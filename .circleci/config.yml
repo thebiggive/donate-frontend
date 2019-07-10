@@ -1,6 +1,7 @@
 version: 2.1
+
 jobs:
-  test:
+  build:
     docker:
       - image: circleci/node:lts
 
@@ -21,3 +22,15 @@ jobs:
           key: v1-dependencies-{{ checksum "package-lock.json" }}
 
       - run: npm run ci
+
+orbs:
+  jira: circleci/jira@1.0.5
+
+workflows:
+  build:
+    jobs:
+      - build
+        post-steps:
+          - jira/notify:
+              job_type: build
+              environment_type: development
