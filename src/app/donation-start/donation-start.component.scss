@@ -1,0 +1,18 @@
+@import '../../styles';
+
+.donation-form__error {
+  color: $error-colour;
+}
+
+mat-form-field, mat-radio-group {
+  margin-bottom: 0.5rem;
+}
+
+mat-form-field, mat-label, mat-radio-group {
+  display: block;
+  width: 100%;
+}
+
+mat-radio-button {
+  margin-right: 2rem;
+}
