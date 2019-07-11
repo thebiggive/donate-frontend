@@ -1,7 +1,19 @@
 # The Big Give Donate Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.4.
+This Angular project is a web frontend which will eventually let donors discover the Big Give campaigns and
+start a donation to them.
 
+## Getting started
+
+To run the app locally:
+
+* clone it from GitHub
+* `npm install`
+* `npm start`
+
+To use `ng` commands directly, e.g. to generate new code scaffolding with the CLI, install Angular globally:
+
+* `npm install -g @angular/cli`
 
 ## CI, e2e tests and Puppeteer
 
