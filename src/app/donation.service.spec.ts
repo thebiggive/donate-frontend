@@ -71,7 +71,7 @@ describe('DonationService', () => {
         mockPost.flush(donationCreatedResponse);
 
         httpMock.verify();
-      }
-    )
+      },
+    ),
   );
 });
