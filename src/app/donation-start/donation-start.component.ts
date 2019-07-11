@@ -32,8 +32,8 @@ export class DonationStartComponent implements OnInit {
   ngOnInit() {
     this.donationForm = this.formBuilder.group({
       // TODO require a whole number of pounds, unless scrapping that constraint
-      // TODO more specific validation error messages, especially for min & max
       donationAmount: [null, [
+        Validators.required,
         Validators.min(5),
         Validators.max(environment.maximumDonationAmount),
         Validators.pattern('^£?[0-9]+(\\.[0-9]{2})?$'),
@@ -85,4 +85,9 @@ export class DonationStartComponent implements OnInit {
         console.log('ERROR', error);
       });
   }
+
+  /**
+   * Quick getter for form controls, to keep validation message handling concise.
+   */
+  public get f() { return this.donationForm.controls; }
 }

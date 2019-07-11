@@ -1,10 +1,19 @@
 <h1>Donating to campaign ID {{ campaignId }}!</h1>
 
 <form class="donation-form" (ngSubmit)="submit()" [formGroup]="donationForm">
-  <mat-form-field appearance="outline">
+  <mat-form-field>
     <mat-label for="donationAmount">Amount (£)</mat-label>
     <input formControlName="donationAmount" id="donationAmount" matInput>
   </mat-form-field>
+  <div
+      *ngIf="f.donationAmount.invalid && (f.donationAmount.dirty || f.donationAmount.touched)"
+      class="donation-form__error"
+    >
+    <div *ngIf="f.donationAmount.errors.min">Sorry, the minimum donation is currently £5.</div>
+    <div *ngIf="f.donationAmount.errors.max">Sorry, the maximum single donation is £25,000.</div>
+    <div *ngIf="f.donationAmount.errors.pattern">Please enter a numeric value in pounds (£) without commas.</div>
+    <div *ngIf="f.donationAmount.errors.required">Please enter how much you would like to donate.</div>
+  </div>
 
   <mat-label id="giftAid-label">Claim Gift Aid?</mat-label>
   <mat-radio-group aria-labelledby="giftAid-label" formControlName="giftAid">
