@@ -1,3 +1,45 @@
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~@angular/material/theming';
 
-$error-colour: #990000;
+@include mat-core();
+
+$tbg-red: (
+  500: #f0423b,
+  800: #c1211a,
+  contrast: (
+    500: white,
+    800: $white-87-opacity,
+  )
+);
+
+$tbg-teal: (
+  200: #4fb3bf,
+  500: #00838f,
+  800: #005662,
+  contrast: (
+    200: black,
+    500: white,
+    800: white,
+  )
+);
+
+$tbg-error-red: (
+  500: #f36a52,
+  contrast: (
+    500: black,
+  )
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$donate-primary: mat-palette($tbg-red);
+$donate-accent: mat-palette($tbg-teal);
+$donate-warn: mat-palette($tbg-error-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$donate-theme: mat-light-theme($donate-primary, $donate-accent, $donate-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($donate-theme);

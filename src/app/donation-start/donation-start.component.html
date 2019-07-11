@@ -1,14 +1,11 @@
 <h1>Donating to campaign ID {{ campaignId }}!</h1>
 
 <form class="donation-form" (ngSubmit)="submit()" [formGroup]="donationForm">
-  <mat-form-field>
+  <mat-form-field color="accent">
     <mat-label for="donationAmount">Amount (£)</mat-label>
     <input formControlName="donationAmount" id="donationAmount" matInput>
   </mat-form-field>
-  <div
-      *ngIf="f.donationAmount.invalid && (f.donationAmount.dirty || f.donationAmount.touched)"
-      class="donation-form__error"
-    >
+  <div *ngIf="f.donationAmount.invalid && (f.donationAmount.dirty || f.donationAmount.touched)" class="error">
     <div *ngIf="f.donationAmount.errors.min">Sorry, the minimum donation is currently £5.</div>
     <div *ngIf="f.donationAmount.errors.max">Sorry, the maximum single donation is £25,000.</div>
     <div *ngIf="f.donationAmount.errors.pattern">Please enter a numeric value in pounds (£) without commas.</div>
@@ -33,15 +30,15 @@
       <mat-radio-button labelPosition="after" [value]="false">No</mat-radio-button>
   </mat-radio-group>
 
-  <p *ngIf="apiError" class="donation-form__error">
+  <p *ngIf="apiError" class="error">
     Sorry, we can't submit your donation right now. Please try again in a moment.
   </p>
 
-  <p *ngIf="validationError" class="donation-form__error">
+  <p *ngIf="validationError" class="error">
     Please complete all fields above to proceed with your donation.
   </p>
 
   <p>
-    <button type="submit" [disabled]="submitting">Donate Now</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="submitting">Donate Now</button>
   </p>
 </form>

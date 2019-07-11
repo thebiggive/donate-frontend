@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
+  MatButtonModule,
   MatInputModule,
   MatRadioModule,
 } from '@angular/material';
@@ -22,6 +23,7 @@ import { DonationStartComponent } from './donation-start/donation-start.componen
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    MatButtonModule,
     MatInputModule,
     MatRadioModule,
     ReactiveFormsModule,

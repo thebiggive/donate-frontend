@@ -1,7 +1,8 @@
 @import '../../styles';
 
-.donation-form__error {
-  color: $error-colour;
+.error {
+  color: mat-color($donate-warn);
+  margin-bottom: 1rem;
 }
 
 mat-form-field, mat-radio-group {
