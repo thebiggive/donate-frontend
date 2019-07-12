@@ -17,7 +17,7 @@ export class DonationService {
   ) {}
 
   create(donation: Donation): Observable<DonationCreatedResponse> {
-    return this.http.post<any>(`${environment.apiUriPrefix}${this.apiPath}`, donation);
+    return this.http.post<DonationCreatedResponse>(`${environment.apiUriPrefix}${this.apiPath}`, donation);
   }
 
   saveToken(donationId, jwt) {
