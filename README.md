@@ -21,6 +21,11 @@ The latest tagged [Puppeteer](https://www.npmjs.com/package/puppeteer) uses the 
 with the latest *stable* tagged version that other libaries have available. So for it to continue working, we need to be careful with its version
 and pin it to a specific point releases rather than allowing any `1.x` upgrade.
 
+## Salesforce API requirements
+
+For each sandbox, you need to ensure a Site is created for both `/donations` and `/campaigns`
+and that public access is enabled for every Apex class the APIs use.
+
 # Angular info
 
 The below docs are part of the `ng init` boilerplate starter info. We'll adpat them to our most common use cases later.
