@@ -56,14 +56,14 @@ export class DonationStartComponent implements OnInit {
     this.apiError = this.validationError = false;
 
     const donation = new Donation(
-      '441', // TODO derive from the campaign once we look up campaign details
+      '0011r00002HHAphAAH', // TODO derive from the campaign once we look up campaign details
       this.donationForm.value.donationAmount.replace('£', ''), // Strip '£' if entered
       false, // TODO set appropriately once we look up campaign details
       this.donationForm.value.giftAid,
       this.donationForm.value.optInCharityEmail,
       this.donationForm.value.optInTbgEmail,
       this.campaignId,
-      null,
+      undefined,
       'People, Potential, Possibilities',
     );
 

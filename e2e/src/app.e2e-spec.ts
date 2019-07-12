@@ -8,9 +8,9 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
+  it('should display heading', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual('Welcome to donate-frontend!');
+    expect(page.getTitleText()).toEqual('The Big Give Donations');
   });
 
   afterEach(async () => {
