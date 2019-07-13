@@ -1,4 +1,5 @@
 import { Donation } from './donation.model';
+import { environment } from 'src/environments/environment';
 
 export class CharityCheckoutDonation {
   /* tslint:disable:variable-name These properties must match Charity Checkout snake_case POST parameters */
@@ -19,7 +20,7 @@ export class CharityCheckoutDonation {
 
   constructor(donation: Donation) {
     this.allow_TBG_contact = donation.optInTbgEmail ? '1' : '0';
-    this.change_donation_url = 'https://www.example.com'; // TODO this needs to be a valid route within this app
+    this.change_donation_url = `${environment.donateUriPrefix}/donate/${donation.projectId}`;
     this.charity_id = donation.charityId;
     this.charity_name = donation.charityName;
     this.donation_amount = donation.donationAmount;

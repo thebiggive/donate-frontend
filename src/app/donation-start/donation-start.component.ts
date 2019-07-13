@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
 import { CharityCheckoutService } from '../charity-checkout.service';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-donation-start',
@@ -16,6 +16,7 @@ import { environment } from 'src/environments/environment.prod';
 export class DonationStartComponent implements OnInit {
   public apiError = false;
   public campaignId: string;
+  public charityCheckoutError?: string;
   public donationForm: FormGroup;
   public submitting = false;
   public validationError = false;
@@ -27,6 +28,11 @@ export class DonationStartComponent implements OnInit {
     private route: ActivatedRoute,
   ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
+    route.queryParams.forEach((params: Params) => {
+      if (params.error) {
+        this.charityCheckoutError = params.error;
+      }
+    });
   }
 
   ngOnInit() {
@@ -54,6 +60,7 @@ export class DonationStartComponent implements OnInit {
 
     this.submitting = true;
     this.apiError = this.validationError = false;
+    this.charityCheckoutError = null;
 
     const donation = new Donation(
       '0011r00002HHAphAAH', // TODO derive from the campaign once we look up campaign details

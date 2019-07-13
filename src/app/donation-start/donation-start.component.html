@@ -31,7 +31,15 @@
   </mat-radio-group>
 
   <p *ngIf="apiError" class="error">
-    Sorry, we can't submit your donation right now. Please try again in a moment.
+    Sorry, we can't submit your donation right now. Please try again in a moment
+    or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank">contact us</a>
+    if this message persists.
+  </p>
+
+  <p *ngIf="charityCheckoutError" class="error">
+    Sorry, there was an error initiating your donation: "{{ charityCheckoutError }}". Please try again in a moment
+    or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank">contact us</a>
+    if this message persists.
   </p>
 
   <p *ngIf="validationError" class="error">
