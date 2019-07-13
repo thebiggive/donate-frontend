@@ -30,14 +30,14 @@
       <mat-radio-button labelPosition="after" [value]="false">No</mat-radio-button>
   </mat-radio-group>
 
-  <p *ngIf="apiError" class="error">
+  <p *ngIf="sfApiError" class="error">
     Sorry, we can't submit your donation right now. Please try again in a moment
     or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank">contact us</a>
     if this message persists.
   </p>
 
   <p *ngIf="charityCheckoutError" class="error">
-    Sorry, there was an error initiating your donation: "{{ charityCheckoutError }}". Please try again in a moment
+    Sorry, there was an error starting your donation: "{{ charityCheckoutError }}". Please try again in a moment
     or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank">contact us</a>
     if this message persists.
   </p>

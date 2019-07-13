@@ -14,12 +14,12 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./donation-start.component.scss'],
 })
 export class DonationStartComponent implements OnInit {
-  public apiError = false;
   public campaignId: string;
-  public charityCheckoutError?: string;
+  public charityCheckoutError?: string; // Charity Checkout donation start error message
   public donationForm: FormGroup;
+  public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
-  public validationError = false;
+  public validationError = false;         // Internal Angular app form validation error
 
   constructor(
     private charityCheckoutService: CharityCheckoutService,
@@ -59,8 +59,8 @@ export class DonationStartComponent implements OnInit {
     }
 
     this.submitting = true;
-    this.apiError = this.validationError = false;
     this.charityCheckoutError = null;
+    this.sfApiError = this.validationError = false;
 
     const donation = new Donation(
       '0011r00002HHAphAAH', // TODO derive from the campaign once we look up campaign details
@@ -81,7 +81,7 @@ export class DonationStartComponent implements OnInit {
         this.charityCheckoutService.startDonation(donationCreatedResponse.donation);
       }, error => {
         // TODO log the detailed `error` message somewhere
-        this.apiError = true;
+        this.sfApiError = true;
         this.submitting = false;
 
         // TEMPORARY logic to proceed to Charity Checkout even though SF create failed

@@ -39,6 +39,10 @@ $donate-warn: mat-palette($tbg-error-red);
 // Create the theme object (a Sass map containing all of the palettes).
 $donate-theme: mat-light-theme($donate-primary, $donate-accent, $donate-warn);
 
+a {
+  color: mat-color($donate-accent);
+}
+
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
