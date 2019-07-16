@@ -26,6 +26,21 @@ and pin it to a specific point releases rather than allowing any `1.x` upgrade.
 For each sandbox, you need to ensure a Site is created for both `/donations` and `/campaigns`
 and that public access is enabled for every Apex class the APIs use.
 
+## Browser support
+
+We want donations to work as widely as possible within the constraints set by our technology partners, unless doing so would compromise
+donors' security. Browsers we expect to work fully with this app are:
+
+* all modern mobile & desktop browsers kept up to date, including extended support release cycles;
+* Internet Explorer 11
+
+See [`browserslist`](./browserslist) for the specific instructions that tell the Angular build system what support is needed during builds.
+
+Because of limits with the payment processor Charity Checkout, the app must warn users of Internet Explorer 9 and 10 that they can't complete
+the journey, even though these browsers are included as [`browserslist`](./browserslist) build targets. To do this cleanly and also exclude
+other browsers unlikely to work with the external system, we use feature detection to look for
+[`console.time` support](https://caniuse.com/#feat=console-time) and direct users without it to upgrade.
+
 # Angular info
 
 The below docs are part of the `ng init` boilerplate starter info. We'll adpat them to our most common use cases later.
