@@ -4,4 +4,5 @@ export const environment = {
   charityCheckoutInitUri: 'https://fundraise.charitycheckout.co.uk/api/checkout/init',
   donateUriPrefix: 'https://donate.thebiggive.org.uk',
   maximumDonationAmount: 25000,
+  thanksUriPrefix: 'https://www.thebiggive.org.uk/s/thank-you?id=',
 };

@@ -28,7 +28,7 @@ export class CharityCheckoutDonation {
     this.gift_aid = donation.giftAid ? '1' : '0';
     this.project_id = donation.projectId;
     this.reservation_time = donation.donationMatched ? Math.floor((new Date()).getTime() / 1000) : null;
-    this.thanks_url = 'https://www.example.com'; // TODO this needs to be a valid Salesforce URI
+    this.thanks_url = `${environment.thanksUriPrefix}${donation.donationId}`;
     this.unique_ID = donation.donationId;
   }
 }
