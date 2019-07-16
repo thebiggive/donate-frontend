@@ -73,6 +73,7 @@ workflows:
                 job_type: deployment
                 environment_type: staging
             - slack/notify:
-                mentions: tech
-                message: Donate frontend staging demo deployed
+                color: '#009900'
+                message: Donate frontend staging demo deployed to S3
                 title: Donate frontend deployed!
+                title_link: http://tbg-donate-frontend-demo.s3-website.eu-west-2.amazonaws.com
