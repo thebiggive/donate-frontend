@@ -36,7 +36,7 @@ jobs:
     steps:
       - checkout
 
-      - run: npm install --quiet --production
+      - run: npm install --quiet
 
       - run: npm run build:s3-demo
 
