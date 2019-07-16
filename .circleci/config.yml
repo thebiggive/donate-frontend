@@ -76,4 +76,4 @@ workflows:
                 color: '#009900'
                 message: Donate frontend staging demo deployed to S3
                 title: Donate frontend deployed!
-                title_link: http://tbg-donate-frontend-demo.s3-website.eu-west-2.amazonaws.com
+                title_link: https://d21lpwf5nm8mg.cloudfront.net
