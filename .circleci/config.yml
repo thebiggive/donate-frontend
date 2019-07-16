@@ -29,8 +29,29 @@ jobs:
 
       - run: npm run ci
 
+  deploy-s3-demo:
+    docker:
+      - image: circleci/node:lts
+
+    steps:
+      - checkout
+
+      - run: npm install --quiet --production
+
+      - run: npm run build:s3-demo
+
+      - aws-s3/sync:
+          from: dist/browser
+          to: 's3://tbg-donate-frontend-demo'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=300"
+          overwrite: true
+
 orbs:
+  aws-s3: circleci/aws-s3@1.0.11
   jira: circleci/jira@1.0.5
+  slack: circleci/slack@3.2.0
 
 workflows:
   build:
@@ -40,3 +61,18 @@ workflows:
             - jira/notify:
                 job_type: build
                 environment_type: development
+  deploy-s3-demo:
+    jobs:
+      - deploy-s3-demo:
+          filters:
+            branches:
+              only:
+                - master
+          post-steps:
+            - jira/notify:
+                job_type: deployment
+                environment_type: staging
+            - slack/notify:
+                mentions: tech
+                message: Donate frontend staging demo deployed
+                title: Donate frontend deployed!

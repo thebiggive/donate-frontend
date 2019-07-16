@@ -13,18 +13,19 @@
     "serve:ssr": "node dist/server",
     "build:ssr": "npm run build:client-and-server-bundles && npm run compile:server",
     "build:client-and-server-bundles": "ng build --prod && ng run donate-frontend:server:production",
+    "build:s3-demo": "ng build --prod --configuration=staging",
     "e2e-ci": "ng e2e --protractor-config=e2e/protractor-ci.conf.js",
     "ci": "npm run lint && npm run test-ci && npm run e2e-ci"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "^8.1.1",
-    "@angular/cdk": "^8.0.2",
+    "@angular/cdk": "^8.1.0",
     "@angular/common": "^8.1.1",
     "@angular/compiler": "^8.1.1",
     "@angular/core": "^8.1.1",
     "@angular/forms": "^8.1.1",
-    "@angular/material": "^8.0.2",
+    "@angular/material": "^8.1.0",
     "@angular/platform-browser": "^8.1.1",
     "@angular/platform-browser-dynamic": "^8.1.1",
     "@angular/platform-server": "^8.1.1",
@@ -58,7 +59,7 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "~3.4.3",
-    "webpack-cli": "^3.1.0"
+    "webpack-cli": "^3.3.6"
   },
   "engines": {
     "node": ">=10",

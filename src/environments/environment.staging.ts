@@ -1,12 +1,12 @@
 // This file can be replaced during build by using the `fileReplacements` array.
-// `ng build --prod` replaces `environment.ts` with `environment.production.ts`.
+// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
   production: false,
   apiUriPrefix: 'https://full-biggive.cs101.force.com',
   charityCheckoutInitUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
-  donateUriPrefix: 'http://localhost:4200',
+  donateUriPrefix: 'http://localhost:4200', // TODO replace with S3 path
   maximumDonationAmount: 25000,
 };
 

@@ -21,6 +21,13 @@ The latest tagged [Puppeteer](https://www.npmjs.com/package/puppeteer) uses the 
 with the latest *stable* tagged version that other libaries have available. So for it to continue working, we need to be careful with its version
 and pin it to a specific point releases rather than allowing any `1.x` upgrade.
 
+Environment Variables configured in the CircleCI interface for this app are:
+
+* `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and `AWS_REGION` - for S3 deploys. Should belong to a user with only write & ACL set permission on
+  _only_ the S3 bucket used to host the demo.
+* `CIRCLE_TOKEN` - set up within CircleCI itself and used to retrieve build & deploy metadata to report back to Jira.
+* `SLACK_WEBHOOK` - destination URI to report deploys to Slack.
+
 ## Salesforce API requirements
 
 For each sandbox, you need to ensure a Site is created for both `/donations` and `/campaigns`
