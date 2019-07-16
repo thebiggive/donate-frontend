@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   apiUriPrefix: 'https://full-biggive.cs101.force.com',
   charityCheckoutInitUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
-  donateUriPrefix: 'http://localhost:4200', // TODO replace with S3 path
+  donateUriPrefix: 'http://tbg-donate-frontend-demo.s3-website.eu-west-2.amazonaws.com',
   maximumDonationAmount: 25000,
 };
 
