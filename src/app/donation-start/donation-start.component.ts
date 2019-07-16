@@ -77,7 +77,22 @@ export class DonationStartComponent implements OnInit {
     this.donationService
       .create(donation) // Create Salesforce donation
       .subscribe((donationCreatedResponse: DonationCreatedResponse) => {
-        // If that succeeded, proceed to Charity Checkout donation page
+        // If that succeeded proceed to Charity Checkout donation page, providing key
+        // fields are present in the Salesforce response's Donation.
+
+        const salesforceResponseMissingRequiredData = (
+          !donationCreatedResponse.donation.charityId ||
+          !donationCreatedResponse.donation.donationId ||
+          !donationCreatedResponse.donation.projectId
+        );
+        if (salesforceResponseMissingRequiredData) {
+          // TODO log detail of missing info back from Salesforce
+          this.sfApiError = true;
+          this.submitting = false;
+
+          return;
+        }
+
         this.charityCheckoutService.startDonation(donationCreatedResponse.donation);
       }, error => {
         // TODO log the detailed `error` message somewhere
