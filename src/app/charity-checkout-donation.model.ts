@@ -10,7 +10,6 @@ export class CharityCheckoutDonation {
   public donation_amount: number;
   public donation_type: string;
   public gift_aid: string; // Pseudo-boolean '0' or '1'
-  public mode = 'donation';
   public project_id: string;
   public reservation_time: number; // UNIX timestamp in seconds. Start of reservation window.
   public share_details_with_charity = '1'; // Donors' details are now always shared with charities
