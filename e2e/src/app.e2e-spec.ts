@@ -10,7 +10,7 @@ describe('workspace-project App', () => {
 
   it('should display heading', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual('The Big Give Donations');
+    expect(page.getTitleText()).toContain('Donations');
   });
 
   afterEach(async () => {
