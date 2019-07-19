@@ -1,7 +1,6 @@
 <div>
   <h1>
-    <img src="/assets/logo.png" alt="The Big Give" width="200">
-    Donations
+    <a href="/"><img src="/assets/logo.png" alt="The Big Give" width="200"></a>
   </h1>
 
   <div *ngIf="!browserSupported" class="error">
@@ -14,6 +13,9 @@
 
   <!-- Temporary hard-coded link to donate to a Full sandbox campaign -->
   <p><a routerLink="/donate/a051X000000sbmuQAA">Try a donation!</a></p>
+
+  <!-- Temporary hard-coded link to view a campaign on Full sandbox campaign -->
+  <p><a routerLink="/campaign/a051r00001EywjpAAB">View a campaign!</a></p>
 </div>
 
 <router-outlet *ngIf="browserSupported"></router-outlet>
