@@ -18,7 +18,7 @@ export class CampaignService {
     private http: HttpClient,
   ) {}
 
-  getCampaign(): Observable<Campaign[]> {
-    return this.http.get<Campaign[]>(`${environment.apiUriPrefix}${this.apiPath}` + 'a051r00001EywjpAAB');
+  getCampaign(campaignId): Observable<Campaign[]> {
+    return this.http.get<Campaign[]>(`${environment.apiUriPrefix}${this.apiPath}` + campaignId);
   }
 }

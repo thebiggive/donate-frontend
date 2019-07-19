@@ -1,17 +1,19 @@
-<img src={{campaign.bannerUri}} alt="Italian Trulli">
-<h1>{{campaign.title}} | Championed by: {{campaign.championName}}</h1>
+<div class="container">
+    <img class="banner" src={{campaign.bannerUri}} alt="Campaign Banner">
 
-<p *ngIf="campaign.isMatched">
-    Matched Campaign!
-</p>
+    <div>
+        <h2>{{campaign.title}} | <i>Championed by: {{campaign.championName}}</i></h2>
+        <h3 *ngIf="campaign.isMatched">Matched Campaign!</h3>
+    </div>
 
-<div *ngFor="let c of campaign.video">
-    <p *ngIf="c.provider == 'youtube'">
-        {{c.provider}}
-    </p>
+    <div>
+        <h3>Campaign Summary</h3>
+        <p>{{campaign.summary}}</p>
+    </div>
+
+    <div>
+        <h3>Campaign Targets</h3>
+        <p>Campaign target: {{campaign.target}}<br/>Amount raised: {{campaign.amountRaised}}</p>
+    </div>
+
 </div>
-
-
-<p>{{campaign.summary}}</p>
-<p>{{campaign.target}} / {{campaign.amountRaised}}</p>
-

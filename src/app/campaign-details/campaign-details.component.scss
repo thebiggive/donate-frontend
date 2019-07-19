@@ -1,1 +1,18 @@
 @import '../../styles';
+
+.container {
+    margin: auto;
+    width: 75%;
+    border: 3px solid black;
+    padding: 10px;
+    margin-bottom: 10em;
+}
+
+.banner {
+    margin: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+}
+
