@@ -1,1 +1,17 @@
-<p>campaign-details works!</p>
+<img src={{campaign.bannerUri}} alt="Italian Trulli">
+<h1>{{campaign.title}} | Championed by: {{campaign.championName}}</h1>
+
+<p *ngIf="campaign.isMatched">
+    Matched Campaign!
+</p>
+
+<div *ngFor="let c of campaign.video">
+    <p *ngIf="c.provider == 'youtube'">
+        {{c.provider}}
+    </p>
+</div>
+
+
+<p>{{campaign.summary}}</p>
+<p>{{campaign.target}} / {{campaign.amountRaised}}</p>
+
