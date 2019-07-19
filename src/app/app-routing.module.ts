@@ -11,7 +11,7 @@ const routes: Routes = [
   {
     path: 'campaign/:campaignId',
     component: CampaignDetailsComponent,
-  }
+  },
 ];
 
 @NgModule({
