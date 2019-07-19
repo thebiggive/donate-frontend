@@ -6,9 +6,6 @@ import { CampaignService } from './campaign.service';
 import { environment } from '../environments/environment';
 
 describe('CampaignService', () => {
-
-  let service: CampaignService;
-
   beforeEach(() => TestBed.configureTestingModule({
     imports: [ HttpClientTestingModule ],
     providers: [ CampaignService ],

@@ -15,7 +15,7 @@ export class CampaignDetailsComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
     private route: ActivatedRoute,
-  ){ 
+  ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
   }
 

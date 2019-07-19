@@ -14,5 +14,4 @@ export interface Campaign {
     title: string;
     updates: Array<{content: string, modifiedDate: Date}>;
     video: Array<{provider: string, key: string}>;
-    
 }
