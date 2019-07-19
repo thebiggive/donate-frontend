@@ -10,7 +10,7 @@ describe('workspace-project App', () => {
 
   it('should display heading', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toContain('Donations');
+    expect(page.getTitleText()).toContain('2.1');
   });
 
   afterEach(async () => {

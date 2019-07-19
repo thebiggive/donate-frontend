@@ -1,5 +1,9 @@
 @import '../styles';
 
+.header {
+  padding: 2em;
+}
+
 .error {
   color: mat-color($donate-warn);
 }
