@@ -7,3 +7,11 @@
 .error {
   color: mat-color($donate-warn);
 }
+
+.container {
+  margin: auto;
+  width: 75%;
+  border: 3px solid mat-color($donate-accent);
+  padding: 10px;
+  margin-bottom: 10em;
+}

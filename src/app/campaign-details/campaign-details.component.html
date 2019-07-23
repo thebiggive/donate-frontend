@@ -1,19 +1,15 @@
-<div class="container">
-    <img class="banner" src={{campaign.bannerUri}} alt="Campaign Banner">
+<img class="banner" src={{campaign.bannerUri}} alt="Campaign Banner">
+<div>
+    <h2>{{campaign.title}} | <em>Championed by: {{campaign.championName}}</em></h2>
+    <h3 *ngIf="campaign.isMatched">Matched Campaign!</h3>
+</div>
 
-    <div>
-        <h2>{{campaign.title}} | <em>Championed by: {{campaign.championName}}</em></h2>
-        <h3 *ngIf="campaign.isMatched">Matched Campaign!</h3>
-    </div>
+<div>
+    <h3>Campaign Summary</h3>
+    <p>{{campaign.summary}}</p>
+</div>
 
-    <div>
-        <h3>Campaign Summary</h3>
-        <p>{{campaign.summary}}</p>
-    </div>
-
-    <div>
-        <h3>Campaign Targets</h3>
-        <p>Campaign target: {{campaign.target}}<br/>Amount raised: {{campaign.amountRaised}}</p>
-    </div>
-
+<div>
+    <h3>Campaign Targets</h3>
+    <p>Campaign target: {{campaign.target}}<br/>Amount raised: {{campaign.amountRaised}}</p>
 </div>
