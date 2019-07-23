@@ -29,7 +29,11 @@ export class SearchResultsComponent implements OnInit {
   }
 
   public search() {
+    const service = this;
     this.campaignService.search(this.term)
-      .subscribe(campaignSummaries => this.campaigns = campaignSummaries);
+      .subscribe(campaignSummaries => {
+        this.campaigns = campaignSummaries;
+        service.searched = true;
+      });
   }
 }

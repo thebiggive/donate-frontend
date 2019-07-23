@@ -1,4 +1,4 @@
-<div>
+<div class="header">
   <h1>
     <img src="/assets/logo.png" alt="The Big Give" width="200">
     Donations
@@ -14,9 +14,6 @@
 
   <h3>Find a Campaign</h3>
   <app-campaign-search-form></app-campaign-search-form>
-
-  <!-- Temporary hard-coded link to donate to a Full sandbox campaign -->
-  <p><a routerLink="/donate/a051X000000sbmuQAA">Try a donation!</a></p>
 </div>
 
 <router-outlet *ngIf="browserSupported"></router-outlet>
