@@ -1,15 +1,25 @@
 import { TestBed, async } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule, MatInputModule } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+
 import { AppComponent } from './app.component';
+import { CampaignSearchFormComponent } from './campaign-search-form/campaign-search-form.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        MatButtonModule, // Not required but makes test DOM layout more realistic
+        MatInputModule,
+        NoopAnimationsModule,
+        ReactiveFormsModule,
         RouterTestingModule,
       ],
       declarations: [
         AppComponent,
+        CampaignSearchFormComponent,
       ],
     }).compileComponents();
   }));

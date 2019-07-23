@@ -1,0 +1,7 @@
+<h3>Campaign Search Results</h3>
+
+<p *ngIf="searched && !campaigns">None :( Please try another search term</p>
+
+<p *ngFor="let campaign of campaigns">
+  {{ campaign.title }}
+</p>

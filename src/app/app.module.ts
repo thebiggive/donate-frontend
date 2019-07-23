@@ -12,11 +12,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
+import { CampaignSearchFormComponent } from './campaign-search-form/campaign-search-form.component';
+import { SearchResultsComponent } from './search-results/search-results.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    CampaignSearchFormComponent,
     DonationStartComponent,
+    SearchResultsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

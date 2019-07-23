@@ -1,0 +1,15 @@
+<form (ngSubmit)="search()" [formGroup]="searchForm">
+  <mat-form-field color="accent">
+    <mat-label for="term">Campaign or Charity</mat-label>
+    <input matInput formControlName="term" id="term" type="text">
+  </mat-form-field>
+
+  <p>
+    <button
+      [disabled]="!this.searchForm.valid"
+      mat-raised-button
+      color="primary"
+      type="submit"
+    >Search</button>
+  </p>
+</form>
