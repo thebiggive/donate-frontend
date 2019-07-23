@@ -17,10 +17,8 @@ export class CampaignService {
   constructor(
     private http: HttpClient,
   ) {}
-  
   /* tslint:disable:max-line-length*/
   getCampaign(campaignId): Observable<Campaign[]> {
-    
     return this.http.get<Campaign[]>(`${environment.apiUriPrefix}${this.apiPath}` + campaignId);
   }
   /* tslint:enable:max-line-length*/
