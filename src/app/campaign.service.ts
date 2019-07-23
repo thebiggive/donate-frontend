@@ -11,7 +11,7 @@ import { environment } from '../environments/environment';
 })
 export class CampaignService {
   private apiPath = '/campaigns/services/apexrest/v1.0/campaigns';
-  campaign: Observable<Campaign[]>
+  campaign: Observable<Campaign[]>;
 
   constructor(
     private http: HttpClient,
