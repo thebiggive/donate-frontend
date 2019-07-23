@@ -1,21 +1,23 @@
 <img class="banner" src={{campaign.bannerUri}} alt="Campaign Banner">
-<div>
-    <h2>{{campaign.title}} | <em>Championed by: {{campaign.championName}}</em></h2>
-    <h3 *ngIf="campaign.isMatched">Matched Campaign!</h3>
-</div>
+<div class="details">
+    <div>
+        <h2>{{campaign.title}} | <em>Championed by: {{campaign.championName}}</em></h2>
+        <h3 *ngIf="campaign.isMatched">Matched Campaign!</h3>
+    </div>
 
-<div>
-    <h3>Campaign Summary</h3>
-    <p>{{campaign.summary}}</p>
-</div>
+    <div>
+        <h3>Campaign Summary</h3>
+        <p>{{campaign.summary}}</p>
+    </div>
 
-<div>
-    <h3>Campaign Targets</h3>
-    <p>Campaign target: {{campaign.target}}</p>
-    <p>Amount raised: {{campaign.amountRaised}}</p>
-</div>
+    <div>
+        <h3>Campaign Targets</h3>
+        <p>Campaign target: {{campaign.target}}</p>
+        <p>Amount raised: {{campaign.amountRaised}}</p>
+    </div>
 
-<div>
-    <!-- Temporary hard-coded link to view a campaign on Full sandbox campaign -->
-    <p><a routerLink="/donate/a051r00001EywjpAAB"><button mat-raised-button color="primary" type="submit">Donate</button></a></p>
+    <div>
+        <!-- Temporary hard-coded link to view a campaign on Full sandbox campaign -->
+        <a routerLink="/donate/a051r00001EywjpAAB"><button mat-raised-button color="primary" type="submit">Donate</button></a>
+    </div>
 </div>
