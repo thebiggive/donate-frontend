@@ -1,22 +1,24 @@
-<div>
-  <h1>
-    <img src="/assets/logo.png" alt="The Big Give" width="200">
-    Donations
-  </h1>
+<div class="container">
+  <div class="header">
+    <h1><a href="/"><img src="/assets/logo.png" alt="The Big Give" width="200"></a>Donations</h1>
 
-  <div *ngIf="!browserSupported" class="error">
-    <p>Sorry, but to keep your details safe while you donate, we'll need you to update to a newer web browser.</p>
-    <p>Visit <a href="https://browsehappy.com/" target="_blank">Browse Happy</a> for a few great options. We recommend
-      <a href="https://www.mozilla.org/en-GB/firefox/" target="_blank">Firefox</a> or
-      <a href="https://www.google.com/chrome/" target="_blank">Chrome</a>,
-      but any of these will work with the Big Give donations and keep you safer everywhere on the internet.</p>
+    <div *ngIf="!browserSupported" class="error">
+      <p>Sorry, but to keep your details safe while you donate, we'll need you to update to a newer web browser.</p>
+      <p>Visit <a href="https://browsehappy.com/" target="_blank">Browse Happy</a> for a few great options. We recommend
+        <a href="https://www.mozilla.org/en-GB/firefox/" target="_blank">Firefox</a> or
+        <a href="https://www.google.com/chrome/" target="_blank">Chrome</a>,
+        but any of these will work with the Big Give donations and keep you safer everywhere on the internet.</p>
+    </div>
+
+    <h3>Find a Campaign</h3>
+    <app-campaign-search-form></app-campaign-search-form>
+
+    <!-- Temporary hard-coded link to donate to a Full sandbox campaign -->
+    <p><a routerLink="/donate/a051X000000sbmuQAA">&#62; Try a donation!</a></p>
+
+    <!-- Temporary hard-coded link to view a campaign on Full sandbox campaign -->
+    <p><a routerLink="/campaign/a051r00001EywjpAAB">&#62; View a campaign!</a></p>
   </div>
-
-  <h3>Find a Campaign</h3>
-  <app-campaign-search-form></app-campaign-search-form>
-
-  <!-- Temporary hard-coded link to donate to a Full sandbox campaign -->
-  <p><a routerLink="/donate/a051X000000sbmuQAA">Try a donation!</a></p>
 </div>
 
 <router-outlet *ngIf="browserSupported"></router-outlet>

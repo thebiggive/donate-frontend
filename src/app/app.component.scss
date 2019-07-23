@@ -1,5 +1,17 @@
 @import '../styles';
 
+.header {
+  padding: 2em;
+}
+
 .error {
   color: mat-color($donate-warn);
+}
+
+.container {
+  margin: auto;
+  width: 75%;
+  border: 2px solid;
+  padding: 10px;
+  margin-bottom: 10em;
 }
