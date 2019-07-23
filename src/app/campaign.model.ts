@@ -17,4 +17,3 @@ export class Campaign {
     public video: Array<{provider: string, key: string}>,
     ) {}
 }
-  
