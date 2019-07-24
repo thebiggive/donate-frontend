@@ -6,7 +6,7 @@ export class Campaign {
     public bannerUri: string,
     public budgetDetails: Array<{amount: number, description: string}>,
     public championName: string,
-    public charity: Array<{id: string, name: string}>,
+    public charity: {id: string, name: string},
     public endDate: Date,
     public giftHandles: Array<{amount: number, description: string}>,
     public isMatched: boolean,

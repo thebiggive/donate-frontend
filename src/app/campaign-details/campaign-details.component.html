@@ -1,7 +1,7 @@
 <img class="banner" [src]="campaign.bannerUri" alt="Campaign Banner">
 <div class="details">
 	<div>
-		<h2>{{campaign.title}} <em *ngIf="campaign.championName"> | Championed by: {{campaign.championName}}</em></h2>
+		<h2>{{campaign.title}}<em *ngIf="campaign.championName"> | Championed by: {{campaign.championName}}</em></h2>
 		<h3 *ngIf="campaign.isMatched">Matched Campaign!</h3>
 		<h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
 	</div>

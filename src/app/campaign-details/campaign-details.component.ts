@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CampaignService } from '../campaign.service';
 import { ActivatedRoute } from '@angular/router';
+
 import { Campaign } from '../campaign.model';
+import { CampaignService } from '../campaign.service';
 
 @Component({
   selector: 'app-campaign-details',
