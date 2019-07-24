@@ -1,8 +1,9 @@
-<img class="banner" src={{campaign.bannerUri}} alt="Campaign Banner">
+<img class="banner" [src]="campaign.bannerUri" alt="Campaign Banner">
 <div class="details container">
     <div>
-        <h2>{{campaign.title}} | <em>Championed by: {{campaign.championName}}</em></h2>
+        <h2>{{campaign.title}} <em *ngIf="campaign.championName"> | Championed by: {{campaign.championName}}</em></h2>
         <h3 *ngIf="campaign.isMatched">Matched Campaign!</h3>
+        <h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
     </div>
 
     <div>
@@ -12,12 +13,11 @@
 
     <div>
         <h3>Campaign Targets</h3>
-        <p>Campaign target: {{campaign.target}}</p>
-        <p>Amount raised: {{campaign.amountRaised}}</p>
+        <p *ngIf="campaign.target > 0">Campaign Target: {{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
+        <p *ngIf="campaign.amountRaised > 0">Amount Raised: {{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
     </div>
 
     <div>
-        <!-- Temporary hard-coded link to view a campaign on Full sandbox campaign -->
-        <a routerLink="/donate/a051r00001EywjpAAB"><button mat-raised-button color="primary" type="submit">Donate</button></a>
+        <button mat-raised-button color="primary" [routerLink]="'/donate/' + campaign.id">Donate</button>
     </div>
 </div>
