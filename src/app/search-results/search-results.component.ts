@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { CampaignService } from '../campaign.service';
@@ -14,6 +14,7 @@ export class SearchResultsComponent implements OnInit {
   public searched = false;
 
   private term: string;
+  private viewportWidth: number; // In px. Used to vary `<mat-grid-list />`'s `cols`.
 
   constructor(
     private campaignService: CampaignService,
@@ -26,10 +27,24 @@ export class SearchResultsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.viewportWidth = window.innerWidth;
+  }
+
+  public cols(): number {
+    return Math.min(3, Math.floor(this.viewportWidth / 300)); // Min 300px per col; up to 3 cols
   }
 
   public search() {
+    const service = this;
     this.campaignService.search(this.term)
-      .subscribe(campaignSummaries => this.campaigns = campaignSummaries);
+      .subscribe(campaignSummaries => {
+        this.campaigns = campaignSummaries;
+        service.searched = true;
+      });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  private onResize(event) {
+    this.viewportWidth = event.target.innerWidth;
   }
 }
