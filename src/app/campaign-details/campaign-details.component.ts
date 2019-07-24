@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CampaignService } from '../campaign.service';
 import { ActivatedRoute } from '@angular/router';
+import { Campaign } from '../campaign.model';
 
 @Component({
   selector: 'app-campaign-details',
@@ -8,9 +9,8 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./campaign-details.component.scss'],
 })
 export class CampaignDetailsComponent implements OnInit {
-
+  public campaign: Campaign;
   public campaignId: string;
-  public campaign = [];
 
   constructor(
     private campaignService: CampaignService,
