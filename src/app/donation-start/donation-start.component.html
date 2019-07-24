@@ -1,4 +1,4 @@
-<form class="formPadding" (ngSubmit)="submit()" [formGroup]="donationForm">
+<form (ngSubmit)="submit()" [formGroup]="donationForm">
   <h1>Donating to campaign ID {{ campaignId }}!</h1>
   <mat-form-field color="accent">
     <mat-label for="donationAmount">Amount (£)</mat-label>
