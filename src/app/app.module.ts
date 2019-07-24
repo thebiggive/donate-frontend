@@ -17,6 +17,7 @@ import { CampaignCardComponent } from './campaign-card/campaign-card.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
 import { CampaignSearchFormComponent } from './campaign-search-form/campaign-search-form.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
+import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { SearchResultsComponent } from './search-results/search-results.componen
     CampaignSearchFormComponent,
     DonationStartComponent,
     SearchResultsComponent,
+    CampaignDetailsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
