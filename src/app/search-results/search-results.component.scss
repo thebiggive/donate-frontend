@@ -1,0 +1,9 @@
+@import '../../styles';
+
+mat-grid-list {
+  margin: 1rem;
+}
+
+mat-grid-tile {
+  border: solid 1px mat-color($donate-accent);
+}

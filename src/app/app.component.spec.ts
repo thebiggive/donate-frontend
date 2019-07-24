@@ -1,6 +1,6 @@
 import { TestBed, async } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatInputModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatGridListModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -12,6 +12,8 @@ describe('AppComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         MatButtonModule, // Not required but makes test DOM layout more realistic
+        MatCardModule,
+        MatGridListModule,
         MatInputModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
