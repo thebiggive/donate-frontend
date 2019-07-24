@@ -11,7 +11,6 @@ import { environment } from '../environments/environment';
 })
 export class CampaignService {
   private apiPath = '/campaigns/services/apexrest/v1.0/campaigns';
-  campaign: Observable<Campaign[]>;
 
   constructor(
     private http: HttpClient,
@@ -21,7 +20,7 @@ export class CampaignService {
     return this.http.get<CampaignSummary[]>(`${environment.apiUriPrefix}${this.apiPath}?term=${term}`);
   }
 
-  getCampaign(campaignId): Observable<Campaign[]> {
+  getOne(campaignId): Observable<Campaign[]> {
     return this.http.get<Campaign[]>(`${environment.apiUriPrefix}${this.apiPath}/${campaignId}`);
   }
 }

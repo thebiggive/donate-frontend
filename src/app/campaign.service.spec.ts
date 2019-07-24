@@ -67,7 +67,7 @@ describe('CampaignService', () => {
       ],
     }];
 
-    service.getCampaign('a051r00001EywjpAAB').subscribe(campaign => {
+    service.getOne('a051r00001EywjpAAB').subscribe(campaign => {
       expect(campaign.length).toBe(1);
       expect(campaign).toEqual(dummyCampaign);
     }, () => {

@@ -20,7 +20,7 @@ export class CampaignDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.campaignService.getCampaign(this.campaignId)
+    this.campaignService.getOne(this.campaignId)
       .subscribe(data => this.campaign = data);
   }
 }
