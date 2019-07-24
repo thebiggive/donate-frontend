@@ -18,9 +18,9 @@ describe('CampaignService', () => {
     const dummyCampaign: Campaign[] = [{
       video: [
         {
-          provider: "youtube",
-          key: "1G_Abc2delF",
-        }
+          provider: 'youtube',
+          key: '1G_Abc2delF',
+        },
       ],
       updates: [],
       title: 'Some title',
@@ -28,8 +28,8 @@ describe('CampaignService', () => {
       summary: 'Some long summary',
       quotes: [
         {
-          quote: "Some quote",
-          person: "Someones quote",
+          quote: 'Some quote',
+          person: 'Someones quote',
         },
       ],
       startDate: '2019-07-03T15:30:00.000Z',
@@ -37,7 +37,7 @@ describe('CampaignService', () => {
       id: 'a051r00001EywjpAAB',
       giftHandles: [
         {
-          description: "Can buy you 2 things",
+          description: 'Can buy you 2 things',
           amount: 50.01,
         },
       ],
@@ -62,7 +62,7 @@ describe('CampaignService', () => {
       additionalImageUris: [
         {
           /* tslint:disable:max-line-length*/
-          uri: "https://thebiggive--c.eu12.content.force.com/sfc/dist/version/download/?oid=00D0O000000YzQm&ids=0681r00000CtcvY&d=%2Fa%2F1r0000002Ypn%2FeDMuuQUiOagDxe4259w1_.zlHnaPgj2nMiGJ5M.Gi2Y&asPdf=false",
+          uri: 'https://thebiggive--c.eu12.content.force.com/sfc/dist/version/download/?oid=00D0O000000YzQm&ids=0681r00000CtcvY&d=%2Fa%2F1r0000002Ypn%2FeDMuuQUiOagDxe4259w1_.zlHnaPgj2nMiGJ5M.Gi2Y&asPdf=false',
           /* tslint:enable:max-line-length*/
           order: 100,
         },
@@ -72,6 +72,8 @@ describe('CampaignService', () => {
     service.getCampaign('a051r00001EywjpAAB').subscribe(campaign => {
       expect(campaign.length).toBe(1);
       expect(campaign).toEqual(dummyCampaign);
+    }, () => {
+      expect(false).toBe(true); // Always fail if observable errors
     });
 
     const request = httpMock.expectOne(`${environment.apiUriPrefix}/campaigns/services/apexrest/v1.0/campaigns/a051r00001EywjpAAB`);
