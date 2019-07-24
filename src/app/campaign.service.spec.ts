@@ -1,5 +1,5 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { inject, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { Campaign } from './campaign.model';
 import { CampaignService } from './campaign.service';
@@ -15,7 +15,7 @@ describe('CampaignService', () => {
     const service: CampaignService = TestBed.get(CampaignService);
     const httpMock: HttpTestingController = TestBed.get(HttpTestingController);
 
-    const dummyCampaign: Campaign[] = [{
+    const dummyCampaign: Campaign = {
       video: [
         {
           provider: 'youtube',
@@ -41,12 +41,10 @@ describe('CampaignService', () => {
           amount: 50.01,
         },
       ],
-      charity: [
-        {
-          name: 'Awesome Charity',
-          id: '0011r00002HHAprAAH',
-        },
-      ],
+      charity: {
+        name: 'Awesome Charity',
+        id: '0011r00002HHAprAAH',
+      },
       endDate: new Date(),
       championName: 'The Big Give Match Fund',
       budgetDetails: [
@@ -65,10 +63,9 @@ describe('CampaignService', () => {
           order: 100,
         },
       ],
-    }];
+    };
 
     service.getOne('a051r00001EywjpAAB').subscribe(campaign => {
-      expect(campaign.length).toBe(1);
       expect(campaign).toEqual(dummyCampaign);
     }, () => {
       expect(false).toBe(true); // Always fail if observable errors
@@ -77,7 +74,5 @@ describe('CampaignService', () => {
     const request = httpMock.expectOne(`${environment.apiUriPrefix}/campaigns/services/apexrest/v1.0/campaigns/a051r00001EywjpAAB`);
     expect(request.request.method).toBe('GET');
     request.flush(dummyCampaign);
-
   });
-
 });

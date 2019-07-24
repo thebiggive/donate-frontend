@@ -20,7 +20,7 @@ export class CampaignService {
     return this.http.get<CampaignSummary[]>(`${environment.apiUriPrefix}${this.apiPath}?term=${term}`);
   }
 
-  getOne(campaignId): Observable<Campaign[]> {
-    return this.http.get<Campaign[]>(`${environment.apiUriPrefix}${this.apiPath}/${campaignId}`);
+  getOne(campaignId): Observable<Campaign> {
+    return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/${campaignId}`);
   }
 }
