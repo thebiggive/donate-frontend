@@ -1,5 +1,5 @@
 <div class="header">
-  <h1><a href="/"><img src="/assets/logo.png" alt="The Big Give" width="200"></a>Donations</h1>
+  <h1><a routerLink="/"><img src="/assets/logo.png" alt="The Big Give" width="200"></a> Donations</h1>
 
   <div *ngIf="!browserSupported" class="error">
     <p>Sorry, but to keep your details safe while you donate, we'll need you to update to a newer web browser.</p>
@@ -9,8 +9,13 @@
       but any of these will work with the Big Give donations and keep you safer everywhere on the internet.</p>
   </div>
 
+  <h3>Try a Meta-campaign</h3>
+  <a routerLink="/metacampaign/a051r00001CGEpoAAH">Summer Give 2019</a>
+
   <h3>Find a Campaign</h3>
   <app-campaign-search-form></app-campaign-search-form>
 </div>
+
+<hr>
 
 <router-outlet *ngIf="browserSupported"></router-outlet>

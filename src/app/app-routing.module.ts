@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { DonationStartComponent } from './donation-start/donation-start.component';
-import { SearchResultsComponent } from './search-results/search-results.component';
+import { RouterModule, Routes } from '@angular/router';
+
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
+import { DonationStartComponent } from './donation-start/donation-start.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
+import { SearchResultsComponent } from './search-results/search-results.component';
 
 const routes: Routes = [
   {

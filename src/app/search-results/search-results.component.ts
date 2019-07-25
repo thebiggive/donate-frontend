@@ -22,7 +22,7 @@ export class SearchResultsComponent implements OnInit {
     private route: ActivatedRoute,
   ) {
     route.queryParams.forEach((params: Params) => {
-      this.parentCampaignId = params.campaign;
+      this.parentCampaignId = params.parent;
       this.term = params.term;
       this.search();
     });

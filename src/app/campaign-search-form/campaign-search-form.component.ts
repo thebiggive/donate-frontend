@@ -17,6 +17,7 @@ export class CampaignSearchFormComponent implements OnInit {
 
   ngOnInit() {
     this.searchForm = this.formBuilder.group({
+      summerGive19: [false],
       term: [null, [
         Validators.required,
         Validators.minLength(2),
@@ -25,6 +26,12 @@ export class CampaignSearchFormComponent implements OnInit {
   }
 
   public search() {
-    this.router.navigateByUrl(`/search?term=${this.searchForm.value.term}`);
+    let url = `/search?term=${this.searchForm.value.term}`;
+
+    if (this.searchForm.value.summerGive19) {
+      url = `${url}&parent=a051r00001CGEpoAAH`;
+    }
+
+    this.router.navigateByUrl(url);
   }
 }

@@ -27,7 +27,7 @@ export class MetaCampaignComponent implements OnInit {
   ngOnInit() {
     this.viewportWidth = window.innerWidth;
     this.campaignService.getOne(this.campaignId).subscribe(campaign => this.campaign = campaign);
-    this.campaignService.search(undefined, this.campaignId).subscribe(campaignSummaries => this.children = campaignSummaries);
+    this.campaignService.search(this.campaignId).subscribe(campaignSummaries => this.children = campaignSummaries);
   }
 
   cols(): number {

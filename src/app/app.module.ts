@@ -7,6 +7,7 @@ import {
   MatGridListModule,
   MatInputModule,
   MatRadioModule,
+  MatSlideToggleModule,
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -40,6 +41,7 @@ import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
     MatGridListModule,
     MatInputModule,
     MatRadioModule,
+    MatSlideToggleModule,
     ReactiveFormsModule,
   ],
   providers: [],
