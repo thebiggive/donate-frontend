@@ -1,7 +1,7 @@
 import { CampaignSummary } from './../campaign-summary.model';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatGridListModule } from '@angular/material';
+import { MatCardModule, MatGridListModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Campaign } from '../campaign.model';
@@ -20,6 +20,7 @@ describe('MetaCampaignComponent', () => {
       ],
       imports: [
         HttpClientTestingModule,
+        MatCardModule,
         MatGridListModule,
         RouterTestingModule,
       ],
