@@ -1,4 +1,7 @@
-<img class="banner" [src]="campaign.bannerUri" alt="Campaign Banner">
+<!-- <img class="banner" [src]="campaign.bannerUri" alt="Campaign Banner"> -->
+<!-- Commented until these URIs are safe to load without increasing limited Salesforce production org counts -->
+<h2>Banner Image here!</h2>
+
 <div class="details">
 	<div>
 		<h2>{{campaign.title}}<em *ngIf="campaign.championName"> | Championed by: {{campaign.championName}}</em></h2>
