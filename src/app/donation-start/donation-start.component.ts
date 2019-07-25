@@ -51,8 +51,6 @@ export class DonationStartComponent implements OnInit {
   }
 
   public submit() {
-    console.log(this.donationForm.value);
-
     if (this.donationForm.invalid) {
       this.validationError = true;
       return;
