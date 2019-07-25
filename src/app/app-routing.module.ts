@@ -3,19 +3,24 @@ import { Routes, RouterModule } from '@angular/router';
 import { DonationStartComponent } from './donation-start/donation-start.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
+import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 
 const routes: Routes = [
+  {
+    path: 'campaign/:campaignId',
+    component: CampaignDetailsComponent,
+  },
   {
     path: 'donate/:campaignId',
     component: DonationStartComponent,
   },
   {
-    path: 'search',
-    component: SearchResultsComponent,
+    path: 'metacampaign/:campaignId',
+    component: MetaCampaignComponent,
   },
   {
-    path: 'campaign/:campaignId',
-    component: CampaignDetailsComponent,
+    path: 'search',
+    component: SearchResultsComponent,
   },
 ];
 
