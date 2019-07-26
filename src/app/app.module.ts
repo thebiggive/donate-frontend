@@ -7,6 +7,7 @@ import {
   MatGridListModule,
   MatInputModule,
   MatRadioModule,
+  MatSlideToggleModule,
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,6 +19,7 @@ import { DonationStartComponent } from './donation-start/donation-start.componen
 import { CampaignSearchFormComponent } from './campaign-search-form/campaign-search-form.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
+import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,7 @@ import { CampaignDetailsComponent } from './campaign-details/campaign-details.co
     DonationStartComponent,
     SearchResultsComponent,
     CampaignDetailsComponent,
+    MetaCampaignComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -38,6 +41,7 @@ import { CampaignDetailsComponent } from './campaign-details/campaign-details.co
     MatGridListModule,
     MatInputModule,
     MatRadioModule,
+    MatSlideToggleModule,
     ReactiveFormsModule,
   ],
   providers: [],

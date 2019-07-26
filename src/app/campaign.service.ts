@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -16,8 +16,17 @@ export class CampaignService {
     private http: HttpClient,
   ) {}
 
-  search(term): Observable<CampaignSummary[]> {
-    return this.http.get<CampaignSummary[]>(`${environment.apiUriPrefix}${this.apiPath}?term=${term}`);
+  search(parentCampaignId?: string, term?: string): Observable<CampaignSummary[]> {
+    let params = new HttpParams();
+    if (parentCampaignId) {
+      params = params.append('parent', parentCampaignId);
+    }
+
+    if (term) {
+      params = params.append('term', term);
+    }
+
+    return this.http.get<CampaignSummary[]>(`${environment.apiUriPrefix}${this.apiPath}`, { params });
   }
 
   getOne(campaignId): Observable<Campaign> {
