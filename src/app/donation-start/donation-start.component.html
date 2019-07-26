@@ -1,5 +1,6 @@
-<form (ngSubmit)="submit()" [formGroup]="donationForm">
-  <h1>Donating to campaign ID {{ campaignId }}!</h1>
+<form (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaign">
+  <h1>Donating to {{ campaign.charity.name }}!</h1>
+  <h2>For &quot;{{ campaign.title }}&quot;</h2>
   <mat-form-field color="accent">
     <mat-label for="donationAmount">Amount (£)</mat-label>
     <input formControlName="donationAmount" id="donationAmount" matInput>

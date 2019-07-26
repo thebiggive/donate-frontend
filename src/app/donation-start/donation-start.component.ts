@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 
+import { Campaign } from './../campaign.model';
 import { CharityCheckoutService } from '../charity-checkout.service';
+import { CampaignService } from '../campaign.service';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
@@ -14,14 +16,17 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./donation-start.component.scss'],
 })
 export class DonationStartComponent implements OnInit {
-  public campaignId: string;
+  public campaign: Campaign;
   public charityCheckoutError?: string; // Charity Checkout donation start error message
   public donationForm: FormGroup;
   public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
   public validationError = false;         // Internal Angular app form validation error
 
+  private campaignId: string;
+
   constructor(
+    private campaignService: CampaignService,
     private charityCheckoutService: CharityCheckoutService,
     private donationService: DonationService,
     private formBuilder: FormBuilder,
@@ -36,6 +41,9 @@ export class DonationStartComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.campaignService.getOne(this.campaignId)
+      .subscribe(campaign => this.campaign = campaign);
+
     this.donationForm = this.formBuilder.group({
       // TODO require a whole number of pounds, unless scrapping that constraint
       donationAmount: [null, [
@@ -60,16 +68,21 @@ export class DonationStartComponent implements OnInit {
     this.charityCheckoutError = null;
     this.sfApiError = this.validationError = false;
 
+    if (!this.campaign.charity.id) { // Can't proceed if campaign info not looked up yet
+      this.sfApiError = true;
+      return;
+    }
+
     const donation = new Donation(
-      '0011r00002HHAphAAH', // TODO derive from the campaign once we look up campaign details
+      this.campaign.charity.id,
       this.donationForm.value.donationAmount.replace('£', ''), // Strip '£' if entered
-      false, // TODO set appropriately once we look up campaign details
+      this.campaign.isMatched,
       this.donationForm.value.giftAid,
       this.donationForm.value.optInCharityEmail,
       this.donationForm.value.optInTbgEmail,
       this.campaignId,
       undefined,
-      'People, Potential, Possibilities',
+      this.campaign.charity.name,
     );
 
     this.donationService
