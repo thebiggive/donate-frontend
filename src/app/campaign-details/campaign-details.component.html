@@ -2,10 +2,11 @@
 <!-- Commented until these URIs are safe to load without increasing limited Salesforce production org counts -->
 <h2>Banner Image here!</h2>
 
-<div class="details">
+<div class="details" *ngIf="campaign">
 	<div>
-		<h2>{{campaign.title}}<em *ngIf="campaign.championName"> | Championed by: {{campaign.championName}}</em></h2>
-		<h3 *ngIf="campaign.isMatched">Matched Campaign!</h3>
+		<h2>{{campaign.title}}</h2>
+    <h3 *ngIf="campaign.championName">Championed by {{campaign.championName}}</h3>
+		<h4 *ngIf="campaign.isMatched">Matched Campaign!</h4>
 		<h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
 	</div>
 
