@@ -10,6 +10,7 @@ export class Campaign {
     public endDate: Date,
     public giftHandles: Array<{amount: number, description: string}>,
     public isMatched: boolean,
+    public matchFundsRemaining: number,
     public quotes: Array<{person: string, quote: string}>,
     public startDate: Date,
     public summary: string,
