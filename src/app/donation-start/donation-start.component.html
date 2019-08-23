@@ -1,6 +1,30 @@
 <form (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaign">
   <h1>Donating to {{ campaign.charity.name }}!</h1>
   <h2>For &quot;{{ campaign.title }}&quot;</h2>
+
+  <div *ngIf="campaign.isMatched">
+    <h3>Matched Campaign</h3>
+    <p *ngIf="campaign.matchFundsRemaining > 0">
+      There is currently {{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }} available to match donations.
+    </p>
+    <p *ngIf="campaign.matchFundsRemaining == 0">
+      There are currently no funds available to match donations, but please check back if you think
+      these may have recently run out. Reserved match funds might become available if any donations
+      are not completed successfully.
+    </p>
+    <h3 *ngIf="!campaign.isMatched">Regular campaign &ndash; donations are not matched</h3>
+  </div>
+
+  <!-- TODO if keeping all this detail, abstract out pieces duplicated between here and campaign-details.component -->
+  <div>
+    <h3>Campaign Targets</h3>
+    <p *ngIf="campaign.target > 0">Campaign Target: {{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
+    <p *ngIf="campaign.amountRaised > 0">Amount Raised: {{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
+    <p>Donations: {{ campaign.donationCount }}</p>
+  </div>
+
+  <p *ngIf="campaign.status == 'Active'">{{ campaign.daysLeft }} days left</p>
+
   <mat-form-field color="accent">
     <mat-label for="donationAmount">Amount (£)</mat-label>
     <input formControlName="donationAmount" id="donationAmount" matInput>
