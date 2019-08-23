@@ -16,16 +16,39 @@ describe('CampaignService', () => {
     const httpMock: HttpTestingController = TestBed.get(HttpTestingController);
 
     const dummyCampaign: Campaign = {
-      video: [
+      additionalImageUris: [
         {
-          provider: 'youtube',
-          key: '1G_Abc2delF',
+          // tslint:disable-next-line
+          uri: 'https://thebiggive--c.eu12.content.force.com/sfc/dist/version/download/?oid=00D0O000000YzQm&ids=0681r00000CtcvY&d=%2Fa%2F1r0000002Ypn%2FeDMuuQUiOagDxe4259w1_.zlHnaPgj2nMiGJ5M.Gi2Y&asPdf=false',
+          order: 100,
         },
       ],
-      updates: [],
-      title: 'Some title',
-      target: 2000.01,
-      summary: 'Some long summary',
+      amountRaised: 200.00,
+      // tslint:disable-next-line
+      bannerUri: 'https://thebiggive--Full--c.cs101.content.force.com/sfc/dist/version/download/?oid=00D1X0000008ahG&ids=0681X0000007w5l&d=%2Fa%2F1X0000008UpU%2FvdeP6lXwciVq6CMSA8BhwNQ6hNTyZHu7VmcugZgN2SY&asPdf=false',
+      budgetDetails: [
+        {
+          description: 'x',
+          amount: 2000.01,
+        },
+      ],
+      championName: 'The Big Give Match Fund',
+      charity: {
+        name: 'Awesome Charity',
+        id: '0011r00002HHAprAAH',
+      },
+      daysLeft: 0,
+      donationCount: 4,
+      endDate: new Date(),
+      giftHandles: [
+        {
+          description: 'Can buy you 2 things',
+          amount: 50.01,
+        },
+      ],
+      id: 'a051r00001EywjpAAB',
+      isMatched: true,
+      matchFundsRemaining: 987.00,
       quotes: [
         {
           quote: 'Some quote',
@@ -33,34 +56,15 @@ describe('CampaignService', () => {
         },
       ],
       startDate: new Date(),
-      isMatched: true,
-      id: 'a051r00001EywjpAAB',
-      giftHandles: [
+      status: 'Active',
+      summary: 'Some long summary',
+      target: 2000.01,
+      title: 'Some title',
+      updates: [],
+      video: [
         {
-          description: 'Can buy you 2 things',
-          amount: 50.01,
-        },
-      ],
-      charity: {
-        name: 'Awesome Charity',
-        id: '0011r00002HHAprAAH',
-      },
-      endDate: new Date(),
-      championName: 'The Big Give Match Fund',
-      budgetDetails: [
-        {
-          description: 'x',
-          amount: 2000.01,
-        },
-      ],
-      /* tslint:disable-next-line */
-      bannerUri: 'https://thebiggive--Full--c.cs101.content.force.com/sfc/dist/version/download/?oid=00D1X0000008ahG&ids=0681X0000007w5l&d=%2Fa%2F1X0000008UpU%2FvdeP6lXwciVq6CMSA8BhwNQ6hNTyZHu7VmcugZgN2SY&asPdf=false',
-      amountRaised: 200.00,
-      additionalImageUris: [
-        {
-          /* tslint:disable-next-line */
-          uri: 'https://thebiggive--c.eu12.content.force.com/sfc/dist/version/download/?oid=00D0O000000YzQm&ids=0681r00000CtcvY&d=%2Fa%2F1r0000002Ypn%2FeDMuuQUiOagDxe4259w1_.zlHnaPgj2nMiGJ5M.Gi2Y&asPdf=false',
-          order: 100,
+          provider: 'youtube',
+          key: '1G_Abc2delF',
         },
       ],
     };

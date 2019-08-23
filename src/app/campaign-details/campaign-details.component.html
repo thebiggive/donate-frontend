@@ -12,13 +12,16 @@
 
 	<div>
 		<h3>Campaign Summary</h3>
-		<p>{{campaign.summary}}</p>
+    <p>{{campaign.summary}}</p>
+    <p>Status: <strong>{{ campaign.status }}</strong></p>
+    <p *ngIf="campaign.status == 'Active'">{{ campaign.daysLeft }} days left</p>
 	</div>
 
 	<div>
 		<h3>Campaign Targets</h3>
 		<p *ngIf="campaign.target > 0">Campaign Target: {{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
-		<p *ngIf="campaign.amountRaised > 0">Amount Raised: {{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
+    <p *ngIf="campaign.amountRaised > 0">Amount Raised: {{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
+    <p>Donations: {{ campaign.donationCount }}</p>
 	</div>
 
 	<div>
