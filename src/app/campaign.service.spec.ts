@@ -25,7 +25,7 @@ describe('CampaignService', () => {
       ],
       amountRaised: 200.00,
       // tslint:disable-next-line
-      bannerUri: 'https://thebiggive--Full--c.cs101.content.force.com/sfc/dist/version/download/?oid=00D1X0000008ahG&ids=0681X0000007w5l&d=%2Fa%2F1X0000008UpU%2FvdeP6lXwciVq6CMSA8BhwNQ6hNTyZHu7VmcugZgN2SY&asPdf=false',
+      bannerUri: 'https://thebiggive--Full--c.cs107.content.force.com/sfc/dist/version/download/?oid=00D1X0000008ahG&ids=0681X0000007w5l&d=%2Fa%2F1X0000008UpU%2FvdeP6lXwciVq6CMSA8BhwNQ6hNTyZHu7VmcugZgN2SY&asPdf=false',
       budgetDetails: [
         {
           description: 'x',

@@ -4,11 +4,11 @@
 
 export const environment = {
   production: false,
-  apiUriPrefix: 'https://full-biggive.cs101.force.com',
+  apiUriPrefix: 'https://full-biggive.cs107.force.com',
   charityCheckoutInitUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
   donateUriPrefix: 'https://d21lpwf5nm8mg.cloudfront.net',
   maximumDonationAmount: 25000,
-  thanksUriPrefix: 'https://full-thebiggive.cs101.force.com/s/thank-you?id=',
+  thanksUriPrefix: 'https://full-thebiggive.cs107.force.com/s/thank-you?id=',
 };
 
 /*
