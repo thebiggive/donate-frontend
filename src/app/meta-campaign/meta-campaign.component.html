@@ -2,10 +2,12 @@
   <mat-card-header>
     <div mat-card-avatar class="childhood-trust-icon"></div>
     <mat-card-title>{{ campaign.title }}</mat-card-title>
+    <mat-card-subtitle *ngIf="campaign.status == 'Preview'">Opens in {{ campaign.startDate | timeLeft }}</mat-card-subtitle>
+    <mat-card-subtitle *ngIf="campaign.status != 'Preview'">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }} raised</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
     <p>{{ campaign.summary }}</p>
-    </mat-card-content>
+  </mat-card-content>
 </mat-card>
 
 <div *ngIf="children">
