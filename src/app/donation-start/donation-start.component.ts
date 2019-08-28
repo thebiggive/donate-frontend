@@ -10,6 +10,7 @@ import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
+import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -46,6 +47,8 @@ export class DonationStartComponent implements OnInit {
   ngOnInit() {
     this.campaignService.getOne(this.campaignId)
       .subscribe(campaign => this.campaign = campaign);
+
+    this.donationService.checkForExistingDonations(this.campaignId, this);
 
     this.donationForm = this.formBuilder.group({
       // TODO require a whole number of pounds, unless scrapping that constraint
@@ -90,14 +93,15 @@ export class DonationStartComponent implements OnInit {
 
     this.donationService
       .create(donation) // Create Salesforce donation
-      .subscribe((donationCreatedResponse: DonationCreatedResponse) => {
+      .subscribe((response: DonationCreatedResponse) => {
+        this.donationService.saveDonation(response.donation, response.jwt);
+
         // If that succeeded proceed to Charity Checkout donation page, providing key
         // fields are present in the Salesforce response's Donation.
-
         const salesforceResponseMissingRequiredData = (
-          !donationCreatedResponse.donation.charityId ||
-          !donationCreatedResponse.donation.donationId ||
-          !donationCreatedResponse.donation.projectId
+          !response.donation.charityId ||
+          !response.donation.donationId ||
+          !response.donation.projectId
         );
         if (salesforceResponseMissingRequiredData) {
           // TODO log detail of missing info back from Salesforce
@@ -107,18 +111,18 @@ export class DonationStartComponent implements OnInit {
           return;
         }
 
-        if (donation.donationMatched && !donationCreatedResponse.donation.donationMatched) {
-          this.promptToContinueWithNoMatchingLeft(donationCreatedResponse.donation);
+        if (donation.donationMatched && !response.donation.donationMatched) {
+          this.promptToContinueWithNoMatchingLeft(response.donation);
           return;
         }
 
-        if (donation.donationMatched && donation.donationAmount < donationCreatedResponse.donation.matchReservedAmount) {
-          this.promptToContinueWithPartialMatching(donationCreatedResponse.donation);
+        if (donation.donationMatched && donation.donationAmount < response.donation.matchReservedAmount) {
+          this.promptToContinueWithPartialMatching(response.donation);
           return;
         }
 
         // Else either the donation was not expected to be matched or has 100% match funds allocated -> no need for an extra step
-        this.redirectToCharityCheckout(donationCreatedResponse.donation);
+        this.redirectToCharityCheckout(response.donation);
       }, error => {
         // TODO log the detailed `error` message somewhere
         this.sfApiError = true;
@@ -137,6 +141,17 @@ export class DonationStartComponent implements OnInit {
    * Quick getter for form controls, to keep validation message handling concise.
    */
   get f() { return this.donationForm.controls; }
+
+  offerExistingDonation(donation: Donation) {
+    this.submitting = true;
+
+    const reuseDialog = this.dialog.open(DonationStartOfferReuseDialogComponent, {
+      data: { donation },
+      disableClose: true,
+      role: 'alertdialog',
+    });
+    reuseDialog.afterClosed().subscribe(this.getDialogResponseFn(donation));
+  }
 
   private redirectToCharityCheckout(donation: Donation) {
     this.charityCheckoutService.startDonation(donation);
@@ -162,23 +177,32 @@ export class DonationStartComponent implements OnInit {
   }
 
   private promptToContinue(status: string, cancelCopy: string, donation: Donation) {
-    const dialogRef = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
+    const continueDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
       data: { cancelCopy, status },
       disableClose: true,
       role: 'alertdialog',
     });
+    continueDialog.afterClosed().subscribe(this.getDialogResponseFn(donation));
+  }
 
-    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+  /**
+   * Thunk returning a fn which can handle a dialog true/false response and continue/cancel `donation` accordingly.
+   */
+  private getDialogResponseFn(donation: Donation) {
+    return (proceed: boolean) => {
       if (proceed) {
         this.redirectToCharityCheckout(donation);
 
         return;
       }
 
-      // Else cancel the pending donation
-      // TODO release match funds reserved, if any - DON-12
-
+      // Else cancel the existing donation in Salesforce and remove our local record of it
+      this.donationService.cancel(donation)
+        .subscribe(
+          response => console.log('Cancelled donation', response), // TODO log to GA?
+          error => console.log('Cancel error:', error), // TODO definitely log these to GA
+        );
       this.submitting = false;
-    });
+    };
   }
 }

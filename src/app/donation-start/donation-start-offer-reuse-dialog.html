@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Continue donation?</h2>
+
+<mat-dialog-content class="mat-typography">
+  <h3>You have an existing incomplete donation to this campaign which you may continue.</h3>
+
+  <p>Donation amount: <strong>{{ data.donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong></p>
+
+  <p *ngIf="data.donation.matchReservedAmount > 0">Match funds reserved: <strong>{{ data.donation.matchReservedAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong></p>
+  <p *ngIf="data.donation.matchReservedAmount == 0">No match funds are reserved.</p>
+
+  <p>Please confirm if you would rather proceed, or cancel this and provide new donation details.</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button [mat-dialog-close]="false" color="accent">Cancel</button>
+  <button mat-raised-button [mat-dialog-close]="true" cdkFocusInitial color="primary">Proceed</button>
+</mat-dialog-actions>
