@@ -1,6 +1,4 @@
 export class Campaign {
-  public daysLeft: number;
-
   constructor(
     public id: string,
     public amountRaised: number,
@@ -22,7 +20,5 @@ export class Campaign {
     public title: string,
     public updates: Array<{content: string, modifiedDate: Date}>,
     public video: Array<{provider: string, key: string}>,
-    ) {
-      this.daysLeft = Math.floor((new Date()).getTime() - endDate.getTime() / 86400000);
-    }
+  ) {}
 }

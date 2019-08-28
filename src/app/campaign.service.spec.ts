@@ -37,7 +37,6 @@ describe('CampaignService', () => {
         name: 'Awesome Charity',
         id: '0011r00002HHAprAAH',
       },
-      daysLeft: 0,
       donationCount: 4,
       endDate: new Date(),
       giftHandles: [

@@ -14,7 +14,7 @@
 		<h3>Campaign Summary</h3>
     <p>{{campaign.summary}}</p>
     <p>Status: <strong>{{ campaign.status }}</strong></p>
-    <p *ngIf="campaign.status == 'Active'">{{ campaign.daysLeft }} days left</p>
+    <p *ngIf="campaign.status == 'Active'">{{ campaign.endDate | timeLeft }} left</p>
 	</div>
 
 	<div>

@@ -1,8 +1,8 @@
 import { Donation } from './donation.model';
-import { environment } from 'src/environments/environment';
+import { environment } from '../environments/environment';
 
 export class CharityCheckoutDonation {
-  /* tslint:disable:variable-name These properties must match Charity Checkout snake_case POST parameters */
+  // tslint:disable:variable-name These properties must match Charity Checkout snake_case POST parameters
   public allow_TBG_contact: string; // Pseudo-boolean '0' or '1'
   public change_donation_url: string;
   public charity_id: string;
@@ -15,7 +15,7 @@ export class CharityCheckoutDonation {
   public share_details_with_charity = '1'; // Donors' details are now always shared with charities
   public thanks_url: string;
   public unique_ID: string;
-  /* tslint:enable:variable-name */
+  // tslint:enable:variable-name
 
   constructor(donation: Donation) {
     this.allow_TBG_contact = donation.optInTbgEmail ? '1' : '0';

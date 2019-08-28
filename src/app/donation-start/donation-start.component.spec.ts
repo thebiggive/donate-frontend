@@ -1,11 +1,12 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatInputModule, MatRadioModule } from '@angular/material';
+import { MatButtonModule, MatDialogModule, MatInputModule, MatRadioModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { DonationStartComponent } from './donation-start.component';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('DonationStartComponent', () => {
   let component: DonationStartComponent;
@@ -13,10 +14,11 @@ describe('DonationStartComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DonationStartComponent ],
+      declarations: [ DonationStartComponent, TimeLeftPipe ],
       imports: [
         HttpClientTestingModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
+        MatDialogModule,
         MatInputModule,
         MatRadioModule,
         NoopAnimationsModule,
