@@ -7,6 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Campaign } from '../campaign.model';
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
 import { MetaCampaignComponent } from './meta-campaign.component';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('MetaCampaignComponent', () => {
   let component: MetaCampaignComponent;
@@ -17,6 +18,7 @@ describe('MetaCampaignComponent', () => {
       declarations: [
         CampaignCardComponent,
         MetaCampaignComponent,
+        TimeLeftPipe,
       ],
       imports: [
         HttpClientTestingModule,
