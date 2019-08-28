@@ -4,6 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Campaign } from '../campaign.model';
 import { CampaignDetailsComponent } from './campaign-details.component';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
@@ -11,7 +12,7 @@ describe('CampaignDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CampaignDetailsComponent ],
+      declarations: [ CampaignDetailsComponent, TimeLeftPipe ],
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,

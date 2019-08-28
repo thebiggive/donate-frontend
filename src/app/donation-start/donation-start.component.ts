@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { Campaign } from './../campaign.model';
@@ -8,7 +9,8 @@ import { CampaignService } from '../campaign.service';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
-import { environment } from 'src/environments/environment';
+import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-donation-start',
@@ -28,6 +30,7 @@ export class DonationStartComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
     private charityCheckoutService: CharityCheckoutService,
+    public dialog: MatDialog,
     private donationService: DonationService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -104,7 +107,18 @@ export class DonationStartComponent implements OnInit {
           return;
         }
 
-        this.charityCheckoutService.startDonation(donationCreatedResponse.donation);
+        if (donation.donationMatched && !donationCreatedResponse.donation.donationMatched) {
+          this.promptToContinueWithNoMatchingLeft(donationCreatedResponse.donation);
+          return;
+        }
+
+        if (donation.donationMatched && donation.donationAmount < donationCreatedResponse.donation.matchReservedAmount) {
+          this.promptToContinueWithPartialMatching(donationCreatedResponse.donation);
+          return;
+        }
+
+        // Else either the donation was not expected to be matched or has 100% match funds allocated -> no need for an extra step
+        this.redirectToCharityCheckout(donationCreatedResponse.donation);
       }, error => {
         // TODO log the detailed `error` message somewhere
         this.sfApiError = true;
@@ -122,5 +136,49 @@ export class DonationStartComponent implements OnInit {
   /**
    * Quick getter for form controls, to keep validation message handling concise.
    */
-  public get f() { return this.donationForm.controls; }
+  get f() { return this.donationForm.controls; }
+
+  private redirectToCharityCheckout(donation: Donation) {
+    this.charityCheckoutService.startDonation(donation);
+  }
+
+  private promptToContinueWithNoMatchingLeft(donation: Donation) {
+    this.promptToContinue(
+      'There are no match funds remaining for this campaign. Your donation will not be matched.',
+      'Cancel',
+      donation,
+    );
+  }
+
+  /**
+   * @param donation *Response* Donation object, with `matchReservedAmount` set and returned by Salesforce.
+   */
+  private promptToContinueWithPartialMatching(donation: Donation) {
+    this.promptToContinue(
+      `There are limited match funds remaining for this campaign. £${donation.matchReservedAmount} of your donation will be matched.`,
+      'Cancel and release match funds',
+      donation,
+    );
+  }
+
+  private promptToContinue(status: string, cancelCopy: string, donation: Donation) {
+    const dialogRef = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
+      data: { cancelCopy, status },
+      disableClose: true,
+      role: 'alertdialog',
+    });
+
+    dialogRef.afterClosed().subscribe((proceed: boolean) => {
+      if (proceed) {
+        this.redirectToCharityCheckout(donation);
+
+        return;
+      }
+
+      // Else cancel the pending donation
+      // TODO release match funds reserved, if any - DON-12
+
+      this.submitting = false;
+    });
+  }
 }

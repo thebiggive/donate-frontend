@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { CharityCheckoutDonation } from './charity-checkout-donation.model';
 import { Donation } from './donation.model';
-import { environment } from 'src/environments/environment';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',

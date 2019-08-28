@@ -23,7 +23,7 @@
     <p>Donations: {{ campaign.donationCount }}</p>
   </div>
 
-  <p *ngIf="campaign.status == 'Active'">{{ campaign.daysLeft }} days left</p>
+  <p *ngIf="campaign.status == 'Active'">{{ campaign.endDate | timeLeft }} left</p>
 
   <mat-form-field color="accent">
     <mat-label for="donationAmount">Amount (£)</mat-label>
