@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Match funds not available</h2>
+
+<mat-dialog-content class="mat-typography">
+  <h3>{{ data.status }}</h3>
+
+  <p>Please confirm if you would rather proceed anyway, or cancel and edit your donation details.</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button [mat-dialog-close]="false" color="accent">{{ data.cancelCopy }}</button>
+  <button mat-raised-button [mat-dialog-close]="true" cdkFocusInitial color="primary">Proceed anyway</button>
+</mat-dialog-actions>
