@@ -111,11 +111,13 @@ export class DonationStartComponent implements OnInit {
           return;
         }
 
-        if (donation.donationMatched && !response.donation.donationMatched) {
+        // Amount reserved for matching is 'false-y', i.e. £0
+        if (donation.donationMatched && !response.donation.matchReservedAmount) {
           this.promptToContinueWithNoMatchingLeft(response.donation);
           return;
         }
 
+        // Amount reserved for matching is >£0 but less than the full donation
         if (donation.donationMatched && donation.donationAmount < response.donation.matchReservedAmount) {
           this.promptToContinueWithPartialMatching(response.donation);
           return;
