@@ -29,6 +29,7 @@ describe('CampaignDetailsComponent', () => {
       123,
       [],
       'https://example.com/banner.png',
+      'Some information about what happens if funds are not used',
       [],
       'Some Champion',
       { id: 'testCharityId', name: 'Test Charity' },

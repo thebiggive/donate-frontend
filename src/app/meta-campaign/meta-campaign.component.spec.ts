@@ -39,6 +39,7 @@ describe('MetaCampaignComponent', () => {
       123,
       [],
       'https://example.com/banner.png',
+      '',
       [],
       undefined,
       { id: 'tbgId', name: 'The Big Give' },
