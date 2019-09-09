@@ -3,7 +3,6 @@ export class Campaign {
     public id: string,
     public amountRaised: number,
     public additionalImageUris: Array<{uri: string, order: number}>,
-    public alternativeFundUse: string,
     public bannerUri: string,
     public budgetDetails: Array<{amount: number, description: string}>,
     public championName: string,
@@ -21,5 +20,6 @@ export class Campaign {
     public title: string,
     public updates: Array<{content: string, modifiedDate: Date}>,
     public video: Array<{provider: string, key: string}>,
+    public alternativeFundUse?: string,
   ) {}
 }

@@ -5,7 +5,7 @@
 <div class="details" *ngIf="campaign">
 	<div>
 		<h2>{{campaign.title}}</h2>
-    	<h3 *ngIf="campaign.championName">Championed by {{campaign.championName}}</h3>
+		<h3 *ngIf="campaign.championName">Championed by {{campaign.championName}}</h3>
 		<h4 *ngIf="campaign.isMatched">Matched Campaign!</h4>
 		<h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
 	</div>
@@ -24,7 +24,7 @@
 		<p>Donations: {{ campaign.donationCount }}</p>
 	</div>
 
-	<div *ngIf="campaign.alternativeFundUse != null">
+	<div *ngIf="campaign.alternativeFundUse">
 		<h3>Understanding the Target</h3>
 		<p>{{ campaign.alternativeFundUse }}</p>
 	</div>
