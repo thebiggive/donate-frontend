@@ -55,7 +55,6 @@ describe('MetaCampaignComponent', () => {
       'Test Master Campaign!',
       [],
       [],
-      '',
     );
     component.children = [
       new CampaignSummary(
