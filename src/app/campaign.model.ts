@@ -20,5 +20,6 @@ export class Campaign {
     public title: string,
     public updates: Array<{content: string, modifiedDate: Date}>,
     public video: Array<{provider: string, key: string}>,
+    public alternativeFundUse?: string,
   ) {}
 }

@@ -45,6 +45,7 @@ describe('CampaignDetailsComponent', () => {
       'Test Campaign!',
       [],
       [],
+      'Some information about what happens if funds are not used',
     );
     fixture.detectChanges();
   });
