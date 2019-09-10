@@ -3,33 +3,34 @@
 <h2>Banner Image here!</h2>
 
 <div class="details" *ngIf="campaign">
-	<div>
-		<h2>{{campaign.title}}</h2>
+  <div>
+    <h2>{{campaign.title}}</h2>
     <h3 *ngIf="campaign.championName">Championed by {{campaign.championName}}</h3>
-		<h4 *ngIf="campaign.isMatched">Matched Campaign!</h4>
-		<h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
-	</div>
+    <h4 *ngIf="campaign.isMatched">Matched Campaign!</h4>
+    <h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
+  </div>
 
-	<div>
-		<h3>Campaign Summary</h3>
+  <div>
+    <h3>Campaign Summary</h3>
     <p>{{campaign.summary}}</p>
     <p>Status: <strong>{{ campaign.status }}</strong></p>
     <p *ngIf="campaign.status == 'Active'">{{ campaign.endDate | timeLeft }} left</p>
-	</div>
+  </div>
 
-	<div>
-		<h3>Campaign Targets</h3>
-		<p *ngIf="campaign.target > 0">Campaign Target: {{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
-    <p *ngIf="campaign.amountRaised > 0">Amount Raised: {{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
+  <div>
+    <h3>Campaign Targets</h3>
+    <p *ngIf="campaign.target > 0">Campaign Target: {{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
+    <p *ngIf="campaign.amountRaised > 0">Amount Raised:
+      {{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
     <p>Donations: {{ campaign.donationCount }}</p>
-	</div>
-	
-	<div *ngIf="campaign.alternativeFundUse">
-		<h3>Understanding the Target</h3>
-		<p>{{ campaign.alternativeFundUse }}</p>
-	</div>
+  </div>
 
-	<div>
-		<button mat-raised-button color="primary" [routerLink]="'/donate/' + campaign.id">Donate</button>
-	</div>
+  <div *ngIf="campaign.alternativeFundUse">
+    <h3>Understanding the Target</h3>
+    <p>{{ campaign.alternativeFundUse }}</p>
+  </div>
+
+  <div>
+    <button mat-raised-button color="primary" [routerLink]="'/donate/' + campaign.id">Donate</button>
+  </div>
 </div>
