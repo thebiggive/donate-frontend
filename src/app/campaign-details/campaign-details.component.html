@@ -25,6 +25,22 @@
     <p>Donations: {{ campaign.donationCount }}</p>
   </div>
 
+  <div *ngIf="campaign.budgetDetails.length != 0">
+      <h3>Budget Details</h3>
+      <div *ngFor="let detail of campaign.budgetDetails">
+        <p>Amount: {{ detail.amount }}</p>
+        <p>Description: {{ detail.description }}</p>
+      </div>
+  </div>
+  
+  <div *ngIf="campaign.quotes.length != 0">
+      <h3>Campaign Quotes</h3>
+      <div *ngFor="let quotes of campaign.quotes">
+        <p>Person: {{ quotes.person }}</p>
+        <p>Quote: {{ quotes.quote }}</p>
+      </div>
+  </div>
+
   <div *ngIf="campaign.alternativeFundUse">
     <h3>Understanding the Target</h3>
     <p>{{ campaign.alternativeFundUse }}</p>
