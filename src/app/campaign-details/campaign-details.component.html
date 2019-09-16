@@ -28,7 +28,7 @@
   <div *ngIf="campaign.budgetDetails.length != 0">
       <h3>Budget Details</h3>
       <div *ngFor="let detail of campaign.budgetDetails">
-        <p>Amount: {{ detail.amount }}</p>
+        <p>Amount: {{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</p>
         <p>Description: {{ detail.description }}</p>
       </div>
   </div>
