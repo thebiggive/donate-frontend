@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Campaign } from '../campaign.model';
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { TimeLeftPipe } from '../time-left.pipe';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
@@ -16,6 +17,7 @@ describe('CampaignDetailsComponent', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule,
+        MatCarouselModule,
       ],
     })
     .compileComponents();
