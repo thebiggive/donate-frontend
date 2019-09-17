@@ -13,7 +13,7 @@ To run the app locally:
 
 To use `ng` commands directly, e.g. to generate new code scaffolding with the CLI, install Angular globally:
 
-* `npm install -g @angular/cli`
+    npm install -g @angular/cli
 
 ## CI, e2e tests and Puppeteer
 
@@ -47,6 +47,23 @@ Because of limits with the payment processor Charity Checkout, the app must warn
 the journey, even though these browsers are included as [`browserslist`](./browserslist) build targets. To do this cleanly and also exclude
 other browsers unlikely to work with the external system, we use feature detection to look for
 [`console.time` support](https://caniuse.com/#feat=console-time) and direct users without it to upgrade.
+
+## Docker configuration
+
+The `Dockerfile` in this repository and its `npm` scripts are used for Server-Side Rendering support and containerised deployments in AWS
+Elastic Container Service (ECS). `Dockerfile` therefore has production build flags set. You can run it from any machine to test the build
+process, but typically working without Docker locally is currently easier because things like live reload and source maps are intentionally
+switched off for production builds.
+
+To test re-building the image:
+
+    docker build --rm -f "Dockerfile" -t thebiggive/donate-frontend:latest .
+
+To start it daemonised (in the background) and map to host port 4000 - assuming no running web server on that port:
+
+    docker run -d -p 4000:4000 --name donate-frontend-test1 thebiggive/donate-frontend
+
+When running this way to test Server-Side Rendering, access the app at [localhost:4000](http://localhost:4000).
 
 # Angular info
 
