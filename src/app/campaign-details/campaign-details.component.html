@@ -33,7 +33,7 @@
     </ul>
   </div>
   
-  <div *ngIf="campaign.quotes.length != 0">
+  <div *ngIf="campaign.quotes.length > 0">
     <h3>Campaign Quotes</h3>
     <ul *ngFor="let quotes of campaign.quotes">
       <li>Person: {{ quotes.person }}</li>
