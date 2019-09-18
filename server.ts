@@ -25,8 +25,8 @@ const {AppServerModuleNgFactory, LAZY_MODULE_MAP} = require('./dist/server/main'
 app.engine('html', ngExpressEngine({
   bootstrap: AppServerModuleNgFactory,
   providers: [
-    provideModuleMap(LAZY_MODULE_MAP)
-  ]
+    provideModuleMap(LAZY_MODULE_MAP),
+  ],
 }));
 
 app.set('view engine', 'html');
@@ -36,7 +36,7 @@ app.set('views', DIST_FOLDER);
 // app.get('/api/**', (req, res) => { });
 // Server static files from /browser
 app.get('*.*', express.static(DIST_FOLDER, {
-  maxAge: '1y'
+  maxAge: '1y',
 }));
 
 // All regular routes use the Universal engine
