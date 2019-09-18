@@ -43,15 +43,16 @@ donors' security. Browsers we expect to work fully with this app are:
 
 See [`browserslist`](./browserslist) for the specific instructions that tell the Angular build system what support is needed during builds.
 
-Because of limits with the payment processor Charity Checkout, the app must warn users of Internet Explorer 9 and 10 that they can't complete
-the journey, even though these browsers are included as [`browserslist`](./browserslist) build targets. To do this cleanly and also exclude
-other browsers unlikely to work with the external system, we use feature detection to look for
-[`console.time` support](https://caniuse.com/#feat=console-time) and direct users without it to upgrade.
+Although it would be good to extend support for Internet Explorer
+9 and 10, they are unsupported by both Charity Checkout and
+Angular Material so this is not an option. We use a conditional
+IE HTML comment to explain the situation to users of these
+browsers.
 
 ## Docker configuration
 
 The `Dockerfile` in this repository and its `npm` scripts are used for Server-Side Rendering support and containerised deployments in AWS
-Elastic Container Service (ECS). `Dockerfile` therefore has production build flags set. You can run it from any machine to test the build
+Elastic Container Service (ECS). `Dockerfile` is therefore configured for production/staging builds. You can run it from any machine to test the build
 process, but typically working without Docker locally is currently easier because things like live reload and source maps are intentionally
 switched off for production builds.
 
@@ -65,30 +66,28 @@ To start it daemonised (in the background) and map to host port 4000 - assuming 
 
 When running this way to test Server-Side Rendering, access the app at [localhost:4000](http://localhost:4000).
 
-# Angular info
+## Using Angular
 
-The below docs are part of the `ng init` boilerplate starter info. We'll adpat them to our most common use cases later.
-
-## Development server
+### Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
+### Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+### Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Running unit tests
+### Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+### Running end-to-end tests
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-## Further help
+### Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
