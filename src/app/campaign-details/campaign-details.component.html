@@ -1,7 +1,4 @@
-<!-- <img class="banner" [src]="campaign.bannerUri" alt="Campaign Banner"> -->
-<!-- Commented until these URIs are safe to load without increasing limited Salesforce production org counts -->
-<h2>Banner Image here!</h2>
-
+<img class="banner" [src]="campaign.bannerUri" alt="Campaign Banner">
 <div class="details" *ngIf="campaign">
   <div>
     <h2>{{campaign.title}}</h2>
@@ -39,6 +36,32 @@
       <li>Person: {{ quotes.person }}</li>
       <li>Quote: {{ quotes.quote }}</li>
     </ul>
+  </div>
+
+  <div *ngIf="campaign.additionalImageUris.length > 0">
+    <h3>Campaign Images</h3>
+    <mat-carousel
+      timings="250ms ease-in"
+      [autoplay]="true"
+      interval="5000"
+      color="white"
+      maxWidth="auto"
+      proportion="20"
+      slides="5"
+      [loop]="true"
+      [hideArrows]="true"
+      [hideIndicators]="false"
+      [useKeyboard]="true"
+      [useMouseWheel]="false"
+      orientation="ltr"
+    >
+      <mat-carousel-slide
+        #matCarouselSlide
+        *ngFor="let image of campaign.additionalImageUris"
+        [image]="image.uri"
+        [hideOverlay]="false"
+      ></mat-carousel-slide>
+    </mat-carousel>
   </div>
 
   <div *ngIf="campaign.alternativeFundUse">
