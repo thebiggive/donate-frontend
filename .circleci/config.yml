@@ -60,16 +60,15 @@ workflows:
   deploy-staging:
     jobs:
       - aws-ecr/build-and-push-image:
-          account-url: ECR_URI
-          dockerfile: "Dockerfile.staging"
-          repo: "${AWS_ECS_RESOURCE_NAME}"
-          region: AWS_REGION
-          tag: "staging-${CIRCLE_SHA1}"
-      - aws-ecs/deploy-service-update:
           filters:
             branches:
               only:
                 - master # TODO this will become develop when we start deploying to prod
+          extra-build-args: "BUILD_ENV=staging"
+          repo: "${AWS_ECS_RESOURCE_NAME}"
+          region: AWS_REGION
+          tag: "staging-${CIRCLE_SHA1}"
+      - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
           aws-region: ${AWS_REGION}
