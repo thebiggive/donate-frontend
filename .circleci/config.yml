@@ -68,7 +68,7 @@ workflows:
           extra-build-args: "--build-arg BUILD_ENV=staging"
           repo: "${AWS_ECR_REPO_NAME}"
           region: AWS_REGION
-          tag: "staging-${CIRCLE_SHA1}"
+          tag: "staging,staging-${CIRCLE_SHA1}"
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
