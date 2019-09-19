@@ -77,15 +77,12 @@ workflows:
           cluster-name: "tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
           container-image-name-updates: "container=tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX},tag=staging-${CIRCLE_SHA1}"
           post-steps:
-            - slack/notify-on-failure:
-                color: '#990000'
-                message: Donate frontend staging deploy failed
-                title: "Staging ERROR!: Donate frontend"
             - slack/notify:
                 color: '#009900'
                 message: Donate frontend staging deployed
                 title: "Staging: Donate frontend deployed!"
                 title_link: https://donate-staging.thebiggivetest.org.uk
+            - slack/notify-on-failure: ~
 
   deploy-s3-demo:
     jobs:
