@@ -11,8 +11,10 @@
     "e2e": "ng e2e",
     "compile:server": "webpack --config webpack.server.config.js --progress --colors",
     "serve:ssr": "node dist/server",
-    "build:ssr": "npm run build:client-and-server-bundles && npm run compile:server",
-    "build:client-and-server-bundles": "ng build --prod && ng run donate-frontend:server:production",
+    "build:ssr:production": "npm run build:client-and-server-bundles:production && npm run compile:server",
+    "build:ssr:staging": "npm run build:client-and-server-bundles:staging && npm run compile:server",
+    "build:client-and-server-bundles:production": "ng build --prod && ng run donate-frontend:server:production",
+    "build:client-and-server-bundles:staging": "ng build --prod --configuration=staging && ng run donate-frontend:server:production",
     "build:s3-demo": "ng build --prod --configuration=staging",
     "e2e-ci": "ng e2e --protractor-config=e2e/protractor-ci.conf.js",
     "ci": "npm run lint && npm run test-ci && npm run e2e-ci"
