@@ -75,7 +75,7 @@ workflows:
           aws-region: ${AWS_REGION}
           family: "tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
           cluster-name: "tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
-          container-image-name-updates: "container=tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX},tag=staging-${CIRCLE_SHA1}"
+          container-image-name-updates: "container=donate,tag=staging-${CIRCLE_SHA1}"
           post-steps:
             - slack/notify:
                 color: '#009900'
