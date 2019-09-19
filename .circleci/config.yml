@@ -64,7 +64,7 @@ workflows:
             branches:
               only:
                 - master # TODO this will become develop when we start deploying to prod
-          extra-build-args: "BUILD_ENV=staging"
+          extra-build-args: "--build-arg BUILD_ENV=staging"
           repo: "${AWS_ECS_RESOURCE_NAME}"
           region: AWS_REGION
           tag: "staging-${CIRCLE_SHA1}"
