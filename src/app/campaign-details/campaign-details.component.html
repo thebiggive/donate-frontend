@@ -1,5 +1,5 @@
-<img class="banner" [src]="campaign.bannerUri" alt="Campaign Banner">
 <div class="details" *ngIf="campaign">
+  <img class="banner" [src]="campaign.bannerUri" alt="Campaign Banner">
   <div>
     <h2>{{campaign.title}}</h2>
     <h3 *ngIf="campaign.championName">Championed by {{campaign.championName}}</h3>
@@ -29,7 +29,7 @@
       <li>Description: {{ detail.description }}</li>
     </ul>
   </div>
-  
+
   <div *ngIf="campaign.quotes.length > 0">
     <h3>Campaign Quotes</h3>
     <ul *ngFor="let quotes of campaign.quotes">

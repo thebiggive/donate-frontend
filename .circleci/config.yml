@@ -57,6 +57,7 @@ workflows:
             - jira/notify:
                 job_type: build
                 environment_type: development
+
   deploy-staging:
     jobs:
       - aws-ecr/build-and-push-image:
@@ -65,16 +66,24 @@ workflows:
               only:
                 - master # TODO this will become develop when we start deploying to prod
           extra-build-args: "--build-arg BUILD_ENV=staging"
-          repo: "${AWS_ECS_RESOURCE_NAME}"
+          repo: "${AWS_ECR_REPO_NAME}"
           region: AWS_REGION
           tag: "staging-${CIRCLE_SHA1}"
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
           aws-region: ${AWS_REGION}
-          family: "${AWS_ECS_RESOURCE_NAME}"
-          cluster-name: "${AWS_ECS_RESOURCE_NAME}"
-          container-image-name-updates: "container=${AWS_ECS_RESOURCE_NAME},tag=staging-${CIRCLE_SHA1}"
+          family: "tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
+          cluster-name: "tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
+          container-image-name-updates: "container=tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX},tag=staging-${CIRCLE_SHA1}"
+          post-steps:
+            - slack/notify:
+                color: '#009900'
+                message: Donate frontend staging deployed
+                title: "Staging: Donate frontend deployed!"
+                title_link: https://donate-staging.thebiggivetest.org.uk
+            - slack/notify-on-failure: ~
+
   deploy-s3-demo:
     jobs:
       - deploy-s3-demo:
