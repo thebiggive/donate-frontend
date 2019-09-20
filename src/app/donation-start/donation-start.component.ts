@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
+import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { Campaign } from './../campaign.model';
@@ -34,7 +35,9 @@ export class DonationStartComponent implements OnInit {
     public dialog: MatDialog,
     private donationService: DonationService,
     private formBuilder: FormBuilder,
+    private meta: Meta,
     private route: ActivatedRoute,
+    private title: Title,
   ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
     route.queryParams.forEach((params: Params) => {
@@ -46,7 +49,11 @@ export class DonationStartComponent implements OnInit {
 
   ngOnInit() {
     this.campaignService.getOne(this.campaignId)
-      .subscribe(campaign => this.campaign = campaign);
+      .subscribe(campaign => {
+        this.campaign = campaign;
+        this.title.setTitle(`Donate to ${campaign.charity.name}`);
+        this.meta.updateTag({ name: 'description', content: `Donate to the "${campaign.title}" campaign`});
+      });
 
     this.donationService.checkForExistingDonations(this.campaignId, this);
 

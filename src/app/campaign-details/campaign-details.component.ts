@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
 import { Campaign } from '../campaign.model';
@@ -15,13 +16,19 @@ export class CampaignDetailsComponent implements OnInit {
 
   constructor(
     private campaignService: CampaignService,
+    private meta: Meta,
     private route: ActivatedRoute,
+    private title: Title,
   ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
   }
 
   ngOnInit() {
     this.campaignService.getOne(this.campaignId)
-      .subscribe(data => this.campaign = data);
+      .subscribe(campaign => {
+        this.campaign = campaign;
+        this.title.setTitle(campaign.title);
+        this.meta.updateTag({ name: 'description', content: `View details of the "${campaign.title}" campaign`});
+      });
   }
 }
