@@ -8,6 +8,7 @@ import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 
 import * as compression from 'compression';
 import * as express from 'express';
+import * as helmet from 'helmet';
 import {join} from 'path';
 
 // Faster server renders w/ Prod mode (dev mode never needed)
@@ -17,6 +18,7 @@ enableProdMode();
 const app = express();
 
 app.use(compression());
+app.use(helmet()); // Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
 
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist/browser');
