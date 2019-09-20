@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   apiUriPrefix: 'https://full-biggive.cs107.force.com',
   charityCheckoutInitUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
-  donateUriPrefix: 'https://d21lpwf5nm8mg.cloudfront.net',
+  donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   maximumDonationAmount: 25000,
   thanksUriPrefix: 'https://full-thebiggive.cs107.force.com/s/thank-you?id=',
 };
