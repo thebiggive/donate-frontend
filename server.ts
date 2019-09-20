@@ -51,7 +51,8 @@ app.get('/robots.txt', (req, res) => {
 // app.get('/api/**', (req, res) => { });
 // Server static files from /browser
 app.get('*.*', express.static(DIST_FOLDER, {
-  maxAge: Infinity, // Sets cache of 1 year and `immutable` flag. See https://github.com/pillarjs/send/pull/140
+  immutable: true,
+  maxAge: '1y',
 }));
 
 // All regular routes use the Universal engine
