@@ -1,28 +1,38 @@
-<mat-grid-tile-header>
-  <h2>{{ campaign.title }}</h2>
-</mat-grid-tile-header>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ campaign.title }}</mat-card-title>
+  </mat-card-header>
 
-<img *ngIf="campaign.imageUri" mat-card-image class="banner" [src]="campaign.imageUri" alt="" role="presentation">
+  <img
+    *ngIf="campaign.imageUri"
+    mat-card-image
+    class="banner"
+    [src]="campaign.imageUri"
+    alt=""
+    role="presentation"
+  >
 
-<h4 *ngIf="campaign.isMatched">Match funded campaign</h4>
-<h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
-<h3>for {{ campaign.charity.name }}</h3>
+  <mat-card-content>
+  <h4 *ngIf="campaign.isMatched">Match funded campaign</h4>
+  <h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
+  <h3>for {{ campaign.charity.name }}</h3>
+  <ul>
+    <li *ngIf="campaign.target > 0">Target: {{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</li>
+    <li>Raised: {{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</li>
+    <li *ngIf="percentRaised !== null">Percent raised: {{ percentRaised }}%</li>
+  </ul>
+  </mat-card-content>
 
-<ul>
-  <li *ngIf="campaign.target > 0">Target: {{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</li>
-  <li>Raised: {{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</li>
-  <li *ngIf="percentRaised !== null">Percent raised: {{ percentRaised }}%</li>
-</ul>
-
-<mat-grid-tile-footer>
-  <button
-    mat-raised-button
-    color="accent"
-    [routerLink]="'/campaign/' + campaign.id"
-  >View</button>
-  <button
-    mat-raised-button
-    color="primary"
-    [routerLink]="'/donate/' + campaign.id"
-  >Donate</button>
-</mat-grid-tile-footer>
+  <mat-card-actions>
+    <button
+      mat-raised-button
+      color="accent"
+      [routerLink]="'/campaign/' + campaign.id"
+    >View</button>
+    <button
+      mat-raised-button
+      color="primary"
+      [routerLink]="'/donate/' + campaign.id"
+    >Donate</button>
+  </mat-card-actions>
+</mat-card>
