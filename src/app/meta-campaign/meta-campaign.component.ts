@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
 import { Campaign } from '../campaign.model';
@@ -19,14 +20,20 @@ export class MetaCampaignComponent implements OnInit {
 
   constructor(
     private campaignService: CampaignService,
+    private meta: Meta,
     private route: ActivatedRoute,
+    private title: Title,
   ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
   }
 
   ngOnInit() {
     this.viewportWidth = window.innerWidth;
-    this.campaignService.getOne(this.campaignId).subscribe(campaign => this.campaign = campaign);
+    this.campaignService.getOne(this.campaignId).subscribe(campaign => {
+      this.campaign = campaign;
+      this.title.setTitle(`Campaigns in ${campaign.title}`);
+      this.meta.updateTag({ name: 'description', content: `Browse campaigns in ${campaign.title}`});
+    });
     this.campaignService.search(this.campaignId).subscribe(campaignSummaries => this.children = campaignSummaries);
   }
 
