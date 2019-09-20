@@ -79,7 +79,7 @@ workflows:
           post-steps:
             - slack/notify:
                 color: '#009900'
-                message: Donate frontend staging deployed
+                message: We use rolling blue/green deploys. All visitors to staging will see the updated app version in about 15 minutes.
                 title: "Staging: Donate frontend deployed!"
                 title_link: https://donate-staging.thebiggivetest.org.uk
             - slack/notify-on-failure: ~

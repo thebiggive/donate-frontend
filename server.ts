@@ -6,7 +6,9 @@ import {ngExpressEngine} from '@nguniversal/express-engine';
 // Import module map for lazy loading
 import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 
+import * as compression from 'compression';
 import * as express from 'express';
+import * as helmet from 'helmet';
 import {join} from 'path';
 
 // Faster server renders w/ Prod mode (dev mode never needed)
@@ -14,6 +16,9 @@ enableProdMode();
 
 // Express server
 const app = express();
+
+app.use(compression());
+app.use(helmet()); // Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
 
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist/browser');
@@ -36,7 +41,7 @@ app.set('views', DIST_FOLDER);
 // app.get('/api/**', (req, res) => { });
 // Server static files from /browser
 app.get('*.*', express.static(DIST_FOLDER, {
-  maxAge: '1y',
+  maxAge: Infinity, // Sets cache of 1 year and `immutable` flag. See https://github.com/pillarjs/send/pull/140
 }));
 
 // All regular routes use the Universal engine
