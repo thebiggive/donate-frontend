@@ -6,6 +6,7 @@ import {ngExpressEngine} from '@nguniversal/express-engine';
 // Import module map for lazy loading
 import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 
+import * as compression from 'compression';
 import * as express from 'express';
 import {join} from 'path';
 
@@ -14,6 +15,8 @@ enableProdMode();
 
 // Express server
 const app = express();
+
+app.use(compression());
 
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist/browser');
@@ -36,7 +39,7 @@ app.set('views', DIST_FOLDER);
 // app.get('/api/**', (req, res) => { });
 // Server static files from /browser
 app.get('*.*', express.static(DIST_FOLDER, {
-  maxAge: '1y',
+  maxAge: Infinity, // Sets cache of 1 year and `immutable` flag. See https://github.com/pillarjs/send/pull/140
 }));
 
 // All regular routes use the Universal engine
