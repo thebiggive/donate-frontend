@@ -5,11 +5,12 @@ import {enableProdMode} from '@angular/core';
 import {ngExpressEngine} from '@nguniversal/express-engine';
 // Import module map for lazy loading
 import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
-
 import * as compression from 'compression';
 import * as express from 'express';
 import * as helmet from 'helmet';
 import {join} from 'path';
+
+import { environment } from './src/environments/environment';
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
@@ -36,6 +37,15 @@ app.engine('html', ngExpressEngine({
 
 app.set('view engine', 'html');
 app.set('views', DIST_FOLDER);
+
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain');
+  if (environment.production) {
+    res.send('User-agent: *\nAllow: /');
+  } else {
+    res.send('User-agent: *\nDisallow: /');
+  }
+});
 
 // Example Express Rest API endpoints
 // app.get('/api/**', (req, res) => { });
