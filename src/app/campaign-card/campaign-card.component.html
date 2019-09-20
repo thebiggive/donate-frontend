@@ -13,14 +13,14 @@
   >
 
   <mat-card-content>
-  <h4 *ngIf="campaign.isMatched">Match funded campaign</h4>
-  <h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
-  <h3>for {{ campaign.charity.name }}</h3>
-  <ul>
-    <li *ngIf="campaign.target > 0">Target: {{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</li>
-    <li>Raised: {{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</li>
-    <li *ngIf="percentRaised !== null">Percent raised: {{ percentRaised }}%</li>
-  </ul>
+    <h4 *ngIf="campaign.isMatched">Match funded campaign</h4>
+    <h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
+    <h3>for {{ campaign.charity.name }}</h3>
+    <ul>
+      <li *ngIf="campaign.target > 0">Target: {{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</li>
+      <li>Raised: {{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</li>
+      <li *ngIf="percentRaised !== null">Percent raised: {{ percentRaised }}%</li>
+    </ul>
   </mat-card-content>
 
   <mat-card-actions>
