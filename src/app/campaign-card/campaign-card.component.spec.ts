@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatButtonModule, MatGridListModule } from '@angular/material';
+import { MatButtonModule, MatCardModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { CampaignCardComponent } from './campaign-card.component';
@@ -14,7 +14,7 @@ describe('CampaignCardComponent', () => {
       declarations: [ CampaignCardComponent ],
       imports: [
         MatButtonModule,
-        MatGridListModule,
+        MatCardModule,
         RouterTestingModule,
       ],
     })
