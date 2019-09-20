@@ -1,5 +1,5 @@
 <div class="details" *ngIf="campaign">
-  <img class="banner" [src]="campaign.bannerUri" alt="Campaign Banner">
+  <img *ngIf="campaign.bannerUri" class="banner" [src]="campaign.bannerUri" alt="" role="presentation">
   <div>
     <h2>{{campaign.title}}</h2>
     <h3 *ngIf="campaign.championName">Championed by {{campaign.championName}}</h3>
