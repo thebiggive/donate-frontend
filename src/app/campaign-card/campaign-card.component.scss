@@ -1,4 +1,9 @@
-mat-grid-tile-footer { 
-  display: flex; 
+mat-grid-tile-footer {
+  display: flex;
   justify-content: space-between;
+}
+
+mat-progress-bar {
+  background: black;
+  height: 6px;
 }
