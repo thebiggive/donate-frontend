@@ -38,7 +38,7 @@ export class SearchResultsComponent implements OnInit {
 
   public search() {
     const service = this;
-    this.campaignService.search(this.parentCampaignId, this.term)
+    this.campaignService.search({parentCampaignId: this.parentCampaignId, term: this.term})
       .subscribe(campaignSummaries => {
         this.campaigns = campaignSummaries;
         service.searched = true;

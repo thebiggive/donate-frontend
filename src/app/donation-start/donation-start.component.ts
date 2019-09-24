@@ -48,7 +48,7 @@ export class DonationStartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.campaignService.getOne(this.campaignId)
+    this.campaignService.getOneById(this.campaignId)
       .subscribe(campaign => {
         this.campaign = campaign;
         this.title.setTitle(`Donate to ${campaign.charity.name}`);
