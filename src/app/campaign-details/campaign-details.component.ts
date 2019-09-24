@@ -25,7 +25,7 @@ export class CampaignDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.campaignService.getOne(this.campaignId)
+    this.campaignService.getOneById(this.campaignId)
       .subscribe(campaign => {
         this.campaign = campaign;
         this.percentRaised = CampaignService.percentRaised(campaign);

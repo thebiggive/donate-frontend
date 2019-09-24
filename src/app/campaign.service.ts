@@ -24,20 +24,40 @@ export class CampaignService {
     return 100 * campaign.amountRaised / campaign.target;
   }
 
-  search(parentCampaignId?: string, term?: string): Observable<CampaignSummary[]> {
+  search(searchQuery: SearchQuery): Observable<CampaignSummary[]> {
     let params = new HttpParams();
-    if (parentCampaignId) {
-      params = params.append('parent', parentCampaignId);
+
+    if (searchQuery.fundSlug) {
+      params = params.append('fundSlug', searchQuery.fundSlug);
     }
 
-    if (term) {
-      params = params.append('term', term);
+    if (searchQuery.parentCampaignId) {
+      params = params.append('parent', searchQuery.parentCampaignId);
+    }
+
+    if (searchQuery.parentCampaignSlug) {
+      params = params.append('parentSlug', searchQuery.parentCampaignSlug);
+    }
+
+    if (searchQuery.term) {
+      params = params.append('term', searchQuery.term);
     }
 
     return this.http.get<CampaignSummary[]>(`${environment.apiUriPrefix}${this.apiPath}`, { params });
   }
 
-  getOne(campaignId): Observable<Campaign> {
+  getOneById(campaignId: string): Observable<Campaign> {
     return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/${campaignId}`);
   }
+
+  getOneBySlug(campaignSlug: string): Observable<Campaign> {
+    return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/slug/${campaignSlug}`);
+  }
+}
+
+class SearchQuery {
+  public fundSlug?: string;
+  public parentCampaignId?: string;
+  public parentCampaignSlug?: string;
+  public term?: string;
 }

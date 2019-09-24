@@ -69,7 +69,7 @@ describe('CampaignService', () => {
       ],
     };
 
-    service.getOne('a051r00001EywjpAAB').subscribe(campaign => {
+    service.getOneById('a051r00001EywjpAAB').subscribe(campaign => {
       expect(campaign).toEqual(dummyCampaign);
     }, () => {
       expect(false).toBe(true); // Always fail if observable errors

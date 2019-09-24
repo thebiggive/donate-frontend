@@ -20,8 +20,16 @@ const routes: Routes = [
     component: MetaCampaignComponent,
   },
   {
+    path: 'metacampaign/:campaignId/:fundSlug',
+    component: MetaCampaignComponent,
+  },
+  {
     path: 'search',
     component: SearchResultsComponent,
+  },
+  {
+    path: ':campaignSlug',
+    component: MetaCampaignComponent,
   },
 ];
 
