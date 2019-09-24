@@ -16,6 +16,14 @@ export class CampaignService {
     private http: HttpClient,
   ) {}
 
+  static percentRaised(campaign: (Campaign|CampaignSummary)): number|null {
+    if (!campaign.target) {
+      return null;
+    }
+
+    return 100 * campaign.amountRaised / campaign.target;
+  }
+
   search(parentCampaignId?: string, term?: string): Observable<CampaignSummary[]> {
     let params = new HttpParams();
     if (parentCampaignId) {

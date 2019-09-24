@@ -1,11 +1,12 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatProgressBarModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 import { Campaign } from '../campaign.model';
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { TimeLeftPipe } from '../time-left.pipe';
-import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
@@ -16,8 +17,9 @@ describe('CampaignDetailsComponent', () => {
       declarations: [ CampaignDetailsComponent, TimeLeftPipe ],
       imports: [
         HttpClientTestingModule,
-        RouterTestingModule,
         MatCarouselModule,
+        MatProgressBarModule,
+        RouterTestingModule,
       ],
     })
     .compileComponents();

@@ -17,6 +17,7 @@
   <div>
     <h3>Campaign Targets</h3>
     <p *ngIf="campaign.target > 0">Campaign Target: {{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
+    <mat-progress-bar *ngIf="campaign.target > 0" [color]="accent" [value]="percentRaised"></mat-progress-bar>
     <p *ngIf="campaign.amountRaised > 0">Amount Raised:
       {{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
     <p>Donations: {{ campaign.donationCount }}</p>

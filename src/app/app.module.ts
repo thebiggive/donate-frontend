@@ -8,6 +8,7 @@ import {
   MatDialogModule,
   MatGridListModule,
   MatInputModule,
+  MatProgressBarModule,
   MatRadioModule,
   MatSlideToggleModule,
 } from '@angular/material';
@@ -53,6 +54,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     MatDialogModule,
     MatGridListModule,
     MatInputModule,
+    MatProgressBarModule,
     MatRadioModule,
     MatSlideToggleModule,
     ReactiveFormsModule,
