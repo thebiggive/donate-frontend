@@ -13,6 +13,7 @@ import { CampaignService } from '../campaign.service';
 export class CampaignDetailsComponent implements OnInit {
   public campaign: Campaign;
   public campaignId: string;
+  public percentRaised?: number;
 
   constructor(
     private campaignService: CampaignService,
@@ -27,6 +28,7 @@ export class CampaignDetailsComponent implements OnInit {
     this.campaignService.getOneById(this.campaignId)
       .subscribe(campaign => {
         this.campaign = campaign;
+        this.percentRaised = CampaignService.percentRaised(campaign);
         this.title.setTitle(campaign.title);
         this.meta.updateTag({ name: 'description', content: `View details of the "${campaign.title}" campaign`});
       });
