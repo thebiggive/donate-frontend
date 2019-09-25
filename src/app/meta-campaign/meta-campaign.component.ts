@@ -1,4 +1,5 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
@@ -24,6 +25,8 @@ export class MetaCampaignComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
     private meta: Meta,
+    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
+    @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private title: Title,
   ) {
@@ -35,7 +38,7 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (window) { // Leave for the client to handle later, when rendering Server-Side.
+    if (isPlatformBrowser(this.platformId)) { // Update w.r.t. viewport only when browser-rendered
       this.viewportWidth = window.innerWidth;
     }
 

@@ -1,4 +1,5 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { CampaignService } from '../campaign.service';
@@ -19,6 +20,8 @@ export class SearchResultsComponent implements OnInit {
 
   constructor(
     private campaignService: CampaignService,
+    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
+    @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
   ) {
     route.queryParams.forEach((params: Params) => {
@@ -29,7 +32,7 @@ export class SearchResultsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (window) { // Leave for the client to handle later, when rendering Server-Side.
+    if (isPlatformBrowser(this.platformId)) { // Update w.r.t. viewport only when browser-rendered
       this.viewportWidth = window.innerWidth;
     }
   }
