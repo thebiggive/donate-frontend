@@ -18,14 +18,14 @@ describe('CampaignService', () => {
     const dummyCampaign: Campaign = {
       additionalImageUris: [
         {
-          // tslint:disable-next-line
+          // tslint:disable-next-line:max-line-length
           uri: 'https://thebiggive--c.eu12.content.force.com/sfc/dist/version/download/?oid=00D0O000000YzQm&ids=0681r00000CtcvY&d=%2Fa%2F1r0000002Ypn%2FeDMuuQUiOagDxe4259w1_.zlHnaPgj2nMiGJ5M.Gi2Y&asPdf=false',
           order: 100,
         },
       ],
       alternativeFundUse: 'Some information about what happens if funds are not used',
       amountRaised: 200.00,
-      // tslint:disable-next-line
+      // tslint:disable-next-line:max-line-length
       bannerUri: 'https://thebiggive--Full--c.cs107.content.force.com/sfc/dist/version/download/?oid=00D1X0000008ahG&ids=0681X0000007w5l&d=%2Fa%2F1X0000008UpU%2FvdeP6lXwciVq6CMSA8BhwNQ6hNTyZHu7VmcugZgN2SY&asPdf=false',
       budgetDetails: [
         {
