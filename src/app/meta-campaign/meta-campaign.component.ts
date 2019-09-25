@@ -35,7 +35,9 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.viewportWidth = window.innerWidth;
+    if (window) { // Leave for the client to handle later, when rendering Server-Side.
+      this.viewportWidth = window.innerWidth;
+    }
 
     if (this.campaignId) {
       this.campaignService.getOneById(this.campaignId).subscribe(campaign => this.setCampaign(campaign));

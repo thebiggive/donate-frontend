@@ -29,7 +29,9 @@ export class SearchResultsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.viewportWidth = window.innerWidth;
+    if (window) { // Leave for the client to handle later, when rendering Server-Side.
+      this.viewportWidth = window.innerWidth;
+    }
   }
 
   cols(): number {
