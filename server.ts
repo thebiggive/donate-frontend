@@ -60,6 +60,7 @@ app.get('*', (req, res) => {
 });
 
 // Start up the Node server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Node Express server listening on http://localhost:${PORT}`);
 });
+server.setTimeout(70 * 1000); // 70 seconds, 10s longer than ALBs.
