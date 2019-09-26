@@ -1,6 +1,6 @@
 <mat-card *ngIf="searched && campaigns.length == 0">No results :( Please try another search term</mat-card>
 
-<mat-grid-list [cols]="cols()" rowHeight="30rem" gutterSize="1rem">
+<mat-grid-list [cols]="cols()" rowHeight="28rem" gutterSize="1rem">
   <mat-grid-tile *ngFor="let campaign of campaigns">
     <app-campaign-card [campaign]="campaign"></app-campaign-card>
   </mat-grid-tile>

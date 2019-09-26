@@ -12,7 +12,7 @@
 
 <div *ngIf="children">
   <h2>Participating Campaigns</h2>
-  <mat-grid-list [cols]="cols()" rowHeight="30rem" gutterSize="1rem">
+  <mat-grid-list [cols]="cols()" rowHeight="28rem" gutterSize="1rem">
     <mat-grid-tile *ngFor="let campaign of children">
       <app-campaign-card [campaign]="campaign"></app-campaign-card>
     </mat-grid-tile>

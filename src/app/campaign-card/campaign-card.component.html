@@ -3,14 +3,15 @@
     <mat-card-title>{{ campaign.title }}</mat-card-title>
   </mat-card-header>
 
-  <img
-    *ngIf="campaign.imageUri"
-    mat-card-image
-    class="banner"
-    [src]="campaign.imageUri"
-    alt=""
-    role="presentation"
-  >
+  <div class="banner-container">
+    <img
+      *ngIf="campaign.imageUri"
+      mat-card-image
+      [src]="campaign.imageUri"
+      alt=""
+      role="presentation"
+    >
+  </div>
 
   <mat-card-content>
     <h4 *ngIf="campaign.isMatched">Match funded campaign</h4>
