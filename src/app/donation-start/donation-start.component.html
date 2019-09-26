@@ -70,6 +70,8 @@
     Please complete all fields above to proceed with your donation.
   </p>
 
+  <mat-spinner *ngIf="submitting" color="accent" diameter="30"></mat-spinner>
+
   <p>
     <button mat-raised-button color="primary" type="submit" [disabled]="submitting">Donate Now</button>
   </p>
