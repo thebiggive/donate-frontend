@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatDialogModule, MatInputModule, MatRadioModule } from '@angular/material';
+import { MatButtonModule, MatDialogModule, MatInputModule, MatProgressSpinnerModule, MatRadioModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -21,6 +21,7 @@ describe('DonationStartComponent', () => {
         MatDialogModule,
         MatInputModule,
         MatRadioModule,
+        MatProgressSpinnerModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([

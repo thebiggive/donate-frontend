@@ -3,8 +3,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatCardModule,
-  MatDialogModule,
-  MatGridListModule,
   MatInputModule,
   MatSlideToggleModule,
 } from '@angular/material';
@@ -20,8 +18,6 @@ describe('AppComponent', () => {
       imports: [
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatCardModule,
-        MatDialogModule,
-        MatGridListModule,
         MatInputModule,
         MatSlideToggleModule,
         NoopAnimationsModule,
