@@ -1,4 +1,43 @@
-mat-grid-tile-footer {
+// If we somehow end up with an unexpected-ratio image, let Angular Material do its
+// thing with `mat-card-image` on the `img` itself (can't set a max height as this
+// would stretch it when combined with that) but use this to ensure the card can't
+// grow to a height that breaks the layout.
+.banner-container {
+  height: 110px;
+  overflow: hidden;
+}
+
+@media (max-width: 800px) {
+  .banner-container {
+    height: 80px;
+  }
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.raised {
+  float: left;
+}
+
+.target {
+  float: right;
+}
+
+h3 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+mat-card-header {
+  height: 4rem;
+}
+
+mat-card-actions {
   display: flex;
   justify-content: space-between;
 }

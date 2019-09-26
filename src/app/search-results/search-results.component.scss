@@ -1,9 +1,9 @@
 @import '../../styles';
 
-mat-grid-list {
-  margin: 1rem;
+app-campaign-card {
+  width: 100%;
 }
 
-mat-grid-tile {
-  border: solid 1px mat-color($donate-accent);
+mat-grid-list {
+  margin: 1rem;
 }
