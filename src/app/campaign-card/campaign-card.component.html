@@ -18,12 +18,14 @@
     <h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
     <h3>for {{ campaign.charity.name }}</h3>
     <ul>
-      <li *ngIf="campaign.target > 0">
-        Target: {{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}
-        <mat-progress-bar color="accent" [value]="percentRaised"></mat-progress-bar>
+      <li>
+        <span class="raised">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }} raised</span>
       </li>
-      <li>Raised: {{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</li>
+      <li *ngIf="campaign.target">
+        <span class="target">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }} target</span>
+      </li>
     </ul>
+    <mat-progress-bar color="accent" [value]="campaign.target ? percentRaised : (campaign.amountRaised > 0 ? 100 : 0)"></mat-progress-bar>
   </mat-card-content>
 
   <mat-card-actions>
