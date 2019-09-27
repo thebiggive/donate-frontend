@@ -64,7 +64,7 @@ workflows:
           filters:
             branches:
               only:
-                - master # TODO this will become develop when we start deploying to prod
+                - develop
           extra-build-args: "--build-arg BUILD_ENV=staging"
           repo: "${AWS_ECR_REPO_NAME}"
           region: AWS_REGION
@@ -77,11 +77,43 @@ workflows:
           cluster-name: "tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
           container-image-name-updates: "container=donate,tag=staging-${CIRCLE_SHA1}"
           post-steps:
+            - jira/notify:
+                job_type: deployment
+                environment_type: staging
             - slack/notify:
                 color: '#009900'
                 message: We use rolling blue/green deploys. All visitors to staging will see the updated app version within ~20 minutes.
                 title: "Staging: Donate frontend deployed!"
                 title_link: https://donate-staging.thebiggivetest.org.uk
+            - slack/notify-on-failure: ~
+
+  deploy-production:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          filters:
+            branches:
+              only:
+                - master
+          extra-build-args: "--build-arg BUILD_ENV=production"
+          repo: "${AWS_ECR_REPO_NAME}"
+          region: AWS_REGION
+          tag: "production,production-${CIRCLE_SHA1}"
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build-and-push-image
+          aws-region: ${AWS_REGION}
+          family: "tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
+          cluster-name: "tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
+          container-image-name-updates: "container=donate,tag=production-${CIRCLE_SHA1}"
+          post-steps:
+            - jira/notify:
+                job_type: deployment
+                environment_type: production
+            - slack/notify:
+                color: '#009900'
+                message: We use rolling blue/green deploys. All visitors to production will see the updated app version within ~20 minutes.
+                title: "Production: Donate frontend deployed!"
+                title_link: https://donate-production.thebiggive.org.uk
             - slack/notify-on-failure: ~
 
   deploy-s3-demo:
@@ -90,11 +122,8 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - develop
           post-steps:
-            - jira/notify:
-                job_type: deployment
-                environment_type: staging
             - slack/notify:
                 color: '#009900'
                 message: Donate frontend staging demo deployed to S3
