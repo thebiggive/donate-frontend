@@ -17,6 +17,9 @@ To use `ng` commands directly, e.g. to generate new code scaffolding with the CL
 
 ## CI, e2e tests and Puppeteer
 
+* `master` branch deploys to Production.
+* `develop` branch deploys to Staging.
+
 The latest tagged [Puppeteer](https://www.npmjs.com/package/puppeteer) uses the very latest available Chromium, which is typically incompatible
 with the latest *stable* tagged version that other libaries have available. So for it to continue working, we need to be careful with its version
 and pin it to a specific point releases rather than allowing any `1.x` upgrade.
