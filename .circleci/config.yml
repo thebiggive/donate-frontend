@@ -43,11 +43,11 @@ jobs:
           overwrite: true
 
 orbs:
-  aws-ecr: circleci/aws-ecr@6.3.0
+  aws-ecr: circleci/aws-ecr@6.4.0
   aws-ecs: circleci/aws-ecs@0.0.11
   aws-s3: circleci/aws-s3@1.0.11
-  jira: circleci/jira@1.0.5
-  slack: circleci/slack@3.2.0
+  jira: circleci/jira@1.0.6
+  slack: circleci/slack@3.3.0
 
 workflows:
   build:
