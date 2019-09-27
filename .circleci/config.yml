@@ -123,6 +123,7 @@ workflows:
             branches:
               only:
                 - develop
+          post-steps:
             - slack/notify:
                 color: '#009900'
                 message: Donate frontend staging demo deployed to S3
