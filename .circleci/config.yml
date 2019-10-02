@@ -1,5 +1,12 @@
 version: 2.1
 
+orbs:
+  aws-ecr: circleci/aws-ecr@6.3.0
+  aws-ecs: circleci/aws-ecs@0.0.11
+  aws-s3: circleci/aws-s3@1.0.11
+  jira: circleci/jira@1.0.5
+  slack: circleci/slack@3.2.0
+
 jobs:
   build:
     docker:
@@ -61,13 +68,6 @@ jobs:
             --cache-control "max-age=86400"
           overwrite: true
 
-orbs:
-  aws-ecr: circleci/aws-ecr@6.4.0
-  aws-ecs: circleci/aws-ecs@0.0.11
-  aws-s3: circleci/aws-s3@1.0.11
-  jira: circleci/jira@1.0.6
-  slack: circleci/slack@3.3.0
-
 workflows:
   build:
     jobs:
@@ -110,26 +110,26 @@ workflows:
             branches:
               only:
                 - develop
-          extra-build-args: "--build-arg BUILD_ENV=staging"
-          repo: "${AWS_ECR_REPO_NAME}"
+          extra-build-args: '--build-arg BUILD_ENV=staging'
+          repo: '${AWS_ECR_REPO_NAME}'
           region: AWS_REGION
-          tag: "staging,staging-${CIRCLE_SHA1}"
+          tag: 'staging,staging-${CIRCLE_SHA1}'
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
-          aws-region: ${AWS_REGION}
-          family: "tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
-          cluster-name: "tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
-          container-image-name-updates: "container=donate,tag=staging-${CIRCLE_SHA1}"
+          aws-region: '${AWS_REGION}'
+          family: 'tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
+          cluster-name: 'tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
+          container-image-name-updates: 'container=donate,tag=staging-${CIRCLE_SHA1}'
           post-steps:
             - jira/notify:
                 job_type: deployment
                 environment_type: staging
             - slack/notify:
                 color: '#009900'
-                message: We use rolling blue/green deploys. All visitors to staging will see the updated app version within ~20 minutes.
-                title: "Staging: Donate frontend deployed!"
-                title_link: https://donate-staging.thebiggivetest.org.uk
+                message: 'We use rolling blue/green deploys. All visitors to staging will see the updated app version within ~20 minutes.'
+                title: 'Staging: Donate frontend deployed!'
+                title_link: 'https://donate-staging.thebiggivetest.org.uk'
             - slack/notify-on-failure: ~
 
   deploy-production-ecs:
@@ -139,16 +139,16 @@ workflows:
             branches:
               only:
                 - master
-          extra-build-args: "--build-arg BUILD_ENV=production"
-          repo: "${AWS_ECR_REPO_NAME}"
+          extra-build-args: '--build-arg BUILD_ENV=production'
+          repo: '${AWS_ECR_REPO_NAME}'
           region: AWS_REGION
-          tag: "production,production-${CIRCLE_SHA1}"
+          tag: 'production,production-${CIRCLE_SHA1}'
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
-          aws-region: ${AWS_REGION}
-          family: "tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
-          cluster-name: "tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
+          aws-region: '${AWS_REGION}'
+          family: 'tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
+          cluster-name: 'tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
           container-image-name-updates: "container=donate,tag=production-${CIRCLE_SHA1}"
           post-steps:
             - jira/notify:
@@ -156,7 +156,7 @@ workflows:
                 environment_type: production
             - slack/notify:
                 color: '#009900'
-                message: We use rolling blue/green deploys. All visitors to production will see the updated app version within ~20 minutes.
+                message: 'We use rolling blue/green deploys. All visitors to production will see the updated app version within ~20 minutes.'
                 title: 'Production: Donate frontend deployed!'
                 title_link: 'https://donate-production.thebiggive.org.uk'
             - slack/notify-on-failure: ~

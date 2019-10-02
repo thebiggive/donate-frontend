@@ -23,7 +23,7 @@ app.use(helmet()); // Sane header defaults, e.g. remove powered by, add HSTS, st
 app.use(morgan('combined')); // Log requests to stdout in Apache-like format
 
 const PORT = process.env.PORT || 4000;
-const DIST_FOLDER = join(process.cwd(), 'dist/browser/d');
+const DIST_FOLDER = join(process.cwd(), 'dist/browser');
 
 // * NOTE :: leave this as require() since this file is built Dynamically from webpack
 const {AppServerModuleNgFactory, LAZY_MODULE_MAP} = require('./dist/server/main');
@@ -48,10 +48,15 @@ app.get('/robots.txt', (req, res) => {
   }
 });
 
-// Serve static files requested via /d/ from /browser - when deployed S3 serves these up to CloudFront
-app.get('*.*', express.static(DIST_FOLDER, {
+// Serve static files requested via /d/ from /browser/d - when deployed S3 serves these up to CloudFront
+app.use('/d', express.static(DIST_FOLDER, {
   immutable: true,
   maxAge: '1y',
+}));
+
+// And similar for /assets
+app.use('/assets', express.static(DIST_FOLDER + '/assets', {
+  maxAge: '1d',
 }));
 
 // All regular routes use the Universal engine
