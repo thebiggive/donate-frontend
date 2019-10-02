@@ -100,11 +100,6 @@ workflows:
             branches:
               only:
                 - develop
-          post-steps:
-            - slack/notify:
-                color: '#009900'
-                message: 'The main staging deploy should follow shortly.'
-                title: 'Staging: Donate static assets deployed!'
       - aws-ecr/build-and-push-image:
           requires:
             - deploy-staging-static
@@ -137,11 +132,6 @@ workflows:
             branches:
               only:
                 - master
-          post-steps:
-            - slack/notify:
-                color: '#009900'
-                message: 'The main production deploy should follow shortly.'
-                title: 'Production: Donate static assets deployed!'
       - aws-ecr/build-and-push-image:
           requires:
             - deploy-production-static
