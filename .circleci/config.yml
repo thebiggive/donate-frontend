@@ -1,5 +1,12 @@
 version: 2.1
 
+orbs:
+  aws-ecr: circleci/aws-ecr@6.3.0
+  aws-ecs: circleci/aws-ecs@0.0.11
+  aws-s3: circleci/aws-s3@1.0.11
+  jira: circleci/jira@1.0.5
+  slack: circleci/slack@3.2.0
+
 jobs:
   build:
     docker:
@@ -23,7 +30,7 @@ jobs:
 
       - run: npm run ci
 
-  deploy-s3-demo:
+  deploy-staging-static:
     docker:
       - image: circleci/node:lts
 
@@ -32,22 +39,50 @@ jobs:
 
       - run: npm install --quiet
 
-      - run: npm run build:s3-demo
+      - run: npm run build:staging
 
       - aws-s3/sync:
           from: dist/browser
-          to: 's3://tbg-donate-frontend-demo'
+          to: 's3://tbg-staging-donate-static/d'
           arguments: |
             --acl public-read \
-            --cache-control "max-age=300"
+            --cache-control "max-age=31536000"
           overwrite: true
 
-orbs:
-  aws-ecr: circleci/aws-ecr@6.4.0
-  aws-ecs: circleci/aws-ecs@0.0.11
-  aws-s3: circleci/aws-s3@1.0.11
-  jira: circleci/jira@1.0.6
-  slack: circleci/slack@3.3.0
+      - aws-s3/sync:
+          from: dist/browser/assets
+          to: 's3://tbg-staging-donate-static/assets'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          overwrite: true
+
+  deploy-production-static:
+    docker:
+      - image: circleci/node:lts
+
+    steps:
+      - checkout
+
+      - run: npm install --quiet
+
+      - run: npm run build:production
+
+      - aws-s3/sync:
+          from: dist/browser
+          to: 's3://tbg-production-donate-static/d'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=31536000"
+          overwrite: true
+
+      - aws-s3/sync:
+          from: dist/browser/assets
+          to: 's3://tbg-production-donate-static/assets'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          overwrite: true
 
 workflows:
   build:
@@ -58,52 +93,78 @@ workflows:
                 job_type: build
                 environment_type: development
 
-  deploy-staging:
+  deploy-staging-static:
+    jobs:
+      - deploy-staging-static:
+          filters:
+            branches:
+              only:
+                - develop
+          post-steps:
+            - slack/notify:
+                color: '#009900'
+                message: 'The main staging deploy should follow shortly.'
+                title: 'Staging: Donate static assets deployed!'
+
+  deploy-production-static:
+    jobs:
+      - deploy-production-static:
+          filters:
+            branches:
+              only:
+                - master
+          post-steps:
+            - slack/notify:
+                color: '#009900'
+                message: 'The main production deploy should follow shortly.'
+                title: 'Production: Donate static assets deployed!'
+
+  deploy-staging-ecs:
     jobs:
       - aws-ecr/build-and-push-image:
           filters:
             branches:
               only:
                 - develop
-          extra-build-args: "--build-arg BUILD_ENV=staging"
-          repo: "${AWS_ECR_REPO_NAME}"
+          extra-build-args: '--build-arg BUILD_ENV=staging'
+          repo: '${AWS_ECR_REPO_NAME}'
           region: AWS_REGION
-          tag: "staging,staging-${CIRCLE_SHA1}"
+          tag: 'staging,staging-${CIRCLE_SHA1}'
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
-          aws-region: ${AWS_REGION}
-          family: "tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
-          cluster-name: "tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
-          container-image-name-updates: "container=donate,tag=staging-${CIRCLE_SHA1}"
+          aws-region: '${AWS_REGION}'
+          family: 'tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
+          cluster-name: 'tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
+          container-image-name-updates: 'container=donate,tag=staging-${CIRCLE_SHA1}'
           post-steps:
             - jira/notify:
                 job_type: deployment
                 environment_type: staging
             - slack/notify:
                 color: '#009900'
-                message: We use rolling blue/green deploys. All visitors to staging will see the updated app version within ~20 minutes.
-                title: "Staging: Donate frontend deployed!"
-                title_link: https://donate-staging.thebiggivetest.org.uk
+                message: 'We use rolling blue/green deploys. All visitors to staging will see the updated app version within ~20 minutes.'
+                title: 'Staging: Donate frontend deployed!'
+                title_link: 'https://donate-staging.thebiggivetest.org.uk'
             - slack/notify-on-failure: ~
 
-  deploy-production:
+  deploy-production-ecs:
     jobs:
       - aws-ecr/build-and-push-image:
           filters:
             branches:
               only:
                 - master
-          extra-build-args: "--build-arg BUILD_ENV=production"
-          repo: "${AWS_ECR_REPO_NAME}"
+          extra-build-args: '--build-arg BUILD_ENV=production'
+          repo: '${AWS_ECR_REPO_NAME}'
           region: AWS_REGION
-          tag: "production,production-${CIRCLE_SHA1}"
+          tag: 'production,production-${CIRCLE_SHA1}'
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
-          aws-region: ${AWS_REGION}
-          family: "tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
-          cluster-name: "tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}"
+          aws-region: '${AWS_REGION}'
+          family: 'tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
+          cluster-name: 'tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
           container-image-name-updates: "container=donate,tag=production-${CIRCLE_SHA1}"
           post-steps:
             - jira/notify:
@@ -111,21 +172,7 @@ workflows:
                 environment_type: production
             - slack/notify:
                 color: '#009900'
-                message: We use rolling blue/green deploys. All visitors to production will see the updated app version within ~20 minutes.
-                title: "Production: Donate frontend deployed!"
-                title_link: https://donate-production.thebiggive.org.uk
+                message: 'We use rolling blue/green deploys. All visitors to production will see the updated app version within ~20 minutes.'
+                title: 'Production: Donate frontend deployed!'
+                title_link: 'https://donate-production.thebiggive.org.uk'
             - slack/notify-on-failure: ~
-
-  deploy-s3-demo:
-    jobs:
-      - deploy-s3-demo:
-          filters:
-            branches:
-              only:
-                - develop
-          post-steps:
-            - slack/notify:
-                color: '#009900'
-                message: Donate frontend staging demo deployed to S3
-                title: Donate frontend deployed!
-                title_link: https://d21lpwf5nm8mg.cloudfront.net

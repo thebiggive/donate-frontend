@@ -48,10 +48,15 @@ app.get('/robots.txt', (req, res) => {
   }
 });
 
-// Server static files from /browser
-app.get('*.*', express.static(DIST_FOLDER, {
+// Serve static files requested via /d/ from /browser/d - when deployed S3 serves these up to CloudFront
+app.use('/d', express.static(DIST_FOLDER, {
   immutable: true,
   maxAge: '1y',
+}));
+
+// And similar for /assets
+app.use('/assets', express.static(DIST_FOLDER + '/assets', {
+  maxAge: '1d',
 }));
 
 // All regular routes use the Universal engine
