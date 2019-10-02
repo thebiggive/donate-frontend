@@ -46,6 +46,14 @@ jobs:
           to: 's3://tbg-staging-donate-static/d'
           arguments: |
             --acl public-read \
+            --cache-control "max-age=31536000"
+          overwrite: true
+
+      - aws-s3/sync:
+          from: dist/browser/assets
+          to: 's3://tbg-staging-donate-static/assets'
+          arguments: |
+            --acl public-read \
             --cache-control "max-age=86400"
           overwrite: true
 
@@ -63,6 +71,14 @@ jobs:
       - aws-s3/sync:
           from: dist/browser
           to: 's3://tbg-production-donate-static/d'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=31536000"
+          overwrite: true
+
+      - aws-s3/sync:
+          from: dist/browser/assets
+          to: 's3://tbg-production-donate-static/assets'
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
