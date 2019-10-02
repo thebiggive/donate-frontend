@@ -93,7 +93,7 @@ workflows:
                 job_type: build
                 environment_type: development
 
-  deploy-staging-static:
+  deploy-staging:
     jobs:
       - deploy-staging-static:
           filters:
@@ -105,27 +105,9 @@ workflows:
                 color: '#009900'
                 message: 'The main staging deploy should follow shortly.'
                 title: 'Staging: Donate static assets deployed!'
-
-  deploy-production-static:
-    jobs:
-      - deploy-production-static:
-          filters:
-            branches:
-              only:
-                - master
-          post-steps:
-            - slack/notify:
-                color: '#009900'
-                message: 'The main production deploy should follow shortly.'
-                title: 'Production: Donate static assets deployed!'
-
-  deploy-staging-ecs:
-    jobs:
       - aws-ecr/build-and-push-image:
-          filters:
-            branches:
-              only:
-                - develop
+          requires:
+            - deploy-staging-static
           extra-build-args: '--build-arg BUILD_ENV=staging'
           repo: '${AWS_ECR_REPO_NAME}'
           region: AWS_REGION
@@ -148,13 +130,21 @@ workflows:
                 title_link: 'https://donate-staging.thebiggivetest.org.uk'
             - slack/notify-on-failure: ~
 
-  deploy-production-ecs:
+  deploy-production:
     jobs:
-      - aws-ecr/build-and-push-image:
+      - deploy-production-static:
           filters:
             branches:
               only:
                 - master
+          post-steps:
+            - slack/notify:
+                color: '#009900'
+                message: 'The main production deploy should follow shortly.'
+                title: 'Production: Donate static assets deployed!'
+      - aws-ecr/build-and-push-image:
+          requires:
+            - deploy-production-static
           extra-build-args: '--build-arg BUILD_ENV=production'
           repo: '${AWS_ECR_REPO_NAME}'
           region: AWS_REGION
