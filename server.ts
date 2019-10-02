@@ -23,7 +23,7 @@ app.use(helmet()); // Sane header defaults, e.g. remove powered by, add HSTS, st
 app.use(morgan('combined')); // Log requests to stdout in Apache-like format
 
 const PORT = process.env.PORT || 4000;
-const DIST_FOLDER = join(process.cwd(), 'dist/browser');
+const DIST_FOLDER = join(process.cwd(), 'dist/browser/d');
 
 // * NOTE :: leave this as require() since this file is built Dynamically from webpack
 const {AppServerModuleNgFactory, LAZY_MODULE_MAP} = require('./dist/server/main');
@@ -48,7 +48,7 @@ app.get('/robots.txt', (req, res) => {
   }
 });
 
-// Server static files from /browser
+// Serve static files requested via /d/ from /browser - when deployed S3 serves these up to CloudFront
 app.get('*.*', express.static(DIST_FOLDER, {
   immutable: true,
   maxAge: '1y',
