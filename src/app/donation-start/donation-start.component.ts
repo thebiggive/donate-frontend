@@ -71,6 +71,8 @@ export class DonationStartComponent implements OnInit {
       optInTbgEmail: [null, Validators.required],
     });
 
+    const component = this;
+
     this.donationService.getExistingDonation(this.campaignId)
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;
@@ -179,10 +181,7 @@ export class DonationStartComponent implements OnInit {
    */
   private processDonationError() {
     if (this.previousDonation) {
-      console.log('cancelling donation');
       this.donationService.cancel(this.previousDonation).subscribe(() => this.donationService.removeLocalDonation(this.previousDonation));
-    } else {
-      console.log('no existing donation to cancel');
     }
 
     const errorDialog = this.dialog.open(DonationStartErrorDialogComponent, {
@@ -192,7 +191,6 @@ export class DonationStartComponent implements OnInit {
     });
 
     errorDialog.afterClosed().subscribe(() => {
-      console.log('error closed');
       // Direct user to project page without the error URL param, so returning from browser history or sharing the link
       // doesn't show the error again.
       this.router.navigate(['donate', this.campaignId], {
