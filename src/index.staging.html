@@ -10,7 +10,15 @@
   <link rel="icon" type="image/x-icon" href="/d/favicon.ico">
 </head>
 <body>
-  <!--[if lt IE 11]> <p><a href="https://browsehappy.com/">Please upgrade your browser to continue.</a></p> <![endif]-->
-  <app-root></app-root>
+  <!--[if lt IE 11]>
+    <p><a href="https://browsehappy.com/">Please upgrade your browser to continue.</a></p>
+    <style>
+      .hide-from-old-ie {
+        display: none;
+      }
+    </style>
+  <![endif]-->
+
+  <app-root class="hide-from-old-ie"></app-root>
 </body>
 </html>

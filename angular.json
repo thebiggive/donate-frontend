@@ -39,12 +39,12 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.production.ts"
-                },
-                {
-                  "replace": "src/index.html",
-                  "with": "src/index.production.html"
                 }
               ],
+              "index": {
+                "input": "src/index.production.html",
+                "output": "index.html"
+              },
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -67,12 +67,12 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.staging.ts"
-                },
-                {
-                  "replace": "src/index.html",
-                  "with": "src/index.staging.html"
                 }
               ],
+              "index": {
+                "input": "src/index.staging.html",
+                "output": "index.html"
+              },
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -165,10 +165,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.production.ts"
-                },
-                {
-                  "replace": "src/index.html",
-                  "with": "src/index.production.html"
                 }
               ]
             },
@@ -177,10 +173,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.staging.ts"
-                },
-                {
-                  "replace": "src/index.html",
-                  "with": "src/index.staging.html"
                 }
               ]
             }
