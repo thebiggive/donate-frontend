@@ -21,6 +21,7 @@ import { AppComponent } from './app.component';
 import { CampaignCardComponent } from './campaign-card/campaign-card.component';
 import { CampaignSearchFormComponent } from './campaign-search-form/campaign-search-form.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
+import { DonationStartErrorDialogComponent } from './donation-start/donation-start-error-dialog.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
@@ -35,6 +36,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     CampaignDetailsComponent,
     CampaignSearchFormComponent,
     DonationStartComponent,
+    DonationStartErrorDialogComponent,
     DonationStartMatchConfirmDialogComponent,
     DonationStartOfferReuseDialogComponent,
     SearchResultsComponent,
@@ -42,6 +44,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     TimeLeftPipe,
   ],
   entryComponents: [
+    DonationStartErrorDialogComponent,
     DonationStartMatchConfirmDialogComponent,
     DonationStartOfferReuseDialogComponent,
   ],

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Meta, Title } from '@angular/platform-browser';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { Campaign } from './../campaign.model';
 import { CharityCheckoutService } from '../charity-checkout.service';
@@ -10,6 +10,7 @@ import { CampaignService } from '../campaign.service';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
+import { DonationStartErrorDialogComponent } from './donation-start-error-dialog.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
 import { environment } from '../../environments/environment';
@@ -21,13 +22,14 @@ import { environment } from '../../environments/environment';
 })
 export class DonationStartComponent implements OnInit {
   public campaign: Campaign;
-  public charityCheckoutError?: string; // Charity Checkout donation start error message
   public donationForm: FormGroup;
   public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
   public validationError = false;         // Internal Angular app form validation error
 
   private campaignId: string;
+  private charityCheckoutError?: string; // Charity Checkout donation start error message
+  private previousDonation?: Donation;
 
   constructor(
     private campaignService: CampaignService,
@@ -37,6 +39,7 @@ export class DonationStartComponent implements OnInit {
     private formBuilder: FormBuilder,
     private meta: Meta,
     private route: ActivatedRoute,
+    private router: Router,
     private title: Title,
   ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
@@ -55,8 +58,6 @@ export class DonationStartComponent implements OnInit {
         this.meta.updateTag({ name: 'description', content: `Donate to the "${campaign.title}" campaign`});
       });
 
-    this.donationService.checkForExistingDonations(this.campaignId, this);
-
     this.donationForm = this.formBuilder.group({
       // TODO require a whole number of pounds, unless scrapping that constraint
       donationAmount: [null, [
@@ -68,6 +69,16 @@ export class DonationStartComponent implements OnInit {
       giftAid: [null, Validators.required],
       optInCharityEmail: [null, Validators.required],
       optInTbgEmail: [null, Validators.required],
+    });
+
+    this.donationService.getExistingDonation(this.campaignId)
+      .subscribe((existingDonation: (Donation|undefined)) => {
+        this.previousDonation = existingDonation;
+        if (this.charityCheckoutError) {
+          this.processDonationError();
+        } else if (this.previousDonation) {
+          this.offerExistingDonation(this.previousDonation);
+        }
     });
   }
 
@@ -151,7 +162,7 @@ export class DonationStartComponent implements OnInit {
    */
   get f() { return this.donationForm.controls; }
 
-  offerExistingDonation(donation: Donation) {
+  private offerExistingDonation(donation: Donation) {
     this.submitting = true;
 
     const reuseDialog = this.dialog.open(DonationStartOfferReuseDialogComponent, {
@@ -160,6 +171,35 @@ export class DonationStartComponent implements OnInit {
       role: 'alertdialog',
     });
     reuseDialog.afterClosed().subscribe(this.getDialogResponseFn(donation));
+  }
+
+  /**
+   * Auto-cancel the attempted donation (it's unlikely to start working for the same project immediately so better to start a
+   * 'clean' one) and let the user know about the error.
+   */
+  private processDonationError() {
+    if (this.previousDonation) {
+      console.log('cancelling donation');
+      this.donationService.cancel(this.previousDonation).subscribe(() => this.donationService.removeLocalDonation(this.previousDonation));
+    } else {
+      console.log('no existing donation to cancel');
+    }
+
+    const errorDialog = this.dialog.open(DonationStartErrorDialogComponent, {
+      data: { charityCheckoutError: this.charityCheckoutError },
+      disableClose: true,
+      role: 'alertdialog',
+    });
+
+    errorDialog.afterClosed().subscribe(() => {
+      console.log('error closed');
+      // Direct user to project page without the error URL param, so returning from browser history or sharing the link
+      // doesn't show the error again.
+      this.router.navigate(['donate', this.campaignId], {
+        queryParams: { error: null },
+        replaceUrl: true,
+      });
+    });
   }
 
   private redirectToCharityCheckout(donation: Donation) {
@@ -208,7 +248,10 @@ export class DonationStartComponent implements OnInit {
       // Else cancel the existing donation in Salesforce and remove our local record of it
       this.donationService.cancel(donation)
         .subscribe(
-          response => console.log('Cancelled donation', response), // TODO log to GA?
+          response => {
+            console.log('Cancelled donation', response); // TODO log to GA?
+            this.donationService.removeLocalDonation(donation);
+          },
           error => console.log('Cancel error:', error), // TODO definitely log these to GA
         );
       this.submitting = false;
