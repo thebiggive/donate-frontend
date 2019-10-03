@@ -1,14 +1,6 @@
 <div class="header">
   <h1><a routerLink="/"><img src="/assets/logo.png" alt="The Big Give" width="200"></a> Donations</h1>
 
-  <div *ngIf="!browserSupported" class="error">
-    <p>Sorry, but to keep your details safe while you donate, we'll need you to update to a newer web browser.</p>
-    <p>Visit <a href="https://browsehappy.com/" target="_blank">Browse Happy</a> for a few great options. We recommend
-      <a href="https://www.mozilla.org/en-GB/firefox/" target="_blank">Firefox</a> or
-      <a href="https://www.google.com/chrome/" target="_blank">Chrome</a>,
-      but any of these will work with the Big Give donations and keep you safer everywhere on the internet.</p>
-  </div>
-
   <h3>Try a Meta-campaign</h3>
   <a routerLink="/metacampaign/a051r00001CGEpoAAH">Summer Give 2019</a>
 
@@ -18,4 +10,4 @@
 
 <hr>
 
-<router-outlet *ngIf="browserSupported"></router-outlet>
+<router-outlet></router-outlet>

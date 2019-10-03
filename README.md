@@ -80,6 +80,21 @@ To start it daemonised (in the background) and map to host port 4000 - assuming 
 
 When running this way to test Server-Side Rendering, access the app at [localhost:4000](http://localhost:4000).
 
+## Deployment strategy
+
+We use ECS blue/green deploys for dynamically-routed app requests, which enables Server-Side Rendering.
+However we also want to support long caching and effective cache-busting with build hashes for built
+Angular JS & CSS files. We can't guarantee that somebody accessing a new ECS container would get the new
+version when requesting the static resources, so to ensure that deploys don't break requests for anybody
+while in progress, we serve static assets via S3 and everything else via an ALB in front of the ECS cluster.
+
+Deploys must therefore:
+
+* deploy to S3 by copying built files to S3 at `/d` and `/assets`; *then*
+* deploy to ECS, which will reference any updated file hashes on S3 by using `--deploy-url=/d/`
+
+CloudFront is configured to automatically route requests to the right place based on the static prefixes.
+
 ## Using Angular
 
 ### Development server

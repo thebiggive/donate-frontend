@@ -48,14 +48,27 @@ app.get('/robots.txt', (req, res) => {
   }
 });
 
-// Server static files from /browser
-app.get('*.*', express.static(DIST_FOLDER, {
-  immutable: true,
-  maxAge: '1y',
+// Serve static files requested via /d/ from /browser/d - when deployed S3 serves these up to CloudFront
+app.get('/d/favicon.ico', (req, res) => {
+  res.sendFile(DIST_FOLDER + '/favicon.ico', {
+    maxAge: '7 days', // Don't make the favicon immutable in case we want to update it
+  });
+});
+
+app.use('/d', express.static(DIST_FOLDER, {
+  immutable: true, // Everything in here should be named with an immutable hash
+  maxAge: '1 year',
+}));
+
+app.use('/assets', express.static(DIST_FOLDER + '/assets', {
+  maxAge: '1 day', // Assets should be served similarly but don't have name-hashes
 }));
 
 // All regular routes use the Universal engine
 app.get('*', (req, res) => {
+  // Note that the file output as `index.html` is actually dynamic. See `index` config keys in `angular.json`.
+  // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
+  // this key to work around `fileReplacements` ending index support in Angular 8.
   res.render('index', { req });
 });
 

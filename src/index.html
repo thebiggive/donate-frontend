@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <link rel="preconnect" href="https://full-biggive.cs107.force.com">
   <meta charset="utf-8">
   <title>The Big Give</title>
   <base href="/">
@@ -9,7 +10,15 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-  <!--[if lt IE 11]> <p><a href="https://browsehappy.com/">Please upgrade your browser to continue.</a></p> <![endif]-->
-  <app-root></app-root>
+  <!--[if lt IE 11]>
+    <p><a href="https://browsehappy.com/">Please upgrade your browser to continue.</a></p>
+    <style>
+      .hide-from-old-ie {
+        display: none;
+      }
+    </style>
+  <![endif]-->
+
+  <app-root class="hide-from-old-ie"></app-root>
 </body>
 </html>

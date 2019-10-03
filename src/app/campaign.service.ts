@@ -16,7 +16,7 @@ export class CampaignService {
     private http: HttpClient,
   ) {}
 
-  static percentRaised(campaign: (Campaign|CampaignSummary)): number|null {
+  static percentRaised(campaign: (Campaign | CampaignSummary)): number | null {
     if (!campaign.target) {
       return null;
     }
