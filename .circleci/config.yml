@@ -47,7 +47,7 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=31536000"
-          overwrite: true
+          overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
       - aws-s3/sync:
           from: dist/browser/assets
@@ -55,7 +55,7 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
-          overwrite: true
+          overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
   deploy-production-static:
     docker:
@@ -74,7 +74,7 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=31536000"
-          overwrite: true
+          overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
       - aws-s3/sync:
           from: dist/browser/assets
@@ -82,7 +82,7 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
-          overwrite: true
+          overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
 workflows:
   build:
