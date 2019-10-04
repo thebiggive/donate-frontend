@@ -15,10 +15,6 @@ export class AnalyticsService {
 
   constructor(private router: Router) {}
 
-  event(eventName: string, params: {}) {
-    gtag('event', eventName, params);
-  }
-
   init() {
     this.listenForRouteChanges();
 
@@ -35,6 +31,24 @@ export class AnalyticsService {
       gtag('config', '` + environment.googleAnalyticsId + `', {'send_page_view': false});
     `;
     document.head.appendChild(scriptConfigureGtag);
+  }
+
+  logError(key: string, message: string) {
+    this.sendEvent(key, {
+      event_category: 'donate_error',
+      event_label: message,
+    });
+  }
+
+  logEvent(key: string, message: string) {
+    this.sendEvent(key, {
+      event_category: 'donate',
+      event_label: message,
+    });
+  }
+
+  private sendEvent(eventName: string, params: {}) {
+    gtag('event', eventName, params);
   }
 
   private listenForRouteChanges() {

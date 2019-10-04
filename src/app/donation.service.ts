@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { Observable, of } from 'rxjs';
 
+import { AnalyticsService } from './analytics.service';
 import { Donation } from './donation.model';
 import { DonationCreatedResponse } from './donation-created-response.model';
 import { environment } from '../environments/environment';
@@ -23,6 +24,7 @@ export class DonationService {
   private readonly storageKey = 'v1.donate.thebiggive.org.uk';
 
   constructor(
+    private analyticsService: AnalyticsService,
     private http: HttpClient,
     @Inject(SESSION_STORAGE) private storage: StorageService,
   ) {
@@ -111,8 +113,12 @@ export class DonationService {
     const donationDataItems = this.donationCouplets.filter(donationItem => donationItem.donation.donationId === donation.donationId);
 
     if (donationDataItems.length !== 1) {
-      // TODO log this, and handle it more elegantly if we can find any normal cases where users could encounter it.
-      throw new Error('Not authorised to work with that donation');
+      this.analyticsService.logError(
+        'auth_jwt_error',
+        `Not authorised to work with donation ${donation.donationId} to campaign ${donation.projectId}`,
+      );
+
+      return { headers: new HttpHeaders({}) };
     }
 
     return {
