@@ -32,7 +32,7 @@ jobs:
 
   deploy-staging-static:
     docker:
-      - image: circleci/node:lts
+      - image: circleci/node:12
 
     steps:
       - checkout
@@ -59,7 +59,7 @@ jobs:
 
   deploy-production-static:
     docker:
-      - image: circleci/node:lts
+      - image: circleci/node:12
 
     steps:
       - checkout
