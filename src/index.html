@@ -12,12 +12,12 @@
 </head>
 <body>
   <app-root id="app"></app-root>
-  <p style="visibility: hidden" id="unsupported-message"><a href="https://browsehappy.com/">Please upgrade your browser to continue.</a></p>
+  <p style="display: none" id="unsupported-message"><a href="https://browsehappy.com/">Please upgrade your browser to continue.</a></p>
   <script>
     var ie10OrOlder = (window.navigator.userAgent.indexOf('MSIE ') > 0);
     if (ie10OrOlder) {
-      document.getElementById('app').style.visiblility = 'hidden';
-      document.getElementById('unsupported-message').style.visibility = 'visible';
+      document.getElementById('app').style.display = 'none';
+      document.getElementById('unsupported-message').style.display = 'block';
     }
   </script>
 </body>
