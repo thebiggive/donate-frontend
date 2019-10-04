@@ -7,18 +7,18 @@
   <base href="/">
   <meta name="description" content="The Big Give &ndash; discover campaigns and donate">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-  <!--[if lt IE 11]>
-    <p><a href="https://browsehappy.com/">Please upgrade your browser to continue.</a></p>
-    <style>
-      .hide-from-old-ie {
-        display: none;
-      }
-    </style>
-  <![endif]-->
-
-  <app-root class="hide-from-old-ie"></app-root>
+  <app-root id="app"></app-root>
+  <p style="visibility: hidden" id="unsupported-message"><a href="https://browsehappy.com/">Please upgrade your browser to continue.</a></p>
+  <script>
+    var ie10OrOlder = (window.navigator.userAgent.indexOf('MSIE ') > 0);
+    if (ie10OrOlder) {
+      document.getElementById('app').style.visiblility = 'hidden';
+      document.getElementById('unsupported-message').style.visibility = 'visible';
+    }
+  </script>
 </body>
 </html>
