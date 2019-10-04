@@ -32,6 +32,9 @@ jobs:
 
   deploy-staging-static:
     docker:
+      # This image's base Node version must match that used in the *root* `Dockerfile` (not the one in this directory)
+      # which is the basis for ECS app builds. Otherwise the two builds will have different output hashes and the
+      # dynamic app will reference static files that don't exist.
       - image: circleci/node:12
 
     steps:
@@ -59,6 +62,9 @@ jobs:
 
   deploy-production-static:
     docker:
+      # This image's base Node version must match that used in the *root* `Dockerfile` (not the one in this directory)
+      # which is the basis for ECS app builds. Otherwise the two builds will have different output hashes and the
+      # dynamic app will reference static files that don't exist.
       - image: circleci/node:12
 
     steps:
