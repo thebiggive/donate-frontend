@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
+import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
 import { CharityCheckoutService } from '../charity-checkout.service';
 import { CampaignService } from '../campaign.service';
@@ -32,6 +33,7 @@ export class DonationStartComponent implements OnInit {
   private previousDonation?: Donation;
 
   constructor(
+    private analyticsService: AnalyticsService,
     private campaignService: CampaignService,
     private charityCheckoutService: CharityCheckoutService,
     public dialog: MatDialog,
@@ -70,8 +72,6 @@ export class DonationStartComponent implements OnInit {
       optInCharityEmail: [null, Validators.required],
       optInTbgEmail: [null, Validators.required],
     });
-
-    const component = this;
 
     this.donationService.getExistingDonation(this.campaignId)
       .subscribe((existingDonation: (Donation|undefined)) => {
@@ -124,7 +124,10 @@ export class DonationStartComponent implements OnInit {
           !response.donation.projectId
         );
         if (salesforceResponseMissingRequiredData) {
-          // TODO log detail of missing info back from Salesforce
+          this.analyticsService.logError(
+            'salesforce_create_response_incomplete',
+            `Missing expected response data creating new donation for campaign ${this.campaignId}`,
+          );
           this.sfApiError = true;
           this.submitting = false;
 
@@ -146,16 +149,12 @@ export class DonationStartComponent implements OnInit {
         // Else either the donation was not expected to be matched or has 100% match funds allocated -> no need for an extra step
         this.redirectToCharityCheckout(response.donation);
       }, error => {
-        // TODO log the detailed `error` message somewhere
+        this.analyticsService.logError(
+          'salesforce_create_failed',
+          `Could not create new donation for campaign ${this.campaignId}: ${error}`,
+        );
         this.sfApiError = true;
         this.submitting = false;
-
-        // TEMPORARY logic to proceed to Charity Checkout even though SF create failed
-        // Un-comment for testing while we're ironing out the donation create API
-        // TODO remove this entirely
-        // this.charityCheckoutService.startDonation(donation);
-
-        console.log('ERROR', error);
       });
   }
 
@@ -166,6 +165,7 @@ export class DonationStartComponent implements OnInit {
 
   private offerExistingDonation(donation: Donation) {
     this.submitting = true;
+    this.analyticsService.logEvent('existing_donation_offered', `Found pending donation to campaign ${this.campaignId}`);
 
     const reuseDialog = this.dialog.open(DonationStartOfferReuseDialogComponent, {
       data: { donation },
@@ -180,7 +180,16 @@ export class DonationStartComponent implements OnInit {
    * 'clean' one) and let the user know about the error.
    */
   private processDonationError() {
+    this.analyticsService.logError(
+      'charity_checkout_error',
+      `Charity Checkout rejected donation setup for campaign ${this.campaignId}: ${this.charityCheckoutError}`,
+    );
+
     if (this.previousDonation) {
+      this.analyticsService.logEvent(
+        'cancel_auto',
+        `Cancelled failing donation ${this.previousDonation.donationId} to campaign ${this.campaignId}`,
+      );
       this.donationService.cancel(this.previousDonation).subscribe(() => this.donationService.removeLocalDonation(this.previousDonation));
     }
 
@@ -201,10 +210,12 @@ export class DonationStartComponent implements OnInit {
   }
 
   private redirectToCharityCheckout(donation: Donation) {
+    this.analyticsService.logEvent('payment_redirect_click', `Donating to campaign ${this.campaignId}`);
     this.charityCheckoutService.startDonation(donation);
   }
 
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
+    this.analyticsService.logEvent('alerted_no_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
       'There are no match funds remaining for this campaign. Your donation will not be matched.',
       'Cancel',
@@ -216,6 +227,7 @@ export class DonationStartComponent implements OnInit {
    * @param donation *Response* Donation object, with `matchReservedAmount` set and returned by Salesforce.
    */
   private promptToContinueWithPartialMatching(donation: Donation) {
+    this.analyticsService.logEvent('alerted_partial_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
       `There are limited match funds remaining for this campaign. £${donation.matchReservedAmount} of your donation will be matched.`,
       'Cancel and release match funds',
@@ -246,11 +258,14 @@ export class DonationStartComponent implements OnInit {
       // Else cancel the existing donation in Salesforce and remove our local record of it
       this.donationService.cancel(donation)
         .subscribe(
-          response => {
-            console.log('Cancelled donation', response); // TODO log to GA?
+          () => {
+            this.analyticsService.logEvent('cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
             this.donationService.removeLocalDonation(donation);
           },
-          error => console.log('Cancel error:', error), // TODO definitely log these to GA
+          error => this.analyticsService.logError(
+            'cancel_failed',
+            `Could not cancel donation ${donation.donationId} to campaign ${this.campaignId}: ${error}`,
+          ),
         );
       this.submitting = false;
     };

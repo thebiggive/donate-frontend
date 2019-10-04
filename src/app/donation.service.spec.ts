@@ -1,5 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { Donation } from './donation.model';
 import { DonationService } from './donation.service';
@@ -8,7 +9,7 @@ import { DonationCreatedResponse } from './donation-created-response.model';
 
 describe('DonationService', () => {
   beforeEach(() => TestBed.configureTestingModule({
-    imports: [ HttpClientTestingModule ],
+    imports: [ HttpClientTestingModule, RouterTestingModule ],
     providers: [ DonationService ],
   }));
 
