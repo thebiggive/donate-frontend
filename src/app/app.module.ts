@@ -49,7 +49,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     DonationStartOfferReuseDialogComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
