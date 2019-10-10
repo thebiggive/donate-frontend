@@ -148,10 +148,10 @@ export class DonationStartComponent implements OnInit {
 
         // Else either the donation was not expected to be matched or has 100% match funds allocated -> no need for an extra step
         this.redirectToCharityCheckout(response.donation);
-      }, error => {
+      }, response => {
         this.analyticsService.logError(
           'salesforce_create_failed',
-          `Could not create new donation for campaign ${this.campaignId}: ${error}`,
+          `Could not create new donation for campaign ${this.campaignId}: ${response.error.error}`,
         );
         this.sfApiError = true;
         this.submitting = false;
@@ -262,9 +262,9 @@ export class DonationStartComponent implements OnInit {
             this.analyticsService.logEvent('cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
             this.donationService.removeLocalDonation(donation);
           },
-          error => this.analyticsService.logError(
+          response => this.analyticsService.logError(
             'cancel_failed',
-            `Could not cancel donation ${donation.donationId} to campaign ${this.campaignId}: ${error}`,
+            `Could not cancel donation ${donation.donationId} to campaign ${this.campaignId}: ${response.error.error}`,
           ),
         );
       this.submitting = false;
