@@ -163,6 +163,14 @@ export class DonationStartComponent implements OnInit {
    */
   get f() { return this.donationForm.controls; }
 
+  campaignIsOpen(): boolean {
+    return (
+      this.campaign
+        ? (new Date(this.campaign.startDate) <= new Date() && new Date(this.campaign.endDate) > new Date())
+        : false
+      );
+  }
+
   private offerExistingDonation(donation: Donation) {
     this.submitting = true;
     this.analyticsService.logEvent('existing_donation_offered', `Found pending donation to campaign ${this.campaignId}`);

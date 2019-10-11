@@ -25,48 +25,54 @@
 
   <p *ngIf="campaign.status == 'Active'">{{ campaign.endDate | timeLeft }} left</p>
 
-  <mat-form-field color="accent">
-    <mat-label for="donationAmount">Amount (£)</mat-label>
-    <input formControlName="donationAmount" id="donationAmount" matInput>
-  </mat-form-field>
-  <div *ngIf="f.donationAmount.invalid && (f.donationAmount.dirty || f.donationAmount.touched)" class="error">
-    <div *ngIf="f.donationAmount.errors.min">Sorry, the minimum donation is currently £5.</div>
-    <div *ngIf="f.donationAmount.errors.max">Sorry, the maximum single donation is £25,000.</div>
-    <div *ngIf="f.donationAmount.errors.pattern">Please enter a numeric value in pounds (£) without commas.</div>
-    <div *ngIf="f.donationAmount.errors.required">Please enter how much you would like to donate.</div>
+  <div *ngIf="!campaignIsOpen()">
+    Campaign open {{ campaign.startDate | date:'fullDate' }} &ndash; {{ campaign.endDate | date:'fullDate' }}
   </div>
 
-  <mat-label id="giftAid-label">Claim Gift Aid?</mat-label>
-  <mat-radio-group aria-labelledby="giftAid-label" formControlName="giftAid">
-      <mat-radio-button labelPosition="after" [value]="true">Yes</mat-radio-button>
-      <mat-radio-button labelPosition="after" [value]="false">No</mat-radio-button>
-  </mat-radio-group>
+  <div *ngIf="campaignIsOpen()">
+    <mat-form-field color="accent">
+      <mat-label for="donationAmount">Amount (£)</mat-label>
+      <input formControlName="donationAmount" id="donationAmount" matInput>
+    </mat-form-field>
+    <div *ngIf="f.donationAmount.invalid && (f.donationAmount.dirty || f.donationAmount.touched)" class="error">
+      <div *ngIf="f.donationAmount.errors.min">Sorry, the minimum donation is currently £5.</div>
+      <div *ngIf="f.donationAmount.errors.max">Sorry, the maximum single donation is £25,000.</div>
+      <div *ngIf="f.donationAmount.errors.pattern">Please enter a numeric value in pounds (£) without commas.</div>
+      <div *ngIf="f.donationAmount.errors.required">Please enter how much you would like to donate.</div>
+    </div>
 
-  <mat-label id="optInCharityEmail-label">Receive email from the charity?</mat-label>
-  <mat-radio-group aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
-      <mat-radio-button labelPosition="after" [value]="true">Yes</mat-radio-button>
-      <mat-radio-button labelPosition="after" [value]="false">No</mat-radio-button>
-  </mat-radio-group>
+    <mat-label id="giftAid-label">Claim Gift Aid?</mat-label>
+    <mat-radio-group aria-labelledby="giftAid-label" formControlName="giftAid">
+        <mat-radio-button labelPosition="after" [value]="true">Yes</mat-radio-button>
+        <mat-radio-button labelPosition="after" [value]="false">No</mat-radio-button>
+    </mat-radio-group>
 
-  <mat-label id="optInTbgEmail-label">Receive email from the Big Give?</mat-label>
-  <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
-      <mat-radio-button labelPosition="after" [value]="true">Yes</mat-radio-button>
-      <mat-radio-button labelPosition="after" [value]="false">No</mat-radio-button>
-  </mat-radio-group>
+    <mat-label id="optInCharityEmail-label">Receive email from the charity?</mat-label>
+    <mat-radio-group aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
+        <mat-radio-button labelPosition="after" [value]="true">Yes</mat-radio-button>
+        <mat-radio-button labelPosition="after" [value]="false">No</mat-radio-button>
+    </mat-radio-group>
 
-  <p *ngIf="sfApiError" class="error">
-    Sorry, we can't submit your donation right now. Please try again in a moment
-    or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank">contact us</a>
-    if this message persists.
-  </p>
+    <mat-label id="optInTbgEmail-label">Receive email from the Big Give?</mat-label>
+    <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
+        <mat-radio-button labelPosition="after" [value]="true">Yes</mat-radio-button>
+        <mat-radio-button labelPosition="after" [value]="false">No</mat-radio-button>
+    </mat-radio-group>
 
-  <p *ngIf="validationError" class="error">
-    Please complete all fields above to proceed with your donation.
-  </p>
+    <p *ngIf="sfApiError" class="error">
+      Sorry, we can't submit your donation right now. Please try again in a moment
+      or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank">contact us</a>
+      if this message persists.
+    </p>
 
-  <mat-spinner *ngIf="submitting" color="accent" diameter="30"></mat-spinner>
+    <p *ngIf="validationError" class="error">
+      Please complete all fields above to proceed with your donation.
+    </p>
 
-  <p>
-    <button mat-raised-button color="primary" type="submit" [disabled]="submitting">Donate Now</button>
-  </p>
+    <mat-spinner *ngIf="submitting" color="accent" diameter="30"></mat-spinner>
+
+    <p>
+      <button mat-raised-button color="primary" type="submit" [disabled]="submitting">Donate Now</button>
+    </p>
+  </div>
 </form>
