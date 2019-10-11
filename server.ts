@@ -76,4 +76,11 @@ app.get('*', (req, res) => {
 const server = app.listen(PORT, () => {
   console.log(`Node Express server listening on http://localhost:${PORT}`);
 });
-server.setTimeout(70 * 1000); // 70 seconds, 10s longer than ALBs.
+
+/**
+ * ALBs are configured with 60s timeout and these should be longer.
+ * @link https://shuheikagawa.com/blog/2019/04/25/keep-alive-timeout/
+ * @link https://adamcrowder.net/posts/node-express-api-and-aws-alb-502/
+ */
+server.keepAliveTimeout = 65 * 1000;
+server.headersTimeout = 70 * 1000;
