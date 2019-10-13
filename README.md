@@ -1,7 +1,7 @@
 # The Big Give Donate Frontend
 
-This Angular project is a web frontend which will eventually let donors discover the Big Give campaigns and
-start a donation to them.
+This Angular project is a web frontend allowing donors to discover the Big Give
+charities' campaigns and donate to them.
 
 ## Getting started
 
@@ -51,9 +51,8 @@ See [`browserslist`](./browserslist) for the specific instructions that tell the
 
 Although it would be good to extend support for Internet Explorer
 9 and 10, they are unsupported by both Charity Checkout and
-Angular Material so this is not an option. We use a conditional
-IE HTML comment to explain the situation to users of these
-browsers.
+Angular Material so this is not an option. We use user agent
+detection to explain the situation to users of these browsers.
 
 ## Docker configuration
 
@@ -93,7 +92,7 @@ Deploys must therefore:
 * deploy to S3 by copying built files to S3 at `/d` and `/assets`; *then*
 * deploy to ECS, which will reference any updated file hashes on S3 by using `--deploy-url=/d/`
 
-CloudFront is configured to automatically route requests to the right place based on the static prefixes.
+CloudFront is configured to route requests to the right place based on these prefixes.
 
 ## Using Angular
 
