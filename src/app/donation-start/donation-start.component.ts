@@ -141,7 +141,7 @@ export class DonationStartComponent implements OnInit {
         }
 
         // Amount reserved for matching is >£0 but less than the full donation
-        if (donation.donationMatched && donation.donationAmount < response.donation.matchReservedAmount) {
+        if (donation.donationMatched && response.donation.matchReservedAmount < donation.donationAmount) {
           this.promptToContinueWithPartialMatching(response.donation);
           return;
         }
