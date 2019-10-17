@@ -1,11 +1,11 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
+import { AnalyticsService } from './analytics.service';
 import { Donation } from './donation.model';
 import { DonationCreatedResponse } from './donation-created-response.model';
-import { DonationStartComponent } from './donation-start/donation-start.component';
 import { environment } from '../environments/environment';
 
 @Injectable({
@@ -24,13 +24,17 @@ export class DonationService {
   private readonly storageKey = 'v1.donate.thebiggive.org.uk';
 
   constructor(
+    private analyticsService: AnalyticsService,
     private http: HttpClient,
     @Inject(SESSION_STORAGE) private storage: StorageService,
   ) {
     this.donationCouplets = this.storage.get(this.storageKey) || [];
   }
 
-  checkForExistingDonations(projectId: string, donationStartComponent: DonationStartComponent): void {
+  /**
+   * Get a recent eligible-for-resuming donation to this same campaign/project, if any exists.
+   */
+  getExistingDonation(projectId: string): Observable<Donation | undefined> {
     // TODO we should tidy up by deleting any locally saved donations too old to be useful as part of this process
 
     const existingDonations = this.donationCouplets.filter(donationItem => {
@@ -46,33 +50,27 @@ export class DonationService {
     });
 
     if (existingDonations.length === 0) {
-      return; // No relevant donations to offer to resume.
+      return of(undefined); // No relevant donations to offer to resume.
     }
+
+    // TODO We should revisit whether it's worth explicitly checking with the server for the
+    // latest status before trying to reuse a donation. It adds extra calls so is probably
+    // best avoided if not needed. Now that we remove donation info from local immediately
+    // after cancelling on Salesforce, and as we also check the time is recent client-side,
+    // it seems like it should be unnecessary. But let's keep an eye out for edge cases.
 
     // We have at least one existing donation that may be a candidate to re-try.
     // We'll take an arbitrary 'first' matching donation since presenting multiple to the donor would be too confusing.
     // But we first need to check with the server that it's still in a Pending or Reserved status ready to try again -
     // and check any remaining local candidates if not.
-    let foundReusableDonation = false;
-    for (const existingDonation of existingDonations) {
-      if (foundReusableDonation) {
-        break;
-      }
-
-      this.get(existingDonation.donation)
-        .subscribe((donation: Donation) => {
-          if (!foundReusableDonation && this.resumableStatuses.includes(donation.status)) {
-            foundReusableDonation = true;
-            donationStartComponent.offerExistingDonation(donation);
-          }
-        });
-    }
+    return this.get(existingDonations[0].donation);
   }
 
+  /**
+   * Cancel donation in Salesforce to free up match funds straight away. Subscribers should `removeLocalDonation()` on success.
+   */
   cancel(donation: Donation): Observable<any> {
     donation.status = 'Cancelled';
-
-    // TODO we should immediately remove the local copy from this.donationCouplets when doing this
 
     return this.http.put<any>(
       `${environment.apiUriPrefix}${this.apiPath}/${donation.donationId}`,
@@ -104,12 +102,23 @@ export class DonationService {
     this.storage.set(this.storageKey, this.donationCouplets);
   }
 
+  removeLocalDonation(donation: Donation) {
+    this.donationCouplets.splice(
+      this.donationCouplets.findIndex(donationItem => donationItem.donation.donationId === donation.donationId),
+    );
+    this.storage.set(this.storageKey, this.donationCouplets);
+  }
+
   private getAuthHttpOptions(donation: Donation): { headers: HttpHeaders } {
     const donationDataItems = this.donationCouplets.filter(donationItem => donationItem.donation.donationId === donation.donationId);
 
     if (donationDataItems.length !== 1) {
-      // TODO log this, and handle it more elegantly if we can find any normal cases where users could encounter it.
-      throw new Error('Not authorised to work with that donation');
+      this.analyticsService.logError(
+        'auth_jwt_error',
+        `Not authorised to work with donation ${donation.donationId} to campaign ${donation.projectId}`,
+      );
+
+      return { headers: new HttpHeaders({}) };
     }
 
     return {

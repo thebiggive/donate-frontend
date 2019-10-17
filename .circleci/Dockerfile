@@ -1,5 +1,5 @@
 # Customised version of CircleCI Node image, published to Docker Hub as `thebiggive/donate-frontend-ci:latest` so it can be cached.
-# This avoids CI runs having to install lots of packages on every run.
+# This avoids CI runs having to install lots of packages on every build.
 
 FROM circleci/node:12
 

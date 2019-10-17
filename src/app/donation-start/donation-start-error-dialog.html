@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Something went wrong</h2>
+
+<mat-dialog-content class="mat-typography">
+  <h3>Sorry, there was an error starting your donation: <em>{{ data.charityCheckoutError }}</em>.</h3>
+
+  <p>Please try again in a moment or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank">contact us</a>
+    if this message persists.</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close cdkFocusInitial color="primary">OK</button>
+</mat-dialog-actions>

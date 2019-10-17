@@ -32,7 +32,10 @@ jobs:
 
   deploy-staging-static:
     docker:
-      - image: circleci/node:lts
+      # This image's base Node version must match that used in the *root* `Dockerfile` (not the one in this directory)
+      # which is the basis for ECS app builds. Otherwise the two builds will have different output hashes and the
+      # dynamic app will reference static files that don't exist.
+      - image: circleci/node:12
 
     steps:
       - checkout
@@ -47,7 +50,7 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=31536000"
-          overwrite: true
+          overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
       - aws-s3/sync:
           from: dist/browser/assets
@@ -55,11 +58,14 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
-          overwrite: true
+          overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
   deploy-production-static:
     docker:
-      - image: circleci/node:lts
+      # This image's base Node version must match that used in the *root* `Dockerfile` (not the one in this directory)
+      # which is the basis for ECS app builds. Otherwise the two builds will have different output hashes and the
+      # dynamic app will reference static files that don't exist.
+      - image: circleci/node:12
 
     steps:
       - checkout
@@ -74,7 +80,7 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=31536000"
-          overwrite: true
+          overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
       - aws-s3/sync:
           from: dist/browser/assets
@@ -82,7 +88,7 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
-          overwrite: true
+          overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
 workflows:
   build:
