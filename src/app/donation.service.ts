@@ -3,9 +3,6 @@ import { Inject, Injectable } from '@angular/core';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { Observable, of } from 'rxjs';
 import { _throw } from 'rxjs/observable/throw';
-import { genericRetryStrategy } from './rxjs-utils';
-import { mergeMap, finalize } from 'rxjs/operators';
-import { catchError, retryWhen  } from 'rxjs/operators';
 
 import { AnalyticsService } from './analytics.service';
 import { Donation } from './donation.model';
