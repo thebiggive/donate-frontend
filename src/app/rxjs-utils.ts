@@ -3,6 +3,7 @@ import { _throw } from 'rxjs/observable/throw';
 import { timer } from 'rxjs/observable/timer';
 import { mergeMap, finalize } from 'rxjs/operators';
 
+// Class based on this example: https://www.learnrxjs.io/operators/error_handling/retrywhen.html
 export const genericRetryStrategy = (
   {
     maxRetryAttempts = 3,
