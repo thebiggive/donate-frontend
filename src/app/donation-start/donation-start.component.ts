@@ -15,6 +15,10 @@ import { DonationStartErrorDialogComponent } from './donation-start-error-dialog
 import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
 import { environment } from '../../environments/environment';
+import { genericRetryStrategy } from '../rxjs-utils';
+import { mergeMap, finalize } from 'rxjs/operators';
+import { catchError, retryWhen  } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-donation-start',
@@ -113,7 +117,19 @@ export class DonationStartComponent implements OnInit {
 
     this.donationService
       .create(donation) // Create Salesforce donation
-      .subscribe((response: DonationCreatedResponse) => {
+      .pipe(
+        retryWhen(genericRetryStrategy()),
+        catchError(error => of(error))
+      )
+      // excluding status code, delay for logging clarity
+      .pipe(
+        retryWhen(genericRetryStrategy({
+          scalingDuration: 2000, 
+          excludedStatusCodes: [200]
+        })),
+        catchError(error => of(error)),
+      )
+      .subscribe(console.log, (response: DonationCreatedResponse) => {
         this.donationService.saveDonation(response.donation, response.jwt);
 
         // If that succeeded proceed to Charity Checkout donation page, providing key

@@ -2,6 +2,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { Observable, of } from 'rxjs';
+import { _throw } from 'rxjs/observable/throw';
+import { genericRetryStrategy } from './rxjs-utils';
+import { mergeMap, finalize } from 'rxjs/operators';
+import { catchError, retryWhen  } from 'rxjs/operators';
 
 import { AnalyticsService } from './analytics.service';
 import { Donation } from './donation.model';
@@ -81,9 +85,8 @@ export class DonationService {
 
   create(donation: Donation): Observable<DonationCreatedResponse> {
     return this.http.post<DonationCreatedResponse>(
-      `${environment.apiUriPrefix}${this.apiPath}`,
-      donation,
-    );
+      `${environment.apiUriPrefix}${this.apiPath}`, 
+      donation)
   }
 
   get(donation: Donation): Observable<Donation> {
@@ -126,5 +129,9 @@ export class DonationService {
         'X-Tbg-Auth': donationDataItems[0].jwt,
       }),
     };
+  }
+
+  private getData(status: number) {
+    return _throw({status});
   }
 }
