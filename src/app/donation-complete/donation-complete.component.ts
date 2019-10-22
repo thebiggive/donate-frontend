@@ -31,6 +31,8 @@ export class DonationCompleteComponent implements OnInit {
 
   ngOnInit() {
     this.updateDonation().subscribe(donation => {
+      this.donation = donation;
+
       if (donation === undefined) {
         this.noAccess = true; // If we don't have the local auth token we can never load the details.
         return;
@@ -59,10 +61,6 @@ export class DonationCompleteComponent implements OnInit {
       return of(undefined); // Tell the main thread to bail out
     }
 
-    const donationObservable = this.donationService.get(donationLocalCopy);
-
-    donationObservable.subscribe((donation: Donation) => this.donation = donation);
-
-    return donationObservable;
+    return this.donationService.get(donationLocalCopy);
   }
 }
