@@ -5,5 +5,5 @@ export const environment = {
   donateUriPrefix: 'https://donate.thebiggive.org.uk',
   googleAnalyticsId: 'UA-2979952-1',
   maximumDonationAmount: 25000,
-  thanksUriPrefix: 'https://www.thebiggive.org.uk/s/thank-you?id=',
+  thanksUriPrefix: 'https://donate.thebiggive.org.uk/thanks/',
 };
