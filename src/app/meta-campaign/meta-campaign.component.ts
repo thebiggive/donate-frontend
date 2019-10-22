@@ -19,11 +19,13 @@ export class MetaCampaignComponent implements OnInit {
   public children: CampaignSummary[];
   public countryOptions: string[];
   public filterError = false;
-  private query: SearchQuery;
+  public sortDirection = 'asc';
+  public sortDirectionEnabled = false; // Default sort field is relevance
 
   private campaignId: string;
   private campaignSlug: string;
   private fundSlug: string;
+  private query: SearchQuery;
   private viewportWidth: number; // In px. Used to vary `<mat-grid-list />`'s `cols`.
 
   constructor(
@@ -74,6 +76,20 @@ export class MetaCampaignComponent implements OnInit {
    */
   setQueryProperty(property, event) {
     this.query[property] = event.value;
+    this.run();
+  }
+
+  setSortField(event) {
+    this.query.sortField = event.value;
+    if (event.value === '') { // Sort by Relevance, ascending and direction locked
+      this.sortDirection = 'asc';
+      this.sortDirectionEnabled = false;
+      this.query.sortDirection = undefined;
+    } else {                  // Sort by an amount field, descending by default
+      this.sortDirection = 'desc';
+      this.sortDirectionEnabled = true;
+      this.query.sortDirection = this.sortDirection;
+    }
     this.run();
   }
 

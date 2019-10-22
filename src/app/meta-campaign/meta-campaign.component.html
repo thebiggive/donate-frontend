@@ -38,7 +38,7 @@
   <h3>Sort By</h3>
   <mat-form-field>
     <mat-label>Field</mat-label>
-    <mat-select value="" (selectionChange)="setQueryProperty('sortField', $event)">
+    <mat-select value="" (selectionChange)="setSortField($event)">
       <mat-option value="">Relevance</mat-option>
       <mat-option value="amountRaised">Amount raised</mat-option>
       <mat-option value="matchFundsRemaining">Match funds remaining</mat-option>
@@ -46,7 +46,7 @@
   </mat-form-field>
   <mat-form-field>
     <mat-label>Direction</mat-label>
-    <mat-select value="asc" (selectionChange)="setQueryProperty('sortDirection', $event)">
+    <mat-select [(value)]="sortDirection" [disabled]="!sortDirectionEnabled" (selectionChange)="setQueryProperty('sortDirection', $event)">
       <mat-option selected value="asc">Ascending</mat-option>
       <mat-option value="desc">Descending</mat-option>
     </mat-select>
