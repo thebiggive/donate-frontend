@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Meta, Title } from '@angular/platform-browser';
@@ -16,24 +16,24 @@ import { DonationStartMatchConfirmDialogComponent } from './donation-start-match
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
 import { environment } from '../../environments/environment';
 import { genericRetryStrategy } from '../rxjs-utils';
-import { mergeMap, finalize } from 'rxjs/operators';
 import { catchError, retryWhen  } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, observable } from 'rxjs';
 
 @Component({
   selector: 'app-donation-start',
   templateUrl: './donation-start.component.html',
   styleUrls: ['./donation-start.component.scss'],
 })
+
 export class DonationStartComponent implements OnInit {
+  @Output() retry: EventEmitter<any> = new EventEmitter<any>();
   public campaign: Campaign;
   public donationForm: FormGroup;
   public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
   public validationError = false;         // Internal Angular app form validation error
-
   private campaignId: string;
-  private charityCheckoutError?: string; // Charity Checkout donation start error message
+  private charityCheckoutError?: string;  // Charity Checkout donation start error message
   private previousDonation?: Donation;
 
   constructor(
@@ -120,11 +120,12 @@ export class DonationStartComponent implements OnInit {
       // excluding status code, delay for logging clarity
       .pipe(
         retryWhen(genericRetryStrategy({
+          retry: true,
           excludedStatusCodes: [200],
         })),
         catchError(error => of(error)),
       )
-      .subscribe(console.log, (response: DonationCreatedResponse) => {
+      .subscribe((response: DonationCreatedResponse) => {
         this.donationService.saveDonation(response.donation, response.jwt);
 
         // If that succeeded proceed to Charity Checkout donation page, providing key

@@ -1,7 +1,8 @@
 import { Observable } from 'rxjs/Observable';
 import { _throw } from 'rxjs/observable/throw';
 import { timer } from 'rxjs/observable/timer';
-import { finalize, switchMap } from 'rxjs/operators';
+import { finalize, switchMap, combineLatest } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject'
 
 // Class based on this example: https://www.learnrxjs.io/operators/error_handling/retrywhen.html
 
@@ -10,10 +11,12 @@ export const genericRetryStrategy = (
     maxRetryAttempts = 4,
     scalingDuration = 1000,
     excludedStatusCodes = [],
+    retry = new Subject<any>(),
   }: {
     maxRetryAttempts?: number;
     scalingDuration?: number;
     excludedStatusCodes?: number[];
+    retry?: any;
   } = {},
 ) => (attempts: Observable<any>) => {
   return attempts.pipe(
