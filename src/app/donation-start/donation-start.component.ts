@@ -77,7 +77,7 @@ export class DonationStartComponent implements OnInit {
       optInTbgEmail: [null, Validators.required],
     });
 
-    this.donationService.getExistingDonation(this.campaignId)
+    this.donationService.getResumableDonation(this.campaignId)
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;
         if (this.charityCheckoutError) {

@@ -9,7 +9,7 @@ export const environment = {
   donateUriPrefix: 'http://localhost:4200',
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,
-  thanksUriPrefix: 'https://full-thebiggive.cs107.force.com/s/thank-you?id=',
+  thanksUriPrefix: 'http://localhost:4200/thanks/',
 };
 
 /*

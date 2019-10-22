@@ -98,6 +98,7 @@ workflows:
             - jira/notify:
                 job_type: build
                 environment_type: development
+            - slack/notify-on-failure: ~
 
   deploy-staging:
     jobs:
@@ -160,5 +161,5 @@ workflows:
                 color: '#009900'
                 message: 'We use rolling blue/green deploys. All visitors to production will see the updated app version within ~20 minutes.'
                 title: 'Production: Donate frontend deployed!'
-                title_link: 'https://donate-production.thebiggive.org.uk'
+                title_link: 'https://donate.thebiggive.org.uk'
             - slack/notify-on-failure: ~

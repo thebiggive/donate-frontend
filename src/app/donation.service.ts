@@ -32,10 +32,22 @@ export class DonationService {
     this.donationCouplets = this.storage.get(this.storageKey) || [];
   }
 
+  getDonation(donationId: string): Donation | undefined {
+    const donations = this.donationCouplets.filter(donationItem => {
+      return (donationItem.donation.donationId === donationId);
+    });
+
+    if (donations.length === 0) {
+      return undefined;
+    }
+
+    return donations[0].donation;
+  }
+
   /**
    * Get a recent eligible-for-resuming donation to this same campaign/project, if any exists.
    */
-  getExistingDonation(projectId: string): Observable<Donation | undefined> {
+  getResumableDonation(projectId: string): Observable<Donation | undefined> {
     // TODO we should tidy up by deleting any locally saved donations too old to be useful as part of this process
 
     const existingDonations = this.donationCouplets.filter(donationItem => {
@@ -65,6 +77,16 @@ export class DonationService {
     // But we first need to check with the server that it's still in a Pending or Reserved status ready to try again -
     // and check any remaining local candidates if not.
     return this.get(existingDonations[0].donation);
+  }
+
+  /**
+   * Indicates whether a donation is considered successful and fully processed. This is not always 'final' - donations
+   * can be refunded and exit the Collected status.
+   */
+  isComplete(donation: Donation): boolean {
+    const completeStatuses = ['Collected', 'Paid'];
+
+    return completeStatuses.includes(donation.status);
   }
 
   /**
