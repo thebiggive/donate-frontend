@@ -1,8 +1,8 @@
-import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { Observable } from 'rxjs';
 
+import { AnalyticsService } from '../analytics.service';
 import { Donation } from '../donation.model';
 import { DonationService } from '../donation.service';
 
@@ -23,6 +23,7 @@ export class DonationCompleteComponent implements OnInit {
   private tries = 0;
 
   constructor(
+    private analyticsService: AnalyticsService,
     private donationService: DonationService,
     private route: ActivatedRoute,
   ) {
@@ -37,9 +38,11 @@ export class DonationCompleteComponent implements OnInit {
    * Must be public in order for re-tries to invoke it in an anonymous context.
    */
   checkDonation(): Observable<Donation> {
+    this.tries++;
     const donationLocalCopy = this.donationService.getDonation(this.donationId);
 
     if (donationLocalCopy === undefined) {
+      this.analyticsService.logError('thank_you_no_local_copy', `Donation ID ${this.donationId}`);
       this.noAccess = true; // If we don't have the local auth token we can never load the details.
       return;
     }
@@ -48,16 +51,16 @@ export class DonationCompleteComponent implements OnInit {
   }
 
   private setDonation(donation: Donation) {
-    this.donation = donation;
-
     if (donation === undefined) {
+      this.analyticsService.logError('thank_you_lookup_failed', `Donation ID ${this.donationId}`);
       this.noAccess = true; // If we don't have the local auth token we can never load the details.
       return;
     }
 
-    this.tries++;
+    this.donation = donation;
 
     if (this.donationService.isComplete(donation)) {
+      this.analyticsService.logEvent('thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
       this.complete = true;
       return;
     }
@@ -68,6 +71,7 @@ export class DonationCompleteComponent implements OnInit {
       return;
     }
 
+    this.analyticsService.logError('thank_you_timed_out_pre_complete', `Donation to campaign ${donation.projectId}`);
     this.timedOut = true;
   }
 }
