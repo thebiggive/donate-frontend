@@ -1,0 +1,20 @@
+<h2>Thank you!</h2>
+
+<mat-spinner *ngIf="!complete && !timedOut"></mat-spinner>
+
+<p *ngIf="noAccess" class="error">
+  We don't seem to have the required token to look up your donation. We can only show your receipt on the device where
+  you donated, in order to keep your information secure. Don't worry though, we'll email you a receipt within a few minutes
+  confirming if your donation was processed.
+</p>
+
+<p *ngIf="timedOut" class="error">
+  Your donation was not processed immediately &ndash; it may be that there is a short delay because we're very
+  busy. Please refresh this page to see the latest status. We'll also email your receipt within a few minutes when
+  your donation is processed.
+</p>
+
+<div *ngIf="donation">
+  <p>Your donation status: {{ donation.status }}</p>
+  <p>You donated {{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
+</div>

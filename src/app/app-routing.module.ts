@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
+import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
@@ -26,6 +27,10 @@ const routes: Routes = [
   {
     path: 'search',
     component: SearchResultsComponent,
+  },
+  {
+    path: 'thanks/:donationId',
+    component: DonationCompleteComponent,
   },
   {
     path: ':campaignSlug',
