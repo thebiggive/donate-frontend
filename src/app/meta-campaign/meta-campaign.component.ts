@@ -69,8 +69,11 @@ export class MetaCampaignComponent implements OnInit {
     return Math.min(3, Math.floor(this.viewportWidth / 300)); // Min 300px per col; up to 3 cols
   }
 
-  setFilter(filter, event) {
-    this.query[filter] = event.value;
+  /**
+   * Set a filter or sort value on the query
+   */
+  setQueryProperty(property, event) {
+    this.query[property] = event.value;
     this.run();
   }
 
