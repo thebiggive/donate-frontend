@@ -117,15 +117,10 @@ export class DonationStartComponent implements OnInit {
 
     this.donationService
       .create(donation) // Create Salesforce donation
-      .pipe(
-        retryWhen(genericRetryStrategy()),
-        catchError(error => of(error))
-      )
       // excluding status code, delay for logging clarity
       .pipe(
         retryWhen(genericRetryStrategy({
-          scalingDuration: 2000, 
-          excludedStatusCodes: [200]
+          excludedStatusCodes: [200],
         })),
         catchError(error => of(error)),
       )

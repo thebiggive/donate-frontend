@@ -71,6 +71,10 @@
 
     <mat-spinner *ngIf="submitting" color="accent" diameter="30"></mat-spinner>
 
+    <p *ngIf="retrying" class="warning">
+      Retrying donation submission..
+    </p>
+
     <p>
       <button mat-raised-button color="primary" type="submit" [disabled]="submitting">Donate Now</button>
     </p>
