@@ -31,7 +31,7 @@ export class DonationService {
     this.donationCouplets = this.storage.get(this.storageKey) || [];
   }
 
-  getDonation(donationId: string): Donation {
+  getDonation(donationId: string): Donation | undefined {
     const donations = this.donationCouplets.filter(donationItem => {
       return (donationItem.donation.donationId === donationId);
     });

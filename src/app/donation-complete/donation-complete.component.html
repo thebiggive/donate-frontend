@@ -1,6 +1,6 @@
 <h2>Thank you!</h2>
 
-<mat-spinner *ngIf="!complete && !timedOut" color="accent" diameter="30"></mat-spinner>
+<mat-spinner *ngIf="!complete && !noAccess && !timedOut" color="accent" diameter="30"></mat-spinner>
 
 <p *ngIf="noAccess" class="error">
   We don't seem to have the required token to look up your donation. We can only show your receipt on the device where

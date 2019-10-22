@@ -18,7 +18,7 @@ export class DonationCompleteComponent implements OnInit {
   public timedOut = false;
 
   private donationId: string;
-  private maxTries = 6;
+  private maxTries = 5;
   private retryInterval = 2; // In seconds
   private tries = 0;
 
@@ -30,37 +30,44 @@ export class DonationCompleteComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.updateDonation().subscribe(donation => {
-      this.donation = donation;
-
-      if (donation === undefined) {
-        this.noAccess = true; // If we don't have the local auth token we can never load the details.
-        return;
-      }
-
-      this.tries++;
-
-      if (this.donationService.isComplete(donation)) {
-        this.complete = true;
-        return;
-      }
-
-      if (this.tries < this.maxTries) {
-        setTimeout(this.updateDonation, this.retryInterval * 1000);
-        return;
-      }
-
-      this.timedOut = true;
-    });
+    this.checkDonation();
   }
 
-  updateDonation(): Observable<Donation> {
+  /**
+   * Must be public in order for re-tries to invoke it in an anonymous context.
+   */
+  checkDonation(): Observable<Donation> {
     const donationLocalCopy = this.donationService.getDonation(this.donationId);
 
     if (donationLocalCopy === undefined) {
-      return of(undefined); // Tell the main thread to bail out
+      this.noAccess = true; // If we don't have the local auth token we can never load the details.
+      return;
     }
 
-    return this.donationService.get(donationLocalCopy);
+    this.donationService.get(donationLocalCopy).subscribe(donation => this.setDonation(donation));
+  }
+
+  private setDonation(donation: Donation) {
+    this.donation = donation;
+
+    if (donation === undefined) {
+      this.noAccess = true; // If we don't have the local auth token we can never load the details.
+      return;
+    }
+
+    this.tries++;
+
+    if (this.donationService.isComplete(donation)) {
+      this.complete = true;
+      return;
+    }
+
+    if (this.tries < this.maxTries) {
+      // Use an anonymous function so `this` context works inside the callback.
+      setTimeout(() => this.checkDonation(), this.retryInterval * 1000);
+      return;
+    }
+
+    this.timedOut = true;
   }
 }
