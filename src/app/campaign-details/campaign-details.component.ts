@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
+import { PageMetaService } from '../page-meta.service';
 
 @Component({
   selector: 'app-campaign-details',
@@ -17,9 +17,8 @@ export class CampaignDetailsComponent implements OnInit {
 
   constructor(
     private campaignService: CampaignService,
-    private meta: Meta,
+    private pageMeta: PageMetaService,
     private route: ActivatedRoute,
-    private title: Title,
   ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
   }
@@ -29,8 +28,7 @@ export class CampaignDetailsComponent implements OnInit {
       .subscribe(campaign => {
         this.campaign = campaign;
         this.percentRaised = CampaignService.percentRaised(campaign);
-        this.title.setTitle(campaign.title);
-        this.meta.updateTag({ name: 'description', content: `View details of the "${campaign.title}" campaign`});
+        this.pageMeta.setCommon(campaign.title, `View details of the "${campaign.title}" campaign`, campaign.bannerUri);
       });
   }
 }

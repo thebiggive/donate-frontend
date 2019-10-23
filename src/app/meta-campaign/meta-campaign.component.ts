@@ -1,11 +1,11 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService } from '../campaign.service';
+import { PageMetaService } from '../page-meta.service';
 
 @Component({
   selector: 'app-meta-campaign',
@@ -24,11 +24,10 @@ export class MetaCampaignComponent implements OnInit {
 
   constructor(
     private campaignService: CampaignService,
-    private meta: Meta,
+    private pageMeta: PageMetaService,
     // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
-    private title: Title,
   ) {
     route.params.pipe().subscribe(params => {
       this.campaignId = params.campaignId;
@@ -68,8 +67,11 @@ export class MetaCampaignComponent implements OnInit {
    */
   private setCampaign(campaign: Campaign) {
     this.campaign = campaign;
-    this.title.setTitle(`Campaigns in ${campaign.title}`);
-    this.meta.updateTag({ name: 'description', content: `Browse campaigns in ${campaign.title}`});
+    this.pageMeta.setCommon(
+      `Campaigns in ${campaign.title}`,
+      `Browse campaigns in ${campaign.title}`,
+      campaign.bannerUri,
+    );
   }
 
   @HostListener('window:resize', ['$event'])
