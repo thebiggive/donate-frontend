@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
-import { CampaignService } from '../campaign.service';
+import { CampaignService, SearchQuery } from '../campaign.service';
 import { PageMetaService } from '../page-meta.service';
 
 @Component({
@@ -13,13 +13,19 @@ import { PageMetaService } from '../page-meta.service';
   styleUrls: ['./meta-campaign.component.scss'],
 })
 export class MetaCampaignComponent implements OnInit {
+  public beneficiaryOptions: string[];
   public campaign: Campaign;
+  public categoryOptions: string[];
   public children: CampaignSummary[];
+  public countryOptions: string[];
   public filterError = false;
+  public sortDirection = 'asc';
+  public sortDirectionEnabled = false; // Default sort field is relevance
 
   private campaignId: string;
   private campaignSlug: string;
   private fundSlug: string;
+  private query: SearchQuery;
   private viewportWidth: number; // In px. Used to vary `<mat-grid-list />`'s `cols`.
 
   constructor(
@@ -29,6 +35,10 @@ export class MetaCampaignComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
   ) {
+    this.beneficiaryOptions = campaignService.getBeneficiaries();
+    this.categoryOptions = campaignService.getCategories();
+    this.countryOptions = campaignService.getCountries();
+
     route.params.pipe().subscribe(params => {
       this.campaignId = params.campaignId;
       this.campaignSlug = params.campaignSlug;
@@ -47,19 +57,46 @@ export class MetaCampaignComponent implements OnInit {
       this.campaignService.getOneBySlug(this.campaignSlug).subscribe(campaign => this.setCampaign(campaign));
     }
 
-    const searchQuery = {
+    this.query = {
       parentCampaignId: this.campaignId,
       parentCampaignSlug: this.campaignSlug,
       fundSlug: this.fundSlug,
     };
-    this.campaignService.search(searchQuery).subscribe(
-      campaignSummaries => this.children = campaignSummaries, // Success
-      () => this.filterError = true, // Error, e.g. slug not known
-    );
+
+    this.run();
   }
 
   cols(): number {
     return Math.min(3, Math.floor(this.viewportWidth / 300)); // Min 300px per col; up to 3 cols
+  }
+
+  /**
+   * Set a filter or sort value on the query
+   */
+  setQueryProperty(property, event) {
+    this.query[property] = event.value;
+    this.run();
+  }
+
+  setSortField(event) {
+    this.query.sortField = event.value;
+    if (event.value === '') { // Sort by Relevance, ascending and direction locked
+      this.sortDirection = 'asc';
+      this.sortDirectionEnabled = false;
+      this.query.sortDirection = undefined;
+    } else {                  // Sort by an amount field, descending by default
+      this.sortDirection = 'desc';
+      this.sortDirectionEnabled = true;
+      this.query.sortDirection = this.sortDirection;
+    }
+    this.run();
+  }
+
+  private run() {
+    this.campaignService.search(this.query).subscribe(
+      campaignSummaries => this.children = campaignSummaries, // Success
+      () => this.filterError = true, // Error, e.g. slug not known
+    );
   }
 
   /**
