@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -14,6 +14,9 @@ import { DonationStartErrorDialogComponent } from './donation-start-error-dialog
 import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
 import { environment } from '../../environments/environment';
+import { genericRetryStrategy } from '../rxjs-utils';
+import { catchError, retryWhen, tap  } from 'rxjs/operators';
+import { of, observable } from 'rxjs';
 import { PageMetaService } from '../page-meta.service';
 
 @Component({
@@ -21,16 +24,17 @@ import { PageMetaService } from '../page-meta.service';
   templateUrl: './donation-start.component.html',
   styleUrls: ['./donation-start.component.scss'],
 })
+
 export class DonationStartComponent implements OnInit {
   public campaign: Campaign;
   public donationForm: FormGroup;
   public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
   public validationError = false;         // Internal Angular app form validation error
-
   private campaignId: string;
-  private charityCheckoutError?: string; // Charity Checkout donation start error message
+  private charityCheckoutError?: string;  // Charity Checkout donation start error message
   private previousDonation?: Donation;
+  public retry = false;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -111,6 +115,16 @@ export class DonationStartComponent implements OnInit {
 
     this.donationService
       .create(donation) // Create Salesforce donation
+      // excluding status code, delay for logging clarity
+      .pipe(
+        retryWhen(error => {
+          return error.pipe(
+            tap(val => this.retry = val.status !== 500),
+            genericRetryStrategy(),
+          );
+        }),
+        catchError(error => of(error)),
+      )
       .subscribe((response: DonationCreatedResponse) => {
         this.donationService.saveDonation(response.donation, response.jwt);
 

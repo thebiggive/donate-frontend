@@ -104,8 +104,7 @@ export class DonationService {
   create(donation: Donation): Observable<DonationCreatedResponse> {
     return this.http.post<DonationCreatedResponse>(
       `${environment.apiUriPrefix}${this.apiPath}`,
-      donation,
-    );
+      donation);
   }
 
   get(donation: Donation): Observable<Donation> {
