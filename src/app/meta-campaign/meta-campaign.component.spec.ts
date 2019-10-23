@@ -1,11 +1,12 @@
-import { CampaignSummary } from './../campaign-summary.model';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule, MatGridListModule, MatProgressBarModule } from '@angular/material';
+import { MatCardModule, MatGridListModule, MatProgressBarModule, MatSelectModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Campaign } from '../campaign.model';
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
+import { CampaignSummary } from '../campaign-summary.model';
 import { MetaCampaignComponent } from './meta-campaign.component';
 import { TimeLeftPipe } from '../time-left.pipe';
 
@@ -25,6 +26,8 @@ describe('MetaCampaignComponent', () => {
         MatCardModule,
         MatGridListModule,
         MatProgressBarModule,
+        MatSelectModule,
+        NoopAnimationsModule,
         RouterTestingModule,
       ],
     })
