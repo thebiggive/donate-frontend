@@ -28,6 +28,7 @@ import { SearchResultsComponent } from './search-results/search-results.componen
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { TimeLeftPipe } from './time-left.pipe';
+import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     SearchResultsComponent,
     MetaCampaignComponent,
     TimeLeftPipe,
+    DonationCompleteComponent,
   ],
   entryComponents: [
     DonationStartErrorDialogComponent,
