@@ -16,7 +16,7 @@ import { DonationStartMatchConfirmDialogComponent } from './donation-start-match
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
 import { environment } from '../../environments/environment';
 import { genericRetryStrategy } from '../rxjs-utils';
-import { catchError, retryWhen  } from 'rxjs/operators';
+import { catchError, retryWhen, tap  } from 'rxjs/operators';
 import { of, observable } from 'rxjs';
 
 @Component({
@@ -26,7 +26,6 @@ import { of, observable } from 'rxjs';
 })
 
 export class DonationStartComponent implements OnInit {
-  @Output() retry: EventEmitter<any> = new EventEmitter<any>();
   public campaign: Campaign;
   public donationForm: FormGroup;
   public sfApiError = false;              // Salesforce donation create API error
@@ -35,6 +34,7 @@ export class DonationStartComponent implements OnInit {
   private campaignId: string;
   private charityCheckoutError?: string;  // Charity Checkout donation start error message
   private previousDonation?: Donation;
+  public retry = false;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -119,10 +119,12 @@ export class DonationStartComponent implements OnInit {
       .create(donation) // Create Salesforce donation
       // excluding status code, delay for logging clarity
       .pipe(
-        retryWhen(genericRetryStrategy({
-          retry: true,
-          excludedStatusCodes: [200],
-        })),
+        retryWhen(error => {
+          return error.pipe(
+            tap(val => this.retry = val.status !== 500),
+            genericRetryStrategy(),
+          );
+        }),
         catchError(error => of(error)),
       )
       .subscribe((response: DonationCreatedResponse) => {
