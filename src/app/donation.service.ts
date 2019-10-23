@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { Observable, of } from 'rxjs';
-import { _throw } from 'rxjs/observable/throw';
 
 import { AnalyticsService } from './analytics.service';
 import { Donation } from './donation.model';
@@ -148,9 +147,5 @@ export class DonationService {
         'X-Tbg-Auth': donationDataItems[0].jwt,
       }),
     };
-  }
-
-  private getData(status: number) {
-    return _throw({status});
   }
 }

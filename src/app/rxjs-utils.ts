@@ -1,7 +1,5 @@
-import { Observable } from 'rxjs/Observable';
-import { _throw } from 'rxjs/observable/throw';
-import { timer } from 'rxjs/observable/timer';
-import { finalize, switchMap, combineLatest } from 'rxjs/operators';
+import { Observable, throwError, timer } from 'rxjs';
+import { finalize, switchMap } from 'rxjs/operators';
 
 // Class based on this example: https://www.learnrxjs.io/operators/error_handling/retrywhen.html
 
@@ -22,7 +20,7 @@ export const genericRetryStrategy = (
       // if maximum number of retries have been met
       // or response is a status code we don't wish to retry, throw error
       if (retryAttempt > maxRetryAttempts || excludedStatusCodes.find(e => e === error.status)) {
-        return _throw(error);
+        return throwError (error);
       }
       // retry after 1s, 2s, 6s and 8s
       if (retryAttempt === 3 || retryAttempt === 4) {
