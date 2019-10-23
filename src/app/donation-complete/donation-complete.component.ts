@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { DonationService } from '../donation.service';
   templateUrl: './donation-complete.component.html',
   styleUrls: ['./donation-complete.component.scss'],
 })
-export class DonationCompleteComponent implements OnInit {
+export class DonationCompleteComponent {
   public complete = false;
   public donation: Donation;
   public noAccess = false;
@@ -27,11 +27,10 @@ export class DonationCompleteComponent implements OnInit {
     private donationService: DonationService,
     private route: ActivatedRoute,
   ) {
-    route.params.pipe().subscribe(params => this.donationId = params.donationId);
-  }
-
-  ngOnInit() {
-    this.checkDonation();
+    route.params.pipe().subscribe(params => {
+      this.donationId = params.donationId;
+      this.checkDonation();
+    });
   }
 
   /**
