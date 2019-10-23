@@ -103,6 +103,8 @@ workflows:
   deploy-staging:
     jobs:
       - deploy-staging-static:
+          requires:
+            - build
           filters:
             branches:
               only:
@@ -135,6 +137,8 @@ workflows:
   deploy-production:
     jobs:
       - deploy-production-static:
+          requires:
+            - build
           filters:
             branches:
               only:

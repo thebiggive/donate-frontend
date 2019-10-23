@@ -1,7 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { AnalyticsService } from '../analytics.service';
@@ -18,6 +17,7 @@ import { environment } from '../../environments/environment';
 import { genericRetryStrategy } from '../rxjs-utils';
 import { catchError, retryWhen, tap  } from 'rxjs/operators';
 import { of, observable } from 'rxjs';
+import { PageMetaService } from '../page-meta.service';
 
 @Component({
   selector: 'app-donation-start',
@@ -43,10 +43,9 @@ export class DonationStartComponent implements OnInit {
     public dialog: MatDialog,
     private donationService: DonationService,
     private formBuilder: FormBuilder,
-    private meta: Meta,
+    private pageMeta: PageMetaService,
     private route: ActivatedRoute,
     private router: Router,
-    private title: Title,
   ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
     route.queryParams.forEach((params: Params) => {
@@ -60,8 +59,7 @@ export class DonationStartComponent implements OnInit {
     this.campaignService.getOneById(this.campaignId)
       .subscribe(campaign => {
         this.campaign = campaign;
-        this.title.setTitle(`Donate to ${campaign.charity.name}`);
-        this.meta.updateTag({ name: 'description', content: `Donate to the "${campaign.title}" campaign`});
+        this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
       });
 
     this.donationForm = this.formBuilder.group({
