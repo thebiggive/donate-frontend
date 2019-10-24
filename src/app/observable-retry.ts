@@ -1,9 +1,8 @@
 import { Observable, throwError, timer } from 'rxjs';
 import { finalize, switchMap } from 'rxjs/operators';
 
-// Class based on this example: https://www.learnrxjs.io/operators/error_handling/retrywhen.html
-
-export const genericRetryStrategy = (
+// Based on example 2 from https://www.learnrxjs.io/operators/error_handling/retrywhen.html
+export const retryStrategy = (
   {
     maxRetryAttempts = 4,
     scalingDuration = 1000,
@@ -26,9 +25,8 @@ export const genericRetryStrategy = (
       if (retryAttempt === 3 || retryAttempt === 4) {
         scalingDuration = 2000;
       }
-      console.log(`Attempt ${retryAttempt}: retrying in ${retryAttempt * scalingDuration}ms`);
       return timer(retryAttempt * scalingDuration);
     }),
-    finalize(() => console.log('Abandoning donation as server took too long to respond')),
+    finalize(() => {}),
   );
 };

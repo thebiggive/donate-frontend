@@ -1,7 +1,8 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { retryWhen, tap  } from 'rxjs/operators';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
@@ -14,10 +15,8 @@ import { DonationStartErrorDialogComponent } from './donation-start-error-dialog
 import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
 import { environment } from '../../environments/environment';
-import { genericRetryStrategy } from '../rxjs-utils';
-import { catchError, retryWhen, tap  } from 'rxjs/operators';
-import { of, observable } from 'rxjs';
 import { PageMetaService } from '../page-meta.service';
+import { retryStrategy } from '../observable-retry';
 
 @Component({
   selector: 'app-donation-start',
@@ -28,13 +27,13 @@ import { PageMetaService } from '../page-meta.service';
 export class DonationStartComponent implements OnInit {
   public campaign: Campaign;
   public donationForm: FormGroup;
+  public retrying = false;
   public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
   public validationError = false;         // Internal Angular app form validation error
   private campaignId: string;
   private charityCheckoutError?: string;  // Charity Checkout donation start error message
   private previousDonation?: Donation;
-  public retry = false;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -119,11 +118,10 @@ export class DonationStartComponent implements OnInit {
       .pipe(
         retryWhen(error => {
           return error.pipe(
-            tap(val => this.retry = val.status !== 500),
-            genericRetryStrategy(),
+            tap(val => this.retrying = (val.status !== 500)),
+            retryStrategy({excludedStatusCodes: [500]}),
           );
         }),
-        catchError(error => of(error)),
       )
       .subscribe((response: DonationCreatedResponse) => {
         this.donationService.saveDonation(response.donation, response.jwt);
@@ -165,6 +163,7 @@ export class DonationStartComponent implements OnInit {
           'salesforce_create_failed',
           `Could not create new donation for campaign ${this.campaignId}: ${response.error.error}`,
         );
+        this.retrying = false;
         this.sfApiError = true;
         this.submitting = false;
       });
