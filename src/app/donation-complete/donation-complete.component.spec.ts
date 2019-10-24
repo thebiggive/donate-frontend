@@ -5,9 +5,11 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
+import { AnalyticsService } from '../analytics.service';
 import { DonationCompleteComponent } from './donation-complete.component';
 
 describe('DonationCompleteComponent', () => {
+  let analyticsService;
   let component: DonationCompleteComponent;
   let fixture: ComponentFixture<DonationCompleteComponent>;
 
@@ -25,6 +27,7 @@ describe('DonationCompleteComponent', () => {
         ]),
       ],
       providers: [
+        AnalyticsService,
         {
           provide: ActivatedRoute,
           useValue: {
@@ -32,8 +35,14 @@ describe('DonationCompleteComponent', () => {
           },
         },
       ],
-    })
-    .compileComponents();
+    });
+
+    // We must mock AnalyticsService so we don't touch the window/global var which is unavailable.
+    // This also lets the test assert that a specific GA method call is made.
+    analyticsService = TestBed.get(AnalyticsService);
+    spyOn(analyticsService, 'logError');
+
+    TestBed.compileComponents();
   }));
 
   beforeEach(() => {
@@ -43,11 +52,9 @@ describe('DonationCompleteComponent', () => {
   });
 
   it('should create', () => {
-    // Hack to ensure calls to the global from AnalyticsService as the component loads don't cause test
-    // errors. TODO - ideally, we should have a mock of the AnalyticsService for tests which doesn't touch
-    // the global and allows us to assert that specific GA calls are made.
-    const gtag = () => {};
-
     expect(component).toBeTruthy();
+    // We bootstrap with a fake, unknown donation ID. So the thanks page should error out on load
+    // and log that error to GA.
+    expect(analyticsService.logError).toHaveBeenCalled();
   });
 });
