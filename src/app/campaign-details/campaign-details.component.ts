@@ -28,7 +28,9 @@ export class CampaignDetailsComponent implements OnInit {
       .subscribe(campaign => {
         this.campaign = campaign;
         this.percentRaised = CampaignService.percentRaised(campaign);
-        this.pageMeta.setCommon(campaign.title, `View details of the "${campaign.title}" campaign`, campaign.bannerUri);
+        // First 20 word-like things followed by …
+        const summaryStart = campaign.summary.replace(new RegExp('^(([\\w\',."-]+ ){20}).*$'), '$1') + '&hellip;';
+        this.pageMeta.setCommon(campaign.title, summaryStart, campaign.bannerUri);
       });
   }
 }
