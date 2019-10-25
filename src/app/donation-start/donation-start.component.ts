@@ -159,10 +159,14 @@ export class DonationStartComponent implements OnInit {
         // Else either the donation was not expected to be matched or has 100% match funds allocated -> no need for an extra step
         this.redirectToCharityCheckout(response.donation);
       }, response => {
-        this.analyticsService.logError(
-          'salesforce_create_failed',
-          `Could not create new donation for campaign ${this.campaignId}: ${response.error.error}`,
-        );
+        let errorMessage: string;
+        if (response.error) {
+          errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.error.error}`;
+        } else {
+          // Unhandled 5xx crashes etc.
+          errorMessage = `Could not create new donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
+        }
+        this.analyticsService.logError('salesforce_create_failed', errorMessage);
         this.retrying = false;
         this.sfApiError = true;
         this.submitting = false;
