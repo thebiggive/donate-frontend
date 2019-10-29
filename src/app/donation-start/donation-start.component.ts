@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { retryWhen, tap  } from 'rxjs/operators';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
@@ -15,21 +15,24 @@ import { DonationStartErrorDialogComponent } from './donation-start-error-dialog
 import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
 import { environment } from '../../environments/environment';
+import { PageMetaService } from '../page-meta.service';
+import { retryStrategy } from '../observable-retry';
 
 @Component({
   selector: 'app-donation-start',
   templateUrl: './donation-start.component.html',
   styleUrls: ['./donation-start.component.scss'],
 })
+
 export class DonationStartComponent implements OnInit {
   public campaign: Campaign;
   public donationForm: FormGroup;
+  public retrying = false;
   public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
   public validationError = false;         // Internal Angular app form validation error
-
   private campaignId: string;
-  private charityCheckoutError?: string; // Charity Checkout donation start error message
+  private charityCheckoutError?: string;  // Charity Checkout donation start error message
   private previousDonation?: Donation;
 
   constructor(
@@ -39,10 +42,9 @@ export class DonationStartComponent implements OnInit {
     public dialog: MatDialog,
     private donationService: DonationService,
     private formBuilder: FormBuilder,
-    private meta: Meta,
+    private pageMeta: PageMetaService,
     private route: ActivatedRoute,
     private router: Router,
-    private title: Title,
   ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
     route.queryParams.forEach((params: Params) => {
@@ -56,8 +58,7 @@ export class DonationStartComponent implements OnInit {
     this.campaignService.getOneById(this.campaignId)
       .subscribe(campaign => {
         this.campaign = campaign;
-        this.title.setTitle(`Donate to ${campaign.charity.name}`);
-        this.meta.updateTag({ name: 'description', content: `Donate to the "${campaign.title}" campaign`});
+        this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
       });
 
     this.donationForm = this.formBuilder.group({
@@ -73,7 +74,7 @@ export class DonationStartComponent implements OnInit {
       optInTbgEmail: [null, Validators.required],
     });
 
-    this.donationService.getExistingDonation(this.campaignId)
+    this.donationService.getResumableDonation(this.campaignId)
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;
         if (this.charityCheckoutError) {
@@ -113,6 +114,15 @@ export class DonationStartComponent implements OnInit {
 
     this.donationService
       .create(donation) // Create Salesforce donation
+      // excluding status code, delay for logging clarity
+      .pipe(
+        retryWhen(error => {
+          return error.pipe(
+            tap(val => this.retrying = (val.status !== 500)),
+            retryStrategy({excludedStatusCodes: [500]}),
+          );
+        }),
+      )
       .subscribe((response: DonationCreatedResponse) => {
         this.donationService.saveDonation(response.donation, response.jwt);
 
@@ -149,10 +159,15 @@ export class DonationStartComponent implements OnInit {
         // Else either the donation was not expected to be matched or has 100% match funds allocated -> no need for an extra step
         this.redirectToCharityCheckout(response.donation);
       }, response => {
-        this.analyticsService.logError(
-          'salesforce_create_failed',
-          `Could not create new donation for campaign ${this.campaignId}: ${response.error.error}`,
-        );
+        let errorMessage: string;
+        if (response.error) {
+          errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.error.error}`;
+        } else {
+          // Unhandled 5xx crashes etc.
+          errorMessage = `Could not create new donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
+        }
+        this.analyticsService.logError('salesforce_create_failed', errorMessage);
+        this.retrying = false;
         this.sfApiError = true;
         this.submitting = false;
       });

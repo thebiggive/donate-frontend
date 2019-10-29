@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { SESSION_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
 import { Observable, of } from 'rxjs';
 
 import { AnalyticsService } from './analytics.service';
@@ -26,18 +26,28 @@ export class DonationService {
   constructor(
     private analyticsService: AnalyticsService,
     private http: HttpClient,
-    @Inject(SESSION_STORAGE) private storage: StorageService,
-  ) {
-    this.donationCouplets = this.storage.get(this.storageKey) || [];
+    @Inject(LOCAL_STORAGE) private storage: StorageService,
+  ) {}
+
+  getDonation(donationId: string): Donation | undefined {
+    const donations = this.getDonationCouplets().filter(donationItem => {
+      return (donationItem.donation.donationId === donationId);
+    });
+
+    if (donations.length === 0) {
+      return undefined;
+    }
+
+    return donations[0].donation;
   }
 
   /**
    * Get a recent eligible-for-resuming donation to this same campaign/project, if any exists.
    */
-  getExistingDonation(projectId: string): Observable<Donation | undefined> {
+  getResumableDonation(projectId: string): Observable<Donation | undefined> {
     // TODO we should tidy up by deleting any locally saved donations too old to be useful as part of this process
 
-    const existingDonations = this.donationCouplets.filter(donationItem => {
+    const existingDonations = this.getDonationCouplets().filter(donationItem => {
       const createdDate = donationItem.donation.createdTime instanceof Date
         ? donationItem.donation.createdTime
         : new Date(donationItem.donation.createdTime);
@@ -67,6 +77,16 @@ export class DonationService {
   }
 
   /**
+   * Indicates whether a donation is considered successful and fully processed. This is not always 'final' - donations
+   * can be refunded and exit the Collected status.
+   */
+  isComplete(donation: Donation): boolean {
+    const completeStatuses = ['Collected', 'Paid'];
+
+    return completeStatuses.includes(donation.status);
+  }
+
+  /**
    * Cancel donation in Salesforce to free up match funds straight away. Subscribers should `removeLocalDonation()` on success.
    */
   cancel(donation: Donation): Observable<any> {
@@ -82,8 +102,7 @@ export class DonationService {
   create(donation: Donation): Observable<DonationCreatedResponse> {
     return this.http.post<DonationCreatedResponse>(
       `${environment.apiUriPrefix}${this.apiPath}`,
-      donation,
-    );
+      donation);
   }
 
   get(donation: Donation): Observable<Donation> {
@@ -110,7 +129,7 @@ export class DonationService {
   }
 
   private getAuthHttpOptions(donation: Donation): { headers: HttpHeaders } {
-    const donationDataItems = this.donationCouplets.filter(donationItem => donationItem.donation.donationId === donation.donationId);
+    const donationDataItems = this.getDonationCouplets().filter(donationItem => donationItem.donation.donationId === donation.donationId);
 
     if (donationDataItems.length !== 1) {
       this.analyticsService.logError(
@@ -126,5 +145,13 @@ export class DonationService {
         'X-Tbg-Auth': donationDataItems[0].jwt,
       }),
     };
+  }
+
+  private getDonationCouplets() {
+    if (this.donationCouplets.length === 0) {
+      this.donationCouplets = this.storage.get(this.storageKey) || [];
+    }
+
+    return this.donationCouplets;
   }
 }
