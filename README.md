@@ -11,6 +11,8 @@ To run the app locally:
 * `npm install`
 * `npm start`
 
+The app should be running at [localhost:4200](http://localhost:4200).
+
 To use `ng` commands directly, e.g. to generate new code scaffolding with the CLI, install Angular globally:
 
     npm install -g @angular/cli
@@ -19,6 +21,10 @@ To use `ng` commands directly, e.g. to generate new code scaffolding with the CL
 
 * `master` branch deploys to Production.
 * `develop` branch deploys to Staging.
+
+To run style, unit and e2e tests together from your local, as CircleCI build checks do against every branch:
+
+    npm run ci
 
 The latest tagged [Puppeteer](https://www.npmjs.com/package/puppeteer) uses the very latest available Chromium, which is typically incompatible
 with the latest *stable* tagged version that other libaries have available. So for it to continue working, we need to be careful with its version
