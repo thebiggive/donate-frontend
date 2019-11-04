@@ -12,7 +12,6 @@ import {
   MatProgressSpinnerModule,
   MatRadioModule,
   MatSelectModule,
-  MatSlideToggleModule,
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -64,7 +63,6 @@ import { DonationCompleteComponent } from './donation-complete/donation-complete
     MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,
-    MatSlideToggleModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     MatCarouselModule,

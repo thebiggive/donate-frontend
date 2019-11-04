@@ -75,6 +75,10 @@ export class MetaCampaignComponent implements OnInit {
    */
   setQueryProperty(property, event) {
     this.query[property] = event.value;
+
+    console.log('new query:');
+    console.log(this.query);
+
     this.run();
   }
 
@@ -89,6 +93,11 @@ export class MetaCampaignComponent implements OnInit {
       this.sortDirectionEnabled = true;
       this.query.sortDirection = this.sortDirection;
     }
+    this.run();
+  }
+
+  onMetacampaignSearch(term: string) {
+    this.query.term = term;
     this.run();
   }
 

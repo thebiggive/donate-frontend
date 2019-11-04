@@ -1,8 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatInputModule, MatSlideToggleModule } from '@angular/material';
+import { MatButtonModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { CampaignSearchFormComponent } from './campaign-search-form.component';
 
@@ -16,10 +15,8 @@ describe('CampaignSearchFormComponent', () => {
       imports: [
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatInputModule,
-        MatSlideToggleModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-        RouterTestingModule,
       ],
     })
     .compileComponents();
@@ -37,13 +34,13 @@ describe('CampaignSearchFormComponent', () => {
   });
 
   it('should still have search button disabled after 1 character entered', () => {
-    component.searchForm.setValue({summerGive19: false, term: 'T'});
+    component.searchForm.setValue({term: 'T'});
 
     expect(component.searchForm.valid).toBe(false);
   });
 
   it('should have search button enabled after 2 characters entered', () => {
-    component.searchForm.setValue({summerGive19: false, term: 'Te'});
+    component.searchForm.setValue({term: 'Te'});
 
     expect(component.searchForm.valid).toBe(true);
   });
