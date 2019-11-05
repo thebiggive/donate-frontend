@@ -92,6 +92,11 @@ export class MetaCampaignComponent implements OnInit {
     this.run();
   }
 
+  onMetacampaignSearch(term: string) {
+    this.query.term = term;
+    this.run();
+  }
+
   private run() {
     this.campaignService.search(this.query).subscribe(
       campaignSummaries => this.children = campaignSummaries, // Success
