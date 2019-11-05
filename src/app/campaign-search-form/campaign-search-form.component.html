@@ -1,14 +1,8 @@
-<form (ngSubmit)="search()" [formGroup]="searchForm">
+<form (ngSubmit)="submit()" [formGroup]="searchForm">
   <mat-form-field color="accent">
     <mat-label for="term">Campaign or Charity</mat-label>
     <input matInput formControlName="term" id="term" type="text">
   </mat-form-field>
-
-  <p>
-    <mat-slide-toggle formControlName="summerGive19" id="summerGive19">
-      Limit to Summer Give 2019
-    </mat-slide-toggle>
-  </p>
 
   <p>
     <button

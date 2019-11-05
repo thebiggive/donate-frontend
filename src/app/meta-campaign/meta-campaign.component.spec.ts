@@ -1,11 +1,20 @@
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule, MatGridListModule, MatProgressBarModule, MatSelectModule } from '@angular/material';
+import { ReactiveFormsModule } from '@angular/forms';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatGridListModule,
+  MatInputModule,
+  MatProgressBarModule,
+  MatSelectModule,
+} from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Campaign } from '../campaign.model';
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
+import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
 import { MetaCampaignComponent } from './meta-campaign.component';
 import { TimeLeftPipe } from '../time-left.pipe';
@@ -18,16 +27,20 @@ describe('MetaCampaignComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         CampaignCardComponent,
+        CampaignSearchFormComponent,
         MetaCampaignComponent,
         TimeLeftPipe,
       ],
       imports: [
         HttpClientTestingModule,
+        MatButtonModule, // Not required but makes test DOM layout more realistic
         MatCardModule,
         MatGridListModule,
+        MatInputModule,
         MatProgressBarModule,
         MatSelectModule,
         NoopAnimationsModule,
+        ReactiveFormsModule,
         RouterTestingModule,
       ],
     })

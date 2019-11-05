@@ -9,8 +9,10 @@
   </mat-card-content>
 </mat-card>
 
-<div *ngIf="children">
+<div *ngIf="campaign && children">
   <h2>Participating Campaigns</h2>
+  <h3>Search in {{ campaign.title }}</h3>
+  <app-campaign-search-form [campaignId]="campaign.id" (search)="onMetacampaignSearch($event)"></app-campaign-search-form>
 
   <h3>Filters</h3>
   <mat-form-field>
