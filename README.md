@@ -20,7 +20,7 @@ To use `ng` commands directly, e.g. to generate new code scaffolding with the CL
 ## CI, e2e tests and Puppeteer
 
 * `master` branch deploys to Production.
-* `develop` branch deploys to Staging.
+* `develop` branch deploys to Staging and Regression (for end-to-end regression tests).
 
 To run style, unit and e2e tests together from your local, as CircleCI build checks do against every branch:
 
