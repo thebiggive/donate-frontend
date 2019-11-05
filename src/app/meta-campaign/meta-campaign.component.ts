@@ -75,10 +75,6 @@ export class MetaCampaignComponent implements OnInit {
    */
   setQueryProperty(property, event) {
     this.query[property] = event.value;
-
-    console.log('new query:');
-    console.log(this.query);
-
     this.run();
   }
 
