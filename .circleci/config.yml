@@ -60,6 +60,36 @@ jobs:
             --cache-control "max-age=86400"
           overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
+  deploy-regression-static:
+    docker:
+      # This image's base Node version must match that used in the *root* `Dockerfile` (not the one in this directory)
+      # which is the basis for ECS app builds. Otherwise the two builds will have different output hashes and the
+      # dynamic app will reference static files that don't exist.
+      - image: circleci/node:12
+
+    steps:
+      - checkout
+
+      - run: npm install --quiet
+
+      - run: npm run build:regression
+
+      - aws-s3/sync:
+          from: dist/browser
+          to: 's3://tbg-regression-donate-static/d'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=31536000"
+          overwrite: false  # Leave previous versions in tact (don't `--delete`)
+
+      - aws-s3/sync:
+          from: dist/browser/assets
+          to: 's3://tbg-regression-donate-static/assets'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          overwrite: false  # Leave previous versions in tact (don't `--delete`)
+
   deploy-production-static:
     docker:
       # This image's base Node version must match that used in the *root* `Dockerfile` (not the one in this directory)
@@ -98,6 +128,30 @@ workflows:
             - jira/notify:
                 job_type: build
                 environment_type: development
+            - slack/notify-on-failure: ~
+
+  deploy-regression:
+    jobs:
+      - deploy-regression-static:
+          filters:
+            branches:
+              only:
+                - develop
+      - aws-ecr/build-and-push-image:
+          requires:
+            - deploy-regression-static
+          extra-build-args: '--build-arg BUILD_ENV=regression'
+          repo: '${AWS_ECR_REPO_NAME}'
+          region: AWS_REGION
+          tag: 'regression,regression-${CIRCLE_SHA1}'
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build-and-push-image
+          aws-region: '${AWS_REGION}'
+          family: 'tbg-regression-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
+          cluster-name: 'tbg-regression-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
+          container-image-name-updates: 'container=donate,tag=regression-${CIRCLE_SHA1}'
+          post-steps:
             - slack/notify-on-failure: ~
 
   deploy-staging:

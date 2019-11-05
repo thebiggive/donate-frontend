@@ -10,7 +10,7 @@ RUN npm install
 # Now copy the app source
 COPY . .
 
-# Take value 'staging' or 'production' so we know which Angular vars to build into the app bundle.
+# Take value 'regression', 'staging' or 'production' so we know which Angular vars to build into the app bundle.
 # This controls e.g. which environment's API we target.
 ARG BUILD_ENV
 
