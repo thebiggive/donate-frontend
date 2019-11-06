@@ -18,9 +18,10 @@ describe('FundService', () => {
     const dummyFund: Fund = {
       id: 'asdfasdfasdfasdf12',
       type: 'championFund',
-      name: 'Dummy Unit Test Fund',
+      name: 'Dummy unit test fund',
       amountRaised: 204.67,
       totalAmount: 150.00,
+      description: 'Dummy unit test descriptoin of the Champion',
       logoUri: 'https://example.com/an-image.png',
     };
 
