@@ -39,7 +39,7 @@
     </ul>
   </div>
 
-  <div *ngIf="campaign.additionalImageUris.length > 0">
+  <div *ngIf="clientSide && campaign.additionalImageUris.length > 0">
     <h3>Campaign Images</h3>
     <mat-carousel
       timings="250ms ease-in"
@@ -57,7 +57,6 @@
       orientation="ltr"
     >
       <mat-carousel-slide
-        #matCarouselSlide
         *ngFor="let image of campaign.additionalImageUris"
         [image]="image.uri"
         [hideOverlay]="false"
