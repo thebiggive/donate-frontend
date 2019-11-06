@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
+import { Fund } from '../fund.model';
+import { FundService } from '../fund.service';
 import { PageMetaService } from '../page-meta.service';
 
 @Component({
@@ -19,6 +21,7 @@ export class MetaCampaignComponent implements OnInit {
   public children: CampaignSummary[];
   public countryOptions: string[];
   public filterError = false;
+  public fund: Fund;
   public sortDirection = 'asc';
   public sortDirectionEnabled = false; // Default sort field is relevance
 
@@ -30,6 +33,7 @@ export class MetaCampaignComponent implements OnInit {
 
   constructor(
     private campaignService: CampaignService,
+    private fundService: FundService,
     private pageMeta: PageMetaService,
     // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -55,6 +59,10 @@ export class MetaCampaignComponent implements OnInit {
       this.campaignService.getOneById(this.campaignId).subscribe(campaign => this.setCampaign(campaign));
     } else {
       this.campaignService.getOneBySlug(this.campaignSlug).subscribe(campaign => this.setCampaign(campaign));
+    }
+
+    if (this.fundSlug) {
+      this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => this.fund = fund);
     }
 
     this.query = {
