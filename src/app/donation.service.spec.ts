@@ -5,10 +5,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Donation } from './donation.model';
 import { DonationCreatedResponse } from './donation-created-response.model';
 import { DonationService } from './donation.service';
+import { DonationStatus } from './donation-status.type';
 import { environment } from '../environments/environment';
 
 describe('DonationService', () => {
-  const getDummyDonation = () => {
+  const getDummyDonation = (status: DonationStatus = 'Pending') => {
     return new Donation(
       '01I400000009Sds3e2',
       1234.56,
@@ -27,7 +28,7 @@ describe('DonationService', () => {
       'Theroux',
       0,
       500.01,
-      'Pending',
+      status,
       'd290f1ee-6c54-4b01-90e6-d701748f0851',
       new Date(),
     );
@@ -64,17 +65,56 @@ describe('DonationService', () => {
         });
 
         const mockPost = httpMock.expectOne(`${environment.apiUriPrefix}/donations/services/apexrest/v1.0/donations`);
-
         expect(mockPost.request.method).toEqual('POST');
         expect(mockPost.cancelled).toBeFalsy();
         expect(mockPost.request.responseType).toEqual('json');
-
         const donationCreatedResponse = new DonationCreatedResponse(
           donation,
           'mockJwtheader.mockJwtBody.mockJwtSignature',
         );
-
         mockPost.flush(donationCreatedResponse);
+
+        httpMock.verify();
+      },
+    ),
+  );
+
+  it(
+    'should successfully cancel a donation',
+    inject(
+      [HttpTestingController],
+      (
+        httpMock: HttpTestingController,
+      ) => {
+        const service: DonationService = TestBed.get(DonationService);
+        const donation = getDummyDonation();
+        service.create(donation).subscribe(createResponse => {
+          expect(createResponse.donation.status).toEqual('Pending');
+
+          service.cancel(createResponse.donation).subscribe(cancelResponse => {
+            expect(cancelResponse.status).toEqual('Cancelled');
+          }, () => {
+            expect(false).toBe(true); // Always fail if cancel observable errors
+          });
+        }, () => {
+          expect(false).toBe(true); // Always fail if create observable errors
+        });
+
+        const mockPost = httpMock.expectOne(`${environment.apiUriPrefix}/donations/services/apexrest/v1.0/donations`);
+        expect(mockPost.request.method).toEqual('POST');
+        expect(mockPost.cancelled).toBeFalsy();
+        expect(mockPost.request.responseType).toEqual('json');
+        const donationCreatedResponse = new DonationCreatedResponse(
+          donation,
+          'mockJwtheader.mockJwtBody.mockJwtSignature',
+        );
+        mockPost.flush(donationCreatedResponse);
+
+        const mockPut = httpMock.expectOne(`${environment.apiUriPrefix}/donations/services/apexrest/v1.0/donations/${donation.donationId}`);
+        expect(mockPut.request.method).toEqual('PUT');
+        expect(mockPut.cancelled).toBeFalsy();
+        expect(mockPut.request.responseType).toEqual('json');
+        mockPut.flush(getDummyDonation('Cancelled'));
 
         httpMock.verify();
       },
