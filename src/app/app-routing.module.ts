@@ -33,6 +33,10 @@ const routes: Routes = [
     component: DonationCompleteComponent,
   },
   {
+    path: ':campaignSlug/:fundSlug',
+    component: MetaCampaignComponent,
+  },
+  {
     path: ':campaignSlug',
     component: MetaCampaignComponent,
   },
