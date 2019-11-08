@@ -1,0 +1,49 @@
+<mat-toolbar class="main-nav-toolbar">
+  <div class="logo__wrap">
+    <a (click)="sidenav.close()" routerLink="/"><img class="logo" src="/assets/logo.png" alt="The Big Give" width="148"></a>
+  </div>
+  <div class="main-nav">
+    <div class="nav-links__wrap">
+      <a mat-button class="nav-link" [routerLink]="'/accounts'">About</a>
+      <a mat-button class="nav-link" [routerLink]="'/create-account'">How we help</a>
+      <a mat-button class="nav-link" [routerLink]="'/contacts'">Explore campaigns</a>
+      <a mat-button class="nav-link" [routerLink]="'/create-contact'">Contact us</a>
+    </div>
+    <div class="main-nav__search-form">
+      <app-nav-search-form></app-nav-search-form>
+    </div>
+    <div class="charity-login__wrap">
+      <a mat-button class="charity-login__link" [routerLink]="'/accounts'">Charity login</a>
+    </div>
+  </div>
+  <div class="side-nav-button__wrap">
+    <button mat-icon-button class="side-nav-button__button" (click)="sidenav.toggle()">
+      <mat-icon aria-hidden="false" aria-label="Menu" color="accent">{{ !opened ? 'menu' : 'close' }}</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+
+<mat-sidenav-container>
+  <mat-sidenav
+    #sidenav
+    role="navigation"
+    mode="side"
+    [(opened)]="opened"
+    (opened)="events.push('open!')"
+    (closed)="events.push('close!')">
+    <app-nav-search-form></app-nav-search-form>
+    <mat-nav-list class="mat-nav-list nav-links__wrap">
+      <a class="nav-links__link" mat-list-item (click)="sidenav.close()" [routerLink]="'/link'">About</a>
+      <a class="nav-links__link" mat-list-item (click)="sidenav.close()" [routerLink]="'/link'">How we help</a>
+      <a class="nav-links__link" mat-list-item (click)="sidenav.close()" [routerLink]="'/link'">Explore campaigns</a>
+      <a class="nav-links__link" mat-list-item (click)="sidenav.close()" [routerLink]="'/link'">Contact us</a>
+    </mat-nav-list>
+    <mat-nav-list class="mat-nav-list charity-login__wrap">
+      <a class="charity-login__link" mat-list-item (click)="sidenav.close()" [routerLink]="'/link'">Charity Login</a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content role="navigation">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
