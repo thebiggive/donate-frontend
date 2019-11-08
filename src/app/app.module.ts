@@ -13,6 +13,11 @@ import {
   MatRadioModule,
   MatSelectModule,
   MatSlideToggleModule,
+  MatIconModule,
+  MatToolbarModule,
+  MatSidenavModule,
+  MatListModule,
+  MatMenuModule,
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -30,6 +35,8 @@ import { CampaignDetailsComponent } from './campaign-details/campaign-details.co
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { TimeLeftPipe } from './time-left.pipe';
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
+import { NavigationComponent } from './navigation/navigation.component';
+import { NavSearchFormComponent } from './nav-search-form/nav-search-form.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +52,8 @@ import { DonationCompleteComponent } from './donation-complete/donation-complete
     MetaCampaignComponent,
     TimeLeftPipe,
     DonationCompleteComponent,
+    NavigationComponent,
+    NavSearchFormComponent,
   ],
   entryComponents: [
     DonationStartErrorDialogComponent,
@@ -68,6 +77,11 @@ import { DonationCompleteComponent } from './donation-complete/donation-complete
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     MatCarouselModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
+    MatMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
