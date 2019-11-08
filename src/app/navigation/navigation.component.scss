@@ -1,0 +1,83 @@
+@import '../../styles';
+
+mat-sidenav-container {
+  height: 100vh;
+  background-color: white;
+}
+
+mat-sidenav {
+  width: 100vw;
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+}
+
+.main-nav-toolbar {
+  background-color: white;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  box-shadow: 0px 5px 4px rgba(0, 0, 0, 0.06);
+}
+
+.logo__wrap {
+  margin-right: 1rem;
+}
+
+.logo {
+  padding-top: 1.125rem;
+  width: 150px;
+
+  @media screen and (min-width: 768px) {
+    padding-top: 1.5rem;
+    width: 125px;
+  }
+}
+
+.material-icons {
+  font-size: 35px;
+}
+
+.mat-icon {
+  height: 26px;
+  width: 35px;
+}
+
+a.mat-button {
+  min-width: auto;
+  @media screen and (min-width: 768px) and (max-width: 991px) {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    &:first-child {
+      padding-left: 0;
+    }
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+}
+
+.charity-login__link {
+  text-transform: uppercase;
+  color: $colour-teal;
+}
+
+.main-nav {
+  @media screen and (max-width: 767px) {
+    display: none;
+  }
+
+  .nav-links__wrap,
+  .charity-login__wrap,
+  .main-nav__search-form {
+    display: inline-block;
+  }
+}
+
+.side-nav-button__wrap {
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+}
