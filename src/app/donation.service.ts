@@ -19,7 +19,7 @@ export class DonationService {
    */
   private donationCouplets: Array<{ donation: Donation, jwt: string }> = [];
 
-  private readonly apiPath = '/donations/services/apexrest/v1.0/donations';
+  private readonly apiPath = '/v1/donations';
   private readonly resumableStatuses = ['Pending', 'Reserved'];
   private readonly storageKey = 'v1.donate.thebiggive.org.uk';
 
@@ -93,7 +93,7 @@ export class DonationService {
     donation.status = 'Cancelled';
 
     return this.http.put<any>(
-      `${environment.apiUriPrefix}${this.apiPath}/${donation.donationId}`,
+      `${environment.donationApiPrefix}${this.apiPath}/${donation.donationId}`,
       donation,
       this.getAuthHttpOptions(donation),
     );
@@ -101,13 +101,13 @@ export class DonationService {
 
   create(donation: Donation): Observable<DonationCreatedResponse> {
     return this.http.post<DonationCreatedResponse>(
-      `${environment.apiUriPrefix}${this.apiPath}`,
+      `${environment.donationApiPrefix}${this.apiPath}`,
       donation);
   }
 
   get(donation: Donation): Observable<Donation> {
     return this.http.get<Donation>(
-      `${environment.apiUriPrefix}${this.apiPath}/${donation.donationId}`,
+      `${environment.donationApiPrefix}${this.apiPath}/${donation.donationId}`,
       this.getAuthHttpOptions(donation),
     );
   }
