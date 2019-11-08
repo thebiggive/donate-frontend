@@ -13,6 +13,12 @@ import {
   MatProgressSpinnerModule,
   MatRadioModule,
   MatSelectModule,
+  MatSlideToggleModule,
+  MatIconModule,
+  MatToolbarModule,
+  MatSidenavModule,
+  MatListModule,
+  MatMenuModule,
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -31,6 +37,8 @@ import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { TimeLeftPipe } from './time-left.pipe';
 import { HeroComponent } from './hero/hero.component';
+import { NavigationComponent } from './navigation/navigation.component';
+import { NavSearchFormComponent } from './nav-search-form/nav-search-form.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +55,8 @@ import { HeroComponent } from './hero/hero.component';
     MetaCampaignComponent,
     TimeLeftPipe,
     HeroComponent,
+    NavigationComponent,
+    NavSearchFormComponent,
   ],
   entryComponents: [
     DonationStartErrorDialogComponent,
@@ -60,7 +70,6 @@ import { HeroComponent } from './hero/hero.component';
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
-    MatCarouselModule.forRoot(),
     MatDialogModule,
     MatGridListModule,
     MatInputModule,
@@ -70,6 +79,12 @@ import { HeroComponent } from './hero/hero.component';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     FlexLayoutModule,
+    MatCarouselModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
+    MatMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
