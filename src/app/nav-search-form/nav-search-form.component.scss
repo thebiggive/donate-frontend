@@ -1,0 +1,24 @@
+.mat-form-field__wrap {
+  padding: 1rem;
+  padding-bottom: 0;
+  width: calc(100% - 2rem);
+  max-width: 300px;
+
+  .mat-form-field {
+    width: calc(100% - 31px);
+
+    @media screen and (min-width: 768px) {
+      width: 200px;
+    }
+  }
+
+  .search-button {
+    background-color: transparent;
+  }
+
+  .mat-button {
+    padding: 0;
+    padding-left: 0.5rem;
+    min-width: auto;
+  }
+}
