@@ -1,0 +1,49 @@
+<nav class="navbar navbar-expand-lg">
+  <a class="navbar-brand" routerLink="/"><img class="logo" src="/assets/logo.png" alt="The Big Give"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <i class="fas fa-bars"></i>
+  </button>
+  
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item app-header-form__wrap">
+        <app-header-form></app-header-form>
+      </li>
+      <li class="nav-item about__wrap dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          About
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" [routerLink]="'/accounts'">The Big Give</a>
+          <a class="dropdown-item" [routerLink]="'/create-account'">Our story</a>
+          <a class="dropdown-item" [routerLink]="'/contacts'">Team</a>
+          <a class="dropdown-item" [routerLink]="'/create-contact'">Press</a>
+          <a class="dropdown-item" [routerLink]="'/create-contact'">Our fees</a>
+          <a class="dropdown-item" [routerLink]="'/create-contact'">Privacy policy</a>
+          <a class="dropdown-item" [routerLink]="'/create-contact'">Cookie policy</a>
+          <a class="dropdown-item" [routerLink]="'/create-contact'">Terms and conditions</a>
+        </div>
+      </li>
+      <li class="nav-item how-we-help__wrap dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          How we help
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" [routerLink]="'/accounts'">Charities</a>
+          <a class="dropdown-item" [routerLink]="'/create-account'">Philanthropists</a>
+          <a class="dropdown-item" [routerLink]="'/contacts'">Individuals</a>
+          <a class="dropdown-item" [routerLink]="'/create-contact'">Christmas Challenge</a>
+        </div>
+      </li>
+      <li class="nav-item explore-campaigns__wrap">
+        <a class="nav-link" href="#">Explore campaigns</a>
+      </li>
+      <li class="nav-item contact-us__wrap">
+        <a class="nav-link" href="#">Contact us</a>
+      </li>
+      <li class="nav-item charity-login__wrap">
+        <a class="nav-link charity-login__a" href="#">Charity login</a>
+      </li>
+    </ul>
+  </div>
+</nav>
