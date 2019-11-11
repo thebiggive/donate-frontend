@@ -1,0 +1,18 @@
+@import '../../styles';
+
+.form-control {
+  width: calc(100% - 37px);
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid $colour-teal;
+}
+
+.mr-sm-2 {
+  @media (min-width: 576px) {
+    margin-right: 0 !important;
+  }
+}
+
+.fa-search:before {
+  color: $colour-teal;
+}
