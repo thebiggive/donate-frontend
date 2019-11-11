@@ -13,6 +13,7 @@ import {
   MatRadioModule,
   MatSelectModule,
 } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -29,6 +30,7 @@ import { DonationStartOfferReuseDialogComponent } from './donation-start/donatio
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { TimeLeftPipe } from './time-left.pipe';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     SearchResultsComponent,
     MetaCampaignComponent,
     TimeLeftPipe,
+    FooterComponent,
   ],
   entryComponents: [
     DonationStartErrorDialogComponent,
@@ -66,6 +69,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     MatSelectModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
+    FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
