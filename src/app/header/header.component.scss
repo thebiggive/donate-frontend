@@ -1,0 +1,77 @@
+@import '../../styles';
+
+.navbar {
+  background-color: white;
+  padding: 1rem;
+  box-shadow: 0px 5px 4px rgba(0, 0, 0, 0.06);
+  justify-content: space-between;
+  @media (min-width: 992px) {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+  @media (min-width: 1200px) {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+.logo {
+  width: 110px;
+}
+
+.fa-bars:before {
+  color: $colour-teal;
+  font-size: 1.75rem;
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-item {
+  @media (min-width: 1200px) {
+    margin-right: 1rem;
+  }
+}
+
+.app-header-form__wrap {
+  @media (min-width: 992px) {
+    order: 1;
+    margin-left: 1rem;
+  }
+}
+
+.dropdown-toggle::after {
+  float: right;
+  margin-right: 10.5px;
+  color: $colour-teal;
+  @media (min-width: 992px) {
+    float: none;
+    margin-right: 0;
+  }
+}
+
+.nav-link {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.dropdown-menu {
+  border: none;
+}
+
+.dropdown-item {
+  color: #333;
+  font-weight: 500;
+}
+
+.charity-login__wrap {
+  order: 2;
+}
+
+.charity-login__a {
+  text-transform: uppercase;
+  color: $colour-teal;
+}
