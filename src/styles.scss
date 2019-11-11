@@ -2,6 +2,13 @@
 
 @include mat-core();
 
+body {
+  background-color: #E5E5E5;
+}
+
+$colour-red: #f0423b;
+$colour-teal: #00838f;
+
 $tbg-red: (
   500: #f0423b,
   800: #c1211a,
