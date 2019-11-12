@@ -64,7 +64,7 @@ describe('DonationService', () => {
           expect(false).toBe(true); // Always fail if observable errors
         });
 
-        const mockPost = httpMock.expectOne(`${environment.apiUriPrefix}/donations/services/apexrest/v1.0/donations`);
+        const mockPost = httpMock.expectOne(`${environment.donationsApiPrefix}/donations`);
         expect(mockPost.request.method).toEqual('POST');
         expect(mockPost.cancelled).toBeFalsy();
         expect(mockPost.request.responseType).toEqual('json');
@@ -100,7 +100,7 @@ describe('DonationService', () => {
           expect(false).toBe(true); // Always fail if create observable errors
         });
 
-        const mockPost = httpMock.expectOne(`${environment.apiUriPrefix}/donations/services/apexrest/v1.0/donations`);
+        const mockPost = httpMock.expectOne(`${environment.donationsApiPrefix}/donations`);
         expect(mockPost.request.method).toEqual('POST');
         expect(mockPost.cancelled).toBeFalsy();
         expect(mockPost.request.responseType).toEqual('json');
@@ -110,7 +110,7 @@ describe('DonationService', () => {
         );
         mockPost.flush(donationCreatedResponse);
 
-        const mockPut = httpMock.expectOne(`${environment.apiUriPrefix}/donations/services/apexrest/v1.0/donations/${donation.donationId}`);
+        const mockPut = httpMock.expectOne(`${environment.donationsApiPrefix}/donations/${donation.donationId}`);
         expect(mockPut.request.method).toEqual('PUT');
         expect(mockPut.cancelled).toBeFalsy();
         expect(mockPut.request.responseType).toEqual('json');
@@ -163,7 +163,7 @@ describe('DonationService', () => {
       // After it finds a local match, getResumableDonation() will hit the server for the latest copy via
       // `DonationService.get()`.
       const mockGet = httpMock.expectOne(
-        `${environment.apiUriPrefix}/donations/services/apexrest/v1.0/donations/${inputDonation.donationId}`,
+        `${environment.donationsApiPrefix}/donations/${inputDonation.donationId}`,
       );
       expect(mockGet.request.method).toBe('GET');
       expect(mockGet.cancelled).toBeFalsy();
