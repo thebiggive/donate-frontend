@@ -70,7 +70,6 @@ $app-typography: mat-typography-config(
 
 body, html {
   margin: 0;
-  height: 100%;
   font-family: mat-font-family($app-typography);
   font-size: mat-font-size($app-typography, body-2);
   line-height: mat-line-height($app-typography, body-2);
