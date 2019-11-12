@@ -1,7 +1,7 @@
 @import '../../styles';
 
 .form-control {
-  width: calc(100% - 37px);
+  width: calc(100% - 26.5px);
   border: none;
   border-radius: 0;
   border-bottom: 1px solid $colour-teal;
@@ -11,6 +11,10 @@
   @media (min-width: 576px) {
     margin-right: 0 !important;
   }
+}
+
+.search-button {
+  padding-left: 0;
 }
 
 .fa-search:before {
