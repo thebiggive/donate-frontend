@@ -32,7 +32,7 @@ and pin it to a specific point releases rather than allowing any `1.x` upgrade.
 
 Environment Variables configured in the CircleCI interface for this app are:
 
-* `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `AWS_ECR_REPO_NAME` and `AWS_ECS_SERVICE_SUFFIX`, for ECS deploys.
+* `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `AWS_ECR_ACCOUNT_URL`, `AWS_ECR_REPO_NAME` and `AWS_ECS_SERVICE_SUFFIX`, for ECS deploys.
   Key must belong to a user with ECS deploy rights and permission to deploy to the S3 static asset buckets.
 * `CIRCLE_TOKEN` - set up within CircleCI itself and used to retrieve build & deploy metadata to report back to Jira.
 * `SLACK_WEBHOOK` - destination URI to report deploys to Slack.
