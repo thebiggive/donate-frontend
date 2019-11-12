@@ -2,6 +2,16 @@
 
 @include mat-core();
 
+body {
+  background-color: #E5E5E5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+$colour-red: #f0423b;
+$colour-teal: #00838f;
+$colour-teal-light: #6ADDC0;
+
 $tbg-red: (
   500: #f0423b,
   800: #c1211a,
