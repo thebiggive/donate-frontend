@@ -31,6 +31,8 @@ export class MetaCampaignComponent implements OnInit {
   private query: SearchQuery;
   private viewportWidth: number; // In px. Used to vary `<mat-grid-list />`'s `cols`.
 
+  private perPage = 6;
+
   constructor(
     private campaignService: CampaignService,
     private fundService: FundService,
@@ -69,9 +71,25 @@ export class MetaCampaignComponent implements OnInit {
       parentCampaignId: this.campaignId,
       parentCampaignSlug: this.campaignSlug,
       fundSlug: this.fundSlug,
+      limit: this.perPage,
+      offset: 0,
     };
 
     this.run();
+  }
+
+  /**
+   * For now, just do a full search with more results requested. Not very efficient but does the job
+   * for now while we focus on other priorities.
+   * @todo use `offset` and load only campaigns not already likely to be on the page.
+   */
+  more() {
+    this.query.limit += this.perPage;
+    this.run();
+  }
+
+  moreMightExist(): boolean {
+    return (this.children.length === this.query.limit);
   }
 
   cols(): number {
