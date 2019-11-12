@@ -24,6 +24,11 @@
   font-size: 1.75rem;
 }
 
+.navbar-collapse {
+  flex-basis: auto;
+  flex-grow: 0;
+}
+
 ul {
   display: flex;
   flex-direction: column;
@@ -31,7 +36,7 @@ ul {
 
 .nav-item {
   @media (min-width: 1200px) {
-    margin-right: 1rem;
+    margin-right: 1.5rem;
   }
 }
 
@@ -54,7 +59,7 @@ ul {
 
 .nav-link {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: #333;
 }
 
