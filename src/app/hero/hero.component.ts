@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 export interface Category {
   value: string;
@@ -11,6 +11,8 @@ export interface Category {
   styleUrls: ['./hero.component.scss'],
 })
 export class HeroComponent implements OnInit {
+  @Input() public title: string;
+  @Input() public description: string;
 
   constructor() { }
 
