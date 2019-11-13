@@ -28,6 +28,7 @@ export class DonationStartComponent implements OnInit {
   public campaign: Campaign;
   public donationForm: FormGroup;
   public retrying = false;
+  public suggestedAmounts = [50, 200, 500];
   public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
   public validationError = false;         // Internal Angular app form validation error
@@ -85,7 +86,14 @@ export class DonationStartComponent implements OnInit {
     });
   }
 
-  public submit() {
+  setAmount(amount: number) {
+    // We need to keep this as a string for consistency with manual donor-input amounts,
+    // so that `submit()` doesn't fall over trying to clean it of possible currency symbols.
+    const amountAsString = amount.toString();
+    this.donationForm.patchValue({ donationAmount: amountAsString });
+  }
+
+  submit() {
     if (this.donationForm.invalid) {
       this.validationError = true;
       return;
