@@ -31,6 +31,8 @@ import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { TimeLeftPipe } from './time-left.pipe';
 import { HeroComponent } from './hero/hero.component';
+import { CardSectionComponent } from './card-section/card-section.component';
+import { FiltersComponent } from './filters/filters.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +49,8 @@ import { HeroComponent } from './hero/hero.component';
     MetaCampaignComponent,
     TimeLeftPipe,
     HeroComponent,
+    CardSectionComponent,
+    FiltersComponent,
   ],
   entryComponents: [
     DonationStartErrorDialogComponent,
