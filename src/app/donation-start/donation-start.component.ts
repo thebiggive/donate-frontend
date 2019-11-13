@@ -62,12 +62,11 @@ export class DonationStartComponent implements OnInit {
       });
 
     this.donationForm = this.formBuilder.group({
-      // TODO require a whole number of pounds, unless scrapping that constraint
       donationAmount: [null, [
         Validators.required,
         Validators.min(5),
         Validators.max(environment.maximumDonationAmount),
-        Validators.pattern('^£?[0-9]+(\\.[0-9]{2})?$'),
+        Validators.pattern('^£?[0-9]+?$'),
       ]],
       giftAid: [null, Validators.required],
       optInCharityEmail: [null, Validators.required],

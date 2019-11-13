@@ -37,7 +37,7 @@
     <div *ngIf="f.donationAmount.invalid && (f.donationAmount.dirty || f.donationAmount.touched)" class="error">
       <div *ngIf="f.donationAmount.errors.min">Sorry, the minimum donation is currently £5.</div>
       <div *ngIf="f.donationAmount.errors.max">Sorry, the maximum single donation is £25,000.</div>
-      <div *ngIf="f.donationAmount.errors.pattern">Please enter a numeric value in pounds (£) without commas.</div>
+      <div *ngIf="f.donationAmount.errors.pattern">Please enter a whole number of pounds (£) without commas or pence.</div>
       <div *ngIf="f.donationAmount.errors.required">Please enter how much you would like to donate.</div>
     </div>
 
