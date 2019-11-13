@@ -23,9 +23,16 @@
   <h3>Search in {{ campaign.title }}</h3>
   <app-campaign-search-form [campaignId]="campaign.id" (search)="onMetacampaignSearch($event)"></app-campaign-search-form>
 
-  <h3>Filters</h3>
   <mat-form-field>
-    <mat-label>Beneficiary</mat-label>
+    <mat-label>Order</mat-label>
+    <mat-select [value]="selectedSort" (selectionChange)="setSortField($event)">
+      <mat-option value="matchFundsRemaining">Match funds remaining</mat-option>
+      <mat-option value="amountRaised">Most raised</mat-option>
+      <mat-option *ngIf="hasTerm" value="">Relevance</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Helping</mat-label>
     <mat-select value="" (selectionChange)="setQueryProperty('beneficiary', $event)">
       <mat-option value="">All</mat-option>
       <mat-option *ngFor="let beneficiary of beneficiaryOptions" [value]="beneficiary">{{ beneficiary }}</mat-option>
@@ -39,27 +46,17 @@
     </mat-select>
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Country</mat-label>
+    <mat-label>Location</mat-label>
     <mat-select value="" (selectionChange)="setQueryProperty('country', $event)">
       <mat-option value="">All</mat-option>
       <mat-option *ngFor="let country of countryOptions" [value]="country">{{ country }}</mat-option>
     </mat-select>
   </mat-form-field>
-
-  <h3>Sort By</h3>
   <mat-form-field>
-    <mat-label>Field</mat-label>
-    <mat-select value="" (selectionChange)="setSortField($event)">
-      <mat-option value="">Relevance</mat-option>
-      <mat-option value="amountRaised">Amount raised</mat-option>
-      <mat-option value="matchFundsRemaining">Match funds remaining</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Direction</mat-label>
-    <mat-select [(value)]="sortDirection" [disabled]="!sortDirectionEnabled" (selectionChange)="setQueryProperty('sortDirection', $event)">
-      <mat-option selected value="asc">Ascending</mat-option>
-      <mat-option value="desc">Descending</mat-option>
+    <mat-label>Is Doubling</mat-label>
+    <mat-select [value]="false" (selectionChange)="setQueryProperty('onlyMatching', $event)">
+      <mat-option [value]="false">Doubling or Not</mat-option>
+      <mat-option [value]="true">Only Doubling</mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -68,9 +65,9 @@
       <app-campaign-card [campaign]="campaign"></app-campaign-card>
     </mat-grid-tile>
   </mat-grid-list>
-</div>
 
-<p *ngIf="moreMightExist()"><button (click)="more()">More Campaigns</button></p>
+  <p *ngIf="moreMightExist()"><button (click)="more()">More Campaigns</button></p>
+</div>
 
 <div *ngIf="filterError">
   <!-- e.g. campaign or fund slug is not recognised -->

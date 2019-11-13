@@ -51,6 +51,10 @@ export class CampaignService {
       params = params.append('fundSlug', searchQuery.fundSlug);
     }
 
+    if (searchQuery.onlyMatching) {
+      params = params.append('onlyMatching', 'true');
+    }
+
     if (searchQuery.parentCampaignId) {
       params = params.append('parent', searchQuery.parentCampaignId);
     }
@@ -376,6 +380,7 @@ export class SearchQuery {
   public fundSlug?: string;
   public limit?: number;
   public offset?: number;
+  public onlyMatching?: boolean;
   public parentCampaignId?: string;
   public parentCampaignSlug?: string;
   public sortDirection?: string;
