@@ -30,15 +30,13 @@ export class DonationService {
   ) {}
 
   getDonation(donationId: string): Donation | undefined {
-    const donations = this.getDonationCouplets().filter(donationItem => {
-      return (donationItem.donation.donationId === donationId);
-    });
+    const couplet = this.getLocalDonationCouplet(donationId);
 
-    if (donations.length === 0) {
+    if (!couplet) {
       return undefined;
     }
 
-    return donations[0].donation;
+    return couplet.donation;
   }
 
   /**
@@ -74,6 +72,22 @@ export class DonationService {
     // But we first need to check with the server that it's still in a Pending or Reserved status ready to try again -
     // and check any remaining local candidates if not.
     return this.get(existingDonations[0].donation);
+  }
+
+  /**
+   * Update a local copy of a Donation that we already expect to have saved, leaving its
+   * JWT in tact so that e.g. its details can still be loaded on the thank you page.
+   */
+  updateLocalDonation(donation: Donation) {
+    const couplet = this.getLocalDonationCouplet(donation.donationId);
+
+    if (!couplet) {
+      return; // Just bail out if there's no match we can safely update.
+    }
+
+    const jwt = couplet.jwt;
+    this.removeLocalDonation(donation);
+    this.saveDonation(donation, jwt);
   }
 
   /**
@@ -145,6 +159,18 @@ export class DonationService {
         'X-Tbg-Auth': donationDataItems[0].jwt,
       }),
     };
+  }
+
+  private getLocalDonationCouplet(donationId: string): { donation: Donation, jwt: string } {
+    const donations = this.getDonationCouplets().filter(donationItem => {
+      return (donationItem.donation.donationId === donationId);
+    });
+
+    if (donations.length === 0) {
+      return undefined;
+    }
+
+    return donations[0];
   }
 
   private getDonationCouplets() {
