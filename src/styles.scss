@@ -61,9 +61,40 @@ $app-typography: mat-typography-config(
 
 @include mat-core($app-typography);
 
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($donate-theme);
+@include mat-core-theme($donate-theme);
+@include mat-button-theme($donate-theme);
+@include mat-checkbox-theme($donate-theme);
+
+
+// Variables
+
+$colour-red: #f0423b;
+$colour-teal: #00838f;
+
+$breakpoint-md: "(min-width: 600px)";
+$breakpoint-lg: "(min-width: 960px)";
+$breakpoint-xl: "(min-width: 1280px)";
+
+
+// Custom mixins
+
+@mixin size-md {
+  font-size: 14px;
+}
+@mixin size-lg {
+  font-size: 18px;
+}
+@mixin size-xl {
+  font-size: 21px;
+}
+
+
 body, html {
   margin: 0;
-  height: 100%;
   font-family: mat-font-family($app-typography);
   font-size: mat-font-size($app-typography, body-2);
   line-height: mat-line-height($app-typography, body-2);
@@ -72,8 +103,3 @@ body, html {
 a {
   color: mat-color($donate-accent);
 }
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include angular-material-theme($donate-theme);
