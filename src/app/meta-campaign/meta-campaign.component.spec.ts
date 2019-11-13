@@ -18,6 +18,7 @@ import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-se
 import { CampaignSummary } from '../campaign-summary.model';
 import { MetaCampaignComponent } from './meta-campaign.component';
 import { TimeLeftPipe } from '../time-left.pipe';
+import { HeroComponent } from '../hero/hero.component';
 
 describe('MetaCampaignComponent', () => {
   let component: MetaCampaignComponent;
@@ -30,6 +31,7 @@ describe('MetaCampaignComponent', () => {
         CampaignSearchFormComponent,
         MetaCampaignComponent,
         TimeLeftPipe,
+        HeroComponent,
       ],
       imports: [
         HttpClientTestingModule,
