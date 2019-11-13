@@ -4,6 +4,7 @@ import {
   MatButtonModule,
   MatCardModule,
   MatInputModule,
+  MatSelectModule,
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -18,6 +19,7 @@ describe('AppComponent', () => {
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatCardModule,
         MatInputModule,
+        MatSelectModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
         RouterTestingModule,

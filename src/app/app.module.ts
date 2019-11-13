@@ -1,5 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCarouselModule } from '@ngmodule/material-carousel';
 import {
@@ -29,6 +30,7 @@ import { DonationStartOfferReuseDialogComponent } from './donation-start/donatio
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { TimeLeftPipe } from './time-left.pipe';
+import { HeroComponent } from './hero/hero.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +46,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     SearchResultsComponent,
     MetaCampaignComponent,
     TimeLeftPipe,
+    HeroComponent,
   ],
   entryComponents: [
     DonationStartErrorDialogComponent,
@@ -66,6 +69,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     MatSelectModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
+    FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
