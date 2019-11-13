@@ -6,15 +6,6 @@
       <input matInput formControlName="term" id="term" type="text">
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Select a category</mat-label>
-      <mat-select>
-      <mat-option *ngFor="let category of categories" [value]="category.value">
-        {{category.viewValue}}
-      </mat-option>
-    </mat-select>
-      </mat-form-field>
-
     <p>
       <button
         [disabled]="!this.searchForm.valid"
