@@ -1,15 +1,27 @@
-<form (ngSubmit)="submit()" [formGroup]="searchForm">
-  <mat-form-field color="accent">
-    <mat-label for="term">Campaign or Charity</mat-label>
-    <input matInput formControlName="term" id="term" type="text">
-  </mat-form-field>
+<div class="campaign-search-form">
+  <h3>Find a campaign</h3>
+  <form (ngSubmit)="submit()" [formGroup]="searchForm">
+    <mat-form-field color="accent">
+      <mat-label for="term">Enter a keyword...</mat-label>
+      <input matInput formControlName="term" id="term" type="text">
+    </mat-form-field>
 
-  <p>
-    <button
-      [disabled]="!this.searchForm.valid"
-      mat-raised-button
-      color="primary"
-      type="submit"
-    >Search</button>
-  </p>
-</form>
+    <mat-form-field>
+      <mat-label>Select a category</mat-label>
+      <mat-select>
+      <mat-option *ngFor="let category of categories" [value]="category.value">
+        {{category.viewValue}}
+      </mat-option>
+    </mat-select>
+      </mat-form-field>
+
+    <p>
+      <button
+        [disabled]="!this.searchForm.valid"
+        mat-raised-button
+        color="accent"
+        type="submit"
+      >Search</button>
+    </p>
+  </form>
+</div>
