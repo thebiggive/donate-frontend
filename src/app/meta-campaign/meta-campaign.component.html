@@ -70,6 +70,8 @@
   </mat-grid-list>
 </div>
 
+<p *ngIf="moreMightExist()"><button (click)="more()">More Campaigns</button></p>
+
 <div *ngIf="filterError">
   <!-- e.g. campaign or fund slug is not recognised -->
   <p class="error">Could not load the campaign. You might have followed a broken link.</p>
