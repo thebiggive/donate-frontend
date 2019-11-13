@@ -4,6 +4,41 @@ app-campaign-card {
   width: 100%;
 }
 
+// Card Section START
+
+.card-section {
+  overflow-x: scroll;
+}
+
+.filters {
+  padding: 1rem;
+  display: flex;
+  @media (min-width: 960px) {
+    justify-content: center;
+  }
+}
+
+mat-form-field {
+  margin-right: 1rem;
+  &:last-child {
+    margin-right: 0;
+  }
+  @media (min-width: 960px) {
+    margin-right: 0.5rem;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+  @media (min-width: 1280px) {
+    margin-right: 1rem;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+// Card Section END
+
 mat-grid-list {
   margin: 1rem;
 }
