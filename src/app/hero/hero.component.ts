@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-hero',
@@ -8,14 +8,14 @@ import { Component, Input, OnInit } from '@angular/core';
 export class HeroComponent implements OnInit {
   @Input() public title: string;
   @Input() public description: string;
+  @Output() heroSearch: EventEmitter<any> = new EventEmitter();
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  onGlobalSearch() {
-    // TODO hook this up with the MetaCampaign search & its filters
-    console.log('Search placeholder event!');
+  search(term: string) {
+    this.heroSearch.emit(term);
   }
 }

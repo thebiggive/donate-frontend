@@ -1,12 +1,7 @@
-<app-hero
-  *ngIf="campaign && fund"
-  [title]="fund.name + ' &ndash; ' + campaign.title"
-  [description]="fund.description"
-></app-hero>
-<app-hero
-  *ngIf="campaign && !fund"
-  [title]="campaign.title"
-  [description]="campaign.summary"
+<app-hero *ngIf="campaign"
+  [title]="fund ? fund.name + ' &ndash; ' + campaign.title : campaign.title"
+  [description]="fund ? fund.description : campaign.summary"
+  (heroSearch)="onMetacampaignSearch($event)"
 ></app-hero>
 
 <mat-card *ngIf="campaign">
@@ -23,10 +18,6 @@
 </mat-card>
 
 <div *ngIf="campaign && children">
-  <h2>Participating Campaigns</h2>
-  <h3>Search in {{ campaign.title }}</h3>
-  <app-campaign-search-form [campaignId]="campaign.id" (search)="onMetacampaignSearch($event)"></app-campaign-search-form>
-
   <h3>Filters</h3>
   <mat-form-field>
     <mat-label>Beneficiary</mat-label>
