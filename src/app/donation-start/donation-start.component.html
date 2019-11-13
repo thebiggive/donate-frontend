@@ -30,10 +30,18 @@
   </div>
 
   <div *ngIf="campaignIsOpen()">
+    <p>Enter an amount</p>
     <mat-form-field color="accent">
       <mat-label for="donationAmount">Amount (£)</mat-label>
       <input formControlName="donationAmount" id="donationAmount" matInput>
     </mat-form-field>
+    <p>Or, choose</p>
+    <button
+      type="button"
+      *ngFor="let suggestedAmount of suggestedAmounts"
+      (click)="setAmount(suggestedAmount)"
+    >{{ suggestedAmount | currency : '£' : 'symbol' : '1.0-0' }}</button>
+
     <div *ngIf="f.donationAmount.invalid && (f.donationAmount.dirty || f.donationAmount.touched)" class="error">
       <div *ngIf="f.donationAmount.errors.min">Sorry, the minimum donation is currently £5.</div>
       <div *ngIf="f.donationAmount.errors.max">Sorry, the maximum single donation is £25,000.</div>
@@ -42,6 +50,8 @@
     </div>
 
     <mat-label id="giftAid-label">Claim Gift Aid?</mat-label>
+    <p>'I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of Gift Aid claimed on all my donations it is my responsibility to pay the difference'</p>
+    <p>Gift Aid is a government scheme for UK charities to reclaim the tax you have paid and gain 25% more at no cost or hassle to you. Find out more about Gift Aid.</p>
     <mat-radio-group aria-labelledby="giftAid-label" formControlName="giftAid">
         <mat-radio-button labelPosition="after" [value]="true">Yes</mat-radio-button>
         <mat-radio-button labelPosition="after" [value]="false">No</mat-radio-button>
