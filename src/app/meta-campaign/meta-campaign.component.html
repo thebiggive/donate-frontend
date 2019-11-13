@@ -26,8 +26,8 @@
   <mat-form-field>
     <mat-label>Order</mat-label>
     <mat-select [value]="selectedSort" (selectionChange)="setSortField($event)">
-      <mat-option value="matchFundsRemaining">Match funds remaining</mat-option>
-      <mat-option value="amountRaised">Most raised</mat-option>
+      <mat-option value="matchFundsRemaining">Match Funds Remaining</mat-option>
+      <mat-option value="amountRaised">Most Raised</mat-option>
       <mat-option *ngIf="hasTerm" value="">Relevance</mat-option>
     </mat-select>
   </mat-form-field>
