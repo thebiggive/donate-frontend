@@ -22,14 +22,16 @@ export class MetaCampaignComponent implements OnInit {
   public countryOptions: string[];
   public filterError = false;
   public fund: Fund;
-  public sortDirection = 'asc';
-  public sortDirectionEnabled = false; // Default sort field is relevance
+  public hasTerm = false;
+  public selectedSort = 'matchFundsRemaining';
 
   private campaignId: string;
   private campaignSlug: string;
   private fundSlug: string;
   private query: SearchQuery;
   private viewportWidth: number; // In px. Used to vary `<mat-grid-list />`'s `cols`.
+
+  private perPage = 6;
 
   constructor(
     private campaignService: CampaignService,
@@ -69,9 +71,26 @@ export class MetaCampaignComponent implements OnInit {
       parentCampaignId: this.campaignId,
       parentCampaignSlug: this.campaignSlug,
       fundSlug: this.fundSlug,
+      limit: this.perPage,
+      offset: 0,
     };
 
+    this.handleSortParams();
     this.run();
+  }
+
+  /**
+   * For now, just do a full search with more results requested. Not very efficient but does the job
+   * for now while we focus on other priorities.
+   * @todo use `offset` and load only campaigns not already likely to be on the page.
+   */
+  more() {
+    this.query.limit += this.perPage;
+    this.run();
+  }
+
+  moreMightExist(): boolean {
+    return (this.children.length === this.query.limit);
   }
 
   cols(): number {
@@ -87,21 +106,25 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   setSortField(event) {
-    this.query.sortField = event.value;
-    if (event.value === '') { // Sort by Relevance, ascending and direction locked
-      this.sortDirection = 'asc';
-      this.sortDirectionEnabled = false;
-      this.query.sortDirection = undefined;
-    } else {                  // Sort by an amount field, descending by default
-      this.sortDirection = 'desc';
-      this.sortDirectionEnabled = true;
-      this.query.sortDirection = this.sortDirection;
-    }
+    this.selectedSort = event.value;
+    this.handleSortParams();
     this.run();
   }
 
+  handleSortParams() {
+    this.query.sortField = this.selectedSort;
+    if (this.selectedSort === '') { // this means sort by relevance for now
+      this.query.sortDirection = undefined;
+    } else { // match funds left and amount raised both make most sense in 'desc' order
+      this.query.sortDirection = 'desc';
+    }
+  }
+
   onMetacampaignSearch(term: string) {
+    this.hasTerm = true; // Enable Relevance sort option, which we'll also now default to.
     this.query.term = term;
+    this.selectedSort = '';
+    this.handleSortParams();
     this.run();
   }
 

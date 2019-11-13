@@ -14,7 +14,24 @@
   your donation is processed.
 </p>
 
-<div *ngIf="donation">
-  <p>Your donation status: {{ donation.status }}</p>
-  <p>You donated {{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
+<div *ngIf="complete">
+  <p>Your donation of {{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }} has been made.</p>
+  <p>That's worth {{ totalValue | currency : '£' : 'symbol' : '1.2-2' }} to {{ donation.charityName }}.</p>
+
+  <h2>Your receipt</h2>
+  <p>Your donation</p>
+  <p><strong>{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong></p>
+
+  <div *ngIf="donation.matchedAmount > 0">
+    <p>Matched funds</p>
+    <p><strong>{{ donation.matchedAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong></p>
+  </div>
+
+  <div *ngIf="donation.giftAid">
+    <p>Gift Aid</p>
+    <p><strong>{{ giftAidAmount | currency : '£' : 'symbol' : '1.2-2' }}</strong></p>
+  </div>
+
+  <p>Total amount {{ donation.charityName }} receive</p>
+  <p><strong>{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</strong></p>
 </div>

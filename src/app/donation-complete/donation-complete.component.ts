@@ -14,8 +14,10 @@ import { DonationService } from '../donation.service';
 export class DonationCompleteComponent {
   public complete = false;
   public donation: Donation;
+  public giftAidAmount: number;
   public noAccess = false;
   public timedOut = false;
+  public totalValue: number;
 
   private donationId: string;
   private maxTries = 5;
@@ -60,7 +62,14 @@ export class DonationCompleteComponent {
 
     if (this.donationService.isComplete(donation)) {
       this.analyticsService.logEvent('thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
+      this.giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;
+      this.totalValue = donation.donationAmount + this.giftAidAmount + donation.matchedAmount;
       this.complete = true;
+
+      // Re-save the donation with its new status so we don't offer to resume it if the donor
+      // goes back to the same campaign.
+      this.donationService.updateLocalDonation(donation);
+
       return;
     }
 

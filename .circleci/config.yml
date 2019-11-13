@@ -1,11 +1,11 @@
 version: 2.1
 
 orbs:
-  aws-ecr: circleci/aws-ecr@6.3.0
-  aws-ecs: circleci/aws-ecs@0.0.11
+  aws-ecr: circleci/aws-ecr@6.5.0
+  aws-ecs: circleci/aws-ecs@1.0.0
   aws-s3: circleci/aws-s3@1.0.11
-  jira: circleci/jira@1.0.5
-  slack: circleci/slack@3.2.0
+  jira: circleci/jira@1.0.6
+  slack: circleci/slack@3.4.1
 
 jobs:
   build:
@@ -128,7 +128,6 @@ workflows:
             - jira/notify:
                 job_type: build
                 environment_type: development
-            - slack/notify-on-failure: ~
 
   deploy-regression:
     jobs:

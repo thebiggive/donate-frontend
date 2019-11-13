@@ -19,7 +19,7 @@ export class DonationService {
    */
   private donationCouplets: Array<{ donation: Donation, jwt: string }> = [];
 
-  private readonly apiPath = '/donations/services/apexrest/v1.0/donations';
+  private readonly apiPath = '/donations';
   private readonly resumableStatuses = ['Pending', 'Reserved'];
   private readonly storageKey = 'v1.donate.thebiggive.org.uk';
 
@@ -30,15 +30,13 @@ export class DonationService {
   ) {}
 
   getDonation(donationId: string): Donation | undefined {
-    const donations = this.getDonationCouplets().filter(donationItem => {
-      return (donationItem.donation.donationId === donationId);
-    });
+    const couplet = this.getLocalDonationCouplet(donationId);
 
-    if (donations.length === 0) {
+    if (!couplet) {
       return undefined;
     }
 
-    return donations[0].donation;
+    return couplet.donation;
   }
 
   /**
@@ -77,6 +75,22 @@ export class DonationService {
   }
 
   /**
+   * Update a local copy of a Donation that we already expect to have saved, leaving its
+   * JWT in tact so that e.g. its details can still be loaded on the thank you page.
+   */
+  updateLocalDonation(donation: Donation) {
+    const couplet = this.getLocalDonationCouplet(donation.donationId);
+
+    if (!couplet) {
+      return; // Just bail out if there's no match we can safely update.
+    }
+
+    const jwt = couplet.jwt;
+    this.removeLocalDonation(donation);
+    this.saveDonation(donation, jwt);
+  }
+
+  /**
    * Indicates whether a donation is considered successful and fully processed. This is not always 'final' - donations
    * can be refunded and exit the Collected status.
    */
@@ -93,7 +107,7 @@ export class DonationService {
     donation.status = 'Cancelled';
 
     return this.http.put<any>(
-      `${environment.apiUriPrefix}${this.apiPath}/${donation.donationId}`,
+      `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}`,
       donation,
       this.getAuthHttpOptions(donation),
     );
@@ -101,13 +115,13 @@ export class DonationService {
 
   create(donation: Donation): Observable<DonationCreatedResponse> {
     return this.http.post<DonationCreatedResponse>(
-      `${environment.apiUriPrefix}${this.apiPath}`,
+      `${environment.donationsApiPrefix}${this.apiPath}`,
       donation);
   }
 
   get(donation: Donation): Observable<Donation> {
     return this.http.get<Donation>(
-      `${environment.apiUriPrefix}${this.apiPath}/${donation.donationId}`,
+      `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}`,
       this.getAuthHttpOptions(donation),
     );
   }
@@ -145,6 +159,18 @@ export class DonationService {
         'X-Tbg-Auth': donationDataItems[0].jwt,
       }),
     };
+  }
+
+  private getLocalDonationCouplet(donationId: string): { donation: Donation, jwt: string } {
+    const donations = this.getDonationCouplets().filter(donationItem => {
+      return (donationItem.donation.donationId === donationId);
+    });
+
+    if (donations.length === 0) {
+      return undefined;
+    }
+
+    return donations[0];
   }
 
   private getDonationCouplets() {
