@@ -39,21 +39,24 @@ export class DonationService {
     return couplet.donation;
   }
 
+  isResumable(donation: Donation): boolean {
+    return this.resumableStatuses.includes(donation.status);
+  }
+
   /**
-   * Get a recent eligible-for-resuming donation to this same campaign/project, if any exists.
+   * Get a recent eligible-for-resuming donation to this same campaign/project, if any exists. We look
+   * for candidates based on local status initially but return an Observable resulting from a re-GET
+   * so we include the latest server status. This is why this private method only knows the donation is
+   * 'probably' resumable.
    */
-  getResumableDonation(projectId: string): Observable<Donation | undefined> {
-    // TODO we should tidy up by deleting any locally saved donations too old to be useful as part of this process
+  getProbablyResumableDonation(projectId: string): Observable<Donation | undefined> {
+    this.removeOldLocalDonations();
 
     const existingDonations = this.getDonationCouplets().filter(donationItem => {
-      const createdDate = donationItem.donation.createdTime instanceof Date
-        ? donationItem.donation.createdTime
-        : new Date(donationItem.donation.createdTime);
-
       return (
-        donationItem.donation.projectId === projectId &&              // Only bring back donations to the same project/CCampaign...
-        createdDate.getTime() > ((new Date()).getTime() - 600000) &&  // ...from the past 10 minutes...
-        this.resumableStatuses.includes(donationItem.donation.status) // ...with a reusable last-known status.
+        donationItem.donation.projectId === projectId && // Only bring back donations to the same project/CCampaign...
+        this.getCreatedTime(donationItem.donation) > ((new Date()).getTime() - 600000) && // ...from the past 10 minutes...
+        this.isResumable(donationItem.donation) // ...with a reusable last-known status.
       );
     });
 
@@ -61,16 +64,8 @@ export class DonationService {
       return of(undefined); // No relevant donations to offer to resume.
     }
 
-    // TODO We should revisit whether it's worth explicitly checking with the server for the
-    // latest status before trying to reuse a donation. It adds extra calls so is probably
-    // best avoided if not needed. Now that we remove donation info from local immediately
-    // after cancelling on Salesforce, and as we also check the time is recent client-side,
-    // it seems like it should be unnecessary. But let's keep an eye out for edge cases.
-
     // We have at least one existing donation that may be a candidate to re-try.
     // We'll take an arbitrary 'first' matching donation since presenting multiple to the donor would be too confusing.
-    // But we first need to check with the server that it's still in a Pending or Reserved status ready to try again -
-    // and check any remaining local candidates if not.
     return this.get(existingDonations[0].donation);
   }
 
@@ -140,6 +135,28 @@ export class DonationService {
       this.donationCouplets.findIndex(donationItem => donationItem.donation.donationId === donation.donationId),
     );
     this.storage.set(this.storageKey, this.donationCouplets);
+  }
+
+  /**
+   * Safely get created date from a Donation, whether the local data has it as a Date (e.g. when set locally) or
+   * a string (when just derived from an HTTP response), and return it as a JavaScript Unix epoch milliseconds value.
+   */
+  private getCreatedTime(donation: Donation): number {
+    const createdDate: Date = donation.createdTime instanceof Date
+      ? donation.createdTime
+      : new Date(donation.createdTime);
+
+    return createdDate.getTime();
+  }
+
+  private removeOldLocalDonations() {
+    let donationsOlderThan30Days: Array<{ donation: Donation, jwt: string }>;
+    donationsOlderThan30Days = this.getDonationCouplets().filter(donationItem => {
+      return (!donationItem.donation.createdTime || this.getCreatedTime(donationItem.donation) < ((new Date()).getTime() - 2592000000));
+    });
+    for (const oldDonationCouplet of donationsOlderThan30Days) {
+      this.removeLocalDonation(oldDonationCouplet.donation);
+    }
   }
 
   private getAuthHttpOptions(donation: Donation): { headers: HttpHeaders } {
