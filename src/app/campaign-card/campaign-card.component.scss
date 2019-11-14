@@ -1,7 +1,15 @@
+@import '../../styles';
+
 // If we somehow end up with an unexpected-ratio image, let Angular Material do its
 // thing with `mat-card-image` on the `img` itself (can't set a max height as this
 // would stretch it when combined with that) but use this to ensure the card can't
 // grow to a height that breaks the layout.
+
+.card {
+  border: 1px solid red;
+  border-radius: 4px;
+}
+
 .banner-container {
   height: 110px;
   overflow: hidden;
@@ -11,6 +19,28 @@
   .banner-container {
     height: 80px;
   }
+}
+
+
+.content-div,
+.buttons {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+}
+
+mat-card-title {
+  color: $colour-teal-dark;
+}
+
+.mat-chip-list-wrapper .mat-standard-chip {
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 ul {
@@ -26,23 +56,54 @@ ul {
   float: right;
 }
 
+.card-header {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+h4 {
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+  color: $colour-grey;
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
 h3 {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
+  margin: 0;
+  color: $colour-teal-dark;
+  @include size-lg;
 }
 
-mat-card-header {
-  height: 4rem;
+.campaign-tags {
+  margin: 1rem 0.5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  overflow-x: scroll;
 }
 
-mat-card-actions {
-  display: flex;
-  justify-content: space-between;
+.campaign-tags__tag {
+  background-color: $colour-teal-fade;
+  color: $colour-teal;
+  border-radius: 14px;
+  padding-left: 0.75rem;
+  padding-bottom: 0.25rem;
+  padding-right: 0.75rem;
+  margin-right: 0.5rem;
+  &:last-child {
+    margin-right: 0;
+  }
 }
 
-mat-progress-bar {
-  background: black;
-  height: 6px;
+.mat-icon-button,
+.mat-raised-button {
+  margin: 0;
+  min-width: 85px;
+  font-weight: 400;
+}
+
+.mat-raised-button {
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
