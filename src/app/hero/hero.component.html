@@ -1,4 +1,4 @@
-<div class="hero">
+<div [class]="'hero ' + (webp ? 'webp-bg' : 'nowebp-bg')">
   <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center">
     <div class="hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
       <div fxLayout="column">
