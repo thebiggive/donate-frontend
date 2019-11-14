@@ -16,6 +16,5 @@ export class CampaignCardComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.percentRaised = CampaignService.percentRaised(this.campaign);
   }
 }
