@@ -18,6 +18,8 @@
     <h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
     <h3>for {{ campaign.charity.name }}</h3>
     <ul>
+      <li *ngFor="let category of campaign.categories">{{ category }}</li>
+      <li>{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }} funds remaining</li>
       <li>
         <span class="raised">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }} raised</span>
       </li>
