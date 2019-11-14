@@ -74,14 +74,25 @@ export class DonationStartComponent implements OnInit {
       optInTbgEmail: [null, Validators.required],
     });
 
-    this.donationService.getResumableDonation(this.campaignId)
+    this.donationService.getProbablyResumableDonation(this.campaignId)
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;
+
         if (this.charityCheckoutError) {
           this.processDonationError();
-        } else if (this.previousDonation) {
-          this.offerExistingDonation(this.previousDonation);
+          return;
         }
+
+        // The local check might not have the latest donation status in edge cases, so we need to check the copy
+        // the Donations API returned still has a resumable status and wasn't completed or cancelled since being
+        // saved locally.
+        if (!existingDonation || !this.donationService.isResumable(existingDonation)) {
+          // No resumable donations
+          return;
+        }
+
+        // We have a resumable donation and aren't processing an error
+        this.offerExistingDonation(this.previousDonation);
     });
   }
 

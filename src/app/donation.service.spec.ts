@@ -158,13 +158,13 @@ describe('DonationService', () => {
 
       service.saveDonation(inputDonation, 'fakeheader.fakebody.fakesig');
 
-      service.getResumableDonation('11I400000009Sds3e3').subscribe(outputDonation => {
+      service.getProbablyResumableDonation('11I400000009Sds3e3').subscribe(outputDonation => {
         expect(outputDonation).toBe(inputDonation);
       }, () => {
         expect(false).toBe(true); // Always fail on observable error
       });
 
-      // After it finds a local match, getResumableDonation() will hit the server for the latest copy via
+      // After it finds a local match, getProbablyResumableDonation() will hit the server for the latest copy via
       // `DonationService.get()`.
       const mockGet = httpMock.expectOne(
         `${environment.donationsApiPrefix}/donations/${inputDonation.donationId}`,
@@ -180,7 +180,7 @@ describe('DonationService', () => {
   it('should return undefined for resumable donations with unknown project ID', () => {
     const service: DonationService = TestBed.get(DonationService);
     service.saveDonation(getDummyDonation(), 'fakeheader.fakebody.fakesig');
-    service.getResumableDonation('notARealProjectId').subscribe(donation => {
+    service.getProbablyResumableDonation('notARealProjectId').subscribe(donation => {
       expect(donation).toBeUndefined();
     }, () => {
       expect(false).toBe(true); // Always fail on observable error
