@@ -20,6 +20,9 @@ module.exports = function (config) {
       reports: ['html', 'lcovonly', 'text-summary'],
       fixWebpackSourcePaths: true
     },
+    files: [
+      './src/assets/custom-libs/modernizr.js',
+    ],
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
