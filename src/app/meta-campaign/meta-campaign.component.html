@@ -4,7 +4,7 @@
   (heroSearch)="onMetacampaignSearch($event)"
 ></app-hero>
 
-  <img *ngIf="campaign && fund && fund.logoUri" [src]="fund.logoUri + '?width=200'" width="100" [alt]="fund.name + ' logo'">
+<img *ngIf="campaign && fund && fund.logoUri" [src]="fund.logoUri + '?width=200'" width="100" [alt]="fund.name + ' logo'">
 
 <div class="card-section" *ngIf="campaign && children">
   <div class="filters">
