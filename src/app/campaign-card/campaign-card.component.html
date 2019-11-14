@@ -14,10 +14,10 @@
     <h3 class="campaign-title">{{ campaign.title }}</h3>
   </div>
 
-  <div class="campaign-tags__wrap">
-    <div class="campaign-tags" *ngFor="let category of campaign.categories">
-      <span class="campaign-tags__tag"><small>{{ category }}</small></span>
-    </div>
+  <div class="campaign-categories__wrap">
+    <div class="campaign-categories" *ngFor="let category of campaign.categories">
+      <span class="campaign-categories__category"><small>{{ category }}</small></span>
+    </div>category
   </div>
 
   <div class="funds" fxLayout="row">
