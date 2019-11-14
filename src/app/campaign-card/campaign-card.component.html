@@ -14,21 +14,20 @@
     <h3 class="campaign-title">{{ campaign.title }}</h3>
   </div>
 
-  <div class="campaign-tags" *ngFor="let tag of tags">
-    <span class="campaign-tags__tag"><small>{{ tag }}</small></span>
-  </div>
-  <div class="campaign-tags">
-    <span class="campaign-tags__tag"><small>Tag</small></span>
-    <span class="campaign-tags__tag"><small>Tag tag</small></span>
-    <span class="campaign-tags__tag"><small>Tag tag tag</small></span>
+  <div class="campaign-tags__wrap">
+    <div class="campaign-tags" *ngFor="let category of campaign.categories">
+      <span class="campaign-tags__tag"><small>{{ category }}</small></span>
+    </div>
   </div>
 
   <div class="funds" fxLayout="row">
-    <div class="matched-funds-remaining" *ngIf="campaign.isMatched" fxFlex="50">
-      <p><small>Matched funds remaining</small></p>
+    <div class="matched-funds" *ngIf="campaign.isMatched" fxFlex="50" fxLayout="column">
+      <p fxFlex="50"><small>Matched funds remaining</small></p>
+      <h4 class="matched-funds__amount" fxFlex="50">{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }}</h4>
     </div>
-    <div class="matched-funds-remaining" *ngIf="campaign.isMatched" fxFlex="50">
-      <p><small>Total funds raised (inc. gift aid)</small></p>
+    <div class="total-funds" *ngIf="campaign.isMatched" fxFlex="50" fxLayout="column">
+      <p fxFlex="50"><small>Total funds raised (inc. gift aid)</small></p>
+      <h4 class="total-funds__amount" fxFlex="50">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</h4>
     </div>
   </div>
 
@@ -43,7 +42,7 @@
     </button>
     <button
       mat-raised-button
-      color="primary"
+      class="donate-button"
       [routerLink]="'/donate/' + campaign.id"
     >
       Donate
