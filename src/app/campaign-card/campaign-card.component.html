@@ -1,12 +1,9 @@
 <div class="card">
-  <div class="banner-container">
-    <img
-      *ngIf="campaign.imageUri"
-      mat-card-image
-      [src]="campaign.imageUri"
-      alt=""
-      role="presentation"
-    >
+  <div
+    class="banner-container"
+    [ngStyle]="{'background-image':' url(' + campaign.imageUri + ')'}"
+    role="presentation"
+  >
   </div>
 
   <div class="card-header">
