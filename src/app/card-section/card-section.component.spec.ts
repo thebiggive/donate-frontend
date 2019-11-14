@@ -1,6 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {
+  MatInputModule,
+  MatSelectModule,
+} from '@angular/material';
 
 import { CardSectionComponent } from './card-section.component';
+import { FiltersComponent } from '../filters/filters.component';
 
 describe('CardSectionComponent', () => {
   let component: CardSectionComponent;
@@ -8,7 +13,14 @@ describe('CardSectionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CardSectionComponent ]
+      declarations: [
+        CardSectionComponent,
+        FiltersComponent,
+      ],
+      imports: [
+        MatInputModule,
+        MatSelectModule,
+      ],
     })
     .compileComponents();
   }));
