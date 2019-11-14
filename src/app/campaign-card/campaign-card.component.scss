@@ -13,6 +13,8 @@
 .banner-container {
   height: 110px;
   overflow: hidden;
+  background-size:cover;
+  background-position:center center;
 }
 
 @media (max-width: 800px) {
