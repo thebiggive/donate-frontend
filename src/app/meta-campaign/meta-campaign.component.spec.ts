@@ -5,6 +5,7 @@ import {
   MatButtonModule,
   MatCardModule,
   MatGridListModule,
+  MatIconModule,
   MatInputModule,
   MatProgressBarModule,
   MatSelectModule,
@@ -38,6 +39,7 @@ describe('MetaCampaignComponent', () => {
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatCardModule,
         MatGridListModule,
+        MatIconModule,
         MatInputModule,
         MatProgressBarModule,
         MatSelectModule,
