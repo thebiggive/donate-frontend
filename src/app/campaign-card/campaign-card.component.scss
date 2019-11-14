@@ -61,7 +61,7 @@ ul {
   padding-right: 1rem;
 }
 
-h4 {
+.charity-name {
   margin-top: 0.75rem;
   margin-bottom: 0;
   color: $colour-grey;
@@ -70,7 +70,7 @@ h4 {
   text-transform: uppercase;
 }
 
-h3 {
+.campaign-title {
   margin: 0;
   color: $colour-teal-dark;
   @include size-lg;
