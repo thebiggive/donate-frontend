@@ -1,8 +1,4 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>{{ campaign.title }}</mat-card-title>
-  </mat-card-header>
-
+<div class="card">
   <div class="banner-container">
     <img
       *ngIf="campaign.imageUri"
@@ -13,33 +9,36 @@
     >
   </div>
 
-  <mat-card-content>
-    <h4 *ngIf="campaign.isMatched">Match funded campaign</h4>
-    <h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
-    <h3>for {{ campaign.charity.name }}</h3>
-    <ul>
-      <li *ngFor="let category of campaign.categories">{{ category }}</li>
-      <li>{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }} funds remaining</li>
-      <li>
-        <span class="raised">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }} raised</span>
-      </li>
-      <li *ngIf="campaign.target">
-        <span class="target">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }} target</span>
-      </li>
-    </ul>
-    <mat-progress-bar color="accent" [value]="campaign.target ? percentRaised : (campaign.amountRaised > 0 ? 100 : 0)"></mat-progress-bar>
-  </mat-card-content>
+  <div class="card-header">
+    <h4 class="charity-name">{{ campaign.charity.name }}</h4>
+    <h3 class="campaign-title">{{ campaign.title }}</h3>
+  </div>
 
-  <mat-card-actions>
+  <div class="campaign-tags" *ngFor="let tag of tags">
+    <span class="campaign-tags__tag"><small>{{ tag }}</small></span>
+  </div>
+  <div class="campaign-tags">
+    <span class="campaign-tags__tag"><small>Tag</small></span>
+    <span class="campaign-tags__tag"><small>Tag tag</small></span>
+    <span class="campaign-tags__tag"><small>Tag tag tag</small></span>
+  </div>
+
+  <div class="buttons">
     <button
-      mat-raised-button
+      mat-icon-button
       color="accent"
       [routerLink]="'/campaign/' + campaign.id"
-    >View</button>
+    >
+      More info
+      <mat-icon aria-hidden="false" aria-label="Example home icon">add</mat-icon>
+    </button>
     <button
       mat-raised-button
       color="primary"
       [routerLink]="'/donate/' + campaign.id"
-    >Donate</button>
-  </mat-card-actions>
-</mat-card>
+    >
+      Donate
+    </button>
+  </div>
+
+</div>
