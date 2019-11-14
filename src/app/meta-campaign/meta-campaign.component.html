@@ -4,18 +4,7 @@
   (heroSearch)="onMetacampaignSearch($event)"
 ></app-hero>
 
-<mat-card *ngIf="campaign">
-  <mat-card-header *ngIf="fund">
-    <img *ngIf="fund.logoUri" [src]="fund.logoUri + '?width=200'" width="100" [alt]="fund.name + ' logo'">
-    <mat-card-subtitle *ngIf="campaign.status == 'Preview'">Opens in {{ campaign.startDate | timeLeft }}</mat-card-subtitle>
-    <mat-card-subtitle *ngIf="campaign.status != 'Preview'">{{ fund.amountRaised | currency : '£' : 'symbol' : '1.0-0' }} raised</mat-card-subtitle>
-  </mat-card-header>
-
-  <mat-card-header *ngIf="!fund">
-    <mat-card-subtitle *ngIf="campaign.status == 'Preview'">Opens in {{ campaign.startDate | timeLeft }}</mat-card-subtitle>
-    <mat-card-subtitle *ngIf="campaign.status != 'Preview'">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }} raised</mat-card-subtitle>
-  </mat-card-header>
-</mat-card>
+  <img *ngIf="campaign && fund && fund.logoUri" [src]="fund.logoUri + '?width=200'" width="100" [alt]="fund.name + ' logo'">
 
 <div class="card-section" *ngIf="campaign && children">
   <div class="filters">
