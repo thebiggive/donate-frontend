@@ -6,13 +6,10 @@ app-campaign-card {
 
 // Card Section START
 
-.card-section {
-  overflow-x: scroll;
-}
-
 .filters {
-  padding: 1rem;
+  margin: 1rem;
   display: flex;
+  overflow-x: scroll;
   @media (min-width: 960px) {
     justify-content: center;
   }
