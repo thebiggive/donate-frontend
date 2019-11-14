@@ -23,6 +23,15 @@
     <span class="campaign-tags__tag"><small>Tag tag tag</small></span>
   </div>
 
+  <div class="funds" fxLayout="row">
+    <div class="matched-funds-remaining" *ngIf="campaign.isMatched" fxFlex="50">
+      <p><small>Matched funds remaining</small></p>
+    </div>
+    <div class="matched-funds-remaining" *ngIf="campaign.isMatched" fxFlex="50">
+      <p><small>Total funds raised (inc. gift aid)</small></p>
+    </div>
+  </div>
+
   <div class="buttons">
     <button
       mat-icon-button
