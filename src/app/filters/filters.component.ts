@@ -12,7 +12,7 @@ import { PageMetaService } from '../page-meta.service';
 @Component({
   selector: 'app-filters',
   templateUrl: './filters.component.html',
-  styleUrls: ['./filters.component.scss']
+  styleUrls: ['./filters.component.scss'],
 })
 export class FiltersComponent implements OnInit {
   @Input() public beneficiaryOptions: string[];
