@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import {
-  MatInputModule,
   MatSelectModule,
 } from '@angular/material';
 
@@ -18,7 +17,6 @@ describe('CardSectionComponent', () => {
         FiltersComponent,
       ],
       imports: [
-        MatInputModule,
         MatSelectModule,
       ],
     })
