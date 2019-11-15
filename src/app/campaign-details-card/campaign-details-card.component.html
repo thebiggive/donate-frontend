@@ -1,24 +1,25 @@
 <div class="card">
     <div
       class="banner-container"
+      [ngStyle]="{'background-image':' url(' + campaign.bannerUri + ')'}"
       role="presentation"
     >
     </div>
 
   <div class="card-body">
     <p>Campaign target</p>
-    <h3>£20,000</h3>
+    <h3>{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</h3>
     <mat-progress-bar [value]="70"></mat-progress-bar>
     <p>Amount raised (inc. gift aid)</p>
-    <h3>£14,000</h3>
+    <h3>{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</h3>
     <div fxLayout="row">
       <div fxFlex="50">
         <p>Days left</p>
-        <h4>17</h4>
+        <h4>{{ campaign.endDate | timeLeft }}</h4>
       </div>
       <div fxFlex="50">
         <p>Donations</p>
-        <h4>57</h4>
+        <h4>{{ campaign.donationCount }}</h4>
       </div>
     </div>
   </div>
