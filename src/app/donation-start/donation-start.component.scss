@@ -1,5 +1,16 @@
 @import '../../styles';
 
+.donate-start {
+  @media (min-width: 960px) {
+    &:first-child {
+      width: 60%;
+    }
+    &:last-child {
+      width: 40%;
+    }
+  }
+}
+
 .error {
   color: mat-color($donate-warn);
   margin-bottom: 1rem;
