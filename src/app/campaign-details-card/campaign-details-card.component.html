@@ -8,23 +8,27 @@
 
   <div class="card-body">
     <p>Campaign target</p>
-    <h3>{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</h3>
+    <h3 *ngIf="campaign.target > 0">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</h3>
     <mat-progress-bar [value]="70"></mat-progress-bar>
     <p>Amount raised (inc. gift aid)</p>
-    <h3>{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</h3>
+    <h3 *ngIf="campaign.amountRaised > 0">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</h3>
     <div fxLayout="row">
-      <div fxFlex="50">
+      <div *ngIf="campaign.status == 'Active'" fxFlex="50">
         <p>Days left</p>
         <h4>{{ campaign.endDate | timeLeft }}</h4>
       </div>
-      <div fxFlex="50">
+      <div *ngIf="campaign.status == 'Active'" fxFlex="50">
+        <p>Donations</p>
+        <h4>{{ campaign.donationCount }}</h4>
+      </div>
+      <div *ngIf="!campaign.status == 'Active'" fxFlex="100">
         <p>Donations</p>
         <h4>{{ campaign.donationCount }}</h4>
       </div>
     </div>
   </div>
 
-  <div class="card-footer">
-    <p>Championed by <strong>The Childhood Trust</strong></p>
+  <div *ngIf="campaign.championName" class="card-footer">
+    <p>Championed by <strong>{{campaign.championName}}</strong></p>
   </div>
 </div>
