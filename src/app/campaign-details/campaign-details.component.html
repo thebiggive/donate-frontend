@@ -18,7 +18,7 @@
         www.stratfordcircusartscentre.org.uk
       </a></p>
     </div>
-  
+
     <div class="campaign-card">
       <app-campaign-details-card [campaign]="campaign"></app-campaign-details-card>
     </div>
@@ -55,18 +55,9 @@
             <p>Transport: Day trip to Rose Brunfird College College</p>
           </div>
         </mat-tab>
-        <mat-tab class="campaign-tabs__name" label="Understanding the Target">
+        <mat-tab *ngIf="campaign.alternativeFundUse" class="campaign-tabs__name" label="Understanding the Target">
           <div class="campaign-tabs__details">
-            <h5>£444</h5>
-            <p>Transport: Day trip to Rose Brunfird College College College</p>
-          </div>
-          <div class="campaign-tabs__details">
-            <h5>£444</h5>
-            <p>Transport: Day trip to Rose Brunfird College College College</p>
-          </div>
-          <div class="campaign-tabs__details">
-            <h5>£444</h5>
-            <p>Transport: Day trip to Rose Brunfird College College College</p>
+            <p>{{ campaign.alternativeFundUse }}</p>
           </div>
         </mat-tab>
       </mat-tab-group>
