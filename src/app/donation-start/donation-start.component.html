@@ -18,7 +18,7 @@
     <form (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaign">
       <div *ngIf="campaignIsOpen()">
         <mat-accordion multi="true">
-          <mat-expansion-panel expanded="true">
+          <mat-expansion-panel expanded="true" disabled="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <h3>Your donation</h3>
