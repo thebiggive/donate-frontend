@@ -11,6 +11,10 @@
   }
 }
 
+.mat-expansion-panel-header[aria-disabled=true] {
+  color: inherit;
+}
+
 .error {
   color: mat-color($donate-warn);
   margin-bottom: 1rem;
