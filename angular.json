@@ -29,7 +29,8 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/fonts/index.css"
+              "src/fonts/index.css",
+              "node_modules/material-icons-font/material-icons-font.css"
             ],
             "scripts": []
           },
@@ -150,7 +151,8 @@
             ],
             "styles": [
               "src/styles.scss",
-              "src/fonts/index.css"
+              "src/fonts/index.css",
+              "node_modules/material-icons-font/material-icons-font.css"
             ],
             "scripts": []
           }
