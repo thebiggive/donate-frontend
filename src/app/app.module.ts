@@ -14,6 +14,7 @@ import {
   MatProgressSpinnerModule,
   MatRadioModule,
   MatSelectModule,
+  MatTabsModule,
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -71,6 +72,7 @@ import { CampaignDetailsCardComponent } from './campaign-details-card/campaign-d
     MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,
+    MatTabsModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     FlexLayoutModule,
