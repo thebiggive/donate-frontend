@@ -15,11 +15,8 @@ import { PageMetaService } from '../page-meta.service';
   styleUrls: ['./meta-campaign.component.scss'],
 })
 export class MetaCampaignComponent implements OnInit {
-  public beneficiaryOptions: string[];
   public campaign: Campaign;
-  public categoryOptions: string[];
   public children: CampaignSummary[];
-  public countryOptions: string[];
   public filterError = false;
   public fund: Fund;
   public hasTerm = false;
@@ -41,10 +38,6 @@ export class MetaCampaignComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
   ) {
-    this.beneficiaryOptions = campaignService.getBeneficiaries();
-    this.categoryOptions = campaignService.getCategories();
-    this.countryOptions = campaignService.getCountries();
-
     route.params.pipe().subscribe(params => {
       this.campaignId = params.campaignId;
       this.campaignSlug = params.campaignSlug;
@@ -105,12 +98,6 @@ export class MetaCampaignComponent implements OnInit {
     this.run();
   }
 
-  setSortField(event) {
-    this.selectedSort = event.value;
-    this.handleSortParams();
-    this.run();
-  }
-
   handleSortParams() {
     this.query.sortField = this.selectedSort;
     if (this.selectedSort === '') { // this means sort by relevance for now
@@ -118,6 +105,17 @@ export class MetaCampaignComponent implements OnInit {
     } else { // match funds left and amount raised both make most sense in 'desc' order
       this.query.sortDirection = 'desc';
     }
+  }
+
+  onFilterApplied(update: {filterName: string, value: string}) {
+    this.query[update.filterName] = update.value;
+    this.run();
+  }
+
+  onSortApplied(selectedSort: string) {
+    this.selectedSort = selectedSort;
+    this.handleSortParams();
+    this.run();
   }
 
   onMetacampaignSearch(term: string) {

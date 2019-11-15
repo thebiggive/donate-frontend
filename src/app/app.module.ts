@@ -8,6 +8,7 @@ import {
   MatCardModule,
   MatDialogModule,
   MatGridListModule,
+  MatIconModule,
   MatInputModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
@@ -31,6 +32,7 @@ import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { TimeLeftPipe } from './time-left.pipe';
 import { HeroComponent } from './hero/hero.component';
+import { FiltersComponent } from './filters/filters.component';
 
 @NgModule({
   declarations: [
@@ -43,10 +45,11 @@ import { HeroComponent } from './hero/hero.component';
     DonationStartErrorDialogComponent,
     DonationStartMatchConfirmDialogComponent,
     DonationStartOfferReuseDialogComponent,
-    SearchResultsComponent,
-    MetaCampaignComponent,
-    TimeLeftPipe,
+    FiltersComponent,
     HeroComponent,
+    MetaCampaignComponent,
+    SearchResultsComponent,
+    TimeLeftPipe,
   ],
   entryComponents: [
     DonationStartErrorDialogComponent,
@@ -63,6 +66,7 @@ import { HeroComponent } from './hero/hero.component';
     MatCarouselModule.forRoot(),
     MatDialogModule,
     MatGridListModule,
+    MatIconModule,
     MatInputModule,
     MatProgressBarModule,
     MatRadioModule,
