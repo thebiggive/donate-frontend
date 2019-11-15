@@ -23,4 +23,23 @@
       <app-campaign-details-card [campaign]="campaign"></app-campaign-details-card>
     </div>
   </div>
+
+  <div *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" fxLayout="row">
+    <div class="campaign-tabs">
+      <mat-tab-group animationDuration="0ms">
+        <mat-tab *ngIf="campaign.budgetDetails.length > 0" label="Where's the money going?">
+          <ul *ngFor="let detail of campaign.budgetDetails">
+            <li>Amount: {{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</li>
+            <li>Description: {{ detail.description }}</li>
+          </ul>
+        </mat-tab>
+        <mat-tab *ngIf="campaign.alternativeFundUse" label="Understanding the Target">
+          <div class="campaign-tabs__details">
+            <p>{{ campaign.alternativeFundUse }}</p>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+
 </div>
