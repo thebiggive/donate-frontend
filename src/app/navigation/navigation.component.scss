@@ -8,6 +8,9 @@ mat-sidenav-container {
 mat-sidenav {
   width: 100vw;
   @media (min-width: 600px) {
+    max-width: 300px;
+  }
+  @media (min-width: 960px) {
     display: none;
   }
 }
@@ -30,31 +33,52 @@ mat-sidenav {
   padding-top: 1.125rem;
   width: 150px;
 
-  @media (min-width: 600px) {
+  @media (min-width: 960px) {
     padding-top: 1.5rem;
     width: 125px;
   }
 }
 
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
 .material-icons {
-  font-size: 35px;
+  font-size: 21px;
 }
 
-mat-icon {
-  height: 26px;
-  width: 35px;
+.mat-icon {
+  width: 21px;
 }
 
-mat-button {
+.side-nav-button__wrap {
+  .material-icons {
+    font-size: 35px;
+  }
+
+  .mat-icon {
+    height: 26px;
+    width: 35px;
+  }
+}
+
+.nav-links {
+  display: inline-block;
   min-width: auto;
-  @media (min-width: 600px) and (max-width: 840px) {
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
-    &:first-child {
-      padding-left: 0;
-    }
-    &:last-child {
-      padding-right: 0;
+  @media (min-width: 960px) and (max-width: 1280px) {
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+  }
+}
+
+.charity-login__wrap {
+  .mat-button {
+    @media (min-width: 960px) and (max-width: 1280px) {
+      &:last-child {
+        padding-right: 0;
+      }
     }
   }
 }
@@ -66,7 +90,7 @@ mat-button {
 }
 
 .main-nav {
-  @media (max-width: 599px) {
+  @media (max-width: 959px) {
     display: none;
   }
 
@@ -78,7 +102,7 @@ mat-button {
 }
 
 .side-nav-button__wrap {
-  @media (min-width: 600px) {
+  @media (min-width: 960px) {
     display: none;
   }
 }
