@@ -11,8 +11,6 @@ import { CampaignSummary } from '../campaign-summary.model';
 export class CampaignCardComponent implements OnInit {
   @Input() public campaign: CampaignSummary;
 
-  public percentRaised?: number;
-
   constructor() {}
 
   ngOnInit() {
