@@ -1,92 +1,68 @@
-<form (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaign">
-  <h1>Donating to {{ campaign.charity.name }}!</h1>
-  <h2>For &quot;{{ campaign.title }}&quot;</h2>
-
-  <div *ngIf="campaign.isMatched">
-    <h3>Matched Campaign</h3>
-    <p *ngIf="campaign.matchFundsRemaining > 0">
-      There is currently {{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }} available to match donations.
-    </p>
-    <p *ngIf="campaign.matchFundsRemaining == 0">
-      There are currently no funds available to match donations, but please check back if you think
-      these may have recently run out. Reserved match funds might become available if any donations
-      are not completed successfully.
-    </p>
-    <h3 *ngIf="!campaign.isMatched">Regular campaign &ndash; donations are not matched</h3>
-  </div>
-
-  <!-- TODO if keeping all this detail, abstract out pieces duplicated between here and campaign-details.component -->
+<div class="donate-start" *ngIf="campaign" fxLayout="row" fxLayout.xs="column">
   <div>
-    <h3>Campaign Targets</h3>
-    <p *ngIf="campaign.target > 0">Campaign Target: {{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
-    <p *ngIf="campaign.amountRaised > 0">Amount Raised: {{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
-    <p>Donations: {{ campaign.donationCount }}</p>
-  </div>
-
-  <p *ngIf="campaign.status == 'Active'">{{ campaign.endDate | timeLeft }} left</p>
-
-  <div *ngIf="!campaignIsOpen()">
-    Campaign open {{ campaign.startDate | date:'fullDate' }} &ndash; {{ campaign.endDate | date:'fullDate' }}
-  </div>
-
-  <div *ngIf="campaignIsOpen()">
-    <p>Enter an amount</p>
-    <mat-form-field color="accent">
-      <mat-label for="donationAmount">Amount (£)</mat-label>
-      <input formControlName="donationAmount" id="donationAmount" matInput>
-    </mat-form-field>
-    <p>Or, choose</p>
-    <button
-      type="button"
-      *ngFor="let suggestedAmount of suggestedAmounts"
-      (click)="setAmount(suggestedAmount)"
-    >{{ suggestedAmount | currency : '£' : 'symbol' : '1.0-0' }}</button>
-
-    <div *ngIf="f.donationAmount.invalid && (f.donationAmount.dirty || f.donationAmount.touched)" class="error">
-      <div *ngIf="f.donationAmount.errors.min">Sorry, the minimum donation is currently £5.</div>
-      <div *ngIf="f.donationAmount.errors.max">Sorry, the maximum single donation is £25,000.</div>
-      <div *ngIf="f.donationAmount.errors.pattern">Please enter a whole number of pounds (£) without commas or pence.</div>
-      <div *ngIf="f.donationAmount.errors.required">Please enter how much you would like to donate.</div>
+    <div class="campaign-button">
+      <button mat-icon-button class="campaign-button__button" [routerLink]="'/'">
+        <mat-icon class="campaign-button__icon" aria-hidden="false" aria-label="Example home icon">keyboard_arrow_left</mat-icon>
+        Back to campaign
+      </button>
     </div>
 
-    <mat-label id="giftAid-label">Claim Gift Aid?</mat-label>
-    <p>'I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of Gift Aid claimed on all my donations it is my responsibility to pay the difference'</p>
-    <p>Gift Aid is a government scheme for UK charities to reclaim the tax you have paid and gain 25% more at no cost or hassle to you. Find out more about Gift Aid.</p>
-    <mat-radio-group aria-labelledby="giftAid-label" formControlName="giftAid">
-        <mat-radio-button labelPosition="after" [value]="true">Yes</mat-radio-button>
-        <mat-radio-button labelPosition="after" [value]="false">No</mat-radio-button>
-    </mat-radio-group>
+    <div class="page-header">
+      <p>You are donating to</p>
+      <h1>{{ campaign.charity.name }}!</h1>
+      <p>For the</p>
+      <h2>{{ campaign.title }}</h2>
+      <p>{{ campaign.summary }}</p>
+    </div>
 
-    <mat-label id="optInCharityEmail-label">Receive email from the charity?</mat-label>
-    <mat-radio-group aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
-        <mat-radio-button labelPosition="after" [value]="true">Yes</mat-radio-button>
-        <mat-radio-button labelPosition="after" [value]="false">No</mat-radio-button>
-    </mat-radio-group>
+    <form (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaign">
+      <div *ngIf="campaignIsOpen()">
+        <div class="your-donation">
+          <h3>Your donation</h3>
+          <p><small>Enter an amount</small></p>
+          <mat-form-field color="accent">
+            <mat-label for="donationAmount">Amount (£)</mat-label>
+            <input formControlName="donationAmount" id="donationAmount" matInput>
+          </mat-form-field>
+          <p><small>Or, choose</small></p>
+          <button
+            type="button"
+            *ngFor="let suggestedAmount of suggestedAmounts"
+            (click)="setAmount(suggestedAmount)"
+          >{{ suggestedAmount | currency : '£' : 'symbol' : '1.0-0' }}</button>
+    
+          <div *ngIf="f.donationAmount.invalid && (f.donationAmount.dirty || f.donationAmount.touched)" class="error">
+            <div *ngIf="f.donationAmount.errors.min">Sorry, the minimum donation is currently £5.</div>
+            <div *ngIf="f.donationAmount.errors.max">Sorry, the maximum single donation is £25,000.</div>
+            <div *ngIf="f.donationAmount.errors.pattern">Please enter a whole number of pounds (£) without commas or pence.</div>
+            <div *ngIf="f.donationAmount.errors.required">Please enter how much you would like to donate.</div>
+          </div>
+        </div>
 
-    <mat-label id="optInTbgEmail-label">Receive email from the Big Give?</mat-label>
-    <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
-        <mat-radio-button labelPosition="after" [value]="true">Yes</mat-radio-button>
-        <mat-radio-button labelPosition="after" [value]="false">No</mat-radio-button>
-    </mat-radio-group>
-
-    <p *ngIf="sfApiError" class="error">
-      Sorry, we can't submit your donation right now. Please try again in a moment
-      or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank">contact us</a>
-      if this message persists.
-    </p>
-
-    <p *ngIf="validationError" class="error">
-      Please complete all fields above to proceed with your donation.
-    </p>
-
-    <mat-spinner *ngIf="submitting" color="accent" diameter="30"></mat-spinner>
-
-    <p *ngIf="retrying" class="warning">
-      It looks like our system is a bit busy, one moment please&hellip;
-    </p>
-
-    <p>
-      <button mat-raised-button color="primary" type="submit" [disabled]="submitting">Donate Now</button>
-    </p>
+        <p *ngIf="sfApiError" class="error">
+          Sorry, we can't submit your donation right now. Please try again in a moment
+          or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank">contact us</a>
+          if this message persists.
+        </p>
+    
+        <p *ngIf="validationError" class="error">
+          Please complete all fields above to proceed with your donation.
+        </p>
+    
+        <mat-spinner *ngIf="submitting" color="accent" diameter="30"></mat-spinner>
+    
+        <p *ngIf="retrying" class="warning">
+          It looks like our system is a bit busy, one moment please&hellip;
+        </p>
+    
+        <p>
+          <button mat-raised-button color="primary" type="submit" [disabled]="submitting">Donate Now</button>
+        </p>
+      </div>
+    </form>
   </div>
-</form>
+
+  <div>
+    * * * app-campaign-details-card goes here * * *
+  </div>
+</div>
