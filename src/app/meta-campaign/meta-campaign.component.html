@@ -7,44 +7,12 @@
 <img *ngIf="campaign && fund && fund.logoUri" [src]="fund.logoUri + '?width=200'" width="100" [alt]="fund.name + ' logo'">
 
 <div class="card-section" *ngIf="campaign && children">
-  <div class="filters">
-    <mat-form-field>
-      <mat-label>Order</mat-label>
-      <mat-select [value]="selectedSort" (selectionChange)="setSortField($event)">
-        <mat-option value="matchFundsRemaining">Match Funds Remaining</mat-option>
-        <mat-option value="amountRaised">Most Raised</mat-option>
-        <mat-option *ngIf="hasTerm" value="">Relevance</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Helping</mat-label>
-      <mat-select value="" (selectionChange)="setQueryProperty('beneficiary', $event)">
-        <mat-option value="">All</mat-option>
-        <mat-option *ngFor="let beneficiary of beneficiaryOptions" [value]="beneficiary">{{ beneficiary }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Category</mat-label>
-      <mat-select value="" (selectionChange)="setQueryProperty('category', $event)">
-        <mat-option value="">All</mat-option>
-        <mat-option *ngFor="let category of categoryOptions" [value]="category">{{ category }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Location</mat-label>
-      <mat-select value="" (selectionChange)="setQueryProperty('country', $event)">
-        <mat-option value="">All</mat-option>
-        <mat-option *ngFor="let country of countryOptions" [value]="country">{{ country }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Is Doubling</mat-label>
-      <mat-select [value]="false" (selectionChange)="setQueryProperty('onlyMatching', $event)">
-        <mat-option [value]="false">Doubling or Not</mat-option>
-        <mat-option [value]="true">Only Doubling</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+  <app-filters
+    [hasTerm]="hasTerm"
+    [selectedSort]="selectedSort"
+    (filterApplied)="onFilterApplied($event)"
+    (sortApplied)="onSortApplied($event)"
+  ></app-filters>
 
   <mat-grid-list [cols]="cols()" rowHeight="27rem" gutterSize="1rem">
     <mat-grid-tile *ngFor="let campaign of children">

@@ -17,9 +17,10 @@ import { Campaign } from '../campaign.model';
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
 import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
+import { FiltersComponent } from './../filters/filters.component';
+import { HeroComponent } from '../hero/hero.component';
 import { MetaCampaignComponent } from './meta-campaign.component';
 import { TimeLeftPipe } from '../time-left.pipe';
-import { HeroComponent } from '../hero/hero.component';
 
 describe('MetaCampaignComponent', () => {
   let component: MetaCampaignComponent;
@@ -30,9 +31,10 @@ describe('MetaCampaignComponent', () => {
       declarations: [
         CampaignCardComponent,
         CampaignSearchFormComponent,
+        FiltersComponent,
+        HeroComponent,
         MetaCampaignComponent,
         TimeLeftPipe,
-        HeroComponent,
       ],
       imports: [
         HttpClientTestingModule,
