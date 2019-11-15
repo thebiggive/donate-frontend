@@ -50,7 +50,7 @@ describe('DonationStartComponent', () => {
       donationAmount: '£1234',
       giftAid: true,
       optInCharityEmail: false,
-      optInTbgEmail: true,
+      // optInTbgEmail: true,
     });
 
     expect(component.donationForm.valid).toBe(true);
@@ -58,7 +58,7 @@ describe('DonationStartComponent', () => {
     expect(component.donationForm.controls.donationAmount.errors).toBeNull();
     expect(component.donationForm.controls.giftAid.errors).toBeNull();
     expect(component.donationForm.controls.optInCharityEmail.errors).toBeNull();
-    expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
+    // expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
   });
 
   it('should have an error with required radio buttons not set', () => {
@@ -66,7 +66,7 @@ describe('DonationStartComponent', () => {
       donationAmount: '1234',
       giftAid: null,
       optInCharityEmail: null,
-      optInTbgEmail: null,
+      // optInTbgEmail: null,
     });
 
     expect(component.donationForm.valid).toBe(false);
@@ -74,7 +74,7 @@ describe('DonationStartComponent', () => {
     expect(component.donationForm.controls.donationAmount.errors).toBeNull();
     expect(component.donationForm.controls.giftAid.errors.required).toBe(true);
     expect(component.donationForm.controls.optInCharityEmail.errors.required).toBe(true);
-    expect(component.donationForm.controls.optInTbgEmail.errors.required).toBe(true);
+    // expect(component.donationForm.controls.optInTbgEmail.errors.required).toBe(true);
   });
 
   it('should have missing amount error', () => {
@@ -82,7 +82,7 @@ describe('DonationStartComponent', () => {
       donationAmount: null,
       giftAid: true,
       optInCharityEmail: true,
-      optInTbgEmail: false,
+      // optInTbgEmail: false,
     });
 
     expect(component.donationForm.valid).toBe(false);
@@ -90,7 +90,7 @@ describe('DonationStartComponent', () => {
     expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['required']);
     expect(component.donationForm.controls.giftAid.errors).toBeNull();
     expect(component.donationForm.controls.optInCharityEmail.errors).toBeNull();
-    expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
+    // expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
   });
 
   it('should have minimum amount error', () => {
@@ -98,7 +98,7 @@ describe('DonationStartComponent', () => {
       donationAmount: '4',
       giftAid: false,
       optInCharityEmail: true,
-      optInTbgEmail: false,
+      // optInTbgEmail: false,
     });
 
     expect(component.donationForm.valid).toBe(false);
@@ -106,7 +106,7 @@ describe('DonationStartComponent', () => {
     expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['min']);
     expect(component.donationForm.controls.giftAid.errors).toBeNull();
     expect(component.donationForm.controls.optInCharityEmail.errors).toBeNull();
-    expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
+    // expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
   });
 
   it('should have maximum amount error', () => {
@@ -114,7 +114,7 @@ describe('DonationStartComponent', () => {
       donationAmount: '25001',
       giftAid: false,
       optInCharityEmail: false,
-      optInTbgEmail: false,
+      // optInTbgEmail: false,
     });
 
     expect(component.donationForm.valid).toBe(false);
@@ -122,7 +122,7 @@ describe('DonationStartComponent', () => {
     expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['max']);
     expect(component.donationForm.controls.giftAid.errors).toBeNull();
     expect(component.donationForm.controls.optInCharityEmail.errors).toBeNull();
-    expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
+    // expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
   });
 
   it('should have mis-formatted amount error', () => {
@@ -130,7 +130,7 @@ describe('DonationStartComponent', () => {
       donationAmount: '8765,21',
       giftAid: true,
       optInCharityEmail: true,
-      optInTbgEmail: true,
+      // optInTbgEmail: true,
     });
 
     expect(component.donationForm.valid).toBe(false);
@@ -138,6 +138,6 @@ describe('DonationStartComponent', () => {
     expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['pattern']);
     expect(component.donationForm.controls.giftAid.errors).toBeNull();
     expect(component.donationForm.controls.optInCharityEmail.errors).toBeNull();
-    expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
+    // expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
   });
 });

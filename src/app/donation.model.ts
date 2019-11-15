@@ -27,7 +27,7 @@ export class Donation {
 
     public optInCharityEmail: boolean,
 
-    public optInTbgEmail: boolean,
+    // public optInTbgEmail: boolean,
 
     /**
      * Unique ID for a CCampaign / project assigned by the Big Give, in Salesforce

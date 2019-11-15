@@ -71,7 +71,7 @@ export class DonationStartComponent implements OnInit {
       ]],
       giftAid: [null, Validators.required],
       optInCharityEmail: [null, Validators.required],
-      optInTbgEmail: [null, Validators.required],
+      // optInTbgEmail: [null, Validators.required],
     });
 
     this.donationService.getProbablyResumableDonation(this.campaignId)
@@ -124,7 +124,7 @@ export class DonationStartComponent implements OnInit {
       this.campaign.isMatched,
       this.donationForm.value.giftAid,
       this.donationForm.value.optInCharityEmail,
-      this.donationForm.value.optInTbgEmail,
+      // this.donationForm.value.optInTbgEmail,
       this.campaignId,
       undefined,
       this.campaign.charity.name,
