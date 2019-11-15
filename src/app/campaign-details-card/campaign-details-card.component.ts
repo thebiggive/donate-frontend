@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { CampaignSummary } from '../campaign-summary.model';
+import { Campaign } from '../campaign.model';
 
 @Component({
   selector: 'app-campaign-details-card',
@@ -9,7 +9,7 @@ import { CampaignSummary } from '../campaign-summary.model';
 })
 export class CampaignDetailsCardComponent implements OnInit {
 
-  @Input() public campaign: CampaignSummary;
+  @Input() public campaign: Campaign;
   
   constructor() { }
 
