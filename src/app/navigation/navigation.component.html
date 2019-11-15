@@ -4,16 +4,50 @@
   </div>
   <div class="main-nav">
     <div class="nav-links__wrap">
-      <a mat-button class="nav-link" [routerLink]="'/accounts'">About</a>
-      <a mat-button class="nav-link" [routerLink]="'/create-account'">How we help</a>
-      <a mat-button class="nav-link" [routerLink]="'/contacts'">Explore campaigns</a>
-      <a mat-button class="nav-link" [routerLink]="'/create-contact'">Contact us</a>
+      <div class="nav-links">
+        <button mat-icon-button [matMenuTriggerFor]="about">
+          About
+          <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #about="matMenu">
+          <ul>
+            <li><a mat-button class="nav-link" [routerLink]="'/'">The Big Give</a></li>
+            <li><a mat-button class="nav-link" [routerLink]="'/'">Our story</a></li>
+            <li><a mat-button class="nav-link" [routerLink]="'/'">Team</a></li>
+            <li><a mat-button class="nav-link" [routerLink]="'/'">Press</a></li>
+            <li><a mat-button class="nav-link" [routerLink]="'/'">Our fees</a></li>
+            <li><a mat-button class="nav-link" [routerLink]="'/'">Privacy policy</a></li>
+            <li><a mat-button class="nav-link" [routerLink]="'/'">Cookie policy</a></li>
+            <li><a mat-button class="nav-link" [routerLink]="'/'">Terms and conditions</a></li>
+          </ul>
+        </mat-menu>
+      </div>
+      <div class="nav-links">
+        <button mat-icon-button [matMenuTriggerFor]="howcanwehelp">
+          How can we help
+          <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #howcanwehelp="matMenu">
+          <ul>
+            <li><a mat-button class="nav-link" [routerLink]="'/'">Charities</a></li>
+            <li><a mat-button class="nav-link" [routerLink]="'/'">Philanthropists</a></li>
+            <li><a mat-button class="nav-link" [routerLink]="'/'">Individuals</a></li>
+            <li><a mat-button class="nav-link" [routerLink]="'/'">Christmas Challenge</a></li>
+          </ul>    
+        </mat-menu>
+      </div>
+      <div class="nav-links">
+        <a mat-button class="nav-link" [routerLink]="'/'">Explore campaigns</a>
+      </div>
+      <div class="nav-links">
+        <a mat-button class="nav-link" [routerLink]="'/'">Contact us</a>
+      </div>
     </div>
     <div class="main-nav__search-form">
       <app-nav-search-form></app-nav-search-form>
     </div>
     <div class="charity-login__wrap">
-      <a mat-button class="charity-login__link" [routerLink]="'/accounts'">Charity login</a>
+      <a mat-button class="charity-login__link" [routerLink]="'/'">Charity login</a>
     </div>
   </div>
   <div class="side-nav-button__wrap">
