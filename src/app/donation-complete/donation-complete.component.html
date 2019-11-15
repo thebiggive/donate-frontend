@@ -1,39 +1,50 @@
-<h2>Thank you!</h2>
+<div class="donate-complete">
+  <mat-spinner *ngIf="!complete && !noAccess && !timedOut" color="accent" diameter="30"></mat-spinner>
 
-<mat-spinner *ngIf="!complete && !noAccess && !timedOut" color="accent" diameter="30"></mat-spinner>
+  <p *ngIf="noAccess" class="error">
+    We don't seem to have the required token to look up your donation. We can only show your receipt on the device where
+    you donated, in order to keep your information secure. Don't worry though, we'll email you a receipt within a few minutes
+    confirming if your donation was processed.
+  </p>
+  
+  <p *ngIf="timedOut" class="error">
+    Your donation was not processed immediately &ndash; it may be that there is a short delay because we're very
+    busy. Please refresh this page to see the latest status. We'll also email your receipt within a few minutes when
+    your donation is processed.
+  </p>
+  
+  <div *ngIf="complete">
+    <div class="thank-you">
+      <h2>Thank you!</h2>
+    </div>
+  
+    <div class="page-body">
+      <h3>Your donation of <strong>{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong> has been made.</h3>
+      <h3>That's worth <strong>{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</strong> to {{ donation.charityName }}.</h3>
+      <p>{{ campaign.summary }}</p>
+    
+      <div class="receipt">
+          <h3>Your receipt</h3>
+          <div fxLayout="row">
+            <div fxFlex="50">
+              <p><small>Your donation</small></p>
+              <p><strong>{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong></p>
+              <p><small>Matched funds</small></p>
+              <p><strong>{{ donation.matchedAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong></p>
+              <p><small>Gift Aid</small></p>
+              <p><strong>{{ giftAidAmount | currency : '£' : 'symbol' : '1.2-2' }}</strong></p>
+            </div>
+            <div fxFlex="50">
+              <p><small>Total amount {{ donation.charityName }} receive</small></p>
+              <h4><strong>{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</strong></h4>
+            </div>
+          </div>
+      </div>
+    </div>
 
-<p *ngIf="noAccess" class="error">
-  We don't seem to have the required token to look up your donation. We can only show your receipt on the device where
-  you donated, in order to keep your information secure. Don't worry though, we'll email you a receipt within a few minutes
-  confirming if your donation was processed.
-</p>
-
-<p *ngIf="timedOut" class="error">
-  Your donation was not processed immediately &ndash; it may be that there is a short delay because we're very
-  busy. Please refresh this page to see the latest status. We'll also email your receipt within a few minutes when
-  your donation is processed.
-</p>
-
-<div *ngIf="complete">
-  <div *ngIf="campaign">{{ campaign.summary }}</div>
-
-  <p>Your donation of {{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }} has been made.</p>
-  <p>That's worth {{ totalValue | currency : '£' : 'symbol' : '1.2-2' }} to {{ donation.charityName }}.</p>
-
-  <h2>Your receipt</h2>
-  <p>Your donation</p>
-  <p><strong>{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong></p>
-
-  <div *ngIf="donation.matchedAmount > 0">
-    <p>Matched funds</p>
-    <p><strong>{{ donation.matchedAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong></p>
+    <button mat-button>
+      <p>Explore other campaigns</p>
+      <img src="/assets/logo.png" alt="The Big Give" width="200">
+    </button>
   </div>
-
-  <div *ngIf="donation.giftAid">
-    <p>Gift Aid</p>
-    <p><strong>{{ giftAidAmount | currency : '£' : 'symbol' : '1.2-2' }}</strong></p>
-  </div>
-
-  <p>Total amount {{ donation.charityName }} receive</p>
-  <p><strong>{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</strong></p>
 </div>
