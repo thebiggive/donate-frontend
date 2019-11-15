@@ -1,7 +1,7 @@
 <div class="details" *ngIf="campaign">
-  <div class="back-button">
-    <button mat-icon-button class="back-button__button" [routerLink]="'/'">
-      <mat-icon class="back-button__icon" aria-hidden="false" aria-label="Example home icon">keyboard_arrow_left</mat-icon>
+  <div class="listing-button">
+    <button mat-icon-button class="listing-button__button" [routerLink]="'/'">
+      <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Example home icon">keyboard_arrow_left</mat-icon>
       Back to listing
     </button>
   </div>
@@ -20,11 +20,56 @@
     </div>
   
     <div class="campaign-card">
-      <app-campaign-details-card></app-campaign-details-card>
+      <app-campaign-details-card [campaign]="campaign"></app-campaign-details-card>
     </div>
   </div>
 
-  <div class="campaign-body">
-    
+  <div fxLayout="row">
+    <div class="campaign-tabs">
+      <mat-tab-group animationDuration="0ms">
+        <mat-tab class="campaign-tabs__name" label="Where's the money going?">
+          <div class="campaign-tabs__details">
+            <h5>£400</h5>
+            <p>Transport: Day trip to Rose Brunfird College</p>
+          </div>
+          <div class="campaign-tabs__details">
+            <h5>£400</h5>
+            <p>Transport: Day trip to Rose Brunfird College</p>
+          </div>
+          <div class="campaign-tabs__details">
+            <h5>£400</h5>
+            <p>Transport: Day trip to Rose Brunfird College</p>
+          </div>
+        </mat-tab>
+        <mat-tab class="campaign-tabs__name" label="Charity details">
+          <div class="campaign-tabs__details">
+            <h5>£440</h5>
+            <p>Transport: Day trip to Rose Brunfird College College</p>
+          </div>
+          <div class="campaign-tabs__details">
+            <h5>£440</h5>
+            <p>Transport: Day trip to Rose Brunfird College College</p>
+          </div>
+          <div class="campaign-tabs__details">
+            <h5>£440</h5>
+            <p>Transport: Day trip to Rose Brunfird College College</p>
+          </div>
+        </mat-tab>
+        <mat-tab class="campaign-tabs__name" label="Understanding the Target">
+          <div class="campaign-tabs__details">
+            <h5>£444</h5>
+            <p>Transport: Day trip to Rose Brunfird College College College</p>
+          </div>
+          <div class="campaign-tabs__details">
+            <h5>£444</h5>
+            <p>Transport: Day trip to Rose Brunfird College College College</p>
+          </div>
+          <div class="campaign-tabs__details">
+            <h5>£444</h5>
+            <p>Transport: Day trip to Rose Brunfird College College College</p>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
   </div>
 </div>
