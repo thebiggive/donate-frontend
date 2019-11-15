@@ -1,16 +1,48 @@
 @import '../../styles';
 
-.banner {
-  margin: auto;
-  display: block;
-  width: 50%;
-}
+// .banner {
+//   margin: auto;
+//   display: block;
+//   width: 50%;
+// }
 
 .details {
   padding: 2rem;
+  overflow: hidden;
 }
 
 mat-progress-bar {
   background: black;
   height: 6px;
+}
+
+.campaign-header {
+  @media (min-width: 600px) {
+    max-width: 50%;
+  }
+  @media (min-width: 960px) {
+    max-width: 70%;
+  }
+}
+
+.campaign-card {
+  @media (min-width: 600px) {
+    width: 50%;
+  }
+  @media (min-width: 960px) {
+    max-width: 30%;
+  }
+}
+
+.campaign-tabs {
+  @media (min-width: 600px) {
+    max-width: 50%;
+  }
+  @media (min-width: 960px) {
+    max-width: 70%;
+  }
+}
+
+.campaign-tabs {
+  overflow-x: scroll;
 }
