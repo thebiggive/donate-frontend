@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
+import { Campaign } from '../campaign.model';
+import { CampaignService } from '../campaign.service';
 import { Donation } from '../donation.model';
 import { DonationService } from '../donation.service';
 
@@ -12,6 +14,7 @@ import { DonationService } from '../donation.service';
   styleUrls: ['./donation-complete.component.scss'],
 })
 export class DonationCompleteComponent {
+  public campaign: Campaign;
   public complete = false;
   public donation: Donation;
   public giftAidAmount: number;
@@ -26,6 +29,7 @@ export class DonationCompleteComponent {
 
   constructor(
     private analyticsService: AnalyticsService,
+    private campaignService: CampaignService,
     private donationService: DonationService,
     private route: ActivatedRoute,
   ) {
@@ -59,6 +63,7 @@ export class DonationCompleteComponent {
     }
 
     this.donation = donation;
+    this.campaignService.getOneById(donation.projectId).subscribe(campaign => this.campaign = campaign);
 
     if (this.donationService.isComplete(donation)) {
       this.analyticsService.logEvent('thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
