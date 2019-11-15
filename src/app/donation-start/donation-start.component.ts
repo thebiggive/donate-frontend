@@ -196,6 +196,18 @@ export class DonationStartComponent implements OnInit {
    */
   get f() { return this.donationForm.controls; }
 
+  expectedMatchAmount(): number {
+    return Math.min(this.campaign.matchFundsRemaining, parseFloat(this.donationForm.value.donationAmount));
+  }
+
+  giftAidAmount(): number {
+    return this.donationForm.value.giftAid ? (0.25 * parseFloat(this.donationForm.value.donationAmount)) : 0;
+  }
+
+  expectedTotalAmount(): number {
+    return parseFloat(this.donationForm.value.donationAmount) + this.giftAidAmount() + this.expectedMatchAmount();
+  }
+
   campaignIsOpen(): boolean {
     return (
       this.campaign

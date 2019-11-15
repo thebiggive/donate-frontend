@@ -80,43 +80,35 @@
                 <h3>Make your donation</h3>
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <button mat-raised-button color="primary" type="submit" [disabled]="submitting">Donate £12345</button>
-            <div fxLayout="row" *ngIf="campaign.isMatched">
-              <div fxFlex="26">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="submitting"
+            >Donate {{ donationForm.value.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</button>
+            <div fxLayout="row" *ngIf="donationForm.value.donationAmount > 0">
+              <div [fxFlex]="(expectedMatchAmount() > 0) ? 26 : 39">
                 <p><small>Your donation</small></p>
-                <p><strong>£123</strong></p>
+                <p><strong>{{ donationForm.value.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong></p>
               </div>
               <div fxFlex="11" fxLayout="row" fxLayoutAlign="center end">
-                <mat-icon aria-hidden="false" aria-label="Example home icon">add</mat-icon>
+                <mat-icon aria-hidden="false" aria-label="Plus">add</mat-icon>
               </div>
-              <div fxFlex="26">
+              <div fxFlex="26" *ngIf="expectedMatchAmount() > 0">
                 <p><small>Matched funds</small></p>
-                <p><strong>£456</strong></p>
+                <p><strong>{{ expectedMatchAmount() | currency : '£' : 'symbol' : '1.0-0' }}</strong></p>
               </div>
-              <div fxFlex="11" fxLayout="row" fxLayoutAlign="center end">
-                <mat-icon aria-hidden="false" aria-label="Example home icon">add</mat-icon>
+              <div fxFlex="11" fxLayout="row" fxLayoutAlign="center end" *ngIf="expectedMatchAmount() > 0">
+                <mat-icon aria-hidden="false" aria-label="Plus">add</mat-icon>
               </div>
-              <div fxFlex="26">
+              <div [fxFlex]="(expectedMatchAmount() > 0) ? 26 : 39">
                 <p><small>Gift Aid</small></p>
-                <p><strong>£789</strong></p>
+                <p><strong>{{ giftAidAmount() | currency : '£' : 'symbol' : '1.2-2' }}</strong></p>
               </div>
             </div>
-            <div fxLayout="row" *ngIf="!campaign.isMatched">
-              <div fxFlex="39">
-                <p><small>Your donation</small></p>
-                <p><strong>£123</strong></p>
-              </div>
-              <div fxFlex="12" fxLayout="row" fxLayoutAlign="center end">
-                <mat-icon>add</mat-icon>
-              </div>
-              <div fxFlex="39">
-                <p><small>Gift Aid</small></p>
-                <p><strong>£789</strong></p>
-              </div>
-            </div>
-            <div fxLayout="row" fxLayoutAlign="space-around">
+            <div fxLayout="row" fxLayoutAlign="space-around" *ngIf="donationForm.value.donationAmount > 0">
               <p><small>Total amount {{ campaign.charity.name }} receive</small></p>
-              <p><strong>£123.45</strong></p>
+              <p><strong>{{ expectedTotalAmount() | currency : '£' : 'symbol' : '1.2-2' }}</strong></p>
             </div>
           </mat-expansion-panel>
         </mat-accordion>
