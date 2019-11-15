@@ -23,44 +23,4 @@
       <app-campaign-details-card [campaign]="campaign"></app-campaign-details-card>
     </div>
   </div>
-
-  <div fxLayout="row">
-    <div class="campaign-tabs">
-      <mat-tab-group animationDuration="0ms">
-        <mat-tab class="campaign-tabs__name" label="Where's the money going?">
-          <div class="campaign-tabs__details">
-            <h5>£400</h5>
-            <p>Transport: Day trip to Rose Brunfird College</p>
-          </div>
-          <div class="campaign-tabs__details">
-            <h5>£400</h5>
-            <p>Transport: Day trip to Rose Brunfird College</p>
-          </div>
-          <div class="campaign-tabs__details">
-            <h5>£400</h5>
-            <p>Transport: Day trip to Rose Brunfird College</p>
-          </div>
-        </mat-tab>
-        <mat-tab class="campaign-tabs__name" label="Charity details">
-          <div class="campaign-tabs__details">
-            <h5>£440</h5>
-            <p>Transport: Day trip to Rose Brunfird College College</p>
-          </div>
-          <div class="campaign-tabs__details">
-            <h5>£440</h5>
-            <p>Transport: Day trip to Rose Brunfird College College</p>
-          </div>
-          <div class="campaign-tabs__details">
-            <h5>£440</h5>
-            <p>Transport: Day trip to Rose Brunfird College College</p>
-          </div>
-        </mat-tab>
-        <mat-tab *ngIf="campaign.alternativeFundUse" class="campaign-tabs__name" label="Understanding the Target">
-          <div class="campaign-tabs__details">
-            <p>{{ campaign.alternativeFundUse }}</p>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-    </div>
-  </div>
 </div>
