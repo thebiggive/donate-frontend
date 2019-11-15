@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatInputModule } from '@angular/material';
+import { MatButtonModule, MatInputModule, MatSelectModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { CampaignSearchFormComponent } from './campaign-search-form.component';
@@ -15,6 +15,7 @@ describe('CampaignSearchFormComponent', () => {
       imports: [
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatInputModule,
+        MatSelectModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
       ],

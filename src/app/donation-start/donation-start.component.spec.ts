@@ -95,7 +95,7 @@ describe('DonationStartComponent', () => {
 
   it('should have minimum amount error', () => {
     component.donationForm.setValue({
-      donationAmount: '4.99',
+      donationAmount: '4',
       giftAid: false,
       optInCharityEmail: true,
       optInTbgEmail: false,
@@ -111,7 +111,7 @@ describe('DonationStartComponent', () => {
 
   it('should have maximum amount error', () => {
     component.donationForm.setValue({
-      donationAmount: '25000.01',
+      donationAmount: '25001',
       giftAid: false,
       optInCharityEmail: false,
       optInTbgEmail: false,

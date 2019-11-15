@@ -1,5 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCarouselModule } from '@ngmodule/material-carousel';
 import {
@@ -7,6 +8,7 @@ import {
   MatCardModule,
   MatDialogModule,
   MatGridListModule,
+  MatIconModule,
   MatInputModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
@@ -29,6 +31,8 @@ import { DonationStartOfferReuseDialogComponent } from './donation-start/donatio
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { TimeLeftPipe } from './time-left.pipe';
+import { HeroComponent } from './hero/hero.component';
+import { FiltersComponent } from './filters/filters.component';
 
 @NgModule({
   declarations: [
@@ -41,8 +45,10 @@ import { TimeLeftPipe } from './time-left.pipe';
     DonationStartErrorDialogComponent,
     DonationStartMatchConfirmDialogComponent,
     DonationStartOfferReuseDialogComponent,
-    SearchResultsComponent,
+    FiltersComponent,
+    HeroComponent,
     MetaCampaignComponent,
+    SearchResultsComponent,
     TimeLeftPipe,
   ],
   entryComponents: [
@@ -60,12 +66,14 @@ import { TimeLeftPipe } from './time-left.pipe';
     MatCarouselModule.forRoot(),
     MatDialogModule,
     MatGridListModule,
+    MatIconModule,
     MatInputModule,
     MatProgressBarModule,
     MatRadioModule,
     MatSelectModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
+    FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

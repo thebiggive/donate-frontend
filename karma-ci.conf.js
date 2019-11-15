@@ -24,11 +24,14 @@ module.exports = function (config) {
       reports: ['html', 'lcovonly', 'text-summary'],
       fixWebpackSourcePaths: true
     },
-    reporters: ['progress', 'kjhtml'],
+    files: [
+      './src/assets/custom-libs/modernizr.js',
+    ],
+    reporters: ['kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    autoWatch: true,
+    autoWatch: false,
     browsers: ['Chrome'],
     // See https://medium.com/ramsatt/gitlab-ci-cd-with-angular-7-firebase-779bf040bb82
     customLaunchers: {
@@ -37,7 +40,7 @@ module.exports = function (config) {
         flags: ['--no-sandbox']
       }
     },
-    singleRun: false,
-    restartOnFileChange: true
+    singleRun: true,
+    restartOnFileChange: false
   });
 };

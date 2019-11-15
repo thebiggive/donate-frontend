@@ -1,10 +1,21 @@
+@import '../../styles';
+
 // If we somehow end up with an unexpected-ratio image, let Angular Material do its
 // thing with `mat-card-image` on the `img` itself (can't set a max height as this
 // would stretch it when combined with that) but use this to ensure the card can't
 // grow to a height that breaks the layout.
+
+.card {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+}
+
 .banner-container {
   height: 110px;
   overflow: hidden;
+  background-size:cover;
+  background-position:center center;
 }
 
 @media (max-width: 800px) {
@@ -13,36 +24,110 @@
   }
 }
 
+.buttons {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+}
+
 ul {
   list-style-type: none;
   padding: 0;
 }
 
-.raised {
-  float: left;
+.card-header {
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
-.target {
-  float: right;
+.charity-name {
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+  color: $colour-grey;
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: uppercase;
 }
 
-h3 {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
+.campaign-title {
+  margin: 0;
+  color: $colour-teal-dark;
+  @include size-lg;
 }
 
-mat-card-header {
-  height: 4rem;
+.campaign-categories__wrap {
+  overflow-x: scroll;
+  white-space:nowrap;
+  margin-left: 0.5rem;
 }
 
-mat-card-actions {
-  display: flex;
-  justify-content: space-between;
+.campaign-categories {
+  margin: 1rem 0.5rem;
+  margin-left: 0;
+  display: inline;
 }
 
-mat-progress-bar {
-  background: black;
-  height: 6px;
+.campaign-categories__category {
+  background-color: $colour-teal-fade;
+  color: $colour-teal;
+  border-radius: 14px;
+  padding-left: 0.75rem;
+  padding-bottom: 0.25rem;
+  padding-right: 0.75rem;
+  margin-right: 0.5rem;
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.funds {
+  padding: 1rem;
+  color: $colour-grey;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+  line-height: 1;
+}
+
+.matched-funds {
+  padding-right: 0.25rem;
+}
+
+.total-funds {
+  padding-left: 0.25rem;
+}
+
+.matched-funds__amount,
+.total-funds__amount {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.total-funds__amount {
+  color: $colour-teal;
+}
+
+.mat-icon-button,
+.donate-button {
+  margin: 0;
+  min-width: 85px;
+}
+
+.mat-icon-button {
+  font-weight: 400;
+}
+
+.donate-button {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background-color: $colour-teal-lighter;
+  color: $colour-teal-dark;
+  border-radius: 4px;
 }

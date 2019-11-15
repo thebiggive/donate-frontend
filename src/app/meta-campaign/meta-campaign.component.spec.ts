@@ -5,6 +5,7 @@ import {
   MatButtonModule,
   MatCardModule,
   MatGridListModule,
+  MatIconModule,
   MatInputModule,
   MatProgressBarModule,
   MatSelectModule,
@@ -16,6 +17,8 @@ import { Campaign } from '../campaign.model';
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
 import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
+import { FiltersComponent } from './../filters/filters.component';
+import { HeroComponent } from '../hero/hero.component';
 import { MetaCampaignComponent } from './meta-campaign.component';
 import { TimeLeftPipe } from '../time-left.pipe';
 
@@ -28,6 +31,8 @@ describe('MetaCampaignComponent', () => {
       declarations: [
         CampaignCardComponent,
         CampaignSearchFormComponent,
+        FiltersComponent,
+        HeroComponent,
         MetaCampaignComponent,
         TimeLeftPipe,
       ],
@@ -36,6 +41,7 @@ describe('MetaCampaignComponent', () => {
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatCardModule,
         MatGridListModule,
+        MatIconModule,
         MatInputModule,
         MatProgressBarModule,
         MatSelectModule,
@@ -77,11 +83,13 @@ describe('MetaCampaignComponent', () => {
       new CampaignSummary(
         'testCampaignId',
         123,
+        ['cat1', 'cat2'],
         'Test Champion',
         { id: 'testCharityId', name: 'Test Charity' },
         new Date(),
         'https://example.com/image.png',
         true,
+        400,
         new Date(),
         1230,
         'Test Campaign!',

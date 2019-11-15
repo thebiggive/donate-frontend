@@ -1,43 +1,49 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>{{ campaign.title }}</mat-card-title>
-  </mat-card-header>
-
-  <div class="banner-container">
-    <img
-      *ngIf="campaign.imageUri"
-      mat-card-image
-      [src]="campaign.imageUri"
-      alt=""
-      role="presentation"
-    >
+<div class="card">
+  <div
+    class="banner-container"
+    [ngStyle]="{'background-image':' url(' + campaign.imageUri + ')'}"
+    role="presentation"
+  >
   </div>
 
-  <mat-card-content>
-    <h4 *ngIf="campaign.isMatched">Match funded campaign</h4>
-    <h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
-    <h3>for {{ campaign.charity.name }}</h3>
-    <ul>
-      <li>
-        <span class="raised">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }} raised</span>
-      </li>
-      <li *ngIf="campaign.target">
-        <span class="target">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }} target</span>
-      </li>
-    </ul>
-    <mat-progress-bar color="accent" [value]="campaign.target ? percentRaised : (campaign.amountRaised > 0 ? 100 : 0)"></mat-progress-bar>
-  </mat-card-content>
+  <div class="card-header">
+    <h4 class="charity-name">{{ campaign.charity.name }}</h4>
+    <h3 class="campaign-title">{{ campaign.title }}</h3>
+  </div>
 
-  <mat-card-actions>
+  <div class="campaign-categories__wrap">
+    <div class="campaign-categories" *ngFor="let category of campaign.categories">
+      <span class="campaign-categories__category"><small>{{ category }}</small></span>
+    </div>
+  </div>
+
+  <div class="funds" fxLayout="row">
+    <div class="matched-funds" *ngIf="campaign.isMatched" fxFlex="50" fxLayout="column">
+      <p fxFlex="50"><small>Matched funds remaining</small></p>
+      <h4 class="matched-funds__amount" fxFlex="50">{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }}</h4>
+    </div>
+    <div class="total-funds" *ngIf="campaign.isMatched" fxFlex="50" fxLayout="column">
+      <p fxFlex="50"><small>Total funds raised (inc. gift aid)</small></p>
+      <h4 class="total-funds__amount" fxFlex="50">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</h4>
+    </div>
+  </div>
+
+  <div class="buttons">
     <button
-      mat-raised-button
+      mat-icon-button
       color="accent"
       [routerLink]="'/campaign/' + campaign.id"
-    >View</button>
+    >
+      More info
+      <mat-icon aria-hidden="false" aria-label="Example home icon">add</mat-icon>
+    </button>
     <button
       mat-raised-button
-      color="primary"
+      class="donate-button"
       [routerLink]="'/donate/' + campaign.id"
-    >Donate</button>
-  </mat-card-actions>
-</mat-card>
+    >
+      Donate
+    </button>
+  </div>
+
+</div>

@@ -28,6 +28,7 @@ export class DonationStartComponent implements OnInit {
   public campaign: Campaign;
   public donationForm: FormGroup;
   public retrying = false;
+  public suggestedAmounts = [50, 200, 500];
   public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
   public validationError = false;         // Internal Angular app form validation error
@@ -62,30 +63,47 @@ export class DonationStartComponent implements OnInit {
       });
 
     this.donationForm = this.formBuilder.group({
-      // TODO require a whole number of pounds, unless scrapping that constraint
       donationAmount: [null, [
         Validators.required,
         Validators.min(5),
         Validators.max(environment.maximumDonationAmount),
-        Validators.pattern('^£?[0-9]+(\\.[0-9]{2})?$'),
+        Validators.pattern('^£?[0-9]+?$'),
       ]],
       giftAid: [null, Validators.required],
       optInCharityEmail: [null, Validators.required],
       optInTbgEmail: [null, Validators.required],
     });
 
-    this.donationService.getResumableDonation(this.campaignId)
+    this.donationService.getProbablyResumableDonation(this.campaignId)
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;
+
         if (this.charityCheckoutError) {
           this.processDonationError();
-        } else if (this.previousDonation) {
-          this.offerExistingDonation(this.previousDonation);
+          return;
         }
+
+        // The local check might not have the latest donation status in edge cases, so we need to check the copy
+        // the Donations API returned still has a resumable status and wasn't completed or cancelled since being
+        // saved locally.
+        if (!existingDonation || !this.donationService.isResumable(existingDonation)) {
+          // No resumable donations
+          return;
+        }
+
+        // We have a resumable donation and aren't processing an error
+        this.offerExistingDonation(this.previousDonation);
     });
   }
 
-  public submit() {
+  setAmount(amount: number) {
+    // We need to keep this as a string for consistency with manual donor-input amounts,
+    // so that `submit()` doesn't fall over trying to clean it of possible currency symbols.
+    const amountAsString = amount.toString();
+    this.donationForm.patchValue({ donationAmount: amountAsString });
+  }
+
+  submit() {
     if (this.donationForm.invalid) {
       this.validationError = true;
       return;

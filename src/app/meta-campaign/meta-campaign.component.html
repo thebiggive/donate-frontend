@@ -1,73 +1,26 @@
-<mat-card *ngIf="campaign">
-  <mat-card-header *ngIf="fund">
-    <img *ngIf="fund.logoUri" [src]="fund.logoUri + '?width=200'" width="100" [alt]="fund.name + ' logo'">
-    <mat-card-title>{{ fund.name }} &ndash; {{ campaign.title }}</mat-card-title>
-    <mat-card-subtitle *ngIf="campaign.status == 'Preview'">Opens in {{ campaign.startDate | timeLeft }}</mat-card-subtitle>
-    <mat-card-subtitle *ngIf="campaign.status != 'Preview'">{{ fund.amountRaised | currency : '£' : 'symbol' : '1.0-0' }} raised</mat-card-subtitle>
-  </mat-card-header>
+<app-hero *ngIf="campaign"
+  [title]="fund ? fund.name + ' &ndash; ' + campaign.title : campaign.title"
+  [description]="fund ? fund.description : campaign.summary"
+  (heroSearch)="onMetacampaignSearch($event)"
+></app-hero>
 
-  <mat-card-header *ngIf="!fund">
-    <mat-card-title>{{ campaign.title }}</mat-card-title>
-    <mat-card-subtitle *ngIf="campaign.status == 'Preview'">Opens in {{ campaign.startDate | timeLeft }}</mat-card-subtitle>
-    <mat-card-subtitle *ngIf="campaign.status != 'Preview'">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }} raised</mat-card-subtitle>
-  </mat-card-header>
+<img *ngIf="campaign && fund && fund.logoUri" [src]="fund.logoUri + '?width=200'" width="100" [alt]="fund.name + ' logo'">
 
-  <mat-card-content>
-    <p *ngIf="fund">{{ fund.description }}</p>
-    <p *ngIf="!fund">{{ campaign.summary }}</p>
-  </mat-card-content>
-</mat-card>
-
-<div *ngIf="campaign && children">
-  <h2>Participating Campaigns</h2>
-  <h3>Search in {{ campaign.title }}</h3>
-  <app-campaign-search-form [campaignId]="campaign.id" (search)="onMetacampaignSearch($event)"></app-campaign-search-form>
-
-  <h3>Filters</h3>
-  <mat-form-field>
-    <mat-label>Beneficiary</mat-label>
-    <mat-select value="" (selectionChange)="setQueryProperty('beneficiary', $event)">
-      <mat-option value="">All</mat-option>
-      <mat-option *ngFor="let beneficiary of beneficiaryOptions" [value]="beneficiary">{{ beneficiary }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Category</mat-label>
-    <mat-select value="" (selectionChange)="setQueryProperty('category', $event)">
-      <mat-option value="">All</mat-option>
-      <mat-option *ngFor="let category of categoryOptions" [value]="category">{{ category }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Country</mat-label>
-    <mat-select value="" (selectionChange)="setQueryProperty('country', $event)">
-      <mat-option value="">All</mat-option>
-      <mat-option *ngFor="let country of countryOptions" [value]="country">{{ country }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <h3>Sort By</h3>
-  <mat-form-field>
-    <mat-label>Field</mat-label>
-    <mat-select value="" (selectionChange)="setSortField($event)">
-      <mat-option value="">Relevance</mat-option>
-      <mat-option value="amountRaised">Amount raised</mat-option>
-      <mat-option value="matchFundsRemaining">Match funds remaining</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Direction</mat-label>
-    <mat-select [(value)]="sortDirection" [disabled]="!sortDirectionEnabled" (selectionChange)="setQueryProperty('sortDirection', $event)">
-      <mat-option selected value="asc">Ascending</mat-option>
-      <mat-option value="desc">Descending</mat-option>
-    </mat-select>
-  </mat-form-field>
+<div class="card-section" *ngIf="campaign && children">
+  <app-filters
+    [hasTerm]="hasTerm"
+    [selectedSort]="selectedSort"
+    (filterApplied)="onFilterApplied($event)"
+    (sortApplied)="onSortApplied($event)"
+  ></app-filters>
 
   <mat-grid-list [cols]="cols()" rowHeight="27rem" gutterSize="1rem">
     <mat-grid-tile *ngFor="let campaign of children">
       <app-campaign-card [campaign]="campaign"></app-campaign-card>
     </mat-grid-tile>
   </mat-grid-list>
+
+  <p *ngIf="moreMightExist()"><button (click)="more()">More Campaigns</button></p>
 </div>
 
 <div *ngIf="filterError">
