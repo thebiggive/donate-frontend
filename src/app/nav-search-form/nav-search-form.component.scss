@@ -2,12 +2,10 @@
   padding: 1rem;
   padding-bottom: 0;
   width: calc(100% - 2rem);
-  max-width: 300px;
 
   .mat-form-field {
     width: calc(100% - 31px);
-
-    @media screen and (min-width: 768px) {
+    @media (min-width: 960px) {
       width: 200px;
     }
   }
