@@ -62,7 +62,7 @@
           <mat-expansion-panel expanded="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <h3 id="optInCharityEmail-label">Contact</h3>
+                <h3 id="optInCharityEmail-label">Contact from charity</h3>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <p><strong>Would you be happy to receive emails from {{ campaign.charity.name }}?</strong></p>
@@ -73,8 +73,22 @@
               <mat-radio-button labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.charity.name }}</mat-radio-button>
             </mat-radio-group>
           </mat-expansion-panel>
-
+          
           <mat-expansion-panel expanded="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <h3 id="optInTbgEmail-label">Contact from The Big Give</h3>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p><strong>Would you be happy to receive emails from The Big Give?</strong></p>
+            <p><small>By selecting 'no', we will no longer be able to email you about opportunities to double your donation.</small></p>
+            <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
+              <mat-radio-button labelPosition="after" [value]="true">Yes, I’m happy to receive emails from The Big Give</mat-radio-button>
+              <mat-radio-button labelPosition="after" [value]="false">No, I would not like to receive emails from The Big Give</mat-radio-button>
+            </mat-radio-group>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel expanded="true" disabled="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <h3>Make your donation</h3>
