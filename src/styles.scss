@@ -76,6 +76,7 @@ $colour-red: #f0423b;
 $colour-teal-lighter: #6ADDC0;
 $colour-teal: #00838f;
 $colour-teal-dark: #00707C;
+$colour-teal-darker: #006672;
 $colour-teal-fade: #E0F0F2;
 $colour-grey: #7B8292;
 
@@ -95,6 +96,9 @@ $breakpoint-xl: "(min-width: 1280px)";
 @mixin size-xl {
   font-size: 21px;
 }
+@mixin size-xxl {
+  font-size: 28px;
+}
 
 
 body, html {
@@ -107,4 +111,20 @@ body, html {
 
 a {
   color: mat-color($donate-accent);
+}
+
+
+
+.back-button {
+  color: $colour-teal;
+  margin-left: 0.75rem;
+  margin-bottom: 0.75rem;
+  .mat-icon-button {
+    font-weight: 400;
+  }
+  .mat-icon {
+    font-size: 1rem;
+    line-height: 23px;
+    width: 1rem;
+  }
 }
