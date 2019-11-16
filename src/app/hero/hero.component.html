@@ -1,15 +1,17 @@
 <div [class]="'hero ' + (webp ? 'webp-bg' : 'nowebp-bg')">
-  <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center">
-    <div class="hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
-      <div fxLayout="column">
-        <h1>{{ title }}</h1>
+  <div class="hero__content">
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center">
+      <div class="hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
+        <div fxLayout="column">
+          <h1>{{ title }}</h1>
+        </div>
+        <div fxLayout="column">
+          <h2>{{ description }}</h2>
+        </div>
       </div>
-      <div fxLayout="column">
-        <h2>{{ description }}</h2>
+      <div class="hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
+        <app-campaign-search-form (search)="search($event)"></app-campaign-search-form>
       </div>
-    </div>
-    <div class="hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
-      <app-campaign-search-form (search)="search($event)"></app-campaign-search-form>
     </div>
   </div>
 </div>
