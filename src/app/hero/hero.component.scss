@@ -56,16 +56,23 @@ h1 {
   line-height: 1.2;
   @media #{$breakpoint-md} {
     font-size: 35px;
-   }
+  }
   @media #{$breakpoint-lg} {
     font-size: 45px;
-   }
+  }
+  @media #{$breakpoint-xl} {
+    font-size: 60px;
+  }
 }
 
 h2 {
   font-size: 18px;
   margin-top: 1rem;
   font-weight: 400;
+  line-height:1.5;
+  @media #{$breakpoint-xl} {
+    font-size: 24px;
+  }
 }
 
 app-campaign-search-form {

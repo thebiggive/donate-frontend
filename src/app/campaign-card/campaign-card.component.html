@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card">  
   <div
     class="banner-container"
     [ngStyle]="{'background-image':' url(' + campaign.imageUri + ')'}"
@@ -32,6 +32,7 @@
     <button
       mat-icon-button
       color="accent"
+      class="more-button"
       [routerLink]="'/campaign/' + campaign.id"
     >
       More info

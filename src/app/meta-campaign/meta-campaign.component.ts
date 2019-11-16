@@ -87,7 +87,7 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   cols(): number {
-    return Math.min(3, Math.floor(this.viewportWidth / 300)); // Min 300px per col; up to 3 cols
+    return Math.min(5, Math.floor(this.viewportWidth / 300)); // Min 300px per col; up to 3 cols
   }
 
   /**

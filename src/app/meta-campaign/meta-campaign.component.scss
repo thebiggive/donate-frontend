@@ -11,3 +11,11 @@ mat-grid-list {
 .error {
   color: mat-color($donate-warn);
 }
+
+app-campaign-card {
+  height:100%;
+}
+
+.mat-grid-tile {
+  overflow:visible;
+}
