@@ -110,6 +110,67 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
   font-size: 48px;
 }
 
+@mixin make-container {
+  margin:0 15px;
+  @media #{$breakpoint-lg} {
+    margin:0 30px;
+  }
+  @media #{$breakpoint-xl} {
+    max-width: 1220px;
+    margin:0 auto;
+  }
+}
+@mixin make-container-small {
+  margin:0 15px;
+  @media #{$breakpoint-md} {
+    margin:0 30px;
+  }
+  @media #{$breakpoint-lg} {
+    margin:0 60px;
+  }
+  @media #{$breakpoint-xl} {
+    max-width: 1150px;
+    margin:0 auto;
+  }
+}
+@mixin make-donate-button {
+  padding: 0.5rem 2rem;
+  background-color: $colour-teal-lighter;
+  color: $colour-teal-dark;
+  border-radius: 4px;
+  font-size:18px;
+  box-shadow:none !important;
+}
+@mixin make-back-button {
+  color: $colour-teal;
+  margin-bottom: 1rem;
+  .mat-icon-button {
+    font-weight: 400;
+  }
+  .mat-icon {
+    font-size: 1rem;
+    line-height: 23px;
+    width: 1rem;
+  }
+}
+@mixin make-card($box-shadow: $box-shadow-soft) {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow:$box-shadow;
+}
+@mixin make-card-banner {
+  height: 110px;
+  border-radius:4px 4px 0 0;
+  background-size:cover;
+  background-position:center center;
+}
+@mixin size-xxl {
+  font-size: 34px;
+}
+@mixin size-xxxl {
+  font-size: 48px;
+}
+
 @mixin rt-sm {
   font-size: 11px;
   line-height: 14px;
@@ -175,29 +236,7 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
   @include rt-3;
 }
 
-@mixin make-container {
-  margin:0 15px;
-  @media #{$breakpoint-lg} {
-    margin:0 30px;
-  }
-  @media #{$breakpoint-xl} {
-    max-width: 1220px;
-    margin:0 auto;
-  }
-}
-@mixin make-container-small {
-  margin:0 15px;
-  @media #{$breakpoint-md} {
-    margin:0 30px;
-  }
-  @media #{$breakpoint-lg} {
-    margin:0 60px;
-  }
-  @media #{$breakpoint-xl} {
-    max-width: 1150px;
-    margin:0 auto;
-  }
-}
+
 @mixin make-primary-column {
   @media #{$breakpoint-md} {
     width:calc(100% - 270px);
@@ -242,17 +281,6 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
     width: 1rem;
   }
 }
-@mixin make-card($box-shadow: $box-shadow-soft) {
-  background-color: white;
-  border-radius: 4px;
-  box-shadow:$box-shadow;
-}
-@mixin make-card-banner {
-  height: 110px;
-  border-radius:4px 4px 0 0;
-  background-size:cover;
-  background-position:center center;
-}
 
 
 body, html {
@@ -267,6 +295,29 @@ a {
   color: mat-color($donate-accent);
 }
 
+.mat-menu-trigger {
+  cursor:pointer;
+}
+
+.mat-menu-content {
+  ul {
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+  li {
+    display:block;
+    a {
+      display:block;
+      text-align:left;
+    }
+  }
+}
+
+.mat-ripple {
+  display:none;
+}
+
 // Style Material Componenets here due to ViewEncapsulation
 mat-progress-bar {
   .mat-progress-bar-background {
@@ -279,7 +330,7 @@ mat-progress-bar {
     background: $colour-teal;
     opacity:0.24;
   }
-} 
+}
 
 mat-radio-button {
   margin-bottom:1rem;
@@ -300,13 +351,13 @@ mat-expansion-panel {
   .mat-expansion-panel-header[aria-disabled=true] {
     color: inherit;
   }
-  
+
   .mat-expansion-panel-body {
     padding:0 1rem 1rem;
     @media #{$breakpoint-lg} {
       padding:0 2rem 2rem;
     }
-  }  
+  }
 }
 
 mat-form-field {
