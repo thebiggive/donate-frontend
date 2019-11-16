@@ -19,6 +19,10 @@
     </div>
   
     <div class="page-body">
+      <div *ngIf="campaign">
+        <img [src]="campaign.bannerUri">
+      </div>
+
       <h3>Your donation of <strong>{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong> has been made.</h3>
       <h3>That's worth <strong>{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</strong> to {{ donation.charityName }}.</h3>
       <p>{{ campaign.summary }}</p>
