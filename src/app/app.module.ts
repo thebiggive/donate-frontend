@@ -17,7 +17,6 @@ import {
   MatRadioModule,
   MatSelectModule,
   MatSidenavModule,
-  MatSlideToggleModule,
   MatToolbarModule,
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';

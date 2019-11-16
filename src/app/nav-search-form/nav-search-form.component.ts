@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-nav-search-form',
   templateUrl: './nav-search-form.component.html',
-  styleUrls: ['./nav-search-form.component.scss']
+  styleUrls: ['./nav-search-form.component.scss'],
 })
 export class NavSearchFormComponent implements OnInit {
   public searchForm: FormGroup;
@@ -25,8 +25,6 @@ export class NavSearchFormComponent implements OnInit {
   }
 
   public search() {
-    let url = `/search?term=${this.searchForm.value.term}`;
-
-    this.router.navigateByUrl(url);
+    this.router.navigateByUrl(`/search?term=${this.searchForm.value.term}`);
   }
 }

@@ -1,6 +1,6 @@
 <mat-toolbar class="main-nav-toolbar">
   <div class="logo__wrap">
-    <a (click)="sidenav.close()" routerLink="/" class="logo__link"><img class="logo" src="/assets/logo.png" alt="The Big Give"></a>
+    <a (click)="sidenav.close()" class="logo__link"><img class="logo" src="/assets/logo.png" alt="The Big Give"></a>
   </div>
   <div class="main-nav">
     <div class="nav-links__wrap">
@@ -11,14 +11,14 @@
         </button>
         <mat-menu #about="matMenu">
           <ul>
-            <li><a mat-button class="nav-link" [routerLink]="'/'">The Big Give</a></li>
-            <li><a mat-button class="nav-link" [routerLink]="'/'">Our story</a></li>
-            <li><a mat-button class="nav-link" [routerLink]="'/'">Team</a></li>
-            <li><a mat-button class="nav-link" [routerLink]="'/'">Press</a></li>
-            <li><a mat-button class="nav-link" [routerLink]="'/'">Our fees</a></li>
-            <li><a mat-button class="nav-link" [routerLink]="'/'">Privacy policy</a></li>
-            <li><a mat-button class="nav-link" [routerLink]="'/'">Cookie policy</a></li>
-            <li><a mat-button class="nav-link" [routerLink]="'/'">Terms and conditions</a></li>
+            <li><a mat-button class="nav-link" href="#">The Big Give</a></li>
+            <li><a mat-button class="nav-link" href="#">Our story</a></li>
+            <li><a mat-button class="nav-link" href="#">Team</a></li>
+            <li><a mat-button class="nav-link" href="#">Press</a></li>
+            <li><a mat-button class="nav-link" href="#">Our fees</a></li>
+            <li><a mat-button class="nav-link" href="#">Privacy policy</a></li>
+            <li><a mat-button class="nav-link" href="#">Cookie policy</a></li>
+            <li><a mat-button class="nav-link" href="#">Terms and conditions</a></li>
           </ul>
         </mat-menu>
       </div>
@@ -29,25 +29,25 @@
         </button>
         <mat-menu #howcanwehelp="matMenu">
           <ul>
-            <li><a mat-button class="nav-link" [routerLink]="'/'">Charities</a></li>
-            <li><a mat-button class="nav-link" [routerLink]="'/'">Philanthropists</a></li>
-            <li><a mat-button class="nav-link" [routerLink]="'/'">Individuals</a></li>
-            <li><a mat-button class="nav-link" [routerLink]="'/'">Christmas Challenge</a></li>
+            <li><a mat-button class="nav-link" href="#">Charities</a></li>
+            <li><a mat-button class="nav-link" href="#">Philanthropists</a></li>
+            <li><a mat-button class="nav-link" href="#">Individuals</a></li>
+            <li><a mat-button class="nav-link" href="#">Christmas Challenge</a></li>
           </ul>    
         </mat-menu>
       </div>
       <div class="nav-links">
-        <a mat-button class="nav-link" [routerLink]="'/'">Explore campaigns</a>
+        <a mat-button class="nav-link" href="#">Explore campaigns</a>
       </div>
       <div class="nav-links">
-        <a mat-button class="nav-link" [routerLink]="'/'">Contact us</a>
+        <a mat-button class="nav-link" href="#">Contact us</a>
       </div>
     </div>
     <!-- <div class="main-nav__search-form">
       <app-nav-search-form></app-nav-search-form>
     </div> -->
     <div class="charity-login__wrap">
-      <a mat-button class="charity-login__link" [routerLink]="'/'">Charity login</a>
+      <a mat-button class="charity-login__link" href="#">Charity login</a>
     </div>
   </div>
   <div class="side-nav-button__wrap">
@@ -67,13 +67,13 @@
     (closed)="events.push('close!')">
     <!-- <app-nav-search-form></app-nav-search-form> -->
     <mat-nav-list class="mat-nav-list nav-links__wrap">
-      <a class="nav-links__link" mat-list-item (click)="sidenav.close()" [routerLink]="'/link'">About</a>
-      <a class="nav-links__link" mat-list-item (click)="sidenav.close()" [routerLink]="'/link'">How we help</a>
-      <a class="nav-links__link" mat-list-item (click)="sidenav.close()" [routerLink]="'/link'">Explore campaigns</a>
-      <a class="nav-links__link" mat-list-item (click)="sidenav.close()" [routerLink]="'/link'">Contact us</a>
+      <a class="nav-links__link" mat-list-item (click)="sidenav.close()" href="#">About</a>
+      <a class="nav-links__link" mat-list-item (click)="sidenav.close()" href="#">How we help</a>
+      <a class="nav-links__link" mat-list-item (click)="sidenav.close()" href="#">Explore campaigns</a>
+      <a class="nav-links__link" mat-list-item (click)="sidenav.close()" href="#">Contact us</a>
     </mat-nav-list>
     <mat-nav-list class="mat-nav-list charity-login__wrap">
-      <a class="charity-login__link" mat-list-item (click)="sidenav.close()" [routerLink]="'/link'">Charity Login</a>
+      <a class="charity-login__link" mat-list-item (click)="sidenav.close()" href="#">Charity Login</a>
     </mat-nav-list>
   </mat-sidenav>
 

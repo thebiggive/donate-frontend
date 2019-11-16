@@ -1,4 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule, MatListModule, MatMenuModule, MatSidenavModule, MatToolbarModule } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { NavigationComponent } from './navigation.component';
 
@@ -8,7 +11,16 @@ describe('NavigationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NavigationComponent ]
+      declarations: [ NavigationComponent ],
+      imports: [
+        MatIconModule,
+        MatListModule,
+        MatMenuModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        NoopAnimationsModule,
+        RouterTestingModule,
+      ],
     })
     .compileComponents();
   }));
