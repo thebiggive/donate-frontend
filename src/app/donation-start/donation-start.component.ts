@@ -28,7 +28,7 @@ export class DonationStartComponent implements OnInit {
   public campaign: Campaign;
   public donationForm: FormGroup;
   public retrying = false;
-  public suggestedAmounts = [50, 200, 500];
+  public suggestedAmounts = [30, 100, 250];
   public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
   public validationError = false;         // Internal Angular app form validation error

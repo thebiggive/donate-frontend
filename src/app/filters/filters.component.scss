@@ -1,0 +1,27 @@
+.filters {
+  margin: 1rem;
+  display: flex;
+  overflow-x: scroll;
+  @media (min-width: 960px) {
+    justify-content: center;
+  }
+}
+
+mat-form-field {
+  margin-right: 1rem;
+  &:last-child {
+    margin-right: 0;
+  }
+  @media (min-width: 960px) {
+    margin-right: 0.5rem;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+  @media (min-width: 1280px) {
+    margin-right: 1rem;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

@@ -34,6 +34,7 @@ import { SearchResultsComponent } from './search-results/search-results.componen
 import { TimeLeftPipe } from './time-left.pipe';
 import { HeroComponent } from './hero/hero.component';
 import { CampaignDetailsCardComponent } from './campaign-details-card/campaign-details-card.component';
+import { FiltersComponent } from './filters/filters.component';
 
 @NgModule({
   declarations: [
@@ -46,8 +47,10 @@ import { CampaignDetailsCardComponent } from './campaign-details-card/campaign-d
     DonationStartErrorDialogComponent,
     DonationStartMatchConfirmDialogComponent,
     DonationStartOfferReuseDialogComponent,
-    SearchResultsComponent,
+    FiltersComponent,
+    HeroComponent,
     MetaCampaignComponent,
+    SearchResultsComponent,
     TimeLeftPipe,
     HeroComponent,
     CampaignDetailsCardComponent,

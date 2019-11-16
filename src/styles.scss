@@ -99,6 +99,7 @@ $breakpoint-xl: "(min-width: 1280px)";
 
 body, html {
   margin: 0;
+  background-color: #F4F4F4;
   font-family: mat-font-family($app-typography);
   font-size: mat-font-size($app-typography, body-2);
   line-height: mat-line-height($app-typography, body-2);
