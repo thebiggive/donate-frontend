@@ -1,11 +1,11 @@
 @import '../../styles';
 
-app-campaign-card {
-  width: 100%;
+.card-section {
+  @include make-container;
 }
 
-mat-grid-list {
-  margin: 1rem;
+app-campaign-card {
+  width: 100%;
 }
 
 .error {
