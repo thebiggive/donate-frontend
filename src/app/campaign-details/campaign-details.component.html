@@ -1,6 +1,6 @@
 <div class="details" *ngIf="campaign">
   <div class="listing-button">
-    <button mat-icon-button class="listing-button__button" [routerLink]="'/'">
+    <button mat-icon-button class="listing-button__button" [routerLink]="'/christmas-challenge-2019'">
       <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Example home icon">keyboard_arrow_left</mat-icon>
       Back to listing
     </button>
@@ -10,7 +10,7 @@
     <div class="campaign-header">
       <h4 class="charity-name">{{ campaign.charity.name }}</h4>
       <h3 class="campaign-title">{{ campaign.title }}</h3>
-      <p>{{campaign.summary}}</p>
+      <p class="campaign-description">{{campaign.summary}}</p>
       <button mat-raised-button class="donate-button" [routerLink]="'/donate/' + campaign.id">
         Donate
       </button>
@@ -20,14 +20,14 @@
       <app-campaign-details-card [campaign]="campaign"></app-campaign-details-card>
     </div>
   </div>
-
+  
   <div *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" fxLayout="row">
     <div class="campaign-tabs">
-      <mat-tab-group animationDuration="0ms">
+      <mat-tab-group animationDuration="0ms" color="accent">
         <mat-tab *ngIf="campaign.budgetDetails.length > 0" label="Where's the money going?">
           <ul *ngFor="let detail of campaign.budgetDetails">
-            <li>Amount: {{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</li>
-            <li>Description: {{ detail.description }}</li>
+            <li><h4>{{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</h4></li>
+            <li>{{ detail.description }}</li>
           </ul>
         </mat-tab>
         <mat-tab *ngIf="campaign.alternativeFundUse" label="Understanding the Target">

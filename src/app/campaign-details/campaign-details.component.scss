@@ -7,42 +7,77 @@
 // }
 
 .details {
-  padding: 2rem;
-  overflow: hidden;
+  @include make-container;
 }
 
-mat-progress-bar {
-  background: black;
-  height: 6px;
+.listing-button__button {
+  @include make-back-button;
 }
 
 .campaign-header {
-  @media (min-width: 600px) {
-    max-width: 50%;
+  @include make-primary-column;
+}
+
+.charity-name {
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+  color: $colour-grey;
+  font-size: 1rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.campaign-title {
+  margin: 0 0 1rem;
+  color: $colour-teal-dark;
+  font-weight:600;
+  @include size-xxl;
+  @media #{$breakpoint-md} {
+    @include size-xxxl;
   }
-  @media (min-width: 960px) {
-    max-width: 70%;
+  line-height:1.2;
+}
+
+.campaign-description {
+  @include size-lg;
+  @media #{$breakpoint-md} {
+    font-size: 24px;
   }
+  margin-bottom:2rem;
+  line-height:1.5;
+}
+
+.donate-button {
+  @include make-donate-button;
 }
 
 .campaign-card {
-  @media (min-width: 600px) {
-    width: 50%;
-  }
-  @media (min-width: 960px) {
-    max-width: 30%;
-  }
+  @include make-secondary-column;
 }
 
 .campaign-tabs {
-  @media (min-width: 600px) {
+  @media #{$breakpoint-md} {
     max-width: 50%;
   }
-  @media (min-width: 960px) {
+  @media #{$breakpoint-xl} {
     max-width: 70%;
   }
 }
 
 .campaign-tabs {
   overflow-x: scroll;
+}
+
+mat-tab-group {
+  margin-top:2rem;
+  ul {
+    list-style:none;
+    margin-left:0;
+    padding-left:15px;
+  }
+  h4 {
+    font-weight:500;
+    margin-bottom:0;
+  }
 }
