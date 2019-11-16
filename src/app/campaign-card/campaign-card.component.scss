@@ -6,26 +6,14 @@
 // grow to a height that breaks the layout.
 
 .card {
+  @include make-card;
   display:flex;
   flex-direction:column;
-  background-color: white;
-  border-radius: 4px;
-  box-shadow: $box-shadow;
   height:100%;
 }
 
 .banner-container {
-  height: 110px;
-  overflow: hidden;
-  background-size:cover;
-  background-position:center center;
-  border-radius:4px 4px 0 0;
-}
-
-@media (max-width: 800px) {
-  .banner-container {
-    height: 80px;
-  }
+  @include make-card-banner;
 }
 
 .buttons {
@@ -130,13 +118,9 @@ p {
 }
 
 .donate-button {
-  padding: 0.5rem 2rem;
-  background-color: $colour-teal-lighter;
-  color: $colour-teal-dark;
-  border-radius: 4px;
-  font-size:18px;
-  box-shadow:none !important;
+  @include make-donate-button;
 }
+
 .more-button {
   font-size:18px !important;
 }
