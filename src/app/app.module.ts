@@ -8,17 +8,17 @@ import {
   MatCardModule,
   MatDialogModule,
   MatGridListModule,
+  MatIconModule,
   MatInputModule,
+  MatListModule,
+  MatMenuModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
   MatRadioModule,
   MatSelectModule,
-  MatSlideToggleModule,
-  MatIconModule,
-  MatToolbarModule,
   MatSidenavModule,
-  MatListModule,
-  MatMenuModule,
+  MatSlideToggleModule,
+  MatToolbarModule,
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,12 +33,13 @@ import { DonationStartComponent } from './donation-start/donation-start.componen
 import { DonationStartErrorDialogComponent } from './donation-start/donation-start-error-dialog.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
-import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
-import { SearchResultsComponent } from './search-results/search-results.component';
-import { TimeLeftPipe } from './time-left.pipe';
+import { FiltersComponent } from './filters/filters.component';
 import { HeroComponent } from './hero/hero.component';
+import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { NavSearchFormComponent } from './nav-search-form/nav-search-form.component';
+import { SearchResultsComponent } from './search-results/search-results.component';
+import { TimeLeftPipe } from './time-left.pipe';
 
 @NgModule({
   declarations: [
@@ -51,12 +52,13 @@ import { NavSearchFormComponent } from './nav-search-form/nav-search-form.compon
     DonationStartErrorDialogComponent,
     DonationStartMatchConfirmDialogComponent,
     DonationStartOfferReuseDialogComponent,
-    SearchResultsComponent,
-    MetaCampaignComponent,
-    TimeLeftPipe,
+    FiltersComponent,
     HeroComponent,
+    MetaCampaignComponent,
     NavigationComponent,
     NavSearchFormComponent,
+    SearchResultsComponent,
+    TimeLeftPipe,
   ],
   entryComponents: [
     DonationStartErrorDialogComponent,
@@ -67,24 +69,24 @@ import { NavSearchFormComponent } from './nav-search-form/nav-search-form.compon
     BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
     AppRoutingModule,
     BrowserAnimationsModule,
+    FlexLayoutModule,
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
+    MatCarouselModule.forRoot(),
     MatDialogModule,
     MatGridListModule,
-    MatInputModule,
-    MatProgressBarModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatProgressSpinnerModule,
-    ReactiveFormsModule,
-    FlexLayoutModule,
-    MatCarouselModule,
     MatIconModule,
-    MatToolbarModule,
-    MatSidenavModule,
+    MatInputModule,
     MatListModule,
     MatMenuModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
