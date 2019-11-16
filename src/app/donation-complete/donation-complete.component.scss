@@ -1,0 +1,65 @@
+@import '../../styles';
+
+.donate-complete {
+  @include make-container;
+}
+
+.page-body {
+  @include make-card($box-shadow-hard);
+}
+
+.page-body-margin {
+  margin: 1rem;
+}
+
+img {
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+h3 {
+  font-weight: 400;
+  color: $colour-teal-darker;
+  @include size-xl;
+}
+
+.receipt {
+  border-top: 1px solid $colour-grey-light;
+  border-bottom: 1px solid $colour-grey-light;
+  margin-top: 2rem;
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  color: $colour-grey;
+  h3 {
+    font-weight: 700;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  h4 {
+    margin-top: 0.25rem;
+  }
+  p {
+    margin: 0;
+    small {
+      font-size: 12px;
+    }
+  }
+}
+
+.small-p {
+  line-height: 1;
+}
+
+.mat-button {
+  background-color: #F4F4F4;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  img {
+    width: 80px;
+    margin-top: 0;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
+}
