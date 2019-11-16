@@ -2,6 +2,13 @@
 
 @include mat-core();
 
+body {
+  background-color: #F4F4F4;
+}
+
+$colour-red: #f0423b;
+$colour-teal: #00838f;
+
 $tbg-red: (
   500: #f0423b,
   800: #c1211a,
@@ -195,6 +202,29 @@ body, html {
 
 a {
   color: mat-color($donate-accent);
+}
+
+.mat-menu-trigger {
+  cursor:pointer;
+}
+
+.mat-menu-content {
+  ul {
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+  li {
+    display:block;
+    a {
+      display:block;
+      text-align:left;
+    }
+  }
+}
+
+.mat-ripple {
+  display:none;
 }
 
 // Style Material Componenets here due to ViewEncapsulation
