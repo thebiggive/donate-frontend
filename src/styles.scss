@@ -87,6 +87,9 @@ $colour-grey: #7B8292;
 $breakpoint-md: "(min-width: 600px)";
 $breakpoint-lg: "(min-width: 960px)";
 $breakpoint-xl: "(min-width: 1280px)";
+$box-shadow-soft: 0px 11px 15px rgba(0, 0, 0, 0.05), 0px 9px 46px rgba(0, 0, 0, 0.05), 0px 24px 38px rgba(0, 0, 0, 0.05);
+$box-shadow: $box-shadow-soft;
+$box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
 
 
 // Custom mixins
@@ -101,22 +104,61 @@ $breakpoint-xl: "(min-width: 1280px)";
   font-size: 21px;
 }
 @mixin size-xxl {
-  font-size: 28px;
+  font-size: 34px;
+}
+@mixin size-xxxl {
+  font-size: 48px;
 }
 
 @mixin make-container {
   margin:0 15px;
+  @media #{$breakpoint-lg} {
+    margin:0 30px;
+  }
   @media #{$breakpoint-xl} {
-    max-width: 1250px;
+    max-width: 1220px;
     margin:0 auto;
   }
 }
+@mixin make-container-small {
+  margin:0 15px;
+  @media #{$breakpoint-md} {
+    margin:0 30px;
+  }
+  @media #{$breakpoint-lg} {
+    margin:0 60px;
+  }
+  @media #{$breakpoint-xl} {
+    max-width: 1150px;
+    margin:0 auto;
+  }
+}
+@mixin make-primary-column {
+  @media #{$breakpoint-md} {
+    width:calc(100% - 330px);
+    padding-right:15px;
+  }
+  @media #{$breakpoint-lg} {
+    padding-right:10%;
+  }
+  @media #{$breakpoint-xl} {
+    padding-right:15%;
+  }
+}
+@mixin make-secondary-column {
+  margin-top:1rem;
+  @media #{$breakpoint-md} {
+    margin-top:0;
+    width: 330px;
+  }
+}
 @mixin make-donate-button {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding: 0.5rem 2rem;
   background-color: $colour-teal-lighter;
   color: $colour-teal-dark;
   border-radius: 4px;
+  font-size:18px;
+  box-shadow:none !important;
 }
 @mixin make-back-button {
   color: $colour-teal;
@@ -129,6 +171,17 @@ $breakpoint-xl: "(min-width: 1280px)";
     line-height: 23px;
     width: 1rem;
   }
+}
+@mixin make-card($box-shadow: $box-shadow-soft) {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow:$box-shadow;
+}
+@mixin make-card-banner {
+  height: 110px;
+  border-radius:4px 4px 0 0;
+  background-size:cover;
+  background-position:center center;
 }
 
 
@@ -143,3 +196,17 @@ body, html {
 a {
   color: mat-color($donate-accent);
 }
+
+// Style Material Componenets here due to ViewEncapsulation
+mat-progress-bar {
+  .mat-progress-bar-background {
+    display:none !important;
+  }
+  .mat-progress-bar-fill::after {
+    background: $colour-teal-dark;
+  }
+  .mat-progress-bar-buffer {
+    background: $colour-teal;
+    opacity:0.24;
+  }
+} 
