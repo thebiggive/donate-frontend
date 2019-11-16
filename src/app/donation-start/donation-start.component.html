@@ -1,18 +1,18 @@
 <div class="donate-start" *ngIf="campaign" fxLayout="row" fxLayout.xs="column" fxLayout.sm="column">
   <div>
-    <div class="campaign-button">
-      <button mat-icon-button class="campaign-button__button" [routerLink]="'/'">
-        <mat-icon class="campaign-button__icon" aria-hidden="false" aria-label="Example home icon">keyboard_arrow_left</mat-icon>
+    <div class="back-button">
+      <button mat-icon-button class="back-button__button" [routerLink]="'/'">
+        <mat-icon class="back-button__icon" aria-hidden="false" aria-label="Bac button">keyboard_arrow_left</mat-icon>
         Back to campaign
       </button>
     </div>
 
     <div class="page-header">
-      <p>You are donating to</p>
+      <h3>You are donating to:</h3>
       <h1>{{ campaign.charity.name }}!</h1>
-      <p>For the</p>
+      <h3>For the:</h3>
       <h2>{{ campaign.title }}</h2>
-      <p>{{ campaign.summary }}</p>
+      <p class="campaign-summary">{{ campaign.summary }}</p>
     </div>
 
     <form (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaign">
