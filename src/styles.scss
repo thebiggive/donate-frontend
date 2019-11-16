@@ -2,13 +2,6 @@
 
 @include mat-core();
 
-body {
-  background-color: #F4F4F4;
-}
-
-$colour-red: #f0423b;
-$colour-teal: #00838f;
-
 $tbg-red: (
   500: #f0423b,
   800: #c1211a,
@@ -140,25 +133,6 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
     margin:0 auto;
   }
 }
-@mixin make-primary-column {
-  @media #{$breakpoint-md} {
-    width:calc(100% - 330px);
-    padding-right:15px;
-  }
-  @media #{$breakpoint-lg} {
-    padding-right:10%;
-  }
-  @media #{$breakpoint-xl} {
-    padding-right:15%;
-  }
-}
-@mixin make-secondary-column {
-  margin-top:1rem;
-  @media #{$breakpoint-md} {
-    margin-top:0;
-    width: 330px;
-  }
-}
 @mixin make-donate-button {
   padding: 0.5rem 2rem;
   background-color: $colour-teal-lighter;
@@ -189,6 +163,123 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
   border-radius:4px 4px 0 0;
   background-size:cover;
   background-position:center center;
+}
+@mixin size-xxl {
+  font-size: 34px;
+}
+@mixin size-xxxl {
+  font-size: 48px;
+}
+
+@mixin rt-sm {
+  font-size: 11px;
+  line-height: 14px;
+  @media #{$breakpoint-lg} {
+    font-size: 14px;
+    line-height: 20px
+  }
+}
+
+@mixin rt-0 {
+  font-size: 14px;
+  line-height: 20px;
+  @media #{$breakpoint-lg} {
+    font-size: 18px;
+    line-height: 27px;
+  }
+}
+
+@mixin rt-1 {
+  font-size: 18px;
+  line-height: 21px;
+  @media #{$breakpoint-lg} {
+    font-size: 24px;
+    line-height: 36px;
+  }
+}
+
+@mixin rt-2 {
+  font-size: 24px;
+  line-height: 36px;
+  @media #{$breakpoint-lg} {
+    font-size: 34px;
+    line-height: 40px;
+  }
+}
+
+@mixin rt-3 {
+  font-size: 34px;
+  line-height: 41px;
+  @media #{$breakpoint-lg} {
+    font-size: 48px;
+    line-height: 56px;
+  }
+}
+
+.rt-sm {
+  @include rt-sm;
+}
+
+.rt-0 {
+  @include rt-0;
+}
+
+.rt-1 {
+  @include rt-1;
+}
+
+.rt-2 {
+  @include rt-2;
+}
+
+.rt-3 {
+  @include rt-3;
+}
+
+
+@mixin make-primary-column {
+  @media #{$breakpoint-md} {
+    width:calc(100% - 270px);
+    padding-right:15px;
+  }
+  @media #{$breakpoint-lg} {
+    width:calc(100% - 330px);
+    padding-right:10%;
+  }
+  @media #{$breakpoint-xl} {
+    padding-right:15%;
+  }
+}
+@mixin make-secondary-column {
+  margin-top:1rem;
+  @media #{$breakpoint-md} {
+    margin-top:0;
+    width: 270px;
+  }
+  @media #{$breakpoint-lg} {
+    margin-top:0;
+    width: 330px;
+  }
+}
+@mixin make-donate-button {
+  padding: 0.5rem 2rem;
+  background-color: $colour-teal-lighter;
+  color: $colour-teal-dark;
+  border-radius: 4px;
+  font-size:18px;
+  box-shadow:none !important;
+}
+@mixin make-back-button {
+  color: $colour-teal;
+  margin-bottom: 1rem;
+  .mat-icon-button {
+    font-weight: 400;
+  }
+  .mat-icon {
+    font-size: 1rem;
+    line-height: 23px;
+    width: 1rem;
+  }
 }
 
 
@@ -238,5 +329,39 @@ mat-progress-bar {
   .mat-progress-bar-buffer {
     background: $colour-teal;
     opacity:0.24;
+  }
+}
+
+mat-radio-button {
+  margin-bottom:1rem;
+  .mat-radio-label {
+    white-space:initial;
+    @include rt-0;
+  }
+}
+
+mat-expansion-panel {
+  .mat-expansion-panel-header {
+    padding: 0 1rem;
+    @media #{$breakpoint-lg} {
+      padding:1rem 2rem 0;
+    }
+  }
+
+  .mat-expansion-panel-header[aria-disabled=true] {
+    color: inherit;
+  }
+
+  .mat-expansion-panel-body {
+    padding:0 1rem 1rem;
+    @media #{$breakpoint-lg} {
+      padding:0 2rem 2rem;
+    }
+  }
+}
+
+mat-form-field {
+  .mat-form-field-label {
+    @include rt-0;
   }
 }
