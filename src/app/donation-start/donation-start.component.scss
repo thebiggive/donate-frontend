@@ -1,6 +1,7 @@
 @import '../../styles';
 
 .donate-start {
+  padding: 0.75rem;
   @media (min-width: 960px) {
     &:first-child {
       width: 60%;
@@ -11,6 +12,48 @@
   }
 }
 
+.back-button {
+  color: $colour-teal;
+  margin-left: 0.75rem;
+  margin-bottom: 0.75rem;
+  .mat-icon-button {
+    font-weight: 400;
+  }
+  .mat-icon {
+    font-size: 1rem;
+    line-height: 23px;
+    width: 1rem;
+  }
+}
+
+.page-header {
+  color: $colour-teal-darker;
+  h3,
+  p {
+    margin: 0;
+    margin-top: 0.25rem;
+    @include size-lg;
+    font-weight: 400;
+  }
+  h1,
+  h2 {
+    margin-top: 0.25rem;
+    @include size-xxl;
+    line-height: 1.2;
+  }
+}
+
+.campaign-summary {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+form {
+  margin-top: 2rem;
+  h3 {
+    @include size-lg;
+  }
+}
+
 .mat-expansion-panel-header[aria-disabled=true] {
   color: inherit;
 }
@@ -18,10 +61,6 @@
 .error {
   color: mat-color($donate-warn);
   margin-bottom: 1rem;
-}
-
-form {
-  padding: 2em;
 }
 
 mat-form-field, mat-radio-group {
