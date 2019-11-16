@@ -22,14 +22,11 @@
   p {
     margin: 0;
     margin-top: 0.25rem;
-    @include size-lg;
     font-weight: 400;
   }
   h1,
   h2 {
     margin-top: 0.25rem;
-    @include size-xxl;
-    line-height: 1.2;
   }
 }
 
@@ -39,9 +36,7 @@
 
 form {
   margin: 2rem auto;
-  max-width: 440px;
   h3 {
-    @include size-lg;
     color: $colour-teal-darker;
   }
 }
@@ -64,18 +59,6 @@ form {
   margin-top: 0;
 }
 
-.mat-expansion-panel-header {
-  padding: 0 1rem;
-}
-
-.mat-expansion-panel-header[aria-disabled=true] {
-  color: inherit;
-}
-
-.mat-expansion-panel-body {  // Not working
-  padding: 0 1rem 1rem;
-}
-
 .mat-form-field {
   max-width: 200px;
   margin: 0 auto;
@@ -89,6 +72,8 @@ form {
   border: none;
   border-radius: 4px;
   margin-right: 0.5rem;
+  color:$colour-teal;
+  @include rt-2;
   &:last-child {
     margin-right: 0;
   }
@@ -123,7 +108,7 @@ a {
   p {
     margin: 0;
     small {
-      font-size: 65%;
+      font-size: 12px;
     }
   }
   .mat-icon {
@@ -135,7 +120,8 @@ a {
 }
 
 .donation-receipt {
-  padding-bottom: 0.5rem;
+  margin-top:1rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid $colour-grey-light;
   .strong-p {
     margin-top: 0.25rem;
@@ -163,6 +149,11 @@ a {
     color: $colour-grey;
     margin: 0;
   }
+}
+
+.donation-summary {
+  max-width:300px;
+  margin:1rem auto;
 }
 
 .mat-raised-button[_ngcontent-donate-frontend-c1]:not([class*=mat-elevation-z]) {
