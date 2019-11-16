@@ -22,27 +22,35 @@ mat-sidenav {
   justify-content: space-between;
   padding-left: 1rem;
   padding-right: 1rem;
-  box-shadow: 0px 5px 4px rgba(0, 0, 0, 0.06);
+  &:after {
+    display:block;
+    content:"";
+    width:100%;
+    height:10px;
+    position:absolute;
+    z-index:1000;
+    top:56px;
+    background:linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.06) 100%);
+    @media #{$breakpoint-md} {
+      top:64px;
+    }
+    left:0;
+  }
+}
+
+.logo {
+  width: 150px;
+  height: auto;
 }
 
 .logo__wrap {
   margin-right: 1rem;
+  display:inline-flex;
+  justify-content:center;
 }
 
-.logo {
-  padding-top: 1.125rem;
-  width: 150px;
-
-  @media (min-width: 960px) {
-    padding-top: 1.5rem;
-    width: 125px;
-  }
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+.logo__link {
+  display:flex;
 }
 
 .material-icons {
@@ -66,14 +74,16 @@ ul {
 
 .nav-links {
   display: inline-block;
-  min-width: auto;
-  @media (min-width: 960px) and (max-width: 1280px) {
-    padding-left: 0.9rem;
-    padding-right: 0.9rem;
+  width:auto;
+  @media #{$breakpoint-md} {
+    padding-right: 1rem;
+    font-size:18px;
   }
 }
 
 .charity-login__wrap {
+  display:flex;
+  align-items: center;
   .mat-button {
     @media (min-width: 960px) and (max-width: 1280px) {
       &:last-child {
@@ -90,14 +100,19 @@ ul {
 }
 
 .main-nav {
-  @media (max-width: 959px) {
+  display: none;
+  @media #{$breakpoint-lg} {
+    display:flex;
+  }
+  .nav-links__wrap {
+    display:inline-block;
+  }
+  .main-nav__search-form {
     display: none;
   }
-
-  .nav-links__wrap,
-  .charity-login__wrap,
-  .main-nav__search-form {
-    display: inline-block;
+  .mat-icon-button {
+    width:auto;
+    height:auto;
   }
 }
 
@@ -106,3 +121,4 @@ ul {
     display: none;
   }
 }
+
