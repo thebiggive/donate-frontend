@@ -8,9 +8,9 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('should display heading', () => {
+  it('should display TBG logo', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toContain('Donations');
+    expect(page.getLogoAltText()).toBe('The Big Give');
   });
 
   afterEach(async () => {

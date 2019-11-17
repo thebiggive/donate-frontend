@@ -7,13 +7,18 @@ import {
   MatButtonModule,
   MatCardModule,
   MatDialogModule,
+  MatExpansionModule,
   MatGridListModule,
   MatIconModule,
   MatInputModule,
+  MatListModule,
+  MatMenuModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
   MatRadioModule,
   MatSelectModule,
+  MatSidenavModule,
+  MatToolbarModule,
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,11 +33,13 @@ import { DonationStartComponent } from './donation-start/donation-start.componen
 import { DonationStartErrorDialogComponent } from './donation-start/donation-start-error-dialog.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
+import { FiltersComponent } from './filters/filters.component';
+import { HeroComponent } from './hero/hero.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
+import { NavigationComponent } from './navigation/navigation.component';
+import { NavSearchFormComponent } from './nav-search-form/nav-search-form.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { TimeLeftPipe } from './time-left.pipe';
-import { HeroComponent } from './hero/hero.component';
-import { FiltersComponent } from './filters/filters.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +55,8 @@ import { FiltersComponent } from './filters/filters.component';
     FiltersComponent,
     HeroComponent,
     MetaCampaignComponent,
+    NavigationComponent,
+    NavSearchFormComponent,
     SearchResultsComponent,
     TimeLeftPipe,
   ],
@@ -60,20 +69,25 @@ import { FiltersComponent } from './filters/filters.component';
     BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
     AppRoutingModule,
     BrowserAnimationsModule,
+    FlexLayoutModule,
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
     MatCarouselModule.forRoot(),
     MatDialogModule,
+    MatExpansionModule,
     MatGridListModule,
     MatIconModule,
     MatInputModule,
+    MatListModule,
+    MatMenuModule,
     MatProgressBarModule,
+    MatProgressSpinnerModule,
     MatRadioModule,
     MatSelectModule,
-    MatProgressSpinnerModule,
+    MatSidenavModule,
+    MatToolbarModule,
     ReactiveFormsModule,
-    FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
