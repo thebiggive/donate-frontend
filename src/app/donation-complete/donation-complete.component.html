@@ -14,37 +14,40 @@
   </p>
 
   <div *ngIf="complete">
-    <div class="thank-you">
-      <h2>Thank you!</h2>
-    </div>
+    <h2 class="thank-you"><span>Thank you!</span></h2>
 
     <div class="page-body">
-      <h3>Your donation of <strong>{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong> has been made.</h3>
-      <h3>That's worth <strong>{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</strong> to {{ donation.charityName }}.</h3>
-      <p>{{ campaign.summary }}</p>
 
-      <div class="receipt">
-          <h3>Your receipt</h3>
-          <div fxLayout="row">
-            <div fxFlex="50">
-              <p><small>Your donation</small></p>
-              <p><strong>{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong></p>
-              <p *ngIf="donation.matchedAmount > 0"><small>Matched funds</small></p>
-              <p *ngIf="donation.matchedAmount > 0"><strong>{{ donation.matchedAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong></p>
-              <p><small>Gift Aid</small></p>
-              <p><strong>{{ giftAidAmount | currency : '£' : 'symbol' : '1.2-2' }}</strong></p>
-            </div>
-            <div fxFlex="50">
-              <p><small>Total amount {{ donation.charityName }} receive</small></p>
-              <h4><strong>{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</strong></h4>
+      <div class="page-margin">
+        <h3 class="rt-2">Your donation of <strong>{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong> has been made.</h3>
+        <h3 class="rt-2">That's worth <strong>{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</strong> to {{ donation.charityName }}.</h3>
+        <p class="rt-0">{{ campaign.summary }}</p>
+  
+        <div class="receipt">
+            <h3>Your receipt</h3>
+            <div fxLayout="row">
+              <div fxFlex="50">
+                <h4 class="rt-sm">Your donation</h4>
+                <p class="rt-1">{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
+                <h4 class="rt-sm" *ngIf="donation.matchedAmount > 0">Matched funds</h4>
+                <p class="rt-1" *ngIf="donation.matchedAmount > 0">{{ donation.matchedAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
+                <h4 class="rt-sm">Gift Aid</h4>
+                <p class="rt-1">{{ giftAidAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
+              </div>
+              <div fxFlex="50">
+                <h4 class="rt-sm">Total amount {{ donation.charityName }} receive</h4>
+                <h4 class="rt-2">{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</h4>
+              </div>
             </div>
           </div>
-      </div>
-    </div>
+        </div>
 
-    <button mat-button>
-      <p>Explore other campaigns</p>
-      <img src="/assets/logo.png" alt="The Big Give" width="200">
-    </button>
+        <button mat-button>
+          <div>
+            <p class="rt-1">Explore other campaigns</p>
+          </div>
+          <img src="/assets/logo.png" alt="The Big Give" width="200">
+        </button>
+      </div>
   </div>
 </div>
