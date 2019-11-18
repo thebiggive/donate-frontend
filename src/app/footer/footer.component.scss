@@ -50,6 +50,9 @@ li {
 .nav-link {
   padding: 0;
   min-width: auto;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .teal-nav {
