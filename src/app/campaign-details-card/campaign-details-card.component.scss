@@ -1,0 +1,39 @@
+@import '../../styles';
+
+.card {
+  @include make-card($box-shadow-hard);
+}
+
+.banner-container {
+  @include make-card-banner;
+}
+
+.card-body {
+  @include make-card-body;
+}
+
+.campaign-target {
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 20px;
+  margin: 0;
+}
+
+.campaign-target-value {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 0;
+  color:$colour-teal;
+  &.sm {
+    font-size: 18px;
+  }
+}
+
+.championed-by {
+  color:$colour-teal;
+  margin-bottom: 0;
+}
+
+mat-progress-bar {
+  margin-bottom: 15px;
+}

@@ -1,8 +1,11 @@
 import { browser, by, element } from 'protractor';
 
 export class AppPage {
-  navigateTo() {
-    return browser.get(browser.baseUrl) as Promise<any>;
+  /**
+   * @param path Path to navigate to, excluding leading slash.
+   */
+  navigateTo(path: string) {
+    return browser.get(browser.baseUrl + path) as Promise<any>;
   }
 
   getLogoAltText() {

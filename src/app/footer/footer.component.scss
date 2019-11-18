@@ -1,0 +1,135 @@
+@import '../../styles';
+
+.footer {
+  background-color: #333333;
+  color: white;
+  padding: 5rem;
+  @media screen and (min-width: 600px) {
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+  }
+}
+
+.footer-row {
+  width: 100%;
+}
+
+.logo__wrap {
+  width: 100%;
+  @media (min-width: 960px) {
+    width: 25%;
+    display: inline-block;
+  }
+}
+
+img {
+  width: 180px;
+}
+
+h3 {
+  margin-bottom: 0.5rem;
+  @media screen and (min-width: 600px) {
+    margin-top: 0;
+  }
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  display: block;
+}
+
+.nav-link {
+  padding: 0;
+  min-width: auto;
+}
+
+.teal-nav {
+  text-transform: uppercase;
+  color: #6ADDC0;
+  .mat-button {
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 12px;
+  }
+}
+
+.nav-links {
+  margin-top: 2rem;
+  @media screen and (min-width: 960px) {
+    margin-top: 0;
+  }
+}
+
+.nav-links__about,
+.nav-links__row {
+  @media (min-width: 600px) {
+    width: 50%;
+    display: inline-block;
+    vertical-align: top;
+  }
+}
+
+.nav-links__about {
+  @media (min-width: 960px) {
+    width: 25%;
+  }
+}
+
+.nav-links__how-we-can-help,
+.nav-links__teal {
+  @media (min-width: 960px) {
+    width: 50%;
+    display: inline-block;
+  }
+}
+
+.nav-links__teal {
+  vertical-align: top;
+  @media (min-width: 600px) {
+    margin-top: 1rem;
+  }
+  @media (min-width: 960px) {
+    margin-top: 0;
+  }
+}
+
+.sponsors {
+  width: 100%;
+}
+
+.reed-logo__wrap,
+.fundraising-regulator-logo__wrap,
+.copyright-text__wrap {
+  margin-top: 2rem;
+  @media (min-width: 600px) {
+    width: 50%;
+    display: inline-block;
+    vertical-align: bottom;
+    margin-top: 3rem;
+  }
+  @media (min-width: 960px) {
+    width: 33.33%;
+  }
+}
+
+.reed-logo__text {
+  margin-top: 0;
+}
+
+.copyright-text__wrap {
+  @media (min-width: 600px) {
+    width: 100%;
+  }
+  @media (min-width: 960px) {
+    width: 33.33%;
+    vertical-align: unset;
+  }
+}
+
+.copyright-text {
+  margin: 0;
+}

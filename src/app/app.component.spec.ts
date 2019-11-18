@@ -16,6 +16,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppComponent } from './app.component';
 import { CampaignSearchFormComponent } from './campaign-search-form/campaign-search-form.component';
+import { FooterComponent } from './footer/footer.component';
 import { NavigationComponent } from './navigation/navigation.component';
 
 describe('AppComponent', () => {
@@ -37,8 +38,9 @@ describe('AppComponent', () => {
       ],
       declarations: [
         AppComponent,
-        NavigationComponent,
         CampaignSearchFormComponent,
+        FooterComponent,
+        NavigationComponent,
       ],
     }).compileComponents();
   }));
