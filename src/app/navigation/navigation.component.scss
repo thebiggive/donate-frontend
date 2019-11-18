@@ -91,6 +91,11 @@ mat-sidenav {
     display: block;
   }
 
+  .mat-icon-button,
+  .mat-button {
+    font-size: 16px;
+  }
+
   .mat-icon-button {
     padding-left: 16px;
     padding-right: 16px;
