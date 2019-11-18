@@ -17,13 +17,12 @@ export class FiltersComponent implements OnInit {
   public categoryOptions: string[];
   public countryOptions: string[];
 
-  constructor(private campaignService: CampaignService) {
-    this.beneficiaryOptions = campaignService.getBeneficiaries();
-    this.categoryOptions = campaignService.getCategories();
-    this.countryOptions = campaignService.getCountries();
-  }
+  constructor(private campaignService: CampaignService) {}
 
   ngOnInit() {
+    this.beneficiaryOptions = this.campaignService.getBeneficiaries();
+    this.categoryOptions = this.campaignService.getCategories();
+    this.countryOptions = this.campaignService.getCountries();
   }
 
   setFilter(filterName, event) {
