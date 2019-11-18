@@ -353,12 +353,22 @@ mat-expansion-panel {
     color: inherit;
   }
 
+  .mat-expansion-indicator::after {
+    color: $colour-teal-darker;
+    border-width: 0 3px 3px 0;
+    padding: 5px;
+  }
+
   .mat-expansion-panel-body {
     padding: 0 1rem 1rem;
     @media #{$breakpoint-lg} {
       padding: 0 2rem 2rem;
     }
   }
+}
+
+.mat-expansion-panel {
+  margin-bottom: 16px;
 }
 
 mat-form-field {
