@@ -1,70 +1,13 @@
-<mat-toolbar class="main-nav-toolbar">
-  <div class="logo__wrap">
-    <a (click)="sidenav.close()" class="logo__link"><img class="logo" src="/assets/logo.png" alt="The Big Give"></a>
-  </div>
-  <div class="main-nav">
-    <div class="nav-links__wrap">
-      <div class="nav-links">
-        <button mat-icon-button [matMenuTriggerFor]="about">
-          About
-          <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
-        </button>
-        <mat-menu #about="matMenu">
-          <ul>
-            <li><a mat-button class="nav-link" href="#">The Big Give</a></li>
-            <li><a mat-button class="nav-link" href="#">Our story</a></li>
-            <li><a mat-button class="nav-link" href="#">Team</a></li>
-            <li><a mat-button class="nav-link" href="#">Press</a></li>
-            <li><a mat-button class="nav-link" href="#">Our fees</a></li>
-            <li><a mat-button class="nav-link" href="#">Privacy policy</a></li>
-            <li><a mat-button class="nav-link" href="#">Cookie policy</a></li>
-            <li><a mat-button class="nav-link" href="#">Terms and conditions</a></li>
-          </ul>
-        </mat-menu>
-      </div>
-      <div class="nav-links">
-        <button mat-icon-button [matMenuTriggerFor]="howcanwehelp">
-          How can we help
-          <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
-        </button>
-        <mat-menu #howcanwehelp="matMenu">
-          <ul>
-            <li><a mat-button class="nav-link" href="#">Charities</a></li>
-            <li><a mat-button class="nav-link" href="#">Philanthropists</a></li>
-            <li><a mat-button class="nav-link" href="#">Individuals</a></li>
-            <li><a mat-button class="nav-link" href="#">Christmas Challenge</a></li>
-          </ul>
-        </mat-menu>
-      </div>
-      <div class="nav-links">
-        <a mat-button class="nav-link" href="#">Explore campaigns</a>
-      </div>
-      <div class="nav-links">
-        <a mat-button class="nav-link" href="#">Contact us</a>
-      </div>
-    </div>
-    <!-- <div class="main-nav__search-form">
-      <app-nav-search-form></app-nav-search-form>
-    </div> -->
-    <div class="charity-login__wrap">
-      <a mat-button class="charity-login__link" href="#">Charity login</a>
-    </div>
-  </div>
-  <div class="side-nav-button__wrap">
-    <button mat-icon-button class="side-nav-button__button" (click)="sidenav.toggle()">
-      <mat-icon aria-hidden="false" aria-label="Menu" color="accent">{{ !opened ? 'menu' : 'close' }}</mat-icon>
-    </button>
-  </div>
-</mat-toolbar>
-
 <mat-sidenav-container>
+  
   <mat-sidenav
     #sidenav
     role="navigation"
     mode="over"
     [(opened)]="opened"
     (opened)="events.push('open!')"
-    (closed)="events.push('close!')">
+    (closed)="events.push('close!')"
+    (click)="sidenav.toggle()">
     <!-- <app-nav-search-form></app-nav-search-form> -->
     <mat-nav-list class="mat-nav-list nav-links__wrap">
       <a class="nav-links__link" mat-list-item (click)="sidenav.close()" href="#">About</a>
@@ -78,6 +21,68 @@
   </mat-sidenav>
 
   <mat-sidenav-content role="navigation">
+    <mat-toolbar class="main-nav-toolbar">
+      <div class="logo__wrap">
+        <a (click)="sidenav.close()" class="logo__link"><img class="logo" src="/assets/logo.png" alt="The Big Give"></a>
+      </div>
+      <div class="main-nav">
+        <div class="nav-links__wrap">
+          <div class="nav-links">
+            <button mat-icon-button [matMenuTriggerFor]="about">
+              About
+              <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
+            </button>
+            <mat-menu #about="matMenu">
+              <ul>
+                <li><a mat-button class="nav-link" href="#">The Big Give</a></li>
+                <li><a mat-button class="nav-link" href="#">Our story</a></li>
+                <li><a mat-button class="nav-link" href="#">Team</a></li>
+                <li><a mat-button class="nav-link" href="#">Press</a></li>
+                <li><a mat-button class="nav-link" href="#">Our fees</a></li>
+                <li><a mat-button class="nav-link" href="#">Privacy policy</a></li>
+                <li><a mat-button class="nav-link" href="#">Cookie policy</a></li>
+                <li><a mat-button class="nav-link" href="#">Terms and conditions</a></li>
+              </ul>
+            </mat-menu>
+          </div>
+          <div class="nav-links">
+            <button mat-icon-button [matMenuTriggerFor]="howcanwehelp">
+              How can we help
+              <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
+            </button>
+            <mat-menu #howcanwehelp="matMenu">
+              <ul>
+                <li><a mat-button class="nav-link" href="#">Charities</a></li>
+                <li><a mat-button class="nav-link" href="#">Philanthropists</a></li>
+                <li><a mat-button class="nav-link" href="#">Individuals</a></li>
+                <li><a mat-button class="nav-link" href="#">Christmas Challenge</a></li>
+              </ul>
+            </mat-menu>
+          </div>
+          <div class="nav-links">
+            <a mat-button class="nav-link" href="#">Explore campaigns</a>
+          </div>
+          <div class="nav-links">
+            <a mat-button class="nav-link" href="#">Contact us</a>
+          </div>
+        </div>
+        <!-- <div class="main-nav__search-form">
+          <app-nav-search-form></app-nav-search-form>
+        </div> -->
+        <div class="charity-login__wrap">
+          <a mat-button class="charity-login__link" href="#">Charity login</a>
+        </div>
+      </div>
+      <div class="side-nav-button__wrap">
+        <button mat-icon-button class="side-nav-button__button" (click)="sidenav.toggle()">
+          <mat-icon aria-hidden="false" aria-label="Menu" color="accent">{{ !opened ? 'menu' : 'close' }}</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar>
     <router-outlet></router-outlet>
+    <app-footer></app-footer>
   </mat-sidenav-content>
+  
+  
 </mat-sidenav-container>
+
