@@ -1,7 +1,7 @@
 import { AppPage } from './app.po';
 import { browser, logging } from 'protractor';
 
-describe('MatchBot', () => {
+describe('Donate Frontend', () => {
   let page: AppPage;
 
   beforeEach(() => {
