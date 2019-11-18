@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" *ngIf="campaign">
   <div
     class="banner-container"
     [ngStyle]="{'background-image':' url(' + campaign.bannerUri + ')'}"

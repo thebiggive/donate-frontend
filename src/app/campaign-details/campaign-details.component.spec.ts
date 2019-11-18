@@ -1,10 +1,12 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatProgressBarModule } from '@angular/material';
+import { MatIconModule, MatProgressBarModule, MatTabsModule } from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 import { Campaign } from '../campaign.model';
+import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { TimeLeftPipe } from '../time-left.pipe';
 
@@ -14,11 +16,14 @@ describe('CampaignDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CampaignDetailsComponent, TimeLeftPipe ],
+      declarations: [ CampaignDetailsComponent, CampaignDetailsCardComponent, TimeLeftPipe ],
       imports: [
         HttpClientTestingModule,
         MatCarouselModule,
+        MatIconModule,
         MatProgressBarModule,
+        MatTabsModule,
+        NoopAnimationsModule,
         RouterTestingModule,
       ],
     })

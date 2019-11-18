@@ -3,6 +3,7 @@ import { MatButtonModule, MatCardModule, MatIconModule, MatSelectModule, MatProg
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { CampaignDetailsCardComponent } from './campaign-details-card.component';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('CampaignDetailsCardComponent', () => {
   let component: CampaignDetailsCardComponent;
@@ -10,7 +11,7 @@ describe('CampaignDetailsCardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CampaignDetailsCardComponent ],
+      declarations: [ CampaignDetailsCardComponent, TimeLeftPipe ],
       imports: [
         MatButtonModule,
         MatCardModule,
