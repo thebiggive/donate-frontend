@@ -1,10 +1,9 @@
 <div class="card">
-    <div
-      class="banner-container"
-      [ngStyle]="{'background-image':' url(' + campaign.bannerUri + ')'}"
-      role="presentation"
-    >
-    </div>
+  <div
+    class="banner-container"
+    [ngStyle]="{'background-image':' url(' + campaign.bannerUri + ')'}"
+    role="presentation"
+  ></div>
 
   <div class="card-body">
     <h3 class="campaign-target">Campaign target</h3>
@@ -28,5 +27,5 @@
     </div>
     <p class="championed-by" *ngIf="campaign.championName">Championed by <strong>{{campaign.championName}}</strong></p>
   </div>
-  
+
 </div>

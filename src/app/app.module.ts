@@ -42,7 +42,6 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { NavSearchFormComponent } from './nav-search-form/nav-search-form.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { TimeLeftPipe } from './time-left.pipe';
-import { HeroComponent } from './hero/hero.component';
 
 @NgModule({
   declarations: [
