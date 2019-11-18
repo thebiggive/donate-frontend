@@ -234,7 +234,11 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
   font-size:18px;
   box-shadow:none !important;
   border:0px;
-  
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: darken($colour-teal-lighter, 10%);
+  }
 }
 
 @mixin make-back-button {
