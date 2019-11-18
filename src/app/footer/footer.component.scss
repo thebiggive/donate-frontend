@@ -5,15 +5,26 @@
   color: white;
   padding: 5rem;
   @media screen and (min-width: 600px) {
+    padding-top: 3rem;
     padding-bottom: 2rem;
   }
 }
 
-// .logo__wrap {
-//   @media screen and (min-width: 600px) {
-//     text-align: center;
-//   }
-// }
+.footer-row {
+  width: 100%;
+}
+
+.logo__wrap {
+  width: 100%;
+  @media (min-width: 960px) {
+    width: 25%;
+    display: inline-block;
+  }
+}
+
+img {
+  width: 180px;
+}
 
 h3 {
   margin-bottom: 0.5rem;
@@ -24,7 +35,7 @@ h3 {
 
 ul {
   padding: 0;
-  margin-top: 0;
+  margin: 0;
 }
 
 li {
@@ -36,39 +47,89 @@ li {
   min-width: auto;
 }
 
-.teal-nav__wrap {
+.teal-nav {
   text-transform: uppercase;
   color: #6ADDC0;
   .mat-button {
     font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 12px;
   }
 }
 
-.nav-links__wrap {
+.nav-links {
   margin-top: 2rem;
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 960px) {
     margin-top: 0;
-  //   text-align: center;
   }
 }
 
-// .text-align-left {
-//   @media screen and (min-width: 600px) {
-//     text-align: left;
-//   }
-// }
+.nav-links__about,
+.nav-links__row {
+  @media (min-width: 600px) {
+    width: 50%;
+    display: inline-block;
+    vertical-align: top;
+  }
+}
 
-.reed-logo__wrap {
+.nav-links__about {
+  @media (min-width: 960px) {
+    width: 25%;
+  }
+}
+
+.nav-links__how-we-can-help,
+.nav-links__teal {
+  @media (min-width: 960px) {
+    width: 50%;
+    display: inline-block;
+  }
+}
+
+.nav-links__teal {
+  vertical-align: top;
+  @media (min-width: 600px) {
+    margin-top: 1rem;
+  }
+  @media (min-width: 960px) {
+    margin-top: 0;
+  }
+}
+
+.sponsors {
+  width: 100%;
+}
+
+.reed-logo__wrap,
+.fundraising-regulator-logo__wrap,
+.copyright-text__wrap {
   margin-top: 2rem;
-}
-
-.fundraising-regulator-logo__wrap {
-  margin-top: 3rem;
-}
-
-.note-to-self {
-  display: none;
-  @media screen and (min-width: 576px) and (max-width: 991px) {
-    display: block;
+  @media (min-width: 600px) {
+    width: 50%;
+    display: inline-block;
+    vertical-align: bottom;
+    margin-top: 3rem;
   }
+  @media (min-width: 960px) {
+    width: 33.33%;
+  }
+}
+
+.reed-logo__text {
+  margin-top: 0;
+}
+
+.copyright-text__wrap {
+  @media (min-width: 600px) {
+    width: 100%;
+  }
+  @media (min-width: 960px) {
+    width: 33.33%;
+    vertical-align: unset;
+  }
+}
+
+.copyright-text {
+  margin: 0;
 }
