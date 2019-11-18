@@ -1,11 +1,5 @@
 @import '../../styles';
 
-// .banner {
-//   margin: auto;
-//   display: block;
-//   width: 50%;
-// }
-
 .details {
   @include make-container;
 }
@@ -70,14 +64,14 @@
 }
 
 mat-tab-group {
-  margin-top:2rem;
+  margin-top: 2rem;
   ul {
-    list-style:none;
-    margin-left:0;
-    padding-left:15px;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 15px;
   }
   h4 {
-    font-weight:500;
-    margin-bottom:0;
+    font-weight: 500;
+    margin-bottom: 0;
   }
 }

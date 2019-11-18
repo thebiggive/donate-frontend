@@ -218,9 +218,9 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
 }
 
 @mixin make-secondary-column {
-  margin-top:2rem;
+  margin-top: 2rem;
   @media #{$breakpoint-md} {
-    margin-top:0;
+    margin-top: 0;
     width: 330px;
   }
 }
@@ -255,15 +255,15 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
 
 @mixin make-card-banner {
   height: 110px;
-  border-radius:4px 4px 0 0;
-  background-size:cover;
-  background-position:center center;
+  border-radius: 4px 4px 0 0;
+  background-size: cover;
+  background-position: center center;
 }
 
 @mixin make-card-body {
-  padding:15px;
+  padding: 15px;
   @media #{$breakpoint-xl} {
-    padding:15px 30px;
+    padding: 15px 30px;
   }
 }
 
@@ -284,32 +284,32 @@ a {
 }
 
 .mat-menu-trigger {
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .mat-menu-content {
   ul {
-    list-style:none;
-    padding:0;
-    margin:0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
   li {
-    display:block;
+    display: block;
     a {
-      display:block;
-      text-align:left;
+      display: block;
+      text-align: left;
     }
   }
 }
 
 .mat-ripple {
-  display:none;
+  display: none;
 }
 
 // Style Material Componenets here due to ViewEncapsulation
 mat-progress-bar {
-  border-radius:4px;
-  height:5px;
+  border-radius: 4px;
+  height: 5px;
   .mat-progress-bar-background {
     display:none !important;
   }
@@ -318,12 +318,12 @@ mat-progress-bar {
   }
   .mat-progress-bar-buffer {
     background: $colour-teal;
-    opacity:0.24;
+    opacity: 0.24;
   }
 }
 
 mat-radio-button {
-  margin-bottom:1rem;
+  margin-bottom: 1rem;
   .mat-radio-label {
     white-space:initial;
     @include rt-0;
@@ -334,7 +334,7 @@ mat-expansion-panel {
   .mat-expansion-panel-header {
     padding: 0 1rem;
     @media #{$breakpoint-lg} {
-      padding:1rem 2rem 0;
+      padding: 1rem 2rem 0;
     }
   }
 
@@ -343,9 +343,9 @@ mat-expansion-panel {
   }
 
   .mat-expansion-panel-body {
-    padding:0 1rem 1rem;
+    padding: 0 1rem 1rem;
     @media #{$breakpoint-lg} {
-      padding:0 2rem 2rem;
+      padding: 0 2rem 2rem;
     }
   }
 }
