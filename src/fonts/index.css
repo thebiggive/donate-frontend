@@ -13,6 +13,7 @@ way it's trivial to add the style to `angular.json` and have it work with client
     local('Maven Pro-Regular'),
     url('./maven-pro-latin-400.woff2') format('woff2'), /* Super Modern Browsers */
     url('./maven-pro-latin-400.woff') format('woff'); /* Modern Browsers */
+  font-display: swap;
 }
 
 /* maven-pro-500normal - latin */
@@ -26,6 +27,7 @@ way it's trivial to add the style to `angular.json` and have it work with client
     local('Maven Pro-Medium'),
     url('./maven-pro-latin-500.woff2') format('woff2'), /* Super Modern Browsers */
     url('./maven-pro-latin-500.woff') format('woff'); /* Modern Browsers */
+  font-display: swap;
 }
 
 /* maven-pro-700normal - latin */
@@ -39,6 +41,7 @@ way it's trivial to add the style to `angular.json` and have it work with client
     local('Maven Pro-Bold'),
     url('./maven-pro-latin-700.woff2') format('woff2'), /* Super Modern Browsers */
     url('./maven-pro-latin-700.woff') format('woff'); /* Modern Browsers */
+  font-display: swap;
 }
 
 /* maven-pro-900normal - latin */
@@ -52,4 +55,5 @@ way it's trivial to add the style to `angular.json` and have it work with client
     local('Maven Pro-Black'),
     url('./maven-pro-latin-900.woff2') format('woff2'), /* Super Modern Browsers */
     url('./maven-pro-latin-900.woff') format('woff'); /* Modern Browsers */
+  font-display: swap;
 }
