@@ -89,10 +89,16 @@ p {
 
 .matched-funds {
   padding-right: 0.25rem;
+  p {
+    margin-bottom: 0.5rem;
+  }
 }
 
 .total-funds {
   padding-left: 0.25rem;
+  p {
+    margin-bottom: 0.5rem;
+  }
 }
 
 .matched-funds__amount,
