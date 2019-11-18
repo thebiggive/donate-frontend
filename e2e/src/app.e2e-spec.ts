@@ -1,7 +1,7 @@
 import { AppPage } from './app.po';
 import { browser, logging } from 'protractor';
 
-describe('workspace-project App', () => {
+describe('MatchBot', () => {
   let page: AppPage;
 
   beforeEach(() => {
@@ -9,7 +9,7 @@ describe('workspace-project App', () => {
   });
 
   it('should display TBG logo', () => {
-    page.navigateTo();
+    page.navigateTo('search?term=e2eTestTerm');
     expect(page.getLogoAltText()).toBe('The Big Give');
   });
 
