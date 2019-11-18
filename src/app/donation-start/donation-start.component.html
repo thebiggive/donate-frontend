@@ -1,6 +1,6 @@
 <div class="donate-start" *ngIf="campaign">
   <div class="campaign-button">
-    <button mat-icon-button class="campaign-button__button" [routerLink]="'/'">
+    <button mat-icon-button class="campaign-button__button" [routerLink]="'/campaign/' + campaign.id">
       <mat-icon class="campaign-button__icon" aria-hidden="false" aria-label="Bac button">keyboard_arrow_left</mat-icon>
       Back to campaign
     </button>
@@ -39,7 +39,7 @@
                   (click)="setAmount(suggestedAmount)"
                 >{{ suggestedAmount | currency : '£' : 'symbol' : '1.0-0' }}</button>
               </div>
-        
+
               <div *ngIf="f.donationAmount.invalid && (f.donationAmount.dirty || f.donationAmount.touched)" class="error">
                 <div *ngIf="f.donationAmount.errors.min">Sorry, the minimum donation is currently £5.</div>
                 <div *ngIf="f.donationAmount.errors.max">Sorry, the maximum single donation is £25,000.</div>
@@ -77,7 +77,7 @@
                 <mat-radio-button labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.charity.name }}</mat-radio-button>
               </mat-radio-group>
             </mat-expansion-panel>
-            
+
             <mat-expansion-panel expanded="true">
               <mat-expansion-panel-header>
                 <mat-panel-title>
@@ -129,22 +129,22 @@
                   <p class="rt-1"><strong>{{ expectedTotalAmount() | currency : '£' : 'symbol' : '1.2-2' }}</strong></p>
                 </div>
               </div>
-              
+
             </mat-expansion-panel>
           </mat-accordion>
-      
+
           <p *ngIf="sfApiError" class="error">
             Sorry, we can't submit your donation right now. Please try again in a moment
             or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank">contact us</a>
             if this message persists.
           </p>
-      
+
           <p *ngIf="validationError" class="error">
             Please complete all fields above to proceed with your donation.
           </p>
-      
+
           <mat-spinner *ngIf="submitting" color="accent" diameter="30"></mat-spinner>
-      
+
           <p *ngIf="retrying" class="warning">
             It looks like our system is a bit busy, one moment please&hellip;
           </p>
