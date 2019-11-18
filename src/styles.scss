@@ -232,6 +232,8 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
   border-radius: 4px;
   font-size:18px;
   box-shadow:none !important;
+  border:0px;
+  
 }
 
 @mixin make-back-button {
@@ -352,6 +354,13 @@ mat-expansion-panel {
 
 mat-form-field {
   .mat-form-field-label {
-    @include rt-0;
+
   }
+}
+
+mat-toolbar {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 1000;
 }
