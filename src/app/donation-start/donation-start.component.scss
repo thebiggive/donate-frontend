@@ -38,6 +38,7 @@ form {
   margin: 2rem auto;
   h3 {
     color: $colour-teal-darker;
+    margin-bottom: 0.75rem;
   }
 }
 
@@ -73,6 +74,8 @@ form {
   border-radius: 4px;
   margin-right: 0.5rem;
   color:$colour-teal;
+  font-family: "Maven Pro", sans-serif;
+  font-weight: 500;
   @include rt-2;
   &:last-child {
     margin-right: 0;
