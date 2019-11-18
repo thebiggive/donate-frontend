@@ -65,8 +65,7 @@
     mode="over"
     [(opened)]="opened"
     (opened)="events.push('open!')"
-    (closed)="events.push('close!')"
-    (click)="sidenav.toggle()">
+    (closed)="events.push('close!')">
     <!-- <app-nav-search-form></app-nav-search-form> -->
     <mat-nav-list class="mat-nav-list nav-links__wrap"><div class="nav-links">
         <button mat-icon-button (click)="sidenav.open()" [matMenuTriggerFor]="about">
