@@ -1,13 +1,14 @@
 @import '../../styles';
 
 mat-sidenav-container {
-  height: 100vh;
   background-color: white;
 }
 
 mat-sidenav {
   width:100%;
-  max-width: 300px;
+  @media #{$breakpoint-md} {
+    max-width: 300px;
+  }
   @media (min-width: 960px) {
     display: none;
   }
