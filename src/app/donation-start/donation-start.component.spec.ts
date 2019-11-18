@@ -8,6 +8,7 @@ import {
   MatExpansionModule,
   MatIconModule,
   MatInputModule,
+  MatProgressBarModule,
   MatProgressSpinnerModule,
   MatRadioModule,
 } from '@angular/material';
@@ -15,6 +16,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { DonationStartComponent } from './donation-start.component';
+import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
 import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('DonationStartComponent', () => {
@@ -23,7 +25,11 @@ describe('DonationStartComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DonationStartComponent, TimeLeftPipe ],
+      declarations: [
+        DonationStartComponent,
+        TimeLeftPipe,
+        CampaignDetailsCardComponent,
+      ],
       imports: [
         HttpClientTestingModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
@@ -33,6 +39,7 @@ describe('DonationStartComponent', () => {
         MatIconModule,
         MatInputModule,
         MatRadioModule,
+        MatProgressBarModule,
         MatProgressSpinnerModule,
         NoopAnimationsModule,
         ReactiveFormsModule,

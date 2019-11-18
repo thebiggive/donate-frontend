@@ -19,3 +19,11 @@ app-campaign-card {
 .mat-grid-tile {
   overflow: visible;
 }
+
+.more-campaigns {
+  padding:5rem 0;
+  text-align:center;
+  button {
+    @include make-donate-button;
+  }
+}

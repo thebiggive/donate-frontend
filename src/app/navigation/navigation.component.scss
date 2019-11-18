@@ -1,13 +1,12 @@
 @import '../../styles';
 
 mat-sidenav-container {
-  height: 100vh;
   background-color: white;
 }
 
 mat-sidenav {
-  width: 100vw;
-  @media (min-width: 600px) {
+  width:100%;
+  @media #{$breakpoint-md} {
     max-width: 300px;
   }
   @media (min-width: 960px) {
@@ -76,8 +75,30 @@ mat-sidenav {
   display: inline-block;
   width:auto;
   @media #{$breakpoint-md} {
+    padding-left: 1rem;
     padding-right: 1rem;
-    font-size:18px;
+  }
+}
+
+.button-about,
+.button-how-can-we-help {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+mat-sidenav {
+  .nav-links {
+    display: block;
+  }
+
+  .mat-icon-button,
+  .mat-button {
+    font-size: 16px;
+  }
+
+  .mat-icon-button {
+    padding-left: 16px;
+    padding-right: 16px;
   }
 }
 

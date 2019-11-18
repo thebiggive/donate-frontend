@@ -22,11 +22,16 @@
     border-top-right-radius: 8px;
     margin: 0 auto;
     display: inline-block;
+    @include rt-2;
+    @media#{$breakpoint-lg} {
+      padding: 1.5rem 10rem;
+    }
   }
 }
 
-.page {
+.page-body {
   @include make-card($box-shadow-hard);
+  padding: 1rem;
 }
 
 .page-margin {
@@ -37,7 +42,7 @@
   }
   @media #{$breakpoint-lg} {
     margin: 0 60px;
-    padding-top: 3rem;
+    padding-top: 2rem;
   }
   @media #{$breakpoint-xl} {
     margin: 0 75px;
@@ -80,23 +85,29 @@ h3 {
 .receipt {
   border-top: 1px solid $colour-grey-light;
   border-bottom: 1px solid $colour-grey-light;
-  margin-top: 2rem;
+  margin-top: 3rem;
   padding-bottom: 2rem;
   margin-bottom: 2rem;
   color: $colour-grey;
   h3 {
     font-weight: 700;
-    margin-top: 1rem;
+    margin-top: 2rem;
     margin-bottom: 1rem;
   }
   h4 {
-    margin-top: 0.25rem;
+    margin-bottom: 0;
+    font-weight: 400;
+    &.rt-sm {
+      margin-top: 0.75rem;
+    }
+    &.rt-2 {
+      font-weight: 500;
+      margin-top: 0;
+    }
   }
   p {
     margin: 0;
-    small {
-      font-size: 12px;
-    }
+    font-weight: 500;
   }
 }
 
@@ -123,9 +134,17 @@ h3 {
 
 .mat-button {
   background-color: #F4F4F4;
+  color: $colour-teal;
   padding-bottom: 1rem;
   width: 100%;
   margin-bottom: 1rem;
+  text-align: center;
+  &:hover {
+    text-decoration: underline;
+  }
+  p {
+    margin-bottom: 0;
+  }
   img {
     width: 80px;
     margin-top: 0;

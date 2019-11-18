@@ -4,6 +4,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { NavigationComponent } from './navigation.component';
+import { FooterComponent } from '../footer/footer.component';
 
 describe('NavigationComponent', () => {
   let component: NavigationComponent;
@@ -11,7 +12,10 @@ describe('NavigationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NavigationComponent ],
+      declarations: [
+        NavigationComponent,
+        FooterComponent,
+      ],
       imports: [
         MatIconModule,
         MatListModule,
