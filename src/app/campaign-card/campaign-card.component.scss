@@ -21,6 +21,7 @@
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
+  align-items:center;
 }
 
 ul {
@@ -53,6 +54,7 @@ ul {
   overflow-x: scroll;
   white-space:nowrap;
   margin-left: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .campaign-categories {
@@ -113,7 +115,7 @@ p {
 .mat-icon-button {
   font-weight: 400;
   .mat-icon {
-    line-height: 21px;
+    line-height: 22px;
   }
 }
 
