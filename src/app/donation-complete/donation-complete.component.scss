@@ -1,0 +1,135 @@
+@import '../../styles';
+
+.donate-complete {
+  @include make-container;
+}
+
+.mat-spinner {
+  margin: 3rem auto 0;
+}
+
+.thank-you {
+  text-align: center;
+  margin-top: 3rem;
+  margin-bottom: 0;
+  @include size-xl;
+  font-weight: 500;
+  span {
+    background-color: $colour-teal-darker;
+    padding: 1rem 2rem;
+    color: white;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    margin: 0 auto;
+    display: inline-block;
+  }
+}
+
+.page {
+  @include make-card($box-shadow-hard);
+}
+
+.page-margin {
+  margin: 1rem;
+  margin-top: 0;
+  @media #{$breakpoint-md} {
+    margin: 0 30px;
+  }
+  @media #{$breakpoint-lg} {
+    margin: 0 60px;
+    padding-top: 3rem;
+  }
+  @media #{$breakpoint-xl} {
+    margin: 0 75px;
+  }
+}
+
+.campaign-banner {
+  @media #{$breakpoint-lg} {
+    display: inline-block;
+    img {
+      max-width: 330px;
+    }
+  }
+}
+
+.page-heading {
+  @media #{$breakpoint-lg} {
+    display: inline-block;
+    margin-left: 2rem;
+  }
+}
+
+.page-body {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+img {
+  width: 100%;
+  border-radius: 4px;
+  margin-top: 1rem;
+}
+
+h3 {
+  font-weight: 400;
+  color: $colour-teal-darker;
+  @include size-xl;
+}
+
+.receipt {
+  border-top: 1px solid $colour-grey-light;
+  border-bottom: 1px solid $colour-grey-light;
+  margin-top: 2rem;
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  color: $colour-grey;
+  h3 {
+    font-weight: 700;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  h4 {
+    margin-top: 0.25rem;
+  }
+  p {
+    margin: 0;
+    small {
+      font-size: 12px;
+    }
+  }
+}
+
+.small-p {
+  line-height: 1;
+}
+
+.page-button {
+  margin: 1rem;
+  margin-top: 0;
+  @media #{$breakpoint-md} {
+    margin-left: 30px;
+    margin-right: 30px;
+  }
+  @media #{$breakpoint-lg} {
+    margin-left: 0 60px;
+    margin-right: 0 60px;
+  }
+  @media #{$breakpoint-xl} {
+    margin-left: 75px;
+    margin-right: 75px;
+  }
+}
+
+.mat-button {
+  background-color: #F4F4F4;
+  padding-bottom: 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+  img {
+    width: 80px;
+    margin-top: 0;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
+}

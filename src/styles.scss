@@ -73,17 +73,24 @@ $app-typography: mat-typography-config(
 // Variables
 
 $colour-red: #f0423b;
-$colour-teal-lighter: #6ADDC0;
+$colour-teal-lightest: #CAE8EC;  // Should be lighter
+$colour-teal-lighter: #6ADDC0;   // Should be lightest
+$colour-teal-light: #EAF6F7;
+$colour-teal-lightish: #69BEC9;
 $colour-teal: #00838f;
 $colour-teal-dark: #00707C;
 $colour-teal-darker: #006672;
 $colour-teal-fade: #E0F0F2;
+$colour-grey-light: #E1E2E5;
 $colour-grey: #7B8292;
 $colour-grey-dark: #333;
 
 $breakpoint-md: "(min-width: 600px)";
 $breakpoint-lg: "(min-width: 960px)";
 $breakpoint-xl: "(min-width: 1280px)";
+$box-shadow-soft: 0px 11px 15px rgba(0, 0, 0, 0.05), 0px 9px 46px rgba(0, 0, 0, 0.05), 0px 24px 38px rgba(0, 0, 0, 0.05);
+$box-shadow: $box-shadow-soft;
+$box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
 
 $box-shadow-soft: 0px 11px 15px rgba(0, 0, 0, 0.05), 0px 9px 46px rgba(0, 0, 0, 0.05), 0px 24px 38px rgba(0, 0, 0, 0.05);
 $box-shadow: $box-shadow-soft;
@@ -194,7 +201,7 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
     padding:15px 30px;
   }
 }
-  
+
 html {
   font-family: mat-font-family($app-typography);
   font-size: mat-font-size($app-typography, body-2);
@@ -211,9 +218,30 @@ a {
   color: mat-color($donate-accent);
 }
 
+.mat-menu-trigger {
+  cursor:pointer;
+}
+
+.mat-menu-content {
+  ul {
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+  li {
+    display:block;
+    a {
+      display:block;
+      text-align:left;
+    }
+  }
+}
+
+.mat-ripple {
+  display:none;
+}
 
 // Style Material Componenets here due to ViewEncapsulation
-
 mat-progress-bar {
   border-radius:4px;
   height:5px;
@@ -227,6 +255,38 @@ mat-progress-bar {
     background: $colour-teal;
     opacity:0.24;
   }
-} 
+}
 
+mat-radio-button {
+  margin-bottom:1rem;
+  .mat-radio-label {
+    white-space:initial;
+    @include rt-0;
+  }
+}
 
+mat-expansion-panel {
+  .mat-expansion-panel-header {
+    padding: 0 1rem;
+    @media #{$breakpoint-lg} {
+      padding:1rem 2rem 0;
+    }
+  }
+
+  .mat-expansion-panel-header[aria-disabled=true] {
+    color: inherit;
+  }
+
+  .mat-expansion-panel-body {
+    padding:0 1rem 1rem;
+    @media #{$breakpoint-lg} {
+      padding:0 2rem 2rem;
+    }
+  }
+}
+
+mat-form-field {
+  .mat-form-field-label {
+    @include rt-0;
+  }
+}

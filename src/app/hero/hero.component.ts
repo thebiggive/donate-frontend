@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class HeroComponent implements OnInit {
   @Input() public title: string;
   @Input() public description: string;
+  @Input() public logoUri?: string;
   @Output() heroSearch: EventEmitter<any> = new EventEmitter();
 
   public webp: boolean; // Dynamically use the smallest supported image format
