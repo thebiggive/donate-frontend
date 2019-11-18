@@ -134,7 +134,7 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
 
 @mixin rt-1 {
   font-size: 18px;
-  line-height: 21px;
+  line-height: 1.5;
   @media #{$breakpoint-lg} {
     font-size: 24px;
     line-height: 36px;
@@ -206,10 +206,11 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
 
 @mixin make-primary-column {
   @media #{$breakpoint-md} {
-    width:calc(100% - 330px);
+    width:calc(100% - 150px);
     padding-right:15px;
   }
   @media #{$breakpoint-lg} {
+    width:calc(100% - 330px);
     padding-right:10%;
   }
   @media #{$breakpoint-xl} {
@@ -336,6 +337,10 @@ mat-expansion-panel {
     @media #{$breakpoint-lg} {
       padding: 1rem 2rem 0;
     }
+  }
+
+  .mat-expansion-panel-header {
+    height: auto !important;
   }
 
   .mat-expansion-panel-header[aria-disabled=true] {
