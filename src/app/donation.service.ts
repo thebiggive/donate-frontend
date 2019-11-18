@@ -19,7 +19,7 @@ export class DonationService {
    */
   private donationCouplets: Array<{ donation: Donation, jwt: string }> = [];
 
-  private readonly apiPath = '/donations/services/apexrest/v1.0/donations';
+  private readonly apiPath = '/donations';
   private readonly resumableStatuses = ['Pending', 'Reserved'];
   private readonly storageKey = 'v1.donate.thebiggive.org.uk';
 
@@ -30,32 +30,33 @@ export class DonationService {
   ) {}
 
   getDonation(donationId: string): Donation | undefined {
-    const donations = this.getDonationCouplets().filter(donationItem => {
-      return (donationItem.donation.donationId === donationId);
-    });
+    const couplet = this.getLocalDonationCouplet(donationId);
 
-    if (donations.length === 0) {
+    if (!couplet) {
       return undefined;
     }
 
-    return donations[0].donation;
+    return couplet.donation;
+  }
+
+  isResumable(donation: Donation): boolean {
+    return this.resumableStatuses.includes(donation.status);
   }
 
   /**
-   * Get a recent eligible-for-resuming donation to this same campaign/project, if any exists.
+   * Get a recent eligible-for-resuming donation to this same campaign/project, if any exists. We look
+   * for candidates based on local status initially but return an Observable resulting from a re-GET
+   * so we include the latest server status. This is why this private method only knows the donation is
+   * 'probably' resumable.
    */
-  getResumableDonation(projectId: string): Observable<Donation | undefined> {
-    // TODO we should tidy up by deleting any locally saved donations too old to be useful as part of this process
+  getProbablyResumableDonation(projectId: string): Observable<Donation | undefined> {
+    this.removeOldLocalDonations();
 
     const existingDonations = this.getDonationCouplets().filter(donationItem => {
-      const createdDate = donationItem.donation.createdTime instanceof Date
-        ? donationItem.donation.createdTime
-        : new Date(donationItem.donation.createdTime);
-
       return (
-        donationItem.donation.projectId === projectId &&              // Only bring back donations to the same project/CCampaign...
-        createdDate.getTime() > ((new Date()).getTime() - 600000) &&  // ...from the past 10 minutes...
-        this.resumableStatuses.includes(donationItem.donation.status) // ...with a reusable last-known status.
+        donationItem.donation.projectId === projectId && // Only bring back donations to the same project/CCampaign...
+        this.getCreatedTime(donationItem.donation) > ((new Date()).getTime() - 600000) && // ...from the past 10 minutes...
+        this.isResumable(donationItem.donation) // ...with a reusable last-known status.
       );
     });
 
@@ -63,17 +64,25 @@ export class DonationService {
       return of(undefined); // No relevant donations to offer to resume.
     }
 
-    // TODO We should revisit whether it's worth explicitly checking with the server for the
-    // latest status before trying to reuse a donation. It adds extra calls so is probably
-    // best avoided if not needed. Now that we remove donation info from local immediately
-    // after cancelling on Salesforce, and as we also check the time is recent client-side,
-    // it seems like it should be unnecessary. But let's keep an eye out for edge cases.
-
     // We have at least one existing donation that may be a candidate to re-try.
     // We'll take an arbitrary 'first' matching donation since presenting multiple to the donor would be too confusing.
-    // But we first need to check with the server that it's still in a Pending or Reserved status ready to try again -
-    // and check any remaining local candidates if not.
     return this.get(existingDonations[0].donation);
+  }
+
+  /**
+   * Update a local copy of a Donation that we already expect to have saved, leaving its
+   * JWT in tact so that e.g. its details can still be loaded on the thank you page.
+   */
+  updateLocalDonation(donation: Donation) {
+    const couplet = this.getLocalDonationCouplet(donation.donationId);
+
+    if (!couplet) {
+      return; // Just bail out if there's no match we can safely update.
+    }
+
+    const jwt = couplet.jwt;
+    this.removeLocalDonation(donation);
+    this.saveDonation(donation, jwt);
   }
 
   /**
@@ -93,7 +102,7 @@ export class DonationService {
     donation.status = 'Cancelled';
 
     return this.http.put<any>(
-      `${environment.apiUriPrefix}${this.apiPath}/${donation.donationId}`,
+      `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}`,
       donation,
       this.getAuthHttpOptions(donation),
     );
@@ -101,13 +110,13 @@ export class DonationService {
 
   create(donation: Donation): Observable<DonationCreatedResponse> {
     return this.http.post<DonationCreatedResponse>(
-      `${environment.apiUriPrefix}${this.apiPath}`,
+      `${environment.donationsApiPrefix}${this.apiPath}`,
       donation);
   }
 
   get(donation: Donation): Observable<Donation> {
     return this.http.get<Donation>(
-      `${environment.apiUriPrefix}${this.apiPath}/${donation.donationId}`,
+      `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}`,
       this.getAuthHttpOptions(donation),
     );
   }
@@ -128,6 +137,28 @@ export class DonationService {
     this.storage.set(this.storageKey, this.donationCouplets);
   }
 
+  /**
+   * Safely get created date from a Donation, whether the local data has it as a Date (e.g. when set locally) or
+   * a string (when just derived from an HTTP response), and return it as a JavaScript Unix epoch milliseconds value.
+   */
+  private getCreatedTime(donation: Donation): number {
+    const createdDate: Date = donation.createdTime instanceof Date
+      ? donation.createdTime
+      : new Date(donation.createdTime);
+
+    return createdDate.getTime();
+  }
+
+  private removeOldLocalDonations() {
+    let donationsOlderThan30Days: Array<{ donation: Donation, jwt: string }>;
+    donationsOlderThan30Days = this.getDonationCouplets().filter(donationItem => {
+      return (!donationItem.donation.createdTime || this.getCreatedTime(donationItem.donation) < ((new Date()).getTime() - 2592000000));
+    });
+    for (const oldDonationCouplet of donationsOlderThan30Days) {
+      this.removeLocalDonation(oldDonationCouplet.donation);
+    }
+  }
+
   private getAuthHttpOptions(donation: Donation): { headers: HttpHeaders } {
     const donationDataItems = this.getDonationCouplets().filter(donationItem => donationItem.donation.donationId === donation.donationId);
 
@@ -145,6 +176,18 @@ export class DonationService {
         'X-Tbg-Auth': donationDataItems[0].jwt,
       }),
     };
+  }
+
+  private getLocalDonationCouplet(donationId: string): { donation: Donation, jwt: string } {
+    const donations = this.getDonationCouplets().filter(donationItem => {
+      return (donationItem.donation.donationId === donationId);
+    });
+
+    if (donations.length === 0) {
+      return undefined;
+    }
+
+    return donations[0];
   }
 
   private getDonationCouplets() {

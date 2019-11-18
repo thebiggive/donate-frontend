@@ -1,16 +1,16 @@
 import { AppPage } from './app.po';
 import { browser, logging } from 'protractor';
 
-describe('workspace-project App', () => {
+describe('MatchBot', () => {
   let page: AppPage;
 
   beforeEach(() => {
     page = new AppPage();
   });
 
-  it('should display heading', () => {
-    page.navigateTo();
-    expect(page.getTitleText()).toContain('Donations');
+  it('should display TBG logo', () => {
+    page.navigateTo('search?term=e2eTestTerm');
+    expect(page.getLogoAltText()).toBe('The Big Give');
   });
 
   afterEach(async () => {

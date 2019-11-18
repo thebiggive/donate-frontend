@@ -3,7 +3,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatCardModule,
+  MatIconModule,
   MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatToolbarModule,
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -11,6 +17,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { CampaignSearchFormComponent } from './campaign-search-form/campaign-search-form.component';
 import { FooterComponent } from './footer/footer.component';
+import { NavigationComponent } from './navigation/navigation.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -18,7 +25,13 @@ describe('AppComponent', () => {
       imports: [
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatCardModule,
+        MatIconModule,
         MatInputModule,
+        MatListModule,
+        MatMenuModule,
+        MatSelectModule,
+        MatSidenavModule,
+        MatToolbarModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
         RouterTestingModule,
@@ -27,6 +40,7 @@ describe('AppComponent', () => {
         AppComponent,
         CampaignSearchFormComponent,
         FooterComponent,
+        NavigationComponent,
       ],
     }).compileComponents();
   }));
@@ -35,12 +49,5 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
-  });
-
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Donations');
   });
 });

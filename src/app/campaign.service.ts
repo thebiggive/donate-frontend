@@ -27,6 +27,14 @@ export class CampaignService {
   search(searchQuery: SearchQuery): Observable<CampaignSummary[]> {
     let params = new HttpParams();
 
+    if (searchQuery.limit) {
+      params = params.append('limit', searchQuery.limit.toString());
+    }
+
+    if (searchQuery.offset) {
+      params = params.append('offset', searchQuery.offset.toString());
+    }
+
     if (searchQuery.beneficiary) {
       params = params.append('beneficiary', searchQuery.beneficiary);
     }
@@ -41,6 +49,10 @@ export class CampaignService {
 
     if (searchQuery.fundSlug) {
       params = params.append('fundSlug', searchQuery.fundSlug);
+    }
+
+    if (searchQuery.onlyMatching) {
+      params = params.append('onlyMatching', 'true');
     }
 
     if (searchQuery.parentCampaignId) {
@@ -366,6 +378,9 @@ export class SearchQuery {
   public category?: string;
   public country?: string;
   public fundSlug?: string;
+  public limit?: number;
+  public offset?: number;
+  public onlyMatching?: boolean;
   public parentCampaignId?: string;
   public parentCampaignSlug?: string;
   public sortDirection?: string;

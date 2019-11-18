@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatButtonModule, MatCardModule, MatProgressBarModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatIconModule, MatSelectModule, MatProgressBarModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { CampaignCardComponent } from './campaign-card.component';
@@ -15,7 +15,9 @@ describe('CampaignCardComponent', () => {
       imports: [
         MatButtonModule,
         MatCardModule,
+        MatIconModule,
         MatProgressBarModule,
+        MatSelectModule,
         RouterTestingModule,
       ],
     })
@@ -28,11 +30,13 @@ describe('CampaignCardComponent', () => {
     component.campaign = new CampaignSummary(
       'testCampaignId',
       123,
+      ['cat1', 'cat2'],
       'Test Champion',
       { id: 'testCharityId', name: 'Test Charity' },
       new Date(),
       'https://example.com/image.png',
       true,
+      400,
       new Date(),
       1230,
       'Test Campaign!',
@@ -48,12 +52,5 @@ describe('CampaignCardComponent', () => {
     expect(component.campaign.title).toBe('Test Campaign!');
     expect(component.campaign.isMatched).toBe(true);
     expect(component.campaign.charity.name).toBe('Test Charity');
-  });
-
-  it('should calculate target progress percentage', () => {
-    component.ngOnInit();
-    fixture.detectChanges();
-
-    expect(component.percentRaised).toBe(10);
   });
 });

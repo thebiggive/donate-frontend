@@ -1,0 +1,81 @@
+@import '../../styles';
+
+.webp-bg.hero {
+  background-image: url(../../assets/bg-hero-christmas.webp);
+}
+
+.nowebp-bg.hero {
+  background-image: url(../../assets/bg-hero-christmas.png);
+}
+
+.hero {
+  color: white;
+  background-size: auto 150%;
+  background-repeat: no-repeat;
+  background-position: center top;
+  @media #{$breakpoint-md} {
+    background-size: cover;
+  }
+}
+
+.hero__content {
+  @include make-container-small;
+}
+
+.hero-flex__child {
+  @media #{$breakpoint-md} {
+    margin-right: 1rem;
+    &:last-child {
+      margin-left: 1rem;
+      margin-right: 0;
+    }
+  }
+  @media #{$breakpoint-lg} {
+    margin-right: 2rem;
+    &:last-child {
+      margin-left: 2rem;
+      margin-right: 0;
+    }
+  }
+  @media #{$breakpoint-xl} {
+    margin-right: 3rem;
+    &:last-child {
+      margin-left: 3rem;
+      margin-right: 0;
+    }
+  }
+}
+
+h1 {
+  margin-bottom: 0;
+  line-height: 1.2;
+  @media #{$breakpoint-md} {
+    font-size: 35px;
+  }
+  @media #{$breakpoint-lg} {
+    font-size: 45px;
+  }
+  @media #{$breakpoint-xl} {
+    font-size: 60px;
+  }
+}
+
+h2 {
+  font-size: 18px;
+  margin-top: 1rem;
+  font-weight: 400;
+  line-height:1.5;
+  @media #{$breakpoint-xl} {
+    font-size: 24px;
+  }
+}
+
+img {
+  float: right;
+  margin-left: 1rem;
+}
+
+app-campaign-search-form {
+  display: flex;
+  justify-content: center;
+}
