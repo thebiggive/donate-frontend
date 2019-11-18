@@ -3,10 +3,15 @@
 .footer {
   background-color: #333333;
   color: white;
-  padding: 5rem;
-  @media screen and (min-width: 600px) {
+  padding: 2rem;
+  margin-top: 4rem;
+  @media #{$breakpoint-md} {
     padding-top: 3rem;
     padding-bottom: 2rem;
+  }
+  @media #{$breakpoint-xl} {
+    padding-left: 5rem;
+    padding-right: 5rem;
   }
 }
 
