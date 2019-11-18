@@ -10,6 +10,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppComponent } from './app.component';
 import { CampaignSearchFormComponent } from './campaign-search-form/campaign-search-form.component';
+import { FooterComponent } from './footer/footer.component';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -25,6 +26,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         CampaignSearchFormComponent,
+        FooterComponent,
       ],
     }).compileComponents();
   }));
