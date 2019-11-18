@@ -206,8 +206,8 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
 
 @mixin make-primary-column {
   @media #{$breakpoint-md} {
-    width:calc(100% - 150px);
-    padding-right:15px;
+    width:calc(100% - 225px);
+    padding-right:7%;
   }
   @media #{$breakpoint-lg} {
     width:calc(100% - 330px);
@@ -221,6 +221,10 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
 @mixin make-secondary-column {
   margin-top: 2rem;
   @media #{$breakpoint-md} {
+    margin-top: 0;
+    width: 225px;
+  }
+  @media #{$breakpoint-lg} {
     margin-top: 0;
     width: 330px;
   }
