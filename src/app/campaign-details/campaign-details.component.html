@@ -1,8 +1,8 @@
 <div class="details" *ngIf="campaign">
   <div class="listing-button">
-    <button mat-icon-button class="listing-button__button" [routerLink]="'/christmas-challenge-2019'">
-      <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Example home icon">keyboard_arrow_left</mat-icon>
-      Back to listing
+    <button mat-icon-button class="listing-button__button" routerLink="/christmas-challenge-2019">
+      <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
+      All participating campaigns
     </button>
   </div>
 
@@ -20,7 +20,7 @@
       <app-campaign-details-card [campaign]="campaign"></app-campaign-details-card>
     </div>
   </div>
-  
+
   <div *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" fxLayout="row">
     <div class="campaign-tabs">
       <mat-tab-group animationDuration="0ms" color="accent">
