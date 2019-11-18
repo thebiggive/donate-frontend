@@ -83,6 +83,7 @@ $colour-teal-darker: #006672;
 $colour-teal-fade: #E0F0F2;
 $colour-grey-light: #E1E2E5;
 $colour-grey: #7B8292;
+$colour-grey-dark: #333;
 
 $breakpoint-md: "(min-width: 600px)";
 $breakpoint-lg: "(min-width: 960px)";
@@ -91,6 +92,9 @@ $box-shadow-soft: 0px 11px 15px rgba(0, 0, 0, 0.05), 0px 9px 46px rgba(0, 0, 0, 
 $box-shadow: $box-shadow-soft;
 $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
 
+$box-shadow-soft: 0px 11px 15px rgba(0, 0, 0, 0.05), 0px 9px 46px rgba(0, 0, 0, 0.05), 0px 24px 38px rgba(0, 0, 0, 0.05);
+$box-shadow: $box-shadow-soft;
+$box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
 
 // Custom mixins
 
@@ -102,67 +106,6 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
 }
 @mixin size-xl {
   font-size: 21px;
-}
-@mixin size-xxl {
-  font-size: 34px;
-}
-@mixin size-xxxl {
-  font-size: 48px;
-}
-
-@mixin make-container {
-  margin:0 15px;
-  @media #{$breakpoint-lg} {
-    margin:0 30px;
-  }
-  @media #{$breakpoint-xl} {
-    max-width: 1220px;
-    margin:0 auto;
-  }
-}
-@mixin make-container-small {
-  margin:0 15px;
-  @media #{$breakpoint-md} {
-    margin:0 30px;
-  }
-  @media #{$breakpoint-lg} {
-    margin:0 60px;
-  }
-  @media #{$breakpoint-xl} {
-    max-width: 1150px;
-    margin:0 auto;
-  }
-}
-@mixin make-donate-button {
-  padding: 0.5rem 2rem;
-  background-color: $colour-teal-lighter;
-  color: $colour-teal-dark;
-  border-radius: 4px;
-  font-size:18px;
-  box-shadow:none !important;
-}
-@mixin make-back-button {
-  color: $colour-teal;
-  margin-bottom: 1rem;
-  .mat-icon-button {
-    font-weight: 400;
-  }
-  .mat-icon {
-    font-size: 1rem;
-    line-height: 23px;
-    width: 1rem;
-  }
-}
-@mixin make-card($box-shadow: $box-shadow-soft) {
-  background-color: white;
-  border-radius: 4px;
-  box-shadow:$box-shadow;
-}
-@mixin make-card-banner {
-  height: 110px;
-  border-radius:4px 4px 0 0;
-  background-size:cover;
-  background-position:center center;
 }
 @mixin size-xxl {
   font-size: 34px;
@@ -236,31 +179,52 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
   @include rt-3;
 }
 
+@mixin make-container {
+  margin:0 15px;
+  @media #{$breakpoint-lg} {
+    margin:0 30px;
+  }
+  @media #{$breakpoint-xl} {
+    max-width: 1220px;
+    margin:0 auto;
+  }
+}
+
+@mixin make-container-small {
+  margin:0 15px;
+  @media #{$breakpoint-md} {
+    margin:0 30px;
+  }
+  @media #{$breakpoint-lg} {
+    margin:0 60px;
+  }
+  @media #{$breakpoint-xl} {
+    max-width: 1150px;
+    margin:0 auto;
+  }
+}
 
 @mixin make-primary-column {
   @media #{$breakpoint-md} {
-    width:calc(100% - 270px);
+    width:calc(100% - 330px);
     padding-right:15px;
   }
   @media #{$breakpoint-lg} {
-    width:calc(100% - 330px);
     padding-right:10%;
   }
   @media #{$breakpoint-xl} {
     padding-right:15%;
   }
 }
+
 @mixin make-secondary-column {
-  margin-top:1rem;
+  margin-top: 2rem;
   @media #{$breakpoint-md} {
-    margin-top:0;
-    width: 270px;
-  }
-  @media #{$breakpoint-lg} {
-    margin-top:0;
+    margin-top: 0;
     width: 330px;
   }
 }
+
 @mixin make-donate-button {
   padding: 0.5rem 2rem;
   background-color: $colour-teal-lighter;
@@ -269,6 +233,7 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
   font-size:18px;
   box-shadow:none !important;
 }
+
 @mixin make-back-button {
   color: $colour-teal;
   margin-bottom: 1rem;
@@ -282,13 +247,36 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
   }
 }
 
+@mixin make-card($box-shadow: $box-shadow-soft) {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow:$box-shadow;
+}
 
-body, html {
-  margin: 0;
-  background-color: #F4F4F4;
+@mixin make-card-banner {
+  height: 110px;
+  border-radius: 4px 4px 0 0;
+  background-size: cover;
+  background-position: center center;
+}
+
+@mixin make-card-body {
+  padding: 15px;
+  @media #{$breakpoint-xl} {
+    padding: 15px 30px;
+  }
+}
+
+html {
   font-family: mat-font-family($app-typography);
   font-size: mat-font-size($app-typography, body-2);
   line-height: mat-line-height($app-typography, body-2);
+}
+
+body {
+  margin: 0;
+  background-color: #F4F4F4;
+  color:#333;
 }
 
 a {
@@ -296,30 +284,32 @@ a {
 }
 
 .mat-menu-trigger {
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .mat-menu-content {
   ul {
-    list-style:none;
-    padding:0;
-    margin:0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
   li {
-    display:block;
+    display: block;
     a {
-      display:block;
-      text-align:left;
+      display: block;
+      text-align: left;
     }
   }
 }
 
 .mat-ripple {
-  display:none;
+  display: none;
 }
 
 // Style Material Componenets here due to ViewEncapsulation
 mat-progress-bar {
+  border-radius: 4px;
+  height: 5px;
   .mat-progress-bar-background {
     display:none !important;
   }
@@ -328,12 +318,12 @@ mat-progress-bar {
   }
   .mat-progress-bar-buffer {
     background: $colour-teal;
-    opacity:0.24;
+    opacity: 0.24;
   }
 }
 
 mat-radio-button {
-  margin-bottom:1rem;
+  margin-bottom: 1rem;
   .mat-radio-label {
     white-space:initial;
     @include rt-0;
@@ -344,7 +334,7 @@ mat-expansion-panel {
   .mat-expansion-panel-header {
     padding: 0 1rem;
     @media #{$breakpoint-lg} {
-      padding:1rem 2rem 0;
+      padding: 1rem 2rem 0;
     }
   }
 
@@ -353,9 +343,9 @@ mat-expansion-panel {
   }
 
   .mat-expansion-panel-body {
-    padding:0 1rem 1rem;
+    padding: 0 1rem 1rem;
     @media #{$breakpoint-lg} {
-      padding:0 2rem 2rem;
+      padding: 0 2rem 2rem;
     }
   }
 }

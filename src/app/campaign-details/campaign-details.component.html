@@ -1,75 +1,42 @@
 <div class="details" *ngIf="campaign">
-  <img *ngIf="campaign.bannerUri" class="banner" [src]="campaign.bannerUri" alt="" role="presentation">
-  <div>
-    <h2>{{campaign.title}}</h2>
-    <h3 *ngIf="campaign.championName">Championed by {{campaign.championName}}</h3>
-    <h4 *ngIf="campaign.isMatched">Matched Campaign!</h4>
-    <h4 *ngIf="!campaign.isMatched">Regular campaign</h4>
+  <div class="listing-button">
+    <button mat-icon-button class="listing-button__button" [routerLink]="'/christmas-challenge-2019'">
+      <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Example home icon">keyboard_arrow_left</mat-icon>
+      Back to listing
+    </button>
   </div>
 
-  <div>
-    <h3>Campaign Summary</h3>
-    <p>{{campaign.summary}}</p>
-    <p>Status: <strong>{{ campaign.status }}</strong></p>
-    <p *ngIf="campaign.status == 'Active'">{{ campaign.endDate | timeLeft }} left</p>
+  <div fxLayout="row" fxLayout.xs="column">
+    <div class="campaign-header">
+      <h4 class="charity-name">{{ campaign.charity.name }}</h4>
+      <h3 class="campaign-title">{{ campaign.title }}</h3>
+      <p class="campaign-description">{{campaign.summary}}</p>
+      <button mat-raised-button class="donate-button" [routerLink]="'/donate/' + campaign.id">
+        Donate
+      </button>
+    </div>
+
+    <div class="campaign-card">
+      <app-campaign-details-card [campaign]="campaign"></app-campaign-details-card>
+    </div>
+  </div>
+  
+  <div *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" fxLayout="row">
+    <div class="campaign-tabs">
+      <mat-tab-group animationDuration="0ms" color="accent">
+        <mat-tab *ngIf="campaign.budgetDetails.length > 0" label="Where's the money going?">
+          <ul *ngFor="let detail of campaign.budgetDetails">
+            <li><h4>{{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</h4></li>
+            <li>{{ detail.description }}</li>
+          </ul>
+        </mat-tab>
+        <mat-tab *ngIf="campaign.alternativeFundUse" label="Understanding the Target">
+          <div class="campaign-tabs__details">
+            <p>{{ campaign.alternativeFundUse }}</p>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
   </div>
 
-  <div>
-    <h3>Campaign Targets</h3>
-    <p *ngIf="campaign.target > 0">Campaign Target: {{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
-    <mat-progress-bar *ngIf="campaign.target > 0" color="accent" [value]="percentRaised"></mat-progress-bar>
-    <p *ngIf="campaign.amountRaised > 0">Amount Raised:
-      {{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
-    <p>Donations: {{ campaign.donationCount }}</p>
-  </div>
-
-  <div *ngIf="campaign.budgetDetails.length > 0">
-    <h3>Budget Details</h3>
-    <ul *ngFor="let detail of campaign.budgetDetails">
-      <li>Amount: {{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</li>
-      <li>Description: {{ detail.description }}</li>
-    </ul>
-  </div>
-
-  <div *ngIf="campaign.quotes.length > 0">
-    <h3>Campaign Quotes</h3>
-    <ul *ngFor="let quotes of campaign.quotes">
-      <li>Person: {{ quotes.person }}</li>
-      <li>Quote: {{ quotes.quote }}</li>
-    </ul>
-  </div>
-
-  <div *ngIf="clientSide && campaign.additionalImageUris.length > 0">
-    <h3>Campaign Images</h3>
-    <mat-carousel
-      timings="250ms ease-in"
-      [autoplay]="true"
-      interval="5000"
-      color="white"
-      maxWidth="auto"
-      proportion="20"
-      slides="5"
-      [loop]="true"
-      [hideArrows]="true"
-      [hideIndicators]="false"
-      [useKeyboard]="true"
-      [useMouseWheel]="false"
-      orientation="ltr"
-    >
-      <mat-carousel-slide
-        *ngFor="let image of campaign.additionalImageUris"
-        [image]="image.uri"
-        [hideOverlay]="false"
-      ></mat-carousel-slide>
-    </mat-carousel>
-  </div>
-
-  <div *ngIf="campaign.alternativeFundUse">
-    <h3>Understanding the Target</h3>
-    <p>{{ campaign.alternativeFundUse }}</p>
-  </div>
-
-  <div>
-    <button mat-raised-button color="primary" [routerLink]="'/donate/' + campaign.id">Donate</button>
-  </div>
 </div>

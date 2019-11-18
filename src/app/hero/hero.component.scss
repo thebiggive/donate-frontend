@@ -9,22 +9,17 @@
 }
 
 .hero {
-  padding: 0.75rem;
   color: white;
-  background-size: cover;
+  background-size: auto 150%;
   background-repeat: no-repeat;
+  background-position: center top;
   @media #{$breakpoint-md} {
-    background-position: center top;
-    padding: 2rem;
+    background-size: cover;
   }
-  @media #{$breakpoint-lg} {
-    padding-left: 5rem;
-    padding-right: 5rem;
-  }
-  @media #{$breakpoint-xl} {
-    padding-left: 8rem;
-    padding-right: 8rem;
-  }
+}
+
+.hero__content {
+  @include make-container-small;
 }
 
 .hero-flex__child {
@@ -56,16 +51,23 @@ h1 {
   line-height: 1.2;
   @media #{$breakpoint-md} {
     font-size: 35px;
-   }
+  }
   @media #{$breakpoint-lg} {
     font-size: 45px;
-   }
+  }
+  @media #{$breakpoint-xl} {
+    font-size: 60px;
+  }
 }
 
 h2 {
   font-size: 18px;
   margin-top: 1rem;
   font-weight: 400;
+  line-height:1.5;
+  @media #{$breakpoint-xl} {
+    font-size: 24px;
+  }
 }
 
 img {

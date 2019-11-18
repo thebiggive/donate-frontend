@@ -40,6 +40,11 @@ const routes: Routes = [
     path: ':campaignSlug',
     component: MetaCampaignComponent,
   },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'christmas-challenge-2019',
+  },
 ];
 
 @NgModule({

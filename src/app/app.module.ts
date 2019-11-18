@@ -18,6 +18,7 @@ import {
   MatRadioModule,
   MatSelectModule,
   MatSidenavModule,
+  MatTabsModule,
   MatToolbarModule,
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
@@ -27,6 +28,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CampaignCardComponent } from './campaign-card/campaign-card.component';
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
+import { CampaignDetailsCardComponent } from './campaign-details-card/campaign-details-card.component';
 import { CampaignSearchFormComponent } from './campaign-search-form/campaign-search-form.component';
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
@@ -46,6 +48,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     AppComponent,
     CampaignCardComponent,
     CampaignDetailsComponent,
+    CampaignDetailsCardComponent,
     CampaignSearchFormComponent,
     DonationCompleteComponent,
     DonationStartComponent,
@@ -86,6 +89,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     MatRadioModule,
     MatSelectModule,
     MatSidenavModule,
+    MatTabsModule,
     MatToolbarModule,
     ReactiveFormsModule,
   ],

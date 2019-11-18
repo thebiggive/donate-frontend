@@ -13,7 +13,7 @@
     (sortApplied)="onSortApplied($event)"
   ></app-filters>
 
-  <mat-grid-list [cols]="cols()" rowHeight="27rem" gutterSize="1rem">
+  <mat-grid-list [cols]="cols()" gutterSize="3rem">
     <mat-grid-tile *ngFor="let campaign of children">
       <app-campaign-card [campaign]="campaign"></app-campaign-card>
     </mat-grid-tile>

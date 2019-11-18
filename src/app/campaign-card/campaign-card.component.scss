@@ -6,33 +6,21 @@
 // grow to a height that breaks the layout.
 
 .card {
-  background-color: white;
-  border-radius: 4px;
-  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  @include make-card;
+  display:flex;
+  flex-direction:column;
+  height:100%;
 }
 
 .banner-container {
-  height: 110px;
-  overflow: hidden;
-  background-size:cover;
-  background-position:center center;
-}
-
-@media (max-width: 800px) {
-  .banner-container {
-    height: 80px;
-  }
+  @include make-card-banner;
 }
 
 .buttons {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-.buttons {
+  margin-top:auto;
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
-  padding-bottom: 1rem;
 }
 
 ul {
@@ -41,8 +29,8 @@ ul {
 }
 
 .card-header {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 .charity-name {
@@ -52,10 +40,11 @@ ul {
   font-size: 1rem;
   font-weight: 400;
   text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .campaign-title {
-  margin: 0;
+  margin: 0 0 .75rem 0;
   color: $colour-teal-dark;
   @include size-lg;
 }
@@ -67,7 +56,7 @@ ul {
 }
 
 .campaign-categories {
-  margin: 1rem 0.5rem;
+  margin:0 0.5rem;
   margin-left: 0;
   display: inline;
 }
@@ -86,7 +75,7 @@ ul {
 }
 
 .funds {
-  padding: 1rem;
+  padding: 1rem 2rem;
   color: $colour-grey;
 }
 
@@ -108,6 +97,7 @@ p {
 .total-funds__amount {
   margin-top: 0;
   margin-bottom: 0;
+  font-size:20px;
 }
 
 .total-funds__amount {
@@ -122,12 +112,15 @@ p {
 
 .mat-icon-button {
   font-weight: 400;
+  .mat-icon {
+    line-height: 21px;
+  }
 }
 
 .donate-button {
-  padding-left: 1rem;
-  padding-right: 1rem;
-  background-color: $colour-teal-lighter;
-  color: $colour-teal-dark;
-  border-radius: 4px;
+  @include make-donate-button;
+}
+
+.more-button {
+  font-size:18px !important;
 }
