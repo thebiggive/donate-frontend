@@ -36,6 +36,7 @@ import { DonationStartErrorDialogComponent } from './donation-start/donation-sta
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
 import { FiltersComponent } from './filters/filters.component';
+import { FooterComponent } from './footer/footer.component';
 import { HeroComponent } from './hero/hero.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { NavigationComponent } from './navigation/navigation.component';
@@ -56,6 +57,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     DonationStartMatchConfirmDialogComponent,
     DonationStartOfferReuseDialogComponent,
     FiltersComponent,
+    FooterComponent,
     HeroComponent,
     MetaCampaignComponent,
     NavigationComponent,
