@@ -55,7 +55,7 @@ export class DonationService {
     const existingDonations = this.getDonationCouplets().filter(donationItem => {
       return (
         donationItem.donation.projectId === projectId && // Only bring back donations to the same project/CCampaign...
-        this.getCreatedTime(donationItem.donation) > ((new Date()).getTime() - 600000) && // ...from the past 10 minutes...
+        this.getCreatedTime(donationItem.donation) > (Date.now() - 600000) && // ...from the past 10 minutes...
         this.isResumable(donationItem.donation) // ...with a reusable last-known status.
       );
     });
@@ -152,7 +152,7 @@ export class DonationService {
   private removeOldLocalDonations() {
     let donationsOlderThan30Days: Array<{ donation: Donation, jwt: string }>;
     donationsOlderThan30Days = this.getDonationCouplets().filter(donationItem => {
-      return (!donationItem.donation.createdTime || this.getCreatedTime(donationItem.donation) < ((new Date()).getTime() - 2592000000));
+      return (!donationItem.donation.createdTime || this.getCreatedTime(donationItem.donation) < (Date.now() - 2592000000));
     });
     for (const oldDonationCouplet of donationsOlderThan30Days) {
       this.removeLocalDonation(oldDonationCouplet.donation);
