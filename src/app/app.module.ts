@@ -21,7 +21,6 @@ import {
   MatTabsModule,
   MatToolbarModule,
 } from '@angular/material';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -37,13 +36,13 @@ import { DonationStartErrorDialogComponent } from './donation-start/donation-sta
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
 import { FiltersComponent } from './filters/filters.component';
+import { FooterComponent } from './footer/footer.component';
 import { HeroComponent } from './hero/hero.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { NavSearchFormComponent } from './nav-search-form/nav-search-form.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { TimeLeftPipe } from './time-left.pipe';
-import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -58,13 +57,13 @@ import { FooterComponent } from './footer/footer.component';
     DonationStartMatchConfirmDialogComponent,
     DonationStartOfferReuseDialogComponent,
     FiltersComponent,
+    FooterComponent,
     HeroComponent,
     MetaCampaignComponent,
     NavigationComponent,
     NavSearchFormComponent,
     SearchResultsComponent,
     TimeLeftPipe,
-    FooterComponent,
   ],
   entryComponents: [
     DonationStartErrorDialogComponent,
@@ -95,7 +94,6 @@ import { FooterComponent } from './footer/footer.component';
     MatTabsModule,
     MatToolbarModule,
     ReactiveFormsModule,
-    FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
