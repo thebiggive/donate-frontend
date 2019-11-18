@@ -6,10 +6,8 @@ mat-sidenav-container {
 }
 
 mat-sidenav {
-  width: 100vw;
-  @media (min-width: 600px) {
-    max-width: 300px;
-  }
+  width:100%;
+  max-width: 300px;
   @media (min-width: 960px) {
     display: none;
   }
