@@ -20,8 +20,8 @@
       <div class="page-margin">
         <h3 class="rt-2">Your donation of <strong>{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong> has been made.</h3>
         <h3 class="rt-2">That's worth <strong>{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</strong> to {{ donation.charityName }}.</h3>
-        <p class="rt-0">{{ campaign.summary }}</p>
-  
+        <p class="rt-0" *ngIf="campaign">{{ campaign.summary }}</p>
+
         <div class="receipt">
             <h3 class="rt-2">Your receipt</h3>
             <div fxLayout="row">
@@ -36,6 +36,11 @@
               <div fxFlex="50">
                 <h4 class="rt-sm">Total amount {{ donation.charityName }} receive</h4>
                 <h4 class="rt-2">{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</h4>
+                <div *ngIf="donation.tipAmount > 0">
+                  <p class="small-p">Thank you for leaving a tip of {{ donation.tipAmount | currency : '£' : 'symbol' : '1.2-2' }} towards the Big Give.</p>
+                  <h4 class="rt-sm">Total amount you have been charged</h4>
+                  <p class="rt-1">{{ cardChargedAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
+                </div>
               </div>
             </div>
           </div>
