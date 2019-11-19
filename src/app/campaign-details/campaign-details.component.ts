@@ -15,6 +15,7 @@ export class CampaignDetailsComponent implements OnInit {
   public campaign: Campaign;
   public campaignId: string;
   public clientSide: boolean;
+  public donateEnabled = true;
   public percentRaised?: number;
 
   constructor(
@@ -35,9 +36,10 @@ export class CampaignDetailsComponent implements OnInit {
     this.campaignService.getOneById(this.campaignId)
       .subscribe(campaign => {
         this.campaign = campaign;
+        this.donateEnabled = CampaignService.isOpenForDonations(campaign);
         this.percentRaised = CampaignService.percentRaised(campaign);
         // First 20 word-like things followed by …
-        const summaryStart = campaign.summary.replace(new RegExp('^(([\\w\',."-]+ ){20}).*$'), '$1') + '&hellip;';
+        const summaryStart = campaign.summary.replace(new RegExp('^(([\\w\',."-]+ ){20}).*$'), '$1') + '…';
         this.pageMeta.setCommon(campaign.title, summaryStart, campaign.bannerUri);
       });
   }

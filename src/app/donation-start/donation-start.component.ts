@@ -59,6 +59,12 @@ export class DonationStartComponent implements OnInit {
     this.campaignService.getOneById(this.campaignId)
       .subscribe(campaign => {
         this.campaign = campaign;
+
+        if (!CampaignService.isOpenForDonations(campaign)) {
+          this.router.navigateByUrl(`/campaign/${campaign.id}`);
+          return;
+        }
+
         this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
       });
 
