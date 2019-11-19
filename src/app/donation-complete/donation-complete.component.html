@@ -34,7 +34,7 @@
                 <p class="rt-1">{{ giftAidAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
               </div>
               <div fxFlex="50">
-                <h4 class="rt-sm">Total amount {{ donation.charityName }} receive</h4>
+                <h4 class="rt-sm">Total for {{ donation.charityName }}</h4>
                 <h4 class="rt-2">{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</h4>
                 <div *ngIf="donation.tipAmount > 0">
                   <p class="small-p">Thank you for leaving a tip of {{ donation.tipAmount | currency : '£' : 'symbol' : '1.2-2' }} towards the Big Give.</p>
