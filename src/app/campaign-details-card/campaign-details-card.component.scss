@@ -5,7 +5,14 @@
 }
 
 .banner-container {
-  @include make-card-banner;
+  height: 0;
+  padding-bottom: 30.56%;
+}
+
+img {
+  width: 100%;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 }
 
 .card-body {
