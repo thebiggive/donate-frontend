@@ -16,6 +16,18 @@ export class CampaignService {
     private http: HttpClient,
   ) {}
 
+  static isOpenForDonations(campaign: Campaign): boolean {
+    if (campaign.status === 'Active') {
+      return true;
+    }
+
+    if (campaign.startDate > new Date()) {
+      return false;
+    }
+
+    return (campaign.endDate >= new Date());
+  }
+
   static percentRaised(campaign: (Campaign | CampaignSummary)): number | null {
     if (!campaign.target) {
       return null;

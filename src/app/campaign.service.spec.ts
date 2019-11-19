@@ -6,6 +6,60 @@ import { CampaignService } from './campaign.service';
 import { environment } from '../environments/environment';
 
 describe('CampaignService', () => {
+  const getDummyCampaign = () => {
+    return new Campaign(
+      'a051r00001EywjpAAB',
+      200.00,
+      [
+        {
+          uri: 'https://example.com/some-additional-image.png',
+          order: 100,
+        },
+      ],
+      'https://example.com/some-banner.png',
+      [
+        {
+          description: 'budget line 1',
+          amount: 2000.01,
+        },
+      ],
+      'The Big Give Match Fund',
+      {
+        name: 'Awesome Charity',
+        id: '0011r00002HHAprAAH',
+      },
+      4,
+      new Date(),
+      [
+        {
+          description: 'Can buy you 2 things',
+          amount: 50.01,
+        },
+      ],
+      true,
+      987.00,
+      [
+        {
+          quote: 'Some quote',
+          person: 'Someones quote',
+        },
+      ],
+      new Date(),
+      'Active',
+      'Some long summary',
+      2000.01,
+      'Some title',
+      [],
+      [
+        {
+          provider: 'youtube',
+          key: '1G_Abc2delF',
+        },
+      ],
+      'Some information about what happens if funds are not used'
+    );
+  };
+
   beforeEach(() => TestBed.configureTestingModule({
     imports: [ HttpClientTestingModule ],
     providers: [ CampaignService ],
@@ -15,59 +69,7 @@ describe('CampaignService', () => {
     const service: CampaignService = TestBed.get(CampaignService);
     const httpMock: HttpTestingController = TestBed.get(HttpTestingController);
 
-    const dummyCampaign: Campaign = {
-      additionalImageUris: [
-        {
-          // tslint:disable-next-line:max-line-length
-          uri: 'https://thebiggive--c.eu12.content.force.com/sfc/dist/version/download/?oid=00D0O000000YzQm&ids=0681r00000CtcvY&d=%2Fa%2F1r0000002Ypn%2FeDMuuQUiOagDxe4259w1_.zlHnaPgj2nMiGJ5M.Gi2Y&asPdf=false',
-          order: 100,
-        },
-      ],
-      alternativeFundUse: 'Some information about what happens if funds are not used',
-      amountRaised: 200.00,
-      // tslint:disable-next-line:max-line-length
-      bannerUri: 'https://thebiggive--Full--c.cs107.content.force.com/sfc/dist/version/download/?oid=00D1X0000008ahG&ids=0681X0000007w5l&d=%2Fa%2F1X0000008UpU%2FvdeP6lXwciVq6CMSA8BhwNQ6hNTyZHu7VmcugZgN2SY&asPdf=false',
-      budgetDetails: [
-        {
-          description: 'x',
-          amount: 2000.01,
-        },
-      ],
-      championName: 'The Big Give Match Fund',
-      charity: {
-        name: 'Awesome Charity',
-        id: '0011r00002HHAprAAH',
-      },
-      donationCount: 4,
-      endDate: new Date(),
-      giftHandles: [
-        {
-          description: 'Can buy you 2 things',
-          amount: 50.01,
-        },
-      ],
-      id: 'a051r00001EywjpAAB',
-      isMatched: true,
-      matchFundsRemaining: 987.00,
-      quotes: [
-        {
-          quote: 'Some quote',
-          person: 'Someones quote',
-        },
-      ],
-      startDate: new Date(),
-      status: 'Active',
-      summary: 'Some long summary',
-      target: 2000.01,
-      title: 'Some title',
-      updates: [],
-      video: [
-        {
-          provider: 'youtube',
-          key: '1G_Abc2delF',
-        },
-      ],
-    };
+    const dummyCampaign: Campaign = getDummyCampaign();
 
     service.getOneById('a051r00001EywjpAAB').subscribe(campaign => {
       expect(campaign).toEqual(dummyCampaign);
@@ -78,5 +80,41 @@ describe('CampaignService', () => {
     const request = httpMock.expectOne(`${environment.apiUriPrefix}/campaigns/services/apexrest/v1.0/campaigns/a051r00001EywjpAAB`);
     expect(request.request.method).toBe('GET');
     request.flush(dummyCampaign);
+  });
+
+  it ('should allow donation attempts to any campaign with status Active, regardless of its dates', () => {
+    const campaign = getDummyCampaign();
+    campaign.startDate = new Date((new Date()).getTime() - 86400000);
+    campaign.endDate = new Date((new Date()).getTime() - 86400000);
+    campaign.status = 'Active';
+
+    expect(CampaignService.isOpenForDonations(campaign)).toBe(true);
+  });
+
+  it ('should allow donation attempts to any campaign in active date range, even if Status gets stuck in Preview', () => {
+    const campaign = getDummyCampaign();
+    campaign.startDate = new Date((new Date()).getTime() - 86400000);
+    campaign.endDate = new Date((new Date()).getTime() + 86400000);
+    campaign.status = 'Preview';
+
+    expect(CampaignService.isOpenForDonations(campaign)).toBe(true);
+  });
+
+  it ('should allow not allow donation attempts to Preview campaigns with future start dates', () => {
+    const campaign = getDummyCampaign();
+    campaign.startDate = new Date((new Date()).getTime() + 86400000);
+    campaign.endDate = new Date((new Date()).getTime() + 86400001);
+    campaign.status = 'Preview';
+
+    expect(CampaignService.isOpenForDonations(campaign)).toBe(false);
+  });
+
+  it ('should allow not allow donation attempts to Expired campaigns with past end dates', () => {
+    const campaign = getDummyCampaign();
+    campaign.startDate = new Date((new Date()).getTime() - 86400000);
+    campaign.endDate = new Date((new Date()).getTime() - 1000);
+    campaign.status = 'Expired';
+
+    expect(CampaignService.isOpenForDonations(campaign)).toBe(false);
   });
 });
