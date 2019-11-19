@@ -39,7 +39,7 @@ export class CampaignDetailsComponent implements OnInit {
         this.donateEnabled = CampaignService.isOpenForDonations(campaign);
         this.percentRaised = CampaignService.percentRaised(campaign);
         // First 20 word-like things followed by …
-        const summaryStart = campaign.summary.replace(new RegExp('^(([\\w\',."-]+ ){20}).*$'), '$1') + '&hellip;';
+        const summaryStart = campaign.summary.replace(new RegExp('^(([\\w\',."-]+ ){20}).*$'), '$1') + '…';
         this.pageMeta.setCommon(campaign.title, summaryStart, campaign.bannerUri);
       });
   }
