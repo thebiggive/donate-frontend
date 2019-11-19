@@ -56,7 +56,7 @@ describe('CampaignService', () => {
           key: '1G_Abc2delF',
         },
       ],
-      'Some information about what happens if funds are not used'
+      'Some information about what happens if funds are not used',
     );
   };
 
