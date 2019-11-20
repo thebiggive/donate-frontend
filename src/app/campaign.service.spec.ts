@@ -9,6 +9,7 @@ describe('CampaignService', () => {
   const getDummyCampaign = () => {
     return new Campaign(
       'a051r00001EywjpAAB',
+      ['Aim 1'],
       200.00,
       [
         {
@@ -36,26 +37,28 @@ describe('CampaignService', () => {
           amount: 50.01,
         },
       ],
+      'Impact reporting plan',
+      'Impact overview',
       true,
       987.00,
+      'The situation',
       [
         {
           quote: 'Some quote',
           person: 'Someones quote',
         },
       ],
+      'The solution',
       new Date(),
       'Active',
       'Some long summary',
       2000.01,
       'Some title',
       [],
-      [
-        {
-          provider: 'youtube',
-          key: '1G_Abc2delF',
-        },
-      ],
+      {
+        provider: 'youtube',
+        key: '1G_Abc2delF',
+      },
       'Some information about what happens if funds are not used',
     );
   };

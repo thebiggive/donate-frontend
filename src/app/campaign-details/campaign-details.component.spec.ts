@@ -35,6 +35,7 @@ describe('CampaignDetailsComponent', () => {
     component = fixture.componentInstance;
     component.campaign = new Campaign(
       'testCampaignId',
+      ['Aim 1'],
       123,
       [],
       'https://example.com/banner.png',
@@ -44,16 +45,23 @@ describe('CampaignDetailsComponent', () => {
       4,
       new Date(),
       [],
+      'Impact reporting plan',
+      'Impact overview',
       true,
       987,
+      'The situation',
       [],
+      'The solution',
       new Date(),
       'Active',
       'Test campaign description',
       1234,
       'Test Campaign!',
       [],
-      [],
+      {
+        provider: 'youtube',
+        key: 'someFakeKey',
+      },
       'Some information about what happens if funds are not used',
     );
     fixture.detectChanges();
@@ -67,5 +75,7 @@ describe('CampaignDetailsComponent', () => {
     expect(component.campaign.title).toBe('Test Campaign!');
     expect(component.campaign.isMatched).toBe(true);
     expect(component.campaign.charity.name).toBe('Test Charity');
+    expect(component.campaign.aims[0]).toBe('Aim 1');
+    expect(component.campaign.video.provider).toBe('youtube');
   });
 });

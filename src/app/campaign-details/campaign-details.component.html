@@ -26,8 +26,28 @@
     <div class="campaign-tabs">
       <mat-tab-group animationDuration="0ms" color="accent">
         <mat-tab label="Campaign overview">
+          <ul *ngIf="campaign.quotes.length > 0" class="campaign-quotes">
+            <li *ngFor="let quote of campaign.quotes">
+              <blockquote>{{ quote.quote }}</blockquote>
+              <h4 class="attribution">&mdash; {{ quote.person }}</h4>
+            </li>
+          </ul>
+
+          <div *ngIf="videoEmbedUrl" class="campaign-video">
+              <iframe
+                [src]="videoEmbedUrl"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
+                webkitallowfullscreen="ture"
+                mozallowfullscreen="true"
+                allowfullscreen="true"></iframe>
+            </div>
+
           <div class="campaign-tabs__details">
-            <p><!-- Some of Situation / Solution to go here --></p>
+            <h3>Situation</h3>
+            <p>{{ campaign.problem }}</p>
+            <h3>Solution</h3>
+            <p>{{ campaign.solution }}</p>
           </div>
 
           <div *ngIf="clientSide && campaign.additionalImageUris.length > 0">
@@ -62,12 +82,9 @@
           </ul>
         </mat-tab>
 
-        <mat-tab *ngIf="campaign.quotes.length > 0" label="Quotes">
-          <ul>
-            <li *ngFor="let quote of campaign.quotes">
-              <blockquote>{{ quote.quote }}&quot;</blockquote>
-              <h4 class="attribution">&ndash; {{ quote.person }}</h4>
-            </li>
+        <mat-tab *ngIf="campaign.updates.aims > 0" label="Aims">
+          <ul *ngFor="let aim of campaign.aims">
+            <li>{{ aim }}</li>
           </ul>
         </mat-tab>
 
@@ -83,6 +100,14 @@
           <div class="campaign-tabs__details">
             <p>{{ campaign.alternativeFundUse }}</p>
           </div>
+        </mat-tab>
+
+        <mat-tab label="Impact &amp; reporting">
+          <h3>Impact</h3>
+          <p>{{ campaign.impactSummary }}</p>
+
+          <h3>Reporting</h3>
+          <p>{{ campaign.impactReporting }}</p>
         </mat-tab>
       </mat-tab-group>
     </div>

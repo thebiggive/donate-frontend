@@ -59,6 +59,7 @@ describe('MetaCampaignComponent', () => {
 
     component.campaign = new Campaign(
       'testMasterCampaignId',
+      ['Aim 1'],
       123,
       [],
       'https://example.com/banner.png',
@@ -68,16 +69,20 @@ describe('MetaCampaignComponent', () => {
       4,
       new Date(),
       [],
+      'Impact reporting plan',
+      'Impact overview',
       true,
       987,
+      'The situation',
       [],
+      'The solution',
       new Date(),
       'Active',
       'Test Master Campaign detail',
       undefined,
       'Test Master Campaign!',
       [],
-      [],
+      null,
     );
     component.children = [
       new CampaignSummary(
