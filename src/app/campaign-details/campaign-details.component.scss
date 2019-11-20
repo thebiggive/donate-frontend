@@ -42,6 +42,33 @@
   line-height:1.5;
 }
 
+.campaign-video {
+  width: 100%;
+  height: auto;
+
+  iframe {
+    height: 200px;
+  }
+}
+
+.campaign-quotes {
+  list-style: none;
+  margin: 2rem 0 0 0;
+  padding: 0;
+
+  blockquote {
+    border-left: solid 2px $colour-teal-dark;
+    padding-left: 2rem;
+    margin: 0;
+    white-space: pre-wrap;
+  }
+
+  .attribution {
+    text-align: right;
+    margin-bottom: 2rem;
+  }
+}
+
 .donate-button {
   @include make-donate-button;
 }
@@ -65,17 +92,9 @@
 
 mat-tab-group {
   margin-top: 2rem;
-  ul {
-    list-style: none;
-    margin-left: 0;
-    padding-left: 15px;
-  }
+
   h4 {
     font-weight: 500;
     margin-bottom: 0;
-  }
-  .attribution {
-    text-align: right;
-    margin-bottom: 2rem;
   }
 }

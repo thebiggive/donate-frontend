@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
 import { Campaign } from '../campaign.model';
@@ -17,12 +18,14 @@ export class CampaignDetailsComponent implements OnInit {
   public clientSide: boolean;
   public donateEnabled = true;
   public percentRaised?: number;
+  public videoEmbedUrl?: SafeResourceUrl;
 
   constructor(
     private campaignService: CampaignService,
     private pageMeta: PageMetaService,
     // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
+    private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
   ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
@@ -41,6 +44,13 @@ export class CampaignDetailsComponent implements OnInit {
         // First 20 word-like things followed by …
         const summaryStart = campaign.summary.replace(new RegExp('^(([\\w\',."-]+ ){20}).*$'), '$1') + '…';
         this.pageMeta.setCommon(campaign.title, summaryStart, campaign.bannerUri);
+
+        // As per https://angular.io/guide/security#bypass-security-apis constructing `SafeResourceUrl`s with these appends should be safe.
+        if (campaign.video && campaign.video.provider === 'youtube') {
+          this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${campaign.video.key}`);
+        } else if (campaign.video && campaign.video.provider === 'vimeo') {
+          this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://player.vimeo.com/video/${campaign.video.key}`);
+        }
       });
   }
 }
