@@ -1,5 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { CampaignService } from '../campaign.service';
@@ -16,7 +15,6 @@ export class SearchResultsComponent implements OnInit {
 
   private parentCampaignId: string;
   private term: string;
-  private viewportWidth: number; // In px. Used to vary `<mat-grid-list />`'s `cols`.
 
   constructor(
     private campaignService: CampaignService,
@@ -32,13 +30,6 @@ export class SearchResultsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) { // Update w.r.t. viewport only when browser-rendered
-      this.viewportWidth = window.innerWidth;
-    }
-  }
-
-  cols(): number {
-    return Math.min(5, Math.floor(this.viewportWidth / 300)); // Min 300px per col; up to 3 cols
   }
 
   public search() {
@@ -48,10 +39,5 @@ export class SearchResultsComponent implements OnInit {
         this.campaigns = campaignSummaries;
         service.searched = true;
       });
-  }
-
-  @HostListener('window:resize', ['$event'])
-  private onResize(event) {
-    this.viewportWidth = event.target.innerWidth;
   }
 }

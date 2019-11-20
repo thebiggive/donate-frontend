@@ -77,6 +77,8 @@ export class Donation {
      */
     public status?: DonationStatus,
 
+    public tipAmount?: number,
+
     /**
      * ID assigned by Charity Checkout upon checkout initiation.
      */

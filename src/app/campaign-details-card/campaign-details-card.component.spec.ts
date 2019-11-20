@@ -30,6 +30,7 @@ describe('CampaignDetailsCardComponent', () => {
     component = fixture.componentInstance;
     component.campaign = new Campaign(
       'testCampaignId',
+      ['Aim 1'],
       123,
       [],
       'https://example.com/banner.png',
@@ -39,16 +40,20 @@ describe('CampaignDetailsCardComponent', () => {
       4,
       new Date(),
       [],
+      'Impact reporting plan',
+      'Impact overview',
       true,
       987,
+      'The situation',
       [],
+      'The solution',
       new Date(),
       'Active',
       'Test campaign description',
       1234,
       'Test Campaign!',
       [],
-      [],
+      undefined,
       'Some information about what happens if funds are not used',
     );
     fixture.detectChanges();

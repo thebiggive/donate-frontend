@@ -12,6 +12,9 @@ mat-sidenav {
   @media (min-width: 960px) {
     display: none;
   }
+  button.mat-menu-trigger.mat-icon-button {
+    width: auto; // Work around Safari layout issue where top sidenav items are cut off
+  }
 }
 
 .main-nav-toolbar {
@@ -39,7 +42,7 @@ mat-sidenav {
 
 .logo {
   width: 150px;
-  height: auto;
+  height: 30px;
 }
 
 .logo__wrap {

@@ -67,6 +67,10 @@ form {
   text-align: center;
 }
 
+p.rt-0 mat-icon {
+  vertical-align: middle;
+}
+
 .suggested-amount__button {
   background-color: $colour-teal-light;
   box-shadow: inset 0px 1px 4px rgba(0, 131, 143, 0.2);
@@ -115,7 +119,7 @@ a {
       font-size: 12px;
     }
   }
-  .mat-icon {
+  .mat-icon.plus {
     color: $colour-grey;
     font-size: 1rem;
     font-weight: bolder;

@@ -1,5 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { Campaign } from '../campaign.model';
@@ -26,7 +25,6 @@ export class MetaCampaignComponent implements OnInit {
   private campaignSlug: string;
   private fundSlug: string;
   private query: SearchQuery;
-  private viewportWidth: number; // In px. Used to vary `<mat-grid-list />`'s `cols`.
 
   private perPage = 6;
 
@@ -46,10 +44,6 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) { // Update w.r.t. viewport only when browser-rendered
-      this.viewportWidth = window.innerWidth;
-    }
-
     if (this.campaignId) {
       this.campaignService.getOneById(this.campaignId).subscribe(campaign => this.setCampaign(campaign));
     } else {
@@ -84,10 +78,6 @@ export class MetaCampaignComponent implements OnInit {
 
   moreMightExist(): boolean {
     return (this.children.length === this.query.limit);
-  }
-
-  cols(): number {
-    return Math.min(3, Math.floor(this.viewportWidth / 300)); // Min 300px per col; up to 3 cols
   }
 
   /**
@@ -143,10 +133,5 @@ export class MetaCampaignComponent implements OnInit {
       `Browse campaigns in ${campaign.title}`,
       campaign.bannerUri,
     );
-  }
-
-  @HostListener('window:resize', ['$event'])
-  private onResize(event) {
-    this.viewportWidth = event.target.innerWidth;
   }
 }

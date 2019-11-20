@@ -25,16 +25,89 @@
   <div *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" fxLayout="row">
     <div class="campaign-tabs">
       <mat-tab-group animationDuration="0ms" color="accent">
+        <mat-tab label="Campaign overview">
+          <ul *ngIf="campaign.quotes.length > 0" class="campaign-quotes">
+            <li *ngFor="let quote of campaign.quotes">
+              <blockquote>{{ quote.quote }}</blockquote>
+              <h4 class="attribution">&mdash; {{ quote.person }}</h4>
+            </li>
+          </ul>
+
+          <div *ngIf="videoEmbedUrl" class="campaign-video">
+              <iframe
+                [src]="videoEmbedUrl"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
+                webkitallowfullscreen="ture"
+                mozallowfullscreen="true"
+                allowfullscreen="true"></iframe>
+            </div>
+
+          <div class="campaign-tabs__details">
+            <h3>Situation</h3>
+            <p>{{ campaign.problem }}</p>
+            <h3>Solution</h3>
+            <p>{{ campaign.solution }}</p>
+          </div>
+
+          <div *ngIf="clientSide && campaign.additionalImageUris.length > 0">
+            <mat-carousel
+              timings="250ms ease-in"
+              [autoplay]="true"
+              interval="5000"
+              color="white"
+              maxWidth="auto"
+              proportion="20"
+              slides="5"
+              [loop]="true"
+              [hideArrows]="true"
+              [hideIndicators]="false"
+              [useKeyboard]="true"
+              [useMouseWheel]="false"
+              orientation="ltr"
+            >
+              <mat-carousel-slide
+                *ngFor="let image of campaign.additionalImageUris"
+                [image]="image.uri"
+                [hideOverlay]="false"
+              ></mat-carousel-slide>
+            </mat-carousel>
+          </div>
+        </mat-tab>
+
+        <mat-tab *ngIf="campaign.updates.length > 0" label="Updates">
+          <ul *ngFor="let update of campaign.updates">
+            <li><h4>{{ update.modifiedDate | date : 'longDate' }}</h4></li>
+            <li>{{ update.content }}</li>
+          </ul>
+        </mat-tab>
+
+        <mat-tab *ngIf="campaign.updates.aims > 0" label="Aims">
+          <ul *ngFor="let aim of campaign.aims">
+            <li>{{ aim }}</li>
+          </ul>
+        </mat-tab>
+
         <mat-tab *ngIf="campaign.budgetDetails.length > 0" label="Where's the money going?">
           <ul *ngFor="let detail of campaign.budgetDetails">
             <li><h4>{{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</h4></li>
             <li>{{ detail.description }}</li>
           </ul>
-        </mat-tab>
-        <mat-tab *ngIf="campaign.alternativeFundUse" label="Understanding the Target">
+
+          <div *ngIf="campaign.alternativeFundUse">
+            <h4>Understanding the target</h4>
+          </div>
           <div class="campaign-tabs__details">
             <p>{{ campaign.alternativeFundUse }}</p>
           </div>
+        </mat-tab>
+
+        <mat-tab label="Impact &amp; reporting">
+          <h3>Impact</h3>
+          <p>{{ campaign.impactSummary }}</p>
+
+          <h3>Reporting</h3>
+          <p>{{ campaign.impactReporting }}</p>
         </mat-tab>
       </mat-tab-group>
     </div>
