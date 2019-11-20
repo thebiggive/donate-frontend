@@ -29,6 +29,7 @@ describe('DonationService', () => {
       0,
       500.01,
       status,
+      2.75,
       'd290f1ee-6c54-4b01-90e6-d701748f0851',
       new Date(),
     );
@@ -59,6 +60,7 @@ describe('DonationService', () => {
           expect(result.jwt).toEqual('mockJwtheader.mockJwtBody.mockJwtSignature');
           expect(result.donation.donationAmount).toEqual(1234.56);
           expect(result.donation.matchReservedAmount).toEqual(500.01);
+          expect(result.donation.tipAmount).toEqual(2.75);
           expect(result.donation.transactionId).toEqual('d290f1ee-6c54-4b01-90e6-d701748f0851');
         }, () => {
           expect(false).toBe(true); // Always fail if observable errors
