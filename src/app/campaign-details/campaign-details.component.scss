@@ -10,6 +10,21 @@
 
 .campaign-header {
   @include make-primary-column;
+
+  mat-icon {
+    font-size: 1rem;
+    vertical-align: baseline;
+  }
+
+  .social-icons {
+    a {
+      margin-right: 1rem;
+    }
+
+    img {
+      width: 21px;
+    }
+  }
 }
 
 .charity-name {
