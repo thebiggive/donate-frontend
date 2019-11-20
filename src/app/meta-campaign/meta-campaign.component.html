@@ -13,11 +13,11 @@
     (sortApplied)="onSortApplied($event)"
   ></app-filters>
 
-  <mat-grid-list [cols]="cols()" gutterSize="3rem" rowHeight="400px">
-    <mat-grid-tile *ngFor="let campaign of children">
+  <div class="cards-grid">
+    <div class="cards-grid__card" *ngFor="let campaign of children">
       <app-campaign-card [campaign]="campaign"></app-campaign-card>
-    </mat-grid-tile>
-  </mat-grid-list>
+    </div>
+  </div>
 
   <p class="more-campaigns" *ngIf="moreMightExist()">
     <button mat-raised-button (click)="more()">
