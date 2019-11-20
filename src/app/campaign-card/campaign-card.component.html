@@ -26,7 +26,7 @@
       <h4 class="matched-funds__amount" fxFlex="50">{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }}</h4>
     </div>
     <div class="total-funds" *ngIf="campaign.isMatched" fxFlex="50" fxLayout="column">
-      <p class="rt-sm" fxFlex="50">Total funds raised (inc. gift aid)</p>
+      <p class="rt-sm" fxFlex="50">Total funds raised (inc. Gift Aid)</p>
       <h4 class="total-funds__amount" fxFlex="50">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</h4>
     </div>
   </div>

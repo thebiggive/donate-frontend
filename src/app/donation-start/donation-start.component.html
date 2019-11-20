@@ -1,7 +1,7 @@
 <div class="donate-start" *ngIf="campaign">
   <div class="campaign-button">
     <button mat-icon-button class="campaign-button__button" [routerLink]="'/campaign/' + campaign.id">
-      <mat-icon class="campaign-button__icon" aria-hidden="false" aria-label="Bac button">keyboard_arrow_left</mat-icon>
+      <mat-icon class="campaign-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
       Back to campaign
     </button>
   </div>
@@ -56,7 +56,9 @@
               </mat-expansion-panel-header>
               <p class="no-margin-top rt-1"><strong>Boost your donation by 25p of Gift Aid for every £1 you donate.</strong></p>
               <p class="rt-0">'I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of Gift Aid claimed on all my donations it is my responsibility to pay the difference'.</p>
-              <p class="rt-0">Gift Aid is a government scheme for UK charities to reclaim the tax you have paid and gain 25% more at no cost or hassle to you. <a routerLink="'/terms-and-conditions'">Find out more about Gift Aid</a>.</p>
+              <p class="rt-0">Gift Aid is a government scheme for UK charities to reclaim the tax you have paid and gain 25% more at no cost or hassle to you.
+                <a href="https://www.thebiggive.org.uk/s/terms-and-conditions" target="_blank"><mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> Find out more about Gift Aid</a>.
+              </p>
               <mat-radio-group aria-labelledby="giftAid-label" formControlName="giftAid">
                 <mat-radio-button labelPosition="after" [value]="true">Yes, I am a UK tax payer and would like Gift Aid claimed on my donations</mat-radio-button>
                 <mat-radio-button labelPosition="after" [value]="false">No, I am not a UK tax payer and do not want Gift Aid claimed on my donations</mat-radio-button>
@@ -100,8 +102,8 @@
               </mat-expansion-panel-header>
 
               <p class="rt-0">By clicking on the <em>Donate</em> button, you agree to the Big Give's
-                <a href="https://www.thebiggive.org.uk/s/terms-and-conditions" target="_blank"><mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>Terms and Conditions</a> and
-                <a href="https://www.thebiggive.org.uk/s/privacy-policy" target="_blank"><mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>Privacy Policy</a>.
+                <a href="https://www.thebiggive.org.uk/s/terms-and-conditions" target="_blank"><mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> Terms and Conditions</a> and
+                <a href="https://www.thebiggive.org.uk/s/privacy-policy" target="_blank"><mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> Privacy Policy</a>.
               </p>
 
               <div class="donation-summary">
@@ -116,14 +118,14 @@
                     <p class="centered-p rt-0"><strong>{{ donationForm.value.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong></p>
                   </div>
                   <div fxFlex="11" fxLayout="row" fxLayoutAlign="center end">
-                    <mat-icon aria-hidden="false" aria-label="Plus">add</mat-icon>
+                    <mat-icon class="plus" aria-hidden="false" aria-label="Plus">add</mat-icon>
                   </div>
                   <div fxFlex="26" *ngIf="expectedMatchAmount() > 0">
                     <p class="centered-p rt-sm"><small>Matched funds</small></p>
                     <p class="centered-p rt-0"><strong>{{ expectedMatchAmount() | currency : '£' : 'symbol' : '1.0-0' }}</strong></p>
                   </div>
                   <div fxFlex="11" fxLayout="row" fxLayoutAlign="center end" *ngIf="expectedMatchAmount() > 0">
-                    <mat-icon aria-hidden="false" aria-label="Plus">add</mat-icon>
+                    <mat-icon class="plus" aria-hidden="false" aria-label="Plus">add</mat-icon>
                   </div>
                   <div [fxFlex]="(expectedMatchAmount() > 0) ? 26 : 39">
                     <p class="centered-p rt-sm"><small>Gift Aid</small></p>
@@ -141,7 +143,7 @@
 
           <p *ngIf="sfApiError" class="error">
             Sorry, we can't submit your donation right now. Please try again in a moment
-            or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank"><mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>contact us</a>
+            or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank"><mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> contact us</a>
             if this message persists.
           </p>
 
