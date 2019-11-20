@@ -1,9 +1,13 @@
 <div class="card" *ngIf="campaign">
-  <div
-    class="banner-container"
-    [ngStyle]="{'background-image':' url(' + campaign.bannerUri + ')'}"
-    role="presentation"
-  ></div>
+  <div class="banner-container">
+    <img
+      class="banner-image"
+      *ngIf="campaign.bannerUri"
+      [src]="campaign.bannerUri"
+      alt=""
+      role="presentation"
+    >
+  </div>
 
   <div class="card-body">
     <h3 class="campaign-target">Campaign target</h3>

@@ -1,9 +1,12 @@
 <div class="card">
-  <div
-    class="banner-container"
-    [ngStyle]="{'background-image':' url(' + campaign.imageUri + '?width=1000)'}"
-    role="presentation"
-  >
+  <div class="banner-container">
+    <img
+      class="banner-image"
+      *ngIf="campaign.imageUri"
+      [src]="campaign.imageUri"
+      alt=""
+      role="presentation"
+    >
   </div>
 
   <div class="card-header">

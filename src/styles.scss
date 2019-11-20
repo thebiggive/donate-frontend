@@ -80,6 +80,7 @@ $colour-teal-lightish: #69BEC9;
 $colour-teal: #00838f;
 $colour-teal-dark: #00707C;
 $colour-teal-darker: #006672;
+$colour-teal-darkest: #005360;
 $colour-teal-fade: #E0F0F2;
 $colour-grey-light: #E1E2E5;
 $colour-grey: #7B8292;
@@ -233,7 +234,7 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
 @mixin make-donate-button {
   padding: 0.5rem 2rem;
   background-color: $colour-teal-lighter;
-  color: $colour-teal-dark;
+  color: $colour-teal-darkest;
   border-radius: 4px;
   font-size:18px;
   box-shadow:none !important;
