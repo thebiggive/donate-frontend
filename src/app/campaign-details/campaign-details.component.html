@@ -15,13 +15,6 @@
         Donate
       </button>
       <p *ngIf="!donateEnabled">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL' }}</p>
-
-      <ul *ngIf="campaign.quotes.length > 0" class="campaign-quotes">
-        <li *ngFor="let quote of campaign.quotes">
-          <blockquote>{{ quote.quote }}</blockquote>
-          <h4 class="attribution">&mdash; {{ quote.person }}</h4>
-        </li>
-      </ul>
     </div>
 
     <div class="campaign-card">
@@ -33,6 +26,13 @@
     <div class="campaign-tabs">
       <mat-tab-group animationDuration="0ms" color="accent">
         <mat-tab label="Campaign overview">
+          <ul *ngIf="campaign.quotes.length > 0" class="campaign-quotes">
+            <li *ngFor="let quote of campaign.quotes">
+              <blockquote>{{ quote.quote }}</blockquote>
+              <h4 class="attribution">&mdash; {{ quote.person }}</h4>
+            </li>
+          </ul>
+
           <div *ngIf="videoEmbedUrl" class="campaign-video">
               <iframe
                 [src]="videoEmbedUrl"
