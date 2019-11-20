@@ -15,6 +15,7 @@ import { DonationService } from '../donation.service';
 })
 export class DonationCompleteComponent {
   public campaign: Campaign;
+  public cardChargedAmount: number;
   public complete = false;
   public donation: Donation;
   public giftAidAmount: number;
@@ -67,6 +68,7 @@ export class DonationCompleteComponent {
 
     if (this.donationService.isComplete(donation)) {
       this.analyticsService.logEvent('thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
+      this.cardChargedAmount = donation.donationAmount + donation.tipAmount;
       this.giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;
       this.totalValue = donation.donationAmount + this.giftAidAmount + donation.matchedAmount;
       this.complete = true;

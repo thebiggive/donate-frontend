@@ -109,10 +109,10 @@ h3 {
     margin: 0;
     font-weight: 500;
   }
-}
-
-.small-p {
-  line-height: 1;
+  p.small-p {
+    margin-top: 2.5rem;
+    line-height: 1;
+  }
 }
 
 .page-button {

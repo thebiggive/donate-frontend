@@ -1,5 +1,5 @@
 <app-hero *ngIf="campaign"
-  [title]="fund ? fund.name + ' x ' + campaign.title : campaign.title"
+  [title]="fund ? fund.name + ' // ' + campaign.title : campaign.title"
   [description]="fund ? fund.description : campaign.summary"
   (heroSearch)="onMetacampaignSearch($event)"
   [logoUri]="fund && fund.logoUri ? fund.logoUri : null"
@@ -18,12 +18,6 @@
       <app-campaign-card [campaign]="campaign"></app-campaign-card>
     </div>
   </div>
-
-  <!-- <mat-grid-list [cols]="cols()" gutterSize="3rem" rowHeight="420px">
-    <mat-grid-tile *ngFor="let campaign of children">
-      <app-campaign-card [campaign]="campaign"></app-campaign-card>
-    </mat-grid-tile>
-  </mat-grid-list> -->
 
   <p class="more-campaigns" *ngIf="moreMightExist()">
     <button mat-raised-button (click)="more()">
