@@ -133,7 +133,7 @@
                   </div>
                 </div>
                 <div class="receipt-total" fxLayout="row" fxLayoutAlign="space-around" *ngIf="donationForm.value.donationAmount > 0">
-                  <p class="rt-0">Total amount {{ campaign.charity.name }} receive:</p>
+                  <p class="rt-0">Total for {{ campaign.charity.name }}:</p>
                   <p class="rt-1"><strong>{{ expectedTotalAmount() | currency : '£' : 'symbol' : '1.2-2' }}</strong></p>
                 </div>
               </div>
