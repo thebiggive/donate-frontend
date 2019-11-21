@@ -41,8 +41,14 @@ export class CampaignDetailsComponent implements OnInit {
         this.campaign = campaign;
         this.donateEnabled = CampaignService.isOpenForDonations(campaign);
         this.percentRaised = CampaignService.percentRaised(campaign);
-        // First 20 word-like things followed by …
-        const summaryStart = campaign.summary.replace(new RegExp('^(([\\w\',."-]+ ){20}).*$'), '$1') + '…';
+
+        let summaryStart;
+        if (campaign.summary) {
+          // First 20 word-like things followed by …
+          summaryStart = campaign.summary.replace(new RegExp('^(([\\w\',."-]+ ){20}).*$'), '$1') + '…';
+        } else {
+          summaryStart = `${campaign.charity.name}'s campaign, ${campaign.title}`;
+        }
         this.pageMeta.setCommon(campaign.title, summaryStart, campaign.bannerUri);
 
         // As per https://angular.io/guide/security#bypass-security-apis constructing `SafeResourceUrl`s with these appends should be safe.

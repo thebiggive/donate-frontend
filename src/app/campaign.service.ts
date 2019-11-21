@@ -21,11 +21,11 @@ export class CampaignService {
       return true;
     }
 
-    if (campaign.startDate > new Date()) {
+    if (new Date(campaign.startDate) > new Date()) {
       return false;
     }
 
-    return (campaign.endDate >= new Date());
+    return (new Date(campaign.endDate) >= new Date());
   }
 
   static percentRaised(campaign: (Campaign | CampaignSummary)): number | null {
