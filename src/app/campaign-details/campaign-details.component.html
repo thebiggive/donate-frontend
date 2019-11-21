@@ -15,9 +15,9 @@
       <button mat-raised-button class="donate-button" [routerLink]="'/donate/' + campaign.id" *ngIf="donateEnabled">
         Donate
       </button>
-      <p *ngIf="!donateEnabled">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL' }}</p>
+      <p *ngIf="!donateEnabled">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 
-      <p><a [href]="campaign.charity.website" target="_blank"
+      <p><a *ngIf="campaign.charity.website" [href]="campaign.charity.website" target="_blank"
         ><mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
         <strong>{{ campaign.charity.website }}</strong></a>
       </p>
