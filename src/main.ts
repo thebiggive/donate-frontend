@@ -1,6 +1,6 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import 'hammerjs'; // Used for carousel's touch support
+import 'hammerjs'; // Used for some Angular Material components' touch support
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';

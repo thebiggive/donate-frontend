@@ -3,7 +3,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule, MatProgressBarModule, MatTabsModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 import { Campaign } from '../campaign.model';
 import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
@@ -19,7 +18,6 @@ describe('CampaignDetailsComponent', () => {
       declarations: [ CampaignDetailsComponent, CampaignDetailsCardComponent, TimeLeftPipe ],
       imports: [
         HttpClientTestingModule,
-        MatCarouselModule,
         MatIconModule,
         MatProgressBarModule,
         MatTabsModule,
