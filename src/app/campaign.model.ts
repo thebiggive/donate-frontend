@@ -20,7 +20,7 @@ export class Campaign {
     public solution: string,
     public startDate: Date,
     public status: 'Active' | 'Expired' | 'Preview',
-    public summary: string,
+    public summary: string | null,
     public target: number,
     public title: string,
     public updates: Array<{content: string, modifiedDate: Date}>,

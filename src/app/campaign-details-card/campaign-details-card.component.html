@@ -10,9 +10,11 @@
   </div>
 
   <div class="card-body">
-    <h3 class="campaign-target">Campaign target</h3>
-    <p class="campaign-target-value" *ngIf="campaign.target > 0">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
-    <mat-progress-bar [value]="percentRaised"></mat-progress-bar>
+    <div *ngIf="campaign.target > 0">
+      <h3 class="campaign-target">Campaign target</h3>
+      <p class="campaign-target-value">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
+      <mat-progress-bar [value]="percentRaised"></mat-progress-bar>
+    </div>
     <h3 class="campaign-target" *ngIf="campaign.amountRaised > 0">Amount raised (inc. Gift Aid)</h3>
     <p class="campaign-target-value" *ngIf="campaign.amountRaised > 0">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
     <div fxLayout="row">
