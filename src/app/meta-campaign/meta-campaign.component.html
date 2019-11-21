@@ -1,5 +1,5 @@
 <app-hero *ngIf="campaign"
-  [title]="fund ? fund.name + ' // ' + campaign.title : campaign.title"
+  [title]="fund ? fund.name + ' / ' + campaign.title : campaign.title"
   [description]="fund ? fund.description : campaign.summary"
   (heroSearch)="onMetacampaignSearch($event)"
   [logoUri]="fund && fund.logoUri ? fund.logoUri : null"
