@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, PLATFORM_ID } from '@angular/core';
 
 @Component({
   selector: 'app-hero',
@@ -11,12 +12,22 @@ export class HeroComponent implements OnInit {
   @Input() public logoUri?: string;
   @Output() heroSearch: EventEmitter<any> = new EventEmitter();
 
-  public webp: boolean; // Dynamically use the smallest supported image format
+  /**
+   * Dynamically use the smallest supported image format. Default to true to optimise
+   * server-client handover for modern browsers that are likely to load the image itself
+   * faster. On the client side, Modernizr jumps in asynchroously in `ngOnInit()` and
+   * switches the background over to the png, on browsers that need it.
+   */
+  public webp = true;
 
-  constructor() { }
+  // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit() {
-    Modernizr.on('webp', browserSupportsWebp => this.webp = browserSupportsWebp);
+    // The server doesn't know what's rendering the page, so can't check for webp support
+    if (isPlatformBrowser(this.platformId)) {
+      Modernizr.on('webp', browserSupportsWebp => this.webp = browserSupportsWebp);
+    }
   }
 
   search(term: string) {
