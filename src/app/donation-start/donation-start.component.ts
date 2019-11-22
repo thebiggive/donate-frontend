@@ -203,7 +203,7 @@ export class DonationStartComponent implements OnInit {
   get f() { return this.donationForm.controls; }
 
   expectedMatchAmount(): number {
-    return Math.min(this.campaign.matchFundsRemaining, parseFloat(this.donationForm.value.donationAmount));
+    return Math.max(0, Math.min(this.campaign.matchFundsRemaining, parseFloat(this.donationForm.value.donationAmount)));
   }
 
   giftAidAmount(): number {
