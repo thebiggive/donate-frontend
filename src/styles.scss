@@ -390,7 +390,7 @@ mat-toolbar {
 }
 
 button.mat-icon-button {
-  // Work around Safari layout issue where text button to buttons was cut off.
+  // Work around Safari layout issue where text following buttons was cut off.
   // Observed in top sidenav and 'back' links next to `keyboard_arrow_left` icons.
   width: auto;
 }
