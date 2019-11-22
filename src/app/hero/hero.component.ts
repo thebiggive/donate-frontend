@@ -28,6 +28,15 @@ export class HeroComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       Modernizr.on('webp', browserSupportsWebp => this.webp = browserSupportsWebp);
     }
+
+    this.cloneTicker();
+  }
+
+  cloneTicker() {
+    var ticker = document.querySelector('.c-ticker');
+    var list = document.querySelector('.c-ticker__list');
+    var clone = list.cloneNode(true);
+    ticker.append(clone);
   }
 
   search(term: string) {
