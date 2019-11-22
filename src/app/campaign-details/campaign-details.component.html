@@ -42,7 +42,7 @@
     <div class="campaign-tabs">
       <mat-tab-group animationDuration="0ms" color="accent">
         <mat-tab label="Campaign overview">
-          <ul *ngIf="campaign.quotes.length > 0" class="campaign-quotes">
+          <ul *ngIf="campaign.quotes.length > 0" class="campaign-tabs__quotes">
             <li *ngFor="let quote of campaign.quotes">
               <blockquote>{{ quote.quote }}</blockquote>
               <h4 class="attribution">&mdash; {{ quote.person }}</h4>
@@ -75,9 +75,11 @@
         </mat-tab>
 
         <mat-tab *ngIf="campaign.updates.length > 0" label="Updates">
-          <ul *ngFor="let update of campaign.updates">
-            <li><h4>{{ update.modifiedDate | date : 'longDate' }}</h4></li>
-            <li>{{ update.content }}</li>
+          <ul *ngFor="let update of campaign.updates" class="campaign-tabs__updates">
+            <li>
+              <h4>{{ update.modifiedDate | date : 'longDate' }}</h4>
+              <p>{{ update.content }}</p>
+            </li>
           </ul>
         </mat-tab>
 
@@ -88,9 +90,11 @@
         </mat-tab>
 
         <mat-tab *ngIf="campaign.budgetDetails.length > 0" label="Where's the money going?">
-          <ul *ngFor="let detail of campaign.budgetDetails">
-            <li><h4>{{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</h4></li>
-            <li>{{ detail.description }}</li>
+          <ul *ngFor="let detail of campaign.budgetDetails" class="campaign-tabs__budget">
+            <li>
+              <h4>{{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</h4>
+              <p>{{ detail.description }}</p>
+            </li>
           </ul>
 
           <div *ngIf="campaign.alternativeFundUse">
@@ -102,11 +106,13 @@
         </mat-tab>
 
         <mat-tab label="Impact &amp; reporting">
-          <h3>Impact</h3>
-          <p>{{ campaign.impactSummary }}</p>
+          <div class="campaign-tabs__details">
+            <h3>Impact</h3>
+            <p>{{ campaign.impactSummary }}</p>
 
-          <h3>Reporting</h3>
-          <p>{{ campaign.impactReporting }}</p>
+            <h3>Reporting</h3>
+            <p>{{ campaign.impactReporting }}</p>
+          </div>
         </mat-tab>
       </mat-tab-group>
     </div>

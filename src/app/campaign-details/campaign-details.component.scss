@@ -67,7 +67,7 @@
   }
 }
 
-.campaign-quotes {
+.campaign-tabs__quotes {
   list-style: none;
   margin: 2rem 0 0 0;
   padding: 0;
@@ -82,6 +82,15 @@
   .attribution {
     text-align: right;
     margin-bottom: 2rem;
+  }
+}
+
+.campaign-tabs__budget, .campaign-tabs__updates {
+  padding: 0;
+  list-style: none;
+
+  p {
+    white-space: pre-wrap;
   }
 }
 
@@ -101,6 +110,10 @@
     max-width: 70%;
   }
   overflow-x: scroll;
+}
+
+.campaign-tabs__details p {
+  white-space: pre-wrap;
 }
 
 .additional-images {
