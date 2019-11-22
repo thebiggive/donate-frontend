@@ -15,7 +15,7 @@
       <p class="campaign-target-value">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
       <mat-progress-bar [value]="percentRaised"></mat-progress-bar>
     </div>
-    <h3 class="campaign-target" *ngIf="campaign.amountRaised > 0">Amount raised (inc. Gift Aid)</h3>
+    <h3 class="campaign-target" *ngIf="campaign.amountRaised > 0">Amount raised</h3>
     <p class="campaign-target-value" *ngIf="campaign.amountRaised > 0">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
     <div fxLayout="row">
       <div *ngIf="campaign.status == 'Active'" fxFlex="50">

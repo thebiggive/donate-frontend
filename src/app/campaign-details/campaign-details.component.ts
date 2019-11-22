@@ -1,5 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
@@ -24,7 +23,6 @@ export class CampaignDetailsComponent implements OnInit {
     private campaignService: CampaignService,
     private pageMeta: PageMetaService,
     // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
-    @Inject(PLATFORM_ID) private platformId: Object,
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
   ) {
@@ -32,10 +30,6 @@ export class CampaignDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // The carousel component seems to hang rendering forever on the server side and breaks the whole app load. So for now we have
-    // the template check it's running in-browser before loading the carousel at all.
-    this.clientSide = isPlatformBrowser(this.platformId);
-
     this.campaignService.getOneById(this.campaignId)
       .subscribe(campaign => {
         this.campaign = campaign;
