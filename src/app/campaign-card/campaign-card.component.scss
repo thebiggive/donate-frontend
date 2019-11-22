@@ -51,6 +51,10 @@ ul {
   margin: 0 0 .75rem 0;
   color: $colour-teal-dark;
   @include size-lg;
+
+  a {
+    text-decoration: none;
+  }
 }
 
 .campaign-categories__wrap {
