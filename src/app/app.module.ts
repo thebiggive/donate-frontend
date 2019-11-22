@@ -2,7 +2,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatCarouselModule } from '@ngmodule/material-carousel';
 import {
   MatButtonModule,
   MatCardModule,
@@ -78,7 +77,6 @@ import { TimeLeftPipe } from './time-left.pipe';
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
-    MatCarouselModule.forRoot(),
     MatDialogModule,
     MatExpansionModule,
     MatGridListModule,

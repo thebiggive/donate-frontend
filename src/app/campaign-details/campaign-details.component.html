@@ -66,28 +66,11 @@
             <p>{{ campaign.solution }}</p>
           </div>
 
-          <div *ngIf="clientSide && campaign.additionalImageUris.length > 0">
-            <mat-carousel
-              timings="250ms ease-in"
-              [autoplay]="true"
-              interval="5000"
-              color="white"
-              maxWidth="auto"
-              proportion="20"
-              slides="5"
-              [loop]="true"
-              [hideArrows]="true"
-              [hideIndicators]="false"
-              [useKeyboard]="true"
-              [useMouseWheel]="false"
-              orientation="ltr"
+          <div *ngIf="campaign.additionalImageUris.length > 0" class="additional-images">
+            <img
+              *ngFor="let image of campaign.additionalImageUris"
+              [src]="image.uri + '?width=850'"
             >
-              <mat-carousel-slide
-                *ngFor="let image of campaign.additionalImageUris"
-                [image]="image.uri"
-                [hideOverlay]="false"
-              ></mat-carousel-slide>
-            </mat-carousel>
           </div>
         </mat-tab>
 
