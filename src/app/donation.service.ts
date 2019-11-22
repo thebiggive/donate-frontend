@@ -12,16 +12,9 @@ import { environment } from '../environments/environment';
   providedIn: 'root',
 })
 export class DonationService {
-  /**
-   * For the purpose of this class, each `donationCouplet` is a pairing of a donation and its corresponding
-   * unique JWT. This token grants the donor who originally created a donation permission to get its current
-   * status & additional data, and to cancel it if it's Pending or Reserved.
-   */
-  private donationCouplets: Array<{ donation: Donation, jwt: string }> = [];
-
   private readonly apiPath = '/donations';
   private readonly resumableStatuses = ['Pending', 'Reserved'];
-  private readonly storageKey = 'v1.donate.thebiggive.org.uk';
+  private readonly storageKey = 'v2.donate.thebiggive.org.uk';
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -126,15 +119,16 @@ export class DonationService {
     // which donations are new and eligible for reuse.
     donation.createdTime = new Date();
 
-    this.donationCouplets.push({ donation, jwt });
-    this.storage.set(this.storageKey, this.donationCouplets);
+    const donationCouplets = this.getDonationCouplets().push({ donation, jwt });
+    this.storage.set(this.storageKey, donationCouplets);
   }
 
   removeLocalDonation(donation: Donation) {
-    this.donationCouplets.splice(
-      this.donationCouplets.findIndex(donationItem => donationItem.donation.donationId === donation.donationId),
+    const donationCouplets = this.getDonationCouplets();
+    donationCouplets.splice(
+      donationCouplets.findIndex(donationItem => donationItem.donation.donationId === donation.donationId),
     );
-    this.storage.set(this.storageKey, this.donationCouplets);
+    this.storage.set(this.storageKey, donationCouplets);
   }
 
   /**
@@ -190,11 +184,12 @@ export class DonationService {
     return donations[0];
   }
 
-  private getDonationCouplets() {
-    if (this.donationCouplets.length === 0) {
-      this.donationCouplets = this.storage.get(this.storageKey) || [];
-    }
-
-    return this.donationCouplets;
+  /**
+   * For the purpose of this class, each `donationCouplet` is a pairing of a donation and its corresponding
+   * unique JWT. This token grants the donor who originally created a donation permission to get its current
+   * status & additional data, and to cancel it if it's Pending or Reserved.
+   */
+  private getDonationCouplets(): Array<{ donation: Donation, jwt: string }> {
+    return this.storage.get(this.storageKey) || [];
   }
 }
