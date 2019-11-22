@@ -129,7 +129,7 @@ export class MetaCampaignComponent implements OnInit {
   private setCampaign(campaign: Campaign) {
     this.campaign = campaign;
     this.pageMeta.setCommon(
-      `Campaigns in ${campaign.title}`,
+      campaign.title,
       `Browse campaigns in ${campaign.title}`,
       campaign.bannerUri,
     );
