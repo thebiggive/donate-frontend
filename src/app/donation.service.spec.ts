@@ -132,7 +132,7 @@ describe('DonationService', () => {
     const inputDonation = getDummyDonation();
     service.saveDonation(inputDonation, 'fakeheader.fakebody.fakesig');
 
-    expect(service.getDonation(inputDonation.donationId)).toBe(inputDonation);
+    expect(service.getDonation(inputDonation.donationId)).toEqual(inputDonation);
   });
 
   it('should correctly determine when a donation is complete', () => {
