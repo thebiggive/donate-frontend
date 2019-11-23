@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
-import { LOCAL_STORAGE, StorageService } from 'ngx-webstorage-service';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { StorageService } from 'ngx-webstorage-service';
 import { Observable, of } from 'rxjs';
 
 import { AnalyticsService } from './analytics.service';
@@ -8,18 +8,20 @@ import { Donation } from './donation.model';
 import { DonationCreatedResponse } from './donation-created-response.model';
 import { environment } from '../environments/environment';
 
+export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
+
 @Injectable({
   providedIn: 'root',
 })
 export class DonationService {
   private readonly apiPath = '/donations';
   private readonly resumableStatuses = ['Pending', 'Reserved'];
-  private readonly storageKey = 'v2.donate.thebiggive.org.uk';
+  private readonly storageKey = `${environment.donateUriPrefix}/v2`; // Key is per-domain/env
 
   constructor(
     private analyticsService: AnalyticsService,
     private http: HttpClient,
-    @Inject(LOCAL_STORAGE) private storage: StorageService,
+    @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
   ) {}
 
   getDonation(donationId: string): Donation | undefined {
@@ -117,9 +119,10 @@ export class DonationService {
   saveDonation(donation: Donation, jwt: string) {
     // Salesforce doesn't add this until after the async persist so we need to set it locally in order to later determine
     // which donations are new and eligible for reuse.
-    donation.createdTime = new Date();
+    donation.createdTime = (new Date()).toISOString();
 
-    const donationCouplets = this.getDonationCouplets().push({ donation, jwt });
+    const donationCouplets = this.getDonationCouplets();
+    donationCouplets.push({ donation, jwt });
     this.storage.set(this.storageKey, donationCouplets);
   }
 
@@ -136,11 +139,7 @@ export class DonationService {
    * a string (when just derived from an HTTP response), and return it as a JavaScript Unix epoch milliseconds value.
    */
   private getCreatedTime(donation: Donation): number {
-    const createdDate: Date = donation.createdTime instanceof Date
-      ? donation.createdTime
-      : new Date(donation.createdTime);
-
-    return createdDate.getTime();
+    return (new Date(donation.createdTime)).getTime();
   }
 
   private removeOldLocalDonations() {

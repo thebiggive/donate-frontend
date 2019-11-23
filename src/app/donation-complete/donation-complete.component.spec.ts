@@ -3,9 +3,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatProgressSpinnerModule } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
+import { TBG_DONATE_STORAGE } from '../donation.service';
 import { DonationCompleteComponent } from './donation-complete.component';
 
 describe('DonationCompleteComponent', () => {
@@ -28,12 +30,9 @@ describe('DonationCompleteComponent', () => {
       ],
       providers: [
         AnalyticsService,
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({donationId: 'myTestDonationId'}),
-          },
-        },
+        { provide: ActivatedRoute, useValue: { params: of({donationId: 'myTestDonationId'})}},
+        InMemoryStorageService,
+        { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
       ],
     });
 
