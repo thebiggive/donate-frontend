@@ -4,10 +4,10 @@
 
 export const environment = {
   production: false,
-  apiUriPrefix: 'https://full-biggive.cs107.force.com',
+  apiUriPrefix: 'https://full-biggive.cs128.force.com',
   charityCheckoutInitUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
-  donationsApiPrefix: 'https://full-biggive.cs107.force.com/donations/services/apexrest/v1.0',
+  donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,
   thanksUriPrefix: 'https://donate-staging.thebiggivetest.org.uk/thanks/',
