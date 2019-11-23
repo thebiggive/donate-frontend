@@ -51,6 +51,9 @@ ul {
   margin: 0 0 .75rem 0;
   color: $colour-teal-dark;
   @include size-lg;
+  @media #{$breakpoint-md} {
+    min-height: 48px;
+  }
 
   a {
     text-decoration: none;
