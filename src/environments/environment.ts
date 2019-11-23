@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUriPrefix: 'https://full-biggive.cs107.force.com',
+  apiUriPrefix: 'https://full-biggive.cs128.force.com',
   charityCheckoutInitUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
   donateUriPrefix: 'http://localhost:4200',
   donationsApiPrefix: 'https://full-biggive.cs107.force.com/donations/services/apexrest/v1.0',
