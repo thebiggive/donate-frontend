@@ -22,7 +22,6 @@ export class CampaignDetailsComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
     private pageMeta: PageMetaService,
-    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
   ) {
