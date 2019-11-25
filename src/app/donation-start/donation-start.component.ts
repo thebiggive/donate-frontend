@@ -124,17 +124,16 @@ export class DonationStartComponent implements OnInit {
       return;
     }
 
-    const donation = new Donation(
-      this.campaign.charity.id,
-      this.donationForm.value.donationAmount.replace('£', ''), // Strip '£' if entered
-      this.campaign.isMatched,
-      this.donationForm.value.giftAid,
-      this.donationForm.value.optInCharityEmail,
-      this.donationForm.value.optInTbgEmail,
-      this.campaignId,
-      undefined,
-      this.campaign.charity.name,
-    );
+    const donation: Donation = {
+      charityId: this.campaign.charity.id,
+      charityName: this.campaign.charity.name,
+      donationAmount: this.donationForm.value.donationAmount.replace('£', ''), // Strip '£' if entered
+      donationMatched: this.campaign.isMatched,
+      giftAid: this.donationForm.value.giftAid,
+      optInCharityEmail: this.donationForm.value.optInCharityEmail,
+      optInTbgEmail: this.donationForm.value.optInTbgEmail,
+      projectId: this.campaignId,
+    };
 
     this.donationService
       .create(donation) // Create Salesforce donation
