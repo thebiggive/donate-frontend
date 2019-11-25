@@ -37,8 +37,7 @@ export class CampaignDetailsComponent implements OnInit {
     if (this.campaign) {
       this.setSecondaryProps(this.campaign);
     } else {
-    this.campaignService.getOneById(this.campaignId)
-      .subscribe(campaign => {
+      this.campaignService.getOneById(this.campaignId).subscribe(campaign => {
         this.state.set(CAMPAIGN_KEY, campaign);
         this.campaign = campaign;
         this.setSecondaryProps(campaign);
