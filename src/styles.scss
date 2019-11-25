@@ -84,7 +84,7 @@ $colour-teal-darkest: #005360;
 $colour-teal-fade: #E0F0F2;
 $colour-grey-light: #E1E2E5;
 $colour-grey: #7B8292;
-$colour-grey-dark: #333;
+$colour-black: #333;
 
 $breakpoint-md: "(min-width: 600px)";
 $breakpoint-lg: "(min-width: 960px)";
@@ -288,7 +288,12 @@ html {
 body {
   margin: 0;
   background-color: #F4F4F4;
-  color:#333;
+  color: $colour-black;
+}
+
+p,
+li {
+  @include rt-0;
 }
 
 a {
