@@ -58,12 +58,13 @@ export class DonationStartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.campaign = this.state.get(makeStateKey(`campaign-${this.campaignId}`), undefined);
+    const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
+    this.campaign = this.state.get(campaignKey, undefined);
 
     if (!this.campaign) {
       this.campaignService.getOneById(this.campaignId)
         .subscribe(campaign => {
-          this.state.set(makeStateKey(`campaign-${this.campaignId}`), campaign);
+          this.state.set(campaignKey, campaign);
           this.campaign = campaign;
 
           if (!CampaignService.isOpenForDonations(campaign)) {
