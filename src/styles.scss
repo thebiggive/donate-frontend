@@ -112,7 +112,7 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
   font-size: 34px;
 }
 @mixin size-xxxl {
-  font-size: 48px;
+  font-size: 40px;
 }
 
 @mixin rt-sm {
@@ -155,7 +155,7 @@ $box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12
   font-size: 34px;
   line-height: 41px;
   @media #{$breakpoint-lg} {
-    font-size: 48px;
+    font-size: 40px;
     line-height: 56px;
   }
 }
