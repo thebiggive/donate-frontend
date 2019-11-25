@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  <div *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" fxLayout="row">
+  <div fxLayout="row">
     <div class="campaign-tabs">
       <mat-tab-group animationDuration="0ms" color="accent">
         <mat-tab label="Campaign overview">
@@ -93,11 +93,10 @@
           </ul>
         </mat-tab>
 
-        <mat-tab *ngIf="campaign.budgetDetails.length > 0" label="Where's the money going?">
+        <mat-tab *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" label="Where's the money going?">
           <ul *ngFor="let detail of campaign.budgetDetails" class="campaign-tabs__budget">
             <li>
-              <h4>{{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</h4>
-              <p>{{ detail.description }}</p>
+              <p><strong>{{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</strong> &ndash; {{ detail.description }}</p>
             </li>
           </ul>
 
