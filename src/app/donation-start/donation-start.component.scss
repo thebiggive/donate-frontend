@@ -48,6 +48,20 @@ form {
   }
 }
 
+p.your-donation__highlight {
+  background: $colour-highlight;
+  color: $colour-teal-darkest;
+  border-radius: 4px;
+  padding: 0.5rem;
+  display: block;
+  text-align: center;
+  margin-bottom: 1rem !important;
+
+  img {
+    padding-right: 1rem;
+  }
+}
+
 .centered-p {
   text-align: center;
   color: $colour-grey;

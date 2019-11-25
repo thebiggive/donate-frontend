@@ -24,6 +24,10 @@
                   <h3 class="rt-2">Your donation</h3>
                 </mat-panel-title>
               </mat-expansion-panel-header>
+              <p *ngIf="campaign.matchFundsRemaining > 0" class="your-donation__highlight">
+                <img src="/assets/icon-tick.png" height="11" alt="Check mark">
+                This donation should be matched!
+              </p>
               <mat-form-field color="accent">
                 <mat-label for="donationAmount">Enter an amount (£)</mat-label>
                 <input formControlName="donationAmount" id="donationAmount" matInput>
