@@ -285,7 +285,7 @@ export class DonationStartComponent implements OnInit {
     this.analyticsService.logEvent('alerted_no_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
       'There are no match funds currently available for this campaign so your donation will not be matched.',
-      'But every penny helps & you can continue make an unmatched donation to the charity!',
+      'Remember every penny helps & you can continue to make an unmatched donation to the charity!',
       'Cancel',
       donation,
     );
@@ -299,7 +299,7 @@ export class DonationStartComponent implements OnInit {
     this.promptToContinue(
       'There are not enough match funds currently available to fully match your donation. ' +
         `£${donation.matchReservedAmount} will be matched.`,
-      'But every penny helps & you can continue to make a partially matched donation to the charity!',
+      'Remember every penny helps & you can continue to make a partially matched donation to the charity!',
       'Cancel and release match funds',
       donation,
     );
