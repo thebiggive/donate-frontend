@@ -61,6 +61,7 @@ export class FiltersComponent implements OnInit {
    */
   static getCountries(): string[] {
     return [
+      'United Kingdom',
       'Afghanistan',
       'Aland Islands',
       'Albania',
@@ -287,7 +288,6 @@ export class FiltersComponent implements OnInit {
       'Uganda',
       'Ukraine',
       'United Arab Emirates',
-      'United Kingdom',
       'United States',
       'Uruguay',
       'Uzbekistan',

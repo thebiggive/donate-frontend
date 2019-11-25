@@ -1,6 +1,6 @@
 <div class="filters">
   <mat-form-field>
-    <mat-label>Order</mat-label>
+    <mat-label>Sort By</mat-label>
     <mat-select [value]="selectedSort" (selectionChange)="setSortField($event)">
       <mat-option value="matchFundsRemaining">Match Funds Remaining</mat-option>
       <mat-option value="amountRaised">Most Raised</mat-option>
@@ -29,10 +29,10 @@
     </mat-select>
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Is Doubling</mat-label>
+    <mat-label>Matching Now?</mat-label>
     <mat-select [value]="false" (selectionChange)="setFilter('onlyMatching', $event)">
       <mat-option [value]="false">All</mat-option>
-      <mat-option [value]="true">Only Doubling</mat-option>
+      <mat-option [value]="true">Match Funds Available</mat-option>
     </mat-select>
   </mat-form-field>
 </div>
