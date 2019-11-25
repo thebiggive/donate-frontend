@@ -5,26 +5,18 @@
 // would stretch it when combined with that) but use this to ensure the card can't
 // grow to a height that breaks the layout.
 
-.card {
+.c-card {
   @include make-card;
   display:flex;
   flex-direction:column;
   height:100%;
 }
 
-.banner-image {
+.c-card__banner--image {
   width: 100%;
   height: auto;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-}
-
-.buttons {
-  margin-top:auto;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items:center;
 }
 
 ul {
@@ -32,12 +24,12 @@ ul {
   padding: 0;
 }
 
-.card-header {
+.c-card__header {
   padding-left: 2rem;
   padding-right: 2rem;
 }
 
-.charity-name {
+.c-card__header--charity-name {
   margin-top: 0.75rem;
   margin-bottom: 0;
   color: $colour-grey;
@@ -47,7 +39,7 @@ ul {
   letter-spacing: 1px;
 }
 
-.campaign-title {
+.c-card__header--campaign-title {
   margin: 0 0 .75rem 0;
   color: $colour-teal-dark;
   @include size-lg;
@@ -60,85 +52,88 @@ ul {
   }
 }
 
-.campaign-categories__wrap {
+.c-card__categories {
   overflow-x: scroll;
   white-space:nowrap;
   margin-left: 0.5rem;
   padding-bottom: 0.5rem;
 }
 
-.campaign-categories {
+.c-card__categories--list {
   margin:0 0.5rem;
   margin-left: 0;
   display: inline;
 }
 
-.campaign-categories__category {
+.c-card__categories--item {
+  @include rt-sm;
   background-color: $colour-teal-fade;
   color: $colour-teal;
   border-radius: 14px;
-  padding-left: 0.75rem;
-  padding-bottom: 0.25rem;
-  padding-right: 0.75rem;
+  padding: 0.15rem 0.75rem 0.25rem;
   margin-right: 0.5rem;
+  display: inline;
   &:last-child {
     margin-right: 0;
   }
 }
 
-.funds {
+.c-card__funds {
   padding: 1rem 2rem;
   color: $colour-grey;
 }
 
-p {
+.c-card__funds--description {
+  @include rt-sm;
   margin-top: 0;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
   line-height: 1;
 }
 
-.matched-funds {
+.c-card__funds--matched {
   padding-right: 0.25rem;
-  p {
-    margin-bottom: 0.5rem;
-  }
 }
 
-.total-funds {
+.c-card__funds--total {
   padding-left: 0.25rem;
-  p {
-    margin-bottom: 0.5rem;
+
+  .c-card__funds--amount {
+    color: $colour-teal;
   }
 }
 
-.matched-funds__amount,
-.total-funds__amount {
+.c-card__funds--amount {
   margin-top: 0;
   margin-bottom: 0;
   font-size:20px;
 }
 
-.total-funds__amount {
-  color: $colour-teal;
+.c-card__buttons {
+  margin-top:auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items:center;
 }
 
-.mat-icon-button,
-.donate-button {
+.c-card__buttons--more,
+.c-card__buttons--donate {
   margin: 0;
   min-width: 85px;
 }
 
-.mat-icon-button {
+.c-card__buttons--more {
   font-weight: 400;
-  .mat-icon {
-    line-height: 22px;
-  }
 }
 
-.donate-button {
+.c-card__buttons--more-icon {
+  line-height: 22px;
+}
+
+.c-card__buttons--more {
+  font-size:18px;
+}
+
+.c-card__buttons--donate {
   @include make-donate-button;
-}
-
-.more-button {
-  font-size:18px !important;
 }
