@@ -12,6 +12,7 @@ import {
   MatProgressSpinnerModule,
   MatRadioModule,
 } from '@angular/material';
+import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
@@ -33,6 +34,7 @@ describe('DonationStartComponent', () => {
         CampaignDetailsCardComponent,
       ],
       imports: [
+        BrowserTransferStateModule,
         HttpClientTestingModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatDialogModule,

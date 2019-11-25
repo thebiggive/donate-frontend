@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
+import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { retryWhen, tap  } from 'rxjs/operators';
 
@@ -17,6 +18,8 @@ import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-r
 import { environment } from '../../environments/environment';
 import { PageMetaService } from '../page-meta.service';
 import { retryStrategy } from '../observable-retry';
+
+const CAMPAIGN_KEY = makeStateKey('campaign');
 
 @Component({
   selector: 'app-donation-start',
@@ -46,6 +49,7 @@ export class DonationStartComponent implements OnInit {
     private pageMeta: PageMetaService,
     private route: ActivatedRoute,
     private router: Router,
+    private state: TransferState,
   ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
     route.queryParams.forEach((params: Params) => {
@@ -56,17 +60,22 @@ export class DonationStartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.campaignService.getOneById(this.campaignId)
-      .subscribe(campaign => {
-        this.campaign = campaign;
+    this.campaign = this.state.get(CAMPAIGN_KEY, undefined);
 
-        if (!CampaignService.isOpenForDonations(campaign)) {
-          this.router.navigateByUrl(`/campaign/${campaign.id}`);
-          return;
-        }
+    if (!this.campaign) {
+      this.campaignService.getOneById(this.campaignId)
+        .subscribe(campaign => {
+          this.state.set(CAMPAIGN_KEY, campaign);
+          this.campaign = campaign;
 
-        this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
-      });
+          if (!CampaignService.isOpenForDonations(campaign)) {
+            this.router.navigateByUrl(`/campaign/${campaign.id}`);
+            return;
+          }
+
+          this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
+        });
+    }
 
     this.donationForm = this.formBuilder.group({
       donationAmount: [null, [

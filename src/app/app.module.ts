@@ -20,7 +20,7 @@ import {
   MatTabsModule,
   MatToolbarModule,
 } from '@angular/material';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
@@ -72,9 +72,10 @@ import { TimeLeftPipe } from './time-left.pipe';
     DonationStartOfferReuseDialogComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
     AppRoutingModule,
     BrowserAnimationsModule,
+    BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
+    BrowserTransferStateModule,
     FlexLayoutModule,
     HttpClientModule,
     MatButtonModule,
