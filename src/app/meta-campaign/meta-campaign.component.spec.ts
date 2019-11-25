@@ -10,6 +10,7 @@ import {
   MatProgressBarModule,
   MatSelectModule,
 } from '@angular/material';
+import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -37,6 +38,7 @@ describe('MetaCampaignComponent', () => {
         TimeLeftPipe,
       ],
       imports: [
+        BrowserTransferStateModule,
         HttpClientTestingModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatCardModule,

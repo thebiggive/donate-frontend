@@ -6,84 +6,88 @@ import { DonationStatus } from './donation-status.type';
  * * after the donor has completed the Charity Checkout forms (e.g. `countryCode`, `emailAddress`, ...); or
  * * after the donation is fully processed and webhook returned (e.g. `matchedAmount`).
  */
-export class Donation {
-  constructor(
+export interface Donation {
     /**
      * Unique ID for a charity Account assigned by the Big Give, in Salesforce
      * case-insensitive format. 18 character string.
      */
-    public charityId: string,
+    charityId: string;
 
-    public donationAmount: number,
+    donationAmount: number;
 
     /**
      * Indicates whether donation was expected to be eligible for either full or partial matching
      * when initiated. Does not necessarily indicate a full or completed match. See also
      * `matchReservedAmount` and `matchedAmount`.
      */
-    public donationMatched: boolean,
+    donationMatched: boolean;
 
-    public giftAid: boolean,
+    giftAid: boolean;
 
-    public optInCharityEmail: boolean,
+    optInCharityEmail: boolean;
 
-    public optInTbgEmail: boolean,
+    optInTbgEmail: boolean;
 
     /**
      * Unique ID for a CCampaign / project assigned by the Big Give, in Salesforce
      * case-insensitive format. 18 character string.
      */
-    public projectId: string,
+    projectId: string;
 
     /**
      * Donor's address including postcode.
      */
-    public billingPostalAddress?: string,
+    billingPostalAddress?: string;
 
-    public charityName?: string,
+    charityName?: string;
 
     /**
      * Donor's country code in ISO 3166-1 alpha-2 format.
      */
-    public countryCode?: string,
+    countryCode?: string;
 
-    public createdTime?: Date,
+    /**
+     * ISO 8601 formatted datetime
+     */
+    createdTime?: string;
 
     /**
      * Unique ID for a donation, in Salesforce case-insensitive format. 18 character string.
      * Assigned earlier than Charity Checkout's `transactionId`.
      */
-    public donationId?: string,
+    donationId?: string;
 
-    public emailAddress?: string,
+    emailAddress?: string;
 
-    public firstName?: string,
+    firstName?: string;
 
-    public lastName?: string,
+    lastName?: string;
 
     /**
      * Amount actually matched once donation is Collected or Paid.
      */
-    public matchedAmount?: number,
+    matchedAmount?: number;
 
     /**
      * Amount allocated for matching when donation initiated.
      */
-    public matchReservedAmount?: number,
+    matchReservedAmount?: number;
 
     /**
      * One of the Charity Checkout status strings defined in the `DonationStatus` type.
      * See `donation-status.enum.ts` where the type and backing enum are defined.
      */
-    public status?: DonationStatus,
+    status?: DonationStatus;
 
-    public tipAmount?: number,
+    tipAmount?: number;
 
     /**
      * ID assigned by Charity Checkout upon checkout initiation.
      */
-    public transactionId?: string,
+    transactionId?: string;
 
-    public updatedTime?: Date,
-    ) {}
+    /**
+     * ISO 8601 formatted datetime
+     */
+    updatedTime?: string;
 }

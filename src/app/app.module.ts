@@ -20,8 +20,9 @@ import {
   MatTabsModule,
   MatToolbarModule,
 } from '@angular/material';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,6 +30,7 @@ import { CampaignCardComponent } from './campaign-card/campaign-card.component';
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
 import { CampaignDetailsCardComponent } from './campaign-details-card/campaign-details-card.component';
 import { CampaignSearchFormComponent } from './campaign-search-form/campaign-search-form.component';
+import { TBG_DONATE_STORAGE } from './donation.service';
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
 import { DonationStartErrorDialogComponent } from './donation-start/donation-start-error-dialog.component';
@@ -70,9 +72,10 @@ import { TimeLeftPipe } from './time-left.pipe';
     DonationStartOfferReuseDialogComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
     AppRoutingModule,
     BrowserAnimationsModule,
+    BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
+    BrowserTransferStateModule,
     FlexLayoutModule,
     HttpClientModule,
     MatButtonModule,
@@ -93,7 +96,9 @@ import { TimeLeftPipe } from './time-left.pipe';
     MatToolbarModule,
     ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [
+    { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

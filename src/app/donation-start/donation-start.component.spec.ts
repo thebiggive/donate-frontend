@@ -12,9 +12,12 @@ import {
   MatProgressSpinnerModule,
   MatRadioModule,
 } from '@angular/material';
+import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { InMemoryStorageService } from 'ngx-webstorage-service';
 
+import { TBG_DONATE_STORAGE } from '../donation.service';
 import { DonationStartComponent } from './donation-start.component';
 import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
 import { TimeLeftPipe } from '../time-left.pipe';
@@ -31,6 +34,7 @@ describe('DonationStartComponent', () => {
         CampaignDetailsCardComponent,
       ],
       imports: [
+        BrowserTransferStateModule,
         HttpClientTestingModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatDialogModule,
@@ -49,6 +53,10 @@ describe('DonationStartComponent', () => {
             component: DonationStartComponent,
           },
         ]),
+      ],
+      providers: [
+        InMemoryStorageService,
+        { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
       ],
     })
     .compileComponents();
