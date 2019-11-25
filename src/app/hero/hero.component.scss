@@ -62,6 +62,11 @@ h1 {
   @media #{$breakpoint-xl} {
     font-size: 60px;
   }
+
+  img {
+    margin-top: -22px; // Make enough space for the copy below to remain legible
+    width: 330px;
+  }
 }
 
 h2 {
@@ -72,11 +77,6 @@ h2 {
   @media #{$breakpoint-xl} {
     font-size: 24px;
   }
-}
-
-img {
-  float: right;
-  margin-left: 1rem;
 }
 
 app-campaign-search-form {

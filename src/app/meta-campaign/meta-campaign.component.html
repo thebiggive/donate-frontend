@@ -1,10 +1,9 @@
 <app-hero *ngIf="campaign"
   [campaign]="campaign"
   [fund]="fund"
-  [title]="fund ? fund.name + ' / ' + campaign.title : campaign.title"
+  [title]="campaign.title"
   [description]="fund ? fund.description : campaign.summary"
   (heroSearch)="onMetacampaignSearch($event)"
-  [logoUri]="fund && fund.logoUri ? fund.logoUri : null"
 ></app-hero>
 
 <div class="card-section" *ngIf="campaign && children">
