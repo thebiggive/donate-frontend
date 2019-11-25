@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { makeStateKey, TransferState } from '@angular/platform-browser';
+import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
 import { Campaign } from '../campaign.model';
@@ -8,9 +8,6 @@ import { CampaignService, SearchQuery } from '../campaign.service';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
 import { PageMetaService } from '../page-meta.service';
-
-const FUND_KEY = makeStateKey('fund');
-const METACAMPAIGN_KEY = makeStateKey('metacampaign');
 
 @Component({
   selector: 'app-meta-campaign',
@@ -49,20 +46,23 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.campaign = this.state.get(METACAMPAIGN_KEY, undefined);
-    this.fund = this.state.get(FUND_KEY, undefined);
+    const fundKey = makeStateKey<Fund>(`fund-for-${this.campaignId}`);
+    const metacampaignKey = makeStateKey<Campaign>(`metacampaign-${this.campaignId}`);
+
+    this.campaign = this.state.get(metacampaignKey, undefined);
+    this.fund = this.state.get(fundKey, undefined);
 
     if (!this.campaign) {
       if (this.campaignId) {
-        this.campaignService.getOneById(this.campaignId).subscribe(campaign => this.setCampaign(campaign));
+        this.campaignService.getOneById(this.campaignId).subscribe(campaign => this.setCampaign(campaign, metacampaignKey));
       } else {
-        this.campaignService.getOneBySlug(this.campaignSlug).subscribe(campaign => this.setCampaign(campaign));
+        this.campaignService.getOneBySlug(this.campaignSlug).subscribe(campaign => this.setCampaign(campaign, metacampaignKey));
       }
     }
 
     if (!this.fund && this.fundSlug) {
       this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
-        this.state.set(FUND_KEY, fund);
+        this.state.set(fundKey, fund);
         this.fund = fund;
       });
     }
@@ -139,8 +139,8 @@ export class MetaCampaignComponent implements OnInit {
   /**
    * Set the campaign for the service and page metadata.
    */
-  private setCampaign(campaign: Campaign) {
-    this.state.set(METACAMPAIGN_KEY, campaign); // Have data ready for client when handing over from SSR
+  private setCampaign(campaign: Campaign, metacampaignKey: StateKey<Campaign>) {
+    this.state.set(metacampaignKey, campaign); // Have data ready for client when handing over from SSR
     this.campaign = campaign;
     this.pageMeta.setCommon(
       campaign.title,

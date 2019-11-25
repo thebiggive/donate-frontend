@@ -19,8 +19,6 @@ import { environment } from '../../environments/environment';
 import { PageMetaService } from '../page-meta.service';
 import { retryStrategy } from '../observable-retry';
 
-const CAMPAIGN_KEY = makeStateKey('campaign');
-
 @Component({
   selector: 'app-donation-start',
   templateUrl: './donation-start.component.html',
@@ -60,12 +58,13 @@ export class DonationStartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.campaign = this.state.get(CAMPAIGN_KEY, undefined);
+    const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
+    this.campaign = this.state.get(campaignKey, undefined);
 
     if (!this.campaign) {
       this.campaignService.getOneById(this.campaignId)
         .subscribe(campaign => {
-          this.state.set(CAMPAIGN_KEY, campaign);
+          this.state.set(campaignKey, campaign);
           this.campaign = campaign;
 
           if (!CampaignService.isOpenForDonations(campaign)) {
