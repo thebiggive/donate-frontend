@@ -1,10 +1,12 @@
 @import '../../styles';
 
 .c-ticker {
+  background-color: #333;
   display: flex;
   align-items: center;
   width: 100%;
   position: relative;
+  overflow: hidden;
 }
 
 .c-ticker__total {
@@ -31,7 +33,6 @@
 }
 
 .c-ticker__list {
-  background-color: #333;
   animation: ticker 15s infinite linear;
   display: inline-flex;
   align-items: center;
