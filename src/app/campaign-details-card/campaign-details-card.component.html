@@ -1,7 +1,7 @@
-<div class="card" *ngIf="campaign">
-  <div class="banner-container">
+<div class="c-card" *ngIf="campaign">
+  <div class="c-card__banner">
     <img
-      class="banner-image"
+      class="c-card__banner--image"
       *ngIf="campaign.bannerUri"
       [src]="campaign.bannerUri"
       alt=""
@@ -9,25 +9,25 @@
     >
   </div>
 
-  <div class="card-body">
+  <div class="c-card__body">
     <div *ngIf="campaign.target > 0">
-      <h3 class="campaign-target">Campaign target</h3>
-      <p class="campaign-target-value">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
+      <h3 class="c-card__body--description">Campaign target</h3>
+      <p class="c-card__body--value">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
       <mat-progress-bar [value]="percentRaised"></mat-progress-bar>
     </div>
-    <h3 class="campaign-target" *ngIf="campaign.amountRaised > 0">Amount raised</h3>
-    <p class="campaign-target-value" *ngIf="campaign.amountRaised > 0">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
+    <h3 class="c-card__body--description" *ngIf="campaign.amountRaised > 0">Amount raised</h3>
+    <p class="c-card__body--value" *ngIf="campaign.amountRaised > 0">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
     <div fxLayout="row">
       <div *ngIf="campaign.status == 'Active'" fxFlex="50">
-        <p class="campaign-target">Days left</p>
-        <p class="campaign-target-value sm">{{ campaign.endDate | timeLeft }}</p>
+        <p class="c-card__body--description">Days left</p>
+        <p class="c-card__body--value sm">{{ campaign.endDate | timeLeft }}</p>
       </div>
       <div fxFlex="50">
-        <p class="campaign-target">Donations</p>
-        <p class="campaign-target-value sm">{{ campaign.donationCount | number:'1.0-0' }}</p>
+        <p class="c-card__body--description">Donations</p>
+        <p class="c-card__body--value sm">{{ campaign.donationCount | number:'1.0-0' }}</p>
       </div>
     </div>
-    <p class="championed-by" *ngIf="campaign.championName">Championed by <strong>{{campaign.championName}}</strong></p>
+    <p class="c-card__body--championed-by" *ngIf="campaign.championName">Championed by <strong>{{campaign.championName}}</strong></p>
   </div>
 
 </div>
