@@ -1,23 +1,6 @@
 <div [class]="'hero ' + (webp ? 'webp-bg' : 'nowebp-bg')">
-  <div class="c-ticker">
-    <div class="c-ticker__total">
-      <em class="c-ticker__value c-ticker__value--emphasised">£1,000,000</em> raised
-    </div>
-    <ul class="c-ticker__list">
-      <li class="c-ticker__item"><span class="c-ticker__value">88</span> donations</li>
-      <li class="c-ticker__item"><span class="c-ticker__value">472</span> charities</li>
-      <li class="c-ticker__item"><span class="c-ticker__value">£768,000</span> in Matched funds</li>
-      <li class="c-ticker__item"><span class="c-ticker__value">12</span> days</li>
-      <li class="c-ticker__item"><span class="c-ticker__value">88</span> donations</li>
-      <li class="c-ticker__item"><span class="c-ticker__value">472</span> charities</li>
-      <li class="c-ticker__item"><span class="c-ticker__value">£768,000</span> in Matched funds</li>
-      <li class="c-ticker__item"><span class="c-ticker__value">12</span> days</li>
-      <li class="c-ticker__item"><span class="c-ticker__value">88</span> donations</li>
-      <li class="c-ticker__item"><span class="c-ticker__value">472</span> charities</li>
-      <li class="c-ticker__item"><span class="c-ticker__value">£768,000</span> in Matched funds</li>
-      <li class="c-ticker__item"><span class="c-ticker__value">12</span> days</li>
-    </ul>
-  </div>
+  <app-ticker [campaign]="campaign" [fund]="fund"></app-ticker>
+
   <div class="hero__content">
     <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center">
       <div class="hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">

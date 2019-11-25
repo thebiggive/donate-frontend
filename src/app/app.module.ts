@@ -43,6 +43,7 @@ import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { NavSearchFormComponent } from './nav-search-form/nav-search-form.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
+import { TickerComponent } from './ticker/ticker.component';
 import { TimeLeftPipe } from './time-left.pipe';
 
 @NgModule({
@@ -64,6 +65,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     NavigationComponent,
     NavSearchFormComponent,
     SearchResultsComponent,
+    TickerComponent,
     TimeLeftPipe,
   ],
   entryComponents: [

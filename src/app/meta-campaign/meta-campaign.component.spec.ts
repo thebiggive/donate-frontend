@@ -21,6 +21,7 @@ import { CampaignSummary } from '../campaign-summary.model';
 import { FiltersComponent } from './../filters/filters.component';
 import { HeroComponent } from '../hero/hero.component';
 import { MetaCampaignComponent } from './meta-campaign.component';
+import { TickerComponent } from './../ticker/ticker.component';
 import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('MetaCampaignComponent', () => {
@@ -35,6 +36,7 @@ describe('MetaCampaignComponent', () => {
         FiltersComponent,
         HeroComponent,
         MetaCampaignComponent,
+        TickerComponent,
         TimeLeftPipe,
       ],
       imports: [
@@ -75,6 +77,7 @@ describe('MetaCampaignComponent', () => {
       'Impact overview',
       true,
       987,
+      988,
       'The situation',
       [],
       'The solution',

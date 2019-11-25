@@ -1,42 +1,24 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatCardModule, MatInputModule, MatSelectModule, MatProgressBarModule } from '@angular/material';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { Campaign } from '../campaign.model';
-import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
-import { HeroComponent } from './hero.component';
-import { TickerComponent } from './../ticker/ticker.component';
+import { TickerComponent } from './ticker.component';
 import { TimeLeftPipe } from '../time-left.pipe';
 
-describe('HeroComponent', () => {
-  let component: HeroComponent;
-  let fixture: ComponentFixture<HeroComponent>;
+describe('TickerComponent', () => {
+  let component: TickerComponent;
+  let fixture: ComponentFixture<TickerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        CampaignSearchFormComponent,
-        HeroComponent,
-        TickerComponent,
-        TimeLeftPipe,
-      ],
-      imports: [
-        MatButtonModule,
-        MatInputModule,
-        MatCardModule,
-        MatProgressBarModule,
-        MatSelectModule,
-        NoopAnimationsModule,
-        ReactiveFormsModule,
-      ],
+      declarations: [ TickerComponent, TimeLeftPipe ],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HeroComponent);
+    fixture = TestBed.createComponent(TickerComponent);
     component = fixture.componentInstance;
+    // TODO make Campaign an interface and simplify unit test data.
     component.campaign = new Campaign(
       'a051r00001EywjpAAB',
       ['Aim 1'],
