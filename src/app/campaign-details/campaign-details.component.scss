@@ -1,33 +1,18 @@
 @import '../../styles';
 
-.details {
+.c-details {
   @include make-container;
 }
 
-.listing-button__button {
+.c-details__listing-button--link {
   @include make-back-button;
 }
 
-.campaign-header {
+.c-details__header {
   @include make-primary-column;
-
-  mat-icon {
-    font-size: 1rem;
-    vertical-align: baseline;
-  }
-
-  .social-icons {
-    a {
-      margin-right: 1rem;
-    }
-
-    img {
-      width: 21px;
-    }
-  }
 }
 
-.charity-name {
+.c-details__header--charity-name {
   margin-top: 0.75rem;
   margin-bottom: 0.5rem;
   color: $colour-grey;
@@ -37,7 +22,7 @@
   letter-spacing: 1px;
 }
 
-.campaign-title {
+.c-details__header--campaign-title {
   margin: 0 0 1rem;
   color: $colour-teal-dark;
   font-weight:600;
@@ -48,7 +33,7 @@
   line-height:1.2;
 }
 
-.campaign-description {
+.c-details__header--description {
   @include size-lg;
   @media #{$breakpoint-md} {
     font-size: 24px;
@@ -57,52 +42,28 @@
   line-height:1.5;
 }
 
-.campaign-video {
-  width: 100%;
-  height: auto;
-
-  iframe {
-    width: 100%;
-    height: 400px;
-  }
-}
-
-.campaign-tabs__quotes {
-  list-style: none;
-  margin: 2rem 0 0 0;
-  padding: 0;
-
-  blockquote {
-    border-left: solid 2px $colour-teal-dark;
-    padding-left: 2rem;
-    margin: 0 0 0 2rem;
-    white-space: pre-wrap;
-  }
-
-  .attribution {
-    text-align: right;
-    margin-bottom: 2rem;
-  }
-}
-
-.campaign-tabs__budget, .campaign-tabs__updates {
-  padding: 0;
-  list-style: none;
-
-  p {
-    white-space: pre-wrap;
-  }
-}
-
-.donate-button {
+.c-details__header--donate-button {
   @include make-donate-button;
 }
 
-.campaign-card {
+.c-details__header--social-link {
+  margin-right: 1rem;
+}
+
+.c-details__header--social-icon {
+  width: 21px;
+}
+
+.c-details__header--icon {
+  font-size: 1rem;
+  vertical-align: sub;
+}
+
+.c-details__card {
   @include make-secondary-column;
 }
 
-.campaign-tabs {
+.c-tabs {
   @media #{$breakpoint-md} {
     max-width: 50%;
   }
@@ -112,15 +73,78 @@
   overflow-x: scroll;
 }
 
-.campaign-tabs__details p, .campaign-tabs__impact p {
+.c-details__tabs--quotes {
+  list-style: none;
+  margin: 2rem 0 0 0;
+  padding: 0;
+}
+
+.c-tabs__quotes--blockquote {
+  border-left: solid 2px $colour-teal-dark;
+  padding-left: 2rem;
+  margin: 0 0 0 2rem;
   white-space: pre-wrap;
 }
 
-.additional-images {
-  img {
-    margin: 1rem auto 0 auto;
-    max-width: 100%;
+.c-tabs__quotes--attribution {
+  text-align: right;
+  margin-bottom: 2rem;
+}
+
+.c-tabs--video {
+  width: 100%;
+  height: auto;
+}
+
+.c-tabs__video--iframe {
+  width: 100%;
+  height: 235px;
+  padding-top: 1rem;
+  @media #{$breakpoint-lg} {
+    height: 300px;
   }
+  @media #{$breakpoint-xl} {
+    height: 400px;
+  }
+}
+
+.c-tabs__additional--images {
+  margin: 1rem auto 0 auto;
+  max-width: 100%;
+}
+
+.c-details__tabs--budget,
+.c-details__tabs--updates {
+  padding: 0;
+  list-style: none;
+}
+
+.c-tabs__aims--item {
+  @include rt-0;
+}
+
+.c-tabs__budget--item {
+  white-space: pre-wrap;
+}
+
+.c-details__header--website,
+.c-tabs__budget--amount,
+.c-tabs__updates--description {
+  font-weight: 700;
+}
+
+.c-tabs__details--heading,
+.c-tabs__impact--heading {
+  @include rt-2;
+  margin: 0;
+  &:first-child {
+    margin-top: 1rem;
+  }
+}
+
+.c-tabs__details--description,
+.c-tabs__impact--description {
+  white-space: pre-wrap;
 }
 
 mat-tab-group {

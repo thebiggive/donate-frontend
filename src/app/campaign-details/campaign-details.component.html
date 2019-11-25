@@ -1,60 +1,67 @@
-<div class="details" *ngIf="campaign">
-  <div class="listing-button">
-    <button *ngIf="campaign.parentRef" mat-icon-button class="listing-button__button" [routerLink]="'/' + campaign.parentRef">
-      <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
+<div class="c-details" *ngIf="campaign">
+  <div class="c-details__listing-button">
+    <button class="c-details__listing-button--link" *ngIf="campaign.parentRef" mat-icon-button [routerLink]="'/' + campaign.parentRef">
+      <mat-icon class="c-details__listing-button--icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
       All participating campaigns
     </button>
-    <a *ngIf="!campaign.parentRef" mat-icon-button class="listing-button__button" href="https://www.thebiggive.org.uk/s/explore-campaigns">
-      <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
+    <a class="c-details__listing-button--link" *ngIf="!campaign.parentRef" mat-icon-button href="https://www.thebiggive.org.uk/s/explore-campaigns">
+      <mat-icon class="c-details__listing-button--icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
       All campaigns
     </a>
   </div>
 
   <div fxLayout="row" fxLayout.xs="column">
-    <div class="campaign-header">
-      <h4 class="charity-name">{{ campaign.charity.name }}</h4>
-      <h3 class="campaign-title">{{ campaign.title }}</h3>
-      <p class="campaign-description">{{campaign.summary}}</p>
+    <div class="c-details__header">
+      <h4 class="c-details__header--charity-name">{{ campaign.charity.name }}</h4>
+      <h3 class="c-details__header--campaign-title">{{ campaign.title }}</h3>
+      <p class="c-details__header--description">{{campaign.summary}}</p>
 
-      <button mat-raised-button class="donate-button" [routerLink]="'/donate/' + campaign.id" *ngIf="donateEnabled">
+      <button class="c-details__header--donate-button" mat-raised-button [routerLink]="'/donate/' + campaign.id" *ngIf="donateEnabled">
         Donate
       </button>
       <p *ngIf="!donateEnabled">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 
-      <p><a *ngIf="campaign.charity.website" [href]="campaign.charity.website" target="_blank"
-        ><mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
-        <strong>{{ campaign.charity.website }}</strong></a>
+      <p>
+        <a *ngIf="campaign.charity.website" [href]="campaign.charity.website" target="_blank">
+          <mat-icon class="c-details__header--icon" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+          <span class="c-details__header--website">{{ campaign.charity.website }}</span>
+        </a>
       </p>
 
-      <p *ngIf="campaign.charity.facebook || campaign.charity.twitter" class="social-icons">
-        <a *ngIf="campaign.charity.facebook" [href]="campaign.charity.facebook"
+      <p class="c-details__header--social" *ngIf="campaign.charity.facebook || campaign.charity.twitter">
+        <a class="c-details__header--social-link" *ngIf="campaign.charity.facebook" [href]="campaign.charity.facebook"
           target="_blank" title="Open {{ campaign.charity.name }}'s Facebook Page in a new tab"
-          ><img src="/assets/icon-facebook.png" alt="Facebook"></a>
+          >
+          <img class="c-details__header--social-icon" src="/assets/icon-facebook.png" alt="Facebook">
+        </a>
 
-        <a *ngIf="campaign.charity.twitter" [href]="campaign.charity.twitter"
+        <a class="c-details__header--social-link" *ngIf="campaign.charity.twitter" [href]="campaign.charity.twitter"
           target="_blank" title="Open {{ campaign.charity.name }}'s Twitter profile in a new tab"
-          ><img src="/assets/icon-twitter.png" alt="Twitter"></a>
+          >
+          <img class="c-details__header--social-icon" src="/assets/icon-twitter.png" alt="Twitter">
+        </a>
       </p>
     </div>
 
-    <div class="campaign-card">
+    <div class="c-details__card">
       <app-campaign-details-card [campaign]="campaign"></app-campaign-details-card>
     </div>
   </div>
 
   <div fxLayout="row">
-    <div class="campaign-tabs">
+    <div class="c-tabs">
       <mat-tab-group animationDuration="0ms" color="accent">
         <mat-tab label="Campaign overview">
-          <ul *ngIf="campaign.quotes.length > 0" class="campaign-tabs__quotes">
+          <ul class="c-tabs__quotes" *ngIf="campaign.quotes.length > 0">
             <li *ngFor="let quote of campaign.quotes">
-              <blockquote>{{ quote.quote }}</blockquote>
-              <h4 class="attribution">&mdash; {{ quote.person }}</h4>
+              <blockquote class="c-tabs__quotes--blockquote">{{ quote.quote }}</blockquote>
+              <h4 class="c-tabs__quotes--attribution">&mdash; {{ quote.person }}</h4>
             </li>
           </ul>
 
-          <div *ngIf="videoEmbedUrl" class="campaign-video">
+          <div class="c-tabs__video" *ngIf="videoEmbedUrl">
               <iframe
+                class="c-tabs__video--iframe"
                 [src]="videoEmbedUrl"
                 frameborder="0"
                 allow="autoplay; encrypted-media"
@@ -63,15 +70,16 @@
                 allowfullscreen="true"></iframe>
             </div>
 
-          <div class="campaign-tabs__details">
-            <h3>Situation</h3>
-            <p>{{ campaign.problem }}</p>
-            <h3>Solution</h3>
-            <p>{{ campaign.solution }}</p>
+          <div class="c-tabs__details">
+            <h3 class="c-tabs__details--heading">Situation</h3>
+            <p class="c-tabs__details--description">{{ campaign.problem }}</p>
+            <h3 class="c-tabs__details--heading">Solution</h3>
+            <p class="c-tabs__details--description">{{ campaign.solution }}</p>
           </div>
 
-          <div *ngIf="campaign.additionalImageUris.length > 0" class="additional-images">
+          <div class="c-tabs__additional" *ngIf="campaign.additionalImageUris.length > 0">
             <img
+              class="c-tabs__additional--images"
               *ngFor="let image of campaign.additionalImageUris"
               [src]="image.uri + '?width=850'"
             >
@@ -79,42 +87,43 @@
         </mat-tab>
 
         <mat-tab *ngIf="campaign.updates.length > 0" label="Updates">
-          <ul *ngFor="let update of campaign.updates" class="campaign-tabs__updates">
+          <ul class="c-tabs__updates" *ngFor="let update of campaign.updates">
             <li>
               <h4>{{ update.modifiedDate | date : 'longDate' }}</h4>
-              <p>{{ update.content }}</p>
+              <p class="c-tabs__updates--description">{{ update.content }}</p>
             </li>
           </ul>
         </mat-tab>
 
         <mat-tab *ngIf="campaign.aims.length > 0" label="Aims">
-          <ul *ngFor="let aim of campaign.aims">
-            <li>{{ aim }}</li>
+          <ul class="c-tabs__aims" *ngFor="let aim of campaign.aims">
+            <li class="c-tabs__aims--item">{{ aim }}</li>
           </ul>
         </mat-tab>
 
         <mat-tab *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" label="Where's the money going?">
-          <ul *ngFor="let detail of campaign.budgetDetails" class="campaign-tabs__budget">
-            <li>
-              <p><strong>{{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</strong> &ndash; {{ detail.description }}</p>
+          <ul class="c-tabs__budget" *ngFor="let detail of campaign.budgetDetails">
+            <li class="c-tabs__budget--item">
+              <span class="c-tabs__budget--amount">{{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</span>
+              &ndash; {{ detail.description }}
             </li>
           </ul>
 
           <div *ngIf="campaign.alternativeFundUse">
             <h4>Understanding the target</h4>
           </div>
-          <div class="campaign-tabs__details">
+          <div class="c-tabs__details">
             <p>{{ campaign.alternativeFundUse }}</p>
           </div>
         </mat-tab>
 
         <mat-tab label="Impact &amp; reporting">
-          <div class="campaign-tabs__impact">
-            <h3>Impact</h3>
-            <p>{{ campaign.impactSummary }}</p>
+          <div class="c-tabs__impact">
+            <h3 class="c-tabs__impact--heading">Impact</h3>
+            <p class="c-tabs__impact--description">{{ campaign.impactSummary }}</p>
 
-            <h3>Reporting</h3>
-            <p>{{ campaign.impactReporting }}</p>
+            <h3 class="c-tabs__impact--heading">Reporting</h3>
+            <p class="c-tabs__impact--description">{{ campaign.impactReporting }}</p>
           </div>
         </mat-tab>
       </mat-tab-group>
