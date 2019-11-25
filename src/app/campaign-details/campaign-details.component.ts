@@ -6,8 +6,6 @@ import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { PageMetaService } from '../page-meta.service';
 
-const CAMPAIGN_KEY = makeStateKey('campaign');
-
 @Component({
   selector: 'app-campaign-details',
   templateUrl: './campaign-details.component.html',
@@ -32,13 +30,13 @@ export class CampaignDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.campaign = this.state.get(CAMPAIGN_KEY, undefined);
+    this.campaign = this.state.get(makeStateKey(`campaign-${this.campaignId}`), undefined);
 
     if (this.campaign) {
       this.setSecondaryProps(this.campaign);
     } else {
       this.campaignService.getOneById(this.campaignId).subscribe(campaign => {
-        this.state.set(CAMPAIGN_KEY, campaign);
+        this.state.set(makeStateKey(`campaign-${this.campaignId}`), campaign);
         this.campaign = campaign;
         this.setSecondaryProps(campaign);
       });

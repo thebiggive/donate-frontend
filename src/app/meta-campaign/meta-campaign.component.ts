@@ -9,9 +9,6 @@ import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
 import { PageMetaService } from '../page-meta.service';
 
-const FUND_KEY = makeStateKey('fund');
-const METACAMPAIGN_KEY = makeStateKey('metacampaign');
-
 @Component({
   selector: 'app-meta-campaign',
   templateUrl: './meta-campaign.component.html',
@@ -49,8 +46,8 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.campaign = this.state.get(METACAMPAIGN_KEY, undefined);
-    this.fund = this.state.get(FUND_KEY, undefined);
+    this.campaign = this.state.get(makeStateKey(`metacampaign-${this.campaignId}`), undefined);
+    this.fund = this.state.get(makeStateKey(`fund-for-${this.campaignId}`), undefined);
 
     if (!this.campaign) {
       if (this.campaignId) {
@@ -62,7 +59,7 @@ export class MetaCampaignComponent implements OnInit {
 
     if (!this.fund && this.fundSlug) {
       this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
-        this.state.set(FUND_KEY, fund);
+        this.state.set(makeStateKey(`fund-for-${this.campaignId}`), fund);
         this.fund = fund;
       });
     }
@@ -140,7 +137,7 @@ export class MetaCampaignComponent implements OnInit {
    * Set the campaign for the service and page metadata.
    */
   private setCampaign(campaign: Campaign) {
-    this.state.set(METACAMPAIGN_KEY, campaign); // Have data ready for client when handing over from SSR
+    this.state.set(makeStateKey(`metacampaign-${this.campaignId}`), campaign); // Have data ready for client when handing over from SSR
     this.campaign = campaign;
     this.pageMeta.setCommon(
       campaign.title,
