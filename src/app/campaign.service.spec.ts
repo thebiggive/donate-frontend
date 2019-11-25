@@ -41,6 +41,7 @@ describe('CampaignService', () => {
       'Impact overview',
       true,
       987.00,
+      988.00,
       'The situation',
       [
         {

@@ -1,12 +1,17 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, EventEmitter, Inject, Input, OnInit, Output, PLATFORM_ID } from '@angular/core';
 
+import { Campaign } from '../campaign.model';
+import { Fund } from '../fund.model';
+
 @Component({
   selector: 'app-hero',
   templateUrl: './hero.component.html',
   styleUrls: ['./hero.component.scss'],
 })
 export class HeroComponent implements OnInit {
+  @Input() public campaign: Campaign;
+  @Input() public fund?: Fund;
   @Input() public title: string;
   @Input() public description: string;
   @Input() public logoUri?: string;

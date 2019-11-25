@@ -10,11 +10,15 @@
 
 .hero {
   color: white;
+  padding-top: 1rem;
   background-size: auto 150%;
   background-repeat: no-repeat;
   background-position: center top;
   @media #{$breakpoint-md} {
     background-size: cover;
+  }
+  @media #{$breakpoint-lg} {
+    padding-top: 1.5rem;
   }
 }
 
