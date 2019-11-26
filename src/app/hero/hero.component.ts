@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, EventEmitter, Inject, Input, OnInit, Output, PLATFORM_ID } from '@angular/core';
+import { Observable } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
 import { Fund } from '../fund.model';
@@ -10,10 +11,11 @@ import { Fund } from '../fund.model';
   styleUrls: ['./hero.component.scss'],
 })
 export class HeroComponent implements OnInit {
-  @Input() public campaign: Campaign;
-  @Input() public fund?: Fund;
-  @Input() public title: string;
-  @Input() public description: string;
+  @Input() campaign: Campaign;
+  @Input() description: string;
+  @Input() fund?: Fund;
+  @Input() reset: Observable<void>; // Passed through to CampaignSearchFormComponent
+  @Input() title: string;
   @Output() heroSearch: EventEmitter<any> = new EventEmitter();
 
   /**

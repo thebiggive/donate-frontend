@@ -2,11 +2,12 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatCardModule, MatInputModule, MatSelectModule, MatProgressBarModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Observable } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
 import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { HeroComponent } from './hero.component';
-import { TickerComponent } from './../ticker/ticker.component';
+import { TickerComponent } from '../ticker/ticker.component';
 import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('HeroComponent', () => {
@@ -92,6 +93,7 @@ describe('HeroComponent', () => {
       },
       'Some information about what happens if funds are not used',
     );
+    component.reset = new Observable();
     fixture.detectChanges();
   });
 

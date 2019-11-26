@@ -8,6 +8,7 @@ import {
   MatIconModule,
   MatInputModule,
   MatProgressBarModule,
+  MatProgressSpinnerModule,
   MatSelectModule,
 } from '@angular/material';
 import { BrowserTransferStateModule } from '@angular/platform-browser';
@@ -48,6 +49,7 @@ describe('MetaCampaignComponent', () => {
         MatIconModule,
         MatInputModule,
         MatProgressBarModule,
+        MatProgressSpinnerModule,
         MatSelectModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
