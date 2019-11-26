@@ -1,20 +1,20 @@
 @import '../../styles';
 
-.donate-complete {
+.c-donate-complete {
   @include make-container;
 }
 
-.mat-spinner {
+.c-donate-complete__mat-spinner {
   margin: 3rem auto 0;
 }
 
-.thank-you {
+.c-donate-complete__thank-you {
   text-align: center;
   margin-top: 3rem;
   margin-bottom: 0;
   @include size-xl;
   font-weight: 500;
-  span {
+  .c-donate-complete__thank-you--copy {
     background-color: $colour-teal-darker;
     padding: 1rem 2rem;
     color: white;
@@ -29,12 +29,12 @@
   }
 }
 
-.page-body {
+.c-donate-complete__body {
   @include make-card($box-shadow-hard);
   padding: 1rem;
 }
 
-.page-margin {
+.c-donate-complete__body--margin {
   margin: 1rem;
   margin-top: 0;
   @media #{$breakpoint-md} {
@@ -49,70 +49,57 @@
   }
 }
 
-.campaign-banner {
-  @media #{$breakpoint-lg} {
-    display: inline-block;
-    img {
-      max-width: 330px;
-    }
-  }
-}
-
-.page-heading {
-  @media #{$breakpoint-lg} {
-    display: inline-block;
-    margin-left: 2rem;
-  }
-}
-
-.page-body {
-  max-width: 750px;
-  margin: 0 auto;
-}
-
-img {
-  width: 100%;
-  border-radius: 4px;
-  margin-top: 1rem;
-}
-
-h3 {
+.c-donate-complete__heading {
+  @include rt-2;
   font-weight: 400;
   color: $colour-teal-darker;
-  @include size-xl;
 }
 
-.receipt {
+.c-donate-complete__heading--highlight {
+  font-weight: 700;
+}
+
+.c-donate-complete__description {
+  @include rt-0;
+}
+
+.c-donate-complete__receipt {
   border-top: 1px solid $colour-grey-light;
   border-bottom: 1px solid $colour-grey-light;
   margin-top: 3rem;
   padding-bottom: 2rem;
   margin-bottom: 2rem;
   color: $colour-grey;
-  h3 {
-    font-weight: 700;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+}
+  
+.c-donate-complete__receipt--heading {
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.c-donate-complete__reciept--subheading {
+  @include rt-sm;
+}
+
+h4 {
+  margin-bottom: 0;
+  font-weight: 400;
+  &.rt-sm {
+    margin-top: 0.75rem;
   }
-  h4 {
-    margin-bottom: 0;
-    font-weight: 400;
-    &.rt-sm {
-      margin-top: 0.75rem;
-    }
-    &.rt-2 {
-      font-weight: 500;
-      margin-top: 0;
-    }
-  }
-  p {
-    margin: 0;
+  &.rt-2 {
     font-weight: 500;
+    margin-top: 0;
   }
-  p.small-p {
-    margin-top: 2.5rem;
-    line-height: 1;
-  }
+}
+p {
+  margin: 0;
+  font-weight: 500;
+}
+p.small-p {
+  margin-top: 2.5rem;
+  line-height: 1;
 }
 
 .page-button {
