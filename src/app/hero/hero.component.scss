@@ -27,6 +27,8 @@
 }
 
 .hero-flex__child {
+  padding-right: 15px; // Allow space so GetSiteControl right-floated widgets don't cover copy
+
   @media #{$breakpoint-md} {
     margin-right: 1rem;
     &:last-child {
