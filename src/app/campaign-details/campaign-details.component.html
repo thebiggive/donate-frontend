@@ -1,5 +1,9 @@
 <div class="details" *ngIf="campaign">
   <div class="listing-button">
+    <button *ngIf="campaign.parentRef && fromFund" mat-icon-button class="listing-button__button block" [routerLink]="'/' + campaign.parentRef + '/' + campaign.championRef">
+      <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
+      All {{ campaign.championName }} campaigns<br>
+    </button>
     <button *ngIf="campaign.parentRef" mat-icon-button class="listing-button__button" [routerLink]="'/' + campaign.parentRef">
       <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
       All participating campaigns

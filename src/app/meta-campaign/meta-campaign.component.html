@@ -18,7 +18,7 @@
 
   <mat-spinner *ngIf="loading" color="accent" diameter="30"></mat-spinner>
 
-  <div *ngIf="campaign && children.length === 0 && !loading">
+  <div *ngIf="campaign && children.length === 0 && !loading && !filterError">
     <p class="error">
       We can't find any campaigns matching this search but there are lots more to choose from.
       <a (click)="setDefaultFilters()">View all participating campaigns here</a>.
@@ -27,7 +27,7 @@
 
   <div class="cards-grid">
     <div class="cards-grid__card" *ngFor="let campaign of children">
-      <app-campaign-card [campaign]="campaign"></app-campaign-card>
+      <app-campaign-card [campaign]="campaign" [inFundContext]="!!fund"></app-campaign-card>
     </div>
   </div>
 
@@ -40,6 +40,6 @@
 
 <div *ngIf="filterError">
   <!-- e.g. campaign or fund slug is not recognised -->
-  <p class="error">Could not load the campaign. You might have followed a broken link.</p>
-  <p>Not to worry, you can <a routerLink="/">browse all active campaigns here</a>!</p>
+  <p class="error">Could not load the campaign. You might have followed a broken link.<br>
+    Not to worry, you can <a routerLink="/">browse all active campaigns here</a>!</p>
 </div>

@@ -8,6 +8,11 @@
   @include make-back-button;
 }
 
+.listing-button__button.block {
+  display: block;
+  margin-bottom: 0;
+}
+
 .campaign-header {
   @include make-primary-column;
 
