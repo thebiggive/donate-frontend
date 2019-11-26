@@ -30,10 +30,17 @@ app-campaign-card {
 
 .error {
   color: mat-color($donate-warn);
+  max-width: 600px;
+  text-align: center;
+  margin: 1rem auto;
 }
 
 .mat-grid-tile {
   overflow: visible;
+}
+
+.mat-spinner {
+  margin: 3rem auto 0;
 }
 
 .more-campaigns {
