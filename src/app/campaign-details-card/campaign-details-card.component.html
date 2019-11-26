@@ -27,7 +27,6 @@
         <p class="campaign-target-value sm">{{ campaign.donationCount | number:'1.0-0' }}</p>
       </div>
     </div>
-    <p class="championed-by" *ngIf="campaign.championName">Championed by <strong>{{campaign.championName}}</strong></p>
+    <p class="championed-by" *ngIf="campaign.championName"><a [routerLink]="'/' + campaign.parentRef + '/' + campaign.championRef">Championed by <strong>{{campaign.championName}}</strong></a></p>
   </div>
-
 </div>

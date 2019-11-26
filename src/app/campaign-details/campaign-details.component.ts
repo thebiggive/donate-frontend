@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, makeStateKey, SafeResourceUrl, TransferState } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
@@ -16,6 +16,7 @@ export class CampaignDetailsComponent implements OnInit {
   public campaignId: string;
   public clientSide: boolean;
   public donateEnabled = true;
+  public fromFund = false;
   public percentRaised?: number;
   public videoEmbedUrl?: SafeResourceUrl;
 
@@ -27,6 +28,11 @@ export class CampaignDetailsComponent implements OnInit {
     private state: TransferState,
   ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
+    route.queryParams.forEach((params: Params) => {
+      if (params.fromFund) {
+        this.fromFund = true;
+      }
+    });
   }
 
   ngOnInit() {

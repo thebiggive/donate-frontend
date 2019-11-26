@@ -11,7 +11,7 @@
 
   <div class="card-header">
     <h4 class="charity-name">{{ campaign.charity.name }}</h4>
-    <h3 class="campaign-title"><a [routerLink]="'/campaign/' + campaign.id">{{ campaign.title }}</a></h3>
+    <h3 class="campaign-title"><a [routerLink]="'/campaign/' + campaign.id" [queryParams]="inFundContext ? {fromFund: 1} : {}">{{ campaign.title }}</a></h3>
   </div>
 
   <div class="campaign-categories__wrap">
@@ -37,6 +37,7 @@
       color="accent"
       class="more-button"
       [routerLink]="'/campaign/' + campaign.id"
+      [queryParams]="inFundContext ? {fromFund: 1} : {}"
     >
       More info
       <mat-icon aria-hidden="false" aria-label="Plus">add</mat-icon>
