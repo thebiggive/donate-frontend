@@ -84,7 +84,7 @@ ul {
 }
 
 .c-card__funds--description {
-  @include rt-sm;
+  @extend .text-grey-sm;
   margin-top: 0;
   margin-bottom: 0.5rem;
   line-height: 1;
