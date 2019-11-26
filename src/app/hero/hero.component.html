@@ -6,7 +6,7 @@
       <div class="hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
         <div fxLayout="column">
           <h1>
-            <img *ngIf="logoUri" [src]="logoUri + '?width=200'" width="100" alt="Champion logo'">
+            <img *ngIf="fund && fund.logoUri" [src]="fund.logoUri + '?width=300'" [alt]="fund.name">
             {{ title }}
           </h1>
         </div>

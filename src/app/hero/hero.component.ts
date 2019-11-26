@@ -14,7 +14,6 @@ export class HeroComponent implements OnInit {
   @Input() public fund?: Fund;
   @Input() public title: string;
   @Input() public description: string;
-  @Input() public logoUri?: string;
   @Output() heroSearch: EventEmitter<any> = new EventEmitter();
 
   /**
