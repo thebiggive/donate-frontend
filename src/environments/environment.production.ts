@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUriPrefix: 'https://biggive.secure.force.com',
+  apiUriPrefix: 'https://sf-api-production.thebiggive.org.uk',
   charityCheckoutInitUri: 'https://fundraise.charitycheckout.co.uk/api/checkout/init',
   donateUriPrefix: 'https://donate.thebiggive.org.uk',
   donationsApiPrefix: 'https://biggive.secure.force.com/donations/services/apexrest/v1.0',
