@@ -118,7 +118,7 @@
 
 .c-receipt__value,
 .c-tip__value {
-  @include rt-1;
+  @extend .text-grey-sm;
   font-weight: 700;
   margin: 0;
   &--highlighted {
