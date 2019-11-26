@@ -1,0 +1,159 @@
+@mixin size-md {
+  font-size: 14px;
+}
+@mixin size-lg {
+  font-size: 18px;
+}
+@mixin size-xl {
+  font-size: 21px;
+}
+@mixin size-xxl {
+  font-size: 34px;
+}
+@mixin size-xxxl {
+  font-size: 40px;
+}
+
+@mixin rt-sm {
+  font-size: 11px;
+  line-height: 14px;
+  @media #{$breakpoint-lg} {
+    font-size: 14px;
+    line-height: 20px
+  }
+}
+
+@mixin rt-0 {
+  font-size: 14px;
+  line-height: 20px;
+  @media #{$breakpoint-lg} {
+    font-size: 18px;
+    line-height: 27px;
+  }
+}
+
+@mixin rt-1 {
+  font-size: 18px;
+  line-height: 1.5;
+  @media #{$breakpoint-lg} {
+    font-size: 24px;
+    line-height: 36px;
+  }
+}
+
+@mixin rt-2 {
+  font-size: 24px;
+  line-height: 36px;
+  @media #{$breakpoint-lg} {
+    font-size: 34px;
+    line-height: 40px;
+  }
+}
+
+@mixin rt-3 {
+  font-size: 34px;
+  line-height: 41px;
+  @media #{$breakpoint-lg} {
+    font-size: 40px;
+    line-height: 56px;
+  }
+}
+
+@mixin make-container {
+  margin:0 15px;
+  @media #{$breakpoint-lg} {
+    margin:0 30px;
+  }
+  @media #{$breakpoint-xl} {
+    max-width: 1220px;
+    margin:0 auto;
+  }
+}
+
+@mixin make-container-small {
+  margin:0 15px;
+  @media #{$breakpoint-md} {
+    margin:0 30px;
+  }
+  @media #{$breakpoint-lg} {
+    margin:0 60px;
+  }
+  @media #{$breakpoint-xl} {
+    max-width: 1150px;
+    margin:0 auto;
+  }
+}
+
+@mixin make-primary-column {
+  @media #{$breakpoint-md} {
+    width:calc(100% - 225px);
+    padding-right:7%;
+  }
+  @media #{$breakpoint-lg} {
+    width:calc(100% - 330px);
+    padding-right:10%;
+  }
+  @media #{$breakpoint-xl} {
+    padding-right:15%;
+  }
+}
+
+@mixin make-secondary-column {
+  margin-top: 2rem;
+  @media #{$breakpoint-md} {
+    margin-top: 0;
+    width: 225px;
+  }
+  @media #{$breakpoint-lg} {
+    margin-top: 0;
+    width: 330px;
+  }
+}
+
+@mixin make-donate-button {
+  padding: 0.5rem 2rem;
+  background-color: $colour-teal-lighter;
+  color: $colour-teal-darkest;
+  border-radius: 4px;
+  font-size:18px;
+  box-shadow:none !important;
+  border:0px;
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: darken($colour-teal-lighter, 10%);
+  }
+}
+
+@mixin make-back-button {
+  color: $colour-teal;
+  margin-bottom: 1rem;
+  .mat-icon-button {
+    font-weight: 400;
+  }
+  .mat-icon {
+    font-size: 1rem;
+    line-height: 23px;
+    width: 1rem;
+  }
+}
+
+@mixin make-card($box-shadow: $box-shadow-soft) {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow:$box-shadow;
+}
+
+@mixin make-card-banner {
+  height: 110px;
+  border-radius: 4px 4px 0 0;
+  background-size: cover;
+  background-position: center center;
+}
+
+@mixin make-card-body {
+  padding: 15px;
+  @media #{$breakpoint-xl} {
+    padding: 15px 30px;
+  }
+}
