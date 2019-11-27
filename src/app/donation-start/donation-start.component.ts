@@ -29,7 +29,7 @@ export class DonationStartComponent implements OnInit {
   public campaign: Campaign;
   public donationForm: FormGroup;
   public retrying = false;
-  public suggestedAmounts = [30, 100, 250];
+  public suggestedAmounts: number[];
   public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
   public validationError = false;         // Internal Angular app form validation error
@@ -49,6 +49,8 @@ export class DonationStartComponent implements OnInit {
     private router: Router,
     private state: TransferState,
   ) {
+    this.suggestedAmounts = this.getSuggestedAmounts();
+
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
     route.queryParams.forEach((params: Params) => {
       if (params.error) {
@@ -227,6 +229,15 @@ export class DonationStartComponent implements OnInit {
         ? (new Date(this.campaign.startDate) <= new Date() && new Date(this.campaign.endDate) > new Date())
         : false
       );
+  }
+
+  private getSuggestedAmounts() {
+    if (!this.suggestedAmounts) {
+      // TODO add up weightings and pick an amount set accordingly.
+      this.suggestedAmounts = environment.suggestedAmounts[0].values;
+    }
+
+    return this.suggestedAmounts;
   }
 
   private offerExistingDonation(donation: Donation) {

@@ -12,6 +12,7 @@ export const environment = {
   donationsApiPrefix: 'https://regtest1-biggive.cs105.force.com/donations/services/apexrest/v1.0',
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,
+  suggestedAmounts: [{weight: 1, values: [30, 100, 250]}],
   thanksUriPrefix: 'https://donate-regression.thebiggivetest.org.uk/thanks/',
 };
 
