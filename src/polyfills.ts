@@ -28,7 +28,7 @@
  */
 
 // Seemingly also needed by Angular Material for IE11, see https://stackoverflow.com/a/51442855/2803757
-import 'web-animations-js';  // Run `npm install --save web-animations-js`.
+// import 'web-animations-js';  // Run `npm install --save web-animations-js`.
 
 /**
  * By default, zone.js will patch all possible macroTask and DomEvents
@@ -66,20 +66,3 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 
  // Support `includes(...)` for arrays in IE11 etc. Not polyfilled for Angular core.
 import 'core-js/modules/es.array.includes';
-
-// Try kitchen sync polyfills to see if any combination gets IE11 working for now.
-// See WIP DON-142 and https://stackoverflow.com/a/46037724/2803757
-import 'core-js/es/symbol';
-import 'core-js/es/object';
-import 'core-js/es/function';
-import 'core-js/es/parse-int';
-import 'core-js/es/parse-float';
-import 'core-js/es/number';
-import 'core-js/es/math';
-import 'core-js/es/string';
-import 'core-js/es/date';
-import 'core-js/es/array';
-import 'core-js/es/regexp';
-import 'core-js/es/map';
-import 'core-js/es/weak-map';
-import 'core-js/es/set';
