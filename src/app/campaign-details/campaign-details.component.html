@@ -12,17 +12,17 @@
 
   <div fxLayout="row" fxLayout.xs="column">
     <div class="b-primary-column">
-      <h4 class="c-details__header--charity-name b-rt0 b-uppercase b-grey b-light">{{ campaign.charity.name }}</h4>
-      <h3 class="c-details__header--campaign-title b-rh1 b-bold">{{ campaign.title }}</h3>
-      <p class="c-details__header--description b-rt1">{{campaign.summary}}</p>
+      <h4 class="c-details__header--charity-name b-rt-0 b-uppercase b-grey b-light">{{ campaign.charity.name }}</h4>
+      <h3 class="c-details__header--campaign-title b-rh-1 b-bold">{{ campaign.title }}</h3>
+      <p class="c-details__header--description b-rt-1">{{campaign.summary}}</p>
 
       <button class="b-donate-button" mat-raised-button [routerLink]="'/donate/' + campaign.id" *ngIf="donateEnabled">
         Donate
       </button>
       <p *ngIf="!donateEnabled">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 
-      <a class="b-rt0 b-bold b-block" *ngIf="campaign.charity.website" [href]="campaign.charity.website" target="_blank">
-        <mat-icon class="c-website__icon b-rt0" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+      <a class="b-rt-0 b-bold b-block" *ngIf="campaign.charity.website" [href]="campaign.charity.website" target="_blank">
+        <mat-icon class="c-website__icon b-rt-0" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
         {{ campaign.charity.website }}
       </a>
 
@@ -53,7 +53,7 @@
           <ul class="c-quotes" *ngIf="campaign.quotes.length > 0">
             <li *ngFor="let quote of campaign.quotes">
               <blockquote class="c-quotes__blockquote">{{ quote.quote }}</blockquote>
-              <h4 class="c-quotes__attribution">&mdash; {{ quote.person }}</h4>
+              <h4 class="c-quotes__attribution b-semi-bold">&mdash; {{ quote.person }}</h4>
             </li>
           </ul>
 
@@ -68,16 +68,16 @@
                 allowfullscreen="true"></iframe>
             </div>
 
-          <div class="c-tabs__details">
-            <h3 class="c-tabs__details--heading">Situation</h3>
-            <p class="c-tabs__details--description">{{ campaign.problem }}</p>
-            <h3 class="c-tabs__details--heading">Solution</h3>
-            <p class="c-tabs__details--description">{{ campaign.solution }}</p>
+          <div class="c-details">
+            <h3 class="c-details__heading b-rh-2">Situation</h3>
+            <p class="c-details__description">{{ campaign.problem }}</p>
+            <h3 class="c-details__heading b-rh-2">Solution</h3>
+            <p class="c-details__description">{{ campaign.solution }}</p>
           </div>
 
-          <div class="c-tabs__additional" *ngIf="campaign.additionalImageUris.length > 0">
+          <div class="c-additional" *ngIf="campaign.additionalImageUris.length > 0">
             <img
-              class="c-tabs__additional--images"
+              class="c-additional__images"
               *ngFor="let image of campaign.additionalImageUris"
               [src]="image.uri + '?width=850'"
             >
@@ -85,43 +85,41 @@
         </mat-tab>
 
         <mat-tab *ngIf="campaign.updates.length > 0" label="Updates">
-          <ul class="c-tabs__updates" *ngFor="let update of campaign.updates">
+          <ul class="c-updates" *ngFor="let update of campaign.updates">
             <li>
-              <h4>{{ update.modifiedDate | date : 'longDate' }}</h4>
-              <p class="c-tabs__updates--description">{{ update.content }}</p>
+              <h4 class="b-semi-bold">{{ update.modifiedDate | date : 'longDate' }}</h4>
+              <p class="c-updates__description">{{ update.content }}</p>
             </li>
           </ul>
         </mat-tab>
 
         <mat-tab *ngIf="campaign.aims.length > 0" label="Aims">
-          <ul class="c-tabs__aims" *ngFor="let aim of campaign.aims">
-            <li class="c-tabs__aims--item">{{ aim }}</li>
+          <ul class="c-aims" *ngFor="let aim of campaign.aims">
+            <li class="c-aims__item">{{ aim }}</li>
           </ul>
         </mat-tab>
 
         <mat-tab *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" label="Where's the money going?">
-          <ul class="c-tabs__budget" *ngFor="let detail of campaign.budgetDetails">
-            <li class="c-tabs__budget--item">
-              <span class="c-tabs__budget--amount">{{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</span>
+          <ul class="c-budget" *ngFor="let detail of campaign.budgetDetails">
+            <li class="c-budget__item">
+              <span class="c-budget__value">{{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</span>
               &ndash; {{ detail.description }}
             </li>
           </ul>
 
-          <div *ngIf="campaign.alternativeFundUse">
-            <h4>Understanding the target</h4>
-          </div>
-          <div class="c-tabs__details">
-            <p>{{ campaign.alternativeFundUse }}</p>
+          <div class="c-alternative-funds" *ngIf="campaign.alternativeFundUse">
+            <h4 class="c-alternative-funds__title b-semi-bold">Understanding the target</h4>
+            <p class="c-alternative-funds__description">{{ campaign.alternativeFundUse }}</p>
           </div>
         </mat-tab>
 
         <mat-tab label="Impact &amp; reporting">
-          <div class="c-tabs__impact">
-            <h3 class="c-tabs__impact--heading">Impact</h3>
-            <p class="c-tabs__impact--description">{{ campaign.impactSummary }}</p>
+          <div class="c-impact">
+            <h3 class="c-impact__heading b-rh-2">Impact</h3>
+            <p class="c-impact__description">{{ campaign.impactSummary }}</p>
 
-            <h3 class="c-tabs__impact--heading">Reporting</h3>
-            <p class="c-tabs__impact--description">{{ campaign.impactReporting }}</p>
+            <h3 class="c-impact__heading b-rh-2">Reporting</h3>
+            <p class="c-impact__description">{{ campaign.impactReporting }}</p>
           </div>
         </mat-tab>
       </mat-tab-group>
