@@ -94,7 +94,7 @@ body {
 
 p,
 li {
-  @include b-rt0;
+  @include b-rt-0;
 }
 
 a {
@@ -125,79 +125,4 @@ a {
 }
 
 // Style Material Componenets here due to ViewEncapsulation
-mat-progress-bar {
-  border-radius: 4px;
-  height: 5px;
-  margin-bottom: 15px;
-  .mat-progress-bar-background {
-    display:none !important;
-  }
-  .mat-progress-bar-fill::after {
-    background: $colour-teal-dark;
-  }
-  .mat-progress-bar-buffer {
-    background: $colour-teal;
-    opacity: 0.24;
-  }
-}
-
-mat-radio-button {
-  margin-bottom: 1rem;
-  .mat-radio-label {
-    white-space:initial;
-    @include b-rt0;
-  }
-}
-
-mat-expansion-panel {
-  .mat-expansion-panel-header {
-    padding: 0 1rem;
-    @media #{$breakpoint-lg} {
-      padding: 1rem 2rem 0;
-    }
-  }
-
-  .mat-expansion-panel-header {
-    height: auto !important;
-  }
-
-  .mat-expansion-panel-header[aria-disabled=true] {
-    color: inherit;
-  }
-
-  .mat-expansion-indicator::after {
-    color: $colour-teal-darker;
-    border-width: 0 3px 3px 0;
-    padding: 5px;
-  }
-
-  .mat-expansion-panel-body {
-    padding: 0 1rem 1rem;
-    @media #{$breakpoint-lg} {
-      padding: 0 2rem 2rem;
-    }
-  }
-}
-
-.mat-expansion-panel {
-  margin-bottom: 16px;
-}
-
-mat-form-field {
-  .mat-form-field-label {
-
-  }
-}
-
-mat-toolbar {
-  position: sticky;
-  position: -webkit-sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-button.mat-icon-button {
-  // Work around Safari layout issue where text following buttons was cut off.
-  // Observed in top sidenav and 'back' links next to `keyboard_arrow_left` icons.
-  width: auto;
-}
+@import './assets/scss/overwrite-mat';
