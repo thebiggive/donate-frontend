@@ -30,12 +30,12 @@
   }
 }
 
-.c-body {
+.c-card {
   @include make-card($box-shadow-hard);
   padding: 1rem;
 }
 
-.c-body__margin {
+.c-main {
   margin: 1rem;
   margin-top: 0;
   @media #{$breakpoint-md} {
@@ -50,32 +50,14 @@
   }
 }
 
-.c-heading {
-  @include b-rt-2;
-  font-weight: 400;
-  color: $colour-teal-darker;
-}
-
-.c-heading__highlight {
-  font-weight: 700;
-}
-
-.c-description {
-  @include b-rt-0;
-}
-
 .c-receipt {
   border-top: 1px solid $colour-grey-light;
   border-bottom: 1px solid $colour-grey-light;
   margin: 3rem 0;
   padding-bottom: 3rem;
-  color: $colour-grey;
 }
   
 .c-receipt__heading {
-  @include b-rt-2;
-  color: $colour-teal-darker;
-  font-weight: 700;
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
@@ -83,7 +65,6 @@
 .c-receipt__list {
   clear: both;
   display: table;
-  width: 100%;
   padding: 0;
   margin-bottom: 0;
   @media #{$breakpoint-md} {
@@ -94,30 +75,18 @@
 }
 
 .c-receipt__item {
-  display: block;
-  float:left;
-  width:50%;
-  clear:left;
+  float: left;
+  width: 50%;
+  clear: left;
   &--highlighted {
-    float:right;
+    float: right;
   }
 }
 
 .c-receipt__title,
 .c-tip__description {
   margin-bottom: 0;
-  font-weight: 400;
   margin-top: 0.75rem;
-}
-
-.c-receipt__value,
-.c-tip__value {
-  @extend .b-rt-0;
-  font-weight: 700;
-  margin: 0;
-  &--highlighted {
-    @include b-rt-2;
-  }
 }
 
 .c-tip {
@@ -133,19 +102,12 @@
   background-color: #F4F4F4;
   color: $colour-teal;
   padding: 1rem 0;
-  width: 100%;
-  text-align: center;
   &:hover {
     text-decoration: underline;
   }
   @media #{$breakpoint-lg} {
     padding: 2rem 0;
   }
-}
-
-.c-button__link {
-  @include b-rt-1;
-  margin: 0;
 }
 
 .c-button__image {

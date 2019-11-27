@@ -17,57 +17,57 @@
       <span class="c-thank-you__content">Thank you!</span>
     </h2>
 
-    <div class="c-body">
-      <div class="c-body__margin">
-        <h3 class="c-heading">
+    <div class="c-card">
+      <div class="c-main">
+        <h3 class="b-rh-2 b-light">
           Your donation of 
-          <span class="c-heading__highlight">
+          <span class="b-bold">
             {{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}
           </span>
            has been made.
         </h3>
-        <h3 class="c-heading">
+        <h3 class="b-rh-2 b-light">
           That's worth 
-          <span class="c-heading__highlight">
+          <span class="b-bold">
             {{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}
           </span>
           to {{ donation.charityName }}.
         </h3>
-        <p class="c-description" *ngIf="campaign">{{ campaign.summary }}</p>
+        <p class="b-rt-0" *ngIf="campaign">{{ campaign.summary }}</p>
 
-        <div class="c-receipt">
-          <h3 class="c-receipt__heading">Your receipt</h3>
-          <ul class="c-receipt__list">
-            <li class="c-receipt__item c-receipt__item--highlighted">
-              <h4 class="c-receipt__title  b-grey b-rt-sm">Total for {{ donation.charityName }}</h4>
-              <p class="c-receipt__value c-receipt__value--highlighted">{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</p>
+        <div class="c-receipt b-grey">
+          <h3 class="c-receipt__heading b-rh-2 b-bold">Your receipt</h3>
+          <ul class="c-receipt__list b-w-100">
+            <li class="c-receipt__item c-receipt__item--highlighted b-db">
+              <h4 class="c-receipt__title b-light b-grey b-rt-sm">Total for {{ donation.charityName }}</h4>
+              <p class="b-rt-2 b-bold b-m-0">{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</p>
             </li>
-            <li class="c-receipt__item">
-              <h4 class="c-receipt__title  b-grey b-rt-sm">Your donation</h4>
-              <p class="c-receipt__value">{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
+            <li class="c-receipt__item b-db">
+              <h4 class="c-receipt__title b-light b-grey b-rt-sm">Your donation</h4>
+              <p class="b-rt-0 b-bold b-m-0">{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
             </li>
-            <li class="c-receipt__item">
-              <h4 class="c-receipt__title  b-grey b-rt-sm" *ngIf="donation.matchedAmount > 0">Matched funds</h4>
-              <p class="c-receipt__value" *ngIf="donation.matchedAmount > 0">{{ donation.matchedAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
+            <li class="c-receipt__item b-db">
+              <h4 class="c-receipt__title b-light b-grey b-rt-sm" *ngIf="donation.matchedAmount > 0">Matched funds</h4>
+              <p class="b-rt-0 b-bold b-m-0" *ngIf="donation.matchedAmount > 0">{{ donation.matchedAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
             </li>
-            <li class="c-receipt__item">
-              <h4 class="c-receipt__title  b-grey b-rt-sm">Gift Aid</h4>
-              <p class="c-receipt__value">{{ giftAidAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
+            <li class="c-receipt__item b-db">
+              <h4 class="c-receipt__title b-light b-grey b-rt-sm">Gift Aid</h4>
+              <p class="b-rt-0 b-bold b-m-0">{{ giftAidAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
             </li>
           </ul>
           <div class="c-receipt__tip c-tip" *ngIf="donation.tipAmount > 0">
             <p class="c-tip__heading">Thank you for leaving a tip of {{ donation.tipAmount | currency : '£' : 'symbol' : '1.2-2' }} towards the Big Give.</p>
-            <p class="c-tip__description b-grey b-rt-sm">Total amount you have been charged</p>
-            <p class="c-tip__value">{{ cardChargedAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
+            <p class="c-tip__description b-light b-grey b-rt-sm">Total amount you have been charged</p>
+            <p class="b-rt-0 b-bold b-m-0">{{ cardChargedAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
           </div>
         </div>
       </div>
 
-      <button class="c-button" mat-button>
+      <button class="c-button b-w-100 b-center" mat-button>
         <div *ngIf="campaign">
           <!-- For now, this assumes Master / meta-campaigns all have slugs set. -->
-          <p class="c-button__link" *ngIf="campaign.parentRef"><a [routerLink]="'/' + campaign.parentRef">Explore other campaigns</a></p>
-          <p class="c-button__link" *ngIf="!campaign.parentRef"><a href="https://www.thebiggive.org.uk/s/explore-campaigns">Explore other campaigns</a></p>
+          <p class="b-rt-1 b-m-0" *ngIf="campaign.parentRef"><a [routerLink]="'/' + campaign.parentRef">Explore other campaigns</a></p>
+          <p class="b-rt-1 b-m-0" *ngIf="!campaign.parentRef"><a href="https://www.thebiggive.org.uk/s/explore-campaigns">Explore other campaigns</a></p>
         </div>
         <img class="c-button__image" src="/assets/images/logo.png" alt="The Big Give" width="200">
       </button>
