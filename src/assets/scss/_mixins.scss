@@ -14,7 +14,7 @@
   font-size: 40px;
 }
 
-@mixin rt-sm {
+@mixin b-rtSm {
   font-size: 11px;
   line-height: 14px;
   @media #{$breakpoint-lg} {
@@ -23,7 +23,7 @@
   }
 }
 
-@mixin rt-0 {
+@mixin b-rt0 {
   font-size: 14px;
   line-height: 20px;
   @media #{$breakpoint-lg} {
@@ -32,7 +32,7 @@
   }
 }
 
-@mixin rt-1 {
+@mixin b-rt1 {
   font-size: 18px;
   line-height: 1.5;
   @media #{$breakpoint-lg} {
@@ -41,7 +41,7 @@
   }
 }
 
-@mixin rt-2 {
+@mixin b-rt2 {
   font-size: 24px;
   line-height: 36px;
   @media #{$breakpoint-lg} {
@@ -50,7 +50,7 @@
   }
 }
 
-@mixin rt-3 {
+@mixin b-rt3 {
   font-size: 34px;
   line-height: 41px;
   @media #{$breakpoint-lg} {
@@ -70,7 +70,7 @@
   }
 }
 
-@mixin make-container-small {
+@mixin make-container-sm {
   margin:0 15px;
   @media #{$breakpoint-md} {
     margin:0 30px;
@@ -126,6 +126,7 @@
 }
 
 @mixin make-back-button {
+  @include b-rtSm;
   color: $colour-teal;
   margin-bottom: 1rem;
   .mat-icon-button {
