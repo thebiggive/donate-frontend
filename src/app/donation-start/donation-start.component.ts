@@ -49,8 +49,6 @@ export class DonationStartComponent implements OnInit {
     private router: Router,
     private state: TransferState,
   ) {
-    this.suggestedAmounts = this.getSuggestedAmounts();
-
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
     route.queryParams.forEach((params: Params) => {
       if (params.error) {
@@ -60,6 +58,13 @@ export class DonationStartComponent implements OnInit {
   }
 
   ngOnInit() {
+    const suggestedAmountsKey = makeStateKey<number[]>('suggested-amounts');
+    this.suggestedAmounts = this.state.get(suggestedAmountsKey, undefined);
+    if (!this.suggestedAmounts) {
+      this.suggestedAmounts = this.getSuggestedAmounts();
+      this.state.set(suggestedAmountsKey, this.suggestedAmounts);
+    }
+
     const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
     this.campaign = this.state.get(campaignKey, undefined);
 
@@ -231,13 +236,28 @@ export class DonationStartComponent implements OnInit {
       );
   }
 
-  private getSuggestedAmounts() {
+  private getSuggestedAmounts(): number[] {
     if (!this.suggestedAmounts) {
-      // TODO add up weightings and pick an amount set accordingly.
-      this.suggestedAmounts = environment.suggestedAmounts[0].values;
-    }
+      if (environment.suggestedAmounts.length === 0) {
+        return [];
+      }
 
-    return this.suggestedAmounts;
+      // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
+      let thresholdCounter = 0;
+      for (const suggestedAmount of environment.suggestedAmounts) {
+        thresholdCounter += suggestedAmount.weight;
+      }
+      const threshold = Math.floor(Math.random() * thresholdCounter);
+
+      thresholdCounter = 0;
+      for (const suggestedAmount of environment.suggestedAmounts) {
+        thresholdCounter += suggestedAmount.weight;
+
+        if (thresholdCounter > threshold) {
+          return suggestedAmount.values;
+        }
+      }
+    }
   }
 
   private offerExistingDonation(donation: Donation) {
@@ -287,6 +307,7 @@ export class DonationStartComponent implements OnInit {
   }
 
   private redirectToCharityCheckout(donation: Donation) {
+    this.analyticsService.logAmountChosen(donation.donationAmount, this.suggestedAmounts, this.campaignId);
     this.analyticsService.logEvent('payment_redirect_click', `Donating to campaign ${this.campaignId}`);
     this.charityCheckoutService.startDonation(donation);
   }
