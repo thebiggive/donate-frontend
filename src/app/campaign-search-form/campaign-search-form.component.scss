@@ -1,9 +1,9 @@
 @import '../../styles';
 
-.campaign-search-form {
+.c-search {
   max-width: 440px;
   @include make-card;
-  color: black;
+  color: $colour-black;
   padding: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -13,31 +13,16 @@
   }
 }
 
-h3 {
-  font-weight: 500;
-  text-transform: uppercase;
-  color: #333333;
+.c-search__heading {
+  color: $colour-black;
   margin-top: 0;
   margin-bottom: 0;
 }
 
-form {
+.c-form {
   max-width: 440px;
 }
 
-mat-form-field {
-  width: 100%;
-}
-
-p {
-  margin: 0;
-}
-
-button {
-  width: 100%;
-  box-shadow: none;
-}
-
-.mat-raised-button {
-  font-weight: 400;
+.c-form__button {
+  box-shadow: none !important;
 }

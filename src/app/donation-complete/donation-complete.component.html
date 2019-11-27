@@ -1,5 +1,5 @@
-<div class="donate-complete">
-  <mat-spinner *ngIf="!complete && !noAccess && !timedOut" color="accent" diameter="30"></mat-spinner>
+<div class="c-donate-complete">
+  <mat-spinner class="c-donate-complete__mat-spinner" *ngIf="!complete && !noAccess && !timedOut" color="accent" diameter="30"></mat-spinner>
 
   <p *ngIf="noAccess" class="error">
     We can only show your receipt on the device where you donated, in order to keep your information secure. Don't worry
@@ -13,47 +13,64 @@
   </p>
 
   <div *ngIf="complete">
-    <h2 class="thank-you"><span>Thank you!</span></h2>
+    <h2 class="c-thank-you">
+      <span class="c-thank-you__content">Thank you!</span>
+    </h2>
 
-    <div class="page-body">
+    <div class="c-card">
+      <div class="c-main">
+        <h3 class="b-rh-2 b-light">
+          Your donation of
+          <span class="b-bold">
+            {{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}
+          </span>
+           has been made.
+        </h3>
+        <h3 class="b-rh-2 b-light">
+          That's worth
+          <span class="b-bold">
+            {{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}
+          </span>
+          to {{ donation.charityName }}.
+        </h3>
+        <p class="b-rt-0" *ngIf="campaign">{{ campaign.summary }}</p>
 
-      <div class="page-margin">
-        <h3 class="rt-2">Your donation of <strong>{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong> has been made.</h3>
-        <h3 class="rt-2">That's worth <strong>{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</strong> to {{ donation.charityName }}.</h3>
-        <p class="rt-0" *ngIf="campaign">{{ campaign.summary }}</p>
-
-        <div class="receipt">
-            <h3 class="rt-2">Your receipt</h3>
-            <div fxLayout="row">
-              <div fxFlex="50">
-                <h4 class="rt-sm">Your donation</h4>
-                <p class="rt-1">{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
-                <h4 class="rt-sm" *ngIf="donation.matchedAmount > 0">Matched funds</h4>
-                <p class="rt-1" *ngIf="donation.matchedAmount > 0">{{ donation.matchedAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
-                <h4 class="rt-sm">Gift Aid</h4>
-                <p class="rt-1">{{ giftAidAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
-              </div>
-              <div fxFlex="50">
-                <h4 class="rt-sm">Total for {{ donation.charityName }}</h4>
-                <h4 class="rt-2">{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</h4>
-                <div *ngIf="donation.tipAmount > 0">
-                  <p class="small-p">Thank you for leaving a tip of {{ donation.tipAmount | currency : '£' : 'symbol' : '1.2-2' }} towards the Big Give.</p>
-                  <h4 class="rt-sm">Total amount you have been charged</h4>
-                  <p class="rt-1">{{ cardChargedAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
-                </div>
-              </div>
-            </div>
+        <div class="c-receipt b-grey">
+          <h3 class="c-receipt__heading b-rh-2 b-bold">Your receipt</h3>
+          <ul class="c-receipt__list b-w-100">
+            <li class="c-receipt__item c-receipt__item--highlighted b-db">
+              <h4 class="c-receipt__title b-light b-grey b-rt-sm">Total for {{ donation.charityName }}</h4>
+              <p class="b-rt-2 b-bold b-m-0">{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</p>
+            </li>
+            <li class="c-receipt__item b-db">
+              <h4 class="c-receipt__title b-light b-grey b-rt-sm">Your donation</h4>
+              <p class="b-rt-0 b-bold b-m-0">{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
+            </li>
+            <li class="c-receipt__item b-db">
+              <h4 class="c-receipt__title b-light b-grey b-rt-sm" *ngIf="donation.matchedAmount > 0">Matched funds</h4>
+              <p class="b-rt-0 b-bold b-m-0" *ngIf="donation.matchedAmount > 0">{{ donation.matchedAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
+            </li>
+            <li class="c-receipt__item b-db">
+              <h4 class="c-receipt__title b-light b-grey b-rt-sm">Gift Aid</h4>
+              <p class="b-rt-0 b-bold b-m-0">{{ giftAidAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
+            </li>
+          </ul>
+          <div class="c-receipt__tip c-tip" *ngIf="donation.tipAmount > 0">
+            <p class="c-tip__heading">Thank you for leaving a tip of {{ donation.tipAmount | currency : '£' : 'symbol' : '1.2-2' }} towards the Big Give.</p>
+            <p class="c-tip__description b-light b-grey b-rt-sm">Total amount you have been charged</p>
+            <p class="b-rt-0 b-bold b-m-0">{{ cardChargedAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
           </div>
         </div>
-
-        <button mat-button>
-          <div *ngIf="campaign">
-            <!-- For now, this assumes Master / meta-campaigns all have slugs set. -->
-            <p class="rt-1" *ngIf="campaign.parentRef"><a [routerLink]="'/' + campaign.parentRef">Explore other campaigns</a></p>
-            <p class="rt-1" *ngIf="!campaign.parentRef"><a href="https://www.thebiggive.org.uk/s/explore-campaigns">Explore other campaigns</a></p>
-          </div>
-          <a href="https://www.thebiggive.org.uk/s/"><img src="/assets/logo.png" alt="The Big Give" width="200"></a>
-        </button>
       </div>
+
+      <button class="c-button b-w-100 b-center" mat-button>
+        <div *ngIf="campaign">
+          <!-- For now, this assumes Master / meta-campaigns all have slugs set. -->
+          <p class="b-rt-1 b-m-0" *ngIf="campaign.parentRef"><a [routerLink]="'/' + campaign.parentRef">Explore other campaigns</a></p>
+          <p class="b-rt-1 b-m-0" *ngIf="!campaign.parentRef"><a href="https://www.thebiggive.org.uk/s/explore-campaigns">Explore other campaigns</a></p>
+        </div>
+        <a href="https://www.thebiggive.org.uk/s/"><img class="c-button__image" src="/assets/images/logo.png" alt="The Big Give" width="200"></a>
+      </button>
+    </div>
   </div>
 </div>

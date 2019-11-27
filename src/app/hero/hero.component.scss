@@ -1,11 +1,11 @@
 @import '../../styles';
 
 .webp-bg.hero {
-  background-image: url(/assets/bg-hero-christmas.webp);
+  background-image: url(/assets/images/bg-hero-christmas.webp);
 }
 
 .nowebp-bg.hero {
-  background-image: url(/assets/bg-hero-christmas.png);
+  background-image: url(/assets/images/bg-hero-christmas.png);
 }
 
 .hero {
@@ -20,10 +20,6 @@
   @media #{$breakpoint-lg} {
     padding-top: 1.5rem;
   }
-}
-
-.hero__content {
-  @include make-container-small;
 }
 
 .hero-flex__child {
@@ -52,7 +48,7 @@
   }
 }
 
-h1 {
+.c-hero__heading {
   margin-bottom: 0;
   line-height: 1.2;
   @media #{$breakpoint-md} {
@@ -64,21 +60,15 @@ h1 {
   @media #{$breakpoint-xl} {
     font-size: 60px;
   }
-
-  img {
-    margin-top: -22px; // Make enough space for the copy below to remain legible
-    width: 330px; // 660px image requested for sharp rendering at high DPI
-  }
 }
 
-h2 {
-  font-size: 18px;
+.c-hero__description {
   margin-top: 1rem;
-  font-weight: 400;
-  line-height:1.5;
-  @media #{$breakpoint-xl} {
-    font-size: 24px;
-  }
+}
+
+.c-hero__image {
+  margin-top: -22px; // Make enough space for the copy below to remain legible
+  width: 330px; // 660px image requested for sharp rendering at high DPI
 }
 
 app-campaign-search-form {
