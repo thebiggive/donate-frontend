@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start-dangerously": "ng serve --host 0.0.0.0",
     "test": "ng test",
     "test-ci": "ng test --karma-config ./karma-ci.conf.js --browsers=ChromeHeadlessNoSandbox",
     "lint": "ng lint",
