@@ -12,7 +12,7 @@
   }
 }
 
-form {
+.c-donate-form {
   margin: 2rem auto;
   h3 {
     margin-top: 1rem;
@@ -33,17 +33,12 @@ form {
   margin-top: 0;
 }
 
-.mat-form-field {
+.c-your-donation__form-field {
   max-width: 200px;
   margin: 0 auto;
 }
 
-p.b-rt-0 mat-icon {
-  vertical-align: middle;
-}
-
 .c-suggested-amount__button {
-  @extend .b-rh-2;
   background-color: $colour-teal-light;
   box-shadow: inset 0px 1px 4px rgba(0, 131, 143, 0.2);
   padding: 1rem;
@@ -62,23 +57,12 @@ p.b-rt-0 mat-icon {
   }
 }
 
-.mat-radio-label {  // Not working
-  white-space: normal;
-}
-
 a {
   text-decoration: none;
 }
 
-.mat-raised-button {
-  @include make-donate-button;
-  @include size-lg;
-  font-weight: 400;
-  width: 100%;
-  padding: 0.125rem 1rem;
-  strong {
-    line-height: 3;
-  }
+.c-donate-button {
+  padding: 1.5rem;
 }
 
 .c-make-your-donation {
@@ -96,45 +80,26 @@ a {
   }
 }
 
-.donation-receipt {
+.c-donation-receipt {
   margin-top:1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid $colour-grey-light;
-  .strong-p {
-    margin-top: 0.25rem;
-  }
-
-  div {
-    display:flex;
-    flex-direction:column;
-    justify-content: flex-end;
-    align-items:center;
-    .strong-p {
-      margin-top: auto;
-    }
-  }
 }
 
-.small-p {
-  line-height: 1;
+.c-donation-receipt__gift-aid {
+  display:flex;
+  flex-direction:column;
+  justify-content: space-between;
+  align-items:center;
 }
 
-.receipt-total {
+.c-receipt-total {
   margin-top: 0.5rem;
-  color: $colour-grey;
-  h3 {
-    color: $colour-grey;
-    margin: 0;
-  }
 }
 
 .c-donation-summary {
   max-width: 300px;
   margin: 1rem auto;
-}
-
-.mat-raised-button[_ngcontent-donate-frontend-c1]:not([class*=mat-elevation-z]) {
-  box-shadow: none;
 }
 
 .error {
