@@ -1,12 +1,5 @@
 @import '../../styles';
 
-.c-donate-start {
-  @include make-container;
-}
-
-.c-campaigns {
-  @include make-back-button
-}
 
 .page-header {
   h3 {
@@ -15,7 +8,6 @@
   }
   h1,
   h2 {
-    @extend .b-rh1;
     margin-top: 0.25rem;
   }
 }
@@ -23,24 +15,18 @@
 form {
   margin: 2rem auto;
   h3 {
-    @extend .b-rh2;
     margin-top: 1rem;
     margin-bottom: 1rem;
   }
 }
 
-.your-donation {
+.c-your-donation {
   p {
     margin: 0;
     &:last-of-type {
       margin-bottom: 0.5rem;
     }
   }
-}
-
-.centered-p {
-  text-align: center;
-  color: $colour-grey;
 }
 
 .no-margin-top {
@@ -50,22 +36,21 @@ form {
 .mat-form-field {
   max-width: 200px;
   margin: 0 auto;
-  text-align: center;
 }
 
-p.b-rt0 mat-icon {
+p.b-rt-0 mat-icon {
   vertical-align: middle;
 }
 
-.suggested-amount__button {
-  @extend .b-rh2;
+.c-suggested-amount__button {
+  @extend .b-rh-2;
   background-color: $colour-teal-light;
   box-shadow: inset 0px 1px 4px rgba(0, 131, 143, 0.2);
   padding: 1rem;
   border: none;
   border-radius: 4px;
   margin-right: 0.5rem;
-  @include b-rt2;
+  @include b-rt-2;
   &:last-child {
     margin-right: 0;
   }
@@ -96,7 +81,7 @@ a {
   }
 }
 
-.make-your-donation {
+.c-make-your-donation {
   p {
     margin: 0;
     small {
@@ -143,12 +128,9 @@ a {
   }
 }
 
-.donation-summary {
+.c-donation-summary {
   max-width: 300px;
   margin: 1rem auto;
-  mat-spinner {
-    margin: 1rem auto;
-  }
 }
 
 .mat-raised-button[_ngcontent-donate-frontend-c1]:not([class*=mat-elevation-z]) {
