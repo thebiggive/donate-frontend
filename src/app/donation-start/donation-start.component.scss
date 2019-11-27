@@ -1,7 +1,7 @@
 @import '../../styles';
 
 
-.page-header {
+.c-header {
   h3 {
     margin: 0;
     margin-top: 0.25rem;
@@ -36,6 +36,7 @@
 .c-your-donation__form-field {
   max-width: 200px;
   margin: 0 auto;
+  display: block;
 }
 
 .c-suggested-amount__button {
@@ -72,11 +73,8 @@ a {
       font-size: 12px;
     }
   }
-  .mat-icon.plus {
-    color: $colour-grey;
+  .c-donation-receipt__icon {
     font-size: 1rem;
-    font-weight: bolder;
-    text-align: center;
   }
 }
 
@@ -105,17 +103,4 @@ a {
 .error {
   color: mat-color($donate-warn);
   margin-bottom: 1rem;
-}
-
-mat-form-field, mat-radio-group {
-  margin-bottom: 0.5rem;
-}
-
-mat-form-field, mat-label, mat-radio-group {
-  display: block;
-  width: 100%;
-}
-
-mat-radio-button {
-  margin-right: 2rem;
 }
