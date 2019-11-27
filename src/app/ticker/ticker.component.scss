@@ -1,12 +1,7 @@
 @import '../../styles';
 
 .c-ticker {
-  background-color: #333;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  position: relative;
-  overflow: hidden;
+  height: 40px; // Make height explicit; avoids e.g. heading overlap on IE11
 }
 
 .c-ticker__total {
@@ -32,6 +27,19 @@
   }
 }
 
+.c-ticker__lists {
+  background-color: #333;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  top: 1px;
+  @media #{$breakpoint-md} {
+    top: 4px;
+  }
+}
+
 .c-ticker__list {
   animation: ticker 15s infinite linear;
   display: inline-flex;
@@ -46,6 +54,12 @@
   }
   @media #{$breakpoint-xl} {
     animation-duration: 20s;
+  }
+
+  // IE11 really can't handle the moving bar's layout, so to keep the basics usable, for now
+  // we're unfortunately hiding it with a vendor-specific hack.
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    display: none;
   }
 }
 
