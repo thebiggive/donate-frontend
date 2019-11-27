@@ -1,10 +1,7 @@
 @import '../../styles';
 
-.card-section {
-  @include make-container;
-}
 
-.cards-grid {
+.c-grid {
   width: 100%;
   display: -ms-grid;
   display: grid;
@@ -24,22 +21,10 @@
   }
 }
 
-app-campaign-card {
-  width: 100%;
-}
-
 .error {
   color: mat-color($donate-warn);
 }
 
-.mat-grid-tile {
-  overflow: visible;
-}
-
-.more-campaigns {
-  padding:5rem 0;
-  text-align:center;
-  button {
-    @include make-donate-button;
-  }
+.c-more-campaigns {
+  padding: 5rem 0;
 }
