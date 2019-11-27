@@ -74,10 +74,18 @@
 }
 
 // Margins
+.b-mt-2 {
+  margin-top: 2rem;
+}
 .b-mr-2 {
   margin-right: 2rem;
 }
-
+.b-m-0 {
+  margin: 0;
+}
+.b-mb-0 {
+  margin-bottom: 0;
+}
 
 // Misc
 .b-db {
