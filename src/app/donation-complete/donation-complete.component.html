@@ -39,25 +39,25 @@
           <h3 class="c-receipt__heading">Your receipt</h3>
           <ul class="c-receipt__list">
             <li class="c-receipt__item c-receipt__item--highlighted">
-              <h4 class="c-receipt__title">Total for {{ donation.charityName }}</h4>
+              <h4 class="c-receipt__title  b-grey b-rtSm">Total for {{ donation.charityName }}</h4>
               <p class="c-receipt__value c-receipt__value--highlighted">{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</p>
             </li>
             <li class="c-receipt__item">
-              <h4 class="c-receipt__title">Your donation</h4>
+              <h4 class="c-receipt__title  b-grey b-rtSm">Your donation</h4>
               <p class="c-receipt__value">{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
             </li>
             <li class="c-receipt__item">
-              <h4 class="c-receipt__title" *ngIf="donation.matchedAmount > 0">Matched funds</h4>
+              <h4 class="c-receipt__title  b-grey b-rtSm" *ngIf="donation.matchedAmount > 0">Matched funds</h4>
               <p class="c-receipt__value" *ngIf="donation.matchedAmount > 0">{{ donation.matchedAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
             </li>
             <li class="c-receipt__item">
-              <h4 class="c-receipt__title">Gift Aid</h4>
+              <h4 class="c-receipt__title  b-grey b-rtSm">Gift Aid</h4>
               <p class="c-receipt__value">{{ giftAidAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
             </li>
           </ul>
-          <div class="c-receipt__tip c-tip" *ngIf="donation.tipAmount > 0">
+          <div class="c-receipt__tip c-tip" *ngIf="!donation.tipAmount > 0">
             <p class="c-tip__heading">Thank you for leaving a tip of {{ donation.tipAmount | currency : '£' : 'symbol' : '1.2-2' }} towards the Big Give.</p>
-            <p class="c-tip__description">Total amount you have been charged</p>
+            <p class="c-tip__description b-grey b-rtSm">Total amount you have been charged</p>
             <p class="c-tip__value">{{ cardChargedAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
           </div>
         </div>
