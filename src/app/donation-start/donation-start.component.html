@@ -1,18 +1,18 @@
-<div class="donate-start" *ngIf="campaign">
-  <div class="campaign-button">
-    <button mat-icon-button class="campaign-button__button" [routerLink]="'/campaign/' + campaign.id">
-      <mat-icon class="campaign-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
+<div class="c-donate-start" *ngIf="campaign">
+  <div class="c-campaigns">
+    <button mat-icon-button class="c-campaign-button" [routerLink]="'/campaign/' + campaign.id">
+      <mat-icon class="campaign-icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
       Back to campaign
     </button>
   </div>
 
   <div fxLayout="row" fxLayout.xs="column">
-    <div class="primary-column">
+    <div class="b-primary-column">
       <div class="page-header">
-        <h3 class="rt-2">You are donating to:</h3>
-        <h1 class="rt-3">{{ campaign.charity.name }}!</h1>
-        <h3 class="rt-2">For:</h3>
-        <h2 class="rt-3">{{ campaign.title }}</h2>
+        <h3 class="b-rh2 b-light">You are donating to:</h3>
+        <h1 class="b-rh1 b-bold">{{ campaign.charity.name }}!</h1>
+        <h3 class="b-rh2 b-light">For:</h3>
+        <h2 class="b-rh1 b-bold">{{ campaign.title }}</h2>
       </div>
 
       <form (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaign">
@@ -126,7 +126,12 @@
                   mat-raised-button
                   type="submit"
                   [disabled]="submitting"
-                >Donate <strong>{{ donationForm.value.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</strong></button>
+                >
+                  Donate 
+                  <strong>
+                    {{ donationForm.value.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}
+                  </strong>
+                </button>
                 <div class="donation-receipt" fxLayout="row" *ngIf="donationForm.value.donationAmount > 0">
                   <div [fxFlex]="(expectedMatchAmount() > 0) ? 26 : 39">
                     <p class="centered-p rt-sm">Your donation</p>
