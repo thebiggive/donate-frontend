@@ -3,7 +3,7 @@
 .c-search {
   max-width: 440px;
   @include make-card;
-  color: black;
+  color: $colour-black;
   padding: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -14,24 +14,15 @@
 }
 
 .c-search__heading {
-  font-weight: 500;
-  text-transform: uppercase;
-  color: #333333;
+  color: $colour-black;
   margin-top: 0;
   margin-bottom: 0;
 }
 
-.c-search__form {
+.c-form {
   max-width: 440px;
 }
 
-.c-search__form--field {
-  width: 100%;
-}
-
-.c-search__form--button {
-  width: 100%;
+.c-form__button {
   box-shadow: none !important;
-  display: block;
-  font-weight: 400;
 }
