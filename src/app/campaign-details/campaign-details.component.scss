@@ -1,62 +1,31 @@
 @import '../../styles';
 
-.c-details {
-  @include make-container;
-}
-
-.c-details__listing-button--link {
-  @include make-back-button;
-}
-
-.c-details__header {
-  @include make-primary-column;
-}
 
 .c-details__header--charity-name {
   margin-top: 0.75rem;
   margin-bottom: 0.5rem;
-  color: $colour-grey;
-  font-size: 1rem;
-  font-weight: 400;
-  text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .c-details__header--campaign-title {
   margin: 0 0 1rem;
-  color: $colour-teal-dark;
-  font-weight:600;
-  @include size-xxl;
-  @media #{$breakpoint-md} {
-    @include size-xxxl;
-  }
-  line-height:1.2;
 }
 
 .c-details__header--description {
-  @include size-lg;
-  @media #{$breakpoint-md} {
-    font-size: 24px;
-  }
-  margin-bottom:2rem;
-  line-height:1.5;
+  margin-bottom: 2rem;
 }
 
-.c-details__header--donate-button {
-  @include make-donate-button;
+.c-website__icon {
+  vertical-align: sub;
+  margin: 1rem 0;
 }
 
-.c-details__header--social-link {
+.c-social__link {
   margin-right: 1rem;
 }
 
-.c-details__header--social-icon {
+.c-social__icon {
   width: 21px;
-}
-
-.c-details__header--icon {
-  font-size: 1rem;
-  vertical-align: sub;
 }
 
 .c-details__card {
@@ -73,30 +42,30 @@
   overflow-x: scroll;
 }
 
-.c-details__tabs--quotes {
+.c-quotes {
   list-style: none;
   margin: 2rem 0 0 0;
   padding: 0;
 }
 
-.c-tabs__quotes--blockquote {
+.c-quotes__blockquote {
   border-left: solid 2px $colour-teal-dark;
   padding-left: 2rem;
   margin: 0 0 0 2rem;
   white-space: pre-wrap;
 }
 
-.c-tabs__quotes--attribution {
+.c-quotes__attribution {
   text-align: right;
   margin-bottom: 2rem;
 }
 
-.c-tabs--video {
+.c-video {
   width: 100%;
   height: auto;
 }
 
-.c-tabs__video--iframe {
+.c-video__iframe {
   width: 100%;
   height: 235px;
   padding-top: 1rem;
@@ -120,14 +89,13 @@
 }
 
 .c-tabs__aims--item {
-  @include rt-0;
+  @include b-rt0;
 }
 
 .c-tabs__budget--item {
   white-space: pre-wrap;
 }
 
-.c-details__header--website,
 .c-tabs__budget--amount,
 .c-tabs__updates--description {
   font-weight: 700;
@@ -135,7 +103,7 @@
 
 .c-tabs__details--heading,
 .c-tabs__impact--heading {
-  @include rt-2;
+  @include b-rt2;
   margin: 0;
   &:first-child {
     margin-top: 1rem;
