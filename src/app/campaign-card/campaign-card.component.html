@@ -1,7 +1,7 @@
 <div class="c-card">
-  <div class="c-card__banner">
+  <div class="c-banner">
     <img
-      class="c-card__banner--image"
+      class="c-banner__image b-w-100"
       *ngIf="campaign.imageUri"
       [src]="campaign.imageUri"
       alt=""
@@ -9,41 +9,41 @@
     >
   </div>
 
-  <div class="c-card__header">
-    <h4 class="c-card__header--charity-name">{{ campaign.charity.name }}</h4>
-    <h3 class="c-card__header--campaign-title"><a [routerLink]="'/campaign/' + campaign.id">{{ campaign.title }}</a></h3>
+  <div class="c-header">
+    <h4 class="c-header__charity-name b-grey b-light b-uppercase">{{ campaign.charity.name }}</h4>
+    <a class="c-header__link" [routerLink]="'/campaign/' + campaign.id"><h3 class="c-header__campaign-title">{{ campaign.title }}</h3></a>
   </div>
 
-  <div class="c-card__categories">
-    <ul class="c-card__categories--list" *ngFor="let category of campaign.categories">
-      <li class="c-card__categories--item">{{ category }}</li>
+  <div class="c-categories">
+    <ul class="c-categories__list" *ngFor="let category of campaign.categories">
+      <li class="c-categories__item">{{ category }}</li>
     </ul>
   </div>
 
-  <div class="c-card__funds" fxLayout="row">
-    <div class="c-card__funds--matched" *ngIf="campaign.isMatched" fxFlex="50" fxLayout="column">
-      <p class="c-card__funds--description" fxFlex="50">Matched funds remaining</p>
-      <h4 class="c-card__funds--amount" fxFlex="50">{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }}</h4>
+  <div class="c-funds" fxLayout="row">
+    <div class="c-funds__matched" *ngIf="campaign.isMatched" fxFlex="50" fxLayout="column">
+      <p class="c-funds__description" fxFlex="50">Matched funds remaining</p>
+      <h4 class="c-funds__amount" fxFlex="50">{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }}</h4>
     </div>
-    <div class="c-card__funds--total" *ngIf="campaign.isMatched" fxFlex="50" fxLayout="column">
-      <p class="c-card__funds--description" fxFlex="50">Total funds raised</p>
-      <h4 class="c-card__funds--amount" fxFlex="50">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</h4>
+    <div class="c-funds__total" *ngIf="campaign.isMatched" fxFlex="50" fxLayout="column">
+      <p class="c-funds__description" fxFlex="50">Total funds raised</p>
+      <h4 class="c-funds__amount" fxFlex="50">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</h4>
     </div>
   </div>
 
-  <div class="c-card__buttons">
+  <div class="c-buttons">
     <button
       mat-icon-button
       color="accent"
-      class="c-card__buttons--more"
+      class="c-buttons__more"
       [routerLink]="'/campaign/' + campaign.id"
     >
       More info
-      <mat-icon class="c-card__buttons--more-icon" aria-hidden="false" aria-label="Plus">add</mat-icon>
+      <mat-icon class="c-buttons__more-icon" aria-hidden="false" aria-label="Plus">add</mat-icon>
     </button>
     <button
       mat-raised-button
-      class="c-card__buttons--donate"
+      class="b-donate-button"
       [routerLink]="'/donate/' + campaign.id"
     >
       Donate

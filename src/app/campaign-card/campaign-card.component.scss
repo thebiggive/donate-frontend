@@ -12,8 +12,7 @@
   height:100%;
 }
 
-.c-card__banner--image {
-  width: 100%;
+.c-banner__image {
   height: auto;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
@@ -24,48 +23,51 @@ ul {
   padding: 0;
 }
 
-.c-card__header {
+.c-header {
   padding-left: 2rem;
   padding-right: 2rem;
 }
 
-.c-card__header--charity-name {
+.c-header__charity-name {
   margin-top: 0.75rem;
   margin-bottom: 0;
-  color: $colour-grey;
-  font-size: 1rem;
-  font-weight: 400;
-  text-transform: uppercase;
+  @include size-md;
   letter-spacing: 1px;
+  @media #{$breakpoint-md} {
+    min-height: 48px;
+    display: flex;
+    align-items: flex-end;
+    line-height: 1.5;
+  }
 }
 
-.c-card__header--campaign-title {
+.c-header__campaign-title {
   margin: 0 0 .75rem;
   color: $colour-teal-dark;
   @include size-lg;
   @media #{$breakpoint-md} {
     min-height: 48px;
   }
-
-  a {
-    text-decoration: none;
-  }
 }
 
-.c-card__categories {
+.c-header__link {
+  text-decoration: none;
+}
+
+.c-categories {
   overflow-x: scroll;
   white-space:nowrap;
   margin-left: 0.5rem;
   padding-bottom: 0.5rem;
 }
 
-.c-card__categories--list {
+.c-categories__list {
   margin:0 0.5rem;
   margin-left: 0;
   display: inline;
 }
 
-.c-card__categories--item {
+.c-categories__item {
   @include size-md;
   background-color: $colour-teal-fade;
   color: $colour-teal;
@@ -78,12 +80,12 @@ ul {
   }
 }
 
-.c-card__funds {
+.c-funds {
   padding: 1rem 2rem;
   color: $colour-grey;
 }
 
-.c-card__funds--description {
+.c-funds__description {
   @include size-md;
   color: $colour-grey;
   margin-top: 0;
@@ -91,25 +93,25 @@ ul {
   line-height: 1;
 }
 
-.c-card__funds--matched {
+.c-funds__matched {
   padding-right: 0.25rem;
 }
 
-.c-card__funds--total {
+.c-funds__total {
   padding-left: 0.25rem;
 
-  .c-card__funds--amount {
+  .c-funds__amount {
     color: $colour-teal;
   }
 }
 
-.c-card__funds--amount {
+.c-funds__amount {
   margin-top: 0;
   margin-bottom: 0;
   font-size:20px;
 }
 
-.c-card__buttons {
+.c-buttons {
   margin-top:auto;
   padding: 1rem 2rem;
   display: flex;
@@ -117,24 +119,20 @@ ul {
   align-items:center;
 }
 
-.c-card__buttons--more,
-.c-card__buttons--donate {
+.c-buttons__more,
+.c-buttons__donate {
   margin: 0;
   min-width: 85px;
 }
 
-.c-card__buttons--more {
+.c-buttons__more {
   font-weight: 400;
 }
 
-.c-card__buttons--more-icon {
+.c-buttons__more-icon {
   line-height: 22px;
 }
 
-.c-card__buttons--more {
+.c-buttons__more {
   font-size:18px;
-}
-
-.c-card__buttons--donate {
-  @include make-donate-button;
 }
