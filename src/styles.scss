@@ -94,7 +94,7 @@ body {
 
 p,
 li {
-  @include rt-0;
+  @include b-rt0;
 }
 
 a {
@@ -145,7 +145,7 @@ mat-radio-button {
   margin-bottom: 1rem;
   .mat-radio-label {
     white-space:initial;
-    @include rt-0;
+    @include b-rt0;
   }
 }
 
