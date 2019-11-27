@@ -68,18 +68,14 @@ export class DonationStartComponent implements OnInit {
     const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
     this.campaign = this.state.get(campaignKey, undefined);
 
-    if (!this.campaign) {
+    if (this.campaign) {
+      this.handleCampaign(this.campaign);
+    } else {
       this.campaignService.getOneById(this.campaignId)
         .subscribe(campaign => {
           this.state.set(campaignKey, campaign);
           this.campaign = campaign;
-
-          if (!CampaignService.isOpenForDonations(campaign)) {
-            this.router.navigateByUrl(`/campaign/${campaign.id}`);
-            return;
-          }
-
-          this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
+          this.handleCampaign(campaign);
         });
     }
 
@@ -234,6 +230,18 @@ export class DonationStartComponent implements OnInit {
         ? (new Date(this.campaign.startDate) <= new Date() && new Date(this.campaign.endDate) > new Date())
         : false
       );
+  }
+
+  /**
+   * Redirect if campaign's not open yet; set up page metadata if it is
+   */
+  private handleCampaign(campaign: Campaign) {
+    if (!CampaignService.isOpenForDonations(campaign)) {
+      this.router.navigateByUrl(`/campaign/${campaign.id}`);
+      return;
+    }
+
+    this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
   }
 
   private getSuggestedAmounts(): number[] {
