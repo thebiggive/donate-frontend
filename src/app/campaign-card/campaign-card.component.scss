@@ -40,7 +40,7 @@ ul {
 }
 
 .c-card__header--campaign-title {
-  margin: 0 0 .75rem 0;
+  margin: 0 0 .75rem;
   color: $colour-teal-dark;
   @include size-lg;
   @media #{$breakpoint-md} {
@@ -66,7 +66,7 @@ ul {
 }
 
 .c-card__categories--item {
-  @include rt-sm;
+  @include size-md;
   background-color: $colour-teal-fade;
   color: $colour-teal;
   border-radius: 14px;
@@ -84,7 +84,8 @@ ul {
 }
 
 .c-card__funds--description {
-  @extend .text-grey-sm;
+  @include size-md;
+  color: $colour-grey;
   margin-top: 0;
   margin-bottom: 0.5rem;
   line-height: 1;

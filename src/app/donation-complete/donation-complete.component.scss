@@ -24,7 +24,7 @@
   border-top-right-radius: 8px;
   margin: 0 auto;
   display: inline-block;
-  @include rt-2;
+  @include b-rt2;
   @media#{$breakpoint-lg} {
     padding: 1.5rem 10rem;
   }
@@ -51,7 +51,7 @@
 }
 
 .c-heading {
-  @include rt-2;
+  @include b-rt2;
   font-weight: 400;
   color: $colour-teal-darker;
 }
@@ -61,7 +61,7 @@
 }
 
 .c-description {
-  @include rt-0;
+  @include b-rt0;
 }
 
 .c-receipt {
@@ -73,7 +73,7 @@
 }
   
 .c-receipt__heading {
-  @include rt-2;
+  @include b-rt2;
   color: $colour-teal-darker;
   font-weight: 700;
   margin-top: 2rem;
@@ -105,24 +105,18 @@
 
 .c-receipt__title,
 .c-tip__description {
-  @include rt-sm;
   margin-bottom: 0;
   font-weight: 400;
   margin-top: 0.75rem;
-  &--highlighted {
-    float:right;
-    width:50%;
-    border:1px solid red;
-  }
 }
 
 .c-receipt__value,
 .c-tip__value {
-  @extend .text-grey-sm;
+  @extend .b-rt0;
   font-weight: 700;
   margin: 0;
   &--highlighted {
-    @include rt-2;
+    @include b-rt2;
   }
 }
 
@@ -150,7 +144,7 @@
 }
 
 .c-button__link {
-  @include rt-1;
+  @include b-rt1;
   margin: 0;
 }
 
