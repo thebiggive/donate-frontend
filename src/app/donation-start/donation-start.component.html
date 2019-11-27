@@ -102,7 +102,7 @@
                 </mat-panel-title>
               </mat-expansion-panel-header>
 
-              <p class="b-rt-0">By clicking on the <em>Donate</em> button, you agree to the Big Give's
+              <p class="b-rt-0 b-m-0">By clicking on the <em>Donate</em> button, you agree to the Big Give's
                 <a href="https://www.thebiggive.org.uk/s/terms-and-conditions" target="_blank">
                   <mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
                    Terms and Conditions
@@ -143,27 +143,27 @@
                 </button>
                 <div class="c-donation-receipt" fxLayout="row" *ngIf="donationForm.value.donationAmount > 0">
                   <div [fxFlex]="(expectedMatchAmount() > 0) ? 26 : 39">
-                    <p class="b-center b-grey b-rt-sm">Your donation</p>
-                    <p class="b-center b-grey b-rt-0 b-bold">{{ donationForm.value.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
+                    <p class="b-center b-grey b-rt-sm b-m-0">Your donation</p>
+                    <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ donationForm.value.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
                   </div>
                   <div fxFlex="11" fxLayout="row" fxLayoutAlign="center end">
                     <mat-icon class="c-donation-receipt__icon b-grey b-bold b-center" aria-hidden="false" aria-label="Plus">add</mat-icon>
                   </div>
                   <div fxFlex="26" *ngIf="expectedMatchAmount() > 0">
-                    <p class="b-center b-grey b-rt-sm">Matched funds</p>
-                    <p class="b-center b-grey b-rt-0 b-bold">{{ expectedMatchAmount() | currency : '£' : 'symbol' : '1.0-0' }}</p>
+                    <p class="b-center b-grey b-rt-sm b-m-0">Matched funds</p>
+                    <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ expectedMatchAmount() | currency : '£' : 'symbol' : '1.0-0' }}</p>
                   </div>
                   <div fxFlex="11" fxLayout="row" fxLayoutAlign="center end" *ngIf="expectedMatchAmount() > 0">
                     <mat-icon class="c-donation-receipt__icon b-grey b-bold b-center" aria-hidden="false" aria-label="Plus">add</mat-icon>
                   </div>
                   <div class="c-donation-receipt__gift-aid" [fxFlex]="(expectedMatchAmount() > 0) ? 26 : 39">
-                    <p class="b-center b-grey b-rt-sm">Gift Aid</p>
-                    <p class="b-center b-grey b-rt-0 b-bold">{{ giftAidAmount() | currency : '£' : 'symbol' : '1.2-2' }}</p>
+                    <p class="b-center b-grey b-rt-sm b-m-0">Gift Aid</p>
+                    <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ giftAidAmount() | currency : '£' : 'symbol' : '1.2-2' }}</p>
                   </div>
                 </div>
                 <div class="c-receipt-total b-grey" fxLayout="row" fxLayoutAlign="space-around center" *ngIf="donationForm.value.donationAmount > 0">
-                  <p class="b-rt-0">Total for {{ campaign.charity.name }}:</p>
-                  <p class="b-rt-1 b-bold">{{ expectedTotalAmount() | currency : '£' : 'symbol' : '1.2-2' }}</p>
+                  <p class="b-rt-0 b-m-0">Total for {{ campaign.charity.name }}:</p>
+                  <p class="b-rt-1 b-bold b-m-0">{{ expectedTotalAmount() | currency : '£' : 'symbol' : '1.2-2' }}</p>
                 </div>
               </div>
 

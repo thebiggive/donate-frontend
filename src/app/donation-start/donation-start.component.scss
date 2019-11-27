@@ -66,22 +66,14 @@ a {
   padding: 1.5rem;
 }
 
-.c-make-your-donation {
-  p {
-    margin: 0;
-    small {
-      font-size: 12px;
-    }
-  }
-  .c-donation-receipt__icon {
-    font-size: 1rem;
-  }
-}
-
 .c-donation-receipt {
   margin-top:1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid $colour-grey-light;
+}
+
+.c-donation-receipt__icon {
+  @include size-md;
 }
 
 .c-donation-receipt__gift-aid {
