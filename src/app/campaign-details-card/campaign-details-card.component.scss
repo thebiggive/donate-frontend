@@ -4,32 +4,34 @@
   @include make-card($box-shadow-hard);
 }
 
-.c-card__banner--image {
-  width: 100%;
+.c-banner__image {
   height: auto;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
 }
 
-.c-card__body {
+.c-card-body {
   @include make-card-body;
 }
 
-.c-card__body--description {
-  font-size: 14px;
-  font-weight: normal;
+.c-campaign-target__description,
+.c-campaign-raised__description,
+.c-campaign-status__description,
+.c-campaign-donations__description {
+  @include size-md;
   line-height: 20px;
   margin: 0 0 0.25rem;
 }
 
-.c-card__body--value {
-  font-size: 24px;
-  font-weight: 600;
+.c-campaign-target__value,
+.c-campaign-raised__value,
+.c-campaign-status__value,
+.c-campaign-donations__value {
+  @include size-xl;
   margin-top: 0;
   color:$colour-teal;
 }
 
-.c-card__body--championed-by {
+.c-championed-by {
   color:$colour-teal;
-  margin-bottom: 0;
 }

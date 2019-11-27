@@ -1,7 +1,7 @@
 <div class="c-card" *ngIf="campaign">
-  <div class="c-card__banner">
+  <div class="c-banner">
     <img
-      class="c-card__banner--image"
+      class="c-banner__image b-w-100"
       *ngIf="campaign.bannerUri"
       [src]="campaign.bannerUri"
       alt=""
@@ -9,25 +9,30 @@
     >
   </div>
 
-  <div class="c-card__body">
-    <div *ngIf="campaign.target > 0">
-      <h3 class="c-card__body--description">Campaign target</h3>
-      <p class="c-card__body--value">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
+  <div class="c-card-body">
+    <div class="c-campaign-target" *ngIf="campaign.target > 0">
+      <h3 class="c-campaign-target__description b-grey b-light">Campaign target</h3>
+      <p class="c-campaign-target__value b-bold">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
       <mat-progress-bar [value]="percentRaised"></mat-progress-bar>
     </div>
-    <h3 class="c-card__body--description" *ngIf="campaign.amountRaised > 0">Amount raised</h3>
-    <p class="c-card__body--value" *ngIf="campaign.amountRaised > 0">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
+    <div class="c-campaign-raised" *ngIf="campaign.amountRaised > 0">
+      <h3 class="c-campaign-raised__description b-grey b-light">Amount raised</h3>
+      <p class="c-campaign-raised__value b-bold">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
+    </div>
     <div fxLayout="row">
-      <div *ngIf="campaign.status == 'Active'" fxFlex="50">
-        <p class="c-card__body--description">Days left</p>
-        <p class="c-card__body--value sm">{{ campaign.endDate | timeLeft }}</p>
+      <div class="c-campaign-status" *ngIf="campaign.status == 'Active'" fxFlex="50">
+        <p class="c-campaign-status__description b-grey b-light">Days left</p>
+        <p class="c-campaign-status__value b-bold">{{ campaign.endDate | timeLeft }}</p>
       </div>
-      <div fxFlex="50">
-        <p class="c-card__body--description">Donations</p>
-        <p class="c-card__body--value sm">{{ campaign.donationCount | number:'1.0-0' }}</p>
+      <div class="c-campaign-donations" fxFlex="50">
+        <p class="c-campaign-donations__description b-grey b-light">Donations</p>
+        <p class="c-campaign-donations__value b-bold">{{ campaign.donationCount | number:'1.0-0' }}</p>
       </div>
     </div>
-    <p class="c-card__body--championed-by" *ngIf="campaign.championName">Championed by <strong>{{campaign.championName}}</strong></p>
+    <p class="c-championed-by b-mb-0" *ngIf="campaign.championName">
+      Championed by 
+      <span class="b-bold">{{campaign.championName}}</span>
+    </p>
   </div>
 
 </div>
