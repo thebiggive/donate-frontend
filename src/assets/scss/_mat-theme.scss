@@ -1,0 +1,70 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$tbg-red: (
+  500: #f0423b,
+  800: #c1211a,
+  contrast: (
+    500: white,
+    800: $white-87-opacity,
+  )
+);
+
+$tbg-teal: (
+  200: #4fb3bf,
+  500: #00838f,
+  800: #005662,
+  contrast: (
+    200: black,
+    500: white,
+    800: white,
+  )
+);
+
+$tbg-error-red: (
+  500: #f36a52,
+  contrast: (
+    500: black,
+  )
+);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$donate-primary: mat-palette($tbg-red);
+$donate-accent: mat-palette($tbg-teal);
+$donate-warn: mat-palette($tbg-error-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$donate-theme: mat-light-theme($donate-primary, $donate-accent, $donate-warn);
+
+// Adapting Angular Material to override font, including on inputs.
+// https://stackoverflow.com/a/49541553/2803757
+$app-typography: mat-typography-config(
+  $font-family:   '"Maven Pro", sans-serif',
+  $display-4:     mat-typography-level(112px, 112px, 300),
+  $display-3:     mat-typography-level(56px, 56px, 400),
+  $display-2:     mat-typography-level(45px, 48px, 400),
+  $display-1:     mat-typography-level(34px, 40px, 400),
+  $headline:      mat-typography-level(24px, 32px, 400),
+  $title:         mat-typography-level(20px, 32px, 500),
+  $subheading-2:  mat-typography-level(16px, 28px, 400),
+  $subheading-1:  mat-typography-level(15px, 24px, 400),
+  $body-2:        mat-typography-level(14px, 24px, 500),
+  $body-1:        mat-typography-level(14px, 20px, 400),
+  $caption:       mat-typography-level(12px, 20px, 400),
+  $button:        mat-typography-level(14px, 14px, 500),
+    // Line-height must be unit-less fraction of the font-size.
+  $input:         mat-typography-level(16px, 1.25, 400)
+);
+
+@include mat-core($app-typography);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($donate-theme);
+@include mat-core-theme($donate-theme);
+@include mat-button-theme($donate-theme);
+@include mat-checkbox-theme($donate-theme);

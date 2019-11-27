@@ -1,13 +1,12 @@
 @import '../../styles';
 
-.filters {
+.c-filters {
   margin: 1rem 0;
   overflow: hidden;
   position: relative;
-  width: 100%;
 }
 
-.filters__selects {
+.c-filters__selects {
   display: flex;
   overflow-x: scroll;
   @media (min-width: 960px) {
@@ -15,7 +14,7 @@
   }
 }
 
-.filters__fade-out {
+.c-filters__fade-out {
   pointer-events: none;
   width: 100px;
   height: 50px;
@@ -30,7 +29,7 @@
   }
 }
 
-mat-form-field {
+.c-filters__form-field {
   margin-right: 1rem;
   &:last-child {
     margin-right: 0;

@@ -1,113 +1,38 @@
 @import '../../styles';
 
-.details {
-  @include make-container;
-}
-
-.listing-button__button {
-  @include make-back-button;
-}
-
-.listing-button__button.block {
+.c-listing-button.block {
   display: block;
   margin-bottom: 0;
 }
 
-.campaign-header {
-  @include make-primary-column;
-
-  mat-icon {
-    font-size: 1rem;
-    vertical-align: baseline;
-  }
-
-  .social-icons {
-    a {
-      margin-right: 1rem;
-    }
-
-    img {
-      width: 21px;
-    }
-  }
-}
-
-.charity-name {
+.c-header__charity-name {
   margin-top: 0.75rem;
   margin-bottom: 0.5rem;
-  color: $colour-grey;
-  font-size: 1rem;
-  font-weight: 400;
-  text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-.campaign-title {
+.c-header__campaign-title {
   margin: 0 0 1rem;
-  color: $colour-teal-dark;
-  font-weight:600;
-  @include size-xxl;
-  @media #{$breakpoint-md} {
-    @include size-xxxl;
-  }
-  line-height:1.2;
 }
 
-.campaign-description {
-  @include size-lg;
-  @media #{$breakpoint-md} {
-    font-size: 24px;
-  }
-  margin-bottom:2rem;
-  line-height:1.5;
+.c-header__description {
+  margin-bottom: 2rem;
 }
 
-.campaign-video {
-  width: 100%;
-  height: auto;
-
-  iframe {
-    width: 100%;
-    height: 400px;
-  }
+.c-website__icon {
+  vertical-align: sub;
+  margin: 1rem 0;
 }
 
-.campaign-tabs__quotes {
-  list-style: none;
-  margin: 2rem 0 0 0;
-  padding: 0;
-
-  blockquote {
-    border-left: solid 2px $colour-teal-dark;
-    padding-left: 2rem;
-    margin: 0 0 0 2rem;
-    white-space: pre-wrap;
-  }
-
-  .attribution {
-    text-align: right;
-    margin-bottom: 2rem;
-  }
+.c-social__link {
+  margin-right: 1rem;
 }
 
-.campaign-tabs__budget, .campaign-tabs__updates {
-  padding: 0;
-  list-style: none;
-
-  p {
-    white-space: pre-wrap;
-  }
+.c-social__icon {
+  width: 21px;
 }
 
-.donate-button {
-  @include make-donate-button;
-}
-
-.campaign-card {
-  @include make-secondary-column;
-}
-
-.campaign-tabs {
+.c-tabs {
   @media #{$breakpoint-md} {
     max-width: 50%;
   }
@@ -117,22 +42,64 @@
   overflow-x: scroll;
 }
 
-.campaign-tabs__details p, .campaign-tabs__impact p {
+.c-quotes {
+  list-style: none;
+  margin: 2rem 0 0 0;
+  padding: 0;
+}
+
+.c-quotes__blockquote {
+  border-left: solid 2px $colour-teal-dark;
+  padding-left: 2rem;
+  margin: 0 0 0 2rem;
   white-space: pre-wrap;
 }
 
-.additional-images {
-  img {
-    margin: 1rem auto 0 auto;
-    max-width: 100%;
+.c-quotes__attribution {
+  text-align: right;
+  margin-bottom: 2rem;
+}
+
+.c-video {
+  width: 100%;
+  height: auto;
+}
+
+.c-video__iframe {
+  height: 235px;
+  padding-top: 1rem;
+  @media #{$breakpoint-lg} {
+    height: 300px;
+  }
+  @media #{$breakpoint-xl} {
+    height: 400px;
   }
 }
 
-mat-tab-group {
-  margin-top: 2rem;
+.c-additional__images {
+  margin: 1rem auto 0 auto;
+  max-width: 100%;
+}
 
-  h4 {
-    font-weight: 500;
-    margin-bottom: 0;
+.c-budget,
+.c-updates {
+  padding: 0;
+  list-style: none;
+}
+
+.c-budget__item {
+  white-space: pre-wrap;
+}
+
+.c-budget__amount,
+.c-updates__description {
+  font-weight: 700;
+}
+
+.c-details__heading,
+.c-impact__heading {
+  margin: 0;
+  &:first-child {
+    margin-top: 1rem;
   }
 }

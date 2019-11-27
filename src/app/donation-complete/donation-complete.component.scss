@@ -1,40 +1,41 @@
 @import '../../styles';
 
-.donate-complete {
+.c-donate-complete {
   @include make-container;
 }
 
-.mat-spinner {
+.c-donate-complete__mat-spinner {
   margin: 3rem auto 0;
 }
 
-.thank-you {
+.c-thank-you {
   text-align: center;
   margin-top: 3rem;
   margin-bottom: 0;
   @include size-xl;
   font-weight: 500;
-  span {
-    background-color: $colour-teal-darker;
-    padding: 1rem 2rem;
-    color: white;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    margin: 0 auto;
-    display: inline-block;
-    @include rt-2;
-    @media#{$breakpoint-lg} {
-      padding: 1.5rem 10rem;
-    }
+}
+
+.c-thank-you__content {
+  background-color: $colour-teal-darker;
+  padding: 1rem 2rem;
+  color: white;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  margin: 0 auto;
+  display: inline-block;
+  @include b-rt-2;
+  @media#{$breakpoint-lg} {
+    padding: 1.5rem 10rem;
   }
 }
 
-.page-body {
+.c-card {
   @include make-card($box-shadow-hard);
   padding: 1rem;
 }
 
-.page-margin {
+.c-main {
   margin: 1rem;
   margin-top: 0;
   @media #{$breakpoint-md} {
@@ -49,106 +50,73 @@
   }
 }
 
-.campaign-banner {
-  @media #{$breakpoint-lg} {
-    display: inline-block;
-    img {
-      max-width: 330px;
-    }
-  }
-}
-
-.page-heading {
-  @media #{$breakpoint-lg} {
-    display: inline-block;
-    margin-left: 2rem;
-  }
-}
-
-.page-body {
-  max-width: 750px;
-  margin: 0 auto;
-}
-
-img {
-  width: 100%;
-  border-radius: 4px;
-  margin-top: 1rem;
-}
-
-h3 {
-  font-weight: 400;
-  color: $colour-teal-darker;
-  @include size-xl;
-}
-
-.receipt {
+.c-receipt {
   border-top: 1px solid $colour-grey-light;
   border-bottom: 1px solid $colour-grey-light;
-  margin-top: 3rem;
-  padding-bottom: 2rem;
-  margin-bottom: 2rem;
-  color: $colour-grey;
-  h3 {
-    font-weight: 700;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-  }
-  h4 {
-    margin-bottom: 0;
-    font-weight: 400;
-    &.rt-sm {
-      margin-top: 0.75rem;
-    }
-    &.rt-2 {
-      font-weight: 500;
-      margin-top: 0;
-    }
-  }
-  p {
-    margin: 0;
-    font-weight: 500;
-  }
-  p.small-p {
-    margin-top: 2.5rem;
-    line-height: 1;
-  }
+  margin: 3rem 0;
+  padding-bottom: 3rem;
+}
+  
+.c-receipt__heading {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 
-.page-button {
-  margin: 1rem;
-  margin-top: 0;
+.c-receipt__list {
+  clear: both;
+  display: table;
+  padding: 0;
+  margin-bottom: 0;
   @media #{$breakpoint-md} {
-    margin-left: 30px;
-    margin-right: 30px;
-  }
-  @media #{$breakpoint-lg} {
-    margin-left: 0 60px;
-    margin-right: 0 60px;
-  }
-  @media #{$breakpoint-xl} {
-    margin-left: 75px;
-    margin-right: 75px;
+    width: 90%;
+    width: calc(100% - 4rem);
+    padding: 0 2rem;
   }
 }
 
-.mat-button {
+.c-receipt__item {
+  float: left;
+  width: 50%;
+  clear: left;
+  &--highlighted {
+    float: right;
+  }
+}
+
+.c-receipt__title,
+.c-tip__description {
+  margin-bottom: 0;
+  margin-top: 0.75rem;
+}
+
+.c-tip {
+  border-top: 1px solid $colour-grey-light;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  @media #{$breakpoint-md} {
+    padding: 1rem 2rem 0;
+  }
+}
+
+.c-button {
   background-color: #F4F4F4;
   color: $colour-teal;
-  padding-bottom: 1rem;
-  width: 100%;
-  margin-bottom: 1rem;
-  text-align: center;
+  padding: 1rem 0;
   &:hover {
     text-decoration: underline;
   }
-  p {
-    margin-bottom: 0;
+  @media #{$breakpoint-lg} {
+    padding: 2rem 0;
   }
-  img {
-    width: 80px;
-    margin-top: 0;
-    margin-left: 0.25rem;
-    margin-right: 0.25rem;
+}
+
+.c-button__image {
+  width: 80px;
+  @media #{$breakpoint-md} {
+    width: 100px;
+  }
+  @media #{$breakpoint-lg} {
+    width: 120px;
+    margin-top: 1rem;
   }
 }
