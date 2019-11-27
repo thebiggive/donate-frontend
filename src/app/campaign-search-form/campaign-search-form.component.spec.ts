@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatInputModule, MatSelectModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Observable } from 'rxjs';
 
 import { CampaignSearchFormComponent } from './campaign-search-form.component';
 
@@ -26,6 +27,7 @@ describe('CampaignSearchFormComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CampaignSearchFormComponent);
     component = fixture.componentInstance;
+    component.reset = new Observable();
     fixture.detectChanges();
   });
 

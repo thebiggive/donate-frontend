@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
@@ -19,14 +21,15 @@ export class MetaCampaignComponent implements OnInit {
   public filterError = false;
   public fund: Fund;
   public hasTerm = false;
+  public loading = false; // Server render gets initial result set; set true when filters change.
   public selectedSort = 'matchFundsRemaining';
 
   private campaignId: string;
   private campaignSlug: string;
   private fundSlug: string;
-  private query: SearchQuery;
-
   private perPage = 6;
+  private query: SearchQuery;
+  private resetSubject: Subject<void> = new Subject<void>();
 
   constructor(
     private campaignService: CampaignService,
@@ -35,6 +38,7 @@ export class MetaCampaignComponent implements OnInit {
     // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
+    private state: TransferState,
   ) {
     route.params.pipe().subscribe(params => {
       this.campaignId = params.campaignId;
@@ -44,26 +48,31 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.campaignId) {
-      this.campaignService.getOneById(this.campaignId).subscribe(campaign => this.setCampaign(campaign));
-    } else {
-      this.campaignService.getOneBySlug(this.campaignSlug).subscribe(campaign => this.setCampaign(campaign));
-    }
+    const metacampaignKey = makeStateKey<Campaign>(`metacampaign-${this.campaignId}`);
+    this.campaign = this.state.get(metacampaignKey, undefined);
 
+    let fundKey;
     if (this.fundSlug) {
-      this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => this.fund = fund);
+      fundKey = makeStateKey<Fund>(`fund-${this.fundSlug}`);
+      this.fund = this.state.get(fundKey, undefined);
     }
 
-    this.query = {
-      parentCampaignId: this.campaignId,
-      parentCampaignSlug: this.campaignSlug,
-      fundSlug: this.fundSlug,
-      limit: this.perPage,
-      offset: 0,
-    };
+    if (!this.campaign) {
+      if (this.campaignId) {
+        this.campaignService.getOneById(this.campaignId).subscribe(campaign => this.setCampaign(campaign, metacampaignKey));
+      } else {
+        this.campaignService.getOneBySlug(this.campaignSlug).subscribe(campaign => this.setCampaign(campaign, metacampaignKey));
+      }
+    }
 
-    this.handleSortParams();
-    this.run();
+    if (!this.fund && this.fundSlug) {
+      this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
+        this.state.set(fundKey, fund);
+        this.fund = fund;
+      });
+    }
+
+    this.setDefaultFilters();
   }
 
   /**
@@ -86,6 +95,23 @@ export class MetaCampaignComponent implements OnInit {
   setQueryProperty(property, event) {
     this.query[property] = event.value;
     this.run();
+  }
+
+  setDefaultFilters() {
+    this.hasTerm = false;
+    this.selectedSort = 'matchFundsRemaining';
+    this.query = {
+      parentCampaignId: this.campaignId,
+      parentCampaignSlug: this.campaignSlug,
+      fundSlug: this.fundSlug,
+      limit: this.perPage,
+      offset: 0,
+    };
+
+    this.handleSortParams();
+    this.run();
+
+    this.resetSubject.next();
   }
 
   handleSortParams() {
@@ -117,16 +143,23 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   private run() {
-    this.campaignService.search(this.query).subscribe(
-      campaignSummaries => this.children = campaignSummaries, // Success
-      () => this.filterError = true, // Error, e.g. slug not known
+    this.children = [];
+    this.loading = true;
+    this.campaignService.search(this.query).subscribe(campaignSummaries => {
+      this.children = campaignSummaries; // Success
+      this.loading = false;
+    }, () => {
+        this.filterError = true; // Error, e.g. slug not known
+        this.loading = false;
+      },
     );
   }
 
   /**
    * Set the campaign for the service and page metadata.
    */
-  private setCampaign(campaign: Campaign) {
+  private setCampaign(campaign: Campaign, metacampaignKey: StateKey<Campaign>) {
+    this.state.set(metacampaignKey, campaign); // Have data ready for client when handing over from SSR
     this.campaign = campaign;
     this.pageMeta.setCommon(
       campaign.title,

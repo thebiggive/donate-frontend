@@ -1,19 +1,29 @@
-import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-filters',
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.scss'],
 })
-export class FiltersComponent implements OnInit {
+export class FiltersComponent implements OnInit, OnDestroy {
   @Input() hasTerm: boolean;
+  @Input() reset: Observable<void>;
+  @Input() @Output() selectedSort: string;
   @Output() filterApplied: EventEmitter<any> = new EventEmitter();
   @Output() sortApplied: EventEmitter<any> = new EventEmitter();
-  @Input() @Output() selectedSort: any;
 
   public beneficiaryOptions: string[];
   public categoryOptions: string[];
   public countryOptions: string[];
+
+  public beneficiarySelected = '';
+  public categorySelected = '';
+  public countrySelected = '';
+  public matchingNowSelected = false;
+
+  private defaultSort: string;
+  private resetSubscription: Subscription;
 
   constructor() {}
 
@@ -61,6 +71,7 @@ export class FiltersComponent implements OnInit {
    */
   static getCountries(): string[] {
     return [
+      'United Kingdom',
       'Afghanistan',
       'Aland Islands',
       'Albania',
@@ -287,7 +298,6 @@ export class FiltersComponent implements OnInit {
       'Uganda',
       'Ukraine',
       'United Arab Emirates',
-      'United Kingdom',
       'United States',
       'Uruguay',
       'Uzbekistan',
@@ -304,9 +314,20 @@ export class FiltersComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.defaultSort = this.selectedSort;
     this.beneficiaryOptions = FiltersComponent.getBeneficiaries();
     this.categoryOptions = FiltersComponent.getCategories();
     this.countryOptions = FiltersComponent.getCountries();
+
+    this.resetSubscription = this.reset.subscribe(() => {
+      this.selectedSort = this.defaultSort;
+      this.beneficiarySelected = this.categorySelected = this.countrySelected = '';
+      this.matchingNowSelected = false;
+    });
+  }
+
+  ngOnDestroy() {
+    this.resetSubscription.unsubscribe();
   }
 
   setFilter(filterName, event) {

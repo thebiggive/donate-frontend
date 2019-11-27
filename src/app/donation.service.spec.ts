@@ -1,43 +1,49 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { Donation } from './donation.model';
 import { DonationCreatedResponse } from './donation-created-response.model';
-import { DonationService } from './donation.service';
+import { DonationService, TBG_DONATE_STORAGE } from './donation.service';
 import { DonationStatus } from './donation-status.type';
 import { environment } from '../environments/environment';
 
 describe('DonationService', () => {
-  const getDummyDonation = (status: DonationStatus = 'Pending') => {
-    return new Donation(
-      '01I400000009Sds3e2',
-      1234.56,
-      true,
-      true,
-      true,
-      false,
-      '11I400000009Sds3e3',
-      '123 Main St, london, N1 1AA',
-      'My Test Charity',
-      'GB',
-      new Date(),
-      '21I400000009Sds3e4',
-      'test@example.com',
-      'Louis',
-      'Theroux',
-      0,
-      500.01,
+  const getDummyDonation = (status: DonationStatus = 'Pending'): Donation => {
+    return {
+      billingPostalAddress: '123 Main St, london, N1 1AA',
+      charityName: 'My Test Charity',
+      countryCode: 'GB',
+      createdTime: (new Date()).toISOString(),
+      charityId: '21I400000009Sds3e4',
+      donationId: '01I400000009Sds3e2',
+      donationAmount: 1234.56,
+      donationMatched: true,
+      emailAddress: 'test@example.com',
+      firstName: 'Louis',
+      giftAid: true,
+      lastName: 'Theroux',
+      matchedAmount: 0,
+      matchReservedAmount: 500.01,
+      optInCharityEmail: true,
+      optInTbgEmail: false,
+      projectId: '11I400000009Sds3e3',
       status,
-      2.75,
-      'd290f1ee-6c54-4b01-90e6-d701748f0851',
-      new Date(),
-    );
+      tipAmount: 2.75,
+      transactionId: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
+      updatedTime: (new Date()).toISOString(),
+    };
   };
 
   beforeEach(() => TestBed.configureTestingModule({
     imports: [ HttpClientTestingModule, RouterTestingModule ],
-    providers: [ DonationService ],
+    providers: [
+      // Inject in-memory storage for tests, in place of local storage.
+      { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
+      DonationService,
+      InMemoryStorageService,
+    ],
   }));
 
   it('should be created', () => {
@@ -132,7 +138,7 @@ describe('DonationService', () => {
     const inputDonation = getDummyDonation();
     service.saveDonation(inputDonation, 'fakeheader.fakebody.fakesig');
 
-    expect(service.getDonation(inputDonation.donationId)).toBe(inputDonation);
+    expect(service.getDonation(inputDonation.donationId)).toEqual(inputDonation);
   });
 
   it('should correctly determine when a donation is complete', () => {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
+import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { retryWhen, tap  } from 'rxjs/operators';
 
@@ -46,6 +47,7 @@ export class DonationStartComponent implements OnInit {
     private pageMeta: PageMetaService,
     private route: ActivatedRoute,
     private router: Router,
+    private state: TransferState,
   ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
     route.queryParams.forEach((params: Params) => {
@@ -56,17 +58,23 @@ export class DonationStartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.campaignService.getOneById(this.campaignId)
-      .subscribe(campaign => {
-        this.campaign = campaign;
+    const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
+    this.campaign = this.state.get(campaignKey, undefined);
 
-        if (!CampaignService.isOpenForDonations(campaign)) {
-          this.router.navigateByUrl(`/campaign/${campaign.id}`);
-          return;
-        }
+    if (!this.campaign) {
+      this.campaignService.getOneById(this.campaignId)
+        .subscribe(campaign => {
+          this.state.set(campaignKey, campaign);
+          this.campaign = campaign;
 
-        this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
-      });
+          if (!CampaignService.isOpenForDonations(campaign)) {
+            this.router.navigateByUrl(`/campaign/${campaign.id}`);
+            return;
+          }
+
+          this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
+        });
+    }
 
     this.donationForm = this.formBuilder.group({
       donationAmount: [null, [
@@ -124,17 +132,16 @@ export class DonationStartComponent implements OnInit {
       return;
     }
 
-    const donation = new Donation(
-      this.campaign.charity.id,
-      this.donationForm.value.donationAmount.replace('£', ''), // Strip '£' if entered
-      this.campaign.isMatched,
-      this.donationForm.value.giftAid,
-      this.donationForm.value.optInCharityEmail,
-      this.donationForm.value.optInTbgEmail,
-      this.campaignId,
-      undefined,
-      this.campaign.charity.name,
-    );
+    const donation: Donation = {
+      charityId: this.campaign.charity.id,
+      charityName: this.campaign.charity.name,
+      donationAmount: this.donationForm.value.donationAmount.replace('£', ''), // Strip '£' if entered
+      donationMatched: this.campaign.isMatched,
+      giftAid: this.donationForm.value.giftAid,
+      optInCharityEmail: this.donationForm.value.optInCharityEmail,
+      optInTbgEmail: this.donationForm.value.optInTbgEmail,
+      projectId: this.campaignId,
+    };
 
     this.donationService
       .create(donation) // Create Salesforce donation
@@ -277,7 +284,7 @@ export class DonationStartComponent implements OnInit {
     this.analyticsService.logEvent('alerted_no_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
       'There are no match funds currently available for this campaign so your donation will not be matched.',
-      'But every penny helps & you can continue make an unmatched donation to the charity!',
+      'Remember every penny helps & you can continue to make an unmatched donation to the charity!',
       'Cancel',
       donation,
     );
@@ -291,7 +298,7 @@ export class DonationStartComponent implements OnInit {
     this.promptToContinue(
       'There are not enough match funds currently available to fully match your donation. ' +
         `£${donation.matchReservedAmount} will be matched.`,
-      'But every penny helps & you can continue to make a partially matched donation to the charity!',
+      'Remember every penny helps & you can continue to make a partially matched donation to the charity!',
       'Cancel and release match funds',
       donation,
     );

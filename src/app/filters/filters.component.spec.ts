@@ -2,6 +2,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatSelectModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Observable } from 'rxjs';
 
 import { FiltersComponent } from './filters.component';
 
@@ -24,6 +25,7 @@ describe('FiltersComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FiltersComponent);
     component = fixture.componentInstance;
+    component.reset = new Observable();
     fixture.detectChanges();
   });
 

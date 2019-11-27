@@ -9,6 +9,7 @@ import { CampaignSummary } from '../campaign-summary.model';
 })
 export class CampaignCardComponent implements OnInit {
   @Input() public campaign: CampaignSummary;
+  @Input() public inFundContext: boolean;
 
   constructor() {}
 

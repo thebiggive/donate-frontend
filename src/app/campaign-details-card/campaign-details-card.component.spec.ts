@@ -44,6 +44,7 @@ describe('CampaignDetailsCardComponent', () => {
       'Impact overview',
       true,
       987,
+      988,
       'The situation',
       [],
       'The solution',
