@@ -32,8 +32,8 @@
                 <mat-label for="donationAmount">Enter an amount (£)</mat-label>
                 <input formControlName="donationAmount" id="donationAmount" matInput>
               </mat-form-field>
-              <p class="b-center b-grey b-rt-0">Or, choose</p>
-              <div class="c-suggested-amount" fxLayout="row">
+              <p *ngIf="suggestedAmounts && suggestedAmounts.length > 0" class="b-center b-grey b-rt-0">Or, choose</p>
+              <div *ngIf="suggestedAmounts && suggestedAmounts.length > 0" class="c-suggested-amount" fxLayout="row">
                 <button
                   class="c-suggested-amount__button b-rh-2 b-bold"
                   type="button"

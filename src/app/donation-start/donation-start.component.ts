@@ -29,7 +29,7 @@ export class DonationStartComponent implements OnInit {
   public campaign: Campaign;
   public donationForm: FormGroup;
   public retrying = false;
-  public suggestedAmounts = [30, 100, 250];
+  public suggestedAmounts: number[];
   public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
   public validationError = false;         // Internal Angular app form validation error
@@ -58,6 +58,13 @@ export class DonationStartComponent implements OnInit {
   }
 
   ngOnInit() {
+    const suggestedAmountsKey = makeStateKey<number[]>('suggested-amounts');
+    this.suggestedAmounts = this.state.get(suggestedAmountsKey, undefined);
+    if (!this.suggestedAmounts) {
+      this.suggestedAmounts = this.getSuggestedAmounts();
+      this.state.set(suggestedAmountsKey, this.suggestedAmounts);
+    }
+
     const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
     this.campaign = this.state.get(campaignKey, undefined);
 
@@ -229,6 +236,30 @@ export class DonationStartComponent implements OnInit {
       );
   }
 
+  private getSuggestedAmounts(): number[] {
+    if (!this.suggestedAmounts) {
+      if (environment.suggestedAmounts.length === 0) {
+        return [];
+      }
+
+      // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
+      let thresholdCounter = 0;
+      for (const suggestedAmount of environment.suggestedAmounts) {
+        thresholdCounter += suggestedAmount.weight;
+      }
+      const threshold = Math.floor(Math.random() * thresholdCounter);
+
+      thresholdCounter = 0;
+      for (const suggestedAmount of environment.suggestedAmounts) {
+        thresholdCounter += suggestedAmount.weight;
+
+        if (thresholdCounter > threshold) {
+          return suggestedAmount.values;
+        }
+      }
+    }
+  }
+
   private offerExistingDonation(donation: Donation) {
     this.submitting = true;
     this.analyticsService.logEvent('existing_donation_offered', `Found pending donation to campaign ${this.campaignId}`);
@@ -276,6 +307,7 @@ export class DonationStartComponent implements OnInit {
   }
 
   private redirectToCharityCheckout(donation: Donation) {
+    this.analyticsService.logAmountChosen(donation.donationAmount, this.suggestedAmounts, this.campaignId);
     this.analyticsService.logEvent('payment_redirect_click', `Donating to campaign ${this.campaignId}`);
     this.charityCheckoutService.startDonation(donation);
   }
