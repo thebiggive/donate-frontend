@@ -44,7 +44,7 @@
 
               <div class="error" *ngIf="f.donationAmount.invalid && (f.donationAmount.dirty || f.donationAmount.touched)">
                 <div *ngIf="f.donationAmount.errors.min">Sorry, the minimum donation is currently £5.</div>
-                <div *ngIf="f.donationAmount.errors.max">Sorry, the maximum single donation is £25,000.</div>
+                <div *ngIf="f.donationAmount.errors.max">Your donation must be £25,000 or less to proceed. You can make multiple matched donations of £25,000 if match funds are available.</div>
                 <div *ngIf="f.donationAmount.errors.pattern">Please enter a whole number of pounds (£) without commas or pence.</div>
                 <div *ngIf="f.donationAmount.errors.required">Please enter how much you would like to donate.</div>
               </div>
@@ -137,14 +137,14 @@
                   class="c-donate-button b-donate-button b-w-100 b-rt-1"
                   mat-raised-button
                   type="submit"
-                  [disabled]="submitting"
+                  [disabled]="submitting || f.donationAmount.invalid"
                 >
                   Donate
                   <span class="b-bold b-va-bas">
                     {{ donationForm.value.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}
                   </span>
                 </button>
-                <div class="c-donation-receipt" fxLayout="row" *ngIf="donationForm.value.donationAmount > 0">
+                <div *ngIf="!f.donationAmount.invalid" class="c-donation-receipt" fxLayout="row">
                   <div [fxFlex]="(expectedMatchAmount() > 0) ? 26 : 39">
                     <p class="b-center b-grey b-rt-sm b-m-0">Your donation</p>
                     <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ donationForm.value.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
@@ -164,7 +164,7 @@
                     <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ giftAidAmount() | currency : '£' : 'symbol' : '1.2-2' }}</p>
                   </div>
                 </div>
-                <div class="c-receipt-total b-grey" fxLayout="row" fxLayoutAlign="space-around center" *ngIf="donationForm.value.donationAmount > 0">
+                <div *ngIf="!f.donationAmount.invalid" class="c-receipt-total b-grey" fxLayout="row" fxLayoutAlign="space-around center">
                   <p class="b-rt-0 b-m-0">Total for {{ campaign.charity.name }}:</p>
                   <p class="b-rt-1 b-bold b-m-0">{{ expectedTotalAmount() | currency : '£' : 'symbol' : '1.2-2' }}</p>
                 </div>
