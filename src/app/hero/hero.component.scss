@@ -10,15 +10,21 @@
 
 .hero {
   color: white;
+  padding-top: 1rem;
   background-size: auto 150%;
   background-repeat: no-repeat;
   background-position: center top;
   @media #{$breakpoint-md} {
     background-size: cover;
   }
+  @media #{$breakpoint-lg} {
+    padding-top: 1.5rem;
+  }
 }
 
 .hero-flex__child {
+  padding-right: 15px; // Allow space so GetSiteControl right-floated widgets don't cover copy
+
   @media #{$breakpoint-md} {
     margin-right: 1rem;
     &:last-child {
@@ -61,8 +67,8 @@
 }
 
 .c-hero__image {
-  float: right;
-  margin-left: 1rem;
+  margin-top: -22px; // Make enough space for the copy below to remain legible
+  width: 330px; // 660px image requested for sharp rendering at high DPI
 }
 
 app-campaign-search-form {

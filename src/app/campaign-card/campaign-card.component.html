@@ -3,7 +3,7 @@
     <img
       class="c-banner__image b-w-100"
       *ngIf="campaign.imageUri"
-      [src]="campaign.imageUri"
+      [src]="campaign.imageUri + '?width=830'"
       alt=""
       role="presentation"
     >
@@ -11,7 +11,7 @@
 
   <div class="c-header">
     <h4 class="c-header__charity-name b-grey b-light b-uppercase">{{ campaign.charity.name }}</h4>
-    <a class="c-header__link" [routerLink]="'/campaign/' + campaign.id"><h3 class="c-header__campaign-title">{{ campaign.title }}</h3></a>
+    <a class="c-header__link" [routerLink]="'/campaign/' + campaign.id" [queryParams]="inFundContext ? {fromFund: 1} : {}"><h3 class="c-header__campaign-title">{{ campaign.title }}</h3></a>
   </div>
 
   <div class="c-categories">
@@ -21,13 +21,13 @@
   </div>
 
   <div class="c-funds" fxLayout="row">
-    <div class="c-funds__matched" *ngIf="campaign.isMatched" fxFlex="50" fxLayout="column">
-      <p class="c-funds__description" fxFlex="50">Matched funds remaining</p>
-      <h4 class="c-funds__amount" fxFlex="50">{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }}</h4>
+    <div class="c-funds__matched" *ngIf="campaign.isMatched" fxFlex="50">
+      <p class="c-funds__description">Matched funds remaining</p>
+      <h4 class="c-funds__amount">{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }}</h4>
     </div>
-    <div class="c-funds__total" *ngIf="campaign.isMatched" fxFlex="50" fxLayout="column">
-      <p class="c-funds__description" fxFlex="50">Total funds raised</p>
-      <h4 class="c-funds__amount" fxFlex="50">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</h4>
+    <div class="c-funds__total" *ngIf="campaign.isMatched" fxFlex="50">
+      <p class="c-funds__description">Total funds raised</p>
+      <h4 class="c-funds__amount">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</h4>
     </div>
   </div>
 
@@ -37,6 +37,7 @@
       color="accent"
       class="c-buttons__more"
       [routerLink]="'/campaign/' + campaign.id"
+      [queryParams]="inFundContext ? {fromFund: 1} : {}"
     >
       More info
       <mat-icon class="c-buttons__more-icon" aria-hidden="false" aria-label="Plus">add</mat-icon>

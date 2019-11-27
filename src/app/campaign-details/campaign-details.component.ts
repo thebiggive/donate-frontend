@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, makeStateKey, SafeResourceUrl, TransferState } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { PageMetaService } from '../page-meta.service';
-
-const CAMPAIGN_KEY = makeStateKey('campaign');
 
 @Component({
   selector: 'app-campaign-details',
@@ -18,6 +16,7 @@ export class CampaignDetailsComponent implements OnInit {
   public campaignId: string;
   public clientSide: boolean;
   public donateEnabled = true;
+  public fromFund = false;
   public percentRaised?: number;
   public videoEmbedUrl?: SafeResourceUrl;
 
@@ -29,16 +28,22 @@ export class CampaignDetailsComponent implements OnInit {
     private state: TransferState,
   ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
+    route.queryParams.forEach((params: Params) => {
+      if (params.fromFund) {
+        this.fromFund = true;
+      }
+    });
   }
 
   ngOnInit() {
-    this.campaign = this.state.get(CAMPAIGN_KEY, undefined);
+    const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
+    this.campaign = this.state.get(campaignKey, undefined);
 
     if (this.campaign) {
       this.setSecondaryProps(this.campaign);
     } else {
       this.campaignService.getOneById(this.campaignId).subscribe(campaign => {
-        this.state.set(CAMPAIGN_KEY, campaign);
+        this.state.set(campaignKey, campaign);
         this.campaign = campaign;
         this.setSecondaryProps(campaign);
       });

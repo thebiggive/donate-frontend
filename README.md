@@ -9,7 +9,7 @@ To run the app locally:
 
 * clone it from GitHub
 * `npm install`
-* `npm start`
+* `npm run start`
 
 The app should be running at [localhost:4200](http://localhost:4200).
 
@@ -59,6 +59,18 @@ Although it would be good to extend support for Internet Explorer
 9 and 10, they are unsupported by both Charity Checkout and
 Angular Material so this is not an option. We use user agent
 detection to explain the situation to users of these browsers.
+
+### Debugging Internet Explorer
+
+It is possible, though fiddly, to test Internet Explorer 11 complete with live reload. These steps were used on macOS but should work cross-platform:
+
+* Temporarily target ES5 for local builds - makes output less optimised but this is necessary to use the local server with IE11: in the project root `tsconfig.json` change the config to `... "target": "es5", ...`. Do not commit this change outside of a debug branch!
+* Get the latest [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and a free [test image from Microsoft](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
+* In the VirtualBox Network config, choose the Bridged Adapter and the host network you connect to the internet with
+* Boot the app with `npm run start-dangerously` to open up the development server to anyone on your local network(!)
+* Check your IP on the local network, e.g. with `ifconfig | grep inet` - you typically want a `192....` or `10....` one
+* Access in the Virtual Machine's IE11 browser at `http://{local IP from previous step}`
+* If using this approach rather than port forwarding to `127.0.0.1` you will also need to temporarily CORS whitelist your current local IP as an origin with any APIs you need to test from IE, in their staging environments
 
 ## Docker configuration
 

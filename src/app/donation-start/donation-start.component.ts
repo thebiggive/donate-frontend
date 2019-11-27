@@ -19,8 +19,6 @@ import { environment } from '../../environments/environment';
 import { PageMetaService } from '../page-meta.service';
 import { retryStrategy } from '../observable-retry';
 
-const CAMPAIGN_KEY = makeStateKey('campaign');
-
 @Component({
   selector: 'app-donation-start',
   templateUrl: './donation-start.component.html',
@@ -60,12 +58,13 @@ export class DonationStartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.campaign = this.state.get(CAMPAIGN_KEY, undefined);
+    const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
+    this.campaign = this.state.get(campaignKey, undefined);
 
     if (!this.campaign) {
       this.campaignService.getOneById(this.campaignId)
         .subscribe(campaign => {
-          this.state.set(CAMPAIGN_KEY, campaign);
+          this.state.set(campaignKey, campaign);
           this.campaign = campaign;
 
           if (!CampaignService.isOpenForDonations(campaign)) {
@@ -284,8 +283,9 @@ export class DonationStartComponent implements OnInit {
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
     this.analyticsService.logEvent('alerted_no_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
+      'Match funds not available',
       'There are no match funds currently available for this campaign so your donation will not be matched.',
-      'But every penny helps & you can continue make an unmatched donation to the charity!',
+      'Remember every penny helps & you can continue to make an unmatched donation to the charity!',
       'Cancel',
       donation,
     );
@@ -297,17 +297,18 @@ export class DonationStartComponent implements OnInit {
   private promptToContinueWithPartialMatching(donation: Donation) {
     this.analyticsService.logEvent('alerted_partial_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
+      'Not all match funds are available',
       'There are not enough match funds currently available to fully match your donation. ' +
         `£${donation.matchReservedAmount} will be matched.`,
-      'But every penny helps & you can continue to make a partially matched donation to the charity!',
+      'Remember every penny helps & you can continue to make a partially matched donation to the charity!',
       'Cancel and release match funds',
       donation,
     );
   }
 
-  private promptToContinue(status: string, statusDetail: string, cancelCopy: string, donation: Donation) {
+  private promptToContinue(title: string, status: string, statusDetail: string, cancelCopy: string, donation: Donation) {
     const continueDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
-      data: { cancelCopy, status, statusDetail },
+      data: { cancelCopy, status, statusDetail, title },
       disableClose: true,
       role: 'alertdialog',
     });

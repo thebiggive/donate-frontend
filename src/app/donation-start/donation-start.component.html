@@ -10,7 +10,7 @@
     <div class="b-primary-column">
       <div class="c-header">
         <h3 class="b-rh-2 b-light">You are donating to:</h3>
-        <h1 class="b-rh-1 b-bold">{{ campaign.charity.name }}!</h1>
+        <h1 class="b-rh-1 b-bold">{{ campaign.charity.name }}</h1>
         <h3 class="b-rh-2 b-light">For:</h3>
         <h2 class="b-rh-1 b-bold">{{ campaign.title }}</h2>
       </div>
@@ -24,6 +24,10 @@
                   <h3 class="b-rh-2">Your donation</h3>
                 </mat-panel-title>
               </mat-expansion-panel-header>
+              <p *ngIf="campaign.matchFundsRemaining > 0" class="your-donation__highlight">
+                <img src="/assets/icon-tick.png" height="11" alt="Check mark">
+                Match funds are currently available!
+              </p>
               <mat-form-field class="c-your-donation__form-field b-center size-lg" color="accent">
                 <mat-label for="donationAmount">Enter an amount (£)</mat-label>
                 <input formControlName="donationAmount" id="donationAmount" matInput>
@@ -31,7 +35,6 @@
               <p class="b-center b-grey b-rt-0">Or, choose</p>
               <div class="c-suggested-amount" fxLayout="row">
                 <button
-                  fxFlex="calc((100 - 1rem)/3)"
                   class="c-suggested-amount__button b-rh-2 b-bold"
                   type="button"
                   *ngFor="let suggestedAmount of suggestedAmounts"
@@ -136,7 +139,7 @@
                   type="submit"
                   [disabled]="submitting"
                 >
-                  Donate 
+                  Donate
                   <span class="b-bold b-va-bas">
                     {{ donationForm.value.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}
                   </span>

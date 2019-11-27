@@ -15,6 +15,7 @@ export class Campaign {
     public impactSummary: string,
     public isMatched: boolean,
     public matchFundsRemaining: number,
+    public matchFundsTotal: number,
     public problem: string,
     public quotes: Array<{person: string, quote: string}>,
     public solution: string,
@@ -26,5 +27,8 @@ export class Campaign {
     public updates: Array<{content: string, modifiedDate: Date}>,
     public video?: {provider: string, key: string},
     public alternativeFundUse?: string,
+    public campaignCount?: number,
+    public championRef?: string,
+    public parentRef?: string,
   ) {}
 }

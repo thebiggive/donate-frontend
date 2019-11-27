@@ -29,9 +29,12 @@
 .c-campaign-donations__value {
   @include size-xl;
   margin-top: 0;
-  color:$colour-teal;
+  color: $colour-teal;
 }
 
 .c-championed-by {
-  color:$colour-teal;
+  color: $colour-teal;
+  a {
+    text-decoration: none;
+  }
 }

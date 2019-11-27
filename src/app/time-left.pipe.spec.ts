@@ -6,6 +6,18 @@ describe('TimeLeftPipe', () => {
     expect(pipe).toBeTruthy();
   });
 
+  it('returns 1 minute correctly', () => {
+    const futureDate = new Date((new Date()).getTime() + 61000); // 61 seconds in the future
+
+    expect((new TimeLeftPipe()).transform(futureDate)).toEqual('1 minute');
+  });
+
+  it('returns 23 hours correctly', () => {
+    const futureDate = new Date((new Date()).getTime() + 23 * 60 * 60 * 1000 + 10000); // 23 hours and 10 seconds in the future
+
+    expect((new TimeLeftPipe()).transform(futureDate)).toEqual('23 hours');
+  });
+
   it('returns 1 day correctly', () => {
     const futureDate = new Date((new Date()).getTime() + 86410000); // 1 day and 10 seconds in the future
 

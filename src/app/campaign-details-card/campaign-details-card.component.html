@@ -3,7 +3,7 @@
     <img
       class="c-banner__image b-w-100"
       *ngIf="campaign.bannerUri"
-      [src]="campaign.bannerUri"
+      [src]="campaign.bannerUri + '?width=830'"
       alt=""
       role="presentation"
     >
@@ -30,9 +30,10 @@
       </div>
     </div>
     <p class="c-championed-by b-mb-0" *ngIf="campaign.championName">
-      Championed by 
-      <span class="b-bold">{{campaign.championName}}</span>
+      <a [routerLink]="'/' + campaign.parentRef + '/' + campaign.championRef">
+        Championed by
+        <span class="b-bold">{{campaign.championName}}</span>
+      </a>
     </p>
   </div>
-
 </div>

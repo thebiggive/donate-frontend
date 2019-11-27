@@ -40,6 +40,8 @@
 }
 
 .c-suggested-amount__button {
+  flex: 1 0 auto;
+  width: calc((100 - 1rem) / 3);
   background-color: $colour-teal-light;
   box-shadow: inset 0px 1px 4px rgba(0, 131, 143, 0.2);
   padding: 1rem;

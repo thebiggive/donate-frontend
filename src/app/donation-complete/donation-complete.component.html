@@ -20,14 +20,14 @@
     <div class="c-card">
       <div class="c-main">
         <h3 class="b-rh-2 b-light">
-          Your donation of 
+          Your donation of
           <span class="b-bold">
             {{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}
           </span>
            has been made.
         </h3>
         <h3 class="b-rh-2 b-light">
-          That's worth 
+          That's worth
           <span class="b-bold">
             {{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}
           </span>
@@ -69,7 +69,7 @@
           <p class="b-rt-1 b-m-0" *ngIf="campaign.parentRef"><a [routerLink]="'/' + campaign.parentRef">Explore other campaigns</a></p>
           <p class="b-rt-1 b-m-0" *ngIf="!campaign.parentRef"><a href="https://www.thebiggive.org.uk/s/explore-campaigns">Explore other campaigns</a></p>
         </div>
-        <img class="c-button__image" src="/assets/images/logo.png" alt="The Big Give" width="200">
+        <a href="https://www.thebiggive.org.uk/s/"><img class="c-button__image" src="/assets/images/logo.png" alt="The Big Give" width="200"></a>
       </button>
     </div>
   </div>
