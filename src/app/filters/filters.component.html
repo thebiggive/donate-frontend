@@ -1,7 +1,7 @@
-<div class="filters">
-  <div class="filters__fade-out"></div>
-  <div class="filters__selects">
-    <mat-form-field>
+<div class="c-filters b-w-100">
+  <div class="c-filters__fade-out"></div>
+  <div class="c-filters__selects">
+    <mat-form-field class="c-filters__form-field">
       <mat-label>Sort By</mat-label>
       <mat-select [value]="selectedSort" (selectionChange)="setSortField($event)">
         <mat-option value="matchFundsRemaining">Match Funds Remaining</mat-option>
@@ -9,28 +9,28 @@
         <mat-option *ngIf="hasTerm" value="">Relevance</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="c-filters__form-field">
       <mat-label>Helping</mat-label>
       <mat-select value="" (selectionChange)="setFilter('beneficiary', $event)">
         <mat-option value="">All</mat-option>
         <mat-option *ngFor="let beneficiary of beneficiaryOptions" [value]="beneficiary">{{ beneficiary }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="c-filters__form-field">
       <mat-label>Category</mat-label>
       <mat-select value="" (selectionChange)="setFilter('category', $event)">
         <mat-option value="">All</mat-option>
         <mat-option *ngFor="let category of categoryOptions" [value]="category">{{ category }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="c-filters__form-field">
       <mat-label>Location</mat-label>
       <mat-select value="" (selectionChange)="setFilter('country', $event)">
         <mat-option value="">All</mat-option>
         <mat-option *ngFor="let country of countryOptions" [value]="country">{{ country }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field class="c-filters__form-field">
       <mat-label>Matching Now?</mat-label>
       <mat-select [value]="false" (selectionChange)="setFilter('onlyMatching', $event)">
         <mat-option [value]="false">All</mat-option>
