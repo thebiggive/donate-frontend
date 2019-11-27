@@ -6,6 +6,6 @@ export const environment = {
   donationsApiPrefix: 'https://biggive.secure.force.com/donations/services/apexrest/v1.0',
   googleAnalyticsId: 'UA-2979952-1',
   maximumDonationAmount: 25000,
-  suggestedAmounts: [{weight: 1, values: [30, 100, 250]}],
+  suggestedAmounts: [],
   thanksUriPrefix: 'https://donate.thebiggive.org.uk/thanks/',
 };
