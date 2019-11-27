@@ -1,7 +1,3 @@
-@import './variables';
-@import './mixins';
-
-
 .b-container {
   @include make-container;
 }
@@ -35,29 +31,44 @@
   color: $colour-grey;
 }
 
+.b-center {
+  text-align: center;
+}
+
 .b-uppercase {
   text-transform: uppercase;
 }
 
 
-.b-rtSm {
-  @include b-rtSm;
+.b-rt-sm {
+  @include b-rt-sm;
 }
 
-.b-rt0 {
-  @include b-rt0;
+.b-rt-0 {
+  @include b-rt-0;
 }
 
-.b-rt1 {
-  @include b-rt1;
+.b-rt-1 {
+  @include b-rt-1;
 }
 
-.b-rt2 {
-  @include b-rt2;
+.b-rt-2 {
+  @include b-rt-2;
 }
 
-.b-rt3 {
-  @include b-rt3;
+.b-rt-3 {
+  @include b-rt-3;
+}
+
+
+.b-rh-1 {
+  @include b-rt-3;
+  color: $colour-teal-dark;
+}
+
+.b-rh-2 {
+  @include b-rt-2;
+  color: $colour-teal-dark;
 }
 
 
@@ -65,16 +76,10 @@
   font-weight: 400;
 }
 
+.b-semi-bold {
+  font-weight: 500;
+}
+
 .b-bold {
   font-weight: 700;
-}
-
-.b-rh1 {
-  @include b-rt3;
-  color: $colour-teal-dark;
-}
-
-.b-rh2 {
-  @include b-rt2;
-  color: $colour-teal-dark;
 }
