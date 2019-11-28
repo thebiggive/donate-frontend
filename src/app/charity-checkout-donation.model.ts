@@ -23,10 +23,11 @@ export class CharityCheckoutDonation {
     this.charity_id = donation.charityId;
     this.charity_name = donation.charityName;
     this.donation_amount = donation.donationAmount;
-    this.donation_type = donation.donationMatched ? 'em1' : 'ind1';
+    this.donation_type = donation.donationMatched ? 'em1' : 'ind1'; // Indicates campaign type, event if this donation's not matched
     this.gift_aid = donation.giftAid ? '1' : '0';
     this.project_id = donation.projectId;
-    this.reservation_time = donation.donationMatched ? Math.floor((new Date()).getTime() / 1000) : null;
+    // Triggers a Charity Checkout message about reserved match funds, so only non-null when we actually have some allocated.
+    this.reservation_time = (donation.matchReservedAmount > 0) ? Math.floor((new Date()).getTime() / 1000) : null;
     this.thanks_url = `${environment.thanksUriPrefix}${donation.donationId}`;
     this.unique_ID = donation.donationId;
   }
