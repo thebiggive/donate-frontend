@@ -130,6 +130,7 @@ export class DonationService {
     const donationCouplets = this.getDonationCouplets();
     donationCouplets.splice(
       donationCouplets.findIndex(donationItem => donationItem.donation.donationId === donation.donationId),
+      1,
     );
     this.storage.set(this.storageKey, donationCouplets);
   }
