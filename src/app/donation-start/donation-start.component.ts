@@ -241,7 +241,7 @@ export class DonationStartComponent implements OnInit {
    */
   private handleCampaign(campaign: Campaign) {
     if (!CampaignService.isOpenForDonations(campaign)) {
-      this.router.navigateByUrl(`/campaign/${campaign.id}`);
+      this.router.navigateByUrl(`/campaign/${campaign.id}`, { replaceUrl: true });
       return;
     }
 
