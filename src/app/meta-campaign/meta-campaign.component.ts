@@ -77,18 +77,24 @@ export class MetaCampaignComponent implements OnInit {
     this.setDefaultFilters();
   }
 
+  onScroll() {
+    if (this.moreMightExist()) {
+      this.more();
+    }
+  }
+
   /**
    * For now, just do a full search with more results requested. Not very efficient but does the job
    * for now while we focus on other priorities.
    * @todo use `offset` and load only campaigns not already likely to be on the page.
    */
   more() {
-    this.query.limit += this.perPage;
-    this.run();
-  }
-
-  moreMightExist(): boolean {
-    return (this.children.length === this.query.limit);
+    const cardsPerRow = (window.innerWidth < 600 ? 1 : (window.innerWidth < 960 ? 2 : 3));
+    const safeNumberOfRows = 2 + (500 + window.scrollY) / 450; // Allow 500px for top stuff; 450px per card row; 2 spare rows
+    const safeNumberToLoad = cardsPerRow * safeNumberOfRows;
+    if (this.children.length < safeNumberToLoad) {
+      this.loadMoreForCurrentSearch();
+    }
   }
 
   /**
@@ -144,7 +150,25 @@ export class MetaCampaignComponent implements OnInit {
     this.run();
   }
 
+  private loadMoreForCurrentSearch() {
+    this.query.offset += this.perPage;
+    this.loading = true;
+    this.campaignService.search(this.query).subscribe(campaignSummaries => {
+      // Success
+      this.children = [...this.children, ...campaignSummaries];
+      this.loading = false;
+    }, () => {
+      this.filterError = true; // Error, e.g. slug not known
+      this.loading = false;
+    });
+  }
+
+  private moreMightExist(): boolean {
+    return (this.children.length === (this.query.limit + this.query.offset));
+  }
+
   private run() {
+    this.query.offset = 0;
     this.children = [];
     this.loading = true;
     this.campaignService.search(this.query).subscribe(campaignSummaries => {

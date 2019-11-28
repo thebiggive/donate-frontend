@@ -22,6 +22,7 @@ import {
 } from '@angular/material';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -80,6 +81,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     BrowserTransferStateModule,
     FlexLayoutModule,
     HttpClientModule,
+    InfiniteScrollModule,
     MatButtonModule,
     MatCardModule,
     MatDialogModule,
