@@ -87,7 +87,9 @@
   list-style: none;
 }
 
-.c-budget__item {
+.c-budget__item,
+.c-details,
+.c-impact {
   white-space: pre-wrap;
 }
 
