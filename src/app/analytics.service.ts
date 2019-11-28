@@ -51,7 +51,7 @@ export class AnalyticsService {
     this.sendEvent(JSON.stringify(amountsSuggested), {
       event_category: 'donate_amount_chosen',
       event_label: `Donation to campaign ${campaignId}`,
-      event_value: amountChosen,
+      value: amountChosen,
     });
   }
 
