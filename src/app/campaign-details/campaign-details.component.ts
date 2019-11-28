@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, makeStateKey, SafeResourceUrl, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 
@@ -11,7 +12,7 @@ import { PageMetaService } from '../page-meta.service';
   templateUrl: './campaign-details.component.html',
   styleUrls: ['./campaign-details.component.scss'],
 })
-export class CampaignDetailsComponent implements OnInit {
+export class CampaignDetailsComponent implements OnInit, OnDestroy {
   public campaign: Campaign;
   public campaignId: string;
   public clientSide: boolean;
@@ -20,9 +21,13 @@ export class CampaignDetailsComponent implements OnInit {
   public percentRaised?: number;
   public videoEmbedUrl?: SafeResourceUrl;
 
+  private timer: any; // State update setTimeout reference, for client side when donations open soon
+
   constructor(
     private campaignService: CampaignService,
     private pageMeta: PageMetaService,
+    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
+    @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
     private state: TransferState,
@@ -50,8 +55,26 @@ export class CampaignDetailsComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    if (isPlatformBrowser(this.platformId) && this.timer) {
+      window.clearTimeout(this.timer);
+      this.timer = undefined;
+    }
+  }
+
   private setSecondaryProps(campaign: Campaign) {
     this.donateEnabled = CampaignService.isOpenForDonations(campaign);
+
+    // If donations open within 24 hours, set a timer to update this page's state.
+    if (!this.donateEnabled && isPlatformBrowser(this.platformId)) {
+      const msToLaunch = new Date(campaign.startDate).getTime() - Date.now();
+      if (msToLaunch > 0 && msToLaunch < 86400000) {
+        this.timer = setTimeout(() => {
+          this.donateEnabled = true;
+         }, msToLaunch);
+      }
+    }
+
     this.percentRaised = CampaignService.percentRaised(campaign);
 
     let summaryStart;
