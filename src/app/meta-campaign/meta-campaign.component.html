@@ -16,8 +16,6 @@
     (sortApplied)="onSortApplied($event)"
   ></app-filters>
 
-  <mat-spinner *ngIf="loading" color="accent" diameter="30"></mat-spinner>
-
   <div *ngIf="campaign && children.length === 0 && !loading && !filterError">
     <p class="error">
       We can't find any campaigns matching this search but there are lots more to choose from.
@@ -27,15 +25,18 @@
 
   <div class="c-grid">
     <div class="c-grid__card" *ngFor="let campaign of children">
+      <div
+        infiniteScroll
+        (scrolled)="onScroll()"
+        [infiniteScrollDistance]="20"
+        [scrollWindow]="true"
+        [alwaysCallback]="true"
+      ></div>
       <app-campaign-card [campaign]="campaign" [inFundContext]="!!fund"></app-campaign-card>
     </div>
   </div>
 
-  <p class="c-more-campaigns b-center" *ngIf="moreMightExist()">
-    <button class="b-donate-button" mat-raised-button (click)="more()">
-      More Charities
-    </button>
-  </p>
+  <mat-spinner *ngIf="loading" color="accent" diameter="30"></mat-spinner>
 </div>
 
 <div *ngIf="filterError">
