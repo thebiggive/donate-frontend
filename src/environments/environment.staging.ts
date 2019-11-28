@@ -10,7 +10,7 @@ export const environment = {
   donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,
-  suggestedAmounts: [],
+  suggestedAmounts: [{weight: 1, values: [30, 100, 250]}, {weight: 9, values: []}], // Suggestions for 10% of donors, none for 90%
   thanksUriPrefix: 'https://donate-staging.thebiggivetest.org.uk/thanks/',
 };
 
