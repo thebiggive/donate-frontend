@@ -5,26 +5,17 @@
 // would stretch it when combined with that) but use this to ensure the card can't
 // grow to a height that breaks the layout.
 
-.card {
+.c-card {
   @include make-card;
   display:flex;
   flex-direction:column;
   height:100%;
 }
 
-.banner-image {
-  width: 100%;
+.c-banner__image {
   height: auto;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-}
-
-.buttons {
-  margin-top:auto;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items:center;
 }
 
 ul {
@@ -32,113 +23,116 @@ ul {
   padding: 0;
 }
 
-.card-header {
+.c-header {
   padding-left: 2rem;
   padding-right: 2rem;
 }
 
-.charity-name {
+.c-header__charity-name {
   margin-top: 0.75rem;
   margin-bottom: 0;
-  color: $colour-grey;
-  font-size: 1rem;
-  font-weight: 400;
-  text-transform: uppercase;
+  @include size-md;
   letter-spacing: 1px;
+  @media #{$breakpoint-md} {
+    min-height: 48px;
+    display: flex;
+    align-items: flex-end;
+    line-height: 1.5;
+  }
 }
 
-.campaign-title {
-  margin: 0 0 .75rem 0;
+.c-header__campaign-title {
+  margin: 0 0 .75rem;
   color: $colour-teal-dark;
   @include size-lg;
   @media #{$breakpoint-md} {
     min-height: 48px;
   }
-
-  a {
-    text-decoration: none;
-  }
 }
 
-.campaign-categories__wrap {
+.c-header__link {
+  text-decoration: none;
+}
+
+.c-categories {
   overflow-x: scroll;
   white-space:nowrap;
   margin-left: 0.5rem;
   padding-bottom: 0.5rem;
 }
 
-.campaign-categories {
+.c-categories__list {
   margin:0 0.5rem;
   margin-left: 0;
   display: inline;
 }
 
-.campaign-categories__category {
+.c-categories__item {
+  @include size-md;
   background-color: $colour-teal-fade;
   color: $colour-teal;
   border-radius: 14px;
-  padding-left: 0.75rem;
-  padding-bottom: 0.25rem;
-  padding-right: 0.75rem;
+  padding: 0.15rem 0.75rem 0.25rem;
   margin-right: 0.5rem;
+  display: inline;
   &:last-child {
     margin-right: 0;
   }
 }
 
-.funds {
+.c-funds {
   padding: 1rem 2rem;
   color: $colour-grey;
 }
 
-p {
+.c-funds__description {
+  @include size-md;
+  color: $colour-grey;
   margin-top: 0;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
   line-height: 1;
 }
 
-.matched-funds {
+.c-funds__matched {
   padding-right: 0.25rem;
-  p {
-    margin-bottom: 0.5rem;
-  }
 }
 
-.total-funds {
+.c-funds__total {
   padding-left: 0.25rem;
-  p {
-    margin-bottom: 0.5rem;
+
+  .c-funds__amount {
+    color: $colour-teal;
   }
 }
 
-.matched-funds__amount,
-.total-funds__amount {
+.c-funds__amount {
   margin-top: 0;
   margin-bottom: 0;
   font-size:20px;
 }
 
-.total-funds__amount {
-  color: $colour-teal;
+.c-buttons {
+  margin-top:auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items:center;
 }
 
-.mat-icon-button,
-.donate-button {
+.c-buttons__more,
+.c-buttons__donate {
   margin: 0;
   min-width: 85px;
 }
 
-.mat-icon-button {
+.c-buttons__more {
   font-weight: 400;
-  .mat-icon {
-    line-height: 22px;
-  }
 }
 
-.donate-button {
-  @include make-donate-button;
+.c-buttons__more-icon {
+  line-height: 22px;
 }
 
-.more-button {
-  font-size:18px !important;
+.c-buttons__more {
+  font-size:18px;
 }

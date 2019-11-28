@@ -1,0 +1,107 @@
+// Write all class styling inside elements where possible
+
+.mat-menu-trigger {
+  cursor: pointer;
+}
+
+.mat-menu-content {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  li {
+    display: block;
+    a {
+      display: block;
+      text-align: left;
+    }
+  }
+}
+
+.mat-ripple {
+  display: none;
+}
+
+mat-progress-bar {
+  border-radius: 4px;
+  height: 5px;
+  margin-bottom: 15px;
+  .mat-progress-bar-background {
+    display:none !important;
+  }
+  .mat-progress-bar-fill::after {
+    background: $colour-teal-dark;
+  }
+  .mat-progress-bar-buffer {
+    background: $colour-teal;
+    opacity: 0.24;
+  }
+}
+
+mat-radio-button {
+  margin-bottom: 1rem;
+  .mat-radio-label {
+    white-space:initial;
+    @include b-rt-0;
+  }
+}
+
+mat-expansion-panel {
+  margin-bottom: 16px;
+
+  .mat-expansion-panel-header {
+    padding: 0 1rem;
+    @media #{$breakpoint-lg} {
+      padding: 1rem 2rem 0;
+    }
+  }
+
+  .mat-expansion-panel-header {
+    height: auto !important;
+  }
+
+  .mat-expansion-panel-header[aria-disabled=true] {
+    color: inherit;
+  }
+
+  .mat-expansion-indicator::after {
+    color: $colour-teal-darker;
+    border-width: 0 3px 3px 0;
+    padding: 5px;
+  }
+
+  .mat-expansion-panel-body {
+    padding: 0 1rem 1rem;
+    @media #{$breakpoint-lg} {
+      padding: 0 2rem 2rem;
+    }
+  }
+}
+
+mat-form-field {
+  .mat-form-field-label {
+
+  }
+}
+
+mat-toolbar {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+button.mat-icon-button {
+  // Work around Safari layout issue where text following buttons was cut off.
+  // Observed in top sidenav and 'back' links next to `keyboard_arrow_left` icons.
+  width: auto;
+}
+
+mat-spinner {
+  margin: 1rem auto;
+}
+
+app-campaign-card {
+  width: 100%;
+}

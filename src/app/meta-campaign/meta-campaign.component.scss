@@ -1,10 +1,7 @@
 @import '../../styles';
 
-.card-section {
-  @include make-container;
-}
 
-.cards-grid {
+.c-grid {
   width: 100%;
   display: grid;
   grid-template-columns: 100%;
@@ -20,10 +17,6 @@
   }
 }
 
-app-campaign-card {
-  width: 100%;
-}
-
 .error {
   color: mat-color($donate-warn);
   max-width: 600px;
@@ -31,18 +24,10 @@ app-campaign-card {
   margin: 1rem auto;
 }
 
-.mat-grid-tile {
-  overflow: visible;
+.c-more-campaigns {
+  padding: 5rem 0;
 }
 
 .mat-spinner {
   margin: 3rem auto 0;
-}
-
-.more-campaigns {
-  padding:5rem 0;
-  text-align:center;
-  button {
-    @include make-donate-button;
-  }
 }

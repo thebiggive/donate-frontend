@@ -29,7 +29,7 @@ export class DonationStartComponent implements OnInit {
   public campaign: Campaign;
   public donationForm: FormGroup;
   public retrying = false;
-  public suggestedAmounts = [30, 100, 250];
+  public suggestedAmounts: number[];
   public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
   public validationError = false;         // Internal Angular app form validation error
@@ -58,21 +58,24 @@ export class DonationStartComponent implements OnInit {
   }
 
   ngOnInit() {
+    const suggestedAmountsKey = makeStateKey<number[]>('suggested-amounts');
+    this.suggestedAmounts = this.state.get(suggestedAmountsKey, undefined);
+    if (!this.suggestedAmounts) {
+      this.suggestedAmounts = this.getSuggestedAmounts();
+      this.state.set(suggestedAmountsKey, this.suggestedAmounts);
+    }
+
     const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
     this.campaign = this.state.get(campaignKey, undefined);
 
-    if (!this.campaign) {
+    if (this.campaign) {
+      this.handleCampaign(this.campaign);
+    } else {
       this.campaignService.getOneById(this.campaignId)
         .subscribe(campaign => {
           this.state.set(campaignKey, campaign);
           this.campaign = campaign;
-
-          if (!CampaignService.isOpenForDonations(campaign)) {
-            this.router.navigateByUrl(`/campaign/${campaign.id}`);
-            return;
-          }
-
-          this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
+          this.handleCampaign(campaign);
         });
     }
 
@@ -229,6 +232,42 @@ export class DonationStartComponent implements OnInit {
       );
   }
 
+  /**
+   * Redirect if campaign's not open yet; set up page metadata if it is
+   */
+  private handleCampaign(campaign: Campaign) {
+    if (!CampaignService.isOpenForDonations(campaign)) {
+      this.router.navigateByUrl(`/campaign/${campaign.id}`);
+      return;
+    }
+
+    this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
+  }
+
+  private getSuggestedAmounts(): number[] {
+    if (!this.suggestedAmounts) {
+      if (environment.suggestedAmounts.length === 0) {
+        return [];
+      }
+
+      // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
+      let thresholdCounter = 0;
+      for (const suggestedAmount of environment.suggestedAmounts) {
+        thresholdCounter += suggestedAmount.weight;
+      }
+      const threshold = Math.floor(Math.random() * thresholdCounter);
+
+      thresholdCounter = 0;
+      for (const suggestedAmount of environment.suggestedAmounts) {
+        thresholdCounter += suggestedAmount.weight;
+
+        if (thresholdCounter > threshold) {
+          return suggestedAmount.values;
+        }
+      }
+    }
+  }
+
   private offerExistingDonation(donation: Donation) {
     this.submitting = true;
     this.analyticsService.logEvent('existing_donation_offered', `Found pending donation to campaign ${this.campaignId}`);
@@ -276,6 +315,7 @@ export class DonationStartComponent implements OnInit {
   }
 
   private redirectToCharityCheckout(donation: Donation) {
+    this.analyticsService.logAmountChosen(donation.donationAmount, this.suggestedAmounts, this.campaignId);
     this.analyticsService.logEvent('payment_redirect_click', `Donating to campaign ${this.campaignId}`);
     this.charityCheckoutService.startDonation(donation);
   }
@@ -283,6 +323,7 @@ export class DonationStartComponent implements OnInit {
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
     this.analyticsService.logEvent('alerted_no_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
+      'Match funds not available',
       'There are no match funds currently available for this campaign so your donation will not be matched.',
       'Remember every penny helps & you can continue to make an unmatched donation to the charity!',
       'Cancel',
@@ -296,6 +337,7 @@ export class DonationStartComponent implements OnInit {
   private promptToContinueWithPartialMatching(donation: Donation) {
     this.analyticsService.logEvent('alerted_partial_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
+      'Not all match funds are available',
       'There are not enough match funds currently available to fully match your donation. ' +
         `£${donation.matchReservedAmount} will be matched.`,
       'Remember every penny helps & you can continue to make a partially matched donation to the charity!',
@@ -304,9 +346,9 @@ export class DonationStartComponent implements OnInit {
     );
   }
 
-  private promptToContinue(status: string, statusDetail: string, cancelCopy: string, donation: Donation) {
+  private promptToContinue(title: string, status: string, statusDetail: string, cancelCopy: string, donation: Donation) {
     const continueDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
-      data: { cancelCopy, status, statusDetail },
+      data: { cancelCopy, status, statusDetail, title },
       disableClose: true,
       role: 'alertdialog',
     });

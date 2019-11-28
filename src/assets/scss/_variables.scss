@@ -1,0 +1,25 @@
+$colour-red: #f0423b;
+$colour-teal-lightest: #CAE8EC;  // Should be lighter
+$colour-teal-lighter: #6ADDC0;   // Should be lightest
+$colour-teal-light: #EAF6F7;
+$colour-teal-lightish: #69BEC9;
+$colour-teal: #00838f;
+$colour-teal-dark: #00707C;
+$colour-teal-darker: #006672;
+$colour-teal-darkest: #005360;
+$colour-teal-fade: #E0F0F2;
+$colour-grey-light: #E1E2E5;
+$colour-grey: #7B8292;
+$colour-black: #333;
+$colour-highlight: #FDA83B;
+
+$breakpoint-md: "(min-width: 600px)";
+$breakpoint-lg: "(min-width: 960px)";
+$breakpoint-xl: "(min-width: 1280px)";
+$box-shadow-soft: 0px 11px 15px rgba(0, 0, 0, 0.05), 0px 9px 46px rgba(0, 0, 0, 0.05), 0px 24px 38px rgba(0, 0, 0, 0.05);
+$box-shadow: $box-shadow-soft;
+$box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);
+
+$box-shadow-soft: 0px 11px 15px rgba(0, 0, 0, 0.05), 0px 9px 46px rgba(0, 0, 0, 0.05), 0px 24px 38px rgba(0, 0, 0, 0.05);
+$box-shadow: $box-shadow-soft;
+$box-shadow-hard: 0px 1px 3px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 0px 2px rgba(0, 0, 0, 0.14);

@@ -1,17 +1,17 @@
 <div [class]="'hero ' + (webp ? 'webp-bg' : 'nowebp-bg')">
   <app-ticker [campaign]="campaign" [fund]="fund"></app-ticker>
 
-  <div class="hero__content">
+  <div class="b-container-sm">
     <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center">
       <div class="hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
         <div fxLayout="column">
-          <h1>
-            <img *ngIf="fund && fund.logoUri" [src]="fund.logoUri + '?width=300'" [alt]="fund.name">
+          <h1 class="c-hero__heading">
+            <img class="c-hero__image" *ngIf="fund && fund.logoUri" [src]="fund.logoUri + '?width=660'" [alt]="fund.name">
             {{ title }}
           </h1>
         </div>
         <div fxLayout="column">
-          <h2>{{ description }}</h2>
+          <h2 class="c-hero__description b-light b-rt-1">{{ description }}</h2>
         </div>
       </div>
       <div class="hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">

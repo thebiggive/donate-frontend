@@ -1,28 +1,10 @@
 @import '../../styles';
 
-.donate-start {
-  @include make-container;
-}
 
-.primary-column {
-  @include make-primary-column;
-}
-
-.secondary-column {
-  @include make-secondary-column;
-}
-
-.campaign-button {
-  @include make-back-button
-}
-
-.page-header {
-  color: $colour-teal-darker;
-  h3,
-  p {
+.c-header {
+  h3 {
     margin: 0;
     margin-top: 0.25rem;
-    font-weight: 400;
   }
   h1,
   h2 {
@@ -30,16 +12,15 @@
   }
 }
 
-form {
+.c-donate-form {
   margin: 2rem auto;
   h3 {
-    color: $colour-teal-darker;
     margin-top: 1rem;
     margin-bottom: 1rem;
   }
 }
 
-.your-donation {
+.c-your-donation {
   p {
     margin: 0;
     &:last-of-type {
@@ -48,7 +29,7 @@ form {
   }
 }
 
-p.your-donation__highlight {
+.c-your-donation__highlight {
   background: $colour-highlight;
   color: $colour-teal-darkest;
   border-radius: 4px;
@@ -62,28 +43,17 @@ p.your-donation__highlight {
   }
 }
 
-.centered-p {
-  text-align: center;
-  color: $colour-grey;
-}
-
 .no-margin-top {
   margin-top: 0;
 }
 
-.mat-form-field {
-  max-width: 600px;
+.c-your-donation__form-field {
+  max-width: 200px;
   margin: 0 auto;
-  text-align: center;
-  font-size: 24px;
-  font-weight: 700;
+  display: block;
 }
 
-p.rt-0 mat-icon {
-  vertical-align: middle;
-}
-
-.suggested-amount__button {
+.c-suggested-amount__button {
   flex: 1 0 auto;
   width: calc((100 - 1rem) / 3);
   background-color: $colour-teal-light;
@@ -92,10 +62,7 @@ p.rt-0 mat-icon {
   border: none;
   border-radius: 4px;
   margin-right: 0.5rem;
-  color: $colour-teal;
-  font-family: "Maven Pro", sans-serif;
-  font-weight: 500;
-  @include rt-2;
+  @include b-rt-2;
   &:last-child {
     margin-right: 0;
   }
@@ -107,98 +74,41 @@ p.rt-0 mat-icon {
   }
 }
 
-.mat-radio-label {  // Not working
-  white-space: normal;
-}
-
 a {
   text-decoration: none;
 }
 
-.mat-raised-button {
-  @include make-donate-button;
-  @include size-lg;
-  font-weight: 400;
-  width: 100%;
-  padding: 0.125rem 1rem;
-  strong {
-    line-height: 3;
-  }
+.c-donate-button {
+  padding: 1.5rem;
 }
 
-.make-your-donation {
-  p {
-    margin: 0;
-    small {
-      font-size: 12px;
-    }
-  }
-  .mat-icon.plus {
-    color: $colour-grey;
-    font-size: 1rem;
-    font-weight: bolder;
-    text-align: center;
-  }
-}
-
-.donation-receipt {
+.c-donation-receipt {
   margin-top:1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid $colour-grey-light;
-  .strong-p {
-    margin-top: 0.25rem;
-  }
-
-  div {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    .strong-p {
-      margin-top: auto;
-    }
-  }
 }
 
-.small-p {
-  line-height: 1;
+.c-donation-receipt__icon {
+  @include size-md;
 }
 
-.receipt-total {
+.c-donation-receipt__gift-aid {
+  display:flex;
+  flex-direction:column;
+  justify-content: space-between;
+  align-items:center;
+}
+
+.c-receipt-total {
   margin-top: 0.5rem;
-  color: $colour-grey;
-  h3 {
-    color: $colour-grey;
-    margin: 0;
-  }
 }
 
-.donation-summary {
+.c-donation-summary {
   max-width: 300px;
   margin: 1rem auto;
-  mat-spinner {
-    margin: 1rem auto;
-  }
-}
-
-.mat-raised-button[_ngcontent-donate-frontend-c1]:not([class*=mat-elevation-z]) {
-  box-shadow: none;
 }
 
 .error {
   color: mat-color($donate-warn);
   margin-bottom: 1rem;
-}
-
-mat-form-field, mat-radio-group {
-  margin-bottom: 0.5rem;
-}
-
-mat-form-field, mat-label, mat-radio-group {
-  display: block;
-  width: 100%;
-}
-
-mat-radio-button {
-  margin-right: 2rem;
 }

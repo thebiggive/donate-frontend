@@ -57,7 +57,9 @@ export class MetaCampaignComponent implements OnInit {
       this.fund = this.state.get(fundKey, undefined);
     }
 
-    if (!this.campaign) {
+    if (this.campaign) {
+      this.setSecondaryProps(this.campaign);
+    } else {
       if (this.campaignId) {
         this.campaignService.getOneById(this.campaignId).subscribe(campaign => this.setCampaign(campaign, metacampaignKey));
       } else {
@@ -161,6 +163,10 @@ export class MetaCampaignComponent implements OnInit {
   private setCampaign(campaign: Campaign, metacampaignKey: StateKey<Campaign>) {
     this.state.set(metacampaignKey, campaign); // Have data ready for client when handing over from SSR
     this.campaign = campaign;
+    this.setSecondaryProps(campaign);
+  }
+
+  private setSecondaryProps(campaign: Campaign) {
     this.pageMeta.setCommon(
       campaign.title,
       `Browse campaigns in ${campaign.title}`,

@@ -10,6 +10,7 @@ export const environment = {
   donationsApiPrefix: 'http://localhost:30030/v1',
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,
+  suggestedAmounts: [{weight: 1, values: [30, 100, 250]}, {weight: 4, values: [10, 20, 30]}],
   thanksUriPrefix: 'http://localhost:4200/thanks/',
 };
 
