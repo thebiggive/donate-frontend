@@ -1,3 +1,5 @@
+<mat-spinner *ngIf="!campaign" class="b-full-page" color="accent" diameter="30"></mat-spinner>
+
 <div class="b-container" *ngIf="campaign">
   <div class="b-back-button">
     <button mat-icon-button class="c-campaign-button" [routerLink]="'/campaign/' + campaign.id">
