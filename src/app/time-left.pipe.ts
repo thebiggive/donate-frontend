@@ -18,11 +18,11 @@ export class TimeLeftPipe implements PipeTransform {
       value: 3600000,
     },
     {
-      label: 'minute',
+      label: 'min',
       value: 60000,
     },
     {
-      label: 'second',
+      label: 'sec',
       value: 1000,
     },
   ];
@@ -39,7 +39,7 @@ export class TimeLeftPipe implements PipeTransform {
       }
     }
 
-    return '0 seconds';
+    return '0 secs';
   }
 
   private buildForUnit(date: Date, microsecsInUnit: number): number {

@@ -9,7 +9,7 @@ describe('TimeLeftPipe', () => {
   it('returns 1 minute correctly', () => {
     const futureDate = new Date((new Date()).getTime() + 61000); // 61 seconds in the future
 
-    expect((new TimeLeftPipe()).transform(futureDate)).toEqual('1 minute');
+    expect((new TimeLeftPipe()).transform(futureDate)).toEqual('1 min');
   });
 
   it('returns 23 hours correctly', () => {
