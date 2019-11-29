@@ -23,25 +23,25 @@ describe('TimeLeftPipe', () => {
   it('returns 0 seconds for past times', () => {
     const futureDate = new Date((new Date()).getTime() - 100000);
 
-    expect(pipe.transform(futureDate)).toEqual('0 seconds');
+    expect(pipe.transform(futureDate)).toEqual('0 secs');
   });
 
   it('returns 0 seconds for very near future times', () => {
     const futureDate = new Date((new Date()).getTime() + 100); // 0.1 seconds in the future
 
-    expect(pipe.transform(futureDate)).toEqual('0 seconds');
+    expect(pipe.transform(futureDate)).toEqual('0 secs');
   });
 
-  it('returns 1 second correctly', () => {
+  it('returns 1 sec correctly', () => {
     const futureDate = new Date((new Date()).getTime() + 1100); // 1.1 seconds in the future
 
-    expect(pipe.transform(futureDate)).toEqual('1 second');
+    expect(pipe.transform(futureDate)).toEqual('1 sec');
   });
 
-  it('returns 1 minute correctly', () => {
+  it('returns 1 min correctly', () => {
     const futureDate = new Date((new Date()).getTime() + 61000); // 61 seconds in the future
 
-    expect(pipe.transform(futureDate)).toEqual('1 minute');
+    expect(pipe.transform(futureDate)).toEqual('1 min');
   });
 
   it('returns 23 hours correctly', () => {
