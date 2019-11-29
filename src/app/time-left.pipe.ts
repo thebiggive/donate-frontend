@@ -25,11 +25,11 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
       value: 3600000,
     },
     {
-      label: 'minute',
+      label: 'min', // We abbreviate to 'mins' and 'secs' to keep current card layout looking good
       value: 60000,
     },
     {
-      label: 'second',
+      label: 'sec',
       value: 1000,
     },
   ];
@@ -64,7 +64,7 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
         }
       }
 
-      return '0 seconds';
+      return '0 secs';
     }));
   }
 
