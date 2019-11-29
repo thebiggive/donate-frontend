@@ -14,6 +14,7 @@ describe('CharityCheckoutDonation model', () => {
       donationMatched: true,
       donationId: 'someDonationId',
       giftAid: true,
+      matchReservedAmount: 1100.00,
       optInCharityEmail: true,
       optInTbgEmail: false,
       projectId: 'someProjectId',
@@ -31,6 +32,26 @@ describe('CharityCheckoutDonation model', () => {
     expect(charityCheckoutDonation.reservation_time).toBeLessThanOrEqual(Math.floor((new Date()).getTime()));
     expect(charityCheckoutDonation.share_details_with_charity).toBe('1'); // Always true
     expect(charityCheckoutDonation.unique_ID).toBe('someDonationId');
+  });
+
+  it('should not start a reservation timer if no matching could be allocated', () => {
+    // As above except for zero reserved match funds
+    const donation: Donation = {
+      charityId: 'someCharityId',
+      charityName: 'My Test Charity',
+      donationAmount: 1234.56,
+      donationMatched: true,
+      donationId: 'someDonationId',
+      giftAid: true,
+      matchReservedAmount: 0.00,
+      optInCharityEmail: true,
+      optInTbgEmail: false,
+      projectId: 'someProjectId',
+    };
+    const charityCheckoutDonation: CharityCheckoutDonation = new CharityCheckoutDonation(donation);
+
+    expect(charityCheckoutDonation.donation_type).toBe('em1');
+    expect(charityCheckoutDonation.reservation_time).toBeNull();
   });
 
   it('should translate a donation with all opt-ins but TBG contact false correctly', () => {

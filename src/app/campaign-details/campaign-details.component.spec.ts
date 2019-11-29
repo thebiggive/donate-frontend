@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule, MatProgressBarModule, MatTabsModule } from '@angular/material';
+import { MatIconModule, MatProgressBarModule, MatProgressSpinnerModule, MatTabsModule } from '@angular/material';
 import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -22,6 +22,7 @@ describe('CampaignDetailsComponent', () => {
         HttpClientTestingModule,
         MatIconModule,
         MatProgressBarModule,
+        MatProgressSpinnerModule,
         MatTabsModule,
         NoopAnimationsModule,
         RouterTestingModule,
@@ -41,7 +42,14 @@ describe('CampaignDetailsComponent', () => {
       'https://example.com/banner.png',
       [],
       'Some Champion',
-      { id: 'testCharityId', name: 'Test Charity' },
+      {
+        id: 'testCharityId',
+        name: 'Test Charity',
+        donateLinkId: 'SFIdOrLegacyId',
+        website: 'https://www.testcharity.co.uk',
+        regulatorNumber: '123456',
+        regulatorRegion: 'Scotland',
+      },
       4,
       new Date(),
       [],

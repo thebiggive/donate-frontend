@@ -57,8 +57,12 @@ describe('HeroComponent', () => {
       ],
       'The Big Give Match Fund',
       {
-        name: 'Awesome Charity',
         id: '0011r00002HHAprAAH',
+        name: 'Awesome Charity',
+        donateLinkId: 'SFIdOrLegacyId',
+        website: 'https://www.awesomecharity.co.uk',
+        regulatorNumber: '123456',
+        regulatorRegion: 'Scotland',
       },
       4,
       new Date(),

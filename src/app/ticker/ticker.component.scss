@@ -47,13 +47,13 @@
   margin-top: 4px;
   margin-bottom: 4px;
   @media #{$breakpoint-md} {
-    animation-duration: 20s;
+    animation-duration: 15s;
   }
   @media #{$breakpoint-lg} {
-    animation-duration: 30s;
+    animation-duration: 20s;
   }
   @media #{$breakpoint-xl} {
-    animation-duration: 20s;
+    animation-duration: 15s;
   }
 
   // IE11 really can't handle the moving bar's layout, so to keep the basics usable, for now

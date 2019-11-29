@@ -224,6 +224,10 @@ export class DonationStartComponent implements OnInit {
     return parseFloat(this.donationForm.value.donationAmount) + this.giftAidAmount() + this.expectedMatchAmount();
   }
 
+  /**
+   * Unlike the CampaignService method which is more forgiving if the status gets stuck Active (we don't trust
+   * these to be right in Salesforce yet), this check relies solely on campaign dates.
+   */
   campaignIsOpen(): boolean {
     return (
       this.campaign
@@ -237,7 +241,7 @@ export class DonationStartComponent implements OnInit {
    */
   private handleCampaign(campaign: Campaign) {
     if (!CampaignService.isOpenForDonations(campaign)) {
-      this.router.navigateByUrl(`/campaign/${campaign.id}`);
+      this.router.navigateByUrl(`/campaign/${campaign.id}`, { replaceUrl: true });
       return;
     }
 

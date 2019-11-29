@@ -103,3 +103,7 @@
 .b-uppercase {
   text-transform: uppercase;
 }
+
+mat-spinner.b-full-page {
+  margin-bottom: 1500px; // Reduce perceived footer glitches during page load
+}

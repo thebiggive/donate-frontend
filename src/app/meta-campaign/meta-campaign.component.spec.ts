@@ -14,6 +14,7 @@ import {
 import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { Campaign } from '../campaign.model';
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
@@ -43,6 +44,7 @@ describe('MetaCampaignComponent', () => {
       imports: [
         BrowserTransferStateModule,
         HttpClientTestingModule,
+        InfiniteScrollModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatCardModule,
         MatGridListModule,
@@ -71,7 +73,13 @@ describe('MetaCampaignComponent', () => {
       'https://example.com/banner.png',
       [],
       undefined,
-      { id: 'tbgId', name: 'The Big Give' },
+      {
+        id: 'tbgId',
+        name: 'The Big Give',
+        donateLinkId: 'SFIdOrLegacyId',
+        website: 'https://www.thebiggive.org.uk',
+        regulatorNumber: '123456',
+        regulatorRegion: 'Scotland' },
       4,
       new Date(),
       [],

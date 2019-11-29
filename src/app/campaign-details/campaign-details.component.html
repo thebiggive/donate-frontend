@@ -1,3 +1,5 @@
+<mat-spinner *ngIf="!campaign" class="b-full-page" color="accent" diameter="30"></mat-spinner>
+
 <div class="b-container" *ngIf="campaign">
   <div class="b-back-button">
     <button *ngIf="campaign.parentRef && fromFund" mat-icon-button class="c-listing-button block" [routerLink]="'/' + campaign.parentRef + '/' + campaign.championRef">
@@ -44,6 +46,10 @@
           >
           <img class="c-social__icon" src="/assets/images/icon-twitter.png" alt="Twitter">
         </a>
+      </p>
+
+      <p *ngIf="campaign.charity.regulatorRegion != 'Exempt'">
+        Registered Charity in {{ campaign.charity.regulatorRegion }} ({{ campaign.charity.regulatorNumber }})
       </p>
     </div>
 

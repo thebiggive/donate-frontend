@@ -21,7 +21,7 @@
     </div>
     <div fxLayout="row">
       <div class="c-campaign-status" *ngIf="campaign.status == 'Active'" fxFlex="50">
-        <p class="c-campaign-status__description b-grey b-light">Days left</p>
+        <p class="c-campaign-status__description b-grey b-light">Time left</p>
         <p class="c-campaign-status__value b-bold">{{ campaign.endDate | timeLeft }}</p>
       </div>
       <div class="c-campaign-donations" fxFlex="50">
