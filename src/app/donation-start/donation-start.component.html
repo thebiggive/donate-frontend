@@ -2,10 +2,10 @@
 
 <div class="b-container" *ngIf="campaign">
   <div class="b-back-button">
-    <button mat-icon-button class="c-campaign-button" [routerLink]="'/campaign/' + campaign.id">
+    <a mat-icon-button class="c-campaign-button" [routerLink]="'/campaign/' + campaign.id">
       <mat-icon class="campaign-icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
       Back to campaign
-    </button>
+    </a>
   </div>
 
   <div fxLayout="row" fxLayout.xs="column">
