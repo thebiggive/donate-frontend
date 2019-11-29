@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { Campaign } from '../campaign.model';
-import { CampaignService } from './../campaign.service';
+import { CampaignService } from '../campaign.service';
 import { Fund } from '../fund.model';
 
 @Component({
