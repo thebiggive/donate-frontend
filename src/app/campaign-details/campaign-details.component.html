@@ -47,6 +47,10 @@
           <img class="c-social__icon" src="/assets/images/icon-twitter.png" alt="Twitter">
         </a>
       </p>
+
+      <p *ngIf="campaign.charity.regulatorRegion != 'Exempt'">
+        Registered Charity in {{ campaign.charity.regulatorRegion }} ({{ campaign.charity.regulatorNumber }})
+      </p>
     </div>
 
     <div class="b-secondary-column">
