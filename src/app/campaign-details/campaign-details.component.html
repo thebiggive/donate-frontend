@@ -34,17 +34,25 @@
         {{ campaign.charity.website }}
       </a>
 
-      <p class="c-social" *ngIf="campaign.charity.facebook || campaign.charity.twitter">
+      <p class="c-social">
         <a class="c-social__link" *ngIf="campaign.charity.facebook" [href]="campaign.charity.facebook"
-          target="_blank" title="Open {{ campaign.charity.name }}'s Facebook Page in a new tab"
-          >
+          target="_blank" title="Open {{ campaign.charity.name }}'s Facebook page in a new tab">
           <img class="c-social__icon" src="/assets/images/icon-facebook.png" alt="Facebook">
         </a>
 
         <a class="c-social__link" *ngIf="campaign.charity.twitter" [href]="campaign.charity.twitter"
-          target="_blank" title="Open {{ campaign.charity.name }}'s Twitter profile in a new tab"
-          >
+          target="_blank" title="Open {{ campaign.charity.name }}'s Twitter profile in a new tab">
           <img class="c-social__icon" src="/assets/images/icon-twitter.png" alt="Twitter">
+        </a>
+
+        <a class="c-social__link" *ngIf="campaign.charity.instagram" [href]="campaign.charity.instagram"
+          target="_blank" title="Open {{ campaign.charity.name }}'s Instagram profile in a new tab">
+          <img class="c-social__icon" src="/assets/images/icon-instagram.png" alt="Instagram">
+        </a>
+
+        <a class="c-social__link" *ngIf="campaign.charity.linkedin" [href]="campaign.charity.linkedin"
+          target="_blank" title="Open {{ campaign.charity.name }}'s LinkedIn page in a new tab">
+          <img class="c-social__icon" src="/assets/images/icon-linkedin.png" alt="LinkedIn">
         </a>
       </p>
 
