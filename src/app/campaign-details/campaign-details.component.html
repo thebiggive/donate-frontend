@@ -2,14 +2,14 @@
 
 <div class="b-container" *ngIf="campaign">
   <div class="b-back-button">
-    <button *ngIf="campaign.parentRef && fromFund" mat-icon-button class="c-listing-button block" [routerLink]="'/' + campaign.parentRef + '/' + campaign.championRef">
+    <a *ngIf="campaign.parentRef && fromFund" mat-icon-button class="c-listing-button block" [routerLink]="'/' + campaign.parentRef + '/' + campaign.championRef">
       <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
       All {{ campaign.championName }} campaigns<br>
-    </button>
-    <button class="c-listing-button" *ngIf="campaign.parentRef" mat-icon-button [routerLink]="'/' + campaign.parentRef">
+    </a>
+    <a class="c-listing-button" *ngIf="campaign.parentRef" mat-icon-button [routerLink]="'/' + campaign.parentRef">
       <mat-icon class="c-listing-icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
       All participating campaigns
-    </button>
+    </a>
     <a class="c-listing-button" *ngIf="!campaign.parentRef" mat-icon-button href="https://www.thebiggive.org.uk/s/explore-campaigns">
       <mat-icon class="c-listing-icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
       All campaigns
@@ -24,9 +24,9 @@
         <p class="c-header__description b-rt-1">{{campaign.summary}}</p>
       </div>
 
-      <button class="b-donate-button" mat-raised-button [routerLink]="'/donate/' + campaign.id" *ngIf="donateEnabled">
+      <a class="b-donate-button" mat-raised-button [routerLink]="'/donate/' + campaign.id" *ngIf="donateEnabled">
         Donate
-      </button>
+      </a>
       <p *ngIf="!donateEnabled">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 
       <a class="b-rt-0 b-bold b-db" *ngIf="campaign.charity.website" [href]="campaign.charity.website" target="_blank">
@@ -34,17 +34,25 @@
         {{ campaign.charity.website }}
       </a>
 
-      <p class="c-social" *ngIf="campaign.charity.facebook || campaign.charity.twitter">
+      <p class="c-social">
         <a class="c-social__link" *ngIf="campaign.charity.facebook" [href]="campaign.charity.facebook"
-          target="_blank" title="Open {{ campaign.charity.name }}'s Facebook Page in a new tab"
-          >
+          target="_blank" title="Open {{ campaign.charity.name }}'s Facebook page in a new tab">
           <img class="c-social__icon" src="/assets/images/icon-facebook.png" alt="Facebook">
         </a>
 
         <a class="c-social__link" *ngIf="campaign.charity.twitter" [href]="campaign.charity.twitter"
-          target="_blank" title="Open {{ campaign.charity.name }}'s Twitter profile in a new tab"
-          >
+          target="_blank" title="Open {{ campaign.charity.name }}'s Twitter profile in a new tab">
           <img class="c-social__icon" src="/assets/images/icon-twitter.png" alt="Twitter">
+        </a>
+
+        <a class="c-social__link" *ngIf="campaign.charity.instagram" [href]="campaign.charity.instagram"
+          target="_blank" title="Open {{ campaign.charity.name }}'s Instagram profile in a new tab">
+          <img class="c-social__icon" src="/assets/images/icon-instagram.png" alt="Instagram">
+        </a>
+
+        <a class="c-social__link" *ngIf="campaign.charity.linkedin" [href]="campaign.charity.linkedin"
+          target="_blank" title="Open {{ campaign.charity.name }}'s LinkedIn page in a new tab">
+          <img class="c-social__icon" src="/assets/images/icon-linkedin.png" alt="LinkedIn">
         </a>
       </p>
 
@@ -114,7 +122,7 @@
         <mat-tab *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" label="Where's the money going?">
           <ul class="c-budget" *ngFor="let detail of campaign.budgetDetails">
             <li class="c-budget__item">
-              <span class="c-budget__value">{{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</span>
+              <span class="c-budget__value b-semi-bold">{{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</span>
               &ndash; {{ detail.description }}
             </li>
           </ul>
