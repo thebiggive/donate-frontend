@@ -193,7 +193,7 @@ export class MetaCampaignComponent implements OnInit {
   private setSecondaryProps(campaign: Campaign) {
     this.pageMeta.setCommon(
       campaign.title,
-      `Browse campaigns in ${campaign.title}`,
+      campaign.summary,
       campaign.bannerUri,
     );
   }
