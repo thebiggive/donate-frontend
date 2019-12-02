@@ -10,6 +10,7 @@ export const environment = {
   charityCheckoutInitUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
   donateUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
   donationsApiPrefix: 'https://regtest1-biggive.cs105.force.com/donations/services/apexrest/v1.0',
+  getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,
   suggestedAmounts: [{weight: 1, values: [30, 100, 250]}],
