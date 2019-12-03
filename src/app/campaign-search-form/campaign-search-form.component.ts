@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 
@@ -8,6 +8,7 @@ import { Observable, Subscription } from 'rxjs';
   styleUrls: ['./campaign-search-form.component.scss'],
 })
 export class CampaignSearchFormComponent implements OnInit, OnDestroy {
+  @ViewChild('term', {static: false}) termField: ElementRef;
   @Input() campaignId: string;
   @Input() reset: Observable<void>;
   @Output() search: EventEmitter<any> = new EventEmitter();
@@ -23,7 +24,6 @@ export class CampaignSearchFormComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.searchForm = this.formBuilder.group({
       term: [null, [
-        Validators.required,
         Validators.minLength(2),
       ]],
     });
@@ -38,6 +38,15 @@ export class CampaignSearchFormComponent implements OnInit, OnDestroy {
   }
 
   submit() {
+    // If the donor hasn't ever clicked/tapped the 'term' field yet, they probably didn't mean to start a search,
+    // so in this case only treat empty input like an invalid form and point their focus to the field. Otherwise,
+    // do this only if the term is invalid based on length (exactly 1 character).
+    if (!this.searchForm.touched || !this.searchForm.valid) {
+      this.termField.nativeElement.focus();
+      return;
+    }
+
+    // In all valid cases, including an empty term, update the results.
     this.search.emit(this.searchForm.value.term);
   }
 }
