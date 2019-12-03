@@ -59,7 +59,15 @@ $app-typography: mat-typography-config(
 
 @include mat-core($app-typography);
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include angular-material-theme($donate-theme);
+// Include styles only for core + the components we use. SSR currently preloads the lot so it's important to keep
+// this as light (for page weight) as we can.
+// See https://github.com/angular/components/blob/master/guides/theming.md#theming-only-certain-components
+@include mat-core-theme($donate-theme);
+
+@include mat-button-theme($donate-theme);
+@include mat-dialog-theme($donate-theme);
+@include mat-form-field-theme($donate-theme);
+@include mat-menu-theme($donate-theme);
+@include mat-radio-theme($donate-theme);
+@include mat-select-theme($donate-theme);
+@include mat-tabs-theme($donate-theme);
