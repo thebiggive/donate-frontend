@@ -3,7 +3,9 @@ import { NavigationEnd, Router } from '@angular/router';
 
 import { environment } from '../environments/environment';
 
-declare var gsc: (...args) => void;
+declare var _gscq: {
+  push: (...args) => void,
+};
 
 /**
  * GetSiteControl JS is injected to provide social, cookie & feedback widgets.
@@ -25,9 +27,7 @@ export class GetSiteControlService {
 
     const scriptConfigureGSC = document.createElement('script');
     scriptConfigureGSC.innerHTML = `
-      window.gsc=window.gsc||function(){
-        (gsc.q=gsc.q||[]).push(arguments)
-      };
+      window._gscq=window._gscq||[];
     `;
     document.head.appendChild(scriptConfigureGSC);
   }
@@ -35,11 +35,11 @@ export class GetSiteControlService {
   private listenForRouteChanges() {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        if (!gsc) {
+        if (!_gscq) {
           return; // Skip the call gracefully if loading fails or 3rd party JS is blocked.
         }
 
-        gsc('trackPage', event.urlAfterRedirects);
+        _gscq.push(['trackPage', event.urlAfterRedirects]);
       }
     });
   }
