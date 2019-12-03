@@ -18,12 +18,13 @@ export class GetSiteControlService {
   init() {
     this.listenForRouteChanges();
 
+    const scriptInitGSC = document.createElement('script');
+    scriptInitGSC.async = true;
+    scriptInitGSC.src = `https://widgets.getsitecontrol.com/${environment.getSiteControlId}/script.js`;
+    document.head.appendChild(scriptInitGSC);
+
     const scriptConfigureGSC = document.createElement('script');
     scriptConfigureGSC.innerHTML = `
-      (function (w,i,d,g,e,t,s) {w[d] = w[d]||[];t= i.createElement(g);
-        t.async=1;t.src=e;s=i.getElementsByTagName(g)[0];s.parentNode.insertBefore(t, s);
-      })(window, document, '_gscq','script','//widgets.getsitecontrol.com/` + environment.getSiteControlId + `/script.js');
-
       window.gsc=window.gsc||function(){
         (gsc.q=gsc.q||[]).push(arguments)
       };
