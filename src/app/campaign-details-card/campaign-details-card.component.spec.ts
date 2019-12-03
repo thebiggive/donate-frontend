@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatButtonModule, MatCardModule, MatIconModule, MatSelectModule, MatProgressBarModule } from '@angular/material';
+import { MatButtonModule, MatIconModule, MatSelectModule, MatProgressBarModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { Campaign } from '../campaign.model';
@@ -15,7 +15,6 @@ describe('CampaignDetailsCardComponent', () => {
       declarations: [ CampaignDetailsCardComponent, TimeLeftPipe ],
       imports: [
         MatButtonModule,
-        MatCardModule,
         MatIconModule,
         MatProgressBarModule,
         MatSelectModule,

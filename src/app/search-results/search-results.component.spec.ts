@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule, MatIconModule, MatGridListModule, MatProgressBarModule } from '@angular/material';
+import { MatIconModule, MatProgressBarModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
@@ -18,9 +18,7 @@ describe('SearchResultsComponent', () => {
       ],
       imports: [
         HttpClientTestingModule,
-        MatCardModule,
         MatIconModule,
-        MatGridListModule,
         MatProgressBarModule,
         RouterTestingModule.withRoutes([
           {

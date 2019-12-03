@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatCardModule, MatInputModule, MatSelectModule, MatProgressBarModule } from '@angular/material';
+import { MatButtonModule, MatInputModule, MatSelectModule, MatProgressBarModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Observable } from 'rxjs';
 
@@ -25,7 +25,6 @@ describe('HeroComponent', () => {
       imports: [
         MatButtonModule,
         MatInputModule,
-        MatCardModule,
         MatProgressBarModule,
         MatSelectModule,
         NoopAnimationsModule,
