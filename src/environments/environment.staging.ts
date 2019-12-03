@@ -8,6 +8,7 @@ export const environment = {
   charityCheckoutInitUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
+  getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,
   // Each of 4x suggestion sets for 5% of donors each, no suggestions for the other 80%.

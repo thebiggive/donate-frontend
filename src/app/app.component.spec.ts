@@ -2,7 +2,6 @@ import { TestBed, async } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
-  MatCardModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
@@ -24,7 +23,6 @@ describe('AppComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         MatButtonModule, // Not required but makes test DOM layout more realistic
-        MatCardModule,
         MatIconModule,
         MatInputModule,
         MatListModule,

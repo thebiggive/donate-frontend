@@ -56,12 +56,20 @@ export class AnalyticsService {
   }
 
   private sendEvent(eventName: string, params: {}) {
+    if (!gtag) {
+      return; // Skip the call gracefully if loading fails or 3rd party JS is blocked.
+    }
+
     gtag('event', eventName, params);
   }
 
   private listenForRouteChanges() {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
+        if (!gtag) {
+          return; // Skip the call gracefully if loading fails or 3rd party JS is blocked.
+        }
+
         gtag('config', environment.googleAnalyticsId, {
           page_path: event.urlAfterRedirects,
         });

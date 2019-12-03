@@ -4,10 +4,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
-  MatCardModule,
   MatDialogModule,
   MatExpansionModule,
-  MatGridListModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
@@ -83,10 +81,8 @@ import { TimeLeftPipe } from './time-left.pipe';
     HttpClientModule,
     InfiniteScrollModule,
     MatButtonModule,
-    MatCardModule,
     MatDialogModule,
     MatExpansionModule,
-    MatGridListModule,
     MatIconModule,
     MatInputModule,
     MatListModule,

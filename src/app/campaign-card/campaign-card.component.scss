@@ -1,10 +1,5 @@
 @import '../../styles';
 
-// If we somehow end up with an unexpected-ratio image, let Angular Material do its
-// thing with `mat-card-image` on the `img` itself (can't set a max height as this
-// would stretch it when combined with that) but use this to ensure the card can't
-// grow to a height that breaks the layout.
-
 .c-card {
   @include make-card;
   display:flex;
