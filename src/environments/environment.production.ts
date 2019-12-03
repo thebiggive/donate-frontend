@@ -4,6 +4,7 @@ export const environment = {
   charityCheckoutInitUri: 'https://fundraise.charitycheckout.co.uk/api/checkout/init',
   donateUriPrefix: 'https://donate.thebiggive.org.uk',
   donationsApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',
+  getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-1',
   maximumDonationAmount: 25000,
   // Each of 4x suggestion sets for 5% of donors each, no suggestions for the other 80%.
