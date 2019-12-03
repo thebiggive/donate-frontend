@@ -69,6 +69,7 @@ $app-typography: mat-typography-config(
 @include mat-expansion-panel-theme($donate-theme);
 @include mat-form-field-theme($donate-theme);
 @include mat-menu-theme($donate-theme);
+@include mat-progress-spinner-theme($donate-theme);
 @include mat-radio-theme($donate-theme);
 @include mat-select-theme($donate-theme);
 @include mat-sidenav-theme($donate-theme);
