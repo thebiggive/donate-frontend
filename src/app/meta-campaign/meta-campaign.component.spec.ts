@@ -3,8 +3,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
-  MatCardModule,
-  MatGridListModule,
   MatIconModule,
   MatInputModule,
   MatProgressBarModule,
@@ -46,8 +44,6 @@ describe('MetaCampaignComponent', () => {
         HttpClientTestingModule,
         InfiniteScrollModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
-        MatCardModule,
-        MatGridListModule,
         MatIconModule,
         MatInputModule,
         MatProgressBarModule,
