@@ -1,7 +1,5 @@
 @import '~@angular/material/theming';
 
-@include mat-core();
-
 $tbg-red: (
   500: #f0423b,
   800: #c1211a,
@@ -65,6 +63,3 @@ $app-typography: mat-typography-config(
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($donate-theme);
-@include mat-core-theme($donate-theme);
-@include mat-button-theme($donate-theme);
-@include mat-checkbox-theme($donate-theme);
