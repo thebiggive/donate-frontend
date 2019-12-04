@@ -3,12 +3,11 @@
   <form class="c-form" (ngSubmit)="submit()" [formGroup]="searchForm">
     <mat-form-field class="b-w-100" color="accent">
       <mat-label for="term">Enter a keyword...</mat-label>
-      <input matInput formControlName="term" id="term" type="text">
+      <input #term matInput formControlName="term" id="term" type="text">
     </mat-form-field>
 
     <button
       class="c-form__button b-w-100 b-db b-light"
-      [disabled]="!this.searchForm.valid"
       mat-raised-button
       color="accent"
       type="submit"

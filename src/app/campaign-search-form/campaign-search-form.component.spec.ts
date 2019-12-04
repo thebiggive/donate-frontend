@@ -31,18 +31,18 @@ describe('CampaignSearchFormComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create with search button disabled', () => {
+  it('should create with search button enabled', () => {
     expect(component).toBeTruthy();
-    expect(component.searchForm.valid).toBe(false);
+    expect(component.searchForm.valid).toBe(true);
   });
 
-  it('should still have search button disabled after 1 character entered', () => {
+  it('should be considered invalid after 1 character entered', () => {
     component.searchForm.setValue({term: 'T'});
 
     expect(component.searchForm.valid).toBe(false);
   });
 
-  it('should have search button enabled after 2 characters entered', () => {
+  it('should be considered valid again after 2 characters entered', () => {
     component.searchForm.setValue({term: 'Te'});
 
     expect(component.searchForm.valid).toBe(true);
