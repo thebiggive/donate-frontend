@@ -187,6 +187,7 @@
           "options": {
             "outputPath": "dist/server",
             "main": "src/main.server.ts",
+            "sourceMap": false,
             "tsConfig": "tsconfig.server.json"
           },
           "configurations": {
