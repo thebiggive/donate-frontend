@@ -84,9 +84,7 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   /**
-   * For now, just do a full search with more results requested. Not very efficient but does the job
-   * for now while we focus on other priorities.
-   * @todo use `offset` and load only campaigns not already likely to be on the page.
+   * If we've filled the viewport plus a reasonable buffer, trigger a search with an increased offset.
    */
   more() {
     const cardsPerRow = (window.innerWidth < 600 ? 1 : (window.innerWidth < 960 ? 2 : 3));
