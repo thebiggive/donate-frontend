@@ -141,9 +141,12 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   onMetacampaignSearch(term: string) {
-    this.hasTerm = true; // Enable Relevance sort option, which we'll also now default to.
+    // Enable Relevance sort option and apply it if term is non-blank,
+    // otherwise remove it and set to match funds remaining.
+    this.hasTerm = (term !== '');
+    this.selectedSort = (term === '' ? 'matchFundsRemaining' : '');
+
     this.query.term = term;
-    this.selectedSort = '';
     this.handleSortParams();
     this.run();
   }
