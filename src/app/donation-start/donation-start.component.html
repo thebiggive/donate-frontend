@@ -47,7 +47,7 @@
               <div class="error" *ngIf="f.donationAmount.invalid && (f.donationAmount.dirty || f.donationAmount.touched)">
                 <div *ngIf="f.donationAmount.errors.min">Sorry, the minimum donation is currently £5.</div>
                 <div *ngIf="f.donationAmount.errors.max">Your donation must be £25,000 or less to proceed. You can make multiple matched donations of £25,000 if match funds are available.</div>
-                <div *ngIf="f.donationAmount.errors.pattern">Please enter a whole number of pounds (£) without commas or pence.</div>
+                <div *ngIf="f.donationAmount.errors.pattern">Please enter a whole number of pounds (£) without commas.</div>
                 <div *ngIf="f.donationAmount.errors.required">Please enter how much you would like to donate.</div>
               </div>
             </mat-expansion-panel>
@@ -100,7 +100,7 @@
               </mat-radio-group>
             </mat-expansion-panel>
 
-            <mat-expansion-panel class="c-make-your-donation" expanded="true" disabled="true">
+            <mat-expansion-panel class="c-make-your-donation" expanded="true">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   <h3 class="b-rh-2">Make your donation</h3>
@@ -130,6 +130,9 @@
                 </p>
                 <p class="error" *ngIf="validationError">
                   Please complete all fields above to proceed with your donation.
+                </p>
+                <p class="error" *ngIf="f.donationAmount.invalid">
+                  Please check your donation amount above. It must be a whole number of pounds without commas.
                 </p>
                 <mat-spinner *ngIf="submitting" color="accent" diameter="30"></mat-spinner>
                 <p *ngIf="retrying" class="warning">
