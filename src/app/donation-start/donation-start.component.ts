@@ -84,7 +84,7 @@ export class DonationStartComponent implements OnInit {
         Validators.required,
         Validators.min(5),
         Validators.max(environment.maximumDonationAmount),
-        Validators.pattern('^£?[0-9]+?(\.00)?$'),
+        Validators.pattern('^£?[0-9]+?(\\.00)?$'),
       ]],
       giftAid: [null, Validators.required],
       optInCharityEmail: [null, Validators.required],
