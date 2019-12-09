@@ -84,7 +84,7 @@ export class DonationStartComponent implements OnInit {
         Validators.required,
         Validators.min(5),
         Validators.max(environment.maximumDonationAmount),
-        Validators.pattern('^£?[0-9]+?$'),
+        Validators.pattern('^£?[0-9]+?(\.00)?$'),
       ]],
       giftAid: [null, Validators.required],
       optInCharityEmail: [null, Validators.required],
@@ -138,7 +138,7 @@ export class DonationStartComponent implements OnInit {
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
-      donationAmount: this.donationForm.value.donationAmount.replace('£', ''), // Strip '£' if entered
+      donationAmount: this.donationForm.value.donationAmount.replace('£', '').replace('.00', ''), // Strip '£', '.00' if entered
       donationMatched: this.campaign.isMatched,
       giftAid: this.donationForm.value.giftAid,
       optInCharityEmail: this.donationForm.value.optInCharityEmail,
