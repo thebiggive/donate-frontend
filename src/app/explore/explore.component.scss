@@ -3,11 +3,25 @@
 .home-hero {
   padding-top: 1rem;
   background-image: url(/assets/images/bg-hero-home.png);
-  background-size: contain;
+  background-size: 50%;
   background-repeat: no-repeat;
-  background-position: right top;
+  background-position: 140% -10%;
+
   @media #{$breakpoint-lg} {
     padding-top: 1.5rem;
+    background-size: contain;
+    background-position: right top;
+  }
+}
+
+.home-hero__description {
+  @include size-md;
+  color: $colour-grey;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+
+  @media #{$breakpoint-lg} {
+    @include size-lg;
   }
 }
 
