@@ -1,0 +1,89 @@
+@import '../../styles';
+
+.home-hero {
+  padding-top: 1rem;
+  background-image: url(/assets/images/bg-hero-home.png);
+  background-size: 50%;
+  background-repeat: no-repeat;
+  background-position: 140% -10%;
+
+  @media #{$breakpoint-lg} {
+    padding-top: 1.5rem;
+    background-size: contain;
+    background-position: right top;
+  }
+}
+
+.home-hero__description {
+  @include size-md;
+  color: $colour-grey;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+
+  @media #{$breakpoint-lg} {
+    @include size-lg;
+  }
+}
+
+.home-hero-flex__child {
+  padding-right: 15px; // Allow space so GetSiteControl right-floated widgets don't cover copy
+
+  @media #{$breakpoint-md} {
+    margin-right: 1rem;
+    &:last-child {
+      margin-left: 1rem;
+      margin-right: 0;
+    }
+  }
+  @media #{$breakpoint-lg} {
+    margin-right: 2rem;
+    &:last-child {
+      margin-left: 2rem;
+      margin-right: 0;
+    }
+  }
+  @media #{$breakpoint-xl} {
+    margin-right: 3rem;
+    &:last-child {
+      margin-left: 3rem;
+      margin-right: 0;
+    }
+  }
+}
+
+.c-home-hero__heading {
+  margin-bottom: 0;
+  line-height: 1.2;
+  @media #{$breakpoint-md} {
+    font-size: 35px;
+  }
+  @media #{$breakpoint-lg} {
+    font-size: 45px;
+  }
+  @media #{$breakpoint-xl} {
+    font-size: 60px;
+  }
+}
+
+.c-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 100%;
+  gap: 15px;
+  row-gap: 15px;
+  @media #{$breakpoint-md} {
+    grid-template-columns: calc((100% - 15px)/2) calc((100% - 15px)/2);
+  }
+  @media #{$breakpoint-lg} {
+    grid-template-columns: calc((100% - 60px)/3) calc((100% - 60px)/3) calc((100% - 60px)/3);
+    gap: 30px;
+    row-gap: 30px;
+  }
+}
+
+.error {
+  color: mat-color($donate-warn);
+  max-width: 600px;
+  text-align: center;
+  margin: 1rem auto;
+}

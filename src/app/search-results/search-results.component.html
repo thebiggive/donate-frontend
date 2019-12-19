@@ -1,7 +1,0 @@
-<p *ngIf="searched && campaigns.length == 0">No results :( Please try another search term</p>
-
-<div class="cards-grid">
-  <div class="cards-grid__card" *ngFor="let campaign of campaigns">
-    <app-campaign-card [campaign]="campaign"></app-campaign-card>
-  </div>
-</div>

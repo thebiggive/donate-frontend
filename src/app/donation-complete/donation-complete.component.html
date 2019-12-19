@@ -47,7 +47,7 @@
               <p class="b-rt-0 b-bold b-m-0">{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
             </li>
             <li class="c-receipt__item b-db">
-              <h4 class="c-receipt__title b-light b-grey b-rt-sm" *ngIf="donation.matchedAmount > 0">Matched funds</h4>
+              <h4 class="c-receipt__title b-light b-grey b-rt-sm" *ngIf="donation.matchedAmount > 0">Match funds</h4>
               <p class="b-rt-0 b-bold b-m-0" *ngIf="donation.matchedAmount > 0">{{ donation.matchedAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
             </li>
             <li class="c-receipt__item b-db">

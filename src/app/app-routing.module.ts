@@ -5,7 +5,7 @@ import { CampaignDetailsComponent } from './campaign-details/campaign-details.co
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
-import { SearchResultsComponent } from './search-results/search-results.component';
+import { ExploreComponent } from './explore/explore.component';
 
 const routes: Routes = [
   {
@@ -25,10 +25,6 @@ const routes: Routes = [
     component: MetaCampaignComponent,
   },
   {
-    path: 'search',
-    component: SearchResultsComponent,
-  },
-  {
     path: 'thanks/:donationId',
     component: DonationCompleteComponent,
   },
@@ -42,8 +38,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'christmas-challenge-2019',
+    component: ExploreComponent,
   },
 ];
 
@@ -51,4 +46,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled'})],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

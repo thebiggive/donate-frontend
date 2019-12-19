@@ -55,7 +55,7 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
   }
 
   public static buildForUnit(date: Date, microsecsInUnit: number): number {
-    return Math.floor((date.getTime() - (new Date()).getTime()) / microsecsInUnit);
+    return Math.floor((date.getTime() - Date.now()) / microsecsInUnit);
   }
 
   transform(date: any, args?: any[]): any {

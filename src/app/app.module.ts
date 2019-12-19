@@ -41,7 +41,7 @@ import { HeroComponent } from './hero/hero.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { NavSearchFormComponent } from './nav-search-form/nav-search-form.component';
-import { SearchResultsComponent } from './search-results/search-results.component';
+import { ExploreComponent } from './explore/explore.component';
 import { TickerComponent } from './ticker/ticker.component';
 import { TimeLeftPipe } from './time-left.pipe';
 
@@ -63,7 +63,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     MetaCampaignComponent,
     NavigationComponent,
     NavSearchFormComponent,
-    SearchResultsComponent,
+    ExploreComponent,
     TickerComponent,
     TimeLeftPipe,
   ],
