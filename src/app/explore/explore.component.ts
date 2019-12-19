@@ -15,12 +15,12 @@ export class ExploreComponent implements OnInit {
   public campaigns: CampaignSummary[];
   public loading = false; // Server render gets initial result set; set true when filters change.
   public hasTerm = false;
+  public resetSubject: Subject<void> = new Subject<void>();
   public searched = false;
   public selectedSort = 'matchFundsRemaining';
 
   private perPage = 6;
   private query: SearchQuery;
-  private resetSubject: Subject<void> = new Subject<void>();
   private term: string;
 
   constructor(
