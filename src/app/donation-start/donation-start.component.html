@@ -159,7 +159,7 @@
                   <mat-icon class="c-donation-receipt__icon b-grey b-bold b-center" aria-hidden="false" aria-label="Plus">add</mat-icon>
                 </div>
                 <div fxFlex="26" *ngIf="expectedMatchAmount() > 0">
-                  <p class="b-center b-grey b-rt-sm b-m-0">Matched funds</p>
+                  <p class="b-center b-grey b-rt-sm b-m-0">Match funds</p>
                   <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ expectedMatchAmount() | currency : '£' : 'symbol' : '1.0-0' }}</p>
                 </div>
                 <div fxFlex="11" fxLayout="row" fxLayoutAlign="center end" *ngIf="expectedMatchAmount() > 0">

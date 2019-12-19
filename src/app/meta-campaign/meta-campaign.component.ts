@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -35,8 +35,6 @@ export class MetaCampaignComponent implements OnInit {
     private campaignService: CampaignService,
     private fundService: FundService,
     private pageMeta: PageMetaService,
-    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
-    @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private state: TransferState,
   ) {
