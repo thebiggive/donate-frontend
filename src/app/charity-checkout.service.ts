@@ -30,7 +30,8 @@ export class CharityCheckoutService {
     const donationPostData = new CharityCheckoutDonation(donation);
     for (const param in donationPostData) {
       if (donationPostData.hasOwnProperty(param)) {
-        form.appendChild(this.createHiddenElement(param, donationPostData[param]));
+        const paramAsString = donationPostData[param as keyof CharityCheckoutDonation] as string;
+        form.appendChild(this.createHiddenElement(param, paramAsString));
       }
     }
 

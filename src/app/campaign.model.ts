@@ -30,14 +30,14 @@ export class Campaign {
     public solution: string,
     public startDate: Date,
     public status: 'Active' | 'Expired' | 'Preview',
-    public summary: string | null,
+    public summary: string = '',
     public target: number,
     public title: string,
     public updates: Array<{content: string, modifiedDate: Date}>,
-    public video?: {provider: string, key: string},
     public alternativeFundUse?: string,
     public campaignCount?: number,
     public championRef?: string,
     public parentRef?: string,
+    public video?: {provider: string, key: string},
   ) {}
 }

@@ -60,7 +60,6 @@ describe('CampaignDetailsCardComponent', () => {
       1234,
       'Test Campaign!',
       [],
-      undefined,
       'Some information about what happens if funds are not used',
     );
     fixture.detectChanges();

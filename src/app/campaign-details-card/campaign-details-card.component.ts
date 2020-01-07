@@ -10,7 +10,7 @@ import { CampaignService } from '../campaign.service';
 })
 export class CampaignDetailsCardComponent implements OnInit {
   @Input() public campaign: Campaign;
-  public percentRaised: number;
+  public percentRaised?: number;
 
   constructor() { }
 

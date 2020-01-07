@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
+import { FilterType } from '../filters/filters.component';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
 import { PageMetaService } from '../page-meta.service';
@@ -16,10 +17,10 @@ import { PageMetaService } from '../page-meta.service';
   styleUrls: ['./meta-campaign.component.scss'],
 })
 export class MetaCampaignComponent implements OnInit {
-  public campaign: Campaign;
+  public campaign?: Campaign;
   public children: CampaignSummary[];
   public filterError = false;
-  public fund: Fund;
+  public fund?: Fund;
   public hasTerm = false;
   public loading = false; // Server render gets initial result set; set true when filters change.
   public selectedSort = 'matchFundsRemaining';
@@ -28,7 +29,7 @@ export class MetaCampaignComponent implements OnInit {
   private campaignSlug: string;
   private fundSlug: string;
   private perPage = 6;
-  private query: SearchQuery;
+  private query: {[key: string]: any};
   private resetSubject: Subject<void> = new Subject<void>();
 
   constructor(
@@ -47,9 +48,9 @@ export class MetaCampaignComponent implements OnInit {
 
   ngOnInit() {
     const metacampaignKey = makeStateKey<Campaign>(`metacampaign-${this.campaignId}`);
-    this.campaign = this.state.get(metacampaignKey, undefined);
+    this.campaign = this.state.get<Campaign | undefined>(metacampaignKey, undefined);
 
-    let fundKey;
+    let fundKey: StateKey<string>;
     if (this.fundSlug) {
       fundKey = makeStateKey<Fund>(`fund-${this.fundSlug}`);
       this.fund = this.state.get(fundKey, undefined);
@@ -93,14 +94,6 @@ export class MetaCampaignComponent implements OnInit {
     }
   }
 
-  /**
-   * Set a filter or sort value on the query
-   */
-  setQueryProperty(property, event) {
-    this.query[property] = event.value;
-    this.run();
-  }
-
   setDefaultFilters() {
     this.hasTerm = false;
     this.selectedSort = 'matchFundsRemaining';
@@ -127,8 +120,13 @@ export class MetaCampaignComponent implements OnInit {
     }
   }
 
-  onFilterApplied(update: {filterName: string, value: string}) {
-    this.query[update.filterName] = update.value;
+  onFilterApplied(update: { [filterName: string]: string, value: string}) {
+    const fAS = update.filterName as keyof FilterType;
+
+
+
+    this.query[update.filterName] = update.value as string;
+
     this.run();
   }
 
@@ -152,7 +150,7 @@ export class MetaCampaignComponent implements OnInit {
   private loadMoreForCurrentSearch() {
     this.query.offset += this.perPage;
     this.loading = true;
-    this.campaignService.search(this.query).subscribe(campaignSummaries => {
+    this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
       // Success
       this.children = [...this.children, ...campaignSummaries];
       this.loading = false;
@@ -170,7 +168,7 @@ export class MetaCampaignComponent implements OnInit {
     this.query.offset = 0;
     this.children = [];
     this.loading = true;
-    this.campaignService.search(this.query).subscribe(campaignSummaries => {
+    this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
       this.children = campaignSummaries; // Success
       this.loading = false;
     }, () => {
