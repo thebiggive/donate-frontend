@@ -55,7 +55,7 @@ describe('CharityCheckoutDonation model', () => {
     const charityCheckoutDonation: CharityCheckoutDonation = new CharityCheckoutDonation(donation);
 
     expect(charityCheckoutDonation.donation_type).toBe('em1');
-    expect(charityCheckoutDonation.reservation_time).toBeNull();
+    expect(charityCheckoutDonation.reservation_time).toBeUndefined();
   });
 
   it('should translate a donation with all opt-ins but TBG contact false correctly', () => {
@@ -83,7 +83,7 @@ describe('CharityCheckoutDonation model', () => {
     expect(charityCheckoutDonation.donation_type).toBe('ind1');
     expect(charityCheckoutDonation.gift_aid).toBe('0');
     expect(charityCheckoutDonation.project_id).toBe('someOtherProjectId');
-    expect(charityCheckoutDonation.reservation_time).toBeNull();
+    expect(charityCheckoutDonation.reservation_time).toBeUndefined();
     expect(charityCheckoutDonation.share_details_with_charity).toBe('1'); // Always true
     expect(charityCheckoutDonation.unique_ID).toBe('someOtherDonationId');
   });
