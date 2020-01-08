@@ -83,4 +83,4 @@ const server = app.listen(PORT, () => {
  * @link https://adamcrowder.net/posts/node-express-api-and-aws-alb-502/
  */
 server.keepAliveTimeout = 65 * 1000;
-server.headersTimeout = 70 * 1000;
+server.timeout = 70 * 1000;
