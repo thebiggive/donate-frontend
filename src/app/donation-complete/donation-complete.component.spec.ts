@@ -11,7 +11,7 @@ import { TBG_DONATE_STORAGE } from '../donation.service';
 import { DonationCompleteComponent } from './donation-complete.component';
 
 describe('DonationCompleteComponent', () => {
-  let analyticsService;
+  let analyticsService: AnalyticsService;
   let component: DonationCompleteComponent;
   let fixture: ComponentFixture<DonationCompleteComponent>;
 

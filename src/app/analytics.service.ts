@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 
 import { environment } from '../environments/environment';
 
-declare var gtag: (...args) => void;
+declare var gtag: (...args: Array<string | { [key: string]: any }>) => void;
 
 /**
  * Heavily inspired by https://stackoverflow.com/a/55222168/2803757
@@ -47,7 +47,7 @@ export class AnalyticsService {
     });
   }
 
-  logAmountChosen(amountChosen: number, amountsSuggested: number[], campaignId: string) {
+  logAmountChosen(amountChosen: number, campaignId: string, amountsSuggested?: number[]) {
     this.sendEvent(JSON.stringify(amountsSuggested), {
       event_category: 'donate_amount_chosen',
       event_label: `Donation to campaign ${campaignId}`,
@@ -55,7 +55,7 @@ export class AnalyticsService {
     });
   }
 
-  private sendEvent(eventName: string, params: {}) {
+  private sendEvent(eventName: string, params: { [key: string]: any }) {
     if (!gtag) {
       return; // Skip the call gracefully if loading fails or 3rd party JS is blocked.
     }

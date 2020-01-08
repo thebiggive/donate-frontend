@@ -41,7 +41,8 @@ export class CampaignSearchFormComponent implements OnInit, OnDestroy {
     // If the donor hasn't ever typed in the 'term' field yet, they probably didn't mean to start a search,
     // so in this case only treat empty input like an invalid form and point their focus to the field. Otherwise,
     // do this only if the term is invalid based on length (exactly 1 character).
-    if (!this.searchForm.get('term').dirty || !this.searchForm.valid) {
+    const term = this.searchForm.get('term');
+    if (!term || !term.dirty || !this.searchForm.valid) {
       this.termField.nativeElement.focus();
       return;
     }

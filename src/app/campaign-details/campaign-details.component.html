@@ -21,7 +21,7 @@
       <div class="c-header">
         <h4 class="c-header__charity-name b-rt-0 b-uppercase b-grey b-light">{{ campaign.charity.name }}</h4>
         <h3 class="c-header__campaign-title b-rh-1 b-bold">{{ campaign.title }}</h3>
-        <p class="c-header__description b-rt-1">{{campaign.summary}}</p>
+        <p class="c-header__description b-rt-1">{{ campaign.summary }}</p>
       </div>
 
       <a class="b-donate-button" mat-raised-button [routerLink]="'/donate/' + campaign.id" *ngIf="donateEnabled">
