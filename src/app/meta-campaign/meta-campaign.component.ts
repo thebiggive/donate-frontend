@@ -23,7 +23,7 @@ export class MetaCampaignComponent implements OnInit {
   public fund?: Fund;
   public hasTerm = false;
   public loading = false; // Server render gets initial result set; set true when filters change.
-  public selectedSort = 'matchFundsRemaining';
+  public selectedSort: string;
 
   private campaignId: string;
   private campaignSlug: string;
@@ -72,8 +72,6 @@ export class MetaCampaignComponent implements OnInit {
         this.fund = fund;
       });
     }
-
-    this.setDefaultFilters();
   }
 
   onScroll() {
@@ -96,7 +94,8 @@ export class MetaCampaignComponent implements OnInit {
 
   setDefaultFilters() {
     this.hasTerm = false;
-    this.selectedSort = 'matchFundsRemaining';
+    this.selectedSort = this.getDefaultSort();
+
     this.query = {
       parentCampaignId: this.campaignId,
       parentCampaignSlug: this.campaignSlug,
@@ -140,11 +139,16 @@ export class MetaCampaignComponent implements OnInit {
     // Enable Relevance sort option and apply it if term is non-blank,
     // otherwise remove it and set to match funds remaining.
     this.hasTerm = (term !== '');
-    this.selectedSort = (term === '' ? 'matchFundsRemaining' : '');
+    this.selectedSort = (term === '' ? this.getDefaultSort() : '');
 
     this.query.term = term;
     this.handleSortParams();
     this.run();
+  }
+
+  private getDefaultSort(): string {
+    // Most Raised for completed Master Campaigns; Match Funds Remaining for others.
+    return (this.campaign && new Date(this.campaign.endDate) < new Date()) ? 'amountRaised' : 'matchFundsRemaining';
   }
 
   private loadMoreForCurrentSearch() {
@@ -184,6 +188,7 @@ export class MetaCampaignComponent implements OnInit {
   private setCampaign(campaign: Campaign, metacampaignKey: StateKey<Campaign>) {
     this.state.set(metacampaignKey, campaign); // Have data ready for client when handing over from SSR
     this.campaign = campaign;
+    this.setDefaultFilters();
     this.setSecondaryProps(campaign);
   }
 
