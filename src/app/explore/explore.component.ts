@@ -31,7 +31,7 @@ export class ExploreComponent implements OnInit {
     this.setDefaults();
     route.queryParams.forEach((params: Params) => {
       this.term = params.term;
-      this.search(this.term);
+      this.search(this.term ? this.term : '');
     });
   }
 
