@@ -6,7 +6,6 @@ import { Subject } from 'rxjs';
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
-import { FilterType } from '../filters/filters.component';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
 import { PageMetaService } from '../page-meta.service';
@@ -56,7 +55,8 @@ export class MetaCampaignComponent implements OnInit {
       this.fund = this.state.get(fundKey, undefined);
     }
 
-    if (this.campaign) {
+    if (this.campaign) { // app handed over from SSR to client-side JS
+      this.setDefaultFilters();
       this.setSecondaryProps(this.campaign);
     } else {
       if (this.campaignId) {
@@ -120,10 +120,6 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   onFilterApplied(update: { [filterName: string]: string, value: string}) {
-    const fAS = update.filterName as keyof FilterType;
-
-
-
     this.query[update.filterName] = update.value as string;
 
     this.run();
