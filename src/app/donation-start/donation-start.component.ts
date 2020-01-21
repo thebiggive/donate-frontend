@@ -365,7 +365,13 @@ export class DonationStartComponent implements OnInit {
     );
   }
 
-  private promptToContinue(title: string, status: string, statusDetail: string, cancelCopy: string, donation: Donation, surplusDonationInfo?: string) {
+  private promptToContinue(
+    title: string,
+    status: string,
+    statusDetail: string,
+    cancelCopy: string,
+    donation: Donation,
+    surplusDonationInfo?: string) {
     const continueDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
       data: { cancelCopy, status, statusDetail, title, surplusDonationInfo },
       disableClose: true,
