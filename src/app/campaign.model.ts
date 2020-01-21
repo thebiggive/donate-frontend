@@ -39,5 +39,6 @@ export class Campaign {
     public championRef?: string,
     public parentRef?: string,
     public video?: {provider: string, key: string},
+    public surplusDonationInfo?: string,
   ) {}
 }

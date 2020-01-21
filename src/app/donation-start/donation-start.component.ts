@@ -182,14 +182,14 @@ export class DonationStartComponent implements OnInit {
         }
 
         // Amount reserved for matching is 'false-y', i.e. £0
-        if (donation.donationMatched && !response.donation.matchReservedAmount) {
-          this.promptToContinueWithNoMatchingLeft(response.donation);
+        if (donation.donationMatched && !response.donation.matchReservedAmount && this.campaign) {
+          this.promptToContinueWithNoMatchingLeft(response.donation, this.campaign.surplusDonationInfo);
           return;
         }
 
         // Amount reserved for matching is >£0 but less than the full donation
-        if (donation.donationMatched && response.donation.matchReservedAmount < donation.donationAmount) {
-          this.promptToContinueWithPartialMatching(response.donation);
+        if (donation.donationMatched && response.donation.matchReservedAmount < donation.donationAmount && this.campaign) {
+          this.promptToContinueWithPartialMatching(response.donation, this.campaign.surplusDonationInfo);
           return;
         }
 
@@ -337,7 +337,7 @@ export class DonationStartComponent implements OnInit {
     this.charityCheckoutService.startDonation(donation);
   }
 
-  private promptToContinueWithNoMatchingLeft(donation: Donation) {
+  private promptToContinueWithNoMatchingLeft(donation: Donation, surplusDonationInfo?: string) {
     this.analyticsService.logEvent('alerted_no_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
       'Match funds not available',
@@ -345,13 +345,14 @@ export class DonationStartComponent implements OnInit {
       'Remember every penny helps & you can continue to make an unmatched donation to the charity!',
       'Cancel',
       donation,
+      surplusDonationInfo,
     );
   }
 
   /**
    * @param donation *Response* Donation object, with `matchReservedAmount` set and returned by Salesforce.
    */
-  private promptToContinueWithPartialMatching(donation: Donation) {
+  private promptToContinueWithPartialMatching(donation: Donation, surplusDonationInfo?: string) {
     this.analyticsService.logEvent('alerted_partial_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
       'Not all match funds are available',
@@ -360,12 +361,13 @@ export class DonationStartComponent implements OnInit {
       'Remember every penny helps & you can continue to make a partially matched donation to the charity!',
       'Cancel and release match funds',
       donation,
+      surplusDonationInfo,
     );
   }
 
-  private promptToContinue(title: string, status: string, statusDetail: string, cancelCopy: string, donation: Donation) {
+  private promptToContinue(title: string, status: string, statusDetail: string, cancelCopy: string, donation: Donation, surplusDonationInfo?: string) {
     const continueDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
-      data: { cancelCopy, status, statusDetail, title },
+      data: { cancelCopy, status, statusDetail, title, surplusDonationInfo },
       disableClose: true,
       role: 'alertdialog',
     });
