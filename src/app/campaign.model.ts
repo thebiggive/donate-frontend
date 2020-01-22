@@ -38,7 +38,7 @@ export class Campaign {
     public campaignCount?: number,
     public championRef?: string,
     public parentRef?: string,
-    public video?: {provider: string, key: string},
     public surplusDonationInfo?: string,
+    public video?: {provider: string, key: string},
   ) {}
 }
