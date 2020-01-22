@@ -36,6 +36,7 @@ export class DonationStartComponent implements OnInit {
   private campaignId: string;
   private charityCheckoutError?: string;  // Charity Checkout donation start error message
   private previousDonation?: Donation;
+  private surplusDonationInfo?: string;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -134,6 +135,8 @@ export class DonationStartComponent implements OnInit {
       this.sfApiError = true;
       return;
     }
+
+    this.surplusDonationInfo = this.campaign.surplusDonationInfo;
 
     const donation: Donation = {
       charityId: this.campaign.charity.id,
@@ -345,7 +348,7 @@ export class DonationStartComponent implements OnInit {
       'Remember every penny helps & you can continue to make an unmatched donation to the charity!',
       'Cancel',
       donation,
-      this.campaign?.surplusDonationInfo,
+      this.surplusDonationInfo,
     );
   }
 
@@ -361,7 +364,7 @@ export class DonationStartComponent implements OnInit {
       'Remember every penny helps & you can continue to make a partially matched donation to the charity!',
       'Cancel and release match funds',
       donation,
-      this.campaign?.surplusDonationInfo,
+      this.surplusDonationInfo,
     );
   }
 
