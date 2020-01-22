@@ -36,7 +36,6 @@ export class DonationStartComponent implements OnInit {
   private campaignId: string;
   private charityCheckoutError?: string;  // Charity Checkout donation start error message
   private previousDonation?: Donation;
-  private surplusDonationInfo?: string;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -380,7 +379,8 @@ export class DonationStartComponent implements OnInit {
     statusDetail: string,
     cancelCopy: string,
     donation: Donation,
-    surplusDonationInfo?: string ) {
+    surplusDonationInfo?: string,
+  ) {
     const continueDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
       data: { cancelCopy, status, statusDetail, title, surplusDonationInfo },
       disableClose: true,

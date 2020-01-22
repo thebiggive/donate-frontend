@@ -11,5 +11,6 @@ export class DonationStartMatchConfirmDialogComponent {
     status: string,
     statusDetail: string,
     title: string,
-    surplusDonationInfo: string }) {}
+    surplusDonationInfo: string,
+  }) {}
 }
