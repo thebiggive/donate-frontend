@@ -136,8 +136,6 @@ export class DonationStartComponent implements OnInit {
       return;
     }
 
-    this.surplusDonationInfo = this.campaign.surplusDonationInfo;
-
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
@@ -341,6 +339,10 @@ export class DonationStartComponent implements OnInit {
   }
 
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
+    if (!this.campaign) {
+      return;
+    }
+
     this.analyticsService.logEvent('alerted_no_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
       'Match funds not available',
@@ -348,7 +350,7 @@ export class DonationStartComponent implements OnInit {
       'Remember every penny helps & you can continue to make an unmatched donation to the charity!',
       'Cancel',
       donation,
-      this.surplusDonationInfo,
+      this.campaign.surplusDonationInfo,
     );
   }
 
@@ -356,6 +358,10 @@ export class DonationStartComponent implements OnInit {
    * @param donation *Response* Donation object, with `matchReservedAmount` set and returned by Salesforce.
    */
   private promptToContinueWithPartialMatching(donation: Donation) {
+    if (!this.campaign) {
+      return;
+    }
+
     this.analyticsService.logEvent('alerted_partial_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
       'Not all match funds are available',
@@ -364,7 +370,7 @@ export class DonationStartComponent implements OnInit {
       'Remember every penny helps & you can continue to make a partially matched donation to the charity!',
       'Cancel and release match funds',
       donation,
-      this.surplusDonationInfo,
+      this.campaign.surplusDonationInfo,
     );
   }
 
@@ -374,7 +380,7 @@ export class DonationStartComponent implements OnInit {
     statusDetail: string,
     cancelCopy: string,
     donation: Donation,
-    surplusDonationInfo?: string) {
+    surplusDonationInfo?: string ) {
     const continueDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
       data: { cancelCopy, status, statusDetail, title, surplusDonationInfo },
       disableClose: true,
