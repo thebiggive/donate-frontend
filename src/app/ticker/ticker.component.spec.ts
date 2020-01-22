@@ -76,6 +76,7 @@ describe('TickerComponent', () => {
       undefined,
       undefined,
       undefined,
+      undefined,
       {
         provider: 'youtube',
         key: '1G_Abc2delF',
