@@ -1,4 +1,4 @@
-<div class="hero" [ngStyle]="{'background-image': 'url(' + campaign.bannerUri + ')'}">
+<div class="hero" *ngIf="bannerUri" [ngStyle]="{'background-image': 'url(' + bannerUri + ')'}">
   <app-ticker [campaign]="campaign" [fund]="fund"></app-ticker>
 
   <div class="b-container-sm">
@@ -6,7 +6,7 @@
       <div class="hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
         <div fxLayout="column">
           <h1 class="c-hero__heading">
-            <img class="c-hero__image" *ngIf="fund && fund.logoUri" [src]="fund.logoUri + '?width=660'" [alt]="fund.name">
+            <img class="c-hero__image" *ngIf="fundLogoUri" [src]="fundLogoUri" [alt]="fund.name">
             {{ title }}
           </h1>
         </div>

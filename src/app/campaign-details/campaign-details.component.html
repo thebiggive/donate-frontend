@@ -95,12 +95,8 @@
             <p class="c-details__description">{{ campaign.solution }}</p>
           </div>
 
-          <div class="c-additional" *ngIf="campaign.additionalImageUris.length > 0">
-            <img
-              class="c-additional__images"
-              *ngFor="let image of campaign.additionalImageUris"
-              [src]="image.uri + '?width=850'"
-            >
+          <div class="c-additional" *ngIf="additionalImageUris.length > 0">
+            <img *ngFor="let uri of additionalImageUris" [src]="uri" class="c-additional__images">
           </div>
         </mat-tab>
 

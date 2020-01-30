@@ -1,9 +1,9 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, EventEmitter, Inject, Input, OnInit, Output, PLATFORM_ID } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
 import { Fund } from '../fund.model';
+import { ImageService } from '../image.service';
 
 @Component({
   selector: 'app-hero',
@@ -18,21 +18,16 @@ export class HeroComponent implements OnInit {
   @Input() title: string;
   @Output() heroSearch: EventEmitter<any> = new EventEmitter();
 
-  /**
-   * Dynamically use the smallest supported image format. Default to true to optimise
-   * server-client handover for modern browsers that are likely to load the image itself
-   * faster. On the client side, Modernizr jumps in asynchroously in `ngOnInit()` and
-   * switches the background over to the png, on browsers that need it.
-   */
-  public webp = true;
+  bannerUri: string;
+  fundLogoUri?: string;
 
-  // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(private imageService: ImageService) {}
 
   ngOnInit() {
-    // The server doesn't know what's rendering the page, so can't check for webp support
-    if (isPlatformBrowser(this.platformId)) {
-      Modernizr.on('webp', browserSupportsWebp => this.webp = browserSupportsWebp);
+    this.imageService.getImageUri(this.campaign.bannerUri, 2000).subscribe(uri => this.bannerUri = uri);
+
+    if (this.fund && this.fund.logoUri) {
+      this.imageService.getImageUri(this.fund.logoUri, 660).subscribe(uri => this.fundLogoUri = uri);
     }
   }
 
