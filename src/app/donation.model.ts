@@ -66,12 +66,12 @@ export interface Donation {
     /**
      * Amount actually matched once donation is Collected or Paid.
      */
-    matchedAmount?: number;
+    matchedAmount: number;
 
     /**
      * Amount allocated for matching when donation initiated.
      */
-    matchReservedAmount?: number;
+    matchReservedAmount: number;
 
     /**
      * One of the Charity Checkout status strings defined in the `DonationStatus` type.
@@ -79,7 +79,7 @@ export interface Donation {
      */
     status?: DonationStatus;
 
-    tipAmount?: number;
+    tipAmount: number;
 
     /**
      * ID assigned by Charity Checkout upon checkout initiation.

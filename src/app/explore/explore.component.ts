@@ -1,3 +1,4 @@
+import { FilterType } from './../filters/filters.component';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -20,7 +21,7 @@ export class ExploreComponent implements OnInit {
   public selectedSort = 'matchFundsRemaining';
 
   private perPage = 6;
-  private query: SearchQuery;
+  private query: {[key: string]: any};
   private term: string;
 
   constructor(
@@ -30,7 +31,7 @@ export class ExploreComponent implements OnInit {
     this.setDefaults();
     route.queryParams.forEach((params: Params) => {
       this.term = params.term;
-      this.search(this.term);
+      this.search(this.term ? this.term : '');
     });
   }
 
@@ -73,7 +74,7 @@ export class ExploreComponent implements OnInit {
     }
   }
 
-  onFilterApplied(update: {filterName: string, value: string}) {
+  onFilterApplied(update: {filterName: FilterType, value: string}) {
     this.query[update.filterName] = update.value;
     this.run();
   }
@@ -113,7 +114,7 @@ export class ExploreComponent implements OnInit {
   private loadMoreForCurrentSearch() {
     this.query.offset += this.perPage;
     this.loading = true;
-    this.campaignService.search(this.query).subscribe(campaignSummaries => {
+    this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
       // Success
       this.campaigns = [...this.campaigns, ...campaignSummaries];
       this.loading = false;
@@ -127,10 +128,10 @@ export class ExploreComponent implements OnInit {
     this.campaigns = [];
     this.loading = true;
 
-    this.campaignService.search(this.query).subscribe(campaignSummaries => {
+    this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
       this.campaigns = campaignSummaries; // Success
       this.loading = false;
-      }, () => {
+    }, () => {
         this.loading = false;
       },
     );

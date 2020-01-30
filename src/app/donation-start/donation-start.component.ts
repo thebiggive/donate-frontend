@@ -26,10 +26,10 @@ import { retryStrategy } from '../observable-retry';
 })
 
 export class DonationStartComponent implements OnInit {
-  public campaign: Campaign;
+  public campaign?: Campaign;
   public donationForm: FormGroup;
   public retrying = false;
-  public suggestedAmounts: number[];
+  public suggestedAmounts?: number[];
   public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
   public validationError = false;         // Internal Angular app form validation error
@@ -60,7 +60,7 @@ export class DonationStartComponent implements OnInit {
   ngOnInit() {
     const suggestedAmountsKey = makeStateKey<number[]>('suggested-amounts');
     this.suggestedAmounts = this.state.get(suggestedAmountsKey, undefined);
-    if (!this.suggestedAmounts) {
+    if (this.suggestedAmounts === undefined) {
       this.suggestedAmounts = this.getSuggestedAmounts();
       this.state.set(suggestedAmountsKey, this.suggestedAmounts);
     }
@@ -109,7 +109,7 @@ export class DonationStartComponent implements OnInit {
         }
 
         // We have a resumable donation and aren't processing an error
-        this.offerExistingDonation(this.previousDonation);
+        this.offerExistingDonation(existingDonation);
     });
   }
 
@@ -127,10 +127,10 @@ export class DonationStartComponent implements OnInit {
     }
 
     this.submitting = true;
-    this.charityCheckoutError = null;
+    this.charityCheckoutError = undefined;
     this.sfApiError = this.validationError = false;
 
-    if (!this.campaign.charity.id) { // Can't proceed if campaign info not looked up yet
+    if (!this.campaign || !this.campaign.charity.id) { // Can't proceed if campaign info not looked up yet
       this.sfApiError = true;
       return;
     }
@@ -141,9 +141,12 @@ export class DonationStartComponent implements OnInit {
       donationAmount: this.donationForm.value.donationAmount.replace('£', '').replace('.00', ''), // Strip '£', '.00' if entered
       donationMatched: this.campaign.isMatched,
       giftAid: this.donationForm.value.giftAid,
+      matchedAmount: 0, // Only set >0 after donation completed
+      matchReservedAmount: 0, // Only set >0 after initial donation create API response
       optInCharityEmail: this.donationForm.value.optInCharityEmail,
       optInTbgEmail: this.donationForm.value.optInTbgEmail,
       projectId: this.campaignId,
+      tipAmount: 0, // Only set >0 after donation completed
     };
 
     this.donationService
@@ -213,6 +216,10 @@ export class DonationStartComponent implements OnInit {
   get f() { return this.donationForm.controls; }
 
   expectedMatchAmount(): number {
+    if (!this.campaign) {
+      return 0;
+    }
+
     return Math.max(0, Math.min(this.campaign.matchFundsRemaining, parseFloat(this.donationForm.value.donationAmount)));
   }
 
@@ -249,27 +256,33 @@ export class DonationStartComponent implements OnInit {
   }
 
   private getSuggestedAmounts(): number[] {
-    if (!this.suggestedAmounts) {
-      if (environment.suggestedAmounts.length === 0) {
-        return [];
-      }
+    if (environment.suggestedAmounts.length === 0) {
+      return [];
+    }
 
-      // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
-      let thresholdCounter = 0;
-      for (const suggestedAmount of environment.suggestedAmounts) {
-        thresholdCounter += suggestedAmount.weight;
-      }
-      const threshold = Math.floor(Math.random() * thresholdCounter);
+    // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
+    let thresholdCounter = 0;
+    for (const suggestedAmount of environment.suggestedAmounts) {
+      thresholdCounter += suggestedAmount.weight;
+    }
+    const threshold = Math.floor(Math.random() * thresholdCounter);
 
-      thresholdCounter = 0;
-      for (const suggestedAmount of environment.suggestedAmounts) {
-        thresholdCounter += suggestedAmount.weight;
+    thresholdCounter = 0;
+    for (const suggestedAmount of environment.suggestedAmounts) {
+      thresholdCounter += suggestedAmount.weight;
 
-        if (thresholdCounter > threshold) {
-          return suggestedAmount.values;
-        }
+      if (thresholdCounter > threshold) {
+        return suggestedAmount.values;
       }
     }
+
+    // We should never reach this point if the suggestions options are configured correctly.
+    this.analyticsService.logError(
+      'suggested_amounts_misconfigured',
+      `Unexpectedly failed to pick suggested amounts for campaign ${this.campaignId}`,
+    );
+
+    return [];
   }
 
   private offerExistingDonation(donation: Donation) {
@@ -319,12 +332,16 @@ export class DonationStartComponent implements OnInit {
   }
 
   private redirectToCharityCheckout(donation: Donation) {
-    this.analyticsService.logAmountChosen(donation.donationAmount, this.suggestedAmounts, this.campaignId);
+    this.analyticsService.logAmountChosen(donation.donationAmount, this.campaignId, this.suggestedAmounts);
     this.analyticsService.logEvent('payment_redirect_click', `Donating to campaign ${this.campaignId}`);
     this.charityCheckoutService.startDonation(donation);
   }
 
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
+    if (!this.campaign) {
+      return;
+    }
+
     this.analyticsService.logEvent('alerted_no_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
       'Match funds not available',
@@ -332,6 +349,7 @@ export class DonationStartComponent implements OnInit {
       'Remember every penny helps & you can continue to make an unmatched donation to the charity!',
       'Cancel',
       donation,
+      this.campaign.surplusDonationInfo,
     );
   }
 
@@ -339,6 +357,10 @@ export class DonationStartComponent implements OnInit {
    * @param donation *Response* Donation object, with `matchReservedAmount` set and returned by Salesforce.
    */
   private promptToContinueWithPartialMatching(donation: Donation) {
+    if (!this.campaign) {
+      return;
+    }
+
     this.analyticsService.logEvent('alerted_partial_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
       'Not all match funds are available',
@@ -347,12 +369,20 @@ export class DonationStartComponent implements OnInit {
       'Remember every penny helps & you can continue to make a partially matched donation to the charity!',
       'Cancel and release match funds',
       donation,
+      this.campaign.surplusDonationInfo,
     );
   }
 
-  private promptToContinue(title: string, status: string, statusDetail: string, cancelCopy: string, donation: Donation) {
+  private promptToContinue(
+    title: string,
+    status: string,
+    statusDetail: string,
+    cancelCopy: string,
+    donation: Donation,
+    surplusDonationInfo?: string,
+  ) {
     const continueDialog = this.dialog.open(DonationStartMatchConfirmDialogComponent, {
-      data: { cancelCopy, status, statusDetail, title },
+      data: { cancelCopy, status, statusDetail, title, surplusDonationInfo },
       disableClose: true,
       role: 'alertdialog',
     });

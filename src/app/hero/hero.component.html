@@ -1,4 +1,4 @@
-<div [class]="'hero ' + (webp ? 'webp-bg' : 'nowebp-bg')">
+<div class="hero" [ngStyle]="{'background-image': 'url(' + campaign.bannerUri + ')'}">
   <app-ticker [campaign]="campaign" [fund]="fund"></app-ticker>
 
   <div class="b-container-sm">

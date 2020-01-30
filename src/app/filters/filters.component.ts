@@ -1,6 +1,15 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
+enum FilterEnum {
+  'beneficiary',
+  'category',
+  'country',
+  'onlyMatching',
+}
+
+export type FilterType = keyof typeof FilterEnum;
+
 @Component({
   selector: 'app-filters',
   templateUrl: './filters.component.html',
@@ -330,11 +339,11 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.resetSubscription.unsubscribe();
   }
 
-  setFilter(filterName, event) {
+  setFilter(filterName: FilterType, event: { value: string }) {
     this.filterApplied.emit({filterName, value: event.value});
   }
 
-  setSortField(event) {
+  setSortField(event: { value: string }) {
     this.sortApplied.emit(event.value);
   }
 }

@@ -15,6 +15,7 @@ export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE
 })
 export class DonationService {
   private readonly apiPath = '/donations';
+  private readonly completeStatuses = ['Collected', 'Paid'];
   private readonly resumableStatuses = ['Pending', 'Reserved'];
   private readonly storageKey = `${environment.donateUriPrefix}/v2`; // Key is per-domain/env
 
@@ -35,7 +36,7 @@ export class DonationService {
   }
 
   isResumable(donation: Donation): boolean {
-    return this.resumableStatuses.includes(donation.status);
+    return (donation.status !== undefined && this.resumableStatuses.includes(donation.status));
   }
 
   /**
@@ -69,6 +70,10 @@ export class DonationService {
    * JWT in tact so that e.g. its details can still be loaded on the thank you page.
    */
   updateLocalDonation(donation: Donation) {
+    if (!donation.donationId) {
+      return;
+    }
+
     const couplet = this.getLocalDonationCouplet(donation.donationId);
 
     if (!couplet) {
@@ -85,9 +90,7 @@ export class DonationService {
    * can be refunded and exit the Collected status.
    */
   isComplete(donation: Donation): boolean {
-    const completeStatuses = ['Collected', 'Paid'];
-
-    return completeStatuses.includes(donation.status);
+    return (donation.status !== undefined && this.completeStatuses.includes(donation.status));
   }
 
   /**
@@ -126,7 +129,11 @@ export class DonationService {
     this.storage.set(this.storageKey, donationCouplets);
   }
 
-  removeLocalDonation(donation: Donation) {
+  removeLocalDonation(donation?: Donation) {
+    if (!donation) {
+      return;
+    }
+
     const donationCouplets = this.getDonationCouplets();
     donationCouplets.splice(
       donationCouplets.findIndex(donationItem => donationItem.donation.donationId === donation.donationId),
@@ -140,7 +147,11 @@ export class DonationService {
    * a string (when just derived from an HTTP response), and return it as a JavaScript Unix epoch milliseconds value.
    */
   private getCreatedTime(donation: Donation): number {
-    return (new Date(donation.createdTime)).getTime();
+    if (donation.createdTime) {
+      return (new Date(donation.createdTime)).getTime();
+    }
+
+    return 0;
   }
 
   private removeOldLocalDonations() {
@@ -172,7 +183,7 @@ export class DonationService {
     };
   }
 
-  private getLocalDonationCouplet(donationId: string): { donation: Donation, jwt: string } {
+  private getLocalDonationCouplet(donationId: string): { donation: Donation, jwt: string } | undefined {
     const donations = this.getDonationCouplets().filter(donationItem => {
       return (donationItem.donation.donationId === donationId);
     });

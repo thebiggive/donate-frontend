@@ -67,11 +67,15 @@ describe('CampaignDetailsComponent', () => {
       1234,
       'Test Campaign!',
       [],
+      'Some information about what happens if funds are not used',
+      undefined,
+      undefined,
+      undefined,
+      undefined,
       {
         provider: 'youtube',
         key: 'someFakeKey',
       },
-      'Some information about what happens if funds are not used',
     );
     // For now, *don't* detect changes as ngOnInit() will clear out the fixed `campaign` trying to
     // read a value from the state transfer service. TODO it would be better to mock an HTTP response
@@ -84,10 +88,19 @@ describe('CampaignDetailsComponent', () => {
   });
 
   it('should load key data from test campaign', () => {
+    if (!component.campaign) {
+      expect(false).toBeTrue(); // campaign unexpectedly undefined
+      return;
+    }
     expect(component.campaign.title).toBe('Test Campaign!');
     expect(component.campaign.isMatched).toBe(true);
     expect(component.campaign.charity.name).toBe('Test Charity');
     expect(component.campaign.aims[0]).toBe('Aim 1');
-    expect(component.campaign.video.provider).toBe('youtube');
+    expect(component.campaign.video).toBeDefined();
+    if (component.campaign.video) {
+      expect(component.campaign.video.provider).toBe('youtube');
+    } else {
+      expect(false).toBeTrue(); // video unexpectedly undefined
+    }
   });
 });

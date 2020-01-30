@@ -13,7 +13,7 @@ import { PageMetaService } from '../page-meta.service';
   styleUrls: ['./campaign-details.component.scss'],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
-  public campaign: Campaign;
+  public campaign?: Campaign;
   public campaignId: string;
   public clientSide: boolean;
   public donateEnabled = true;
@@ -78,7 +78,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     this.percentRaised = CampaignService.percentRaised(campaign);
 
     let summaryStart;
-    if (campaign.summary) {
+    if (campaign.summary.length > 0) {
       // First 20 word-like things followed by …
       summaryStart = campaign.summary.replace(new RegExp('^(([\\w\',."-]+ ){20}).*$'), '$1') + '…';
     } else {

@@ -14,10 +14,12 @@ describe('CharityCheckoutDonation model', () => {
       donationMatched: true,
       donationId: 'someDonationId',
       giftAid: true,
+      matchedAmount: 0,
       matchReservedAmount: 1100.00,
       optInCharityEmail: true,
       optInTbgEmail: false,
       projectId: 'someProjectId',
+      tipAmount: 0,
     };
     const charityCheckoutDonation: CharityCheckoutDonation = new CharityCheckoutDonation(donation);
 
@@ -43,15 +45,17 @@ describe('CharityCheckoutDonation model', () => {
       donationMatched: true,
       donationId: 'someDonationId',
       giftAid: true,
+      matchedAmount: 0.00,
       matchReservedAmount: 0.00,
       optInCharityEmail: true,
       optInTbgEmail: false,
       projectId: 'someProjectId',
+      tipAmount: 0.00,
     };
     const charityCheckoutDonation: CharityCheckoutDonation = new CharityCheckoutDonation(donation);
 
     expect(charityCheckoutDonation.donation_type).toBe('em1');
-    expect(charityCheckoutDonation.reservation_time).toBeNull();
+    expect(charityCheckoutDonation.reservation_time).toBeUndefined();
   });
 
   it('should translate a donation with all opt-ins but TBG contact false correctly', () => {
@@ -64,7 +68,10 @@ describe('CharityCheckoutDonation model', () => {
       giftAid: false,
       optInCharityEmail: false,
       optInTbgEmail: true,
+      matchedAmount: 0.00,
+      matchReservedAmount: 0.00,
       projectId: 'someOtherProjectId',
+      tipAmount: 0.00,
     };
 
     const charityCheckoutDonation: CharityCheckoutDonation = new CharityCheckoutDonation(donation);
@@ -76,7 +83,7 @@ describe('CharityCheckoutDonation model', () => {
     expect(charityCheckoutDonation.donation_type).toBe('ind1');
     expect(charityCheckoutDonation.gift_aid).toBe('0');
     expect(charityCheckoutDonation.project_id).toBe('someOtherProjectId');
-    expect(charityCheckoutDonation.reservation_time).toBeNull();
+    expect(charityCheckoutDonation.reservation_time).toBeUndefined();
     expect(charityCheckoutDonation.share_details_with_charity).toBe('1'); // Always true
     expect(charityCheckoutDonation.unique_ID).toBe('someOtherDonationId');
   });

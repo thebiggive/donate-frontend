@@ -28,9 +28,9 @@ export class CampaignService {
     return (new Date(campaign.endDate) >= new Date());
   }
 
-  static percentRaised(campaign: (Campaign | CampaignSummary)): number | null {
+  static percentRaised(campaign: (Campaign | CampaignSummary)): number | undefined {
     if (!campaign.target) {
-      return null;
+      return undefined;
     }
 
     return 100 * campaign.amountRaised / campaign.target;
@@ -99,13 +99,17 @@ export class CampaignService {
   }
 }
 
-export class SearchQuery {
+interface SearchQueryInterface {
+  [key: string]: any;
+}
+
+export class SearchQuery implements SearchQueryInterface {
   public beneficiary?: string;
   public category?: string;
   public country?: string;
   public fundSlug?: string;
-  public limit?: number;
-  public offset?: number;
+  public limit = 6;
+  public offset = 0;
   public onlyMatching?: boolean;
   public parentCampaignId?: string;
   public parentCampaignSlug?: string;

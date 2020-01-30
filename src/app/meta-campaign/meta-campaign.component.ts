@@ -16,19 +16,19 @@ import { PageMetaService } from '../page-meta.service';
   styleUrls: ['./meta-campaign.component.scss'],
 })
 export class MetaCampaignComponent implements OnInit {
-  public campaign: Campaign;
+  public campaign?: Campaign;
   public children: CampaignSummary[];
   public filterError = false;
-  public fund: Fund;
+  public fund?: Fund;
   public hasTerm = false;
   public loading = false; // Server render gets initial result set; set true when filters change.
-  public selectedSort = 'matchFundsRemaining';
+  public selectedSort: string;
 
   private campaignId: string;
   private campaignSlug: string;
   private fundSlug: string;
   private perPage = 6;
-  private query: SearchQuery;
+  private query: {[key: string]: any};
   private resetSubject: Subject<void> = new Subject<void>();
 
   constructor(
@@ -47,15 +47,16 @@ export class MetaCampaignComponent implements OnInit {
 
   ngOnInit() {
     const metacampaignKey = makeStateKey<Campaign>(`metacampaign-${this.campaignId}`);
-    this.campaign = this.state.get(metacampaignKey, undefined);
+    this.campaign = this.state.get<Campaign | undefined>(metacampaignKey, undefined);
 
-    let fundKey;
+    let fundKey: StateKey<string>;
     if (this.fundSlug) {
       fundKey = makeStateKey<Fund>(`fund-${this.fundSlug}`);
       this.fund = this.state.get(fundKey, undefined);
     }
 
-    if (this.campaign) {
+    if (this.campaign) { // app handed over from SSR to client-side JS
+      this.setDefaultFilters();
       this.setSecondaryProps(this.campaign);
     } else {
       if (this.campaignId) {
@@ -71,8 +72,6 @@ export class MetaCampaignComponent implements OnInit {
         this.fund = fund;
       });
     }
-
-    this.setDefaultFilters();
   }
 
   onScroll() {
@@ -93,17 +92,10 @@ export class MetaCampaignComponent implements OnInit {
     }
   }
 
-  /**
-   * Set a filter or sort value on the query
-   */
-  setQueryProperty(property, event) {
-    this.query[property] = event.value;
-    this.run();
-  }
-
   setDefaultFilters() {
     this.hasTerm = false;
-    this.selectedSort = 'matchFundsRemaining';
+    this.selectedSort = this.getDefaultSort();
+
     this.query = {
       parentCampaignId: this.campaignId,
       parentCampaignSlug: this.campaignSlug,
@@ -127,8 +119,9 @@ export class MetaCampaignComponent implements OnInit {
     }
   }
 
-  onFilterApplied(update: {filterName: string, value: string}) {
-    this.query[update.filterName] = update.value;
+  onFilterApplied(update: { [filterName: string]: string, value: string}) {
+    this.query[update.filterName] = update.value as string;
+
     this.run();
   }
 
@@ -142,17 +135,22 @@ export class MetaCampaignComponent implements OnInit {
     // Enable Relevance sort option and apply it if term is non-blank,
     // otherwise remove it and set to match funds remaining.
     this.hasTerm = (term !== '');
-    this.selectedSort = (term === '' ? 'matchFundsRemaining' : '');
+    this.selectedSort = (term === '' ? this.getDefaultSort() : '');
 
     this.query.term = term;
     this.handleSortParams();
     this.run();
   }
 
+  private getDefaultSort(): string {
+    // Most Raised for completed Master Campaigns; Match Funds Remaining for others.
+    return (this.campaign && new Date(this.campaign.endDate) < new Date()) ? 'amountRaised' : 'matchFundsRemaining';
+  }
+
   private loadMoreForCurrentSearch() {
     this.query.offset += this.perPage;
     this.loading = true;
-    this.campaignService.search(this.query).subscribe(campaignSummaries => {
+    this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
       // Success
       this.children = [...this.children, ...campaignSummaries];
       this.loading = false;
@@ -170,7 +168,7 @@ export class MetaCampaignComponent implements OnInit {
     this.query.offset = 0;
     this.children = [];
     this.loading = true;
-    this.campaignService.search(this.query).subscribe(campaignSummaries => {
+    this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
       this.children = campaignSummaries; // Success
       this.loading = false;
     }, () => {
@@ -186,6 +184,7 @@ export class MetaCampaignComponent implements OnInit {
   private setCampaign(campaign: Campaign, metacampaignKey: StateKey<Campaign>) {
     this.state.set(metacampaignKey, campaign); // Have data ready for client when handing over from SSR
     this.campaign = campaign;
+    this.setDefaultFilters();
     this.setSecondaryProps(campaign);
   }
 

@@ -6,6 +6,7 @@ import { ngExpressEngine } from '@nguniversal/express-engine';
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import * as compression from 'compression';
 import * as express from 'express';
+import { Request, Response } from 'express';
 import * as helmet from 'helmet';
 import * as morgan from 'morgan';
 import { join } from 'path';
@@ -29,6 +30,7 @@ const DIST_FOLDER = join(process.cwd(), 'dist/browser');
 const {AppServerModuleNgFactory, LAZY_MODULE_MAP} = require('./dist/server/main');
 
 // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
+// @ts-ignore Suppress param type error for now. See https://github.com/angular/universal/issues/1210
 app.engine('html', ngExpressEngine({
   bootstrap: AppServerModuleNgFactory,
   providers: [
@@ -39,7 +41,7 @@ app.engine('html', ngExpressEngine({
 app.set('view engine', 'html');
 app.set('views', DIST_FOLDER);
 
-app.get('/robots.txt', (req, res) => {
+app.get('/robots.txt', (req: Request, res: Response) => {
   res.type('text/plain');
   if (environment.production) {
     res.send('User-agent: *\nAllow: /');
@@ -49,7 +51,7 @@ app.get('/robots.txt', (req, res) => {
 });
 
 // Serve static files requested via /d/ from /browser/d - when deployed S3 serves these up to CloudFront
-app.get('/d/favicon.ico', (req, res) => {
+app.get('/d/favicon.ico', (req: Request, res: Response) => {
   res.sendFile(DIST_FOLDER + '/favicon.ico', {
     maxAge: '7 days', // Don't make the favicon immutable in case we want to update it
   });
@@ -65,7 +67,7 @@ app.use('/assets', express.static(DIST_FOLDER + '/assets', {
 }));
 
 // All regular routes use the Universal engine
-app.get('*', (req, res) => {
+app.get('*', (req: Request, res: Response) => {
   // Note that the file output as `index.html` is actually dynamic. See `index` config keys in `angular.json`.
   // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
   // this key to work around `fileReplacements` ending index support in Angular 8.
@@ -83,4 +85,4 @@ const server = app.listen(PORT, () => {
  * @link https://adamcrowder.net/posts/node-express-api-and-aws-alb-502/
  */
 server.keepAliveTimeout = 65 * 1000;
-server.headersTimeout = 70 * 1000;
+server.timeout = 70 * 1000;

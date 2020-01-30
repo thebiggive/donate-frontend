@@ -6,5 +6,11 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   templateUrl: 'donation-start-match-confirm-dialog.html',
 })
 export class DonationStartMatchConfirmDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { cancelCopy: string, status: string, statusDetail: string, title: string }) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {
+    cancelCopy: string,
+    status: string,
+    statusDetail: string,
+    title: string,
+    surplusDonationInfo: string,
+  }) {}
 }

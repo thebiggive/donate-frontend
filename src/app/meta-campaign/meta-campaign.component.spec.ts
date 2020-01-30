@@ -68,7 +68,7 @@ describe('MetaCampaignComponent', () => {
       [],
       'https://example.com/banner.png',
       [],
-      undefined,
+      '',
       {
         id: 'tbgId',
         name: 'The Big Give',
@@ -90,10 +90,9 @@ describe('MetaCampaignComponent', () => {
       new Date(),
       'Active',
       'Test Master Campaign detail',
-      undefined,
+      15000,
       'Test Master Campaign!',
       [],
-      null,
     );
     component.children = [
       new CampaignSummary(

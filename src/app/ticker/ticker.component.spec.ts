@@ -72,11 +72,15 @@ describe('TickerComponent', () => {
       2000.01,
       'Some title',
       [],
+      'Some information about what happens if funds are not used',
+      undefined,
+      undefined,
+      undefined,
+      undefined,
       {
         provider: 'youtube',
         key: '1G_Abc2delF',
       },
-      'Some information about what happens if funds are not used',
     );
     fixture.detectChanges();
   });

@@ -43,7 +43,7 @@ export class DonationCompleteComponent {
   /**
    * Must be public in order for re-tries to invoke it in an anonymous context.
    */
-  checkDonation(): Observable<Donation> {
+  checkDonation(): void {
     this.tries++;
     const donationLocalCopy = this.donationService.getDonation(this.donationId);
 
@@ -66,7 +66,7 @@ export class DonationCompleteComponent {
     this.donation = donation;
     this.campaignService.getOneById(donation.projectId).subscribe(campaign => this.campaign = campaign);
 
-    if (this.donationService.isComplete(donation)) {
+    if (donation && this.donationService.isComplete(donation)) {
       this.analyticsService.logEvent('thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
       this.cardChargedAmount = donation.donationAmount + donation.tipAmount;
       this.giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;

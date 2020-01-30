@@ -99,9 +99,17 @@ describe('DonationStartComponent', () => {
     expect(component.donationForm.valid).toBe(false);
 
     expect(component.donationForm.controls.donationAmount.errors).toBeNull();
-    expect(component.donationForm.controls.giftAid.errors.required).toBe(true);
-    expect(component.donationForm.controls.optInCharityEmail.errors.required).toBe(true);
-    expect(component.donationForm.controls.optInTbgEmail.errors.required).toBe(true);
+    if (
+      component.donationForm.controls.giftAid.errors &&
+      component.donationForm.controls.optInCharityEmail.errors &&
+      component.donationForm.controls.optInTbgEmail.errors
+    ) {
+      expect(component.donationForm.controls.giftAid.errors.required).toBe(true);
+      expect(component.donationForm.controls.optInCharityEmail.errors.required).toBe(true);
+      expect(component.donationForm.controls.optInTbgEmail.errors.required).toBe(true);
+    } else {
+      expect(false).toBeTrue(); // One of more errors unexpectedly undefined
+    }
   });
 
   it('should have missing amount error', () => {
@@ -114,7 +122,11 @@ describe('DonationStartComponent', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
-    expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['required']);
+    if (component.donationForm.controls.donationAmount.errors) {
+      expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['required']);
+    } else {
+      expect(false).toBeTrue(); // donationAmount errors unexpectedly undefined
+    }
     expect(component.donationForm.controls.giftAid.errors).toBeNull();
     expect(component.donationForm.controls.optInCharityEmail.errors).toBeNull();
     expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
@@ -130,7 +142,11 @@ describe('DonationStartComponent', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
-    expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['min']);
+    if (component.donationForm.controls.donationAmount.errors) {
+      expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['min']);
+    } else {
+      expect(false).toBeTrue(); // donationAmount errors unexpectedly undefined
+    }
     expect(component.donationForm.controls.giftAid.errors).toBeNull();
     expect(component.donationForm.controls.optInCharityEmail.errors).toBeNull();
     expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
@@ -146,7 +162,11 @@ describe('DonationStartComponent', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
-    expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['max']);
+    if (component.donationForm.controls.donationAmount.errors) {
+      expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['max']);
+    } else {
+      expect(false).toBeTrue(); // donationAmount errors unexpectedly undefined
+    }
     expect(component.donationForm.controls.giftAid.errors).toBeNull();
     expect(component.donationForm.controls.optInCharityEmail.errors).toBeNull();
     expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
@@ -162,7 +182,11 @@ describe('DonationStartComponent', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
-    expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['pattern']);
+    if (component.donationForm.controls.donationAmount.errors) {
+      expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['pattern']);
+    } else {
+      expect(false).toBeTrue(); // donationAmount errors unexpectedly undefined
+    }
     expect(component.donationForm.controls.giftAid.errors).toBeNull();
     expect(component.donationForm.controls.optInCharityEmail.errors).toBeNull();
     expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
