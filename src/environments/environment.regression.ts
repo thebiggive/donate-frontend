@@ -9,7 +9,7 @@ export const environment = {
   apiUriPrefix: 'https://regtest1-biggive.cs105.force.com',
   charityCheckoutInitUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
   donateUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
-  donationsApiPrefix: 'https://regtest1-biggive.cs105.force.com/donations/services/apexrest/v1.0',
+  donationsApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,
