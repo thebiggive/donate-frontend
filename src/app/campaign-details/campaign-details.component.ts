@@ -84,7 +84,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     this.percentRaised = CampaignService.percentRaised(campaign);
 
     let summaryStart;
-    if (campaign.summary.length > 0) {
+    if (campaign.summary) {
       // First 20 word-like things followed by …
       summaryStart = campaign.summary.replace(new RegExp('^(([\\w\',."-]+ ){20}).*$'), '$1') + '…';
     } else {
