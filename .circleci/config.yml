@@ -1,11 +1,11 @@
 version: 2.1
 
 orbs:
-  aws-ecr: circleci/aws-ecr@6.5.0
-  aws-ecs: circleci/aws-ecs@1.0.0
-  aws-s3: circleci/aws-s3@1.0.11
-  jira: circleci/jira@1.0.6
-  slack: circleci/slack@3.4.1
+  aws-ecr: circleci/aws-ecr@6.7.0
+  aws-ecs: circleci/aws-ecs@1.1.0
+  aws-s3: circleci/aws-s3@1.0.15
+  jira: circleci/jira@1.1.2
+  slack: circleci/slack@3.4.2
 
 jobs:
   build:

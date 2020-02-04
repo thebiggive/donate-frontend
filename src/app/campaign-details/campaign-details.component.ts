@@ -5,6 +5,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
+import { ImageService } from '../image.service';
 import { PageMetaService } from '../page-meta.service';
 
 @Component({
@@ -13,19 +14,20 @@ import { PageMetaService } from '../page-meta.service';
   styleUrls: ['./campaign-details.component.scss'],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
-  public campaign?: Campaign;
-  public campaignId: string;
-  public clientSide: boolean;
-  public donateEnabled = true;
-  public fromFund = false;
-  public percentRaised?: number;
-  public videoEmbedUrl?: SafeResourceUrl;
+  additionalImageUris: string[] = [];
+  campaign?: Campaign;
+  campaignId: string;
+  donateEnabled = true;
+  fromFund = false;
+  percentRaised?: number;
+  videoEmbedUrl?: SafeResourceUrl;
 
   private timer: any; // State update setTimeout reference, for client side when donations open soon
 
   constructor(
     private campaignService: CampaignService,
     private pageMeta: PageMetaService,
+    private imageService: ImageService,
     // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
@@ -65,6 +67,10 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   private setSecondaryProps(campaign: Campaign) {
     this.donateEnabled = CampaignService.isOpenForDonations(campaign);
 
+    for (const originalUri of campaign.additionalImageUris) {
+      this.imageService.getImageUri(originalUri.uri, 850).subscribe(uri => this.additionalImageUris.push(uri));
+    }
+
     // If donations open within 24 hours, set a timer to update this page's state.
     if (!this.donateEnabled && isPlatformBrowser(this.platformId)) {
       const msToLaunch = new Date(campaign.startDate).getTime() - Date.now();
@@ -78,7 +84,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     this.percentRaised = CampaignService.percentRaised(campaign);
 
     let summaryStart;
-    if (campaign.summary.length > 0) {
+    if (campaign.summary) {
       // First 20 word-like things followed by …
       summaryStart = campaign.summary.replace(new RegExp('^(([\\w\',."-]+ ){20}).*$'), '$1') + '…';
     } else {
