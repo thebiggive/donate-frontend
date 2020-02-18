@@ -62,7 +62,10 @@ detection to explain the situation to users of these browsers.
 
 ### Debugging Internet Explorer
 
-It is possible, though fiddly, to test Internet Explorer 11 complete with live reload. These steps were used on macOS but should work cross-platform:
+If you only need to check an issue that is already happening on staging, the easiest way is through a manual test session on [TestingBot](https://testingbot.com/).
+
+It is possible, though more fiddly, to test Internet Explorer 11 complete with live reload to dig into an issue while trying changes locally.
+These steps were used on macOS but should work cross-platform:
 
 * Temporarily target ES5 for local builds - makes output less optimised but this is necessary to use the local server with IE11: in the project root `tsconfig.json` change the config to `... "target": "es5", ...`. Do not commit this change outside of a debug branch!
 * Get the latest [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and a free [test image from Microsoft](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
