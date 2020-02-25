@@ -13,7 +13,6 @@
     "compile:server:production": "webpack --config webpack.server.production.config.js --progress --colors",
     "compile:server:regression": "webpack --config webpack.server.regression.config.js --progress --colors",
     "compile:server:staging": "webpack --config webpack.server.staging.config.js --progress --colors",
-    "serve:ssr": "node dist/server",
     "build": "ng build --deploy-url=/d/",
     "build:staging": "ng build --deploy-url=/d/ --prod --configuration=staging",
     "build:regression": "ng build --deploy-url=/d/ --prod --configuration=regression",
@@ -25,7 +24,12 @@
     "build:client-and-server-bundles:regression": "npm run build:regression && ng run donate-frontend:server:regression",
     "build:client-and-server-bundles:staging": "npm run build:staging && ng run donate-frontend:server:staging",
     "e2e-ci": "ng e2e --protractor-config=e2e/protractor-ci.conf.js",
-    "ci": "npm run lint && npm run test-ci && npm run e2e-ci && npm run build:staging"
+    "ci": "npm run lint && npm run test-ci && npm run e2e-ci && npm run build:staging",
+    "serve:ssr_bak": "node dist/server",
+    "dev:ssr": "ng run donate-frontend:serve-ssr",
+    "serve:ssr": "node dist/server/main.js",
+    "build:ssr": "ng build --prod && ng run donate-frontend:server:production",
+    "prerender": "ng run donate-frontend:prerender"
   },
   "dependencies": {
     "@angular/animations": "^9.0.2",
@@ -41,7 +45,6 @@
     "@angular/platform-server": "^9.0.2",
     "@angular/router": "^9.0.2",
     "@nguniversal/express-engine": "^9.0.1",
-    "@nguniversal/module-map-ngfactory-loader": "^8.2.6",
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "helmet": "^3.21.3",
@@ -58,6 +61,7 @@
     "@angular/cli": "^9.0.3",
     "@angular/compiler-cli": "^9.0.2",
     "@angular/language-service": "^9.0.2",
+    "@nguniversal/builders": "^9.0.1",
     "@types/compression": "^1.7.0",
     "@types/express": "^4.17.2",
     "@types/helmet": "0.0.45",
