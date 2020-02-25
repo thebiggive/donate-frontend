@@ -38,7 +38,7 @@ describe('DonationCompleteComponent', () => {
 
     // We must mock AnalyticsService so we don't touch the window/global var which is unavailable.
     // This also lets the test assert that a specific GA method call is made.
-    analyticsService = TestBed.get(AnalyticsService);
+    analyticsService = TestBed.inject(AnalyticsService);
     spyOn(analyticsService, 'logError');
 
     TestBed.compileComponents();
