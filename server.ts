@@ -68,11 +68,6 @@ export function app() {
     // Note that the file output as `index.html` is actually dynamic. See `index` config keys in `angular.json`.
     // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
     // this key to work around `fileReplacements` ending index support in Angular 8.
-    res.render('index', { req });
-  });
-
-  // All regular routes use the Universal engine
-  server.get('*', (req, res) => {
     res.render(indexHtml, { req, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
   });
 
