@@ -65,11 +65,6 @@ import { TimeLeftPipe } from './time-left.pipe';
     TickerComponent,
     TimeLeftPipe,
   ],
-  entryComponents: [
-    DonationStartErrorDialogComponent,
-    DonationStartMatchConfirmDialogComponent,
-    DonationStartOfferReuseDialogComponent,
-  ],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,
