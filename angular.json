@@ -206,27 +206,27 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.production.ts"
                 }
-              ]
-            ,              "optimization": true
-},
+              ],
+              "optimization": true
+            },
             "regression": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.regression.ts"
                 }
-              ]
-            ,              "optimization": true
-},
+              ],
+              "optimization": true
+            },
             "staging": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.staging.ts"
                 }
-              ]
-            ,              "optimization": true
-}
+              ],
+              "optimization": true
+            }
           }
         }
       }
