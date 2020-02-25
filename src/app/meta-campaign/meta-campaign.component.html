@@ -3,7 +3,7 @@
   [fund]="fund"
   [title]="campaign.title"
   [reset]="resetSubject.asObservable()"
-  [description]="fund ? fund.description : campaign.summary"
+  [description]="(fund && fund.description) ? fund.description : campaign.summary"
   (heroSearch)="onMetacampaignSearch($event)"
 ></app-hero>
 
