@@ -22,7 +22,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
-            "aot": false,
+            "aot": true,
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -51,7 +51,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -60,6 +59,10 @@
                   "type": "initial",
                   "maximumWarning": "2.5mb",
                   "maximumError": "3mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             },
@@ -79,7 +82,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -88,6 +90,10 @@
                   "type": "initial",
                   "maximumWarning": "2.5mb",
                   "maximumError": "3mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             },
@@ -107,7 +113,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -116,6 +121,10 @@
                   "type": "initial",
                   "maximumWarning": "2.5mb",
                   "maximumError": "3mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
                 }
               ]
             }
@@ -198,7 +207,8 @@
                   "with": "src/environments/environment.production.ts"
                 }
               ]
-            },
+            ,              "optimization": true
+},
             "regression": {
               "fileReplacements": [
                 {
@@ -206,7 +216,8 @@
                   "with": "src/environments/environment.regression.ts"
                 }
               ]
-            },
+            ,              "optimization": true
+},
             "staging": {
               "fileReplacements": [
                 {
@@ -214,7 +225,8 @@
                   "with": "src/environments/environment.staging.ts"
                 }
               ]
-            }
+            ,              "optimization": true
+}
           }
         }
       }
