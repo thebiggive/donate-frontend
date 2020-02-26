@@ -8,7 +8,7 @@ import { Observable, Subscription } from 'rxjs';
   styleUrls: ['./campaign-search-form.component.scss'],
 })
 export class CampaignSearchFormComponent implements OnInit, OnDestroy {
-  @ViewChild('term', {static: false}) termField: ElementRef;
+  @ViewChild('term') termField: ElementRef;
   @Input() campaignId: string;
   @Input() reset: Observable<void>;
   @Output() search: EventEmitter<any> = new EventEmitter();

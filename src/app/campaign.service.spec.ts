@@ -78,8 +78,8 @@ describe('CampaignService', () => {
   }));
 
   it('should retrieve campaign details from API', () => {
-    const service: CampaignService = TestBed.get(CampaignService);
-    const httpMock: HttpTestingController = TestBed.get(HttpTestingController);
+    const service: CampaignService = TestBed.inject(CampaignService);
+    const httpMock: HttpTestingController = TestBed.inject(HttpTestingController);
 
     const dummyCampaign: Campaign = getDummyCampaign();
 
