@@ -40,6 +40,10 @@ const routes: Routes = [
     path: '',
     component: ExploreComponent,
   },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];
 
 @NgModule({
