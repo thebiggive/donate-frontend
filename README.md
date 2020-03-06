@@ -26,9 +26,8 @@ To run style, unit and e2e tests together from your local, as CircleCI build che
 
     npm run ci
 
-The latest tagged [Puppeteer](https://www.npmjs.com/package/puppeteer) uses the very latest available Chromium, which is typically incompatible
-with the latest *stable* tagged version that other libaries have available. So for it to continue working, we need to be careful with its version
-and pin it to a specific point releases rather than allowing any `1.x` upgrade.
+The latest tagged [Puppeteer](https://www.npmjs.com/package/puppeteer) typically uses the latest available Chromium and updates do not follow
+semantic versioning. So for it to continue working, it currently needs to be pinned to a particular "feature release", e.g. `2.1.*` for Chromium 80.
 
 Environment Variables configured in the CircleCI interface for this app are:
 
@@ -62,7 +61,10 @@ detection to explain the situation to users of these browsers.
 
 ### Debugging Internet Explorer
 
-It is possible, though fiddly, to test Internet Explorer 11 complete with live reload. These steps were used on macOS but should work cross-platform:
+If you only need to check an issue that is already happening on staging, the easiest way is through a manual test session on [TestingBot](https://testingbot.com/).
+
+It is possible, though more fiddly, to test Internet Explorer 11 complete with live reload to dig into an issue while trying changes locally.
+These steps were used on macOS but should work cross-platform:
 
 * Temporarily target ES5 for local builds - makes output less optimised but this is necessary to use the local server with IE11: in the project root `tsconfig.json` change the config to `... "target": "es5", ...`. Do not commit this change outside of a debug branch!
 * Get the latest [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and a free [test image from Microsoft](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)

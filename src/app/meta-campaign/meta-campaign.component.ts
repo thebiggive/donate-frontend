@@ -22,6 +22,7 @@ export class MetaCampaignComponent implements OnInit {
   public fund?: Fund;
   public hasTerm = false;
   public loading = false; // Server render gets initial result set; set true when filters change.
+  public resetSubject: Subject<void> = new Subject<void>();
   public selectedSort: string;
 
   private campaignId: string;
@@ -29,7 +30,6 @@ export class MetaCampaignComponent implements OnInit {
   private fundSlug: string;
   private perPage = 6;
   private query: {[key: string]: any};
-  private resetSubject: Subject<void> = new Subject<void>();
 
   constructor(
     private campaignService: CampaignService,

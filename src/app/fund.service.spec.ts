@@ -12,8 +12,8 @@ describe('FundService', () => {
   }));
 
   it('should retrieve Champion Funding details from API', () => {
-    const service: FundService = TestBed.get(FundService);
-    const httpMock: HttpTestingController = TestBed.get(HttpTestingController);
+    const service: FundService = TestBed.inject(FundService);
+    const httpMock: HttpTestingController = TestBed.inject(HttpTestingController);
 
     const dummyFund: Fund = {
       id: 'asdfasdfasdfasdf12',

@@ -24,7 +24,7 @@ describe('TimeLeftPipe', () => {
       markForCheck: () => null,
       reattach: () => null,
     };
-    pipe = new TimeLeftPipe(TestBed.get(PLATFORM_ID), cdRefMock);
+    pipe = new TimeLeftPipe(TestBed.inject(PLATFORM_ID), cdRefMock);
   });
 
   it('is instantiated', () => {

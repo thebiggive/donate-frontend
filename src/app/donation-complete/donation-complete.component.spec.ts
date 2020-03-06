@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatProgressSpinnerModule } from '@angular/material';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
@@ -38,7 +38,7 @@ describe('DonationCompleteComponent', () => {
 
     // We must mock AnalyticsService so we don't touch the window/global var which is unavailable.
     // This also lets the test assert that a specific GA method call is made.
-    analyticsService = TestBed.get(AnalyticsService);
+    analyticsService = TestBed.inject(AnalyticsService);
     spyOn(analyticsService, 'logError');
 
     TestBed.compileComponents();

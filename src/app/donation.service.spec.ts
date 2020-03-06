@@ -47,7 +47,7 @@ describe('DonationService', () => {
   }));
 
   it('should be created', () => {
-    const service: DonationService = TestBed.get(DonationService);
+    const service: DonationService = TestBed.inject(DonationService);
     expect(service).toBeTruthy();
   });
 
@@ -59,7 +59,7 @@ describe('DonationService', () => {
       (
         httpMock: HttpTestingController,
       ) => {
-        const service: DonationService = TestBed.get(DonationService);
+        const service: DonationService = TestBed.inject(DonationService);
         const donation = getDummyDonation();
 
         service.create(donation).subscribe(result => {
@@ -98,7 +98,7 @@ describe('DonationService', () => {
   //     (
   //       httpMock: HttpTestingController,
   //     ) => {
-  //       const service: DonationService = TestBed.get(DonationService);
+  //       const service: DonationService = TestBed.inject(DonationService);
   //       const donation = getDummyDonation();
   //       service.create(donation).subscribe(createResponse => {
   //         expect(createResponse.donation.status).toEqual('Pending');
@@ -134,7 +134,7 @@ describe('DonationService', () => {
   // );
 
   it('should save local donation data and find the donation by ID', () => {
-    const service: DonationService = TestBed.get(DonationService);
+    const service: DonationService = TestBed.inject(DonationService);
     const inputDonation = getDummyDonation();
     service.saveDonation(inputDonation, 'fakeheader.fakebody.fakesig');
 
@@ -146,7 +146,7 @@ describe('DonationService', () => {
   });
 
   it('should correctly determine when a donation is complete', () => {
-    const service: DonationService = TestBed.get(DonationService);
+    const service: DonationService = TestBed.inject(DonationService);
     const donation: Donation = getDummyDonation();
     donation.status = 'Paid';
 
@@ -154,7 +154,7 @@ describe('DonationService', () => {
   });
 
   it('should correctly determine when a donation is incomplete', () => {
-    const service: DonationService = TestBed.get(DonationService);
+    const service: DonationService = TestBed.inject(DonationService);
     const donation: Donation = getDummyDonation();
     donation.status = 'Refunded';
 
@@ -165,7 +165,7 @@ describe('DonationService', () => {
     inject([HttpTestingController], (
       httpMock: HttpTestingController,
     ) => {
-      const service: DonationService = TestBed.get(DonationService);
+      const service: DonationService = TestBed.inject(DonationService);
       const inputDonation = getDummyDonation();
 
       service.saveDonation(inputDonation, 'fakeheader.fakebody.fakesig');
@@ -190,7 +190,7 @@ describe('DonationService', () => {
   );
 
   it('should return undefined for resumable donations with unknown project ID', () => {
-    const service: DonationService = TestBed.get(DonationService);
+    const service: DonationService = TestBed.inject(DonationService);
     service.saveDonation(getDummyDonation(), 'fakeheader.fakebody.fakesig');
     service.getProbablyResumableDonation('notARealProjectId').subscribe(donation => {
       expect(donation).toBeUndefined();
