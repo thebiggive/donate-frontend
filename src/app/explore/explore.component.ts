@@ -1,7 +1,8 @@
 import { FilterType } from './../filters/filters.component';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Params, Router, RouterEvent } from '@angular/router';
 import { Subject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { CampaignSummary } from '../campaign-summary.model';
@@ -27,6 +28,7 @@ export class ExploreComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
     private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.setDefaults();
     route.queryParams.forEach((params: Params) => {
@@ -37,6 +39,13 @@ export class ExploreComponent implements OnInit {
 
   ngOnInit() {
     this.handleFilters();
+
+    // Navigation "changes" occur when donors navigate back to the root `/` path, e.g. from the main menu.
+    // When this happens it's usually desirable to clear the filters so they have a convenient way to navigate
+    // back to the default view where we surface some campaigns, if they've got lost in an overly-filtered view.
+    this.router.events.pipe(
+      filter((event: RouterEvent) => event instanceof NavigationEnd),
+    ).subscribe(() => this.resetFilters());
   }
 
   resetFilters() {

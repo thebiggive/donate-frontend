@@ -47,7 +47,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled', initialNavigation: 'enabled' })],
+  imports: [RouterModule.forRoot(routes, {
+    initialNavigation: 'enabled',
+    onSameUrlNavigation: 'reload', // Allows Explore & home logo links to clear search filters in ExploreComponent
+    scrollPositionRestoration: 'enabled',
+  })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
