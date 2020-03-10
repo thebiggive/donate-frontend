@@ -1,3 +1,4 @@
+$colour-background: #f4f4f4; // Global / main app background
 $colour-red: #f0423b;
 $colour-teal-lightest: #CAE8EC;  // Should be lighter
 $colour-teal-lighter: #6ADDC0;   // Should be lightest
@@ -11,7 +12,9 @@ $colour-teal-fade: #E0F0F2;
 $colour-grey-light: #E1E2E5;
 $colour-grey: #7B8292;
 $colour-black: #333;
+$colour-black-contrast: #fff; // Suitable for legible text on `$colour-black` backgrounds
 $colour-highlight: #FDA83B;
+$colour-card-background: #fff;
 
 $breakpoint-md: "(min-width: 600px)";
 $breakpoint-lg: "(min-width: 960px)";

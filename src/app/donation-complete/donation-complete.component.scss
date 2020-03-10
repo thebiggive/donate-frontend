@@ -19,7 +19,7 @@
 .c-thank-you__content {
   background-color: $colour-teal-darker;
   padding: 1rem 2rem;
-  color: white;
+  color: $colour-black-contrast;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   margin: 0 auto;
@@ -56,7 +56,7 @@
   margin: 3rem 0;
   padding-bottom: 3rem;
 }
-  
+
 .c-receipt__heading {
   margin-top: 2rem;
   margin-bottom: 1rem;
@@ -99,7 +99,7 @@
 }
 
 .c-button {
-  background-color: #F4F4F4;
+  background-color: $colour-background;
   color: $colour-teal;
   padding: 1rem 0;
   &:hover {

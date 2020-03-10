@@ -7,12 +7,12 @@
 .c-ticker__total {
   @include b-rt-0;
   position: absolute;
-  background-color: #333;
+  background-color: $colour-black;
   z-index: 1;
   padding: 0 0.75rem;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
-  box-shadow: 15px 0 15px -5px #333;
+  box-shadow: 15px 0 15px -5px $colour-black;
   @media #{$breakpoint-lg} {
     padding: 0.5rem 1rem;
   }
@@ -28,7 +28,7 @@
 }
 
 .c-ticker__lists {
-  background-color: #333;
+  background-color: $colour-black;
   display: flex;
   align-items: center;
   width: 100%;

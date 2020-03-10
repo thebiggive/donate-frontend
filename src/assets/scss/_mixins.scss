@@ -140,7 +140,7 @@
 }
 
 @mixin make-card($box-shadow: $box-shadow-soft) {
-  background-color: white;
+  background-color: $colour-card-background;
   border-radius: 4px;
   box-shadow:$box-shadow;
 }

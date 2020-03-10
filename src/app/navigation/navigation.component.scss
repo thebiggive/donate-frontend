@@ -1,7 +1,7 @@
 @import '../../styles';
 
 mat-sidenav-container {
-  background-color: white;
+  background-color: $colour-card-background;
 }
 
 mat-sidenav {
@@ -10,7 +10,7 @@ mat-sidenav {
   @media #{$breakpoint-md} {
     max-width: 300px;
   }
-  @media (min-width: 960px) {
+  @media #{$breakpoint-lg} {
     display: none;
   }
 
@@ -30,25 +30,25 @@ mat-sidenav {
 }
 
 .main-nav-toolbar {
-  background-color: white;
+  background-color: $colour-card-background;
   font-size: 18px;
   display: flex;
   justify-content: space-between;
   padding-left: 1rem;
   padding-right: 1rem;
   &:after {
-    display:block;
-    content:"";
-    width:100%;
-    height:10px;
-    position:absolute;
-    z-index:1000;
-    top:56px;
-    background:linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.06) 100%);
+    display: block;
+    content: "";
+    width: 100%;
+    height: 10px;
+    position: absolute;
+    z-index: 1000;
+    top: 56px;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.06) 100%);
     @media #{$breakpoint-md} {
-      top:64px;
+      top: 64px;
     }
-    left:0;
+    left: 0;
   }
 }
 
@@ -59,8 +59,8 @@ mat-sidenav {
 
 .logo__wrap {
   margin-right: 1rem;
-  display:inline-flex;
-  justify-content:center;
+  display: inline-flex;
+  justify-content: center;
 }
 
 .logo__link {
@@ -88,7 +88,7 @@ mat-sidenav {
 
 .nav-links {
   display: inline-block;
-  width:auto;
+  width: auto;
   @media #{$breakpoint-md} {
     padding-left: 1rem;
     padding-right: 1rem;
@@ -102,10 +102,10 @@ mat-sidenav {
 }
 
 .charity-login__wrap {
-  display:flex;
+  display: flex;
   align-items: center;
   .mat-button {
-    @media (min-width: 960px) and (max-width: 1280px) {
+    @media #{$breakpoint-lg} {
       &:last-child {
         padding-right: 0;
       }
@@ -122,22 +122,22 @@ mat-sidenav {
 .main-nav {
   display: none;
   @media #{$breakpoint-lg} {
-    display:flex;
+    display: flex;
   }
   .nav-links__wrap {
-    display:inline-block;
+    display: inline-block;
   }
   .main-nav__search-form {
     display: none;
   }
   .mat-icon-button {
-    width:auto;
-    height:auto;
+    width: auto;
+    height: auto;
   }
 }
 
 .side-nav-button__wrap {
-  @media (min-width: 960px) {
+  @media #{$breakpoint-lg} {
     display: none;
   }
 }
