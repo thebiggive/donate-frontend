@@ -1,8 +1,8 @@
 @import '../../styles';
 
 .footer {
-  background-color: #333333;
-  color: white;
+  background-color: $colour-black;
+  color: $colour-black-contrast;
   padding: 2rem;
   margin-top: 4rem;
   @media #{$breakpoint-md} {
@@ -15,13 +15,13 @@
   }
 }
 
-.footer-row {
+.footer__row {
   width: 100%;
 }
 
 .logo__wrap {
   width: 100%;
-  @media (min-width: 960px) {
+  @media #{$breakpoint-lg} {
     width: 25%;
     display: inline-block;
   }
@@ -33,7 +33,7 @@ img {
 
 h3 {
   margin-bottom: 0.5rem;
-  @media screen and (min-width: 600px) {
+  @media screen and #{$breakpoint-md} {
     margin-top: 0;
   }
 }
@@ -57,7 +57,7 @@ li {
 
 .teal-nav {
   text-transform: uppercase;
-  color: #6ADDC0;
+  color: $colour-teal-lighter;
   .mat-button {
     font-size: 16px;
     line-height: 24px;
@@ -67,14 +67,14 @@ li {
 
 .nav-links {
   margin-top: 2rem;
-  @media screen and (min-width: 960px) {
+  @media screen and #{$breakpoint-lg} {
     margin-top: 0;
   }
 }
 
 .nav-links__about,
 .nav-links__row {
-  @media (min-width: 600px) {
+  @media #{$breakpoint-md} {
     width: 50%;
     display: inline-block;
     vertical-align: top;
@@ -82,14 +82,14 @@ li {
 }
 
 .nav-links__about {
-  @media (min-width: 960px) {
+  @media #{$breakpoint-lg} {
     width: 25%;
   }
 }
 
 .nav-links__how-we-can-help,
 .nav-links__teal {
-  @media (min-width: 960px) {
+  @media #{$breakpoint-lg} {
     width: 50%;
     display: inline-block;
   }
@@ -97,10 +97,10 @@ li {
 
 .nav-links__teal {
   vertical-align: top;
-  @media (min-width: 600px) {
+  @media #{$breakpoint-md} {
     margin-top: 1rem;
   }
-  @media (min-width: 960px) {
+  @media #{$breakpoint-lg} {
     margin-top: 0;
   }
 }
@@ -113,13 +113,13 @@ li {
 .fundraising-regulator-logo__wrap,
 .copyright-text__wrap {
   margin-top: 2rem;
-  @media (min-width: 600px) {
+  @media #{$breakpoint-md} {
     width: 50%;
     display: inline-block;
     vertical-align: bottom;
     margin-top: 3rem;
   }
-  @media (min-width: 960px) {
+  @media #{$breakpoint-lg} {
     width: 33.33%;
   }
 }
@@ -129,10 +129,10 @@ li {
 }
 
 .copyright-text__wrap {
-  @media (min-width: 600px) {
+  @media #{$breakpoint-md} {
     width: 100%;
   }
-  @media (min-width: 960px) {
+  @media #{$breakpoint-lg} {
     width: 33.33%;
     vertical-align: unset;
   }
