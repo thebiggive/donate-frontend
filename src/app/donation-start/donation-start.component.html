@@ -82,7 +82,7 @@
             <p class="b-rt-0">This may include thanks for your donation, updates on how it is being used, newsletters and future campaigns. If you select no, we will pass on your details as these may be required for Gift Aid purposes, but the charity will be informed that you do not wish to receive communications.</p>
             <p class="b-rt-0">Please note that you might continue to receive communications from {{ campaign.charity.name }} if you have already shared your details with them via other methods.</p>
             <mat-radio-group aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
-              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I’m happy to receive emails from {{ campaign.charity.name }}</mat-radio-button>
+              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.charity.name }}</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.charity.name }}</mat-radio-button>
             </mat-radio-group>
           </mat-expansion-panel>
@@ -96,7 +96,7 @@
             <p class="no-margin-top b-rt-1 b-bold">Would you be happy to receive emails from The Big Give?</p>
             <p class="b-rt-0">By selecting 'no', we will no longer be able to email you about opportunities to double your donation.</p>
             <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
-              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I’m happy to receive emails from The Big Give</mat-radio-button>
+              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from The Big Give</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from The Big Give</mat-radio-button>
             </mat-radio-group>
           </mat-expansion-panel>
@@ -104,13 +104,12 @@
           <mat-expansion-panel expanded="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <h3 class="b-rh-2">Did you know?</h3>
+                <h3 class="b-rh-2">Support the Big Give</h3>
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <p class="b-rt-0">The Big Give is the UKs #1 match funding platform, but we're also a <a href="https://beta.charitycommission.gov.uk/charity-details/?regid=1136547" target="_blank"><mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too!</p>
-            <p class="b-rt-0">We develop and operate the technology, support charities as they create and run their campaigns. 
-            Tips play a vital part in paying towards our running costs as a charity. 
-            If you'd like to support us you can choose to provide a voluntary tip when finalising your donation on the next page.</p>
+            <p class="b-rt-0">Before you finalise payment for your donation to this campaign, you'll have the chance to make an additional donation to the Big Give.</p>
+            <p class="b-rt-0">The Big Give is the UK's #1 match funding platform, but we're also a <a href="https://beta.charitycommission.gov.uk/charity-details/?regid=1136547" target="_blank"><mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too!</p>
+            <p class="b-rt-0">We develop and operate the technology, support charities as they create and run their campaigns. Tips play a vital part in paying towards our running costs as a charity. If you'd rather not support us, you can choose not to tip when finalising your donation.</p>
           </mat-expansion-panel>
 
           <mat-expansion-panel class="c-make-your-donation" expanded="true">
