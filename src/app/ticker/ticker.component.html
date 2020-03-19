@@ -1,7 +1,7 @@
 <div class="c-ticker">
   <div class="c-ticker__total">
-    <span *ngIf="fund"><em class="c-ticker__value c-ticker__value--emphasised">{{ fund.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</em> raised</span>
-    <span *ngIf="!fund && campaign.amountRaised > 0" ><em class="c-ticker__value c-ticker__value--emphasised">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</em> raised</span>
+    <span *ngIf="fund"><em class="c-ticker__value c-ticker__value--emphasised">{{ fund.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</em> raised inc. Gift Aid</span>
+    <span *ngIf="!fund && campaign.amountRaised > 0" ><em class="c-ticker__value c-ticker__value--emphasised">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</em> raised inc. Gift Aid</span>
     <span *ngIf="!fund && campaign.amountRaised == 0">Opens in <em  class="c-ticker__value c-ticker__value--emphasised">{{ campaign.startDate | timeLeft }}</em></span>
   </div>
   <div class="c-ticker__lists">
