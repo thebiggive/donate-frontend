@@ -13,10 +13,10 @@
     <div class="c-campaign-target" *ngIf="campaign.target > 0">
       <h3 class="c-campaign-target__description b-grey b-light">Campaign target</h3>
       <!-- TODO remove hard-coded campaign target after COVID-19 Emergency Appeal -->
-      <div *ngIf="showTemporaryTarget; else showRealTarget">
+      <div *ngIf="showTemporaryTarget">
         <p class="c-campaign-target__value b-bold">{{ 1000000 | currency : '£' : 'symbol' : '1.0-0' }}</p>
       </div>
-      <div #showRealTarget>
+      <div *ngIf="!showTemporaryTarget">
         <p class="c-campaign-target__value b-bold">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
         <mat-progress-bar [value]="percentRaised" *ngIf="campaign.amountRaised > 0"></mat-progress-bar>
       </div>
