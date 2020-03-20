@@ -16,10 +16,10 @@
       <div *ngIf="showTemporaryTarget; else showRealTarget">
         <p class="c-campaign-target__value b-bold">{{ 1000000 | currency : '£' : 'symbol' : '1.0-0' }}</p>
       </div>
-      <ng-template #showRealTarget>
+      <div #showRealTarget>
         <p class="c-campaign-target__value b-bold">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
         <mat-progress-bar [value]="percentRaised" *ngIf="campaign.amountRaised > 0"></mat-progress-bar>
-      </ng-template>
+      </div>
     </div>
     <div class="c-campaign-raised" *ngIf="campaign.amountRaised > 0">
       <h3 class="c-campaign-raised__description b-grey b-light">Amount raised</h3>
