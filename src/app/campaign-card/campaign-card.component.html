@@ -25,7 +25,7 @@
       <p class="c-funds__description">Match funds remaining</p>
       <h4 class="c-funds__amount">{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }}</h4>
     </div>
-    <div class="c-funds__total" fxFlex="50">
+    <div class="c-funds__total" *ngIf="campaign.amountRaised > 0" fxFlex="50">
       <p class="c-funds__description">Total funds raised</p>
       <h4 class="c-funds__amount">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</h4>
     </div>
