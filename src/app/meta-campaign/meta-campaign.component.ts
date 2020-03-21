@@ -46,7 +46,12 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   ngOnInit() {
-    const metacampaignKey = makeStateKey<Campaign>(`metacampaign-${this.campaignId}`);
+    let metacampaignKey: StateKey<string>;
+    if (this.campaignSlug) {
+      metacampaignKey = makeStateKey<Campaign>(`metacampaign-${this.campaignSlug}`);
+    } else {
+      metacampaignKey = makeStateKey<Campaign>(`metacampaign-${this.campaignId}`);
+    }
     this.campaign = this.state.get<Campaign | undefined>(metacampaignKey, undefined);
 
     let fundKey: StateKey<string>;
