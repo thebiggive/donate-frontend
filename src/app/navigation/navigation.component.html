@@ -1,6 +1,6 @@
 <mat-toolbar class="main-nav-toolbar">
   <div class="logo__wrap">
-    <a (click)="sidenav.close()" routerLink="/" class="logo__link"><img class="logo" src="/assets/images/logo.png" alt="The Big Give"></a>
+    <a routerLink="/" class="logo__link"><img class="logo" src="/assets/images/logo.png" alt="The Big Give"></a>
   </div>
   <div class="main-nav">
     <div class="nav-links__wrap">
@@ -69,7 +69,7 @@
   >
     <!-- <app-nav-search-form></app-nav-search-form> -->
     <mat-nav-list class="mat-nav-list nav-links__wrap"><div class="nav-links">
-        <button mat-icon-button (click)="sidenav.open()" [matMenuTriggerFor]="about">
+        <button mat-icon-button [matMenuTriggerFor]="about">
           About
           <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
         </button>
@@ -87,7 +87,7 @@
         </mat-menu>
       </div>
       <div class="nav-links">
-        <button mat-icon-button (click)="sidenav.open()" [matMenuTriggerFor]="howcanwehelp">
+        <button mat-icon-button [matMenuTriggerFor]="howcanwehelp">
           How can we help
           <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
         </button>
@@ -102,14 +102,14 @@
         </mat-menu>
       </div>
       <div class="nav-links">
-        <a mat-button class="nav-link" (click)="sidenav.close()" routerLink="/">Explore campaigns</a>
+        <a mat-button class="nav-link" routerLink="/">Explore campaigns</a>
       </div>
       <div class="nav-links">
         <a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/contact-us">Contact us</a>
       </div>
     </mat-nav-list>
     <mat-nav-list class="mat-nav-list charity-login__wrap">
-      <a class="charity-login__link" mat-list-item (click)="sidenav.close()" href="https://www.thebiggive.org.uk/charities/s/login/">Charity Login</a>
+      <a class="charity-login__link" mat-list-item href="https://www.thebiggive.org.uk/charities/s/login/">Charity Login</a>
     </mat-nav-list>
   </mat-sidenav>
 
