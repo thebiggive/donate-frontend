@@ -10,11 +10,11 @@ export class FacebookPixelService {
 
   load() {
     if (!this.loadOk) {
-      (function(f: any, b, e, v, n, t, s) {
+      ((f: any, b, e, v, n, t, s) => {
         if (f.fbq) {
           return;
         }
-        n = f.fbq = function() {
+        n = f.fbq = () => {
           n.callMethod
             ? n.callMethod.apply(n, arguments)
             : n.queue.push(arguments);
