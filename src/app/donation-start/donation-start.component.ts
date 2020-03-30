@@ -41,6 +41,7 @@ import { GiftAidAddress } from '../gift-aid-address.model';
 import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
 import { IdentityService } from '../identity.service';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
+import { MetaPixelService } from '../meta-pixel.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
 import { PostcodeService } from '../postcode.service';
@@ -170,6 +171,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
     private imageService: ImageService,
+    private metaPixelService: MetaPixelService,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -1816,6 +1818,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private exitPostDonationSuccess(donation: Donation) {
     this.analyticsService.logCheckoutDone(this.campaign, donation);
+    this.metaPixelService.trackConversion(donation.donationAmount);
+
     this.cancelExpiryWarning();
     this.router.navigate(['thanks', donation.donationId], {
       replaceUrl: true,

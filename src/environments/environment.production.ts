@@ -18,6 +18,7 @@ export const environment: Environment = {
   // googleOptimizeId: 'OPT-W78W6BT', // Bring back when we have an experiment to run
   identityApiPrefix: 'https://identity-production.thebiggive.org.uk/v1',
   maximumDonationAmount: 25_000,
+  metaPixelId: null, // Set to a string to enable init of Meta Pixel.
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
