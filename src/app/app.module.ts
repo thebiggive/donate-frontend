@@ -33,7 +33,6 @@ import { DonationStartComponent } from './donation-start/donation-start.componen
 import { DonationStartErrorDialogComponent } from './donation-start/donation-start-error-dialog.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
-import { FacebookPixelProvider } from './facebook-pixel-service/facebook-pixel-provider';
 import { FiltersComponent } from './filters/filters.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeroComponent } from './hero/hero.component';
@@ -92,7 +91,6 @@ import { TimeLeftPipe } from './time-left.pipe';
   ],
   providers: [
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
-    FacebookPixelProvider,
   ],
   bootstrap: [AppComponent],
 })

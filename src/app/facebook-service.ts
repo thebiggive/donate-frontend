@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class FacebookPixelService {
-  private loadOk = false;
-
+export class FacebookService {
   constructor() {}
 
-  load() {
-    if (!this.loadOk) {
-      ((f: any, b, e, v, n?: any, t?: any, s?: any) => {
+  /**
+   * Inspired by https://stackoverflow.com/a/58120781/2803757
+   */
+  init() {
+      ((f: any, b?: any, e?: any, v?: any, n?: any, t?: any, s?: any) => {
         if (f.fbq) {
           return;
         }
@@ -39,11 +39,5 @@ export class FacebookPixelService {
       );
       (window as any).fbq('init', '272508403759002');
       (window as any).fbq('track', 'PageView');
-      this.loadOk = true;
-      console.log('Facebook pixel init run!');
-    } else {
-      (window as any).fbq('track', 'PageView');
-      console.log('Facebook PageView event fired!');
-    }
   }
 }
