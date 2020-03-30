@@ -10,7 +10,7 @@ export class FacebookPixelService {
 
   load() {
     if (!this.loadOk) {
-      ((f: any, b, e, v, n, t, s) => {
+      ((f: any, b, e, v, n?: any, t?: any, s?: any) => {
         if (f.fbq) {
           return;
         }
