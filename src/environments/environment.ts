@@ -8,6 +8,7 @@ export const environment = {
   charityCheckoutInitUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
   donateUriPrefix: 'http://localhost:4200',
   donationsApiPrefix: 'http://localhost:30030/v1',
+  facebookPixelId: '272508403759002',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,
