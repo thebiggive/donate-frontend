@@ -37,7 +37,7 @@ export class FacebookPixelService {
         'script',
         'https://connect.facebook.net/en_US/fbevents.js',
       );
-      (window as any).fbq('init', '381817369337156');
+      (window as any).fbq('init', '272508403759002');
       (window as any).fbq('track', 'PageView');
       this.loadOk = true;
       console.log('Facebook pixel init run!');
