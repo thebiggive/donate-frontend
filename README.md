@@ -114,6 +114,12 @@ Deploys must therefore:
 
 CloudFront is configured to route requests to the right place based on these prefixes.
 
+### Server-side app
+
+The ECS app we deploy runs on Express with `@nguniversal/express-engine`, the typical way to serve
+Universal apps. There are a few configuration tweaks and middleware additions for our use case,
+which all live in [`server.ts`](./server.ts).
+
 ## Using Angular
 
 ### Development server

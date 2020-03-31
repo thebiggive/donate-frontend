@@ -28,7 +28,7 @@ export class AnalyticsService {
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', '` + environment.googleAnalyticsId + `', {'send_page_view': false});
+      gtag('config', '${environment.googleAnalyticsId}', {'send_page_view': false});
     `;
     document.head.appendChild(scriptConfigureGtag);
   }
