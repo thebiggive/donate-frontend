@@ -24,8 +24,8 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.analyticsService.init();
-      this.getSiteControlService.init();
       this.facebookService.init();
+      this.getSiteControlService.init();
     }
   }
 
