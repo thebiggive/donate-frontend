@@ -28,6 +28,7 @@ import { retryStrategy } from '../observable-retry';
 export class DonationStartComponent implements OnInit {
   public campaign?: Campaign;
   public donationForm: FormGroup;
+  public maximumDonationAmount: number;
   public retrying = false;
   public suggestedAmounts?: number[];
   public sfApiError = false;              // Salesforce donation create API error
@@ -58,6 +59,7 @@ export class DonationStartComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.maximumDonationAmount = environment.maximumDonationAmount;
     const suggestedAmountsKey = makeStateKey<number[]>('suggested-amounts');
     this.suggestedAmounts = this.state.get(suggestedAmountsKey, undefined);
     if (this.suggestedAmounts === undefined) {
