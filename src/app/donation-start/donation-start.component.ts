@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -28,7 +28,6 @@ import { retryStrategy } from '../observable-retry';
 export class DonationStartComponent implements OnInit {
   public campaign?: Campaign;
   public donationForm: FormGroup;
-  public maximumDonationAmount: number;
   public retrying = false;
   public suggestedAmounts?: number[];
   public sfApiError = false;              // Salesforce donation create API error
@@ -59,9 +58,6 @@ export class DonationStartComponent implements OnInit {
   }
 
   ngOnInit() {
-    // TODO standardise or remove this.
-    this.maximumDonationAmount = environment.maximumDonationAmount;
-
     const suggestedAmountsKey = makeStateKey<number[]>('suggested-amounts');
     this.suggestedAmounts = this.state.get(suggestedAmountsKey, undefined);
     if (this.suggestedAmounts === undefined) {
@@ -87,8 +83,7 @@ export class DonationStartComponent implements OnInit {
       donationAmount: [null, [
         Validators.required,
         Validators.min(5),
-        // https://stackoverflow.com/a/45952838/2803757
-        (control: AbstractControl) => Validators.max(this.maximumDonationAmount)(control),
+        Validators.max(environment.maximumDonationAmount),
         Validators.pattern('^£?[0-9]+?(\\.00)?$'),
       ]],
       giftAid: [null, Validators.required],
