@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -59,10 +59,7 @@ export class DonationStartComponent implements OnInit {
   }
 
   ngOnInit() {
-    // May be overridden with temporary COVID-19 emergency limit case (as per DON-197).
-    // TODO standardise or remove this.
     this.maximumDonationAmount = environment.maximumDonationAmount;
-
     const suggestedAmountsKey = makeStateKey<number[]>('suggested-amounts');
     this.suggestedAmounts = this.state.get(suggestedAmountsKey, undefined);
     if (this.suggestedAmounts === undefined) {
@@ -88,8 +85,7 @@ export class DonationStartComponent implements OnInit {
       donationAmount: [null, [
         Validators.required,
         Validators.min(5),
-        // https://stackoverflow.com/a/45952838/2803757
-        (control: AbstractControl) => Validators.max(this.maximumDonationAmount)(control),
+        Validators.max(environment.maximumDonationAmount),
         Validators.pattern('^£?[0-9]+?(\\.00)?$'),
       ]],
       giftAid: [null, Validators.required],
@@ -259,11 +255,6 @@ export class DonationStartComponent implements OnInit {
     }
 
     this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
-
-    // Temporary per-donation constraint as per DON-197.
-    if (campaign.parentRef === 'covid-19') {
-      this.maximumDonationAmount = 5000;
-    }
   }
 
   private getSuggestedAmounts(): number[] {
