@@ -59,7 +59,6 @@ export class DonationStartComponent implements OnInit {
   }
 
   ngOnInit() {
-    // May be overridden with temporary COVID-19 emergency limit case (as per DON-197).
     // TODO standardise or remove this.
     this.maximumDonationAmount = environment.maximumDonationAmount;
 
@@ -259,11 +258,6 @@ export class DonationStartComponent implements OnInit {
     }
 
     this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
-
-    // Temporary per-donation constraint as per DON-197.
-    if (campaign.parentRef === 'covid-19') {
-      this.maximumDonationAmount = 5000;
-    }
   }
 
   private getSuggestedAmounts(): number[] {
