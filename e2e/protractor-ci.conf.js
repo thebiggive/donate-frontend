@@ -5,12 +5,10 @@
 const config = require('./protractor.conf').config;
 const puppeteer = require('puppeteer');
 
-config.capabilities = {
-  browserName: 'chrome',
-  chromeOptions: {
-    args: ['--headless', '--no-sandbox'],
-    binary: process.env.HEADLESS ? puppeteer.executablePath() : undefined,
-  }
+// Existing capabilities include `browserName: 'chrome'`
+config.capabilities.chromeOptions = {
+  args: ['--headless', '--no-sandbox'],
+  binary: puppeteer.executablePath(),
 };
 
 exports.config = config;

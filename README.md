@@ -27,7 +27,7 @@ To run style, unit and e2e tests together from your local, as CircleCI build che
     npm run ci
 
 The latest tagged [Puppeteer](https://www.npmjs.com/package/puppeteer) typically uses the latest available Chromium and updates do not follow
-semantic versioning. So for it to continue working, it currently needs to be pinned to a particular "feature release", e.g. `2.1.*` for Chromium 80.
+semantic versioning. So for it to continue working, it currently needs to be pinned to a particular "feature release", e.g. `3.0.*` for Chromium 81.
 
 Environment Variables configured in the CircleCI interface for this app are:
 
