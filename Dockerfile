@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Skip Puppeteer Chromium download. https://github.com/puppeteer/puppeteer/issues/2262#issuecomment-407405037
-RUN npm config set puppeteer_skip_chromium_download true -g && \
+RUN npm config set puppeteer_skip_chromium_download true && \
     npm install
 
 # Now copy the app source
