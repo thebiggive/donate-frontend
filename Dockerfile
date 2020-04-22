@@ -5,7 +5,10 @@ WORKDIR /usr/src/app
 # Do lib metadata copy + install separately, so this part of the build is cached when only app code changes.
 # See https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
 COPY package*.json ./
-RUN npm install
+
+# Skip Puppeteer Chromium download. https://github.com/puppeteer/puppeteer/issues/2262#issuecomment-407405037
+RUN npm config set puppeteer_skip_chromium_download true && \
+    npm install
 
 # Now copy the app source
 COPY . .
