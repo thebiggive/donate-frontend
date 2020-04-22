@@ -40,6 +40,7 @@ jobs:
     steps:
       - checkout
 
+      - run: npm config set puppeteer_skip_chromium_download true -g
       - run: npm install --quiet
 
       - run: npm run build:staging
@@ -70,6 +71,7 @@ jobs:
     steps:
       - checkout
 
+      - run: npm config set puppeteer_skip_chromium_download true -g
       - run: npm install --quiet
 
       - run: npm run build:regression
@@ -100,6 +102,7 @@ jobs:
     steps:
       - checkout
 
+      - run: npm config set puppeteer_skip_chromium_download true -g
       - run: npm install --quiet
 
       - run: npm run build:production
