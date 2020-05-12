@@ -21,7 +21,7 @@
   </div>
 
   <div class="c-funds" fxLayout="row">
-    <div class="c-funds__matched" *ngIf="campaign.isMatched" fxFlex="50">
+    <div class="c-funds__matched" *ngIf="campaign.isMatched && !isFinished" fxFlex="50">
       <p class="c-funds__description">Match funds remaining</p>
       <h4 class="c-funds__amount">{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }}</h4>
     </div>
