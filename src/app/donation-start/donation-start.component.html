@@ -105,11 +105,14 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <p class="no-margin-top b-rt-1 b-bold">Would you be happy to receive emails from The Big Give?</p>
-            <p class="b-rt-0">By selecting 'no', we will no longer be able to email you about opportunities to double your donation.</p>
             <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from The Big Give</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from The Big Give</mat-radio-button>
             </mat-radio-group>
+
+            <p *ngIf="donationForm.value.optInTbgEmail === false" class="error">
+              By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
+            </p>
           </mat-expansion-panel>
 
           <mat-expansion-panel class="c-make-your-donation" expanded="true">
@@ -147,7 +150,7 @@
                 Please check your donation amount above. It must be a whole number of pounds without commas.
               </p>
               <mat-spinner *ngIf="submitting" color="accent" diameter="30"></mat-spinner>
-              <p *ngIf="retrying" class="warning">
+              <p *ngIf="retrying" class="error">
                 It looks like our system is a bit busy, one moment please&hellip;
               </p>
               <button
