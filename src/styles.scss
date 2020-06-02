@@ -13,6 +13,10 @@
 // Style Material Componenets here due to ViewEncapsulation
 @import './assets/scss/overwrite-mat';
 
+// Hide icons until the font is ready. https://github.com/angular/components/issues/12171#issuecomment-595831987
+.wf-loading body {
+  display: none;
+}
 
 html {
   font-family: mat-font-family($app-typography);
