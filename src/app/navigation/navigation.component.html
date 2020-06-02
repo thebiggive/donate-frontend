@@ -13,7 +13,7 @@
       <div class="nav-links">
         <button class="button-about" mat-icon-button [matMenuTriggerFor]="about">
           About
-          <mat-icon aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
+          <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
         </button>
         <mat-menu #about="matMenu">
           <ul>
@@ -31,7 +31,7 @@
       <div class="nav-links">
         <button class="button-how-can-we-help" mat-icon-button [matMenuTriggerFor]="howcanwehelp">
           How can we help
-          <mat-icon aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
+          <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
         </button>
         <mat-menu #howcanwehelp="matMenu">
           <ul>
@@ -53,7 +53,7 @@
   </div>
   <div class="side-nav-button__wrap">
     <button mat-icon-button class="side-nav-button__button" (click)="sidenav.toggle()">
-      <mat-icon aria-label="Menu" color="accent">{{ !opened ? 'menu' : 'close' }}</mat-icon>
+      <mat-icon aria-hidden="false" aria-label="Menu" color="accent">{{ !opened ? 'menu' : 'close' }}</mat-icon>
     </button>
   </div>
 </mat-toolbar>
@@ -77,7 +77,7 @@
       <div class="nav-links">
         <button mat-icon-button [matMenuTriggerFor]="about">
           About
-          <mat-icon aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
+          <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
         </button>
         <mat-menu #about="matMenu">
           <ul>
@@ -95,7 +95,7 @@
       <div class="nav-links">
         <button mat-icon-button [matMenuTriggerFor]="howcanwehelp">
           How can we help
-          <mat-icon aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
+          <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
         </button>
         <mat-menu #howcanwehelp="matMenu">
           <ul>
