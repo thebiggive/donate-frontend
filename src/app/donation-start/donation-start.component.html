@@ -1,8 +1,8 @@
 <mat-spinner *ngIf="!campaign" class="b-full-page" color="accent" diameter="30"></mat-spinner>
 
-<div class="b-container" *ngIf="campaign">
+<main class="b-container" *ngIf="campaign">
   <div class="b-back-button">
-    <a mat-icon-button class="c-campaign-button" [routerLink]="'/campaign/' + campaign.id">
+    <a mat-icon-button [routerLink]="'/campaign/' + campaign.id">
       <mat-icon class="campaign-icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
       Back to campaign
     </a>
@@ -11,10 +11,10 @@
   <div fxLayout="row" fxLayout.xs="column">
     <div class="b-primary-column">
       <div class="c-header">
-        <h3 class="b-rh-2 b-light">You are donating to:</h3>
-        <h1 class="b-rh-1 b-bold">{{ campaign.charity.name }}</h1>
-        <h3 class="b-rh-2 b-light">For:</h3>
-        <h2 class="b-rh-1 b-bold">{{ campaign.title }}</h2>
+        <h2 class="b-rh-2 b-light">You are donating to:</h2>
+        <h3 class="b-rh-1 b-bold">{{ campaign.charity.name }}</h3>
+        <h2 class="b-rh-2 b-light">For:</h2>
+        <h1 class="b-rh-1 b-bold">{{ campaign.title }}</h1>
       </div>
 
       <p *ngIf="campaign && !campaignIsOpen()">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
@@ -24,7 +24,7 @@
           <mat-expansion-panel class="c-your-donation" expanded="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <h3 class="b-rh-2">Your donation</h3>
+                <h2 class="b-rh-2">Your donation</h2>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <p *ngIf="campaign.matchFundsRemaining > 0" class="c-your-donation__highlight">
@@ -45,7 +45,7 @@
               >{{ suggestedAmount | currency : '£' : 'symbol' : '1.0-0' }}</button>
             </div>
 
-            <div class="error" *ngIf="f.donationAmount.invalid && f.donationAmount.errors && (f.donationAmount.dirty || f.donationAmount.touched)">
+            <div class="error" aria-live="polite" *ngIf="f.donationAmount.invalid && f.donationAmount.errors && (f.donationAmount.dirty || f.donationAmount.touched)">
               <div *ngIf="f.donationAmount.errors.min">Sorry, the minimum donation is currently £5.</div>
               <div *ngIf="f.donationAmount.errors.max">Your donation must be {{ maximumDonationAmount | currency : '£' : 'symbol' : '1.0-0' }} or less to proceed. You can make multiple matched donations of {{ maximumDonationAmount | currency : '£' : 'symbol' : '1.0-0' }} if match funds are available.</div>
               <div *ngIf="f.donationAmount.errors.pattern">Please enter a whole number of pounds (£) without commas.</div>
@@ -56,7 +56,7 @@
           <mat-expansion-panel expanded="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <h3 class="b-rh-2" id="giftAid-label">Gift Aid</h3>
+                <h2 class="b-rh-2" id="giftAid-label">Gift Aid</h2>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <p class="no-margin-top b-rt-1 b-bold">Boost your donation by 25p of Gift Aid for every £1 you donate.</p>
@@ -75,7 +75,7 @@
           <mat-expansion-panel expanded="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <h3 class="b-rh-2">Support the Big Give</h3>
+                <h2 class="b-rh-2">Support the Big Give</h2>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <p class="b-rt-0">Before you finalise payment for your donation to this campaign, you'll have the chance to make a small additional donation to the Big Give.</p>
@@ -86,7 +86,7 @@
           <mat-expansion-panel expanded="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <h3 class="b-rh-2" id="optInCharityEmail-label">Contact from charity</h3>
+                <h2 class="b-rh-2" id="optInCharityEmail-label">Contact from charity</h2>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <p class="no-margin-top b-rt-1 b-bold">Would you be happy to receive emails from {{ campaign.charity.name }}?</p>
@@ -101,7 +101,7 @@
           <mat-expansion-panel expanded="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <h3 class="b-rh-2" id="optInTbgEmail-label">Contact from The Big Give</h3>
+                <h2 class="b-rh-2" id="optInTbgEmail-label">Contact from The Big Give</h2>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <p class="no-margin-top b-rt-1 b-bold">Would you be happy to receive emails from The Big Give?</p>
@@ -110,7 +110,7 @@
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from The Big Give</mat-radio-button>
             </mat-radio-group>
 
-            <p *ngIf="donationForm.value.optInTbgEmail === false" class="error">
+            <p *ngIf="donationForm.value.optInTbgEmail === false" class="error" aria-live="polite">
               By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
             </p>
           </mat-expansion-panel>
@@ -118,7 +118,7 @@
           <mat-expansion-panel class="c-make-your-donation" expanded="true">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <h3 class="b-rh-2">Make your donation</h3>
+                <h2 class="b-rh-2">Make your donation</h2>
               </mat-panel-title>
             </mat-expansion-panel-header>
 
@@ -136,21 +136,21 @@
             </p>
 
             <div class="c-donation-summary">
-              <p class="error" *ngIf="sfApiError">
+              <p class="error" *ngIf="sfApiError" aria-live="alert">
                 Sorry, we can't submit your donation right now. Please try again in a moment
                 or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank">
                   <mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
                     contact us</a>
                 if this message persists.
               </p>
-              <p class="error" *ngIf="validationError">
+              <p class="error" *ngIf="validationError" aria-live="polite">
                 Please complete all fields above to proceed with your donation.
               </p>
-              <p class="error" *ngIf="f.donationAmount.invalid">
+              <p class="error" *ngIf="f.donationAmount.invalid" aria-live="polite">
                 Please check your donation amount above. It must be a whole number of pounds without commas.
               </p>
               <mat-spinner *ngIf="submitting" color="accent" diameter="30"></mat-spinner>
-              <p *ngIf="retrying" class="error">
+              <p *ngIf="retrying" class="error" aria-live="polite">
                 It looks like our system is a bit busy, one moment please&hellip;
               </p>
               <button
@@ -199,4 +199,4 @@
       <app-campaign-details-card [campaign]="campaign"></app-campaign-details-card>
     </div>
   </div>
-</div>
+</main>

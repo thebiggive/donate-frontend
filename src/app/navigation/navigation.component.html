@@ -1,9 +1,15 @@
-<mat-toolbar class="main-nav-toolbar">
+<mat-toolbar role="navigation" class="main-nav-toolbar">
   <div class="logo__wrap">
     <a routerLink="/" class="logo__link"><img class="logo" src="/assets/images/logo.png" alt="The Big Give"></a>
   </div>
   <div class="main-nav">
     <div class="nav-links__wrap">
+      <div class="nav-links">
+        <button mat-icon-button routerLink="/">
+          <mat-icon aria-hidden="false" aria-label="Search" color="accent">search</mat-icon>
+          Explore campaigns
+        </button>
+      </div>
       <div class="nav-links">
         <button class="button-about" mat-icon-button [matMenuTriggerFor]="about">
           About
@@ -38,9 +44,6 @@
         </mat-menu>
       </div>
       <div class="nav-links">
-        <a mat-button class="nav-link" routerLink="/">Explore campaigns</a>
-      </div>
-      <div class="nav-links">
         <a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/contact-us">Contact us</a>
       </div>
     </div>
@@ -61,9 +64,17 @@
     role="navigation"
     mode="over"
     [(opened)]="opened"
+    [attr.aria-hidden]="!opened"
     fixedInViewport="true"
   >
-    <mat-nav-list class="mat-nav-list nav-links__wrap"><div class="nav-links">
+    <mat-nav-list class="mat-nav-list nav-links__wrap">
+      <div class="nav-links">
+        <button mat-icon-button routerLink="/">
+          <mat-icon aria-hidden="false" aria-label="Search" color="accent">search</mat-icon>
+          Explore campaigns
+        </button>
+      </div>
+      <div class="nav-links">
         <button mat-icon-button [matMenuTriggerFor]="about">
           About
           <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
@@ -97,9 +108,6 @@
         </mat-menu>
       </div>
       <div class="nav-links">
-        <a mat-button class="nav-link" routerLink="/">Explore campaigns</a>
-      </div>
-      <div class="nav-links">
         <a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/contact-us">Contact us</a>
       </div>
     </mat-nav-list>
@@ -108,7 +116,7 @@
     </mat-nav-list>
   </mat-sidenav>
 
-  <mat-sidenav-content role="navigation">
+  <mat-sidenav-content>
 
     <router-outlet></router-outlet>
 
@@ -116,6 +124,4 @@
 
   </mat-sidenav-content>
 
-
 </mat-sidenav-container>
-

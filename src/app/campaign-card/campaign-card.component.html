@@ -10,11 +10,11 @@
   </div>
 
   <div class="c-header">
-    <h4 class="c-header__charity-name b-grey b-light b-uppercase">{{ campaign.charity.name }}</h4>
+    <h3 class="c-header__charity-name b-grey b-light b-uppercase">{{ campaign.charity.name }}</h3>
     <a class="c-header__link" [routerLink]="'/campaign/' + campaign.id" [queryParams]="inFundContext ? {fromFund: 1} : {}"><h3 class="c-header__campaign-title">{{ campaign.title }}</h3></a>
   </div>
 
-  <div class="c-categories">
+  <div class="c-categories" tabindex="0"> <!-- We need to explicitly make this focusable so the scrolling area is keyboard-usable -->
     <ul class="c-categories__list" *ngFor="let category of campaign.categories">
       <li class="c-categories__item">{{ category }}</li>
     </ul>
@@ -40,7 +40,7 @@
       [queryParams]="inFundContext ? {fromFund: 1} : {}"
     >
       More info
-      <mat-icon class="c-buttons__more-icon" aria-hidden="false" aria-label="Plus">add</mat-icon>
+      <mat-icon class="c-buttons__more-icon" aria-hidden="true">add</mat-icon>
     </a>
     <a
       mat-raised-button
