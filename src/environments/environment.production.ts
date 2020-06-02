@@ -4,7 +4,6 @@ export const environment = {
   charityCheckoutInitUri: 'https://fundraise.charitycheckout.co.uk/api/checkout/init',
   donateUriPrefix: 'https://donate.thebiggive.org.uk',
   donationsApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',
-  facebookPixelId: '272508403759002',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-1',
   maximumDonationAmount: 25000,
