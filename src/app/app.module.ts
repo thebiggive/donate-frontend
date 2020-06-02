@@ -20,6 +20,12 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
+import * as WebFont from 'webfontloader';
+
+// https://github.com/angular/components/issues/12171#issuecomment-595831987
+WebFont.load({
+  custom: { families: ['Material Icons', 'Material Icons Outline'] },
+});
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -38,7 +44,6 @@ import { FooterComponent } from './footer/footer.component';
 import { HeroComponent } from './hero/hero.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { NavigationComponent } from './navigation/navigation.component';
-import { NavSearchFormComponent } from './nav-search-form/nav-search-form.component';
 import { ExploreComponent } from './explore/explore.component';
 import { TickerComponent } from './ticker/ticker.component';
 import { TimeLeftPipe } from './time-left.pipe';
@@ -60,7 +65,6 @@ import { TimeLeftPipe } from './time-left.pipe';
     HeroComponent,
     MetaCampaignComponent,
     NavigationComponent,
-    NavSearchFormComponent,
     ExploreComponent,
     TickerComponent,
     TimeLeftPipe,

@@ -127,7 +127,7 @@
 
 @mixin make-back-button {
   @include b-rt-sm;
-  color: $colour-teal;
+  color: $colour-teal-dark;
   margin-bottom: 1rem;
   .mat-icon-button {
     font-weight: 400;

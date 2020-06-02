@@ -33,7 +33,6 @@ export class DonationStartComponent implements OnInit {
   public suggestedAmounts?: number[];
   public sfApiError = false;              // Salesforce donation create API error
   public submitting = false;
-  public validationError = false;         // Internal Angular app form validation error
   private campaignId: string;
   private charityCheckoutError?: string;  // Charity Checkout donation start error message
   private previousDonation?: Donation;
@@ -124,13 +123,12 @@ export class DonationStartComponent implements OnInit {
 
   submit() {
     if (this.donationForm.invalid) {
-      this.validationError = true;
       return;
     }
 
     this.submitting = true;
     this.charityCheckoutError = undefined;
-    this.sfApiError = this.validationError = false;
+    this.sfApiError = false;
 
     if (!this.campaign || !this.campaign.charity.id) { // Can't proceed if campaign info not looked up yet
       this.sfApiError = true;

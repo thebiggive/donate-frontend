@@ -23,6 +23,11 @@
   display: none;
 }
 
+.mat-tab-label {
+  opacity: 1 !important;
+  color: $colour-grey !important;
+}
+
 mat-progress-bar {
   border-radius: 4px;
   height: 5px;
@@ -42,7 +47,7 @@ mat-progress-bar {
 mat-radio-button {
   margin-bottom: 1rem;
   .mat-radio-label {
-    white-space:initial;
+    white-space: initial;
     @include b-rt-0;
   }
 }
