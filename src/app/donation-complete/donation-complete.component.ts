@@ -6,7 +6,6 @@ import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { Donation } from '../donation.model';
 import { DonationService } from '../donation.service';
-import { FacebookService } from '../facebook.service';
 
 @Component({
   selector: 'app-donation-complete',
@@ -32,7 +31,6 @@ export class DonationCompleteComponent {
     private analyticsService: AnalyticsService,
     private campaignService: CampaignService,
     private donationService: DonationService,
-    private facebookService: FacebookService,
     private route: ActivatedRoute,
   ) {
     route.params.pipe().subscribe(params => {
@@ -69,7 +67,6 @@ export class DonationCompleteComponent {
 
     if (donation && this.donationService.isComplete(donation)) {
       this.analyticsService.logEvent('thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
-      this.facebookService.trackConversion(donation.donationAmount);
 
       this.cardChargedAmount = donation.donationAmount + donation.tipAmount;
       this.giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;
