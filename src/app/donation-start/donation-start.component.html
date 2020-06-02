@@ -143,7 +143,7 @@
                     contact us</a>
                 if this message persists.
               </p>
-              <p class="error" *ngIf="validationError" aria-live="polite">
+              <p class="error" *ngIf="donationForm.invalid" aria-live="polite">
                 Please complete all fields above to proceed with your donation.
               </p>
               <p class="error" *ngIf="f.donationAmount.invalid" aria-live="polite">
