@@ -24,7 +24,7 @@ import * as WebFont from 'webfontloader';
 
 // https://github.com/angular/components/issues/12171#issuecomment-595831987
 WebFont.load({
-  custom: { families: ['Material Icons', 'Material Icons Outline'] }
+  custom: { families: ['Material Icons', 'Material Icons Outline'] },
 });
 
 import { AppRoutingModule } from './app-routing.module';
