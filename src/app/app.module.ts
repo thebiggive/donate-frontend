@@ -20,12 +20,6 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
-import * as WebFont from 'webfontloader';
-
-// https://github.com/angular/components/issues/12171#issuecomment-595831987
-WebFont.load({
-  custom: { families: ['Material Icons', 'Material Icons Outline'] },
-});
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
