@@ -13,11 +13,6 @@
 // Style Material Componenets here due to ViewEncapsulation
 @import './assets/scss/overwrite-mat';
 
-// Hide icons until the font is ready. https://github.com/angular/components/issues/12171#issuecomment-595831987
-.wf-loading body {
-  display: none;
-}
-
 html {
   font-family: mat-font-family($app-typography);
   font-size: mat-font-size($app-typography, body-2);
@@ -28,6 +23,11 @@ body {
   margin: 0;
   background-color: $colour-background;
   color: $colour-black;
+}
+
+// Hide app until icon font is ready. https://github.com/angular/components/issues/12171#issuecomment-546079738
+body:not(.material-icons-loaded) {
+  display: none;
 }
 
 p,
