@@ -24,7 +24,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      // Avoid flash of icon placeholder text. https://github.com/angular/components/issues/12171#issuecomment-546079738
+      // Avoid flash of icon placeholder text during SSR -> client JS handover.
+      // https://github.com/angular/components/issues/12171#issuecomment-546079738
       const materialIcons = new FontFaceObserver('Material Icons');
       materialIcons.load(null, 10000)
         .then(() => this.renderer.addClass(this.elementRef.nativeElement, 'material-icons-loaded'));
@@ -32,6 +33,7 @@ export class AppComponent implements OnInit {
       this.analyticsService.init();
       this.getSiteControlService.init();
     } else {
+      // On the server side, add the class to show icons immediately.
       this.renderer.addClass(this.elementRef.nativeElement, 'material-icons-loaded');
     }
   }
