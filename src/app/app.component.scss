@@ -1,6 +1,1 @@
 @import '../styles';
-
-// Hide app until icon font is ready. https://github.com/angular/components/issues/12171#issuecomment-546079738
-app-root:not(.material-icons-loaded) {
-  display: none;
-}
