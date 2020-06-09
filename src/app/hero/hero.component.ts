@@ -15,19 +15,27 @@ export class HeroComponent implements OnInit {
   @Input() description: string;
   @Input() fund?: Fund;
   @Input() reset: Observable<void>; // Passed through to CampaignSearchFormComponent
-  @Input() title: string;
   @Output() heroSearch: EventEmitter<any> = new EventEmitter();
 
   bannerUri: string;
-  fundLogoUri?: string;
+  logoAltText?: string;
+  /** May be a fund logo (in addition to campaign title), or campaign logo (replaces title). */
+  logoUri?: string;
+  /** Set false if there's a campaign logo instead. */
+  showTitle = true;
 
   constructor(private imageService: ImageService) {}
 
   ngOnInit() {
     this.imageService.getImageUri(this.campaign.bannerUri, 2000).subscribe(uri => this.bannerUri = uri);
 
-    if (this.fund && this.fund.logoUri) {
-      this.imageService.getImageUri(this.fund.logoUri, 660).subscribe(uri => this.fundLogoUri = uri);
+    if (this.campaign.logoUri) {
+      this.logoAltText = this.campaign.title;
+      this.showTitle = false;
+      this.imageService.getImageUri(this.campaign.logoUri, 660).subscribe(uri => this.logoUri = uri);
+    } else if (this.fund && this.fund.logoUri) {
+      this.logoAltText = this.fund.name;
+      this.imageService.getImageUri(this.fund.logoUri, 660).subscribe(uri => this.logoUri = uri);
     }
   }
 
