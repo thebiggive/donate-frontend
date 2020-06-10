@@ -66,7 +66,7 @@
                 <mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
                   Find out more about Gift Aid</a>.
             </p>
-            <mat-radio-group aria-labelledby="giftAid-label" formControlName="giftAid">
+            <mat-radio-group tabindex="0" aria-labelledby="giftAid-label" formControlName="giftAid">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I am a UK tax payer and would like Gift Aid claimed on my donations</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I am not a UK tax payer and do not want Gift Aid claimed on my donations</mat-radio-button>
             </mat-radio-group>
@@ -92,7 +92,7 @@
             <p class="no-margin-top b-rt-1 b-bold">Would you be happy to receive emails from {{ campaign.charity.name }}?</p>
             <p class="b-rt-0">This may include thanks for your donation, updates on how it is being used, newsletters and future campaigns. If you select no, we will pass on your details as these may be required for Gift Aid purposes, but the charity will be informed that you do not wish to receive communications.</p>
             <p class="b-rt-0">Please note that you might continue to receive communications from {{ campaign.charity.name }} if you have already shared your details with them via other methods.</p>
-            <mat-radio-group aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
+            <mat-radio-group tabindex="0" aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.charity.name }}</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.charity.name }}</mat-radio-button>
             </mat-radio-group>
@@ -105,7 +105,7 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
             <p class="no-margin-top b-rt-1 b-bold">Would you be happy to receive emails from The Big Give?</p>
-            <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
+            <mat-radio-group tabindex="0" aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from The Big Give</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from The Big Give</mat-radio-button>
             </mat-radio-group>
