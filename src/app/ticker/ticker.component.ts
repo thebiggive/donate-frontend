@@ -12,12 +12,14 @@ import { Fund } from '../fund.model';
 export class TickerComponent implements OnInit {
   @Input() public campaign: Campaign;
   @Input() public fund?: Fund;
+  public campaignInFuture: boolean; // Does not imply £0 raised, see HTML comment.
   public campaignOpen: boolean;
   public durationInDays: number;
 
   constructor() { }
 
   ngOnInit() {
+    this.campaignInFuture = CampaignService.isInFuture(this.campaign);
     this.campaignOpen = CampaignService.isOpenForDonations(this.campaign);
     this.durationInDays = Math.floor((new Date(this.campaign.endDate).getTime() - new Date(this.campaign.startDate).getTime()) / 86400000);
   }
