@@ -13,7 +13,6 @@
 // Style Material Componenets here due to ViewEncapsulation
 @import './assets/scss/overwrite-mat';
 
-
 html {
   font-family: mat-font-family($app-typography);
   font-size: mat-font-size($app-typography, body-2);

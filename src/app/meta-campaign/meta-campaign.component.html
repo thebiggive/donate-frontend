@@ -1,47 +1,48 @@
-<app-hero *ngIf="campaign"
-  [campaign]="campaign"
-  [fund]="fund"
-  [title]="campaign.title"
-  [reset]="resetSubject.asObservable()"
-  [description]="(fund && fund.description) ? fund.description : campaign.summary"
-  (heroSearch)="onMetacampaignSearch($event)"
-></app-hero>
-
-<div class="b-container" *ngIf="campaign && children">
-  <app-filters
-    *ngIf="campaign.campaignCount && campaign.campaignCount > 1"
-    [hasTerm]="hasTerm"
-    [selectedSort]="selectedSort"
+<main>
+  <app-hero *ngIf="campaign"
+    [campaign]="campaign"
+    [fund]="fund"
     [reset]="resetSubject.asObservable()"
-    (filterApplied)="onFilterApplied($event)"
-    (sortApplied)="onSortApplied($event)"
-  ></app-filters>
+    [description]="(fund && fund.description) ? fund.description : campaign.summary"
+    (heroSearch)="onMetacampaignSearch($event)"
+  ></app-hero>
 
-  <div *ngIf="campaign && children.length === 0 && !loading && !filterError">
-    <p class="error">
-      We can't find any campaigns matching this search but there are lots more to choose from.
-      <a (click)="setDefaultFilters()">View all participating campaigns here</a>.
-    </p>
-  </div>
+  <div class="b-container" *ngIf="campaign && children">
+    <app-filters
+      *ngIf="campaign.campaignCount && campaign.campaignCount > 1"
+      [hasTerm]="hasTerm"
+      [selectedSort]="selectedSort"
+      [reset]="resetSubject.asObservable()"
+      (filterApplied)="onFilterApplied($event)"
+      (sortApplied)="onSortApplied($event)"
+    ></app-filters>
 
-  <div class="c-grid">
-    <div class="c-grid__card" *ngFor="let campaign of children">
-      <div
-        infiniteScroll
-        (scrolled)="onScroll()"
-        [infiniteScrollDistance]="20"
-        [scrollWindow]="true"
-        [alwaysCallback]="true"
-      ></div>
-      <app-campaign-card [campaign]="campaign" [inFundContext]="!!fund"></app-campaign-card>
+    <div *ngIf="campaign && children.length === 0 && !loading && !filterError">
+      <p class="error" aria-live="polite">
+        We can't find any campaigns matching this search but there are lots more to choose from.
+        <a (click)="setDefaultFilters()">View all participating campaigns here</a>.
+      </p>
     </div>
+
+    <div class="c-grid">
+      <div class="c-grid__card" *ngFor="let campaign of children">
+        <div
+          infiniteScroll
+          (scrolled)="onScroll()"
+          [infiniteScrollDistance]="20"
+          [scrollWindow]="true"
+          [alwaysCallback]="true"
+        ></div>
+        <app-campaign-card [campaign]="campaign" [inFundContext]="!!fund"></app-campaign-card>
+      </div>
+    </div>
+
+    <mat-spinner *ngIf="loading" color="accent" diameter="30"></mat-spinner>
   </div>
 
-  <mat-spinner *ngIf="loading" color="accent" diameter="30"></mat-spinner>
-</div>
-
-<div *ngIf="filterError">
-  <!-- e.g. campaign or fund slug is not recognised -->
-  <p class="error">Could not load the campaign. You might have followed a broken link.<br>
-    Not to worry, you can <a routerLink="/">browse all active campaigns here</a>!</p>
-</div>
+  <div *ngIf="filterError" tabindex="0">
+    <!-- e.g. campaign or fund slug is not recognised -->
+    <p class="error" aria-live="alert">Could not load the campaign. You might have followed a broken link.<br>
+      Not to worry, you can <a routerLink="/">browse all active campaigns here</a>!</p>
+  </div>
+</main>

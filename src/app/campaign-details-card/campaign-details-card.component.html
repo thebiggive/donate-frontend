@@ -11,12 +11,12 @@
 
   <div class="c-card-body">
     <div class="c-campaign-target" *ngIf="campaign.target > 0">
-      <h3 class="c-campaign-target__description b-grey b-light">Campaign target</h3>
+      <h2 class="c-campaign-target__description b-grey b-light">Campaign target</h2>
       <p class="c-campaign-target__value b-bold">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
       <mat-progress-bar [value]="percentRaised" *ngIf="campaign.amountRaised > 0"></mat-progress-bar>
     </div>
     <div class="c-campaign-raised" *ngIf="campaign.amountRaised > 0">
-      <h3 class="c-campaign-raised__description b-grey b-light">Amount raised</h3>
+      <h2 class="c-campaign-raised__description b-grey b-light">Amount raised</h2>
       <p class="c-campaign-raised__value b-bold">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</p>
     </div>
     <div fxLayout="row">

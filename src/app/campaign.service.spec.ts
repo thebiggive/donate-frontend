@@ -65,6 +65,7 @@ describe('CampaignService', () => {
       undefined,
       undefined,
       undefined,
+      undefined,
       {
         provider: 'youtube',
         key: '1G_Abc2delF',
@@ -101,6 +102,7 @@ describe('CampaignService', () => {
     campaign.status = 'Active';
 
     expect(CampaignService.isOpenForDonations(campaign)).toBe(true);
+    expect(CampaignService.isInFuture(campaign)).toBe(false);
   });
 
   it ('should allow donation attempts to any campaign in active date range, even if Status gets stuck in Preview', () => {
@@ -110,6 +112,7 @@ describe('CampaignService', () => {
     campaign.status = 'Preview';
 
     expect(CampaignService.isOpenForDonations(campaign)).toBe(true);
+    expect(CampaignService.isInFuture(campaign)).toBe(false);
   });
 
   it ('should allow not allow donation attempts to Preview campaigns with future start dates', () => {
@@ -119,6 +122,7 @@ describe('CampaignService', () => {
     campaign.status = 'Preview';
 
     expect(CampaignService.isOpenForDonations(campaign)).toBe(false);
+    expect(CampaignService.isInFuture(campaign)).toBe(true);
   });
 
   it ('should allow not allow donation attempts to Expired campaigns with past end dates', () => {
@@ -128,5 +132,6 @@ describe('CampaignService', () => {
     campaign.status = 'Expired';
 
     expect(CampaignService.isOpenForDonations(campaign)).toBe(false);
+    expect(CampaignService.isInFuture(campaign)).toBe(false);
   });
 });
