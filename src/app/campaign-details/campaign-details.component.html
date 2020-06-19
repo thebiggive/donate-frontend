@@ -29,17 +29,15 @@
       </a>
 
       <mat-card *ngIf="!donateEnabled" class="c-not-open">
-        <mat-card-header>
-          <mat-card-title *ngIf="campaignInFuture">
-            <mat-icon aria-hidden="false" aria-label="Future campaign">update</mat-icon>
-            Matching opens soon!
-          </mat-card-title>
+        <mat-card-title *ngIf="campaignInFuture">
+          <mat-icon aria-hidden="false" aria-label="Future campaign">update</mat-icon>
+          Matching opens soon!
+        </mat-card-title>
 
-          <mat-card-title *ngIf="!campaignInFuture">
-            <mat-icon aria-hidden="false" aria-label="Past campaign">history</mat-icon>
-            Campaign has now closed
-          </mat-card-title>
-        </mat-card-header>
+        <mat-card-title *ngIf="!campaignInFuture">
+          <mat-icon aria-hidden="false" aria-label="Past campaign">history</mat-icon>
+          Campaign has now closed
+        </mat-card-title>
 
         <mat-card-content>
           <p>Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
