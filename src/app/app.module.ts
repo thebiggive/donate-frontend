@@ -33,6 +33,7 @@ import { DonationStartComponent } from './donation-start/donation-start.componen
 import { DonationStartErrorDialogComponent } from './donation-start/donation-start-error-dialog.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
+import { ExactCurrencyPipe } from './exact-currency.pipe';
 import { FiltersComponent } from './filters/filters.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeroComponent } from './hero/hero.component';
@@ -54,6 +55,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     DonationStartErrorDialogComponent,
     DonationStartMatchConfirmDialogComponent,
     DonationStartOfferReuseDialogComponent,
+    ExactCurrencyPipe,
     FiltersComponent,
     FooterComponent,
     HeroComponent,
