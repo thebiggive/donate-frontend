@@ -1,4 +1,3 @@
-import { ChangeDetectorRef, PLATFORM_ID } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 
 import { ExactCurrencyPipe } from './exact-currency.pipe';
@@ -11,13 +10,6 @@ describe('ExactCurrencyPipe', () => {
   }));
 
   beforeEach(() => {
-    const cdRefMock: ChangeDetectorRef = {
-      checkNoChanges: () => null,
-      detach: () => null,
-      detectChanges: () => null,
-      markForCheck: () => null,
-      reattach: () => null,
-    };
     pipe = new ExactCurrencyPipe();
   });
 

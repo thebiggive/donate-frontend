@@ -1,5 +1,5 @@
-import { DecimalPipe, CurrencyPipe } from '@angular/common';
-import { ChangeDetectorRef, Inject, Pipe, PipeTransform } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
+import { Pipe, PipeTransform } from '@angular/core';
 
 /**
  * Pipe to format currency
