@@ -22,14 +22,14 @@
         <h3 class="b-rh-2 b-light">
           Your donation of
           <span class="b-bold">
-            {{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}
+            {{ donation.donationAmount | exactCurrency }}
           </span>
            has been made.
         </h3>
         <h3 class="b-rh-2 b-light">
           That's worth
           <span class="b-bold">
-            {{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}
+            {{ totalValue | exactCurrency }}
           </span>
           to {{ donation.charityName }}.
         </h3>
@@ -40,25 +40,25 @@
           <ul class="c-receipt__list b-w-100">
             <li class="c-receipt__item c-receipt__item--highlighted b-db">
               <h4 class="c-receipt__title b-light b-grey b-rt-sm">Total for {{ donation.charityName }}</h4>
-              <p class="b-rt-2 b-bold b-m-0">{{ totalValue | currency : '£' : 'symbol' : '1.2-2' }}</p>
+              <p class="b-rt-2 b-bold b-m-0">{{ totalValue | exactCurrency }}</p>
             </li>
             <li class="c-receipt__item b-db">
               <h4 class="c-receipt__title b-light b-grey b-rt-sm">Your donation</h4>
-              <p class="b-rt-0 b-bold b-m-0">{{ donation.donationAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
+              <p class="b-rt-0 b-bold b-m-0">{{ donation.donationAmount | exactCurrency }}</p>
             </li>
             <li class="c-receipt__item b-db">
               <h4 class="c-receipt__title b-light b-grey b-rt-sm" *ngIf="donation.matchedAmount > 0">Match funds</h4>
-              <p class="b-rt-0 b-bold b-m-0" *ngIf="donation.matchedAmount > 0">{{ donation.matchedAmount | currency : '£' : 'symbol' : '1.0-0' }}</p>
+              <p class="b-rt-0 b-bold b-m-0" *ngIf="donation.matchedAmount > 0">{{ donation.matchedAmount | exactCurrency }}</p>
             </li>
             <li class="c-receipt__item b-db">
               <h4 class="c-receipt__title b-light b-grey b-rt-sm">Gift Aid</h4>
-              <p class="b-rt-0 b-bold b-m-0">{{ giftAidAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
+              <p class="b-rt-0 b-bold b-m-0">{{ giftAidAmount | exactCurrency }}</p>
             </li>
           </ul>
           <div class="c-receipt__tip c-tip" *ngIf="donation.tipAmount > 0">
-            <p class="c-tip__heading">Thank you for leaving a tip of {{ donation.tipAmount | currency : '£' : 'symbol' : '1.2-2' }} towards the Big Give.</p>
+            <p class="c-tip__heading">Thank you for leaving a tip of {{ donation.tipAmount | exactCurrency }} towards the Big Give.</p>
             <p class="c-tip__description b-light b-grey b-rt-sm">Total amount you have been charged</p>
-            <p class="b-rt-0 b-bold b-m-0">{{ cardChargedAmount | currency : '£' : 'symbol' : '1.2-2' }}</p>
+            <p class="b-rt-0 b-bold b-m-0">{{ cardChargedAmount | exactCurrency }}</p>
           </div>
         </div>
       </div>
