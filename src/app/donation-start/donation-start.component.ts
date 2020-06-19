@@ -367,7 +367,7 @@ export class DonationStartComponent implements OnInit {
     this.promptToContinue(
       'Not all match funds are available',
       'There are not enough match funds currently available to fully match your donation. ' +
-        `£${formattedReservedAmount} will be matched.`,
+        `${formattedReservedAmount} will be matched.`,
       'Remember every penny helps & you can continue to make a partially matched donation to the charity!',
       'Cancel and release match funds',
       donation,
