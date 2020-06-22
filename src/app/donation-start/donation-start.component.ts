@@ -16,6 +16,7 @@ import { DonationStartErrorDialogComponent } from './donation-start-error-dialog
 import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
 import { environment } from '../../environments/environment';
+import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { PageMetaService } from '../page-meta.service';
 import { retryStrategy } from '../observable-retry';
 
@@ -362,10 +363,11 @@ export class DonationStartComponent implements OnInit {
     }
 
     this.analyticsService.logEvent('alerted_partial_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
+    const formattedReservedAmount = (new ExactCurrencyPipe()).transform(donation.matchReservedAmount);
     this.promptToContinue(
       'Not all match funds are available',
       'There are not enough match funds currently available to fully match your donation. ' +
-        `£${donation.matchReservedAmount} will be matched.`,
+        `${formattedReservedAmount} will be matched.`,
       'Remember every penny helps & you can continue to make a partially matched donation to the charity!',
       'Cancel and release match funds',
       donation,

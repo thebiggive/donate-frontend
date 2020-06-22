@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,6 +34,7 @@ import { DonationStartComponent } from './donation-start/donation-start.componen
 import { DonationStartErrorDialogComponent } from './donation-start/donation-start-error-dialog.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
+import { ExactCurrencyPipe } from './exact-currency.pipe';
 import { FiltersComponent } from './filters/filters.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeroComponent } from './hero/hero.component';
@@ -54,6 +56,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     DonationStartErrorDialogComponent,
     DonationStartMatchConfirmDialogComponent,
     DonationStartOfferReuseDialogComponent,
+    ExactCurrencyPipe,
     FiltersComponent,
     FooterComponent,
     HeroComponent,
@@ -72,6 +75,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     HttpClientModule,
     InfiniteScrollModule,
     MatButtonModule,
+    MatCardModule,
     MatDialogModule,
     MatExpansionModule,
     MatIconModule,

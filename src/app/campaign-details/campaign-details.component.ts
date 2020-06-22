@@ -17,6 +17,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   additionalImageUris: string[] = [];
   campaign?: Campaign;
   campaignId: string;
+  campaignInFuture = false;
   donateEnabled = true;
   fromFund = false;
   percentRaised?: number;
@@ -65,6 +66,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   }
 
   private setSecondaryProps(campaign: Campaign) {
+    this.campaignInFuture = CampaignService.isInFuture(campaign);
     this.donateEnabled = CampaignService.isOpenForDonations(campaign);
 
     for (const originalUri of campaign.additionalImageUris) {
@@ -76,6 +78,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       const msToLaunch = new Date(campaign.startDate).getTime() - Date.now();
       if (msToLaunch > 0 && msToLaunch < 86400000) {
         this.timer = setTimeout(() => {
+          this.campaignInFuture = false;
           this.donateEnabled = true;
          }, msToLaunch);
       }
