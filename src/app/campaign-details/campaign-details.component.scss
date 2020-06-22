@@ -1,5 +1,10 @@
 @import '../../styles';
 
+.c-not-open {
+  @include make-card;
+  margin-bottom: 1rem;
+}
+
 .c-listing-button.block {
   display: block;
   margin-bottom: 0;
