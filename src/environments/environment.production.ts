@@ -9,7 +9,7 @@ export const environment = {
   maximumDonationAmount: 25000,
   // One suggestion set for 30% of donors, no suggestions for the other 70%.
   suggestedAmounts: [
-    { weight: 3,  values: [50, 200, 500] },
+    { weight: 3, values: [50, 200, 500] },
     { weight: 7, values: [] },
   ],
   thanksUriPrefix: 'https://donate.thebiggive.org.uk/thanks/',
