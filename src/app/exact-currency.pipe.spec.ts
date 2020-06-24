@@ -32,4 +32,16 @@ describe('ExactCurrencyPipe', () => {
   it('rounds unexpected > 2 d.p. values to 2 d.p.', () => {
     expect(pipe.transform(12.345)).toEqual('£12.35');
   });
+
+  it('works with £ input by donors', () => {
+    expect(pipe.transform('£1234.5')).toEqual('£1,234.50');
+  });
+
+  it(`bails out but doesn't crash when a comma is entered`, () => {
+    expect(pipe.transform('12,345')).toEqual(undefined);
+  });
+
+  it(`bails out with zero when input is not numeric at all`, () => {
+    expect(pipe.transform('hello')).toEqual(undefined);
+  });
 });
