@@ -19,6 +19,8 @@ import { environment } from '../../environments/environment';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { PageMetaService } from '../page-meta.service';
 import { retryStrategy } from '../observable-retry';
+import { ValidateCurrencyMax } from '../validators/currency-max';
+import { ValidateCurrencyMin } from '../validators/currency-min';
 
 @Component({
   selector: 'app-donation-start',
@@ -84,8 +86,8 @@ export class DonationStartComponent implements OnInit {
     this.donationForm = this.formBuilder.group({
       donationAmount: [null, [
         Validators.required,
-        Validators.min(5),
-        Validators.max(environment.maximumDonationAmount),
+        ValidateCurrencyMin,
+        ValidateCurrencyMax,
         Validators.pattern('^£?[0-9]+?(\\.00)?$'),
       ]],
       giftAid: [null, Validators.required],
