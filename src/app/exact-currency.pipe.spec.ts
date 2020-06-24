@@ -41,7 +41,7 @@ describe('ExactCurrencyPipe', () => {
     expect(pipe.transform('12,345')).toEqual(undefined);
   });
 
-  it(`bails out with zero when input is not numeric at all`, () => {
+  it(`bails out when input is not numeric at all`, () => {
     expect(pipe.transform('hello')).toEqual(undefined);
   });
 });
