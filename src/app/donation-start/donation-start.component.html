@@ -1,5 +1,11 @@
 <mat-spinner *ngIf="!campaign" class="b-full-page" color="accent" diameter="30"></mat-spinner>
 
+<div class="sr-combo-inputs-row">
+  <mat-label for="card-info">Card</mat-label>
+  <div class="sr-input sr-card-element" id="card-element" #cardInfo></div>
+  <div id="card-errors" role="alert" *ngIf="stripeError">{{ stripeError }}</div>
+</div>
+
 <main class="b-container" *ngIf="campaign">
   <div class="b-back-button">
     <a mat-icon-button [routerLink]="'/campaign/' + campaign.id">
@@ -190,6 +196,9 @@
               </div>
             </div>
 
+            <p *ngIf="noPsps" class="error" aria-live="alert">
+              Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few minutes to try again.
+            </p>
           </mat-expansion-panel>
         </mat-accordion>
       </form>

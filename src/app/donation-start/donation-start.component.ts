@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
@@ -19,6 +19,7 @@ import { environment } from '../../environments/environment';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { PageMetaService } from '../page-meta.service';
 import { retryStrategy } from '../observable-retry';
+import { StripeService } from '../stripe.service';
 import { ValidateCurrencyMax } from '../validators/currency-max';
 import { ValidateCurrencyMin } from '../validators/currency-min';
 
@@ -28,13 +29,20 @@ import { ValidateCurrencyMin } from '../validators/currency-min';
   styleUrls: ['./donation-start.component.scss'],
 })
 
-export class DonationStartComponent implements OnInit {
+export class DonationStartComponent implements AfterViewInit, OnDestroy, OnInit {
+  // Stripe basics adapted from https://www.digitalocean.com/community/tutorials/angular-stripe-elements
+  @ViewChild('cardInfo') cardInfo: ElementRef;
+  card: any;
+  cardHandler = this.onChange.bind(this);
+
   public campaign?: Campaign;
   public donationForm: FormGroup;
   public maximumDonationAmount: number;
+  public noPsps = false; // TODO set this true when appropriate
   public retrying = false;
   public suggestedAmounts?: number[];
   public sfApiError = false;              // Salesforce donation create API error
+  public stripeError?: string;
   public submitting = false;
   private campaignId: string;
   private charityCheckoutError?: string;  // Charity Checkout donation start error message
@@ -43,6 +51,7 @@ export class DonationStartComponent implements OnInit {
   constructor(
     private analyticsService: AnalyticsService,
     private campaignService: CampaignService,
+    private cd: ChangeDetectorRef,
     private charityCheckoutService: CharityCheckoutService,
     public dialog: MatDialog,
     private donationService: DonationService,
@@ -51,6 +60,7 @@ export class DonationStartComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private state: TransferState,
+    private stripeService: StripeService,
   ) {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
     route.queryParams.forEach((params: Params) => {
@@ -58,6 +68,29 @@ export class DonationStartComponent implements OnInit {
         this.charityCheckoutError = params.error;
       }
     });
+  }
+
+  onChange(error: any) {
+    if (error) {
+      this.stripeError = error.message;
+    } else {
+      this.stripeError = undefined;
+    }
+
+    this.cd.detectChanges();
+  }
+
+  ngAfterViewInit() {
+    // Suppress postal code if and only if Gift Aid option is no, since we will collect
+    // the full postal address when it is yes.
+    this.card = this.stripeService.createCard(!this.donationForm.value.giftAid);
+    this.card.mount(this.cardInfo.nativeElement);
+    this.card.addEventListener('change', this.cardHandler);
+  }
+
+  ngOnDestroy() {
+    this.card.removeEventListener('change', this.cardHandler);
+    this.card.destroy();
   }
 
   ngOnInit() {
@@ -100,7 +133,7 @@ export class DonationStartComponent implements OnInit {
         this.previousDonation = existingDonation;
 
         if (this.charityCheckoutError) {
-          this.processDonationError();
+          this.processDonationError(); // TODO make this Enthuse specific or pass in the PSP name for GA event labels?
           return;
         }
 
@@ -124,10 +157,15 @@ export class DonationStartComponent implements OnInit {
     this.donationForm.patchValue({ donationAmount: amountAsString });
   }
 
-  submit() {
+  async submit() {
     if (this.donationForm.invalid) {
       return;
     }
+
+    const { token, error } = await this.stripeService.createToken(this.card);
+
+    console.log('TOKEN!', token);
+    console.log('ERROR!', error);
 
     this.submitting = true;
     this.charityCheckoutError = undefined;
@@ -153,11 +191,11 @@ export class DonationStartComponent implements OnInit {
     };
 
     this.donationService
-      .create(donation) // Create Salesforce donation
+      .create(donation) // Create Donation record
       // excluding status code, delay for logging clarity
       .pipe(
-        retryWhen(error => {
-          return error.pipe(
+        retryWhen(createError => {
+          return createError.pipe(
             tap(val => this.retrying = (val.status !== 500)),
             retryStrategy({excludedStatusCodes: [500]}),
           );

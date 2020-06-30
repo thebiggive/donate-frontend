@@ -5,12 +5,23 @@
 export const environment = {
   production: false,
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
-  charityCheckoutInitUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
   donateUriPrefix: 'http://localhost:4200',
   donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,
+  // TODO other envs
+  psps: {
+    enthuse: {
+      enabled: true,
+      initUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
+    },
+    stripe: {
+      enabled: true,
+      initUri: 'https://api.stripe.com', // todo rm?
+      publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
+    },
+  },
   // Each of 4x suggestion sets for 5% of donors each, no suggestions for the other 80%.
   suggestedAmounts: [
     { weight: 1,  values: [30, 100, 250] },
