@@ -7,12 +7,21 @@
 export const environment = {
   production: false,
   apiUriPrefix: 'https://regtest1-biggive.cs105.force.com',
-  charityCheckoutInitUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
   donateUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
   donationsApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,
+  psps: {
+    enthuse: {
+      enabled: true,
+      initUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
+    },
+    stripe: {
+      enabled: true,
+      publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
+    },
+  },
   suggestedAmounts: [{weight: 1, values: [30, 100, 250]}],
   thanksUriPrefix: 'https://donate-regression.thebiggivetest.org.uk/thanks/',
 };

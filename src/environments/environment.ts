@@ -10,7 +10,6 @@ export const environment = {
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,
-  // TODO other envs
   psps: {
     enthuse: {
       enabled: true,
@@ -18,7 +17,6 @@ export const environment = {
     },
     stripe: {
       enabled: true,
-      initUri: 'https://api.stripe.com', // todo rm?
       publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
