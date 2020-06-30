@@ -88,13 +88,17 @@ export class DonationStartComponent implements AfterViewInit, OnDestroy, OnInit 
     // correct value.
     // this.card = this.stripeService.createCard(this.donationForm.value.giftAid);
     this.card = await this.stripeService.createCard(false);
-    this.card.mount(this.cardInfo.nativeElement);
-    this.card.addEventListener('change', this.cardHandler);
+    if (this.card) {
+      this.card.mount(this.cardInfo.nativeElement);
+      this.card.addEventListener('change', this.cardHandler);
+    }
   }
 
   ngOnDestroy() {
-    this.card.removeEventListener('change', this.cardHandler);
-    this.card.destroy();
+    if (this.card) {
+      this.card.removeEventListener('change', this.cardHandler);
+      this.card.destroy();
+    }
   }
 
   ngOnInit() {
