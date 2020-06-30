@@ -81,13 +81,13 @@ export class DonationStartComponent implements AfterViewInit, OnDestroy, OnInit 
     this.cd.detectChanges();
   }
 
-  ngAfterViewInit() {
+  async ngAfterViewInit() {
     // Suppress postal code if and only if Gift Aid option is yes, since we will collect
     // the full postal address in those cases.
     // TODO create the Stripe card form once we know this so we can pass in the
     // correct value.
     // this.card = this.stripeService.createCard(this.donationForm.value.giftAid);
-    this.card = this.stripeService.createCard(false);
+    this.card = await this.stripeService.createCard(false);
     this.card.mount(this.cardInfo.nativeElement);
     this.card.addEventListener('change', this.cardHandler);
   }

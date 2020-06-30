@@ -29,7 +29,6 @@ export class StripeService {
     }
   }
 
-  // TODO try out loading via module for TS support.
   createCard(hidePostalCode: boolean): StripeCardElement | null {
     if (this.elements) {
       return this.elements.create('card', {
