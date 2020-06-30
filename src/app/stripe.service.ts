@@ -14,11 +14,6 @@ export class StripeService {
   constructor() {}
 
   async init() {
-    // Loading Stripe JS itself here seemed to create a race condition, so to keep things
-    // simple and reliable it is in each `index.*.html`. The library is required to
-    // be hotlinked from stripe.com.
-    const scriptInitStripeElements = document.createElement('script');
-
     // Initialising through the ES Module like this is not required, but is made available by
     // an official Stripe-maintained package and gives us TypeScript types for
     // the library's objects, which allows for better IDE hinting and more
@@ -26,14 +21,27 @@ export class StripeService {
     // See https://github.com/stripe/stripe-js
     this.stripe = await loadStripe(environment.psps.stripe.publishableKey);
     if (this.stripe) {
-      this.elements = this.stripe.elements();
+      this.elements = this.stripe.elements({fonts: [
+        {
+          cssSrc: 'https://fonts.googleapis.com/css2?family=Maven+Pro&display=swap',
+        },
+      ]});
     }
   }
 
   // TODO try out loading via module for TS support.
   createCard(hidePostalCode: boolean): StripeCardElement | null {
     if (this.elements) {
-      return this.elements.create('card', { hidePostalCode });
+      return this.elements.create('card', {
+        hidePostalCode,
+        iconStyle: 'solid',
+        style: {
+          base: {
+            fontFamily: 'Maven Pro, sans-serif',
+            fontSize: '2rem',
+          },
+        },
+      });
     }
 
     console.log('Stripe Elements not ready');
