@@ -1,38 +1,51 @@
 import { Injectable } from '@angular/core';
+import { Stripe, StripeCardElement, StripeElements, StripeError, Token } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js/pure';
 
 import { environment } from '../environments/environment';
-
-declare var stripe: {
-  createToken: (card: any) => any,
-};
-declare var elements: {
-  create: (type: string, options: any) => any,
-};
 
 @Injectable({
   providedIn: 'root',
 })
 export class StripeService {
+  private elements: StripeElements;
+  private stripe: Stripe | null;
+
   constructor() {}
 
-  init() {
+  async init() {
     // Loading Stripe JS itself here seemed to create a race condition, so to keep things
     // simple and reliable it is in each `index.*.html`. The library is required to
     // be hotlinked from stripe.com.
     const scriptInitStripeElements = document.createElement('script');
-    scriptInitStripeElements.innerHTML = `
-      var stripe = Stripe('${environment.psps.stripe.publishableKey}');
-      var elements = stripe.elements();
-    `;
-    document.head.appendChild(scriptInitStripeElements);
+
+    // Initialising through the ES Module like this is not required, but is made available by
+    // an official Stripe-maintained package and gives us TypeScript types for
+    // the library's objects, which allows for better IDE hinting and more
+    // checks that we are handling Stripe objects as intended.
+    // See https://github.com/stripe/stripe-js
+    this.stripe = await loadStripe(environment.psps.stripe.publishableKey);
+    if (this.stripe) {
+      this.elements = this.stripe.elements();
+    }
   }
 
   // TODO try out loading via module for TS support.
-  createCard(hidePostalCode: boolean): any {
-    return elements.create('card', { hidePostalCode });
+  createCard(hidePostalCode: boolean): StripeCardElement | null {
+    if (this.elements) {
+      return this.elements.create('card', { hidePostalCode });
+    }
+
+    console.log('Stripe Elements not ready');
+    return null;
   }
 
-  createToken(card: any): any {
-    return stripe.createToken(card);
+  createToken(card: any): Promise<{ token?: Token | undefined, error?: StripeError | undefined }> | null {
+    if (this.stripe) {
+      return this.stripe.createToken(card);
+    }
+
+    console.log('Stripe Elements not ready');
+    return null;
   }
 }

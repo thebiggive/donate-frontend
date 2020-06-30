@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { retryWhen, tap  } from 'rxjs/operators';
+import { Token } from '@stripe/stripe-js';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
@@ -81,9 +82,12 @@ export class DonationStartComponent implements AfterViewInit, OnDestroy, OnInit 
   }
 
   ngAfterViewInit() {
-    // Suppress postal code if and only if Gift Aid option is no, since we will collect
-    // the full postal address when it is yes.
-    this.card = this.stripeService.createCard(!this.donationForm.value.giftAid);
+    // Suppress postal code if and only if Gift Aid option is yes, since we will collect
+    // the full postal address in those cases.
+    // TODO create the Stripe card form once we know this so we can pass in the
+    // correct value.
+    // this.card = this.stripeService.createCard(this.donationForm.value.giftAid);
+    this.card = this.stripeService.createCard(false);
     this.card.mount(this.cardInfo.nativeElement);
     this.card.addEventListener('change', this.cardHandler);
   }
@@ -162,10 +166,20 @@ export class DonationStartComponent implements AfterViewInit, OnDestroy, OnInit 
       return;
     }
 
-    const { token, error } = await this.stripeService.createToken(this.card);
+    const stripeTokenResponse = await this.stripeService.createToken(this.card);
 
-    console.log('TOKEN!', token);
-    console.log('ERROR!', error);
+    let stripeToken: Token | undefined;
+    let stripeError: string | undefined;
+
+    if (stripeTokenResponse) {
+      stripeToken = stripeTokenResponse.token;
+      if (stripeTokenResponse.error) {
+        stripeError = stripeTokenResponse.error.message;
+      }
+    }
+
+    console.log('TOKEN!', stripeToken);
+    console.log('ERROR!', stripeError);
 
     this.submitting = true;
     this.charityCheckoutError = undefined;

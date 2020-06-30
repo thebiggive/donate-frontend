@@ -37,6 +37,7 @@
     "@angular/platform-server": "^9.1.9",
     "@angular/router": "^9.1.9",
     "@nguniversal/express-engine": "^9.1.1",
+    "@stripe/stripe-js": "^1.7.0",
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "helmet": "^3.22.0",
