@@ -31,7 +31,6 @@ import { ValidateCurrencyMin } from '../validators/currency-min';
 })
 
 export class DonationStartComponent implements OnDestroy, OnInit {
-  // Stripe basics adapted from https://www.digitalocean.com/community/tutorials/angular-stripe-elements
   @ViewChild('cardInfo') cardInfo: ElementRef;
   card: any;
   cardHandler = this.onStripeCardChange.bind(this);

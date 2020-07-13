@@ -18,7 +18,7 @@ export const environment = {
       initUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
     },
     stripe: {
-      enabled: true,
+      enabled: false,
       publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
