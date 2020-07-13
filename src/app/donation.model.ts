@@ -34,7 +34,7 @@ export interface Donation {
      */
     projectId: string;
 
-    psp: string;
+    psp: 'enthuse' | 'stripe';
 
     /**
      * Donor's address including postcode.

@@ -39,7 +39,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   public donationForm: FormGroup;
   public maximumDonationAmount: number;
   public noPsps = false;
-  public psp?: string;
+  public psp?: 'enthuse' | 'stripe';
   public cardDetailsEventually = false;
   public cardDetailsNow = false;
   public retrying = false;
