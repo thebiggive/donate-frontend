@@ -9,7 +9,7 @@
 
   <div class="b-container" *ngIf="campaign && children">
     <app-filters
-      *ngIf="campaign.campaignCount && campaign.campaignCount > 10"
+      *ngIf="campaign.campaignCount && campaign.campaignCount > 1"
       [hasTerm]="hasTerm"
       [selectedSort]="selectedSort"
       [reset]="resetSubject.asObservable()"
