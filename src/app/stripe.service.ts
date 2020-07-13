@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Stripe, StripeCardElement, StripeElements, StripeError, Token } from '@stripe/stripe-js';
+import { PaymentIntent, Stripe, StripeCardElement, StripeElements, StripeError } from '@stripe/stripe-js';
 import { loadStripe } from '@stripe/stripe-js/pure';
 
 import { environment } from '../environments/environment';
@@ -29,30 +29,44 @@ export class StripeService {
     }
   }
 
-  createCard(hidePostalCode: boolean): StripeCardElement | null {
-    if (this.elements) {
-      return this.elements.create('card', {
-        hidePostalCode,
-        iconStyle: 'solid',
-        style: {
-          base: {
-            fontFamily: 'Maven Pro, sans-serif',
-            fontSize: '2rem',
-          },
-        },
-      });
+  async confirmCardPayment(
+    clientSecret: string,
+    cardElement: StripeCardElement,
+  ): Promise<{paymentIntent?: PaymentIntent; error?: StripeError}> {
+    if (!this.stripe) {
+      console.log('Stripe not ready');
+      return {};
     }
 
-    console.log('Stripe Elements not ready');
-    return null;
+    const result = await this.stripe.confirmCardPayment(
+      clientSecret,
+      {
+        payment_method: {
+          card: cardElement,
+          // TODO also pass any billing info collected by this point,
+          // see https://stripe.com/docs/payments/accept-a-payment#web-submit-payment
+        },
+      },
+    );
+
+    return result;
   }
 
-  createToken(card: any): Promise<{ token?: Token | undefined, error?: StripeError | undefined }> | null {
-    if (this.stripe) {
-      return this.stripe.createToken(card);
+  createCard(hidePostalCode: boolean): StripeCardElement | null {
+    if (!this.elements) {
+      console.log('Stripe Elements not ready');
+      return null;
     }
 
-    console.log('Stripe Elements not ready');
-    return null;
+    return this.elements.create('card', {
+      hidePostalCode,
+      iconStyle: 'solid',
+      style: {
+        base: {
+          fontFamily: 'Maven Pro, sans-serif',
+          fontSize: '2rem',
+        },
+      },
+    });
   }
 }

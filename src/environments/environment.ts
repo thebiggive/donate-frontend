@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
+  apiUriPrefix: 'https://sandbox7-thebiggive.cs108.force.com',
   donateUriPrefix: 'http://localhost:4200',
-  donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
+  donationsApiPrefix: 'http://localhost:30030/v1',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,

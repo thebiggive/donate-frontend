@@ -1,10 +1,10 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { retryWhen, tap  } from 'rxjs/operators';
-import { Token } from '@stripe/stripe-js';
+import { StripeElementChangeEvent } from '@stripe/stripe-js';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
@@ -30,23 +30,29 @@ import { ValidateCurrencyMin } from '../validators/currency-min';
   styleUrls: ['./donation-start.component.scss'],
 })
 
-export class DonationStartComponent implements AfterViewInit, OnDestroy, OnInit {
+export class DonationStartComponent implements OnDestroy, OnInit {
   // Stripe basics adapted from https://www.digitalocean.com/community/tutorials/angular-stripe-elements
   @ViewChild('cardInfo') cardInfo: ElementRef;
   card: any;
-  cardHandler = this.onChange.bind(this);
+  cardHandler = this.onStripeCardChange.bind(this);
 
   public campaign?: Campaign;
   public donationForm: FormGroup;
   public maximumDonationAmount: number;
-  public noPsps = false; // TODO set this true when appropriate
+  public noPsps = false;
+  public psp?: string;
+  public cardDetailsEventually = false;
+  public cardDetailsNow = false;
   public retrying = false;
   public suggestedAmounts?: number[];
   public sfApiError = false;              // Salesforce donation create API error
-  public stripeError?: string;
+  public stripeProcessingError?: string;
+  public stripeValidationError?: string | undefined = 'Card not entered yet';
   public submitting = false;
   private campaignId: string;
   private charityCheckoutError?: string;  // Charity Checkout donation start error message
+  private donationClientSecret?: string; // Used in Stripe payment callback
+  private donationId?: string; // Used in Stripe payment callback
   private previousDonation?: Donation;
 
   constructor(
@@ -71,27 +77,14 @@ export class DonationStartComponent implements AfterViewInit, OnDestroy, OnInit 
     });
   }
 
-  onChange(error: any) {
-    if (error) {
-      this.stripeError = error.message;
+  onStripeCardChange(state: StripeElementChangeEvent) {
+    if (state.complete) {
+      this.stripeValidationError = undefined;
     } else {
-      this.stripeError = undefined;
+      this.stripeValidationError = state.error ? state.error?.message : 'Valid so far but incomplete';
     }
 
     this.cd.detectChanges();
-  }
-
-  async ngAfterViewInit() {
-    // Suppress postal code if and only if Gift Aid option is yes, since we will collect
-    // the full postal address in those cases.
-    // TODO create the Stripe card form once we know this so we can pass in the
-    // correct value.
-    // this.card = this.stripeService.createCard(this.donationForm.value.giftAid);
-    this.card = await this.stripeService.createCard(false);
-    if (this.card) {
-      this.card.mount(this.cardInfo.nativeElement);
-      this.card.addEventListener('change', this.cardHandler);
-    }
   }
 
   ngOnDestroy() {
@@ -99,9 +92,20 @@ export class DonationStartComponent implements AfterViewInit, OnDestroy, OnInit 
       this.card.removeEventListener('change', this.cardHandler);
       this.card.destroy();
     }
+    delete this.donationClientSecret;
+    delete this.donationId;
   }
 
   ngOnInit() {
+    if (environment.psps.stripe.enabled) {
+      this.cardDetailsEventually = true;
+      this.psp = 'stripe';
+    } else if (environment.psps.enthuse.enabled) {
+      this.psp = 'enthuse';
+    } else {
+      this.noPsps = true;
+    }
+
     this.maximumDonationAmount = environment.maximumDonationAmount;
     const suggestedAmountsKey = makeStateKey<number[]>('suggested-amounts');
     this.suggestedAmounts = this.state.get(suggestedAmountsKey, undefined);
@@ -170,26 +174,12 @@ export class DonationStartComponent implements AfterViewInit, OnDestroy, OnInit 
       return;
     }
 
-    const stripeTokenResponse = await this.stripeService.createToken(this.card);
-
-    let stripeToken: Token | undefined;
-    let stripeError: string | undefined;
-
-    if (stripeTokenResponse) {
-      stripeToken = stripeTokenResponse.token;
-      if (stripeTokenResponse.error) {
-        stripeError = stripeTokenResponse.error.message;
-      }
-    }
-
-    console.log('TOKEN!', stripeToken);
-    console.log('ERROR!', stripeError);
-
     this.submitting = true;
     this.charityCheckoutError = undefined;
     this.sfApiError = false;
 
-    if (!this.campaign || !this.campaign.charity.id) { // Can't proceed if campaign info not looked up yet
+     // Can't proceed if campaign info not looked up yet or no usable PSP
+    if (!this.campaign || !this.campaign.charity.id || !this.psp) {
       this.sfApiError = true;
       return;
     }
@@ -205,6 +195,7 @@ export class DonationStartComponent implements AfterViewInit, OnDestroy, OnInit 
       optInCharityEmail: this.donationForm.value.optInCharityEmail,
       optInTbgEmail: this.donationForm.value.optInTbgEmail,
       projectId: this.campaignId,
+      psp: this.psp,
       tipAmount: 0, // Only set >0 after donation completed
     };
 
@@ -219,7 +210,7 @@ export class DonationStartComponent implements AfterViewInit, OnDestroy, OnInit 
           );
         }),
       )
-      .subscribe((response: DonationCreatedResponse) => {
+      .subscribe(async (response: DonationCreatedResponse) => {
         this.donationService.saveDonation(response.donation, response.jwt);
 
         // If that succeeded proceed to Charity Checkout donation page, providing key
@@ -252,12 +243,35 @@ export class DonationStartComponent implements AfterViewInit, OnDestroy, OnInit 
           return;
         }
 
-        // Else either the donation was not expected to be matched or has 100% match funds allocated -> no need for an extra step
-        this.redirectToCharityCheckout(response.donation);
+        if (donation.psp === 'enthuse') {
+          // Else either the donation was not expected to be matched or has 100% match funds allocated -> no need for an extra step
+          this.redirectToCharityCheckout(response.donation);
+          return;
+        }
+
+        // Else we're using Stripe and should prompt for payment details here.
+        if (response.donation.clientSecret) {
+          this.cardDetailsNow = true;
+          this.donationClientSecret = response.donation.clientSecret;
+          this.donationId = response.donation.donationId;
+
+          // TODO Suppress postal code if and only if Gift Aid option is yes, since we will collect
+          // the full postal address in those cases.
+          // this.card = this.stripeService.createCard(this.donationForm.value.giftAid);
+          this.card = await this.stripeService.createCard(false);
+          if (this.card) {
+            this.card.mount(this.cardInfo.nativeElement);
+            this.card.addEventListener('change', this.cardHandler);
+          }
+        } else {
+          this.stripeProcessingError = 'Could not prepare payment';
+          this.analyticsService.logError('stripe_payment_intent_create_failed', 'No client secret');
+        }
+        this.submitting = false;
       }, response => {
         let errorMessage: string;
-        if (response.error) {
-          errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.error.error}`;
+        if (response.message) {
+          errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.message}`;
         } else {
           // Unhandled 5xx crashes etc.
           errorMessage = `Could not create new donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
@@ -267,6 +281,46 @@ export class DonationStartComponent implements AfterViewInit, OnDestroy, OnInit 
         this.sfApiError = true;
         this.submitting = false;
       });
+  }
+
+  async payWithStripe() {
+    if (!this.donationClientSecret || !this.donationId) {
+      this.stripeProcessingError = 'Missing data from previous step – please refresh and try again';
+      this.analyticsService.logError('stripe_pay_missing_keys', `Donation ID: ${this.donationId}`);
+      return;
+    }
+
+    this.submitting = true;
+
+    const result = await this.stripeService.confirmCardPayment(this.donationClientSecret, this.card);
+
+    if (result.error) {
+      this.stripeProcessingError = result.error.message;
+      this.analyticsService.logError('stripe_card_payment_error', result.error.message ?? '[No message]');
+
+      return;
+    }
+
+    if (!result.paymentIntent) {
+      this.analyticsService.logError('stripe_card_payment_invalid_response', 'No error or paymentIntent');
+      return;
+    }
+
+    // See https://stripe.com/docs/payments/intents
+    if (['succeeded', 'processing'].includes(result.paymentIntent.status)) {
+      this.analyticsService.logEvent(
+        'stripe_card_payment_success',
+        `Stripe Intent processing or done for donation ${this.donationId} to campaign ${this.campaignId}`,
+      );
+      this.router.navigate(['thanks', this.donationId], {
+        replaceUrl: true,
+      });
+    } else {
+      this.analyticsService.logError('stripe_intent_not_success', result.paymentIntent.status);
+      this.stripeProcessingError = `Status: ${result.paymentIntent.status}`;
+    }
+
+    this.submitting = false;
   }
 
   /**
@@ -455,6 +509,8 @@ export class DonationStartComponent implements AfterViewInit, OnDestroy, OnInit 
   private getDialogResponseFn(donation: Donation) {
     return (proceed: boolean) => {
       if (proceed) {
+        // TODO this and similar need to support Stripe model too; abstract out
+        // to a `continue()` method?
         this.redirectToCharityCheckout(donation);
 
         return;
