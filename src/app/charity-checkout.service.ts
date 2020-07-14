@@ -24,7 +24,7 @@ export class CharityCheckoutService {
   startDonation(donation: Donation) {
     const form = window.document.createElement('form');
     form.setAttribute('method', 'post');
-    form.setAttribute('action', environment.charityCheckoutInitUri);
+    form.setAttribute('action', environment.psps.enthuse.initUri);
     form.setAttribute('target', '_self');
 
     const donationPostData = new CharityCheckoutDonation(donation);

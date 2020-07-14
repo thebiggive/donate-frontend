@@ -5,12 +5,21 @@
 export const environment = {
   production: false,
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
-  charityCheckoutInitUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,
+  psps: {
+    enthuse: {
+      enabled: true,
+      initUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
+    },
+    stripe: {
+      enabled: false,
+      publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
+    },
+  },
   // One suggestion set for 30% of donors, no suggestions for the other 70%.
   suggestedAmounts: [
     { weight: 3, values: [50, 200, 500] },

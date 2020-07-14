@@ -19,6 +19,7 @@ describe('CharityCheckoutDonation model', () => {
       optInCharityEmail: true,
       optInTbgEmail: false,
       projectId: 'someProjectId',
+      psp: 'enthuse',
       tipAmount: 0,
     };
     const charityCheckoutDonation: CharityCheckoutDonation = new CharityCheckoutDonation(donation);
@@ -50,6 +51,7 @@ describe('CharityCheckoutDonation model', () => {
       optInCharityEmail: true,
       optInTbgEmail: false,
       projectId: 'someProjectId',
+      psp: 'enthuse',
       tipAmount: 0.00,
     };
     const charityCheckoutDonation: CharityCheckoutDonation = new CharityCheckoutDonation(donation);
@@ -71,6 +73,7 @@ describe('CharityCheckoutDonation model', () => {
       matchedAmount: 0.00,
       matchReservedAmount: 0.00,
       projectId: 'someOtherProjectId',
+      psp: 'enthuse',
       tipAmount: 0.00,
     };
 
