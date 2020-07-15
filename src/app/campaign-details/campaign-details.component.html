@@ -40,7 +40,11 @@
         </mat-card-title>
 
         <mat-card-content>
-          <p>Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
+          <p>
+            <span *ngIf="campaignInFuture">Donations open</span>
+            <span *ngIf="!campaignInFuture">It ran from</span>
+            {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' : 'Europe/London' }} to
+            {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' : 'Europe/London' }}</p>
         </mat-card-content>
       </mat-card>
 
@@ -118,7 +122,7 @@
         <mat-tab *ngIf="campaign.updates.length > 0" label="Updates">
           <ul class="c-updates" *ngFor="let update of campaign.updates">
             <li>
-              <h4 class="b-semi-bold b-mb-0">{{ update.modifiedDate | date : 'longDate' }}</h4>
+              <h4 class="b-semi-bold b-mb-0">{{ update.modifiedDate | date : 'longDate' : 'Europe/London' }}</h4>
               <p class="c-updates__description">{{ update.content }}</p>
             </li>
           </ul>
