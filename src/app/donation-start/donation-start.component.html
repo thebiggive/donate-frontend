@@ -17,7 +17,9 @@
         <h1 class="b-rh-1 b-bold">{{ campaign.title }}</h1>
       </div>
 
-      <p *ngIf="campaign && !campaignIsOpen()">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
+      <p *ngIf="campaign && !campaignIsOpen()">Donations open
+        {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' : 'Europe/London' }} to
+        {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' : 'Europe/London' }}</p>
 
       <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaign && campaignIsOpen()">
         <mat-accordion multi="true">
