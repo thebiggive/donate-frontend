@@ -1,0 +1,47 @@
+<mat-nav-list [class]="listClass">
+  <mat-list-item>
+    <button mat-icon-button routerLink="/">
+      Explore campaigns
+      <mat-icon aria-hidden="true" color="accent">search</mat-icon>
+    </button>
+  </mat-list-item>
+  <mat-list-item>
+    <button mat-icon-button [matMenuTriggerFor]="about">
+      About
+      <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
+    </button>
+    <mat-menu #about="matMenu">
+      <ul>
+        <li><a mat-menu-item href="https://www.thebiggive.org.uk/s/about">The Big Give</a></li>
+        <li><a mat-menu-item href="https://www.thebiggive.org.uk/s/our-story">Our story</a></li>
+        <li><a mat-menu-item href="https://www.thebiggive.org.uk/s/team">Team</a></li>
+        <li><a mat-menu-item href="https://www.thebiggive.org.uk/s/press">Press</a></li>
+        <li><a mat-menu-item href="https://www.thebiggive.org.uk/s/our-fees">Our fees</a></li>
+        <li><a mat-menu-item href="https://www.thebiggive.org.uk/s/privacy-policy">Privacy policy</a></li>
+        <li><a mat-menu-item href="https://www.thebiggive.org.uk/s/cookies">Cookie policy</a></li>
+        <li><a mat-menu-item href="https://www.thebiggive.org.uk/s/terms-and-conditions">Terms and conditions</a></li>
+      </ul>
+    </mat-menu>
+  </mat-list-item>
+  <mat-list-item>
+    <button mat-icon-button [matMenuTriggerFor]="howcanwehelp">
+      How can we help
+      <mat-icon aria-hidden="false" aria-label="Dropdown" color="accent">arrow_drop_down</mat-icon>
+    </button>
+    <mat-menu #howcanwehelp="matMenu">
+      <ul>
+        <li><a mat-menu-item href="https://www.thebiggive.org.uk/s/charities">Charities</a></li>
+        <li><a mat-menu-item href="https://www.thebiggive.org.uk/s/philanthropists">Philanthropists</a></li>
+        <li><a mat-menu-item href="https://www.thebiggive.org.uk/s/individuals">Individuals</a></li>
+        <li><a mat-menu-item href="https://www.thebiggive.org.uk/s/christmas-challenge">Christmas Challenge</a></li>
+        <li><a mat-menu-item href="https://www.thebiggive.org.uk/s/other-campaigns">Other campaigns</a></li>
+      </ul>
+    </mat-menu>
+  </mat-list-item>
+  <mat-list-item tabindex="0">
+    <a href="https://www.thebiggive.org.uk/s/contact-us">Contact us</a>
+  </mat-list-item>
+  <mat-list-item tabindex="0">
+    <a class="charity-login" href="https://www.thebiggive.org.uk/charities/s/login/">Charity Login</a>
+  </mat-list-item>
+</mat-nav-list>

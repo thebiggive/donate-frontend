@@ -1,0 +1,35 @@
+@import '../../styles';
+
+.charity-login {
+  text-transform: uppercase;
+  color: $colour-teal;
+  font-weight: 600;
+}
+
+.mat-list-item {
+  // Works whether rendering as `block` or `inline-block`. Must override Material base.
+  width: auto !important;
+  padding: 0 1rem !important;
+  &:last-child {
+    padding-right: 0 !important;
+  }
+
+  a {
+    font-size: mat-font-size($app-typography, button);
+  }
+}
+
+.bar {
+  // Override 8px Material default which throws off vertical alignment within the toolbar.
+  padding-top: 0;
+
+  .mat-list-item {
+    display: inline-block;
+  }
+}
+
+.tray {
+  .mat-list-item {
+    display: block;
+  }
+}
