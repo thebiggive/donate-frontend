@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUriPrefix: 'https://sandbox7-biggive.cs108.force.com',
+  apiUriPrefix: 'https://sandbox7-biggive.cs109.force.com',
   donateUriPrefix: 'http://localhost:4200',
   donationsApiPrefix: 'http://localhost:30030/v1',
   getSiteControlId: '97792',
