@@ -190,6 +190,38 @@
               </div>
             </div>
 
+            <p *ngIf="noPsps" class="error" aria-live="alert">
+              Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few minutes to try again.
+            </p>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel *ngIf="cardDetailsEventually" class="c-payment-details" [expanded]="cardDetailsNow">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <h2 class="b-rh-2">Your payment details</h2>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="sr-combo-inputs-row">
+              <mat-label for="card-info">Card</mat-label>
+              <div class="sr-input sr-card-element" id="card-element" #cardInfo></div>
+            </div>
+
+            <div role="alert" aria-live="alert" class="error" *ngIf="stripeProcessingError">{{ stripeProcessingError }}</div>
+
+            <!-- For now we rely on Stripe's inline styling to highlight mistakes
+            instead of showing stripeValidationError text, and just disable the Pay
+            button outside of Elements, until the card is valid. -->
+            <button
+                class="c-donate-button b-donate-button b-w-100 b-rt-1"
+                mat-raised-button
+                [disabled]="stripeValidationError || submitting || f.donationAmount.invalid"
+                (click)="payWithStripe()"
+              >
+                Pay
+                <span class="b-bold b-va-bas">
+                  {{ donationForm.value.donationAmount | exactCurrency }}
+                </span>
+              </button>
           </mat-expansion-panel>
         </mat-accordion>
       </form>

@@ -41,8 +41,14 @@ and updates to the `master` branch will trigger it to rebuild on Docker Hub.
 
 ## Salesforce API requirements
 
-For each sandbox, you need to ensure a Site is created for both `/donations` and `/campaigns`
+For each sandbox, you need to ensure a Site is created for both `/campaigns` and `/funds`
 and that public access is enabled for every Apex class the APIs use.
+
+## Donation API
+
+MatchBot's deployed environments implement the Donation API and manage real-time match
+fund allocation. For data in Salesforce to be eventually consistent, it must also have a
+`/donations` Site deployed with working public access as above.
 
 ## Browser support
 

@@ -34,10 +34,17 @@ export interface Donation {
      */
     projectId: string;
 
+    psp: 'enthuse' | 'stripe';
+
     /**
      * Donor's address including postcode.
      */
     billingPostalAddress?: string;
+
+    /**
+     * Used to complete payment details with some PSPs, e.g. Stripe.
+     */
+    clientSecret?: string;
 
     charityName?: string;
 

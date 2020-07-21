@@ -40,7 +40,11 @@
         </mat-card-title>
 
         <mat-card-content>
-          <p>Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
+          <p>
+            <span *ngIf="campaignInFuture">Donations open</span>
+            <span *ngIf="!campaignInFuture">It ran from</span>
+            {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}
+          </p>
         </mat-card-content>
       </mat-card>
 

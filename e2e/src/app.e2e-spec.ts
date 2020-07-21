@@ -9,7 +9,7 @@ describe('Donate Frontend', () => {
   });
 
   it('should display TBG logo', () => {
-    page.navigateTo('?term=e2eTestTerm');
+    page.navigateTo('');
     expect(page.getLogoAltText()).toBe('The Big Give');
   });
 
