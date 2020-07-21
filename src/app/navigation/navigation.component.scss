@@ -1,11 +1,13 @@
 @import '../../styles';
 
+$toolbar-height: 64px;
+
 mat-sidenav-container {
   background-color: $colour-card-background;
 }
 
 mat-sidenav {
-  width:100%;
+  width: 100%;
   margin-top: 56px;
   @media #{$breakpoint-md} {
     max-width: 300px;
@@ -36,6 +38,7 @@ mat-sidenav {
   justify-content: space-between;
   padding-left: 1rem;
   padding-right: 1rem;
+  height: $toolbar-height;
   &:after {
     display: block;
     content: "";
@@ -43,11 +46,8 @@ mat-sidenav {
     height: 10px;
     position: absolute;
     z-index: 1000;
-    top: 56px;
     background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.06) 100%);
-    @media #{$breakpoint-md} {
-      top: 64px;
-    }
+    top: $toolbar-height;
     left: 0;
   }
 }
