@@ -38,6 +38,7 @@ import { ExactCurrencyPipe } from './exact-currency.pipe';
 import { FiltersComponent } from './filters/filters.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeroComponent } from './hero/hero.component';
+import { MainMenuComponent } from './main-menu/main-menu.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { ExploreComponent } from './explore/explore.component';
@@ -60,6 +61,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     FiltersComponent,
     FooterComponent,
     HeroComponent,
+    MainMenuComponent,
     MetaCampaignComponent,
     NavigationComponent,
     ExploreComponent,
