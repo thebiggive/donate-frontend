@@ -5,7 +5,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -15,6 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule, MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
@@ -35,13 +35,14 @@ import { DonationStartErrorDialogComponent } from './donation-start/donation-sta
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
 import { ExactCurrencyPipe } from './exact-currency.pipe';
+import { ExploreComponent } from './explore/explore.component';
 import { FiltersComponent } from './filters/filters.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeroComponent } from './hero/hero.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
+import { MatVerticalStepperScrollerDirective } from './mat-vertical-stepper-scroller.directive';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { NavigationComponent } from './navigation/navigation.component';
-import { ExploreComponent } from './explore/explore.component';
 import { TickerComponent } from './ticker/ticker.component';
 import { TimeLeftPipe } from './time-left.pipe';
 
@@ -62,6 +63,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     FooterComponent,
     HeroComponent,
     MainMenuComponent,
+    MatVerticalStepperScrollerDirective,
     MetaCampaignComponent,
     NavigationComponent,
     ExploreComponent,
@@ -79,7 +81,6 @@ import { TimeLeftPipe } from './time-left.pipe';
     MatButtonModule,
     MatCardModule,
     MatDialogModule,
-    MatExpansionModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
@@ -89,6 +90,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     MatRadioModule,
     MatSelectModule,
     MatSidenavModule,
+    MatStepperModule,
     MatTabsModule,
     MatToolbarModule,
     ReactiveFormsModule,

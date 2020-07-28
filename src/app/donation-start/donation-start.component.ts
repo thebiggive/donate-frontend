@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { retryWhen, tap  } from 'rxjs/operators';
@@ -32,22 +33,28 @@ import { ValidateCurrencyMin } from '../validators/currency-min';
 
 export class DonationStartComponent implements OnDestroy, OnInit {
   @ViewChild('cardInfo') cardInfo: ElementRef;
+  @ViewChild('stepper') private stepper: MatStepper;
   card: any;
   cardHandler = this.onStripeCardChange.bind(this);
 
-  public campaign?: Campaign;
-  public donationForm: FormGroup;
-  public maximumDonationAmount: number;
-  public noPsps = false;
-  public psp?: 'enthuse' | 'stripe';
-  public cardDetailsEventually = false;
-  public cardDetailsNow = false;
-  public retrying = false;
-  public suggestedAmounts?: number[];
-  public sfApiError = false;              // Salesforce donation create API error
-  public stripeProcessingError?: string;
-  public stripeValidationError?: string | undefined = 'Card not entered yet';
-  public submitting = false;
+  campaign?: Campaign;
+
+  donationForm: FormGroup;
+  amountsGroup: FormGroup;
+  giftAidAndBillingGroup: FormGroup;
+  emailAndMarketingGroup: FormGroup;
+
+  maximumDonationAmount: number;
+  noPsps = false;
+  psp?: 'enthuse' | 'stripe';
+  cardDetailsEventually = false;
+  retrying = false;
+  suggestedAmounts?: number[];
+  sfApiError = false;              // Salesforce donation create API error
+  stripeProcessingError?: string;
+  stripeValidationError?: string | undefined = 'Card not entered yet';
+  submitting = false;
+
   private campaignId: string;
   private charityCheckoutError?: string;  // Charity Checkout donation start error message
   private donationClientSecret?: string; // Used in Stripe payment callback
@@ -76,16 +83,6 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     });
   }
 
-  onStripeCardChange(state: StripeElementChangeEvent) {
-    if (state.complete) {
-      this.stripeValidationError = undefined;
-    } else {
-      this.stripeValidationError = state.error ? state.error?.message : 'Valid so far but incomplete';
-    }
-
-    this.cd.detectChanges();
-  }
-
   ngOnDestroy() {
     if (this.card) {
       this.card.removeEventListener('change', this.cardHandler);
@@ -103,6 +100,51 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       this.psp = 'enthuse';
     } else {
       this.noPsps = true;
+    }
+
+    this.donationForm = this.formBuilder.group({
+      amounts: this.formBuilder.group({
+        donationAmount: [null, [
+          Validators.required,
+          ValidateCurrencyMin,
+          ValidateCurrencyMax,
+          Validators.pattern('^£?[0-9]+?(\\.00)?$'),
+        ]],
+        tipAmount: [null, [
+          // Validators.required, // TODO require iff in Stripe mode
+          Validators.pattern('^£?[0-9]+?(\\.[0-9]{2})?$'),
+        ]],
+      }),
+      giftAidAndBilling: this.formBuilder.group({
+        giftAid: [null, Validators.required],
+        billingPostcode: [null, Validators.required], // TODO validate format basics
+        firstName: [null, Validators.required],
+        lastName: [null, Validators.required],
+        homeAddress: [null],  // Required iff Gift Aid claimed
+        homePostcode: [null], // Required iff Gift Aid claimed
+      }),
+      emailAndMarketing: this.formBuilder.group({
+        emailAddress: [null, [Validators.required, Validators.email]],
+        optInCharityEmail: [null, Validators.required],
+        optInTbgEmail: [null, Validators.required],
+      }),
+    });
+
+    // Current strict type checks mean we need to do this for the compiler to be happy that
+    // the groups are not null.
+    const amountsGroup: any = this.donationForm.get('amounts');
+    if (amountsGroup != null) {
+      this.amountsGroup = amountsGroup;
+    }
+
+    const giftAidAndBillingGroup: any = this.donationForm.get('giftAidAndBilling');
+    if (giftAidAndBillingGroup != null) {
+      this.giftAidAndBillingGroup = giftAidAndBillingGroup;
+    }
+
+    const emailAndMarketingGroup: any = this.donationForm.get('emailAndMarketing');
+    if (emailAndMarketingGroup != null) {
+      this.emailAndMarketingGroup = emailAndMarketingGroup;
     }
 
     this.maximumDonationAmount = environment.maximumDonationAmount;
@@ -127,18 +169,6 @@ export class DonationStartComponent implements OnDestroy, OnInit {
         });
     }
 
-    this.donationForm = this.formBuilder.group({
-      donationAmount: [null, [
-        Validators.required,
-        ValidateCurrencyMin,
-        ValidateCurrencyMax,
-        Validators.pattern('^£?[0-9]+?(\\.00)?$'),
-      ]],
-      giftAid: [null, Validators.required],
-      optInCharityEmail: [null, Validators.required],
-      optInTbgEmail: [null, Validators.required],
-    });
-
     this.donationService.getProbablyResumableDonation(this.campaignId)
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;
@@ -161,11 +191,20 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     });
   }
 
+  onStripeCardChange(state: StripeElementChangeEvent) {
+    if (state.complete) {
+      this.stripeValidationError = undefined;
+    } else {
+      this.stripeValidationError = state.error ? state.error?.message : 'Valid so far but incomplete';
+    }
+
+    this.cd.detectChanges();
+  }
+
   setAmount(amount: number) {
     // We need to keep this as a string for consistency with manual donor-input amounts,
     // so that `submit()` doesn't fall over trying to clean it of possible currency symbols.
-    const amountAsString = amount.toString();
-    this.donationForm.patchValue({ donationAmount: amountAsString });
+    this.amountsGroup.patchValue({ donationAmount: amount.toString() });
   }
 
   async submit() {
@@ -186,13 +225,14 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
-      donationAmount: this.donationForm.value.donationAmount.replace('£', '').replace('.00', ''), // Strip '£', '.00' if entered
+      // Strip '£', '.00' if entered
+      donationAmount: this.amountsGroup.value.donationAmount.replace('£', '').replace('.00', ''),
       donationMatched: this.campaign.isMatched,
-      giftAid: this.donationForm.value.giftAid,
+      giftAid: this.giftAidAndBillingGroup.value.giftAid,
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
-      optInCharityEmail: this.donationForm.value.optInCharityEmail,
-      optInTbgEmail: this.donationForm.value.optInTbgEmail,
+      optInCharityEmail: this.emailAndMarketingGroup.value.optInCharityEmail,
+      optInTbgEmail: this.emailAndMarketingGroup.value.optInTbgEmail,
       projectId: this.campaignId,
       psp: this.psp,
       tipAmount: 0, // Only set >0 after donation completed
@@ -250,14 +290,12 @@ export class DonationStartComponent implements OnDestroy, OnInit {
 
         // Else we're using Stripe and should prompt for payment details here.
         if (response.donation.clientSecret) {
-          this.cardDetailsNow = true;
           this.donationClientSecret = response.donation.clientSecret;
           this.donationId = response.donation.donationId;
 
-          // TODO Suppress postal code if and only if Gift Aid option is yes, since we will collect
-          // the full postal address in those cases.
-          // this.card = this.stripeService.createCard(this.donationForm.value.giftAid);
-          this.card = await this.stripeService.createCard(false);
+          this.stepper.next();
+
+          this.card = await this.stripeService.createCard();
           if (this.card) {
             this.card.mount(this.cardInfo.nativeElement);
             this.card.addEventListener('change', this.cardHandler);
@@ -291,7 +329,13 @@ export class DonationStartComponent implements OnDestroy, OnInit {
 
     this.submitting = true;
 
-    const result = await this.stripeService.confirmCardPayment(this.donationClientSecret, this.card);
+    const result = await this.stripeService.confirmCardPayment(
+      this.donationClientSecret,
+      this.card,
+      this.emailAndMarketingGroup.value.emailAddress,
+      this.giftAidAndBillingGroup.value.name,
+      this.giftAidAndBillingGroup.value.billingPostcode,
+    );
 
     if (result.error) {
       this.stripeProcessingError = result.error.message;
@@ -325,7 +369,32 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   /**
    * Quick getter for form controls, to keep validation message handling concise.
    */
-  get f() { return this.donationForm.controls; }
+  get f() {
+    if (!this.donationForm) {
+      return undefined;
+    }
+
+    return this.donationForm.controls;
+  }
+
+  get donationAmountField() {
+    if (!this.donationForm) {
+      return undefined;
+    }
+
+    return this.donationForm.controls.amounts.get('donationAmount');
+  }
+
+  /**
+   * Quick getter for donation amount, to keep template use concise.
+   */
+  get donationAmount(): number | undefined {
+    if (!this.donationForm) {
+      return undefined;
+    }
+
+    return this.donationForm.controls.amounts.value.donationAmount;
+  }
 
   expectedMatchAmount(): number {
     if (!this.campaign) {
