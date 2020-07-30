@@ -32,7 +32,7 @@
   </div>
 
   <div class="c-buttons">
-    <a
+    <button
       mat-icon-button
       color="accent"
       class="c-buttons__more"
@@ -41,14 +41,13 @@
     >
       More info
       <mat-icon class="c-buttons__more-icon" aria-hidden="true">add</mat-icon>
-    </a>
-    <a
+    </button>
+    <button
       mat-raised-button
       class="b-donate-button"
       [routerLink]="'/donate/' + campaign.id"
     >
       Donate
-    </a>
+    </button>
   </div>
-
 </div>

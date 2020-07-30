@@ -212,16 +212,16 @@
             instead of showing stripeValidationError text, and just disable the Pay
             button outside of Elements, until the card is valid. -->
             <button
-                class="c-donate-button b-donate-button b-w-100 b-rt-1"
-                mat-raised-button
-                [disabled]="stripeValidationError || submitting || f.donationAmount.invalid"
-                (click)="payWithStripe()"
-              >
-                Pay
-                <span class="b-bold b-va-bas">
-                  {{ donationForm.value.donationAmount | exactCurrency }}
-                </span>
-              </button>
+              class="c-donate-button b-donate-button b-w-100 b-rt-1"
+              mat-raised-button
+              [disabled]="stripeValidationError || submitting || f.donationAmount.invalid"
+              (click)="payWithStripe()"
+            >
+              Pay
+              <span class="b-bold b-va-bas">
+                {{ donationForm.value.donationAmount | exactCurrency }}
+              </span>
+            </button>
           </mat-expansion-panel>
         </mat-accordion>
       </form>
