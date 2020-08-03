@@ -385,7 +385,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   }
 
   get donationAndTipAmount(): number {
-    return this.donationAmount + Number((this.amountsGroup.value.tipAmount || '0').replace('£', ''));
+    return this.donationAmount + this.tipAmount();
   }
 
   expectedMatchAmount(): number {
@@ -400,12 +400,12 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     return this.giftAidGroup.value.giftAid ? (0.25 * this.donationAmount) : 0;
   }
 
+  tipAmount(): number {
+    return Number((this.amountsGroup.value.tipAmount || '0').replace('£', ''));
+  }
+
   expectedTbgAmount(): number {
-    return parseFloat(this.amountsGroup.value.tipAmount.replace('£', '')) +
-      (this.giftAidGroup.value.giftAid
-        ? (0.25 * parseFloat(this.amountsGroup.value.tipAmount.replace('£', '')))
-        : 0
-      );
+    return this.tipAmount() + (this.giftAidGroup.value.giftAid ? (0.25 * this.tipAmount()) : 0);
   }
 
   expectedTotalAmount(): number {
