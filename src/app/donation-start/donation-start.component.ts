@@ -1,3 +1,4 @@
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -142,6 +143,11 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       this.personalAndMarketingGroup = personalAndMarketingGroup;
     }
 
+    const paymentAndAgreementGroup: any = this.donationForm.get('paymentAndAgreement');
+    if (paymentAndAgreementGroup != null) {
+      this.paymentAndAgreementGroup = paymentAndAgreementGroup;
+    }
+
     this.maximumDonationAmount = environment.maximumDonationAmount;
     const suggestedAmountsKey = makeStateKey<number[]>('suggested-amounts');
     this.suggestedAmounts = this.state.get(suggestedAmountsKey, undefined);
@@ -184,6 +190,15 @@ export class DonationStartComponent implements OnDestroy, OnInit {
         // We have a resumable donation and aren't processing an error
         this.offerExistingDonation(existingDonation);
     });
+  }
+
+  updateSteps(event: StepperSelectionEvent) {
+    // Default billing postcode to home postcode when Gift Aid's being claimed and so it's set.
+    if (event.previouslySelectedStep.label === 'Gift Aid' && this.giftAidGroup.value.giftAid) {
+      this.paymentAndAgreementGroup.patchValue({
+        billingPostcode: this.giftAidGroup.value.homePostcode,
+      });
+    }
   }
 
   onStripeCardChange(state: StripeElementChangeEvent) {
