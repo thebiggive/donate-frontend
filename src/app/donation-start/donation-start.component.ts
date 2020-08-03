@@ -56,7 +56,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   submitting = false;
 
   private campaignId: string;
-  private charityCheckoutError?: string;  // Charity Checkout donation start error message
+  private enthuseError?: string;  // Enthuse donation start error message
   private donationClientSecret?: string; // Used in Stripe payment callback
   private donationId?: string; // Used in Stripe payment callback
   private previousDonation?: Donation;
@@ -78,7 +78,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
     route.queryParams.forEach((params: Params) => {
       if (params.error) {
-        this.charityCheckoutError = params.error;
+        this.enthuseError = params.error;
       }
     });
   }
@@ -93,14 +93,6 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    if (environment.psps.stripe.enabled) {
-      this.psp = 'stripe';
-    } else if (environment.psps.enthuse.enabled) {
-      this.psp = 'enthuse';
-    } else {
-      this.noPsps = true;
-    }
-
     this.donationForm = this.formBuilder.group({
       // Matching reservation happens at the end of this group.
       amounts: this.formBuilder.group({
@@ -176,8 +168,8 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;
 
-        if (this.charityCheckoutError) {
-          this.processDonationError(); // TODO make this Enthuse specific or pass in the PSP name for GA event labels?
+        if (this.enthuseError) {
+          this.processEnthuseDonationError();
           return;
         }
 
@@ -216,7 +208,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     }
 
     this.submitting = true;
-    this.charityCheckoutError = undefined;
+    this.enthuseError = undefined;
     this.sfApiError = false;
 
      // Can't proceed if campaign info not looked up yet or no usable PSP
@@ -428,6 +420,14 @@ export class DonationStartComponent implements OnDestroy, OnInit {
    * Redirect if campaign's not open yet; set up page metadata if it is
    */
   private handleCampaign(campaign: Campaign) {
+    if (environment.psps.stripe.enabled && this.campaign?.charity.stripeAccountId) {
+      this.psp = 'stripe';
+    } else if (environment.psps.enthuse.enabled) {
+      this.psp = 'enthuse';
+    } else {
+      this.noPsps = true;
+    }
+
     if (!CampaignService.isOpenForDonations(campaign)) {
       this.router.navigateByUrl(`/campaign/${campaign.id}`, { replaceUrl: true });
       return;
@@ -482,10 +482,10 @@ export class DonationStartComponent implements OnDestroy, OnInit {
    * Auto-cancel the attempted donation (it's unlikely to start working for the same project immediately so better to start a
    * 'clean' one) and let the user know about the error.
    */
-  private processDonationError() {
+  private processEnthuseDonationError() {
     this.analyticsService.logError(
-      'charity_checkout_error',
-      `Charity Checkout rejected donation setup for campaign ${this.campaignId}: ${this.charityCheckoutError}`,
+      'charity_checkout_error', // Keep event name for historic comparisons
+      `Enthuse rejected donation setup for campaign ${this.campaignId}: ${this.enthuseError}`,
     );
 
     if (this.previousDonation) {
@@ -497,7 +497,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     }
 
     const errorDialog = this.dialog.open(DonationStartErrorDialogComponent, {
-      data: { charityCheckoutError: this.charityCheckoutError },
+      data: { pspError: this.enthuseError },
       disableClose: true,
       role: 'alertdialog',
     });
