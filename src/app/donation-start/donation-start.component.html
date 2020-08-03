@@ -81,7 +81,7 @@
               <mat-hint
                 *ngIf="donationAmount && donationAmount > 0"
               >
-                {{ ((amountsGroup.value.tipAmount || 0).replace('£', '') / donationAmount) | percent }}
+                {{ ((amountsGroup.value.tipAmount || '0').replace('£', '') / donationAmount) | percent }}
               of main donation
               </mat-hint>
             </mat-form-field>
