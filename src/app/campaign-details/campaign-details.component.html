@@ -24,9 +24,14 @@
         <p class="c-header__description b-rt-1">{{ campaign.summary }}</p>
       </div>
 
-      <a class="b-donate-button" mat-raised-button [routerLink]="'/donate/' + campaign.id" *ngIf="donateEnabled">
+      <button
+        *ngIf="donateEnabled"
+        class="b-donate-button"
+        mat-raised-button
+        [routerLink]="'/donate/' + campaign.id"
+      >
         Donate
-      </a>
+      </button>
 
       <mat-card *ngIf="!donateEnabled" class="c-not-open">
         <mat-card-title *ngIf="campaignInFuture">
