@@ -70,7 +70,7 @@ describe('DonationStartComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have no errors with valid inputs', () => {
+  it('should have no errors with valid inputs and get correct expected amounts', () => {
     component.donationForm.setValue({
       amounts: {
         donationAmount: '£1234',
@@ -94,6 +94,9 @@ describe('DonationStartComponent', () => {
     });
 
     expect(component.donationForm.valid).toBe(true);
+    expect(component.expectedMatchAmount()).toBe(0); // Test has no campaign for now
+    expect(component.expectedTotalAmount()).toBe(1542.5);
+    expect(component.expectedTbgAmount()).toBe(25);
   });
 
   it('should have an error with required radio buttons not set', () => {

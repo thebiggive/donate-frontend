@@ -228,8 +228,8 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
-      // Strip '£', '.00' if entered
-      donationAmount: this.amountsGroup.value.donationAmount.replace('£', '').replace('.00', ''),
+      // Strip '£' if entered
+      donationAmount: this.amountsGroup.value.donationAmount.replace('£', ''),
       donationMatched: this.campaign.isMatched,
       giftAid: this.giftAidGroup.value.giftAid,
       matchedAmount: 0, // Only set >0 after donation completed
@@ -381,11 +381,11 @@ export class DonationStartComponent implements OnDestroy, OnInit {
    * Quick getter for donation amount, to keep template use concise.
    */
   get donationAmount(): number {
-    return this.amountsGroup.value.donationAmount;
+    return Number((this.amountsGroup.value.donationAmount || '0').replace('£', ''));
   }
 
   get donationAndTipAmount(): number {
-    return Number(this.amountsGroup.value.donationAmount) + Number(this.amountsGroup.value.tipAmount);
+    return this.donationAmount + Number((this.amountsGroup.value.tipAmount || '0').replace('£', ''));
   }
 
   expectedMatchAmount(): number {
@@ -397,11 +397,19 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   }
 
   giftAidAmount(): number {
-    return this.giftAidGroup.value.giftAid ? (0.25 * parseFloat(this.amountsGroup.value.donationAmount)) : 0;
+    return this.giftAidGroup.value.giftAid ? (0.25 * this.donationAmount) : 0;
+  }
+
+  expectedTbgAmount(): number {
+    return parseFloat(this.amountsGroup.value.tipAmount.replace('£', '')) +
+      (this.giftAidGroup.value.giftAid
+        ? (0.25 * parseFloat(this.amountsGroup.value.tipAmount.replace('£', '')))
+        : 0
+      );
   }
 
   expectedTotalAmount(): number {
-    return parseFloat(this.amountsGroup.value.donationAmount) + this.giftAidAmount() + this.expectedMatchAmount();
+    return this.donationAmount + this.giftAidAmount() + this.expectedMatchAmount();
   }
 
   /**
