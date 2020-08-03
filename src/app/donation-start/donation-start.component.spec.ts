@@ -76,18 +76,20 @@ describe('DonationStartComponent', () => {
         donationAmount: '£1234',
         tipAmount: '20',
       },
-      giftAidAndBilling: {
+      giftAid: {
         giftAid: true,
-        billingPostcode: 'N1 1AA',
-        firstName: 'Ezra',
-        lastName: 'Furman',
         homeAddress: null,
         homePostcode: null,
       },
-      emailAndMarketing: {
+      personalAndMarketing: {
+        firstName: 'Ezra',
+        lastName: 'Furman',
         emailAddress: 'test@example.com',
         optInCharityEmail: false,
         optInTbgEmail: true,
+      },
+      paymentAndAgreement: {
+        billingPostcode: 'N1 1AA',
       },
     });
 
@@ -100,18 +102,20 @@ describe('DonationStartComponent', () => {
         donationAmount: '1234',
         tipAmount: null,
       },
-      giftAidAndBilling: {
+      giftAid: {
         giftAid: null,
-        billingPostcode: null,
+        homePostcode: null,
+        homeAddress: null,
+      },
+      personalAndMarketing: {
         firstName: null,
         lastName: null,
-        homeAddress: null,
-        homePostcode: null,
-      },
-      emailAndMarketing: {
         emailAddress: null,
         optInCharityEmail: null,
         optInTbgEmail: null,
+      },
+      paymentAndAgreement: {
+        billingPostcode: null,
       },
     });
 
@@ -119,15 +123,15 @@ describe('DonationStartComponent', () => {
 
     expect(component.donationForm.controls.amounts.get('donationAmount')?.errors).toBeNull();
 
-    const giftAidErrors: any = component.donationForm.controls.giftAidAndBilling.get('giftAid')?.errors;
+    const giftAidErrors: any = component.donationForm.controls.giftAid.get('giftAid')?.errors;
     expect(Object.keys(giftAidErrors).length).toBe(1);
     expect(giftAidErrors.required).toBe(true);
 
-    const optInCharityEmailErrors: any = component.donationForm.controls.emailAndMarketing.get('optInCharityEmail')?.errors;
+    const optInCharityEmailErrors: any = component.donationForm.controls.personalAndMarketing.get('optInCharityEmail')?.errors;
     expect(Object.keys(optInCharityEmailErrors).length).toBe(1);
     expect(optInCharityEmailErrors.required).toBe(true);
 
-    const optInTbgEmailErrors: any = component.donationForm.controls.emailAndMarketing.get('optInTbgEmail')?.errors;
+    const optInTbgEmailErrors: any = component.donationForm.controls.personalAndMarketing.get('optInTbgEmail')?.errors;
     expect(Object.keys(optInTbgEmailErrors).length).toBe(1);
     expect(optInTbgEmailErrors.required).toBe(true);
   });
@@ -138,18 +142,20 @@ describe('DonationStartComponent', () => {
         donationAmount: null,
         tipAmount: null,
       },
-      giftAidAndBilling: {
+      giftAid: {
         giftAid: true,
-        billingPostcode: null,
+        homePostcode: null,
+        homeAddress: null,
+      },
+      personalAndMarketing: {
         firstName: null,
         lastName: null,
-        homeAddress: null,
-        homePostcode: null,
-      },
-      emailAndMarketing: {
         emailAddress: null,
         optInCharityEmail: true,
         optInTbgEmail: false,
+      },
+      paymentAndAgreement: {
+        billingPostcode: null,
       },
     });
 
@@ -159,9 +165,9 @@ describe('DonationStartComponent', () => {
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.required).toBe(true);
 
-    expect(component.donationForm.controls.giftAidAndBilling.get('giftAid')?.errors).toBeNull();
-    expect(component.donationForm.controls.emailAndMarketing.get('optInCharityEmail')?.errors).toBeNull();
-    expect(component.donationForm.controls.emailAndMarketing.get('optInTbgEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have minimum amount error', () => {
@@ -170,18 +176,20 @@ describe('DonationStartComponent', () => {
         donationAmount: '4',
         tipAmount: null,
       },
-      giftAidAndBilling: {
+      giftAid: {
         giftAid: false,
-        billingPostcode: null,
+        homePostcode: null,
+        homeAddress: null,
+      },
+      personalAndMarketing: {
         firstName: null,
         lastName: null,
-        homeAddress: null,
-        homePostcode: null,
-      },
-      emailAndMarketing: {
         emailAddress: null,
         optInCharityEmail: true,
         optInTbgEmail: false,
+      },
+      paymentAndAgreement: {
+        billingPostcode: null,
       },
     });
 
@@ -191,9 +199,9 @@ describe('DonationStartComponent', () => {
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.min).toBe(true);
 
-    expect(component.donationForm.controls.giftAidAndBilling.get('giftAid')?.errors).toBeNull();
-    expect(component.donationForm.controls.emailAndMarketing.get('optInCharityEmail')?.errors).toBeNull();
-    expect(component.donationForm.controls.emailAndMarketing.get('optInTbgEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have maximum amount error', () => {
@@ -202,18 +210,20 @@ describe('DonationStartComponent', () => {
         donationAmount: '25001',
         tipAmount: null,
       },
-      giftAidAndBilling: {
+      giftAid: {
         giftAid: false,
-        billingPostcode: null,
+        homePostcode: null,
+        homeAddress: null,
+      },
+      personalAndMarketing: {
         firstName: null,
         lastName: null,
-        homeAddress: null,
-        homePostcode: null,
-      },
-      emailAndMarketing: {
         emailAddress: null,
         optInCharityEmail: false,
         optInTbgEmail: false,
+      },
+      paymentAndAgreement: {
+        billingPostcode: null,
       },
     });
 
@@ -223,9 +233,9 @@ describe('DonationStartComponent', () => {
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.max).toBe(true);
 
-    expect(component.donationForm.controls.giftAidAndBilling.get('giftAid')?.errors).toBeNull();
-    expect(component.donationForm.controls.emailAndMarketing.get('optInCharityEmail')?.errors).toBeNull();
-    expect(component.donationForm.controls.emailAndMarketing.get('optInTbgEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have mis-formatted amount error', () => {
@@ -234,18 +244,20 @@ describe('DonationStartComponent', () => {
         donationAmount: '8765,21',
         tipAmount: null,
       },
-      giftAidAndBilling: {
+      giftAid: {
         giftAid: true,
-        billingPostcode: 'N1 1AA',
+        homePostcode: null,
+        homeAddress: null,
+      },
+      personalAndMarketing: {
         firstName: null,
         lastName: null,
-        homeAddress: null,
-        homePostcode: null,
-      },
-      emailAndMarketing: {
         emailAddress: 'test@example.com',
         optInCharityEmail: true,
         optInTbgEmail: true,
+      },
+      paymentAndAgreement: {
+        billingPostcode: 'N1 1AA',
       },
     });
 
@@ -258,9 +270,9 @@ describe('DonationStartComponent', () => {
       actualValue: '8765,21',
     });
 
-    expect(component.donationForm.controls.giftAidAndBilling.get('giftAid')?.errors).toBeNull();
-    expect(component.donationForm.controls.emailAndMarketing.get('optInCharityEmail')?.errors).toBeNull();
-    expect(component.donationForm.controls.emailAndMarketing.get('optInTbgEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have missing postcode error', () => {
@@ -269,28 +281,30 @@ describe('DonationStartComponent', () => {
         donationAmount: '£1234',
         tipAmount: null,
       },
-      giftAidAndBilling: {
+      giftAid: {
         giftAid: true,
-        billingPostcode: null,
-        firstName: null,
-        lastName: null,
         homeAddress: null,
         homePostcode: null,
       },
-      emailAndMarketing: {
+      personalAndMarketing: {
+        firstName: null,
+        lastName: null,
         emailAddress: 'test@example.com',
         optInCharityEmail: true,
         optInTbgEmail: true,
+      },
+      paymentAndAgreement: {
+        billingPostcode: null,
       },
     });
 
     expect(component.donationForm.valid).toBe(false);
 
-    const billingPostcodeErrors: any = component.donationForm.controls.giftAidAndBilling.get('billingPostcode')?.errors;
+    const billingPostcodeErrors: any = component.donationForm.controls.paymentAndAgreement.get('billingPostcode')?.errors;
     expect(Object.keys(billingPostcodeErrors).length).toBe(1);
     expect(billingPostcodeErrors.required).toBe(true);
 
-    expect(component.donationForm.controls.giftAidAndBilling.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
   });
 
   it('should have missing email address error', () => {
@@ -299,27 +313,29 @@ describe('DonationStartComponent', () => {
         donationAmount: '£1234',
         tipAmount: null,
       },
-      giftAidAndBilling: {
+      giftAid: {
         giftAid: true,
-        billingPostcode: 'N1 1AA',
+        homePostcode: null,
+        homeAddress: null,
+      },
+      personalAndMarketing: {
         firstName: null,
         lastName: null,
-        homeAddress: null,
-        homePostcode: null,
-      },
-      emailAndMarketing: {
         emailAddress: null,
         optInCharityEmail: true,
         optInTbgEmail: true,
+      },
+      paymentAndAgreement: {
+        billingPostcode: 'N1 1AA',
       },
     });
 
     expect(component.donationForm.valid).toBe(false);
 
-    const emailAddressErrors: any = component.donationForm.controls.emailAndMarketing.get('emailAddress')?.errors;
+    const emailAddressErrors: any = component.donationForm.controls.personalAndMarketing.get('emailAddress')?.errors;
     expect(Object.keys(emailAddressErrors).length).toBe(1);
     expect(emailAddressErrors.required).toBe(true);
 
-    expect(component.donationForm.controls.giftAidAndBilling.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
   });
 });

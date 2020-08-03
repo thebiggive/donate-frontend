@@ -68,7 +68,7 @@
 
             <h2 class="b-rh-2">Support the Big Give</h2>
             <p class="b-rt-0">The Big Give is the UK's #1 match funding platform, but we're a <a href="https://beta.charitycommission.gov.uk/charity-details/?regid=1136547" target="_blank"><mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too!</p>
-            <p class="b-rt-0">We develop and operate the technology, and support charities as they create and run their campaigns. Donations make a vital contribution to our running costs as a charity.</p>
+            <p class="b-rt-0">We develop and operate the technology, and support charities as they create and run their campaigns. Donations are optional but make a vital contribution to our running costs as a charity.</p>
 
             <mat-form-field
               *ngIf="psp == 'stripe'"
@@ -76,13 +76,14 @@
               color="primary"
             >
               <span matPrefix>£</span>
-              <mat-label for="tipAmount">Optional donation to the Big Give</mat-label>
+              <mat-label for="tipAmount">Donation to the Big Give</mat-label>
               <input formControlName="tipAmount" id="tipAmount" matInput>
               <mat-hint
                 *ngIf="donationAmount && donationAmount > 0"
-              >{{ ((f?.amounts?.value.tipAmount || 0) / donationAmount) | percent }}
+              >
+                {{ ((amountsGroup.value.tipAmount || 0) / donationAmount) | percent }}
               of main donation
-            </mat-hint>
+              </mat-hint>
             </mat-form-field>
 
             <div>
@@ -91,9 +92,9 @@
           </mat-step>
 
           <mat-step
-            formGroupName="giftAidAndBilling"
-            [stepControl]="giftAidAndBillingGroup"
-            label="Gift Aid and you"
+            formGroupName="giftAid"
+            [stepControl]="giftAidGroup"
+            label="Gift Aid"
           >
             <ng-template matStepperIcon="edit">
               <mat-icon>add_circle_outline</mat-icon>
@@ -112,19 +113,7 @@
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed</mat-radio-button>
             </mat-radio-group>
 
-            <mat-form-field>
-              <mat-label for="firstName">First name</mat-label>
-              <input formControlName="firstName" id="firstName" matInput>
-            </mat-form-field>
-
-            <mat-form-field>
-              <mat-label for="lastName">Last name</mat-label>
-              <input formControlName="lastName" id="lastName" matInput>
-              <mat-hint *ngIf="donationForm.value.giftAidAndBilling.giftAid">Your legal name is used for your Gift Aid declaration, to make it more likely your donation is processed smoothly and to let us confirm who we're speaking with if you have any questions.</mat-hint>
-              <mat-hint *ngIf="!donationForm.value.giftAidAndBilling.giftAid">Your name is used to make it more likely your donation is processed smoothly and to let us confirm who we're speaking with if you have any questions.</mat-hint>
-            </mat-form-field>
-
-            <div *ngIf="psp == 'stripe' && donationForm.value.giftAidAndBilling.giftAid">
+            <div *ngIf="psp == 'stripe' && giftAidGroup.value.giftAid">
               <!-- TODO split out pieces, probably use a lookup service -->
               <mat-form-field>
                 <mat-label for="homeAddress">Home address</mat-label>
@@ -138,27 +127,31 @@
               </mat-form-field>
             </div>
 
-            <mat-form-field>
-              <mat-label for="billingPostcode">Billing postcode</mat-label>
-              <input formControlName="billingPostcode" id="billingPostcode" matInput>
-              <mat-hint>This should match where your payment card is registered.</mat-hint>
-            </mat-form-field>
-
             <div>
               <button type="button" matStepperNext mat-raised-button color="primary">Next</button>
             </div>
           </mat-step>
 
           <mat-step
-            formGroupName="emailAndMarketing"
-            [stepControl]="emailAndMarketingGroup"
-            label="Receipt and updates"
+            formGroupName="personalAndMarketing"
+            [stepControl]="personalAndMarketingGroup"
+            label="Your details"
           >
             <ng-template matStepperIcon="edit">
               <mat-icon>email</mat-icon>
             </ng-template>
 
-            <h3 class="b-rt-3">Your email</h3>
+            <mat-form-field>
+              <mat-label for="firstName">First name</mat-label>
+              <input formControlName="firstName" id="firstName" matInput>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label for="lastName">Last name</mat-label>
+              <input formControlName="lastName" id="lastName" matInput>
+              <mat-hint *ngIf="giftAidGroup.value.giftAid">For Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
+              <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
+            </mat-form-field>
 
             <mat-form-field *ngIf="psp == 'stripe'">
               <mat-label for="emailAddress">Email address</mat-label>
@@ -168,24 +161,28 @@
                 communication is optional.</mat-hint>
             </mat-form-field>
 
-            <h3 class="b-rt-3" id="optInCharityEmail-label">Contact from charity</h3>
-            <p class="no-margin-top b-rt-1 b-bold">Would you be happy to receive emails from {{ campaign.charity.name }}?</p>
-            <p class="b-rt-0">This may include thanks for your donation, updates on how it is being used, newsletters and future campaigns. If you select no, we will pass on your details as these may be required for Gift Aid purposes, but the charity will be informed that you do not wish to receive communications.</p>
-            <p class="b-rt-0">Please note that you might continue to receive communications from {{ campaign.charity.name }} if you have already shared your details with them via other methods.</p>
+            <p class="no-margin-top b-rt-1 b-bold" id="optInCharityEmail-label">Would you be happy to receive emails from {{ campaign.charity.name }}?</p>
             <mat-radio-group tabindex="0" aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
+              <!-- TODO update this hint to vary based on Gift Aid selection and be clearer -->
+              <mat-hint>This may include thanks for your donation, updates on how it is being used, newsletters and future campaigns. If you select no, we will pass on your details as these may be required for Gift Aid purposes, but the charity will be informed that you do not wish to receive communications.</mat-hint>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.charity.name }}</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.charity.name }}</mat-radio-button>
             </mat-radio-group>
+            <p *ngIf="personalAndMarketingGroup.value.optInCharityEmail === false">
+              <mat-hint aria-live="polite">
+                Please note that you might continue to receive communications from {{ campaign.charity.name }} if you have already shared your details with them via other methods.
+              </mat-hint>
+            </p>
 
-            <h3 class="b-rh-2" id="optInTbgEmail-label">Contact from the Big Give</h3>
-            <p class="no-margin-top b-rt-1 b-bold">Would you be happy to receive emails from the Big Give?</p>
+            <p class="no-margin-top b-rt-1 b-bold" id="optInTbgEmail-label">Would you be happy to receive emails from the Big Give?</p>
             <mat-radio-group tabindex="0" aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from the Big Give</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from the Big Give</mat-radio-button>
             </mat-radio-group>
-
-            <p *ngIf="donationForm.value.optInTbgEmail === false" class="error" aria-live="polite">
-              By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
+            <p *ngIf="personalAndMarketingGroup.value.optInTbgEmail === false">
+              <mat-hint aria-live="polite">
+                By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
+              </mat-hint>
             </p>
 
             <div>
@@ -194,13 +191,30 @@
           </mat-step>
 
           <mat-step
+            formGroupName="paymentAndAgreement"
+            [stepControl]="paymentAndAgreementGroup"
             state="done_outline"
-            label="Confirm"
+            label="Confirm &amp; pay"
             class="c-make-your-donation"
           >
             <ng-template matStepperIcon="done_outline">
               <mat-icon>done_outline</mat-icon>
             </ng-template>
+
+            <div *ngIf="psp == 'stripe'">
+              <mat-form-field>
+                <mat-label for="billingPostcode">Billing postcode</mat-label>
+                <input formControlName="billingPostcode" id="billingPostcode" matInput>
+                <mat-hint>This should match where your payment card is registered.</mat-hint>
+              </mat-form-field>
+
+              <div class="sr-combo-inputs-row">
+                <mat-label for="card-info">Card</mat-label>
+                <div class="sr-input sr-card-element" id="card-element" #cardInfo></div>
+              </div>
+  
+              <div role="alert" aria-live="alert" class="error" *ngIf="stripeProcessingError">{{ stripeProcessingError }}</div>
+            </div>
 
             <p class="b-rt-0 b-m-0">By clicking on the <em>Donate</em> button, you agree to the Big Give's
               <a href="https://www.thebiggive.org.uk/s/terms-and-conditions" target="_blank">
@@ -235,7 +249,7 @@
               >
                 Donate
                 <span class="b-bold b-va-bas">
-                  {{ donationAmount | exactCurrency }}
+                  {{ donationAndTipAmount | exactCurrency }}
                 </span>
               </button>
               <div class="c-donation-receipt" fxLayout="row">
@@ -262,20 +276,15 @@
                 <p class="b-rt-0 b-m-0">Total for {{ campaign.charity.name }}:</p>
                 <p class="b-rt-1 b-bold b-m-0">{{ expectedTotalAmount() | exactCurrency }}</p>
               </div>
+              <div *ngIf="amountsGroup.value.tipAmount > 0" class="c-receipt-total b-grey" fxLayout="row" fxLayoutAlign="space-around center">
+                <p class="b-rt-0 b-m-0">Total for the Big Give:</p>
+                <p class="b-rt-1 b-bold b-m-0">{{ amountsGroup.value.tipAmount | exactCurrency }}</p>
+              </div>
             </div>
 
             <p *ngIf="noPsps" class="error" aria-live="alert">
               Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few minutes to try again.
             </p>
-          </mat-step>
-
-          <mat-step *ngIf="cardDetailsEventually" label="Payment details">
-            <div class="sr-combo-inputs-row">
-              <mat-label for="card-info">Card</mat-label>
-              <div class="sr-input sr-card-element" id="card-element" #cardInfo></div>
-            </div>
-
-            <div role="alert" aria-live="alert" class="error" *ngIf="stripeProcessingError">{{ stripeProcessingError }}</div>
 
             <!-- For now we rely on Stripe's inline styling to highlight mistakes
             instead of showing stripeValidationError text, and just disable the Pay

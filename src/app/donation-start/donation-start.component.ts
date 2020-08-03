@@ -41,13 +41,13 @@ export class DonationStartComponent implements OnDestroy, OnInit {
 
   donationForm: FormGroup;
   amountsGroup: FormGroup;
-  giftAidAndBillingGroup: FormGroup;
-  emailAndMarketingGroup: FormGroup;
+  giftAidGroup: FormGroup;
+  personalAndMarketingGroup: FormGroup;
+  paymentAndAgreementGroup: FormGroup;
 
   maximumDonationAmount: number;
   noPsps = false;
   psp?: 'enthuse' | 'stripe';
-  cardDetailsEventually = false;
   retrying = false;
   suggestedAmounts?: number[];
   sfApiError = false;              // Salesforce donation create API error
@@ -94,7 +94,6 @@ export class DonationStartComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     if (environment.psps.stripe.enabled) {
-      this.cardDetailsEventually = true;
       this.psp = 'stripe';
     } else if (environment.psps.enthuse.enabled) {
       this.psp = 'enthuse';
@@ -103,6 +102,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     }
 
     this.donationForm = this.formBuilder.group({
+      // Matching reservation happens at the end of this group.
       amounts: this.formBuilder.group({
         donationAmount: [null, [
           Validators.required,
@@ -115,18 +115,21 @@ export class DonationStartComponent implements OnDestroy, OnInit {
           Validators.pattern('^£?[0-9]+?(\\.[0-9]{2})?$'),
         ]],
       }),
-      giftAidAndBilling: this.formBuilder.group({
+      giftAid: this.formBuilder.group({
         giftAid: [null, Validators.required],
-        billingPostcode: [null, Validators.required], // TODO validate format basics
-        firstName: [null, Validators.required],
-        lastName: [null, Validators.required],
         homeAddress: [null],  // Required iff Gift Aid claimed
         homePostcode: [null], // Required iff Gift Aid claimed
       }),
-      emailAndMarketing: this.formBuilder.group({
+      personalAndMarketing: this.formBuilder.group({
+        firstName: [null, Validators.required],
+        lastName: [null, Validators.required],
         emailAddress: [null, [Validators.required, Validators.email]],
         optInCharityEmail: [null, Validators.required],
         optInTbgEmail: [null, Validators.required],
+      }),
+      // T&Cs agreement is implicit through submitting the form.
+      paymentAndAgreement: this.formBuilder.group({
+        billingPostcode: [null, Validators.required], // TODO validate format basics
       }),
     });
 
@@ -137,14 +140,14 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       this.amountsGroup = amountsGroup;
     }
 
-    const giftAidAndBillingGroup: any = this.donationForm.get('giftAidAndBilling');
-    if (giftAidAndBillingGroup != null) {
-      this.giftAidAndBillingGroup = giftAidAndBillingGroup;
+    const giftAidGroup: any = this.donationForm.get('giftAid');
+    if (giftAidGroup != null) {
+      this.giftAidGroup = giftAidGroup;
     }
 
-    const emailAndMarketingGroup: any = this.donationForm.get('emailAndMarketing');
-    if (emailAndMarketingGroup != null) {
-      this.emailAndMarketingGroup = emailAndMarketingGroup;
+    const personalAndMarketingGroup: any = this.donationForm.get('personalAndMarketing');
+    if (personalAndMarketingGroup != null) {
+      this.personalAndMarketingGroup = personalAndMarketingGroup;
     }
 
     this.maximumDonationAmount = environment.maximumDonationAmount;
@@ -228,11 +231,11 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       // Strip '£', '.00' if entered
       donationAmount: this.amountsGroup.value.donationAmount.replace('£', '').replace('.00', ''),
       donationMatched: this.campaign.isMatched,
-      giftAid: this.giftAidAndBillingGroup.value.giftAid,
+      giftAid: this.giftAidGroup.value.giftAid,
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
-      optInCharityEmail: this.emailAndMarketingGroup.value.optInCharityEmail,
-      optInTbgEmail: this.emailAndMarketingGroup.value.optInTbgEmail,
+      optInCharityEmail: this.personalAndMarketingGroup.value.optInCharityEmail,
+      optInTbgEmail: this.personalAndMarketingGroup.value.optInTbgEmail,
       projectId: this.campaignId,
       psp: this.psp,
       tipAmount: 0, // Only set >0 after donation completed
@@ -332,9 +335,9 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     const result = await this.stripeService.confirmCardPayment(
       this.donationClientSecret,
       this.card,
-      this.emailAndMarketingGroup.value.emailAddress,
-      this.giftAidAndBillingGroup.value.name,
-      this.giftAidAndBillingGroup.value.billingPostcode,
+      this.personalAndMarketingGroup.value.emailAddress,
+      `${this.personalAndMarketingGroup.value.firstName} ${this.personalAndMarketingGroup.value.lastName}`,
+      this.paymentAndAgreementGroup.value.billingPostcode,
     );
 
     if (result.error) {
@@ -366,17 +369,6 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     this.submitting = false;
   }
 
-  /**
-   * Quick getter for form controls, to keep validation message handling concise.
-   */
-  get f() {
-    if (!this.donationForm) {
-      return undefined;
-    }
-
-    return this.donationForm.controls;
-  }
-
   get donationAmountField() {
     if (!this.donationForm) {
       return undefined;
@@ -388,12 +380,12 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   /**
    * Quick getter for donation amount, to keep template use concise.
    */
-  get donationAmount(): number | undefined {
-    if (!this.donationForm) {
-      return undefined;
-    }
+  get donationAmount(): number {
+    return this.amountsGroup.value.donationAmount;
+  }
 
-    return this.donationForm.controls.amounts.value.donationAmount;
+  get donationAndTipAmount(): number {
+    return Number(this.amountsGroup.value.donationAmount) + Number(this.amountsGroup.value.tipAmount);
   }
 
   expectedMatchAmount(): number {
@@ -401,15 +393,15 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       return 0;
     }
 
-    return Math.max(0, Math.min(this.campaign.matchFundsRemaining, parseFloat(this.donationForm.value.donationAmount)));
+    return Math.max(0, Math.min(this.campaign.matchFundsRemaining, parseFloat(this.amountsGroup.value.donationAmount)));
   }
 
   giftAidAmount(): number {
-    return this.donationForm.value.giftAid ? (0.25 * parseFloat(this.donationForm.value.donationAmount)) : 0;
+    return this.giftAidGroup.value.giftAid ? (0.25 * parseFloat(this.amountsGroup.value.donationAmount)) : 0;
   }
 
   expectedTotalAmount(): number {
-    return parseFloat(this.donationForm.value.donationAmount) + this.giftAidAmount() + this.expectedMatchAmount();
+    return parseFloat(this.amountsGroup.value.donationAmount) + this.giftAidAmount() + this.expectedMatchAmount();
   }
 
   /**
