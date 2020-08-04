@@ -12,7 +12,7 @@ export function ValidateCurrencyMin(control: AbstractControl) {
 
   const value = Number(stringValue);
 
-  if (value < 5) {
+  if (value < 1) {
     return { min: true };
   }
 

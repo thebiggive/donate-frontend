@@ -61,7 +61,7 @@
               aria-live="polite"
               *ngIf="donationAmountField?.invalid && donationAmountField?.errors && (donationAmountField?.dirty || donationAmountField?.touched)"
             >
-              <div *ngIf="donationAmountField?.errors?.min">Sorry, the minimum donation is currently £5.</div>
+              <div *ngIf="donationAmountField?.errors?.min">Sorry, the minimum donation is £1.</div>
               <div *ngIf="donationAmountField?.errors?.max">Your donation must be {{ maximumDonationAmount | exactCurrency }} or less to proceed. You can make multiple matched donations of {{ maximumDonationAmount | exactCurrency }} if match funds are available.</div>
               <div *ngIf="donationAmountField?.errors?.pattern">Please enter a whole number of pounds (£) without commas.</div>
               <div *ngIf="donationAmountField?.errors?.required">Please enter how much you would like to donate.</div>
