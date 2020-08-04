@@ -28,14 +28,9 @@
           <mat-step
             formGroupName="amounts"
             [stepControl]="amountsGroup"
-            state="favorite_border"
             label="Your donation"
             class="c-your-donation"
           >
-            <ng-template matStepperIcon="favorite_border">
-              <mat-icon>favorite_border</mat-icon>
-            </ng-template>
-
             <p *ngIf="campaign.matchFundsRemaining > 0" class="c-your-donation__highlight">
               <img src="/assets/images/icon-tick.png" height="11" alt="Check mark">
               Match funds are currently available!
@@ -100,10 +95,6 @@
             [stepControl]="giftAidGroup"
             label="Gift Aid"
           >
-            <ng-template matStepperIcon="edit">
-              <mat-icon>add_circle_outline</mat-icon>
-            </ng-template>
-
             <p class="no-margin-top b-rt-1 b-bold">Boost your donation by 25p of Gift Aid for every £1 you donate.</p>
             <p class="b-rt-0">'I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of Gift Aid claimed on all my donations it is my responsibility to pay the difference'.</p>
             <p class="b-rt-0">Gift Aid is a government scheme for UK charities to reclaim the tax you have paid and gain 25% more at no cost or hassle to you.
@@ -140,10 +131,6 @@
             [stepControl]="personalAndMarketingGroup"
             label="Your details"
           >
-            <ng-template matStepperIcon="edit">
-              <mat-icon>email</mat-icon>
-            </ng-template>
-
             <div *ngIf="psp == 'stripe'">
               <mat-form-field>
                 <mat-label for="firstName">First name</mat-label>
@@ -197,14 +184,9 @@
           <mat-step
             formGroupName="paymentAndAgreement"
             [stepControl]="paymentAndAgreementGroup"
-            state="done_outline"
             label="Confirm &amp; pay"
             class="c-make-your-donation"
           >
-            <ng-template matStepperIcon="done_outline">
-              <mat-icon>done_outline</mat-icon>
-            </ng-template>
-
             <div *ngIf="psp == 'stripe'">
               <mat-form-field>
                 <mat-label for="billingPostcode">Billing postcode</mat-label>
