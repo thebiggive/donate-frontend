@@ -40,7 +40,6 @@ import { FiltersComponent } from './filters/filters.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeroComponent } from './hero/hero.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
-import { MatVerticalStepperScrollerDirective } from './mat-vertical-stepper-scroller.directive';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { TickerComponent } from './ticker/ticker.component';
@@ -63,7 +62,6 @@ import { TimeLeftPipe } from './time-left.pipe';
     FooterComponent,
     HeroComponent,
     MainMenuComponent,
-    MatVerticalStepperScrollerDirective,
     MetaCampaignComponent,
     NavigationComponent,
     ExploreComponent,

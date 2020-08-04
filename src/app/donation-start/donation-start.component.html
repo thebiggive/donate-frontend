@@ -22,7 +22,6 @@
       <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaign && campaignIsOpen()">
         <mat-vertical-stepper
           linear
-          appMatVerticalStepperScroller
           #stepper
           (selectionChange)="updateSteps($event)"
         >
