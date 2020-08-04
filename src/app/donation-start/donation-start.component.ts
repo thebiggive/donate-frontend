@@ -93,6 +93,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       this.card.removeEventListener('change', this.cardHandler);
       this.card.destroy();
     }
+    delete this.campaign;
     delete this.donationClientSecret;
     delete this.donationId;
   }
@@ -158,7 +159,12 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     }
 
     const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
-    this.campaign = this.state.get(campaignKey, undefined);
+
+    // Largely for simpler unit testing, allow `campaign` to be set directly and check for this.
+    // In the future we might want to consider mocking TransferState instead.
+    if (!this.campaign) {
+      this.campaign = this.state.get(campaignKey, undefined);
+    }
 
     if (this.campaign) {
       this.handleCampaign(this.campaign);
