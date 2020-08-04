@@ -62,6 +62,10 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   private donationId?: string; // Used in Stripe payment callback
   private previousDonation?: Donation;
 
+  // Based on https://stackoverflow.com/questions/164979/regex-for-matching-uk-postcodes#comment82517277_164994
+  // but modified to make the separating space optional.
+  private postcodeRegExp = new RegExp('^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\\s?[0-9][A-Za-z]{2})$');
+
   constructor(
     private analyticsService: AnalyticsService,
     private campaignService: CampaignService,
@@ -103,26 +107,23 @@ export class DonationStartComponent implements OnDestroy, OnInit {
           ValidateCurrencyMax,
           Validators.pattern('^£?[0-9]+?(\\.00)?$'),
         ]],
-        tipAmount: [null, [
-          // Validators.required, // TODO require iff in Stripe mode
-          Validators.pattern('^£?[0-9]+?(\\.[0-9]{2})?$'),
-        ]],
+        tipAmount: [null], // See addStripeValidators().
       }),
       giftAid: this.formBuilder.group({
         giftAid: [null, Validators.required],
-        homeAddress: [null],  // Required iff Gift Aid claimed
-        homePostcode: [null], // Required iff Gift Aid claimed
+        homeAddress: [null],  // See addStripeValidators().
+        homePostcode: [null], // See addStripeValidators().
       }),
       personalAndMarketing: this.formBuilder.group({
-        firstName: [null, Validators.required],
-        lastName: [null, Validators.required],
-        emailAddress: [null, [Validators.required, Validators.email]],
+        firstName: [null],    // See addStripeValidators().
+        lastName: [null],     // See addStripeValidators().
+        emailAddress: [null], // See addStripeValidators().
         optInCharityEmail: [null, Validators.required],
         optInTbgEmail: [null, Validators.required],
       }),
       // T&Cs agreement is implicit through submitting the form.
       paymentAndAgreement: this.formBuilder.group({
-        billingPostcode: [null, Validators.required], // TODO validate format basics
+        billingPostcode: [null], // See addStripeValidators().
       }),
     });
 
@@ -437,6 +438,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   private handleCampaign(campaign: Campaign) {
     if (environment.psps.stripe.enabled && this.campaign?.charity.stripeAccountId) {
       this.psp = 'stripe';
+      this.addStripeValidators();
     } else if (environment.psps.enthuse.enabled) {
       this.psp = 'enthuse';
     } else {
@@ -568,6 +570,48 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       donation,
       this.campaign.surplusDonationInfo,
     );
+  }
+
+  private addStripeValidators(): void {
+    this.amountsGroup.controls.tipAmount.setValidators([
+      Validators.pattern('^£?[0-9]+?(\\.[0-9]{2})?$'),
+    ]);
+
+    // Gift Aid home address fields are validated only in Stripe mode and also
+    // conditionally on the donor claiming Gift Aid.
+    this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
+      if (giftAidChecked) {
+        this.giftAidGroup.controls.homePostcode.setValidators([
+          Validators.required,
+          Validators.pattern(this.postcodeRegExp),
+        ]);
+        this.giftAidGroup.controls.homeAddress.setValidators([
+          Validators.required,
+        ]);
+      } else {
+        this.giftAidGroup.controls.homePostcode.setValidators([]);
+        this.giftAidGroup.controls.homeAddress.setValidators([]);
+      }
+
+      this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
+      this.giftAidGroup.controls.homeAddress.updateValueAndValidity();
+    });
+
+    this.personalAndMarketingGroup.controls.firstName.setValidators([
+      Validators.required,
+    ]);
+    this.personalAndMarketingGroup.controls.lastName.setValidators([
+      Validators.required,
+    ]);
+    this.personalAndMarketingGroup.controls.emailAddress.setValidators([
+      Validators.required,
+      Validators.email,
+    ]);
+
+    this.paymentAndAgreementGroup.controls.billingPostcode.setValidators([
+      Validators.required,
+      Validators.pattern(this.postcodeRegExp),
+    ]);
   }
 
   private promptToContinue(

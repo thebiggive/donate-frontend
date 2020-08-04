@@ -145,24 +145,26 @@
               <mat-icon>email</mat-icon>
             </ng-template>
 
-            <mat-form-field>
-              <mat-label for="firstName">First name</mat-label>
-              <input formControlName="firstName" id="firstName" matInput>
-            </mat-form-field>
+            <div *ngIf="psp == 'stripe'">
+              <mat-form-field>
+                <mat-label for="firstName">First name</mat-label>
+                <input formControlName="firstName" id="firstName" matInput>
+              </mat-form-field>
 
-            <mat-form-field>
-              <mat-label for="lastName">Last name</mat-label>
-              <input formControlName="lastName" id="lastName" matInput>
-              <mat-hint *ngIf="giftAidGroup.value.giftAid">For Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
-              <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
-            </mat-form-field>
+              <mat-form-field>
+                <mat-label for="lastName">Last name</mat-label>
+                <input formControlName="lastName" id="lastName" matInput>
+                <mat-hint *ngIf="giftAidGroup.value.giftAid">For Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
+                <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
+              </mat-form-field>
 
-            <mat-form-field *ngIf="psp == 'stripe'">
-              <mat-label for="emailAddress">Email address</mat-label>
-              <input formControlName="emailAddress" id="emailAddress" type="email" matInput>
-              <mat-hint>We'll send you a donation receipt and use this to
-                confirm it's you in case you have any queries.</mat-hint>
-            </mat-form-field>
+              <mat-form-field>
+                <mat-label for="emailAddress">Email address</mat-label>
+                <input formControlName="emailAddress" id="emailAddress" type="email" matInput>
+                <mat-hint>We'll send you a donation receipt and use this to
+                  confirm it's you in case you have any queries.</mat-hint>
+              </mat-form-field>
+            </div>
 
             <p class="b-rt-1 b-bold" id="optInCharityEmail-label">Would you be happy to receive emails from {{ campaign.charity.name }}?</p>
             <mat-radio-group tabindex="0" aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
