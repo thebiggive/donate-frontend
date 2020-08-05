@@ -10,6 +10,7 @@ describe('CharityCheckoutDonation model', () => {
     const donation: Donation = {
       charityId: 'someCharityId',
       charityName: 'My Test Charity',
+      createdTime: (new Date()).toISOString(),
       donationAmount: 1234.56,
       donationMatched: true,
       donationId: 'someDonationId',
