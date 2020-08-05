@@ -39,6 +39,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   cardHandler = this.onStripeCardChange.bind(this);
 
   campaign?: Campaign;
+  donation: Donation;
 
   donationForm: FormGroup;
   amountsGroup: FormGroup;
@@ -48,18 +49,17 @@ export class DonationStartComponent implements OnDestroy, OnInit {
 
   maximumDonationAmount: number;
   noPsps = false;
-  psp?: 'enthuse' | 'stripe';
+  psp: 'enthuse' | 'stripe';
   retrying = false;
   suggestedAmounts?: number[];
-  sfApiError = false;              // Salesforce donation create API error
+  donationCreateError = false;
+  donationUpdateError = false;
   stripeProcessingError?: string;
   stripeValidationError?: string | undefined = 'Card not entered yet';
   submitting = false;
 
   private campaignId: string;
   private enthuseError?: string;  // Enthuse donation start error message
-  private donationClientSecret?: string; // Used in Stripe payment callback
-  private donationId?: string; // Used in Stripe payment callback
   private previousDonation?: Donation;
 
   // Based on https://stackoverflow.com/questions/164979/regex-for-matching-uk-postcodes#comment82517277_164994
@@ -94,8 +94,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       this.card.destroy();
     }
     delete this.campaign;
-    delete this.donationClientSecret;
-    delete this.donationId;
+    delete this.donation;
   }
 
   ngOnInit() {
@@ -199,7 +198,21 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     });
   }
 
-  updateSteps(event: StepperSelectionEvent) {
+  async stepChanged(event: StepperSelectionEvent) {
+    if (event.previouslySelectedStep.label === 'Your donation') {
+      this.createDonation();
+
+      if (this.psp === 'stripe') {
+        this.card = await this.stripeService.createCard();
+        if (this.card) {
+          this.card.mount(this.cardInfo.nativeElement);
+          this.card.addEventListener('change', this.cardHandler);
+        }
+      }
+
+      return;
+    }
+
     // Default billing postcode to home postcode when Gift Aid's being claimed and so it's set.
     if (event.previouslySelectedStep.label === 'Gift Aid' && this.giftAidGroup.value.giftAid) {
       this.paymentAndAgreementGroup.patchValue({
@@ -231,123 +244,66 @@ export class DonationStartComponent implements OnDestroy, OnInit {
 
     this.submitting = true;
     this.enthuseError = undefined;
-    this.sfApiError = false;
+    this.donationUpdateError = false;
 
-     // Can't proceed if campaign info not looked up yet or no usable PSP
+    // Can't proceed if campaign info not looked up yet or no usable PSP
     if (!this.campaign || !this.campaign.charity.id || !this.psp) {
-      this.sfApiError = true;
+      this.donationUpdateError = true;
       return;
     }
 
-    const donation: Donation = {
-      charityId: this.campaign.charity.id,
-      charityName: this.campaign.charity.name,
-      // Strip '£' if entered
-      donationAmount: this.amountsGroup.value.donationAmount.replace('£', ''),
-      donationMatched: this.campaign.isMatched,
-      giftAid: this.giftAidGroup.value.giftAid,
-      matchedAmount: 0, // Only set >0 after donation completed
-      matchReservedAmount: 0, // Only set >0 after initial donation create API response
-      optInCharityEmail: this.personalAndMarketingGroup.value.optInCharityEmail,
-      optInTbgEmail: this.personalAndMarketingGroup.value.optInTbgEmail,
-      projectId: this.campaignId,
-      psp: this.psp,
-      tipAmount: 0, // Only set >0 after donation completed
-    };
+    this.donation.billingPostalAddress = this.paymentAndAgreementGroup.value.billingPostcode;
+    this.donation.emailAddress = this.personalAndMarketingGroup.value.emailAddress;
+    this.donation.firstName = this.personalAndMarketingGroup.value.firstName;
+    this.donation.giftAid = this.giftAidGroup.value.giftAid;
+    this.donation.lastName = this.personalAndMarketingGroup.value.lastName;
+    this.donation.optInCharityEmail = this.personalAndMarketingGroup.value.optInCharityEmail;
+    this.donation.optInTbgEmail = this.personalAndMarketingGroup.value.optInTbgEmail;
+
+    this.donationService.updateLocalDonation(this.donation);
 
     this.donationService
-      .create(donation) // Create Donation record
+      .update(this.donation)
       // excluding status code, delay for logging clarity
       .pipe(
-        retryWhen(createError => {
-          return createError.pipe(
+        retryWhen(updateError => {
+          return updateError.pipe(
             tap(val => this.retrying = (val.status !== 500)),
             retryStrategy({excludedStatusCodes: [500]}),
           );
         }),
       )
-      .subscribe(async (response: DonationCreatedResponse) => {
-        this.donationService.saveDonation(response.donation, response.jwt);
-
-        // If that succeeded proceed to Charity Checkout donation page, providing key
-        // fields are present in the Salesforce response's Donation.
-        const salesforceResponseMissingRequiredData = (
-          !response.donation.charityId ||
-          !response.donation.donationId ||
-          !response.donation.projectId
-        );
-        if (salesforceResponseMissingRequiredData) {
-          this.analyticsService.logError(
-            'salesforce_create_response_incomplete',
-            `Missing expected response data creating new donation for campaign ${this.campaignId}`,
-          );
-          this.sfApiError = true;
-          this.submitting = false;
-
-          return;
-        }
-
-        // Amount reserved for matching is 'false-y', i.e. £0
-        if (donation.donationMatched && !response.donation.matchReservedAmount) {
-          this.promptToContinueWithNoMatchingLeft(response.donation);
-          return;
-        }
-
-        // Amount reserved for matching is >£0 but less than the full donation
-        if (donation.donationMatched && response.donation.matchReservedAmount < donation.donationAmount) {
-          this.promptToContinueWithPartialMatching(response.donation);
-          return;
-        }
-
+      .subscribe(async (donation: Donation) => {
         if (donation.psp === 'enthuse') {
-          // Else either the donation was not expected to be matched or has 100% match funds allocated -> no need for an extra step
-          this.redirectToCharityCheckout(response.donation);
+          this.redirectToEnthuse(donation);
           return;
+        } else if (donation.psp === 'stripe') {
+          this.payWithStripe();
         }
-
-        // Else we're using Stripe and should prompt for payment details here.
-        if (response.donation.clientSecret) {
-          this.donationClientSecret = response.donation.clientSecret;
-          this.donationId = response.donation.donationId;
-
-          this.stepper.next();
-
-          this.card = await this.stripeService.createCard();
-          if (this.card) {
-            this.card.mount(this.cardInfo.nativeElement);
-            this.card.addEventListener('change', this.cardHandler);
-          }
-        } else {
-          this.stripeProcessingError = 'Could not prepare payment';
-          this.analyticsService.logError('stripe_payment_intent_create_failed', 'No client secret');
-        }
-        this.submitting = false;
       }, response => {
         let errorMessage: string;
         if (response.message) {
-          errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.message}`;
+          errorMessage = `Could not update donation for campaign ${this.campaignId}: ${response.message}`;
         } else {
           // Unhandled 5xx crashes etc.
-          errorMessage = `Could not create new donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
+          errorMessage = `Could not update donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
         }
-        this.analyticsService.logError('salesforce_create_failed', errorMessage);
+        this.analyticsService.logError('donation_update_failed', errorMessage);
         this.retrying = false;
-        this.sfApiError = true;
+        this.donationUpdateError = true;
         this.submitting = false;
       });
   }
 
   async payWithStripe() {
-    if (!this.donationClientSecret || !this.donationId) {
+    if (!this.donation.clientSecret) {
       this.stripeProcessingError = 'Missing data from previous step – please refresh and try again';
-      this.analyticsService.logError('stripe_pay_missing_keys', `Donation ID: ${this.donationId}`);
+      this.analyticsService.logError('stripe_pay_missing_secret', `Donation ID: ${this.donation.donationId}`);
       return;
     }
 
-    this.submitting = true;
-
     const result = await this.stripeService.confirmCardPayment(
-      this.donationClientSecret,
+      this.donation.clientSecret,
       this.card,
       this.personalAndMarketingGroup.value.emailAddress,
       `${this.personalAndMarketingGroup.value.firstName} ${this.personalAndMarketingGroup.value.lastName}`,
@@ -370,9 +326,9 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     if (['succeeded', 'processing'].includes(result.paymentIntent.status)) {
       this.analyticsService.logEvent(
         'stripe_card_payment_success',
-        `Stripe Intent processing or done for donation ${this.donationId} to campaign ${this.campaignId}`,
+        `Stripe Intent processing or done for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
       );
-      this.router.navigate(['thanks', this.donationId], {
+      this.router.navigate(['thanks', this.donation.donationId], {
         replaceUrl: true,
       });
     } else {
@@ -489,8 +445,85 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     return [];
   }
 
+  private createDonation() {
+    if (!this.campaign || !this.campaign.charity.id || !this.psp) {
+      this.donationCreateError = true;
+      return;
+    }
+
+    this.donationCreateError = false;
+
+    const donation: Donation = {
+      charityId: this.campaign.charity.id,
+      charityName: this.campaign.charity.name,
+      countryCode: 'GB',
+      // Strip '£' if entered
+      donationAmount: this.amountsGroup.value.donationAmount.replace('£', ''),
+      donationMatched: this.campaign.isMatched,
+      giftAid: this.giftAidGroup.value.giftAid,
+      matchedAmount: 0, // Only set >0 after donation completed
+      matchReservedAmount: 0, // Only set >0 after initial donation create API response
+      projectId: this.campaignId,
+      psp: this.psp,
+      tipAmount: this.amountsGroup.value.tipAmount,
+    };
+
+    this.donationService
+      .create(donation)
+      // excluding status code, delay for logging clarity
+      .pipe(
+        retryWhen(createError => {
+          return createError.pipe(
+            retryStrategy({excludedStatusCodes: [500]}),
+          );
+        }),
+      )
+      .subscribe(async (response: DonationCreatedResponse) => {
+        const createResponseMissingData = (
+          !response.donation.charityId ||
+          !response.donation.donationId ||
+          !response.donation.projectId
+        );
+        if (createResponseMissingData) {
+          this.analyticsService.logError(
+            'donation_create_response_incomplete',
+            `Missing expected response data creating new donation for campaign ${this.campaignId}`,
+          );
+          this.donationCreateError = true;
+          this.stepper.previous(); // Go back to step 1 to surface the internal error.
+
+          return;
+        }
+
+        this.donationService.saveDonation(response.donation, response.jwt);
+        this.donation = response.donation; // Simplify update() while we're on this page.
+
+        // Amount reserved for matching is 'false-y', i.e. £0
+        if (donation.donationMatched && !response.donation.matchReservedAmount) {
+          this.promptToContinueWithNoMatchingLeft(response.donation);
+          return;
+        }
+
+        // Amount reserved for matching is >£0 but less than the full donation
+        if (donation.donationMatched && response.donation.matchReservedAmount < donation.donationAmount) {
+          this.promptToContinueWithPartialMatching(response.donation);
+          return;
+        }
+      }, response => {
+        let errorMessage: string;
+        if (response.message) {
+          errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.message}`;
+        } else {
+          // Unhandled 5xx crashes etc.
+          errorMessage = `Could not create new donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
+        }
+        this.analyticsService.logError('donation_create_failed', errorMessage);
+        this.donationCreateError = true;
+        this.stepper.previous(); // Go back to step 1 to surface the internal error.
+      });
+  }
+
   private offerExistingDonation(donation: Donation) {
-    this.submitting = true;
     this.analyticsService.logEvent('existing_donation_offered', `Found pending donation to campaign ${this.campaignId}`);
 
     const reuseDialog = this.dialog.open(DonationStartOfferReuseDialogComponent, {
@@ -535,7 +568,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     });
   }
 
-  private redirectToCharityCheckout(donation: Donation) {
+  private redirectToEnthuse(donation: Donation) {
     this.analyticsService.logAmountChosen(donation.donationAmount, this.campaignId, this.suggestedAmounts);
     this.analyticsService.logEvent('payment_redirect_click', `Donating to campaign ${this.campaignId}`);
     this.charityCheckoutService.startDonation(donation);
@@ -558,7 +591,8 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   }
 
   /**
-   * @param donation *Response* Donation object, with `matchReservedAmount` set and returned by Salesforce.
+   * @param donation *Response* Donation object, with `matchReservedAmount` returned
+   *                    by the Donations API.
    */
   private promptToContinueWithPartialMatching(donation: Donation) {
     if (!this.campaign) {
@@ -642,26 +676,28 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   private getDialogResponseFn(donation: Donation) {
     return (proceed: boolean) => {
       if (proceed) {
-        // TODO this and similar need to support Stripe model too; abstract out
-        // to a `continue()` method?
-        this.redirectToCharityCheckout(donation);
-
+        // Create has already set up the Donation with no/partial matching, and the donor is
+        // already on step 2. So there is nothing to do but let them continue in this case.
         return;
       }
 
-      // Else cancel the existing donation in Salesforce and remove our local record of it
+      // Else cancel the existing donation, remove our local record and return to step 1,
+      // clearing amounts to encourage smaller donations in the partial match case.
       this.donationService.cancel(donation)
         .subscribe(
           () => {
             this.analyticsService.logEvent('cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
             this.donationService.removeLocalDonation(donation);
+            this.stepper.reset(); // Clear form and return to step 1.
           },
-          response => this.analyticsService.logError(
-            'cancel_failed',
-            `Could not cancel donation ${donation.donationId} to campaign ${this.campaignId}: ${response.error.error}`,
-          ),
+          response => {
+            this.analyticsService.logError(
+              'cancel_failed',
+              `Could not cancel donation ${donation.donationId} to campaign ${this.campaignId}: ${response.error.error}`,
+            );
+            this.stepper.reset(); // Clear and return to start even if the first attempt is 'stuck'.
+          },
         );
-      this.submitting = false;
     };
   }
 }

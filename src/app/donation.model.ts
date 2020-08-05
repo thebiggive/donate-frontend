@@ -24,9 +24,9 @@ export interface Donation {
 
     giftAid: boolean;
 
-    optInCharityEmail: boolean;
+    optInCharityEmail?: boolean;
 
-    optInTbgEmail: boolean;
+    optInTbgEmail?: boolean;
 
     /**
      * Unique ID for a CCampaign / project assigned by the Big Give, in Salesforce
