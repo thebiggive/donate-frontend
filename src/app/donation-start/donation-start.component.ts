@@ -611,6 +611,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
 
   private addStripeValidators(): void {
     this.amountsGroup.controls.tipAmount.setValidators([
+      Validators.required,
       Validators.pattern('^£?[0-9]+?(\\.[0-9]{2})?$'),
     ]);
 
