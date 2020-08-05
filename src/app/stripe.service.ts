@@ -73,6 +73,11 @@ export class StripeService {
       return null;
     }
 
+    const existingElement = this.elements.getElement('card');
+    if (existingElement) {
+      return existingElement;
+    }
+
     return this.elements.create('card', {
       // In order to make things quicker when home & billing postcodes are the same,
       // we always collect this outside the form (defaulting to home value where appropriate)
