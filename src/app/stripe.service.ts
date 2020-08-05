@@ -67,7 +67,7 @@ export class StripeService {
     return result;
   }
 
-  createCard(): StripeCardElement | null {
+  getCard(): StripeCardElement | null {
     if (!this.elements) {
       console.log('Stripe Elements not ready');
       return null;

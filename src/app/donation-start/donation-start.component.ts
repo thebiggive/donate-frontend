@@ -203,7 +203,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       this.createDonation();
 
       if (this.psp === 'stripe') {
-        this.card = await this.stripeService.createCard();
+        this.card = await this.stripeService.getCard();
         if (this.card) {
           this.card.mount(this.cardInfo.nativeElement);
           this.card.addEventListener('change', this.cardHandler);
