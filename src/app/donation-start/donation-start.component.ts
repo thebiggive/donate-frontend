@@ -54,8 +54,8 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   suggestedAmounts?: number[];
   donationCreateError = false;
   donationUpdateError = false;
-  stripeProcessingError?: string;
-  stripeValidationError?: string | undefined = 'Card not entered yet';
+  stripeCardReady = false;
+  stripeError?: string;
   submitting = false;
 
   private campaignId: string;
@@ -222,11 +222,8 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   }
 
   onStripeCardChange(state: StripeElementChangeEvent) {
-    if (state.complete) {
-      this.stripeValidationError = undefined;
-    } else {
-      this.stripeValidationError = state.error ? state.error?.message : 'Valid so far but incomplete';
-    }
+    this.stripeCardReady = state.complete;
+    this.stripeError = state.error?.message;
 
     this.cd.detectChanges();
   }
@@ -297,7 +294,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
 
   async payWithStripe() {
     if (!this.donation.clientSecret) {
-      this.stripeProcessingError = 'Missing data from previous step – please refresh and try again';
+      this.stripeError = 'Missing data from previous step – please refresh and try again';
       this.analyticsService.logError('stripe_pay_missing_secret', `Donation ID: ${this.donation.donationId}`);
       return;
     }
@@ -311,7 +308,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     );
 
     if (result.error) {
-      this.stripeProcessingError = result.error.message;
+      this.stripeError = result.error.message;
       this.analyticsService.logError('stripe_card_payment_error', result.error.message ?? '[No message]');
 
       return;
@@ -333,7 +330,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       });
     } else {
       this.analyticsService.logError('stripe_intent_not_success', result.paymentIntent.status);
-      this.stripeProcessingError = `Status: ${result.paymentIntent.status}`;
+      this.stripeError = `Status: ${result.paymentIntent.status}`;
     }
 
     this.submitting = false;

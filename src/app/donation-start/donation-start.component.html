@@ -205,8 +205,6 @@
                 <mat-label for="card-info">Card</mat-label>
                 <div class="sr-input sr-card-element" id="card-element" #cardInfo></div>
               </div>
-
-              <div role="alert" aria-live="alert" class="error" *ngIf="stripeProcessingError">{{ stripeProcessingError }}</div>
             </div>
 
             <p class="b-rt-0 b-m-0">By clicking on the <em>Donate</em> button, you agree to the Big Give's
@@ -229,14 +227,24 @@
                 if this message persists.
               </p>
               <mat-spinner *ngIf="submitting" color="primary" diameter="30"></mat-spinner>
+
               <p *ngIf="retrying" class="error" aria-live="polite">
                 It looks like our system is a bit busy, one moment please&hellip;
               </p>
+
+              <p *ngIf="noPsps" class="error" aria-live="alert">
+                Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few minutes to try again.
+              </p>
+  
+              <p *ngIf="stripeError" class="error" aria-live="alert">
+                {{ stripeError }}
+              </p>
+
               <button
                 type="submit"
                 class="c-donate-button b-donate-button b-w-100 b-rt-1"
                 mat-raised-button
-                [disabled]="submitting || donationForm.invalid || (psp == 'stripe' &&stripeValidationError)"
+                [disabled]="submitting || donationForm.invalid || (psp == 'stripe' &&!stripeCardReady)"
               >
                 Donate
                 <span class="b-bold b-va-bas">
@@ -275,14 +283,6 @@
                 <p class="b-rt-1 b-bold b-m-0">{{ expectedTbgAmount() | exactCurrency }}</p>
               </div>
             </div>
-
-            <p *ngIf="noPsps" class="error" aria-live="alert">
-              Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few minutes to try again.
-            </p>
-
-            <p *ngIf="psp == 'stripe' && stripeValidationError" class="error" aria-live="alert">
-              {{ stripeValidationError }}
-            </p>
           </mat-step>
         </mat-vertical-stepper>
       </form>
