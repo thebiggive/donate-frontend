@@ -1,6 +1,8 @@
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { retryWhen, tap  } from 'rxjs/operators';
@@ -32,27 +34,37 @@ import { ValidateCurrencyMin } from '../validators/currency-min';
 
 export class DonationStartComponent implements OnDestroy, OnInit {
   @ViewChild('cardInfo') cardInfo: ElementRef;
+  @ViewChild('stepper') private stepper: MatStepper;
   card: any;
   cardHandler = this.onStripeCardChange.bind(this);
 
-  public campaign?: Campaign;
-  public donationForm: FormGroup;
-  public maximumDonationAmount: number;
-  public noPsps = false;
-  public psp?: 'enthuse' | 'stripe';
-  public cardDetailsEventually = false;
-  public cardDetailsNow = false;
-  public retrying = false;
-  public suggestedAmounts?: number[];
-  public sfApiError = false;              // Salesforce donation create API error
-  public stripeProcessingError?: string;
-  public stripeValidationError?: string | undefined = 'Card not entered yet';
-  public submitting = false;
+  campaign?: Campaign;
+  donation: Donation;
+
+  donationForm: FormGroup;
+  amountsGroup: FormGroup;
+  giftAidGroup: FormGroup;
+  personalAndMarketingGroup: FormGroup;
+  paymentAndAgreementGroup: FormGroup;
+
+  maximumDonationAmount: number;
+  noPsps = false;
+  psp: 'enthuse' | 'stripe';
+  retrying = false;
+  suggestedAmounts?: number[];
+  donationCreateError = false;
+  donationUpdateError = false;
+  stripeCardReady = false;
+  stripeError?: string;
+  submitting = false;
+
   private campaignId: string;
-  private charityCheckoutError?: string;  // Charity Checkout donation start error message
-  private donationClientSecret?: string; // Used in Stripe payment callback
-  private donationId?: string; // Used in Stripe payment callback
+  private enthuseError?: string;  // Enthuse donation start error message
   private previousDonation?: Donation;
+
+  // Based on https://stackoverflow.com/questions/164979/regex-for-matching-uk-postcodes#comment82517277_164994
+  // but modified to make the separating space optional.
+  private postcodeRegExp = new RegExp('^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\\s?[0-9][A-Za-z]{2})$');
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -71,19 +83,9 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
     route.queryParams.forEach((params: Params) => {
       if (params.error) {
-        this.charityCheckoutError = params.error;
+        this.enthuseError = params.error;
       }
     });
-  }
-
-  onStripeCardChange(state: StripeElementChangeEvent) {
-    if (state.complete) {
-      this.stripeValidationError = undefined;
-    } else {
-      this.stripeValidationError = state.error ? state.error?.message : 'Valid so far but incomplete';
-    }
-
-    this.cd.detectChanges();
   }
 
   ngOnDestroy() {
@@ -91,18 +93,60 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       this.card.removeEventListener('change', this.cardHandler);
       this.card.destroy();
     }
-    delete this.donationClientSecret;
-    delete this.donationId;
+    delete this.campaign;
+    delete this.donation;
   }
 
   ngOnInit() {
-    if (environment.psps.stripe.enabled) {
-      this.cardDetailsEventually = true;
-      this.psp = 'stripe';
-    } else if (environment.psps.enthuse.enabled) {
-      this.psp = 'enthuse';
-    } else {
-      this.noPsps = true;
+    this.donationForm = this.formBuilder.group({
+      // Matching reservation happens at the end of this group.
+      amounts: this.formBuilder.group({
+        donationAmount: [null, [
+          Validators.required,
+          ValidateCurrencyMin,
+          ValidateCurrencyMax,
+          Validators.pattern('^£?[0-9]+?(\\.00)?$'),
+        ]],
+        tipAmount: [null], // See addStripeValidators().
+      }),
+      giftAid: this.formBuilder.group({
+        giftAid: [null, Validators.required],
+        homeAddress: [null],  // See addStripeValidators().
+        homePostcode: [null], // See addStripeValidators().
+      }),
+      personalAndMarketing: this.formBuilder.group({
+        firstName: [null],    // See addStripeValidators().
+        lastName: [null],     // See addStripeValidators().
+        emailAddress: [null], // See addStripeValidators().
+        optInCharityEmail: [null, Validators.required],
+        optInTbgEmail: [null, Validators.required],
+      }),
+      // T&Cs agreement is implicit through submitting the form.
+      paymentAndAgreement: this.formBuilder.group({
+        billingPostcode: [null], // See addStripeValidators().
+      }),
+    });
+
+    // Current strict type checks mean we need to do this for the compiler to be happy that
+    // the groups are not null.
+    const amountsGroup: any = this.donationForm.get('amounts');
+    if (amountsGroup != null) {
+      this.amountsGroup = amountsGroup;
+    }
+
+    const giftAidGroup: any = this.donationForm.get('giftAid');
+    if (giftAidGroup != null) {
+      this.giftAidGroup = giftAidGroup;
+    }
+
+    const personalAndMarketingGroup: any = this.donationForm.get('personalAndMarketing');
+    if (personalAndMarketingGroup != null) {
+      this.personalAndMarketingGroup = personalAndMarketingGroup;
+    }
+
+    const paymentAndAgreementGroup: any = this.donationForm.get('paymentAndAgreement');
+    if (paymentAndAgreementGroup != null) {
+      this.paymentAndAgreementGroup = paymentAndAgreementGroup;
     }
 
     this.maximumDonationAmount = environment.maximumDonationAmount;
@@ -114,7 +158,12 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     }
 
     const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
-    this.campaign = this.state.get(campaignKey, undefined);
+
+    // Largely for simpler unit testing, allow `campaign` to be set directly and check for this.
+    // In the future we might want to consider mocking TransferState instead.
+    if (!this.campaign) {
+      this.campaign = this.state.get(campaignKey, undefined);
+    }
 
     if (this.campaign) {
       this.handleCampaign(this.campaign);
@@ -127,24 +176,12 @@ export class DonationStartComponent implements OnDestroy, OnInit {
         });
     }
 
-    this.donationForm = this.formBuilder.group({
-      donationAmount: [null, [
-        Validators.required,
-        ValidateCurrencyMin,
-        ValidateCurrencyMax,
-        Validators.pattern('^£?[0-9]+?(\\.00)?$'),
-      ]],
-      giftAid: [null, Validators.required],
-      optInCharityEmail: [null, Validators.required],
-      optInTbgEmail: [null, Validators.required],
-    });
-
     this.donationService.getProbablyResumableDonation(this.campaignId)
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;
 
-        if (this.charityCheckoutError) {
-          this.processDonationError(); // TODO make this Enthuse specific or pass in the PSP name for GA event labels?
+        if (this.enthuseError) {
+          this.processEnthuseDonationError();
           return;
         }
 
@@ -161,11 +198,40 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     });
   }
 
+  async stepChanged(event: StepperSelectionEvent) {
+    if (event.previouslySelectedStep.label === 'Your donation') {
+      this.createDonation();
+
+      if (this.psp === 'stripe') {
+        this.card = await this.stripeService.getCard();
+        if (this.card) {
+          this.card.mount(this.cardInfo.nativeElement);
+          this.card.addEventListener('change', this.cardHandler);
+        }
+      }
+
+      return;
+    }
+
+    // Default billing postcode to home postcode when Gift Aid's being claimed and so it's set.
+    if (event.previouslySelectedStep.label === 'Gift Aid' && this.giftAidGroup.value.giftAid) {
+      this.paymentAndAgreementGroup.patchValue({
+        billingPostcode: this.giftAidGroup.value.homePostcode,
+      });
+    }
+  }
+
+  onStripeCardChange(state: StripeElementChangeEvent) {
+    this.stripeCardReady = state.complete;
+    this.stripeError = state.error?.message;
+
+    this.cd.detectChanges();
+  }
+
   setAmount(amount: number) {
     // We need to keep this as a string for consistency with manual donor-input amounts,
     // so that `submit()` doesn't fall over trying to clean it of possible currency symbols.
-    const amountAsString = amount.toString();
-    this.donationForm.patchValue({ donationAmount: amountAsString });
+    this.amountsGroup.patchValue({ donationAmount: amount.toString() });
   }
 
   async submit() {
@@ -174,127 +240,78 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     }
 
     this.submitting = true;
-    this.charityCheckoutError = undefined;
-    this.sfApiError = false;
+    this.enthuseError = undefined;
+    this.donationUpdateError = false;
 
-     // Can't proceed if campaign info not looked up yet or no usable PSP
+    // Can't proceed if campaign info not looked up yet or no usable PSP
     if (!this.campaign || !this.campaign.charity.id || !this.psp) {
-      this.sfApiError = true;
+      this.donationUpdateError = true;
       return;
     }
 
-    const donation: Donation = {
-      charityId: this.campaign.charity.id,
-      charityName: this.campaign.charity.name,
-      donationAmount: this.donationForm.value.donationAmount.replace('£', '').replace('.00', ''), // Strip '£', '.00' if entered
-      donationMatched: this.campaign.isMatched,
-      giftAid: this.donationForm.value.giftAid,
-      matchedAmount: 0, // Only set >0 after donation completed
-      matchReservedAmount: 0, // Only set >0 after initial donation create API response
-      optInCharityEmail: this.donationForm.value.optInCharityEmail,
-      optInTbgEmail: this.donationForm.value.optInTbgEmail,
-      projectId: this.campaignId,
-      psp: this.psp,
-      tipAmount: 0, // Only set >0 after donation completed
-    };
+    this.donation.billingPostalAddress = this.paymentAndAgreementGroup.value.billingPostcode;
+    this.donation.emailAddress = this.personalAndMarketingGroup.value.emailAddress;
+    this.donation.firstName = this.personalAndMarketingGroup.value.firstName;
+    this.donation.giftAid = this.giftAidGroup.value.giftAid;
+    this.donation.tipGiftAid = this.giftAidGroup.value.giftAid;
+    this.donation.homePostcode = this.giftAidGroup.value.homePostcode;
+    this.donation.homeAddress = this.giftAidGroup.value.homeAddress;
+    this.donation.lastName = this.personalAndMarketingGroup.value.lastName;
+    this.donation.optInCharityEmail = this.personalAndMarketingGroup.value.optInCharityEmail;
+    this.donation.optInTbgEmail = this.personalAndMarketingGroup.value.optInTbgEmail;
+
+    this.donationService.updateLocalDonation(this.donation);
 
     this.donationService
-      .create(donation) // Create Donation record
+      .update(this.donation)
       // excluding status code, delay for logging clarity
       .pipe(
-        retryWhen(createError => {
-          return createError.pipe(
+        retryWhen(updateError => {
+          return updateError.pipe(
             tap(val => this.retrying = (val.status !== 500)),
             retryStrategy({excludedStatusCodes: [500]}),
           );
         }),
       )
-      .subscribe(async (response: DonationCreatedResponse) => {
-        this.donationService.saveDonation(response.donation, response.jwt);
-
-        // If that succeeded proceed to Charity Checkout donation page, providing key
-        // fields are present in the Salesforce response's Donation.
-        const salesforceResponseMissingRequiredData = (
-          !response.donation.charityId ||
-          !response.donation.donationId ||
-          !response.donation.projectId
-        );
-        if (salesforceResponseMissingRequiredData) {
-          this.analyticsService.logError(
-            'salesforce_create_response_incomplete',
-            `Missing expected response data creating new donation for campaign ${this.campaignId}`,
-          );
-          this.sfApiError = true;
-          this.submitting = false;
-
-          return;
-        }
-
-        // Amount reserved for matching is 'false-y', i.e. £0
-        if (donation.donationMatched && !response.donation.matchReservedAmount) {
-          this.promptToContinueWithNoMatchingLeft(response.donation);
-          return;
-        }
-
-        // Amount reserved for matching is >£0 but less than the full donation
-        if (donation.donationMatched && response.donation.matchReservedAmount < donation.donationAmount) {
-          this.promptToContinueWithPartialMatching(response.donation);
-          return;
-        }
-
+      .subscribe(async (donation: Donation) => {
         if (donation.psp === 'enthuse') {
-          // Else either the donation was not expected to be matched or has 100% match funds allocated -> no need for an extra step
-          this.redirectToCharityCheckout(response.donation);
+          this.redirectToEnthuse(donation);
           return;
+        } else if (donation.psp === 'stripe') {
+          this.payWithStripe();
         }
-
-        // Else we're using Stripe and should prompt for payment details here.
-        if (response.donation.clientSecret) {
-          this.cardDetailsNow = true;
-          this.donationClientSecret = response.donation.clientSecret;
-          this.donationId = response.donation.donationId;
-
-          // TODO Suppress postal code if and only if Gift Aid option is yes, since we will collect
-          // the full postal address in those cases.
-          // this.card = this.stripeService.createCard(this.donationForm.value.giftAid);
-          this.card = await this.stripeService.createCard(false);
-          if (this.card) {
-            this.card.mount(this.cardInfo.nativeElement);
-            this.card.addEventListener('change', this.cardHandler);
-          }
-        } else {
-          this.stripeProcessingError = 'Could not prepare payment';
-          this.analyticsService.logError('stripe_payment_intent_create_failed', 'No client secret');
-        }
-        this.submitting = false;
       }, response => {
         let errorMessage: string;
         if (response.message) {
-          errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.message}`;
+          errorMessage = `Could not update donation for campaign ${this.campaignId}: ${response.message}`;
         } else {
           // Unhandled 5xx crashes etc.
-          errorMessage = `Could not create new donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
+          errorMessage = `Could not update donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
         }
-        this.analyticsService.logError('salesforce_create_failed', errorMessage);
+        this.analyticsService.logError('donation_update_failed', errorMessage);
         this.retrying = false;
-        this.sfApiError = true;
+        this.donationUpdateError = true;
         this.submitting = false;
       });
   }
 
   async payWithStripe() {
-    if (!this.donationClientSecret || !this.donationId) {
-      this.stripeProcessingError = 'Missing data from previous step – please refresh and try again';
-      this.analyticsService.logError('stripe_pay_missing_keys', `Donation ID: ${this.donationId}`);
+    if (!this.donation.clientSecret) {
+      this.stripeError = 'Missing data from previous step – please refresh and try again';
+      this.analyticsService.logError('stripe_pay_missing_secret', `Donation ID: ${this.donation.donationId}`);
       return;
     }
 
-    this.submitting = true;
-
-    const result = await this.stripeService.confirmCardPayment(this.donationClientSecret, this.card);
+    const result = await this.stripeService.confirmCardPayment(
+      this.donation.clientSecret,
+      this.card,
+      this.personalAndMarketingGroup.value.emailAddress,
+      `${this.personalAndMarketingGroup.value.firstName} ${this.personalAndMarketingGroup.value.lastName}`,
+      this.paymentAndAgreementGroup.value.billingPostcode,
+    );
 
     if (result.error) {
-      this.stripeProcessingError = result.error.message;
+      this.stripeError = result.error.message;
       this.analyticsService.logError('stripe_card_payment_error', result.error.message ?? '[No message]');
 
       return;
@@ -309,38 +326,60 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     if (['succeeded', 'processing'].includes(result.paymentIntent.status)) {
       this.analyticsService.logEvent(
         'stripe_card_payment_success',
-        `Stripe Intent processing or done for donation ${this.donationId} to campaign ${this.campaignId}`,
+        `Stripe Intent processing or done for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
       );
-      this.router.navigate(['thanks', this.donationId], {
+      this.router.navigate(['thanks', this.donation.donationId], {
         replaceUrl: true,
       });
     } else {
       this.analyticsService.logError('stripe_intent_not_success', result.paymentIntent.status);
-      this.stripeProcessingError = `Status: ${result.paymentIntent.status}`;
+      this.stripeError = `Status: ${result.paymentIntent.status}`;
     }
 
     this.submitting = false;
   }
 
+  get donationAmountField() {
+    if (!this.donationForm) {
+      return undefined;
+    }
+
+    return this.donationForm.controls.amounts.get('donationAmount');
+  }
+
   /**
-   * Quick getter for form controls, to keep validation message handling concise.
+   * Quick getter for donation amount, to keep template use concise.
    */
-  get f() { return this.donationForm.controls; }
+  get donationAmount(): number {
+    return Number((this.amountsGroup.value.donationAmount || '0').replace('£', ''));
+  }
+
+  get donationAndTipAmount(): number {
+    return this.donationAmount + this.tipAmount();
+  }
 
   expectedMatchAmount(): number {
     if (!this.campaign) {
       return 0;
     }
 
-    return Math.max(0, Math.min(this.campaign.matchFundsRemaining, parseFloat(this.donationForm.value.donationAmount)));
+    return Math.max(0, Math.min(this.campaign.matchFundsRemaining, parseFloat(this.amountsGroup.value.donationAmount)));
   }
 
   giftAidAmount(): number {
-    return this.donationForm.value.giftAid ? (0.25 * parseFloat(this.donationForm.value.donationAmount)) : 0;
+    return this.giftAidGroup.value.giftAid ? (0.25 * this.donationAmount) : 0;
+  }
+
+  tipAmount(): number {
+    return Number((this.amountsGroup.value.tipAmount || '0').replace('£', ''));
+  }
+
+  expectedTbgAmount(): number {
+    return this.tipAmount() + (this.giftAidGroup.value.giftAid ? (0.25 * this.tipAmount()) : 0);
   }
 
   expectedTotalAmount(): number {
-    return parseFloat(this.donationForm.value.donationAmount) + this.giftAidAmount() + this.expectedMatchAmount();
+    return this.donationAmount + this.giftAidAmount() + this.expectedMatchAmount();
   }
 
   /**
@@ -359,6 +398,15 @@ export class DonationStartComponent implements OnDestroy, OnInit {
    * Redirect if campaign's not open yet; set up page metadata if it is
    */
   private handleCampaign(campaign: Campaign) {
+    if (environment.psps.stripe.enabled && this.campaign?.charity.stripeAccountId) {
+      this.psp = 'stripe';
+      this.addStripeValidators();
+    } else if (environment.psps.enthuse.enabled) {
+      this.psp = 'enthuse';
+    } else {
+      this.noPsps = true;
+    }
+
     if (!CampaignService.isOpenForDonations(campaign)) {
       this.router.navigateByUrl(`/campaign/${campaign.id}`, { replaceUrl: true });
       return;
@@ -397,8 +445,85 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     return [];
   }
 
+  private createDonation() {
+    if (!this.campaign || !this.campaign.charity.id || !this.psp) {
+      this.donationCreateError = true;
+      return;
+    }
+
+    this.donationCreateError = false;
+
+    const donation: Donation = {
+      charityId: this.campaign.charity.id,
+      charityName: this.campaign.charity.name,
+      countryCode: 'GB',
+      // Strip '£' if entered
+      donationAmount: this.amountsGroup.value.donationAmount.replace('£', ''),
+      donationMatched: this.campaign.isMatched,
+      giftAid: this.giftAidGroup.value.giftAid,
+      matchedAmount: 0, // Only set >0 after donation completed
+      matchReservedAmount: 0, // Only set >0 after initial donation create API response
+      projectId: this.campaignId,
+      psp: this.psp,
+      tipAmount: this.amountsGroup.value.tipAmount,
+    };
+
+    this.donationService
+      .create(donation)
+      // excluding status code, delay for logging clarity
+      .pipe(
+        retryWhen(createError => {
+          return createError.pipe(
+            retryStrategy({excludedStatusCodes: [500]}),
+          );
+        }),
+      )
+      .subscribe(async (response: DonationCreatedResponse) => {
+        const createResponseMissingData = (
+          !response.donation.charityId ||
+          !response.donation.donationId ||
+          !response.donation.projectId
+        );
+        if (createResponseMissingData) {
+          this.analyticsService.logError(
+            'donation_create_response_incomplete',
+            `Missing expected response data creating new donation for campaign ${this.campaignId}`,
+          );
+          this.donationCreateError = true;
+          this.stepper.previous(); // Go back to step 1 to surface the internal error.
+
+          return;
+        }
+
+        this.donationService.saveDonation(response.donation, response.jwt);
+        this.donation = response.donation; // Simplify update() while we're on this page.
+
+        // Amount reserved for matching is 'false-y', i.e. £0
+        if (donation.donationMatched && !response.donation.matchReservedAmount) {
+          this.promptToContinueWithNoMatchingLeft(response.donation);
+          return;
+        }
+
+        // Amount reserved for matching is >£0 but less than the full donation
+        if (donation.donationMatched && response.donation.matchReservedAmount < donation.donationAmount) {
+          this.promptToContinueWithPartialMatching(response.donation);
+          return;
+        }
+      }, response => {
+        let errorMessage: string;
+        if (response.message) {
+          errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.message}`;
+        } else {
+          // Unhandled 5xx crashes etc.
+          errorMessage = `Could not create new donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
+        }
+        this.analyticsService.logError('donation_create_failed', errorMessage);
+        this.donationCreateError = true;
+        this.stepper.previous(); // Go back to step 1 to surface the internal error.
+      });
+  }
+
   private offerExistingDonation(donation: Donation) {
-    this.submitting = true;
     this.analyticsService.logEvent('existing_donation_offered', `Found pending donation to campaign ${this.campaignId}`);
 
     const reuseDialog = this.dialog.open(DonationStartOfferReuseDialogComponent, {
@@ -413,10 +538,10 @@ export class DonationStartComponent implements OnDestroy, OnInit {
    * Auto-cancel the attempted donation (it's unlikely to start working for the same project immediately so better to start a
    * 'clean' one) and let the user know about the error.
    */
-  private processDonationError() {
+  private processEnthuseDonationError() {
     this.analyticsService.logError(
-      'charity_checkout_error',
-      `Charity Checkout rejected donation setup for campaign ${this.campaignId}: ${this.charityCheckoutError}`,
+      'charity_checkout_error', // Keep event name for historic comparisons
+      `Enthuse rejected donation setup for campaign ${this.campaignId}: ${this.enthuseError}`,
     );
 
     if (this.previousDonation) {
@@ -428,7 +553,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     }
 
     const errorDialog = this.dialog.open(DonationStartErrorDialogComponent, {
-      data: { charityCheckoutError: this.charityCheckoutError },
+      data: { pspError: this.enthuseError },
       disableClose: true,
       role: 'alertdialog',
     });
@@ -443,7 +568,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     });
   }
 
-  private redirectToCharityCheckout(donation: Donation) {
+  private redirectToEnthuse(donation: Donation) {
     this.analyticsService.logAmountChosen(donation.donationAmount, this.campaignId, this.suggestedAmounts);
     this.analyticsService.logEvent('payment_redirect_click', `Donating to campaign ${this.campaignId}`);
     this.charityCheckoutService.startDonation(donation);
@@ -466,7 +591,8 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   }
 
   /**
-   * @param donation *Response* Donation object, with `matchReservedAmount` set and returned by Salesforce.
+   * @param donation *Response* Donation object, with `matchReservedAmount` returned
+   *                    by the Donations API.
    */
   private promptToContinueWithPartialMatching(donation: Donation) {
     if (!this.campaign) {
@@ -484,6 +610,49 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       donation,
       this.campaign.surplusDonationInfo,
     );
+  }
+
+  private addStripeValidators(): void {
+    this.amountsGroup.controls.tipAmount.setValidators([
+      Validators.required,
+      Validators.pattern('^£?[0-9]+?(\\.[0-9]{2})?$'),
+    ]);
+
+    // Gift Aid home address fields are validated only in Stripe mode and also
+    // conditionally on the donor claiming Gift Aid.
+    this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
+      if (giftAidChecked) {
+        this.giftAidGroup.controls.homePostcode.setValidators([
+          Validators.required,
+          Validators.pattern(this.postcodeRegExp),
+        ]);
+        this.giftAidGroup.controls.homeAddress.setValidators([
+          Validators.required,
+        ]);
+      } else {
+        this.giftAidGroup.controls.homePostcode.setValidators([]);
+        this.giftAidGroup.controls.homeAddress.setValidators([]);
+      }
+
+      this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
+      this.giftAidGroup.controls.homeAddress.updateValueAndValidity();
+    });
+
+    this.personalAndMarketingGroup.controls.firstName.setValidators([
+      Validators.required,
+    ]);
+    this.personalAndMarketingGroup.controls.lastName.setValidators([
+      Validators.required,
+    ]);
+    this.personalAndMarketingGroup.controls.emailAddress.setValidators([
+      Validators.required,
+      Validators.email,
+    ]);
+
+    this.paymentAndAgreementGroup.controls.billingPostcode.setValidators([
+      Validators.required,
+      Validators.pattern(this.postcodeRegExp),
+    ]);
   }
 
   private promptToContinue(
@@ -508,26 +677,28 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   private getDialogResponseFn(donation: Donation) {
     return (proceed: boolean) => {
       if (proceed) {
-        // TODO this and similar need to support Stripe model too; abstract out
-        // to a `continue()` method?
-        this.redirectToCharityCheckout(donation);
-
+        // Create has already set up the Donation with no/partial matching, and the donor is
+        // already on step 2. So there is nothing to do but let them continue in this case.
         return;
       }
 
-      // Else cancel the existing donation in Salesforce and remove our local record of it
+      // Else cancel the existing donation, remove our local record and return to step 1,
+      // clearing amounts to encourage smaller donations in the partial match case.
       this.donationService.cancel(donation)
         .subscribe(
           () => {
             this.analyticsService.logEvent('cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
             this.donationService.removeLocalDonation(donation);
+            this.stepper.reset(); // Clear form and return to step 1.
           },
-          response => this.analyticsService.logError(
-            'cancel_failed',
-            `Could not cancel donation ${donation.donationId} to campaign ${this.campaignId}: ${response.error.error}`,
-          ),
+          response => {
+            this.analyticsService.logError(
+              'cancel_failed',
+              `Could not cancel donation ${donation.donationId} to campaign ${this.campaignId}: ${response.error.error}`,
+            );
+            this.stepper.reset(); // Clear and return to start even if the first attempt is 'stuck'.
+          },
         );
-      this.submitting = false;
     };
   }
 }

@@ -12,7 +12,7 @@ export const environment = {
   maximumDonationAmount: 25000,
   psps: {
     enthuse: {
-      enabled: false,
+      enabled: true,
       initUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
     },
     stripe: {

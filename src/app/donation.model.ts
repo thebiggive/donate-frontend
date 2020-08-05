@@ -23,10 +23,13 @@ export interface Donation {
     donationMatched: boolean;
 
     giftAid: boolean;
+    tipGiftAid?: boolean;
+    homePostcode?: string;
+    homeAddress?: string;
 
-    optInCharityEmail: boolean;
+    optInCharityEmail?: boolean;
 
-    optInTbgEmail: boolean;
+    optInTbgEmail?: boolean;
 
     /**
      * Unique ID for a CCampaign / project assigned by the Big Give, in Salesforce

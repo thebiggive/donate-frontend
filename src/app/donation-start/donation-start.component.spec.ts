@@ -4,17 +4,18 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatStepperModule } from '@angular/material/stepper';
 import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
+import { Campaign } from '../campaign.model';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { DonationStartComponent } from './donation-start.component';
 import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
@@ -23,6 +24,74 @@ import { TimeLeftPipe } from '../time-left.pipe';
 describe('DonationStartComponent', () => {
   let component: DonationStartComponent;
   let fixture: ComponentFixture<DonationStartComponent>;
+
+  const getDummyCampaign = (campaignId: string) => {
+    return new Campaign(
+      campaignId,
+        ['Aim 1'],
+        200.00,
+        [
+          {
+            uri: 'https://example.com/some-additional-image.png',
+            order: 100,
+          },
+        ],
+        'https://example.com/some-banner.png',
+        [
+          {
+            description: 'budget line 1',
+            amount: 2000.01,
+          },
+        ],
+        'The Big Give Match Fund',
+        {
+          id: '0011r00002HHAprAAH',
+          name: 'Awesome Charity',
+          donateLinkId: 'SFIdOrLegacyId',
+          regulatorNumber: '123456',
+          regulatorRegion: 'Scotland',
+          stripeAccountId: campaignId === 'testCampaignIdForStripe' ? 'testStripeAcctId' : undefined,
+          website: 'https://www.awesomecharity.co.uk',
+        },
+        4,
+        new Date(),
+        [
+          {
+            description: 'Can buy you 2 things',
+            amount: 50.01,
+          },
+        ],
+        'Impact reporting plan',
+        'Impact overview',
+        true,
+        987.00,
+        988.00,
+        'The situation',
+        [
+          {
+            quote: 'Some quote',
+            person: 'Someones quote',
+          },
+        ],
+        'The solution',
+        new Date(),
+        'Active',
+        'Some long summary',
+        2000.01,
+        'Some title',
+        [],
+        'Some information about what happens if funds are not used',
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        {
+          provider: 'youtube',
+          key: '1G_Abc2delF',
+        },
+    );
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -36,13 +105,13 @@ describe('DonationStartComponent', () => {
         HttpClientTestingModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatDialogModule,
-        MatExpansionModule,
         FlexLayoutModule,
         MatIconModule,
         MatInputModule,
         MatRadioModule,
         MatProgressBarModule,
         MatProgressSpinnerModule,
+        MatStepperModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([
@@ -70,123 +139,322 @@ describe('DonationStartComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have no errors with valid inputs', () => {
+  it('should have no errors with valid inputs and get correct expected amounts', () => {
     component.donationForm.setValue({
-      donationAmount: '£1234',
-      giftAid: true,
-      optInCharityEmail: false,
-      optInTbgEmail: true,
+      amounts: {
+        donationAmount: '£1234',
+        tipAmount: '20',
+      },
+      giftAid: {
+        giftAid: true,
+        homeAddress: null,
+        homePostcode: null,
+      },
+      personalAndMarketing: {
+        firstName: 'Ezra',
+        lastName: 'Furman',
+        emailAddress: 'test@example.com',
+        optInCharityEmail: false,
+        optInTbgEmail: true,
+      },
+      paymentAndAgreement: {
+        billingPostcode: 'N1 1AA',
+      },
     });
 
     expect(component.donationForm.valid).toBe(true);
-
-    expect(component.donationForm.controls.donationAmount.errors).toBeNull();
-    expect(component.donationForm.controls.giftAid.errors).toBeNull();
-    expect(component.donationForm.controls.optInCharityEmail.errors).toBeNull();
-    expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
+    expect(component.expectedMatchAmount()).toBe(0); // Test has no campaign for now
+    expect(component.expectedTotalAmount()).toBe(1542.5);
+    expect(component.expectedTbgAmount()).toBe(25);
   });
 
   it('should have an error with required radio buttons not set', () => {
     component.donationForm.setValue({
-      donationAmount: '1234',
-      giftAid: null,
-      optInCharityEmail: null,
-      optInTbgEmail: null,
+      amounts: {
+        donationAmount: '1234',
+        tipAmount: null,
+      },
+      giftAid: {
+        giftAid: null,
+        homePostcode: null,
+        homeAddress: null,
+      },
+      personalAndMarketing: {
+        firstName: null,
+        lastName: null,
+        emailAddress: null,
+        optInCharityEmail: null,
+        optInTbgEmail: null,
+      },
+      paymentAndAgreement: {
+        billingPostcode: null,
+      },
     });
 
     expect(component.donationForm.valid).toBe(false);
 
-    expect(component.donationForm.controls.donationAmount.errors).toBeNull();
-    if (
-      component.donationForm.controls.giftAid.errors &&
-      component.donationForm.controls.optInCharityEmail.errors &&
-      component.donationForm.controls.optInTbgEmail.errors
-    ) {
-      expect(component.donationForm.controls.giftAid.errors.required).toBe(true);
-      expect(component.donationForm.controls.optInCharityEmail.errors.required).toBe(true);
-      expect(component.donationForm.controls.optInTbgEmail.errors.required).toBe(true);
-    } else {
-      expect(false).toBeTrue(); // One of more errors unexpectedly undefined
-    }
+    expect(component.donationForm.controls.amounts.get('donationAmount')?.errors).toBeNull();
+
+    const giftAidErrors: any = component.donationForm.controls.giftAid.get('giftAid')?.errors;
+    expect(Object.keys(giftAidErrors).length).toBe(1);
+    expect(giftAidErrors.required).toBe(true);
+
+    const optInCharityEmailErrors: any = component.donationForm.controls.personalAndMarketing.get('optInCharityEmail')?.errors;
+    expect(Object.keys(optInCharityEmailErrors).length).toBe(1);
+    expect(optInCharityEmailErrors.required).toBe(true);
+
+    const optInTbgEmailErrors: any = component.donationForm.controls.personalAndMarketing.get('optInTbgEmail')?.errors;
+    expect(Object.keys(optInTbgEmailErrors).length).toBe(1);
+    expect(optInTbgEmailErrors.required).toBe(true);
   });
 
   it('should have missing amount error', () => {
     component.donationForm.setValue({
-      donationAmount: null,
-      giftAid: true,
-      optInCharityEmail: true,
-      optInTbgEmail: false,
+      amounts: {
+        donationAmount: null,
+        tipAmount: null,
+      },
+      giftAid: {
+        giftAid: true,
+        homePostcode: null,
+        homeAddress: null,
+      },
+      personalAndMarketing: {
+        firstName: null,
+        lastName: null,
+        emailAddress: null,
+        optInCharityEmail: true,
+        optInTbgEmail: false,
+      },
+      paymentAndAgreement: {
+        billingPostcode: null,
+      },
     });
 
     expect(component.donationForm.valid).toBe(false);
 
-    if (component.donationForm.controls.donationAmount.errors) {
-      expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['required']);
-    } else {
-      expect(false).toBeTrue(); // donationAmount errors unexpectedly undefined
-    }
-    expect(component.donationForm.controls.giftAid.errors).toBeNull();
-    expect(component.donationForm.controls.optInCharityEmail.errors).toBeNull();
-    expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
+    const donationAmountErrors: any = component.donationForm.controls.amounts.get('donationAmount')?.errors;
+    expect(Object.keys(donationAmountErrors).length).toBe(1);
+    expect(donationAmountErrors.required).toBe(true);
+
+    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have minimum amount error', () => {
     component.donationForm.setValue({
-      donationAmount: '4',
-      giftAid: false,
-      optInCharityEmail: true,
-      optInTbgEmail: false,
+      amounts: {
+        donationAmount: '0', // Simpler for now than testing e.g. '0.99' which also fails pattern validation
+        tipAmount: null,
+      },
+      giftAid: {
+        giftAid: false,
+        homePostcode: null,
+        homeAddress: null,
+      },
+      personalAndMarketing: {
+        firstName: null,
+        lastName: null,
+        emailAddress: null,
+        optInCharityEmail: true,
+        optInTbgEmail: false,
+      },
+      paymentAndAgreement: {
+        billingPostcode: null,
+      },
     });
 
     expect(component.donationForm.valid).toBe(false);
 
-    if (component.donationForm.controls.donationAmount.errors) {
-      expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['min']);
-    } else {
-      expect(false).toBeTrue(); // donationAmount errors unexpectedly undefined
-    }
-    expect(component.donationForm.controls.giftAid.errors).toBeNull();
-    expect(component.donationForm.controls.optInCharityEmail.errors).toBeNull();
-    expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
+    const donationAmountErrors: any = component.donationForm.controls.amounts.get('donationAmount')?.errors;
+    expect(Object.keys(donationAmountErrors).length).toBe(1);
+    expect(donationAmountErrors.min).toBe(true);
+
+    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have maximum amount error', () => {
     component.donationForm.setValue({
-      donationAmount: '25001',
-      giftAid: false,
-      optInCharityEmail: false,
-      optInTbgEmail: false,
+      amounts: {
+        donationAmount: '25001',
+        tipAmount: null,
+      },
+      giftAid: {
+        giftAid: false,
+        homePostcode: null,
+        homeAddress: null,
+      },
+      personalAndMarketing: {
+        firstName: null,
+        lastName: null,
+        emailAddress: null,
+        optInCharityEmail: false,
+        optInTbgEmail: false,
+      },
+      paymentAndAgreement: {
+        billingPostcode: null,
+      },
     });
 
     expect(component.donationForm.valid).toBe(false);
 
-    if (component.donationForm.controls.donationAmount.errors) {
-      expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['max']);
-    } else {
-      expect(false).toBeTrue(); // donationAmount errors unexpectedly undefined
-    }
-    expect(component.donationForm.controls.giftAid.errors).toBeNull();
-    expect(component.donationForm.controls.optInCharityEmail.errors).toBeNull();
-    expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
+    const donationAmountErrors: any = component.donationForm.controls.amounts.get('donationAmount')?.errors;
+    expect(Object.keys(donationAmountErrors).length).toBe(1);
+    expect(donationAmountErrors.max).toBe(true);
+
+    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have mis-formatted amount error', () => {
     component.donationForm.setValue({
-      donationAmount: '8765,21',
-      giftAid: true,
-      optInCharityEmail: true,
-      optInTbgEmail: true,
+      amounts: {
+        donationAmount: '8765,21',
+        tipAmount: null,
+      },
+      giftAid: {
+        giftAid: true,
+        homePostcode: null,
+        homeAddress: null,
+      },
+      personalAndMarketing: {
+        firstName: null,
+        lastName: null,
+        emailAddress: 'test@example.com',
+        optInCharityEmail: true,
+        optInTbgEmail: true,
+      },
+      paymentAndAgreement: {
+        billingPostcode: 'N1 1AA',
+      },
     });
 
     expect(component.donationForm.valid).toBe(false);
 
-    if (component.donationForm.controls.donationAmount.errors) {
-      expect(Object.keys(component.donationForm.controls.donationAmount.errors)).toEqual(['pattern']);
-    } else {
-      expect(false).toBeTrue(); // donationAmount errors unexpectedly undefined
-    }
-    expect(component.donationForm.controls.giftAid.errors).toBeNull();
-    expect(component.donationForm.controls.optInCharityEmail.errors).toBeNull();
-    expect(component.donationForm.controls.optInTbgEmail.errors).toBeNull();
+    const donationAmountErrors: any = component.donationForm.controls.amounts.get('donationAmount')?.errors;
+    expect(Object.keys(donationAmountErrors).length).toBe(1);
+    expect(donationAmountErrors.pattern).toEqual({
+      requiredPattern: '^£?[0-9]+?(\\.00)?$',
+      actualValue: '8765,21',
+    });
+
+    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.personalAndMarketing.get('optInTbgEmail')?.errors).toBeNull();
+  });
+
+  it('should have missing postcode error in Stripe mode', () => {
+    // Need to override the default fixture in beforeEach() to set a realistic `campaign`.
+    fixture = TestBed.createComponent(DonationStartComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
+    fixture.detectChanges();
+
+    component.donationForm.setValue({
+      amounts: {
+        donationAmount: '£1234',
+        tipAmount: null,
+      },
+      giftAid: {
+        giftAid: true,
+        homeAddress: null,
+        homePostcode: null,
+      },
+      personalAndMarketing: {
+        firstName: null,
+        lastName: null,
+        emailAddress: 'test@example.com',
+        optInCharityEmail: true,
+        optInTbgEmail: true,
+      },
+      paymentAndAgreement: {
+        billingPostcode: null,
+      },
+    });
+
+    expect(component.donationForm.valid).toBe(false);
+
+    const billingPostcodeErrors: any = component.donationForm.controls.paymentAndAgreement.get('billingPostcode')?.errors;
+    expect(Object.keys(billingPostcodeErrors).length).toBe(1);
+    expect(billingPostcodeErrors.required).toBe(true);
+
+    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
+  });
+
+  it('should have missing email address error in Stripe mode', () => {
+    // Need to override the default fixture in beforeEach() to set a realistic `campaign`.
+    fixture = TestBed.createComponent(DonationStartComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
+    fixture.detectChanges();
+
+    component.donationForm.setValue({
+      amounts: {
+        donationAmount: '£1234',
+        tipAmount: null,
+      },
+      giftAid: {
+        giftAid: true,
+        homePostcode: null,
+        homeAddress: null,
+      },
+      personalAndMarketing: {
+        firstName: null,
+        lastName: null,
+        emailAddress: null,
+        optInCharityEmail: true,
+        optInTbgEmail: true,
+      },
+      paymentAndAgreement: {
+        billingPostcode: 'N1 1AA',
+      },
+    });
+
+    expect(component.donationForm.valid).toBe(false);
+
+    const emailAddressErrors: any = component.donationForm.controls.personalAndMarketing.get('emailAddress')?.errors;
+    expect(Object.keys(emailAddressErrors).length).toBe(1);
+    expect(emailAddressErrors.required).toBe(true);
+
+    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
+  });
+
+  it('should not have missing email address error in Enthuse mode', () => {
+    // Need to override the default fixture in beforeEach() to set a realistic `campaign`.
+    fixture = TestBed.createComponent(DonationStartComponent);
+    component = fixture.componentInstance;
+    component.campaign = getDummyCampaign('testCampaignIdForEnthuse');
+    fixture.detectChanges();
+
+    component.donationForm.setValue({
+      amounts: {
+        donationAmount: '£1234',
+        tipAmount: null,
+      },
+      giftAid: {
+        giftAid: true,
+        homePostcode: null,
+        homeAddress: null,
+      },
+      personalAndMarketing: {
+        firstName: null,
+        lastName: null,
+        emailAddress: null,
+        optInCharityEmail: true,
+        optInTbgEmail: true,
+      },
+      paymentAndAgreement: {
+        billingPostcode: 'N1 1AA',
+      },
+    });
+
+    expect(component.donationForm.valid).toBe(true);
+
+    expect(component.donationForm.controls.personalAndMarketing.get('emailAddress')?.errors).toBeNull();
+    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
   });
 });

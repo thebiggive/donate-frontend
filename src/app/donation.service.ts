@@ -94,11 +94,19 @@ export class DonationService {
   }
 
   /**
-   * Cancel donation in Salesforce to free up match funds straight away. Subscribers should `removeLocalDonation()` on success.
+   * Cancel donation in Salesforce to free up match funds straight away.
+   * This is a special case PUT: this method is just a convenience wrapper
+   * to set the new status without other changes.
+   *
+   * Subscribers should `removeLocalDonation()` on success.
    */
   cancel(donation: Donation): Observable<any> {
     donation.status = 'Cancelled';
 
+    return this.update(donation);
+  }
+
+  update(donation: Donation): Observable<any> {
     return this.http.put<any>(
       `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}`,
       donation,

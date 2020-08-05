@@ -1,8 +1,38 @@
 @import '../../styles';
 
+.mat-form-field {
+  width: 100%;
+}
+
+// See https://github.com/angular/components/issues/5227#issuecomment-480672986
+// for context of the problem solved for longer `mat-hint`s here.
+:host ::ng-deep .c-donate-form .mat-form-field {
+  .mat-form-field-wrapper {
+      padding-bottom: 0;
+      .mat-form-field-underline {
+          position: initial !important;
+          display: block;
+          margin-top: -1px;
+      }
+      .mat-form-field-subscript-wrapper,
+      .mat-form-field-ripple {
+          position: initial !important;
+          display: table;
+      }
+      .mat-form-field-subscript-wrapper {
+          min-height: calc(1em + 1px);
+      }
+  }
+}
+
+.mat-primary {
+  margin-top: 1rem;
+}
+
 .StripeElement {
-  border: solid 2px #009900;
+  border: solid 1px $colour-grey;
   padding: 1rem;
+  margin-bottom: 1rem;
 }
 
 .c-header {
