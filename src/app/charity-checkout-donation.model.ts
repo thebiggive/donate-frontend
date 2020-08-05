@@ -27,7 +27,10 @@ export class CharityCheckoutDonation {
     this.gift_aid = donation.giftAid ? '1' : '0';
     this.project_id = donation.projectId;
     // Triggers a Charity Checkout message about reserved match funds, so only non-null when we actually have some allocated.
-    this.reservation_time = (donation.matchReservedAmount > 0) ? Math.floor(Date.now() / 1000) : undefined;
+    this.reservation_time =
+      (donation.matchReservedAmount > 0 && donation.createdTime)
+        ? Math.floor(new Date(donation.createdTime).getTime() / 1000)
+        : undefined;
     this.thanks_url = `${environment.thanksUriPrefix}${donation.donationId}`;
     this.unique_ID = donation.donationId ? donation.donationId : '';
   }

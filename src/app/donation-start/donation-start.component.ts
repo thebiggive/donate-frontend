@@ -66,6 +66,8 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   // but modified to make the separating space optional.
   private postcodeRegExp = new RegExp('^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\\s?[0-9][A-Za-z]{2})$');
 
+  private reservationMinutes = 15;
+
   constructor(
     private analyticsService: AnalyticsService,
     private campaignService: CampaignService,
@@ -394,6 +396,14 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       );
   }
 
+  reservationExpiryTime(): Date | undefined {
+    if (!this.donation?.createdTime || !this.donation.matchReservedAmount) {
+      return undefined;
+    }
+
+    return new Date(this.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
+  }
+
   /**
    * Redirect if campaign's not open yet; set up page metadata if it is
    */
@@ -678,7 +688,9 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     return (proceed: boolean) => {
       if (proceed) {
         // Create has already set up the Donation with no/partial matching, and the donor is
-        // already on step 2. So there is nothing to do but let them continue in this case.
+        // already on step 2. So the only thing we need to do is get the donation back in local
+        // state to support the reservation timer & other features.
+        this.donation = donation;
         return;
       }
 

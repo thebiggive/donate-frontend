@@ -291,5 +291,10 @@
     <div class="b-secondary-column">
       <app-campaign-details-card [campaign]="campaign"></app-campaign-details-card>
     </div>
+
+    <p *ngIf="reservationExpiryTime()" class="c-timer">
+      <span class="b-rt-0">Match funds reserved for&nbsp;</span>
+      <span class="b-rt-1 b-bold">{{ reservationExpiryTime() | timeLeft }}</span>
+    </p>
   </div>
 </main>
