@@ -257,11 +257,17 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     this.donation.firstName = this.personalAndMarketingGroup.value.firstName;
     this.donation.giftAid = this.giftAidGroup.value.giftAid;
     this.donation.tipGiftAid = this.giftAidGroup.value.giftAid;
-    this.donation.homePostcode = this.giftAidGroup.value.homePostcode;
-    this.donation.homeAddress = this.giftAidGroup.value.homeAddress;
     this.donation.lastName = this.personalAndMarketingGroup.value.lastName;
     this.donation.optInCharityEmail = this.personalAndMarketingGroup.value.optInCharityEmail;
     this.donation.optInTbgEmail = this.personalAndMarketingGroup.value.optInTbgEmail;
+
+    if (this.donation.giftAid || this.donation.tipGiftAid) {
+      this.donation.homePostcode = this.giftAidGroup.value.homePostcode;
+      this.donation.homeAddress = this.giftAidGroup.value.homeAddress;
+    } else {
+      this.donation.homePostcode = undefined;
+      this.donation.homeAddress = undefined;
+    }
 
     this.donationService.updateLocalDonation(this.donation);
 
