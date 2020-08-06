@@ -22,6 +22,7 @@ export const environment = {
       publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
+  reservationMinutes: 15,
   suggestedAmounts: [{weight: 1, values: [30, 100, 250]}],
   thanksUriPrefix: 'https://donate-regression.thebiggivetest.org.uk/thanks/',
 };
