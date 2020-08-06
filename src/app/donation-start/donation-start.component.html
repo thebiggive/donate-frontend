@@ -94,7 +94,13 @@
             </p>
 
             <div>
-              <button type="button" matStepperNext mat-raised-button color="primary">Next</button>
+              <button
+                type="button"
+                matStepperNext
+                mat-raised-button
+                color="primary"
+                (click)="scrollToErrors()"
+              >Next</button>
             </div>
           </mat-step>
 
@@ -113,6 +119,10 @@
             <mat-radio-group tabindex="0" aria-labelledby="giftAid-label" formControlName="giftAid">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I want to Gift Aid my donation to {{ campaign.charity.name }} and any additional gift I make to the Big Give, including any donations made in the past 4 years or in the future</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed</mat-radio-button>
+
+              <p class="error" *ngIf="triedToLeaveGiftAid && giftAidGroup.get('giftAid')?.hasError('required')" aria-live="alert">
+                Please choose whether you wish to claim Gift Aid.
+              </p>
             </mat-radio-group>
 
             <div *ngIf="psp == 'stripe' && giftAidGroup.value.giftAid">
@@ -130,7 +140,13 @@
             </div>
 
             <div>
-              <button type="button" matStepperNext mat-raised-button color="primary">Next</button>
+              <button
+                type="button"
+                matStepperNext
+                mat-raised-button
+                color="primary"
+                (click)="triedToLeaveGiftAid = true; scrollToErrors()"
+              >Next</button>
             </div>
           </mat-step>
 
@@ -166,6 +182,9 @@
               <mat-hint>This may include thanks for your donation, updates on how it is being used, newsletters and future campaigns. If you select no, we will pass on your details as these may be required for Gift Aid purposes, but the charity will be informed that you do not wish to receive communications.</mat-hint>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.charity.name }}</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.charity.name }}</mat-radio-button>
+              <p class="error" *ngIf="triedToLeavePersonalAndMarketing && personalAndMarketingGroup.get('optInCharityEmail')?.hasError('required')" aria-live="alert">
+                Please choose whether you wish to receive updates from {{ campaign.charity.name }}.
+              </p>
             </mat-radio-group>
             <p *ngIf="personalAndMarketingGroup.value.optInCharityEmail === false">
               <mat-hint aria-live="polite">
@@ -177,6 +196,9 @@
             <mat-radio-group tabindex="0" aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from the Big Give</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from the Big Give</mat-radio-button>
+              <p class="error" *ngIf="triedToLeavePersonalAndMarketing && personalAndMarketingGroup.get('optInTbgEmail')?.hasError('required')" aria-live="alert">
+                Please choose whether you wish to receive updates from the Big Give.
+              </p>
             </mat-radio-group>
             <p *ngIf="personalAndMarketingGroup.value.optInTbgEmail === false">
               <mat-hint aria-live="polite">
@@ -185,7 +207,13 @@
             </p>
 
             <div>
-              <button type="button" matStepperNext mat-raised-button color="primary">Next</button>
+              <button
+                type="button"
+                matStepperNext
+                mat-raised-button
+                color="primary"
+                (click)="triedToLeavePersonalAndMarketing = true; scrollToErrors()"
+              >Next</button>
             </div>
           </mat-step>
 

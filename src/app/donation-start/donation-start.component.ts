@@ -57,6 +57,9 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   stripeCardReady = false;
   stripeError?: string;
   submitting = false;
+  // Track 'Next' clicks so we know when to show missing radio button error messages.
+  triedToLeaveGiftAid = false;
+  triedToLeavePersonalAndMarketing = false;
 
   private campaignId: string;
   private enthuseError?: string;  // Enthuse donation start error message
@@ -404,6 +407,25 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     return new Date(this.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
   }
 
+  scrollTo(el: Element): void {
+    if (el) {
+       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  scrollToErrors() {
+    const firstElWithAngularError = document.querySelector('.ng-invalid[formControlName]');
+    if (firstElWithAngularError) {
+      this.scrollTo(firstElWithAngularError);
+      return;
+    }
+
+    const firstCustomError = document.querySelector('.error');
+    if (firstCustomError) {
+      this.scrollTo(firstCustomError);
+    }
+  }
+
   /**
    * Redirect if campaign's not open yet; set up page metadata if it is
    */
@@ -468,7 +490,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       charityName: this.campaign.charity.name,
       countryCode: 'GB',
       // Strip '£' if entered
-      donationAmount: this.amountsGroup.value.donationAmount.replace('£', ''),
+      donationAmount: (this.amountsGroup.value.donationAmount || '0').replace('£', ''),
       donationMatched: this.campaign.isMatched,
       giftAid: this.giftAidGroup.value.giftAid,
       matchedAmount: 0, // Only set >0 after donation completed
@@ -478,16 +500,12 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       tipAmount: this.amountsGroup.value.tipAmount,
     };
 
+    // No re-tries for create() where donors have only entered amounts. If the
+    // server is having problem it's probably more helpful to fail immediately than
+    // to wait until they're ~10 seconds into further data entry before jumping
+    // back to the start.
     this.donationService
       .create(donation)
-      // excluding status code, delay for logging clarity
-      .pipe(
-        retryWhen(createError => {
-          return createError.pipe(
-            retryStrategy({excludedStatusCodes: [500]}),
-          );
-        }),
-      )
       .subscribe(async (response: DonationCreatedResponse) => {
         const createResponseMissingData = (
           !response.donation.charityId ||
