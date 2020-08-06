@@ -57,6 +57,9 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   stripeCardReady = false;
   stripeError?: string;
   submitting = false;
+  // Track 'Next' clicks so we know when to show missing radio button error messages.
+  triedToLeaveGiftAid = false;
+  triedToLeavePersonalAndMarketing = false;
 
   private campaignId: string;
   private enthuseError?: string;  // Enthuse donation start error message
@@ -65,6 +68,8 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   // Based on https://stackoverflow.com/questions/164979/regex-for-matching-uk-postcodes#comment82517277_164994
   // but modified to make the separating space optional.
   private postcodeRegExp = new RegExp('^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\\s?[0-9][A-Za-z]{2})$');
+
+  private reservationMinutes = 15;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -394,6 +399,33 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       );
   }
 
+  reservationExpiryTime(): Date | undefined {
+    if (!this.donation?.createdTime || !this.donation.matchReservedAmount) {
+      return undefined;
+    }
+
+    return new Date(this.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
+  }
+
+  scrollTo(el: Element): void {
+    if (el) {
+       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  scrollToErrors() {
+    const firstElWithAngularError = document.querySelector('.ng-invalid[formControlName]');
+    if (firstElWithAngularError) {
+      this.scrollTo(firstElWithAngularError);
+      return;
+    }
+
+    const firstCustomError = document.querySelector('.error');
+    if (firstCustomError) {
+      this.scrollTo(firstCustomError);
+    }
+  }
+
   /**
    * Redirect if campaign's not open yet; set up page metadata if it is
    */
@@ -458,7 +490,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       charityName: this.campaign.charity.name,
       countryCode: 'GB',
       // Strip '£' if entered
-      donationAmount: this.amountsGroup.value.donationAmount.replace('£', ''),
+      donationAmount: (this.amountsGroup.value.donationAmount || '0').replace('£', ''),
       donationMatched: this.campaign.isMatched,
       giftAid: this.giftAidGroup.value.giftAid,
       matchedAmount: 0, // Only set >0 after donation completed
@@ -468,16 +500,12 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       tipAmount: this.amountsGroup.value.tipAmount,
     };
 
+    // No re-tries for create() where donors have only entered amounts. If the
+    // server is having problem it's probably more helpful to fail immediately than
+    // to wait until they're ~10 seconds into further data entry before jumping
+    // back to the start.
     this.donationService
       .create(donation)
-      // excluding status code, delay for logging clarity
-      .pipe(
-        retryWhen(createError => {
-          return createError.pipe(
-            retryStrategy({excludedStatusCodes: [500]}),
-          );
-        }),
-      )
       .subscribe(async (response: DonationCreatedResponse) => {
         const createResponseMissingData = (
           !response.donation.charityId ||
@@ -678,7 +706,9 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     return (proceed: boolean) => {
       if (proceed) {
         // Create has already set up the Donation with no/partial matching, and the donor is
-        // already on step 2. So there is nothing to do but let them continue in this case.
+        // already on step 2. So the only thing we need to do is get the donation back in local
+        // state to support the reservation timer & other features.
+        this.donation = donation;
         return;
       }
 

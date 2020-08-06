@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PaymentIntent, PaymentMethodCreateParams, Stripe, StripeCardElement, StripeElements, StripeError } from '@stripe/stripe-js';
-import { loadStripe } from '@stripe/stripe-js/pure';
+import { loadStripe, PaymentIntent, PaymentMethodCreateParams, Stripe, StripeCardElement, StripeElements, StripeError } from '@stripe/stripe-js';
 
 import { environment } from '../environments/environment';
 
@@ -88,7 +87,7 @@ export class StripeService {
       style: {
         base: {
           fontFamily: 'Maven Pro, sans-serif',
-          fontSize: '2rem',
+          fontSize: '14px',
         },
       },
     });
