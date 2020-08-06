@@ -703,9 +703,9 @@ export class DonationStartComponent implements OnDestroy, OnInit {
    *
    * May be invoked:
    * (a) when loading the form having found a previous donation in
-   *      browser state and confirmed with the API that it is resumable, or
+   *     browser state and confirmed with the API that it is resumable, or
    * (b) after leaving step 1, having found that match funds will not cover
-   *      the donation fully.
+   *     the donation fully.
    */
   private getDialogResponseFn(donation: Donation) {
     return (proceed: boolean) => {
