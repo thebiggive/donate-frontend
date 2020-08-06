@@ -125,13 +125,20 @@ a {
   text-decoration: none;
 }
 
+.c-breakdown {
+  margin-bottom: 1rem;
+
+  .mat-icon {
+    height: 14px;
+  }
+}
+
 .c-donate-button {
   padding: 1.5rem;
 }
 
 .c-donation-receipt {
   padding: 1rem 0;
-  border-top: 1px solid $colour-grey-light;
 }
 
 .c-donation-receipt__icon {
@@ -139,14 +146,15 @@ a {
 }
 
 .c-donation-receipt__gift-aid {
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items:center;
+  align-items: center;
 }
 
 .c-receipt-total {
-  margin-top: 0.5rem;
+  border-bottom: 1px solid $colour-grey-light;
+  padding: 1.5rem 0 0.5rem;
 }
 
 .c-donation-summary {
