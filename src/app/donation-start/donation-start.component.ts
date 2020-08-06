@@ -69,8 +69,6 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   // but modified to make the separating space optional.
   private postcodeRegExp = new RegExp('^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\\s?[0-9][A-Za-z]{2})$');
 
-  private reservationMinutes = 15;
-
   constructor(
     private analyticsService: AnalyticsService,
     private campaignService: CampaignService,
@@ -404,7 +402,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       return undefined;
     }
 
-    return new Date(this.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
+    return new Date(environment.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
   }
 
   scrollTo(el: Element): void {
