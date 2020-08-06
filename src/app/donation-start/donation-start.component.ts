@@ -492,12 +492,11 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       // Strip '£' if entered
       donationAmount: (this.amountsGroup.value.donationAmount || '0').replace('£', ''),
       donationMatched: this.campaign.isMatched,
-      giftAid: this.giftAidGroup.value.giftAid,
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
       projectId: this.campaignId,
       psp: this.psp,
-      tipAmount: this.amountsGroup.value.tipAmount,
+      tipAmount: (this.amountsGroup.value.tipAmount || '0').replace('£', ''),
     };
 
     // No re-tries for create() where donors have only entered amounts. If the

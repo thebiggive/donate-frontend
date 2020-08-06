@@ -22,7 +22,7 @@ export interface Donation {
      */
     donationMatched: boolean;
 
-    giftAid: boolean;
+    giftAid?: boolean;
     tipGiftAid?: boolean;
     homePostcode?: string;
     homeAddress?: string;
