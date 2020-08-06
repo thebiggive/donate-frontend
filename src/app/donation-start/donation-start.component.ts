@@ -383,10 +383,6 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     return Number((this.amountsGroup.value.tipAmount || '0').replace('£', ''));
   }
 
-  expectedTbgAmount(): number {
-    return this.tipAmount() + (this.giftAidGroup.value.giftAid ? (0.25 * this.tipAmount()) : 0);
-  }
-
   expectedTotalAmount(): number {
     return this.donationAmount + this.giftAidAmount() + this.expectedMatchAmount();
   }
