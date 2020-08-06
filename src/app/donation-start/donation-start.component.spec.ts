@@ -165,7 +165,7 @@ describe('DonationStartComponent', () => {
     expect(component.donationForm.valid).toBe(true);
     expect(component.expectedMatchAmount()).toBe(0); // Test has no campaign for now
     expect(component.expectedTotalAmount()).toBe(1542.5);
-    expect(component.expectedTbgAmount()).toBe(25);
+    expect(component.tipAmount()).toBe(20);
   });
 
   it('should have an error with required radio buttons not set', () => {

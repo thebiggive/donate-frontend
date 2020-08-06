@@ -279,8 +279,10 @@
                   {{ donationAndTipAmount | exactCurrency }}
                 </span>
               </button>
-              <p *ngIf="expectedTbgAmount() > 0" class="b-center b-grey b-rt-sm b-m-0">
-                Including donation to support the Big Give
+              <p *ngIf="tipAmount() > 0" class="b-center b-grey b-rt-sm">
+                {{ donationAmount | exactCurrency }} donation to {{ campaign.charity.name }}<br>
+                <mat-icon class="b-grey" aria-hidden="false" aria-label="Plus">add</mat-icon><br>
+                {{ tipAmount() | exactCurrency }} donation to the Big Give
               </p>
               <div class="c-donation-receipt" fxLayout="row">
                 <div [fxFlex]="(expectedMatchAmount() > 0) ? 26 : 39">
@@ -305,10 +307,6 @@
               <div class="c-receipt-total b-grey" fxLayout="row" fxLayoutAlign="space-around center">
                 <p class="b-rt-0 b-m-0">Total for {{ campaign.charity.name }}:</p>
                 <p class="b-rt-1 b-bold b-m-0">{{ expectedTotalAmount() | exactCurrency }}</p>
-              </div>
-              <div *ngIf="expectedTbgAmount() > 0" class="c-receipt-total b-grey" fxLayout="row" fxLayoutAlign="space-around center">
-                <p class="b-rt-0 b-m-0">Total for the Big Give:</p>
-                <p class="b-rt-1 b-bold b-m-0">{{ expectedTbgAmount() | exactCurrency }}</p>
               </div>
             </div>
           </mat-step>
