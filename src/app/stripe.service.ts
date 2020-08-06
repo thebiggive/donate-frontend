@@ -88,7 +88,7 @@ export class StripeService {
       style: {
         base: {
           fontFamily: 'Maven Pro, sans-serif',
-          fontSize: '24px',
+          fontSize: '14px',
         },
       },
     });
