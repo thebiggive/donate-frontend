@@ -700,15 +700,33 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   }
 
   /**
-   * Thunk returning a fn which can handle a dialog true/false response and continue/cancel `donation` accordingly.
+   * Thunk returning a fn which can handle a dialog true/false response and
+   * continue/cancel `donation` accordingly.
+   *
+   * May be invoked:
+   * (a) when loading the form having found a previous donation in
+   *     browser state and confirmed with the API that it is resumable, or
+   * (b) after leaving step 1, having found that match funds will not cover
+   *     the donation fully.
    */
   private getDialogResponseFn(donation: Donation) {
     return (proceed: boolean) => {
       if (proceed) {
-        // Create has already set up the Donation with no/partial matching, and the donor is
-        // already on step 2. So the only thing we need to do is get the donation back in local
-        // state to support the reservation timer & other features.
+        // Required for both use cases.
         this.donation = donation;
+
+
+        // In doc block use case (a), we need to put the amounts from the previous
+        // donation into the form and move to Step 2.
+        this.amountsGroup.patchValue({
+          donationAmount: donation.donationAmount.toString(),
+          tipAmount: donation.tipAmount.toString(),
+        });
+
+        if (this.stepper.selected.label === 'Your donation') {
+          this.stepper.next();
+        }
+
         return;
       }
 
