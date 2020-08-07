@@ -1,5 +1,5 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
@@ -31,7 +31,7 @@ import { ValidateCurrencyMin } from '../validators/currency-min';
   templateUrl: './donation-start.component.html',
   styleUrls: ['./donation-start.component.scss'],
 })
-export class DonationStartComponent implements OnDestroy, OnInit {
+export class DonationStartComponent implements AfterContentChecked, OnDestroy, OnInit {
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
   card: any;
@@ -63,6 +63,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   private campaignId: string;
   private enthuseError?: string;  // Enthuse donation start error message
   private previousDonation?: Donation;
+  private stepHeaderEventsSet = false;
 
   // Based on https://stackoverflow.com/questions/164979/regex-for-matching-uk-postcodes#comment82517277_164994
   // but modified to make the separating space optional.
@@ -199,6 +200,45 @@ export class DonationStartComponent implements OnDestroy, OnInit {
         // We have a resumable donation and aren't processing an error
         this.offerExistingDonation(existingDonation);
     });
+  }
+
+  ngAfterContentChecked() {
+    // Because the Stepper header elements are built by Angular from the `mat-step` elements,
+    // there is no nice 'Angular way' to listen for click events on them, which we need to do
+    // to clearly surface errors by scrolling to them when donors click Step headings to navigate
+    // rather than Next buttons. So to handle this appropriately we need to listen for clicks
+    // via the native elements.
+
+    // We set this up here as a one-shot thing but in a lifecycle hook because `campaign` is not
+    // guaranteed set on initial load, and the view is also not guaranteed to update with a
+    // rendered #stepper by the time we are the end of `handleCampaign()` or similar.
+
+    const stepper = this.elRef.nativeElement.querySelector('#stepper');
+
+    // Can't do it, or already did it.
+    if (!this.stepper || this.stepHeaderEventsSet) {
+      return;
+    }
+
+    const stepperHeaders = stepper.getElementsByClassName('mat-step-header');
+    let stepIndex = 0;
+    for (const stepperHeader of stepperHeaders) {
+      stepperHeader.addEventListener('click', (clickEvent: any) => {
+        if (clickEvent.target.innerText.includes('Your details') && this.stepper.selected.label === 'Gift Aid') {
+          this.triedToLeaveGiftAid = true;
+        }
+
+        if (clickEvent.target.innerText.includes('Confirm & pay') && this.stepper.selected.label === 'Your details') {
+          this.triedToLeavePersonalAndMarketing = true;
+        }
+
+        this.goToFirstVisibleError();
+      });
+
+      stepIndex++;
+    }
+
+    this.stepHeaderEventsSet = true;
   }
 
   async stepChanged(event: StepperSelectionEvent) {
@@ -423,22 +463,31 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   }
 
   next() {
+    if (!this.goToFirstVisibleError()) {
+      this.stepper.next();
+    }
+  }
+
+  /**
+   * @returns whether any errors were found in the visible viewport.
+   */
+  private goToFirstVisibleError(): boolean {
     const stepper = this.elRef.nativeElement.querySelector('#stepper');
     const steps = stepper.getElementsByClassName('mat-step');
     const stepJustDone = steps[this.stepper.selectedIndex];
     const firstElInStepWithAngularError = stepJustDone.querySelector('.ng-invalid[formControlName]');
     if (firstElInStepWithAngularError) {
       this.scrollTo(firstElInStepWithAngularError);
-      return;
+      return true;
     }
 
     const firstCustomError = document.querySelector('.error');
     if (firstCustomError) {
       this.scrollTo(firstCustomError);
-      return;
+      return true;
     }
 
-    this.stepper.next();
+    return false;
   }
 
   /**
