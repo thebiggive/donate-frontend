@@ -25,6 +25,7 @@
           linear
           #stepper
           (selectionChange)="stepChanged($event)"
+          [@.disabled]
         >
           <mat-step
             formGroupName="amounts"

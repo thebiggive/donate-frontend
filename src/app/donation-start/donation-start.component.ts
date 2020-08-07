@@ -204,9 +204,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   async stepChanged(event: StepperSelectionEvent) {
     const activeStepLabel = document.querySelector('.mat-step-label-active');
     if (activeStepLabel) {
-      setTimeout(() => {
         activeStepLabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 150);
     }
 
     if (event.previouslySelectedStep.label === 'Your donation') {
