@@ -730,21 +730,18 @@ export class DonationStartComponent implements OnDestroy, OnInit {
         return;
       }
 
-      // Else cancel the existing donation, remove our local record and return to step 1,
-      // clearing amounts to encourage smaller donations in the partial match case.
+      // Else cancel the existing donation and remove our local record.
       this.donationService.cancel(donation)
         .subscribe(
           () => {
             this.analyticsService.logEvent('cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
             this.donationService.removeLocalDonation(donation);
-            this.stepper.reset(); // Clear form and return to step 1.
           },
           response => {
             this.analyticsService.logError(
               'cancel_failed',
               `Could not cancel donation ${donation.donationId} to campaign ${this.campaignId}: ${response.error.error}`,
             );
-            this.stepper.reset(); // Clear and return to start even if the first attempt is 'stuck'.
           },
         );
     };
