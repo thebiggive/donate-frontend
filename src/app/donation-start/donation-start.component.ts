@@ -1,5 +1,5 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
@@ -31,7 +31,6 @@ import { ValidateCurrencyMin } from '../validators/currency-min';
   templateUrl: './donation-start.component.html',
   styleUrls: ['./donation-start.component.scss'],
 })
-
 export class DonationStartComponent implements OnDestroy, OnInit {
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
@@ -76,6 +75,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     private charityCheckoutService: CharityCheckoutService,
     public dialog: MatDialog,
     private donationService: DonationService,
+    @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
     private pageMeta: PageMetaService,
     private route: ActivatedRoute,
@@ -202,6 +202,13 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   }
 
   async stepChanged(event: StepperSelectionEvent) {
+    const activeStepLabel = document.querySelector('.mat-step-label-active');
+    if (activeStepLabel) {
+      setTimeout(() => {
+        activeStepLabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 150);
+    }
+
     if (event.previouslySelectedStep.label === 'Your donation') {
       this.createDonation();
 
@@ -413,17 +420,23 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     }
   }
 
-  scrollToErrors() {
-    const firstElWithAngularError = document.querySelector('.ng-invalid[formControlName]');
-    if (firstElWithAngularError) {
-      this.scrollTo(firstElWithAngularError);
+  next() {
+    const stepper = this.elRef.nativeElement.querySelector('#stepper');
+    const steps = stepper.getElementsByClassName('mat-step');
+    const stepJustDone = steps[this.stepper.selectedIndex];
+    const firstElInStepWithAngularError = stepJustDone.querySelector('.ng-invalid[formControlName]');
+    if (firstElInStepWithAngularError) {
+      this.scrollTo(firstElInStepWithAngularError);
       return;
     }
 
     const firstCustomError = document.querySelector('.error');
     if (firstCustomError) {
       this.scrollTo(firstCustomError);
+      return;
     }
+
+    this.stepper.next();
   }
 
   /**
@@ -714,7 +727,6 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       if (proceed) {
         // Required for both use cases.
         this.donation = donation;
-
 
         // In doc block use case (a), we need to put the amounts from the previous
         // donation into the form and move to Step 2.

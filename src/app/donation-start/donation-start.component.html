@@ -21,6 +21,7 @@
 
       <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaign && campaignIsOpen()">
         <mat-vertical-stepper
+          id="stepper"
           linear
           #stepper
           (selectionChange)="stepChanged($event)"
@@ -96,10 +97,9 @@
             <div>
               <button
                 type="button"
-                matStepperNext
                 mat-raised-button
                 color="primary"
-                (click)="scrollToErrors()"
+                (click)="next()"
               >Next</button>
             </div>
           </mat-step>
@@ -142,10 +142,9 @@
             <div>
               <button
                 type="button"
-                matStepperNext
                 mat-raised-button
                 color="primary"
-                (click)="triedToLeaveGiftAid = true; scrollToErrors()"
+                (click)="triedToLeaveGiftAid = true; next()"
               >Next</button>
             </div>
           </mat-step>
@@ -209,10 +208,9 @@
             <div>
               <button
                 type="button"
-                matStepperNext
                 mat-raised-button
                 color="primary"
-                (click)="triedToLeavePersonalAndMarketing = true; scrollToErrors()"
+                (click)="triedToLeavePersonalAndMarketing = true; next()"
               >Next</button>
             </div>
           </mat-step>
