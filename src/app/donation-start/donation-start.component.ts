@@ -365,7 +365,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
    * Quick getter for donation amount, to keep template use concise.
    */
   get donationAmount(): number {
-    return Number((this.amountsGroup.value.donationAmount || '0').replace('£', ''));
+    return this.sanitiseCurrency(this.amountsGroup.value.donationAmount);
   }
 
   get donationAndTipAmount(): number {
@@ -385,7 +385,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
   }
 
   tipAmount(): number {
-    return Number((this.amountsGroup.value.tipAmount || '0').replace('£', ''));
+    return this.sanitiseCurrency(this.amountsGroup.value.tipAmount);
   }
 
   expectedTotalAmount(): number {
@@ -410,6 +410,10 @@ export class DonationStartComponent implements OnDestroy, OnInit {
     }
 
     return new Date(environment.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
+  }
+
+  sanitiseCurrency(amount: string): number {
+    return Number((amount || '0').replace('£', ''));
   }
 
   scrollTo(el: Element): void {
@@ -501,14 +505,13 @@ export class DonationStartComponent implements OnDestroy, OnInit {
       charityName: this.campaign.charity.name,
       countryCode: 'GB',
       // Strip '£' if entered
-      donationAmount: (this.amountsGroup.value.donationAmount || '0').replace('£', ''),
+      donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
       donationMatched: this.campaign.isMatched,
-      giftAid: this.giftAidGroup.value.giftAid,
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
       projectId: this.campaignId,
       psp: this.psp,
-      tipAmount: this.amountsGroup.value.tipAmount,
+      tipAmount: this.sanitiseCurrency(this.amountsGroup.value.tipAmount),
     };
 
     // No re-tries for create() where donors have only entered amounts. If the
