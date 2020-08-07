@@ -128,9 +128,13 @@ export class DonationService {
   }
 
   saveDonation(donation: Donation, jwt: string) {
-    // Salesforce doesn't add this until after the async persist so we need to set it locally in order to later determine
-    // which donations are new and eligible for reuse.
-    donation.createdTime = (new Date()).toISOString();
+    // Salesforce doesn't add this until after the async persist so we need to set it
+    // locally in order to later determine which donations are new and eligible for reuse.
+    // Note that updates call this too so this must check for existing values and not
+    // replace them with now.
+    if (!donation.createdTime) {
+      donation.createdTime = (new Date()).toISOString();
+    }
 
     const donationCouplets = this.getDonationCouplets();
     donationCouplets.push({ donation, jwt });
