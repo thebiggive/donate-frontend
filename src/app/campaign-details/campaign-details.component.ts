@@ -3,6 +3,7 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core
 import { DomSanitizer, makeStateKey, SafeResourceUrl, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 
+import { AnalyticsService } from '../analytics.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { ImageService } from '../image.service';
@@ -26,6 +27,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   private timer: any; // State update setTimeout reference, for client side when donations open soon
 
   constructor(
+    private analyticsService: AnalyticsService,
     private campaignService: CampaignService,
     private pageMeta: PageMetaService,
     private imageService: ImageService,
@@ -101,5 +103,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     } else if (campaign.video && campaign.video.provider === 'vimeo') {
       this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://player.vimeo.com/video/${campaign.video.key}`);
     }
+
+    this.analyticsService.logCampaignProductImpression(campaign);
   }
 }
