@@ -239,6 +239,36 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   async stepChanged(event: StepperSelectionEvent) {
+    // Stepper is 0-indexed and checkout steps are 1-indexed, so we can send the new
+    // stepper index to indicate that the previous step was done.
+    // We can only do this here from step 2 because we need the donation object
+    // first, and it is set up asynchronously after Step 1. See `Donation.Service.create()`
+    // success subscriber for where we handle the post-Step 1 event.
+    if (this.donation && event.selectedIndex > 1) {
+      // After create(), update all Angular form data except billing postcode
+      // (which is in the final step) on step changes.
+      this.donation.emailAddress = this.personalAndMarketingGroup.value.emailAddress;
+      this.donation.firstName = this.personalAndMarketingGroup.value.firstName;
+      this.donation.giftAid = this.giftAidGroup.value.giftAid;
+      this.donation.tipGiftAid = this.giftAidGroup.value.giftAid;
+      this.donation.lastName = this.personalAndMarketingGroup.value.lastName;
+      this.donation.optInCharityEmail = this.personalAndMarketingGroup.value.optInCharityEmail;
+      this.donation.optInTbgEmail = this.personalAndMarketingGroup.value.optInTbgEmail;
+
+      if (this.donation.giftAid || this.donation.tipGiftAid) {
+        this.donation.homePostcode = this.giftAidGroup.value.homePostcode;
+        this.donation.homeAddress = this.giftAidGroup.value.homeAddress;
+      } else {
+        this.donation.homePostcode = undefined;
+        this.donation.homeAddress = undefined;
+      }
+      this.donationService.updateLocalDonation(this.donation);
+
+      if (this.campaign && this.donation.psp === 'stripe') {
+        this.analyticsService.logCheckoutStep(event.selectedIndex, this.campaign, this.donation);
+      }
+    }
+
     const activeStepLabel = document.querySelector('.mat-step-label-active');
     if (activeStepLabel) {
         activeStepLabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -295,22 +325,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     this.donation.billingPostalAddress = this.paymentAndAgreementGroup.value.billingPostcode;
-    this.donation.emailAddress = this.personalAndMarketingGroup.value.emailAddress;
-    this.donation.firstName = this.personalAndMarketingGroup.value.firstName;
-    this.donation.giftAid = this.giftAidGroup.value.giftAid;
-    this.donation.tipGiftAid = this.giftAidGroup.value.giftAid;
-    this.donation.lastName = this.personalAndMarketingGroup.value.lastName;
-    this.donation.optInCharityEmail = this.personalAndMarketingGroup.value.optInCharityEmail;
-    this.donation.optInTbgEmail = this.personalAndMarketingGroup.value.optInTbgEmail;
-
-    if (this.donation.giftAid || this.donation.tipGiftAid) {
-      this.donation.homePostcode = this.giftAidGroup.value.homePostcode;
-      this.donation.homeAddress = this.giftAidGroup.value.homeAddress;
-    } else {
-      this.donation.homePostcode = undefined;
-      this.donation.homeAddress = undefined;
-    }
-
     this.donationService.updateLocalDonation(this.donation);
 
     this.donationService
@@ -329,6 +343,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           this.redirectToEnthuse(donation);
           return;
         } else if (donation.psp === 'stripe') {
+          if (this.campaign) {
+            this.analyticsService.logCheckoutStep(4, this.campaign, donation); // 'Pay'.
+          }
           this.payWithStripe();
         }
       }, response => {
@@ -379,6 +396,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         'stripe_card_payment_success',
         `Stripe Intent processing or done for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
       );
+      if (this.campaign) {
+        this.analyticsService.logCheckoutDone(this.campaign, this.donation);
+      }
       this.router.navigate(['thanks', this.donation.donationId], {
         replaceUrl: true,
       });
@@ -500,6 +520,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.noPsps = true;
     }
 
+    this.analyticsService.logCampaignChosen(campaign);
+
     if (!CampaignService.isOpenForDonations(campaign)) {
       this.router.navigateByUrl(`/campaign/${campaign.id}`, { replaceUrl: true });
       return;
@@ -585,6 +607,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
         this.donationService.saveDonation(response.donation, response.jwt);
         this.donation = response.donation; // Simplify update() while we're on this page.
+
+        if (this.campaign && this.psp === 'stripe') {
+          this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
+        }
 
         // Amount reserved for matching is 'false-y', i.e. £0
         if (donation.donationMatched && !response.donation.matchReservedAmount) {

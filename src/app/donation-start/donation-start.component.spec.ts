@@ -22,6 +22,8 @@ import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-
 import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('DonationStartComponent', () => {
+  (window as any).gtag = (...args: any[]) => args;
+
   let component: DonationStartComponent;
   let fixture: ComponentFixture<DonationStartComponent>;
 
