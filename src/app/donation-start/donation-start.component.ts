@@ -274,7 +274,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         activeStepLabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    if (event.previouslySelectedStep.label === 'Your donation') {
+    if (event.previouslySelectedStep.label === 'Your donation' && (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled')) {
       this.createDonation();
 
       if (this.psp === 'stripe') {
