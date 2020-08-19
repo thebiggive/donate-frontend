@@ -821,10 +821,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           () => {
             this.analyticsService.logEvent('cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
             this.donationService.removeLocalDonation(donation);
-            
+
             // Removes match funds reserved timer if present
             delete this.donation;
-            
+
             // Go back to previous step to encourage donor to try again
             this.stepper.previous();
 
