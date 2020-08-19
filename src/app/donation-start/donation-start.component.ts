@@ -821,6 +821,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           () => {
             this.analyticsService.logEvent('cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
             this.donationService.removeLocalDonation(donation);
+            delete this.donation;
+            this.stepper.previous();
+            this.ngOnInit();
           },
           response => {
             this.analyticsService.logError(
