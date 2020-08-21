@@ -269,10 +269,15 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       }
     }
 
-    const activeStepLabel = document.querySelector('.mat-step-label-active');
-    if (activeStepLabel) {
+    // We need to allow enough time for the Stepper's animation to get the window to
+    // its final position for this step, before this scroll position update can be reliably
+    // helpful.
+    setTimeout(() => {
+      const activeStepLabel = document.querySelector('.mat-step-label-active');
+      if (activeStepLabel) {
         activeStepLabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+      }
+    }, 200);
 
     if (event.previouslySelectedStep.label === 'Your donation' && (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled')) {
       this.createDonation();
