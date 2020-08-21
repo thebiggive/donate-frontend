@@ -825,10 +825,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
             // Removes match funds reserved timer if present
             delete this.donation;
 
-            // Go back to previous step to encourage donor to try again
-            this.stepper.previous();
-
-            this.ngOnInit();
+            // Go back to 1st step to encourage donor to try again
+            this.stepper.reset();
           },
           response => {
             this.analyticsService.logError(
