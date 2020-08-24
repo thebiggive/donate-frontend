@@ -568,12 +568,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     this.donationCreateError = false;
 
+    // Strip '£' if entered
+    const sanitisedDonationAmount = this.sanitiseCurrency(this.amountsGroup.value.donationAmount);
+
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
       countryCode: 'GB',
-      // Strip '£' if entered
-      donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
+      donationAmount: sanitisedDonationAmount,
       donationMatched: this.campaign.isMatched,
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
@@ -582,11 +584,15 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       tipAmount: this.sanitiseCurrency(this.amountsGroup.value.tipAmount),
     };
 
-    // No re-tries for create() where donors have only entered amounts. If the
-    // server is having problem it's probably more helpful to fail immediately than
+    // Only create if amount is greater than 0, we check here because
+    // createDonation() is called within an async method.
+    //
+    // No re-tries for create() where donors have only entered amounts.
+    // If the server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
-    this.donationService
+    if (sanitisedDonationAmount > 0) {
+      this.donationService
       .create(donation)
       .subscribe(async (response: DonationCreatedResponse) => {
         const createResponseMissingData = (
@@ -635,6 +641,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         this.donationCreateError = true;
         this.stepper.previous(); // Go back to step 1 to surface the internal error.
       });
+    }
   }
 
   private offerExistingDonation(donation: Donation) {
