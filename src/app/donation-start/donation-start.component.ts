@@ -585,59 +585,59 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       tipAmount: this.sanitiseCurrency(this.amountsGroup.value.tipAmount),
     };
 
-    // No re-tries for create() where donors have only entered amounts.
-    // If the server is having problem it's probably more helpful to fail immediately than
+    // No re-tries for create() where donors have only entered amounts. If the
+    // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
     this.donationService
-    .create(donation)
-    .subscribe(async (response: DonationCreatedResponse) => {
-      const createResponseMissingData = (
-        !response.donation.charityId ||
-        !response.donation.donationId ||
-        !response.donation.projectId
-      );
-      if (createResponseMissingData) {
-        this.analyticsService.logError(
-          'donation_create_response_incomplete',
-          `Missing expected response data creating new donation for campaign ${this.campaignId}`,
+      .create(donation)
+      .subscribe(async (response: DonationCreatedResponse) => {
+        const createResponseMissingData = (
+          !response.donation.charityId ||
+          !response.donation.donationId ||
+          !response.donation.projectId
         );
+        if (createResponseMissingData) {
+          this.analyticsService.logError(
+            'donation_create_response_incomplete',
+            `Missing expected response data creating new donation for campaign ${this.campaignId}`,
+          );
+          this.donationCreateError = true;
+          this.stepper.previous(); // Go back to step 1 to surface the internal error.
+
+          return;
+        }
+
+        this.donationService.saveDonation(response.donation, response.jwt);
+        this.donation = response.donation; // Simplify update() while we're on this page.
+
+        if (this.campaign && this.psp === 'stripe') {
+          this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
+        }
+
+        // Amount reserved for matching is 'false-y', i.e. £0
+        if (donation.donationMatched && !response.donation.matchReservedAmount) {
+          this.promptToContinueWithNoMatchingLeft(response.donation);
+          return;
+        }
+
+        // Amount reserved for matching is >£0 but less than the full donation
+        if (donation.donationMatched && response.donation.matchReservedAmount < donation.donationAmount) {
+          this.promptToContinueWithPartialMatching(response.donation);
+          return;
+        }
+      }, response => {
+        let errorMessage: string;
+        if (response.message) {
+          errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.message}`;
+        } else {
+          // Unhandled 5xx crashes etc.
+          errorMessage = `Could not create new donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
+        }
+        this.analyticsService.logError('donation_create_failed', errorMessage);
         this.donationCreateError = true;
         this.stepper.previous(); // Go back to step 1 to surface the internal error.
-
-        return;
-      }
-
-      this.donationService.saveDonation(response.donation, response.jwt);
-      this.donation = response.donation; // Simplify update() while we're on this page.
-
-      if (this.campaign && this.psp === 'stripe') {
-        this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
-      }
-
-      // Amount reserved for matching is 'false-y', i.e. £0
-      if (donation.donationMatched && !response.donation.matchReservedAmount) {
-        this.promptToContinueWithNoMatchingLeft(response.donation);
-        return;
-      }
-
-      // Amount reserved for matching is >£0 but less than the full donation
-      if (donation.donationMatched && response.donation.matchReservedAmount < donation.donationAmount) {
-        this.promptToContinueWithPartialMatching(response.donation);
-        return;
-      }
-    }, response => {
-      let errorMessage: string;
-      if (response.message) {
-        errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.message}`;
-      } else {
-        // Unhandled 5xx crashes etc.
-        errorMessage = `Could not create new donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
-      }
-      this.analyticsService.logError('donation_create_failed', errorMessage);
-      this.donationCreateError = true;
-      this.stepper.previous(); // Go back to step 1 to surface the internal error.
-    });
+      });
   }
 
   private offerExistingDonation(donation: Donation) {
