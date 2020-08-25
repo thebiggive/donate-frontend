@@ -239,6 +239,16 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   async stepChanged(event: StepperSelectionEvent) {
+
+    // If the original donation amount was updated, cancel that donation.
+    if (this.donation !== undefined && this.donationAmount !== this.donation.donationAmount) {
+      this.analyticsService.logEvent(
+        'cancel_auto',
+        `Donation cancelled because amount was updated ${this.donation.donationId} to campaign ${this.campaignId}`,
+      );
+      this.donationService.cancel(this.donation).subscribe(() => this.donationService.removeLocalDonation(this.donation));
+    }
+
     // Stepper is 0-indexed and checkout steps are 1-indexed, so we can send the new
     // stepper index to indicate that the previous step was done.
     // We can only do this here from step 2 because we need the donation object
@@ -284,10 +294,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     const activelySelectedNext = (event.previouslySelectedStep.label === 'Your donation'
                                   && event.previouslySelectedStep.interacted === true);
 
-
-    // Only create donation if user actively clicks 'next' from first step, and previous donation is invalid.
+    // Proceed if user actively clicks 'next' from first step, and previous donation is invalid.
     if (activelySelectedNext && (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled')) {
-      this.createDonation();
+
+      // Create donation if one hasn't been defined yet or
+      // if the original donation amount was updated.
+      if (this.donation === undefined || (this.donation && this.donationAmount !== this.donation.donationAmount)) {
+        this.createDonation();
+      }
 
       if (this.psp === 'stripe') {
         this.card = await this.stripeService.getCard();
