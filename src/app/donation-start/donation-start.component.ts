@@ -240,7 +240,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
   async stepChanged(event: StepperSelectionEvent) {
 
-    // If the original donation amount was updated, cancel that donation.
+    // If the original donation amount was updated, cancel that donation,
+    // we'll create a new one later on for this updated amount.
     if (this.donation !== undefined && this.donationAmount !== this.donation.donationAmount) {
       this.analyticsService.logEvent(
         'cancel_auto',
