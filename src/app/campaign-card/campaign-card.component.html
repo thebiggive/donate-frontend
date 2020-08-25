@@ -43,11 +43,18 @@
       <mat-icon class="c-buttons__more-icon" aria-hidden="true">add</mat-icon>
     </button>
     <button
+      *ngIf="!isFinished"
       mat-raised-button
       class="b-donate-button"
       [routerLink]="'/donate/' + campaign.id"
     >
       Donate
     </button>
+    <span *ngIf="isFinished" class="c-buttons__past">
+      <mat-icon aria-hidden="false" aria-label="Past campaign">history</mat-icon>
+      <span class="c-buttons__past-text">
+        Closed {{ campaign.endDate | date : 'longDate' }}
+      </span>
+    </span>
   </div>
 </div>
