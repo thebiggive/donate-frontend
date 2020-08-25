@@ -66,19 +66,7 @@
 }
 
 .c-grid {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 100%;
-  gap: 15px;
-  row-gap: 15px;
-  @media #{$breakpoint-md} {
-    grid-template-columns: calc((100% - 15px)/2) calc((100% - 15px)/2);
-  }
-  @media #{$breakpoint-lg} {
-    grid-template-columns: calc((100% - 60px)/3) calc((100% - 60px)/3) calc((100% - 60px)/3);
-    gap: 30px;
-    row-gap: 30px;
-  }
+  @include campaign-grid;
 }
 
 .error {

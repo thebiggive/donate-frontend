@@ -10,7 +10,7 @@ import { environment } from '../environments/environment';
   providedIn: 'root',
 })
 export class CampaignService {
-  private apiPath = '/campaigns/services/apexrest/v1.0/campaigns';
+  private apiPath = '/campaigns/services/apexrest/v1.0';
 
   constructor(
     private http: HttpClient,
@@ -42,6 +42,10 @@ export class CampaignService {
     }
 
     return 100 * campaign.amountRaised / campaign.target;
+  }
+
+  getForCharity(charityId: string): Observable<CampaignSummary[]> {
+    return this.http.get<CampaignSummary[]>(`${environment.apiUriPrefix}${this.apiPath}/charities/${charityId}/campaigns`);
   }
 
   search(searchQuery: SearchQuery): Observable<CampaignSummary[]> {
@@ -95,15 +99,15 @@ export class CampaignService {
       params = params.append('term', searchQuery.term);
     }
 
-    return this.http.get<CampaignSummary[]>(`${environment.apiUriPrefix}${this.apiPath}`, { params });
+    return this.http.get<CampaignSummary[]>(`${environment.apiUriPrefix}${this.apiPath}/campaigns`, { params });
   }
 
   getOneById(campaignId: string): Observable<Campaign> {
-    return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/${campaignId}`);
+    return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/${campaignId}`);
   }
 
   getOneBySlug(campaignSlug: string): Observable<Campaign> {
-    return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/slug/${campaignSlug}`);
+    return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`);
   }
 }
 
