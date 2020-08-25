@@ -242,7 +242,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     // If the original donation amount was updated, cancel that donation,
     // we'll create a new one later on for this updated amount.
-    if (this.donation !== undefined && this.donationAmount !== this.donation.donationAmount) {
+    if (this.donation !== undefined && this.donationAmount > 0 && this.donationAmount !== this.donation.donationAmount) {
       this.analyticsService.logEvent(
         'cancel_auto',
         `Donation cancelled because amount was updated ${this.donation.donationId} to campaign ${this.campaignId}`,
@@ -295,13 +295,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     const activelySelectedNext = (event.previouslySelectedStep.label === 'Your donation'
                                   && event.previouslySelectedStep.interacted === true);
 
+    const invalidDonation = (this.donation === undefined || this.donation.status === 'Cancelled');
+
+    const invalidPreviousDonation = (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled');
+
     // Create a donation if user actively clicks 'next' from first step and
     // it's a new donation or previous donation was cancelled and
     // previous donation is invalid.
-    if (activelySelectedNext &&
-        (this.donation === undefined || this.donation.status === 'Cancelled') &&
-        (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled')
-    ) {
+    if (activelySelectedNext && invalidDonation && invalidPreviousDonation) {
 
       this.createDonation();
 
