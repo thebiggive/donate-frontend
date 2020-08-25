@@ -28,6 +28,7 @@ import { CampaignCardComponent } from './campaign-card/campaign-card.component';
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
 import { CampaignDetailsCardComponent } from './campaign-details-card/campaign-details-card.component';
 import { CampaignSearchFormComponent } from './campaign-search-form/campaign-search-form.component';
+import { CharityComponent } from './charity/charity.component';
 import { TBG_DONATE_STORAGE } from './donation.service';
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
@@ -52,6 +53,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     CampaignDetailsComponent,
     CampaignDetailsCardComponent,
     CampaignSearchFormComponent,
+    CharityComponent,
     DonationCompleteComponent,
     DonationStartComponent,
     DonationStartErrorDialogComponent,
