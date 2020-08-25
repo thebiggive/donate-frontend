@@ -274,10 +274,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         activeStepLabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // Only create donation if step index is greater than 0, and previous donation is invalid.
-    // There are situations when `stepper.reset()` is called and relying on previous event labels
-    // would trigger `createDonation()` with an empty Donation object.
-    if (event.selectedIndex > 0 && (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled')) {
+    // This ensures `stepper.reset()` evalutes this to false and our usage
+    // with this const helps to prevent `createDonation()` being triggered
+    const activelySelectedNext = (event.previouslySelectedStep.label === 'Your donation'
+                                  && event.previouslySelectedStep.interacted === true);
+
+
+    // Only create donation if user actively clicks 'next', and previous donation is invalid.
+    if (activelySelectedNext && (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled')) {
       this.createDonation();
 
       if (this.psp === 'stripe') {
