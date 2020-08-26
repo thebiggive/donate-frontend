@@ -300,7 +300,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     const activelySelectedNext = (event.previouslySelectedStep.label === 'Your donation'
                                   && event.previouslySelectedStep.interacted === true);
 
-    const invalidDonation = (this.donation === undefined);
+    const invalidDonation = (this.donation === undefined || this.donation.status === 'Cancelled');
 
     const invalidPreviousDonation = (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled');
 
