@@ -247,7 +247,12 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         'cancel_auto',
         `Donation cancelled because amount was updated ${this.donation.donationId} to campaign ${this.campaignId}`,
       );
-      this.donationService.cancel(this.donation).subscribe(() => this.donationService.removeLocalDonation(this.donation));
+
+      this.donationService.cancel(this.donation)
+        .subscribe(() => {
+          this.donationService.removeLocalDonation(this.donation);
+          delete this.donation;
+        });
     }
 
     // Stepper is 0-indexed and checkout steps are 1-indexed, so we can send the new
