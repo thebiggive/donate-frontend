@@ -304,8 +304,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     const invalidPreviousDonation = (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled');
 
-    console.log('activelySelectedNext: ' + activelySelectedNext + ' invalidDonation: ' + invalidDonation + ' invalidPreviousDonation: ' + invalidPreviousDonation);
-
     // Create a donation if user actively clicks 'next' from first step and
     // the current and previous donations are invalid.
     if (activelySelectedNext && invalidDonation && invalidPreviousDonation) {
