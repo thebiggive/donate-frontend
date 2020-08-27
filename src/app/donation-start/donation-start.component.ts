@@ -373,6 +373,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       )
       .subscribe(async (donation: Donation) => {
         if (donation.psp === 'enthuse') {
+
+          // Because we're not storing the charity logo in the DB
+          // we set it as a one off for enthuse journey.
+          donation.charityLogo = this.campaign?.charity.logoUri;
+
           this.redirectToEnthuse(donation);
           return;
         } else if (donation.psp === 'stripe') {
