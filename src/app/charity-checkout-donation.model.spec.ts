@@ -9,7 +9,6 @@ describe('CharityCheckoutDonation model', () => {
   it('should translate a donation with all opt-ins but TBG contact true correctly', () => {
     const donation: Donation = {
       charityId: 'someCharityId',
-      charityLogo: 'http://unitTestLogoURL.com',
       charityName: 'My Test Charity',
       createdTime: (new Date()).toISOString(),
       donationAmount: 1234.56,
@@ -24,11 +23,13 @@ describe('CharityCheckoutDonation model', () => {
       psp: 'enthuse',
       tipAmount: 0,
     };
-    const charityCheckoutDonation: CharityCheckoutDonation = new CharityCheckoutDonation(donation);
+
+    const logoUri = 'http://unitTestLogoURL.com';
+    const charityCheckoutDonation: CharityCheckoutDonation = new CharityCheckoutDonation(donation, logoUri);
 
     expect(charityCheckoutDonation.allow_TBG_contact).toBe('0');
     expect(charityCheckoutDonation.charity_id).toBe('someCharityId');
-    expect(charityCheckoutDonation.charity_logo).toBe('http://unitTestLogoURL.com');
+    expect(charityCheckoutDonation.charity_logo).toBe(logoUri);
     expect(charityCheckoutDonation.charity_name).toBe('My Test Charity');
     expect(charityCheckoutDonation.donation_amount).toBe(1234.56);
     expect(charityCheckoutDonation.donation_type).toBe('em1');
@@ -44,7 +45,6 @@ describe('CharityCheckoutDonation model', () => {
     // As above except for zero reserved match funds
     const donation: Donation = {
       charityId: 'someCharityId',
-      charityLogo: 'http://unitTestLogoURL.com',
       charityName: 'My Test Charity',
       donationAmount: 1234.56,
       donationMatched: true,
@@ -58,7 +58,9 @@ describe('CharityCheckoutDonation model', () => {
       psp: 'enthuse',
       tipAmount: 0.00,
     };
-    const charityCheckoutDonation: CharityCheckoutDonation = new CharityCheckoutDonation(donation);
+
+    const logoUri = 'http://unitTestLogoURL.com';
+    const charityCheckoutDonation: CharityCheckoutDonation = new CharityCheckoutDonation(donation, logoUri);
 
     expect(charityCheckoutDonation.donation_type).toBe('em1');
     expect(charityCheckoutDonation.reservation_time).toBeUndefined();
@@ -67,7 +69,6 @@ describe('CharityCheckoutDonation model', () => {
   it('should translate a donation with all opt-ins but TBG contact false correctly', () => {
     const donation: Donation = {
       charityId: 'someOtherCharityId',
-      charityLogo: 'http://unitTestLogoURL.com',
       charityName: 'My Other Test Charity',
       donationAmount: 12,
       donationMatched: false,
@@ -82,11 +83,12 @@ describe('CharityCheckoutDonation model', () => {
       tipAmount: 0.00,
     };
 
-    const charityCheckoutDonation: CharityCheckoutDonation = new CharityCheckoutDonation(donation);
+    const logoUri = 'http://unitTestLogoURL.com';
+    const charityCheckoutDonation: CharityCheckoutDonation = new CharityCheckoutDonation(donation, logoUri);
 
     expect(charityCheckoutDonation.allow_TBG_contact).toBe('1');
     expect(charityCheckoutDonation.charity_id).toBe('someOtherCharityId');
-    expect(charityCheckoutDonation.charity_logo).toBe('http://unitTestLogoURL.com');
+    expect(charityCheckoutDonation.charity_logo).toBe(logoUri);
     expect(charityCheckoutDonation.charity_name).toBe('My Other Test Charity');
     expect(charityCheckoutDonation.donation_amount).toBe(12);
     expect(charityCheckoutDonation.donation_type).toBe('ind1');

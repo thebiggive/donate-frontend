@@ -373,12 +373,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       )
       .subscribe(async (donation: Donation) => {
         if (donation.psp === 'enthuse') {
-
-          // Because we're not storing the charity logo in the DB
-          // we set it as a one off for enthuse journey.
-          donation.charityLogo = this.campaign?.charity.logoUri;
-
-          this.redirectToEnthuse(donation);
+          this.redirectToEnthuse(donation, this.campaign?.charity.logoUri);
           return;
         } else if (donation.psp === 'stripe') {
           if (this.campaign) {
@@ -720,10 +715,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     });
   }
 
-  private redirectToEnthuse(donation: Donation) {
+  private redirectToEnthuse(donation: Donation, logoUri: any) {
     this.analyticsService.logAmountChosen(donation.donationAmount, this.campaignId, this.suggestedAmounts);
     this.analyticsService.logEvent('payment_redirect_click', `Donating to campaign ${this.campaignId}`);
-    this.charityCheckoutService.startDonation(donation);
+    this.charityCheckoutService.startDonation(donation, logoUri);
   }
 
   private promptToContinueWithNoMatchingLeft(donation: Donation) {

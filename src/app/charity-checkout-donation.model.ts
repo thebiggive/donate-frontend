@@ -18,11 +18,11 @@ export class CharityCheckoutDonation {
   public unique_ID: string;
   // tslint:enable:variable-name
 
-  constructor(donation: Donation) {
+  constructor(donation: Donation, logoUri: string) {
     this.allow_TBG_contact = donation.optInTbgEmail ? '1' : '0';
     this.change_donation_url = `${environment.donateUriPrefix}/donate/${donation.projectId}`;
     this.charity_id = donation.charityId;
-    this.charity_logo = donation.charityLogo ? donation.charityLogo : '';
+    this.charity_logo = logoUri ? logoUri : '';
     this.charity_name = donation.charityName ? donation.charityName : '';
     this.donation_amount = donation.donationAmount;
     this.donation_type = donation.donationMatched ? 'em1' : 'ind1'; // Indicates campaign type, event if this donation's not matched
