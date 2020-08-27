@@ -14,6 +14,7 @@ export class Campaign {
       facebook?: string,
       instagram?: string,
       linkedin?: string,
+      logoUri?: string,
       regulatorNumber: string,
       regulatorRegion: string,
       stripeAccountId?: string,
