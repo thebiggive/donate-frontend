@@ -21,7 +21,7 @@ export class CharityCheckoutService {
    * must leave the Angular world and piece together a 'real' form directly on `window`.
    * @link https://stackoverflow.com/a/51987295/2803757
    */
-  startDonation(donation: Donation, logoUri: string) {
+  startDonation(donation: Donation, logoUri?: string) {
     const form = window.document.createElement('form');
     form.setAttribute('method', 'post');
     form.setAttribute('action', environment.psps.enthuse.initUri);

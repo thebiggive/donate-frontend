@@ -715,7 +715,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     });
   }
 
-  private redirectToEnthuse(donation: Donation, logoUri: any) {
+  private redirectToEnthuse(donation: Donation, logoUri?: string) {
     this.analyticsService.logAmountChosen(donation.donationAmount, this.campaignId, this.suggestedAmounts);
     this.analyticsService.logEvent('payment_redirect_click', `Donating to campaign ${this.campaignId}`);
     this.charityCheckoutService.startDonation(donation, logoUri);

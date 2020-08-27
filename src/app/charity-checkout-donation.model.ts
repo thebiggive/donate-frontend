@@ -18,7 +18,7 @@ export class CharityCheckoutDonation {
   public unique_ID: string;
   // tslint:enable:variable-name
 
-  constructor(donation: Donation, logoUri: string) {
+  constructor(donation: Donation, logoUri?: string) {
     this.allow_TBG_contact = donation.optInTbgEmail ? '1' : '0';
     this.change_donation_url = `${environment.donateUriPrefix}/donate/${donation.projectId}`;
     this.charity_id = donation.charityId;
