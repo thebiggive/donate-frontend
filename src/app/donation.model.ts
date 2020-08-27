@@ -49,8 +49,6 @@ export interface Donation {
      */
     clientSecret?: string;
 
-    charityLogo?: string;
-
     charityName?: string;
 
     /**
