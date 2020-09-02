@@ -357,6 +357,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       return;
     }
 
+    this.donation.tipAmount = this.sanitiseCurrency(this.amountsGroup.value.tipAmount);
     this.donation.billingPostalAddress = this.paymentAndAgreementGroup.value.billingPostcode;
     this.donationService.updateLocalDonation(this.donation);
 
