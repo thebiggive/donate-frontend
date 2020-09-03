@@ -270,6 +270,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.donation.lastName = this.personalAndMarketingGroup.value.lastName;
       this.donation.optInCharityEmail = this.personalAndMarketingGroup.value.optInCharityEmail;
       this.donation.optInTbgEmail = this.personalAndMarketingGroup.value.optInTbgEmail;
+      this.donation.tipAmount = this.sanitiseCurrency(this.amountsGroup.value.tipAmount);
 
       if (this.donation.giftAid || this.donation.tipGiftAid) {
         this.donation.homePostcode = this.giftAidGroup.value.homePostcode;
@@ -357,7 +358,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       return;
     }
 
-    this.donation.tipAmount = this.sanitiseCurrency(this.amountsGroup.value.tipAmount);
     this.donation.billingPostalAddress = this.paymentAndAgreementGroup.value.billingPostcode;
     this.donationService.updateLocalDonation(this.donation);
 
