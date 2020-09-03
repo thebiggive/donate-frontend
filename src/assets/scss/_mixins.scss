@@ -159,6 +159,33 @@
   }
 }
 
+@mixin make-match-badge($high: false) {
+  position: relative;
+  @if $high {
+    top: -80px;
+  } @else {
+    top: -19px;
+  }
+  left: -4px;
+  background: $colour-highlight;
+  color: $colour-teal-darkest;
+  font-size: 12px;
+  padding: 0.25rem 0.5rem;
+}
+
+@mixin make-badge-contour($high: false) {
+  position: relative;
+  @if $high {
+    top: -82px;
+  } @else {
+    top: -21px;
+  }
+  left: -5px;
+  width: 5px;
+  height: 5px;
+  background: url(/assets/images/ribbon-back.png)
+}
+
 @mixin campaign-grid {
   width: 100%;
   display: grid;

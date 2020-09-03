@@ -14,22 +14,11 @@
 }
 
 .c-badge {
-  position: relative;
-  left: -4px;
-  top: -15px;
-  background: $colour-highlight;
-  color: $colour-teal-darkest;
-  font-size: 12px;
-  padding: 0.25rem 0.5rem;
+  @include make-match-badge;
 }
 
 .c-contour {
-  position: relative;
-  top: -17px;
-  left: -5px;
-  width: 5px;
-  height: 5px;
-  background: url(/assets/images/ribbon-back.png);
+  @include make-badge-contour;
 }
 
 ul {
