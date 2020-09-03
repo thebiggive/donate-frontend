@@ -10,6 +10,14 @@
   border-top-right-radius: 4px;
 }
 
+.c-badge {
+  @include make-match-badge(true);
+}
+
+.c-contour {
+  @include make-badge-contour(true);
+}
+
 .c-card-body {
   @include make-card-body;
 }
