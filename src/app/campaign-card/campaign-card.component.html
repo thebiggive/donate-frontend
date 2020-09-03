@@ -9,6 +9,13 @@
     >
   </div>
 
+  <div *ngIf="campaign.isMatched">
+    <span class="c-badge">
+      <img src="/assets/images/icon-tick.png" height="11" alt="Check mark"> Match funded
+    </span>
+    <div class="c-contour"></div>
+  </div>
+
   <div class="c-header">
     <h3 class="c-header__charity-name b-grey b-light b-uppercase">{{ campaign.charity.name }}</h3>
     <a class="c-header__link" [routerLink]="'/campaign/' + campaign.id" [queryParams]="inFundContext ? {fromFund: 1} : {}"><h3 class="c-header__campaign-title">{{ campaign.title }}</h3></a>

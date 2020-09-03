@@ -2,15 +2,34 @@
 
 .c-card {
   @include make-card;
-  display:flex;
-  flex-direction:column;
-  height:100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .c-banner__image {
   height: auto;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
+}
+
+.c-badge {
+  position: relative;
+  left: -4px;
+  top: -15px;
+  background: $colour-highlight;
+  color: $colour-teal-darkest;
+  font-size: 12px;
+  padding: 0.25rem 0.5rem;
+}
+
+.c-contour {
+  position: relative;
+  top: -17px;
+  left: -5px;
+  width: 5px;
+  height: 5px;
+  background: url(/assets/images/ribbon-back.png);
 }
 
 ul {
