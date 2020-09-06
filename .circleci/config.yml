@@ -151,7 +151,7 @@ workflows:
             - aws-ecr/build-and-push-image
           aws-region: '${AWS_REGION}'
           family: 'tbg-regression-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
-          cluster-name: 'tbg-regression-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
+          cluster-name: 'tbg-regression-${AWS_REGION}'
           container-image-name-updates: 'container=donate,tag=regression-${CIRCLE_SHA1}'
           post-steps:
             - slack/notify-on-failure: ~
@@ -175,7 +175,7 @@ workflows:
             - aws-ecr/build-and-push-image
           aws-region: '${AWS_REGION}'
           family: 'tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
-          cluster-name: 'tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
+          cluster-name: 'tbg-staging-${AWS_REGION}'
           container-image-name-updates: 'container=donate,tag=staging-${CIRCLE_SHA1}'
           post-steps:
             - jira/notify:
@@ -207,7 +207,7 @@ workflows:
             - aws-ecr/build-and-push-image
           aws-region: '${AWS_REGION}'
           family: 'tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
-          cluster-name: 'tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
+          cluster-name: 'tbg-production-${AWS_REGION}'
           container-image-name-updates: "container=donate,tag=production-${CIRCLE_SHA1}"
           post-steps:
             - jira/notify:
