@@ -12,8 +12,8 @@ export const environment = {
       initUri: 'https://fundraise.charitycheckout.co.uk/api/checkout/init',
     },
     stripe: {
-      enabled: false,
-      publishableKey: 'TODO', // todo
+      enabled: true,
+      publishableKey: 'pk_live_51GxbdTKkGuKkxwBN1KsxsHMC8MrSeooSxBRETK6zoUYZSkKsjSLLryXE3vPIQm5jM6uV1Lsdvr9GoYB1dShkSELQ00xffCRBIi',
     },
   },
   reservationMinutes: 15,
