@@ -94,11 +94,19 @@ export class DonationService {
   }
 
   /**
-   * Cancel donation in Salesforce to free up match funds straight away. Subscribers should `removeLocalDonation()` on success.
+   * Cancel donation in Salesforce to free up match funds straight away.
+   * This is a special case PUT: this method is just a convenience wrapper
+   * to set the new status without other changes.
+   *
+   * Subscribers should `removeLocalDonation()` on success.
    */
   cancel(donation: Donation): Observable<any> {
     donation.status = 'Cancelled';
 
+    return this.update(donation);
+  }
+
+  update(donation: Donation): Observable<any> {
     return this.http.put<any>(
       `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}`,
       donation,
@@ -120,9 +128,13 @@ export class DonationService {
   }
 
   saveDonation(donation: Donation, jwt: string) {
-    // Salesforce doesn't add this until after the async persist so we need to set it locally in order to later determine
-    // which donations are new and eligible for reuse.
-    donation.createdTime = (new Date()).toISOString();
+    // Salesforce doesn't add this until after the async persist so we need to set it
+    // locally in order to later determine which donations are new and eligible for reuse.
+    // Note that updates call this too so this must check for existing values and not
+    // replace them with now.
+    if (!donation.createdTime) {
+      donation.createdTime = (new Date()).toISOString();
+    }
 
     const donationCouplets = this.getDonationCouplets();
     donationCouplets.push({ donation, jwt });

@@ -2,15 +2,24 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
+import { CharityCampaignsResolver } from './charity-campaigns.resolver';
+import { CharityComponent } from './charity/charity.component';
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
-import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { ExploreComponent } from './explore/explore.component';
+import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 
 const routes: Routes = [
   {
     path: 'campaign/:campaignId',
     component: CampaignDetailsComponent,
+  },
+  {
+    path: 'charity/:charityId',
+    component: CharityComponent,
+    resolve: {
+      campaigns: CharityCampaignsResolver,
+    },
   },
   {
     path: 'donate/:campaignId',
@@ -52,6 +61,7 @@ const routes: Routes = [
     onSameUrlNavigation: 'reload', // Allows Explore & home logo links to clear search filters in ExploreComponent
     scrollPositionRestoration: 'enabled',
   })],
+  providers: [CharityCampaignsResolver],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

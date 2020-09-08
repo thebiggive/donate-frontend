@@ -9,6 +9,13 @@
     >
   </div>
 
+  <div *ngIf="campaign.isMatched">
+    <span class="c-badge">
+      <img src="/assets/images/icon-tick.png" height="9" alt="Check mark"> Match funded
+    </span>
+    <div class="c-contour"></div>
+  </div>
+
   <div class="c-card-body">
     <div class="c-campaign-target" *ngIf="campaign.target > 0">
       <h2 class="c-campaign-target__description b-grey b-light">Campaign target</h2>

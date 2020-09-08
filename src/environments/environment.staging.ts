@@ -16,10 +16,11 @@ export const environment = {
       initUri: 'https://fundraise.charitycheckouttest.co.uk/api/checkout/init',
     },
     stripe: {
-      enabled: false,
+      enabled: true,
       publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
+  reservationMinutes: 15,
   // One suggestion set for 30% of donors, no suggestions for the other 70%.
   suggestedAmounts: [
     { weight: 3, values: [50, 200, 500] },

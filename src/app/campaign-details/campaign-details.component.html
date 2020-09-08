@@ -1,4 +1,4 @@
-<mat-spinner *ngIf="!campaign" class="b-full-page" color="accent" diameter="30"></mat-spinner>
+<mat-spinner *ngIf="!campaign" class="b-full-page" color="primary" diameter="30"></mat-spinner>
 
 <main class="b-container" *ngIf="campaign">
   <div class="b-back-button">
@@ -36,7 +36,7 @@
       <mat-card *ngIf="!donateEnabled" class="c-not-open">
         <mat-card-title *ngIf="campaignInFuture">
           <mat-icon aria-hidden="false" aria-label="Future campaign">update</mat-icon>
-          Matching opens soon!
+          Campaign opens soon!
         </mat-card-title>
 
         <mat-card-title *ngIf="!campaignInFuture">
@@ -92,7 +92,7 @@
 
   <div fxLayout="row">
     <div class="c-tabs">
-      <mat-tab-group class="b-mt-2" animationDuration="0ms" color="accent">
+      <mat-tab-group class="b-mt-2" animationDuration="0ms" color="primary">
         <mat-tab label="Campaign overview">
           <ul class="c-quotes" *ngIf="campaign.quotes.length > 0">
             <li *ngFor="let quote of campaign.quotes">

@@ -2,15 +2,23 @@
 
 .c-card {
   @include make-card;
-  display:flex;
-  flex-direction:column;
-  height:100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .c-banner__image {
   height: auto;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
+}
+
+.c-badge {
+  @include make-match-badge;
+}
+
+.c-contour {
+  @include make-badge-contour;
 }
 
 ul {
@@ -103,7 +111,7 @@ ul {
 .c-funds__amount {
   margin-top: 0;
   margin-bottom: 0;
-  font-size:20px;
+  font-size: 20px;
 }
 
 .c-buttons {
@@ -112,22 +120,26 @@ ul {
   display: flex;
   justify-content: space-between;
   align-items:center;
-}
 
-.c-buttons__more,
-.c-buttons__donate {
-  margin: 0;
-  min-width: 85px;
-}
+  &__past {
+    margin-top: 6px;
+  }
 
-.c-buttons__more {
-  font-weight: 400;
-}
+  &__past-text {
+    vertical-align: top;
+  }
 
-.c-buttons__more-icon {
-  line-height: 22px;
-}
+  &__more {
+    font-size: 18px;
+    font-weight: 400;
+  }
 
-.c-buttons__more {
-  font-size:18px;
+  &__more, &__donate {
+    margin: 0;
+    min-width: 85px;
+  }
+
+  &__more-icon {
+    line-height: 22px;
+  }
 }

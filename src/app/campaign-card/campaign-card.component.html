@@ -9,6 +9,13 @@
     >
   </div>
 
+  <div *ngIf="campaign.isMatched">
+    <span class="c-badge">
+      <img src="/assets/images/icon-tick.png" height="9" alt="Check mark"> Match funded
+    </span>
+    <div class="c-contour"></div>
+  </div>
+
   <div class="c-header">
     <h3 class="c-header__charity-name b-grey b-light b-uppercase">{{ campaign.charity.name }}</h3>
     <a class="c-header__link" [routerLink]="'/campaign/' + campaign.id" [queryParams]="inFundContext ? {fromFund: 1} : {}"><h3 class="c-header__campaign-title">{{ campaign.title }}</h3></a>
@@ -34,7 +41,7 @@
   <div class="c-buttons">
     <button
       mat-icon-button
-      color="accent"
+      color="primary"
       class="c-buttons__more"
       [routerLink]="'/campaign/' + campaign.id"
       [queryParams]="inFundContext ? {fromFund: 1} : {}"
@@ -43,11 +50,18 @@
       <mat-icon class="c-buttons__more-icon" aria-hidden="true">add</mat-icon>
     </button>
     <button
+      *ngIf="!isFinished"
       mat-raised-button
       class="b-donate-button"
       [routerLink]="'/donate/' + campaign.id"
     >
       Donate
     </button>
+    <span *ngIf="isFinished" class="c-buttons__past">
+      <mat-icon aria-hidden="false" aria-label="Past campaign">history</mat-icon>
+      <span class="c-buttons__past-text">
+        Closed {{ campaign.endDate | date : 'longDate' }}
+      </span>
+    </span>
   </div>
 </div>

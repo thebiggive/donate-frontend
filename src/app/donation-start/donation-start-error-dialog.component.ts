@@ -6,5 +6,5 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   templateUrl: 'donation-start-error-dialog.html',
 })
 export class DonationStartErrorDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { charityCheckoutError: string }) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { pspError: string }) { }
 }

@@ -6,6 +6,7 @@ export class CharityCheckoutDonation {
   public allow_TBG_contact: string; // Pseudo-boolean '0' or '1'
   public change_donation_url: string;
   public charity_id: string;
+  public charity_logo: string;
   public charity_name: string;
   public donation_amount: number;
   public donation_type: string;
@@ -17,17 +18,21 @@ export class CharityCheckoutDonation {
   public unique_ID: string;
   // tslint:enable:variable-name
 
-  constructor(donation: Donation) {
+  constructor(donation: Donation, logoUri?: string) {
     this.allow_TBG_contact = donation.optInTbgEmail ? '1' : '0';
     this.change_donation_url = `${environment.donateUriPrefix}/donate/${donation.projectId}`;
     this.charity_id = donation.charityId;
+    this.charity_logo = logoUri ? logoUri : '';
     this.charity_name = donation.charityName ? donation.charityName : '';
     this.donation_amount = donation.donationAmount;
     this.donation_type = donation.donationMatched ? 'em1' : 'ind1'; // Indicates campaign type, event if this donation's not matched
     this.gift_aid = donation.giftAid ? '1' : '0';
     this.project_id = donation.projectId;
     // Triggers a Charity Checkout message about reserved match funds, so only non-null when we actually have some allocated.
-    this.reservation_time = (donation.matchReservedAmount > 0) ? Math.floor(Date.now() / 1000) : undefined;
+    this.reservation_time =
+      (donation.matchReservedAmount > 0 && donation.createdTime)
+        ? Math.floor(new Date(donation.createdTime).getTime() / 1000)
+        : undefined;
     this.thanks_url = `${environment.thanksUriPrefix}${donation.donationId}`;
     this.unique_ID = donation.donationId ? donation.donationId : '';
   }

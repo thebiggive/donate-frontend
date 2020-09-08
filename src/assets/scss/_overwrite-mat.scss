@@ -52,38 +52,6 @@ mat-radio-button {
   }
 }
 
-mat-expansion-panel {
-  margin-bottom: 16px;
-
-  .mat-expansion-panel-header {
-    padding: 0 1rem;
-    @media #{$breakpoint-lg} {
-      padding: 1rem 2rem 0;
-    }
-  }
-
-  .mat-expansion-panel-header {
-    height: auto !important;
-  }
-
-  .mat-expansion-panel-header[aria-disabled=true] {
-    color: inherit;
-  }
-
-  .mat-expansion-indicator::after {
-    color: $colour-teal-darker;
-    border-width: 0 3px 3px 0;
-    padding: 5px;
-  }
-
-  .mat-expansion-panel-body {
-    padding: 0 1rem 1rem;
-    @media #{$breakpoint-lg} {
-      padding: 0 2rem 2rem;
-    }
-  }
-}
-
 mat-toolbar {
   position: sticky;
   position: -webkit-sticky;
