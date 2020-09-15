@@ -159,13 +159,9 @@
   }
 }
 
-@mixin make-match-badge($high: false) {
+@mixin make-match-badge {
   position: relative;
-  @if $high {
-    top: -80px;
-  } @else {
-    top: -19px;
-  }
+  top: -19px;
   left: -4px;
   background: $colour-highlight;
   color: $colour-teal-darkest;
@@ -173,13 +169,9 @@
   padding: 0.25rem 0.5rem;
 }
 
-@mixin make-badge-contour($high: false) {
+@mixin make-badge-contour {
   position: relative;
-  @if $high {
-    top: -82px;
-  } @else {
-    top: -21px;
-  }
+  top: -21px;
   left: -5px;
   width: 5px;
   height: 5px;

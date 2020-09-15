@@ -11,11 +11,11 @@
 }
 
 .c-badge {
-  @include make-match-badge(true);
+  @include make-match-badge;
 }
 
 .c-contour {
-  @include make-badge-contour(true);
+  @include make-badge-contour;
 }
 
 .c-card-body {
