@@ -50,6 +50,7 @@ describe('DonationStartComponent', () => {
           id: '0011r00002HHAprAAH',
           name: 'Awesome Charity',
           donateLinkId: 'SFIdOrLegacyId',
+          optInStatement: 'Opt in statement.',
           regulatorNumber: '123456',
           regulatorRegion: 'Scotland',
           stripeAccountId: campaignId === 'testCampaignIdForStripe' ? 'testStripeAcctId' : undefined,
