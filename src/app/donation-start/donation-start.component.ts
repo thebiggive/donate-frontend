@@ -124,6 +124,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         emailAddress: [null], // See addStripeValidators().
         optInCharityEmail: [null, Validators.required],
         optInTbgEmail: [null, Validators.required],
+        optInChampionEmail: [null],
       }),
       // T&Cs agreement is implicit through submitting the form.
       paymentAndAgreement: this.formBuilder.group({
@@ -270,6 +271,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.donation.lastName = this.personalAndMarketingGroup.value.lastName;
       this.donation.optInCharityEmail = this.personalAndMarketingGroup.value.optInCharityEmail;
       this.donation.optInTbgEmail = this.personalAndMarketingGroup.value.optInTbgEmail;
+      this.donation.optInChampionEmail = this.personalAndMarketingGroup.value.optInChampionEmail;
       this.donation.tipAmount = this.sanitiseCurrency(this.amountsGroup.value.tipAmount);
 
       if (this.donation.giftAid || this.donation.tipGiftAid) {
@@ -553,6 +555,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     } else {
       this.noPsps = true;
     }
+
+    this.setchampionOptInValidity();
 
     this.analyticsService.logCampaignChosen(campaign);
 
@@ -870,5 +874,13 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           },
         );
     };
+  }
+
+  private setchampionOptInValidity() {
+    if (this.campaign?.championOptInStatement !== null) {
+      this.personalAndMarketingGroup.controls.optInChampionEmail.setValidators([
+        Validators.required,
+      ]);
+    }
   }
 }
