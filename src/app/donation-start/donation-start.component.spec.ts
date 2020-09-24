@@ -160,6 +160,7 @@ describe('DonationStartComponent', () => {
         emailAddress: 'test@example.com',
         optInCharityEmail: false,
         optInTbgEmail: true,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: 'N1 1AA',
@@ -189,6 +190,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         optInCharityEmail: null,
         optInTbgEmail: null,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: null,
@@ -229,6 +231,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         optInCharityEmail: true,
         optInTbgEmail: false,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: null,
@@ -263,6 +266,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         optInCharityEmail: true,
         optInTbgEmail: false,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: null,
@@ -297,6 +301,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         optInCharityEmail: false,
         optInTbgEmail: false,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: null,
@@ -331,6 +336,7 @@ describe('DonationStartComponent', () => {
         emailAddress: 'test@example.com',
         optInCharityEmail: true,
         optInTbgEmail: true,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: 'N1 1AA',
@@ -374,6 +380,7 @@ describe('DonationStartComponent', () => {
         emailAddress: 'test@example.com',
         optInCharityEmail: true,
         optInTbgEmail: true,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: null,
@@ -412,6 +419,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         optInCharityEmail: true,
         optInTbgEmail: true,
+        optInChampionEmail: true,
       },
       paymentAndAgreement: {
         billingPostcode: 'N1 1AA',
@@ -450,6 +458,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         optInCharityEmail: true,
         optInTbgEmail: true,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: 'N1 1AA',
