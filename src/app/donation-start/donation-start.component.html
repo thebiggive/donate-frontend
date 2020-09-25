@@ -179,7 +179,8 @@
             <p class="b-rt-1 b-bold" id="optInCharityEmail-label">Would you be happy to receive emails from {{ campaign.charity.name }}?</p>
             <mat-radio-group tabindex="0" aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
               <!-- TODO update this hint to vary based on Gift Aid selection and be clearer -->
-              <mat-hint>{{ campaign.charity.optInStatement }}</mat-hint>
+              <mat-hint *ngIf="campaign.charity.optInStatement">{{ campaign.charity.optInStatement }}</mat-hint>
+              <mat-hint *ngIf="!campaign.charity.optInStatement">This may include thanks for your donation, updates on how it is being used, newsletters and future campaigns. If you select no, we will pass on your details as these may be required for Gift Aid purposes, but the charity will be informed that you do not wish to receive communications.</mat-hint>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.charity.name }}</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.charity.name }}</mat-radio-button>
               <p class="error" *ngIf="triedToLeavePersonalAndMarketing && personalAndMarketingGroup.get('optInCharityEmail')?.hasError('required')" aria-live="assertive">
