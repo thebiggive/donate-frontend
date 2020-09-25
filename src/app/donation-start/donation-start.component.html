@@ -207,7 +207,7 @@
               </mat-hint>
             </p>
             
-            <div *ngIf="campaign.championOptInStatement">
+            <div *ngIf="showChampionOptIn">
               <p class="b-rt-1 b-bold" id="optInChampionEmail-label">Would you be happy to receive emails from {{ campaign.championName }}?</p>
               <mat-radio-group tabindex="0" aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
                 <mat-hint>{{ campaign.championName }} is providing match funding for this charity. Keep up to date with their vital work  {{ campaign.championOptInStatement }}.</mat-hint>

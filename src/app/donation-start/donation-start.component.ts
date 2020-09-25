@@ -37,6 +37,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   card: any;
   cardHandler = this.onStripeCardChange.bind(this);
 
+  showChampionOptIn = false;
+
   campaign?: Campaign;
   donation: Donation;
 
@@ -556,7 +558,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.noPsps = true;
     }
 
-    this.setchampionOptInValidity();
+    if (campaign.championOptInStatement) {
+      this.showChampionOptIn = true;
+    }
+
+    this.setChampionOptInValidity();
 
     this.analyticsService.logCampaignChosen(campaign);
 
@@ -876,8 +882,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     };
   }
 
-  private setchampionOptInValidity() {
-    if (this.campaign?.championOptInStatement !== null) {
+  private setChampionOptInValidity() {
+    if (this.showChampionOptIn) {
       this.personalAndMarketingGroup.controls.optInChampionEmail.setValidators([
         Validators.required,
       ]);
