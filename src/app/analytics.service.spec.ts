@@ -42,7 +42,7 @@ describe('AnalyticsService', () => {
         id: 'sfCharityAsd1',
         name: 'The Test Charity',
         donateLinkId: 'SFIdOrLegacyId',
-        charityOptInStatement: 'Opt in statement.',
+        optInStatement: 'Opt in statement.',
         website: 'https://www.awesomecharity.co.uk',
         regulatorNumber: '123456',
         regulatorRegion: 'Scotland',

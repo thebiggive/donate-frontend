@@ -62,7 +62,7 @@ describe('HeroComponent', () => {
         id: '0011r00002HHAprAAH',
         name: 'Awesome Charity',
         donateLinkId: 'SFIdOrLegacyId',
-        charityOptInStatement: 'Opt in statement.',
+        optInStatement: 'Opt in statement.',
         website: 'https://www.awesomecharity.co.uk',
         regulatorNumber: '123456',
         regulatorRegion: 'Scotland',

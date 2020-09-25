@@ -11,7 +11,7 @@ export class Campaign {
       id: string,
       name: string,
       donateLinkId: string,
-      charityOptInStatement: string,
+      optInStatement: string,
       facebook?: string,
       instagram?: string,
       linkedin?: string,

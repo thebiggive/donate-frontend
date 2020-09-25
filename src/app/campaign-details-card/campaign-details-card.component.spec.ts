@@ -42,7 +42,7 @@ describe('CampaignDetailsCardComponent', () => {
         id: 'testCharityId',
         name: 'Test Charity',
         donateLinkId: 'SFIdOrLegacyId',
-        charityOptInStatement: 'Opt in statement.',
+        optInStatement: 'Opt in statement.',
         website: 'https://www.testcharity.co.uk',
         regulatorNumber: '123456',
         regulatorRegion: 'Scotland',
