@@ -50,6 +50,7 @@ describe('DonationStartComponent', () => {
           id: '0011r00002HHAprAAH',
           name: 'Awesome Charity',
           donateLinkId: 'SFIdOrLegacyId',
+          optInStatement: 'Opt in statement.',
           regulatorNumber: '123456',
           regulatorRegion: 'Scotland',
           stripeAccountId: campaignId === 'testCampaignIdForStripe' ? 'testStripeAcctId' : undefined,
@@ -83,6 +84,7 @@ describe('DonationStartComponent', () => {
         'Some title',
         [],
         'Some information about what happens if funds are not used',
+        undefined,
         undefined,
         undefined,
         undefined,
@@ -158,6 +160,7 @@ describe('DonationStartComponent', () => {
         emailAddress: 'test@example.com',
         optInCharityEmail: false,
         optInTbgEmail: true,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: 'N1 1AA',
@@ -187,6 +190,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         optInCharityEmail: null,
         optInTbgEmail: null,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: null,
@@ -227,6 +231,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         optInCharityEmail: true,
         optInTbgEmail: false,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: null,
@@ -261,6 +266,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         optInCharityEmail: true,
         optInTbgEmail: false,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: null,
@@ -295,6 +301,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         optInCharityEmail: false,
         optInTbgEmail: false,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: null,
@@ -329,6 +336,7 @@ describe('DonationStartComponent', () => {
         emailAddress: 'test@example.com',
         optInCharityEmail: true,
         optInTbgEmail: true,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: 'N1 1AA',
@@ -372,6 +380,7 @@ describe('DonationStartComponent', () => {
         emailAddress: 'test@example.com',
         optInCharityEmail: true,
         optInTbgEmail: true,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: null,
@@ -410,6 +419,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         optInCharityEmail: true,
         optInTbgEmail: true,
+        optInChampionEmail: true,
       },
       paymentAndAgreement: {
         billingPostcode: 'N1 1AA',
@@ -448,6 +458,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         optInCharityEmail: true,
         optInTbgEmail: true,
+        optInChampionEmail: false,
       },
       paymentAndAgreement: {
         billingPostcode: 'N1 1AA',
