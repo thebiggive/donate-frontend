@@ -1,48 +1,87 @@
 <main>
-  <app-hero *ngIf="campaign"
+  <app-hero
+    *ngIf="campaign"
     [campaign]="campaign"
     [fund]="fund"
     [reset]="resetSubject.asObservable()"
-    [description]="(fund && fund.description) ? fund.description : campaign.summary"
+    [description]="
+      fund && fund.description ? fund.description : campaign.summary
+    "
     (heroSearch)="onMetacampaignSearch($event)"
   ></app-hero>
 
-  <div class="b-container" *ngIf="campaign && children">
-    <app-filters
-      *ngIf="campaign.campaignCount && campaign.campaignCount > 1"
-      [hasTerm]="hasTerm"
-      [selectedSort]="selectedSort"
-      [reset]="resetSubject.asObservable()"
-      (filterApplied)="onFilterApplied($event)"
-      (sortApplied)="onSortApplied($event)"
-    ></app-filters>
+  <div *ngIf="campaign && children">
+    <div class="b-container">
+      <app-filters
+        *ngIf="campaign.campaignCount && campaign.campaignCount > 1"
+        [hasTerm]="hasTerm"
+        [selectedSort]="selectedSort"
+        [reset]="resetSubject.asObservable()"
+        (filterApplied)="onFilterApplied($event)"
+        (sortApplied)="onSortApplied($event)"
+      ></app-filters>
 
-    <div *ngIf="campaign && children.length === 0 && !loading && !filterError">
-      <p class="error" aria-live="polite">
-        We can't find any campaigns matching this search but there are lots more to choose from.
-        <a (click)="setDefaultFilters()">View all participating campaigns here</a>.
+      <div
+        *ngIf="campaign && children.length === 0 && !loading && !filterError"
+      >
+        <p class="error" aria-live="polite">
+          We can't find any campaigns matching this search but there are lots
+          more to choose from.
+          <a (click)="setDefaultFilters()"
+            >View all participating campaigns here</a
+          >.
+        </p>
+      </div>
+
+      <div class="c-grid">
+        <div *ngFor="let campaign of children">
+          <app-campaign-card
+            [campaign]="campaign"
+            [inFundContext]="!!fund"
+          ></app-campaign-card>
+        </div>
+      </div>
+
+      <div class="align-center padding-top-s">
+        <button
+          class="b-db b-light align-center"
+          mat-raised-button
+          color="primary"
+          type="submit"
+          (click)="loadMore()"
+        >
+          Load More
+        </button>
+      </div>
+
+      <mat-spinner *ngIf="loading" color="primary" diameter="30"></mat-spinner>
+    </div>
+
+    <div *ngIf="filterError" tabindex="0">
+      <!-- e.g. campaign or fund slug is not recognised -->
+      <p class="error" aria-live="assertive">
+        Could not load the campaign. You might have followed a broken link.<br />
+        Not to worry, you can
+        <a routerLink="/">browse all active campaigns here</a>!
       </p>
     </div>
 
-    <div class="c-grid">
-      <div *ngFor="let campaign of children">
-        <div
-          infiniteScroll
-          (scrolled)="onScroll()"
-          [infiniteScrollDistance]="20"
-          [scrollWindow]="true"
-          [alwaysCallback]="true"
-        ></div>
-        <app-campaign-card [campaign]="campaign" [inFundContext]="!!fund"></app-campaign-card>
+    <div class="b-container">
+      <h1
+        class="b-rh-1 b-bold c-home-hero__heading t-align-center padding-top-m mobile-header"
+      >
+        About {{ campaign.title }}
+      </h1>
+      <div class="t-align-center">
+        <youtube-player
+          videoId="5Q1KVy8lQEc"
+          suggestedQuality="highres"
+          [width]="videoWidth"
+          [height]="videoHeight"
+          [startSeconds]="0"
+        >
+        </youtube-player>
       </div>
     </div>
-
-    <mat-spinner *ngIf="loading" color="primary" diameter="30"></mat-spinner>
-  </div>
-
-  <div *ngIf="filterError" tabindex="0">
-    <!-- e.g. campaign or fund slug is not recognised -->
-    <p class="error" aria-live="assertive">Could not load the campaign. You might have followed a broken link.<br>
-      Not to worry, you can <a routerLink="/">browse all active campaigns here</a>!</p>
   </div>
 </main>
