@@ -95,7 +95,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     MatTabsModule,
     MatToolbarModule,
     ReactiveFormsModule,
-    YouTubePlayerModule
+    YouTubePlayerModule,
   ],
   providers: [
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
