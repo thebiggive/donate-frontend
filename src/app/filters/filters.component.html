@@ -1,7 +1,7 @@
 <div class="c-filters b-w-100">
   <div class="c-filters__fade-out"></div>
   <div class="c-filters__selects">
-    <mat-form-field class="c-filters__form-field">
+    <mat-form-field class="c-filters__form-field" appearance="outline">
       <mat-label>Sort By</mat-label>
       <mat-select [(value)]="selectedSort" (selectionChange)="setSortField($event)">
         <mat-option value="matchFundsRemaining">Match Funds Remaining</mat-option>
@@ -9,32 +9,41 @@
         <mat-option *ngIf="hasTerm" value="">Relevance</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field class="c-filters__form-field">
+    <mat-form-field class="c-filters__form-field" appearance="outline">
       <mat-label>Helping</mat-label>
       <mat-select [(value)]="beneficiarySelected" (selectionChange)="setFilter('beneficiary', $event)">
         <mat-option value="">All</mat-option>
         <mat-option *ngFor="let beneficiary of beneficiaryOptions" [value]="beneficiary">{{ beneficiary }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field class="c-filters__form-field">
+    <mat-form-field class="c-filters__form-field" appearance="outline">
       <mat-label>Category</mat-label>
       <mat-select [(value)]="categorySelected" (selectionChange)="setFilter('category', $event)">
         <mat-option value="">All</mat-option>
         <mat-option *ngFor="let category of categoryOptions" [value]="category">{{ category }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field class="c-filters__form-field">
+    <mat-form-field class="c-filters__form-field" appearance="outline">
       <mat-label>Location</mat-label>
       <mat-select [(value)]="countrySelected" (selectionChange)="setFilter('country', $event)">
         <mat-option value="">All</mat-option>
         <mat-option *ngFor="let country of countryOptions" [value]="country">{{ country }}</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field class="c-filters__form-field">
+    <mat-form-field class="c-filters__form-field" appearance="outline">
       <mat-label>Matching Now?</mat-label>
       <mat-select [(value)]="matchingNowSelected" (selectionChange)="setFilter('onlyMatching', $event)">
         <mat-option [value]="false">All</mat-option>
         <mat-option [value]="true">Match Funds Available</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="!isHomepage" class="c-filters__form-field" appearance="outline">
+      <mat-label># Cards</mat-label>
+      <mat-select [(value)]="numberOfCards" (selectionChange)="setNumberOfCards($event)">
+        <mat-option [value]="6">6</mat-option>
+        <mat-option [value]="12">12</mat-option>
+        <mat-option [value]="18">18</mat-option>
+        <mat-option [value]="24">24</mat-option>
       </mat-select>
     </mat-form-field>
   </div>

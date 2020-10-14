@@ -18,9 +18,11 @@ export type FilterType = keyof typeof FilterEnum;
 export class FiltersComponent implements OnInit, OnDestroy {
   @Input() hasTerm: boolean;
   @Input() reset: Observable<void>;
+  @Input() isHomepage: boolean;
   @Input() @Output() selectedSort: string;
   @Output() filterApplied: EventEmitter<any> = new EventEmitter();
   @Output() sortApplied: EventEmitter<any> = new EventEmitter();
+  @Output() numberOfCardsApplied: EventEmitter<any> = new EventEmitter();
 
   public beneficiaryOptions: string[];
   public categoryOptions: string[];
@@ -30,6 +32,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   public categorySelected = '';
   public countrySelected = '';
   public matchingNowSelected = false;
+  public numberOfCards = 6;
 
   private defaultSort: string;
   private resetSubscription: Subscription;
@@ -345,5 +348,9 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   setSortField(event: { value: string }) {
     this.sortApplied.emit(event.value);
+  }
+
+  setNumberOfCards(event: { value: number }) {
+    this.numberOfCardsApplied.emit(event.value);
   }
 }

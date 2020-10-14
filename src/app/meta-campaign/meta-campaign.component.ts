@@ -141,13 +141,17 @@ export class MetaCampaignComponent implements OnInit {
 
   onFilterApplied(update: { [filterName: string]: string, value: string}) {
     this.query[update.filterName] = update.value as string;
-
     this.run();
   }
 
   onSortApplied(selectedSort: string) {
     this.selectedSort = selectedSort;
     this.handleSortParams();
+    this.run();
+  }
+
+  onNumberOfCardsApplied(selectedNumber: number) {
+    this.query.limit = selectedNumber;
     this.run();
   }
 
