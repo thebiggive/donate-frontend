@@ -56,6 +56,7 @@ describe('CampaignDetailsCardComponent', () => {
       987,
       988,
       'The situation',
+      '',
       [],
       'The solution',
       new Date(),

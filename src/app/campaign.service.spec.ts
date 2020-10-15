@@ -48,6 +48,7 @@ describe('CampaignService', () => {
       987.00,
       988.00,
       'The situation',
+      '',
       [
         {
           quote: 'Some quote',
