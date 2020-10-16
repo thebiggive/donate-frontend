@@ -17,10 +17,12 @@
         [hasTerm]="hasTerm"
         [isHomepage]="false"
         [selectedSort]="selectedSort"
+        [selectedFilters]="query"
         [reset]="resetSubject.asObservable()"
         (filterApplied)="onFilterApplied($event)"
         (sortApplied)="onSortApplied($event)"
         (numberOfCardsApplied)="onNumberOfCardsApplied($event)"
+        (clearFiltersApplied)="onClearFiltersApplied()"
       ></app-filters>
 
       <div

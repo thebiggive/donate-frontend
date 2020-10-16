@@ -1,19 +1,24 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { StorageService } from 'ngx-webstorage-service';
 import { Observable } from 'rxjs';
 
 import { Campaign } from './campaign.model';
 import { CampaignSummary } from './campaign-summary.model';
 import { environment } from '../environments/environment';
 
+export const TBG_FILTERS_STORAGE = new InjectionToken<StorageService>('TBG_FILTERS_STORAGE');
+
 @Injectable({
   providedIn: 'root',
 })
 export class CampaignService {
   private apiPath = '/campaigns/services/apexrest/v1.0';
+  private readonly storageKey = `${environment.donateUriPrefix}/campaignFilters/v2`; // Key is per-domain/env
 
   constructor(
     private http: HttpClient,
+    @Inject(TBG_FILTERS_STORAGE) private storage: StorageService,
   ) {}
 
   static isOpenForDonations(campaign: Campaign): boolean {
@@ -108,6 +113,18 @@ export class CampaignService {
 
   getOneBySlug(campaignSlug: string): Observable<Campaign> {
     return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`);
+  }
+
+  saveFilters(searchQuery?: SearchQuery) {
+    this.storage.set(this.storageKey, searchQuery);
+  }
+
+  getFilters(): SearchQuery {
+    return this.storage.get(this.storageKey);
+  }
+
+  removeFilters() {
+    this.storage.remove(this.storageKey);
   }
 }
 

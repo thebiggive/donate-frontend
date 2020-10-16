@@ -1,6 +1,6 @@
 <div class="c-filters b-w-100">
-  <div class="c-filters__fade-out"></div>
   <div class="c-filters__selects">
+    <div *ngIf="!isHomepage" class="clear-filter" (click)="clearFilters()"></div>
     <mat-form-field class="c-filters__form-field" appearance="outline">
       <mat-label>Sort By</mat-label>
       <mat-select [(value)]="selectedSort" (selectionChange)="setSortField($event)">

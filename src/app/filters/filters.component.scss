@@ -1,7 +1,17 @@
 @import "../../styles";
 
+.clear-filter {
+  background-image: url(/assets/images/clear-filters.png);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  padding-right: 2em;
+  margin-top: 2.5em;
+  margin-right: 1.5em;
+  cursor: pointer;
+}
+
 .mat-form-field {
-  width: 190px;
+  width: 180px;
   padding-top: 1.4375em;
 }
 

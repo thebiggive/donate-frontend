@@ -25,6 +25,7 @@ export class MetaCampaignComponent implements OnInit {
   public hasMore = true;
   public hasTerm = false;
   public loading = false; // Server render gets initial result set; set true when filters change.
+  public query: {[key: string]: any};
   public resetSubject: Subject<void> = new Subject<void>();
   public selectedSort: string;
   public videoWidth: number;
@@ -33,7 +34,6 @@ export class MetaCampaignComponent implements OnInit {
   private campaignId: string;
   private campaignSlug: string;
   private perPage = 6;
-  private query: {[key: string]: any};
 
   constructor(
     private campaignService: CampaignService,
@@ -118,6 +118,7 @@ export class MetaCampaignComponent implements OnInit {
   setDefaultFilters() {
     this.hasTerm = false;
     this.selectedSort = this.getDefaultSort();
+    const localStorageFilters = this.campaignService.getFilters();
 
     this.query = {
       parentCampaignId: this.campaignId,
@@ -128,8 +129,9 @@ export class MetaCampaignComponent implements OnInit {
     };
 
     this.handleSortParams();
+    // Override the filters with the ones saved in local storage, if available.
+    this.overrideFilters(localStorageFilters);
     this.run();
-
     this.resetSubject.next();
   }
 
@@ -158,6 +160,13 @@ export class MetaCampaignComponent implements OnInit {
     this.run();
   }
 
+  onClearFiltersApplied() {
+    this.campaignService.removeFilters();
+    this.setDefaultFilters();
+    this.selectedSort = this.getDefaultSort();
+    this.run();
+  }
+
   onMetacampaignSearch(term: string) {
     // Enable Relevance sort option and apply it if term is non-blank,
     // otherwise remove it and set to match funds remaining.
@@ -167,6 +176,14 @@ export class MetaCampaignComponent implements OnInit {
     this.query.term = term;
     this.handleSortParams();
     this.run();
+  }
+
+  private overrideFilters(filters: SearchQuery) {
+      if (filters !== undefined && filters !== null) {
+        if (Object.keys(filters).length > 0) {
+          this.query = filters;
+        }
+      }
   }
 
   private getDefaultSort(): string {
@@ -195,6 +212,7 @@ export class MetaCampaignComponent implements OnInit {
     this.query.offset = 0;
     this.children = [];
     this.loading = true;
+    this.campaignService.saveFilters(this.query as SearchQuery); // Save to local storage
     this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
       this.children = campaignSummaries; // Success
       this.loading = false;

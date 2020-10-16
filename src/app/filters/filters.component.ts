@@ -23,6 +23,13 @@ export class FiltersComponent implements OnInit, OnDestroy {
   @Output() filterApplied: EventEmitter<any> = new EventEmitter();
   @Output() sortApplied: EventEmitter<any> = new EventEmitter();
   @Output() numberOfCardsApplied: EventEmitter<any> = new EventEmitter();
+  @Output() clearFiltersApplied: EventEmitter<any> = new EventEmitter();
+
+  // Listen for filter changes and set them accordingly.
+  @Input()
+  set selectedFilters(val: {[key: string]: any}) {
+    this.setFilters(val);
+  }
 
   public beneficiaryOptions: string[];
   public categoryOptions: string[];
@@ -352,5 +359,27 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   setNumberOfCards(event: { value: number }) {
     this.numberOfCardsApplied.emit(event.value);
+  }
+
+  clearFilters() {
+    this.clearFiltersApplied.emit();
+  }
+
+  /**
+   * @method setFilters
+   * @desc   set the filter values according to the data stored in local storage, if available.
+   */
+  setFilters(filters: {[key: string]: any}) {
+    this.selectedSort = filters.sortField;
+    this.beneficiarySelected = filters.beneficiary ? filters.beneficiary : '';
+    this.categorySelected = filters.category ? filters.category : '';
+    this.countrySelected = filters.country ? filters.country : '';
+    this.matchingNowSelected = filters.onlyMatching ? filters.onlyMatching : false;
+    this.numberOfCards = filters.limit != null ? filters.limit : '';
+
+    if (filters.term != null) {
+      this.hasTerm = true;
+      this.selectedSort = '';
+    }
   }
 }
