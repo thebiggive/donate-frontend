@@ -8,6 +8,7 @@ import { of } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
+import { TBG_FILTERS_STORAGE } from '../campaign.service';
 import { DonationCompleteComponent } from './donation-complete.component';
 
 describe('DonationCompleteComponent', () => {
@@ -33,6 +34,7 @@ describe('DonationCompleteComponent', () => {
         { provide: ActivatedRoute, useValue: { params: of({donationId: 'myTestDonationId'})}},
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
+        { provide: TBG_FILTERS_STORAGE, useExisting: InMemoryStorageService },
       ],
     });
 

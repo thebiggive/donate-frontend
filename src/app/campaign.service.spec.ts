@@ -1,9 +1,11 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { Campaign } from './campaign.model';
 import { CampaignService } from './campaign.service';
 import { environment } from '../environments/environment';
+import { TBG_FILTERS_STORAGE } from './campaign.service';
 
 describe('CampaignService', () => {
   const getDummyCampaign = () => {
@@ -78,7 +80,11 @@ describe('CampaignService', () => {
 
   beforeEach(() => TestBed.configureTestingModule({
     imports: [ HttpClientTestingModule ],
-    providers: [ CampaignService ],
+    providers: [
+      CampaignService,
+      InMemoryStorageService,
+      { provide: TBG_FILTERS_STORAGE, useExisting: InMemoryStorageService },
+    ],
   }));
 
   it('should retrieve campaign details from API', () => {

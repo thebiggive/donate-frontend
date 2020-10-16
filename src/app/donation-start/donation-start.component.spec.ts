@@ -17,6 +17,7 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { Campaign } from '../campaign.model';
 import { TBG_DONATE_STORAGE } from '../donation.service';
+import { TBG_FILTERS_STORAGE } from '../campaign.service';
 import { DonationStartComponent } from './donation-start.component';
 import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
 import { TimeLeftPipe } from '../time-left.pipe';
@@ -129,6 +130,7 @@ describe('DonationStartComponent', () => {
       providers: [
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
+        { provide: TBG_FILTERS_STORAGE, useExisting: InMemoryStorageService },
       ],
     })
     .compileComponents();

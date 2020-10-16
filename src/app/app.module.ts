@@ -24,6 +24,7 @@ import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { TBG_FILTERS_STORAGE } from './campaign.service';
 import { CampaignCardComponent } from './campaign-card/campaign-card.component';
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
 import { CampaignDetailsCardComponent } from './campaign-details-card/campaign-details-card.component';
@@ -99,6 +100,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
   ],
   providers: [
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
+    { provide: TBG_FILTERS_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
   ],
   bootstrap: [AppComponent],
