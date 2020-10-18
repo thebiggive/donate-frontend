@@ -196,7 +196,7 @@ export class MetaCampaignComponent implements OnInit {
   private setSecondaryProps(campaign: Campaign) {
     this.pageMeta.setCommon(
       campaign.title,
-      campaign.summary,
+      campaign.summary || 'A match funded campaign with the Big Give',
       campaign.bannerUri,
     );
   }
