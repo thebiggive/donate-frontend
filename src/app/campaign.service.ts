@@ -1,13 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { StorageService } from 'ngx-webstorage-service';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Campaign } from './campaign.model';
 import { CampaignSummary } from './campaign-summary.model';
 import { environment } from '../environments/environment';
-
-export const TBG_FILTERS_STORAGE = new InjectionToken<StorageService>('TBG_FILTERS_STORAGE');
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +15,6 @@ export class CampaignService {
 
   constructor(
     private http: HttpClient,
-    @Inject(TBG_FILTERS_STORAGE) private storage: StorageService,
   ) {}
 
   static isOpenForDonations(campaign: Campaign): boolean {
@@ -113,18 +109,6 @@ export class CampaignService {
 
   getOneBySlug(campaignSlug: string): Observable<Campaign> {
     return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`);
-  }
-
-  saveFilters(searchQuery?: SearchQuery) {
-    this.storage.set(this.storageKey, searchQuery);
-  }
-
-  getFilters(): SearchQuery {
-    return this.storage.get(this.storageKey);
-  }
-
-  removeFilters() {
-    this.storage.remove(this.storageKey);
   }
 }
 
