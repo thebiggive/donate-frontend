@@ -7,13 +7,11 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { Campaign } from '../campaign.model';
 import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { TimeLeftPipe } from '../time-left.pipe';
-import { TBG_FILTERS_STORAGE } from '../campaign.service';
 
 describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
@@ -31,10 +29,6 @@ describe('CampaignDetailsComponent', () => {
         MatTabsModule,
         NoopAnimationsModule,
         RouterTestingModule,
-      ],
-      providers: [
-        InMemoryStorageService,
-        { provide: TBG_FILTERS_STORAGE, useExisting: InMemoryStorageService },
       ],
     })
     .compileComponents();

@@ -11,7 +11,6 @@ import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { Campaign } from '../campaign.model';
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
@@ -22,7 +21,6 @@ import { HeroComponent } from '../hero/hero.component';
 import { MetaCampaignComponent } from './meta-campaign.component';
 import { TickerComponent } from './../ticker/ticker.component';
 import { TimeLeftPipe } from '../time-left.pipe';
-import { TBG_FILTERS_STORAGE } from '../campaign.service';
 
 describe('MetaCampaignComponent', () => {
   let component: MetaCampaignComponent;
@@ -52,10 +50,6 @@ describe('MetaCampaignComponent', () => {
         NoopAnimationsModule,
         ReactiveFormsModule,
         RouterTestingModule,
-      ],
-      providers: [
-        InMemoryStorageService,
-        { provide: TBG_FILTERS_STORAGE, useExisting: InMemoryStorageService },
       ],
     })
     .compileComponents();

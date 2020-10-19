@@ -9,13 +9,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
 import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { ExploreComponent } from './explore.component';
 import { FiltersComponent } from '../filters/filters.component';
-import { TBG_FILTERS_STORAGE } from '../campaign.service';
 
 describe('ExploreComponent', () => {
   let component: ExploreComponent;
@@ -45,10 +43,6 @@ describe('ExploreComponent', () => {
             component: ExploreComponent,
           },
         ]),
-      ],
-      providers: [
-        InMemoryStorageService,
-        { provide: TBG_FILTERS_STORAGE, useExisting: InMemoryStorageService },
       ],
     })
     .compileComponents();
