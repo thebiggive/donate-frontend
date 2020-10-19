@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, makeStateKey, StateKey, TransferState, SafeResourceUrl } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
@@ -38,6 +38,7 @@ export class MetaCampaignComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private fundService: FundService,
     private pageMeta: PageMetaService,
+    private router: Router,
     private route: ActivatedRoute,
     private state: TransferState,
   ) {
@@ -64,7 +65,7 @@ export class MetaCampaignComponent implements OnInit {
     }
 
     if (this.campaign) { // app handed over from SSR to client-side JS
-      this.setDefaultFilters();
+      this.setDefaultFilters(true);
       this.setSecondaryProps(this.campaign);
     } else {
       if (this.campaignId) {
@@ -102,10 +103,13 @@ export class MetaCampaignComponent implements OnInit {
     }
   }
 
-  setDefaultFilters() {
+  /**
+   * @method  setDefaultFilters
+   * @param   setQueryParams determine whether to override query with params in the URL
+   */
+  setDefaultFilters(setQueryParams: boolean) {
     this.hasTerm = false;
     this.selectedSort = this.getDefaultSort();
-    const localStorageFilters = this.campaignService.getFilters();
 
     this.query = {
       parentCampaignId: this.campaignId,
@@ -116,8 +120,11 @@ export class MetaCampaignComponent implements OnInit {
     };
 
     this.handleSortParams();
-    // Override the filters with the ones saved in local storage, if available.
-    this.overrideFilters(localStorageFilters);
+
+    if (setQueryParams) {
+      this.setQueryParams();
+    }
+
     this.run();
     this.resetSubject.next();
   }
@@ -133,25 +140,30 @@ export class MetaCampaignComponent implements OnInit {
 
   onFilterApplied(update: { [filterName: string]: string, value: string}) {
     this.query[update.filterName] = update.value as string;
+    this.updateRoute();
     this.run();
   }
 
   onSortApplied(selectedSort: string) {
     this.selectedSort = selectedSort;
     this.handleSortParams();
+    this.updateRoute();
     this.run();
   }
 
   onNumberOfCardsApplied(selectedNumber: number) {
     this.query.limit = selectedNumber;
+    this.updateRoute();
     this.run();
   }
 
   onClearFiltersApplied() {
-    this.campaignService.removeFilters();
-    this.setDefaultFilters();
-    this.selectedSort = this.getDefaultSort();
-    this.run();
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {},
+      replaceUrl: true,
+    });
+    this.setDefaultFilters(false);
   }
 
   onMetacampaignSearch(term: string) {
@@ -163,14 +175,6 @@ export class MetaCampaignComponent implements OnInit {
     this.query.term = term;
     this.handleSortParams();
     this.run();
-  }
-
-  private overrideFilters(filters: SearchQuery) {
-      if (filters !== undefined && filters !== null) {
-        if (Object.keys(filters).length > 0) {
-          this.query = filters;
-        }
-      }
   }
 
   private getDefaultSort(): string {
@@ -199,7 +203,6 @@ export class MetaCampaignComponent implements OnInit {
     this.query.offset = 0;
     this.children = [];
     this.loading = true;
-    this.campaignService.saveFilters(this.query as SearchQuery); // Save to local storage
     this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
       this.children = campaignSummaries; // Success
       this.loading = false;
@@ -216,7 +219,7 @@ export class MetaCampaignComponent implements OnInit {
   private setCampaign(campaign: Campaign, metacampaignKey: StateKey<Campaign>) {
     this.state.set(metacampaignKey, campaign); // Have data ready for client when handing over from SSR
     this.campaign = campaign;
-    this.setDefaultFilters();
+    this.setDefaultFilters(true);
     this.setSecondaryProps(campaign);
   }
 
@@ -232,5 +235,42 @@ export class MetaCampaignComponent implements OnInit {
     } else if (campaign.video && campaign.video.provider === 'vimeo') {
       this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://player.vimeo.com/video/${campaign.video.key}`);
     }
+  }
+
+  /**
+   * Set query params to this.query object, if any are available.
+   */
+  private setQueryParams() {
+    if (window.location.search) {
+      this.route.queryParams.subscribe(params => {
+        for (const key of Object.keys(params)) {
+          if (key === 'onlyMatching') {
+            // convert URL query param string to boolean
+            this.query[key] = (params[key] === 'true');
+          } else {
+            this.query[key] = params[key];
+          }
+        }
+      });
+    }
+  }
+
+  /**
+   * Dynamically update the URL route each time a sort, filter or limit is applied.
+   */
+  private updateRoute() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams:
+      {
+          sortField: this.query.sortField,
+          beneficiary: this.query.beneficiary,
+          category: this.query.category,
+          country: this.query.country,
+          onlyMatching: this.query.onlyMatching,
+          limit: this.query.limit,
+      },
+      replaceUrl: true,
+    });
   }
 }

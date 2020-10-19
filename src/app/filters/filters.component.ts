@@ -375,7 +375,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.categorySelected = filters.category ? filters.category : '';
     this.countrySelected = filters.country ? filters.country : '';
     this.matchingNowSelected = filters.onlyMatching ? filters.onlyMatching : false;
-    this.numberOfCards = filters.limit != null ? filters.limit : '';
+    this.numberOfCards = filters.limit != null ? parseInt(filters.limit, 10) : 0;
 
     if (filters.term != null) {
       this.hasTerm = true;
