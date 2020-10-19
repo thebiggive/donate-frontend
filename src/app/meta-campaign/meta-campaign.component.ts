@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
+import { DomSanitizer, makeStateKey, StateKey, TransferState, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 
@@ -27,8 +27,7 @@ export class MetaCampaignComponent implements OnInit {
   public query: {[key: string]: any};
   public resetSubject: Subject<void> = new Subject<void>();
   public selectedSort: string;
-  public videoWidth: number;
-  public videoHeight: number;
+  public videoEmbedUrl?: SafeResourceUrl;
 
   private campaignId: string;
   private campaignSlug: string;
@@ -36,6 +35,7 @@ export class MetaCampaignComponent implements OnInit {
 
   constructor(
     private campaignService: CampaignService,
+    private sanitizer: DomSanitizer,
     private fundService: FundService,
     private pageMeta: PageMetaService,
     private route: ActivatedRoute,
@@ -226,5 +226,11 @@ export class MetaCampaignComponent implements OnInit {
       campaign.summary,
       campaign.bannerUri,
     );
+    // As per https://angular.io/guide/security#bypass-security-apis constructing `SafeResourceUrl`s with these appends should be safe.
+    if (campaign.video && campaign.video.provider === 'youtube') {
+      this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${campaign.video.key}`);
+    } else if (campaign.video && campaign.video.provider === 'vimeo') {
+      this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://player.vimeo.com/video/${campaign.video.key}`);
+    }
   }
 }
