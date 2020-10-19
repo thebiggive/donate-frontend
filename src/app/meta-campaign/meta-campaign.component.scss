@@ -29,12 +29,19 @@
   padding-top: 4rem;
 }
 
+.padding-top-l {
+  padding-top: 6rem;
+}
+
 .t-align-center {
   text-align: center;
 }
 
-@media only screen and (max-width: 670px) {
-  .mobile-header {
+.meta-sub-heading {
+  color: $colour-teal-dark;
+  font-size: 2rem;
+
+  @media only screen and (max-width: 670px) {
     font-size: 1.5rem;
   }
 }
@@ -43,9 +50,23 @@
   height: 235px;
   padding-top: 1rem;
   @media #{$breakpoint-lg} {
+    width: 800px;
     height: 400px;
   }
   @media #{$breakpoint-xl} {
-    height: 600px;
+    width: 800px;
+    height: 400px;
+  }
+}
+
+.pop-image {
+  @media #{$breakpoint-lg} {
+    background-image: none;
+  }
+  @media #{$breakpoint-xl} {
+    background-image: url(/assets/images/pop.png);
+    background-repeat: no-repeat;
+    background-position: 10% 13%;
+    background-size: 20%;
   }
 }

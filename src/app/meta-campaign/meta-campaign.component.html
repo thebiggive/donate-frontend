@@ -73,15 +73,15 @@
         <a routerLink="/">browse all active campaigns here</a>!
       </p>
     </div>
-    <div *ngIf="videoEmbedUrl && !fundSlug" class="b-container">
-      <h1
-        class="b-rh-1 b-bold c-home-hero__heading t-align-center padding-top-m mobile-header"
+    <div *ngIf="videoEmbedUrl && !fundSlug" class="b-container pop-image">
+      <h3
+        class="meta-sub-heading t-align-center padding-top-l"
       >
         About the {{ campaign.title }}
-      </h1>
+      </h3>
       <div class="c-video">
         <iframe
-          class="c-video__iframe b-w-100"
+          class="c-video__iframe b-w-100 align-center"
           [src]="videoEmbedUrl"
           frameborder="0"
           allow="autoplay; encrypted-media"
