@@ -46,7 +46,6 @@ import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { TickerComponent } from './ticker/ticker.component';
 import { TimeLeftPipe } from './time-left.pipe';
-import { YouTubePlayerModule } from '@angular/youtube-player';
 
 @NgModule({
   declarations: [
@@ -96,7 +95,6 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     MatTabsModule,
     MatToolbarModule,
     ReactiveFormsModule,
-    YouTubePlayerModule,
   ],
   providers: [
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },

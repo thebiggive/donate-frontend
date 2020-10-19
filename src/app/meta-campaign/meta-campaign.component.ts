@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
-import { BreakpointObserver } from '@angular/cdk/layout';
 
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
@@ -38,7 +37,6 @@ export class MetaCampaignComponent implements OnInit {
   constructor(
     private campaignService: CampaignService,
     private fundService: FundService,
-    private observer: BreakpointObserver,
     private pageMeta: PageMetaService,
     private route: ActivatedRoute,
     private state: TransferState,
@@ -82,17 +80,6 @@ export class MetaCampaignComponent implements OnInit {
         this.fund = fund;
       });
     }
-
-    // Actively check for window width and adjust youtube player size accordingly.
-    this.observer.observe('(max-width: 670px)').subscribe(result => {
-      if (result.matches) {
-        this.videoWidth = 350;
-        this.videoHeight = 200;
-      } else {
-        this.videoWidth = 800;
-        this.videoHeight = 450;
-      }
-    });
   }
 
   loadMore() {

@@ -42,7 +42,6 @@ export class Campaign {
     public matchFundsRemaining: number,
     public matchFundsTotal: number,
     public problem: string,
-    public promoVideoId: string,
     public quotes: Array<{person: string, quote: string}>,
     public solution: string,
     public startDate: Date,
