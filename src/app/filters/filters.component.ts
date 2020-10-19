@@ -367,7 +367,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   /**
    * @method setFilters
-   * @desc   set the filter values according to the data stored in local storage, if available.
+   * @desc   set the filter values according to the latest data from parent component
    */
   setFilters(filters: {[key: string]: any}) {
     this.selectedSort = filters.sortField;
