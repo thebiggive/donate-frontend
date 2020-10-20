@@ -11,7 +11,6 @@ import { environment } from '../environments/environment';
 })
 export class CampaignService {
   private apiPath = '/campaigns/services/apexrest/v1.0';
-  private readonly storageKey = `${environment.donateUriPrefix}/campaignFilters/v2`; // Key is per-domain/env
 
   constructor(
     private http: HttpClient,
