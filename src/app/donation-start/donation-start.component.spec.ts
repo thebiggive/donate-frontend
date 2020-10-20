@@ -56,17 +56,6 @@ describe('DonationStartComponent', () => {
           stripeAccountId: campaignId === 'testCampaignIdForStripe' ? 'testStripeAcctId' : undefined,
           website: 'https://www.awesomecharity.co.uk',
         },
-        {
-          charityOptIn: 'Charity opt in',
-          charityOptOut: 'Charity opt out',
-          charityOptOutMessage: 'Charity opt out message',
-          tbgOptIn: 'Tbg opt in',
-          tbgOptOut: 'Tbg opt out',
-          tbgOptOutMessage: 'Tbg opt out message',
-          championOptIn: 'Champion opt in',
-          championOptOut: 'Champion opt out',
-          championOptOutMessage: 'Champion opt out message',
-        },
         4,
         new Date(),
         [
