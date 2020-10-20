@@ -882,6 +882,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         // Required for both use cases.
         this.donation = donation;
 
+        if (!this.expiryWarning && this.donation.matchReservedAmount > 0) {
+          this.scheduleMatchingExpiryWarning(this.donation);
+        }
+
         // In doc block use case (a), we need to put the amounts from the previous
         // donation into the form and move to Step 2.
         this.amountsGroup.patchValue({
