@@ -16,36 +16,6 @@
   margin: 3rem auto 0;
 }
 
-.align-center {
-  display: block;
-  margin: auto;
-}
-
-.padding-top-s {
-  padding-top: 2rem;
-}
-
-.padding-top-m {
-  padding-top: 4rem;
-}
-
-.padding-top-l {
-  padding-top: 6rem;
-}
-
-.t-align-center {
-  text-align: center;
-}
-
-.meta-sub-heading {
-  color: $colour-teal-dark;
-  font-size: 2rem;
-
-  @media only screen and (max-width: 670px) {
-    font-size: 1.5rem;
-  }
-}
-
 .c-video__iframe {
   height: 235px;
   padding-top: 1rem;
@@ -56,17 +26,5 @@
   @media #{$breakpoint-xl} {
     width: 800px;
     height: 400px;
-  }
-}
-
-.pop-image {
-  @media #{$breakpoint-lg} {
-    background-image: none;
-  }
-  @media #{$breakpoint-xl} {
-    background-image: url(/assets/images/pop.png);
-    background-repeat: no-repeat;
-    background-position: 10% 13%;
-    background-size: 20%;
   }
 }

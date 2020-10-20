@@ -37,14 +37,5 @@
         <mat-option [value]="true">Match Funds Available</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field *ngIf="!isHomepage" class="c-filters__form-field" appearance="outline">
-      <mat-label># Cards</mat-label>
-      <mat-select [(value)]="numberOfCards" (selectionChange)="setNumberOfCards($event)">
-        <mat-option [value]="6">6</mat-option>
-        <mat-option [value]="12">12</mat-option>
-        <mat-option [value]="18">18</mat-option>
-        <mat-option [value]="24">24</mat-option>
-      </mat-select>
-    </mat-form-field>
   </div>
 </div>

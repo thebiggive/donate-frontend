@@ -39,23 +39,15 @@
 
       <div class="c-grid">
         <div *ngFor="let campaign of children">
-          <app-campaign-card
-            [campaign]="campaign"
-            [inFundContext]="!!fund"
-          ></app-campaign-card>
+          <div
+            infiniteScroll
+            (scrolled)="onScroll()"
+            [infiniteScrollDistance]="20"
+            [scrollWindow]="true"
+            [alwaysCallback]="true"
+          ></div>
+          <app-campaign-card [campaign]="campaign" [inFundContext]="!!fund"></app-campaign-card>
         </div>
-      </div>
-
-      <div class="align-center padding-top-s">
-        <button
-          class="b-db b-light align-center"
-          mat-raised-button
-          color="primary"
-          type="submit"
-          (click)="loadMore()"
-        >
-          Load More
-        </button>
       </div>
 
       <div *ngIf="!hasMore" class="t-align-center padding-top-s" >
@@ -72,23 +64,6 @@
         Not to worry, you can
         <a routerLink="/">browse all active campaigns here</a>!
       </p>
-    </div>
-    <div *ngIf="videoEmbedUrl && !fundSlug" class="b-container pop-image">
-      <h3
-        class="meta-sub-heading t-align-center padding-top-l"
-      >
-        About the {{ campaign.title }}
-      </h3>
-      <div class="c-video">
-        <iframe
-          class="c-video__iframe b-w-100 align-center"
-          [src]="videoEmbedUrl"
-          frameborder="0"
-          allow="autoplay; encrypted-media"
-          webkitallowfullscreen="ture"
-          mozallowfullscreen="true"
-          allowfullscreen="true"></iframe>
-      </div>
     </div>
   </div>
 </main>

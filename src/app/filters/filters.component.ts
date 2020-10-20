@@ -39,7 +39,6 @@ export class FiltersComponent implements OnInit, OnDestroy {
   public categorySelected = '';
   public countrySelected = '';
   public matchingNowSelected = false;
-  public numberOfCards = 6;
 
   private defaultSort: string;
   private resetSubscription: Subscription;
@@ -357,10 +356,6 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.sortApplied.emit(event.value);
   }
 
-  setNumberOfCards(event: { value: number }) {
-    this.numberOfCardsApplied.emit(event.value);
-  }
-
   clearFilters() {
     this.clearFiltersApplied.emit();
   }
@@ -375,7 +370,6 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.categorySelected = filters.category ? filters.category : '';
     this.countrySelected = filters.country ? filters.country : '';
     this.matchingNowSelected = filters.onlyMatching ? filters.onlyMatching : false;
-    this.numberOfCards = filters.limit != null ? parseInt(filters.limit, 10) : 0;
 
     if (filters.term != null) {
       this.hasTerm = true;
