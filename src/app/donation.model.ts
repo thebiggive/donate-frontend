@@ -31,6 +31,8 @@ export interface Donation {
 
     optInTbgEmail?: boolean;
 
+    optInChampionEmail?: boolean;
+
     /**
      * Unique ID for a CCampaign / project assigned by the Big Give, in Salesforce
      * case-insensitive format. 18 character string.

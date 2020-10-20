@@ -179,7 +179,8 @@
             <p class="b-rt-1 b-bold" id="optInCharityEmail-label">Would you be happy to receive emails from {{ campaign.charity.name }}?</p>
             <mat-radio-group tabindex="0" aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
               <!-- TODO update this hint to vary based on Gift Aid selection and be clearer -->
-              <mat-hint>This may include thanks for your donation, updates on how it is being used, newsletters and future campaigns. If you select no, we will pass on your details as these may be required for Gift Aid purposes, but the charity will be informed that you do not wish to receive communications.</mat-hint>
+              <mat-hint *ngIf="campaign.charity.optInStatement">{{ campaign.charity.optInStatement }}</mat-hint>
+              <mat-hint *ngIf="!campaign.charity.optInStatement">This may include thanks for your donation, updates on how it is being used, newsletters and future campaigns. If you select no, we will pass on your details as these may be required for Gift Aid purposes, but the charity will be informed that you do not wish to receive communications.</mat-hint>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.charity.name }}</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.charity.name }}</mat-radio-button>
               <p class="error" *ngIf="triedToLeavePersonalAndMarketing && personalAndMarketingGroup.get('optInCharityEmail')?.hasError('required')" aria-live="assertive">
@@ -188,7 +189,7 @@
             </mat-radio-group>
             <p *ngIf="personalAndMarketingGroup.value.optInCharityEmail === false">
               <mat-hint aria-live="polite">
-                Please note that you might continue to receive communications from {{ campaign.charity.name }} if you have already shared your details with them via other methods.
+                Please note that you might continue to receive communications from the charity if you have already shared your details with them via other methods.
               </mat-hint>
             </p>
 
@@ -205,6 +206,23 @@
                 By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
               </mat-hint>
             </p>
+            
+            <div *ngIf="showChampionOptIn">
+              <p class="b-rt-1 b-bold" id="optInChampionEmail-label">Would you be happy to receive emails from {{ campaign.championName }}?</p>
+              <mat-radio-group tabindex="0" aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
+                <mat-hint>{{ campaign.championOptInStatement }}.</mat-hint>
+                <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.championName }} </mat-radio-button>
+                <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.championName }} </mat-radio-button>
+                <p class="error" *ngIf="triedToLeavePersonalAndMarketing && personalAndMarketingGroup.get('optInChampionEmail')?.hasError('required')" aria-live="assertive">
+                  Please choose whether you wish to receive updates from {{ campaign.championName }}.
+                </p>
+              </mat-radio-group>
+              <p *ngIf="personalAndMarketingGroup.value.optInChampionEmail === false">
+                <mat-hint aria-live="polite">
+                  Please note that you might continue to receive communications from the champion if you have already shared your details with them via other methods.
+                </mat-hint>
+              </p>
+            </div>
 
             <div>
               <button
