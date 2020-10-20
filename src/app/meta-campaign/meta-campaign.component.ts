@@ -226,7 +226,7 @@ export class MetaCampaignComponent implements OnInit {
   private setSecondaryProps(campaign: Campaign) {
     this.pageMeta.setCommon(
       campaign.title,
-      campaign.summary,
+      campaign.summary || 'A match funded campaign with the Big Give',
       campaign.bannerUri,
     );
     // As per https://angular.io/guide/security#bypass-security-apis constructing `SafeResourceUrl`s with these appends should be safe.
