@@ -672,9 +672,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           return;
         }
 
-        if (this.donation.matchReservedAmount > 0) {
-          this.scheduleMatchingExpiryWarning(this.donation);
-        }
+        this.scheduleMatchingExpiryWarning(this.donation);
       }, response => {
         let errorMessage: string;
         if (response.message) {
@@ -701,7 +699,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private scheduleMatchingExpiryWarning(donation: Donation) {
-    if (!donation.createdTime) {
+    // Only set the timeout when relevant and we don't already have one.
+    if (this.expiryWarning || !donation.createdTime || donation.matchReservedAmount <= 0) {
       return;
     }
 
@@ -882,9 +881,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         // Required for both use cases.
         this.donation = donation;
 
-        if (!this.expiryWarning && this.donation.matchReservedAmount > 0) {
-          this.scheduleMatchingExpiryWarning(this.donation);
-        }
+        this.scheduleMatchingExpiryWarning(this.donation);
 
         // In doc block use case (a), we need to put the amounts from the previous
         // donation into the form and move to Step 2.
