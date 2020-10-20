@@ -34,6 +34,7 @@ import { DonationCompleteComponent } from './donation-complete/donation-complete
 import { DonationStartComponent } from './donation-start/donation-start.component';
 import { DonationStartErrorDialogComponent } from './donation-start/donation-start-error-dialog.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
+import { DonationStartMatchingExpiredDialogComponent } from './donation-start/donation-start-matching-expired-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
 import { ExactCurrencyPipe } from './exact-currency.pipe';
 import { ExploreComponent } from './explore/explore.component';
@@ -58,6 +59,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     DonationStartComponent,
     DonationStartErrorDialogComponent,
     DonationStartMatchConfirmDialogComponent,
+    DonationStartMatchingExpiredDialogComponent,
     DonationStartOfferReuseDialogComponent,
     ExactCurrencyPipe,
     FiltersComponent,
