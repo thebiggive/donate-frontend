@@ -11,6 +11,9 @@ jobs:
   build:
     docker:
       - image: thebiggive/donate-frontend-ci:latest
+        auth:
+          username: $DOCKER_HUB_USERNAME
+          password: $DOCKER_HUB_ACCESS_TOKEN
 
     working_directory: ~/donate
 
@@ -36,6 +39,9 @@ jobs:
       # which is the basis for ECS app builds. Otherwise the two builds will have different output hashes and the
       # dynamic app will reference static files that don't exist.
       - image: circleci/node:12
+        auth:
+          username: $DOCKER_HUB_USERNAME
+          password: $DOCKER_HUB_ACCESS_TOKEN
 
     steps:
       - checkout
@@ -67,6 +73,9 @@ jobs:
       # which is the basis for ECS app builds. Otherwise the two builds will have different output hashes and the
       # dynamic app will reference static files that don't exist.
       - image: circleci/node:12
+        auth:
+          username: $DOCKER_HUB_USERNAME
+          password: $DOCKER_HUB_ACCESS_TOKEN
 
     steps:
       - checkout
@@ -98,6 +107,9 @@ jobs:
       # which is the basis for ECS app builds. Otherwise the two builds will have different output hashes and the
       # dynamic app will reference static files that don't exist.
       - image: circleci/node:12
+        auth:
+          username: $DOCKER_HUB_USERNAME
+          password: $DOCKER_HUB_ACCESS_TOKEN
 
     steps:
       - checkout
@@ -127,6 +139,8 @@ workflows:
   build:
     jobs:
       - build:
+          context:
+            - docker-hub-creds
           post-steps:
             - jira/notify:
                 job_type: build
@@ -139,6 +153,8 @@ workflows:
             branches:
               only:
                 - develop
+          context:
+            - docker-hub-creds
       - aws-ecr/build-and-push-image:
           requires:
             - deploy-regression-static
@@ -163,6 +179,8 @@ workflows:
             branches:
               only:
                 - develop
+          context:
+            - docker-hub-creds
       - aws-ecr/build-and-push-image:
           requires:
             - deploy-staging-static
@@ -195,6 +213,8 @@ workflows:
             branches:
               only:
                 - master
+          context:
+            - docker-hub-creds
       - aws-ecr/build-and-push-image:
           requires:
             - deploy-production-static
