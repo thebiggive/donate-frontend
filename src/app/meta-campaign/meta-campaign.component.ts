@@ -170,6 +170,7 @@ export class MetaCampaignComponent implements OnInit {
 
     this.query.term = term;
     this.handleSortParams();
+    this.updateRoute();
     this.run();
   }
 
@@ -258,6 +259,7 @@ export class MetaCampaignComponent implements OnInit {
           category: this.query.category,
           country: this.query.country,
           onlyMatching: this.query.onlyMatching,
+          term: this.query.term,
       },
       replaceUrl: true,
     });

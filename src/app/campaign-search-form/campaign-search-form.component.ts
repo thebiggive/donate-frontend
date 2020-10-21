@@ -8,11 +8,20 @@ import { Observable, Subscription } from 'rxjs';
   styleUrls: ['./campaign-search-form.component.scss'],
 })
 export class CampaignSearchFormComponent implements OnInit, OnDestroy {
+  public searchTerm: string;
   @ViewChild('term') termField: ElementRef;
   @Input() campaignId: string;
   @Input() reset: Observable<void>;
-  @Output() search: EventEmitter<any> = new EventEmitter();
 
+  // Listen for search term changes and set them accordingly.
+  @Input()
+  set term(val: string) {
+    // We set this to a class var to ensure `FormGroup`
+    // is instantiated before calling `setInputValue()`
+    this.searchTerm = val;
+  }
+
+  @Output() search: EventEmitter<any> = new EventEmitter();
   public searchForm: FormGroup;
 
   private resetSubscription: Subscription;
@@ -31,6 +40,8 @@ export class CampaignSearchFormComponent implements OnInit, OnDestroy {
     this.resetSubscription = this.reset.subscribe(() => {
       this.searchForm.reset();
     });
+
+    this.setInputValue(this.searchTerm);
   }
 
   ngOnDestroy() {
@@ -49,5 +60,11 @@ export class CampaignSearchFormComponent implements OnInit, OnDestroy {
 
     // In all valid cases, including an empty term, update the results.
     this.search.emit(this.searchForm.value.term);
+  }
+
+  setInputValue(val: string) {
+    this.searchForm.setValue({
+      term: val,
+    });
   }
 }
