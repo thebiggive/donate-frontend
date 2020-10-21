@@ -232,18 +232,18 @@ export class MetaCampaignComponent implements OnInit {
    * Set query params to this.query object, if any are available.
    */
   private setQueryParams() {
-    if (window.location.search) {
       this.route.queryParams.subscribe(params => {
-        for (const key of Object.keys(params)) {
-          if (key === 'onlyMatching') {
-            // convert URL query param string to boolean
-            this.query[key] = (params[key] === 'true');
-          } else {
-            this.query[key] = params[key];
+        if (Object.keys(params).length > 0) {
+          for (const key of Object.keys(params)) {
+            if (key === 'onlyMatching') {
+              // convert URL query param string to boolean
+              this.query[key] = (params[key] === 'true');
+            } else {
+              this.query[key] = params[key];
+            }
           }
         }
       });
-    }
   }
 
   /**
