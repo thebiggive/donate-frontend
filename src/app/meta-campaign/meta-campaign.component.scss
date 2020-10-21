@@ -15,16 +15,3 @@
 .mat-spinner {
   margin: 3rem auto 0;
 }
-
-.c-video__iframe {
-  height: 235px;
-  padding-top: 1rem;
-  @media #{$breakpoint-lg} {
-    width: 800px;
-    height: 400px;
-  }
-  @media #{$breakpoint-xl} {
-    width: 800px;
-    height: 400px;
-  }
-}
