@@ -18,7 +18,7 @@ export class CampaignSearchFormComponent implements OnInit, OnDestroy {
   set term(val: string) {
     // We set this to a class var to ensure `FormGroup`
     // is instantiated before calling `setInputValue()`
-    this.searchTerm = (val === undefined || val === null) ? '' : val;
+    this.searchTerm = val;
   }
 
   @Output() search: EventEmitter<any> = new EventEmitter();
@@ -64,7 +64,7 @@ export class CampaignSearchFormComponent implements OnInit, OnDestroy {
 
   setInputValue(val: string) {
     this.searchForm.setValue({
-      term: val,
+      term: (val === undefined || val === null) ? '' : val,
     });
   }
 }
