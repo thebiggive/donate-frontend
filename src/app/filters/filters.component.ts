@@ -18,7 +18,7 @@ export type FilterType = keyof typeof FilterEnum;
 export class FiltersComponent implements OnInit, OnDestroy {
   @Input() hasTerm: boolean;
   @Input() reset: Observable<void>;
-  @Input() isHomepage: boolean;
+  @Input() showClearFilters: boolean;
   @Input() @Output() selectedSort: string;
   @Output() filterApplied: EventEmitter<any> = new EventEmitter();
   @Output() sortApplied: EventEmitter<any> = new EventEmitter();

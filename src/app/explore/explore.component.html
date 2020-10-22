@@ -23,7 +23,7 @@
   <div class="b-container" *ngIf="campaigns">
     <app-filters
       [hasTerm]="hasTerm"
-      [isHomepage]="true"
+      [showClearFilters]="false"
       [selectedSort]="selectedSort"
       [reset]="resetSubject.asObservable()"
       (filterApplied)="onFilterApplied($event)"
