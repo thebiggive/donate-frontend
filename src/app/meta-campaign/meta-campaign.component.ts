@@ -63,7 +63,7 @@ export class MetaCampaignComponent implements OnInit {
     }
 
     if (this.campaign) { // app handed over from SSR to client-side JS
-      this.setDefaultFilters(true);
+      this.setDefaultFiltersOrParams();
       this.setSecondaryProps(this.campaign);
     } else {
       if (this.campaignId) {
@@ -100,10 +100,18 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   /**
-   * @method  setDefaultFilters
-   * @param   setQueryParams determine whether to override query with params in the URL
+   * @method  setDefaultFiltersOrParams
+   * @desc    set default filters where query params, if they exist, takes precedence.
    */
-  setDefaultFilters(setQueryParams: boolean) {
+  setDefaultFiltersOrParams() {
+    this.setDefaultFilters();
+    this.setQueryParams();
+
+    this.run();
+    this.resetSubject.next();
+  }
+
+  setDefaultFilters() {
     this.hasTerm = false;
     this.selectedSort = this.getDefaultSort();
 
@@ -114,15 +122,7 @@ export class MetaCampaignComponent implements OnInit {
       limit: this.perPage,
       offset: 0,
     };
-
     this.handleSortParams();
-
-    if (setQueryParams) {
-      this.setQueryParams();
-    }
-
-    this.run();
-    this.resetSubject.next();
   }
 
   handleSortParams() {
@@ -154,12 +154,16 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   onClearFiltersApplied() {
+    // Remove any query params from URL
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {},
       replaceUrl: true,
     });
-    this.setDefaultFilters(false);
+
+    this.setDefaultFilters();
+    this.run();
+    this.resetSubject.next();
   }
 
   onMetacampaignSearch(term: string) {
@@ -216,7 +220,7 @@ export class MetaCampaignComponent implements OnInit {
   private setCampaign(campaign: Campaign, metacampaignKey: StateKey<Campaign>) {
     this.state.set(metacampaignKey, campaign); // Have data ready for client when handing over from SSR
     this.campaign = campaign;
-    this.setDefaultFilters(true);
+    this.setDefaultFiltersOrParams();
     this.setSecondaryProps(campaign);
   }
 
