@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
@@ -20,21 +20,23 @@ export class MetaCampaignComponent implements OnInit {
   public children: CampaignSummary[];
   public filterError = false;
   public fund?: Fund;
+  public fundSlug: string;
+  public hasMore = true;
   public hasTerm = false;
   public loading = false; // Server render gets initial result set; set true when filters change.
+  public query: {[key: string]: any};
   public resetSubject: Subject<void> = new Subject<void>();
   public selectedSort: string;
 
   private campaignId: string;
   private campaignSlug: string;
-  private fundSlug: string;
   private perPage = 6;
-  private query: {[key: string]: any};
 
   constructor(
     private campaignService: CampaignService,
     private fundService: FundService,
     private pageMeta: PageMetaService,
+    private router: Router,
     private route: ActivatedRoute,
     private state: TransferState,
   ) {
@@ -61,7 +63,7 @@ export class MetaCampaignComponent implements OnInit {
     }
 
     if (this.campaign) { // app handed over from SSR to client-side JS
-      this.setDefaultFilters();
+      this.setDefaultFiltersOrParams();
       this.setSecondaryProps(this.campaign);
     } else {
       if (this.campaignId) {
@@ -97,6 +99,18 @@ export class MetaCampaignComponent implements OnInit {
     }
   }
 
+  /**
+   * @method  setDefaultFiltersOrParams
+   * @desc    set default filters where query params, if they exist, takes precedence.
+   */
+  setDefaultFiltersOrParams() {
+    this.setDefaultFilters();
+    this.setQueryParams();
+
+    this.run();
+    this.resetSubject.next();
+  }
+
   setDefaultFilters() {
     this.hasTerm = false;
     this.selectedSort = this.getDefaultSort();
@@ -108,11 +122,7 @@ export class MetaCampaignComponent implements OnInit {
       limit: this.perPage,
       offset: 0,
     };
-
     this.handleSortParams();
-    this.run();
-
-    this.resetSubject.next();
   }
 
   handleSortParams() {
@@ -126,14 +136,34 @@ export class MetaCampaignComponent implements OnInit {
 
   onFilterApplied(update: { [filterName: string]: string, value: string}) {
     this.query[update.filterName] = update.value as string;
-
+    this.updateRoute();
     this.run();
   }
 
   onSortApplied(selectedSort: string) {
     this.selectedSort = selectedSort;
     this.handleSortParams();
+    this.updateRoute();
     this.run();
+  }
+
+  onNumberOfCardsApplied(selectedNumber: number) {
+    this.query.limit = selectedNumber;
+    this.updateRoute();
+    this.run();
+  }
+
+  onClearFiltersApplied() {
+    // Remove any query params from URL
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {},
+      replaceUrl: true,
+    });
+
+    this.setDefaultFilters();
+    this.run();
+    this.resetSubject.next();
   }
 
   onMetacampaignSearch(term: string) {
@@ -144,6 +174,7 @@ export class MetaCampaignComponent implements OnInit {
 
     this.query.term = term;
     this.handleSortParams();
+    this.updateRoute();
     this.run();
   }
 
@@ -189,7 +220,7 @@ export class MetaCampaignComponent implements OnInit {
   private setCampaign(campaign: Campaign, metacampaignKey: StateKey<Campaign>) {
     this.state.set(metacampaignKey, campaign); // Have data ready for client when handing over from SSR
     this.campaign = campaign;
-    this.setDefaultFilters();
+    this.setDefaultFiltersOrParams();
     this.setSecondaryProps(campaign);
   }
 
@@ -199,5 +230,42 @@ export class MetaCampaignComponent implements OnInit {
       campaign.summary || 'A match funded campaign with the Big Give',
       campaign.bannerUri,
     );
+  }
+
+  /**
+   * Set query params to this.query object, if any are available.
+   */
+  private setQueryParams() {
+      this.route.queryParams.subscribe(params => {
+        if (Object.keys(params).length > 0) {
+          for (const key of Object.keys(params)) {
+            if (key === 'onlyMatching') {
+              // convert URL query param string to boolean
+              this.query[key] = (params[key] === 'true');
+            } else {
+              this.query[key] = params[key];
+            }
+          }
+        }
+      });
+  }
+
+  /**
+   * Dynamically update the URL route each time a sort, filter or limit is applied.
+   */
+  private updateRoute() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams:
+      {
+          sortField: this.query.sortField,
+          beneficiary: this.query.beneficiary,
+          category: this.query.category,
+          country: this.query.country,
+          onlyMatching: this.query.onlyMatching,
+          term: this.query.term,
+      },
+      replaceUrl: true,
+    });
   }
 }

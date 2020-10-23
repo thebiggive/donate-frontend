@@ -11,10 +11,18 @@ import { ImageService } from '../image.service';
   styleUrls: ['./hero.component.scss'],
 })
 export class HeroComponent implements OnInit {
+  public searchTerm: string;
   @Input() campaign: Campaign;
   @Input() description: string;
   @Input() fund?: Fund;
   @Input() reset: Observable<void>; // Passed through to CampaignSearchFormComponent
+
+  // Listen for search term changes and set them accordingly.
+  @Input()
+  set term(val: string) {
+    this.searchTerm = val;
+  }
+
   @Output() heroSearch: EventEmitter<any> = new EventEmitter();
 
   bannerUri: string;
