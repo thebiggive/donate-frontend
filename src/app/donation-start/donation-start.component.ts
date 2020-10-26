@@ -17,6 +17,7 @@ import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
 import { DonationStartErrorDialogComponent } from './donation-start-error-dialog.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
+import { DonationStartMatchingExpiredDialogComponent } from './donation-start-matching-expired-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
 import { environment } from '../../environments/environment';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
@@ -70,6 +71,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   // Based on https://stackoverflow.com/questions/164979/regex-for-matching-uk-postcodes#comment82517277_164994
   // but modified to make the separating space optional.
   private postcodeRegExp = new RegExp('^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\\s?[0-9][A-Za-z]{2})$');
+  /** setTimeout reference (timer ID) if applicable. */
+  expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -254,6 +257,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
             `Donation cancelled because amount was updated ${this.donation.donationId} to campaign ${this.campaignId}`,
           );
           this.donationService.removeLocalDonation(this.donation);
+          this.cancelExpiryWarning();
           delete this.donation;
         });
     }
@@ -667,6 +671,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           this.promptToContinueWithPartialMatching(response.donation);
           return;
         }
+
+        this.scheduleMatchingExpiryWarning(this.donation);
       }, response => {
         let errorMessage: string;
         if (response.message) {
@@ -692,6 +698,32 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     reuseDialog.afterClosed().subscribe(this.getDialogResponseFn(donation));
   }
 
+  private scheduleMatchingExpiryWarning(donation: Donation) {
+    // Only set the timeout when relevant and we don't already have one.
+    if (this.expiryWarning || !donation.createdTime || donation.matchReservedAmount <= 0) {
+      return;
+    }
+
+    // To make this safe to call for both new and resumed donations, we look up
+    // the donation's creation time and determine the timeout based on that rather
+    // than e.g. always using 15 minutes.
+    const msUntilExpiryTime = environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() - Date.now();
+    this.expiryWarning = setTimeout(() => {
+      const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
+        disableClose: true,
+        role: 'alertdialog',
+      });
+      continueDialog.afterClosed().subscribe(this.getDialogResponseFn(donation));
+    }, msUntilExpiryTime);
+  }
+
+  private cancelExpiryWarning() {
+    if (this.expiryWarning) {
+      clearTimeout(this.expiryWarning);
+      delete this.expiryWarning;
+    }
+  }
+
   /**
    * Auto-cancel the attempted donation (it's unlikely to start working for the same project immediately so better to start a
    * 'clean' one) and let the user know about the error.
@@ -707,7 +739,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         'cancel_auto',
         `Cancelled failing donation ${this.previousDonation.donationId} to campaign ${this.campaignId}`,
       );
-      this.donationService.cancel(this.previousDonation).subscribe(() => this.donationService.removeLocalDonation(this.previousDonation));
+      this.donationService.cancel(this.previousDonation).subscribe(() => {
+        this.donationService.removeLocalDonation(this.previousDonation);
+        this.cancelExpiryWarning();
+      });
     }
 
     const errorDialog = this.dialog.open(DonationStartErrorDialogComponent, {
@@ -835,15 +870,18 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
    *
    * May be invoked:
    * (a) when loading the form having found a previous donation in
-   *     browser state and confirmed with the API that it is resumable, or
+   *     browser state and confirmed with the API that it is resumable;
    * (b) after leaving step 1, having found that match funds will not cover
-   *     the donation fully.
+   *     the donation fully; or
+   * (c) after match funds expire.
    */
   private getDialogResponseFn(donation: Donation) {
     return (proceed: boolean) => {
       if (proceed) {
         // Required for both use cases.
         this.donation = donation;
+
+        this.scheduleMatchingExpiryWarning(this.donation);
 
         // In doc block use case (a), we need to put the amounts from the previous
         // donation into the form and move to Step 2.
@@ -865,6 +903,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           () => {
             this.analyticsService.logEvent('cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
             this.donationService.removeLocalDonation(donation);
+            this.cancelExpiryWarning();
 
             // Removes match funds reserved timer if present
             delete this.donation;
