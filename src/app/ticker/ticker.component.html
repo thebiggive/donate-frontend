@@ -10,15 +10,12 @@
   </div>
   <div *ngIf="!fund" class="c-ticker__lists">
     <ul class="c-ticker__list" *ngFor="let index of [0,1,2,3]">
-      <!-- Global -->
       <li class="c-ticker__item"><span class="c-ticker__value">{{ campaign.matchFundsTotal | currency : '£' : 'symbol' : '1.0-0' }}</span> total match funds</li>
       <li class="c-ticker__item" *ngIf="campaignOpen"><span class="c-ticker__value">{{ campaign.endDate | timeLeft }}</span> remaining</li>
       <li class="c-ticker__item" *ngIf="!campaignOpen"><span class="c-ticker__value">{{ durationInDays | number }}</span> days duration</li>
-
-      <!-- Non-fund context only -->
-      <li class="c-ticker__item" *ngIf="campaign.campaignCount && campaign.campaignCount > 1 && !fund"><span class="c-ticker__value">{{ campaign.campaignCount | number }}</span> charities</li>
-      <li class="c-ticker__item" *ngIf="campaign.donationCount > 0 && !fund"><span class="c-ticker__value">{{ campaign.donationCount | number }}</span> donations</li>
-      <li class="c-ticker__item" *ngIf="campaignOpen && !fund"><span class="c-ticker__value">{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }}</span> match funds remaining</li>
+      <li class="c-ticker__item" *ngIf="campaign.campaignCount && campaign.campaignCount > 1"><span class="c-ticker__value">{{ campaign.campaignCount | number }}</span> charities</li>
+      <li class="c-ticker__item" *ngIf="campaign.donationCount > 0"><span class="c-ticker__value">{{ campaign.donationCount | number }}</span> donations</li>
+      <li class="c-ticker__item" *ngIf="campaignOpen"><span class="c-ticker__value">{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }}</span> match funds remaining</li>
     </ul>
   </div>
 </div>
