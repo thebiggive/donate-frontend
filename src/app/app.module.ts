@@ -46,6 +46,7 @@ import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { TickerComponent } from './ticker/ticker.component';
 import { TimeLeftPipe } from './time-left.pipe';
+import { HomePageComponent } from './home-page/home-page.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     ExploreComponent,
     TickerComponent,
     TimeLeftPipe,
+    HomePageComponent,
   ],
   imports: [
     AppRoutingModule,
