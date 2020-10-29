@@ -69,13 +69,6 @@
   @include campaign-grid;
 }
 
-.error {
-  color: mat-color($donate-warn);
-  max-width: 600px;
-  text-align: center;
-  margin: 1rem auto;
-}
-
 .b-container {
   padding-top: 3rem;
 }
