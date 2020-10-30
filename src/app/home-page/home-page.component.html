@@ -28,4 +28,28 @@
     </div>
     <mat-spinner *ngIf="loading" color="primary" diameter="30"></mat-spinner>
   </div>
+
+  <div class="about-container">
+    <h3 class="b-rh-1 b-bold" fxLayoutAlign="center">About the Big Give</h3>
+    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center">
+      <div fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
+        <div fxLayout="column">
+          <div class="c-video">
+            <iframe
+              class="c-video__iframe b-w-100"
+              [src]="videoEmbedUrl"
+              frameborder="0"
+              allow="autoplay; encrypted-media"
+              webkitallowfullscreen="ture"
+              mozallowfullscreen="true"
+              allowfullscreen="true"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="home-hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
+        <p>The Big Give is the UK's #1 match funding platform. We specialise in bringing charities, philanthroposts and the public together to multiply their impact.</p>
+        <p>We run the Christmas Challenge, an annual match funding campaign which raises millions of pounds for good cases, as well as other match funding campaigns. We also provide a platform for charities to run their own funraising campaigns.</p>
+      </div>
+    </div>
+  </div>
 </main>
