@@ -7,7 +7,7 @@ import { CharityComponent } from './charity/charity.component';
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
 import { ExploreComponent } from './explore/explore.component';
-import { HomePageComponent } from './home-page/home-page.component';
+import { HomeComponent } from './home/home.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 
 const routes: Routes = [
@@ -52,7 +52,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: HomePageComponent,
+    component: HomeComponent,
   },
   {
     path: '**',
