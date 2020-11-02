@@ -17,12 +17,13 @@ export class ExploreComponent implements OnInit {
   public campaigns: CampaignSummary[];
   public loading = false; // Server render gets initial result set; set true when filters change.
   public hasTerm = false;
+  public query: {[key: string]: any};
   public resetSubject: Subject<void> = new Subject<void>();
   public searched = false;
-  public selectedSort = 'matchFundsRemaining';
+  public selectedSort: string;
+  public showClearFilters = false;
 
   private perPage = 6;
-  private query: {[key: string]: any};
   private term: string;
 
   constructor(
@@ -30,36 +31,34 @@ export class ExploreComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
   ) {
-    this.setDefaults();
-    route.queryParams.forEach((params: Params) => {
-      this.term = params.term;
-      this.search(this.term ? this.term : '');
-    });
+    this.setDefaultFilters();
   }
 
   ngOnInit() {
-    this.handleFilters();
-
-    // Navigation "changes" occur when donors navigate back to the root `/` path, e.g. from the main menu.
-    // When this happens it's usually desirable to clear the filters so they have a convenient way to navigate
-    // back to the default view where we surface some campaigns, if they've got lost in an overly-filtered view.
-    this.router.events.pipe(
-      filter((event: RouterEvent) => event instanceof NavigationEnd),
-    ).subscribe(() => this.resetFilters());
+    this.setDefaultFiltersOrParams();
   }
 
-  resetFilters() {
-    this.setDefaults();
-    this.handleFilters();
+  /**
+   * @method  setDefaultFiltersOrParams
+   * @desc    set default filters where query params, if they exist, takes precedence.
+   */
+  setDefaultFiltersOrParams() {
+    this.handleSortParams();
+    this.setDefaultFilters();
+    this.setQueryParams();
+
+    this.run();
+    this.resetSubject.next();
   }
 
-  setDefaults() {
+  setDefaultFilters() {
     this.hasTerm = false;
-    this.selectedSort = 'matchFundsRemaining';
+    this.selectedSort = 'matchFundsRemaining'; // match campaigns takes precedence on explore page.
     this.query = {
       limit: this.perPage,
       offset: 0,
     };
+    this.handleSortParams();
   }
 
   handleSortParams() {
@@ -83,8 +82,9 @@ export class ExploreComponent implements OnInit {
     }
   }
 
-  onFilterApplied(update: {filterName: FilterType, value: string}) {
-    this.query[update.filterName] = update.value;
+  onFilterApplied(update: { [filterName: string]: string, value: string}) {
+    this.query[update.filterName] = update.value as string;
+    this.updateRoute();
     this.run();
   }
 
@@ -97,7 +97,22 @@ export class ExploreComponent implements OnInit {
   onSortApplied(selectedSort: string) {
     this.selectedSort = selectedSort;
     this.handleSortParams();
+    this.updateRoute();
     this.run();
+  }
+
+  onClearFiltersApplied() {
+    // Remove any query params from URL
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {},
+      replaceUrl: true,
+    });
+
+    this.showClearFilters = false;
+    this.setDefaultFilters();
+    this.run();
+    this.resetSubject.next();
   }
 
   search(term: string) {
@@ -106,14 +121,8 @@ export class ExploreComponent implements OnInit {
     this.selectedSort = (term === '' ? 'matchFundsRemaining' : '');
 
     this.handleSortParams();
+    this.updateRoute();
     this.run();
-  }
-
-  private handleFilters() {
-    this.handleSortParams();
-    this.run();
-
-    this.resetSubject.next();
   }
 
   private moreMightExist(): boolean {
@@ -144,5 +153,44 @@ export class ExploreComponent implements OnInit {
         this.loading = false;
       },
     );
+  }
+
+  /**
+   * Set query params to this.query object, if any are available.
+   */
+  private setQueryParams() {
+    this.route.queryParams.subscribe(params => {
+      if (Object.keys(params).length > 0) {
+        this.showClearFilters = true;
+        for (const key of Object.keys(params)) {
+          if (key === 'onlyMatching') {
+            // convert URL query param string to boolean
+            this.query[key] = (params[key] === 'true');
+          } else {
+            this.query[key] = params[key];
+          }
+        }
+      }
+    });
+}
+
+  /**
+   * Dynamically update the URL route each time a sort, filter or limit is applied.
+   */
+  private updateRoute() {
+    this.showClearFilters = true;
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams:
+      {
+          sortField: this.query.sortField,
+          beneficiary: this.query.beneficiary,
+          category: this.query.category,
+          country: this.query.country,
+          onlyMatching: this.query.onlyMatching,
+          term: this.query.term,
+      },
+      replaceUrl: true,
+    });
   }
 }
