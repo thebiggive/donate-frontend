@@ -48,8 +48,4 @@ export class HomeComponent implements OnInit {
       },
     );
   }
-
-  search(term: string) {
-    // TODO DON-303 redirect to /explore page with query param
-  }
 }
