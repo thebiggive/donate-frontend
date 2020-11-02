@@ -1,0 +1,25 @@
+<main>
+  <div class="home-hero">
+    <div class="b-container-sm">
+      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center">
+        <div class="home-hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
+          <div fxLayout="column">
+            <h1 class="b-rh-1 b-bold c-home-hero__heading">The leading online match funding platform</h1>
+          </div>
+          <div fxLayout="column">
+            <p class="home-hero__description">The Big Give brings charities, philanthropists and the public together to multiply their impact.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="b-container" *ngIf="campaigns">
+    <div class="c-grid">
+      <div *ngFor="let campaign of campaigns">
+        <app-campaign-card [campaign]="campaign"></app-campaign-card>
+      </div>
+    </div>
+    <mat-spinner *ngIf="loading" color="primary" diameter="30"></mat-spinner>
+  </div>
+</main>
