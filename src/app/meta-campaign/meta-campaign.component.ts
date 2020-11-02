@@ -147,12 +147,6 @@ export class MetaCampaignComponent implements OnInit {
     this.run();
   }
 
-  onNumberOfCardsApplied(selectedNumber: number) {
-    this.query.limit = selectedNumber;
-    this.updateRoute();
-    this.run();
-  }
-
   onClearFiltersApplied() {
     // Remove any query params from URL
     this.router.navigate([], {
