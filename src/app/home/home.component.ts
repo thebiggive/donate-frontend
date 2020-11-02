@@ -5,11 +5,11 @@ import { CampaignService, SearchQuery } from '../campaign.service';
 import { CampaignSummary } from '../campaign-summary.model';
 
 @Component({
-  selector: 'app-home-page',
-  templateUrl: './home-page.component.html',
-  styleUrls: ['./home-page.component.scss'],
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
 })
-export class HomePageComponent implements OnInit {
+export class HomeComponent implements OnInit {
   public campaigns: CampaignSummary[];
   public loading = false; // Server render gets initial result set; set true when filters change.
   public resetSubject: Subject<void> = new Subject<void>();

@@ -9,13 +9,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { HomePageComponent } from './home-page.component';
+import { HomeComponent } from './home.component';
 import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
 
-describe('HomePageComponent', () => {
-  let component: HomePageComponent;
-  let fixture: ComponentFixture<HomePageComponent>;
+describe('HomeComponent', () => {
+  let component: HomeComponent;
+  let fixture: ComponentFixture<HomeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -35,7 +35,7 @@ describe('HomePageComponent', () => {
         RouterTestingModule.withRoutes([
           {
             path: 'search',
-            component: HomePageComponent,
+            component: HomeComponent,
           },
         ]),
       ],
@@ -44,7 +44,7 @@ describe('HomePageComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HomePageComponent);
+    fixture = TestBed.createComponent(HomeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
