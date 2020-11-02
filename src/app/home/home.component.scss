@@ -72,3 +72,41 @@
 .b-container {
   padding-top: 3rem;
 }
+
+.c-video {
+  width: 100%;
+  height: auto;
+}
+
+.c-video__iframe {
+  height: 200px;
+  padding-top: 1rem;
+  @media #{$breakpoint-lg} {
+    height: 250px;
+  }
+  @media #{$breakpoint-xl} {
+    height: 300px;
+  }
+}
+
+.about-container{
+  margin: 0 15px;
+  @media #{$breakpoint-md} {
+    margin: 0 30px;
+  }
+  @media #{$breakpoint-lg} {
+    background-image: none;
+    margin: 0 60px;
+  }
+  @media #{$breakpoint-xl} {
+    max-width: 1150px;
+    margin: 0 auto;
+    background-image: url(/assets/images/pop.png);
+    background-repeat: no-repeat;
+    background-position: 3.3% 39%;
+    background-size: 15%;
+    padding-left: 10rem;
+    padding-right: 10rem;
+    padding-top: 5rem;
+  }
+}
