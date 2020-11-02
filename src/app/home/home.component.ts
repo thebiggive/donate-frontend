@@ -12,7 +12,7 @@ import { CampaignSummary } from '../campaign-summary.model';
 export class HomeComponent implements OnInit {
   public campaigns: CampaignSummary[];
   public loading = false; // Server render gets initial result set; set true when filters change.
-  public resetSubject: Subject<void> = new Subject<void>();;
+  public resetSubject: Subject<void> = new Subject<void>();
 
   private perPage = 6;
   private query: {[key: string]: any};
