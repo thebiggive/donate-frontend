@@ -121,7 +121,7 @@ export class MetaCampaignComponent implements OnInit {
     this.run();
   }
 
-  getDefaultSort(): string {
+  getDefaultSort(): 'amountRaised' | 'matchFundsRemaining' {
     // Most Raised for completed Master Campaigns; Match Funds Remaining for others.
     return (this.campaign && new Date(this.campaign.endDate) < new Date()) ? 'amountRaised' : 'matchFundsRemaining';
   }

@@ -14,7 +14,7 @@ import { FiltersComponent } from '../filters/filters.component';
 })
 export class ExploreComponent implements OnInit {
   campaigns: CampaignSummary[];
-  defaultNonRelevanceSort = 'matchFundsRemaining';
+  defaultNonRelevanceSort: 'matchFundsRemaining' = 'matchFundsRemaining';
   loading = false; // Server render gets initial result set; set true when filters change.
   resetSubject: Subject<void> = new Subject<void>();
   searched = false;
