@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
+import { SelectedType } from '../filters/filters.component';
 import { Fund } from '../fund.model';
 import { ImageService } from '../image.service';
 
@@ -15,13 +16,8 @@ export class HeroComponent implements OnInit {
   @Input() campaign: Campaign;
   @Input() description: string;
   @Input() fund?: Fund;
+  @Input() @Output() selected: SelectedType;
   @Input() reset: Observable<void>; // Passed through to CampaignSearchFormComponent
-
-  // Listen for search term changes and set them accordingly.
-  @Input()
-  set term(val: string) {
-    this.searchTerm = val;
-  }
 
   @Output() heroSearch: EventEmitter<any> = new EventEmitter();
 

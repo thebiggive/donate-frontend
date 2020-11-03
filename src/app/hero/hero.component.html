@@ -18,7 +18,7 @@
         <app-campaign-search-form
           *ngIf="campaign.campaignCount && campaign.campaignCount > 10"
           [reset]="reset"
-          [term]="searchTerm"
+          [selected]="selected"
           (search)="search($event)"
         ></app-campaign-search-form>
       </div>

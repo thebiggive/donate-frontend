@@ -1,11 +1,10 @@
-import { FilterType } from './../filters/filters.component';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Params, Router, RouterEvent } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
 
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { CampaignSummary } from '../campaign-summary.model';
+import { FiltersComponent } from '../filters/filters.component';
 
 /** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
@@ -14,60 +13,25 @@ import { CampaignSummary } from '../campaign-summary.model';
   styleUrls: ['./explore.component.scss'],
 })
 export class ExploreComponent implements OnInit {
-  public campaigns: CampaignSummary[];
-  public loading = false; // Server render gets initial result set; set true when filters change.
-  public hasTerm = false;
-  public query: {[key: string]: any};
-  public resetSubject: Subject<void> = new Subject<void>();
-  public searched = false;
-  public selectedSort: string;
-  public showClearFilters = false;
+  campaigns: CampaignSummary[];
+  defaultNonRelevanceSort = 'matchFundsRemaining';
+  loading = false; // Server render gets initial result set; set true when filters change.
+  resetSubject: Subject<void> = new Subject<void>();
+  searched = false;
+  selected: {[key: string]: any}; // SelectedType but allowing string key lookups.
+  showClearFilters = false;
 
-  private perPage = 6;
-  private term: string;
+  private offset = 0;
 
   constructor(
     private campaignService: CampaignService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {
-    this.setDefaultFilters();
-  }
+  ) {}
 
   ngOnInit() {
-    this.setDefaultFiltersOrParams();
-  }
-
-  /**
-   * @method  setDefaultFiltersOrParams
-   * @desc    set default filters where query params, if they exist, takes precedence.
-   */
-  setDefaultFiltersOrParams() {
-    this.handleSortParams();
-    this.setDefaultFilters();
-    this.setQueryParams();
-
-    this.run();
-    this.resetSubject.next();
-  }
-
-  setDefaultFilters() {
-    this.hasTerm = false;
-    this.selectedSort = 'matchFundsRemaining'; // match campaigns takes precedence on explore page.
-    this.query = {
-      limit: this.perPage,
-      offset: 0,
-    };
-    this.handleSortParams();
-  }
-
-  handleSortParams() {
-    this.query.sortField = this.selectedSort;
-    if (this.selectedSort === '') { // this means sort by relevance for now
-      this.query.sortDirection = undefined;
-    } else { // match funds left and amount raised both make most sense in 'desc' order
-      this.query.sortDirection = 'desc';
-    }
+    this.selected = FiltersComponent.selectedDefaults(this.defaultNonRelevanceSort);
+    this.loadQueryParamsAndRun();
   }
 
   /**
@@ -83,8 +47,7 @@ export class ExploreComponent implements OnInit {
   }
 
   onFilterApplied(update: { [filterName: string]: string, value: string}) {
-    this.query[update.filterName] = update.value as string;
-    this.updateRoute();
+    this.selected[update.filterName] = update.value as string;
     this.run();
   }
 
@@ -95,44 +58,32 @@ export class ExploreComponent implements OnInit {
   }
 
   onSortApplied(selectedSort: string) {
-    this.selectedSort = selectedSort;
-    this.handleSortParams();
-    this.updateRoute();
+    this.selected.sortField = selectedSort;
     this.run();
   }
 
   onClearFiltersApplied() {
-    // Remove any query params from URL
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {},
-      replaceUrl: true,
-    });
-
+    this.selected = FiltersComponent.selectedDefaults(this.defaultNonRelevanceSort);
     this.showClearFilters = false;
-    this.setDefaultFilters();
     this.run();
     this.resetSubject.next();
   }
 
   search(term: string) {
-    this.query.term = this.term = term;
-    this.hasTerm = (term !== '');
-    this.selectedSort = (term === '' ? 'matchFundsRemaining' : '');
-
-    this.handleSortParams();
-    this.updateRoute();
+    this.selected.term = term;
+    this.selected.sortField = term.length > 0 ? '' : this.defaultNonRelevanceSort;
     this.run();
   }
 
   private moreMightExist(): boolean {
-    return (this.campaigns.length === (this.query.limit + this.query.offset));
+    return (this.campaigns.length === (CampaignService.perPage + this.offset));
   }
 
   private loadMoreForCurrentSearch() {
-    this.query.offset += this.perPage;
+    this.offset += CampaignService.perPage;
     this.loading = true;
-    this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
+    const query = this.campaignService.buildQuery(this.selected, this.offset);
+    this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
       // Success
       this.campaigns = [...this.campaigns, ...campaignSummaries];
       this.loading = false;
@@ -142,13 +93,14 @@ export class ExploreComponent implements OnInit {
   }
 
   private run() {
-    this.query.offset = 0;
+    const query = this.campaignService.buildQuery(this.selected, 0);
     this.campaigns = [];
     this.loading = true;
 
-    this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
+    this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
       this.campaigns = campaignSummaries; // Success
       this.loading = false;
+      this.setQueryParams();
     }, () => {
         this.loading = false;
       },
@@ -156,40 +108,34 @@ export class ExploreComponent implements OnInit {
   }
 
   /**
-   * Set query params to this.query object, if any are available.
+   * Get any query params from the requested URL.
    */
-  private setQueryParams() {
+  private loadQueryParamsAndRun() {
     this.route.queryParams.subscribe(params => {
       if (Object.keys(params).length > 0) {
         this.showClearFilters = true;
         for (const key of Object.keys(params)) {
           if (key === 'onlyMatching') {
             // convert URL query param string to boolean
-            this.query[key] = (params[key] === 'true');
+            this.selected[key] = (params[key] === 'true');
           } else {
-            this.query[key] = params[key];
+            this.selected[key] = params[key];
           }
         }
       }
+
+      this.run();
     });
-}
+  }
 
   /**
-   * Dynamically update the URL route each time a sort, filter or limit is applied.
+   * Update the browser's query params when a sort or filter is applied.
    */
-  private updateRoute() {
+  private setQueryParams() {
     this.showClearFilters = true;
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams:
-      {
-          sortField: this.query.sortField,
-          beneficiary: this.query.beneficiary,
-          category: this.query.category,
-          country: this.query.country,
-          onlyMatching: this.query.onlyMatching,
-          term: this.query.term,
-      },
+      queryParams: FiltersComponent.getQueryParams(this.selected, this.defaultNonRelevanceSort),
       replaceUrl: true,
     });
   }

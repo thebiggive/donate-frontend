@@ -53,7 +53,7 @@
 
 .error {
   color: mat-color($donate-warn);
-  max-width: 600px;
+  max-width: $full-copy-max-width;
   text-align: center;
   margin: 1rem auto;
 }

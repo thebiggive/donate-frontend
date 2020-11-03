@@ -4,10 +4,8 @@
     [campaign]="campaign"
     [fund]="fund"
     [reset]="resetSubject.asObservable()"
-    [term]="query.term"
-    [description]="
-      fund && fund.description ? fund.description : campaign.summary
-    "
+    [selected]="selected"
+    [description]="fund && fund.description ? fund.description : campaign.summary"
     (heroSearch)="onMetacampaignSearch($event)"
   ></app-hero>
 
@@ -15,10 +13,9 @@
     <div class="b-container">
       <app-filters
         *ngIf="campaign.campaignCount && campaign.campaignCount > 1"
-        [hasTerm]="hasTerm"
+        [defaultNonRelevanceSort]="getDefaultSort()"
         [showClearFilters]="showClearFilters"
-        [selectedSort]="selectedSort"
-        [selectedFilters]="query"
+        [selected]="selected"
         [reset]="resetSubject.asObservable()"
         (filterApplied)="onFilterApplied($event)"
         (sortApplied)="onSortApplied($event)"
