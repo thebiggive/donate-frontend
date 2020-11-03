@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { CampaignService, SearchQuery } from '../campaign.service';
@@ -19,6 +20,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private campaignService: CampaignService,
+    private router: Router,
   ) {
   }
 
@@ -34,6 +36,10 @@ export class HomeComponent implements OnInit {
       sortDirection: 'desc',
       sortField: 'matchFundsRemaining',
     };
+  }
+
+  search(term: string) {
+    this.router.navigateByUrl(`/explore?term=${encodeURI(term)}`);
   }
 
   private run() {

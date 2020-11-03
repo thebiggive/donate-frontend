@@ -22,7 +22,6 @@ export class FiltersComponent implements OnInit, OnDestroy {
   @Input() @Output() selectedSort: string;
   @Output() filterApplied: EventEmitter<any> = new EventEmitter();
   @Output() sortApplied: EventEmitter<any> = new EventEmitter();
-  @Output() numberOfCardsApplied: EventEmitter<any> = new EventEmitter();
   @Output() clearFiltersApplied: EventEmitter<any> = new EventEmitter();
 
   // Listen for filter changes and set them accordingly.

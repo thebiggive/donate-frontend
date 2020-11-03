@@ -27,6 +27,7 @@ export class MetaCampaignComponent implements OnInit {
   public query: {[key: string]: any};
   public resetSubject: Subject<void> = new Subject<void>();
   public selectedSort: string;
+  public showClearFilters = false;
 
   private campaignId: string;
   private campaignSlug: string;
@@ -147,12 +148,6 @@ export class MetaCampaignComponent implements OnInit {
     this.run();
   }
 
-  onNumberOfCardsApplied(selectedNumber: number) {
-    this.query.limit = selectedNumber;
-    this.updateRoute();
-    this.run();
-  }
-
   onClearFiltersApplied() {
     // Remove any query params from URL
     this.router.navigate([], {
@@ -161,6 +156,7 @@ export class MetaCampaignComponent implements OnInit {
       replaceUrl: true,
     });
 
+    this.showClearFilters = false;
     this.setDefaultFilters();
     this.run();
     this.resetSubject.next();
@@ -238,6 +234,7 @@ export class MetaCampaignComponent implements OnInit {
   private setQueryParams() {
       this.route.queryParams.subscribe(params => {
         if (Object.keys(params).length > 0) {
+          this.showClearFilters = true;
           for (const key of Object.keys(params)) {
             if (key === 'onlyMatching') {
               // convert URL query param string to boolean
@@ -254,6 +251,7 @@ export class MetaCampaignComponent implements OnInit {
    * Dynamically update the URL route each time a sort, filter or limit is applied.
    */
   private updateRoute() {
+    this.showClearFilters = true;
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams:
