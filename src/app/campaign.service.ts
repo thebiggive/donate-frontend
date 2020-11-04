@@ -47,13 +47,25 @@ export class CampaignService {
     return 100 * campaign.amountRaised / campaign.target;
   }
 
-  buildQuery(selected: SelectedType, offset: number): {[key: string]: any} {
+  buildQuery(selected: SelectedType, offset: number, campaignId?: string, campaignSlug?: string, fundSlug?: string): {[key: string]: any} {
     const perPage = 6;
     const query: SearchQuery = {
       limit: perPage,
       offset,
       ...selected,
     };
+
+    if (campaignId) {
+      query.parentCampaignId = campaignId;
+    }
+
+    if (campaignSlug) {
+      query.parentCampaignSlug = campaignSlug;
+    }
+
+    if (fundSlug) {
+      query.fundSlug = fundSlug;
+    }
 
     if (selected.sortField === '') { // this means sort by relevance for now
       query.sortDirection = undefined;
