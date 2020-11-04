@@ -81,7 +81,7 @@ app-campaign-card {
   padding: 0.3em 0 0.7em 0;
 }
 
-.mat-form-field-appearance-legacy .mat-form-field-infix {
+.donation-input .mat-form-field-appearance-legacy .mat-form-field-infix {
   margin-bottom: 0.5rem;
   margin-top: 3rem;
   border: 2px mat-color($donate-primary) solid;
@@ -92,6 +92,6 @@ app-campaign-card {
   padding-right: 1rem;
 }
 
-.mat-form-field-appearance-legacy .mat-form-field-underline {
+.donation-input .mat-form-field-appearance-legacy .mat-form-field-underline {
   height: 0 !important;
 }
