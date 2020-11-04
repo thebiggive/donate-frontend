@@ -9,7 +9,6 @@ import { SelectedType } from '../filters/filters.component';
   styleUrls: ['./campaign-search-form.component.scss'],
 })
 export class CampaignSearchFormComponent implements OnInit, OnDestroy {
-  public searchTerm: string;
   @ViewChild('term') termField: ElementRef;
   @Input() campaignId: string;
   @Input() reset: Observable<void>;
@@ -34,7 +33,7 @@ export class CampaignSearchFormComponent implements OnInit, OnDestroy {
       this.searchForm.reset();
     });
 
-    this.setInputValue(this.searchTerm);
+    this.setInputValue(this.selected.term);
   }
 
   ngOnDestroy() {
