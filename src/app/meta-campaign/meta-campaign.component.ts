@@ -171,7 +171,7 @@ export class MetaCampaignComponent implements OnInit {
 
   private setSecondaryPropsAndRun(campaign: Campaign) {
     this.selected = FiltersComponent.selectedDefaults(this.getDefaultSort()); // Depends on `campaign`
-    this.run();
+    this.loadQueryParamsAndRun();
     this.pageMeta.setCommon(
       campaign.title,
       campaign.summary || 'A match funded campaign with the Big Give',
