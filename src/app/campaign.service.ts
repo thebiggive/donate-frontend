@@ -5,11 +5,14 @@ import { Observable } from 'rxjs';
 import { Campaign } from './campaign.model';
 import { CampaignSummary } from './campaign-summary.model';
 import { environment } from '../environments/environment';
+import { SelectedType } from './filters/filters.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CampaignService {
+  static perPage = 6;
+
   private apiPath = '/campaigns/services/apexrest/v1.0';
 
   constructor(
@@ -42,6 +45,35 @@ export class CampaignService {
     }
 
     return 100 * campaign.amountRaised / campaign.target;
+  }
+
+  buildQuery(selected: SelectedType, offset: number, campaignId?: string, campaignSlug?: string, fundSlug?: string): {[key: string]: any} {
+    const perPage = 6;
+    const query: SearchQuery = {
+      limit: perPage,
+      offset,
+      ...selected,
+    };
+
+    if (campaignId) {
+      query.parentCampaignId = campaignId;
+    }
+
+    if (campaignSlug) {
+      query.parentCampaignSlug = campaignSlug;
+    }
+
+    if (fundSlug) {
+      query.fundSlug = fundSlug;
+    }
+
+    if (selected.sortField === '') { // this means sort by relevance for now
+      query.sortDirection = undefined;
+    } else { // match funds left and amount raised both make most sense in 'desc' order
+      query.sortDirection = 'desc';
+    }
+
+    return query;
   }
 
   getForCharity(charityId: string): Observable<CampaignSummary[]> {

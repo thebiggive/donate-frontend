@@ -10,7 +10,7 @@
         <div class="explore-hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
           <app-campaign-search-form
             [reset]="resetSubject.asObservable()"
-            [term]="query.term"
+            [selected]="selected"
             (search)="search($event)"
           ></app-campaign-search-form>
         </div>
@@ -20,10 +20,9 @@
 
   <div class="b-container" *ngIf="campaigns">
     <app-filters
-      [hasTerm]="hasTerm"
+      [defaultNonRelevanceSort]="defaultNonRelevanceSort"
       [showClearFilters]="showClearFilters"
-      [selectedSort]="selectedSort"
-      [selectedFilters]="query"
+      [selected]="selected"
       [reset]="resetSubject.asObservable()"
       (filterApplied)="onFilterApplied($event)"
       (sortApplied)="onSortApplied($event)"

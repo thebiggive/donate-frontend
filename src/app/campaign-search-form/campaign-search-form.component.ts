@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
+import { SelectedType } from '../filters/filters.component';
 
 @Component({
   selector: 'app-campaign-search-form',
@@ -8,19 +9,10 @@ import { Observable, Subscription } from 'rxjs';
   styleUrls: ['./campaign-search-form.component.scss'],
 })
 export class CampaignSearchFormComponent implements OnInit, OnDestroy {
-  public searchTerm: string;
   @ViewChild('term') termField: ElementRef;
   @Input() campaignId: string;
   @Input() reset: Observable<void>;
-
-  // Listen for search term changes and set them accordingly.
-  @Input()
-  set term(val: string) {
-    // We set this to a class var to ensure `FormGroup`
-    // is instantiated before calling `setInputValue()`
-    this.searchTerm = val;
-  }
-
+  @Input() @Output() selected: SelectedType;
   @Output() search: EventEmitter<any> = new EventEmitter();
   public searchForm: FormGroup;
 
@@ -41,7 +33,7 @@ export class CampaignSearchFormComponent implements OnInit, OnDestroy {
       this.searchForm.reset();
     });
 
-    this.setInputValue(this.searchTerm);
+    this.setInputValue(this.selected.term);
   }
 
   ngOnDestroy() {
@@ -62,7 +54,7 @@ export class CampaignSearchFormComponent implements OnInit, OnDestroy {
     this.search.emit(this.searchForm.value.term);
   }
 
-  setInputValue(val: string) {
+  setInputValue(val?: string) {
     this.searchForm.setValue({
       term: (val === undefined || val === null) ? '' : val,
     });

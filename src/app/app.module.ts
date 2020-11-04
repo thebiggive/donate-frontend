@@ -39,6 +39,7 @@ import { DonationStartOfferReuseDialogComponent } from './donation-start/donatio
 import { ExactCurrencyPipe } from './exact-currency.pipe';
 import { ExploreComponent } from './explore/explore.component';
 import { FiltersComponent } from './filters/filters.component';
+import { FiltersSelectDialogComponent } from './filters/filters-select-dialog.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeroComponent } from './hero/hero.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
@@ -64,6 +65,7 @@ import { HomeComponent } from './home/home.component';
     DonationStartOfferReuseDialogComponent,
     ExactCurrencyPipe,
     FiltersComponent,
+    FiltersSelectDialogComponent,
     FooterComponent,
     HeroComponent,
     MainMenuComponent,
