@@ -65,13 +65,11 @@
               <div *ngIf="donationAmountField?.errors?.required">Please enter how much you would like to donate.</div>
             </div>
 
-            <p class="b-rt-1 b-bold">Support the Big Give</p>
-            <p class="b-rt-0">The Big Give is the UK's #1 match funding platform, but we're a <a href="https://www.thebiggive.org.uk/s/about" target="_blank"><mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too!</p>
-            <p class="b-rt-0">
-              We develop and operate the technology, and support charities as they create and run their campaigns.
-              <span *ngIf="psp == 'stripe'">Donations are optional but make a vital contribution to our running costs as a charity.</span>
-              <span *ngIf="psp == 'enthuse'">Donations play a vital part in paying towards our running costs as a charity. If you'd rather not support us, you can choose not to make a gift to the Big Give when finalising your donation.</span>
-            </p>
+            <mat-hint>
+              We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://www.thebiggive.org.uk/s/about" target="_blank"><mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too!).
+              <span *ngIf="psp == 'enthuse'">Please consider adding an optional tip when finalising your donation.</span>
+              <span *ngIf="psp == 'stripe'">Please consider adding an optional tip.</span>
+            </mat-hint>
 
             <div class="donation-input">
               <mat-form-field
