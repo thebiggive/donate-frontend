@@ -26,7 +26,6 @@ export class MetaCampaignComponent implements OnInit {
   public loading = false; // Server render gets initial result set; set true when filters change.
   public resetSubject: Subject<void> = new Subject<void>();
   public selected: {[key: string]: any}; // SelectedType but allowing string key lookups.
-  public showClearFilters = false;
 
   private campaignId: string;
   private campaignSlug: string;
@@ -110,7 +109,6 @@ export class MetaCampaignComponent implements OnInit {
 
   onClearFiltersApplied() {
     this.selected = FiltersComponent.selectedDefaults(this.getDefaultSort());
-    this.showClearFilters = false;
     this.run();
     this.resetSubject.next();
   }
@@ -124,6 +122,16 @@ export class MetaCampaignComponent implements OnInit {
   getDefaultSort(): 'amountRaised' | 'matchFundsRemaining' {
     // Most Raised for completed Master Campaigns; Match Funds Remaining for others.
     return (this.campaign && new Date(this.campaign.endDate) < new Date()) ? 'amountRaised' : 'matchFundsRemaining';
+  }
+
+  showClearFilters(): boolean {
+    return Boolean(
+      this.selected.beneficiary ||
+      this.selected.category ||
+      this.selected.country ||
+      this.selected.onlyMatching ||
+      this.selected.term,
+    );
   }
 
   private loadMoreForCurrentSearch() {
@@ -185,7 +193,6 @@ export class MetaCampaignComponent implements OnInit {
   private loadQueryParamsAndRun() {
     this.route.queryParams.subscribe(params => {
       if (Object.keys(params).length > 0) {
-        this.showClearFilters = true;
         for (const key of Object.keys(params)) {
           if (key === 'onlyMatching') {
             // convert URL query param string to boolean

@@ -14,7 +14,7 @@
       <app-filters
         *ngIf="campaign.campaignCount && campaign.campaignCount > 1"
         [defaultNonRelevanceSort]="getDefaultSort()"
-        [showClearFilters]="showClearFilters"
+        [showClearFilters]="showClearFilters()"
         [selected]="selected"
         [reset]="resetSubject.asObservable()"
         (filterApplied)="onFilterApplied($event)"

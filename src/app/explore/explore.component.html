@@ -21,7 +21,7 @@
   <div class="b-container" *ngIf="campaigns">
     <app-filters
       [defaultNonRelevanceSort]="defaultNonRelevanceSort"
-      [showClearFilters]="showClearFilters"
+      [showClearFilters]="showClearFilters()"
       [selected]="selected"
       [reset]="resetSubject.asObservable()"
       (filterApplied)="onFilterApplied($event)"

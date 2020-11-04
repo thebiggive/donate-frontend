@@ -19,7 +19,6 @@ export class ExploreComponent implements OnInit {
   resetSubject: Subject<void> = new Subject<void>();
   searched = false;
   selected: {[key: string]: any}; // SelectedType but allowing string key lookups.
-  showClearFilters = false;
 
   private offset = 0;
 
@@ -64,7 +63,6 @@ export class ExploreComponent implements OnInit {
 
   onClearFiltersApplied() {
     this.selected = FiltersComponent.selectedDefaults(this.defaultNonRelevanceSort);
-    this.showClearFilters = false;
     this.run();
     this.resetSubject.next();
   }
@@ -73,6 +71,16 @@ export class ExploreComponent implements OnInit {
     this.selected.term = term;
     this.selected.sortField = term.length > 0 ? '' : this.defaultNonRelevanceSort;
     this.run();
+  }
+
+  showClearFilters(): boolean {
+    return Boolean(
+      this.selected.beneficiary ||
+      this.selected.category ||
+      this.selected.country ||
+      this.selected.onlyMatching ||
+      this.selected.term,
+    );
   }
 
   private moreMightExist(): boolean {
@@ -113,7 +121,6 @@ export class ExploreComponent implements OnInit {
   private loadQueryParamsAndRun() {
     this.route.queryParams.subscribe(params => {
       if (Object.keys(params).length > 0) {
-        this.showClearFilters = true;
         for (const key of Object.keys(params)) {
           if (key === 'onlyMatching') {
             // convert URL query param string to boolean
