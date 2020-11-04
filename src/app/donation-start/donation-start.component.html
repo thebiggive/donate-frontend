@@ -37,11 +37,13 @@
               <img src="/assets/images/icon-tick.png" height="11" alt="Check mark">
               Match funds are currently available!
             </p>
-            <mat-form-field class="c-your-donation__form-field b-center size-lg" color="primary">
-              <span matPrefix>£</span>
-              <mat-label for="donationAmount">Donation to {{ campaign.charity.name }}</mat-label>
-              <input formControlName="donationAmount" id="donationAmount" matInput>
-            </mat-form-field>
+            <div class="donation-input">
+              <mat-form-field class="c-your-donation__form-field b-center size-lg" color="primary">
+                <span matPrefix>£</span>
+                <mat-label for="donationAmount">Donation to {{ campaign.charity.name }}</mat-label>
+                <input formControlName="donationAmount" id="donationAmount" matInput>
+              </mat-form-field>
+            </div>
             <p *ngIf="suggestedAmounts && suggestedAmounts.length > 0" class="b-center b-grey b-rt-0">Or, choose</p>
             <div *ngIf="suggestedAmounts && suggestedAmounts.length > 0" class="c-suggested-amount" fxLayout="row">
               <button
@@ -71,21 +73,23 @@
               <span *ngIf="psp == 'enthuse'">Donations play a vital part in paying towards our running costs as a charity. If you'd rather not support us, you can choose not to make a gift to the Big Give when finalising your donation.</span>
             </p>
 
-            <mat-form-field
-              *ngIf="psp == 'stripe'"
-              class="c-your-donation__form-field b-center"
-              color="primary"
-            >
-              <span matPrefix>£</span>
-              <mat-label for="tipAmount">Donation to the Big Give</mat-label>
-              <input formControlName="tipAmount" id="tipAmount" matInput>
-              <mat-hint
-                *ngIf="donationAmount && donationAmount > 0"
+            <div class="donation-input">
+              <mat-form-field
+                *ngIf="psp == 'stripe'"
+                class="c-your-donation__form-field b-center"
+                color="primary"
               >
-                {{ (tipAmount() / donationAmount) | percent }}
-              of main donation
-              </mat-hint>
-            </mat-form-field>
+                <span matPrefix>£</span>
+                <mat-label for="tipAmount">Donation to the Big Give</mat-label>
+                <input formControlName="tipAmount" id="tipAmount" matInput>
+                <mat-hint
+                  *ngIf="donationAmount && donationAmount > 0"
+                >
+                  {{ (tipAmount() / donationAmount) | percent }}
+                of main donation
+                </mat-hint>
+              </mat-form-field>
+            </div>
 
             <p class="error" *ngIf="donationCreateError" aria-live="assertive">
               Sorry, we can't register your donation right now. Please try again in a moment
