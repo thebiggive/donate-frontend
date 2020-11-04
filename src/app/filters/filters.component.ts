@@ -106,6 +106,15 @@ export class FiltersComponent implements OnInit, OnDestroy {
     return (this.hasTerm() ? '' : this.defaultNonRelevanceSort);
   }
 
+  hasFilter(): boolean {
+    return Boolean(
+      this.selected.beneficiary ||
+      this.selected.category ||
+      this.selected.country ||
+      this.selected.onlyMatching,
+    );
+  }
+
   hasTerm(): boolean {
     return (this.selected.term || '').length > 0;
   }

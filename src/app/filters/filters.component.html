@@ -13,7 +13,9 @@
       mat-raised-button
       (click)="openFilters()"
       class="b-w-100 b-light c-filters__group c-filters__filter-button"
+      [color]="hasFilter() ? 'accent' : ''"
     >
+      <mat-icon *ngIf="hasFilter()">check_circle_outline</mat-icon>
       <mat-icon>filter_alt</mat-icon> Filters
     </button>
   </div>
@@ -22,6 +24,6 @@
     *ngIf="showClearFilters"
     class="c-filters__reset"
     (click)="clearFilters()"
-    aria-label="Clear filters"
-  ></a>
+    aria-label="Clear search and filters"
+  >View all</a>
 </div>
