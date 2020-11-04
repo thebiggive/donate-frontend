@@ -37,10 +37,15 @@
               <img src="/assets/images/icon-tick.png" height="11" alt="Check mark">
               Match funds are currently available!
             </p>
+            <p class="c-your-donation__to">Donation to {{ campaign.charity.name }}</p>
             <div class="donation-input">
               <mat-form-field class="c-your-donation__form-field b-center size-lg" color="primary">
-                <span matPrefix>£</span>
-                <mat-label for="donationAmount">Donation to {{ campaign.charity.name }}</mat-label>
+                <span class="prefix" matPrefix>£</span>
+                <mat-label class="c-your-donation__placeholder" for="donationAmount">
+                  <div class="to-charity">
+                    Donation to {{ campaign.charity.name }}
+                  </div>
+                </mat-label>
                 <input formControlName="donationAmount" id="donationAmount" matInput>
               </mat-form-field>
             </div>
@@ -77,8 +82,12 @@
                 class="c-your-donation__form-field b-center"
                 color="primary"
               >
-                <span matPrefix>£</span>
-                <mat-label for="tipAmount">Donation to the Big Give</mat-label>
+                <span class="prefix" matPrefix>£</span>
+                <mat-label class="c-your-donation__placeholder" for="tipAmount">
+                  <div class="to-tbg">
+                    Donation to the Big Give
+                  </div>
+                </mat-label>
                 <input formControlName="tipAmount" id="tipAmount" matInput>
                 <mat-hint
                   *ngIf="donationAmount && donationAmount > 0"
