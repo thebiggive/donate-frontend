@@ -97,14 +97,42 @@
   margin: 0 auto;
   display: block;
   font-weight: 700;
-  @media #{$breakpoint-md} {
-    font-size: 18px;
+  font-size: 22px;
+}
+
+.c-your-donation__placeholder {
+  padding-bottom: 1rem;
+  font-size: 16px;
+  @media only screen and (max-width: 1200px) {
+    font-size: 12px;
   }
-  @media #{$breakpoint-lg} {
-    font-size: 24px;
+
+  @media only screen and (max-width: 800px) {
+    font-size: 10px;
   }
-  @media #{$breakpoint-xl} {
-    font-size: 24px;
+
+  .to-charity {
+    padding-top: 0.3rem;
+    @media only screen and (max-width: 650px) {
+      display: none;
+    }
+  }
+
+  .to-tbg {
+    padding-top: 0.3rem;
+  }
+}
+
+.c-your-donation__to {
+  display: none;
+
+  @media only screen and (max-width: 650px) {
+    color: mat-color($donate-primary);
+    font-size: 10px;
+    text-align: center;
+    margin-bottom: -3rem;
+    padding-left: 1rem;
+    display: block;
   }
 }
 
@@ -173,4 +201,8 @@ a {
 .error {
   color: mat-color($donate-warn);
   margin-bottom: 1rem;
+}
+
+.prefix {
+  font-size: 2rem
 }
