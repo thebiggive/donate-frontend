@@ -204,7 +204,6 @@ export class MetaCampaignComponent implements OnInit {
    * Update the browser's query params when a sort or filter is applied.
    */
   private setQueryParams() {
-    this.showClearFilters = true;
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: FiltersComponent.getQueryParams(this.selected, this.getDefaultSort()),
