@@ -30,6 +30,8 @@ describe('CampaignSearchFormComponent', () => {
     fixture = TestBed.createComponent(CampaignSearchFormComponent);
     component = fixture.componentInstance;
     component.reset = new Observable();
+    component.selected = {};
+    component.ngOnInit();
     fixture.detectChanges();
   });
 

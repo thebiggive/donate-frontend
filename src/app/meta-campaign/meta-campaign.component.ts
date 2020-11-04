@@ -129,7 +129,7 @@ export class MetaCampaignComponent implements OnInit {
   private loadMoreForCurrentSearch() {
     this.offset += CampaignService.perPage;
     this.loading = true;
-    const query = this.campaignService.buildQuery(this.selected, this.offset);
+    const query = this.campaignService.buildQuery(this.selected, this.offset, this.campaignId, this.campaignSlug, this.fundSlug);
     this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
       // Success
       this.children = [...this.children, ...campaignSummaries];
@@ -145,7 +145,7 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   private run() {
-    const query = this.campaignService.buildQuery(this.selected, 0);
+    const query = this.campaignService.buildQuery(this.selected, 0, this.campaignId, this.campaignSlug, this.fundSlug);
     this.children = [];
     this.loading = true;
 
@@ -171,7 +171,7 @@ export class MetaCampaignComponent implements OnInit {
 
   private setSecondaryPropsAndRun(campaign: Campaign) {
     this.selected = FiltersComponent.selectedDefaults(this.getDefaultSort()); // Depends on `campaign`
-    this.run();
+    this.loadQueryParamsAndRun();
     this.pageMeta.setCommon(
       campaign.title,
       campaign.summary || 'A match funded campaign with the Big Give',

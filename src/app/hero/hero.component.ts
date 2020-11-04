@@ -12,11 +12,10 @@ import { ImageService } from '../image.service';
   styleUrls: ['./hero.component.scss'],
 })
 export class HeroComponent implements OnInit {
-  public searchTerm: string;
   @Input() campaign: Campaign;
   @Input() description: string;
   @Input() fund?: Fund;
-  @Input() @Output() selected: SelectedType;
+  @Input() selected: SelectedType;
   @Input() reset: Observable<void>; // Passed through to CampaignSearchFormComponent
 
   @Output() heroSearch: EventEmitter<any> = new EventEmitter();
