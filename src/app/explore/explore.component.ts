@@ -101,6 +101,7 @@ export class ExploreComponent implements OnInit {
   }
 
   private run() {
+    this.offset = 0;
     const query = this.campaignService.buildQuery(this.selected, 0);
     this.campaigns = [];
     this.loading = true;
