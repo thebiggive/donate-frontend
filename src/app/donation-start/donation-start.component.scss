@@ -100,6 +100,18 @@
   font-size: 22px;
 }
 
+.c-your-donation__form-field-to-tbg {
+  max-width: 300px;
+  margin: 0 auto;
+  display: block;
+  font-weight: 700;
+  font-size: 15px;
+
+  @media only screen and (max-width: 650px) {
+    max-width: 200px;
+  }
+}
+
 .c-your-donation__placeholder {
   padding-bottom: 1rem;
   font-size: 16px;
@@ -119,7 +131,14 @@
   }
 
   .to-tbg {
-    padding-top: 0.3rem;
+    margin-top: -0.2rem;
+    @media only screen and (max-width: 800px) {
+      margin-top: 0.1rem;
+    }
+
+    @media only screen and (max-width: 650px) {
+      margin-top: 0.2rem;
+    }
   }
 }
 
@@ -205,4 +224,8 @@ a {
 
 .prefix {
   font-size: 2rem
+}
+
+.prefix-tbg {
+  font-size: 1.5rem
 }
