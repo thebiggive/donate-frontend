@@ -18,9 +18,9 @@ export class DonationCompleteComponent {
   public cardChargedAmount: number;
   public complete = false;
   public donation: Donation;
-  public prefilledText: string;
   public giftAidAmount: number;
   public noAccess = false;
+  public prefilledText: string;
   public timedOut = false;
   public totalValue: number;
   public shareUrl: string;
