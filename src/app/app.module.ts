@@ -19,6 +19,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
@@ -82,6 +83,7 @@ import { HomeComponent } from './home/home.component';
     BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
     BrowserTransferStateModule,
     FlexLayoutModule,
+    FontAwesomeModule,
     HttpClientModule,
     InfiniteScrollModule,
     MatButtonModule,

@@ -21,9 +21,16 @@
     <a class="c-header__link" [routerLink]="'/campaign/' + campaign.id" [queryParams]="inFundContext ? {fromFund: 1} : {}"><h3 class="c-header__campaign-title">{{ campaign.title }}</h3></a>
   </div>
 
-  <div class="c-categories" tabindex="0"> <!-- We need to explicitly make this focusable so the scrolling area is keyboard-usable -->
-    <ul class="c-categories__list" *ngFor="let category of campaign.categories">
-      <li class="c-categories__item">{{ category }}</li>
+  <div fxLayout="row" class="c-icon-lists">
+    <ul fxFlex="50">
+      <li *ngFor="let category of campaign.categories">
+        <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
+      </li>
+    </ul>
+    <ul fxFlex="50">
+      <li *ngFor="let beneficiary of campaign.beneficiaries">
+        <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
+      </li>
     </ul>
   </div>
 
