@@ -1,6 +1,8 @@
 export const environment = {
   production: true,
   apiUriPrefix: 'https://sf-api-production.thebiggive.org.uk',
+  ccStartTime: 1606824000, // 1st December 2020, 12:00pm
+  ccEndTime: 1607428800, // 8th December 2020, 12:00pm
   donateUriPrefix: 'https://donate.thebiggive.org.uk',
   donationsApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',
   getSiteControlId: '97792',
