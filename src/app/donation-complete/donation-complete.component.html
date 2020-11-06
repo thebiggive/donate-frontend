@@ -60,6 +60,13 @@
             <p class="c-tip__description b-light b-grey b-rt-sm">Total amount you have been charged</p>
             <p class="b-rt-0 b-bold b-m-0">{{ cardChargedAmount | exactCurrency }}</p>
           </div>
+          <div class="c-social-sharing">
+            <p>Amplify your impact. Sharing on social media helps raise more.</p>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ shareUrl }}" target="_blank" rel="noopener"><img class="c-social-image" src="/assets/images/share-facebook.png" alt="Facebook" width="50"></a>
+            <a href="https://twitter.com/share?url={{ shareUrl }}&text={{ prefilledText }}" target="_blank" rel="noopener"><img class="c-social-image" src="/assets/images/share-twitter.png" alt="Twitter" width="50"></a>
+            <a href="https://www.linkedin.com/cws/share?url={{ shareUrl }}" target="_blank" rel="noopener"><img class="c-social-image" src="/assets/images/share-linkedin.png" alt="LinkedIn" width="50"></a>
+            <a href="whatsapp://send?text={{ prefilledText }}\n\n{{ shareUrl }}" target="_blank" rel="noopener"><img class="c-social-image" src="/assets/images/share-whatsapp.png" alt="WhatsApp" width="50"></a>
+          </div>
         </div>
       </div>
 

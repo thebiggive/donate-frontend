@@ -98,6 +98,15 @@
   }
 }
 
+.c-social-sharing {
+  border-top: 1px solid $colour-grey-light;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  @media #{$breakpoint-md} {
+    padding: 1rem 2rem 0;
+  }
+}
+
 .c-button {
   background-color: $colour-background;
   color: $colour-teal;
@@ -119,4 +128,8 @@
     width: 120px;
     margin-top: 1rem;
   }
+}
+
+.c-social-image {
+  padding-right: 1rem;
 }
