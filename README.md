@@ -24,7 +24,7 @@ To use `ng` commands directly, e.g. to generate new code scaffolding with the CL
 
 To run style, unit and e2e tests together from your local, as CircleCI build checks do against every branch:
 
-    npm run ci
+    FONTAWESOME_NPM_AUTH_TOKEN=**TOKEN** npm run ci
 
 The latest tagged [Puppeteer](https://www.npmjs.com/package/puppeteer) typically uses the latest available Chromium and updates do not follow
 semantic versioning. So for it to continue working, it currently needs to be pinned to a particular "feature release", e.g. `3.0.*` for Chromium 81.
