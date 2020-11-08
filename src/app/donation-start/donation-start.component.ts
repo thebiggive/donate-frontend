@@ -1,5 +1,6 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
@@ -84,6 +85,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
     private pageMeta: PageMetaService,
+    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
+    @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,
     private state: TransferState,
@@ -160,11 +163,15 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     this.maximumDonationAmount = environment.maximumDonationAmount;
-    const suggestedAmountsKey = makeStateKey<number[]>('suggested-amounts');
-    this.suggestedAmounts = this.state.get(suggestedAmountsKey, undefined);
-    if (this.suggestedAmounts === undefined) {
-      this.suggestedAmounts = this.getSuggestedAmounts();
-      this.state.set(suggestedAmountsKey, this.suggestedAmounts);
+
+    // We need each donor to get a randomised but consistent for them set of
+    // amount suggestions, while we support variant tests of this. So
+    // we can't set this up for them on the server. It is therefore best
+    // to skip this entirely on the server side and always have it return
+    // suggestions, then have them 'injected' as the page loads when
+    // appropriate based on the options applicable for the particular donor.
+    if (isPlatformBrowser(this.platformId)) {
+      this.suggestedAmounts = this.donationService.getSuggestedAmounts();
     }
 
     const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
@@ -578,36 +585,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
   }
 
-  private getSuggestedAmounts(): number[] {
-    if (environment.suggestedAmounts.length === 0) {
-      return [];
-    }
-
-    // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
-    let thresholdCounter = 0;
-    for (const suggestedAmount of environment.suggestedAmounts) {
-      thresholdCounter += suggestedAmount.weight;
-    }
-    const threshold = Math.floor(Math.random() * thresholdCounter);
-
-    thresholdCounter = 0;
-    for (const suggestedAmount of environment.suggestedAmounts) {
-      thresholdCounter += suggestedAmount.weight;
-
-      if (thresholdCounter > threshold) {
-        return suggestedAmount.values;
-      }
-    }
-
-    // We should never reach this point if the suggestions options are configured correctly.
-    this.analyticsService.logError(
-      'suggested_amounts_misconfigured',
-      `Unexpectedly failed to pick suggested amounts for campaign ${this.campaignId}`,
-    );
-
-    return [];
-  }
-
   private createDonation() {
     if (!this.campaign || !this.campaign.charity.id || !this.psp) {
       this.donationCreateError = true;
@@ -655,6 +632,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
         this.donationService.saveDonation(response.donation, response.jwt);
         this.donation = response.donation; // Simplify update() while we're on this page.
+
+        this.analyticsService.logAmountChosen(donation.donationAmount, this.campaignId, this.suggestedAmounts);
 
         if (this.campaign && this.psp === 'stripe') {
           this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
@@ -762,7 +741,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private redirectToEnthuse(donation: Donation, logoUri?: string) {
-    this.analyticsService.logAmountChosen(donation.donationAmount, this.campaignId, this.suggestedAmounts);
     this.analyticsService.logEvent('payment_redirect_click', `Donating to campaign ${this.campaignId}`);
     this.charityCheckoutService.startDonation(donation, logoUri);
   }

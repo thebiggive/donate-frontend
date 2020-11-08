@@ -18,12 +18,53 @@ export class DonationService {
   private readonly completeStatuses = ['Collected', 'Paid'];
   private readonly resumableStatuses = ['Pending', 'Reserved'];
   private readonly storageKey = `${environment.donateUriPrefix}/v2`; // Key is per-domain/env
+  private readonly uxConfigKey = `${environment.donateUriPrefix}/ux/v1`;
 
   constructor(
     private analyticsService: AnalyticsService,
     private http: HttpClient,
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
   ) {}
+
+  /**
+   * Supports variant tests for now. Uses local storage to give each donor
+   * a consistent experience while they are on the same device.
+   */
+  getSuggestedAmounts(): number[] {
+    const stateKey = this.uxConfigKey;
+    const existingConfig = this.storage.get(stateKey);
+
+    if (existingConfig && existingConfig.suggestedAmounts) {
+      // For now we remember a previously configured set of suggested
+      // amounts indefinitely for a given donor.
+      return existingConfig.suggestedAmounts;
+    }
+
+    let suggestedAmounts: number[] = [];
+
+    if (environment.suggestedAmounts.length > 0) {
+      // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
+      let thresholdCounter = 0;
+      for (const suggestedAmount of environment.suggestedAmounts) {
+        thresholdCounter += suggestedAmount.weight;
+      }
+      const threshold = Math.floor(Math.random() * thresholdCounter);
+
+      thresholdCounter = 0;
+      for (const suggestedAmount of environment.suggestedAmounts) {
+        thresholdCounter += suggestedAmount.weight;
+
+        if (thresholdCounter > threshold) {
+          suggestedAmounts = suggestedAmount.values;
+          break;
+        }
+      }
+    }
+
+    this.storage.set(stateKey, { suggestedAmounts });
+
+    return suggestedAmounts;
+  }
 
   getDonation(donationId: string): Donation | undefined {
     const couplet = this.getLocalDonationCouplet(donationId);
