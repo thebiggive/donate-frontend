@@ -26,46 +26,6 @@ export class DonationService {
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
   ) {}
 
-  /**
-   * Supports variant tests for now. Uses local storage to give each donor
-   * a consistent experience while they are on the same device.
-   */
-  getSuggestedAmounts(): number[] {
-    const stateKey = this.uxConfigKey;
-    const existingConfig = this.storage.get(stateKey);
-
-    if (existingConfig && existingConfig.suggestedAmounts) {
-      // For now we remember a previously configured set of suggested
-      // amounts indefinitely for a given donor.
-      return existingConfig.suggestedAmounts;
-    }
-
-    let suggestedAmounts: number[] = [];
-
-    if (environment.suggestedAmounts.length > 0) {
-      // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
-      let thresholdCounter = 0;
-      for (const suggestedAmount of environment.suggestedAmounts) {
-        thresholdCounter += suggestedAmount.weight;
-      }
-      const threshold = Math.floor(Math.random() * thresholdCounter);
-
-      thresholdCounter = 0;
-      for (const suggestedAmount of environment.suggestedAmounts) {
-        thresholdCounter += suggestedAmount.weight;
-
-        if (thresholdCounter > threshold) {
-          suggestedAmounts = suggestedAmount.values;
-          break;
-        }
-      }
-    }
-
-    this.storage.set(stateKey, { suggestedAmounts });
-
-    return suggestedAmounts;
-  }
-
   getDonation(donationId: string): Donation | undefined {
     const couplet = this.getLocalDonationCouplet(donationId);
 
@@ -104,6 +64,46 @@ export class DonationService {
     // We have at least one existing donation that may be a candidate to re-try.
     // We'll take an arbitrary 'first' matching donation since presenting multiple to the donor would be too confusing.
     return this.get(existingDonations[0].donation);
+  }
+
+    /**
+   * Supports variant tests for now. Uses local storage to give each donor
+   * a consistent experience while they are on the same device.
+   */
+  getSuggestedAmounts(): number[] {
+    const stateKey = this.uxConfigKey;
+    const existingConfig = this.storage.get(stateKey);
+
+    if (existingConfig && existingConfig.suggestedAmounts) {
+      // For now we remember a previously configured set of suggested
+      // amounts indefinitely for a given donor.
+      return existingConfig.suggestedAmounts;
+    }
+
+    let suggestedAmounts: number[] = [];
+
+    if (environment.suggestedAmounts.length > 0) {
+      // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
+      let thresholdCounter = 0;
+      for (const suggestedAmount of environment.suggestedAmounts) {
+        thresholdCounter += suggestedAmount.weight;
+      }
+      const threshold = Math.floor(Math.random() * thresholdCounter);
+
+      thresholdCounter = 0;
+      for (const suggestedAmount of environment.suggestedAmounts) {
+        thresholdCounter += suggestedAmount.weight;
+
+        if (thresholdCounter > threshold) {
+          suggestedAmounts = suggestedAmount.values;
+          break;
+        }
+      }
+    }
+
+    this.storage.set(stateKey, { suggestedAmounts });
+
+    return suggestedAmounts;
   }
 
   /**
