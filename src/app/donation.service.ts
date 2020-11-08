@@ -66,7 +66,7 @@ export class DonationService {
     return this.get(existingDonations[0].donation);
   }
 
-    /**
+  /**
    * Supports variant tests for now. Uses local storage to give each donor
    * a consistent experience while they are on the same device.
    */
