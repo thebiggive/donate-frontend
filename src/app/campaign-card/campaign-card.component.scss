@@ -58,25 +58,8 @@ ul {
 }
 
 .c-icon-lists {
+  @include card-icons;
   padding: 0 2rem;
-
-  ul {
-    li {
-      display: inline;
-      padding-right: 0.5rem;
-
-      .ng-fa-icon {
-        color: $colour-grey;
-      }
-    }
-  
-    &:last-child {
-      text-align: right;
-      li:last-child {
-        padding-right: 0;
-      }
-    }
-  }
 }
 
 .c-funds {

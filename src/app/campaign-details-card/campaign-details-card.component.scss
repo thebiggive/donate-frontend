@@ -4,6 +4,10 @@
   @include make-card($box-shadow-hard);
 }
 
+.c-icon-lists {
+  @include card-icons;
+}
+
 .c-banner__image {
   height: auto;
   border-top-left-radius: 4px;
@@ -40,9 +44,13 @@
   color: $colour-teal;
 }
 
-.c-championed-by {
+.c-championed-by, .c-country {
   color: $colour-teal;
   a {
     text-decoration: none;
   }
+}
+
+.c-country {
+  margin-top: 0;
 }
