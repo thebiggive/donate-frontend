@@ -6,6 +6,10 @@ WORKDIR /usr/src/app
 # See https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
 COPY package*.json ./
 
+# Prepare FontAwesome config for `npm install`.
+ARG FONTAWESOME_NPM_AUTH_TOKEN
+COPY .npmrc ./
+
 # Skip Puppeteer Chromium download. https://github.com/puppeteer/puppeteer/issues/2262#issuecomment-407405037
 RUN npm config set puppeteer_skip_chromium_download true && \
     npm install
@@ -16,8 +20,6 @@ COPY . .
 # Take value 'regression', 'staging' or 'production' so we know which Angular vars to build into the app bundle.
 # This controls e.g. which environment's API we target.
 ARG BUILD_ENV
-
-ARG FONTAWESOME_NPM_AUTH_TOKEN
 
 # Build client bundle and prepare for Server-Side Rendering
 RUN npm run build:ssr:${BUILD_ENV}
