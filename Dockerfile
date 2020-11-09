@@ -17,6 +17,8 @@ COPY . .
 # This controls e.g. which environment's API we target.
 ARG BUILD_ENV
 
+ARG FONTAWESOME_NPM_AUTH_TOKEN
+
 # Build client bundle and prepare for Server-Side Rendering
 RUN npm run build:ssr:${BUILD_ENV}
 
