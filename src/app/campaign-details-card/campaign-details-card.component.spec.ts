@@ -36,7 +36,9 @@ describe('CampaignDetailsCardComponent', () => {
       123,
       [],
       'https://example.com/banner.png',
+      ['Other'],
       [],
+      ['Animals'],
       'Some Champion',
       {
         id: 'testCharityId',
@@ -47,6 +49,7 @@ describe('CampaignDetailsCardComponent', () => {
         regulatorNumber: '123456',
         regulatorRegion: 'Scotland',
       },
+      ['United Kingdom'],
       4,
       new Date(),
       [],
