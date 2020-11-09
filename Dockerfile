@@ -6,6 +6,10 @@ WORKDIR /usr/src/app
 # See https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
 COPY package*.json ./
 
+# Prepare FontAwesome config for `npm install`.
+ARG FONTAWESOME_NPM_AUTH_TOKEN
+COPY .npmrc ./
+
 # Skip Puppeteer Chromium download. https://github.com/puppeteer/puppeteer/issues/2262#issuecomment-407405037
 RUN npm config set puppeteer_skip_chromium_download true && \
     npm install

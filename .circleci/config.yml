@@ -158,7 +158,7 @@ workflows:
       - aws-ecr/build-and-push-image:
           requires:
             - deploy-regression-static
-          extra-build-args: '--build-arg BUILD_ENV=regression'
+          extra-build-args: '--build-arg BUILD_ENV=regression --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN}'
           repo: '${AWS_ECR_REPO_NAME}'
           region: AWS_REGION
           tag: 'regression,regression-${CIRCLE_SHA1}'
@@ -184,7 +184,7 @@ workflows:
       - aws-ecr/build-and-push-image:
           requires:
             - deploy-staging-static
-          extra-build-args: '--build-arg BUILD_ENV=staging'
+          extra-build-args: '--build-arg BUILD_ENV=staging --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN}'
           repo: '${AWS_ECR_REPO_NAME}'
           region: AWS_REGION
           tag: 'staging,staging-${CIRCLE_SHA1}'
@@ -218,7 +218,7 @@ workflows:
       - aws-ecr/build-and-push-image:
           requires:
             - deploy-production-static
-          extra-build-args: '--build-arg BUILD_ENV=production'
+          extra-build-args: '--build-arg BUILD_ENV=production --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN}'
           repo: '${AWS_ECR_REPO_NAME}'
           region: AWS_REGION
           tag: 'production,production-${CIRCLE_SHA1}'
