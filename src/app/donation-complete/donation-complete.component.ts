@@ -98,8 +98,8 @@ export class DonationCompleteComponent {
 
   private setSocialShares(campaign: Campaign) {
     const now = Math.floor(new Date().getTime() / 1000.0);
-    const ccStartTime = parseInt(`${environment.ccStartTime}`, 10);
-    const ccEndTime = parseInt(`${environment.ccEndTime}`, 10);
+    const ccStartTime = environment.ccStartTime;
+    const ccEndTime = environment.ccEndTime;
 
     this.shareUrl = `${environment.donateUriPrefix}/campaign/${campaign.id}`;
 
