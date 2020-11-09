@@ -124,3 +124,9 @@
 .c-social-image {
   padding-right: 1rem;
 }
+
+@media screen and (min-width: 500px) {
+  #whatsapp { 
+    display: none;
+  }
+}
