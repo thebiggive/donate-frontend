@@ -39,12 +39,14 @@ describe('DonationStartComponent', () => {
           },
         ],
         'https://example.com/some-banner.png',
+        ['Other'],
         [
           {
             description: 'budget line 1',
             amount: 2000.01,
           },
         ],
+        ['Animals'],
         'The Big Give Match Fund',
         {
           id: '0011r00002HHAprAAH',
@@ -56,6 +58,7 @@ describe('DonationStartComponent', () => {
           stripeAccountId: campaignId === 'testCampaignIdForStripe' ? 'testStripeAcctId' : undefined,
           website: 'https://www.awesomecharity.co.uk',
         },
+        ['United Kingdom'],
         4,
         new Date(),
         [

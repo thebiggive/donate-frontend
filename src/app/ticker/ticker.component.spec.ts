@@ -30,12 +30,14 @@ describe('TickerComponent', () => {
         },
       ],
       'https://example.com/some-banner.png',
+      ['Other'],
       [
         {
           description: 'budget line 1',
           amount: 2000.01,
         },
       ],
+      ['Animals'],
       'The Big Give Match Fund',
       {
         id: '0011r00002HHAprAAH',
@@ -46,6 +48,7 @@ describe('TickerComponent', () => {
         regulatorNumber: '123456',
         regulatorRegion: 'Scotland',
       },
+      ['United Kingdom'],
       4,
       new Date(),
       [

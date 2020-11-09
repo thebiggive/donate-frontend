@@ -5,14 +5,20 @@
     <mat-label>Category</mat-label>
     <mat-select [(value)]="selected.category" (selectionChange)="setFilter('category', $event)">
       <mat-option value="">All</mat-option>
-      <mat-option *ngFor="let category of categoryOptions" [value]="category">{{ category }}</mat-option>
+      <mat-option
+        *ngFor="let category of categoryOptions"
+        [value]="category.name"
+      ><fa-icon [icon]="category.icon"></fa-icon> {{ category.name }}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field appearance="outline">
     <mat-label>Helping</mat-label>
     <mat-select [(value)]="selected.beneficiary" (selectionChange)="setFilter('beneficiary', $event)">
       <mat-option value="">All</mat-option>
-      <mat-option *ngFor="let beneficiary of beneficiaryOptions" [value]="beneficiary">{{ beneficiary }}</mat-option>
+      <mat-option
+        *ngFor="let beneficiary of beneficiaryOptions"
+        [value]="beneficiary.name"
+      ><fa-icon [icon]="beneficiary.icon"></fa-icon> {{ beneficiary.name }}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field class="c-filters__form-field" appearance="outline">

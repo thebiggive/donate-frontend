@@ -57,29 +57,25 @@ ul {
   text-decoration: none;
 }
 
-.c-categories {
-  overflow-x: scroll;
-  white-space:nowrap;
-  margin-left: 0.5rem;
-  padding-bottom: 0.5rem;
-}
+.c-icon-lists {
+  padding: 0 2rem;
 
-.c-categories__list {
-  margin:0 0.5rem;
-  margin-left: 0;
-  display: inline;
-}
+  ul {
+    li {
+      display: inline;
+      padding-right: 0.5rem;
 
-.c-categories__item {
-  @include size-md;
-  background-color: $colour-teal-fade;
-  color: $colour-teal-dark;
-  border-radius: 14px;
-  padding: 0.15rem 0.75rem 0.25rem;
-  margin-right: 0.5rem;
-  display: inline;
-  &:last-child {
-    margin-right: 0;
+      .ng-fa-icon {
+        color: $colour-grey;
+      }
+    }
+  
+    &:last-child {
+      text-align: right;
+      li:last-child {
+        padding-right: 0;
+      }
+    }
   }
 }
 
