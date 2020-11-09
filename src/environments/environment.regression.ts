@@ -7,6 +7,8 @@
 export const environment = {
   production: false,
   apiUriPrefix: 'https://regtest1-biggive.cs109.force.com',
+  ccStartTime: 1606824000, // 1st December 2020, 12:00pm
+  ccEndTime: 1607428800, // 8th December 2020, 12:00pm
   donateUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
   donationsApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',

@@ -89,7 +89,7 @@
   margin-top: 0.75rem;
 }
 
-.c-tip {
+.c-misc {
   border-top: 1px solid $colour-grey-light;
   margin-top: 2rem;
   padding-top: 1rem;
@@ -118,5 +118,15 @@
   @media #{$breakpoint-lg} {
     width: 120px;
     margin-top: 1rem;
+  }
+}
+
+.c-social-image {
+  padding-right: 1rem;
+}
+
+@media screen and (min-width: 500px) {
+  #whatsapp { 
+    display: none;
   }
 }
