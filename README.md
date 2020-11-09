@@ -5,6 +5,11 @@ charities' campaigns and donate to them.
 
 ## Getting started
 
+To use npm without setting an env var on every invocation, export
+`FONTAWESOME_NPM_AUTH_TOKEN` to your environment with a valid
+key as the value. Alternatively you can set it with a placeholder if
+you don't need to work with FontAwesome and don't have a Pro key.
+
 To run the app locally:
 
 * clone it from GitHub
@@ -24,7 +29,7 @@ To use `ng` commands directly, e.g. to generate new code scaffolding with the CL
 
 To run style, unit and e2e tests together from your local, as CircleCI build checks do against every branch:
 
-    FONTAWESOME_NPM_AUTH_TOKEN=**TOKEN** npm run ci
+    npm run ci
 
 The latest tagged [Puppeteer](https://www.npmjs.com/package/puppeteer) typically uses the latest available Chromium and updates do not follow
 semantic versioning. So for it to continue working, it currently needs to be pinned to a particular "feature release", e.g. `3.0.*` for Chromium 81.

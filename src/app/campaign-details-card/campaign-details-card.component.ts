@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { Campaign } from '../campaign.model';
+import { CampaignGroupsService } from '../campaign-groups.service';
 import { CampaignService } from '../campaign.service';
 import { ImageService } from '../image.service';
 
@@ -19,5 +20,21 @@ export class CampaignDetailsCardComponent implements OnInit {
   ngOnInit() {
     this.percentRaised = CampaignService.percentRaised(this.campaign);
     this.imageService.getImageUri(this.campaign.bannerUri, 830).subscribe(uri => this.bannerUri = uri);
+  }
+
+  getBeneficiaryIcon(beneficiary: string) {
+    return CampaignGroupsService.getBeneficiaryIcon(beneficiary);
+  }
+
+  getCategoryIcon(category: string) {
+    return CampaignGroupsService.getCategoryIcon(category);
+  }
+
+  locations(): string|null {
+    if (this.campaign.countries.length > 1) {
+      return 'Multiple locations';
+    }
+
+    return this.campaign.countries[0];
   }
 }
