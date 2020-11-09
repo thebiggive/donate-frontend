@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   apiUriPrefix: 'https://sandbox7-biggive.cs109.force.com',
-  ccStartTime: 1606824000, // 1st December 2020, 12:00pm
-  ccEndTime: 1607428800, // 8th December 2020, 12:00pm
+  ccStartTime: 1604934000, // 9th November, 15:00
+  ccEndTime: 1604937600, // 9th November, 16:00
   donateUriPrefix: 'http://localhost:4200',
   donationsApiPrefix: 'http://localhost:30030/v1',
   getSiteControlId: '97792',

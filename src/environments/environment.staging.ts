@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
-  ccStartTime: 1606824000, // 1st December 2020, 12:00pm
-  ccEndTime: 1607428800, // 8th December 2020, 12:00pm
+  ccStartTime: 1604934000, // 9th November, 15:00
+  ccEndTime: 1604937600, // 9th November, 16:00
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
