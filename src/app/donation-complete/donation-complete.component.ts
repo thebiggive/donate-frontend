@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from '../../environments/environment';
 
@@ -24,6 +25,7 @@ export class DonationCompleteComponent {
   public timedOut = false;
   public totalValue: number;
   public shareUrl: string;
+  public whatsappShareUrl?: SafeResourceUrl;
 
   private donationId: string;
   private maxTries = 5;
@@ -113,5 +115,7 @@ export class DonationCompleteComponent {
     } else {
       this.prefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
     }
+
+    this.whatsappShareUrl = `whatsapp://send?text=${this.prefilledText}\n\n${this.shareUrl}`;
   }
 }
