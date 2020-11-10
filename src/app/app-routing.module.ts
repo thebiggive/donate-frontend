@@ -52,7 +52,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: HomeComponent,
+    redirectTo: 'christmas-challenge-2020', pathMatch: 'full' // Revert this as soon as user testing ends
   },
   {
     path: '**',
