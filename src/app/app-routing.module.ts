@@ -52,7 +52,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'christmas-challenge-2020', pathMatch: 'full' // Revert this as soon as user testing ends
+    redirectTo: 'christmas-challenge-2020', pathMatch: 'full', // Revert this as soon as user testing ends
   },
   {
     path: '**',
