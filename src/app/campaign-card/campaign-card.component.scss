@@ -32,12 +32,11 @@ ul {
 }
 
 .c-header__charity-name {
-  margin-top: 0.75rem;
-  margin-bottom: 0;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
   @include size-md;
   letter-spacing: 1px;
   @media #{$breakpoint-md} {
-    min-height: 48px;
     display: flex;
     align-items: flex-end;
     line-height: 1.5;
@@ -48,13 +47,14 @@ ul {
   margin: 0 0 .75rem;
   color: $colour-teal-dark;
   @include size-lg;
-  @media #{$breakpoint-md} {
-    min-height: 48px;
-  }
 }
 
 .c-header__link {
   text-decoration: none;
+}
+
+.c-body {
+  margin-top: auto;
 }
 
 .c-icon-lists {
@@ -94,11 +94,11 @@ ul {
 }
 
 .c-buttons {
-  margin-top:auto;
+  margin-top: auto;
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
-  align-items:center;
+  align-items: center;
 
   &__past {
     margin-top: 6px;
