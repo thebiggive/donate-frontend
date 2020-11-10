@@ -49,14 +49,16 @@
                 <input formControlName="donationAmount" id="donationAmount" matInput>
               </mat-form-field>
             </div>
-            <p *ngIf="suggestedAmounts && suggestedAmounts.length > 0" class="b-center b-grey b-rt-0">Or, choose</p>
-            <div *ngIf="suggestedAmounts && suggestedAmounts.length > 0" class="c-suggested-amount" fxLayout="row">
-              <button
-                type="button"
-                class="c-suggested-amount__button b-rh-2 b-bold"
-                *ngFor="let suggestedAmount of suggestedAmounts"
-                (click)="setAmount(suggestedAmount)"
-              >{{ suggestedAmount | exactCurrency }}</button>
+            <div *ngIf="suggestedAmounts && suggestedAmounts.length > 0" class="c-suggested-amounts">
+              <p class="b-center b-grey b-rt-0">Or, choose</p>
+              <div fxLayout="row">
+                <button
+                  type="button"
+                  class="c-suggested-amount__button b-rh-2 b-bold"
+                  *ngFor="let suggestedAmount of suggestedAmounts"
+                  (click)="setAmount(suggestedAmount)"
+                >{{ suggestedAmount | exactCurrency }}</button>
+              </div>
             </div>
 
             <div
