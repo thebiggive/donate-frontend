@@ -22,6 +22,7 @@ export const environment = {
       publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
+  redirectHomeToMeta: false,
   reservationMinutes: 15,
   // Each of 4x suggestion sets for 5% of donors each, no suggestions for the other 80%.
   suggestedAmounts: [

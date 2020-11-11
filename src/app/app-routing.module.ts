@@ -1,3 +1,4 @@
+import { environment } from '../environments/environment';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -9,6 +10,10 @@ import { DonationStartComponent } from './donation-start/donation-start.componen
 import { ExploreComponent } from './explore/explore.component';
 import { HomeComponent } from './home/home.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
+
+const rootPath = environment.redirectHomeToMeta
+  ? { path: '', redirectTo: 'christmas-challenge-2020', pathMatch: 'full' }
+  : { path: '', component: HomeComponent };
 
 const routes: Routes = [
   {
@@ -50,10 +55,7 @@ const routes: Routes = [
     path: ':campaignSlug',
     component: MetaCampaignComponent,
   },
-  {
-    path: '',
-    component: HomeComponent,
-  },
+  rootPath,
   {
     path: '**',
     redirectTo: '',
