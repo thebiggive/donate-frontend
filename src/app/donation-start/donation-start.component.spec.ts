@@ -151,6 +151,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '£1234',
         tipAmount: '20',
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: true,
@@ -181,6 +182,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '1234',
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: null,
@@ -222,6 +224,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: null,
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: true,
@@ -257,6 +260,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '0', // Simpler for now than testing e.g. '0.99' which also fails pattern validation
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: false,
@@ -292,6 +296,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '25001',
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: false,
@@ -327,6 +332,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '8765,21',
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: true,
@@ -371,6 +377,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '£1234',
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: true,
@@ -410,6 +417,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '£1234',
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: true,
@@ -449,6 +457,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '£1234',
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: true,

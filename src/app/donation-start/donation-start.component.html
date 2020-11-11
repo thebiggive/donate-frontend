@@ -79,25 +79,42 @@
             </mat-hint>
 
             <div class="donation-input">
-              <mat-form-field
-                *ngIf="psp == 'stripe'"
-                class="c-your-donation__form-field-to-tbg b-center"
-                color="primary"
-              >
-                <span class="prefix-tbg" matPrefix>£</span>
-                <mat-label class="c-your-donation__placeholder" for="tipAmount">
-                  <div class="to-tbg">
-                    Donation to the Big Give
-                  </div>
-                </mat-label>
-                <input formControlName="tipAmount" id="tipAmount" matInput>
-                <mat-hint
-                  *ngIf="donationAmount && donationAmount > 0"
+              <div *ngIf="psp == 'stripe'">
+                <mat-form-field appearance="outline">
+                  <mat-label for="tipPercentage">Donation to the Big Give</mat-label>
+                  <mat-select formControlName="tipPercentage" id="tipPercentage" (selectionChange)="tipPercentageChange()">
+                    <mat-option [value]="7.5">7.5%</mat-option>
+                    <mat-option [value]="10">10%</mat-option>
+                    <mat-option [value]="12.5">12.5%</mat-option>
+                    <mat-option [value]="15">15%</mat-option>
+                    <mat-option [value]="'Other'">Other</mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <mat-form-field
+                  [ngClass]="'b-center ' + (customTip() ? '' : 'b-hidden')"
+                  appearance="outline"
+                  color="primary"
                 >
+                  <span class="prefix-tbg" matPrefix>£</span>
+                  <input formControlName="tipAmount" id="tipAmount" matInput>
+                </mat-form-field>
+
+                <div
+                  class="error"
+                  aria-live="polite"
+                  *ngIf="tipAmountField?.invalid && tipAmountField?.errors && (tipAmountField?.dirty || tipAmountField?.touched)"
+                >
+                  Please enter how much you would like to donate to the Big Give.
+                </div>
+
+                <mat-hint *ngIf="!customTip()">{{ tipAmount() | exactCurrency }} donation to support the Big Give</mat-hint>
+
+                <mat-hint *ngIf="customTip() && donationAmount && donationAmount > 0">
                   {{ (tipAmount() / donationAmount) | percent }}
                 of main donation
                 </mat-hint>
-              </mat-form-field>
+              </div>
             </div>
 
             <p class="error" *ngIf="donationCreateError" aria-live="assertive">

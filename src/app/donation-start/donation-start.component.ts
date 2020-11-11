@@ -42,7 +42,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   showChampionOptIn = false;
 
   campaign?: Campaign;
-  donation: Donation;
+  donation?: Donation;
 
   donationForm: FormGroup;
   amountsGroup: FormGroup;
@@ -68,7 +68,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   private enthuseError?: string;  // Enthuse donation start error message
   private previousDonation?: Donation;
   private stepHeaderEventsSet = false;
+  private tipPercentageChanged = false;
 
+  private initialTipSuggestedPercentage = 12.5;
   // Based on https://stackoverflow.com/questions/164979/regex-for-matching-uk-postcodes#comment82517277_164994
   // but modified to make the separating space optional.
   private postcodeRegExp = new RegExp('^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\\s?[0-9][A-Za-z]{2})$');
@@ -119,6 +121,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           ValidateCurrencyMax,
           Validators.pattern('^£?[0-9]+?(\\.00)?$'),
         ]],
+        tipPercentage: [this.initialTipSuggestedPercentage], // See addStripeValidators().
         tipAmount: [null], // See addStripeValidators().
       }),
       giftAid: this.formBuilder.group({
@@ -252,16 +255,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   async stepChanged(event: StepperSelectionEvent) {
-
     // If the original donation amount was updated, cancel that donation,
     // we'll create a new one later on for this updated amount.
     if (this.donation !== undefined && this.donationAmount > 0 && this.donationAmount !== this.donation.donationAmount) {
-
       this.donationService.cancel(this.donation)
         .subscribe(() => {
           this.analyticsService.logEvent(
             'cancel_auto',
-            `Donation cancelled because amount was updated ${this.donation.donationId} to campaign ${this.campaignId}`,
+            `Donation cancelled because amount was updated ${this.donation?.donationId} to campaign ${this.campaignId}`,
           );
           this.donationService.removeLocalDonation(this.donation);
           this.cancelExpiryWarning();
@@ -313,8 +314,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     // This ensures `stepper.reset()` evalutes this to false and our usage
     // with this const helps to prevent `createDonation()` from being incorrectly triggered.
-    const activelySelectedNext = (event.previouslySelectedStep.label === 'Your donation'
-                                  && event.previouslySelectedStep.interacted === true);
+    const activelySelectedNext = (
+      event.previouslySelectedStep.label === 'Your donation' &&
+      event.previouslySelectedStep.interacted === true
+    );
 
     const invalidDonation = (this.donation === undefined || this.donation.status === 'Cancelled');
 
@@ -323,7 +326,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // Create a donation if user actively clicks 'next' from first step and
     // the current and previous donations are invalid.
     if (activelySelectedNext && invalidDonation && invalidPreviousDonation) {
-
       this.createDonation();
 
       if (this.psp === 'stripe') {
@@ -368,7 +370,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.donationUpdateError = false;
 
     // Can't proceed if campaign info not looked up yet or no usable PSP
-    if (!this.campaign || !this.campaign.charity.id || !this.psp) {
+    if (!this.donation || !this.campaign || !this.campaign.charity.id || !this.psp) {
       this.donationUpdateError = true;
       return;
     }
@@ -413,9 +415,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   async payWithStripe() {
-    if (!this.donation.clientSecret) {
+    if (!this.donation || !this.donation.clientSecret) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
-      this.analyticsService.logError('stripe_pay_missing_secret', `Donation ID: ${this.donation.donationId}`);
+      this.analyticsService.logError('stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
       return;
     }
 
@@ -467,6 +469,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     return this.donationForm.controls.amounts.get('donationAmount');
   }
 
+  get tipAmountField() {
+    if (!this.donationForm) {
+      return undefined;
+    }
+
+    return this.donationForm.controls.amounts.get('tipAmount');
+  }
+
   /**
    * Quick getter for donation amount, to keep template use concise.
    */
@@ -476,6 +486,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
   get donationAndTipAmount(): number {
     return this.donationAmount + this.tipAmount();
+  }
+
+  customTip(): boolean {
+    return this.amountsGroup.value.tipPercentage === 'Other';
   }
 
   expectedMatchAmount(): number {
@@ -526,6 +540,13 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     if (el) {
        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
+  }
+
+  /**
+   * Percentage selection changed by donor, as opposed to programatically.
+   */
+  tipPercentageChange() {
+    this.tipPercentageChanged = true;
   }
 
   next() {
@@ -784,10 +805,45 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private addStripeValidators(): void {
+    this.amountsGroup.controls.tipPercentage.setValidators([Validators.required]);
     this.amountsGroup.controls.tipAmount.setValidators([
       Validators.required,
       Validators.pattern('^£?[0-9]+?(\\.[0-9]{2})?$'),
     ]);
+
+    this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
+      const updatedValues: {
+        tipPercentage?: number | string,
+        tipAmount?: string,
+      } = {};
+
+      if (!this.tipPercentageChanged) {
+        let newDefault = this.initialTipSuggestedPercentage;
+        if (donationAmount >= 1000) {
+          newDefault = 7.5;
+        } else if (donationAmount >= 300) {
+          newDefault = 10;
+        }
+
+        updatedValues.tipPercentage = newDefault;
+        updatedValues.tipAmount = (newDefault / 100 * donationAmount).toFixed(2);
+      } else if (this.amountsGroup.get('tipPercentage')?.value !== 'Other') {
+        updatedValues.tipAmount = (this.amountsGroup.get('tipPercentage')?.value / 100 * donationAmount).toFixed(2);
+      }
+
+      this.amountsGroup.patchValue(updatedValues);
+    });
+
+    this.amountsGroup.get('tipPercentage')?.valueChanges.subscribe(tipPercentage => {
+      if (tipPercentage === 'Other') {
+        return;
+      }
+
+      this.amountsGroup.patchValue({
+        // Keep value consistent with format of manual string inputs.
+        tipAmount: (tipPercentage / 100 * (this.amountsGroup.get('donationAmount')?.value || 0)).toFixed(2),
+      });
+    });
 
     // Gift Aid home address fields are validated only in Stripe mode and also
     // conditionally on the donor claiming Gift Aid.
@@ -888,6 +944,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
             // Go back to 1st step to encourage donor to try again
             this.stepper.reset();
+            this.amountsGroup.patchValue({ tipPercentage: this.initialTipSuggestedPercentage });
+            this.tipPercentageChanged = false;
           },
           response => {
             this.analyticsService.logError(
