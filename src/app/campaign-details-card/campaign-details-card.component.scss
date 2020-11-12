@@ -4,8 +4,18 @@
   @include make-card($box-shadow-hard);
 }
 
-.c-icon-lists {
-  @include card-icons;
+.c-icon-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.c-icon-title {
+  padding-left: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.c-icon-value {
+  padding-left: 0.2rem;
 }
 
 .c-banner__image {
@@ -29,6 +39,9 @@
 .c-campaign-target__description,
 .c-campaign-raised__description,
 .c-campaign-status__description,
+.c-campaign-country__description,
+.c-campaign-category__description,
+.c-campaign-beneficiary__description,
 .c-campaign-donations__description {
   @include size-md;
   line-height: 20px;
@@ -44,13 +57,14 @@
   color: $colour-teal;
 }
 
-.c-championed-by, .c-country {
+.c-championed-by, .c-country__value {
   color: $colour-teal;
+  margin-top: 0;
   a {
     text-decoration: none;
   }
 }
 
-.c-country {
-  margin-top: 0;
+.c-country{
+  margin-top: 1.5rem;
 }
