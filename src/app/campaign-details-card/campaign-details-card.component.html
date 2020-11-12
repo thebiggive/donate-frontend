@@ -17,21 +17,6 @@
   </div>
 
   <div class="c-card-body">
-    <p class="c-country b-mb-0">{{ locations() }}</p>
-
-    <div fxLayout="row" class="c-icon-lists">
-      <ul fxFlex="50">
-        <li *ngFor="let category of campaign.categories">
-          <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
-        </li>
-      </ul>
-      <ul fxFlex="50">
-        <li *ngFor="let beneficiary of campaign.beneficiaries">
-          <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
-        </li>
-      </ul>
-    </div>
-
     <div class="c-campaign-target" *ngIf="campaign.target > 0">
       <h2 class="c-campaign-target__description b-grey b-light">Campaign target</h2>
       <p class="c-campaign-target__value b-bold">{{ campaign.target | currency : '£' : 'symbol' : '1.0-0' }}</p>
@@ -57,5 +42,27 @@
         <span class="b-bold">{{campaign.championName}}</span>
       </a>
     </p>
+    <ul class="c-icon-list">
+      <h2 class="c-campaign-category__description b-grey b-light">Category</h2>
+      <li *ngFor="let category of campaign.categories">
+        <span class="c-icon-value">
+          <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
+        </span>
+        <span class="c-icon-title">{{ category }}</span>
+      </li>
+    </ul>
+    <ul class="c-icon-list">
+      <h2 class="c-campaign-beneficiary__description b-grey b-light">Helping</h2>
+      <li *ngFor="let beneficiary of campaign.beneficiaries">
+        <span class="c-icon-value">
+          <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
+        </span>
+        <span class="c-icon-title">{{ beneficiary }}</span>
+      </li>
+    </ul>
+    <div class="c-country">
+      <h2 class="c-campaign-country__description b-grey b-light">Location</h2>
+      <p class="c-country__value">{{ locations() }}</p>
+    </div>
   </div>
 </div>

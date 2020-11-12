@@ -58,7 +58,18 @@ ul {
 }
 
 .c-icon-lists {
-  @include card-icons;
+  ul {
+    padding: 0;
+
+    li {
+      display: inline;
+      padding-right: 0.5rem;
+
+      .ng-fa-icon {
+        color: $colour-grey;
+      }
+    }
+  }
   padding: 0 2rem;
 }
 
@@ -67,7 +78,7 @@ ul {
   color: $colour-grey;
 }
 
-.c-funds__description {
+.c-cards__description {
   @include size-md;
   color: $colour-grey;
   margin-top: 0;
