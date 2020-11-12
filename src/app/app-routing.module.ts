@@ -1,4 +1,3 @@
-import { environment } from '../environments/environment';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -7,6 +6,7 @@ import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import { CharityComponent } from './charity/charity.component';
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
+import { environment } from '../environments/environment';
 import { ExploreComponent } from './explore/explore.component';
 import { HomeComponent } from './home/home.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
