@@ -38,10 +38,6 @@
   @media #{$breakpoint-md} {
     top: 4px;
   }
-  @media only screen and (max-width: 450px) {
-    margin-top: 3rem;
-    top: -35px;
-  }
 }
 
 .c-ticker__list {
