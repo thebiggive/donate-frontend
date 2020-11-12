@@ -111,7 +111,7 @@
                 <mat-hint *ngIf="!customTip()">{{ tipAmount() | exactCurrency }} donation to support the Big Give</mat-hint>
 
                 <mat-hint *ngIf="customTip() && donationAmount && donationAmount > 0">
-                  {{ (tipAmount() / donationAmount) | percent }}
+                  {{ (tipAmount() > 0 && tipAmount() / donationAmount < 0.001) ? 'Less than 0.1%' : (tipAmount() / donationAmount) | percent:'1.0-1' }}
                 of main donation
                 </mat-hint>
               </div>
