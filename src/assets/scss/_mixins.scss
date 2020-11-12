@@ -206,12 +206,5 @@
         color: $colour-grey;
       }
     }
-  
-    &:last-child {
-      text-align: right;
-      li:last-child {
-        padding-right: 0;
-      }
-    }
   }
 }
