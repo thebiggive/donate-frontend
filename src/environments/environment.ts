@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  productionLike: false,
   apiUriPrefix: 'https://sandbox7-biggive.cs109.force.com',
   ccStartTime: 1604934000, // 9th November, 15:00
   ccEndTime: 1604937600, // 9th November, 16:00
@@ -29,7 +30,7 @@ export const environment = {
     { weight: 1,  values: [30, 100, 250] },
     { weight: 1,  values: [50, 200, 500] },
     { weight: 1,  values: [20,  50, 100] },
-    { weight: 1,  values: [20, 100, 500] },
+    { weight: 10000,  values: [20, 100, 500] },
     { weight: 16, values: [] },
   ],
   thanksUriPrefix: 'http://localhost:4200/thanks/',
