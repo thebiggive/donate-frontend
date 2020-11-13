@@ -30,7 +30,7 @@ export const environment = {
     { weight: 1,  values: [30, 100, 250] },
     { weight: 1,  values: [50, 200, 500] },
     { weight: 1,  values: [20,  50, 100] },
-    { weight: 10000,  values: [20, 100, 500] },
+    { weight: 1,  values: [20, 100, 500] },
     { weight: 16, values: [] },
   ],
   thanksUriPrefix: 'http://localhost:4200/thanks/',
