@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  productionLike: false,
   apiUriPrefix: 'https://sandbox7-biggive.cs109.force.com',
   ccStartTime: 1604934000, // 9th November, 15:00
   ccEndTime: 1604937600, // 9th November, 16:00
