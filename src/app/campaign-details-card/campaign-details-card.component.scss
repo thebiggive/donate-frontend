@@ -7,18 +7,13 @@
 .c-icon-list {
   list-style-type: none;
   padding: 0;
+
+  @include icon-bullet;
 }
 
 .c-icon-title {
   padding-left: 0.5rem;
   font-size: 0.8rem;
-}
-
-.c-icon-value {
-  padding-left: 0.2rem;
-  .ng-fa-icon {
-    color: $colour-grey;
-  }
 }
 
 .c-banner__image {
