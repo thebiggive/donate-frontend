@@ -33,7 +33,9 @@ export class CampaignSearchFormComponent implements OnInit, OnDestroy {
       this.searchForm.reset();
     });
 
-    this.setInputValue(this.selected.term);
+    if (this.selected) {
+      this.setInputValue(this.selected.term);
+    }
   }
 
   ngOnDestroy() {
