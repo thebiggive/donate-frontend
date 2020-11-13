@@ -161,13 +161,6 @@
   background-position: center center;
 }
 
-@mixin make-card-body {
-  padding: 15px;
-  @media #{$breakpoint-xl} {
-    padding: 15px 30px;
-  }
-}
-
 @mixin make-match-badge {
   position: relative;
   top: -19px;

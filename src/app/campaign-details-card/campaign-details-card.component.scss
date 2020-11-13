@@ -31,7 +31,11 @@
 }
 
 .c-card-body {
-  @include make-card-body;
+  padding: 15px;
+  margin-top: -20px;
+  @media #{$breakpoint-xl} {
+    padding: 15px 30px;
+  }
 }
 
 .c-campaign-target__description,
