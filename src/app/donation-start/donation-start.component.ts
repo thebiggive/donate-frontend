@@ -697,6 +697,16 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   private offerExistingDonation(donation: Donation) {
     this.analyticsService.logEvent('existing_donation_offered', `Found pending donation to campaign ${this.campaignId}`);
 
+    // Ensure we do not claim match funds are reserved when offering an old
+    // donation if the reservation time is up.
+    if (
+      donation.matchReservedAmount > 0 &&
+      donation.createdTime &&
+      (environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime()) < Date.now()
+    ) {
+      donation.matchReservedAmount = 0;
+    }
+
     const reuseDialog = this.dialog.open(DonationStartOfferReuseDialogComponent, {
       data: { donation },
       disableClose: true,
@@ -706,15 +716,35 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private scheduleMatchingExpiryWarning(donation: Donation) {
-    // Only set the timeout when relevant and we don't already have one.
-    if (this.expiryWarning || !donation.createdTime || donation.matchReservedAmount <= 0) {
+    // Only set the timeout when relevant part 1/2: exclude cases with no
+    // matching.
+    if (!donation.createdTime || donation.matchReservedAmount <= 0) {
       return;
+    }
+
+    // If we called this but already had a warning timer, the old one should
+    // be irrelevant because typically we'd invoke this after offering an existing
+    // donation and the donor saying yes. Even if we have prompted about the
+    // same donation for which we were already counting down a timer, removing
+    // and replacing it should be an idempotent process and so is the safest,
+    // least brittle option here.
+    if (this.expiryWarning) {
+      this.cancelExpiryWarning();
     }
 
     // To make this safe to call for both new and resumed donations, we look up
     // the donation's creation time and determine the timeout based on that rather
     // than e.g. always using 15 minutes.
     const msUntilExpiryTime = environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() - Date.now();
+
+    // Only set the timeout when relevant part 2/2: exclude cases where
+    // the timeout has already passed. This happens e.g. when the reuse
+    // dialog is shown because of matching expiry and the donor chooses
+    // to continue anyway without matching.
+    if (msUntilExpiryTime < 0) {
+      return;
+    }
+
     this.expiryWarning = setTimeout(() => {
       const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
         disableClose: true,
