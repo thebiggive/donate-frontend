@@ -314,21 +314,15 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       }
     }, 200);
 
-    // This ensures `stepper.reset()` evalutes this to false and our usage
-    // with this const helps to prevent `createDonation()` from being incorrectly triggered.
-    const activelySelectedNext = (
-      event.previouslySelectedStep.label === 'Your donation' &&
-      event.previouslySelectedStep.interacted === true
-    );
-
-    const invalidDonation = (this.donation === undefined || this.donation.status === 'Cancelled');
-
-    const invalidPreviousDonation = (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled');
-
-    // Create a donation if user actively clicks 'next' from first step and
-    // the current and previous donations are invalid.
-    if (activelySelectedNext && invalidDonation && invalidPreviousDonation) {
-      this.createDonation();
+    // Create a donation if coming from first step and not offering to resume
+    // an existing donation.
+    if (event.previouslySelectedStep.label === 'Your donation') {
+      if (
+        (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled') &&
+        event.selectedStep.label !== 'Your donation' // Resets fire a 0 -> 0 index event.
+      ) {
+        this.createDonation();
+      }
 
       if (this.psp === 'stripe') {
         this.card = await this.stripeService.getCard();
@@ -842,7 +836,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private addStripeValidators(): void {
-    this.amountsGroup.controls.tipPercentage.setValidators([Validators.required]);
+    // Do not add a validator on `tipPercentage` because as a dropdown it always
+    // has a value anyway, and this complicates repopulating the form when e.g.
+    // reusing an existing donation.
     this.amountsGroup.controls.tipAmount.setValidators([
       Validators.required,
       Validators.pattern('^£?[0-9]+?(\\.[0-9]{2})?$'),
@@ -949,16 +945,26 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   private getDialogResponseFn(donation: Donation) {
     return (proceed: boolean) => {
       if (proceed) {
-        // Required for both use cases.
+        // Required for all use cases.
         this.donation = donation;
 
         this.scheduleMatchingExpiryWarning(this.donation);
 
         // In doc block use case (a), we need to put the amounts from the previous
         // donation into the form and move to Step 2.
+        const tipPercentageFixed = (100 * donation.tipAmount / donation.donationAmount).toFixed(1);
+        let tipPercentage;
+
+        if (['7.5', '10.0', '12.5', '15.0'].includes(tipPercentageFixed)) {
+          tipPercentage = Number(tipPercentageFixed);
+        } else {
+          tipPercentage = 'Other';
+        }
+
         this.amountsGroup.patchValue({
           donationAmount: donation.donationAmount.toString(),
           tipAmount: donation.tipAmount.toString(),
+          tipPercentage,
         });
 
         if (this.stepper.selected.label === 'Your donation') {
