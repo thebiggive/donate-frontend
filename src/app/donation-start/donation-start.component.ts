@@ -312,21 +312,12 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       }
     }, 200);
 
-    // This ensures `stepper.reset()` evalutes this to false and our usage
-    // with this const helps to prevent `createDonation()` from being incorrectly triggered.
-    const activelySelectedNext = (
-      event.previouslySelectedStep.label === 'Your donation' &&
-      event.previouslySelectedStep.interacted === true
-    );
-
-    const invalidDonation = (this.donation === undefined || this.donation.status === 'Cancelled');
-
-    const invalidPreviousDonation = (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled');
-
-    // Create a donation if user actively clicks 'next' from first step and
-    // the current and previous donations are invalid.
-    if (activelySelectedNext && invalidDonation && invalidPreviousDonation) {
-      this.createDonation();
+    // Create a donation if coming from first step and not offering to resume
+    // an existing donation.
+    if (event.previouslySelectedStep.label === 'Your donation') {
+      if (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled') {
+        this.createDonation();
+      }
 
       if (this.psp === 'stripe') {
         this.card = await this.stripeService.getCard();
