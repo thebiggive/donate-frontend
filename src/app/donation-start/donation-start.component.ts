@@ -44,6 +44,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   campaign?: Campaign;
   donation?: Donation;
 
+  campaignOpenOnLoad: boolean;
+
   donationForm: FormGroup;
   amountsGroup: FormGroup;
   giftAidGroup: FormGroup;
@@ -512,18 +514,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     return this.donationAmount + this.giftAidAmount() + this.expectedMatchAmount();
   }
 
-  /**
-   * Unlike the CampaignService method which is more forgiving if the status gets stuck Active (we don't trust
-   * these to be right in Salesforce yet), this check relies solely on campaign dates.
-   */
-  campaignIsOpen(): boolean {
-    return (
-      this.campaign
-        ? (new Date(this.campaign.startDate) <= new Date() && new Date(this.campaign.endDate) > new Date())
-        : false
-      );
-  }
-
   reservationExpiryTime(): Date | undefined {
     if (!this.donation?.createdTime || !this.donation.matchReservedAmount) {
       return undefined;
@@ -556,6 +546,18 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   /**
+   * Unlike the CampaignService method which is more forgiving if the status gets stuck Active (we don't trust
+   * these to be right in Salesforce yet), this check relies solely on campaign dates.
+   */
+  private campaignIsOpen(): boolean {
+    return (
+      this.campaign
+        ? (new Date(this.campaign.startDate) <= new Date() && new Date(this.campaign.endDate) > new Date())
+        : false
+      );
+  }
+
+  /**
    * @returns whether any errors were found in the visible viewport.
    */
   private goToFirstVisibleError(): boolean {
@@ -581,6 +583,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
    * Redirect if campaign's not open yet; set up page metadata if it is
    */
   private handleCampaign(campaign: Campaign) {
+    // We want to let donors finish the journey if they're on the page before the campaign
+    // close date and it passes while they're completing the form – in particular they should
+    // be able to use match funds secured until 15 minutes after the close time.
+    this.campaignOpenOnLoad = this.campaignIsOpen();
+
     if (environment.psps.stripe.enabled && this.campaign?.charity.stripeAccountId) {
       this.psp = 'stripe';
       this.addStripeValidators();
