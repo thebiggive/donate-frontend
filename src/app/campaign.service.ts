@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { Campaign } from './campaign.model';
 import { CampaignSummary } from './campaign-summary.model';
 import { environment } from '../environments/environment';
-import { SelectedType } from './filters/filters.component';
+import { SelectedType } from './search.service';
 
 @Injectable({
   providedIn: 'root',

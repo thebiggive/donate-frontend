@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
-import { FiltersComponent } from '../filters/filters.component';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
 import { PageMetaService } from '../page-meta.service';
+import { SearchService } from '../search.service';
 
 @Component({
   selector: 'app-meta-campaign',
@@ -24,8 +23,6 @@ export class MetaCampaignComponent implements OnInit {
   public fundSlug: string;
   public hasMore = true;
   public loading = false; // Server render gets initial result set; set true when filters change.
-  public resetSubject: Subject<void> = new Subject<void>();
-  public selected: {[key: string]: any}; // SelectedType but allowing string key lookups.
 
   private campaignId: string;
   private campaignSlug: string;
@@ -37,6 +34,7 @@ export class MetaCampaignComponent implements OnInit {
     private pageMeta: PageMetaService,
     private router: Router,
     private route: ActivatedRoute,
+    public searchService: SearchService,
     private state: TransferState,
   ) {
     route.params.pipe().subscribe(params => {
@@ -97,47 +95,28 @@ export class MetaCampaignComponent implements OnInit {
     }
   }
 
-  onFilterApplied(update: { [filterName: string]: string, value: string}) {
-    this.selected[update.filterName] = update.value as string;
-    this.run();
+  clear() {
+    this.searchService.reset(this.getDefaultSort());
   }
 
-  onSortApplied(selectedSort: string) {
-    this.selected.sortField = selectedSort;
-    this.run();
-  }
-
-  onClearFiltersApplied() {
-    this.selected = FiltersComponent.selectedDefaults(this.getDefaultSort());
-    this.run();
-    this.resetSubject.next();
-  }
-
-  onMetacampaignSearch(term: string) {
-    this.selected.term = term;
-    this.selected.sortField = term.length > 0 ? '' : this.getDefaultSort();
-    this.run();
-  }
-
+  /**
+   * Default sort when not in relevance mode because there's a search term.
+   */
   getDefaultSort(): 'amountRaised' | 'matchFundsRemaining' {
     // Most Raised for completed Master Campaigns; Match Funds Remaining for others.
     return (this.campaign && new Date(this.campaign.endDate) < new Date()) ? 'amountRaised' : 'matchFundsRemaining';
   }
 
-  showClearFilters(): boolean {
-    return Boolean(
-      this.selected.beneficiary ||
-      this.selected.category ||
-      this.selected.country ||
-      this.selected.onlyMatching ||
-      this.selected.term,
-    );
-  }
-
   private loadMoreForCurrentSearch() {
     this.offset += CampaignService.perPage;
     this.loading = true;
-    const query = this.campaignService.buildQuery(this.selected, this.offset, this.campaignId, this.campaignSlug, this.fundSlug);
+    const query = this.campaignService.buildQuery(
+      this.searchService.selected,
+      this.offset,
+      this.campaignId,
+      this.campaignSlug,
+      this.fundSlug,
+    );
     this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
       // Success
       this.children = [...this.children, ...campaignSummaries];
@@ -152,16 +131,18 @@ export class MetaCampaignComponent implements OnInit {
     return (this.children.length === (CampaignService.perPage + this.offset));
   }
 
-  private run() {
+  private run(fromFormChange: boolean) {
     this.offset = 0;
-    const query = this.campaignService.buildQuery(this.selected, 0, this.campaignId, this.campaignSlug, this.fundSlug);
+    const query = this.campaignService.buildQuery(this.searchService.selected, 0, this.campaignId, this.campaignSlug, this.fundSlug);
     this.children = [];
     this.loading = true;
 
     this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
         this.children = campaignSummaries; // Success
         this.loading = false;
-        this.setQueryParams();
+        if (fromFormChange) {
+          this.setQueryParams();
+        }
       }, () => {
         this.filterError = true; // Error, e.g. slug not known
         this.loading = false;
@@ -179,7 +160,7 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   private setSecondaryPropsAndRun(campaign: Campaign) {
-    this.selected = FiltersComponent.selectedDefaults(this.getDefaultSort()); // Depends on `campaign`
+    this.searchService.reset(this.getDefaultSort());
     this.loadQueryParamsAndRun();
     this.pageMeta.setCommon(
       campaign.title,
@@ -193,18 +174,9 @@ export class MetaCampaignComponent implements OnInit {
    */
   private loadQueryParamsAndRun() {
     this.route.queryParams.subscribe(params => {
-      if (Object.keys(params).length > 0) {
-        for (const key of Object.keys(params)) {
-          if (key === 'onlyMatching') {
-            // convert URL query param string to boolean
-            this.selected[key] = (params[key] === 'true');
-          } else {
-            this.selected[key] = params[key];
-          }
-        }
-      }
-
-      this.run();
+      this.searchService.loadQueryParams(params);
+      this.run(false);
+      this.searchService.changed.subscribe(() => this.run(true));
     });
   }
 
@@ -213,9 +185,7 @@ export class MetaCampaignComponent implements OnInit {
    */
   private setQueryParams() {
     this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: FiltersComponent.getQueryParams(this.selected, this.getDefaultSort()),
-      replaceUrl: true,
+      queryParams: this.searchService.getQueryParams(this.getDefaultSort()),
     });
   }
 }

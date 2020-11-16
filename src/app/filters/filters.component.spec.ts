@@ -4,7 +4,6 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Observable } from 'rxjs';
 
 import { FiltersComponent } from './filters.component';
 
@@ -29,8 +28,6 @@ describe('FiltersComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(FiltersComponent);
     component = fixture.componentInstance;
-    component.reset = new Observable();
-    component.selected = FiltersComponent.selectedDefaults('');
     fixture.detectChanges();
   });
 
