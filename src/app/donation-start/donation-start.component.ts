@@ -315,7 +315,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // Create a donation if coming from first step and not offering to resume
     // an existing donation.
     if (event.previouslySelectedStep.label === 'Your donation') {
-      if (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled') {
+      if (
+        (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled') &&
+        event.selectedStep.label !== 'Your donation' // Resets fire a 0 -> 0 index event.
+      ) {
         this.createDonation();
       }
 
