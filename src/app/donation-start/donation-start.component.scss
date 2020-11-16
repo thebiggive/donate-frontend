@@ -221,15 +221,3 @@ a {
 .prefix-tbg {
   font-size: 1.5rem
 }
-
-.donation-input-to-tbg {
-  padding-top: 1rem;
-  max-width: 300px;
-  display: block;
-  margin-right: auto;
-  margin-left: auto;
-
-  @media only screen and (max-width: 650px) {
-    max-width: 200px;
-  }
-}
