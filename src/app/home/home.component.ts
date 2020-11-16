@@ -39,7 +39,9 @@ export class HomeComponent implements OnInit {
   }
 
   search(term: string) {
-    this.router.navigateByUrl(`/explore?term=${encodeURI(term)}`);
+    this.router.navigate(['explore'], {
+      queryParams: { term },
+    });
   }
 
   private run() {

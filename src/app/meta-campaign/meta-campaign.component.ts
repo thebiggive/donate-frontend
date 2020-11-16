@@ -99,24 +99,24 @@ export class MetaCampaignComponent implements OnInit {
 
   onFilterApplied(update: { [filterName: string]: string, value: string}) {
     this.selected[update.filterName] = update.value as string;
-    this.run();
+    this.run(true);
   }
 
   onSortApplied(selectedSort: string) {
     this.selected.sortField = selectedSort;
-    this.run();
+    this.run(true);
   }
 
   onClearFiltersApplied() {
     this.selected = FiltersComponent.selectedDefaults(this.getDefaultSort());
-    this.run();
+    this.run(true);
     this.resetSubject.next();
   }
 
   onMetacampaignSearch(term: string) {
     this.selected.term = term;
     this.selected.sortField = term.length > 0 ? '' : this.getDefaultSort();
-    this.run();
+    this.run(true);
   }
 
   getDefaultSort(): 'amountRaised' | 'matchFundsRemaining' {
@@ -152,7 +152,7 @@ export class MetaCampaignComponent implements OnInit {
     return (this.children.length === (CampaignService.perPage + this.offset));
   }
 
-  private run() {
+  private run(fromFormChange: boolean) {
     this.offset = 0;
     const query = this.campaignService.buildQuery(this.selected, 0, this.campaignId, this.campaignSlug, this.fundSlug);
     this.children = [];
@@ -161,7 +161,9 @@ export class MetaCampaignComponent implements OnInit {
     this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
         this.children = campaignSummaries; // Success
         this.loading = false;
-        this.setQueryParams();
+        if (fromFormChange) {
+          this.setQueryParams();
+        }
       }, () => {
         this.filterError = true; // Error, e.g. slug not known
         this.loading = false;
@@ -204,7 +206,7 @@ export class MetaCampaignComponent implements OnInit {
         }
       }
 
-      this.run();
+      this.run(false);
     });
   }
 
@@ -213,9 +215,7 @@ export class MetaCampaignComponent implements OnInit {
    */
   private setQueryParams() {
     this.router.navigate([], {
-      relativeTo: this.route,
       queryParams: FiltersComponent.getQueryParams(this.selected, this.getDefaultSort()),
-      replaceUrl: true,
     });
   }
 }

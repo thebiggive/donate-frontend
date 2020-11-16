@@ -47,7 +47,7 @@ export class ExploreComponent implements OnInit {
 
   onFilterApplied(update: { [filterName: string]: string, value: string}) {
     this.selected[update.filterName] = update.value as string;
-    this.run();
+    this.run(true);
   }
 
   onScroll() {
@@ -58,19 +58,19 @@ export class ExploreComponent implements OnInit {
 
   onSortApplied(selectedSort: string) {
     this.selected.sortField = selectedSort;
-    this.run();
+    this.run(true);
   }
 
   onClearFiltersApplied() {
     this.selected = FiltersComponent.selectedDefaults(this.defaultNonRelevanceSort);
-    this.run();
+    this.run(true);
     this.resetSubject.next();
   }
 
   search(term: string) {
     this.selected.term = term;
     this.selected.sortField = term.length > 0 ? '' : this.defaultNonRelevanceSort;
-    this.run();
+    this.run(true);
   }
 
   showClearFilters(): boolean {
@@ -100,7 +100,7 @@ export class ExploreComponent implements OnInit {
     });
   }
 
-  private run() {
+  private run(fromFormChange: boolean) {
     this.offset = 0;
     const query = this.campaignService.buildQuery(this.selected, 0);
     this.campaigns = [];
@@ -109,7 +109,9 @@ export class ExploreComponent implements OnInit {
     this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
       this.campaigns = campaignSummaries; // Success
       this.loading = false;
-      this.setQueryParams();
+      if (fromFormChange) {
+        this.setQueryParams();
+      }
     }, () => {
         this.loading = false;
       },
@@ -132,7 +134,7 @@ export class ExploreComponent implements OnInit {
         }
       }
 
-      this.run();
+      this.run(false);
     });
   }
 
@@ -140,10 +142,8 @@ export class ExploreComponent implements OnInit {
    * Update the browser's query params when a sort or filter is applied.
    */
   private setQueryParams() {
-    this.router.navigate([], {
-      relativeTo: this.route,
+    this.router.navigate(['explore'], {
       queryParams: FiltersComponent.getQueryParams(this.selected, this.defaultNonRelevanceSort),
-      replaceUrl: true,
     });
   }
 }
