@@ -1,8 +1,6 @@
-.ng-fa-icon {
-  display: inline-block;
-  width: 2rem;
-  text-align: center;
-}
+@import '../../styles';
+
+@include icon-bullet;
 
 .mat-form-field {
   width: 100%;

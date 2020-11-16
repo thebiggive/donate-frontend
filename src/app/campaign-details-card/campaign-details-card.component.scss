@@ -7,18 +7,12 @@
 .c-icon-list {
   list-style-type: none;
   padding: 0;
+
+  @include icon-bullet;
 }
 
 .c-icon-title {
-  padding-left: 0.5rem;
   font-size: 0.8rem;
-}
-
-.c-icon-value {
-  padding-left: 0.2rem;
-  .ng-fa-icon {
-    color: $colour-grey;
-  }
 }
 
 .c-banner__image {
@@ -36,7 +30,11 @@
 }
 
 .c-card-body {
-  @include make-card-body;
+  padding: 15px;
+  margin-top: -20px;
+  @media #{$breakpoint-xl} {
+    padding: 15px 30px;
+  }
 }
 
 .c-campaign-target__description,
