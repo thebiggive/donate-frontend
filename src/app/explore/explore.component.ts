@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
 
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { CampaignSummary } from '../campaign-summary.model';
-import { FiltersComponent } from '../filters/filters.component';
+import { SearchService } from '../search.service';
 
 /** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
@@ -14,11 +13,9 @@ import { FiltersComponent } from '../filters/filters.component';
 })
 export class ExploreComponent implements OnInit {
   campaigns: CampaignSummary[];
-  defaultNonRelevanceSort: 'matchFundsRemaining' = 'matchFundsRemaining';
   loading = false; // Server render gets initial result set; set true when filters change.
-  resetSubject: Subject<void> = new Subject<void>();
+  // resetSubject: Subject<void> = new Subject<void>();
   searched = false;
-  selected: {[key: string]: any}; // SelectedType but allowing string key lookups.
 
   private offset = 0;
 
@@ -26,11 +23,19 @@ export class ExploreComponent implements OnInit {
     private campaignService: CampaignService,
     private route: ActivatedRoute,
     private router: Router,
+    public searchService: SearchService,
   ) {}
 
   ngOnInit() {
-    this.selected = FiltersComponent.selectedDefaults(this.defaultNonRelevanceSort);
+    this.searchService.reset(this.getDefaultSort());
     this.loadQueryParamsAndRun();
+  }
+
+  /**
+   * Default sort when not in relevance mode because there's a search term.
+   */
+  getDefaultSort(): 'matchFundsRemaining' {
+    return 'matchFundsRemaining';
   }
 
   /**
@@ -45,42 +50,14 @@ export class ExploreComponent implements OnInit {
     }
   }
 
-  onFilterApplied(update: { [filterName: string]: string, value: string}) {
-    this.selected[update.filterName] = update.value as string;
-    this.run(true);
-  }
-
   onScroll() {
     if (this.moreMightExist()) {
       this.more();
     }
   }
 
-  onSortApplied(selectedSort: string) {
-    this.selected.sortField = selectedSort;
-    this.run(true);
-  }
-
-  onClearFiltersApplied() {
-    this.selected = FiltersComponent.selectedDefaults(this.defaultNonRelevanceSort);
-    this.run(true);
-    this.resetSubject.next();
-  }
-
-  search(term: string) {
-    this.selected.term = term;
-    this.selected.sortField = term.length > 0 ? '' : this.defaultNonRelevanceSort;
-    this.run(true);
-  }
-
-  showClearFilters(): boolean {
-    return Boolean(
-      this.selected.beneficiary ||
-      this.selected.category ||
-      this.selected.country ||
-      this.selected.onlyMatching ||
-      this.selected.term,
-    );
+  clear() {
+    this.searchService.reset(this.getDefaultSort());
   }
 
   private moreMightExist(): boolean {
@@ -90,7 +67,7 @@ export class ExploreComponent implements OnInit {
   private loadMoreForCurrentSearch() {
     this.offset += CampaignService.perPage;
     this.loading = true;
-    const query = this.campaignService.buildQuery(this.selected, this.offset);
+    const query = this.campaignService.buildQuery(this.searchService.selected, this.offset);
     this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
       // Success
       this.campaigns = [...this.campaigns, ...campaignSummaries];
@@ -102,7 +79,7 @@ export class ExploreComponent implements OnInit {
 
   private run(fromFormChange: boolean) {
     this.offset = 0;
-    const query = this.campaignService.buildQuery(this.selected, 0);
+    const query = this.campaignService.buildQuery(this.searchService.selected, 0);
     this.campaigns = [];
     this.loading = true;
 
@@ -123,18 +100,9 @@ export class ExploreComponent implements OnInit {
    */
   private loadQueryParamsAndRun() {
     this.route.queryParams.subscribe(params => {
-      if (Object.keys(params).length > 0) {
-        for (const key of Object.keys(params)) {
-          if (key === 'onlyMatching') {
-            // convert URL query param string to boolean
-            this.selected[key] = (params[key] === 'true');
-          } else {
-            this.selected[key] = params[key];
-          }
-        }
-      }
-
+      this.searchService.loadQueryParams(params);
       this.run(false);
+      this.searchService.changed.subscribe(() => this.run(true));
     });
   }
 
@@ -143,7 +111,7 @@ export class ExploreComponent implements OnInit {
    */
   private setQueryParams() {
     this.router.navigate(['explore'], {
-      queryParams: FiltersComponent.getQueryParams(this.selected, this.defaultNonRelevanceSort),
+      queryParams: this.searchService.getQueryParams(this.getDefaultSort()),
     });
   }
 }

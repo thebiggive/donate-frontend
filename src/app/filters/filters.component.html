@@ -2,7 +2,7 @@
   <div class="c-filters__groups">
     <mat-form-field class="b-w-100 c-filters__group" appearance="outline">
       <mat-label>Sort By</mat-label>
-      <mat-select [(value)]="selected.sortField" (selectionChange)="setSortField($event)">
+      <mat-select [(value)]="search.selected.sortField" (selectionChange)="search.sort($event.value)">
         <mat-option value="matchFundsRemaining">Match Funds Remaining</mat-option>
         <mat-option value="amountRaised">Most Raised</mat-option>
         <mat-option *ngIf="hasTerm()" value="">Relevance</mat-option>
@@ -21,7 +21,7 @@
   </div>
 
   <a
-    *ngIf="showClearFilters"
+    *ngIf="search.showClearFilters()"
     class="c-filters__reset"
     (click)="clearFilters()"
     aria-label="Clear search and filters"

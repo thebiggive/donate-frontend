@@ -12,8 +12,8 @@
         </div>
         <div class="home-hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
           <app-campaign-search-form
-            [reset]="resetSubject.asObservable()"
-            (search)="search($event)"
+            [getDefaultSort]="getDefaultSort"
+            [jumpToExplore]="true"
           ></app-campaign-search-form>
         </div>
       </div>

@@ -3,23 +3,15 @@
     *ngIf="campaign"
     [campaign]="campaign"
     [fund]="fund"
-    [reset]="resetSubject.asObservable()"
-    [selected]="selected"
     [description]="fund && fund.description ? fund.description : campaign.summary"
-    (heroSearch)="onMetacampaignSearch($event)"
+    [getDefaultSort]="getDefaultSort"
   ></app-hero>
 
   <div *ngIf="campaign && children">
     <div class="b-container">
       <app-filters
         *ngIf="campaign.campaignCount && campaign.campaignCount > 1"
-        [defaultNonRelevanceSort]="getDefaultSort()"
-        [showClearFilters]="showClearFilters()"
-        [selected]="selected"
-        [reset]="resetSubject.asObservable()"
-        (filterApplied)="onFilterApplied($event)"
-        (sortApplied)="onSortApplied($event)"
-        (clearFiltersApplied)="onClearFiltersApplied()"
+        [getDefaultSort]="getDefaultSort"
       ></app-filters>
 
       <div
@@ -28,9 +20,7 @@
         <p class="error" aria-live="polite">
           We can't find any campaigns matching this search but there are lots
           more to choose from.
-          <a (click)="onClearFiltersApplied()"
-            >View all participating campaigns here</a
-          >.
+          <a (click)="clear()">View all participating campaigns here</a>.
         </p>
       </div>
 

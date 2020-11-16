@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
-import { SelectedType } from '../filters/filters.component';
 import { Fund } from '../fund.model';
 import { ImageService } from '../image.service';
 
@@ -15,10 +14,8 @@ export class HeroComponent implements OnInit {
   @Input() campaign: Campaign;
   @Input() description: string;
   @Input() fund?: Fund;
-  @Input() selected: SelectedType;
+  @Input() getDefaultSort: () => string;
   @Input() reset: Observable<void>; // Passed through to CampaignSearchFormComponent
-
-  @Output() heroSearch: EventEmitter<any> = new EventEmitter();
 
   bannerUri: string;
   logoAltText?: string;
@@ -40,9 +37,5 @@ export class HeroComponent implements OnInit {
       this.logoAltText = this.fund.name;
       this.imageService.getImageUri(this.fund.logoUri, 660).subscribe(uri => this.logoUri = uri);
     }
-  }
-
-  search(term: string) {
-    this.heroSearch.emit(term);
   }
 }

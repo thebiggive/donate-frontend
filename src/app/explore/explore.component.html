@@ -9,9 +9,7 @@
         </div>
         <div class="explore-hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
           <app-campaign-search-form
-            [reset]="resetSubject.asObservable()"
-            [selected]="selected"
-            (search)="search($event)"
+            [getDefaultSort]="getDefaultSort"
           ></app-campaign-search-form>
         </div>
       </div>
@@ -19,20 +17,12 @@
   </div>
 
   <div class="b-container" *ngIf="campaigns">
-    <app-filters
-      [defaultNonRelevanceSort]="defaultNonRelevanceSort"
-      [showClearFilters]="showClearFilters()"
-      [selected]="selected"
-      [reset]="resetSubject.asObservable()"
-      (filterApplied)="onFilterApplied($event)"
-      (sortApplied)="onSortApplied($event)"
-      (clearFiltersApplied)="onClearFiltersApplied()"
-    ></app-filters>
+    <app-filters [getDefaultSort]="getDefaultSort"></app-filters>
 
     <div *ngIf="campaigns.length === 0 && !loading">
       <p class="error" aria-live="polite">
         We can't find any campaigns matching this search but there are lots more to choose from.
-        <a tabindex="0" (click)="onClearFiltersApplied()">View all campaigns here</a>.
+        <a tabindex="0" (click)="clear()">View all campaigns here</a>.
       </p>
     </div>
 

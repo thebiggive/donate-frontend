@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
 
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { CampaignSummary } from '../campaign-summary.model';
@@ -13,20 +11,22 @@ import { CampaignSummary } from '../campaign-summary.model';
 export class HomeComponent implements OnInit {
   public campaigns: CampaignSummary[];
   public loading = false; // Server render gets initial result set; set true when filters change.
-  public resetSubject: Subject<void> = new Subject<void>();
 
   private perPage = 6;
   private query: {[key: string]: any};
 
-  constructor(
-    private campaignService: CampaignService,
-    private router: Router,
-  ) {
-  }
+  constructor(private campaignService: CampaignService) {}
 
   ngOnInit() {
     this.setDefaults();
     this.run();
+  }
+
+  /**
+   * Default sort when not in relevance mode because there's a search term.
+   */
+  getDefaultSort(): 'matchFundsRemaining' {
+    return 'matchFundsRemaining';
   }
 
   setDefaults() {
@@ -36,12 +36,6 @@ export class HomeComponent implements OnInit {
       sortDirection: 'desc',
       sortField: 'matchFundsRemaining',
     };
-  }
-
-  search(term: string) {
-    this.router.navigate(['explore'], {
-      queryParams: { term },
-    });
   }
 
   private run() {
