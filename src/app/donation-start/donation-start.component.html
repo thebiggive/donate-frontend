@@ -17,9 +17,9 @@
         <h1 class="b-rh-1 b-bold">{{ campaign.title }}</h1>
       </div>
 
-      <p *ngIf="campaign && !campaignIsOpen()">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
+      <p *ngIf="campaign && !campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 
-      <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaign && campaignIsOpen()">
+      <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaign && campaignOpenOnLoad">
         <mat-vertical-stepper
           id="stepper"
           linear
