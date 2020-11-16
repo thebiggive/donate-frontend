@@ -14,7 +14,6 @@ import { SearchService } from '../search.service';
 export class ExploreComponent implements OnInit {
   campaigns: CampaignSummary[];
   loading = false; // Server render gets initial result set; set true when filters change.
-  // resetSubject: Subject<void> = new Subject<void>();
   searched = false;
 
   private offset = 0;

@@ -28,6 +28,7 @@ export class CampaignSearchFormComponent implements OnInit {
         Validators.minLength(2),
       ]],
     });
+    this.search.changed.subscribe(() => this.searchForm.patchValue({ term: this.search.selected.term }));
   }
 
   submit() {

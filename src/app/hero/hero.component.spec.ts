@@ -109,7 +109,6 @@ describe('HeroComponent', () => {
         key: '1G_Abc2delF',
       },
     );
-    component.reset = new Observable();
     fixture.detectChanges();
   });
 

@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
 import { Fund } from '../fund.model';
@@ -15,7 +14,6 @@ export class HeroComponent implements OnInit {
   @Input() description: string;
   @Input() fund?: Fund;
   @Input() getDefaultSort: () => string;
-  @Input() reset: Observable<void>; // Passed through to CampaignSearchFormComponent
 
   bannerUri: string;
   logoAltText?: string;
