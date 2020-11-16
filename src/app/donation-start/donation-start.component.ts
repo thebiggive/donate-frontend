@@ -805,7 +805,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private addStripeValidators(): void {
-    this.amountsGroup.controls.tipPercentage.setValidators([Validators.required]);
+    // Do not add a validator on `tipPercentage` because as a dropdown it always
+    // has a value anyway, and this complicates repopulating the form when e.g.
+    // reusing an existing donation.
     this.amountsGroup.controls.tipAmount.setValidators([
       Validators.required,
       Validators.pattern('^£?[0-9]+?(\\.[0-9]{2})?$'),
@@ -912,16 +914,26 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   private getDialogResponseFn(donation: Donation) {
     return (proceed: boolean) => {
       if (proceed) {
-        // Required for both use cases.
+        // Required for all use cases.
         this.donation = donation;
 
         this.scheduleMatchingExpiryWarning(this.donation);
 
         // In doc block use case (a), we need to put the amounts from the previous
         // donation into the form and move to Step 2.
+        const tipPercentageFixed = (100 * donation.tipAmount / donation.donationAmount).toFixed(1);
+        let tipPercentage;
+
+        if (['7.5', '10.0', '12.5', '15.0'].includes(tipPercentageFixed)) {
+          tipPercentage = Number(tipPercentageFixed);
+        } else {
+          tipPercentage = 'Other';
+        }
+
         this.amountsGroup.patchValue({
           donationAmount: donation.donationAmount.toString(),
           tipAmount: donation.tipAmount.toString(),
+          tipPercentage,
         });
 
         if (this.stepper.selected.label === 'Your donation') {
