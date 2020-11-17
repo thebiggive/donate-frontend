@@ -160,7 +160,7 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   private setSecondaryPropsAndRun(campaign: Campaign) {
-    this.searchService.reset(this.getDefaultSort());
+    this.searchService.reset(this.getDefaultSort()); // Needs `campaign` to determine sort order.
     this.loadQueryParamsAndRun();
     this.pageMeta.setCommon(
       campaign.title,
@@ -174,9 +174,8 @@ export class MetaCampaignComponent implements OnInit {
    */
   private loadQueryParamsAndRun() {
     this.route.queryParams.subscribe(params => {
-      this.searchService.loadQueryParams(params);
-      this.run(false);
-      this.searchService.changed.subscribe(() => this.run(true));
+      this.searchService.changed.subscribe((interactive: boolean) => this.run(interactive));
+      this.searchService.loadQueryParams(params, this.getDefaultSort());
     });
   }
 
