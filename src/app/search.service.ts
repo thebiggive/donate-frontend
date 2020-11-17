@@ -15,7 +15,7 @@ export type SelectedType = {
 export class SearchService {
   selected: {[key: string]: any}; // SelectedType but allowing string key lookups.
 
-  changed: EventEmitter<{[key: string]: any}>;
+  changed: EventEmitter<boolean>; // Value indicates if an interactive UI change triggered this.
 
   constructor() {
     this.changed = new EventEmitter();
@@ -35,7 +35,7 @@ export class SearchService {
 
   filter(filterName: string, value: string) {
     this.selected[filterName] = value;
-    this.changed.emit(this.selected);
+    this.changed.emit(true);
   }
 
   /**
@@ -59,7 +59,9 @@ export class SearchService {
    *
    * @param routeParams object
    */
-  loadQueryParams(queryParams: any) {
+  loadQueryParams(queryParams: any, defaultSort: string) {
+    this.reset(defaultSort);
+
     if (Object.keys(queryParams).length > 0) {
       for (const key of Object.keys(queryParams)) {
         if (key === 'onlyMatching') {
@@ -71,18 +73,18 @@ export class SearchService {
       }
     }
 
-    this.changed.emit(this.selected);
+    this.changed.emit(false);
   }
 
   reset(defaultSort: string) {
     this.selected = SearchService.selectedDefaults(defaultSort);
-    this.changed.emit(this.selected);
+    this.changed.emit(true);
   }
 
   search(term: string, defaultSort: string) {
     this.selected.term = term;
     this.selected.sortField = term.length > 0 ? '' : defaultSort;
-    this.changed.emit(this.selected);
+    this.changed.emit(true);
   }
 
   showClearFilters(): boolean {
@@ -97,6 +99,6 @@ export class SearchService {
 
   sort(selectedSort: string) {
     this.selected.sortField = selectedSort;
-    this.changed.emit(this.selected);
+    this.changed.emit(true);
   }
 }

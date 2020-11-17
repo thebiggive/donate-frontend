@@ -99,9 +99,8 @@ export class ExploreComponent implements OnInit {
    */
   private loadQueryParamsAndRun() {
     this.route.queryParams.subscribe(params => {
-      this.searchService.loadQueryParams(params);
-      this.run(false);
-      this.searchService.changed.subscribe(() => this.run(true));
+      this.searchService.changed.subscribe((interactive: boolean) => this.run(interactive));
+      this.searchService.loadQueryParams(params, this.getDefaultSort());
     });
   }
 
