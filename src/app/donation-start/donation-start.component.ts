@@ -257,8 +257,20 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   async stepChanged(event: StepperSelectionEvent) {
-    // If the original donation amount was updated, cancel that donation,
-    // we'll create a new one later on for this updated amount.
+    // We need to allow enough time for the Stepper's animation to get the window to
+    // its final position for this step, before this scroll position update can be reliably
+    // helpful.
+    setTimeout(() => {
+      const activeStepLabel = document.querySelector('.mat-step-label-active');
+      if (activeStepLabel) {
+        activeStepLabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 200);
+
+
+    // If the original donation amount was updated, cancel that donation and
+    // then (sequentially so any match funds are freed up first) create a new
+    // one for the updated amount.
     if (this.donation !== undefined && this.donationAmount > 0 && this.donationAmount !== this.donation.donationAmount) {
       this.donationService.cancel(this.donation)
         .subscribe(() => {
@@ -269,7 +281,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           this.donationService.removeLocalDonation(this.donation);
           this.cancelExpiryWarning();
           delete this.donation;
+
+          this.createDonation();
         });
+
+      return;
     }
 
     // Stepper is 0-indexed and checkout steps are 1-indexed, so we can send the new
@@ -303,16 +319,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         this.analyticsService.logCheckoutStep(event.selectedIndex, this.campaign, this.donation);
       }
     }
-
-    // We need to allow enough time for the Stepper's animation to get the window to
-    // its final position for this step, before this scroll position update can be reliably
-    // helpful.
-    setTimeout(() => {
-      const activeStepLabel = document.querySelector('.mat-step-label-active');
-      if (activeStepLabel) {
-        activeStepLabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 200);
 
     // Create a donation if coming from first step and not offering to resume
     // an existing donation.
@@ -740,11 +746,20 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     this.expiryWarning = setTimeout(() => {
-      const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
-        disableClose: true,
-        role: 'alertdialog',
+      this.donationService.get(donation).subscribe(updatedDonation => {
+        if (updatedDonation.status !== 'Pending') {
+          console.log('skipping resume offer because donation not pending. was', updatedDonation.status);
+          return;
+        }
+
+        console.log('proceeding to offer', updatedDonation);
+
+        const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
+          disableClose: true,
+          role: 'alertdialog',
+        });
+        continueDialog.afterClosed().subscribe(this.getDialogResponseFn(updatedDonation));
       });
-      continueDialog.afterClosed().subscribe(this.getDialogResponseFn(donation));
     }, msUntilExpiryTime);
   }
 
