@@ -1,11 +1,9 @@
-import { FilterType } from './../filters/filters.component';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Params, Router, RouterEvent } from '@angular/router';
-import { Subject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { CampaignSummary } from '../campaign-summary.model';
+import { SearchService } from '../search.service';
 
 /** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
@@ -14,61 +12,29 @@ import { CampaignSummary } from '../campaign-summary.model';
   styleUrls: ['./explore.component.scss'],
 })
 export class ExploreComponent implements OnInit {
-  public campaigns: CampaignSummary[];
-  public loading = false; // Server render gets initial result set; set true when filters change.
-  public hasTerm = false;
-  public resetSubject: Subject<void> = new Subject<void>();
-  public searched = false;
-  public selectedSort = 'matchFundsRemaining';
+  campaigns: CampaignSummary[];
+  loading = false; // Server render gets initial result set; set true when filters change.
+  searched = false;
 
-  private perPage = 6;
-  private query: {[key: string]: any};
-  private term: string;
+  private offset = 0;
 
   constructor(
     private campaignService: CampaignService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {
-    this.setDefaults();
-    route.queryParams.forEach((params: Params) => {
-      this.term = params.term;
-      this.search(this.term ? this.term : '');
-    });
-  }
+    public searchService: SearchService,
+  ) {}
 
   ngOnInit() {
-    this.handleFilters();
-
-    // Navigation "changes" occur when donors navigate back to the root `/` path, e.g. from the main menu.
-    // When this happens it's usually desirable to clear the filters so they have a convenient way to navigate
-    // back to the default view where we surface some campaigns, if they've got lost in an overly-filtered view.
-    this.router.events.pipe(
-      filter((event: RouterEvent) => event instanceof NavigationEnd),
-    ).subscribe(() => this.resetFilters());
+    this.searchService.reset(this.getDefaultSort());
+    this.loadQueryParamsAndRun();
   }
 
-  resetFilters() {
-    this.setDefaults();
-    this.handleFilters();
-  }
-
-  setDefaults() {
-    this.hasTerm = false;
-    this.selectedSort = 'matchFundsRemaining';
-    this.query = {
-      limit: this.perPage,
-      offset: 0,
-    };
-  }
-
-  handleSortParams() {
-    this.query.sortField = this.selectedSort;
-    if (this.selectedSort === '') { // this means sort by relevance for now
-      this.query.sortDirection = undefined;
-    } else { // match funds left and amount raised both make most sense in 'desc' order
-      this.query.sortDirection = 'desc';
-    }
+  /**
+   * Default sort when not in relevance mode because there's a search term.
+   */
+  getDefaultSort(): 'matchFundsRemaining' {
+    return 'matchFundsRemaining';
   }
 
   /**
@@ -83,47 +49,25 @@ export class ExploreComponent implements OnInit {
     }
   }
 
-  onFilterApplied(update: {filterName: FilterType, value: string}) {
-    this.query[update.filterName] = update.value;
-    this.run();
-  }
-
   onScroll() {
     if (this.moreMightExist()) {
       this.more();
     }
   }
 
-  onSortApplied(selectedSort: string) {
-    this.selectedSort = selectedSort;
-    this.handleSortParams();
-    this.run();
-  }
-
-  search(term: string) {
-    this.query.term = this.term = term;
-    this.hasTerm = (term !== '');
-    this.selectedSort = (term === '' ? 'matchFundsRemaining' : '');
-
-    this.handleSortParams();
-    this.run();
-  }
-
-  private handleFilters() {
-    this.handleSortParams();
-    this.run();
-
-    this.resetSubject.next();
+  clear() {
+    this.searchService.reset(this.getDefaultSort());
   }
 
   private moreMightExist(): boolean {
-    return (this.campaigns.length === (this.query.limit + this.query.offset));
+    return (this.campaigns.length === (CampaignService.perPage + this.offset));
   }
 
   private loadMoreForCurrentSearch() {
-    this.query.offset += this.perPage;
+    this.offset += CampaignService.perPage;
     this.loading = true;
-    this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
+    const query = this.campaignService.buildQuery(this.searchService.selected, this.offset);
+    this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
       // Success
       this.campaigns = [...this.campaigns, ...campaignSummaries];
       this.loading = false;
@@ -132,17 +76,40 @@ export class ExploreComponent implements OnInit {
     });
   }
 
-  private run() {
-    this.query.offset = 0;
+  private run(fromFormChange: boolean) {
+    this.offset = 0;
+    const query = this.campaignService.buildQuery(this.searchService.selected, 0);
     this.campaigns = [];
     this.loading = true;
 
-    this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
+    this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
       this.campaigns = campaignSummaries; // Success
       this.loading = false;
+      if (fromFormChange) {
+        this.setQueryParams();
+      }
     }, () => {
         this.loading = false;
       },
     );
+  }
+
+  /**
+   * Get any query params from the requested URL.
+   */
+  private loadQueryParamsAndRun() {
+    this.route.queryParams.subscribe(params => {
+      this.searchService.changed.subscribe((interactive: boolean) => this.run(interactive));
+      this.searchService.loadQueryParams(params, this.getDefaultSort());
+    });
+  }
+
+  /**
+   * Update the browser's query params when a sort or filter is applied.
+   */
+  private setQueryParams() {
+    this.router.navigate(['explore'], {
+      queryParams: this.searchService.getQueryParams(this.getDefaultSort()),
+    });
   }
 }

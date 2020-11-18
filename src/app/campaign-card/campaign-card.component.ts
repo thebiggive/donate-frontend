@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
+import { CampaignGroupsService } from '../campaign-groups.service';
 import { CampaignSummary } from '../campaign-summary.model';
 import { ImageService } from '../image.service';
 
@@ -19,5 +20,13 @@ export class CampaignCardComponent implements OnInit {
   ngOnInit() {
     this.imageService.getImageUri(this.campaign.imageUri, 830).subscribe(uri => this.bannerUri = uri);
     this.isFinished = (new Date(this.campaign.endDate) < new Date());
+  }
+
+  getBeneficiaryIcon(beneficiary: string) {
+    return CampaignGroupsService.getBeneficiaryIcon(beneficiary);
+  }
+
+  getCategoryIcon(category: string) {
+    return CampaignGroupsService.getCategoryIcon(category);
   }
 }

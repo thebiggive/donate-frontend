@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -39,12 +39,14 @@ describe('DonationStartComponent', () => {
           },
         ],
         'https://example.com/some-banner.png',
+        ['Other'],
         [
           {
             description: 'budget line 1',
             amount: 2000.01,
           },
         ],
+        ['Animals'],
         'The Big Give Match Fund',
         {
           id: '0011r00002HHAprAAH',
@@ -56,6 +58,7 @@ describe('DonationStartComponent', () => {
           stripeAccountId: campaignId === 'testCampaignIdForStripe' ? 'testStripeAcctId' : undefined,
           website: 'https://www.awesomecharity.co.uk',
         },
+        ['United Kingdom'],
         4,
         new Date(),
         [
@@ -97,7 +100,7 @@ describe('DonationStartComponent', () => {
     );
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         DonationStartComponent,
@@ -148,6 +151,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '£1234',
         tipAmount: '20',
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: true,
@@ -178,6 +182,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '1234',
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: null,
@@ -219,6 +224,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: null,
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: true,
@@ -254,6 +260,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '0', // Simpler for now than testing e.g. '0.99' which also fails pattern validation
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: false,
@@ -289,6 +296,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '25001',
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: false,
@@ -324,6 +332,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '8765,21',
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: true,
@@ -368,6 +377,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '£1234',
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: true,
@@ -407,6 +417,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '£1234',
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: true,
@@ -446,6 +457,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         donationAmount: '£1234',
         tipAmount: null,
+        tipPercentage: 12.5,
       },
       giftAid: {
         giftAid: true,

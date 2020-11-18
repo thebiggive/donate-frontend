@@ -32,12 +32,11 @@ ul {
 }
 
 .c-header__charity-name {
-  margin-top: 0.75rem;
-  margin-bottom: 0;
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
   @include size-md;
   letter-spacing: 1px;
   @media #{$breakpoint-md} {
-    min-height: 48px;
     display: flex;
     align-items: flex-end;
     line-height: 1.5;
@@ -48,39 +47,30 @@ ul {
   margin: 0 0 .75rem;
   color: $colour-teal-dark;
   @include size-lg;
-  @media #{$breakpoint-md} {
-    min-height: 48px;
-  }
 }
 
 .c-header__link {
   text-decoration: none;
 }
 
-.c-categories {
-  overflow-x: scroll;
-  white-space:nowrap;
-  margin-left: 0.5rem;
-  padding-bottom: 0.5rem;
+.c-body {
+  margin-top: auto;
 }
 
-.c-categories__list {
-  margin:0 0.5rem;
-  margin-left: 0;
-  display: inline;
-}
+.c-icon-lists {
+  ul {
+    padding: 0;
 
-.c-categories__item {
-  @include size-md;
-  background-color: $colour-teal-fade;
-  color: $colour-teal-dark;
-  border-radius: 14px;
-  padding: 0.15rem 0.75rem 0.25rem;
-  margin-right: 0.5rem;
-  display: inline;
-  &:last-child {
-    margin-right: 0;
+    li {
+      display: inline;
+      padding-right: 0.5rem;
+
+      .ng-fa-icon {
+        color: $colour-grey;
+      }
+    }
   }
+  padding: 0 2rem;
 }
 
 .c-funds {
@@ -88,7 +78,7 @@ ul {
   color: $colour-grey;
 }
 
-.c-funds__description {
+.c-cards__description {
   @include size-md;
   color: $colour-grey;
   margin-top: 0;
@@ -115,11 +105,11 @@ ul {
 }
 
 .c-buttons {
-  margin-top:auto;
+  margin-top: auto;
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
-  align-items:center;
+  align-items: center;
 
   &__past {
     margin-top: 6px;

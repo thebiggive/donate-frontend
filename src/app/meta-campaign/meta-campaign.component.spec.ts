@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,7 +26,7 @@ describe('MetaCampaignComponent', () => {
   let component: MetaCampaignComponent;
   let fixture: ComponentFixture<MetaCampaignComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         CampaignCardComponent,
@@ -65,7 +65,9 @@ describe('MetaCampaignComponent', () => {
       123,
       [],
       'https://example.com/banner.png',
+      ['Other'],
       [],
+      ['Animals'],
       '',
       {
         id: 'tbgId',
@@ -74,7 +76,9 @@ describe('MetaCampaignComponent', () => {
         optInStatement: 'Opt in statement.',
         website: 'https://www.thebiggive.org.uk',
         regulatorNumber: '123456',
-        regulatorRegion: 'Scotland' },
+        regulatorRegion: 'Scotland',
+      },
+      ['United Kingdom'],
       4,
       new Date(),
       [],
@@ -97,7 +101,8 @@ describe('MetaCampaignComponent', () => {
       new CampaignSummary(
         'testCampaignId',
         123,
-        ['cat1', 'cat2'],
+        ['Other'],
+        ['Animals'],
         'Test Champion',
         { id: 'testCharityId', name: 'Test Charity' },
         new Date(),

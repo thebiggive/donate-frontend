@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>Filters</h2>
+
+<mat-dialog-content class="mat-typography">
+  <mat-form-field appearance="outline">
+    <mat-label>Category</mat-label>
+    <mat-select [(value)]="search.selected.category" (selectionChange)="setFilter('category', $event.value)">
+      <mat-option value="">All</mat-option>
+      <mat-option
+        *ngFor="let category of categoryOptions"
+        [value]="category.name"
+      ><fa-icon [icon]="category.icon"></fa-icon> {{ category.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Helping</mat-label>
+    <mat-select [(value)]="search.selected.beneficiary" (selectionChange)="setFilter('beneficiary', $event.value)">
+      <mat-option value="">All</mat-option>
+      <mat-option
+        *ngFor="let beneficiary of beneficiaryOptions"
+        [value]="beneficiary.name"
+      ><fa-icon [icon]="beneficiary.icon"></fa-icon> {{ beneficiary.name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="c-filters__form-field" appearance="outline">
+    <mat-label>Location</mat-label>
+    <mat-select [(value)]="search.selected.country" (selectionChange)="setFilter('country', $event.value)">
+      <mat-option value="">All</mat-option>
+      <mat-option *ngFor="let country of countryOptions" [value]="country">{{ country }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="c-filters__form-field" appearance="outline">
+    <mat-label>Matching Now?</mat-label>
+    <mat-select [(value)]="search.selected.onlyMatching" (selectionChange)="setFilter('onlyMatching', $event.value)">
+      <mat-option [value]="false">All</mat-option>
+      <mat-option [value]="true">Match Funds Available</mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button mat-dialog-close color="primary">
+    <mat-icon>filter_alt</mat-icon> Apply
+  </button>
+</mat-dialog-actions>

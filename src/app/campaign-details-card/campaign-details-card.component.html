@@ -42,5 +42,23 @@
         <span class="b-bold">{{campaign.championName}}</span>
       </a>
     </p>
+    <ul class="c-icon-list">
+      <h2 class="c-campaign-category__description b-grey b-light">Category</h2>
+      <li *ngFor="let category of campaign.categories">
+        <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
+        <span class="c-icon-title">{{ category }}</span>
+      </li>
+    </ul>
+    <ul class="c-icon-list">
+      <h2 class="c-campaign-beneficiary__description b-grey b-light">Helping</h2>
+      <li *ngFor="let beneficiary of campaign.beneficiaries">
+        <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
+        <span class="c-icon-title">{{ beneficiary }}</span>
+      </li>
+    </ul>
+    <div class="c-country">
+      <h2 class="c-campaign-country__description b-grey b-light">Location</h2>
+      <p class="c-country__value">{{ locations() }}</p>
+    </div>
   </div>
 </div>

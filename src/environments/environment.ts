@@ -4,7 +4,10 @@
 
 export const environment = {
   production: false,
+  productionLike: false,
   apiUriPrefix: 'https://sandbox7-biggive.cs109.force.com',
+  ccStartTime: 1604934000, // 9th November, 15:00
+  ccEndTime: 1604937600, // 9th November, 16:00
   donateUriPrefix: 'http://localhost:4200',
   donationsApiPrefix: 'http://localhost:30030/v1',
   getSiteControlId: '97792',
@@ -20,6 +23,7 @@ export const environment = {
       publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
+  redirectHomeToMeta: false,
   reservationMinutes: 15,
   // Each of 4x suggestion sets for 5% of donors each, no suggestions for the other 80%.
   suggestedAmounts: [

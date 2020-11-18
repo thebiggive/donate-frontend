@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { Campaign } from '../campaign.model';
 import { Fund } from '../fund.model';
@@ -11,19 +10,10 @@ import { ImageService } from '../image.service';
   styleUrls: ['./hero.component.scss'],
 })
 export class HeroComponent implements OnInit {
-  public searchTerm: string;
   @Input() campaign: Campaign;
   @Input() description: string;
   @Input() fund?: Fund;
-  @Input() reset: Observable<void>; // Passed through to CampaignSearchFormComponent
-
-  // Listen for search term changes and set them accordingly.
-  @Input()
-  set term(val: string) {
-    this.searchTerm = val;
-  }
-
-  @Output() heroSearch: EventEmitter<any> = new EventEmitter();
+  @Input() getDefaultSort: () => string;
 
   bannerUri: string;
   logoAltText?: string;
@@ -45,9 +35,5 @@ export class HeroComponent implements OnInit {
       this.logoAltText = this.fund.name;
       this.imageService.getImageUri(this.fund.logoUri, 660).subscribe(uri => this.logoUri = uri);
     }
-  }
-
-  search(term: string) {
-    this.heroSearch.emit(term);
   }
 }

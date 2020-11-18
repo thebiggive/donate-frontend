@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -17,7 +17,7 @@ describe('HeroComponent', () => {
   let component: HeroComponent;
   let fixture: ComponentFixture<HeroComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         CampaignSearchFormComponent,
@@ -51,12 +51,14 @@ describe('HeroComponent', () => {
         },
       ],
       'https://example.com/some-banner.png',
+      ['Other'],
       [
         {
           description: 'budget line 1',
           amount: 2000.01,
         },
       ],
+      ['Animals'],
       'The Big Give Match Fund',
       {
         id: '0011r00002HHAprAAH',
@@ -67,6 +69,7 @@ describe('HeroComponent', () => {
         regulatorNumber: '123456',
         regulatorRegion: 'Scotland',
       },
+      ['United Kingdom'],
       4,
       new Date(),
       [
@@ -106,7 +109,6 @@ describe('HeroComponent', () => {
         key: '1G_Abc2delF',
       },
     );
-    component.reset = new Observable();
     fixture.detectChanges();
   });
 

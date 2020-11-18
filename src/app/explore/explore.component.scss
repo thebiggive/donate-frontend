@@ -1,31 +1,13 @@
 @import '../../styles';
 
-.home-hero {
-  padding-top: 1rem;
-  background-image: url(/assets/images/bg-hero-home.png);
-  background-size: 50%;
-  background-repeat: no-repeat;
-  background-position: 140% -10%;
-
+.explore-hero {
   @media #{$breakpoint-lg} {
-    padding-top: 1.5rem;
-    background-size: contain;
-    background-position: right top;
+    padding-top: 5rem;
+    padding-bottom: 2.5rem;
   }
 }
 
-.home-hero__description {
-  @include size-md;
-  color: $colour-grey;
-  margin-bottom: 1rem;
-  line-height: 1.2;
-
-  @media #{$breakpoint-lg} {
-    @include size-lg;
-  }
-}
-
-.home-hero-flex__child {
+.explore-hero-flex__child {
   padding-right: 15px; // Allow space so GetSiteControl right-floated widgets don't cover copy
 
   @media #{$breakpoint-md} {
@@ -51,7 +33,7 @@
   }
 }
 
-.c-home-hero__heading {
+.c-explore-hero__heading {
   margin-bottom: 0;
   line-height: 1.2;
   @media #{$breakpoint-md} {
@@ -71,7 +53,7 @@
 
 .error {
   color: mat-color($donate-warn);
-  max-width: 600px;
+  max-width: $full-copy-max-width;
   text-align: center;
   margin: 1rem auto;
 }

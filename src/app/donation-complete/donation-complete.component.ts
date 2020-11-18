@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from '../campaign.model';
@@ -19,8 +20,10 @@ export class DonationCompleteComponent {
   public donation: Donation;
   public giftAidAmount: number;
   public noAccess = false;
+  public prefilledText: string;
   public timedOut = false;
   public totalValue: number;
+  public shareUrl: string;
 
   private donationId: string;
   private maxTries = 5;
@@ -63,7 +66,10 @@ export class DonationCompleteComponent {
     }
 
     this.donation = donation;
-    this.campaignService.getOneById(donation.projectId).subscribe(campaign => this.campaign = campaign);
+    this.campaignService.getOneById(donation.projectId).subscribe(campaign => {
+      this.campaign = campaign;
+      this.setSocialShares(campaign);
+    });
 
     if (donation && this.donationService.isComplete(donation)) {
       this.analyticsService.logEvent('thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
@@ -88,5 +94,24 @@ export class DonationCompleteComponent {
 
     this.analyticsService.logError('thank_you_timed_out_pre_complete', `Donation to campaign ${donation.projectId}`);
     this.timedOut = true;
+  }
+
+  private setSocialShares(campaign: Campaign) {
+    const now = Math.floor(new Date().getTime() / 1000.0);
+    const ccStartTime = environment.ccStartTime;
+    const ccEndTime = environment.ccEndTime;
+
+    this.shareUrl = `${environment.donateUriPrefix}/campaign/${campaign.id}`;
+
+    if (campaign.parentRef?.includes('christmas-challenge')) {
+      this.prefilledText = encodeURIComponent('I just donated in #ChristmasChallenge20. From 1-8 December, your donation can be doubled. One donation, twice the impact.');
+
+      // During CC we share the meta campaign page, otherwise default is the charities campaign page.
+      if (now >= ccStartTime && now < ccEndTime) {
+        this.shareUrl = `http://bit.ly/cc20thankyou`;
+      }
+    } else {
+      this.prefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
+    }
   }
 }

@@ -1,12 +1,12 @@
 import { ChangeDetectorRef, PLATFORM_ID } from '@angular/core';
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { TimeLeftPipe } from './time-left.pipe';
 
 describe('TimeLeftPipe', () => {
   let pipe: TimeLeftPipe;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },

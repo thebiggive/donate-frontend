@@ -4,6 +4,7 @@ export class CampaignSummary {
   constructor(
     public id: string,
     public amountRaised: number,
+    public beneficiaries: string[],
     public categories: string[],
     public championName: string,
     public charity: {id: string, name: string},

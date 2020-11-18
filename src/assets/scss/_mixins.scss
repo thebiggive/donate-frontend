@@ -41,6 +41,15 @@
   }
 }
 
+@mixin icon-bullet {
+  .ng-fa-icon {
+    display: inline-block;
+    width: 2rem;
+    text-align: center;
+    color: $colour-grey;
+  }
+}
+
 @mixin b-rt-2 {
   font-size: 24px;
   line-height: 36px;
@@ -150,13 +159,6 @@
   border-radius: 4px 4px 0 0;
   background-size: cover;
   background-position: center center;
-}
-
-@mixin make-card-body {
-  padding: 15px;
-  @media #{$breakpoint-xl} {
-    padding: 15px 30px;
-  }
 }
 
 @mixin make-match-badge {

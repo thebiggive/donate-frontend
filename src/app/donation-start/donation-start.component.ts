@@ -1,5 +1,6 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
@@ -41,7 +42,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   showChampionOptIn = false;
 
   campaign?: Campaign;
-  donation: Donation;
+  donation?: Donation;
+
+  campaignOpenOnLoad: boolean;
 
   donationForm: FormGroup;
   amountsGroup: FormGroup;
@@ -67,7 +70,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   private enthuseError?: string;  // Enthuse donation start error message
   private previousDonation?: Donation;
   private stepHeaderEventsSet = false;
+  private tipPercentageChanged = false;
 
+  private initialTipSuggestedPercentage = 12.5;
   // Based on https://stackoverflow.com/questions/164979/regex-for-matching-uk-postcodes#comment82517277_164994
   // but modified to make the separating space optional.
   private postcodeRegExp = new RegExp('^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\\s?[0-9][A-Za-z]{2})$');
@@ -84,6 +89,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
     private pageMeta: PageMetaService,
+    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
+    @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,
     private state: TransferState,
@@ -116,6 +123,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           ValidateCurrencyMax,
           Validators.pattern('^£?[0-9]+?(\\.00)?$'),
         ]],
+        tipPercentage: [this.initialTipSuggestedPercentage], // See addStripeValidators().
         tipAmount: [null], // See addStripeValidators().
       }),
       giftAid: this.formBuilder.group({
@@ -160,11 +168,15 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     this.maximumDonationAmount = environment.maximumDonationAmount;
-    const suggestedAmountsKey = makeStateKey<number[]>('suggested-amounts');
-    this.suggestedAmounts = this.state.get(suggestedAmountsKey, undefined);
-    if (this.suggestedAmounts === undefined) {
-      this.suggestedAmounts = this.getSuggestedAmounts();
-      this.state.set(suggestedAmountsKey, this.suggestedAmounts);
+
+    // We need each donor to get a randomised but consistent for them set of
+    // amount suggestions, while we support variant tests of this. So
+    // we can't set this up for them on the server. It is therefore best
+    // to skip this entirely on the server side and always have it return
+    // suggestions, then have them 'injected' as the page loads when
+    // appropriate based on the options applicable for the particular donor.
+    if (isPlatformBrowser(this.platformId)) {
+      this.suggestedAmounts = this.donationService.getSuggestedAmounts();
     }
 
     const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
@@ -245,16 +257,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   async stepChanged(event: StepperSelectionEvent) {
-
     // If the original donation amount was updated, cancel that donation,
     // we'll create a new one later on for this updated amount.
     if (this.donation !== undefined && this.donationAmount > 0 && this.donationAmount !== this.donation.donationAmount) {
-
       this.donationService.cancel(this.donation)
         .subscribe(() => {
           this.analyticsService.logEvent(
             'cancel_auto',
-            `Donation cancelled because amount was updated ${this.donation.donationId} to campaign ${this.campaignId}`,
+            `Donation cancelled because amount was updated ${this.donation?.donationId} to campaign ${this.campaignId}`,
           );
           this.donationService.removeLocalDonation(this.donation);
           this.cancelExpiryWarning();
@@ -304,20 +314,15 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       }
     }, 200);
 
-    // This ensures `stepper.reset()` evalutes this to false and our usage
-    // with this const helps to prevent `createDonation()` from being incorrectly triggered.
-    const activelySelectedNext = (event.previouslySelectedStep.label === 'Your donation'
-                                  && event.previouslySelectedStep.interacted === true);
-
-    const invalidDonation = (this.donation === undefined || this.donation.status === 'Cancelled');
-
-    const invalidPreviousDonation = (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled');
-
-    // Create a donation if user actively clicks 'next' from first step and
-    // the current and previous donations are invalid.
-    if (activelySelectedNext && invalidDonation && invalidPreviousDonation) {
-
-      this.createDonation();
+    // Create a donation if coming from first step and not offering to resume
+    // an existing donation.
+    if (event.previouslySelectedStep.label === 'Your donation') {
+      if (
+        (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled') &&
+        event.selectedStep.label !== 'Your donation' // Resets fire a 0 -> 0 index event.
+      ) {
+        this.createDonation();
+      }
 
       if (this.psp === 'stripe') {
         this.card = await this.stripeService.getCard();
@@ -361,7 +366,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.donationUpdateError = false;
 
     // Can't proceed if campaign info not looked up yet or no usable PSP
-    if (!this.campaign || !this.campaign.charity.id || !this.psp) {
+    if (!this.donation || !this.campaign || !this.campaign.charity.id || !this.psp) {
       this.donationUpdateError = true;
       return;
     }
@@ -406,9 +411,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   async payWithStripe() {
-    if (!this.donation.clientSecret) {
+    if (!this.donation || !this.donation.clientSecret) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
-      this.analyticsService.logError('stripe_pay_missing_secret', `Donation ID: ${this.donation.donationId}`);
+      this.analyticsService.logError('stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
       return;
     }
 
@@ -460,6 +465,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     return this.donationForm.controls.amounts.get('donationAmount');
   }
 
+  get tipAmountField() {
+    if (!this.donationForm) {
+      return undefined;
+    }
+
+    return this.donationForm.controls.amounts.get('tipAmount');
+  }
+
   /**
    * Quick getter for donation amount, to keep template use concise.
    */
@@ -469,6 +482,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
   get donationAndTipAmount(): number {
     return this.donationAmount + this.tipAmount();
+  }
+
+  customTip(): boolean {
+    return this.amountsGroup.value.tipPercentage === 'Other';
   }
 
   expectedMatchAmount(): number {
@@ -491,18 +508,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     return this.donationAmount + this.giftAidAmount() + this.expectedMatchAmount();
   }
 
-  /**
-   * Unlike the CampaignService method which is more forgiving if the status gets stuck Active (we don't trust
-   * these to be right in Salesforce yet), this check relies solely on campaign dates.
-   */
-  campaignIsOpen(): boolean {
-    return (
-      this.campaign
-        ? (new Date(this.campaign.startDate) <= new Date() && new Date(this.campaign.endDate) > new Date())
-        : false
-      );
-  }
-
   reservationExpiryTime(): Date | undefined {
     if (!this.donation?.createdTime || !this.donation.matchReservedAmount) {
       return undefined;
@@ -521,10 +526,29 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
   }
 
+  /**
+   * Percentage selection changed by donor, as opposed to programatically.
+   */
+  tipPercentageChange() {
+    this.tipPercentageChanged = true;
+  }
+
   next() {
     if (!this.goToFirstVisibleError()) {
       this.stepper.next();
     }
+  }
+
+  /**
+   * Unlike the CampaignService method which is more forgiving if the status gets stuck Active (we don't trust
+   * these to be right in Salesforce yet), this check relies solely on campaign dates.
+   */
+  private campaignIsOpen(): boolean {
+    return (
+      this.campaign
+        ? (new Date(this.campaign.startDate) <= new Date() && new Date(this.campaign.endDate) > new Date())
+        : false
+      );
   }
 
   /**
@@ -553,6 +577,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
    * Redirect if campaign's not open yet; set up page metadata if it is
    */
   private handleCampaign(campaign: Campaign) {
+    // We want to let donors finish the journey if they're on the page before the campaign
+    // close date and it passes while they're completing the form – in particular they should
+    // be able to use match funds secured until 15 minutes after the close time.
+    this.campaignOpenOnLoad = this.campaignIsOpen();
+
     if (environment.psps.stripe.enabled && this.campaign?.charity.stripeAccountId) {
       this.psp = 'stripe';
       this.addStripeValidators();
@@ -576,36 +605,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
-  }
-
-  private getSuggestedAmounts(): number[] {
-    if (environment.suggestedAmounts.length === 0) {
-      return [];
-    }
-
-    // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
-    let thresholdCounter = 0;
-    for (const suggestedAmount of environment.suggestedAmounts) {
-      thresholdCounter += suggestedAmount.weight;
-    }
-    const threshold = Math.floor(Math.random() * thresholdCounter);
-
-    thresholdCounter = 0;
-    for (const suggestedAmount of environment.suggestedAmounts) {
-      thresholdCounter += suggestedAmount.weight;
-
-      if (thresholdCounter > threshold) {
-        return suggestedAmount.values;
-      }
-    }
-
-    // We should never reach this point if the suggestions options are configured correctly.
-    this.analyticsService.logError(
-      'suggested_amounts_misconfigured',
-      `Unexpectedly failed to pick suggested amounts for campaign ${this.campaignId}`,
-    );
-
-    return [];
   }
 
   private createDonation() {
@@ -656,6 +655,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         this.donationService.saveDonation(response.donation, response.jwt);
         this.donation = response.donation; // Simplify update() while we're on this page.
 
+        this.analyticsService.logAmountChosen(donation.donationAmount, this.campaignId, this.suggestedAmounts);
+
         if (this.campaign && this.psp === 'stripe') {
           this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
         }
@@ -690,6 +691,16 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   private offerExistingDonation(donation: Donation) {
     this.analyticsService.logEvent('existing_donation_offered', `Found pending donation to campaign ${this.campaignId}`);
 
+    // Ensure we do not claim match funds are reserved when offering an old
+    // donation if the reservation time is up.
+    if (
+      donation.matchReservedAmount > 0 &&
+      donation.createdTime &&
+      (environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime()) < Date.now()
+    ) {
+      donation.matchReservedAmount = 0;
+    }
+
     const reuseDialog = this.dialog.open(DonationStartOfferReuseDialogComponent, {
       data: { donation },
       disableClose: true,
@@ -699,15 +710,35 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private scheduleMatchingExpiryWarning(donation: Donation) {
-    // Only set the timeout when relevant and we don't already have one.
-    if (this.expiryWarning || !donation.createdTime || donation.matchReservedAmount <= 0) {
+    // Only set the timeout when relevant part 1/2: exclude cases with no
+    // matching.
+    if (!donation.createdTime || donation.matchReservedAmount <= 0) {
       return;
+    }
+
+    // If we called this but already had a warning timer, the old one should
+    // be irrelevant because typically we'd invoke this after offering an existing
+    // donation and the donor saying yes. Even if we have prompted about the
+    // same donation for which we were already counting down a timer, removing
+    // and replacing it should be an idempotent process and so is the safest,
+    // least brittle option here.
+    if (this.expiryWarning) {
+      this.cancelExpiryWarning();
     }
 
     // To make this safe to call for both new and resumed donations, we look up
     // the donation's creation time and determine the timeout based on that rather
     // than e.g. always using 15 minutes.
     const msUntilExpiryTime = environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() - Date.now();
+
+    // Only set the timeout when relevant part 2/2: exclude cases where
+    // the timeout has already passed. This happens e.g. when the reuse
+    // dialog is shown because of matching expiry and the donor chooses
+    // to continue anyway without matching.
+    if (msUntilExpiryTime < 0) {
+      return;
+    }
+
     this.expiryWarning = setTimeout(() => {
       const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
         disableClose: true,
@@ -762,7 +793,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private redirectToEnthuse(donation: Donation, logoUri?: string) {
-    this.analyticsService.logAmountChosen(donation.donationAmount, this.campaignId, this.suggestedAmounts);
     this.analyticsService.logEvent('payment_redirect_click', `Donating to campaign ${this.campaignId}`);
     this.charityCheckoutService.startDonation(donation, logoUri);
   }
@@ -806,10 +836,47 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private addStripeValidators(): void {
+    // Do not add a validator on `tipPercentage` because as a dropdown it always
+    // has a value anyway, and this complicates repopulating the form when e.g.
+    // reusing an existing donation.
     this.amountsGroup.controls.tipAmount.setValidators([
       Validators.required,
       Validators.pattern('^£?[0-9]+?(\\.[0-9]{2})?$'),
     ]);
+
+    this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
+      const updatedValues: {
+        tipPercentage?: number | string,
+        tipAmount?: string,
+      } = {};
+
+      if (!this.tipPercentageChanged) {
+        let newDefault = this.initialTipSuggestedPercentage;
+        if (donationAmount >= 1000) {
+          newDefault = 7.5;
+        } else if (donationAmount >= 300) {
+          newDefault = 10;
+        }
+
+        updatedValues.tipPercentage = newDefault;
+        updatedValues.tipAmount = (newDefault / 100 * donationAmount).toFixed(2);
+      } else if (this.amountsGroup.get('tipPercentage')?.value !== 'Other') {
+        updatedValues.tipAmount = (this.amountsGroup.get('tipPercentage')?.value / 100 * donationAmount).toFixed(2);
+      }
+
+      this.amountsGroup.patchValue(updatedValues);
+    });
+
+    this.amountsGroup.get('tipPercentage')?.valueChanges.subscribe(tipPercentage => {
+      if (tipPercentage === 'Other') {
+        return;
+      }
+
+      this.amountsGroup.patchValue({
+        // Keep value consistent with format of manual string inputs.
+        tipAmount: (tipPercentage / 100 * (this.amountsGroup.get('donationAmount')?.value || 0)).toFixed(2),
+      });
+    });
 
     // Gift Aid home address fields are validated only in Stripe mode and also
     // conditionally on the donor claiming Gift Aid.
@@ -878,16 +945,26 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   private getDialogResponseFn(donation: Donation) {
     return (proceed: boolean) => {
       if (proceed) {
-        // Required for both use cases.
+        // Required for all use cases.
         this.donation = donation;
 
         this.scheduleMatchingExpiryWarning(this.donation);
 
         // In doc block use case (a), we need to put the amounts from the previous
         // donation into the form and move to Step 2.
+        const tipPercentageFixed = (100 * donation.tipAmount / donation.donationAmount).toFixed(1);
+        let tipPercentage;
+
+        if (['7.5', '10.0', '12.5', '15.0'].includes(tipPercentageFixed)) {
+          tipPercentage = Number(tipPercentageFixed);
+        } else {
+          tipPercentage = 'Other';
+        }
+
         this.amountsGroup.patchValue({
           donationAmount: donation.donationAmount.toString(),
           tipAmount: donation.tipAmount.toString(),
+          tipPercentage,
         });
 
         if (this.stepper.selected.label === 'Your donation') {
@@ -910,6 +987,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
             // Go back to 1st step to encourage donor to try again
             this.stepper.reset();
+            this.amountsGroup.patchValue({ tipPercentage: this.initialTipSuggestedPercentage });
+            this.tipPercentageChanged = false;
           },
           response => {
             this.analyticsService.logError(

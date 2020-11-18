@@ -55,10 +55,17 @@
               <p class="b-rt-0 b-bold b-m-0">{{ giftAidAmount | exactCurrency }}</p>
             </li>
           </ul>
-          <div class="c-receipt__tip c-tip" *ngIf="donation.tipAmount > 0">
+          <div class="c-receipt__tip c-misc" *ngIf="donation.tipAmount > 0">
             <p class="c-tip__heading">Thank you for leaving a tip of {{ donation.tipAmount | exactCurrency }} towards the Big Give.</p>
             <p class="c-tip__description b-light b-grey b-rt-sm">Total amount you have been charged</p>
             <p class="b-rt-0 b-bold b-m-0">{{ cardChargedAmount | exactCurrency }}</p>
+          </div>
+          <div class="c-misc">
+            <p>Amplify your impact. Sharing on social media helps raise more.</p>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ shareUrl }}" target="_blank" rel="noopener"><img class="c-social-image" src="/assets/images/share-facebook.png" alt="Facebook" aria-label="Share on Facebook" width="50"></a>
+            <a href="https://twitter.com/share?url={{ shareUrl }}&text={{ prefilledText }}" target="_blank" rel="noopener"><img class="c-social-image" src="/assets/images/share-twitter.png" alt="Twitter" aria-label="Share on Twitter" width="50"></a>
+            <a href="https://www.linkedin.com/cws/share?url={{ shareUrl }}" target="_blank" rel="noopener"><img class="c-social-image" src="/assets/images/share-linkedin.png" alt="LinkedIn" aria-label="Share on LinkedIn" width="50"></a>
+            <a href="https://api.whatsapp.com/send?text={{ prefilledText }}%0A%0A{{ shareUrl }}" target="_blank" rel="noopener"><img id="whatsapp" class="c-social-image" src="/assets/images/share-whatsapp.png" alt="WhatsApp" aria-label="Share on Whatsapp" width="50"></a>
           </div>
         </div>
       </div>

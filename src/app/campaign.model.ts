@@ -5,7 +5,9 @@ export class Campaign {
     public amountRaised: number,
     public additionalImageUris: Array<{uri: string, order: number}>,
     public bannerUri: string,
+    public beneficiaries: string[],
     public budgetDetails: Array<{amount: number, description: string}>,
+    public categories: string[],
     public championName: string,
     public charity: {
       id: string,
@@ -22,6 +24,7 @@ export class Campaign {
       twitter?: string,
       website: string,
     },
+    public countries: string[],
     public donationCount: number,
     public endDate: Date,
     public giftHandles: Array<{amount: number, description: string}>,

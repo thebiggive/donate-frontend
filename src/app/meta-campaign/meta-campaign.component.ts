@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
@@ -9,6 +8,7 @@ import { CampaignService, SearchQuery } from '../campaign.service';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
 import { PageMetaService } from '../page-meta.service';
+import { SearchService } from '../search.service';
 
 @Component({
   selector: 'app-meta-campaign',
@@ -22,15 +22,11 @@ export class MetaCampaignComponent implements OnInit {
   public fund?: Fund;
   public fundSlug: string;
   public hasMore = true;
-  public hasTerm = false;
   public loading = false; // Server render gets initial result set; set true when filters change.
-  public query: {[key: string]: any};
-  public resetSubject: Subject<void> = new Subject<void>();
-  public selectedSort: string;
 
   private campaignId: string;
   private campaignSlug: string;
-  private perPage = 6;
+  private offset = 0;
 
   constructor(
     private campaignService: CampaignService,
@@ -38,6 +34,7 @@ export class MetaCampaignComponent implements OnInit {
     private pageMeta: PageMetaService,
     private router: Router,
     private route: ActivatedRoute,
+    public searchService: SearchService,
     private state: TransferState,
   ) {
     route.params.pipe().subscribe(params => {
@@ -63,8 +60,7 @@ export class MetaCampaignComponent implements OnInit {
     }
 
     if (this.campaign) { // app handed over from SSR to client-side JS
-      this.setDefaultFiltersOrParams();
-      this.setSecondaryProps(this.campaign);
+      this.setSecondaryPropsAndRun(this.campaign);
     } else {
       if (this.campaignId) {
         this.campaignService.getOneById(this.campaignId).subscribe(campaign => this.setCampaign(campaign, metacampaignKey));
@@ -99,94 +95,29 @@ export class MetaCampaignComponent implements OnInit {
     }
   }
 
+  clear() {
+    this.searchService.reset(this.getDefaultSort());
+  }
+
   /**
-   * @method  setDefaultFiltersOrParams
-   * @desc    set default filters where query params, if they exist, takes precedence.
+   * Default sort when not in relevance mode because there's a search term.
    */
-  setDefaultFiltersOrParams() {
-    this.setDefaultFilters();
-    this.setQueryParams();
-
-    this.run();
-    this.resetSubject.next();
-  }
-
-  setDefaultFilters() {
-    this.hasTerm = false;
-    this.selectedSort = this.getDefaultSort();
-
-    this.query = {
-      parentCampaignId: this.campaignId,
-      parentCampaignSlug: this.campaignSlug,
-      fundSlug: this.fundSlug,
-      limit: this.perPage,
-      offset: 0,
-    };
-    this.handleSortParams();
-  }
-
-  handleSortParams() {
-    this.query.sortField = this.selectedSort;
-    if (this.selectedSort === '') { // this means sort by relevance for now
-      this.query.sortDirection = undefined;
-    } else { // match funds left and amount raised both make most sense in 'desc' order
-      this.query.sortDirection = 'desc';
-    }
-  }
-
-  onFilterApplied(update: { [filterName: string]: string, value: string}) {
-    this.query[update.filterName] = update.value as string;
-    this.updateRoute();
-    this.run();
-  }
-
-  onSortApplied(selectedSort: string) {
-    this.selectedSort = selectedSort;
-    this.handleSortParams();
-    this.updateRoute();
-    this.run();
-  }
-
-  onNumberOfCardsApplied(selectedNumber: number) {
-    this.query.limit = selectedNumber;
-    this.updateRoute();
-    this.run();
-  }
-
-  onClearFiltersApplied() {
-    // Remove any query params from URL
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {},
-      replaceUrl: true,
-    });
-
-    this.setDefaultFilters();
-    this.run();
-    this.resetSubject.next();
-  }
-
-  onMetacampaignSearch(term: string) {
-    // Enable Relevance sort option and apply it if term is non-blank,
-    // otherwise remove it and set to match funds remaining.
-    this.hasTerm = (term !== '');
-    this.selectedSort = (term === '' ? this.getDefaultSort() : '');
-
-    this.query.term = term;
-    this.handleSortParams();
-    this.updateRoute();
-    this.run();
-  }
-
-  private getDefaultSort(): string {
+  getDefaultSort(): 'amountRaised' | 'matchFundsRemaining' {
     // Most Raised for completed Master Campaigns; Match Funds Remaining for others.
     return (this.campaign && new Date(this.campaign.endDate) < new Date()) ? 'amountRaised' : 'matchFundsRemaining';
   }
 
   private loadMoreForCurrentSearch() {
-    this.query.offset += this.perPage;
+    this.offset += CampaignService.perPage;
     this.loading = true;
-    this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
+    const query = this.campaignService.buildQuery(
+      this.searchService.selected,
+      this.offset,
+      this.campaignId,
+      this.campaignSlug,
+      this.fundSlug,
+    );
+    this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
       // Success
       this.children = [...this.children, ...campaignSummaries];
       this.loading = false;
@@ -197,17 +128,22 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   private moreMightExist(): boolean {
-    return (this.children.length === (this.query.limit + this.query.offset));
+    return (this.children.length === (CampaignService.perPage + this.offset));
   }
 
-  private run() {
-    this.query.offset = 0;
+  private run(fromFormChange: boolean) {
+    this.offset = 0;
+    const query = this.campaignService.buildQuery(this.searchService.selected, 0, this.campaignId, this.campaignSlug, this.fundSlug);
     this.children = [];
     this.loading = true;
-    this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
-      this.children = campaignSummaries; // Success
-      this.loading = false;
-    }, () => {
+
+    this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
+        this.children = campaignSummaries; // Success
+        this.loading = false;
+        if (fromFormChange) {
+          this.setQueryParams();
+        }
+      }, () => {
         this.filterError = true; // Error, e.g. slug not known
         this.loading = false;
       },
@@ -220,11 +156,12 @@ export class MetaCampaignComponent implements OnInit {
   private setCampaign(campaign: Campaign, metacampaignKey: StateKey<Campaign>) {
     this.state.set(metacampaignKey, campaign); // Have data ready for client when handing over from SSR
     this.campaign = campaign;
-    this.setDefaultFiltersOrParams();
-    this.setSecondaryProps(campaign);
+    this.setSecondaryPropsAndRun(campaign);
   }
 
-  private setSecondaryProps(campaign: Campaign) {
+  private setSecondaryPropsAndRun(campaign: Campaign) {
+    this.searchService.reset(this.getDefaultSort()); // Needs `campaign` to determine sort order.
+    this.loadQueryParamsAndRun();
     this.pageMeta.setCommon(
       campaign.title,
       campaign.summary || 'A match funded campaign with the Big Give',
@@ -233,39 +170,21 @@ export class MetaCampaignComponent implements OnInit {
   }
 
   /**
-   * Set query params to this.query object, if any are available.
+   * Get any query params from the requested URL.
    */
-  private setQueryParams() {
-      this.route.queryParams.subscribe(params => {
-        if (Object.keys(params).length > 0) {
-          for (const key of Object.keys(params)) {
-            if (key === 'onlyMatching') {
-              // convert URL query param string to boolean
-              this.query[key] = (params[key] === 'true');
-            } else {
-              this.query[key] = params[key];
-            }
-          }
-        }
-      });
+  private loadQueryParamsAndRun() {
+    this.route.queryParams.subscribe(params => {
+      this.searchService.changed.subscribe((interactive: boolean) => this.run(interactive));
+      this.searchService.loadQueryParams(params, this.getDefaultSort());
+    });
   }
 
   /**
-   * Dynamically update the URL route each time a sort, filter or limit is applied.
+   * Update the browser's query params when a sort or filter is applied.
    */
-  private updateRoute() {
+  private setQueryParams() {
     this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams:
-      {
-          sortField: this.query.sortField,
-          beneficiary: this.query.beneficiary,
-          category: this.query.category,
-          country: this.query.country,
-          onlyMatching: this.query.onlyMatching,
-          term: this.query.term,
-      },
-      replaceUrl: true,
+      queryParams: this.searchService.getQueryParams(this.getDefaultSort()),
     });
   }
 }

@@ -21,47 +21,58 @@
     <a class="c-header__link" [routerLink]="'/campaign/' + campaign.id" [queryParams]="inFundContext ? {fromFund: 1} : {}"><h3 class="c-header__campaign-title">{{ campaign.title }}</h3></a>
   </div>
 
-  <div class="c-categories" tabindex="0"> <!-- We need to explicitly make this focusable so the scrolling area is keyboard-usable -->
-    <ul class="c-categories__list" *ngFor="let category of campaign.categories">
-      <li class="c-categories__item">{{ category }}</li>
-    </ul>
-  </div>
-
-  <div class="c-funds" fxLayout="row">
-    <div class="c-funds__matched" *ngIf="campaign.isMatched && !isFinished" fxFlex="50">
-      <p class="c-funds__description">Match funds remaining</p>
-      <h4 class="c-funds__amount">{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }}</h4>
+  <div class="c-body">
+    <div fxLayout="row" class="c-icon-lists">
+      <ul fxFlex="50">
+        <p class="c-cards__description">Categories</p>
+        <li *ngFor="let category of campaign.categories">
+          <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
+        </li>
+      </ul>
+      <ul fxFlex="50">
+        <p class="c-cards__description">Beneficiaries</p>
+        <li *ngFor="let beneficiary of campaign.beneficiaries">
+          <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
+        </li>
+      </ul>
     </div>
-    <div class="c-funds__total" *ngIf="campaign.amountRaised > 0" fxFlex="50">
-      <p class="c-funds__description">Total funds raised</p>
-      <h4 class="c-funds__amount">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</h4>
-    </div>
-  </div>
 
-  <div class="c-buttons">
-    <button
-      mat-icon-button
-      color="primary"
-      class="c-buttons__more"
-      [routerLink]="'/campaign/' + campaign.id"
-      [queryParams]="inFundContext ? {fromFund: 1} : {}"
-    >
-      More info
-      <mat-icon class="c-buttons__more-icon" aria-hidden="true">add</mat-icon>
-    </button>
-    <button
-      *ngIf="!isFinished"
-      mat-raised-button
-      class="b-donate-button"
-      [routerLink]="'/donate/' + campaign.id"
-    >
-      Donate
-    </button>
-    <span *ngIf="isFinished" class="c-buttons__past">
-      <mat-icon aria-hidden="false" aria-label="Past campaign">history</mat-icon>
-      <span class="c-buttons__past-text">
-        Closed {{ campaign.endDate | date : 'longDate' }}
+    <div class="c-funds" fxLayout="row">
+      <div class="c-funds__matched" *ngIf="campaign.isMatched && !isFinished" fxFlex="50">
+        <p class="c-cards__description">Match funds remaining</p>
+        <h4 class="c-funds__amount">{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }}</h4>
+      </div>
+      <div class="c-funds__total" *ngIf="campaign.amountRaised > 0" fxFlex="50">
+        <p class="c-cards__description">Total funds raised</p>
+        <h4 class="c-funds__amount">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</h4>
+      </div>
+    </div>
+
+    <div class="c-buttons" fxLayout="row">
+      <button
+        mat-icon-button
+        color="primary"
+        class="c-buttons__more"
+        [routerLink]="'/campaign/' + campaign.id"
+        [queryParams]="inFundContext ? {fromFund: 1} : {}"
+      >
+        More info
+        <mat-icon class="c-buttons__more-icon" aria-hidden="true">add</mat-icon>
+      </button>
+      <button
+        *ngIf="!isFinished"
+        mat-raised-button
+        class="b-donate-button"
+        [routerLink]="'/donate/' + campaign.id"
+      >
+        Donate
+      </button>
+      <span *ngIf="isFinished" class="c-buttons__past">
+        <mat-icon aria-hidden="false" aria-label="Past campaign">history</mat-icon>
+        <span class="c-buttons__past-text">
+          Closed {{ campaign.endDate | date : 'longDate' }}
+        </span>
       </span>
-    </span>
+    </div>
   </div>
 </div>

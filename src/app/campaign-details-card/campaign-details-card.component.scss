@@ -4,6 +4,17 @@
   @include make-card($box-shadow-hard);
 }
 
+.c-icon-list {
+  list-style-type: none;
+  padding: 0;
+
+  @include icon-bullet;
+}
+
+.c-icon-title {
+  font-size: 0.8rem;
+}
+
 .c-banner__image {
   height: auto;
   border-top-left-radius: 4px;
@@ -19,12 +30,19 @@
 }
 
 .c-card-body {
-  @include make-card-body;
+  padding: 15px;
+  margin-top: -20px;
+  @media #{$breakpoint-xl} {
+    padding: 15px 30px;
+  }
 }
 
 .c-campaign-target__description,
 .c-campaign-raised__description,
 .c-campaign-status__description,
+.c-campaign-country__description,
+.c-campaign-category__description,
+.c-campaign-beneficiary__description,
 .c-campaign-donations__description {
   @include size-md;
   line-height: 20px;
@@ -40,9 +58,14 @@
   color: $colour-teal;
 }
 
-.c-championed-by {
+.c-championed-by, .c-country__value {
   color: $colour-teal;
+  margin-top: 0;
   a {
     text-decoration: none;
   }
+}
+
+.c-country {
+  margin-top: 1.5rem;
 }

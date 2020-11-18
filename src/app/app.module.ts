@@ -19,6 +19,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
@@ -39,6 +40,7 @@ import { DonationStartOfferReuseDialogComponent } from './donation-start/donatio
 import { ExactCurrencyPipe } from './exact-currency.pipe';
 import { ExploreComponent } from './explore/explore.component';
 import { FiltersComponent } from './filters/filters.component';
+import { FiltersSelectDialogComponent } from './filters/filters-select-dialog.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeroComponent } from './hero/hero.component';
 import { MainMenuComponent } from './main-menu/main-menu.component';
@@ -46,6 +48,7 @@ import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { TickerComponent } from './ticker/ticker.component';
 import { TimeLeftPipe } from './time-left.pipe';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +66,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     DonationStartOfferReuseDialogComponent,
     ExactCurrencyPipe,
     FiltersComponent,
+    FiltersSelectDialogComponent,
     FooterComponent,
     HeroComponent,
     MainMenuComponent,
@@ -71,6 +75,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     ExploreComponent,
     TickerComponent,
     TimeLeftPipe,
+    HomeComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -78,6 +83,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
     BrowserTransferStateModule,
     FlexLayoutModule,
+    FontAwesomeModule,
     HttpClientModule,
     InfiniteScrollModule,
     MatButtonModule,

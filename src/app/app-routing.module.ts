@@ -6,8 +6,14 @@ import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import { CharityComponent } from './charity/charity.component';
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
+import { environment } from '../environments/environment';
 import { ExploreComponent } from './explore/explore.component';
+import { HomeComponent } from './home/home.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
+
+const rootPath = environment.redirectHomeToMeta
+  ? { path: '', redirectTo: 'christmas-challenge-2020', pathMatch: 'full' }
+  : { path: '', component: HomeComponent };
 
 const routes: Routes = [
   {
@@ -42,13 +48,14 @@ const routes: Routes = [
     component: MetaCampaignComponent,
   },
   {
+    path: 'explore',
+    component: ExploreComponent,
+  },
+  {
     path: ':campaignSlug',
     component: MetaCampaignComponent,
   },
-  {
-    path: '',
-    component: ExploreComponent,
-  },
+  rootPath,
   {
     path: '**',
     redirectTo: '',

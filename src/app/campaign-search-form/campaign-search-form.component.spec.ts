@@ -1,18 +1,19 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Observable } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { CampaignSearchFormComponent } from './campaign-search-form.component';
+import { ExploreComponent } from '../explore/explore.component';
 
 describe('CampaignSearchFormComponent', () => {
   let component: CampaignSearchFormComponent;
   let fixture: ComponentFixture<CampaignSearchFormComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ CampaignSearchFormComponent ],
       imports: [
@@ -21,6 +22,12 @@ describe('CampaignSearchFormComponent', () => {
         MatSelectModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
+        RouterTestingModule.withRoutes([
+          {
+            path: 'explore',
+            component: ExploreComponent,
+          },
+        ]),
       ],
     })
     .compileComponents();
@@ -29,7 +36,6 @@ describe('CampaignSearchFormComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CampaignSearchFormComponent);
     component = fixture.componentInstance;
-    component.reset = new Observable();
     fixture.detectChanges();
   });
 

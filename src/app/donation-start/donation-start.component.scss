@@ -93,11 +93,58 @@
 }
 
 .c-your-donation__form-field {
-  max-width: 600px;
+  max-width: $full-copy-max-width;
   margin: 0 auto;
   display: block;
-  font-size: 24px;
   font-weight: 700;
+  font-size: 22px;
+}
+
+.c-your-donation__placeholder {
+  padding-bottom: 1rem;
+  font-size: 16px;
+  @media only screen and (max-width: 1200px) {
+    font-size: 12px;
+  }
+
+  @media only screen and (max-width: 800px) {
+    font-size: 10px;
+  }
+
+  .to-charity {
+    padding-top: 0.3rem;
+    @media only screen and (max-width: 650px) {
+      display: none;
+    }
+  }
+
+  .to-tbg {
+    margin-top: -0.2rem;
+    @media only screen and (max-width: 800px) {
+      margin-top: 0.1rem;
+    }
+
+    @media only screen and (max-width: 650px) {
+      margin-top: 0.2rem;
+    }
+  }
+}
+
+.c-your-donation__to {
+  display: none;
+
+  @media only screen and (max-width: 650px) {
+    color: mat-color($donate-primary);
+    font-size: 10px;
+    text-align: center;
+    margin-bottom: -3rem;
+    padding-left: 1rem;
+    display: block;
+  }
+}
+
+.c-suggested-amounts {
+  margin: -2rem 0 2rem 0;
 }
 
 .c-suggested-amount__button {
@@ -165,4 +212,12 @@ a {
 .error {
   color: mat-color($donate-warn);
   margin-bottom: 1rem;
+}
+
+.prefix {
+  font-size: 2rem
+}
+
+.prefix-tbg {
+  font-size: 1.5rem
 }

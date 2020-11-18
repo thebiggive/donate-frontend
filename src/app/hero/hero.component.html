@@ -17,9 +17,7 @@
       <div class="hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
         <app-campaign-search-form
           *ngIf="campaign.campaignCount && campaign.campaignCount > 10"
-          [reset]="reset"
-          [term]="searchTerm"
-          (search)="search($event)"
+          [getDefaultSort]="getDefaultSort"
         ></app-campaign-search-form>
       </div>
     </div>

@@ -28,8 +28,4 @@ export class AppComponent implements OnInit {
       this.stripeService.init();
     }
   }
-
-  public onGlobalSearch(term: string) {
-    this.router.navigateByUrl(`/search?term=${term}`);
-  }
 }

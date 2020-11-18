@@ -1,41 +1,29 @@
-<div class="c-filters b-w-100">
-  <div class="c-filters__selects">
-    <div *ngIf="showClearFilters" class="clear-filter" (click)="clearFilters()"></div>
-    <mat-form-field class="c-filters__form-field" appearance="outline">
+<div class="c-filters">
+  <div class="c-filters__groups">
+    <mat-form-field class="b-w-100 c-filters__group" appearance="outline">
       <mat-label>Sort By</mat-label>
-      <mat-select [(value)]="selectedSort" (selectionChange)="setSortField($event)">
+      <mat-select [(value)]="search.selected.sortField" (selectionChange)="search.sort($event.value)">
         <mat-option value="matchFundsRemaining">Match Funds Remaining</mat-option>
         <mat-option value="amountRaised">Most Raised</mat-option>
-        <mat-option *ngIf="hasTerm" value="">Relevance</mat-option>
+        <mat-option *ngIf="hasTerm()" value="">Relevance</mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field class="c-filters__form-field" appearance="outline">
-      <mat-label>Helping</mat-label>
-      <mat-select [(value)]="beneficiarySelected" (selectionChange)="setFilter('beneficiary', $event)">
-        <mat-option value="">All</mat-option>
-        <mat-option *ngFor="let beneficiary of beneficiaryOptions" [value]="beneficiary">{{ beneficiary }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field class="c-filters__form-field" appearance="outline">
-      <mat-label>Category</mat-label>
-      <mat-select [(value)]="categorySelected" (selectionChange)="setFilter('category', $event)">
-        <mat-option value="">All</mat-option>
-        <mat-option *ngFor="let category of categoryOptions" [value]="category">{{ category }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field class="c-filters__form-field" appearance="outline">
-      <mat-label>Location</mat-label>
-      <mat-select [(value)]="countrySelected" (selectionChange)="setFilter('country', $event)">
-        <mat-option value="">All</mat-option>
-        <mat-option *ngFor="let country of countryOptions" [value]="country">{{ country }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field class="c-filters__form-field" appearance="outline">
-      <mat-label>Matching Now?</mat-label>
-      <mat-select [(value)]="matchingNowSelected" (selectionChange)="setFilter('onlyMatching', $event)">
-        <mat-option [value]="false">All</mat-option>
-        <mat-option [value]="true">Match Funds Available</mat-option>
-      </mat-select>
-    </mat-form-field>
+
+    <button
+      mat-raised-button
+      (click)="openFilters()"
+      class="b-w-100 b-light c-filters__group c-filters__filter-button"
+      [color]="hasFilter() ? 'accent' : ''"
+    >
+      <mat-icon *ngIf="hasFilter()">check_circle_outline</mat-icon>
+      <mat-icon>filter_alt</mat-icon> Filters
+    </button>
   </div>
+
+  <a
+    *ngIf="search.showClearFilters()"
+    class="c-filters__reset"
+    (click)="clearFilters()"
+    aria-label="Clear search and filters"
+  >View all</a>
 </div>

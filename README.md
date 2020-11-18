@@ -5,6 +5,11 @@ charities' campaigns and donate to them.
 
 ## Getting started
 
+To use npm without setting an env var on every invocation, export
+`FONTAWESOME_NPM_AUTH_TOKEN` to your environment with a valid
+key as the value. Alternatively you can set it with a placeholder if
+you don't need to work with FontAwesome and don't have a Pro key.
+
 To run the app locally:
 
 * clone it from GitHub
@@ -134,7 +139,7 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 ### Code scaffolding
 
-Run `ng generate component component-name --module app.module` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --module app.module`.
+Run `ng generate component component-name --module app.module` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module [--module app.module]` (arg not needed for services).
 
 ### Build
 

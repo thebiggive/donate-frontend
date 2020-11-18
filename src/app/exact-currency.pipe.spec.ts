@@ -1,11 +1,11 @@
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ExactCurrencyPipe } from './exact-currency.pipe';
 
 describe('ExactCurrencyPipe', () => {
   let pipe: ExactCurrencyPipe;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.compileComponents();
   }));
 
