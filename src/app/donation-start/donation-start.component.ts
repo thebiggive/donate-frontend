@@ -748,11 +748,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.expiryWarning = setTimeout(() => {
       this.donationService.get(donation).subscribe(updatedDonation => {
         if (updatedDonation.status !== 'Pending') {
-          console.log('skipping resume offer because donation not pending. was', updatedDonation.status);
           return;
         }
-
-        console.log('proceeding to offer', updatedDonation);
 
         const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
           disableClose: true,
