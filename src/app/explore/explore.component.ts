@@ -109,7 +109,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
    * Get any query params from the requested URL.
    */
   private loadQueryParamsAndRun() {
-    this.route.queryParams.subscribe(params => {
+    this.routeParamSubscription = this.route.queryParams.subscribe(params => {
       if (!this.initDone) {
         this.initDone = true;
         this.searchService.loadQueryParams(params, this.getDefaultSort());
