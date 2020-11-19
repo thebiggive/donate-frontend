@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { CampaignSummary } from '../campaign-summary.model';
@@ -11,12 +12,15 @@ import { SearchService } from '../search.service';
   templateUrl: './explore.component.html',
   styleUrls: ['./explore.component.scss'],
 })
-export class ExploreComponent implements OnInit {
+export class ExploreComponent implements OnDestroy, OnInit {
   campaigns: CampaignSummary[];
   loading = false; // Server render gets initial result set; set true when filters change.
   searched = false;
 
+  private initDone = false;
   private offset = 0;
+  private routeParamSubscription: Subscription;
+  private searchServiceSubscription: Subscription;
 
   constructor(
     private campaignService: CampaignService,
@@ -25,8 +29,18 @@ export class ExploreComponent implements OnInit {
     public searchService: SearchService,
   ) {}
 
+  ngOnDestroy() {
+    if (this.routeParamSubscription) {
+      this.routeParamSubscription.unsubscribe();
+    }
+
+    if (this.searchServiceSubscription) {
+      this.searchServiceSubscription.unsubscribe();
+    }
+  }
+
   ngOnInit() {
-    this.searchService.reset(this.getDefaultSort());
+    this.searchService.reset(this.getDefaultSort(), true);
     this.loadQueryParamsAndRun();
   }
 
@@ -56,7 +70,7 @@ export class ExploreComponent implements OnInit {
   }
 
   clear() {
-    this.searchService.reset(this.getDefaultSort());
+    this.searchService.reset(this.getDefaultSort(), false);
   }
 
   private moreMightExist(): boolean {
@@ -76,7 +90,7 @@ export class ExploreComponent implements OnInit {
     });
   }
 
-  private run(fromFormChange: boolean) {
+  private run() {
     this.offset = 0;
     const query = this.campaignService.buildQuery(this.searchService.selected, 0);
     this.campaigns = [];
@@ -85,9 +99,6 @@ export class ExploreComponent implements OnInit {
     this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
       this.campaigns = campaignSummaries; // Success
       this.loading = false;
-      if (fromFormChange) {
-        this.setQueryParams();
-      }
     }, () => {
         this.loading = false;
       },
@@ -98,9 +109,21 @@ export class ExploreComponent implements OnInit {
    * Get any query params from the requested URL.
    */
   private loadQueryParamsAndRun() {
-    this.route.queryParams.subscribe(params => {
-      this.searchService.changed.subscribe((interactive: boolean) => this.run(interactive));
-      this.searchService.loadQueryParams(params, this.getDefaultSort());
+    this.routeParamSubscription = this.route.queryParams.subscribe(params => {
+      if (!this.initDone) {
+        this.initDone = true;
+        this.searchService.loadQueryParams(params, this.getDefaultSort());
+      }
+
+      this.run();
+    });
+
+    this.searchServiceSubscription = this.searchService.changed.subscribe((interactive: boolean) => {
+      if (!interactive) {
+        return;
+      }
+
+      this.setQueryParams(); // Trigger a route change which in turn causes a `run()`.
     });
   }
 
