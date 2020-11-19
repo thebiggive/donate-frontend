@@ -105,6 +105,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   ngOnDestroy() {
+    this.cancelExpiryWarning();
     if (this.card) {
       this.card.removeEventListener('change', this.cardHandler);
       this.card.destroy();
@@ -751,9 +752,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // same donation for which we were already counting down a timer, removing
     // and replacing it should be an idempotent process and so is the safest,
     // least brittle option here.
-    if (this.expiryWarning) {
-      this.cancelExpiryWarning();
-    }
+    this.cancelExpiryWarning();
 
     // To make this safe to call for both new and resumed donations, we look up
     // the donation's creation time and determine the timeout based on that rather
