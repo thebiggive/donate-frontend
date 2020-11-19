@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { loadStripe, PaymentIntent, PaymentMethodCreateParams, Stripe, StripeCardElement, StripeElements, StripeError } from '@stripe/stripe-js';
+import { loadStripe, PaymentMethod, PaymentIntent, PaymentMethodCreateParams, Stripe, StripeCardElement, StripeElements, StripeError } from '@stripe/stripe-js';
 
 import { environment } from '../environments/environment';
 
@@ -26,6 +26,26 @@ export class StripeService {
         },
       ]});
     }
+  }
+
+  async createPaymentMethod(
+    cardElement: StripeCardElement,
+    donorName?: string,
+  ): Promise<{paymentMethod?: PaymentMethod; error?: StripeError}> {
+    if (!this.stripe) {
+      console.log('Stripe not ready');
+      return {};
+    }
+
+    // See https://stripe.com/docs/js/payment_methods
+    const result = await this.stripe.createPaymentMethod({
+      type: 'card',
+      card: cardElement,
+      billing_details: {
+        name: donorName,
+      },
+    });
+    return result;
   }
 
   async confirmCardPayment(

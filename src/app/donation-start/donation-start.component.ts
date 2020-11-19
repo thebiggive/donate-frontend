@@ -378,6 +378,29 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     this.donation.billingPostalAddress = this.paymentAndAgreementGroup.value.billingPostcode;
+
+    if (this.psp === 'stripe') {
+      const paymentMethodResult = await this.stripeService.createPaymentMethod(
+        this.card,
+        `${this.personalAndMarketingGroup.value.firstName} ${this.personalAndMarketingGroup.value.lastName}`,
+      );
+
+      if (paymentMethodResult.error) {
+        this.stripeError = paymentMethodResult.error.message;
+        this.analyticsService.logError('stripe_payment_method_error', paymentMethodResult.error.message ?? '[No message]');
+
+        return;
+      }
+
+      if (!paymentMethodResult.paymentMethod) {
+        this.analyticsService.logError('stripe_payment_method_error_invalid_response', 'No error or paymentMethod');
+        return;
+      }
+
+      this.donation.cardBrand = paymentMethodResult.paymentMethod?.card?.brand;
+      this.donation.cardCountry = paymentMethodResult.paymentMethod?.card?.country || '';
+    }
+
     this.donationService.updateLocalDonation(this.donation);
 
     this.donationService
