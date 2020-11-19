@@ -60,7 +60,7 @@ export class SearchService {
    * @param routeParams object
    */
   loadQueryParams(queryParams: any, defaultSort: string) {
-    this.reset(defaultSort);
+    this.reset(defaultSort, true);
 
     if (Object.keys(queryParams).length > 0) {
       for (const key of Object.keys(queryParams)) {
@@ -76,9 +76,12 @@ export class SearchService {
     this.changed.emit(false);
   }
 
-  reset(defaultSort: string) {
+  reset(defaultSort: string, skipChangeEvent: boolean) {
     this.selected = SearchService.selectedDefaults(defaultSort);
-    this.changed.emit(true);
+
+    if (!skipChangeEvent) {
+      this.changed.emit(true);
+    }
   }
 
   search(term: string, defaultSort: string) {
