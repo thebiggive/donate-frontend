@@ -417,6 +417,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       )
       .subscribe(async (donation: Donation) => {
         if (donation.psp === 'enthuse') {
+          this.cancelExpiryWarning();
           this.redirectToEnthuse(donation, this.campaign?.charity.logoUri);
           return;
         } else if (donation.psp === 'stripe') {
@@ -476,6 +477,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       if (this.campaign) {
         this.analyticsService.logCheckoutDone(this.campaign, this.donation);
       }
+      this.cancelExpiryWarning();
       this.router.navigate(['thanks', this.donation.donationId], {
         replaceUrl: true,
       });
