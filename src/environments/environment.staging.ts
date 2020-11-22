@@ -24,7 +24,7 @@ export const environment = {
     },
   },
   redirectHomeToMeta: true,
-  reservationMinutes: 15,
+  reservationMinutes: 1,
   // One suggestion set for 30% of donors, no suggestions for the other 70%.
   suggestedAmounts: [
     { weight: 3, values: [50, 200, 500] },

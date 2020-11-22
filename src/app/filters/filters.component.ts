@@ -29,7 +29,7 @@ export class FiltersComponent {
   }
 
   clearFilters() {
-    this.search.reset(this.getDefaultSort());
+    this.search.reset(this.getDefaultSort(), false);
   }
 
   hasFilter(): boolean {

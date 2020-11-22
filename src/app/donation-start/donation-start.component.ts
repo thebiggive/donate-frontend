@@ -105,6 +105,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   ngOnDestroy() {
+    this.cancelExpiryWarning();
     if (this.card) {
       this.card.removeEventListener('change', this.cardHandler);
       this.card.destroy();
@@ -257,8 +258,20 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   async stepChanged(event: StepperSelectionEvent) {
-    // If the original donation amount was updated, cancel that donation,
-    // we'll create a new one later on for this updated amount.
+    // We need to allow enough time for the Stepper's animation to get the window to
+    // its final position for this step, before this scroll position update can be reliably
+    // helpful.
+    setTimeout(() => {
+      const activeStepLabel = document.querySelector('.mat-step-label-active');
+      if (activeStepLabel) {
+        activeStepLabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 200);
+
+
+    // If the original donation amount was updated, cancel that donation and
+    // then (sequentially so any match funds are freed up first) create a new
+    // one for the updated amount.
     if (this.donation !== undefined && this.donationAmount > 0 && this.donationAmount !== this.donation.donationAmount) {
       this.donationService.cancel(this.donation)
         .subscribe(() => {
@@ -269,7 +282,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           this.donationService.removeLocalDonation(this.donation);
           this.cancelExpiryWarning();
           delete this.donation;
+
+          this.createDonation();
         });
+
+      return;
     }
 
     // Stepper is 0-indexed and checkout steps are 1-indexed, so we can send the new
@@ -303,16 +320,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         this.analyticsService.logCheckoutStep(event.selectedIndex, this.campaign, this.donation);
       }
     }
-
-    // We need to allow enough time for the Stepper's animation to get the window to
-    // its final position for this step, before this scroll position update can be reliably
-    // helpful.
-    setTimeout(() => {
-      const activeStepLabel = document.querySelector('.mat-step-label-active');
-      if (activeStepLabel) {
-        activeStepLabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 200);
 
     // Create a donation if coming from first step and not offering to resume
     // an existing donation.
@@ -372,6 +379,29 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     this.donation.billingPostalAddress = this.paymentAndAgreementGroup.value.billingPostcode;
+
+    if (this.psp === 'stripe') {
+      const paymentMethodResult = await this.stripeService.createPaymentMethod(
+        this.card,
+        `${this.personalAndMarketingGroup.value.firstName} ${this.personalAndMarketingGroup.value.lastName}`,
+      );
+
+      if (paymentMethodResult.error) {
+        this.stripeError = paymentMethodResult.error.message;
+        this.analyticsService.logError('stripe_payment_method_error', paymentMethodResult.error.message ?? '[No message]');
+
+        return;
+      }
+
+      if (!paymentMethodResult.paymentMethod) {
+        this.analyticsService.logError('stripe_payment_method_error_invalid_response', 'No error or paymentMethod');
+        return;
+      }
+
+      this.donation.cardBrand = paymentMethodResult.paymentMethod?.card?.brand;
+      this.donation.cardCountry = paymentMethodResult.paymentMethod?.card?.country || '';
+    }
+
     this.donationService.updateLocalDonation(this.donation);
 
     this.donationService
@@ -387,6 +417,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       )
       .subscribe(async (donation: Donation) => {
         if (donation.psp === 'enthuse') {
+          this.cancelExpiryWarning();
           this.redirectToEnthuse(donation, this.campaign?.charity.logoUri);
           return;
         } else if (donation.psp === 'stripe') {
@@ -446,6 +477,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       if (this.campaign) {
         this.analyticsService.logCheckoutDone(this.campaign, this.donation);
       }
+      this.cancelExpiryWarning();
       this.router.navigate(['thanks', this.donation.donationId], {
         replaceUrl: true,
       });
@@ -722,9 +754,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // same donation for which we were already counting down a timer, removing
     // and replacing it should be an idempotent process and so is the safest,
     // least brittle option here.
-    if (this.expiryWarning) {
-      this.cancelExpiryWarning();
-    }
+    this.cancelExpiryWarning();
 
     // To make this safe to call for both new and resumed donations, we look up
     // the donation's creation time and determine the timeout based on that rather
