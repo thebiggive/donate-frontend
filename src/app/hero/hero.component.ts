@@ -30,6 +30,8 @@ export class HeroComponent implements OnChanges {
    * in `MetaCampaignComponent` and the input is optional.
    */
   ngOnChanges() {
+    this.title = this.campaign.title;
+
     this.imageService.getImageUri(this.campaign.bannerUri, 2000).subscribe(uri => this.bannerUri = uri);
 
     if (this.campaign.logoUri) {
@@ -38,7 +40,6 @@ export class HeroComponent implements OnChanges {
     } else if (this.fund) {
       if (this.fund.logoUri) {
         this.logoAltText = this.fund.name;
-        this.title = this.campaign.title;
         this.imageService.getImageUri(this.fund.logoUri, 660).subscribe(uri => this.logoUri = uri);
       } else {
         this.title = `${this.campaign.title}: ${this.fund.name}`;
