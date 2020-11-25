@@ -29,6 +29,7 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
   private campaignSlug: string;
   private initDone = false;
   private offset = 0;
+  private routeChangeListener: Subscription;
   private routeParamSubscription: Subscription;
   private searchServiceSubscription: Subscription;
 
@@ -49,6 +50,10 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
+    if (this.routeChangeListener) {
+      this.routeChangeListener.unsubscribe();
+    }
+
     if (this.routeParamSubscription) {
       this.routeParamSubscription.unsubscribe();
     }
@@ -213,7 +218,7 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
   }
 
   private listenForRouteChanges() {
-    this.router.events.subscribe(event => {
+    this.routeChangeListener = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd && event.url === '/') {
         this.searchService.reset(this.getDefaultSort(), false);
         this.run();
