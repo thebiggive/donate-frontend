@@ -17,7 +17,6 @@ export class ExploreComponent implements OnDestroy, OnInit {
   loading = false; // Server render gets initial result set; set true when filters change.
   searched = false;
 
-  private initDone = false;
   private offset = 0;
   private routeParamSubscription: Subscription;
   private searchServiceSubscription: Subscription;
@@ -110,11 +109,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
    */
   private loadQueryParamsAndRun() {
     this.routeParamSubscription = this.route.queryParams.subscribe(params => {
-      if (!this.initDone) {
-        this.initDone = true;
-        this.searchService.loadQueryParams(params, this.getDefaultSort());
-      }
-
+      this.searchService.loadQueryParams(params, this.getDefaultSort());
       this.run();
     });
 

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
@@ -27,8 +27,8 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
 
   private campaignId: string;
   private campaignSlug: string;
-  private initDone = false;
   private offset = 0;
+  private routeChangeListener: Subscription;
   private routeParamSubscription: Subscription;
   private searchServiceSubscription: Subscription;
 
@@ -49,6 +49,10 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
+    if (this.routeChangeListener) {
+      this.routeChangeListener.unsubscribe();
+    }
+
     if (this.routeParamSubscription) {
       this.routeParamSubscription.unsubscribe();
     }
@@ -59,6 +63,7 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    this.listenForRouteChanges();
     let metacampaignKey: StateKey<string>;
     if (this.campaignSlug) {
       metacampaignKey = makeStateKey<Campaign>(`metacampaign-${this.campaignSlug}`);
@@ -185,12 +190,8 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
    */
   private loadQueryParamsAndRun() {
     this.routeParamSubscription = this.route.queryParams.subscribe(params => {
-      if (!this.initDone) {
-        this.initDone = true;
         this.searchService.loadQueryParams(params, this.getDefaultSort());
-      }
-
-      this.run();
+        this.run();
     });
 
     this.searchServiceSubscription = this.searchService.changed.subscribe((interactive: boolean) => {
@@ -208,6 +209,15 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
   private setQueryParams() {
     this.router.navigate([], {
       queryParams: this.searchService.getQueryParams(this.getDefaultSort()),
+    });
+  }
+
+  private listenForRouteChanges() {
+    this.routeChangeListener = this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd && event.url === '/') {
+        this.searchService.reset(this.getDefaultSort(), false);
+        this.run();
+      }
     });
   }
 }
