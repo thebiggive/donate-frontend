@@ -27,7 +27,6 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
 
   private campaignId: string;
   private campaignSlug: string;
-  private initDone = false;
   private offset = 0;
   private routeChangeListener: Subscription;
   private routeParamSubscription: Subscription;
@@ -191,12 +190,8 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
    */
   private loadQueryParamsAndRun() {
     this.routeParamSubscription = this.route.queryParams.subscribe(params => {
-      if (!this.initDone) {
-        this.initDone = true;
         this.searchService.loadQueryParams(params, this.getDefaultSort());
-      }
-
-      this.run();
+        this.run();
     });
 
     this.searchServiceSubscription = this.searchService.changed.subscribe((interactive: boolean) => {
