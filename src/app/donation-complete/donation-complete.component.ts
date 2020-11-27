@@ -57,7 +57,13 @@ export class DonationCompleteComponent {
       return;
     }
 
-    this.donationService.get(donationLocalCopy).subscribe(donation => this.setDonation(donation));
+    this.donationService.get(donationLocalCopy).subscribe(
+      donation => this.setDonation(donation),
+      // Get error may occur e.g. after a DB reset; unlikely recoverable within the
+      // page view so treat it like a timeout. Error message encourages donors to
+      // refresh to try loading again when any server problem's resolved.
+      () => this.timedOut = true,
+    );
   }
 
   private setDonation(donation: Donation) {
