@@ -195,6 +195,16 @@ export class DonationService {
     this.storage.set(this.storageKey, donationCouplets);
   }
 
+  removeOldLocalDonations() {
+    let donationsOlderThan30Days: Array<{ donation: Donation, jwt: string }>;
+    donationsOlderThan30Days = this.getDonationCouplets().filter(donationItem => {
+      return (!donationItem.donation.createdTime || this.getCreatedTime(donationItem.donation) < (Date.now() - 2592000000));
+    });
+    for (const oldDonationCouplet of donationsOlderThan30Days) {
+      this.removeLocalDonation(oldDonationCouplet.donation);
+    }
+  }
+
   /**
    * Safely get created date from a Donation, whether the local data has it as a Date (e.g. when set locally) or
    * a string (when just derived from an HTTP response), and return it as a JavaScript Unix epoch milliseconds value.
@@ -205,16 +215,6 @@ export class DonationService {
     }
 
     return 0;
-  }
-
-  private removeOldLocalDonations() {
-    let donationsOlderThan30Days: Array<{ donation: Donation, jwt: string }>;
-    donationsOlderThan30Days = this.getDonationCouplets().filter(donationItem => {
-      return (!donationItem.donation.createdTime || this.getCreatedTime(donationItem.donation) < (Date.now() - 2592000000));
-    });
-    for (const oldDonationCouplet of donationsOlderThan30Days) {
-      this.removeLocalDonation(oldDonationCouplet.donation);
-    }
   }
 
   private getAuthHttpOptions(donation: Donation): { headers: HttpHeaders } {
