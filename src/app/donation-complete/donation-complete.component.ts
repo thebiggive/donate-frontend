@@ -46,6 +46,8 @@ export class DonationCompleteComponent {
    * Must be public in order for re-tries to invoke it in an anonymous context.
    */
   checkDonation(): void {
+    this.donationService.removeOldLocalDonations();
+
     this.tries++;
     const donationLocalCopy = this.donationService.getDonation(this.donationId);
 
