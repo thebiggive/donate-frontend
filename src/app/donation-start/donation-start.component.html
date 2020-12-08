@@ -161,12 +161,12 @@
               <!-- TODO split out pieces, probably use a lookup service -->
               <mat-form-field>
                 <mat-label for="homeAddress">Home address</mat-label>
-                <input formControlName="homeAddress" id="homeAddress" matInput>
+                <input formControlName="homeAddress" id="homeAddress" maxlength="255" matInput>
               </mat-form-field>
 
               <mat-form-field>
                 <mat-label for="homePostcode">Home postcode</mat-label>
-                <input formControlName="homePostcode" id="homePostcode" matInput>
+                <input formControlName="homePostcode" id="homePostcode" maxlength="8" matInput>
                 <mat-hint>For your Gift Aid declaration to HMRC.</mat-hint>
               </mat-form-field>
             </div>
@@ -189,12 +189,12 @@
             <div *ngIf="psp == 'stripe'">
               <mat-form-field>
                 <mat-label for="firstName">First name</mat-label>
-                <input formControlName="firstName" id="firstName" matInput>
+                <input formControlName="firstName" id="firstName" maxlength="40" matInput>
               </mat-form-field>
 
               <mat-form-field>
                 <mat-label for="lastName">Last name</mat-label>
-                <input formControlName="lastName" id="lastName" matInput>
+                <input formControlName="lastName" id="lastName" maxlength="40" matInput>
                 <mat-hint *ngIf="giftAidGroup.value.giftAid">For Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
                 <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
               </mat-form-field>
