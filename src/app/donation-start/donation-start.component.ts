@@ -129,12 +129,12 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       }),
       giftAid: this.formBuilder.group({
         giftAid: [null, Validators.required],
-        homeAddress: [null],  // See addStripeValidators().
-        homePostcode: [null], // See addStripeValidators().
+        homeAddress: [null, Validators.maxLength(255)],  // See addStripeValidators().
+        homePostcode: [null, Validators.maxLength(8)], // See addStripeValidators().
       }),
       personalAndMarketing: this.formBuilder.group({
-        firstName: [null],    // See addStripeValidators().
-        lastName: [null],     // See addStripeValidators().
+        firstName: [null, Validators.maxLength(40)],    // See addStripeValidators().
+        lastName: [null, Validators.maxLength(40)],     // See addStripeValidators().
         emailAddress: [null], // See addStripeValidators().
         optInCharityEmail: [null, Validators.required],
         optInTbgEmail: [null, Validators.required],
@@ -142,7 +142,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       }),
       // T&Cs agreement is implicit through submitting the form.
       paymentAndAgreement: this.formBuilder.group({
-        billingPostcode: [null], // See addStripeValidators().
+        billingPostcode: [null, Validators.maxLength(8)], // See addStripeValidators().
       }),
     });
 
