@@ -139,6 +139,13 @@ export class CampaignService {
   }
 
   getOneBySlug(campaignSlug: string): Observable<Campaign> {
+    if (!campaignSlug) {
+      // TODO consider removing handling for this edge case once we call this
+      // only on pages that have data binding completed as part of the router
+      // pre-conditions. See DON-223.
+      return new Observable();
+    }
+
     return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`);
   }
 }
