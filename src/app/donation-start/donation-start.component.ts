@@ -505,30 +505,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     return this.donationForm.controls.amounts.get('tipAmount');
   }
 
-  get firstNameField() {
-    if (!this.donationForm) {
-      return undefined;
-    }
-
-    return this.donationForm.controls.personalAndMarketing.get('firstName');
-  }
-
-  get lastNameField() {
-    if (!this.donationForm) {
-      return undefined;
-    }
-
-    return this.donationForm.controls.personalAndMarketing.get('lastName');
-  }
-
-  get homeAddressField() {
-    if (!this.donationForm) {
-      return undefined;
-    }
-
-    return this.donationForm.controls.giftAid.get('homeAddress');
-  }
-
   /**
    * Quick getter for donation amount, to keep template use concise.
    */
