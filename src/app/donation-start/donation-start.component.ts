@@ -129,12 +129,12 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       }),
       giftAid: this.formBuilder.group({
         giftAid: [null, Validators.required],
-        homeAddress: [null, Validators.maxLength(255)],  // See addStripeValidators().
-        homePostcode: [null, Validators.maxLength(8)], // See addStripeValidators().
+        homeAddress: [null],  // See addStripeValidators().
+        homePostcode: [null], // See addStripeValidators().
       }),
       personalAndMarketing: this.formBuilder.group({
-        firstName: [null, Validators.maxLength(40)],    // See addStripeValidators().
-        lastName: [null, Validators.maxLength(40)],     // See addStripeValidators().
+        firstName: [null],    // See addStripeValidators().
+        lastName: [null],     // See addStripeValidators().
         emailAddress: [null], // See addStripeValidators().
         optInCharityEmail: [null, Validators.required],
         optInTbgEmail: [null, Validators.required],
@@ -142,7 +142,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       }),
       // T&Cs agreement is implicit through submitting the form.
       paymentAndAgreement: this.formBuilder.group({
-        billingPostcode: [null, Validators.maxLength(8)], // See addStripeValidators().
+        billingPostcode: [null], // See addStripeValidators().
       }),
     });
 
@@ -918,6 +918,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         ]);
         this.giftAidGroup.controls.homeAddress.setValidators([
           Validators.required,
+          Validators.maxLength(255),
         ]);
       } else {
         this.giftAidGroup.controls.homePostcode.setValidators([]);
@@ -929,9 +930,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     });
 
     this.personalAndMarketingGroup.controls.firstName.setValidators([
+      Validators.maxLength(40),
       Validators.required,
     ]);
     this.personalAndMarketingGroup.controls.lastName.setValidators([
+      Validators.maxLength(80),
       Validators.required,
     ]);
     this.personalAndMarketingGroup.controls.emailAddress.setValidators([

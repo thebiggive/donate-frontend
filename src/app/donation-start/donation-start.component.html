@@ -163,6 +163,7 @@
                 <mat-label for="homeAddress">Home address</mat-label>
                 <input formControlName="homeAddress" id="homeAddress" matInput>
               </mat-form-field>
+              <div class="error" *ngIf="giftAidGroup.get('homeAddress')?.errors?.maxlength">Maximum 255 characters exceeded</div>
 
               <mat-form-field>
                 <mat-label for="homePostcode">Home postcode</mat-label>
@@ -191,6 +192,8 @@
                 <mat-label for="firstName">First name</mat-label>
                 <input formControlName="firstName" id="firstName" matInput>
               </mat-form-field>
+              <div class="error" *ngIf="personalAndMarketingGroup.get('firstName')?.errors?.maxlength">Maximum 40 characters exceeded</div>
+              
 
               <mat-form-field>
                 <mat-label for="lastName">Last name</mat-label>
@@ -198,6 +201,7 @@
                 <mat-hint *ngIf="giftAidGroup.value.giftAid">For Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
                 <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
               </mat-form-field>
+              <div class="error" *ngIf="personalAndMarketingGroup.get('lastName')?.errors?.maxlength">Maximum 80 characters exceeded</div>
 
               <mat-form-field>
                 <mat-label for="emailAddress">Email address</mat-label>
