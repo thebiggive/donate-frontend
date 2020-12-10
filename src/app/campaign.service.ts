@@ -19,7 +19,15 @@ export class CampaignService {
     private http: HttpClient,
   ) {}
 
+  static inPreview(campaign: Campaign): boolean {
+    return campaign.status === 'Preview';
+  }
+
   static isOpenForDonations(campaign: Campaign): boolean {
+    if (this.inPreview(campaign)) {
+      return false;
+    }
+
     if (campaign.status === 'Active') {
       return true;
     }
@@ -34,6 +42,10 @@ export class CampaignService {
   static isInFuture(campaign: Campaign): boolean {
     if (campaign.status === 'Active' || campaign.status === 'Expired') {
       return false;
+    }
+
+    if (this.inPreview(campaign)) {
+      return true;
     }
 
     return (new Date(campaign.startDate) > new Date());
