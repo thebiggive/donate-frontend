@@ -34,22 +34,22 @@
       </button>
 
       <mat-card *ngIf="!donateEnabled" class="c-not-open">
-        <mat-card-title *ngIf="inPreview">
-          <mat-icon aria-hidden="false" aria-label="Upcoming campaign">update</mat-icon>
+        <mat-card-title *ngIf="isPending">
+          <mat-icon aria-hidden="false" aria-label="Preview campaign">preview</mat-icon>
           Campaign preview
         </mat-card-title>
 
-        <mat-card-title *ngIf="campaignInFuture && !inPreview">
+        <mat-card-title *ngIf="campaignInFuture && !isPending">
           <mat-icon aria-hidden="false" aria-label="Future campaign">update</mat-icon>
           Campaign opens soon!
         </mat-card-title>
 
-        <mat-card-title *ngIf="!campaignInFuture && !inPreview">
+        <mat-card-title *ngIf="!campaignInFuture && !isPending">
           <mat-icon aria-hidden="false" aria-label="Past campaign">history</mat-icon>
           Campaign has now closed
         </mat-card-title>
 
-        <mat-card-content>
+        <mat-card-content *ngIf="!isPending">
           <p>
             <span *ngIf="campaignInFuture">Donations open</span>
             <span *ngIf="!campaignInFuture">It ran from</span>
