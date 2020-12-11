@@ -37,7 +37,7 @@ export class Campaign {
     public quotes: Array<{person: string, quote: string}>,
     public solution: string,
     public startDate: Date,
-    public status: 'Active' | 'Expired' | 'Preview',
+    public status: 'Active' | 'Expired' | 'Preview' | 'Pending',
     public summary: string = '',
     public target: number,
     public title: string,
