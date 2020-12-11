@@ -120,7 +120,7 @@ describe('CampaignService', () => {
     expect(CampaignService.isInFuture(campaign)).toBe(false);
   });
 
-  it ('should allow not allow donation attempts to Preview campaigns with future start dates', () => {
+  it ('should not allow donation attempts to Preview campaigns with future start dates', () => {
     const campaign = getDummyCampaign();
     campaign.startDate = new Date((new Date()).getTime() + 86400000);
     campaign.endDate = new Date((new Date()).getTime() + 86400001);
@@ -138,5 +138,14 @@ describe('CampaignService', () => {
 
     expect(CampaignService.isOpenForDonations(campaign)).toBe(false);
     expect(CampaignService.isInFuture(campaign)).toBe(false);
+  });
+
+  it ('should not allow donation attempts to Pending campaigns', () => {
+    const campaign = getDummyCampaign();
+    campaign.startDate = new Date((new Date()).getTime() + 86400000);
+    campaign.endDate = new Date((new Date()).getTime() + 86400001);
+    campaign.status = 'Pending';
+
+    expect(CampaignService.isOpenForDonations(campaign)).toBe(false);
   });
 });
