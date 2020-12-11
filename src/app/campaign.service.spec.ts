@@ -110,17 +110,17 @@ describe('CampaignService', () => {
     expect(CampaignService.isInFuture(campaign)).toBe(false);
   });
 
-  it ('should not allow donation attempts to campaigns in Preview status', () => {
+  it ('should allow donation attempts to any campaign in active date range, even if Status gets stuck in Preview', () => {
     const campaign = getDummyCampaign();
     campaign.startDate = new Date((new Date()).getTime() - 86400000);
     campaign.endDate = new Date((new Date()).getTime() + 86400000);
     campaign.status = 'Preview';
 
-    expect(CampaignService.isOpenForDonations(campaign)).toBe(false);
-    expect(CampaignService.isInFuture(campaign)).toBe(true);
+    expect(CampaignService.isOpenForDonations(campaign)).toBe(true);
+    expect(CampaignService.isInFuture(campaign)).toBe(false);
   });
 
-  it ('should not allow donation attempts to Preview campaigns with future start dates', () => {
+  it ('should allow not allow donation attempts to Preview campaigns with future start dates', () => {
     const campaign = getDummyCampaign();
     campaign.startDate = new Date((new Date()).getTime() + 86400000);
     campaign.endDate = new Date((new Date()).getTime() + 86400001);
