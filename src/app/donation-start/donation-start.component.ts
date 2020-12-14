@@ -918,6 +918,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         ]);
         this.giftAidGroup.controls.homeAddress.setValidators([
           Validators.required,
+          Validators.maxLength(255),
         ]);
       } else {
         this.giftAidGroup.controls.homePostcode.setValidators([]);
@@ -929,9 +930,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     });
 
     this.personalAndMarketingGroup.controls.firstName.setValidators([
+      Validators.maxLength(40),
       Validators.required,
     ]);
     this.personalAndMarketingGroup.controls.lastName.setValidators([
+      Validators.maxLength(80),
       Validators.required,
     ]);
     this.personalAndMarketingGroup.controls.emailAddress.setValidators([

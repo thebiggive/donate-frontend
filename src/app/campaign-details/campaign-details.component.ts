@@ -18,6 +18,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   additionalImageUris: string[] = [];
   campaign?: Campaign;
   campaignId: string;
+  isPending = false;
   campaignInFuture = false;
   donateEnabled = true;
   fromFund = false;
@@ -70,6 +71,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   private setSecondaryProps(campaign: Campaign) {
     this.campaignInFuture = CampaignService.isInFuture(campaign);
     this.donateEnabled = CampaignService.isOpenForDonations(campaign);
+    this.isPending = CampaignService.isPending(campaign);
 
     for (const originalUri of campaign.additionalImageUris) {
       this.imageService.getImageUri(originalUri.uri, 850).subscribe(uri => this.additionalImageUris.push(uri));

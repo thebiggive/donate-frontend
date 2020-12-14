@@ -19,7 +19,15 @@ export class CampaignService {
     private http: HttpClient,
   ) {}
 
+  static isPending(campaign: Campaign): boolean {
+    return campaign.status === 'Pending';
+  }
+
   static isOpenForDonations(campaign: Campaign): boolean {
+    if (this.isPending(campaign)) {
+      return false;
+    }
+
     if (campaign.status === 'Active') {
       return true;
     }
