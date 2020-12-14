@@ -19,7 +19,7 @@ export const environment = {
       publishableKey: 'pk_live_51GxbdTKkGuKkxwBN1KsxsHMC8MrSeooSxBRETK6zoUYZSkKsjSLLryXE3vPIQm5jM6uV1Lsdvr9GoYB1dShkSELQ00xffCRBIi',
     },
   },
-  redirectHomeToMeta: true,
+  redirectHomeToMeta: false,
   reservationMinutes: 15,
   // One suggestion set for 30% of donors, no suggestions for the other 70%.
   suggestedAmounts: [
