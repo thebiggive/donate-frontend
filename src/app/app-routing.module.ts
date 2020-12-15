@@ -11,10 +11,6 @@ import { ExploreComponent } from './explore/explore.component';
 import { HomeComponent } from './home/home.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 
-const rootPath = environment.redirectHomeToMeta
-  ? { path: '', redirectTo: 'christmas-challenge-2020', pathMatch: 'full' }
-  : { path: '', component: HomeComponent };
-
 const routes: Routes = [
   {
     path: 'campaign/:campaignId',
@@ -55,7 +51,10 @@ const routes: Routes = [
     path: ':campaignSlug',
     component: MetaCampaignComponent,
   },
-  rootPath,
+  {
+    path: '',
+    component: HomeComponent,
+  },
   {
     path: '**',
     redirectTo: '',
