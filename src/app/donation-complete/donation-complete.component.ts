@@ -105,21 +105,7 @@ export class DonationCompleteComponent {
   }
 
   private setSocialShares(campaign: Campaign) {
-    const now = Math.floor(new Date().getTime() / 1000.0);
-    const ccStartTime = environment.ccStartTime;
-    const ccEndTime = environment.ccEndTime;
-
     this.shareUrl = `${environment.donateUriPrefix}/campaign/${campaign.id}`;
-
-    if (campaign.parentRef?.includes('christmas-challenge')) {
-      this.prefilledText = encodeURIComponent('I just donated in #ChristmasChallenge20. From 1-8 December, your donation can be doubled. One donation, twice the impact.');
-
-      // During CC we share the meta campaign page, otherwise default is the charities campaign page.
-      if (now >= ccStartTime && now < ccEndTime) {
-        this.shareUrl = `http://bit.ly/cc20thankyou`;
-      }
-    } else {
-      this.prefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
-    }
+    this.prefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
   }
 }

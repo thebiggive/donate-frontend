@@ -6,8 +6,6 @@ export const environment = {
   production: false,
   productionLike: true,
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
-  ccStartTime: 1604934000, // 9th November, 15:00
-  ccEndTime: 1604937600, // 9th November, 16:00
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
@@ -23,7 +21,6 @@ export const environment = {
       publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
-  redirectHomeToMeta: false,
   reservationMinutes: 15,
   // One suggestion set for 30% of donors, no suggestions for the other 70%.
   suggestedAmounts: [
