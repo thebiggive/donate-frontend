@@ -66,7 +66,8 @@ const routes: Routes = [
     initialNavigation: 'enabled',
     onSameUrlNavigation: 'reload', // Allows Explore & home logo links to clear search filters in ExploreComponent
     scrollPositionRestoration: 'enabled',
-  })],
+    relativeLinkResolution: 'legacy'
+})],
   providers: [CharityCampaignsResolver],
   exports: [RouterModule],
 })
