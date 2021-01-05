@@ -7,6 +7,7 @@ import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { Donation } from '../donation.model';
 import { DonationService } from '../donation.service';
+import { PageMetaService } from '../page-meta.service';
 
 @Component({
   selector: 'app-donation-complete',
@@ -34,6 +35,7 @@ export class DonationCompleteComponent {
     private analyticsService: AnalyticsService,
     private campaignService: CampaignService,
     private donationService: DonationService,
+    private pageMeta: PageMetaService,
     private route: ActivatedRoute,
   ) {
     route.params.pipe().subscribe(params => {
@@ -76,6 +78,11 @@ export class DonationCompleteComponent {
     this.donation = donation;
     this.campaignService.getOneById(donation.projectId).subscribe(campaign => {
       this.campaign = campaign;
+      this.pageMeta.setCommon(
+        `${campaign.charity.name}`,
+        `Thanks for donating to the "${campaign.title}" campaign`,
+        campaign.bannerUri,
+      );
       this.setSocialShares(campaign);
     });
 
