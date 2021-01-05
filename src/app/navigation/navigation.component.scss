@@ -33,8 +33,11 @@ mat-sidenav {
 }
 
 .main-nav-toolbar {
+  // Material Toolbar normally does this itself, but IE11 gets confused
+  // unless we pin it explicitly.
   position: fixed;
   top: 0;
+
   background-color: $colour-card-background;
   font-size: 18px;
   display: flex;
