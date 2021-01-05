@@ -33,6 +33,8 @@ mat-sidenav {
 }
 
 .main-nav-toolbar {
+  position: fixed;
+  top: 0;
   background-color: $colour-card-background;
   font-size: 18px;
   display: flex;
