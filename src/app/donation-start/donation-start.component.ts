@@ -388,6 +388,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
       if (paymentMethodResult.error) {
         this.stripeError = paymentMethodResult.error.message;
+        this.submitting = false;
         this.analyticsService.logError('stripe_payment_method_error', paymentMethodResult.error.message ?? '[No message]');
 
         return;
@@ -458,6 +459,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     if (result.error) {
       this.stripeError = result.error.message;
+      this.submitting = false;
       this.analyticsService.logError('stripe_card_payment_error', result.error.message ?? '[No message]');
 
       return;
@@ -481,11 +483,13 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.router.navigate(['thanks', this.donation.donationId], {
         replaceUrl: true,
       });
-    } else {
-      this.analyticsService.logError('stripe_intent_not_success', result.paymentIntent.status);
-      this.stripeError = `Status: ${result.paymentIntent.status}`;
+
+      return;
     }
 
+    // else Intent 'done' but not a successful status.
+    this.analyticsService.logError('stripe_intent_not_success', result.paymentIntent.status);
+    this.stripeError = `Status: ${result.paymentIntent.status}`;
     this.submitting = false;
   }
 
