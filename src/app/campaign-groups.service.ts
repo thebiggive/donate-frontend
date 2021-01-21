@@ -29,7 +29,7 @@ import {
 
 } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/pro-duotone-svg-icons';
-import { faHomeHeart } from '@fortawesome/pro-solid-svg-icons';
+import { faHeadSideMedical, faHomeHeart } from '@fortawesome/pro-solid-svg-icons';
 
 @Injectable({
   providedIn: 'root',
@@ -141,6 +141,10 @@ export class CampaignGroupsService {
       {
         name: 'Medical Research',
         icon: faMicroscope,
+      },
+      {
+        name: 'Mental Health',
+        icon: faHeadSideMedical,
       },
       {
         name: 'Poverty Alleviation/Relief',
