@@ -26,7 +26,6 @@ import {
   faUniversalAccess,
   faUserGraduate,
   faVenus,
-
 } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/pro-duotone-svg-icons';
 import { faHeadSideMedical, faHomeHeart } from '@fortawesome/pro-solid-svg-icons';
@@ -413,14 +412,20 @@ export class CampaignGroupsService {
   }
 
   static getBeneficiaryIcon(beneficiary: string): IconDefinition {
-    return CampaignGroupsService.getBeneficiaries().filter(
+    const matchingItems = CampaignGroupsService.getBeneficiaries().filter(
       ii => ii.name === beneficiary,
-    )[0].icon;
+    );
+
+    // For an unknown/invalid beneficiary, show 'other' symbol.
+    return matchingItems[0].icon || faPlus;
   }
 
   static getCategoryIcon(category: string): IconDefinition {
-    return CampaignGroupsService.getCategories().filter(
+    const matchingItems = CampaignGroupsService.getCategories().filter(
       ii => ii.name === category,
-    )[0].icon;
+    );
+
+    // For an unknown/invalid category, show 'other' symbol.
+    return matchingItems[0]?.icon || faPlus;
   }
 }

@@ -102,7 +102,7 @@ which are always tagged with `staging*` or `production*`.
 
 To test re-building the image:
 
-    docker build --rm --build-arg BUILD_ENV=staging -t thebiggive/donate-frontend:staging .
+    docker build --rm --build-arg BUILD_ENV=staging --build-arg FONTAWESOME_NPM_AUTH_TOKEN=**token** -t thebiggive/donate-frontend:staging .
 
 To start it daemonised (in the background) and map to host port 4000 - assuming no running web server on that port:
 
