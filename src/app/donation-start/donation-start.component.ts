@@ -268,7 +268,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       }
     }, 200);
 
-
     // If the original donation amount was updated, cancel that donation and
     // then (sequentially so any match funds are freed up first) create a new
     // one for the updated amount.
@@ -322,9 +321,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     // Create a donation if coming from first step and not offering to resume
-    // an existing donation.
+    // an existing donation and not just patching tip amount on `donation`
+    // having already gone forward then back in the form.
     if (event.previouslySelectedStep.label === 'Your donation') {
       if (
+        !this.donation && // No change or only tip amount changed, if we got here.
         (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled') &&
         event.selectedStep.label !== 'Your donation' // Resets fire a 0 -> 0 index event.
       ) {
