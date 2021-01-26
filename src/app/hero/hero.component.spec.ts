@@ -72,12 +72,6 @@ describe('HeroComponent', () => {
       ['United Kingdom'],
       4,
       new Date(),
-      [
-        {
-          description: 'Can buy you 2 things',
-          amount: 50.01,
-        },
-      ],
       'Impact reporting plan',
       'Impact overview',
       true,

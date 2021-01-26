@@ -81,7 +81,6 @@ describe('MetaCampaignComponent', () => {
       ['United Kingdom'],
       4,
       new Date(),
-      [],
       'Impact reporting plan',
       'Impact overview',
       true,
