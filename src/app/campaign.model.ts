@@ -27,7 +27,6 @@ export class Campaign {
     public countries: string[],
     public donationCount: number,
     public endDate: Date,
-    public giftHandles: Array<{amount: number, description: string}>,
     public impactReporting: string,
     public impactSummary: string,
     public isMatched: boolean,

@@ -33,6 +33,16 @@ mat-sidenav {
 }
 
 .main-nav-toolbar {
+  // Material Toolbar normally does this itself, but IE11 gets confused
+  // unless we pin it explicitly.
+  // Must use a selector hack to avoid confusing modern browsers about the
+  // position of subsequent page content.
+  // See Nov 2018 update on https://base16solutions.wordpress.com/2018/03/12/css-hacks-to-target-latest-ie-11-and-edge-versions/
+  @media screen and (-ms-high-contrast: none) {
+    position: fixed;
+    top: 0;
+  }
+
   background-color: $colour-card-background;
   font-size: 18px;
   display: flex;

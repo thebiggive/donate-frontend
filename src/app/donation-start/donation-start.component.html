@@ -285,6 +285,10 @@
                 <mat-label for="card-info">Card</mat-label>
                 <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
               </div>
+
+              <p *ngIf="stripeError" class="error" aria-live="assertive">
+                {{ stripeError }}
+              </p>
             </div>
 
             <p class="b-rt-0 b-m-0">By clicking on the <em>Donate</em> button, you agree to the Big Give's
@@ -314,10 +318,6 @@
 
               <p *ngIf="noPsps" class="error" aria-live="assertive">
                 Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few minutes to try again.
-              </p>
-  
-              <p *ngIf="stripeError" class="error" aria-live="assertive">
-                {{ stripeError }}
               </p>
 
               <div *ngIf="tipAmount() > 0" class="c-breakdown b-center b-grey">
