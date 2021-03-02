@@ -11,7 +11,7 @@ export class CharityCampaignsResolver implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot) {
     const charityId = route.paramMap.get('charityId');
 
-    if (!charityId) {
+    if (!charityId || charityId === 'null') {
       return of([]);
     }
 
