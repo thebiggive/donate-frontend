@@ -11,7 +11,9 @@ export class CharityCampaignsResolver implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot) {
     const charityId = route.paramMap.get('charityId');
 
-    if (!charityId) {
+    // Edge case for our legacy redirector seems to have returned string 'null' as the
+    // SF ID for some charities. So we should check for this and treat it as blank too.
+    if (!charityId || charityId === 'null') {
       return of([]);
     }
 
