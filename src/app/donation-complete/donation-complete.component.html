@@ -73,7 +73,7 @@
 
       <button class="c-button b-w-100 b-center" mat-button>
         <div *ngIf="campaign">
-          <!-- For now, this assumes Master / meta-campaigns all have slugs set. -->
+          <!-- For now, this assumes parent / meta-campaigns all have slugs set. -->
           <p class="b-rt-1 b-m-0" *ngIf="campaign.parentRef"><a [routerLink]="'/' + campaign.parentRef">Explore other campaigns</a></p>
           <p class="b-rt-1 b-m-0" *ngIf="!campaign.parentRef"><a routerLink="/explore">Explore other campaigns</a></p>
         </div>
