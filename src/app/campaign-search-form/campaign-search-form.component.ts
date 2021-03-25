@@ -32,20 +32,18 @@ export class CampaignSearchFormComponent implements OnInit {
   }
 
   submit() {
-    // If the donor hasn't ever typed in the 'term' field yet, they probably didn't mean to start a search,
-    // so in this case only treat empty input like an invalid form and point their focus to the field. Otherwise,
-    // do this only if the term is invalid based on length (exactly 1 character).
-
     const term = this.searchForm.value.term;
 
     if (term === '' && this.search.hasTermFilterApplied()) {
-      // Newly-blank term -> clear query param.
+      // Newly-blank term -> clear query param and do a new search.
       this.search.search('', this.getDefaultSort());
       return;
     }
 
+    // If the donor hasn't ever typed in the 'term' field yet, they probably didn't mean to start a search,
+    // so in this case only treat empty input like an invalid form and point their focus to the field. Otherwise,
+    // do this only if the term is invalid based on length (exactly 1 character).
     if ((term || '').length < 2) {
-      // Already-blank term -> nudge to populate the field.
       this.termField.nativeElement.focus();
       return;
     }
