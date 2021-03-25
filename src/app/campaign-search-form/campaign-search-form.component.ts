@@ -37,7 +37,15 @@ export class CampaignSearchFormComponent implements OnInit {
     // do this only if the term is invalid based on length (exactly 1 character).
 
     const term = this.searchForm.value.term;
+
+    if (term === '' && this.search.hasTermFilterApplied()) {
+      // Newly-blank term -> clear query param.
+      this.search.search('', this.getDefaultSort());
+      return;
+    }
+
     if ((term || '').length < 2) {
+      // Already-blank term -> nudge to populate the field.
       this.termField.nativeElement.focus();
       return;
     }

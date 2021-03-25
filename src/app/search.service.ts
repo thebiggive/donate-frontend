@@ -54,6 +54,10 @@ export class SearchService {
     return queryParams;
   }
 
+  hasTermFilterApplied(): boolean {
+    return (this.getQueryParams().term?.length > 0);
+  }
+
   /**
    * Apply search state from a route.
    *
