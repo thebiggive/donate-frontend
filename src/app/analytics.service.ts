@@ -15,12 +15,12 @@ declare var gtag: (...args: Array<string | { [key: string]: any }>) => void;
   providedIn: 'root',
 })
 export class AnalyticsService {
+  /** Provides an efficient way to check whether we should be ignoring calls, e.g. because it's a server render. */
+  private initialised = false;
 
   constructor(private router: Router) {}
 
   init() {
-    this.listenForRouteChanges();
-
     const scriptInitGtag = document.createElement('script');
     scriptInitGtag.async = true;
     scriptInitGtag.src = 'https://www.googletagmanager.com/gtag/js?id=' + environment.googleAnalyticsId;
@@ -41,6 +41,9 @@ export class AnalyticsService {
       });
     `;
     document.head.appendChild(scriptConfigureGtag);
+
+    this.initialised = true;
+    this.listenForRouteChanges();
   }
 
   logError(key: string, message: string) {
@@ -169,9 +172,10 @@ export class AnalyticsService {
     });
   }
 
-  private callGtag(...args: any[]) {
-    // Skip the call gracefully if loading fails or 3rd party JS is blocked.
-    if (gtag) {
+  private callGtag(...args: Array<string | { [key: string]: any }>) {
+    // Skip the call gracefully if on the server (don't want to double track router-based events),
+    // or if loading fails or 3rd party JS is blocked (no usable `gtag`).
+    if (this.initialised) {
       gtag(...args);
     }
   }

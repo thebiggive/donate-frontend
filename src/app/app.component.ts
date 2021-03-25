@@ -1,6 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { AnalyticsService } from './analytics.service';
 import { GetSiteControlService } from './getsitecontrol.service';

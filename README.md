@@ -32,7 +32,7 @@ To run style, unit and e2e tests together from your local, as CircleCI build che
     npm run ci
 
 The latest tagged [Puppeteer](https://www.npmjs.com/package/puppeteer) typically uses the latest available Chromium and updates do not follow
-semantic versioning. So for it to continue working, it currently needs to be pinned to a particular "feature release", e.g. `3.0.*` for Chromium 81.
+semantic versioning. So for it to continue working, it currently needs to be pinned to a particular "feature release", e.g. `8.0.*` for Chromium 89.
 
 Environment Variables configured in the CircleCI interface for this app are:
 
@@ -100,13 +100,13 @@ and production, based on which npm `build:*` command is invoked during the Docke
 and production in the Elastic Container Registry are **not** interchangeable! The target for API calls is fixed and baked into the images,
 which are always tagged with `staging*` or `production*`.
 
-To test re-building the image:
+To test re-building the image (use FontAwesome token marked "Pro Package Token" from [Account](https://fontawesome.com/account)):
 
     docker build --rm --build-arg BUILD_ENV=staging --build-arg FONTAWESOME_NPM_AUTH_TOKEN=**token** -t thebiggive/donate-frontend:staging .
 
 To start it daemonised (in the background) and map to host port 4000 - assuming no running web server on that port:
 
-    docker run -d -p 4000:4000 --name donate-frontend-test-staging thebiggive/donate-frontend:staging
+    docker run -d -p 4000:4000 -e FONTAWESOME_NPM_AUTH_TOKEN=**token** --name donate-frontend-test-staging thebiggive/donate-frontend:staging
 
 When running this way to test Server-Side Rendering, access the app at [localhost:4000](http://localhost:4000).
 

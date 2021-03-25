@@ -234,8 +234,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     const stepper = this.elRef.nativeElement.querySelector('#stepper');
 
-    // Can't do it, or already did it.
-    if (!this.stepper || this.stepHeaderEventsSet) {
+    // Can't do it, already did it, or server-side and so can't add DOM-based event listeners.
+    if (!this.stepper || this.stepHeaderEventsSet || !isPlatformBrowser(this.platformId)) {
       return;
     }
 
