@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 import { AnalyticsProduct } from './analytics-product.model';
@@ -16,7 +17,7 @@ declare var gtag: (...args: Array<string | { [key: string]: any }>) => void;
 })
 export class AnalyticsService {
 
-  constructor(private router: Router) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router) {}
 
   init() {
     this.listenForRouteChanges();
@@ -169,9 +170,10 @@ export class AnalyticsService {
     });
   }
 
-  private callGtag(...args: any[]) {
-    // Skip the call gracefully if loading fails or 3rd party JS is blocked.
-    if (gtag) {
+  private callGtag(...args: Array<string | { [key: string]: any }>) {
+    // Skip the call gracefully if on the server (don't want to double track router-based events),
+    // or if loading fails or 3rd party JS is blocked (no usable `gtag`).
+    if (isPlatformBrowser(this.platformId) && !!gtag) {
       gtag(...args);
     }
   }
