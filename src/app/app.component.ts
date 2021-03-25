@@ -17,7 +17,6 @@ export class AppComponent implements OnInit {
     private getSiteControlService: GetSiteControlService,
     // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
-    private router: Router,
     private stripeService: StripeService,
   ) {}
 
