@@ -24,7 +24,7 @@ To use `ng` commands directly, e.g. to generate new code scaffolding with the CL
 
 ## CI, e2e tests and Puppeteer
 
-* `master` branch deploys to Production.
+* `main` branch deploys to Production.
 * `develop` branch deploys to Staging and Regression (for end-to-end regression tests).
 
 To run style, unit and e2e tests together from your local, as CircleCI build checks do against every branch:
@@ -42,7 +42,7 @@ Environment Variables configured in the CircleCI interface for this app are:
 * `SLACK_WEBHOOK` - destination URI to report deploys to Slack.
 
 To make builds faster, CircleCI is configured to use a custom Docker image. This is defined in this repository, in `.circleci/Dockerfile`,
-and updates to the `master` branch will trigger it to rebuild on Docker Hub.
+and updates to the `main` branch will trigger it to rebuild on Docker Hub.
 
 ## Salesforce API requirements
 
