@@ -240,6 +240,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     const stepperHeaders = stepper.getElementsByClassName('mat-step-header');
+
+    if (!stepperHeaders) {
+      return; // Happens e.g. in server render -> don't try to iterate or flip setup bool.
+    }
+
     for (const stepperHeader of stepperHeaders) {
       stepperHeader.addEventListener('click', (clickEvent: any) => {
         if (clickEvent.target.innerText.includes('Your details') && this.stepper.selected.label === 'Gift Aid') {
