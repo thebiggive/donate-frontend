@@ -57,8 +57,8 @@ export function app() {
           'https:',
         ],
         'script-src': [
-          'strict-dynamic',
-          'unsafe-inline', // Backwards compat. https://csp-evaluator.withgoogle.com/
+          `'strict-dynamic'`,
+          `'unsafe-inline'`, // Backwards compat. https://csp-evaluator.withgoogle.com/
           donateHost,
           `'sha256-lAAe/2BNa8LfOLFsGspOHNtIPGU+RpI2Ne1/HaNdnLE='`, // IE fallback inline script?
           `'sha256-${createHash('sha256').update(AnalyticsService.getConfigureContent()).digest('base64')}'`,
