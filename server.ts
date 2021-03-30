@@ -36,6 +36,8 @@ export function app() {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
         'connect-src': [
+          apiHost,
+          donationsApiHost,
           'fonts.googleapis.com',
           'stats.g.doubleclick.net',
           'www.google-analytics.com',
