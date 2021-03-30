@@ -68,4 +68,4 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 import 'core-js/modules/es.array.includes';
 
 // Support `globalThis` in IE11.
-import 'core-js/features/globalThis';
+import 'core-js/features/global-this';
