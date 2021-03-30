@@ -175,7 +175,7 @@ export class AnalyticsService {
   private callGtag(...args: Array<string | { [key: string]: any }>) {
     // Skip the call gracefully if on the server (don't want to double track router-based events),
     // or if loading fails or 3rd party JS is blocked (no usable `gtag`).
-    if (this.initialised) {
+    if (this.initialised && globalThis.hasOwnProperty('gtag')) {
       gtag(...args);
     }
   }

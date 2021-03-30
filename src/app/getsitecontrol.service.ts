@@ -35,7 +35,7 @@ export class GetSiteControlService {
   private listenForRouteChanges() {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        if (!_gscq) {
+        if (!globalThis.hasOwnProperty('_gscq')) {
           return; // Skip the call gracefully if loading fails or 3rd party JS is blocked.
         }
 
