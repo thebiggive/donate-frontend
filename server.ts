@@ -34,6 +34,9 @@ export function app() {
     contentSecurityPolicy: {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        'connect-src': [
+          'www.google-analytics.com',
+        ],
         'default-src': [
           `'self'`,
           apiHost,
