@@ -4,6 +4,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { enableProdMode } from '@angular/core';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as compression from 'compression';
+import { createHash } from 'crypto';
 import * as express from 'express';
 import { Request, Response } from 'express';
 import { existsSync } from 'fs';
@@ -11,8 +12,10 @@ import * as helmet from 'helmet';
 import * as morgan from 'morgan';
 import { join } from 'path';
 
-import { environment } from './src/environments/environment';
+import { AnalyticsService } from './src/app/analytics.service';
 import { AppServerModule } from './src/main.server';
+import { environment } from './src/environments/environment';
+import { GetSiteControlService } from './src/app/getsitecontrol.service';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app() {
@@ -23,7 +26,42 @@ export function app() {
 
   // Middleware
   server.use(compression());
-  server.use(helmet()); // Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
+  // Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
+  // https://github.com/helmetjs/helmet#reference
+  const apiHost = (new URL(environment.apiUriPrefix)).host;
+  const donationsApiHost = (new URL(environment.donationsApiPrefix)).host;
+  server.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        'default-src': [
+          `'self'`,
+          apiHost,
+          donationsApiHost,
+          'fonts.googleapis.com',
+          'js.stripe.com',
+          'player.vimeo.com',
+          'www.youtube.com',
+        ],
+        'img-src': [
+          `'self'`,
+          'data:',
+          'https:',
+        ],
+        'script-src-elem': [
+          `'self'`,
+          `'sha256-lAAe/2BNa8LfOLFsGspOHNtIPGU+RpI2Ne1/HaNdnLE='`, // IE fallback inline script?
+          `'sha256-${createHash('sha256').update(AnalyticsService.getConfigureContent()).digest('base64')}'`,
+          `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
+          'st.getsitecontrol.com',
+          'widgets.getsitecontrol.com',
+          'www.google-analytics.com',
+          'www.googletagmanager.com',
+          'js.stripe.com',
+        ],
+      },
+    },
+  }));
   server.use(morgan('combined')); // Log requests to stdout in Apache-like format
 
   const distFolder = join(process.cwd(), 'dist/browser');

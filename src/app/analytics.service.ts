@@ -20,14 +20,11 @@ export class AnalyticsService {
 
   constructor(private router: Router) {}
 
-  init() {
-    const scriptInitGtag = document.createElement('script');
-    scriptInitGtag.async = true;
-    scriptInitGtag.src = 'https://www.googletagmanager.com/gtag/js?id=' + environment.googleAnalyticsId;
-    document.head.appendChild(scriptInitGtag);
-
-    const scriptConfigureGtag = document.createElement('script');
-    scriptConfigureGtag.innerHTML = `
+  /**
+   * For safely allowing in CSP.
+   */
+  static getConfigureContent() {
+    return `
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -40,6 +37,16 @@ export class AnalyticsService {
         }
       });
     `;
+  }
+
+  init() {
+    const scriptInitGtag = document.createElement('script');
+    scriptInitGtag.async = true;
+    scriptInitGtag.src = 'https://www.googletagmanager.com/gtag/js?id=' + environment.googleAnalyticsId;
+    document.head.appendChild(scriptInitGtag);
+
+    const scriptConfigureGtag = document.createElement('script');
+    scriptConfigureGtag.innerHTML = AnalyticsService.getConfigureContent();
     document.head.appendChild(scriptConfigureGtag);
 
     this.initialised = true;
