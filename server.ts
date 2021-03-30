@@ -47,13 +47,13 @@ export function app() {
     }
   });
 
-  // Serve static files requested via /d/ from /browser/d - when deployed S3 serves these up to CloudFront
   server.get('/d/favicon.ico', (req: Request, res: Response) => {
     res.sendFile(`${distFolder}/favicon.ico`, {
       maxAge: '7 days', // Don't make the favicon immutable in case we want to update it
     });
   });
 
+  // Serve static files requested via /d/ from dist/browser/d - when deployed S3 serves these up to CloudFront
   server.use('/d', express.static(distFolder, {
     immutable: true, // Everything in here should be named with an immutable hash
     maxAge: '1 year',
