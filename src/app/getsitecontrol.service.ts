@@ -17,6 +17,13 @@ export class GetSiteControlService {
 
   constructor(private router: Router) {}
 
+  /**
+   * For safely allowing in CSP.
+   */
+  static getConfigureContent() {
+    return `window._gscq=window._gscq||[];`;
+  }
+
   init() {
     this.listenForRouteChanges();
 
@@ -26,16 +33,14 @@ export class GetSiteControlService {
     document.head.appendChild(scriptInitGSC);
 
     const scriptConfigureGSC = document.createElement('script');
-    scriptConfigureGSC.innerHTML = `
-      window._gscq=window._gscq||[];
-    `;
+    scriptConfigureGSC.innerHTML = GetSiteControlService.getConfigureContent();
     document.head.appendChild(scriptConfigureGSC);
   }
 
   private listenForRouteChanges() {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        if (!_gscq) {
+        if (!globalThis.hasOwnProperty('_gscq')) {
           return; // Skip the call gracefully if loading fails or 3rd party JS is blocked.
         }
 

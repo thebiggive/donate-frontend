@@ -66,3 +66,6 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 
  // Support `includes(...)` for arrays in IE11 etc. Not polyfilled for Angular core.
 import 'core-js/modules/es.array.includes';
+
+// Support `globalThis` in IE11.
+import 'core-js/features/global-this';
