@@ -30,11 +30,14 @@ export function app() {
   // https://github.com/helmetjs/helmet#reference
   const apiHost = (new URL(environment.apiUriPrefix)).host;
   const donationsApiHost = (new URL(environment.donationsApiPrefix)).host;
+  const donateHost = (new URL(environment.donateUriPrefix)).host;
   server.use(helmet({
     contentSecurityPolicy: {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
         'connect-src': [
+          'fonts.googleapis.com',
+          'stats.g.doubleclick.net',
           'www.google-analytics.com',
         ],
         'default-src': [
@@ -52,7 +55,9 @@ export function app() {
           'https:',
         ],
         'script-src': [
-          `'self'`,
+          'strict-dynamic',
+          'unsafe-inline', // Backwards compat. https://csp-evaluator.withgoogle.com/
+          donateHost,
           `'sha256-lAAe/2BNa8LfOLFsGspOHNtIPGU+RpI2Ne1/HaNdnLE='`, // IE fallback inline script?
           `'sha256-${createHash('sha256').update(AnalyticsService.getConfigureContent()).digest('base64')}'`,
           `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
