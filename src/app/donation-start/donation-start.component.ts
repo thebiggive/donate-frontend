@@ -601,7 +601,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       return true;
     }
 
-    const firstCustomError = document.querySelector('.error');
+    const firstCustomError = stepJustDone.querySelector('.error');
     if (firstCustomError) {
       this.scrollTo(firstCustomError);
       return true;
