@@ -17,7 +17,7 @@ export class ExactCurrencyPipe implements PipeTransform {
     // delineation is ambiguous across regions and we don't want donors to accidentally
     // give 100x more than they expect!
     if (typeof value === 'string') {
-      value = value.replace('£', '');
+      value = value.replace('£', '').replace('$', '');
 
       if (value.includes(',')) {
         return undefined;

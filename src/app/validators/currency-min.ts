@@ -5,7 +5,7 @@ export function ValidateCurrencyMin(control: AbstractControl) {
     return null;
   }
 
-  const stringValue = control.value.replace('£', '');
+  const stringValue = control.value.replace('£', '').replace('$', '');
   if (stringValue === '') {
     return null;
   }

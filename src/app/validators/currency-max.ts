@@ -7,7 +7,7 @@ export function ValidateCurrencyMax(control: AbstractControl) {
     return null;
   }
 
-  const value = Number(control.value.replace('£', ''));
+  const value = Number(control.value.replace('£', '').replace('$', ''));
 
   if (value > environment.maximumDonationAmount) {
     return { max: true };
