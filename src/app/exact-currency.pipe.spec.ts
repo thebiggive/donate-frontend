@@ -17,6 +17,14 @@ describe('ExactCurrencyPipe', () => {
     expect(pipe).toBeTruthy();
   });
 
+  it('shows no decimal with whole numbers of pounds and currency code GBP', () => {
+    expect(pipe.transform(12345, 'GBP')).toEqual('£12,345');
+  });
+
+  it('shows no decimal with whole numbers of pounds and currency code USD', () => {
+    expect(pipe.transform(12345, 'USD')).toEqual('$12,345');
+  });
+
   it('shows no decimal with whole numbers of pounds', () => {
     expect(pipe.transform(12345)).toEqual('£12,345');
   });

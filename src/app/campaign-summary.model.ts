@@ -8,6 +8,7 @@ export class CampaignSummary {
     public categories: string[],
     public championName: string,
     public charity: {id: string, name: string},
+    public currencyCode: string,
     public endDate: Date,
     public imageUri: string,
     public isMatched: boolean,

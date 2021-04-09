@@ -59,6 +59,7 @@ describe('DonationStartComponent', () => {
           website: 'https://www.awesomecharity.co.uk',
         },
         ['United Kingdom'],
+        'GBP',
         4,
         new Date(),
         'Impact reporting plan',

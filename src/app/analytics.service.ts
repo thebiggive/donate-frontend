@@ -129,7 +129,7 @@ export class AnalyticsService {
     this.callGtag('event', 'purchase', {
       transaction_id: donation.donationId,
       value: donation.donationAmount + donation.tipAmount,
-      currency: 'GBP',
+      currency: donation.currencyCode,
       items: this.buildAllProductsData(campaign, donation),
     });
   }

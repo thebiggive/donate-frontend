@@ -553,8 +553,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     return new Date(environment.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
   }
 
+  /**
+   * @returns Amount without any £/$s
+   */
   sanitiseCurrency(amount: string): number {
-    return Number((amount || '0').replace('£', ''));
+    return Number((amount || '0').replace('£', '').replace('$', ''));
   }
 
   scrollTo(el: Element): void {
@@ -656,7 +659,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
       countryCode: 'GB',
-      // Strip '£' if entered
+      currencyCode: this.campaign.currencyCode || 'GBP',
       donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
       donationMatched: this.campaign.isMatched,
       matchedAmount: 0, // Only set >0 after donation completed
