@@ -57,7 +57,7 @@
                   class="c-suggested-amount__button b-rh-2 b-bold"
                   *ngFor="let suggestedAmount of suggestedAmounts"
                   (click)="setAmount(suggestedAmount)"
-                >{{ suggestedAmount | exactCurrency }}</button>
+                >{{ suggestedAmount | exactCurrency:campaign.currencyCode }}</button>
               </div>
             </div>
 
@@ -67,7 +67,7 @@
               *ngIf="donationAmountField?.invalid && donationAmountField?.errors && (donationAmountField?.dirty || donationAmountField?.touched)"
             >
               <div *ngIf="donationAmountField?.errors?.min">Sorry, the minimum donation is £1.</div>
-              <div *ngIf="donationAmountField?.errors?.max">Your donation must be {{ maximumDonationAmount | exactCurrency }} or less to proceed. You can make multiple matched donations of {{ maximumDonationAmount | exactCurrency }} if match funds are available.</div>
+              <div *ngIf="donationAmountField?.errors?.max">Your donation must be {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }} or less to proceed. You can make multiple matched donations of {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }} if match funds are available.</div>
               <div *ngIf="donationAmountField?.errors?.pattern">Please enter a whole number of pounds (£) without commas.</div>
               <div *ngIf="donationAmountField?.errors?.required">Please enter how much you would like to donate.</div>
             </div>
@@ -109,7 +109,7 @@
                   pounds (£), optionally with pence as 2 decimals.
                 </div>
 
-                <mat-hint *ngIf="!customTip()">{{ tipAmount() | exactCurrency }} donation to support the Big Give</mat-hint>
+                <mat-hint *ngIf="!customTip()">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to support the Big Give</mat-hint>
 
                 <mat-hint *ngIf="customTip() && donationAmount && donationAmount > 0">
                   {{ (tipAmount() > 0 && tipAmount() / donationAmount < 0.001) ? 'Less than 0.1%' : (tipAmount() / donationAmount) | percent:'1.0-1' }}
@@ -321,9 +321,9 @@
               </p>
 
               <div *ngIf="tipAmount() > 0" class="c-breakdown b-center b-grey">
-                <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency }} donation to {{ campaign.charity.name }}</p>
+                <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }} donation to {{ campaign.charity.name }}</p>
                 <p class="b-m-0"><mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon></p>
-                <p class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency }} donation to the Big Give</p>
+                <p class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give</p>
               </div>
 
               <button
@@ -334,32 +334,32 @@
               >
                 Donate
                 <span class="b-bold b-va-bas">
-                  {{ donationAndTipAmount | exactCurrency }}
+                  {{ donationAndTipAmount | exactCurrency:campaign.currencyCode }}
                 </span>
               </button>
 
               <div class="c-receipt-total b-grey" fxLayout="row" fxLayoutAlign="space-around center">
                 <p class="b-rt-0 b-m-0">Total for {{ campaign.charity.name }}:</p>
-                <p class="b-rt-1 b-bold b-m-0">{{ expectedTotalAmount() | exactCurrency }}</p>
+                <p class="b-rt-1 b-bold b-m-0">{{ expectedTotalAmount() | exactCurrency:campaign.currencyCode }}</p>
               </div>
               <div class="c-donation-receipt" fxLayout="row">
                 <div [fxFlex]="(expectedMatchAmount() > 0) ? 26 : 39">
                   <p class="b-center b-grey b-rt-sm b-m-0">Your donation</p>
-                  <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ donationAmount | exactCurrency }}</p>
+                  <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }}</p>
                 </div>
                 <div fxFlex="11" fxLayout="row" fxLayoutAlign="center end">
                   <mat-icon class="c-donation-receipt__icon b-grey b-bold b-center" aria-hidden="false" aria-label="Plus">add</mat-icon>
                 </div>
                 <div fxFlex="26" *ngIf="expectedMatchAmount() > 0">
                   <p class="b-center b-grey b-rt-sm b-m-0">Match funds</p>
-                  <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ expectedMatchAmount() | exactCurrency }}</p>
+                  <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ expectedMatchAmount() | exactCurrency:campaign.currencyCode }}</p>
                 </div>
                 <div fxFlex="11" fxLayout="row" fxLayoutAlign="center end" *ngIf="expectedMatchAmount() > 0">
                   <mat-icon class="c-donation-receipt__icon b-grey b-bold b-center" aria-hidden="false" aria-label="Plus">add</mat-icon>
                 </div>
                 <div class="c-donation-receipt__gift-aid" [fxFlex]="(expectedMatchAmount() > 0) ? 26 : 39">
                   <p class="b-center b-grey b-rt-sm b-m-0">Gift Aid</p>
-                  <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ giftAidAmount() | exactCurrency }}</p>
+                  <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ giftAidAmount() | exactCurrency:campaign.currencyCode }}</p>
                 </div>
               </div>
             </div>

@@ -147,7 +147,7 @@
         <mat-tab *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" label="Where's the money going?">
           <ul class="c-budget" *ngFor="let detail of campaign.budgetDetails">
             <li class="c-budget__item">
-              <span class="c-budget__value b-semi-bold">{{ detail.amount | currency : '£' : 'symbol' : '1.0-0' }}</span>
+              <span class="c-budget__value b-semi-bold">{{ detail.amount | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</span>
               &ndash; {{ detail.description }}
             </li>
           </ul>

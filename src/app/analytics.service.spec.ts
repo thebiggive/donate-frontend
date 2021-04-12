@@ -50,6 +50,7 @@ describe('AnalyticsService', () => {
         regulatorRegion: 'Scotland',
       },
       ['United Kingdom'],
+      'GBP',
       4,
       new Date(),
       'Impact reporting plan',
@@ -87,6 +88,7 @@ describe('AnalyticsService', () => {
     const donation: Donation = {
       charityId: 'sfCharityAsd1',
       charityName: 'The Test Charity',
+      currencyCode: 'GBP',
       donationAmount: 6,
       donationMatched: true,
       giftAid: true,
