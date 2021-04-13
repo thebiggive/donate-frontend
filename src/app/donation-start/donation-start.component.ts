@@ -8,6 +8,7 @@ import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { retryWhen, tap  } from 'rxjs/operators';
 import { StripeElementChangeEvent } from '@stripe/stripe-js';
+import { Observer } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
@@ -35,9 +36,11 @@ import { ValidateCurrencyMin } from '../validators/currency-min';
 })
 export class DonationStartComponent implements AfterContentChecked, OnDestroy, OnInit {
   @ViewChild('cardInfo') cardInfo: ElementRef;
+  @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
   card: any;
   cardHandler = this.onStripeCardChange.bind(this);
+  paymentRequestButton: any;
 
   showChampionOptIn = false;
 
@@ -333,6 +336,42 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       }
 
       if (this.psp === 'stripe') {
+        if (this.donation) {
+          const paymentRequestResultObserver: Observer<boolean> = {
+            next: success => {
+              if (success) {
+                if (this.donation && this.campaign) {
+                  this.analyticsService.logEvent(
+                    'stripe_prb_payment_success',
+                    `Stripe PRB success for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
+                  );
+                  this.analyticsService.logCheckoutDone(this.campaign, this.donation);
+                }
+
+                this.router.navigate(['thanks', this.donation?.donationId], {
+                  replaceUrl: true,
+                });
+                return;
+              }
+
+              this.stripeError = 'Payment failed – please try again';
+            },
+            error: () => {
+              this.stripeError = 'Payment method handling failed';
+            },
+            complete: () => {},
+          };
+
+          this.paymentRequestButton = await this.stripeService.getPaymentRequestButton(this.donation, paymentRequestResultObserver);
+          this.stripeService.canUsePaymentRequest().then(canUse => {
+            if (canUse) {
+              this.paymentRequestButton.mount(this.paymentRequestButtonEl.nativeElement);
+            } else {
+              this.paymentRequestButtonEl.nativeElement.style.display = 'none';
+            }
+          });
+        }
+
         this.card = await this.stripeService.getCard();
         if (this.card) {
           this.card.mount(this.cardInfo.nativeElement);
@@ -400,8 +439,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         return;
       }
 
-      this.donation.cardBrand = paymentMethodResult.paymentMethod?.card?.brand;
-      this.donation.cardCountry = paymentMethodResult.paymentMethod?.card?.country || '';
+      this.donationService.updatePaymentDetails(
+        this.donation,
+        paymentMethodResult.paymentMethod?.card?.brand,
+        paymentMethodResult.paymentMethod?.card?.country || 'N/A',
+      );
     }
 
     this.donationService.updateLocalDonation(this.donation);
