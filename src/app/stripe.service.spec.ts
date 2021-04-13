@@ -19,7 +19,7 @@ describe('StripeService', () => {
         InMemoryStorageService,
         // Inject in-memory storage for tests, in place of local storage.
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-      ]
+      ],
     });
     service = TestBed.inject(StripeService);
   });
