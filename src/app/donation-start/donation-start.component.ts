@@ -8,7 +8,7 @@ import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { retryWhen, tap  } from 'rxjs/operators';
 import { StripeElementChangeEvent } from '@stripe/stripe-js';
-import { Observer } from 'rxjs';
+import { Observable, Observer, of } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
@@ -332,11 +332,13 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled') &&
         event.selectedStep.label !== 'Your donation' // Resets fire a 0 -> 0 index event.
       ) {
-        this.createDonation();
-      }
+        // TODO does this subscribe logic belong with the createDonation inline callback? somewhere else? Should each bit
+        // have a fn for legibility?
+        this.createDonation().subscribe(() => {
+          if (this.psp !== 'stripe' || !this.donation) {
+            return;
+          }
 
-      if (this.psp === 'stripe') {
-        if (this.donation) {
           const paymentRequestResultObserver: Observer<boolean> = {
             next: success => {
               if (success) {
@@ -362,7 +364,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
             complete: () => {},
           };
 
-          this.paymentRequestButton = await this.stripeService.getPaymentRequestButton(this.donation, paymentRequestResultObserver);
+          this.paymentRequestButton = this.stripeService.getPaymentRequestButton(this.donation, paymentRequestResultObserver);
+
           this.stripeService.canUsePaymentRequest().then(canUse => {
             if (canUse) {
               this.paymentRequestButton.mount(this.paymentRequestButtonEl.nativeElement);
@@ -370,9 +373,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
               this.paymentRequestButtonEl.nativeElement.style.display = 'none';
             }
           });
-        }
+        });
+      }
 
-        this.card = await this.stripeService.getCard();
+      if (this.psp === 'stripe') {
+        // Card element is mounted the same way regardless of donation info. See
+        // this.createDonation().subscribe(...) for Payment Request Button mount, which needs donation info
+        // first.
+        this.card = this.stripeService.getCard();
         if (this.card) {
           this.card.mount(this.cardInfo.nativeElement);
           this.card.addEventListener('change', this.cardHandler);
@@ -689,10 +697,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
   }
 
-  private createDonation() {
+  private createDonation(): Observable<DonationCreatedResponse | null> {
     if (!this.campaign || !this.campaign.charity.id || !this.psp) {
       this.donationCreateError = true;
-      return;
+      return of(null);
     }
 
     this.donationCreateError = false;
@@ -715,9 +723,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
-    this.donationService
-      .create(donation)
-      .subscribe(async (response: DonationCreatedResponse) => {
+    const observable = this.donationService.create(donation);
+
+    observable.subscribe(async (response: DonationCreatedResponse) => {
         const createResponseMissingData = (
           !response.donation.charityId ||
           !response.donation.donationId ||
@@ -768,6 +776,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         this.donationCreateError = true;
         this.stepper.previous(); // Go back to step 1 to surface the internal error.
       });
+
+    return observable;
   }
 
   private offerExistingDonation(donation: Donation) {
