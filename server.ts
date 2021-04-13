@@ -100,6 +100,12 @@ export function app() {
     });
   });
 
+  server.get('/.well-known/apple-developer-merchantid-domain-association', (req: Request, res: Response) => {
+    res.sendFile(`${distFolder}/assets/stripe-apple-developer-merchantid-domain-association`, {
+      maxAge: '7 days',
+    });
+  });
+
   // Serve static files requested via /d/ from dist/browser/d - when deployed S3 serves these up to CloudFront
   server.use('/d', express.static(distFolder, {
     immutable: true, // Everything in here should be named with an immutable hash
