@@ -167,7 +167,8 @@ describe('DonationStartComponent', () => {
     });
 
     expect(component.donationForm.valid).toBe(true);
-    expect(component.expectedMatchAmount()).toBe(0); // Test has no campaign for now
+    // Expected match is £0 until donation set up + funds actually reserved.
+    expect(component.expectedMatchAmount()).toBe(0);
     expect(component.expectedTotalAmount()).toBe(1542.5);
     expect(component.tipAmount()).toBe(20);
   });

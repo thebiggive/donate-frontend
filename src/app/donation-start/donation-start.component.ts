@@ -526,11 +526,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   expectedMatchAmount(): number {
-    if (!this.campaign) {
+    if (!this.donation) {
       return 0;
     }
 
-    return Math.max(0, Math.min(this.campaign.matchFundsRemaining, parseFloat(this.amountsGroup.value.donationAmount)));
+    return this.donation.matchReservedAmount;
   }
 
   giftAidAmount(): number {
