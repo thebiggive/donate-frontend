@@ -144,7 +144,8 @@ export class StripeService {
       currency: donation.currencyCode.toLowerCase() || 'gbp',
       total: {
         label: `Donation to ${donation.charityName}`,
-        amount: donation.donationAmount,
+        // In pence/cents
+        amount: 100 * donation.donationAmount,
       },
       requestPayerName: true,
       requestPayerEmail: true,
