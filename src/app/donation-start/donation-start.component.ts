@@ -765,6 +765,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     if (this.campaign && this.psp === 'stripe') {
       this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
+
+      this.preparePaymentRequestButton(this.donation);
     }
 
     // Amount reserved for matching is 'false-y', i.e. £0
@@ -777,10 +779,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     if (response.donation.donationMatched && response.donation.matchReservedAmount < response.donation.donationAmount) {
       this.promptToContinueWithPartialMatching(response.donation);
       return;
-    }
-
-    if (this.psp === 'stripe') {
-      this.preparePaymentRequestButton(this.donation);
     }
 
     this.scheduleMatchingExpiryWarning(this.donation);
