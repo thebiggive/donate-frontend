@@ -141,7 +141,7 @@ export class StripeService {
 
     this.paymentRequest = this.stripe.paymentRequest({
       country: donation.countryCode || 'GB',
-      currency: donation.currencyCode || 'GBP',
+      currency: donation.currencyCode.toLowerCase() || 'gbp',
       total: {
         label: `Donation to ${donation.charityName}`,
         amount: donation.donationAmount,
@@ -167,8 +167,8 @@ export class StripeService {
         // - more detailed comments on params rationale there.
         this.stripe?.confirmCardPayment(
           donation.clientSecret,
-          {payment_method: event.paymentMethod.id},
-          {handleActions: false},
+          { payment_method: event.paymentMethod.id },
+          { handleActions: false },
         ).then(confirmResult => {
           if (confirmResult.error) {
             // Failure w/ no extra action applicable
