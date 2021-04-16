@@ -11,6 +11,7 @@ describe('CharityCheckoutDonation model', () => {
       charityId: 'someCharityId',
       charityName: 'My Test Charity',
       createdTime: (new Date()).toISOString(),
+      currencyCode: 'GBP',
       donationAmount: 1234.56,
       donationMatched: true,
       donationId: 'someDonationId',
@@ -46,6 +47,7 @@ describe('CharityCheckoutDonation model', () => {
     const donation: Donation = {
       charityId: 'someCharityId',
       charityName: 'My Test Charity',
+      currencyCode: 'GBP',
       donationAmount: 1234.56,
       donationMatched: true,
       donationId: 'someDonationId',
@@ -70,6 +72,7 @@ describe('CharityCheckoutDonation model', () => {
     const donation: Donation = {
       charityId: 'someOtherCharityId',
       charityName: 'My Other Test Charity',
+      currencyCode: 'GBP',
       donationAmount: 12,
       donationMatched: false,
       donationId: 'someOtherDonationId',

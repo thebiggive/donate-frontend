@@ -155,6 +155,12 @@ export class DonationService {
     );
   }
 
+  updatePaymentDetails(donation: Donation, cardBrand = 'N/A', cardCountry = 'N/A') {
+    donation.cardBrand = cardBrand;
+    donation.cardCountry = cardCountry;
+    return this.update(donation);
+  }
+
   create(donation: Donation): Observable<DonationCreatedResponse> {
     return this.http.post<DonationCreatedResponse>(
       `${environment.donationsApiPrefix}${this.apiPath}`,

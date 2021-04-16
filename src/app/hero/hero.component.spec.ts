@@ -70,6 +70,7 @@ describe('HeroComponent', () => {
         regulatorRegion: 'Scotland',
       },
       ['United Kingdom'],
+      'GBP',
       4,
       new Date(),
       'Impact reporting plan',

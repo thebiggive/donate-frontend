@@ -40,11 +40,11 @@
     <div class="c-funds" fxLayout="row">
       <div class="c-funds__matched" *ngIf="campaign.isMatched && !isFinished" fxFlex="50">
         <p class="c-cards__description">Match funds remaining</p>
-        <h4 class="c-funds__amount">{{ campaign.matchFundsRemaining | currency : '£' : 'symbol' : '1.0-0' }}</h4>
+        <h4 class="c-funds__amount">{{ campaign.matchFundsRemaining | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</h4>
       </div>
       <div class="c-funds__total" *ngIf="campaign.amountRaised > 0" fxFlex="50">
         <p class="c-cards__description">Total funds raised</p>
-        <h4 class="c-funds__amount">{{ campaign.amountRaised | currency : '£' : 'symbol' : '1.0-0' }}</h4>
+        <h4 class="c-funds__amount">{{ campaign.amountRaised | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</h4>
       </div>
     </div>
 

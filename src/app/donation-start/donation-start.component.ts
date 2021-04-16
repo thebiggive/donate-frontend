@@ -8,6 +8,7 @@ import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { retryWhen, tap  } from 'rxjs/operators';
 import { StripeElementChangeEvent } from '@stripe/stripe-js';
+import { Observable, Observer, of } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
@@ -35,10 +36,13 @@ import { ValidateCurrencyMin } from '../validators/currency-min';
 })
 export class DonationStartComponent implements AfterContentChecked, OnDestroy, OnInit {
   @ViewChild('cardInfo') cardInfo: ElementRef;
+  @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
   card: any;
   cardHandler = this.onStripeCardChange.bind(this);
+  paymentRequestButton: any;
 
+  requestButtonShown = false;
   showChampionOptIn = false;
 
   campaign?: Campaign;
@@ -333,7 +337,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       }
 
       if (this.psp === 'stripe') {
-        this.card = await this.stripeService.getCard();
+        // Card element is mounted the same way regardless of donation info. See
+        // this.createDonation().subscribe(...) for Payment Request Button mount, which needs donation info
+        // first and so happens in `preparePaymentRequestButton()`.
+        this.card = this.stripeService.getCard();
         if (this.card) {
           this.card.mount(this.cardInfo.nativeElement);
           this.card.addEventListener('change', this.cardHandler);
@@ -400,8 +407,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         return;
       }
 
-      this.donation.cardBrand = paymentMethodResult.paymentMethod?.card?.brand;
-      this.donation.cardCountry = paymentMethodResult.paymentMethod?.card?.country || '';
+      this.donationService.updatePaymentDetails(
+        this.donation,
+        paymentMethodResult.paymentMethod?.card?.brand,
+        paymentMethodResult.paymentMethod?.card?.country || 'N/A',
+      );
     }
 
     this.donationService.updateLocalDonation(this.donation);
@@ -526,11 +536,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   expectedMatchAmount(): number {
-    if (!this.campaign) {
+    if (!this.donation) {
       return 0;
     }
 
-    return Math.max(0, Math.min(this.campaign.matchFundsRemaining, parseFloat(this.amountsGroup.value.donationAmount)));
+    return this.donation.matchReservedAmount;
   }
 
   giftAidAmount(): number {
@@ -553,8 +563,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     return new Date(environment.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
   }
 
+  /**
+   * @returns Amount without any £/$s
+   */
   sanitiseCurrency(amount: string): number {
-    return Number((amount || '0').replace('£', ''));
+    return Number((amount || '0').replace('£', '').replace('$', ''));
   }
 
   scrollTo(el: Element): void {
@@ -601,7 +614,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       return true;
     }
 
-    const firstCustomError = document.querySelector('.error');
+    const firstCustomError = stepJustDone.querySelector('.error');
     if (firstCustomError) {
       this.scrollTo(firstCustomError);
       return true;
@@ -644,7 +657,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
   }
 
-  private createDonation() {
+  private createDonation(): void {
     if (!this.campaign || !this.campaign.charity.id || !this.psp) {
       this.donationCreateError = true;
       return;
@@ -656,7 +669,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
       countryCode: 'GB',
-      // Strip '£' if entered
+      currencyCode: this.campaign.currencyCode || 'GBP',
       donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
       donationMatched: this.campaign.isMatched,
       matchedAmount: 0, // Only set >0 after donation completed
@@ -670,59 +683,105 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
-    this.donationService
-      .create(donation)
-      .subscribe(async (response: DonationCreatedResponse) => {
-        const createResponseMissingData = (
-          !response.donation.charityId ||
-          !response.donation.donationId ||
-          !response.donation.projectId
-        );
-        if (createResponseMissingData) {
-          this.analyticsService.logError(
-            'donation_create_response_incomplete',
-            `Missing expected response data creating new donation for campaign ${this.campaignId}`,
-          );
-          this.donationCreateError = true;
-          this.stepper.previous(); // Go back to step 1 to surface the internal error.
-
-          return;
-        }
-
-        this.donationService.saveDonation(response.donation, response.jwt);
-        this.donation = response.donation; // Simplify update() while we're on this page.
-
-        this.analyticsService.logAmountChosen(donation.donationAmount, this.campaignId, this.suggestedAmounts);
-
-        if (this.campaign && this.psp === 'stripe') {
-          this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
-        }
-
-        // Amount reserved for matching is 'false-y', i.e. £0
-        if (donation.donationMatched && !response.donation.matchReservedAmount) {
-          this.promptToContinueWithNoMatchingLeft(response.donation);
-          return;
-        }
-
-        // Amount reserved for matching is >£0 but less than the full donation
-        if (donation.donationMatched && response.donation.matchReservedAmount < donation.donationAmount) {
-          this.promptToContinueWithPartialMatching(response.donation);
-          return;
-        }
-
-        this.scheduleMatchingExpiryWarning(this.donation);
-      }, response => {
-        let errorMessage: string;
-        if (response.message) {
-          errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.message}`;
-        } else {
-          // Unhandled 5xx crashes etc.
-          errorMessage = `Could not create new donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
-        }
-        this.analyticsService.logError('donation_create_failed', errorMessage);
-        this.donationCreateError = true;
-        this.stepper.previous(); // Go back to step 1 to surface the internal error.
+    this.donationService.create(donation)
+      .subscribe({
+        next: this.newDonationSuccess.bind(this),
+        error: this.newDonationError.bind(this),
       });
+  }
+
+  private newDonationError(response: any) {
+    let errorMessage: string;
+    if (response.message) {
+      errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.message}`;
+    } else {
+      // Unhandled 5xx crashes etc.
+      errorMessage = `Could not create new donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
+    }
+    this.analyticsService.logError('donation_create_failed', errorMessage);
+    this.donationCreateError = true;
+    this.stepper.previous(); // Go back to step 1 to surface the internal error.
+  }
+
+  private preparePaymentRequestButton(donation: Donation) {
+    const paymentRequestResultObserver: Observer<boolean> = {
+      next: success => {
+        if (success) {
+          if (this.donation && this.campaign) {
+            this.analyticsService.logEvent(
+              'stripe_prb_payment_success',
+              `Stripe PRB success for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
+            );
+            this.analyticsService.logCheckoutDone(this.campaign, this.donation);
+          }
+
+          this.router.navigate(['thanks', this.donation?.donationId], {
+            replaceUrl: true,
+          });
+          return;
+        }
+
+        this.stripeError = 'Payment failed – please try again';
+      },
+      error: () => {
+        this.stripeError = 'Payment method handling failed';
+      },
+      complete: () => {},
+    };
+
+    this.paymentRequestButton = this.stripeService.getPaymentRequestButton(donation, paymentRequestResultObserver);
+
+    this.stripeService.canUsePaymentRequest().then(canUse => {
+      if (canUse) {
+        this.paymentRequestButton.mount(this.paymentRequestButtonEl.nativeElement);
+        this.requestButtonShown = true;
+      } else {
+        this.paymentRequestButtonEl.nativeElement.style.display = 'none';
+      }
+    });
+  }
+
+  private newDonationSuccess(response: DonationCreatedResponse) {
+    const createResponseMissingData = (
+      !response.donation.charityId ||
+      !response.donation.donationId ||
+      !response.donation.projectId
+    );
+    if (createResponseMissingData) {
+      this.analyticsService.logError(
+        'donation_create_response_incomplete',
+        `Missing expected response data creating new donation for campaign ${this.campaignId}`,
+      );
+      this.donationCreateError = true;
+      this.stepper.previous(); // Go back to step 1 to surface the internal error.
+
+      return;
+    }
+
+    this.donationService.saveDonation(response.donation, response.jwt);
+    this.donation = response.donation; // Simplify update() while we're on this page.
+
+    this.analyticsService.logAmountChosen(response.donation.donationAmount, this.campaignId, this.suggestedAmounts);
+
+    if (this.campaign && this.psp === 'stripe') {
+      this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
+
+      this.preparePaymentRequestButton(this.donation);
+    }
+
+    // Amount reserved for matching is 'false-y', i.e. £0
+    if (response.donation.donationMatched && !response.donation.matchReservedAmount) {
+      this.promptToContinueWithNoMatchingLeft(response.donation);
+      return;
+    }
+
+    // Amount reserved for matching is >£0 but less than the full donation
+    if (response.donation.donationMatched && response.donation.matchReservedAmount < response.donation.donationAmount) {
+      this.promptToContinueWithPartialMatching(response.donation);
+      return;
+    }
+
+    this.scheduleMatchingExpiryWarning(this.donation);
   }
 
   private offerExistingDonation(donation: Donation) {
@@ -743,7 +802,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       disableClose: true,
       role: 'alertdialog',
     });
-    reuseDialog.afterClosed().subscribe(this.getDialogResponseFn(donation));
+    reuseDialog.afterClosed().subscribe({ next: this.getDialogResponseFn(donation) });
   }
 
   private scheduleMatchingExpiryWarning(donation: Donation) {

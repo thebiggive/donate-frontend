@@ -13,6 +13,11 @@ export interface Donation {
      */
     charityId: string;
 
+    /**
+     * ISO 4217 code for the currency in which all monetary values are denominated.
+     */
+    currencyCode: string;
+
     donationAmount: number;
 
     /**

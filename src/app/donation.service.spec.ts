@@ -17,6 +17,7 @@ describe('DonationService', () => {
       countryCode: 'GB',
       createdTime: (new Date()).toISOString(),
       charityId: '21I400000009Sds3e4',
+      currencyCode: 'GBP',
       donationId: '01I400000009Sds3e2',
       donationAmount: 1234.56,
       donationMatched: true,

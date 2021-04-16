@@ -12,12 +12,12 @@ import { Pipe, PipeTransform } from '@angular/core';
   pure: false,
 })
 export class ExactCurrencyPipe implements PipeTransform {
-  transform(value: any, args?: any[]): any {
+  transform(value: any, currencyCode = 'GBP'): any {
     // We expect and allow extra £ signs. We can't do this with commas because the
     // delineation is ambiguous across regions and we don't want donors to accidentally
     // give 100x more than they expect!
     if (typeof value === 'string') {
-      value = value.replace('£', '');
+      value = value.replace('£', '').replace('$', '');
 
       if (value.includes(',')) {
         return undefined;
@@ -33,7 +33,7 @@ export class ExactCurrencyPipe implements PipeTransform {
 
     // Start by always including 2 d.p., even if £*.00, which is `CurrencyPipe`'s
     // default behaviour.
-    let formatted = (new CurrencyPipe('en-GB', 'GBP').transform(value));
+    let formatted = (new CurrencyPipe('en-GB', currencyCode).transform(value));
     if (formatted?.endsWith('.00')) {
       formatted = formatted.slice(0, -3);
     }

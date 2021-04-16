@@ -57,6 +57,7 @@ describe('CampaignDetailsComponent', () => {
         regulatorRegion: 'Scotland',
       },
       ['United Kingdom'],
+      'GBP',
       4,
       new Date(),
       'Impact reporting plan',
