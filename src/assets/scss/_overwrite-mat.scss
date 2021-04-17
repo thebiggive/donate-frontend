@@ -28,10 +28,8 @@
   color: $colour-grey !important;
 }
 
+// See also .c-progress { ... } in campaign-details-card.component.scss.
 mat-progress-bar {
-  border-radius: 4px;
-  height: 5px;
-  margin-bottom: 15px;
   .mat-progress-bar-background {
     display: none !important;
   }
@@ -81,16 +79,16 @@ app-campaign-card {
   padding: 0.3em 0 0.7em 0;
 }
 
+.mat-form-field-prefix, .mat-form-field-suffix {
+  padding-right: 1rem;
+}
+
 .donation-input .mat-form-field-appearance-legacy .mat-form-field-infix {
   margin-bottom: 0.5rem;
   margin-top: 3rem;
   border: 2px mat-color($donate-primary) solid;
   border-radius: 1rem;
   padding: 0.7em 0;
-}
-
-.mat-form-field-prefix, .mat-form-field-suffix {
-  padding-right: 1rem;
 }
 
 .donation-input .mat-form-field-appearance-legacy .mat-form-field-underline {

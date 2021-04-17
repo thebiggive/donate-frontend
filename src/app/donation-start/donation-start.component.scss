@@ -1,4 +1,32 @@
-@import '../../styles';
+@import '../../abstract';
+
+.b-back-button {
+  @include make-back-button;
+}
+
+.b-center {
+  text-align: center;
+}
+
+.b-hidden {
+  display: none;
+}
+
+.b-mr-2 {
+  margin-right: 2rem;
+}
+
+.b-rt-sm {
+  @include b-rt-sm;
+}
+
+.b-rt-0 {
+  @include b-rt-0;
+}
+
+.b-rt-1 {
+  @include b-rt-1;
+}
 
 // See https://github.com/angular/components/issues/5227#issuecomment-480672986
 // for context of the problem solved for longer `mat-hint`s here.
@@ -181,7 +209,13 @@ a {
 }
 
 .c-donate-button {
+  @include make-donate-button;
+
   padding: 1.5rem;
+}
+
+.c-donate-button-amount {
+  vertical-align: baseline;
 }
 
 .c-donation-receipt {
