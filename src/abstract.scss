@@ -1,0 +1,13 @@
+// Vars and mixins – this file should *only* contain refs with no output/rules,
+// so components can each include this file whenever they need 1+ vars/mixins,
+// without getting bloated and the same compiled rules being repeated through
+// the app.
+
+// Material themes – must come first as some later bits depend on vars defined here.
+@import './assets/scss/mat-theme';
+
+// Variables
+@import './assets/scss/variables';
+
+// Mixins
+@import './assets/scss/mixins';

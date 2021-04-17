@@ -1,4 +1,20 @@
-@import '../../styles';
+@import '../../abstract';
+
+.b-back-button {
+  @include make-back-button;
+}
+
+.b-donate-button {
+  @include make-donate-button;
+}
+
+.b-rt-0 {
+  @include b-rt-0;
+}
+
+.b-rt-1 {
+  @include b-rt-1;
+}
 
 .c-not-open {
   @include make-card;
@@ -35,6 +51,10 @@
 
 .c-social__icon {
   width: 21px;
+}
+
+.c-tab-group {
+  margin-top: 2rem;
 }
 
 .c-tabs {

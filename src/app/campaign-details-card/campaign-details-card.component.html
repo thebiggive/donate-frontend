@@ -20,7 +20,7 @@
     <div class="c-campaign-target" *ngIf="campaign.target > 0">
       <h2 class="c-campaign-target__description b-grey b-light">Campaign target</h2>
       <p class="c-campaign-target__value b-bold">{{ campaign.target | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</p>
-      <mat-progress-bar [value]="percentRaised" *ngIf="campaign.amountRaised > 0"></mat-progress-bar>
+      <mat-progress-bar class="c-progress" [value]="percentRaised" *ngIf="campaign.amountRaised > 0"></mat-progress-bar>
     </div>
     <div class="c-campaign-raised" *ngIf="campaign.amountRaised > 0">
       <h2 class="c-campaign-raised__description b-grey b-light">Amount raised</h2>

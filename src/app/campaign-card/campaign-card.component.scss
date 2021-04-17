@@ -1,4 +1,8 @@
-@import '../../styles';
+@import '../../abstract';
+
+.b-donate-button {
+  @include make-donate-button;
+}
 
 .c-card {
   @include make-card;
