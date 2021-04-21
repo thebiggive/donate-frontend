@@ -1,4 +1,8 @@
-@import '../../styles';
+@import '../../abstract';
+
+.b-rt-1 {
+  @include b-rt-1;
+}
 
 .hero {
   color: $colour-black-contrast;

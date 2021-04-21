@@ -14,31 +14,6 @@
   @include make-secondary-column;
 }
 
-// Buttons
-.b-donate-button {
-  @include make-donate-button;
-}
-.b-back-button {
-  @include make-back-button;
-}
-
-// Responsive text
-.b-rt-sm {
-  @include b-rt-sm;
-}
-.b-rt-0 {
-  @include b-rt-0;
-}
-.b-rt-1 {
-  @include b-rt-1;
-}
-.b-rt-2 {
-  @include b-rt-2;
-}
-.b-rt-3 {
-  @include b-rt-3;
-}
-
 // Responsive headings
 .b-rh-1 {
   @include b-rt-3;
@@ -64,9 +39,6 @@
 .b-va-mid {
   vertical-align: middle;
 }
-.b-va-bas {
-  vertical-align: baseline;
-}
 
 // Width
 .b-w-100 {
@@ -74,12 +46,6 @@
 }
 
 // Margins
-.b-mt-2 {
-  margin-top: 2rem;
-}
-.b-mr-2 {
-  margin-right: 2rem;
-}
 .b-m-0 {
   margin: 0;
 }
@@ -92,16 +58,8 @@
   display: block;
 }
 
-.b-hidden {
-  display: none;
-}
-
 .b-grey {
   color: $colour-grey;
-}
-
-.b-center {
-  text-align: center;
 }
 
 .b-uppercase {

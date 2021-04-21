@@ -1,7 +1,14 @@
-@import '../../styles';
+@import '../../abstract';
 
 .c-card {
   @include make-card($box-shadow-hard);
+}
+
+// See also mat-progress-bar { ... } in _overwrite-mat.scss.
+.c-progress {
+  height: 5px;
+  border-radius: 4px;
+  margin-bottom: 15px;
 }
 
 .c-icon-list {

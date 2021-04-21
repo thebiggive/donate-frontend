@@ -1,4 +1,20 @@
-@import '../../styles';
+@import '../../abstract';
+
+.b-center {
+  text-align: center;
+}
+
+.b-rt-sm {
+  @include b-rt-sm;
+}
+
+.b-rt-0 {
+  @include b-rt-0;
+}
+
+.b-rt-1 {
+  @include b-rt-1;
+}
 
 .c-donate-complete {
   @include make-container;

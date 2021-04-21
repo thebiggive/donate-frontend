@@ -337,7 +337,7 @@
                 [disabled]="submitting || donationForm.invalid || (psp == 'stripe' &&!stripeCardReady)"
               >
                 Donate
-                <span class="b-bold b-va-bas">
+                <span class="b-bold c-donate-button-amount">
                   {{ donationAndTipAmount | exactCurrency:campaign.currencyCode }}
                 </span>
               </button>
