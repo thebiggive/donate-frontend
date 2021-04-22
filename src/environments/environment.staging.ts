@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   productionLike: true,
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
+  donateGlobalUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',

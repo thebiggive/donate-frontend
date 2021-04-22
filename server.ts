@@ -30,6 +30,7 @@ export function app() {
   // https://github.com/helmetjs/helmet#reference
   const apiHost = (new URL(environment.apiUriPrefix)).host;
   const donationsApiHost = (new URL(environment.donationsApiPrefix)).host;
+  const donateGlobalHost = (new URL(environment.donateGlobalUriPrefix)).host;
   const donateHost = (new URL(environment.donateUriPrefix)).host;
   server.use(helmet({
     contentSecurityPolicy: {
@@ -57,6 +58,7 @@ export function app() {
           'https:',
         ],
         'script-src': [
+          donateGlobalHost,
           donateHost,
           `'unsafe-eval'`,
           `'sha256-lAAe/2BNa8LfOLFsGspOHNtIPGU+RpI2Ne1/HaNdnLE='`, // IE fallback inline script?
