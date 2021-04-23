@@ -6,9 +6,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { countries } from 'country-code-lookup';
 import { retryWhen, tap  } from 'rxjs/operators';
 import { StripeElementChangeEvent } from '@stripe/stripe-js';
-import { Observable, Observer, of } from 'rxjs';
+import { Observer } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
@@ -49,6 +50,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   donation?: Donation;
 
   campaignOpenOnLoad: boolean;
+
+  // Sort by name, with locale support so Åland Islands doesn't come after 'Z..'.
+  // https://stackoverflow.com/a/39850483/2803757
+  countryOptions = countries.sort((cA, cB)  => cA.country.localeCompare(cB.country));
 
   donationForm: FormGroup;
   amountsGroup: FormGroup;
@@ -146,6 +151,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       }),
       // T&Cs agreement is implicit through submitting the form.
       paymentAndAgreement: this.formBuilder.group({
+        billingCountry: ['GB'], // See addStripeValidators().
         billingPostcode: [null], // See addStripeValidators().
       }),
     });
@@ -387,6 +393,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     this.donation.billingPostalAddress = this.paymentAndAgreementGroup.value.billingPostcode;
+    this.donation.countryCode = this.paymentAndAgreementGroup.value.billingCountry;
 
     if (this.psp === 'stripe') {
       const paymentMethodResult = await this.stripeService.createPaymentMethod(
@@ -463,6 +470,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     const result = await this.stripeService.confirmCardPayment(
       this.donation.clientSecret,
       this.card,
+      this.paymentAndAgreementGroup.value.billingCountry,
       this.personalAndMarketingGroup.value.emailAddress,
       `${this.personalAndMarketingGroup.value.firstName} ${this.personalAndMarketingGroup.value.lastName}`,
       this.paymentAndAgreementGroup.value.billingPostcode,
@@ -502,6 +510,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.analyticsService.logError('stripe_intent_not_success', result.paymentIntent.status);
     this.stripeError = `Status: ${result.paymentIntent.status}`;
     this.submitting = false;
+  }
+
+  get billingCountryField() {
+    if (!this.donationForm) {
+      return undefined;
+    }
+
+    return this.donationForm.controls.paymentAndAgreementGroup.get('billingCountry');
   }
 
   get donationAmountField() {
@@ -668,7 +684,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
-      countryCode: 'GB',
+      countryCode: this.paymentAndAgreementGroup.value.billingCountry,
       currencyCode: this.campaign.currencyCode || 'GBP',
       donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
       donationMatched: this.campaign.isMatched,
@@ -1006,9 +1022,13 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       Validators.email,
     ]);
 
+    this.paymentAndAgreementGroup.controls.billingCountry.setValidators([
+      Validators.required,
+    ]);
+
     this.paymentAndAgreementGroup.controls.billingPostcode.setValidators([
       Validators.required,
-      Validators.pattern(this.postcodeRegExp),
+      Validators.pattern('^[0-9a-zA-Z ]{2,10}$'),
     ]);
   }
 

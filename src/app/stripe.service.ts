@@ -71,6 +71,7 @@ export class StripeService {
   async confirmCardPayment(
     clientSecret: string,
     cardElement: StripeCardElement,
+    donorCountry: string,
     donorEmail: string,
     donorName?: string,
     donorPostcode?: string,
@@ -87,7 +88,7 @@ export class StripeService {
 
     if (donorPostcode) {
       billingDetails.address = {
-        country: 'GB',
+        country: donorCountry,
         postal_code: donorPostcode,
       };
     }
