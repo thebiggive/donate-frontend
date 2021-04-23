@@ -512,14 +512,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.submitting = false;
   }
 
-  get billingCountryField() {
-    if (!this.donationForm) {
-      return undefined;
-    }
-
-    return this.donationForm.controls.paymentAndAgreementGroup.get('billingCountry');
-  }
-
   get donationAmountField() {
     if (!this.donationForm) {
       return undefined;
