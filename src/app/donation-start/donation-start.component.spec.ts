@@ -162,6 +162,7 @@ describe('DonationStartComponent', () => {
         optInChampionEmail: false,
       },
       paymentAndAgreement: {
+        billingCountry: 'GB',
         billingPostcode: 'N1 1AA',
       },
     });
@@ -194,6 +195,7 @@ describe('DonationStartComponent', () => {
         optInChampionEmail: false,
       },
       paymentAndAgreement: {
+        billingCountry: null,
         billingPostcode: null,
       },
     });
@@ -236,6 +238,7 @@ describe('DonationStartComponent', () => {
         optInChampionEmail: false,
       },
       paymentAndAgreement: {
+        billingCountry: null,
         billingPostcode: null,
       },
     });
@@ -272,6 +275,7 @@ describe('DonationStartComponent', () => {
         optInChampionEmail: false,
       },
       paymentAndAgreement: {
+        billingCountry: null,
         billingPostcode: null,
       },
     });
@@ -308,6 +312,7 @@ describe('DonationStartComponent', () => {
         optInChampionEmail: false,
       },
       paymentAndAgreement: {
+        billingCountry: null,
         billingPostcode: null,
       },
     });
@@ -344,6 +349,7 @@ describe('DonationStartComponent', () => {
         optInChampionEmail: false,
       },
       paymentAndAgreement: {
+        billingCountry: 'GB',
         billingPostcode: 'N1 1AA',
       },
     });
@@ -362,7 +368,7 @@ describe('DonationStartComponent', () => {
     expect(component.donationForm.controls.personalAndMarketing.get('optInTbgEmail')?.errors).toBeNull();
   });
 
-  it('should have missing postcode error in Stripe mode', () => {
+  it('should have missing country & postcode errors in Stripe mode', () => {
     // Need to override the default fixture in beforeEach() to set a realistic `campaign`.
     fixture = TestBed.createComponent(DonationStartComponent);
     component = fixture.componentInstance;
@@ -389,11 +395,16 @@ describe('DonationStartComponent', () => {
         optInChampionEmail: false,
       },
       paymentAndAgreement: {
+        billingCountry: null,
         billingPostcode: null,
       },
     });
 
     expect(component.donationForm.valid).toBe(false);
+
+    const billingCountryErrors: any = component.donationForm.controls.paymentAndAgreement.get('billingPostcode')?.errors;
+    expect(Object.keys(billingCountryErrors).length).toBe(1);
+    expect(billingCountryErrors.required).toBe(true);
 
     const billingPostcodeErrors: any = component.donationForm.controls.paymentAndAgreement.get('billingPostcode')?.errors;
     expect(Object.keys(billingPostcodeErrors).length).toBe(1);
@@ -429,6 +440,7 @@ describe('DonationStartComponent', () => {
         optInChampionEmail: true,
       },
       paymentAndAgreement: {
+        billingCountry: 'GB',
         billingPostcode: 'N1 1AA',
       },
     });
@@ -469,6 +481,7 @@ describe('DonationStartComponent', () => {
         optInChampionEmail: false,
       },
       paymentAndAgreement: {
+        billingCountry: 'GB',
         billingPostcode: 'N1 1AA',
       },
     });
