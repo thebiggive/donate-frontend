@@ -15,7 +15,7 @@ import { PageMetaService } from '../page-meta.service';
   styleUrls: ['./campaign-details.component.scss'],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
-  additionalImageUris: string[] = [];
+  additionalImageUris: Array<string|undefined> = [];
   campaign?: Campaign;
   campaignId: string;
   isPending = false;

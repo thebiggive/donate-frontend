@@ -21,8 +21,7 @@ describe('Donate Frontend', () => {
 
     for (let ii = 0; ii < logs.length; ii++) {
       if (
-        logs[ii].message.endsWith('live Stripe.js integrations must use HTTPS."') ||
-        logs[ii].message.endsWith('404 (Not Found)')
+        logs[ii].message.endsWith('live Stripe.js integrations must use HTTPS."')
       ) {
         logs.splice(ii, 1);
       }
