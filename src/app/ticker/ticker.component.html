@@ -3,7 +3,7 @@
     <span *ngIf="fund"><em class="c-ticker__value c-ticker__value--emphasised">{{ fund.amountRaised | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</em> raised inc. Gift Aid</span>
 
     <!-- We occasionally open child campaigns before their parents, so it
-    is possible for the parent `campaign` here to raise more than £0 before
+    is possible for the parent `campaign` here to raise more than 0 before
     it formally opens. -->
     <span *ngIf="!fund && campaign.amountRaised > 0 && !campaignInFuture" ><em class="c-ticker__value c-ticker__value--emphasised">{{ campaign.amountRaised | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</em> raised inc. Gift Aid</span>
     <span *ngIf="!fund && (campaign.amountRaised == 0 || campaignInFuture)">Opens in <em  class="c-ticker__value c-ticker__value--emphasised">{{ campaign.startDate | timeLeft }}</em></span>
