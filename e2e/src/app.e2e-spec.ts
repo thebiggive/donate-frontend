@@ -20,9 +20,7 @@ describe('Donate Frontend', () => {
     const logs = await browser.manage().logs().get(logging.Type.BROWSER);
 
     for (let ii = 0; ii < logs.length; ii++) {
-      if (
-        logs[ii].message.endsWith('live Stripe.js integrations must use HTTPS."')
-      ) {
+      if (logs[ii].message.endsWith('live Stripe.js integrations must use HTTPS."')) {
         logs.splice(ii, 1);
       }
     }
