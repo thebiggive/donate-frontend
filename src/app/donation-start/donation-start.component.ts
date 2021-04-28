@@ -133,7 +133,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           Validators.required,
           ValidateCurrencyMin,
           ValidateCurrencyMax,
-          Validators.pattern('^£?\\$?[0-9]+?(\\.00)?$'),
+          Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
         tipPercentage: [this.initialTipSuggestedPercentage], // See addStripeValidators().
         tipAmount: [null], // See addStripeValidators().
@@ -947,7 +947,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // reusing an existing donation.
     this.amountsGroup.controls.tipAmount.setValidators([
       Validators.required,
-      Validators.pattern('^£?[0-9]+?(\\.[0-9]{2})?$'),
+      Validators.pattern('^[£$]?[0-9]+?(\\.[0-9]{2})?$'),
     ]);
 
     this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
