@@ -14,8 +14,16 @@ describe('Donate Frontend', () => {
   });
 
   afterEach(async () => {
-    // Assert that there are no errors emitted from the browser
+    // Assert that there are no errors emitted from the browser, except Stripe's
+    // non-https dev warning.
     const logs = await browser.manage().logs().get(logging.Type.BROWSER);
+
+    for (let ii = 0; ii < logs.length; ii++) {
+      if (logs[ii].message.endsWith('live Stripe.js integrations must use HTTPS."')) {
+        logs.splice(ii, 1);
+      }
+    }
+
     expect(logs).not.toContain(jasmine.objectContaining({
       level: logging.Level.SEVERE,
     } as logging.Entry));
