@@ -137,6 +137,7 @@
           </mat-step>
 
           <mat-step
+            *ngIf="campaign.currencyCode === 'GBP'"
             formGroupName="giftAid"
             [stepControl]="giftAidGroup"
             label="Gift Aid"
