@@ -15,11 +15,15 @@ describe('Donate Frontend', () => {
 
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser, except Stripe's
-    // non-https dev warning.
+    // non-https dev warning and the expected failure to load a non-existent
+    // dynamic campaign header image.
     const logs = await browser.manage().logs().get(logging.Type.BROWSER);
 
     for (let ii = 0; ii < logs.length; ii++) {
-      if (logs[ii].message.endsWith('live Stripe.js integrations must use HTTPS."')) {
+      if (
+        logs[ii].message.endsWith('live Stripe.js integrations must use HTTPS."') ||
+        logs[ii].message.endsWith('404 (Not Found)')
+      ) {
         logs.splice(ii, 1);
       }
     }
