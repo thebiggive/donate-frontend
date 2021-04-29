@@ -2,6 +2,7 @@ export const environment = {
   production: true,
   productionLike: true,
   apiUriPrefix: 'https://sf-api-production.thebiggive.org.uk',
+  donateGlobalUriPrefix: 'https://thebiggive.global',
   donateUriPrefix: 'https://donate.thebiggive.org.uk',
   donationsApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',
   getSiteControlId: '97792',

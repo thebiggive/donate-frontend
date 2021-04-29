@@ -112,7 +112,10 @@ export class DonationCompleteComponent {
   }
 
   private setSocialShares(campaign: Campaign) {
-    this.shareUrl = `${environment.donateUriPrefix}/campaign/${campaign.id}`;
+    const prefix = campaign.currencyCode === 'GBP'
+      ? environment.donateUriPrefix
+      : environment.donateGlobalUriPrefix;
+    this.shareUrl = `${prefix}/campaign/${campaign.id}`;
     this.prefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
   }
 }

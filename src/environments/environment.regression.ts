@@ -8,6 +8,7 @@ export const environment = {
   production: false,
   productionLike: true,
   apiUriPrefix: 'https://regtest1-biggive.cs109.force.com',
+  donateGlobalUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
   donateUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
   donationsApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
