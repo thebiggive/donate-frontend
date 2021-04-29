@@ -137,7 +137,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         tipAmount: [null], // See addStripeValidators().
       }),
       giftAid: this.formBuilder.group({
-        giftAid: [null, Validators.required],
+        giftAid: [null],  // See addUKValidators().
         homeAddress: [null],  // See addStripeValidators().
         homePostcode: [null], // See addStripeValidators().
       }),
@@ -640,6 +640,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // be able to use match funds secured until 15 minutes after the close time.
     this.campaignOpenOnLoad = this.campaignIsOpen();
 
+    if (this.campaign?.currencyCode === 'GBP') {
+      this.addUKValidators();
+    }
+
     if (environment.psps.stripe.enabled && this.campaign?.charity.stripeAccountId) {
       this.psp = 'stripe';
       this.addStripeValidators();
@@ -935,6 +939,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       donation,
       this.campaign.surplusDonationInfo,
     );
+  }
+
+  private addUKValidators(): void {
+    this.giftAidGroup.controls.giftAid.setValidators([Validators.required]);
   }
 
   private addStripeValidators(): void {
