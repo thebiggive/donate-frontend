@@ -12,7 +12,7 @@ import { Fund } from '../fund.model';
 export class TickerComponent implements OnInit {
   @Input() public campaign: Campaign;
   @Input() public fund?: Fund;
-  public campaignInFuture: boolean; // Does not imply £0 raised, see HTML comment.
+  public campaignInFuture: boolean; // Does not imply 0 raised, see HTML comment.
   public campaignOpen: boolean;
   public durationInDays: number;
 

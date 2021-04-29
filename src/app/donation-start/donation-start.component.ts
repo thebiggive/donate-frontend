@@ -1,5 +1,5 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { isPlatformBrowser } from '@angular/common';
+import { getCurrencySymbol, isPlatformBrowser } from '@angular/common';
 import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -54,6 +54,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   // Sort by name, with locale support so Åland Islands doesn't come after 'Z..'.
   // https://stackoverflow.com/a/39850483/2803757
   countryOptions = countries.sort((cA, cB)  => cA.country.localeCompare(cB.country));
+
+  currencySymbol: string;
 
   donationForm: FormGroup;
   amountsGroup: FormGroup;
@@ -131,7 +133,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           Validators.required,
           ValidateCurrencyMin,
           ValidateCurrencyMax,
-          Validators.pattern('^£?[0-9]+?(\\.00)?$'),
+          Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
         tipPercentage: [this.initialTipSuggestedPercentage], // See addStripeValidators().
         tipAmount: [null], // See addStripeValidators().
@@ -640,6 +642,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // be able to use match funds secured until 15 minutes after the close time.
     this.campaignOpenOnLoad = this.campaignIsOpen();
 
+    this.currencySymbol = getCurrencySymbol(campaign.currencyCode, 'narrow', 'en-GB');
+
     if (this.campaign?.currencyCode === 'GBP') {
       this.addUKValidators();
     }
@@ -781,13 +785,13 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.preparePaymentRequestButton(this.donation);
     }
 
-    // Amount reserved for matching is 'false-y', i.e. £0
+    // Amount reserved for matching is 'false-y', i.e. 0
     if (response.donation.donationMatched && !response.donation.matchReservedAmount) {
       this.promptToContinueWithNoMatchingLeft(response.donation);
       return;
     }
 
-    // Amount reserved for matching is >£0 but less than the full donation
+    // Amount reserved for matching is > 0 but less than the full donation
     if (response.donation.donationMatched && response.donation.matchReservedAmount < response.donation.donationAmount) {
       this.promptToContinueWithPartialMatching(response.donation);
       return;
@@ -953,7 +957,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       // No tips on alternative fee structure model -> no such validator or value updates.
       this.amountsGroup.controls.tipAmount.setValidators([
         Validators.required,
-        Validators.pattern('^£?[0-9]+?(\\.[0-9]{2})?$'),
+        Validators.pattern('^[£$]?[0-9]+?(\\.[0-9]{2})?$'),
       ]);
 
       this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
@@ -1031,7 +1035,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     this.paymentAndAgreementGroup.controls.billingPostcode.setValidators([
       Validators.required,
-      Validators.pattern('^[0-9a-zA-Z ]{2,10}$'),
+      Validators.pattern('^[0-9a-zA-Z ]{2,8}$'),
     ]);
   }
 

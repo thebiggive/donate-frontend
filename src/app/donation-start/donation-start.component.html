@@ -40,7 +40,7 @@
             <p class="c-your-donation__to">Donation to {{ campaign.charity.name }}</p>
             <div class="donation-input">
               <mat-form-field class="c-your-donation__form-field b-center size-lg" color="primary">
-                <span class="prefix" matPrefix>£</span>
+                <span class="prefix" matPrefix>{{ currencySymbol }}</span>
                 <mat-label class="c-your-donation__placeholder" for="donationAmount">
                   <div class="to-charity">
                     Donation to {{ campaign.charity.name }}
@@ -66,9 +66,9 @@
               aria-live="polite"
               *ngIf="donationAmountField?.invalid && donationAmountField?.errors && (donationAmountField?.dirty || donationAmountField?.touched)"
             >
-              <div *ngIf="donationAmountField?.errors?.min">Sorry, the minimum donation is £1.</div>
+              <div *ngIf="donationAmountField?.errors?.min">Sorry, the minimum donation is {{ currencySymbol }}1.</div>
               <div *ngIf="donationAmountField?.errors?.max">Your donation must be {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }} or less to proceed. You can make multiple matched donations of {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }} if match funds are available.</div>
-              <div *ngIf="donationAmountField?.errors?.pattern">Please enter a whole number of pounds (£) without commas.</div>
+              <div *ngIf="donationAmountField?.errors?.pattern">Please enter a whole number of {{ currencySymbol }} without commas.</div>
               <div *ngIf="donationAmountField?.errors?.required">Please enter how much you would like to donate.</div>
             </div>
 
@@ -102,7 +102,7 @@
                   appearance="outline"
                   color="primary"
                 >
-                  <span class="prefix-tbg" matPrefix>£</span>
+                  <span class="prefix-tbg" matPrefix>{{ currencySymbol }}</span>
                   <input formControlName="tipAmount" id="tipAmount" matInput>
                 </mat-form-field>
 
@@ -112,7 +112,7 @@
                   *ngIf="tipAmountField?.invalid && tipAmountField?.errors && (tipAmountField?.dirty || tipAmountField?.touched)"
                 >
                   Please enter how much you would like to donate to the Big Give as a number of
-                  pounds (£), optionally with pence as 2 decimals.
+                  {{ currencySymbol }}, optionally with 2 decimals.
                 </div>
 
                 <mat-hint *ngIf="!customTip()">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to support the Big Give</mat-hint>
