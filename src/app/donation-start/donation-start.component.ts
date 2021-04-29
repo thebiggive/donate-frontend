@@ -139,7 +139,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         tipAmount: [null], // See addStripeValidators().
       }),
       giftAid: this.formBuilder.group({
-        giftAid: [null, Validators.required],
+        giftAid: [null],  // See addUKValidators().
         homeAddress: [null],  // See addStripeValidators().
         homePostcode: [null], // See addStripeValidators().
       }),
@@ -644,6 +644,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     this.currencySymbol = getCurrencySymbol(campaign.currencyCode, 'narrow', 'en-GB');
 
+    if (this.campaign?.currencyCode === 'GBP') {
+      this.addUKValidators();
+    }
+
     if (environment.psps.stripe.enabled && this.campaign?.charity.stripeAccountId) {
       this.psp = 'stripe';
       this.addStripeValidators();
@@ -941,48 +945,55 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     );
   }
 
+  private addUKValidators(): void {
+    this.giftAidGroup.controls.giftAid.setValidators([Validators.required]);
+  }
+
   private addStripeValidators(): void {
     // Do not add a validator on `tipPercentage` because as a dropdown it always
     // has a value anyway, and this complicates repopulating the form when e.g.
     // reusing an existing donation.
-    this.amountsGroup.controls.tipAmount.setValidators([
-      Validators.required,
-      Validators.pattern('^[£$]?[0-9]+?(\\.[0-9]{2})?$'),
-    ]);
+    if (!this.campaign?.feePercentage) {
+      // No tips on alternative fee structure model -> no such validator or value updates.
+      this.amountsGroup.controls.tipAmount.setValidators([
+        Validators.required,
+        Validators.pattern('^[£$]?[0-9]+?(\\.[0-9]{2})?$'),
+      ]);
 
-    this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
-      const updatedValues: {
-        tipPercentage?: number | string,
-        tipAmount?: string,
-      } = {};
+      this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
+        const updatedValues: {
+          tipPercentage?: number | string,
+          tipAmount?: string,
+        } = {};
 
-      if (!this.tipPercentageChanged) {
-        let newDefault = this.initialTipSuggestedPercentage;
-        if (donationAmount >= 1000) {
-          newDefault = 7.5;
-        } else if (donationAmount >= 300) {
-          newDefault = 10;
+        if (!this.tipPercentageChanged) {
+          let newDefault = this.initialTipSuggestedPercentage;
+          if (donationAmount >= 1000) {
+            newDefault = 7.5;
+          } else if (donationAmount >= 300) {
+            newDefault = 10;
+          }
+
+          updatedValues.tipPercentage = newDefault;
+          updatedValues.tipAmount = (newDefault / 100 * donationAmount).toFixed(2);
+        } else if (this.amountsGroup.get('tipPercentage')?.value !== 'Other') {
+          updatedValues.tipAmount = (this.amountsGroup.get('tipPercentage')?.value / 100 * donationAmount).toFixed(2);
         }
 
-        updatedValues.tipPercentage = newDefault;
-        updatedValues.tipAmount = (newDefault / 100 * donationAmount).toFixed(2);
-      } else if (this.amountsGroup.get('tipPercentage')?.value !== 'Other') {
-        updatedValues.tipAmount = (this.amountsGroup.get('tipPercentage')?.value / 100 * donationAmount).toFixed(2);
-      }
-
-      this.amountsGroup.patchValue(updatedValues);
-    });
-
-    this.amountsGroup.get('tipPercentage')?.valueChanges.subscribe(tipPercentage => {
-      if (tipPercentage === 'Other') {
-        return;
-      }
-
-      this.amountsGroup.patchValue({
-        // Keep value consistent with format of manual string inputs.
-        tipAmount: (tipPercentage / 100 * (this.amountsGroup.get('donationAmount')?.value || 0)).toFixed(2),
+        this.amountsGroup.patchValue(updatedValues);
       });
-    });
+
+      this.amountsGroup.get('tipPercentage')?.valueChanges.subscribe(tipPercentage => {
+        if (tipPercentage === 'Other') {
+          return;
+        }
+
+        this.amountsGroup.patchValue({
+          // Keep value consistent with format of manual string inputs.
+          tipAmount: (tipPercentage / 100 * (this.amountsGroup.get('donationAmount')?.value || 0)).toFixed(2),
+        });
+      });
+    }
 
     // Gift Aid home address fields are validated only in Stripe mode and also
     // conditionally on the donor claiming Gift Aid.

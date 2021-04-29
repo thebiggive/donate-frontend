@@ -12,7 +12,11 @@ export class ImageService {
   // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
-  getImageUri(originalImageUri: string, width: number): Observable<string> {
+  getImageUri(originalImageUri: string, width: number): Observable<string|undefined> {
+    if (!originalImageUri) {
+      return of(undefined);
+    }
+
     const imageUri = `${originalImageUri}?width=${width}`;
 
     // Return immediately if we already checked for webp support on this run.

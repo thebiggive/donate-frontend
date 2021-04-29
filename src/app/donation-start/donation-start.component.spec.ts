@@ -88,6 +88,7 @@ describe('DonationStartComponent', () => {
         undefined,
         undefined,
         undefined,
+        undefined,
         {
           provider: 'youtube',
           key: '1G_Abc2delF',
@@ -203,10 +204,6 @@ describe('DonationStartComponent', () => {
     expect(component.donationForm.valid).toBe(false);
 
     expect(component.donationForm.controls.amounts.get('donationAmount')?.errors).toBeNull();
-
-    const giftAidErrors: any = component.donationForm.controls.giftAid.get('giftAid')?.errors;
-    expect(Object.keys(giftAidErrors).length).toBe(1);
-    expect(giftAidErrors.required).toBe(true);
 
     const optInCharityEmailErrors: any = component.donationForm.controls.personalAndMarketing.get('optInCharityEmail')?.errors;
     expect(Object.keys(optInCharityEmailErrors).length).toBe(1);
@@ -368,7 +365,7 @@ describe('DonationStartComponent', () => {
     expect(component.donationForm.controls.personalAndMarketing.get('optInTbgEmail')?.errors).toBeNull();
   });
 
-  it('should have missing country & postcode errors in Stripe mode', () => {
+  it('should have missing country & postcode & Gift Aid errors in Stripe + UK mode', () => {
     // Need to override the default fixture in beforeEach() to set a realistic `campaign`.
     fixture = TestBed.createComponent(DonationStartComponent);
     component = fixture.componentInstance;
@@ -382,7 +379,7 @@ describe('DonationStartComponent', () => {
         tipPercentage: 12.5,
       },
       giftAid: {
-        giftAid: true,
+        giftAid: null,
         homeAddress: null,
         homePostcode: null,
       },
@@ -410,7 +407,9 @@ describe('DonationStartComponent', () => {
     expect(Object.keys(billingPostcodeErrors).length).toBe(1);
     expect(billingPostcodeErrors.required).toBe(true);
 
-    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
+    const giftAidErrors: any = component.donationForm.controls.giftAid.get('giftAid')?.errors;
+    expect(Object.keys(giftAidErrors).length).toBe(1);
+    expect(giftAidErrors.required).toBe(true);
   });
 
   it('should have missing email address error in Stripe mode', () => {
