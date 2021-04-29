@@ -72,14 +72,20 @@
               <div *ngIf="donationAmountField?.errors?.required">Please enter how much you would like to donate.</div>
             </div>
 
-            <mat-hint>
+            <mat-hint *ngIf="!campaign.feePercentage">
               We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://www.thebiggive.org.uk/s/about" target="_blank"><mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too).
               <span *ngIf="psp == 'enthuse'">Please consider adding an optional tip when finalising your donation.</span>
               <span *ngIf="psp == 'stripe'">Please consider adding an optional tip.</span>
             </mat-hint>
 
+            <mat-hint *ngIf="campaign.feePercentage">
+              We have agreed a special fee structure with {{ campaign.charity.name }}
+              for this campaign. Please see <a href="https://www.thebiggive.org.uk/s/our-fees" target="_blank">our fees</a>
+              for more details.
+            </mat-hint>
+
             <div class="donation-input">
-              <div *ngIf="psp == 'stripe'">
+              <div *ngIf="psp == 'stripe' && !campaign.feePercentage">
                 <mat-form-field appearance="outline">
                   <mat-label for="tipPercentage">Donation to the Big Give</mat-label>
                   <mat-select formControlName="tipPercentage" id="tipPercentage" (selectionChange)="tipPercentageChange()">
