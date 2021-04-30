@@ -219,6 +219,7 @@ a {
 }
 
 .c-donation-receipt {
+  border-top: 1px solid $colour-grey-light;
   padding: 1rem 0;
 }
 
@@ -234,7 +235,6 @@ a {
 }
 
 .c-receipt-total {
-  border-bottom: 1px solid $colour-grey-light;
   padding: 1.5rem 0 0.5rem;
 }
 

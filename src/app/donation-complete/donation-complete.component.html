@@ -51,7 +51,7 @@
               <h4 class="c-receipt__title b-light b-grey b-rt-sm" *ngIf="donation.matchedAmount > 0">Match funds</h4>
               <p class="b-rt-0 b-bold b-m-0" *ngIf="donation.matchedAmount > 0">{{ donation.matchedAmount | exactCurrency:donation.currencyCode }}</p>
             </li>
-            <li class="c-receipt__item b-db">
+            <li *ngIf="giftAidAmount > 0" class="c-receipt__item b-db">
               <h4 class="c-receipt__title b-light b-grey b-rt-sm">Gift Aid</h4>
               <p class="b-rt-0 b-bold b-m-0">{{ giftAidAmount | exactCurrency:donation.currencyCode }}</p>
             </li>
