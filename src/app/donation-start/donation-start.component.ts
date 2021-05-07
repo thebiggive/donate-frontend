@@ -933,7 +933,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     this.analyticsService.logEvent('alerted_partial_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
-    const formattedReservedAmount = (new ExactCurrencyPipe()).transform(donation.matchReservedAmount);
+    const formattedReservedAmount = (new ExactCurrencyPipe()).transform(donation.matchReservedAmount, donation.currencyCode);
     this.promptToContinue(
       'Not all match funds are available',
       'There are not enough match funds currently available to fully match your donation. ' +
