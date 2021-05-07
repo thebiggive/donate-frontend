@@ -12,7 +12,7 @@ import { ImageService } from '../image.service';
 })
 export class CampaignDetailsCardComponent implements OnInit {
   @Input() campaign: Campaign;
-  bannerUri: string;
+  bannerUri?: string;
   percentRaised?: number;
 
   constructor(private imageService: ImageService) {}

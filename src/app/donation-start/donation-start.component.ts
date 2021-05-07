@@ -1,5 +1,5 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { isPlatformBrowser } from '@angular/common';
+import { getCurrencySymbol, isPlatformBrowser } from '@angular/common';
 import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -54,6 +54,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   // Sort by name, with locale support so Åland Islands doesn't come after 'Z..'.
   // https://stackoverflow.com/a/39850483/2803757
   countryOptions = countries.sort((cA, cB)  => cA.country.localeCompare(cB.country));
+
+  currencySymbol: string;
 
   donationForm: FormGroup;
   amountsGroup: FormGroup;
@@ -131,13 +133,13 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           Validators.required,
           ValidateCurrencyMin,
           ValidateCurrencyMax,
-          Validators.pattern('^£?[0-9]+?(\\.00)?$'),
+          Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
         tipPercentage: [this.initialTipSuggestedPercentage], // See addStripeValidators().
         tipAmount: [null], // See addStripeValidators().
       }),
       giftAid: this.formBuilder.group({
-        giftAid: [null, Validators.required],
+        giftAid: [null],  // See addUKValidators().
         homeAddress: [null],  // See addStripeValidators().
         homePostcode: [null], // See addStripeValidators().
       }),
@@ -640,6 +642,12 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // be able to use match funds secured until 15 minutes after the close time.
     this.campaignOpenOnLoad = this.campaignIsOpen();
 
+    this.currencySymbol = getCurrencySymbol(campaign.currencyCode, 'narrow', 'en-GB');
+
+    if (this.campaign?.currencyCode === 'GBP') {
+      this.addUKValidators();
+    }
+
     if (environment.psps.stripe.enabled && this.campaign?.charity.stripeAccountId) {
       this.psp = 'stripe';
       this.addStripeValidators();
@@ -777,13 +785,13 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.preparePaymentRequestButton(this.donation);
     }
 
-    // Amount reserved for matching is 'false-y', i.e. £0
+    // Amount reserved for matching is 'false-y', i.e. 0
     if (response.donation.donationMatched && !response.donation.matchReservedAmount) {
       this.promptToContinueWithNoMatchingLeft(response.donation);
       return;
     }
 
-    // Amount reserved for matching is >£0 but less than the full donation
+    // Amount reserved for matching is > 0 but less than the full donation
     if (response.donation.donationMatched && response.donation.matchReservedAmount < response.donation.donationAmount) {
       this.promptToContinueWithPartialMatching(response.donation);
       return;
@@ -937,48 +945,55 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     );
   }
 
+  private addUKValidators(): void {
+    this.giftAidGroup.controls.giftAid.setValidators([Validators.required]);
+  }
+
   private addStripeValidators(): void {
     // Do not add a validator on `tipPercentage` because as a dropdown it always
     // has a value anyway, and this complicates repopulating the form when e.g.
     // reusing an existing donation.
-    this.amountsGroup.controls.tipAmount.setValidators([
-      Validators.required,
-      Validators.pattern('^£?[0-9]+?(\\.[0-9]{2})?$'),
-    ]);
+    if (!this.campaign?.feePercentage) {
+      // No tips on alternative fee structure model -> no such validator or value updates.
+      this.amountsGroup.controls.tipAmount.setValidators([
+        Validators.required,
+        Validators.pattern('^[£$]?[0-9]+?(\\.[0-9]{2})?$'),
+      ]);
 
-    this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
-      const updatedValues: {
-        tipPercentage?: number | string,
-        tipAmount?: string,
-      } = {};
+      this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
+        const updatedValues: {
+          tipPercentage?: number | string,
+          tipAmount?: string,
+        } = {};
 
-      if (!this.tipPercentageChanged) {
-        let newDefault = this.initialTipSuggestedPercentage;
-        if (donationAmount >= 1000) {
-          newDefault = 7.5;
-        } else if (donationAmount >= 300) {
-          newDefault = 10;
+        if (!this.tipPercentageChanged) {
+          let newDefault = this.initialTipSuggestedPercentage;
+          if (donationAmount >= 1000) {
+            newDefault = 7.5;
+          } else if (donationAmount >= 300) {
+            newDefault = 10;
+          }
+
+          updatedValues.tipPercentage = newDefault;
+          updatedValues.tipAmount = (newDefault / 100 * donationAmount).toFixed(2);
+        } else if (this.amountsGroup.get('tipPercentage')?.value !== 'Other') {
+          updatedValues.tipAmount = (this.amountsGroup.get('tipPercentage')?.value / 100 * donationAmount).toFixed(2);
         }
 
-        updatedValues.tipPercentage = newDefault;
-        updatedValues.tipAmount = (newDefault / 100 * donationAmount).toFixed(2);
-      } else if (this.amountsGroup.get('tipPercentage')?.value !== 'Other') {
-        updatedValues.tipAmount = (this.amountsGroup.get('tipPercentage')?.value / 100 * donationAmount).toFixed(2);
-      }
-
-      this.amountsGroup.patchValue(updatedValues);
-    });
-
-    this.amountsGroup.get('tipPercentage')?.valueChanges.subscribe(tipPercentage => {
-      if (tipPercentage === 'Other') {
-        return;
-      }
-
-      this.amountsGroup.patchValue({
-        // Keep value consistent with format of manual string inputs.
-        tipAmount: (tipPercentage / 100 * (this.amountsGroup.get('donationAmount')?.value || 0)).toFixed(2),
+        this.amountsGroup.patchValue(updatedValues);
       });
-    });
+
+      this.amountsGroup.get('tipPercentage')?.valueChanges.subscribe(tipPercentage => {
+        if (tipPercentage === 'Other') {
+          return;
+        }
+
+        this.amountsGroup.patchValue({
+          // Keep value consistent with format of manual string inputs.
+          tipAmount: (tipPercentage / 100 * (this.amountsGroup.get('donationAmount')?.value || 0)).toFixed(2),
+        });
+      });
+    }
 
     // Gift Aid home address fields are validated only in Stripe mode and also
     // conditionally on the donor claiming Gift Aid.
@@ -1020,7 +1035,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     this.paymentAndAgreementGroup.controls.billingPostcode.setValidators([
       Validators.required,
-      Validators.pattern('^[0-9a-zA-Z ]{2,10}$'),
+      Validators.pattern('^[0-9a-zA-Z ]{2,8}$'),
     ]);
   }
 

@@ -15,7 +15,7 @@ export class HeroComponent implements OnChanges {
   @Input() fund?: Fund;
   @Input() getDefaultSort: () => string;
 
-  bannerUri: string;
+  bannerUri?: string;
   logoAltText?: string;
   /** May be a fund logo (in addition to campaign title), or campaign logo (replaces title). */
   logoUri?: string;

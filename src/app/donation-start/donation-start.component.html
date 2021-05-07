@@ -40,7 +40,7 @@
             <p class="c-your-donation__to">Donation to {{ campaign.charity.name }}</p>
             <div class="donation-input">
               <mat-form-field class="c-your-donation__form-field b-center size-lg" color="primary">
-                <span class="prefix" matPrefix>£</span>
+                <span class="prefix" matPrefix>{{ currencySymbol }}</span>
                 <mat-label class="c-your-donation__placeholder" for="donationAmount">
                   <div class="to-charity">
                     Donation to {{ campaign.charity.name }}
@@ -66,20 +66,26 @@
               aria-live="polite"
               *ngIf="donationAmountField?.invalid && donationAmountField?.errors && (donationAmountField?.dirty || donationAmountField?.touched)"
             >
-              <div *ngIf="donationAmountField?.errors?.min">Sorry, the minimum donation is £1.</div>
+              <div *ngIf="donationAmountField?.errors?.min">Sorry, the minimum donation is {{ currencySymbol }}1.</div>
               <div *ngIf="donationAmountField?.errors?.max">Your donation must be {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }} or less to proceed. You can make multiple matched donations of {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }} if match funds are available.</div>
-              <div *ngIf="donationAmountField?.errors?.pattern">Please enter a whole number of pounds (£) without commas.</div>
+              <div *ngIf="donationAmountField?.errors?.pattern">Please enter a whole number of {{ currencySymbol }} without commas.</div>
               <div *ngIf="donationAmountField?.errors?.required">Please enter how much you would like to donate.</div>
             </div>
 
-            <mat-hint>
+            <mat-hint *ngIf="!campaign.feePercentage">
               We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://www.thebiggive.org.uk/s/about" target="_blank"><mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too).
               <span *ngIf="psp == 'enthuse'">Please consider adding an optional tip when finalising your donation.</span>
               <span *ngIf="psp == 'stripe'">Please consider adding an optional tip.</span>
             </mat-hint>
 
+            <mat-hint *ngIf="campaign.feePercentage">
+              We have agreed a special fee structure with {{ campaign.charity.name }}
+              for this campaign. Please see <a href="https://www.thebiggive.org.uk/s/our-fees" target="_blank">our fees</a>
+              for more details.
+            </mat-hint>
+
             <div class="donation-input">
-              <div *ngIf="psp == 'stripe'">
+              <div *ngIf="psp == 'stripe' && !campaign.feePercentage">
                 <mat-form-field appearance="outline">
                   <mat-label for="tipPercentage">Donation to the Big Give</mat-label>
                   <mat-select formControlName="tipPercentage" id="tipPercentage" (selectionChange)="tipPercentageChange()">
@@ -96,7 +102,7 @@
                   appearance="outline"
                   color="primary"
                 >
-                  <span class="prefix-tbg" matPrefix>£</span>
+                  <span class="prefix-tbg" matPrefix>{{ currencySymbol }}</span>
                   <input formControlName="tipAmount" id="tipAmount" matInput>
                 </mat-form-field>
 
@@ -106,7 +112,7 @@
                   *ngIf="tipAmountField?.invalid && tipAmountField?.errors && (tipAmountField?.dirty || tipAmountField?.touched)"
                 >
                   Please enter how much you would like to donate to the Big Give as a number of
-                  pounds (£), optionally with pence as 2 decimals.
+                  {{ currencySymbol }}, optionally with 2 decimals.
                 </div>
 
                 <mat-hint *ngIf="!customTip()">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to support the Big Give</mat-hint>
@@ -137,6 +143,7 @@
           </mat-step>
 
           <mat-step
+            *ngIf="campaign.currencyCode === 'GBP'"
             formGroupName="giftAid"
             [stepControl]="giftAidGroup"
             label="Gift Aid"
@@ -355,8 +362,13 @@
                 <p class="b-rt-0 b-m-0">Total for {{ campaign.charity.name }}:</p>
                 <p class="b-rt-1 b-bold b-m-0">{{ expectedTotalAmount() | exactCurrency:campaign.currencyCode }}</p>
               </div>
-              <div class="c-donation-receipt" fxLayout="row">
-                <div [fxFlex]="(expectedMatchAmount() > 0) ? 26 : 39">
+              <!-- Show breakdown only if either matching or Gift Aid (or both) applies -->
+              <div
+                *ngIf="expectedMatchAmount() > 0 || giftAidAmount() > 0"
+                class="c-donation-receipt"
+                fxLayout="row"
+              >
+                <div [fxFlex]="(expectedMatchAmount() > 0 && giftAidAmount() > 0) ? 26 : 39">
                   <p class="b-center b-grey b-rt-sm b-m-0">Your donation</p>
                   <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }}</p>
                 </div>
@@ -370,7 +382,11 @@
                 <div fxFlex="11" fxLayout="row" fxLayoutAlign="center end" *ngIf="expectedMatchAmount() > 0">
                   <mat-icon class="c-donation-receipt__icon b-grey b-bold b-center" aria-hidden="false" aria-label="Plus">add</mat-icon>
                 </div>
-                <div class="c-donation-receipt__gift-aid" [fxFlex]="(expectedMatchAmount() > 0) ? 26 : 39">
+                <div
+                  *ngIf="giftAidAmount() > 0"
+                  class="c-donation-receipt__gift-aid"
+                  [fxFlex]="(expectedMatchAmount() > 0) ? 26 : 39"
+                >
                   <p class="b-center b-grey b-rt-sm b-m-0">Gift Aid</p>
                   <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ giftAidAmount() | exactCurrency:campaign.currencyCode }}</p>
                 </div>
