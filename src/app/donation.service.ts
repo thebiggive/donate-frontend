@@ -1,9 +1,12 @@
+import { isPlatformServer } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID } from '@angular/core';
+import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { StorageService } from 'ngx-webstorage-service';
 import { Observable, of } from 'rxjs';
 
 import { AnalyticsService } from './analytics.service';
+import { COUNTRY_CODE } from './country-code.token';
 import { Donation } from './donation.model';
 import { DonationCreatedResponse } from './donation-created-response.model';
 import { environment } from '../environments/environment';
@@ -22,9 +25,31 @@ export class DonationService {
 
   constructor(
     private analyticsService: AnalyticsService,
+    @Optional() @Inject(COUNTRY_CODE) private defaultCountryCode: string,
     private http: HttpClient,
+    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
+    @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
+    private state: TransferState,
   ) {}
+
+  deriveDefaultCountry() {
+    // Only server-rendered, CloudFront-fronted requests set this token. In other
+    // cases we should fall back to UK as the default country.
+    const defaultCountryKey = makeStateKey<string>(`default-country-code`);
+    if (isPlatformServer(this.platformId)) {
+      if (!this.defaultCountryCode) {
+        this.defaultCountryCode = 'GB';
+      }
+      this.state.set(defaultCountryKey, this.defaultCountryCode);
+    } else {
+      this.defaultCountryCode = this.state.get(defaultCountryKey, 'GB');
+    }
+  }
+
+  getDefaultCounty(): string {
+    return this.defaultCountryCode;
+  }
 
   getDonation(donationId: string): Donation | undefined {
     const couplet = this.getLocalDonationCouplet(donationId);
