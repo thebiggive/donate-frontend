@@ -1,4 +1,6 @@
-export const environment = {
+import { Environment } from './environment.interface';
+
+export const environment: Environment = {
   production: true,
   productionLike: true,
   apiUriPrefix: 'https://sf-api-production.thebiggive.org.uk',
@@ -19,10 +21,15 @@ export const environment = {
     },
   },
   reservationMinutes: 15,
-  // One suggestion set for 30% of donors, no suggestions for the other 70%.
-  suggestedAmounts: [
-    { weight: 3, values: [50, 200, 500] },
-    { weight: 7, values: [] },
-  ],
+  suggestedAmounts: {
+    GBP: [
+      // One suggestion set for 30% of donors, no suggestions for the other 70%.
+      { weight: 3, values: [50, 200, 500] },
+      { weight: 7, values: [] },
+    ],
+    USD: [
+      { weight: 1, values: [70, 300, 700] },
+    ],
+  },
   thanksUriPrefix: 'https://donate.thebiggive.org.uk/thanks/',
 };

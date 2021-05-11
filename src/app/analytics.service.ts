@@ -67,9 +67,9 @@ export class AnalyticsService {
     });
   }
 
-  logAmountChosen(amountChosen: number, campaignId: string, amountsSuggested?: number[]) {
+  logAmountChosen(amountChosen: number, campaignId: string, amountsSuggested: number[], currencyCode: string) {
     this.sendEvent(JSON.stringify(amountsSuggested), {
-      event_category: 'donate_amount_chosen',
+      event_category: `donate_amount_chosen_${currencyCode}`,
       event_label: `Donation to campaign ${campaignId}`,
       value: amountChosen,
     });

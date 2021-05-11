@@ -18,7 +18,7 @@ export class DonationService {
   private readonly completeStatuses = ['Collected', 'Paid'];
   private readonly resumableStatuses = ['Pending', 'Reserved'];
   private readonly storageKey = `${environment.donateUriPrefix}/v2`; // Key is per-domain/env
-  private readonly uxConfigKey = `${environment.donateUriPrefix}/ux/v1`;
+  private readonly uxConfigKey = `${environment.donateUriPrefix}/ux/v2`;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -69,8 +69,11 @@ export class DonationService {
   /**
    * Supports variant tests for now. Uses local storage to give each donor
    * a consistent experience while they are on the same device.
+   *
+   * @returns a pseudo-map where keys are currency code strings and
+   *          values are arrays of suggested amounts.
    */
-  getSuggestedAmounts(): number[] {
+  getSuggestedAmounts(): {[key: string]: number[]} {
     const stateKey = this.uxConfigKey;
     const existingConfig = this.storage.get(stateKey);
 
@@ -80,23 +83,25 @@ export class DonationService {
       return existingConfig.suggestedAmounts;
     }
 
-    let suggestedAmounts: number[] = [];
+    const suggestedAmounts: {[key: string]: number[]} = {};
 
-    if (environment.suggestedAmounts.length > 0) {
-      // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
-      let thresholdCounter = 0;
-      for (const suggestedAmount of environment.suggestedAmounts) {
-        thresholdCounter += suggestedAmount.weight;
-      }
-      const threshold = Math.floor(Math.random() * thresholdCounter);
+    for (const currency of Object.keys(environment.suggestedAmounts)) {
+      if (environment.suggestedAmounts[currency].length > 0) {
+        // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
+        let thresholdCounter = 0;
+        for (const suggestedAmount of environment.suggestedAmounts[currency]) {
+          thresholdCounter += suggestedAmount.weight;
+        }
+        const threshold = Math.floor(Math.random() * thresholdCounter);
 
-      thresholdCounter = 0;
-      for (const suggestedAmount of environment.suggestedAmounts) {
-        thresholdCounter += suggestedAmount.weight;
+        thresholdCounter = 0;
+        for (const suggestedAmount of environment.suggestedAmounts[currency]) {
+          thresholdCounter += suggestedAmount.weight;
 
-        if (thresholdCounter > threshold) {
-          suggestedAmounts = suggestedAmount.values;
-          break;
+          if (thresholdCounter > threshold) {
+            suggestedAmounts[currency] = suggestedAmount.values;
+            break;
+          }
         }
       }
     }

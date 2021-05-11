@@ -67,7 +67,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   noPsps = false;
   psp: 'enthuse' | 'stripe';
   retrying = false;
-  suggestedAmounts?: number[];
+  suggestedAmounts: {[key: string]: number[]};
   donationCreateError = false;
   donationUpdateError = false;
   stripeCardReady = false;
@@ -777,7 +777,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.donationService.saveDonation(response.donation, response.jwt);
     this.donation = response.donation; // Simplify update() while we're on this page.
 
-    this.analyticsService.logAmountChosen(response.donation.donationAmount, this.campaignId, this.suggestedAmounts);
+    if (this.campaign) {
+      this.analyticsService.logAmountChosen(
+        response.donation.donationAmount,
+        this.campaignId,
+        this.suggestedAmounts[this.campaign.currencyCode],
+        this.campaign.currencyCode,
+      );
+    }
 
     if (this.campaign && this.psp === 'stripe') {
       this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
