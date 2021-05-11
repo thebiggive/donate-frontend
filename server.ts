@@ -14,6 +14,7 @@ import { join } from 'path';
 
 import { AnalyticsService } from './src/app/analytics.service';
 import { AppServerModule } from './src/main.server';
+import { COUNTRY_CODE } from './src/app/country-code.token';
 import { environment } from './src/environments/environment';
 import { GetSiteControlService } from './src/app/getsitecontrol.service';
 
@@ -123,7 +124,10 @@ export function app() {
     // Note that the file output as `index.html` is actually dynamic. See `index` config keys in `angular.json`.
     // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
     // this key to work around `fileReplacements` ending index support in Angular 8.
-    res.render(indexHtml, { req, providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }] });
+    res.render(indexHtml, { req, providers: [
+      { provide: APP_BASE_HREF, useValue: req.baseUrl },
+      { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
+    ]});
   });
 
   return server;

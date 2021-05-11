@@ -13,8 +13,8 @@ import { Observer } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
-import { CharityCheckoutService } from '../charity-checkout.service';
 import { CampaignService } from '../campaign.service';
+import { CharityCheckoutService } from '../charity-checkout.service';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
@@ -78,6 +78,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   triedToLeavePersonalAndMarketing = false;
 
   private campaignId: string;
+  private defaultCountryCode: string;
   private enthuseError?: string;  // Enthuse donation start error message
   private previousDonation?: Donation;
   private stepHeaderEventsSet = false;
@@ -107,6 +108,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     private state: TransferState,
     private stripeService: StripeService,
   ) {
+    this.defaultCountryCode = this.donationService.getDefaultCounty();
+
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
     route.queryParams.forEach((params: Params) => {
       if (params.error) {
@@ -153,7 +156,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       }),
       // T&Cs agreement is implicit through submitting the form.
       paymentAndAgreement: this.formBuilder.group({
-        billingCountry: ['GB'], // See addStripeValidators().
+        billingCountry: [this.defaultCountryCode], // See addStripeValidators().
         billingPostcode: [null], // See addStripeValidators().
       }),
     });
