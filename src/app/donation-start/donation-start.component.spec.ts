@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -107,6 +108,7 @@ describe('DonationStartComponent', () => {
         BrowserTransferStateModule,
         HttpClientTestingModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
+        MatCheckboxModule,
         MatDialogModule,
         FlexLayoutModule,
         MatIconModule,
@@ -145,6 +147,7 @@ describe('DonationStartComponent', () => {
   it('should have no errors with valid inputs and get correct expected amounts', () => {
     component.donationForm.setValue({
       amounts: {
+        coverFee: false,
         donationAmount: '£1234',
         tipAmount: '20',
         tipPercentage: 12.5,
@@ -178,6 +181,7 @@ describe('DonationStartComponent', () => {
   it('should have an error with required radio buttons not set', () => {
     component.donationForm.setValue({
       amounts: {
+        coverFee: false,
         donationAmount: '1234',
         tipAmount: null,
         tipPercentage: 12.5,
@@ -217,6 +221,7 @@ describe('DonationStartComponent', () => {
   it('should have missing amount error', () => {
     component.donationForm.setValue({
       amounts: {
+        coverFee: false,
         donationAmount: null,
         tipAmount: null,
         tipPercentage: 12.5,
@@ -254,6 +259,7 @@ describe('DonationStartComponent', () => {
   it('should have minimum amount error', () => {
     component.donationForm.setValue({
       amounts: {
+        coverFee: false,
         donationAmount: '0', // Simpler for now than testing e.g. '0.99' which also fails pattern validation
         tipAmount: null,
         tipPercentage: 12.5,
@@ -291,6 +297,7 @@ describe('DonationStartComponent', () => {
   it('should have maximum amount error', () => {
     component.donationForm.setValue({
       amounts: {
+        coverFee: false,
         donationAmount: '25001',
         tipAmount: null,
         tipPercentage: 12.5,
@@ -328,6 +335,7 @@ describe('DonationStartComponent', () => {
   it('should have mis-formatted amount error', () => {
     component.donationForm.setValue({
       amounts: {
+        coverFee: false,
         donationAmount: '8765,21',
         tipAmount: null,
         tipPercentage: 12.5,
@@ -374,6 +382,7 @@ describe('DonationStartComponent', () => {
 
     component.donationForm.setValue({
       amounts: {
+        coverFee: false,
         donationAmount: '£1234',
         tipAmount: null,
         tipPercentage: 12.5,
@@ -421,6 +430,7 @@ describe('DonationStartComponent', () => {
 
     component.donationForm.setValue({
       amounts: {
+        coverFee: false,
         donationAmount: '£1234',
         tipAmount: null,
         tipPercentage: 12.5,
@@ -462,6 +472,7 @@ describe('DonationStartComponent', () => {
 
     component.donationForm.setValue({
       amounts: {
+        coverFee: false,
         donationAmount: '£1234',
         tipAmount: null,
         tipPercentage: 12.5,

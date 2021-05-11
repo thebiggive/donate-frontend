@@ -135,6 +135,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           ValidateCurrencyMax,
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
+        coverFee: [false],
         tipPercentage: [this.initialTipSuggestedPercentage], // See addStripeValidators().
         tipAmount: [null], // See addStripeValidators().
       }),
@@ -311,7 +312,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.donation.emailAddress = this.personalAndMarketingGroup.value.emailAddress;
       this.donation.firstName = this.personalAndMarketingGroup.value.firstName;
       this.donation.giftAid = this.giftAidGroup.value.giftAid;
-      this.donation.tipGiftAid = this.giftAidGroup.value.giftAid;
+
+      // In alternative fee model, 'tip' is donor fee cover so not Gift Aid eligible.
+      this.donation.tipGiftAid = this.campaign?.feePercentage ? false : this.giftAidGroup.value.giftAid;
+
       this.donation.lastName = this.personalAndMarketingGroup.value.lastName;
       this.donation.optInCharityEmail = this.personalAndMarketingGroup.value.optInCharityEmail;
       this.donation.optInTbgEmail = this.personalAndMarketingGroup.value.optInTbgEmail;
@@ -953,8 +957,23 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // Do not add a validator on `tipPercentage` because as a dropdown it always
     // has a value anyway, and this complicates repopulating the form when e.g.
     // reusing an existing donation.
-    if (!this.campaign?.feePercentage) {
-      // No tips on alternative fee structure model -> no such validator or value updates.
+    if (this.campaign?.feePercentage) {
+      // On the alternative fee model, we need to listen for coverFee
+      // checkbox changes and don't have a tip percentage dropdown.
+      this.amountsGroup.get('coverFee')?.valueChanges.subscribe(coverFee => {
+        let tipAmount = '0.00';
+        // % should always be non-null when checkbox available, but re-assert
+        // that here to keep type checks happy.
+        if (coverFee && this.campaign?.feePercentage) {
+          // Keep value consistent with format of manual string inputs.
+          tipAmount = this.getTipAmount(this.campaign.feePercentage, this.donationAmount);
+        }
+
+        this.amountsGroup.patchValue({ tipAmount });
+      });
+    } else {
+      // On the default fee model, we need to listen for tip percentage
+      // field changes and don't have a cover fee checkbox.
       this.amountsGroup.controls.tipAmount.setValidators([
         Validators.required,
         Validators.pattern('^[£$]?[0-9]+?(\\.[0-9]{2})?$'),
@@ -975,9 +994,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           }
 
           updatedValues.tipPercentage = newDefault;
-          updatedValues.tipAmount = (newDefault / 100 * donationAmount).toFixed(2);
+          updatedValues.tipAmount = this.getTipAmount(newDefault, donationAmount);
         } else if (this.amountsGroup.get('tipPercentage')?.value !== 'Other') {
-          updatedValues.tipAmount = (this.amountsGroup.get('tipPercentage')?.value / 100 * donationAmount).toFixed(2);
+          updatedValues.tipAmount = this.getTipAmount(this.amountsGroup.get('tipPercentage')?.value, donationAmount);
         }
 
         this.amountsGroup.patchValue(updatedValues);
@@ -990,7 +1009,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
         this.amountsGroup.patchValue({
           // Keep value consistent with format of manual string inputs.
-          tipAmount: (tipPercentage / 100 * (this.amountsGroup.get('donationAmount')?.value || 0)).toFixed(2),
+          tipAmount: this.getTipAmount(tipPercentage, this.donationAmount),
         });
       });
     }
@@ -1037,6 +1056,16 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       Validators.required,
       Validators.pattern('^[0-9a-zA-Z ]{2,8}$'),
     ]);
+  }
+
+  /**
+   * @param percentage  e.g. from select field or a custom fee model campaign fee level.
+   * @param donationAmount  Sanitised, e.g. via get() helper `donationAmount`.
+   * @returns Tip amount as a decimal string, as if input directly into the form field.
+   */
+  private getTipAmount(percentage: number, donationAmount?: number): string {
+    return (percentage / 100 * (donationAmount || 0))
+      .toFixed(2);
   }
 
   private promptToContinue(
