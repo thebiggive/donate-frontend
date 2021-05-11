@@ -85,7 +85,7 @@ export class DonationService {
 
     const suggestedAmounts: {[key: string]: number[]} = {};
 
-    for (const currency of Object.keys(environment.suggestedAmounts)) {
+    for (const currency in environment.suggestedAmounts) {
       if (environment.suggestedAmounts[currency].length > 0) {
         // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
         let thresholdCounter = 0;
