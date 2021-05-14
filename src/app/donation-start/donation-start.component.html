@@ -204,7 +204,7 @@
                 <input formControlName="firstName" id="firstName" matInput>
               </mat-form-field>
               <div class="error" *ngIf="personalAndMarketingGroup.get('firstName')?.errors?.maxlength">Maximum 40 characters exceeded</div>
-              
+
 
               <mat-form-field>
                 <mat-label for="lastName">Last name</mat-label>
@@ -252,7 +252,7 @@
                 By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
               </mat-hint>
             </p>
-            
+
             <div *ngIf="showChampionOptIn">
               <p class="b-rt-1 b-bold" id="optInChampionEmail-label">Would you be happy to receive emails from {{ campaign.championName }}?</p>
               <mat-radio-group tabindex="0" aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
@@ -344,10 +344,11 @@
                 Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few minutes to try again.
               </p>
 
-              <div *ngIf="tipAmount() > 0 && !campaign.feePercentage" class="c-breakdown b-center b-grey">
+              <div *ngIf="tipAmount() > 0" class="c-breakdown b-center b-grey">
                 <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }} donation to {{ campaign.charity.name }}</p>
                 <p class="b-m-0"><mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon></p>
-                <p class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give</p>
+                <p *ngIf="campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} platform fee cover</p>
+                <p *ngIf="!campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give</p>
               </div>
 
               <button
