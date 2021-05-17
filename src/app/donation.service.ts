@@ -171,24 +171,35 @@ export class DonationService {
    *
    * Subscribers should `removeLocalDonation()` on success.
    */
-  cancel(donation: Donation): Observable<any> {
+  cancel(donation: Donation): Observable<Donation> {
     donation.status = 'Cancelled';
 
     return this.update(donation);
   }
 
-  update(donation: Donation): Observable<any> {
-    return this.http.put<any>(
+  update(donation: Donation): Observable<Donation> {
+    return this.http.put<Donation>(
       `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}`,
       donation,
       this.getAuthHttpOptions(donation),
     );
   }
 
-  updatePaymentDetails(donation: Donation, cardBrand = 'N/A', cardCountry = 'N/A') {
+  /**
+   * Sets card metadata to ensure the correct fees are applied. Also updated the local copy
+   * of the donation as a side effect.
+   */
+  updatePaymentDetails(donation: Donation, cardBrand = 'N/A', cardCountry = 'N/A'): Observable<Donation> {
     donation.cardBrand = cardBrand;
     donation.cardCountry = cardCountry;
-    return this.update(donation);
+
+    const observable = this.update(donation);
+
+    observable.subscribe(updatedDonation => {
+      this.updateLocalDonation(updatedDonation);
+    });
+
+    return observable;
   }
 
   create(donation: Donation): Observable<DonationCreatedResponse> {

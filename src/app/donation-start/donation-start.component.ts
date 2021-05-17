@@ -379,20 +379,48 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
   }
 
-  onStripeCardChange(state: StripeElementChangeEvent) {
+  async onStripeCardChange(state: StripeElementChangeEvent) {
     this.stripePRBMethodReady = false; // Using card instead
 
     this.stripePaymentMethodReady = state.complete;
     this.stripeError = state.error?.message;
 
-    // Jump back if we get an out of band message back that the card is *not* valid.
+    // Jump back if we get an out of band message back that the card is *not* valid/ready.
     // Don't jump forward when the card *is* valid, as the donor might have been
     // intending to edit something else in the `payment` step; let them click Next.
-    if (!this.stripePaymentMethodReady) {
-      this.jumpToStep('Receive updates');
+    if (!this.donation || !this.stripePaymentMethodReady) {
+      this.jumpToStep('Payment details');
+
+      return;
     }
 
-    this.cd.detectChanges();
+    this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
+    this.donation.countryCode = this.paymentGroup.value.billingCountry;
+
+    const paymentMethodResult = await this.stripeService.createPaymentMethod(
+      this.card,
+      `${this.paymentGroup.value.firstName} ${this.paymentGroup.value.lastName}`,
+    );
+
+    if (paymentMethodResult.error) {
+      this.stripeError = paymentMethodResult.error.message;
+      this.submitting = false;
+      this.analyticsService.logError('stripe_payment_method_error', paymentMethodResult.error.message ?? '[No message]');
+
+      return;
+    }
+
+    if (!paymentMethodResult.paymentMethod) {
+      this.analyticsService.logError('stripe_payment_method_error_invalid_response', 'No error or paymentMethod');
+      return;
+    }
+
+    // Because we don't necessarily have the other needed minimum data to put() the donation
+    // yet, we just have StripeService keep a local copy of this info until later.
+    this.stripeService.setLastCardMetadata(
+      paymentMethodResult.paymentMethod?.card?.brand,
+      paymentMethodResult.paymentMethod?.card?.country || 'N/A',
+    );
   }
 
   setAmount(amount: number) {
@@ -415,37 +443,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.donationUpdateError = true;
       return;
     }
-
-    this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
-    this.donation.countryCode = this.paymentGroup.value.billingCountry;
-
-    if (this.psp === 'stripe') {
-      const paymentMethodResult = await this.stripeService.createPaymentMethod(
-        this.card,
-        `${this.paymentGroup.value.firstName} ${this.paymentGroup.value.lastName}`,
-      );
-
-      if (paymentMethodResult.error) {
-        this.stripeError = paymentMethodResult.error.message;
-        this.submitting = false;
-        this.analyticsService.logError('stripe_payment_method_error', paymentMethodResult.error.message ?? '[No message]');
-
-        return;
-      }
-
-      if (!paymentMethodResult.paymentMethod) {
-        this.analyticsService.logError('stripe_payment_method_error_invalid_response', 'No error or paymentMethod');
-        return;
-      }
-
-      this.donationService.updatePaymentDetails(
-        this.donation,
-        paymentMethodResult.paymentMethod?.card?.brand,
-        paymentMethodResult.paymentMethod?.card?.country || 'N/A',
-      );
-    }
-
-    this.donationService.updateLocalDonation(this.donation);
 
     this.donationService
       .update(this.donation)
@@ -615,7 +612,12 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private jumpToStep(stepLabel: string) {
-    this.stepper.steps.filter(step => step.label === stepLabel)[0].select();
+    this.stepper.steps
+      .filter(step => step.label === stepLabel)
+      [0]
+      .select();
+
+    this.cd.detectChanges();
   }
 
   /**
@@ -1142,9 +1144,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           tipPercentage,
         });
 
-        if (this.stepper.selected.label === 'Your donation') {
-          this.stepper.next();
-        }
+        this.jumpToStep(donation.currencyCode === 'GBP' ? 'Gift Aid' : 'Payment details');
 
         return;
       }

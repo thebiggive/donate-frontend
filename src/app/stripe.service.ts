@@ -26,6 +26,8 @@ import { DonationService } from './donation.service';
 })
 export class StripeService {
   private elements: StripeElements;
+  private lastCardBrand?: string;
+  private lastCardCountry?: string;
   private paymentRequest: PaymentRequest;
   private stripe: Stripe | null;
   private paymentMethodIds = new Map<string, string>(); // Donation ID to payment method ID.
@@ -72,87 +74,106 @@ export class StripeService {
     return result;
   }
 
+  setLastCardMetadata(cardBrand?: string, cardCountry?: string) {
+    this.lastCardBrand = cardBrand;
+    this.lastCardCountry = cardCountry;
+  }
+
   async confirmPayment(
-    donation: Donation,
+    donationPreUpdate: Donation,
     cardElement: StripeCardElement,
   ): Promise<PaymentIntentResult | undefined> {
-    if (!this.stripe || !donation.clientSecret || !donation.donationId) {
+    if (!this.stripe || !donationPreUpdate.clientSecret || !donationPreUpdate.donationId) {
       console.log('Stripe not ready for confirmPayment()');
       return;
     }
 
-    const billingDetails: PaymentMethodCreateParams.BillingDetails = {
-      email: donation.emailAddress,
-      name: `${donation.firstName} {donation.lastName}` ?? undefined,
-    };
-
-    billingDetails.address = {
-      country: donation.countryCode,
-      postal_code: donation.billingPostalAddress, // Just postcode in the Stripe case.
-    };
-
-    // Processing adapted from
-    // https://stripe.com/docs/stripe-js/elements/payment-request-button?html-or-react=html#html-js-complete-payment
-    // and card version merged with PRB one. More detailed comments on params
-    // rationale there.
     let paymentMethod: any;
     let prbComplete: any;
     let isPrb = false;
-    if (this.paymentMethodIds.has(donation.donationId)) {
-      isPrb = true;
-      prbComplete = this.paymentMethodCallbacks.get(donation.donationId);
-      paymentMethod = this.paymentMethodIds.get(donation.donationId);
-    } else {
-      paymentMethod = {
-        card: cardElement,
-        // See https://stripe.com/docs/payments/accept-a-payment#web-submit-payment
-        billing_details: billingDetails,
-      };
-    }
 
-    return await this.stripe?.confirmCardPayment(
-      donation.clientSecret,
-      { payment_method: paymentMethod },
-      { handleActions: !isPrb },
-    ).then(async confirmResult => {
-      const analyticsEventActionPrefix = isPrb ? 'stripe_prb_' : 'stripe_card_';
+    const billingDetails: PaymentMethodCreateParams.BillingDetails = {
+      email: donationPreUpdate.emailAddress,
+      name: `${donationPreUpdate.firstName} {donationPreUpdate.lastName}` ?? undefined,
+    };
 
-      if (confirmResult.error) {
-        // Failure w/ no extra action applicable
-        this.analyticsService.logError(
-          `${analyticsEventActionPrefix}payment_error`,
-          confirmResult.error.message ?? '[No message]',
-        );
+    billingDetails.address = {
+      country: donationPreUpdate.countryCode,
+      postal_code: donationPreUpdate.billingPostalAddress, // Just postcode in the Stripe case.
+    };
 
-        if (isPrb) {
-          prbComplete('fail');
+    // Ensure fee info is updated before finalising payment.
+    return new Promise<PaymentIntentResult>((resolve, reject) => {
+      this.donationService.updatePaymentDetails(donationPreUpdate, this.lastCardBrand, this.lastCardCountry)
+      .subscribe(donation => {
+        if (!donation.clientSecret || !donation.donationId) {
+          reject('Missing ID in card-details-updated donation');
+          return;
         }
 
-        return confirmResult;
-      }
-
-      if (confirmResult.paymentIntent.status !== 'requires_action') {
-        // Success w/ no extra action needed
-        if (isPrb) {
-          prbComplete('success');
+        // Processing adapted from
+        // https://stripe.com/docs/stripe-js/elements/payment-request-button?html-or-react=html#html-js-complete-payment
+        // and card version merged with PRB one. More detailed comments on params
+        // rationale there.
+        if (this.paymentMethodIds.has(donation.donationId)) {
+          isPrb = true;
+          prbComplete = this.paymentMethodCallbacks.get(donation.donationId);
+          paymentMethod = this.paymentMethodIds.get(donation.donationId);
+        } else {
+          paymentMethod = {
+            card: cardElement,
+            // See https://stripe.com/docs/payments/accept-a-payment#web-submit-payment
+            billing_details: billingDetails,
+          };
         }
 
-        return confirmResult;
-      }
+        this.stripe?.confirmCardPayment(
+          donation.clientSecret,
+          { payment_method: paymentMethod },
+          { handleActions: !isPrb },
+        ).then(async confirmResult => {
+          const analyticsEventActionPrefix = isPrb ? 'stripe_prb_' : 'stripe_card_';
 
-      // The PaymentIntent requires an action e.g. 3DS verification; let Stripe.js handle the flow.
-      this.analyticsService.logEvent(`${analyticsEventActionPrefix}_requires_action`, confirmResult.paymentIntent.next_action?.type ?? '[Action unknown]');
-      return await this.stripe?.confirmCardPayment(donation.clientSecret || '').then(confirmAgainResult => {
-        if (confirmAgainResult.error) {
-          this.analyticsService.logError(`${analyticsEventActionPrefix}_further_action_error`, confirmAgainResult.error.message ?? '[No message]');
-        }
+          if (confirmResult.error) {
+            // Failure w/ no extra action applicable
+            this.analyticsService.logError(
+              `${analyticsEventActionPrefix}payment_error`,
+              confirmResult.error.message ?? '[No message]',
+            );
 
-        // Extra action done, whether successfully or not.
-        if (isPrb) {
-          prbComplete(confirmAgainResult.error ? 'fail' : 'success');
-        }
+            if (isPrb) {
+              prbComplete('fail');
+            }
 
-        return confirmAgainResult;
+            resolve(confirmResult);
+            return;
+          }
+
+          if (confirmResult.paymentIntent.status !== 'requires_action') {
+            // Success w/ no extra action needed
+            if (isPrb) {
+              prbComplete('success');
+            }
+
+            resolve(confirmResult);
+            return;
+          }
+
+          // The PaymentIntent requires an action e.g. 3DS verification; let Stripe.js handle the flow.
+          this.analyticsService.logEvent(`${analyticsEventActionPrefix}_requires_action`, confirmResult.paymentIntent.next_action?.type ?? '[Action unknown]');
+          this.stripe?.confirmCardPayment(donation.clientSecret || '').then(confirmAgainResult => {
+            if (confirmAgainResult.error) {
+              this.analyticsService.logError(`${analyticsEventActionPrefix}_further_action_error`, confirmAgainResult.error.message ?? '[No message]');
+            }
+
+            // Extra action done, whether successfully or not.
+            if (isPrb) {
+              prbComplete(confirmAgainResult.error ? 'fail' : 'success');
+            }
+
+            resolve(confirmAgainResult);
+          });
+        });
       });
     });
   }
@@ -204,23 +225,19 @@ export class StripeService {
 
     this.paymentRequest.on('paymentmethod', (event: PaymentRequestPaymentMethodEvent) => {
       // Update fee details before confirming payment
-
-      // TODO check if this is sufficient to keep the new
-      // brand/country on subsequent calls – are we updating the local copy?
-      this.donationService.updatePaymentDetails(
-        donation,
+      this.setLastCardMetadata(
         event.paymentMethod?.card?.brand,
         event.paymentMethod?.card?.country || 'N/A',
-      ).subscribe(() => {
-        if (!donation.clientSecret || !donation.donationId) {
-          console.log('No donation client secret to complete PaymentRequest');
-          return;
-        }
+      );
 
-        this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
-        this.paymentMethodCallbacks.set(donation.donationId, event.complete);
-        resultObserver.next(true); // Let the page hard the card details & make 'Next' available.
-      });
+      if (!donation.donationId) {
+        console.log('No donation client secret to complete PaymentRequest');
+        return;
+      }
+
+      this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
+      this.paymentMethodCallbacks.set(donation.donationId, event.complete);
+      resultObserver.next(true); // Let the page hard the card details & make 'Next' available.
     });
 
     const existingElement = this.elements.getElement('paymentRequestButton');
