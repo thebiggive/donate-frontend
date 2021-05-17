@@ -65,6 +65,7 @@ $app-typography: mat-typography-config(
 @include mat-core-theme($donate-theme);
 
 @include mat-button-theme($donate-theme);
+@include mat-checkbox-theme($donate-theme);
 @include mat-dialog-theme($donate-theme);
 @include mat-form-field-theme($donate-theme);
 @include mat-menu-theme($donate-theme);
