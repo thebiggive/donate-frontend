@@ -120,6 +120,10 @@
   margin-top: 0;
 }
 
+.c-your-donation__suggestion-separator {
+  margin-bottom: -1rem;
+}
+
 .c-your-donation__form-field {
   max-width: $full-copy-max-width;
   margin: 0 auto;
@@ -169,10 +173,6 @@
     padding-left: 1rem;
     display: block;
   }
-}
-
-.c-suggested-amounts {
-  margin: -2rem 0 2rem 0;
 }
 
 .c-suggested-amount__button {

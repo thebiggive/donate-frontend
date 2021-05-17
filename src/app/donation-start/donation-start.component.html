@@ -38,6 +38,18 @@
               Match funds are currently available!
             </p>
             <p class="c-your-donation__to">Donation to {{ campaign.charity.name }}</p>
+
+            <div *ngIf="suggestedAmounts && suggestedAmounts[campaign.currencyCode].length > 0" class="c-suggested-amounts">
+              <div fxLayout="row">
+                <button
+                  type="button"
+                  class="c-suggested-amount__button b-rh-2 b-bold"
+                  *ngFor="let suggestedAmount of suggestedAmounts[campaign.currencyCode]"
+                  (click)="setAmount(suggestedAmount)"
+                >{{ suggestedAmount | exactCurrency:campaign.currencyCode }}</button>
+              </div>
+              <p class="b-center b-grey b-rt-0 c-your-donation__suggestion-separator">Or, choose</p>
+            </div>
             <div class="donation-input">
               <mat-form-field class="c-your-donation__form-field b-center size-lg" color="primary">
                 <span class="prefix" matPrefix>{{ currencySymbol }}</span>
@@ -48,17 +60,6 @@
                 </mat-label>
                 <input formControlName="donationAmount" id="donationAmount" matInput>
               </mat-form-field>
-            </div>
-            <div *ngIf="suggestedAmounts && suggestedAmounts[campaign.currencyCode].length > 0" class="c-suggested-amounts">
-              <p class="b-center b-grey b-rt-0">Or, choose</p>
-              <div fxLayout="row">
-                <button
-                  type="button"
-                  class="c-suggested-amount__button b-rh-2 b-bold"
-                  *ngFor="let suggestedAmount of suggestedAmounts[campaign.currencyCode]"
-                  (click)="setAmount(suggestedAmount)"
-                >{{ suggestedAmount | exactCurrency:campaign.currencyCode }}</button>
-              </div>
             </div>
 
             <div
