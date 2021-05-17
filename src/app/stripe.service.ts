@@ -97,7 +97,9 @@ export class StripeService {
     // rationale there.
     let paymentMethod: any;
     let prbComplete: any;
+    let isPrb = false;
     if (this.paymentMethodIds.has(donation.donationId)) {
+      isPrb = true;
       prbComplete = this.paymentMethodCallbacks.get(donation.donationId);
       paymentMethod = this.paymentMethodIds.get(donation.donationId);
     } else {
@@ -111,15 +113,18 @@ export class StripeService {
     return await this.stripe?.confirmCardPayment(
       donation.clientSecret,
       { payment_method: paymentMethod },
-      { handleActions: false },
+      { handleActions: !isPrb },
     ).then(async confirmResult => {
+      const analyticsEventActionPrefix = isPrb ? 'stripe_prb_' : 'stripe_card_';
+
       if (confirmResult.error) {
         // Failure w/ no extra action applicable
-        // TODO update log event names to not be PRB-specific *or* set up a dynamic
-        // pair of events for each.
-        this.analyticsService.logError('stripe_prb_confirm_error', confirmResult.error.message ?? '[No message]');
+        this.analyticsService.logError(
+          `${analyticsEventActionPrefix}payment_error`,
+          confirmResult.error.message ?? '[No message]',
+        );
 
-        if (prbComplete) {
+        if (isPrb) {
           prbComplete('fail');
         }
 
@@ -128,7 +133,7 @@ export class StripeService {
 
       if (confirmResult.paymentIntent.status !== 'requires_action') {
         // Success w/ no extra action needed
-        if (prbComplete) {
+        if (isPrb) {
           prbComplete('success');
         }
 
@@ -136,14 +141,14 @@ export class StripeService {
       }
 
       // The PaymentIntent requires an action e.g. 3DS verification; let Stripe.js handle the flow.
-      this.analyticsService.logEvent('stripe_prb_requires_action', confirmResult.paymentIntent.next_action?.type ?? '[Action unknown]');
+      this.analyticsService.logEvent(`${analyticsEventActionPrefix}_requires_action`, confirmResult.paymentIntent.next_action?.type ?? '[Action unknown]');
       return await this.stripe?.confirmCardPayment(donation.clientSecret || '').then(confirmAgainResult => {
         if (confirmAgainResult.error) {
-          this.analyticsService.logError('stripe_prb_further_action_error', confirmAgainResult.error.message ?? '[No message]');
+          this.analyticsService.logError(`${analyticsEventActionPrefix}_further_action_error`, confirmAgainResult.error.message ?? '[No message]');
         }
 
         // Extra action done, whether successfully or not.
-        if (prbComplete) {
+        if (isPrb) {
           prbComplete(confirmAgainResult.error ? 'fail' : 'success');
         }
 

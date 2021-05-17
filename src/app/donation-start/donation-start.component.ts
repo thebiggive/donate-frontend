@@ -305,14 +305,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       return;
     }
 
-    // Stepper is 0-indexed and checkout steps are 1-indexed, so we can send the new
-    // stepper index to indicate that the previous step was done.
-    // We can only do this here from step 2 because we need the donation object
-    // first, and it is set up asynchronously after Step 1. See `Donation.Service.create()`
-    // success subscriber for where we handle the post-Step 1 event.
     if (this.donation && event.selectedIndex > 1) {
-      // TODO use local vars / don't rely solely on fixed numeric step #s?
-
       // After create(), update all Angular form data except billing postcode
       // (which is in the final step) on step changes.
       this.donation.emailAddress = this.paymentGroup.value.emailAddress;
@@ -338,7 +331,17 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.donationService.updateLocalDonation(this.donation);
 
       if (this.campaign && this.donation.psp === 'stripe') {
-        this.analyticsService.logCheckoutStep(event.selectedIndex, this.campaign, this.donation);
+        if (event.selectedStep.label === 'Receive updates') {
+          // Step 2 'Details' – whichever step(s) come before marketing prefs is the best fit for this #.
+          this.analyticsService.logCheckoutStep(2, this.campaign, this.donation);
+        } else if (event.selectedStep.label === 'Confirm') {
+          // Step 3 'Confirm'.
+          this.analyticsService.logCheckoutStep(2, this.campaign, this.donation);
+        }
+        // Else it's not a step that cleanly maps to the historically-comparable
+        // e-commece funnel steps defined in our Analytics campaign, besides 1
+        // (which we fire on donation create API callback) and 4 (which we fire
+        // alongside calling payWithStripe()).
       }
     }
 
@@ -493,20 +496,20 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     if (!result || result.error) {
       this.stripeError = result?.error.message;
       this.submitting = false;
-      this.analyticsService.logError('stripe_card_payment_error', result?.error.message ?? '[No message]');
 
       return;
     }
 
     if (!result.paymentIntent) {
-      this.analyticsService.logError('stripe_card_payment_invalid_response', 'No error or paymentIntent');
+      this.analyticsService.logError('stripe_pay_missing_pi', 'No error or paymentIntent');
       return;
     }
 
     // See https://stripe.com/docs/payments/intents
     if (['succeeded', 'processing'].includes(result.paymentIntent.status)) {
+      const eventAction = (this.stripePRBMethodReady ? 'stripe_prb_payment_success' : 'stripe_card_payment_success');
       this.analyticsService.logEvent(
-        'stripe_card_payment_success',
+        eventAction,
         `Stripe Intent processing or done for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
       );
       if (this.campaign) {
@@ -744,8 +747,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
               'stripe_prb_setup_success',
               `Stripe PRB success for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
             );
-            // TODO check we have something comparable for PRB with new step order.
-            // this.analyticsService.logCheckoutDone(this.campaign, this.donation);
           }
 
           this.stripePaymentMethodReady = true;
