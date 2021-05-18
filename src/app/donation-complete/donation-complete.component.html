@@ -27,7 +27,7 @@
           </span>
            has been made.
         </h3>
-        <h3 class="b-rh-2 b-light">
+        <h3 *ngIf="totalValue > donation.donationAmount" class="b-rh-2 b-light">
           That's worth
           <span class="b-bold">
             {{ totalValue | exactCurrency:donation.currencyCode }}
