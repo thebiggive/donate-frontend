@@ -57,7 +57,8 @@
             </li>
           </ul>
           <div class="c-receipt__tip c-misc" *ngIf="donation.tipAmount > 0">
-            <p class="c-tip__heading">Thank you for leaving a tip of {{ donation.tipAmount | exactCurrency:donation.currencyCode }} towards the Big Give.</p>
+            <p *ngIf="campaign.feePercentage" class="c-tip__heading">Thank you for covering the platform fee of {{ donation.tipAmount | exactCurrency:donation.currencyCode }}. This enables {{ donation.charityName }} to benefit from the full value of your donation.</p>
+            <p *ngIf="!campaign.feePercentage" class="c-tip__heading">Thank you for leaving a tip of {{ donation.tipAmount | exactCurrency:donation.currencyCode }} towards the Big Give.</p>
             <p class="c-tip__description b-light b-grey b-rt-sm">Total amount you have been charged</p>
             <p class="b-rt-0 b-bold b-m-0">{{ cardChargedAmount | exactCurrency:donation.currencyCode }}</p>
           </div>
