@@ -997,6 +997,18 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
         this.amountsGroup.patchValue({ tipAmount });
       });
+
+      this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
+        if (!this.campaign?.feePercentage) {
+          return;
+        }
+
+        const tipAmount = this.amountsGroup.get('coverFee')?.value
+          ? this.getTipAmount(this.campaign.feePercentage, donationAmount)
+          : '0.00';
+
+        this.amountsGroup.patchValue({ tipAmount });
+      });
     } else {
       // On the default fee model, we need to listen for tip percentage
       // field changes and don't have a cover fee checkbox.
