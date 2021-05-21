@@ -1,9 +1,12 @@
+import { isPlatformServer } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID } from '@angular/core';
+import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { StorageService } from 'ngx-webstorage-service';
 import { Observable, of } from 'rxjs';
 
 import { AnalyticsService } from './analytics.service';
+import { COUNTRY_CODE } from './country-code.token';
 import { Donation } from './donation.model';
 import { DonationCreatedResponse } from './donation-created-response.model';
 import { environment } from '../environments/environment';
@@ -18,13 +21,35 @@ export class DonationService {
   private readonly completeStatuses = ['Collected', 'Paid'];
   private readonly resumableStatuses = ['Pending', 'Reserved'];
   private readonly storageKey = `${environment.donateUriPrefix}/v2`; // Key is per-domain/env
-  private readonly uxConfigKey = `${environment.donateUriPrefix}/ux/v1`;
+  private readonly uxConfigKey = `${environment.donateUriPrefix}/ux/v2`;
 
   constructor(
     private analyticsService: AnalyticsService,
+    @Optional() @Inject(COUNTRY_CODE) private defaultCountryCode: string,
     private http: HttpClient,
+    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
+    @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
+    private state: TransferState,
   ) {}
+
+  deriveDefaultCountry() {
+    // Only server-rendered, CloudFront-fronted requests set this token. In other
+    // cases we should fall back to UK as the default country.
+    const defaultCountryKey = makeStateKey<string>(`default-country-code`);
+    if (isPlatformServer(this.platformId)) {
+      if (!this.defaultCountryCode) {
+        this.defaultCountryCode = 'GB';
+      }
+      this.state.set(defaultCountryKey, this.defaultCountryCode);
+    } else {
+      this.defaultCountryCode = this.state.get(defaultCountryKey, 'GB');
+    }
+  }
+
+  getDefaultCounty(): string {
+    return this.defaultCountryCode;
+  }
 
   getDonation(donationId: string): Donation | undefined {
     const couplet = this.getLocalDonationCouplet(donationId);
@@ -69,8 +94,11 @@ export class DonationService {
   /**
    * Supports variant tests for now. Uses local storage to give each donor
    * a consistent experience while they are on the same device.
+   *
+   * @returns a pseudo-map where keys are currency code strings and
+   *          values are arrays of suggested amounts.
    */
-  getSuggestedAmounts(): number[] {
+  getSuggestedAmounts(): {[key: string]: number[]} {
     const stateKey = this.uxConfigKey;
     const existingConfig = this.storage.get(stateKey);
 
@@ -80,23 +108,25 @@ export class DonationService {
       return existingConfig.suggestedAmounts;
     }
 
-    let suggestedAmounts: number[] = [];
+    const suggestedAmounts: {[key: string]: number[]} = {};
 
-    if (environment.suggestedAmounts.length > 0) {
-      // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
-      let thresholdCounter = 0;
-      for (const suggestedAmount of environment.suggestedAmounts) {
-        thresholdCounter += suggestedAmount.weight;
-      }
-      const threshold = Math.floor(Math.random() * thresholdCounter);
+    for (const currency in environment.suggestedAmounts) {
+      if (environment.suggestedAmounts[currency].length > 0) {
+        // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
+        let thresholdCounter = 0;
+        for (const suggestedAmount of environment.suggestedAmounts[currency]) {
+          thresholdCounter += suggestedAmount.weight;
+        }
+        const threshold = Math.floor(Math.random() * thresholdCounter);
 
-      thresholdCounter = 0;
-      for (const suggestedAmount of environment.suggestedAmounts) {
-        thresholdCounter += suggestedAmount.weight;
+        thresholdCounter = 0;
+        for (const suggestedAmount of environment.suggestedAmounts[currency]) {
+          thresholdCounter += suggestedAmount.weight;
 
-        if (thresholdCounter > threshold) {
-          suggestedAmounts = suggestedAmount.values;
-          break;
+          if (thresholdCounter > threshold) {
+            suggestedAmounts[currency] = suggestedAmount.values;
+            break;
+          }
         }
       }
     }
@@ -141,24 +171,35 @@ export class DonationService {
    *
    * Subscribers should `removeLocalDonation()` on success.
    */
-  cancel(donation: Donation): Observable<any> {
+  cancel(donation: Donation): Observable<Donation> {
     donation.status = 'Cancelled';
 
     return this.update(donation);
   }
 
-  update(donation: Donation): Observable<any> {
-    return this.http.put<any>(
+  update(donation: Donation): Observable<Donation> {
+    return this.http.put<Donation>(
       `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}`,
       donation,
       this.getAuthHttpOptions(donation),
     );
   }
 
-  updatePaymentDetails(donation: Donation, cardBrand = 'N/A', cardCountry = 'N/A') {
+  /**
+   * Sets card metadata to ensure the correct fees are applied. Also updated the local copy
+   * of the donation as a side effect.
+   */
+  updatePaymentDetails(donation: Donation, cardBrand = 'N/A', cardCountry = 'N/A'): Observable<Donation> {
     donation.cardBrand = cardBrand;
     donation.cardCountry = cardCountry;
-    return this.update(donation);
+
+    const observable = this.update(donation);
+
+    observable.subscribe(updatedDonation => {
+      this.updateLocalDonation(updatedDonation);
+    });
+
+    return observable;
   }
 
   create(donation: Donation): Observable<DonationCreatedResponse> {

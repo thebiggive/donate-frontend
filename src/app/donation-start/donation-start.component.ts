@@ -13,8 +13,8 @@ import { Observer } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
-import { CharityCheckoutService } from '../charity-checkout.service';
 import { CampaignService } from '../campaign.service';
+import { CharityCheckoutService } from '../charity-checkout.service';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
@@ -60,24 +60,26 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   donationForm: FormGroup;
   amountsGroup: FormGroup;
   giftAidGroup: FormGroup;
-  personalAndMarketingGroup: FormGroup;
-  paymentAndAgreementGroup: FormGroup;
+  paymentGroup: FormGroup;
+  marketingGroup: FormGroup;
 
   maximumDonationAmount: number;
   noPsps = false;
   psp: 'enthuse' | 'stripe';
   retrying = false;
-  suggestedAmounts?: number[];
+  suggestedAmounts: {[key: string]: number[]};
   donationCreateError = false;
   donationUpdateError = false;
-  stripeCardReady = false;
+  stripePaymentMethodReady = false;
+  stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
   stripeError?: string;
   submitting = false;
   // Track 'Next' clicks so we know when to show missing radio button error messages.
   triedToLeaveGiftAid = false;
-  triedToLeavePersonalAndMarketing = false;
+  triedToLeaveMarketing = false;
 
   private campaignId: string;
+  private defaultCountryCode: string;
   private enthuseError?: string;  // Enthuse donation start error message
   private previousDonation?: Donation;
   private stepHeaderEventsSet = false;
@@ -107,6 +109,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     private state: TransferState,
     private stripeService: StripeService,
   ) {
+    this.defaultCountryCode = this.donationService.getDefaultCounty();
+
     route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
     route.queryParams.forEach((params: Params) => {
       if (params.error) {
@@ -135,27 +139,28 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           ValidateCurrencyMax,
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
+        coverFee: [false],
         tipPercentage: [this.initialTipSuggestedPercentage], // See addStripeValidators().
         tipAmount: [null], // See addStripeValidators().
       }),
       giftAid: this.formBuilder.group({
-        giftAid: [null],  // See addUKValidators().
+        giftAid: [null],        // See addUKValidators().
         homeAddress: [null],  // See addStripeValidators().
         homePostcode: [null], // See addStripeValidators().
       }),
-      personalAndMarketing: this.formBuilder.group({
-        firstName: [null],    // See addStripeValidators().
-        lastName: [null],     // See addStripeValidators().
-        emailAddress: [null], // See addStripeValidators().
+      payment: this.formBuilder.group({
+        firstName: [null],        // See addStripeValidators().
+        lastName: [null],         // See addStripeValidators().
+        emailAddress: [null],     // See addStripeValidators().
+        billingCountry: [this.defaultCountryCode], // See addStripeValidators().
+        billingPostcode: [null],  // See addStripeValidators().
+      }),
+      marketing: this.formBuilder.group({
         optInCharityEmail: [null, Validators.required],
         optInTbgEmail: [null, Validators.required],
         optInChampionEmail: [null],
       }),
       // T&Cs agreement is implicit through submitting the form.
-      paymentAndAgreement: this.formBuilder.group({
-        billingCountry: ['GB'], // See addStripeValidators().
-        billingPostcode: [null], // See addStripeValidators().
-      }),
     });
 
     // Current strict type checks mean we need to do this for the compiler to be happy that
@@ -170,14 +175,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.giftAidGroup = giftAidGroup;
     }
 
-    const personalAndMarketingGroup: any = this.donationForm.get('personalAndMarketing');
-    if (personalAndMarketingGroup != null) {
-      this.personalAndMarketingGroup = personalAndMarketingGroup;
+    const paymentGroup: any = this.donationForm.get('payment');
+    if (paymentGroup != null) {
+      this.paymentGroup = paymentGroup;
     }
 
-    const paymentAndAgreementGroup: any = this.donationForm.get('paymentAndAgreement');
-    if (paymentAndAgreementGroup != null) {
-      this.paymentAndAgreementGroup = paymentAndAgreementGroup;
+    const marketingGroup: any = this.donationForm.get('marketing');
+    if (marketingGroup != null) {
+      this.marketingGroup = marketingGroup;
     }
 
     this.maximumDonationAmount = environment.maximumDonationAmount;
@@ -258,8 +263,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           this.triedToLeaveGiftAid = true;
         }
 
-        if (clickEvent.target.innerText.includes('Confirm & pay') && this.stepper.selected.label === 'Your details') {
-          this.triedToLeavePersonalAndMarketing = true;
+        if (clickEvent.target.innerText.includes('Confirm') && this.stepper.selected.label === 'Your details') {
+          this.triedToLeaveMarketing = true;
         }
 
         this.goToFirstVisibleError();
@@ -300,22 +305,20 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       return;
     }
 
-    // Stepper is 0-indexed and checkout steps are 1-indexed, so we can send the new
-    // stepper index to indicate that the previous step was done.
-    // We can only do this here from step 2 because we need the donation object
-    // first, and it is set up asynchronously after Step 1. See `Donation.Service.create()`
-    // success subscriber for where we handle the post-Step 1 event.
     if (this.donation && event.selectedIndex > 1) {
       // After create(), update all Angular form data except billing postcode
       // (which is in the final step) on step changes.
-      this.donation.emailAddress = this.personalAndMarketingGroup.value.emailAddress;
-      this.donation.firstName = this.personalAndMarketingGroup.value.firstName;
+      this.donation.emailAddress = this.paymentGroup.value.emailAddress;
+      this.donation.firstName = this.paymentGroup.value.firstName;
       this.donation.giftAid = this.giftAidGroup.value.giftAid;
-      this.donation.tipGiftAid = this.giftAidGroup.value.giftAid;
-      this.donation.lastName = this.personalAndMarketingGroup.value.lastName;
-      this.donation.optInCharityEmail = this.personalAndMarketingGroup.value.optInCharityEmail;
-      this.donation.optInTbgEmail = this.personalAndMarketingGroup.value.optInTbgEmail;
-      this.donation.optInChampionEmail = this.personalAndMarketingGroup.value.optInChampionEmail;
+
+      // In alternative fee model, 'tip' is donor fee cover so not Gift Aid eligible.
+      this.donation.tipGiftAid = this.campaign?.feePercentage ? false : this.giftAidGroup.value.giftAid;
+
+      this.donation.lastName = this.paymentGroup.value.lastName;
+      this.donation.optInCharityEmail = this.marketingGroup.value.optInCharityEmail;
+      this.donation.optInTbgEmail = this.marketingGroup.value.optInTbgEmail;
+      this.donation.optInChampionEmail = this.marketingGroup.value.optInChampionEmail;
       this.donation.tipAmount = this.sanitiseCurrency(this.amountsGroup.value.tipAmount);
 
       if (this.donation.giftAid || this.donation.tipGiftAid) {
@@ -328,7 +331,17 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.donationService.updateLocalDonation(this.donation);
 
       if (this.campaign && this.donation.psp === 'stripe') {
-        this.analyticsService.logCheckoutStep(event.selectedIndex, this.campaign, this.donation);
+        if (event.selectedStep.label === 'Receive updates') {
+          // Step 2 'Details' – whichever step(s) come before marketing prefs is the best fit for this #.
+          this.analyticsService.logCheckoutStep(2, this.campaign, this.donation);
+        } else if (event.selectedStep.label === 'Confirm') {
+          // Step 3 'Confirm'.
+          this.analyticsService.logCheckoutStep(2, this.campaign, this.donation);
+        }
+        // Else it's not a step that cleanly maps to the historically-comparable
+        // e-commece funnel steps defined in our Analytics campaign, besides 1
+        // (which we fire on donation create API callback) and 4 (which we fire
+        // alongside calling payWithStripe()).
       }
     }
 
@@ -360,17 +373,54 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     // Default billing postcode to home postcode when Gift Aid's being claimed and so it's set.
     if (event.previouslySelectedStep.label === 'Gift Aid' && this.giftAidGroup.value.giftAid) {
-      this.paymentAndAgreementGroup.patchValue({
+      this.paymentGroup.patchValue({
         billingPostcode: this.giftAidGroup.value.homePostcode,
       });
     }
   }
 
-  onStripeCardChange(state: StripeElementChangeEvent) {
-    this.stripeCardReady = state.complete;
+  async onStripeCardChange(state: StripeElementChangeEvent) {
+    this.stripePRBMethodReady = false; // Using card instead
+
+    this.stripePaymentMethodReady = state.complete;
     this.stripeError = state.error?.message;
 
-    this.cd.detectChanges();
+    // Jump back if we get an out of band message back that the card is *not* valid/ready.
+    // Don't jump forward when the card *is* valid, as the donor might have been
+    // intending to edit something else in the `payment` step; let them click Next.
+    if (!this.donation || !this.stripePaymentMethodReady) {
+      this.jumpToStep('Payment details');
+
+      return;
+    }
+
+    this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
+    this.donation.countryCode = this.paymentGroup.value.billingCountry;
+
+    const paymentMethodResult = await this.stripeService.createPaymentMethod(
+      this.card,
+      `${this.paymentGroup.value.firstName} ${this.paymentGroup.value.lastName}`,
+    );
+
+    if (paymentMethodResult.error) {
+      this.stripeError = paymentMethodResult.error.message;
+      this.submitting = false;
+      this.analyticsService.logError('stripe_payment_method_error', paymentMethodResult.error.message ?? '[No message]');
+
+      return;
+    }
+
+    if (!paymentMethodResult.paymentMethod) {
+      this.analyticsService.logError('stripe_payment_method_error_invalid_response', 'No error or paymentMethod');
+      return;
+    }
+
+    // Because we don't necessarily have the other needed minimum data to put() the donation
+    // yet, we just have StripeService keep a local copy of this info until later.
+    this.stripeService.setLastCardMetadata(
+      paymentMethodResult.paymentMethod?.card?.brand,
+      paymentMethodResult.paymentMethod?.card?.country || 'N/A',
+    );
   }
 
   setAmount(amount: number) {
@@ -393,37 +443,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.donationUpdateError = true;
       return;
     }
-
-    this.donation.billingPostalAddress = this.paymentAndAgreementGroup.value.billingPostcode;
-    this.donation.countryCode = this.paymentAndAgreementGroup.value.billingCountry;
-
-    if (this.psp === 'stripe') {
-      const paymentMethodResult = await this.stripeService.createPaymentMethod(
-        this.card,
-        `${this.personalAndMarketingGroup.value.firstName} ${this.personalAndMarketingGroup.value.lastName}`,
-      );
-
-      if (paymentMethodResult.error) {
-        this.stripeError = paymentMethodResult.error.message;
-        this.submitting = false;
-        this.analyticsService.logError('stripe_payment_method_error', paymentMethodResult.error.message ?? '[No message]');
-
-        return;
-      }
-
-      if (!paymentMethodResult.paymentMethod) {
-        this.analyticsService.logError('stripe_payment_method_error_invalid_response', 'No error or paymentMethod');
-        return;
-      }
-
-      this.donationService.updatePaymentDetails(
-        this.donation,
-        paymentMethodResult.paymentMethod?.card?.brand,
-        paymentMethodResult.paymentMethod?.card?.country || 'N/A',
-      );
-    }
-
-    this.donationService.updateLocalDonation(this.donation);
 
     this.donationService
       .update(this.donation)
@@ -469,32 +488,25 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       return;
     }
 
-    const result = await this.stripeService.confirmCardPayment(
-      this.donation.clientSecret,
-      this.card,
-      this.paymentAndAgreementGroup.value.billingCountry,
-      this.personalAndMarketingGroup.value.emailAddress,
-      `${this.personalAndMarketingGroup.value.firstName} ${this.personalAndMarketingGroup.value.lastName}`,
-      this.paymentAndAgreementGroup.value.billingPostcode,
-    );
+    const result = await this.stripeService.confirmPayment(this.donation, this.card);
 
-    if (result.error) {
-      this.stripeError = result.error.message;
+    if (!result || result.error) {
+      this.stripeError = result?.error.message;
       this.submitting = false;
-      this.analyticsService.logError('stripe_card_payment_error', result.error.message ?? '[No message]');
 
       return;
     }
 
     if (!result.paymentIntent) {
-      this.analyticsService.logError('stripe_card_payment_invalid_response', 'No error or paymentIntent');
+      this.analyticsService.logError('stripe_pay_missing_pi', 'No error or paymentIntent');
       return;
     }
 
     // See https://stripe.com/docs/payments/intents
     if (['succeeded', 'processing'].includes(result.paymentIntent.status)) {
+      const eventAction = (this.stripePRBMethodReady ? 'stripe_prb_payment_success' : 'stripe_card_payment_success');
       this.analyticsService.logEvent(
-        'stripe_card_payment_success',
+        eventAction,
         `Stripe Intent processing or done for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
       );
       if (this.campaign) {
@@ -599,6 +611,15 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
   }
 
+  private jumpToStep(stepLabel: string) {
+    this.stepper.steps
+      .filter(step => step.label === stepLabel)
+      [0]
+      .select();
+
+    this.cd.detectChanges();
+  }
+
   /**
    * Unlike the CampaignService method which is more forgiving if the status gets stuck Active (we don't trust
    * these to be right in Salesforce yet), this check relies solely on campaign dates.
@@ -684,7 +705,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
-      countryCode: this.paymentAndAgreementGroup.value.billingCountry,
+      countryCode: this.paymentGroup.value.billingCountry,
       currencyCode: this.campaign.currencyCode || 'GBP',
       donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
       donationMatched: this.campaign.isMatched,
@@ -721,25 +742,27 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
   private preparePaymentRequestButton(donation: Donation) {
     const paymentRequestResultObserver: Observer<boolean> = {
-      next: success => {
+      next: (success: boolean) => {
         if (success) {
           if (this.donation && this.campaign) {
             this.analyticsService.logEvent(
-              'stripe_prb_payment_success',
+              'stripe_prb_setup_success',
               `Stripe PRB success for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
             );
-            this.analyticsService.logCheckoutDone(this.campaign, this.donation);
           }
 
-          this.router.navigate(['thanks', this.donation?.donationId], {
-            replaceUrl: true,
-          });
+          this.stripePaymentMethodReady = true;
+          this.stripePRBMethodReady = true;
           return;
         }
 
+        this.stripePaymentMethodReady = false;
+        this.stripePRBMethodReady = false;
         this.stripeError = 'Payment failed – please try again';
       },
       error: () => {
+        this.stripePaymentMethodReady = false;
+        this.stripePRBMethodReady = false;
         this.stripeError = 'Payment method handling failed';
       },
       complete: () => {},
@@ -777,7 +800,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.donationService.saveDonation(response.donation, response.jwt);
     this.donation = response.donation; // Simplify update() while we're on this page.
 
-    this.analyticsService.logAmountChosen(response.donation.donationAmount, this.campaignId, this.suggestedAmounts);
+    if (this.campaign) {
+      this.analyticsService.logAmountChosen(
+        response.donation.donationAmount,
+        this.campaignId,
+        this.suggestedAmounts[this.campaign.currencyCode],
+        this.campaign.currencyCode,
+      );
+    }
 
     if (this.campaign && this.psp === 'stripe') {
       this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
@@ -933,7 +963,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     this.analyticsService.logEvent('alerted_partial_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
-    const formattedReservedAmount = (new ExactCurrencyPipe()).transform(donation.matchReservedAmount);
+    const formattedReservedAmount = (new ExactCurrencyPipe()).transform(donation.matchReservedAmount, donation.currencyCode);
     this.promptToContinue(
       'Not all match funds are available',
       'There are not enough match funds currently available to fully match your donation. ' +
@@ -953,8 +983,35 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // Do not add a validator on `tipPercentage` because as a dropdown it always
     // has a value anyway, and this complicates repopulating the form when e.g.
     // reusing an existing donation.
-    if (!this.campaign?.feePercentage) {
-      // No tips on alternative fee structure model -> no such validator or value updates.
+    if (this.campaign?.feePercentage) {
+      // On the alternative fee model, we need to listen for coverFee
+      // checkbox changes and don't have a tip percentage dropdown.
+      this.amountsGroup.get('coverFee')?.valueChanges.subscribe(coverFee => {
+        let tipAmount = '0.00';
+        // % should always be non-null when checkbox available, but re-assert
+        // that here to keep type checks happy.
+        if (coverFee && this.campaign?.feePercentage) {
+          // Keep value consistent with format of manual string inputs.
+          tipAmount = this.getTipAmount(this.campaign.feePercentage, this.donationAmount);
+        }
+
+        this.amountsGroup.patchValue({ tipAmount });
+      });
+
+      this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
+        if (!this.campaign?.feePercentage) {
+          return;
+        }
+
+        const tipAmount = this.amountsGroup.get('coverFee')?.value
+          ? this.getTipAmount(this.campaign.feePercentage, donationAmount)
+          : '0.00';
+
+        this.amountsGroup.patchValue({ tipAmount });
+      });
+    } else {
+      // On the default fee model, we need to listen for tip percentage
+      // field changes and don't have a cover fee checkbox.
       this.amountsGroup.controls.tipAmount.setValidators([
         Validators.required,
         Validators.pattern('^[£$]?[0-9]+?(\\.[0-9]{2})?$'),
@@ -975,9 +1032,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           }
 
           updatedValues.tipPercentage = newDefault;
-          updatedValues.tipAmount = (newDefault / 100 * donationAmount).toFixed(2);
+          updatedValues.tipAmount = this.getTipAmount(newDefault, donationAmount);
         } else if (this.amountsGroup.get('tipPercentage')?.value !== 'Other') {
-          updatedValues.tipAmount = (this.amountsGroup.get('tipPercentage')?.value / 100 * donationAmount).toFixed(2);
+          updatedValues.tipAmount = this.getTipAmount(this.amountsGroup.get('tipPercentage')?.value, donationAmount);
         }
 
         this.amountsGroup.patchValue(updatedValues);
@@ -990,7 +1047,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
         this.amountsGroup.patchValue({
           // Keep value consistent with format of manual string inputs.
-          tipAmount: (tipPercentage / 100 * (this.amountsGroup.get('donationAmount')?.value || 0)).toFixed(2),
+          tipAmount: this.getTipAmount(tipPercentage, this.donationAmount),
         });
       });
     }
@@ -1016,27 +1073,35 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.giftAidGroup.controls.homeAddress.updateValueAndValidity();
     });
 
-    this.personalAndMarketingGroup.controls.firstName.setValidators([
+    this.paymentGroup.controls.firstName.setValidators([
       Validators.maxLength(40),
       Validators.required,
     ]);
-    this.personalAndMarketingGroup.controls.lastName.setValidators([
+    this.paymentGroup.controls.lastName.setValidators([
       Validators.maxLength(80),
       Validators.required,
     ]);
-    this.personalAndMarketingGroup.controls.emailAddress.setValidators([
+    this.paymentGroup.controls.emailAddress.setValidators([
       Validators.required,
       Validators.email,
     ]);
-
-    this.paymentAndAgreementGroup.controls.billingCountry.setValidators([
+    this.paymentGroup.controls.billingCountry.setValidators([
       Validators.required,
     ]);
-
-    this.paymentAndAgreementGroup.controls.billingPostcode.setValidators([
+    this.paymentGroup.controls.billingPostcode.setValidators([
       Validators.required,
       Validators.pattern('^[0-9a-zA-Z ]{2,8}$'),
     ]);
+  }
+
+  /**
+   * @param percentage  e.g. from select field or a custom fee model campaign fee level.
+   * @param donationAmount  Sanitised, e.g. via get() helper `donationAmount`.
+   * @returns Tip amount as a decimal string, as if input directly into the form field.
+   */
+  private getTipAmount(percentage: number, donationAmount?: number): string {
+    return (percentage / 100 * (donationAmount || 0))
+      .toFixed(2);
   }
 
   private promptToContinue(
@@ -1091,9 +1156,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           tipPercentage,
         });
 
-        if (this.stepper.selected.label === 'Your donation') {
-          this.stepper.next();
-        }
+        this.jumpToStep(donation.currencyCode === 'GBP' ? 'Gift Aid' : 'Payment details');
 
         return;
       }
@@ -1113,6 +1176,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
             this.stepper.reset();
             this.amountsGroup.patchValue({ tipPercentage: this.initialTipSuggestedPercentage });
             this.tipPercentageChanged = false;
+            this.paymentGroup.patchValue({ billingCountry: this.defaultCountryCode });
           },
           response => {
             this.analyticsService.logError(
@@ -1126,7 +1190,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
   private setChampionOptInValidity() {
     if (this.showChampionOptIn) {
-      this.personalAndMarketingGroup.controls.optInChampionEmail.setValidators([
+      this.marketingGroup.controls.optInChampionEmail.setValidators([
         Validators.required,
       ]);
     }

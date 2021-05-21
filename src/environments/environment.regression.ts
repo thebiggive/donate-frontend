@@ -4,7 +4,9 @@
 
 // The `regression` environment targets RegTest1 and is intended exclusively for automated regression testing.
 
-export const environment = {
+import { Environment } from './environment.interface';
+
+export const environment: Environment = {
   production: false,
   productionLike: true,
   apiUriPrefix: 'https://regtest1-biggive.cs109.force.com',
@@ -25,7 +27,14 @@ export const environment = {
     },
   },
   reservationMinutes: 15,
-  suggestedAmounts: [{weight: 1, values: [30, 100, 250]}],
+  suggestedAmounts: {
+    GBP: [
+      { weight: 1, values: [30, 100, 250] }
+    ],
+    USD: [
+      { weight: 1, values: [70, 300, 700] },
+    ],
+  },
   thanksUriPrefix: 'https://donate-regression.thebiggivetest.org.uk/thanks/',
 };
 

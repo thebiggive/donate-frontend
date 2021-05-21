@@ -2,7 +2,9 @@
 // `ng build --prod` replaces `environment.ts` with `environment.production.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
+import { Environment } from './environment.interface';
+
+export const environment: Environment = {
   production: false,
   productionLike: false,
   apiUriPrefix: 'https://sandbox7-biggive.cs109.force.com',
@@ -23,14 +25,16 @@ export const environment = {
     },
   },
   reservationMinutes: 15,
-  // Each of 4x suggestion sets for 5% of donors each, no suggestions for the other 80%.
-  suggestedAmounts: [
-    { weight: 1,  values: [30, 100, 250] },
-    { weight: 1,  values: [50, 200, 500] },
-    { weight: 1,  values: [20,  50, 100] },
-    { weight: 1,  values: [20, 100, 500] },
-    { weight: 16, values: [] },
-  ],
+  suggestedAmounts: {
+    GBP: [
+      // One suggestion set for 30% of donors, no suggestions for the other 70%.
+      { weight: 3, values: [50, 200, 500] },
+      { weight: 1, values: [] },
+    ],
+    USD: [
+      { weight: 1, values: [70, 300, 700] },
+    ],
+  },
   thanksUriPrefix: 'http://localhost:4200/thanks/',
 };
 

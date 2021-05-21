@@ -1,6 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
@@ -19,6 +20,7 @@ describe('DonationCompleteComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ DonationCompleteComponent ],
       imports: [
+        BrowserTransferStateModule,
         HttpClientTestingModule,
         MatProgressSpinnerModule,
         RouterTestingModule.withRoutes([

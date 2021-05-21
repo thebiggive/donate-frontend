@@ -47,7 +47,8 @@ export interface Donation {
     psp: 'enthuse' | 'stripe';
 
     /**
-     * Donor's address including postcode.
+     * Donor's address including postcode, or just postcode with Stripe. May be
+     * omitted for US donors in future?
      */
     billingPostalAddress?: string;
 

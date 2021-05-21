@@ -38,6 +38,18 @@
               Match funds are currently available!
             </p>
             <p class="c-your-donation__to">Donation to {{ campaign.charity.name }}</p>
+
+            <div *ngIf="suggestedAmounts && suggestedAmounts[campaign.currencyCode].length > 0" class="c-suggested-amounts">
+              <div fxLayout="row">
+                <button
+                  type="button"
+                  class="c-suggested-amount__button b-rh-2 b-bold"
+                  *ngFor="let suggestedAmount of suggestedAmounts[campaign.currencyCode]"
+                  (click)="setAmount(suggestedAmount)"
+                >{{ suggestedAmount | exactCurrency:campaign.currencyCode }}</button>
+              </div>
+              <p class="b-center b-grey b-rt-0 c-your-donation__suggestion-separator">Or, choose</p>
+            </div>
             <div class="donation-input">
               <mat-form-field class="c-your-donation__form-field b-center size-lg" color="primary">
                 <span class="prefix" matPrefix>{{ currencySymbol }}</span>
@@ -48,17 +60,6 @@
                 </mat-label>
                 <input formControlName="donationAmount" id="donationAmount" matInput>
               </mat-form-field>
-            </div>
-            <div *ngIf="suggestedAmounts && suggestedAmounts.length > 0" class="c-suggested-amounts">
-              <p class="b-center b-grey b-rt-0">Or, choose</p>
-              <div fxLayout="row">
-                <button
-                  type="button"
-                  class="c-suggested-amount__button b-rh-2 b-bold"
-                  *ngFor="let suggestedAmount of suggestedAmounts"
-                  (click)="setAmount(suggestedAmount)"
-                >{{ suggestedAmount | exactCurrency:campaign.currencyCode }}</button>
-              </div>
             </div>
 
             <div
@@ -78,11 +79,15 @@
               <span *ngIf="psp == 'stripe'">Please consider adding an optional tip.</span>
             </mat-hint>
 
-            <mat-hint *ngIf="campaign.feePercentage">
-              We have agreed a special fee structure with {{ campaign.charity.name }}
-              for this campaign. Please see <a href="https://www.thebiggive.org.uk/s/our-fees" target="_blank">our fees</a>
-              for more details.
-            </mat-hint>
+            <div *ngIf="campaign.feePercentage">
+              <mat-hint>
+                Bespoke <a href="https://www.thebiggive.org.uk/s/our-fees" target="_blank">processing fees <mat-icon class="c-website__icon b-rt-0" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon></a> apply for this campaign.
+              </mat-hint>
+
+              <mat-checkbox formControlName="coverFee" id="coverFee">
+                Cover the {{ campaign.feePercentage}}% fee for {{ campaign.charity.name }}?
+              </mat-checkbox>
+            </div>
 
             <div class="donation-input">
               <div *ngIf="psp == 'stripe' && !campaign.feePercentage">
@@ -190,34 +195,74 @@
           </mat-step>
 
           <mat-step
-            formGroupName="personalAndMarketing"
-            [stepControl]="personalAndMarketingGroup"
-            label="Your details"
+            *ngIf="psp == 'stripe'"
+            formGroupName="payment"
+            [stepControl]="paymentGroup"
+            label="Payment details"
           >
-            <div *ngIf="psp == 'stripe'">
-              <mat-form-field>
-                <mat-label for="firstName">First name</mat-label>
-                <input formControlName="firstName" id="firstName" matInput>
-              </mat-form-field>
-              <div class="error" *ngIf="personalAndMarketingGroup.get('firstName')?.errors?.maxlength">Maximum 40 characters exceeded</div>
-              
+            <mat-form-field>
+              <mat-label for="firstName">First name</mat-label>
+              <input formControlName="firstName" id="firstName" matInput>
+            </mat-form-field>
+            <div class="error" *ngIf="paymentGroup.get('firstName')?.errors?.maxlength">Maximum 40 characters exceeded</div>
 
-              <mat-form-field>
-                <mat-label for="lastName">Last name</mat-label>
-                <input formControlName="lastName" id="lastName" matInput>
-                <mat-hint *ngIf="giftAidGroup.value.giftAid">For Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
-                <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
-              </mat-form-field>
-              <div class="error" *ngIf="personalAndMarketingGroup.get('lastName')?.errors?.maxlength">Maximum 80 characters exceeded</div>
+            <mat-form-field>
+              <mat-label for="lastName">Last name</mat-label>
+              <input formControlName="lastName" id="lastName" matInput>
+              <mat-hint *ngIf="giftAidGroup.value.giftAid">For Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
+              <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
+            </mat-form-field>
+            <div class="error" *ngIf="paymentGroup.get('lastName')?.errors?.maxlength">Maximum 80 characters exceeded</div>
 
-              <mat-form-field>
-                <mat-label for="emailAddress">Email address</mat-label>
-                <input formControlName="emailAddress" id="emailAddress" type="email" matInput>
-                <mat-hint>We'll send you a donation receipt and use this to
-                  confirm it's you in case you have any queries.</mat-hint>
-              </mat-form-field>
+            <mat-form-field>
+              <mat-label for="emailAddress">Email address</mat-label>
+              <input formControlName="emailAddress" id="emailAddress" type="email" matInput>
+              <mat-hint>We'll send you a donation receipt and use this to
+                confirm it's you in case you have any queries.</mat-hint>
+            </mat-form-field>
+
+            <div id="payment-request-button" #paymentRequestButton></div>
+            <p *ngIf="requestButtonShown" class="b-center b-grey b-rt-sm">Or</p>
+
+            <mat-form-field>
+              <mat-label for="billingCountry">Billing country</mat-label>
+              <mat-select formControlName="billingCountry" id="billingCountry">
+                <mat-option *ngFor="let country of countryOptions" [value]="country.iso2">
+                  {{ country.country }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label for="billingPostcode">Billing postcode</mat-label>
+              <input formControlName="billingPostcode" id="billingPostcode" matInput>
+            </mat-form-field>
+
+            <div *ngIf="!stripePRBMethodReady" class="sr-combo-inputs-row">
+              <mat-label for="card-info">Card</mat-label>
+              <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
             </div>
 
+            <p *ngIf="stripeError" class="error" aria-live="assertive">
+              {{ stripeError }}
+            </p>
+
+            <div>
+              <button
+                type="button"
+                mat-raised-button
+                color="primary"
+                [disabled]="!stripePaymentMethodReady"
+                (click)="next()"
+              >Next</button>
+            </div>
+          </mat-step>
+
+          <mat-step
+            formGroupName="marketing"
+            [stepControl]="marketingGroup"
+            label="Receive updates"
+          >
             <p class="b-rt-1 b-bold" id="optInCharityEmail-label">Would you be happy to receive emails from {{ campaign.charity.name }}?</p>
             <mat-radio-group tabindex="0" aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
               <!-- TODO update this hint to vary based on Gift Aid selection and be clearer -->
@@ -225,11 +270,11 @@
               <mat-hint *ngIf="!campaign.charity.optInStatement">This may include thanks for your donation, updates on how it is being used, newsletters and future campaigns. If you select no, we will pass on your details as these may be required for Gift Aid purposes, but the charity will be informed that you do not wish to receive communications.</mat-hint>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.charity.name }}</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.charity.name }}</mat-radio-button>
-              <p class="error" *ngIf="triedToLeavePersonalAndMarketing && personalAndMarketingGroup.get('optInCharityEmail')?.hasError('required')" aria-live="assertive">
+              <p class="error" *ngIf="triedToLeaveMarketing && marketingGroup.get('optInCharityEmail')?.hasError('required')" aria-live="assertive">
                 Please choose whether you wish to receive updates from {{ campaign.charity.name }}.
               </p>
             </mat-radio-group>
-            <p *ngIf="personalAndMarketingGroup.value.optInCharityEmail === false">
+            <p *ngIf="marketingGroup.value.optInCharityEmail === false">
               <mat-hint aria-live="polite">
                 Please note that you might continue to receive communications from the charity if you have already shared your details with them via other methods.
               </mat-hint>
@@ -239,27 +284,27 @@
             <mat-radio-group tabindex="0" aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from the Big Give</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from the Big Give</mat-radio-button>
-              <p class="error" *ngIf="triedToLeavePersonalAndMarketing && personalAndMarketingGroup.get('optInTbgEmail')?.hasError('required')" aria-live="assertive">
+              <p class="error" *ngIf="triedToLeaveMarketing && marketingGroup.get('optInTbgEmail')?.hasError('required')" aria-live="assertive">
                 Please choose whether you wish to receive updates from the Big Give.
               </p>
             </mat-radio-group>
-            <p *ngIf="personalAndMarketingGroup.value.optInTbgEmail === false">
+            <p *ngIf="marketingGroup.value.optInTbgEmail === false">
               <mat-hint aria-live="polite">
                 By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
               </mat-hint>
             </p>
-            
+
             <div *ngIf="showChampionOptIn">
               <p class="b-rt-1 b-bold" id="optInChampionEmail-label">Would you be happy to receive emails from {{ campaign.championName }}?</p>
               <mat-radio-group tabindex="0" aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
                 <mat-hint>{{ campaign.championOptInStatement }}.</mat-hint>
                 <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.championName }} </mat-radio-button>
                 <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.championName }} </mat-radio-button>
-                <p class="error" *ngIf="triedToLeavePersonalAndMarketing && personalAndMarketingGroup.get('optInChampionEmail')?.hasError('required')" aria-live="assertive">
+                <p class="error" *ngIf="triedToLeaveMarketing && marketingGroup.get('optInChampionEmail')?.hasError('required')" aria-live="assertive">
                   Please choose whether you wish to receive updates from {{ campaign.championName }}.
                 </p>
               </mat-radio-group>
-              <p *ngIf="personalAndMarketingGroup.value.optInChampionEmail === false">
+              <p *ngIf="marketingGroup.value.optInChampionEmail === false">
                 <mat-hint aria-live="polite">
                   Please note that you might continue to receive communications from the champion if you have already shared your details with them via other methods.
                 </mat-hint>
@@ -271,46 +316,15 @@
                 type="button"
                 mat-raised-button
                 color="primary"
-                (click)="triedToLeavePersonalAndMarketing = true; next()"
+                (click)="triedToLeaveMarketing = true; next()"
               >Next</button>
             </div>
           </mat-step>
 
           <mat-step
-            formGroupName="paymentAndAgreement"
-            [stepControl]="paymentAndAgreementGroup"
-            label="Confirm &amp; pay"
+            label="Confirm"
             class="c-make-your-donation"
           >
-            <div *ngIf="psp == 'stripe'">
-              <div id="payment-request-button" #paymentRequestButton></div>
-
-              <p *ngIf="requestButtonShown" class="b-center b-grey b-rt-sm">Or</p>
-
-              <mat-form-field>
-                <mat-label for="billingCountry">Billing country</mat-label>
-                <mat-select formControlName="billingCountry" id="billingCountry">
-                  <mat-option *ngFor="let country of countryOptions" [value]="country.iso2">
-                    {{ country.country }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <mat-form-field>
-                <mat-label for="billingPostcode">Billing postcode</mat-label>
-                <input formControlName="billingPostcode" id="billingPostcode" matInput>
-              </mat-form-field>
-
-              <div class="sr-combo-inputs-row">
-                <mat-label for="card-info">Card</mat-label>
-                <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
-              </div>
-
-              <p *ngIf="stripeError" class="error" aria-live="assertive">
-                {{ stripeError }}
-              </p>
-            </div>
-
             <p class="b-rt-0 b-m-0">By clicking on the <em>Donate</em> button, you agree to the Big Give's
               <a href="https://www.thebiggive.org.uk/s/terms-and-conditions" target="_blank">
                 <mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
@@ -343,14 +357,15 @@
               <div *ngIf="tipAmount() > 0" class="c-breakdown b-center b-grey">
                 <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }} donation to {{ campaign.charity.name }}</p>
                 <p class="b-m-0"><mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon></p>
-                <p class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give</p>
+                <p *ngIf="campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} platform fee cover</p>
+                <p *ngIf="!campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give</p>
               </div>
 
               <button
                 type="submit"
                 class="c-donate-button b-donate-button b-w-100 b-rt-1"
                 mat-raised-button
-                [disabled]="submitting || donationForm.invalid || (psp == 'stripe' &&!stripeCardReady)"
+                [disabled]="submitting || donationForm.invalid"
               >
                 Donate
                 <span class="b-bold c-donate-button-amount">
@@ -379,7 +394,12 @@
                   <p class="b-center b-grey b-rt-sm b-m-0">Match funds</p>
                   <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ expectedMatchAmount() | exactCurrency:campaign.currencyCode }}</p>
                 </div>
-                <div fxFlex="11" fxLayout="row" fxLayoutAlign="center end" *ngIf="expectedMatchAmount() > 0">
+                <div
+                  fxFlex="11"
+                  fxLayout="row"
+                  fxLayoutAlign="center end"
+                  *ngIf="expectedMatchAmount() > 0 && giftAidAmount() > 0"
+                >
                   <mat-icon class="c-donation-receipt__icon b-grey b-bold b-center" aria-hidden="false" aria-label="Plus">add</mat-icon>
                 </div>
                 <div
