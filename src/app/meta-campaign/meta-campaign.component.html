@@ -1,13 +1,12 @@
 <main>
   <app-hero
-    *ngIf="campaign"
     [campaign]="campaign"
     [fund]="fund"
     [description]="fund && fund.description ? fund.description : campaign.summary"
     [getDefaultSort]="getDefaultSort"
   ></app-hero>
 
-  <div *ngIf="campaign && children">
+  <div *ngIf="children">
     <div class="b-container">
       <app-filters
         *ngIf="campaign.campaignCount && campaign.campaignCount > 1"
@@ -15,7 +14,7 @@
       ></app-filters>
 
       <div
-        *ngIf="campaign && children.length === 0 && !loading && !filterError"
+        *ngIf="children.length === 0 && !loading && !filterError"
       >
         <p class="error" aria-live="polite">
           We can't find any campaigns matching this search but there are lots

@@ -1,6 +1,4 @@
-<mat-spinner *ngIf="!campaign" class="b-full-page" color="primary" diameter="30"></mat-spinner>
-
-<main class="b-container" *ngIf="campaign">
+<main class="b-container">
   <div class="b-back-button">
     <a mat-icon-button [routerLink]="'/campaign/' + campaign.id">
       <mat-icon class="campaign-icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
@@ -17,9 +15,9 @@
         <h1 class="b-rh-1 b-bold">{{ campaign.title }}</h1>
       </div>
 
-      <p *ngIf="campaign && !campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
+      <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 
-      <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaign && campaignOpenOnLoad">
+      <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaignOpenOnLoad">
         <mat-vertical-stepper
           id="stepper"
           linear

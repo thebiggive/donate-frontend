@@ -4,7 +4,6 @@ import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, Inject, 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { countries } from 'country-code-lookup';
 import { retryWhen, tap  } from 'rxjs/operators';
@@ -46,7 +45,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   requestButtonShown = false;
   showChampionOptIn = false;
 
-  campaign?: Campaign;
+  campaign: Campaign;
   donation?: Donation;
 
   campaignOpenOnLoad: boolean;
@@ -94,7 +93,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
   constructor(
     private analyticsService: AnalyticsService,
-    private campaignService: CampaignService,
     private cd: ChangeDetectorRef,
     private charityCheckoutService: CharityCheckoutService,
     public dialog: MatDialog,
@@ -106,12 +104,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,
-    private state: TransferState,
     private stripeService: StripeService,
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
 
-    route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
     route.queryParams.forEach((params: Params) => {
       if (params.error) {
         this.enthuseError = params.error;
@@ -125,13 +121,19 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.card.removeEventListener('change', this.cardHandler);
       this.card.destroy();
     }
-    delete this.campaign;
     delete this.donation;
   }
 
   ngOnInit() {
-    this.donationForm = this.formBuilder.group({
-      // Matching reservation happens at the end of this group.
+    this.campaign = this.route.snapshot.data.campaign;
+    this.setCampaignBasedVars();
+
+    const formGroups: {
+      amounts: FormGroup,   // Matching reservation happens at the end of this group.
+      payment?: FormGroup,  // Added in Stripe mode only.
+      giftAid: FormGroup,
+      marketing: FormGroup,
+    } = {
       amounts: this.formBuilder.group({
         donationAmount: [null, [
           Validators.required,
@@ -148,20 +150,25 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         homeAddress: [null],  // See addStripeValidators().
         homePostcode: [null], // See addStripeValidators().
       }),
-      payment: this.formBuilder.group({
-        firstName: [null],        // See addStripeValidators().
-        lastName: [null],         // See addStripeValidators().
-        emailAddress: [null],     // See addStripeValidators().
-        billingCountry: [this.defaultCountryCode], // See addStripeValidators().
-        billingPostcode: [null],  // See addStripeValidators().
-      }),
       marketing: this.formBuilder.group({
         optInCharityEmail: [null, Validators.required],
         optInTbgEmail: [null, Validators.required],
         optInChampionEmail: [null],
       }),
       // T&Cs agreement is implicit through submitting the form.
-    });
+    };
+
+    if (this.psp === 'stripe') {
+      formGroups.payment = this.formBuilder.group({
+        firstName: [null],        // See addStripeValidators().
+        lastName: [null],         // See addStripeValidators().
+        emailAddress: [null],     // See addStripeValidators().
+        billingCountry: [this.defaultCountryCode], // See addStripeValidators().
+        billingPostcode: [null],  // See addStripeValidators().
+      });
+    }
+
+    this.donationForm = this.formBuilder.group(formGroups);
 
     // Current strict type checks mean we need to do this for the compiler to be happy that
     // the groups are not null.
@@ -195,25 +202,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // appropriate based on the options applicable for the particular donor.
     if (isPlatformBrowser(this.platformId)) {
       this.suggestedAmounts = this.donationService.getSuggestedAmounts();
-    }
-
-    const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
-
-    // Largely for simpler unit testing, allow `campaign` to be set directly and check for this.
-    // In the future we might want to consider mocking TransferState instead.
-    if (!this.campaign) {
-      this.campaign = this.state.get(campaignKey, undefined);
-    }
-
-    if (this.campaign) {
-      this.handleCampaign(this.campaign);
-    } else {
-      this.campaignService.getOneById(this.campaignId)
-        .subscribe(campaign => {
-          this.state.set(campaignKey, campaign);
-          this.campaign = campaign;
-          this.handleCampaign(campaign);
-        });
+      this.handleCampaignViewUpdates();
     }
 
     this.donationService.getProbablyResumableDonation(this.campaignId)
@@ -313,7 +302,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       this.donation.giftAid = this.giftAidGroup.value.giftAid;
 
       // In alternative fee model, 'tip' is donor fee cover so not Gift Aid eligible.
-      this.donation.tipGiftAid = this.campaign?.feePercentage ? false : this.giftAidGroup.value.giftAid;
+      this.donation.tipGiftAid = this.campaign.feePercentage ? false : this.giftAidGroup.value.giftAid;
 
       this.donation.lastName = this.paymentGroup.value.lastName;
       this.donation.optInCharityEmail = this.marketingGroup.value.optInCharityEmail;
@@ -330,7 +319,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       }
       this.donationService.updateLocalDonation(this.donation);
 
-      if (this.campaign && this.donation.psp === 'stripe') {
+      if (this.donation.psp === 'stripe') {
         if (event.selectedStep.label === 'Receive updates') {
           // Step 2 'Details' – whichever step(s) come before marketing prefs is the best fit for this #.
           this.analyticsService.logCheckoutStep(2, this.campaign, this.donation);
@@ -458,12 +447,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       .subscribe(async (donation: Donation) => {
         if (donation.psp === 'enthuse') {
           this.cancelExpiryWarning();
-          this.redirectToEnthuse(donation, this.campaign?.charity.logoUri);
+          this.redirectToEnthuse(donation, this.campaign.charity.logoUri);
           return;
         } else if (donation.psp === 'stripe') {
-          if (this.campaign) {
-            this.analyticsService.logCheckoutStep(4, this.campaign, donation); // 'Pay'.
-          }
+          this.analyticsService.logCheckoutStep(4, this.campaign, donation); // 'Pay'.
           this.payWithStripe();
         }
       }, response => {
@@ -509,9 +496,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         eventAction,
         `Stripe Intent processing or done for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
       );
-      if (this.campaign) {
-        this.analyticsService.logCheckoutDone(this.campaign, this.donation);
-      }
+      this.analyticsService.logCheckoutDone(this.campaign, this.donation);
       this.cancelExpiryWarning();
       this.router.navigate(['thanks', this.donation.donationId], {
         replaceUrl: true,
@@ -657,41 +642,52 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   /**
    * Redirect if campaign's not open yet; set up page metadata if it is
    */
-  private handleCampaign(campaign: Campaign) {
+  private setCampaignBasedVars() {
+    this.campaignId = this.campaign.id;
+
     // We want to let donors finish the journey if they're on the page before the campaign
     // close date and it passes while they're completing the form – in particular they should
     // be able to use match funds secured until 15 minutes after the close time.
     this.campaignOpenOnLoad = this.campaignIsOpen();
 
-    this.currencySymbol = getCurrencySymbol(campaign.currencyCode, 'narrow', 'en-GB');
+    this.currencySymbol = getCurrencySymbol(this.campaign.currencyCode, 'narrow', 'en-GB');
 
-    if (this.campaign?.currencyCode === 'GBP') {
-      this.addUKValidators();
-    }
-
-    if (environment.psps.stripe.enabled && this.campaign?.charity.stripeAccountId) {
+    if (environment.psps.stripe.enabled && this.campaign.charity.stripeAccountId) {
       this.psp = 'stripe';
-      this.addStripeValidators();
     } else if (environment.psps.enthuse.enabled) {
       this.psp = 'enthuse';
     } else {
       this.noPsps = true;
     }
 
-    if (campaign.championOptInStatement) {
+    if (this.campaign.championOptInStatement) {
       this.showChampionOptIn = true;
+    }
+  }
+
+  private handleCampaignViewUpdates() {
+    if (this.campaign.currencyCode === 'GBP') {
+      this.addUKValidators();
+    }
+
+    if (this.psp === 'stripe') {
+      this.addStripeValidators();
     }
 
     this.setChampionOptInValidity();
 
-    this.analyticsService.logCampaignChosen(campaign);
+    this.analyticsService.logCampaignChosen(this.campaign);
 
-    if (!CampaignService.isOpenForDonations(campaign)) {
-      this.router.navigateByUrl(`/campaign/${campaign.id}`, { replaceUrl: true });
+    if (!CampaignService.isOpenForDonations(this.campaign)) {
+      this.router.navigateByUrl(`/campaign/${this.campaign.id}`, { replaceUrl: true });
       return;
     }
 
-    this.pageMeta.setCommon(`Donate to ${campaign.charity.name}`, `Donate to the "${campaign.title}" campaign`, campaign.bannerUri);
+    this.pageMeta.setCommon(
+      `Donate to ${this.campaign.charity.name}`,
+      `Donate to the "${this.campaign.title}" campaign`,
+      this.campaign.bannerUri,
+    );
   }
 
   private createDonation(): void {
@@ -744,7 +740,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     const paymentRequestResultObserver: Observer<boolean> = {
       next: (success: boolean) => {
         if (success) {
-          if (this.donation && this.campaign) {
+          if (this.donation) {
             this.analyticsService.logEvent(
               'stripe_prb_setup_success',
               `Stripe PRB success for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
@@ -800,16 +796,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.donationService.saveDonation(response.donation, response.jwt);
     this.donation = response.donation; // Simplify update() while we're on this page.
 
-    if (this.campaign) {
-      this.analyticsService.logAmountChosen(
-        response.donation.donationAmount,
-        this.campaignId,
-        this.suggestedAmounts[this.campaign.currencyCode],
-        this.campaign.currencyCode,
-      );
-    }
+    this.analyticsService.logAmountChosen(
+      response.donation.donationAmount,
+      this.campaignId,
+      this.suggestedAmounts[this.campaign.currencyCode],
+      this.campaign.currencyCode,
+    );
 
-    if (this.campaign && this.psp === 'stripe') {
+    if (this.psp === 'stripe') {
       this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
 
       this.preparePaymentRequestButton(this.donation);
@@ -938,10 +932,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
-    if (!this.campaign) {
-      return;
-    }
-
     this.analyticsService.logEvent('alerted_no_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
       'Match funds not available',
@@ -958,10 +948,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
    *                    by the Donations API.
    */
   private promptToContinueWithPartialMatching(donation: Donation) {
-    if (!this.campaign) {
-      return;
-    }
-
     this.analyticsService.logEvent('alerted_partial_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     const formattedReservedAmount = (new ExactCurrencyPipe()).transform(donation.matchReservedAmount, donation.currencyCode);
     this.promptToContinue(
@@ -983,14 +969,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // Do not add a validator on `tipPercentage` because as a dropdown it always
     // has a value anyway, and this complicates repopulating the form when e.g.
     // reusing an existing donation.
-    if (this.campaign?.feePercentage) {
+    if (this.campaign.feePercentage) {
       // On the alternative fee model, we need to listen for coverFee
       // checkbox changes and don't have a tip percentage dropdown.
       this.amountsGroup.get('coverFee')?.valueChanges.subscribe(coverFee => {
         let tipAmount = '0.00';
         // % should always be non-null when checkbox available, but re-assert
         // that here to keep type checks happy.
-        if (coverFee && this.campaign?.feePercentage) {
+        if (coverFee && this.campaign.feePercentage) {
           // Keep value consistent with format of manual string inputs.
           tipAmount = this.getTipAmount(this.campaign.feePercentage, this.donationAmount);
         }
@@ -999,7 +985,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       });
 
       this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
-        if (!this.campaign?.feePercentage) {
+        if (!this.campaign.feePercentage) {
           return;
         }
 
