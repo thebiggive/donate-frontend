@@ -12,7 +12,6 @@ import {
 import { AnalyticsService } from './analytics.service';
 import { DonationService } from './donation.service';
 import { GetSiteControlService } from './getsitecontrol.service';
-import { StripeService } from './stripe.service';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +28,6 @@ export class AppComponent implements OnInit {
     // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
-    private stripeService: StripeService,
   ) {
     // https://www.amadousall.com/angular-routing-how-to-display-a-loading-indicator-when-navigating-between-routes/
     this.router.events.subscribe((event: Event) => {
@@ -56,7 +54,6 @@ export class AppComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.analyticsService.init();
       this.getSiteControlService.init();
-      this.stripeService.init();
     }
 
     // This service needs to be injected app-wide and this line is here, because
