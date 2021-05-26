@@ -223,19 +223,18 @@ a {
 }
 
 .c-donation-receipt {
-  border-top: 1px solid $colour-grey-light;
+  border-bottom: 1px solid $colour-grey-light; // Separator before 'Total for..'
   padding: 1rem 0;
+
+  &__block { // A main item (donation amount, match funds, Gift Aid) within the breakdown.
+    flex-grow: 1;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
 .c-donation-receipt__icon {
   @include size-md;
-}
-
-.c-donation-receipt__gift-aid {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .c-receipt-total {
@@ -249,7 +248,7 @@ a {
 
 .error {
   color: mat-color($donate-warn);
-  margin-bottom: 1rem;
+  margin: 1rem 0;
 }
 
 .prefix {
