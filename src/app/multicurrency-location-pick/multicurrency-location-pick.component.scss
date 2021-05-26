@@ -1,0 +1,7 @@
+$colour-multicurrency-brand: #ed6743;
+$colour-multicurrency-contrast: white;
+
+.mat-multicurrency {
+  background: $colour-multicurrency-brand;
+  color: $colour-multicurrency-contrast;
+}
