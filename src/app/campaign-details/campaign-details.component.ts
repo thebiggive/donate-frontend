@@ -83,7 +83,13 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     } else {
       summaryStart = `${campaign.charity.name}'s campaign, ${campaign.title}`;
     }
-    this.pageMeta.setCommon(campaign.title, summaryStart, campaign.bannerUri);
+
+    this.pageMeta.setCommon(
+      campaign.title,
+      summaryStart,
+      campaign.currencyCode !== 'GBP',
+      campaign.bannerUri,
+    );
 
     // As per https://angular.io/guide/security#bypass-security-apis constructing `SafeResourceUrl`s with these appends should be safe.
     if (campaign.video && campaign.video.provider === 'youtube') {
