@@ -263,22 +263,24 @@
             [stepControl]="marketingGroup"
             label="Receive updates"
           >
-            <p class="b-rt-1 b-bold" id="optInCharityEmail-label">Would you be happy to receive emails from {{ campaign.charity.name }}?</p>
+            <p class="b-rt-1 b-bold" id="optInCharityEmail-label">Would you be happy to receive email updates from {{ campaign.charity.name }}?</p>
             <mat-radio-group tabindex="0" aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
-              <!-- TODO update this hint to vary based on Gift Aid selection and be clearer -->
-              <mat-hint *ngIf="campaign.charity.optInStatement">{{ campaign.charity.optInStatement }}</mat-hint>
-              <mat-hint *ngIf="!campaign.charity.optInStatement">This may include thanks for your donation, updates on how it is being used, newsletters and future campaigns. If you select no, we will pass on your details as these may be required for Gift Aid purposes, but the charity will be informed that you do not wish to receive communications.</mat-hint>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.charity.name }}</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.charity.name }}</mat-radio-button>
               <p class="error" *ngIf="triedToLeaveMarketing && marketingGroup.get('optInCharityEmail')?.hasError('required')" aria-live="assertive">
                 Please choose whether you wish to receive updates from {{ campaign.charity.name }}.
               </p>
             </mat-radio-group>
-            <p *ngIf="marketingGroup.value.optInCharityEmail === false">
-              <mat-hint aria-live="polite">
+
+            <mat-hint>
+              <p *ngIf="campaign.charity.optInStatement">{{ campaign.charity.optInStatement }}</p>
+
+              <p *ngIf="marketingGroup.value.optInCharityEmail === false" aria-live="polite">
+                <span *ngIf="giftAidGroup.value.giftAid">We will pass on your details for Gift Aid processing purposes, but the charity will be informed that you do not wish to receive communications.</span>
+
                 Please note that you might continue to receive communications from the charity if you have already shared your details with them via other methods.
-              </mat-hint>
-            </p>
+              </p>
+            </mat-hint>
 
             <p class="b-rt-1 b-bold" id="optInTbgEmail-label">Would you be happy to receive emails from the Big Give?</p>
             <mat-radio-group tabindex="0" aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
@@ -288,11 +290,11 @@
                 Please choose whether you wish to receive updates from the Big Give.
               </p>
             </mat-radio-group>
-            <p *ngIf="marketingGroup.value.optInTbgEmail === false">
-              <mat-hint aria-live="polite">
+            <mat-hint *ngIf="marketingGroup.value.optInTbgEmail === false" aria-live="polite">
+              <p>
                 By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
-              </mat-hint>
-            </p>
+              </p>
+            </mat-hint>
 
             <div *ngIf="showChampionOptIn">
               <p class="b-rt-1 b-bold" id="optInChampionEmail-label">Would you be happy to receive emails from {{ campaign.championName }}?</p>
