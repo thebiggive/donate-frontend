@@ -375,10 +375,6 @@
                 </span>
               </button>
 
-              <div class="c-receipt-total b-grey" fxLayout="row" fxLayoutAlign="space-around center">
-                <p class="b-rt-0 b-m-0">Total for {{ campaign.charity.name }}:</p>
-                <p class="b-rt-1 b-bold b-m-0">{{ expectedTotalAmount() | exactCurrency:campaign.currencyCode }}</p>
-              </div>
               <!-- Show breakdown only if either matching or Gift Aid (or both) applies -->
               <div
                 *ngIf="expectedMatchAmount() > 0 || giftAidAmount() > 0"
@@ -412,6 +408,10 @@
                   <p class="b-center b-grey b-rt-sm b-m-0">Gift Aid</p>
                   <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ giftAidAmount() | exactCurrency:campaign.currencyCode }}</p>
                 </div>
+              </div>
+              <div class="c-receipt-total b-grey" fxLayout="row" fxLayoutAlign="space-around center">
+                <p class="b-rt-0 b-m-0">Total for {{ campaign.charity.name }}:</p>
+                <p class="b-rt-1 b-bold b-m-0">{{ expectedTotalAmount() | exactCurrency:campaign.currencyCode }}</p>
               </div>
             </div>
           </mat-step>

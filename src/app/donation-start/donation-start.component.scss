@@ -223,7 +223,7 @@ a {
 }
 
 .c-donation-receipt {
-  border-top: 1px solid $colour-grey-light;
+  border-bottom: 1px solid $colour-grey-light; // Separator before 'Total for..'
   padding: 1rem 0;
 }
 
