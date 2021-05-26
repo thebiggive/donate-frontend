@@ -363,6 +363,10 @@
                 <p *ngIf="!campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give</p>
               </div>
 
+              <p *ngIf="stripeError" class="error" aria-live="assertive">
+                {{ stripeError }}
+              </p>
+
               <button
                 type="submit"
                 class="c-donate-button b-donate-button b-w-100 b-rt-1"
