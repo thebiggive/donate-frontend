@@ -224,23 +224,25 @@
             <div id="payment-request-button" #paymentRequestButton></div>
             <p *ngIf="requestButtonShown" class="b-center b-grey b-rt-sm">Or</p>
 
-            <mat-form-field>
-              <mat-label for="billingCountry">Billing country</mat-label>
-              <mat-select formControlName="billingCountry" id="billingCountry">
-                <mat-option *ngFor="let country of countryOptions" [value]="country.iso2">
-                  {{ country.country }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+            <div *ngIf="!stripePRBMethodReady">
+              <div class="sr-combo-inputs-row">
+                <mat-label for="card-info">Card</mat-label>
+                <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+              </div>
 
-            <mat-form-field>
-              <mat-label for="billingPostcode">Billing postcode</mat-label>
-              <input formControlName="billingPostcode" id="billingPostcode" matInput>
-            </mat-form-field>
+              <mat-form-field>
+                <mat-label for="billingCountry">Billing country</mat-label>
+                <mat-select formControlName="billingCountry" id="billingCountry">
+                  <mat-option *ngFor="let country of countryOptions" [value]="country.iso2">
+                    {{ country.country }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
 
-            <div *ngIf="!stripePRBMethodReady" class="sr-combo-inputs-row">
-              <mat-label for="card-info">Card</mat-label>
-              <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+              <mat-form-field>
+                <mat-label for="billingPostcode">Billing postcode</mat-label>
+                <input formControlName="billingPostcode" id="billingPostcode" matInput>
+              </mat-form-field>
             </div>
 
             <p *ngIf="stripeError" class="error" aria-live="assertive">
