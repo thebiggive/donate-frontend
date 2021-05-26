@@ -17,7 +17,7 @@ import { SearchService } from '../search.service';
   styleUrls: ['./meta-campaign.component.scss'],
 })
 export class MetaCampaignComponent implements OnDestroy, OnInit {
-  public campaign?: Campaign;
+  public campaign: Campaign;
   public children: CampaignSummary[];
   public filterError = false;
   public fund?: Fund;
@@ -42,7 +42,6 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
     private state: TransferState,
   ) {
     route.params.pipe().subscribe(params => {
-      this.campaignId = params.campaignId;
       this.campaignSlug = params.campaignSlug;
       this.fundSlug = params.fundSlug;
     });
@@ -63,34 +62,22 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    this.campaign = this.route.snapshot.data.campaign;
+    this.campaignId = this.campaign.id;
+
     this.listenForRouteChanges();
-    let metacampaignKey: StateKey<string>;
-    if (this.campaignSlug) {
-      metacampaignKey = makeStateKey<Campaign>(`metacampaign-${this.campaignSlug}`);
-    } else {
-      metacampaignKey = makeStateKey<Campaign>(`metacampaign-${this.campaignId}`);
-    }
-    this.campaign = this.state.get<Campaign | undefined>(metacampaignKey, undefined);
+
+    this.setSecondaryPropsAndRun(this.campaign);
 
     let fundKey: StateKey<string>;
     if (this.fundSlug) {
       fundKey = makeStateKey<Fund>(`fund-${this.fundSlug}`);
-      this.fund = this.state.get(fundKey, undefined);
-    }
-
-    if (this.campaign) { // app handed over from SSR to client-side JS
-      this.setSecondaryPropsAndRun(this.campaign);
-    } else {
-      if (this.campaignId) {
-        this.campaignService.getOneById(this.campaignId).subscribe(campaign => this.setCampaign(campaign, metacampaignKey));
-      } else {
-        this.campaignService.getOneBySlug(this.campaignSlug).subscribe(campaign => this.setCampaign(campaign, metacampaignKey));
-      }
+      this.fund = this.state.get<Fund | undefined>(fundKey, undefined);
     }
 
     if (!this.fund && this.fundSlug) {
       this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
-        this.state.set(fundKey, fund);
+        this.state.set<Fund>(fundKey, fund);
         this.fund = fund;
       });
     }
@@ -164,15 +151,6 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
         this.loading = false;
       },
     );
-  }
-
-  /**
-   * Set the campaign for the service and page metadata.
-   */
-  private setCampaign(campaign: Campaign, metacampaignKey: StateKey<Campaign>) {
-    this.state.set(metacampaignKey, campaign); // Have data ready for client when handing over from SSR
-    this.campaign = campaign;
-    this.setSecondaryPropsAndRun(campaign);
   }
 
   private setSecondaryPropsAndRun(campaign: Campaign) {

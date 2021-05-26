@@ -25,6 +25,7 @@ import { DonationService } from './donation.service';
   providedIn: 'root',
 })
 export class StripeService {
+  private didInit = false;
   private elements: StripeElements;
   private lastCardBrand?: string;
   private lastCardCountry?: string;
@@ -39,6 +40,16 @@ export class StripeService {
   ) {}
 
   async init() {
+    if (this.didInit) {
+      return;
+    }
+
+    this.didInit = true;
+
+    const stripeTag = document.createElement('script');
+    stripeTag.src = 'https://js.stripe.com/v3/';
+    document.head.appendChild(stripeTag);
+
     // Initialising through the ES Module like this is not required, but is made available by
     // an official Stripe-maintained package and gives us TypeScript types for
     // the library's objects, which allows for better IDE hinting and more

@@ -1,6 +1,4 @@
-<mat-spinner *ngIf="!campaign" class="b-full-page" color="primary" diameter="30"></mat-spinner>
-
-<main class="b-container" *ngIf="campaign">
+<main class="b-container">
   <div class="b-back-button">
     <a mat-icon-button [routerLink]="'/campaign/' + campaign.id">
       <mat-icon class="campaign-icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
@@ -17,9 +15,9 @@
         <h1 class="b-rh-1 b-bold">{{ campaign.title }}</h1>
       </div>
 
-      <p *ngIf="campaign && !campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
+      <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 
-      <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaign && campaignOpenOnLoad">
+      <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaignOpenOnLoad">
         <mat-vertical-stepper
           id="stepper"
           linear
@@ -224,23 +222,25 @@
             <div id="payment-request-button" #paymentRequestButton></div>
             <p *ngIf="requestButtonShown" class="b-center b-grey b-rt-sm">Or</p>
 
-            <mat-form-field>
-              <mat-label for="billingCountry">Billing country</mat-label>
-              <mat-select formControlName="billingCountry" id="billingCountry">
-                <mat-option *ngFor="let country of countryOptions" [value]="country.iso2">
-                  {{ country.country }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+            <div *ngIf="!stripePRBMethodReady">
+              <div class="sr-combo-inputs-row">
+                <mat-label for="card-info">Card</mat-label>
+                <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+              </div>
 
-            <mat-form-field>
-              <mat-label for="billingPostcode">Billing postcode</mat-label>
-              <input formControlName="billingPostcode" id="billingPostcode" matInput>
-            </mat-form-field>
+              <mat-form-field>
+                <mat-label for="billingCountry">Billing country</mat-label>
+                <mat-select formControlName="billingCountry" id="billingCountry">
+                  <mat-option *ngFor="let country of countryOptions" [value]="country.iso2">
+                    {{ country.country }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
 
-            <div *ngIf="!stripePRBMethodReady" class="sr-combo-inputs-row">
-              <mat-label for="card-info">Card</mat-label>
-              <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+              <mat-form-field>
+                <mat-label for="billingPostcode">Billing postcode</mat-label>
+                <input formControlName="billingPostcode" id="billingPostcode" matInput>
+              </mat-form-field>
             </div>
 
             <p *ngIf="stripeError" class="error" aria-live="assertive">
@@ -361,6 +361,10 @@
                 <p *ngIf="!campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give</p>
               </div>
 
+              <p *ngIf="stripeError" class="error" aria-live="assertive">
+                {{ stripeError }}
+              </p>
+
               <button
                 type="submit"
                 class="c-donate-button b-donate-button b-w-100 b-rt-1"
@@ -373,24 +377,20 @@
                 </span>
               </button>
 
-              <div class="c-receipt-total b-grey" fxLayout="row" fxLayoutAlign="space-around center">
-                <p class="b-rt-0 b-m-0">Total for {{ campaign.charity.name }}:</p>
-                <p class="b-rt-1 b-bold b-m-0">{{ expectedTotalAmount() | exactCurrency:campaign.currencyCode }}</p>
-              </div>
               <!-- Show breakdown only if either matching or Gift Aid (or both) applies -->
               <div
                 *ngIf="expectedMatchAmount() > 0 || giftAidAmount() > 0"
                 class="c-donation-receipt"
                 fxLayout="row"
               >
-                <div [fxFlex]="(expectedMatchAmount() > 0 && giftAidAmount() > 0) ? 26 : 39">
+                <div class="c-donation-receipt__block">
                   <p class="b-center b-grey b-rt-sm b-m-0">Your donation</p>
                   <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }}</p>
                 </div>
                 <div fxFlex="11" fxLayout="row" fxLayoutAlign="center end">
                   <mat-icon class="c-donation-receipt__icon b-grey b-bold b-center" aria-hidden="false" aria-label="Plus">add</mat-icon>
                 </div>
-                <div fxFlex="26" *ngIf="expectedMatchAmount() > 0">
+                <div *ngIf="expectedMatchAmount() > 0" class="c-donation-receipt__block">
                   <p class="b-center b-grey b-rt-sm b-m-0">Match funds</p>
                   <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ expectedMatchAmount() | exactCurrency:campaign.currencyCode }}</p>
                 </div>
@@ -404,12 +404,15 @@
                 </div>
                 <div
                   *ngIf="giftAidAmount() > 0"
-                  class="c-donation-receipt__gift-aid"
-                  [fxFlex]="(expectedMatchAmount() > 0) ? 26 : 39"
+                  class="c-donation-receipt__block"
                 >
                   <p class="b-center b-grey b-rt-sm b-m-0">Gift Aid</p>
                   <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ giftAidAmount() | exactCurrency:campaign.currencyCode }}</p>
                 </div>
+              </div>
+              <div class="c-receipt-total b-grey" fxLayout="row" fxLayoutAlign="space-around center">
+                <p class="b-rt-0 b-m-0">Total for {{ campaign.charity.name }}:</p>
+                <p class="b-rt-1 b-bold b-m-0">{{ expectedTotalAmount() | exactCurrency:campaign.currencyCode }}</p>
               </div>
             </div>
           </mat-step>

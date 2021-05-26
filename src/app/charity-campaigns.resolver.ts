@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 
 import { CampaignService } from './campaign.service';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { CampaignSummary } from './campaign-summary.model';
 
 @Injectable()
 export class CharityCampaignsResolver implements Resolve<any> {
   constructor(private campaignService: CampaignService) {}
 
-  resolve(route: ActivatedRouteSnapshot) {
+  resolve(route: ActivatedRouteSnapshot): Observable<CampaignSummary[]> {
     const charityId = route.paramMap.get('charityId');
 
     // Edge case for our legacy redirector seems to have returned string 'null' as the

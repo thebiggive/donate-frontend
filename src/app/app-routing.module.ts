@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
+import { CampaignListResolver } from './campaign-list.resolver';
+import { CampaignResolver } from './campaign.resolver';
 import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import { CharityComponent } from './charity/charity.component';
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
-import { environment } from '../environments/environment';
 import { ExploreComponent } from './explore/explore.component';
 import { HomeComponent } from './home/home.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
@@ -15,6 +16,9 @@ const routes: Routes = [
   {
     path: 'campaign/:campaignId',
     component: CampaignDetailsComponent,
+    resolve: {
+      campaign: CampaignResolver,
+    },
   },
   {
     path: 'charity/:charityId',
@@ -26,14 +30,23 @@ const routes: Routes = [
   {
     path: 'donate/:campaignId',
     component: DonationStartComponent,
+    resolve: {
+      campaign: CampaignResolver,
+    },
   },
   {
     path: 'metacampaign/:campaignId',
     component: MetaCampaignComponent,
+    resolve: {
+      campaign: CampaignResolver,
+    },
   },
   {
     path: 'metacampaign/:campaignId/:fundSlug',
     component: MetaCampaignComponent,
+    resolve: {
+      campaign: CampaignResolver,
+    },
   },
   {
     path: 'thanks/:donationId',
@@ -42,6 +55,9 @@ const routes: Routes = [
   {
     path: ':campaignSlug/:fundSlug',
     component: MetaCampaignComponent,
+    resolve: {
+      campaign: CampaignResolver,
+    },
   },
   {
     path: 'explore',
@@ -50,10 +66,16 @@ const routes: Routes = [
   {
     path: ':campaignSlug',
     component: MetaCampaignComponent,
+    resolve: {
+      campaign: CampaignResolver,
+    },
   },
   {
     path: '',
     component: HomeComponent,
+    resolve: {
+      campaigns: CampaignListResolver,
+    },
   },
   {
     path: '**',
@@ -67,7 +89,11 @@ const routes: Routes = [
     onSameUrlNavigation: 'reload', // Allows Explore & home logo links to clear search filters in ExploreComponent
     scrollPositionRestoration: 'enabled',
   })],
-  providers: [CharityCampaignsResolver],
+  providers: [
+    CampaignResolver,
+    CampaignListResolver,
+    CharityCampaignsResolver,
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
