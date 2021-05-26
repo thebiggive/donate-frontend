@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { CampaignService, SearchQuery } from '../campaign.service';
 import { CampaignSummary } from '../campaign-summary.model';
 
 @Component({
@@ -9,17 +9,12 @@ import { CampaignSummary } from '../campaign-summary.model';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  public campaigns: CampaignSummary[];
-  public loading = false; // Server render gets initial result set; set true when filters change.
+  campaigns: CampaignSummary[];
 
-  private perPage = 6;
-  private query: {[key: string]: any};
-
-  constructor(private campaignService: CampaignService) {}
+  public constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.setDefaults();
-    this.run();
+    this.campaigns = this.route.snapshot.data.campaigns;
   }
 
   /**
@@ -27,27 +22,5 @@ export class HomeComponent implements OnInit {
    */
   getDefaultSort(): 'matchFundsRemaining' {
     return 'matchFundsRemaining';
-  }
-
-  setDefaults() {
-    this.query = {
-      limit: this.perPage,
-      offset: 0,
-      sortDirection: 'desc',
-      sortField: 'matchFundsRemaining',
-    };
-  }
-
-  private run() {
-    this.campaigns = [];
-    this.loading = true;
-
-    this.campaignService.search(this.query as SearchQuery).subscribe(campaignSummaries => {
-      this.campaigns = campaignSummaries; // Success
-      this.loading = false;
-    }, () => {
-        this.loading = false;
-      },
-    );
   }
 }

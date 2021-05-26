@@ -7,10 +7,11 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivatedRoute } from '@angular/router';
 
-import { HomeComponent } from './home.component';
 import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
+import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -31,6 +32,9 @@ describe('HomeComponent', () => {
         MatSelectModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
+      ],
+      providers: [
+        { provide: ActivatedRoute, useValue: { snapshot: { data: { campaigns: [] }} } },
       ],
     })
     .compileComponents();

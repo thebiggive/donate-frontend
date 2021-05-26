@@ -1,6 +1,4 @@
-<mat-spinner *ngIf="!campaign" class="b-full-page" color="primary" diameter="30"></mat-spinner>
-
-<main class="b-container" *ngIf="campaign">
+<main class="b-container">
   <div class="b-back-button">
     <a *ngIf="campaign.parentRef && fromFund" mat-icon-button class="c-listing-button block" [routerLink]="'/' + campaign.parentRef + '/' + campaign.championRef">
       <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>

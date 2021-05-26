@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { DomSanitizer, makeStateKey, SafeResourceUrl, TransferState } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { AnalyticsService } from '../analytics.service';
@@ -16,8 +16,7 @@ import { PageMetaService } from '../page-meta.service';
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   additionalImageUris: Array<string|undefined> = [];
-  campaign?: Campaign;
-  campaignId: string;
+  campaign: Campaign;
   isPending = false;
   campaignInFuture = false;
   donateEnabled = true;
@@ -29,16 +28,13 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private analyticsService: AnalyticsService,
-    private campaignService: CampaignService,
     private pageMeta: PageMetaService,
     private imageService: ImageService,
     // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
-    private state: TransferState,
   ) {
-    route.params.pipe().subscribe(params => this.campaignId = params.campaignId);
     route.queryParams.forEach((params: Params) => {
       if (params.fromFund) {
         this.fromFund = true;
@@ -47,18 +43,8 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const campaignKey = makeStateKey<Campaign>(`campaign-${this.campaignId}`);
-    this.campaign = this.state.get(campaignKey, undefined);
-
-    if (this.campaign) {
-      this.setSecondaryProps(this.campaign);
-    } else {
-      this.campaignService.getOneById(this.campaignId).subscribe(campaign => {
-        this.state.set(campaignKey, campaign);
-        this.campaign = campaign;
-        this.setSecondaryProps(campaign);
-      });
-    }
+    this.campaign = this.route.snapshot.data.campaign;
+    this.setSecondaryProps(this.campaign);
   }
 
   ngOnDestroy() {

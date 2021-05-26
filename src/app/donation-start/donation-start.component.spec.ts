@@ -10,16 +10,20 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
+import { of } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
+import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { DonationStartComponent } from './donation-start.component';
-import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
+import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('DonationStartComponent', () => {
@@ -62,7 +66,7 @@ describe('DonationStartComponent', () => {
         ['United Kingdom'],
         'GBP',
         4,
-        new Date(),
+        new Date('2050-01-01T00:00:00'),
         'Impact reporting plan',
         'Impact overview',
         true,
@@ -101,6 +105,7 @@ describe('DonationStartComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         DonationStartComponent,
+        ExactCurrencyPipe,
         TimeLeftPipe,
         CampaignDetailsCardComponent,
       ],
@@ -116,6 +121,7 @@ describe('DonationStartComponent', () => {
         MatRadioModule,
         MatProgressBarModule,
         MatProgressSpinnerModule,
+        MatSelectModule,
         MatStepperModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
@@ -127,24 +133,37 @@ describe('DonationStartComponent', () => {
         ]),
       ],
       providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            queryParams: of({}),
+            snapshot: {
+              data: { campaign: getDummyCampaign('testCampaignIdForStripe') },
+            },
+          },
+        },
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
       ],
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DonationStartComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    component.campaign = getDummyCampaign('testCampaignIdForStripe');
+    // Don't `fixture.detectChanges()` here, so tests can vary their route-resolved campaign.
   });
 
   it('should create', () => {
+    fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
+
     expect(component).toBeTruthy();
   });
 
-  it('should have no errors with valid inputs and get correct expected amounts', () => {
+  it('should have no errors with valid inputs, including for UK Gift Aid, and get correct expected amounts', () => {
+    fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
+
     component.donationForm.setValue({
       amounts: {
         coverFee: false,
@@ -154,8 +173,8 @@ describe('DonationStartComponent', () => {
       },
       giftAid: {
         giftAid: true,
-        homeAddress: null,
-        homePostcode: null,
+        homeAddress: '123 Main St',
+        homePostcode: 'N1 1AA',
       },
       payment: {
         firstName: 'Ezra',
@@ -175,10 +194,16 @@ describe('DonationStartComponent', () => {
     // Expected match is £0 until donation set up + funds actually reserved.
     expect(component.expectedMatchAmount()).toBe(0);
     expect(component.expectedTotalAmount()).toBe(1542.5);
-    expect(component.tipAmount()).toBe(20);
+    // Now we have the percentage field loading fully with `campaign` coming from
+    // a route resolver, we expect this to get set dynamically from the 12.5%
+    // deafult.
+    expect(component.amountsGroup.get('tipPercentage')?.value).toBe(12.5);
+    expect(component.tipAmount()).toBe(154.25);
   });
 
   it('should have an error with required radio buttons not set', () => {
+    fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
+
     component.donationForm.setValue({
       amounts: {
         coverFee: false,
@@ -219,6 +244,8 @@ describe('DonationStartComponent', () => {
   });
 
   it('should have missing amount error', () => {
+    fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
+
     component.donationForm.setValue({
       amounts: {
         coverFee: false,
@@ -227,7 +254,7 @@ describe('DonationStartComponent', () => {
         tipPercentage: 12.5,
       },
       giftAid: {
-        giftAid: true,
+        giftAid: false,
         homePostcode: null,
         homeAddress: null,
       },
@@ -257,6 +284,8 @@ describe('DonationStartComponent', () => {
   });
 
   it('should have minimum amount error', () => {
+    fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
+
     component.donationForm.setValue({
       amounts: {
         coverFee: false,
@@ -295,6 +324,8 @@ describe('DonationStartComponent', () => {
   });
 
   it('should have maximum amount error', () => {
+    fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
+
     component.donationForm.setValue({
       amounts: {
         coverFee: false,
@@ -333,6 +364,8 @@ describe('DonationStartComponent', () => {
   });
 
   it('should have mis-formatted amount error', () => {
+    fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
+
     component.donationForm.setValue({
       amounts: {
         coverFee: false,
@@ -341,7 +374,7 @@ describe('DonationStartComponent', () => {
         tipPercentage: 12.5,
       },
       giftAid: {
-        giftAid: true,
+        giftAid: false,
         homePostcode: null,
         homeAddress: null,
       },
@@ -374,11 +407,7 @@ describe('DonationStartComponent', () => {
   });
 
   it('should have missing country & postcode & Gift Aid errors in Stripe + UK mode', () => {
-    // Need to override the default fixture in beforeEach() to set a realistic `campaign`.
-    fixture = TestBed.createComponent(DonationStartComponent);
-    component = fixture.componentInstance;
-    component.campaign = getDummyCampaign('testCampaignIdForStripe');
-    fixture.detectChanges();
+    fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
     component.donationForm.setValue({
       amounts: {
@@ -422,11 +451,7 @@ describe('DonationStartComponent', () => {
   });
 
   it('should have missing email address error in Stripe mode', () => {
-    // Need to override the default fixture in beforeEach() to set a realistic `campaign`.
-    fixture = TestBed.createComponent(DonationStartComponent);
-    component = fixture.componentInstance;
-    component.campaign = getDummyCampaign('testCampaignIdForStripe');
-    fixture.detectChanges();
+    fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
     component.donationForm.setValue({
       amounts: {
@@ -436,7 +461,7 @@ describe('DonationStartComponent', () => {
         tipPercentage: 12.5,
       },
       giftAid: {
-        giftAid: true,
+        giftAid: false,
         homePostcode: null,
         homeAddress: null,
       },
@@ -463,11 +488,12 @@ describe('DonationStartComponent', () => {
     expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
   });
 
-  it('should not have missing email address error in Enthuse mode', () => {
-    // Need to override the default fixture in beforeEach() to set a realistic `campaign`.
-    fixture = TestBed.createComponent(DonationStartComponent);
-    component = fixture.componentInstance;
-    component.campaign = getDummyCampaign('testCampaignIdForEnthuse');
+  // Email address is recorded on Enthuse's hosted page in this case.
+  it('should NOT have missing email address error in Enthuse mode', () => {
+    // Replace the default Stripe campaign prior to detecting changes.
+    const route: ActivatedRoute = TestBed.inject(ActivatedRoute);
+    route.snapshot.data.campaign = getDummyCampaign('testCampaignIdForEnthuse');
+    TestBed.compileComponents();
     fixture.detectChanges();
 
     component.donationForm.setValue({
@@ -478,16 +504,9 @@ describe('DonationStartComponent', () => {
         tipPercentage: 12.5,
       },
       giftAid: {
-        giftAid: true,
+        giftAid: false,
         homePostcode: null,
         homeAddress: null,
-      },
-      payment: {
-        firstName: null,
-        lastName: null,
-        emailAddress: null,
-        billingCountry: 'GB',
-        billingPostcode: 'N1 1AA',
       },
       marketing: {
         optInCharityEmail: true,
@@ -497,8 +516,6 @@ describe('DonationStartComponent', () => {
     });
 
     expect(component.donationForm.valid).toBe(true);
-
-    expect(component.donationForm.controls.payment.get('emailAddress')?.errors).toBeNull();
     expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
   });
 });
