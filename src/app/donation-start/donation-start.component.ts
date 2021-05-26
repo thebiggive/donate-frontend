@@ -688,6 +688,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.pageMeta.setCommon(
       `Donate to ${this.campaign.charity.name}`,
       `Donate to the "${this.campaign.title}" campaign`,
+      this.campaign.currencyCode !== 'GBP',
       this.campaign.bannerUri,
     );
   }

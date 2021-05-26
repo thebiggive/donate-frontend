@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { CampaignSummary } from '../campaign-summary.model';
+import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
 
 /** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
@@ -25,6 +26,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
     private campaignService: CampaignService,
     private route: ActivatedRoute,
     private router: Router,
+    private pageMeta: PageMetaService,
     public searchService: SearchService,
   ) {}
 
@@ -39,6 +41,13 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    this.pageMeta.setCommon(
+      'The Big Give',
+      'The Big Give &ndash; discover campaigns and donate',
+      false,
+      'https://images-production.thebiggive.org.uk/0011r00002IMRknAAH/CCampaign%20Banner/db3faeb1-d20d-4747-bb80-1ae9286336a3.jpg',
+    );
+
     this.searchService.reset(this.getDefaultSort(), true);
     this.loadQueryParamsAndRun();
   }

@@ -159,6 +159,7 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
     this.pageMeta.setCommon(
       campaign.title,
       campaign.summary || 'A match funded campaign with the Big Give',
+      this.campaign.currencyCode !== 'GBP',
       campaign.bannerUri,
     );
   }

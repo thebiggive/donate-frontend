@@ -81,6 +81,7 @@ export class DonationCompleteComponent {
       this.pageMeta.setCommon(
         `${campaign.charity.name}`,
         `Thanks for donating to the "${campaign.title}" campaign`,
+        campaign.currencyCode !== 'GBP',
         campaign.bannerUri,
       );
       this.setSocialShares(campaign);

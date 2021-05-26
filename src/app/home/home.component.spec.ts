@@ -8,6 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
@@ -32,6 +33,7 @@ describe('HomeComponent', () => {
         MatSelectModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
+        RouterTestingModule,
       ],
       providers: [
         { provide: ActivatedRoute, useValue: { snapshot: { data: { campaigns: [] }} } },
