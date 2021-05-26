@@ -72,12 +72,12 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
     let fundKey: StateKey<string>;
     if (this.fundSlug) {
       fundKey = makeStateKey<Fund>(`fund-${this.fundSlug}`);
-      this.fund = this.state.get(fundKey, undefined);
+      this.fund = this.state.get<Fund | undefined>(fundKey, undefined);
     }
 
     if (!this.fund && this.fundSlug) {
       this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
-        this.state.set(fundKey, fund);
+        this.state.set<Fund>(fundKey, fund);
         this.fund = fund;
       });
     }
