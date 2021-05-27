@@ -1,7 +1,26 @@
 $colour-multicurrency-brand: #ed6743;
+$colour-multicurrency-brand-darker: #b14324;
 $colour-multicurrency-contrast: white;
 
 .mat-multicurrency {
   background: $colour-multicurrency-brand;
   color: $colour-multicurrency-contrast;
+}
+
+form {
+  width: 300px;
+
+  mat-form-field, p, button {
+    width: 100%;
+  }
+
+  button {
+    font-weight: bold;
+    font-size: 1.2rem;
+    padding: 10px 0;
+
+    &:hover {
+      background-color: $colour-multicurrency-brand-darker;
+    }
+  }
 }
