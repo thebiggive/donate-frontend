@@ -299,14 +299,17 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     if (this.donation && event.selectedIndex > 1) {
       // After create(), update all Angular form data except billing postcode
       // (which is in the final step) on step changes.
-      this.donation.emailAddress = this.paymentGroup.value.emailAddress;
-      this.donation.firstName = this.paymentGroup.value.firstName;
+      if (this.paymentGroup) {
+        this.donation.emailAddress = this.paymentGroup.value.emailAddress;
+        this.donation.firstName = this.paymentGroup.value.firstName;
+        this.donation.lastName = this.paymentGroup.value.lastName;
+      }
+
       this.donation.giftAid = this.giftAidGroup.value.giftAid;
 
       // In alternative fee model, 'tip' is donor fee cover so not Gift Aid eligible.
       this.donation.tipGiftAid = this.campaign.feePercentage ? false : this.giftAidGroup.value.giftAid;
 
-      this.donation.lastName = this.paymentGroup.value.lastName;
       this.donation.optInCharityEmail = this.marketingGroup.value.optInCharityEmail;
       this.donation.optInTbgEmail = this.marketingGroup.value.optInTbgEmail;
       this.donation.optInChampionEmail = this.marketingGroup.value.optInChampionEmail;
@@ -363,7 +366,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     // Default billing postcode to home postcode when Gift Aid's being claimed and so it's set.
-    if (event.previouslySelectedStep.label === 'Gift Aid' && this.giftAidGroup.value.giftAid) {
+    if (this.paymentGroup && event.previouslySelectedStep.label === 'Gift Aid' && this.giftAidGroup.value.giftAid) {
       this.paymentGroup.patchValue({
         billingPostcode: this.giftAidGroup.value.homePostcode,
       });
@@ -688,6 +691,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.pageMeta.setCommon(
       `Donate to ${this.campaign.charity.name}`,
       `Donate to the "${this.campaign.title}" campaign`,
+      this.campaign.currencyCode !== 'GBP',
       this.campaign.bannerUri,
     );
   }
@@ -703,7 +707,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
-      countryCode: this.paymentGroup.value.billingCountry,
+      countryCode: this.paymentGroup?.value.billingCountry || 'GB', // Group N/A for Enthuse.
       currencyCode: this.campaign.currencyCode || 'GBP',
       donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
       donationMatched: this.campaign.isMatched,
@@ -1164,7 +1168,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
             this.stepper.reset();
             this.amountsGroup.patchValue({ tipPercentage: this.initialTipSuggestedPercentage });
             this.tipPercentageChanged = false;
-            this.paymentGroup.patchValue({ billingCountry: this.defaultCountryCode });
+            if (this.paymentGroup) {
+              this.paymentGroup.patchValue({ billingCountry: this.defaultCountryCode });
+            }
           },
           response => {
             this.analyticsService.logError(
