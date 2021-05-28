@@ -1,5 +1,4 @@
 $colour-multicurrency-brand: #ed6743;
-$colour-multicurrency-brand-darker: #b14324;
 $colour-multicurrency-contrast: white;
 
 .mat-multicurrency {
@@ -18,9 +17,5 @@ form {
     font-weight: bold;
     font-size: 1.2rem;
     padding: 10px 0;
-
-    &:hover {
-      background-color: $colour-multicurrency-brand-darker;
-    }
   }
 }

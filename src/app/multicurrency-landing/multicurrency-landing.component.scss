@@ -46,6 +46,7 @@ $orange: #ed6743;
             color: white;
             text-align: center;
             font-size: 2rem;
+            text-transform: uppercase;
         }
     
         .logo-wrapper {
@@ -64,6 +65,7 @@ $orange: #ed6743;
         a {
             color: white;
             font-size: 1.5rem;
+            font-weight: 500;
             // margin: auto centers the link text
             margin: auto;
         }
@@ -110,8 +112,13 @@ $orange: #ed6743;
                 padding: 0 15px;
                 height: 50px;
             }
-        }
 
+            .ng-fa-icon {
+                padding: 0 12px !important;
+                font-size: 3rem !important;
+                color: $orange !important;
+            }
+        }
     }
 }
 
