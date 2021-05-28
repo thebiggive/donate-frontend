@@ -14,6 +14,7 @@ $orange: #ed6743;
             color: $orange;
             text-align: center;
             font-size: 2.75rem;
+            line-height: initial;
         }
     
         #multicurrency-location-pick-wrapper {
@@ -30,7 +31,6 @@ $orange: #ed6743;
     padding: 100px 0;
     background-color: lightgrey;
 
-
     .b-container {
         display: grid;
 
@@ -42,16 +42,11 @@ $orange: #ed6743;
     
         .logo-wrapper {
             padding: 25px 0 50px 0;
-            // display: grid;
-            // grid-template-columns: 1fr 1fr 1fr;
-            // grid-gap: 50px;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             
-    
             img {
-                // width: 100%;
                 width: 250px;
                 margin: 20px;
                 border-radius: 10px;
@@ -77,6 +72,7 @@ $orange: #ed6743;
             text-align: center;
             font-size: 2.5rem;
             margin: 0 0 50px 0;
+            line-height: initial;
         }
 
         p {
@@ -85,6 +81,7 @@ $orange: #ed6743;
             font-size: 2rem;
             max-width: 750px;
             margin: 0 auto 20px auto;
+            line-height: initial;
         }
     }
 }
@@ -95,6 +92,44 @@ $orange: #ed6743;
             text-align: center;
         }
 
-        
+        .socials-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            .c-social-image {
+                fill: $orange;
+                padding: 0 15px;
+                height: 50px;
+            }
+        }
+
+    }
+}
+
+
+@media (max-width: 768px) {
+    #social {
+        .b-container {
+            .socials-wrapper {
+                .c-social-image {
+                    height: 40px;
+                    padding: 0 12px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 576px) {
+    #social {
+        .b-container {
+            .socials-wrapper {
+                .c-social-image {
+                    height: 35px;
+                    padding: 0 10px;
+                }
+            }
+        }
     }
 }
