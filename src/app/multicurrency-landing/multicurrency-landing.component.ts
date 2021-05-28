@@ -11,7 +11,7 @@ export class MulticurrencyLandingComponent implements OnInit {
   faFacebookSquare = faFacebookSquare;
   faTwitter = faTwitter;
   faInstagram = faInstagram;
-  
+
   constructor() {}
 
   ngOnInit(): void {
