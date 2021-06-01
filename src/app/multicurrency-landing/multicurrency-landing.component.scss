@@ -1,4 +1,5 @@
 $orange: #ed6743;
+$dark-grey: #333333;
 
 .hero {
     width: 100%;
@@ -18,11 +19,20 @@ $orange: #ed6743;
         }
     
         h1 {
-            padding: 50px 0;
+            padding: 50px 0 0 0;
             color: $orange;
             text-align: center;
             font-size: 2.75rem;
             line-height: initial;
+        }
+
+        h2 {
+            padding-bottom: 25px;
+            text-align: center;
+            font-size: 1.5rem;
+            line-height: initial;
+            margin: 0;
+            color: $dark-grey;
         }
     
         .multicurrency-location-pick-wrapper {
@@ -123,7 +133,7 @@ $orange: #ed6743;
     }
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1600px) {
     .hero {
         height: 325px;
     }
@@ -306,6 +316,22 @@ $orange: #ed6743;
 
 @media (max-width: 576px) {
 
+    .hero {
+        height: 150px;
+    }
+
+    .cta {
+        .b-container {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+        }
+    }
+
     #match-funders {
         padding: 50px 0;
 
@@ -330,9 +356,7 @@ $orange: #ed6743;
         }
     }
 
-    .hero {
-        height: 150px;
-    }
+
 
     #about-go-give-one {
         padding: 75px 0;
