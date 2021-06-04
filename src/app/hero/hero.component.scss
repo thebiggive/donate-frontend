@@ -64,8 +64,8 @@
 .c-hero__description {
   margin-top: 1rem;
   text-shadow: 1px 1px $colour-black;
-  font-size: 15px;
-  line-height: 1.2rem;
+  line-height: 2rem;
+  font-size: 1.4rem;
 }
 
 .c-hero__image {
@@ -76,4 +76,12 @@
 app-campaign-search-form {
   display: flex;
   justify-content: center;
+}
+
+
+@media (max-width: 599px) {
+  .c-hero__description {
+    font-size: 15px;
+    line-height: 1.4rem;
+  }
 }
