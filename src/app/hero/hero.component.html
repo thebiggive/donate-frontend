@@ -7,7 +7,7 @@
         <div fxLayout="column">
           <h1 class="c-hero__heading">
             <img class="c-hero__image" *ngIf="logoUri" [src]="logoUri" [alt]="logoAltText">
-            <span *ngIf="title">{{ title }}</span>
+            <div *ngIf="title">{{ title }}</div>
           </h1>
         </div>
         <div fxLayout="column">
