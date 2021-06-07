@@ -14,7 +14,7 @@
     background-size: cover;
   }
   @media #{$breakpoint-lg} {
-    padding-top: 1.5rem;
+    padding: 1.5rem 0 1rem 0;
   }
 }
 
@@ -54,18 +54,33 @@
     font-size: 35px;
   }
   @media #{$breakpoint-lg} {
-    font-size: 45px;
+    font-size: 38px;
   }
   @media #{$breakpoint-xl} {
-    font-size: 60px;
+    font-size: 40px;
   }
 }
 
 .c-hero__description {
   margin-top: 1rem;
   text-shadow: 1px 1px $colour-black;
-  line-height: 2rem;
-  font-size: 1.4rem;
+
+  @media #{$breakpoint-sm} {
+    font-size: 1.1rem;
+    line-height: 1.4rem;
+  }
+  @media #{$breakpoint-md} {
+    font-size: 1.2rem;
+    line-height: 1.6rem;
+  }
+  @media #{$breakpoint-lg} {
+    font-size: 1.3rem;
+    line-height: 1.8rem;
+  }
+  @media #{$breakpoint-xl} {
+    font-size: 1.4rem;
+    line-height: 2rem;
+  }
 }
 
 .c-hero__image {
@@ -79,9 +94,9 @@ app-campaign-search-form {
 }
 
 
-@media (max-width: 599px) {
-  .c-hero__description {
-    font-size: 15px;
-    line-height: 1.4rem;
-  }
-}
+// @media (max-width: 599px) {
+//   .c-hero__description {
+//     font-size: 15px;
+//     line-height: 1.4rem;
+//   }
+// }
