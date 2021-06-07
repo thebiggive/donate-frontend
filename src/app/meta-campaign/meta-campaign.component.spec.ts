@@ -123,6 +123,7 @@ describe('MetaCampaignComponent', () => {
         'Test Champion',
         { id: 'testCharityId', name: 'Test Charity' },
         'GBP',
+        [],
         new Date(),
         'https://example.com/image.png',
         true,

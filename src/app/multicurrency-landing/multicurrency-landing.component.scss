@@ -1,0 +1,387 @@
+$orange: #ed6743;
+$dark-grey: #333333;
+
+.hero {
+    width: 100%;
+    height: 375px;
+    background-image: url('../../assets/images/gogiveonebg.JPG');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.cta {
+    .b-container {
+        display: grid;
+
+        .section-padding {
+            padding: 60px 0;
+        }
+    
+        h1 {
+            padding: 50px 0 0 0;
+            color: $orange;
+            text-align: center;
+            font-size: 2.75rem;
+            line-height: initial;
+        }
+
+        h2 {
+            padding-bottom: 25px;
+            text-align: center;
+            font-size: 1.5rem;
+            line-height: initial;
+            margin: 0;
+            color: $dark-grey;
+        }
+    
+        .multicurrency-location-pick-wrapper {
+            //margin: auto centers the multicurrency-location-pick-wrapper
+            margin: auto;
+            padding: 75px 0;
+        }
+    }
+}
+
+
+#match-funders {
+    min-height: 50vh;
+    padding: 100px 0;
+    background-color: lightgrey;
+
+    .b-container {
+        display: grid;
+
+        h3 {
+            color: white;
+            text-align: center;
+            font-size: 2rem;
+            text-transform: uppercase;
+        }
+    
+        .logo-wrapper {
+            padding: 25px 0 50px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            
+            img {
+                max-width: 250px;
+                align-self: center;
+                margin: 20px;
+                border-radius: 10px;
+            }
+        }
+    
+        a {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 500;
+            // margin: auto centers the link text
+            margin: auto;
+        }
+    }
+}
+
+#about-go-give-one {
+    background-color: $orange;
+    padding: 200px 0;
+
+    .b-container {
+        h2 {
+            color: white;
+            text-align: center;
+            font-size: 2.5rem;
+            margin: 0 0 50px 0;
+            line-height: initial;
+        }
+
+        p {
+            color: white;
+            text-align: center;
+            font-size: 2rem;
+            max-width: 750px;
+            margin: 0 auto 20px auto;
+            line-height: initial;
+        }
+    }
+}
+
+#social {
+    .b-container {
+        h2 {
+            text-align: center;
+        }
+
+        .socials-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+
+            .c-social-image {
+                fill: $orange;
+                padding: 0 15px;
+                height: 50px;
+            }
+
+            .ng-fa-icon {
+                padding: 0 12px;
+                font-size: 3rem;
+                color: $orange;
+            }
+        }
+    }
+}
+
+@media (max-width: 1600px) {
+    .hero {
+        height: 325px;
+    }
+}
+
+
+@media (max-width: 1200px) {
+    .hero {
+        height: 275px;
+    }
+
+    #match-funders {
+        padding: 80px 0;
+
+        .b-container {
+    
+            h3 {
+                font-size: 1.8rem;
+            }
+        
+            .logo-wrapper {
+                padding: 20px 0 40px 0;
+                img {
+                    max-width: 225px;
+                    align-self: center;
+                    margin: 15px;
+                    border-radius: 9px;
+                }
+            }
+        
+            a {
+                font-size: 1.2rem;
+            }
+        }
+    }
+
+    #about-go-give-one {
+        padding: 175px 0;
+    
+        .b-container {
+            h2 {
+                font-size: 2rem;
+                margin: 0 0 40px 0;
+            }
+    
+            p {
+                font-size: 1.7rem;
+                margin: 0 auto 15px auto;
+            }
+        }
+    }
+
+    #social {
+        .b-container {
+            .socials-wrapper {
+                .ng-fa-icon {
+                    padding: 0 10px;
+                    font-size: 2.7rem;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .hero {
+        height: 230px;
+    }
+
+    #match-funders {
+        padding: 70px 0;
+
+        .b-container {
+    
+            h3 {
+                font-size: 1.7rem;
+            }
+        
+            .logo-wrapper {
+                padding: 15px 0 35px 0;
+                img {
+                    max-width: 200px;
+                    align-self: center;
+                    margin: 10px;
+                    border-radius: 8px;
+                }
+            }
+        
+            a {
+                font-size: 1.1rem;
+            }
+        }
+    }
+
+    #about-go-give-one {
+        padding: 150px 0;
+    
+        .b-container {
+            h2 {
+                font-size: 1.7rem;
+                margin: 0 0 30px 0;
+            }
+    
+            p {
+                font-size: 1.3rem;
+                margin: 0 auto 10px auto;
+            }
+        }
+    }
+
+    #social {
+        .b-container {
+            .socials-wrapper {
+                .ng-fa-icon {
+                    padding: 0 9px;
+                    font-size: 2.5rem;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+
+    .hero {
+        height: 180px;
+    }
+
+    #match-funders {
+        padding: 60px 0;
+
+        .b-container {
+    
+            h3 {
+                font-size: 1.5rem;
+            }
+        
+            .logo-wrapper {
+                padding: 15px 0 35px 0;
+                img {
+                    max-width: 175px;
+                    align-self: center;
+                    margin: 5px;
+                }
+            }
+        
+            a {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    #about-go-give-one {
+        padding: 100px 0;
+    
+        .b-container {
+            h2 {
+                font-size: 1.6rem;
+                margin: 0 0 25px 0;
+            }
+    
+            p {
+                font-size: 1.2rem;
+                margin: 0 auto 10px auto;
+            }
+        }
+    }
+
+    #social {
+        .b-container {
+            .socials-wrapper {
+                .ng-fa-icon {
+                    padding: 0 8px;
+                    font-size: 2.2rem;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 576px) {
+
+    .hero {
+        height: 150px;
+    }
+
+    .cta {
+        .b-container {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+        }
+    }
+
+    #match-funders {
+        padding: 50px 0;
+
+        .b-container {
+    
+            h3 {
+                font-size: 1.4rem;
+            }
+        
+            .logo-wrapper {
+                padding: 15px 0 35px 0;
+                img {
+                    max-width: 125px;
+                    align-self: center;
+                    margin: 5px;
+                }
+            }
+        
+            a {
+                font-size: 0.9rem;
+            }
+        }
+    }
+
+
+
+    #about-go-give-one {
+        padding: 75px 0;
+    
+        .b-container {
+            h2 {
+                font-size: 1.5rem;
+                margin: 0 0 20px 0;
+            }
+    
+            p {
+                font-size: 1rem;
+                margin: 0 auto 8px auto;
+            }
+        }
+    }
+
+    #social {
+        .b-container {
+            .socials-wrapper {
+                .ng-fa-icon {
+                    padding: 0 7px;
+                    font-size: 2rem;
+                }
+            }
+        }
+    }
+}

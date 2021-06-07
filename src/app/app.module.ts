@@ -50,6 +50,8 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { TickerComponent } from './ticker/ticker.component';
 import { TimeLeftPipe } from './time-left.pipe';
 import { HomeComponent } from './home/home.component';
+import { MulticurrencyLandingComponent } from './multicurrency-landing/multicurrency-landing.component';
+import { MulticurrencyLocationPickComponent } from './multicurrency-location-pick/multicurrency-location-pick.component';
 
 @NgModule({
   declarations: [
@@ -77,6 +79,8 @@ import { HomeComponent } from './home/home.component';
     TickerComponent,
     TimeLeftPipe,
     HomeComponent,
+    MulticurrencyLandingComponent,
+    MulticurrencyLocationPickComponent,
   ],
   imports: [
     AppRoutingModule,

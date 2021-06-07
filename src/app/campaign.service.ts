@@ -64,11 +64,11 @@ export class CampaignService {
     };
 
     if (campaignId) {
-      query.parentCampaignId = campaignId;
+      query.parentId = campaignId;
     }
 
     if (campaignSlug) {
-      query.parentCampaignSlug = campaignSlug;
+      query.parentSlug = campaignSlug;
     }
 
     if (fundSlug) {
@@ -119,12 +119,12 @@ export class CampaignService {
       params = params.append('onlyMatching', 'true');
     }
 
-    if (searchQuery.parentCampaignId) {
-      params = params.append('parent', searchQuery.parentCampaignId);
+    if (searchQuery.parentId) {
+      params = params.append('parent', searchQuery.parentId);
     }
 
-    if (searchQuery.parentCampaignSlug) {
-      params = params.append('parentSlug', searchQuery.parentCampaignSlug);
+    if (searchQuery.parentSlug) {
+      params = params.append('parentSlug', searchQuery.parentSlug);
     }
 
     if (searchQuery.sortDirection) {
@@ -170,8 +170,8 @@ export class SearchQuery implements SearchQueryInterface {
   public limit = 6;
   public offset = 0;
   public onlyMatching?: boolean;
-  public parentCampaignId?: string;
-  public parentCampaignSlug?: string;
+  public parentId?: string;
+  public parentSlug?: string;
   public sortDirection?: string;
   public sortField?: string;
   public term?: string;

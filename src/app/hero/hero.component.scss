@@ -48,6 +48,8 @@
   margin-bottom: 0;
   text-shadow: 1px 1px $colour-black;
   line-height: 1.2;
+  font-size: 1.7em;
+
   @media #{$breakpoint-md} {
     font-size: 35px;
   }
@@ -62,6 +64,8 @@
 .c-hero__description {
   margin-top: 1rem;
   text-shadow: 1px 1px $colour-black;
+  line-height: 2rem;
+  font-size: 1.4rem;
 }
 
 .c-hero__image {
@@ -72,4 +76,12 @@
 app-campaign-search-form {
   display: flex;
   justify-content: center;
+}
+
+
+@media (max-width: 599px) {
+  .c-hero__description {
+    font-size: 15px;
+    line-height: 1.4rem;
+  }
 }

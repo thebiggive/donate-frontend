@@ -7,7 +7,7 @@ import { Environment } from './environment.interface';
 export const environment: Environment = {
   production: false,
   productionLike: false,
-  apiUriPrefix: 'https://sandbox7-biggive.cs109.force.com',
+  apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
   donateGlobalUriPrefix: 'http://localhost:4200',
   donateUriPrefix: 'http://localhost:4200',
   donationsApiPrefix: 'http://localhost:30030/v1',
