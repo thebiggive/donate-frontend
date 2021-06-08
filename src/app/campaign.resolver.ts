@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
-import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -11,6 +11,7 @@ import { CampaignService } from './campaign.service';
 export class CampaignResolver implements Resolve<any> {
   constructor(
     public campaignService: CampaignService,
+    private router: Router,
     private state: TransferState,
   ) {}
 
@@ -21,6 +22,9 @@ export class CampaignResolver implements Resolve<any> {
     // No . expected in slugs, and these are typically part of opportunistic junk requests.
     if (campaignSlug && campaignSlug.match(new RegExp('[.]+'))) {
       console.log(`CampaignResolver skipping load attempt for junk slug: "${campaignSlug}"`);
+      // Because it happens server side & before resolution, `replaceUrl` seems not to
+      // work, so just fall back to serving the Explore content on the requested path.
+      this.router.navigateByUrl('/explore');
       return EMPTY;
     }
 
@@ -50,6 +54,9 @@ export class CampaignResolver implements Resolve<any> {
     const observable = method(identifier)
       .pipe(catchError(error => {
         console.log(`CampaignResolver load error: "${error.message}"`);
+        // Because it happens server side & before resolution, `replaceUrl` seems not to
+        // work, so just fall back to serving the Explore content on the requested path.
+        this.router.navigateByUrl('/explore');
         return EMPTY;
       }));
 
