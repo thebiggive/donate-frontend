@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { Campaign } from './campaign.model';
 import { CampaignService } from './campaign.service';
@@ -40,7 +41,12 @@ export class CampaignResolver implements Resolve<any> {
       return of(campaign);
     }
 
-    const observable = method(identifier);
+    const observable = method(identifier)
+      .pipe(catchError(error => {
+        console.log(`CampaignResolver load error: "${error.message}"`);
+        return EMPTY;
+      }));
+
     observable.subscribe(loadedCampaign => {
       // Save in state for future routes, e.g. when moving between `CampaignDetailComponent`
       // and `DonationStartComponent`.

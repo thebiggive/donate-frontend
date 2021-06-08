@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 
 import { CampaignService } from './campaign.service';
-import { Observable, of } from 'rxjs';
+import { EMPTY, Observable, of } from 'rxjs';
 import { CampaignSummary } from './campaign-summary.model';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class CharityCampaignsResolver implements Resolve<any> {
@@ -18,6 +19,10 @@ export class CharityCampaignsResolver implements Resolve<any> {
       return of([]);
     }
 
-    return this.campaignService.getForCharity(charityId);
+    return this.campaignService.getForCharity(charityId)
+      .pipe(catchError(error => {
+        console.log(`CharityCampaignsResolver load error: "${error.message}"`);
+        return EMPTY;
+      }));
   }
 }
