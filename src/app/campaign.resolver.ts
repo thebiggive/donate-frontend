@@ -18,6 +18,12 @@ export class CampaignResolver implements Resolve<any> {
     const campaignId = route.paramMap.get('campaignId');
     const campaignSlug = route.paramMap.get('campaignSlug');
 
+    // No . expected in slugs, and these are typically part of opportunistic junk requests.
+    if (campaignSlug && campaignSlug.match(new RegExp('[.]+'))) {
+      console.log(`CampaignResolver skipping load attempt for junk slug: "${campaignSlug}"`);
+      return EMPTY;
+    }
+
     if (campaignId) {
       return this.loadWithStateCache(
         campaignId,
