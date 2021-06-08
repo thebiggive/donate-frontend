@@ -125,7 +125,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   ngOnInit() {
-    this.stripeService.init();
+    if (isPlatformBrowser(this.platformId)) {
+      this.stripeService.init();
+    }
 
     this.campaign = this.route.snapshot.data.campaign;
     this.setCampaignBasedVars();
