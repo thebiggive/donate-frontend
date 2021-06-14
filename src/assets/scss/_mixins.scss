@@ -51,8 +51,8 @@
 }
 
 @mixin b-rt-2 {
-  font-size: 24px;
-  line-height: 36px;
+  font-size: 20px;
+  line-height: 26px;
   @media #{$breakpoint-lg} {
     font-size: 34px;
     line-height: 40px;
