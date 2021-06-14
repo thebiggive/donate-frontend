@@ -260,6 +260,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           this.triedToLeaveMarketing = true;
         }
 
+        if (this.psp === 'stripe' && clickEvent.target.innerText.includes('Receive updates') && !this.stripePaymentMethodReady) {
+          this.jumpToStep('Payment details');
+        }
+
         this.goToFirstVisibleError();
       });
     }
