@@ -1150,7 +1150,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           tipPercentage,
         });
 
-        this.jumpToStep(donation.currencyCode === 'GBP' ? 'Gift Aid' : 'Payment details');
+        if (this.stepper.selected.label === 'Your donation') {
+          this.jumpToStep(donation.currencyCode === 'GBP' ? 'Gift Aid' : 'Payment details');
+        }
 
         return;
       }
