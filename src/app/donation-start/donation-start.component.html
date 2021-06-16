@@ -35,7 +35,6 @@
               <img src="/assets/images/icon-tick.png" height="11" alt="Check mark">
               Match funds are currently available!
             </p>
-            <p class="c-your-donation__to">Donation to {{ campaign.charity.name }}</p>
 
             <div *ngIf="suggestedAmounts && suggestedAmounts[campaign.currencyCode].length > 0" class="c-suggested-amounts">
               <div fxLayout="row">
@@ -49,6 +48,7 @@
               <p class="b-center b-grey b-rt-0 c-your-donation__suggestion-separator">Or, choose</p>
             </div>
             <div class="donation-input">
+              <p class="c-your-donation__to">Donation to {{ campaign.charity.name }}</p>
               <mat-form-field class="c-your-donation__form-field b-center size-lg" color="primary">
                 <span class="prefix" matPrefix>{{ currencySymbol }}</span>
                 <mat-label class="c-your-donation__placeholder" for="donationAmount">

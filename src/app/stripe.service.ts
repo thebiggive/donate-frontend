@@ -105,7 +105,7 @@ export class StripeService {
 
     const billingDetails: PaymentMethodCreateParams.BillingDetails = {
       email: donationPreUpdate.emailAddress,
-      name: `${donationPreUpdate.firstName} {donationPreUpdate.lastName}` ?? undefined,
+      name: `${donationPreUpdate.firstName} ${donationPreUpdate.lastName}` ?? undefined,
     };
 
     billingDetails.address = {
