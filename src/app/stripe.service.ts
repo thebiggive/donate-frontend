@@ -31,7 +31,7 @@ export class StripeService {
   private lastCardCountry?: string;
   private paymentRequest: PaymentRequest;
   private stripe: Stripe | null;
-  private paymentMethodIds = new Map<string, string>(); // Donation ID to payment method ID.
+  private paymentMethodIds: Map<string, string>; // Donation ID to payment method ID.
   private paymentMethodCallbacks: Map<string, (status: PaymentRequestCompleteStatus) => void>;
 
   constructor(
@@ -45,6 +45,9 @@ export class StripeService {
     }
 
     this.didInit = true;
+
+    this.paymentMethodIds = new Map();
+    this.paymentMethodCallbacks = new Map();
 
     const stripeTag = document.createElement('script');
     stripeTag.src = 'https://js.stripe.com/v3/';
