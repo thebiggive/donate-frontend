@@ -101,7 +101,6 @@ export class StripeService {
     }
 
     let paymentMethod: any;
-    let prbComplete: any;
     let isPrb = false;
 
     const billingDetails: PaymentMethodCreateParams.BillingDetails = {
@@ -152,20 +151,12 @@ export class StripeService {
               confirmResult.error.message ?? '[No message]',
             );
 
-            if (isPrb) {
-              prbComplete('fail');
-            }
-
             resolve(confirmResult);
             return;
           }
 
           if (confirmResult.paymentIntent.status !== 'requires_action') {
             // Success w/ no extra action needed
-            if (isPrb) {
-              prbComplete('success');
-            }
-
             resolve(confirmResult);
             return;
           }
@@ -178,10 +169,6 @@ export class StripeService {
             }
 
             // Extra action done, whether successfully or not.
-            if (isPrb) {
-              prbComplete(confirmAgainResult.error ? 'fail' : 'success');
-            }
-
             resolve(confirmAgainResult);
           });
         });
