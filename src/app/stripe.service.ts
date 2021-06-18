@@ -12,7 +12,6 @@ import {
   StripeElements,
   StripeError,
   StripePaymentRequestButtonElement,
-  PaymentRequestCompleteStatus,
 } from '@stripe/stripe-js';
 import { Observer } from 'rxjs';
 
@@ -46,10 +45,6 @@ export class StripeService {
     this.didInit = true;
 
     this.paymentMethodIds = new Map();
-
-    const stripeTag = document.createElement('script');
-    stripeTag.src = 'https://js.stripe.com/v3/';
-    document.head.appendChild(stripeTag);
 
     // Initialising through the ES Module like this is not required, but is made available by
     // an official Stripe-maintained package and gives us TypeScript types for
