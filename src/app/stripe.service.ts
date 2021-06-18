@@ -32,7 +32,6 @@ export class StripeService {
   private paymentRequest: PaymentRequest;
   private stripe: Stripe | null;
   private paymentMethodIds: Map<string, string>; // Donation ID to payment method ID.
-  private paymentMethodCallbacks: Map<string, (status: PaymentRequestCompleteStatus) => void>;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -47,7 +46,6 @@ export class StripeService {
     this.didInit = true;
 
     this.paymentMethodIds = new Map();
-    this.paymentMethodCallbacks = new Map();
 
     const stripeTag = document.createElement('script');
     stripeTag.src = 'https://js.stripe.com/v3/';
@@ -131,7 +129,6 @@ export class StripeService {
         // rationale there.
         if (this.paymentMethodIds.has(donation.donationId)) {
           isPrb = true;
-          prbComplete = this.paymentMethodCallbacks.get(donation.donationId);
           paymentMethod = this.paymentMethodIds.get(donation.donationId);
         } else {
           paymentMethod = {
@@ -245,12 +242,13 @@ export class StripeService {
       );
 
       if (!donation.donationId) {
+        event.complete('fail');
         console.log('No donation client secret to complete PaymentRequest');
         return;
       }
 
       this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
-      this.paymentMethodCallbacks.set(donation.donationId, event.complete);
+      event.complete('success');
       resultObserver.next(true); // Let the page hard the card details & make 'Next' available.
     });
 
