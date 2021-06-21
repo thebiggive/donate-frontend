@@ -217,6 +217,8 @@ export class StripeService {
     });
 
     this.paymentRequest.on('paymentmethod', (event: PaymentRequestPaymentMethodEvent) => {
+      console.log('PRB debug: got paymentmethod', event);
+
       // Update fee details before confirming payment
       this.setLastCardMetadata(
         event.paymentMethod?.card?.brand,
@@ -230,8 +232,11 @@ export class StripeService {
       }
 
       this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
+
+      console.log('PRB debug: payment method set success');
+
       event.complete('success');
-      resultObserver.next(true); // Let the page hard the card details & make 'Next' available.
+      resultObserver.next(true); // Let the page hide the card details & make 'Next' available.
     });
 
     const existingElement = this.elements.getElement('paymentRequestButton');
