@@ -7,6 +7,7 @@ import {
   PaymentRequestPaymentMethodEvent,
   PaymentMethodCreateParams,
   PaymentRequest,
+  PaymentRequestItem,
   Stripe,
   StripeCardElement,
   StripeElements,
@@ -207,40 +208,42 @@ export class StripeService {
       return null;
     }
 
-    this.paymentRequest = this.stripe.paymentRequest({
-      country: donation.countryCode || 'GB',
-      currency: donation.currencyCode.toLowerCase() || 'gbp',
-      total: {
-        label: `Donation to ${donation.charityName}`,
-        // In pence/cents, inc. tip
-        amount: (100 * donation.donationAmount) + (100 * donation.tipAmount),
-      },
-      requestPayerName: true,
-      requestPayerEmail: true,
-    });
+    if (this.paymentRequest) {
+      this.paymentRequest.update({
+        total: this.getPaymentRequestButtonTotal(donation),
+      });
+    } else {
+      this.paymentRequest = this.stripe.paymentRequest({
+        country: donation.countryCode || 'GB',
+        currency: donation.currencyCode.toLowerCase() || 'gbp',
+        total: this.getPaymentRequestButtonTotal(donation),
+        requestPayerName: true,
+        requestPayerEmail: true,
+      });
 
-    this.paymentRequest.on('paymentmethod', (event: PaymentRequestPaymentMethodEvent) => {
-      console.log('PRB debug: got paymentmethod', event);
+      this.paymentRequest.on('paymentmethod', (event: PaymentRequestPaymentMethodEvent) => {
+        console.log('PRB debug: got paymentmethod', event);
 
-      // Update fee details before confirming payment
-      this.setLastCardMetadata(
-        event.paymentMethod?.card?.brand,
-        event.paymentMethod?.card?.country || 'N/A',
-      );
+        // Update fee details before confirming payment
+        this.setLastCardMetadata(
+          event.paymentMethod?.card?.brand,
+          event.paymentMethod?.card?.country || 'N/A',
+        );
 
-      if (!donation.donationId) {
-        event.complete('fail');
-        console.log('No donation client secret to complete PaymentRequest');
-        return;
-      }
+        if (!donation.donationId) {
+          event.complete('fail');
+          console.log('No donation client secret to complete PaymentRequest');
+          return;
+        }
 
-      this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
+        this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
 
-      console.log('PRB debug: payment method set success');
+        console.log('PRB debug: payment method set success');
 
-      event.complete('success');
-      resultObserver.next(event.paymentMethod?.billing_details); // Let the page hide the card details & make 'Next' available.
-    });
+        event.complete('success');
+        resultObserver.next(event.paymentMethod?.billing_details); // Let the page hide the card details & make 'Next' available.
+      });
+    }
 
     const existingElement = this.elements.getElement('paymentRequestButton');
     if (existingElement) {
@@ -259,5 +262,13 @@ export class StripeService {
 
   canUsePaymentRequest(): Promise<CanMakePaymentResult|null> {
     return this.paymentRequest.canMakePayment();
+  }
+
+  private getPaymentRequestButtonTotal(donation: Donation): PaymentRequestItem {
+    return {
+      label: `Donation to ${donation.charityName}`,
+      // In pence/cents, inc. tip
+      amount: (100 * donation.donationAmount) + (100 * donation.tipAmount),
+    };
   }
 }

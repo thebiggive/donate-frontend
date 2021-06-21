@@ -299,7 +299,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           if (this.donation) {
             this.clearDonation(this.donation, true);
           }
-          this.createDonation();
+          this.createDonation(); // Re-sets-up PRB etc.
         });
 
       return;
