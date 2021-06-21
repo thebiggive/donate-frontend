@@ -261,6 +261,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         }
 
         if (this.psp === 'stripe' && clickEvent.target.innerText.includes('Receive updates') && !this.stripePaymentMethodReady) {
+          console.log('Debug: jumping to payment details as NOT stripePaymentMethodReady');
           this.jumpToStep('Payment details');
         }
 
@@ -382,6 +383,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   async onStripeCardChange(state: StripeElementChangeEvent) {
     this.stripePRBMethodReady = false; // Using card instead
 
+    console.log('Debug: card change event – new state: ', state);
     this.stripePaymentMethodReady = state.complete;
     if (state.error) {
       this.stripeError = `Payment method update failed: ${state.error.message}`;
@@ -391,6 +393,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // Don't jump forward when the card *is* valid, as the donor might have been
     // intending to edit something else in the `payment` step; let them click Next.
     if (!this.donation || !this.stripePaymentMethodReady) {
+      console.log('Debug: jumping to payment details via onStripeCardChange()');
       this.jumpToStep('Payment details');
 
       return;
@@ -612,6 +615,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private jumpToStep(stepLabel: string) {
+    if (!this.donationForm.valid) {
+      console.log('Debug: form – not valid', this.donationForm);
+    }
+
     this.stepper.steps
       .filter(step => step.label === stepLabel)
       [0]
