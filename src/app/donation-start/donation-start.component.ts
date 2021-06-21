@@ -1149,6 +1149,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
         this.scheduleMatchingExpiryWarning(this.donation);
 
+        if (this.psp === 'stripe') {
+          this.preparePaymentRequestButton(this.donation);
+        }
+
         // In doc block use case (a), we need to put the amounts from the previous
         // donation into the form and move to Step 2.
         const tipPercentageFixed = (100 * donation.tipAmount / donation.donationAmount).toFixed(1);
