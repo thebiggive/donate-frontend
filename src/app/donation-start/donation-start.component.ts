@@ -116,12 +116,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   ngOnDestroy() {
-    this.cancelExpiryWarning();
+    if (this.donation) {
+      this.clearDonation(this.donation, false);
+    }
+
     if (this.card) {
       this.card.removeEventListener('change', this.cardHandler);
       this.card.destroy();
     }
-    delete this.donation;
   }
 
   ngOnInit() {
@@ -293,10 +295,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
             'cancel_auto',
             `Donation cancelled because amount was updated ${this.donation?.donationId} to campaign ${this.campaignId}`,
           );
-          this.donationService.removeLocalDonation(this.donation);
-          this.cancelExpiryWarning();
-          delete this.donation;
 
+          if (this.donation) {
+            this.clearDonation(this.donation, true);
+          }
           this.createDonation();
         });
 
@@ -778,8 +780,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
             billingCountry: billingDetails.address?.country,
             billingPostcode: billingDetails.address?.postal_code,
           });
-          this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
-          this.donation.countryCode = this.paymentGroup.value.billingCountry;
 
           this.stripePaymentMethodReady = true;
           this.stripePRBMethodReady = true;
@@ -950,8 +950,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         `Cancelled failing donation ${this.previousDonation.donationId} to campaign ${this.campaignId}`,
       );
       this.donationService.cancel(this.previousDonation).subscribe(() => {
-        this.donationService.removeLocalDonation(this.previousDonation);
-        this.cancelExpiryWarning();
+        if (!this.previousDonation) {
+          return;
+        }
+        this.clearDonation(this.previousDonation, true);
       });
     }
 
@@ -969,6 +971,20 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         replaceUrl: true,
       });
     });
+  }
+
+  private clearDonation(donation: Donation, clearAllRecord: boolean) {
+    if (clearAllRecord) { // i.e. don't keep donation around for /thanks/... or reuse.
+      this.donationService.removeLocalDonation(donation);
+    }
+
+    this.cancelExpiryWarning();
+
+    if (this.paymentRequestButton) {
+      delete this.paymentRequestButton;
+    }
+
+    delete this.donation;
   }
 
   private redirectToEnthuse(donation: Donation, logoUri?: string) {
@@ -1213,11 +1229,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         .subscribe(
           () => {
             this.analyticsService.logEvent('cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
-            this.donationService.removeLocalDonation(donation);
-            this.cancelExpiryWarning();
 
-            // Removes match funds reserved timer if present
-            delete this.donation;
+            this.clearDonation(donation, true);
 
             // Go back to 1st step to encourage donor to try again
             this.stepper.reset();
