@@ -390,6 +390,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.stripePaymentMethodReady = state.complete;
     if (state.error) {
       this.stripeError = `Payment method update failed: ${state.error.message}`;
+    } else {
+      this.stripeError = undefined; // Clear any previous card errors if number fixed.
     }
 
     // Jump back if we get an out of band message back that the card is *not* valid/ready.
