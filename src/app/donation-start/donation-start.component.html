@@ -220,7 +220,7 @@
             </mat-form-field>
 
             <div id="payment-request-button" #paymentRequestButton></div>
-            <p *ngIf="requestButtonShown" class="b-center b-grey b-rt-sm">Or</p>
+            <p *ngIf="requestButtonShown && !stripePRBMethodReady" class="b-center b-grey b-rt-sm">Or</p>
 
             <div *ngIf="!stripePRBMethodReady">
               <div class="sr-combo-inputs-row">

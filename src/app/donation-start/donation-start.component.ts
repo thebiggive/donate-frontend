@@ -755,24 +755,30 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   private preparePaymentRequestButton(donation: Donation) {
     const paymentRequestResultObserver: Observer<boolean> = {
       next: (success: boolean) => {
-        if (success) {
-          if (this.donation) {
-            this.analyticsService.logEvent(
-              'stripe_prb_setup_success',
-              `Stripe PRB success for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
-            );
-          }
+        if (success && this.donation) {
+          console.log('PRB debug: successful observer callback');
+
+          this.analyticsService.logEvent(
+            'stripe_prb_setup_success',
+            `Stripe PRB success for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
+          );
 
           this.stripePaymentMethodReady = true;
           this.stripePRBMethodReady = true;
+          this.jumpToStep('Receive updates');
+
           return;
         }
+
+        console.log('PRB debug: observer callback had non-success status or missing donation');
 
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
         this.stripeError = 'Payment failed – please try again';
       },
-      error: () => {
+      error: (err) => {
+        console.log('PRB debug: observer callback got an error', err);
+
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
         this.stripeError = 'Payment method handling failed';
@@ -784,9 +790,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     this.stripeService.canUsePaymentRequest().then(canUse => {
       if (canUse) {
+        console.log('PRB debug: PRB request is usable');
         this.paymentRequestButton.mount(this.paymentRequestButtonEl.nativeElement);
         this.requestButtonShown = true;
       } else {
+        console.log('PRB debug: PRB request is not usable, hiding button');
         this.paymentRequestButtonEl.nativeElement.style.display = 'none';
       }
     });
