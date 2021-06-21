@@ -210,6 +210,7 @@ export class StripeService {
 
     if (this.paymentRequest) {
       this.paymentRequest.update({
+        currency: donation.currencyCode.toLowerCase() || 'gbp',
         total: this.getPaymentRequestButtonTotal(donation),
       });
     } else {
