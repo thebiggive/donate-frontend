@@ -362,7 +362,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         // this.createDonation().subscribe(...) for Payment Request Button mount, which needs donation info
         // first and so happens in `preparePaymentRequestButton()`.
         this.card = this.stripeService.getCard();
-        if (this.card) {
+        if (this.cardInfo && this.card) { // Ensure #cardInfo not hidden by PRB success.
           this.card.mount(this.cardInfo.nativeElement);
           this.card.addEventListener('change', this.cardHandler);
         }
@@ -1148,6 +1148,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         this.donation = donation;
 
         this.scheduleMatchingExpiryWarning(this.donation);
+
+        if (this.psp === 'stripe') {
+          this.preparePaymentRequestButton(this.donation);
+        }
 
         // In doc block use case (a), we need to put the amounts from the previous
         // donation into the form and move to Step 2.
