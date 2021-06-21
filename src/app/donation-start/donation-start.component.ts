@@ -400,9 +400,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       return;
     }
 
-    this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
-    this.donation.countryCode = this.paymentGroup.value.billingCountry;
-
     const paymentMethodResult = await this.stripeService.createPaymentMethod(
       this.card,
       `${this.paymentGroup.value.firstName} ${this.paymentGroup.value.lastName}`,
@@ -436,8 +433,13 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   async submit() {
-    if (this.donationForm.invalid) {
+    if (!this.donation || this.donationForm.invalid) {
       return;
+    }
+
+    if (!this.donation?.billingPostalAddress && this.paymentGroup.value.billingPostcode) {
+      this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
+      this.donation.countryCode = this.paymentGroup.value.billingCountry;
     }
 
     this.submitting = true;
