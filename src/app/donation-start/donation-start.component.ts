@@ -7,7 +7,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { countries } from 'country-code-lookup';
 import { retryWhen, tap  } from 'rxjs/operators';
-import { StripeElementChangeEvent } from '@stripe/stripe-js';
+import { PaymentMethod, StripeElementChangeEvent } from '@stripe/stripe-js';
 import { Observer } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
@@ -382,6 +382,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
   async onStripeCardChange(state: StripeElementChangeEvent) {
     this.stripePRBMethodReady = false; // Using card instead
+    this.addStripeCardBillingValidators();
 
     console.log('Debug: card change event – new state: ', state);
     this.stripePaymentMethodReady = state.complete;
@@ -760,9 +761,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private preparePaymentRequestButton(donation: Donation) {
-    const paymentRequestResultObserver: Observer<boolean> = {
-      next: (success: boolean) => {
-        if (success && this.donation) {
+    const paymentRequestResultObserver: Observer<PaymentMethod.BillingDetails | undefined> = {
+      next: (billingDetails?: PaymentMethod.BillingDetails) => {
+        if (billingDetails && this.donation) {
           console.log('PRB debug: successful observer callback');
 
           this.analyticsService.logEvent(
@@ -770,8 +771,17 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
             `Stripe PRB success for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
           );
 
+          // Set form and `donation` billing fields from PRB card's data.
+          this.paymentGroup.patchValue({
+            billingCountry: billingDetails.address?.country,
+            billingPostcode: billingDetails.address?.postal_code,
+          });
+          this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
+          this.donation.countryCode = this.paymentGroup.value.billingCountry;
+
           this.stripePaymentMethodReady = true;
           this.stripePRBMethodReady = true;
+          this.removeStripeCardBillingValidators();
           this.jumpToStep('Receive updates');
 
           return;
@@ -781,6 +791,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
+        this.addStripeCardBillingValidators();
         this.stripeError = 'Payment failed – please try again';
       },
       error: (err) => {
@@ -788,6 +799,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
+        this.addStripeCardBillingValidators();
         this.stripeError = 'Payment method handling failed';
       },
       complete: () => {},
@@ -1102,6 +1114,16 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       Validators.required,
       Validators.email,
     ]);
+
+    this.addStripeCardBillingValidators();
+  }
+
+  private removeStripeCardBillingValidators() {
+    this.paymentGroup.controls.billingCountry.setValidators([]);
+    this.paymentGroup.controls.billingPostcode.setValidators([]);
+  }
+
+  private addStripeCardBillingValidators() {
     this.paymentGroup.controls.billingCountry.setValidators([
       Validators.required,
     ]);

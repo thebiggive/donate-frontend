@@ -198,7 +198,10 @@ export class StripeService {
     });
   }
 
-  getPaymentRequestButton(donation: Donation, resultObserver: Observer<boolean>): StripePaymentRequestButtonElement | null {
+  getPaymentRequestButton(
+    donation: Donation,
+    resultObserver: Observer<PaymentMethod.BillingDetails | undefined>,
+  ): StripePaymentRequestButtonElement | null {
     if (!this.elements || !this.stripe) {
       console.log('Stripe Elements not ready');
       return null;
@@ -236,7 +239,7 @@ export class StripeService {
       console.log('PRB debug: payment method set success');
 
       event.complete('success');
-      resultObserver.next(true); // Let the page hide the card details & make 'Next' available.
+      resultObserver.next(event.paymentMethod?.billing_details); // Let the page hide the card details & make 'Next' available.
     });
 
     const existingElement = this.elements.getElement('paymentRequestButton');
