@@ -755,16 +755,16 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   private preparePaymentRequestButton(donation: Donation) {
     const paymentRequestResultObserver: Observer<boolean> = {
       next: (success: boolean) => {
-        if (success) {
-          if (this.donation) {
-            this.analyticsService.logEvent(
-              'stripe_prb_setup_success',
-              `Stripe PRB success for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
-            );
-          }
+        if (success && this.donation) {
+          this.analyticsService.logEvent(
+            'stripe_prb_setup_success',
+            `Stripe PRB success for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
+          );
 
           this.stripePaymentMethodReady = true;
           this.stripePRBMethodReady = true;
+          this.jumpToStep('Receive updates');
+
           return;
         }
 
