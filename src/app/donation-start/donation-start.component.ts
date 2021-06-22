@@ -306,8 +306,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     if (this.donation && event.selectedIndex > 1) {
-      // After create(), update all Angular form data except billing postcode
-      // (which is in the final step) on step changes.
+      // After create() update all Angular form data on step changes, except billing
+      // postcode & country which can be set manually or via PRB callbacks.
       if (this.paymentGroup) {
         this.donation.emailAddress = this.paymentGroup.value.emailAddress;
         this.donation.firstName = this.paymentGroup.value.firstName;
@@ -797,6 +797,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         }
 
         console.log('PRB debug: observer callback had non-success status or missing donation');
+        console.log('this.donation:', this.donation);
+        console.log('pPRB-scoped donation:', donation);
+        console.log('billingDetails:', billingDetails);
 
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
