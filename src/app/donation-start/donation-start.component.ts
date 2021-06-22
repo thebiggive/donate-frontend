@@ -441,7 +441,12 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       return;
     }
 
-    if (!this.donation?.billingPostalAddress && this.paymentGroup.value.billingPostcode) {
+    if (
+      this.psp === 'stripe' &&
+      this.paymentGroup &&
+      !this.donation?.billingPostalAddress &&
+      this.paymentGroup.value.billingPostcode
+    ) {
       this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
       this.donation.countryCode = this.paymentGroup.value.billingCountry;
     }
