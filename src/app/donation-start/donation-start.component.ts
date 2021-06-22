@@ -449,6 +449,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     ) {
       this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
       this.donation.countryCode = this.paymentGroup.value.billingCountry;
+      this.donationService.updateLocalDonation(this.donation);
     }
 
     this.submitting = true;
