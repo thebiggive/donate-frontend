@@ -7,12 +7,12 @@ import {
   PaymentRequestPaymentMethodEvent,
   PaymentMethodCreateParams,
   PaymentRequest,
+  PaymentRequestItem,
   Stripe,
   StripeCardElement,
   StripeElements,
   StripeError,
   StripePaymentRequestButtonElement,
-  PaymentRequestCompleteStatus,
 } from '@stripe/stripe-js';
 import { Observer } from 'rxjs';
 
@@ -46,10 +46,6 @@ export class StripeService {
     this.didInit = true;
 
     this.paymentMethodIds = new Map();
-
-    const stripeTag = document.createElement('script');
-    stripeTag.src = 'https://js.stripe.com/v3/';
-    document.head.appendChild(stripeTag);
 
     // Initialising through the ES Module like this is not required, but is made available by
     // an official Stripe-maintained package and gives us TypeScript types for
@@ -203,41 +199,52 @@ export class StripeService {
     });
   }
 
-  getPaymentRequestButton(donation: Donation, resultObserver: Observer<boolean>): StripePaymentRequestButtonElement | null {
+  getPaymentRequestButton(
+    donation: Donation,
+    resultObserver: Observer<PaymentMethod.BillingDetails | undefined>,
+  ): StripePaymentRequestButtonElement | null {
     if (!this.elements || !this.stripe) {
       console.log('Stripe Elements not ready');
       return null;
     }
 
-    this.paymentRequest = this.stripe.paymentRequest({
-      country: donation.countryCode || 'GB',
-      currency: donation.currencyCode.toLowerCase() || 'gbp',
-      total: {
-        label: `Donation to ${donation.charityName}`,
-        // In pence/cents, inc. tip
-        amount: (100 * donation.donationAmount) + (100 * donation.tipAmount),
-      },
-      requestPayerName: true,
-      requestPayerEmail: true,
-    });
+    if (this.paymentRequest) {
+      this.paymentRequest.update({
+        currency: donation.currencyCode.toLowerCase() || 'gbp',
+        total: this.getPaymentRequestButtonTotal(donation),
+      });
+    } else {
+      this.paymentRequest = this.stripe.paymentRequest({
+        country: donation.countryCode || 'GB',
+        currency: donation.currencyCode.toLowerCase() || 'gbp',
+        total: this.getPaymentRequestButtonTotal(donation),
+        requestPayerName: true,
+        requestPayerEmail: true,
+      });
 
-    this.paymentRequest.on('paymentmethod', (event: PaymentRequestPaymentMethodEvent) => {
-      // Update fee details before confirming payment
-      this.setLastCardMetadata(
-        event.paymentMethod?.card?.brand,
-        event.paymentMethod?.card?.country || 'N/A',
-      );
+      this.paymentRequest.on('paymentmethod', (event: PaymentRequestPaymentMethodEvent) => {
+        console.log('PRB debug: got paymentmethod', event);
 
-      if (!donation.donationId) {
-        event.complete('fail');
-        console.log('No donation client secret to complete PaymentRequest');
-        return;
-      }
+        // Update fee details before confirming payment
+        this.setLastCardMetadata(
+          event.paymentMethod?.card?.brand,
+          event.paymentMethod?.card?.country || 'N/A',
+        );
 
-      this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
-      event.complete('success');
-      resultObserver.next(true); // Let the page hard the card details & make 'Next' available.
-    });
+        if (!donation.donationId) {
+          event.complete('fail');
+          console.log('No donation client secret to complete PaymentRequest');
+          return;
+        }
+
+        this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
+
+        console.log('PRB debug: payment method set success');
+
+        event.complete('success');
+        resultObserver.next(event.paymentMethod?.billing_details); // Let the page hide the card details & make 'Next' available.
+      });
+    }
 
     const existingElement = this.elements.getElement('paymentRequestButton');
     if (existingElement) {
@@ -256,5 +263,13 @@ export class StripeService {
 
   canUsePaymentRequest(): Promise<CanMakePaymentResult|null> {
     return this.paymentRequest.canMakePayment();
+  }
+
+  private getPaymentRequestButtonTotal(donation: Donation): PaymentRequestItem {
+    return {
+      label: `Donation to ${donation.charityName}`,
+      // In pence/cents, inc. tip
+      amount: (100 * donation.donationAmount) + (100 * donation.tipAmount),
+    };
   }
 }

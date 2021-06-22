@@ -7,7 +7,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { countries } from 'country-code-lookup';
 import { retryWhen, tap  } from 'rxjs/operators';
-import { StripeElementChangeEvent } from '@stripe/stripe-js';
+import { PaymentMethod, StripeElementChangeEvent } from '@stripe/stripe-js';
 import { Observer } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
@@ -116,12 +116,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   ngOnDestroy() {
-    this.cancelExpiryWarning();
+    if (this.donation) {
+      this.clearDonation(this.donation, false);
+    }
+
     if (this.card) {
       this.card.removeEventListener('change', this.cardHandler);
       this.card.destroy();
     }
-    delete this.donation;
   }
 
   ngOnInit() {
@@ -261,6 +263,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         }
 
         if (this.psp === 'stripe' && clickEvent.target.innerText.includes('Receive updates') && !this.stripePaymentMethodReady) {
+          console.log('Debug: jumping to payment details as NOT stripePaymentMethodReady');
           this.jumpToStep('Payment details');
         }
 
@@ -292,11 +295,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
             'cancel_auto',
             `Donation cancelled because amount was updated ${this.donation?.donationId} to campaign ${this.campaignId}`,
           );
-          this.donationService.removeLocalDonation(this.donation);
-          this.cancelExpiryWarning();
-          delete this.donation;
 
-          this.createDonation();
+          if (this.donation) {
+            this.clearDonation(this.donation, true);
+          }
+          this.createDonation(); // Re-sets-up PRB etc.
         });
 
       return;
@@ -362,7 +365,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         // this.createDonation().subscribe(...) for Payment Request Button mount, which needs donation info
         // first and so happens in `preparePaymentRequestButton()`.
         this.card = this.stripeService.getCard();
-        if (this.card) {
+        if (this.cardInfo && this.card) { // Ensure #cardInfo not hidden by PRB success.
           this.card.mount(this.cardInfo.nativeElement);
           this.card.addEventListener('change', this.cardHandler);
         }
@@ -381,23 +384,25 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
   async onStripeCardChange(state: StripeElementChangeEvent) {
     this.stripePRBMethodReady = false; // Using card instead
+    this.addStripeCardBillingValidators();
 
+    console.log('Debug: card change event – new state: ', state);
     this.stripePaymentMethodReady = state.complete;
     if (state.error) {
       this.stripeError = `Payment method update failed: ${state.error.message}`;
+    } else {
+      this.stripeError = undefined; // Clear any previous card errors if number fixed.
     }
 
     // Jump back if we get an out of band message back that the card is *not* valid/ready.
     // Don't jump forward when the card *is* valid, as the donor might have been
     // intending to edit something else in the `payment` step; let them click Next.
     if (!this.donation || !this.stripePaymentMethodReady) {
+      console.log('Debug: jumping to payment details via onStripeCardChange()');
       this.jumpToStep('Payment details');
 
       return;
     }
-
-    this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
-    this.donation.countryCode = this.paymentGroup.value.billingCountry;
 
     const paymentMethodResult = await this.stripeService.createPaymentMethod(
       this.card,
@@ -432,8 +437,18 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   async submit() {
-    if (this.donationForm.invalid) {
+    if (!this.donation || this.donationForm.invalid) {
       return;
+    }
+
+    if (
+      this.psp === 'stripe' &&
+      this.paymentGroup &&
+      !this.donation?.billingPostalAddress &&
+      this.paymentGroup.value.billingPostcode
+    ) {
+      this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
+      this.donation.countryCode = this.paymentGroup.value.billingCountry;
     }
 
     this.submitting = true;
@@ -612,6 +627,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private jumpToStep(stepLabel: string) {
+    if (!this.donationForm.valid) {
+      console.log('Debug: form – not valid', this.donationForm);
+    }
+
     this.stepper.steps
       .filter(step => step.label === stepLabel)
       [0]
@@ -753,28 +772,43 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private preparePaymentRequestButton(donation: Donation) {
-    const paymentRequestResultObserver: Observer<boolean> = {
-      next: (success: boolean) => {
-        if (success) {
-          if (this.donation) {
-            this.analyticsService.logEvent(
-              'stripe_prb_setup_success',
-              `Stripe PRB success for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
-            );
-          }
+    const paymentRequestResultObserver: Observer<PaymentMethod.BillingDetails | undefined> = {
+      next: (billingDetails?: PaymentMethod.BillingDetails) => {
+        if (billingDetails && this.donation) {
+          console.log('PRB debug: successful observer callback');
+
+          this.analyticsService.logEvent(
+            'stripe_prb_setup_success',
+            `Stripe PRB success for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
+          );
+
+          // Set form and `donation` billing fields from PRB card's data.
+          this.paymentGroup.patchValue({
+            billingCountry: billingDetails.address?.country,
+            billingPostcode: billingDetails.address?.postal_code,
+          });
 
           this.stripePaymentMethodReady = true;
           this.stripePRBMethodReady = true;
+          this.removeStripeCardBillingValidators();
+          this.jumpToStep('Receive updates');
+
           return;
         }
 
+        console.log('PRB debug: observer callback had non-success status or missing donation');
+
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
+        this.addStripeCardBillingValidators();
         this.stripeError = 'Payment failed – please try again';
       },
-      error: () => {
+      error: (err) => {
+        console.log('PRB debug: observer callback got an error', err);
+
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
+        this.addStripeCardBillingValidators();
         this.stripeError = 'Payment method handling failed';
       },
       complete: () => {},
@@ -784,9 +818,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     this.stripeService.canUsePaymentRequest().then(canUse => {
       if (canUse) {
+        console.log('PRB debug: PRB request is usable');
         this.paymentRequestButton.mount(this.paymentRequestButtonEl.nativeElement);
         this.requestButtonShown = true;
       } else {
+        console.log('PRB debug: PRB request is not usable, hiding button');
         this.paymentRequestButtonEl.nativeElement.style.display = 'none';
       }
     });
@@ -921,8 +957,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         `Cancelled failing donation ${this.previousDonation.donationId} to campaign ${this.campaignId}`,
       );
       this.donationService.cancel(this.previousDonation).subscribe(() => {
-        this.donationService.removeLocalDonation(this.previousDonation);
-        this.cancelExpiryWarning();
+        if (!this.previousDonation) {
+          return;
+        }
+        this.clearDonation(this.previousDonation, true);
       });
     }
 
@@ -940,6 +978,20 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         replaceUrl: true,
       });
     });
+  }
+
+  private clearDonation(donation: Donation, clearAllRecord: boolean) {
+    if (clearAllRecord) { // i.e. don't keep donation around for /thanks/... or reuse.
+      this.donationService.removeLocalDonation(donation);
+    }
+
+    this.cancelExpiryWarning();
+
+    if (this.paymentRequestButton) {
+      delete this.paymentRequestButton;
+    }
+
+    delete this.donation;
   }
 
   private redirectToEnthuse(donation: Donation, logoUri?: string) {
@@ -1087,6 +1139,16 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       Validators.required,
       Validators.email,
     ]);
+
+    this.addStripeCardBillingValidators();
+  }
+
+  private removeStripeCardBillingValidators() {
+    this.paymentGroup.controls.billingCountry.setValidators([]);
+    this.paymentGroup.controls.billingPostcode.setValidators([]);
+  }
+
+  private addStripeCardBillingValidators() {
     this.paymentGroup.controls.billingCountry.setValidators([
       Validators.required,
     ]);
@@ -1141,6 +1203,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
         this.scheduleMatchingExpiryWarning(this.donation);
 
+        if (this.psp === 'stripe') {
+          this.preparePaymentRequestButton(this.donation);
+        }
+
         // In doc block use case (a), we need to put the amounts from the previous
         // donation into the form and move to Step 2.
         const tipPercentageFixed = (100 * donation.tipAmount / donation.donationAmount).toFixed(1);
@@ -1170,11 +1236,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         .subscribe(
           () => {
             this.analyticsService.logEvent('cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
-            this.donationService.removeLocalDonation(donation);
-            this.cancelExpiryWarning();
 
-            // Removes match funds reserved timer if present
-            delete this.donation;
+            this.clearDonation(donation, true);
 
             // Go back to 1st step to encourage donor to try again
             this.stepper.reset();
