@@ -449,6 +449,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     ) {
       this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
       this.donation.countryCode = this.paymentGroup.value.billingCountry;
+      this.donationService.updateLocalDonation(this.donation);
     }
 
     this.submitting = true;
@@ -774,12 +775,12 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   private preparePaymentRequestButton(donation: Donation) {
     const paymentRequestResultObserver: Observer<PaymentMethod.BillingDetails | undefined> = {
       next: (billingDetails?: PaymentMethod.BillingDetails) => {
-        if (billingDetails && this.donation) {
+        if (billingDetails && donation) {
           console.log('PRB debug: successful observer callback');
 
           this.analyticsService.logEvent(
             'stripe_prb_setup_success',
-            `Stripe PRB success for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
+            `Stripe PRB success for donation ${donation.donationId} to campaign ${this.campaignId}`,
           );
 
           // Set form and `donation` billing fields from PRB card's data.
@@ -797,7 +798,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         }
 
         console.log('PRB debug: observer callback had non-success status or missing donation');
-        console.log('this.donation:', this.donation);
         console.log('pPRB-scoped donation:', donation);
         console.log('billingDetails:', billingDetails);
 
