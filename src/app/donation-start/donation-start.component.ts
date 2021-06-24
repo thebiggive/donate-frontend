@@ -772,7 +772,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
 
-  private preparePaymentRequestButton(donation: Donation) {
+  private preparePaymentRequestButton(donation: Donation, paymentGroup: FormGroup) {
     const paymentRequestResultObserver: Observer<PaymentMethod.BillingDetails | undefined> = {
       next: (billingDetails?: PaymentMethod.BillingDetails) => {
         if (billingDetails && donation) {
@@ -784,7 +784,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           );
 
           // Set form and `donation` billing fields from PRB card's data.
-          this.paymentGroup.patchValue({
+          paymentGroup.patchValue({
             billingCountry: billingDetails.address?.country,
             billingPostcode: billingDetails.address?.postal_code,
           });
@@ -861,7 +861,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     if (this.psp === 'stripe') {
       this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
 
-      this.preparePaymentRequestButton(this.donation);
+      this.preparePaymentRequestButton(this.donation, this.paymentGroup);
     }
 
     // Amount reserved for matching is 'false-y', i.e. 0
@@ -1207,7 +1207,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         this.scheduleMatchingExpiryWarning(this.donation);
 
         if (this.psp === 'stripe') {
-          this.preparePaymentRequestButton(this.donation);
+          this.preparePaymentRequestButton(this.donation, this.paymentGroup);
         }
 
         // In doc block use case (a), we need to put the amounts from the previous
