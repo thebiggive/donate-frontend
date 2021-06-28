@@ -773,6 +773,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private preparePaymentRequestButton(donation: Donation, paymentGroup: FormGroup) {
+    if (this.paymentRequestButton) {
+      console.log('Deleting previous PRB ref');
+      delete this.paymentRequestButton;
+    }
+
     const paymentRequestResultObserver: Observer<PaymentMethod.BillingDetails | undefined> = {
       next: (billingDetails?: PaymentMethod.BillingDetails) => {
         if (billingDetails && donation) {
