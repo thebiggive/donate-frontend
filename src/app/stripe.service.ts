@@ -221,30 +221,33 @@ export class StripeService {
         requestPayerName: true,
         requestPayerEmail: true,
       });
-
-      this.paymentRequest.on('paymentmethod', (event: PaymentRequestPaymentMethodEvent) => {
-        console.log('PRB debug: got paymentmethod', event);
-
-        // Update fee details before confirming payment
-        this.setLastCardMetadata(
-          event.paymentMethod?.card?.brand,
-          event.paymentMethod?.card?.country || 'N/A',
-        );
-
-        if (!donation.donationId) {
-          event.complete('fail');
-          console.log('No donation client secret to complete PaymentRequest');
-          return;
-        }
-
-        this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
-
-        console.log('PRB debug: payment method set success');
-
-        event.complete('success');
-        resultObserver.next(event.paymentMethod?.billing_details); // Let the page hide the card details & make 'Next' available.
-      });
     }
+
+    // Always re-define the `on()` so that `resultObserver` is using the latest observer,
+    // in the event that we re-created the PRB, and not trying to call back to a stale
+    // element.
+    this.paymentRequest.on('paymentmethod', (event: PaymentRequestPaymentMethodEvent) => {
+      console.log('PRB debug: got paymentmethod', event);
+
+      // Update fee details before confirming payment
+      this.setLastCardMetadata(
+        event.paymentMethod?.card?.brand,
+        event.paymentMethod?.card?.country || 'N/A',
+      );
+
+      if (!donation.donationId) {
+        event.complete('fail');
+        console.log('No donation client secret to complete PaymentRequest');
+        return;
+      }
+
+      this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
+
+      console.log('PRB debug: payment method set success');
+
+      event.complete('success');
+      resultObserver.next(event.paymentMethod?.billing_details); // Let the page hide the card details & make 'Next' available.
+    });
 
     const existingElement = this.elements.getElement('paymentRequestButton');
     if (existingElement) {
