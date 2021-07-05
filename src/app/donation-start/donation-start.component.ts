@@ -306,8 +306,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     if (this.donation && event.selectedIndex > 1) {
-      // After create(), update all Angular form data except billing postcode
-      // (which is in the final step) on step changes.
+      // After create() update all Angular form data on step changes, except billing
+      // postcode & country which can be set manually or via PRB callbacks.
       if (this.paymentGroup) {
         this.donation.emailAddress = this.paymentGroup.value.emailAddress;
         this.donation.firstName = this.paymentGroup.value.firstName;
@@ -449,6 +449,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     ) {
       this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
       this.donation.countryCode = this.paymentGroup.value.billingCountry;
+      this.donationService.updateLocalDonation(this.donation);
     }
 
     this.submitting = true;
@@ -771,19 +772,24 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
 
-  private preparePaymentRequestButton(donation: Donation) {
+  private preparePaymentRequestButton(donation: Donation, paymentGroup: FormGroup) {
+    if (this.paymentRequestButton) {
+      console.log('Deleting previous PRB ref');
+      delete this.paymentRequestButton;
+    }
+
     const paymentRequestResultObserver: Observer<PaymentMethod.BillingDetails | undefined> = {
       next: (billingDetails?: PaymentMethod.BillingDetails) => {
-        if (billingDetails && this.donation) {
+        if (billingDetails && donation) {
           console.log('PRB debug: successful observer callback');
 
           this.analyticsService.logEvent(
             'stripe_prb_setup_success',
-            `Stripe PRB success for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
+            `Stripe PRB success for donation ${donation.donationId} to campaign ${this.campaignId}`,
           );
 
           // Set form and `donation` billing fields from PRB card's data.
-          this.paymentGroup.patchValue({
+          paymentGroup.patchValue({
             billingCountry: billingDetails.address?.country,
             billingPostcode: billingDetails.address?.postal_code,
           });
@@ -797,6 +803,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         }
 
         console.log('PRB debug: observer callback had non-success status or missing donation');
+        console.log('pPRB-scoped donation:', donation);
+        console.log('billingDetails:', billingDetails);
 
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
@@ -858,7 +866,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     if (this.psp === 'stripe') {
       this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
 
-      this.preparePaymentRequestButton(this.donation);
+      this.preparePaymentRequestButton(this.donation, this.paymentGroup);
     }
 
     // Amount reserved for matching is 'false-y', i.e. 0
@@ -1204,7 +1212,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         this.scheduleMatchingExpiryWarning(this.donation);
 
         if (this.psp === 'stripe') {
-          this.preparePaymentRequestButton(this.donation);
+          this.preparePaymentRequestButton(this.donation, this.paymentGroup);
         }
 
         // In doc block use case (a), we need to put the amounts from the previous
