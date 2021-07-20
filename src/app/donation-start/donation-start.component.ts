@@ -74,6 +74,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
   stripeError?: string;
   submitting = false;
+  termsProvider = `Big Give's`;
   termsUrl = 'https://www.thebiggive.org.uk/s/terms-and-conditions';
   // Track 'Next' clicks so we know when to show missing radio button error messages.
   triedToLeaveGiftAid = false;
@@ -690,6 +691,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.currencySymbol = getCurrencySymbol(this.campaign.currencyCode, 'narrow', 'en-GB');
 
     if (this.campaign.parentRef === 'gogiveone') {
+      this.termsProvider = 'Go Give One';
       this.privacyUrl = 'https://www.thebiggive.org.uk/s/gogiveone-privacy';
       this.termsUrl = 'https://www.thebiggive.org.uk/s/gogiveone-terms';
     }
