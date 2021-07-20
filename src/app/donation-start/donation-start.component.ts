@@ -69,10 +69,12 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   suggestedAmounts: {[key: string]: number[]};
   donationCreateError = false;
   donationUpdateError = false;
+  privacyUrl = 'https://www.thebiggive.org.uk/s/privacy-policy';
   stripePaymentMethodReady = false;
   stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
   stripeError?: string;
   submitting = false;
+  termsUrl = 'https://www.thebiggive.org.uk/s/terms-and-conditions';
   // Track 'Next' clicks so we know when to show missing radio button error messages.
   triedToLeaveGiftAid = false;
   triedToLeaveMarketing = false;
@@ -686,6 +688,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.campaignOpenOnLoad = this.campaignIsOpen();
 
     this.currencySymbol = getCurrencySymbol(this.campaign.currencyCode, 'narrow', 'en-GB');
+
+    if (this.campaign.parentRef === 'gogiveone') {
+      this.privacyUrl = 'https://www.thebiggive.org.uk/s/gogiveone-privacy';
+      this.termsUrl = 'https://www.thebiggive.org.uk/s/gogiveone-terms';
+    }
 
     if (environment.psps.stripe.enabled && this.campaign.charity.stripeAccountId) {
       this.psp = 'stripe';
