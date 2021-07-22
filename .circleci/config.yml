@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   aws-ecr: circleci/aws-ecr@6.15.3
   aws-ecs: circleci/aws-ecs@2.1.0
-  aws-s3: circleci/aws-s3@1.0.15
+  aws-s3: circleci/aws-s3@3.0.0
   jira: circleci/jira@1.1.2
   slack: circleci/slack@3.4.2
 
@@ -57,7 +57,6 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=31536000"
-          overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
       - aws-s3/sync:
           from: dist/browser/assets
@@ -65,7 +64,6 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
-          overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
   deploy-regression-static:
     docker:
@@ -91,7 +89,6 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=31536000"
-          overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
       - aws-s3/sync:
           from: dist/browser/assets
@@ -99,7 +96,6 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
-          overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
   deploy-production-static:
     docker:
@@ -125,7 +121,6 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=31536000"
-          overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
       - aws-s3/sync:
           from: dist/browser/assets
@@ -133,7 +128,6 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
-          overwrite: false  # Leave previous versions in tact (don't `--delete`)
 
 workflows:
   build:
