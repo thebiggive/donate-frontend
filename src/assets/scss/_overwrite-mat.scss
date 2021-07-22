@@ -42,6 +42,12 @@ mat-progress-bar {
   }
 }
 
+mat-checkbox {
+  .mat-checkbox-label {
+    white-space: normal;
+  }
+}
+
 mat-radio-button {
   margin-bottom: 1rem;
   .mat-radio-label {
