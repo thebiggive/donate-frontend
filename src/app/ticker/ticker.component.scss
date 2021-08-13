@@ -16,6 +16,9 @@
   @media #{$breakpoint-lg} {
     padding: 0.5rem 1rem;
   }
+  @media #{$breakpoint-sm} {
+    padding: 4px 15px;
+  }
 }
 
 .c-ticker__value {
@@ -34,10 +37,6 @@
   width: 100%;
   position: relative;
   overflow: hidden;
-  top: 1px;
-  @media #{$breakpoint-md} {
-    top: 4px;
-  }
   @media only screen and (max-width: 450px) {
     margin-top: 3rem;
     top: -35px;
