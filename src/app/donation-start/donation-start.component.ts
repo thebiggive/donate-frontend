@@ -151,6 +151,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
         coverFee: [false],
+        feeCoverAmount: [null],
         tipPercentage: [this.initialTipSuggestedPercentage], // See addStripeValidators().
         tipAmount: [null], // See addStripeValidators().
       }),
@@ -316,6 +317,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         this.donation.firstName = this.paymentGroup.value.firstName;
         this.donation.lastName = this.paymentGroup.value.lastName;
       }
+
+      this.donation.feeCoverAmount = this.sanitiseCurrency(this.amountsGroup.value.feeCoverAmount);
 
       this.donation.giftAid = this.giftAidGroup.value.giftAid;
 
@@ -750,6 +753,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       currencyCode: this.campaign.currencyCode || 'GBP',
       donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
       donationMatched: this.campaign.isMatched,
+      feeCoverAmount: this.sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
       projectId: this.campaignId,
@@ -1058,15 +1062,15 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       // On the alternative fee model, we need to listen for coverFee
       // checkbox changes and don't have a tip percentage dropdown.
       this.amountsGroup.get('coverFee')?.valueChanges.subscribe(coverFee => {
-        let tipAmount = '0.00';
+        let feeCoverAmount = '0.00';
         // % should always be non-null when checkbox available, but re-assert
         // that here to keep type checks happy.
         if (coverFee && this.campaign.feePercentage) {
           // Keep value consistent with format of manual string inputs.
-          tipAmount = this.getTipAmount(this.campaign.feePercentage, this.donationAmount);
+          feeCoverAmount = this.getTipOrFeeAmount(this.campaign.feePercentage, this.donationAmount);
         }
 
-        this.amountsGroup.patchValue({ tipAmount });
+        this.amountsGroup.patchValue({ feeCoverAmount });
       });
 
       this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
@@ -1074,11 +1078,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           return;
         }
 
-        const tipAmount = this.amountsGroup.get('coverFee')?.value
-          ? this.getTipAmount(this.campaign.feePercentage, donationAmount)
+        const feeCoverAmount = this.amountsGroup.get('coverFee')?.value
+          ? this.getTipOrFeeAmount(this.campaign.feePercentage, donationAmount)
           : '0.00';
 
-        this.amountsGroup.patchValue({ tipAmount });
+        this.amountsGroup.patchValue({ feeCoverAmount });
       });
     } else {
       // On the default fee model, we need to listen for tip percentage
@@ -1103,9 +1107,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           }
 
           updatedValues.tipPercentage = newDefault;
-          updatedValues.tipAmount = this.getTipAmount(newDefault, donationAmount);
+          updatedValues.tipAmount = this.getTipOrFeeAmount(newDefault, donationAmount);
         } else if (this.amountsGroup.get('tipPercentage')?.value !== 'Other') {
-          updatedValues.tipAmount = this.getTipAmount(this.amountsGroup.get('tipPercentage')?.value, donationAmount);
+          updatedValues.tipAmount = this.getTipOrFeeAmount(this.amountsGroup.get('tipPercentage')?.value, donationAmount);
         }
 
         this.amountsGroup.patchValue(updatedValues);
@@ -1118,7 +1122,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
         this.amountsGroup.patchValue({
           // Keep value consistent with format of manual string inputs.
-          tipAmount: this.getTipAmount(tipPercentage, this.donationAmount),
+          tipAmount: this.getTipOrFeeAmount(tipPercentage, this.donationAmount),
         });
       });
     }
@@ -1178,9 +1182,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   /**
    * @param percentage  e.g. from select field or a custom fee model campaign fee level.
    * @param donationAmount  Sanitised, e.g. via get() helper `donationAmount`.
-   * @returns Tip amount as a decimal string, as if input directly into the form field.
+   * @returns Tip or fee cover amount as a decimal string, as if input directly into a form field.
    */
-  private getTipAmount(percentage: number, donationAmount?: number): string {
+  private getTipOrFeeAmount(percentage: number, donationAmount?: number): string {
     return (percentage / 100 * (donationAmount || 0))
       .toFixed(2);
   }

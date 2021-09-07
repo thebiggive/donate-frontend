@@ -92,6 +92,7 @@ describe('AnalyticsService', () => {
       currencyCode: 'GBP',
       donationAmount: 6,
       donationMatched: true,
+      feeCoverAmount: 0,
       giftAid: true,
       matchedAmount: 0,
       matchReservedAmount: 6,

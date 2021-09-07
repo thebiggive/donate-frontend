@@ -77,6 +77,8 @@ export interface Donation {
 
     emailAddress?: string;
 
+    feeCoverAmount: number;
+
     firstName?: string;
 
     lastName?: string;
