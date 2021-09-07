@@ -90,7 +90,7 @@ export class DonationCompleteComponent {
     if (donation && this.donationService.isComplete(donation)) {
       this.analyticsService.logEvent('thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
 
-      this.cardChargedAmount = donation.donationAmount + donation.tipAmount;
+      this.cardChargedAmount = donation.donationAmount + donation.feeCoverAmount + donation.tipAmount;
       this.giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;
       this.totalValue = donation.donationAmount + this.giftAidAmount + donation.matchedAmount;
       this.complete = true;

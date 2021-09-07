@@ -138,18 +138,35 @@ export class AnalyticsService {
     const products = [this.buildProductData(campaign, donation, false)];
     if (donation.tipAmount > 0) {
       products.push(this.buildProductData(campaign, donation, true));
+    } else if (donation.feeCoverAmount > 0) {
+      products.push(this.buildProductData(campaign, donation, false, true));
     }
 
     return products;
   }
 
-  private buildProductData(campaign: Campaign, donation?: Donation, tip?: boolean): AnalyticsProduct {
+  private buildProductData(campaign: Campaign, donation?: Donation, tip?: boolean, feeCover?: boolean): AnalyticsProduct {
+    let price;
+    let name = 'Donation';
+
+    if (donation) {
+      price = donation.donationAmount;
+
+      if (tip) {
+        price = donation?.tipAmount;
+        name = 'Tip';
+      } else if (feeCover) {
+        price = donation?.feeCoverAmount;
+        name = 'Fee cover';
+      }
+    }
+
     return {
       brand: campaign.charity.name,
       category: `${campaign.matchFundsRemaining ? 'Matched' : 'Unmatched'} donations`,
       id: tip ? `${campaign.charity.id}-t` : `${campaign.charity.id}-${campaign.matchFundsRemaining > 0 ? 'm' : 'u'}-d`,
-      name: tip ? 'Tip' : 'Donation',
-      price: donation ? (tip ? donation.tipAmount : donation.donationAmount) : undefined,
+      name,
+      price,
       quantity: 1,
       variant: (donation && donation.giftAid !== null) ? (`${donation.giftAid ? 'With' : 'Without'} Gift Aid`) : undefined,
 
