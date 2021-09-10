@@ -267,7 +267,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
         }
 
         if (this.psp === 'stripe' && clickEvent.target.innerText.includes('Receive updates') && !this.stripePaymentMethodReady) {
-          console.log('Debug: jumping to payment details as NOT stripePaymentMethodReady');
           this.jumpToStep('Payment details');
         }
 
@@ -392,7 +391,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     this.stripePRBMethodReady = false; // Using card instead
     this.addStripeCardBillingValidators();
 
-    console.log('Debug: card change event – new state: ', state);
     this.stripePaymentMethodReady = state.complete;
     if (state.error) {
       this.stripeError = `Payment method update failed: ${state.error.message}`;
@@ -404,7 +402,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     // Don't jump forward when the card *is* valid, as the donor might have been
     // intending to edit something else in the `payment` step; let them click Next.
     if (!this.donation || !this.stripePaymentMethodReady) {
-      console.log('Debug: jumping to payment details via onStripeCardChange()');
       this.jumpToStep('Payment details');
 
       return;
@@ -634,10 +631,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private jumpToStep(stepLabel: string) {
-    if (!this.donationForm.valid) {
-      console.log('Debug: form – not valid', this.donationForm);
-    }
-
     this.stepper.steps
       .filter(step => step.label === stepLabel)
       [0]
@@ -787,15 +780,12 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
   private preparePaymentRequestButton(donation: Donation, paymentGroup: FormGroup) {
     if (this.paymentRequestButton) {
-      console.log('Deleting previous PRB ref');
       delete this.paymentRequestButton;
     }
 
     const paymentRequestResultObserver: Observer<PaymentMethod.BillingDetails | undefined> = {
       next: (billingDetails?: PaymentMethod.BillingDetails) => {
         if (billingDetails && donation) {
-          console.log('PRB debug: successful observer callback');
-
           this.analyticsService.logEvent(
             'stripe_prb_setup_success',
             `Stripe PRB success for donation ${donation.donationId} to campaign ${this.campaignId}`,
@@ -815,18 +805,12 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           return;
         }
 
-        console.log('PRB debug: observer callback had non-success status or missing donation');
-        console.log('pPRB-scoped donation:', donation);
-        console.log('billingDetails:', billingDetails);
-
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
         this.addStripeCardBillingValidators();
         this.stripeError = 'Payment failed – please try again';
       },
       error: (err) => {
-        console.log('PRB debug: observer callback got an error', err);
-
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
         this.addStripeCardBillingValidators();
@@ -839,11 +823,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     this.stripeService.canUsePaymentRequest().then(canUse => {
       if (canUse) {
-        console.log('PRB debug: PRB request is usable');
         this.paymentRequestButton.mount(this.paymentRequestButtonEl.nativeElement);
         this.requestButtonShown = true;
       } else {
-        console.log('PRB debug: PRB request is not usable, hiding button');
         this.paymentRequestButtonEl.nativeElement.style.display = 'none';
       }
     });
