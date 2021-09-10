@@ -227,8 +227,6 @@ export class StripeService {
     // in the event that we re-created the PRB, and not trying to call back to a stale
     // element.
     this.paymentRequest.on('paymentmethod', (event: PaymentRequestPaymentMethodEvent) => {
-      console.log('PRB debug: got paymentmethod', event);
-
       // Update fee details before confirming payment
       this.setLastCardMetadata(
         event.paymentMethod?.card?.brand,
@@ -242,8 +240,6 @@ export class StripeService {
       }
 
       this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
-
-      console.log('PRB debug: payment method set success');
 
       event.complete('success');
       resultObserver.next(event.paymentMethod?.billing_details); // Let the page hide the card details & make 'Next' available.
