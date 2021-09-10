@@ -568,8 +568,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     return this.sanitiseCurrency(this.amountsGroup.value.donationAmount);
   }
 
-  get donationAndTipAmount(): number {
-    return this.donationAmount + this.tipAmount();
+  /**
+   * Donation plus any tip and/or fee cover.
+   */
+  get donationAndExtrasAmount(): number {
+    return this.donationAmount + this.tipAmount() + this.feeCoverAmount();
   }
 
   customTip(): boolean {
@@ -582,6 +585,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     return this.donation.matchReservedAmount;
+  }
+
+  feeCoverAmount(): number {
+    return this.sanitiseCurrency(this.amountsGroup.value.feeCoverAmount);
   }
 
   giftAidAmount(): number {
