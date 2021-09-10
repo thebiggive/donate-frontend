@@ -358,11 +358,11 @@
                 Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few minutes to try again.
               </p>
 
-              <div *ngIf="tipAmount() > 0" class="c-breakdown b-center b-grey">
+              <div *ngIf="feeCoverAmount() > 0 || tipAmount() > 0" class="c-breakdown b-center b-grey">
                 <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }} donation to {{ campaign.charity.name }}</p>
                 <p class="b-m-0"><mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon></p>
-                <p *ngIf="campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} platform fee cover</p>
-                <p *ngIf="!campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give</p>
+                <p *ngIf="feeCoverAmount() > 0" class="b-rt-sm b-m-0">{{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} platform fee cover</p>
+                <p *ngIf="tipAmount() > 0" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give</p>
               </div>
 
               <p *ngIf="stripeError" class="error" aria-live="assertive">
@@ -377,7 +377,7 @@
               >
                 Donate
                 <span class="b-bold c-donate-button-amount">
-                  {{ donationAndTipAmount | exactCurrency:campaign.currencyCode }}
+                  {{ donationAndExtrasAmount | exactCurrency:campaign.currencyCode }}
                 </span>
               </button>
 
