@@ -168,6 +168,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         coverFee: false,
         donationAmount: '£1234',
+        feeCoverAmount: null,
         tipAmount: '20',
         tipPercentage: 12.5,
       },
@@ -208,6 +209,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         coverFee: false,
         donationAmount: '1234',
+        feeCoverAmount: null,
         tipAmount: null,
         tipPercentage: 12.5,
       },
@@ -250,6 +252,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         coverFee: false,
         donationAmount: null,
+        feeCoverAmount: null,
         tipAmount: null,
         tipPercentage: 12.5,
       },
@@ -290,6 +293,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         coverFee: false,
         donationAmount: '0', // Simpler for now than testing e.g. '0.99' which also fails pattern validation
+        feeCoverAmount: null,
         tipAmount: null,
         tipPercentage: 12.5,
       },
@@ -330,6 +334,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         coverFee: false,
         donationAmount: '25001',
+        feeCoverAmount: null,
         tipAmount: null,
         tipPercentage: 12.5,
       },
@@ -370,6 +375,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         coverFee: false,
         donationAmount: '8765,21',
+        feeCoverAmount: null,
         tipAmount: null,
         tipPercentage: 12.5,
       },
@@ -413,6 +419,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         coverFee: false,
         donationAmount: '£1234',
+        feeCoverAmount: null,
         tipAmount: null,
         tipPercentage: 12.5,
       },
@@ -457,6 +464,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         coverFee: false,
         donationAmount: '£1234',
+        feeCoverAmount: null,
         tipAmount: null,
         tipPercentage: 12.5,
       },
@@ -500,6 +508,7 @@ describe('DonationStartComponent', () => {
       amounts: {
         coverFee: false,
         donationAmount: '£1234',
+        feeCoverAmount: null,
         tipAmount: null,
         tipPercentage: 12.5,
       },
