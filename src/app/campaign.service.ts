@@ -19,12 +19,12 @@ export class CampaignService {
     private http: HttpClient,
   ) {}
 
-  static isPending(campaign: Campaign): boolean {
-    return campaign.status === 'Pending';
+  static isPendingOrNotReady(campaign: Campaign): boolean {
+    return campaign.status === 'Pending' || !campaign.ready;
   }
 
   static isOpenForDonations(campaign: Campaign): boolean {
-    if (this.isPending(campaign)) {
+    if (this.isPendingOrNotReady(campaign)) {
       return false;
     }
 
