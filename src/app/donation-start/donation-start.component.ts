@@ -725,6 +725,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
 
     this.analyticsService.logCampaignChosen(this.campaign);
 
+    // auto redirect back to campaign page if donations not open yet
     if (!CampaignService.isOpenForDonations(this.campaign)) {
       this.router.navigateByUrl(`/campaign/${this.campaign.id}`, { replaceUrl: true });
       return;

@@ -64,6 +64,7 @@ describe('TickerComponent', () => {
           person: 'Someones quote',
         },
       ],
+      true,
       'The solution',
       new Date(),
       'Active',

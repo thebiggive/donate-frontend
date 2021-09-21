@@ -67,6 +67,7 @@ describe('CampaignDetailsComponent', () => {
       988,
       'The situation',
       [],
+      true,
       'The solution',
       new Date(),
       'Active',

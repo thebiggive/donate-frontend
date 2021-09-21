@@ -65,6 +65,7 @@ describe('AnalyticsService', () => {
           person: 'Someones quote',
         },
       ],
+      true,
       'The solution',
       new Date(),
       'Active',
