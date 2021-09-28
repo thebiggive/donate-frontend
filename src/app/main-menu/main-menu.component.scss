@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import '../../abstract';
 
 .charity-login {
@@ -15,7 +16,7 @@
   }
 
   a {
-    font-size: mat-font-size($app-typography, button);
+    font-size: mat.font-size($app-typography, button);
   }
 }
 

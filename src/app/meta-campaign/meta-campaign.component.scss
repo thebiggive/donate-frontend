@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import '../../abstract';
 
 .c-grid {
@@ -6,7 +7,7 @@
 }
 
 .error {
-  color: mat-color($donate-warn);
+  color: mat.get-color-from-palette($donate-warn);
   max-width: $full-copy-max-width;
   text-align: center;
   margin: 1rem auto;

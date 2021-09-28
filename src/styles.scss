@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import './abstract';
 
 // Utility classes
@@ -7,9 +8,9 @@
 @import './assets/scss/overwrite-mat';
 
 html {
-  font-family: mat-font-family($app-typography);
-  font-size: mat-font-size($app-typography, body-2);
-  line-height: mat-line-height($app-typography, body-2);
+  font-family: mat.font-family($app-typography);
+  font-size: mat.font-size($app-typography, body-2);
+  line-height: mat.line-height($app-typography, body-2);
 }
 
 body {
@@ -24,6 +25,6 @@ li {
 }
 
 a {
-  color: mat-color($donate-primary);
+  color: mat.get-color-from-palette($donate-primary);
   cursor: pointer;
 }

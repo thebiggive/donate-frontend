@@ -1,3 +1,4 @@
+@use '~@angular/material' as mat;
 @import '../../abstract';
 
 .b-back-button {
@@ -170,7 +171,7 @@
   display: none;
 
   @media only screen and (max-width: 650px) {
-    color: mat-color($donate-primary);
+    color: mat.get-color-from-palette($donate-primary);
     font-size: 10px;
     text-align: center;
     margin: 2rem 0 -3rem 0;
@@ -251,7 +252,7 @@ a {
 }
 
 .error {
-  color: mat-color($donate-warn);
+  color: mat.get-color-from-palette($donate-warn);
   margin: 1rem 0;
 }
 
