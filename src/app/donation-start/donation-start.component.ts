@@ -66,6 +66,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   noPsps = false;
   psp: 'enthuse' | 'stripe';
   retrying = false;
+  skipPRBs: boolean;
   suggestedAmounts: {[key: string]: number[]};
   donationCreateError = false;
   donationUpdateError = false;
@@ -203,6 +204,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     this.maximumDonationAmount = environment.maximumDonationAmount;
+    this.skipPRBs = !environment.psps.stripe.prbEnabled;
 
     // We need each donor to get a randomised but consistent for them set of
     // amount suggestions, while we support variant tests of this. So
@@ -787,6 +789,10 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   }
 
   private preparePaymentRequestButton(donation: Donation, paymentGroup: FormGroup) {
+    if (this.skipPRBs) {
+      return;
+    }
+
     if (this.paymentRequestButton) {
       delete this.paymentRequestButton;
     }
