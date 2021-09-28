@@ -129,20 +129,24 @@
                   "maximumWarning": "50kb"
                 }
               ]
-            }
+            },
+            "development": {}
           },
-          "defaultConfiguration": ""
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "donate-frontend:build"
           },
           "configurations": {
             "production": {
               "browserTarget": "donate-frontend:build:production"
+            },
+            "development": {
+              "browserTarget": "donate-frontend:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -185,14 +189,17 @@
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "donate-frontend:serve"
+            "protractorConfig": "e2e/protractor.conf.js"
           },
           "configurations": {
             "production": {
               "devServerTarget": "donate-frontend:serve:production"
+            },
+            "development": {
+              "devServerTarget": "donate-frontend:serve:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "server": {
           "builder": "@angular-devkit/build-angular:server",
@@ -229,22 +236,26 @@
                 }
               ],
               "optimization": true
-            }
+            },
+            "development": {}
           },
-          "defaultConfiguration": ""
+          "defaultConfiguration": "production"
         },
         "serve-ssr": {
           "builder": "@nguniversal/builders:ssr-dev-server",
           "options": {
-            "browserTarget": "donate-frontend:build",
-            "serverTarget": "donate-frontend:server"
           },
           "configurations": {
             "production": {
               "browserTarget": "donate-frontend:build:production",
               "serverTarget": "donate-frontend:server:production"
+            },
+            "development": {
+              "serverTarget": "donate-frontend:server:development",
+              "browserTarget": "donate-frontend:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "prerender": {
           "builder": "@nguniversal/builders:prerender",
