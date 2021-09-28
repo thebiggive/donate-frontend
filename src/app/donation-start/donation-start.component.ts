@@ -258,11 +258,11 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     const stepperHeaders = stepper.getElementsByClassName('mat-step-header');
     for (const stepperHeader of stepperHeaders) {
       stepperHeader.addEventListener('click', (clickEvent: any) => {
-        if (clickEvent.target.innerText.includes('Your details') && this.stepper.selected.label === 'Gift Aid') {
+        if (clickEvent.target.innerText.includes('Your details') && this.stepper.selected?.label === 'Gift Aid') {
           this.triedToLeaveGiftAid = true;
         }
 
-        if (clickEvent.target.innerText.includes('Confirm') && this.stepper.selected.label === 'Your details') {
+        if (clickEvent.target.innerText.includes('Confirm') && this.stepper.selected?.label === 'Your details') {
           this.triedToLeaveMarketing = true;
         }
 
@@ -1235,7 +1235,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
           tipPercentage,
         });
 
-        if (this.stepper.selected.label === 'Your donation') {
+        if (this.stepper.selected?.label === 'Your donation') {
           this.jumpToStep(donation.currencyCode === 'GBP' ? 'Gift Aid' : 'Payment details');
         }
 
