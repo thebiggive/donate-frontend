@@ -11,7 +11,7 @@ export const environment: Environment = {
   donateGlobalUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
-  getSiteControlId: '97792',
+  getSiteControlId: '97792', // todo undefined to switch off?
   googleAnalyticsId: 'UA-2979952-3',
   maximumDonationAmount: 25000,
   psps: {
