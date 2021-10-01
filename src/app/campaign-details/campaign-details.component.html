@@ -97,23 +97,16 @@
     <div class="c-tabs">
       <mat-tab-group class="c-tab-group" animationDuration="0ms" color="primary">
         <mat-tab label="Campaign overview">
-          <ul class="c-quotes" *ngIf="campaign.quotes.length > 0">
-            <li *ngFor="let quote of campaign.quotes">
-              <blockquote class="c-quotes__blockquote">{{ quote.quote }}</blockquote>
-              <h4 class="c-quotes__attribution b-semi-bold b-mb-0">&mdash; {{ quote.person }}</h4>
-            </li>
-          </ul>
-
           <div class="c-video" *ngIf="videoEmbedUrl">
-              <iframe
-                class="c-video__iframe b-w-100"
-                [src]="videoEmbedUrl"
-                frameborder="0"
-                allow="autoplay; encrypted-media"
-                webkitallowfullscreen="true"
-                mozallowfullscreen="true"
-                allowfullscreen="true"></iframe>
-            </div>
+            <iframe
+              class="c-video__iframe b-w-100"
+              [src]="videoEmbedUrl"
+              frameborder="0"
+              allow="autoplay; encrypted-media"
+              webkitallowfullscreen="true"
+              mozallowfullscreen="true"
+              allowfullscreen="true"></iframe>
+          </div>
 
           <div class="c-details">
             <h3 class="c-details__heading b-rh-2">Situation</h3>
@@ -125,6 +118,13 @@
           <div class="c-additional" *ngIf="additionalImageUris.length > 0">
             <img *ngFor="let uri of additionalImageUris" [src]="uri" class="c-additional__images">
           </div>
+
+          <ul class="c-quotes" *ngIf="campaign.quotes.length > 0">
+            <li *ngFor="let quote of campaign.quotes">
+              <blockquote class="c-quotes__blockquote">{{ quote.quote }}</blockquote>
+              <h4 class="c-quotes__attribution b-semi-bold b-mb-0">&mdash; {{ quote.person }}</h4>
+            </li>
+          </ul>
         </mat-tab>
 
         <mat-tab *ngIf="campaign.updates.length > 0" label="Updates">
