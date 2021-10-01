@@ -34,7 +34,7 @@
           </span>
           to {{ donation.charityName }}.
         </h3>
-        <p class="b-rt-0" *ngIf="campaign">{{ campaign.summary }}</p>
+        <p class="b-rt-0" *ngIf="campaign?.thankYouMessage">{{ campaign.thankYouMessage }}</p>
 
         <div class="c-receipt b-grey">
           <h3 class="c-receipt__heading b-rh-2 b-bold">Your receipt</h3>

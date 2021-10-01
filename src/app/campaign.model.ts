@@ -51,6 +51,7 @@ export class Campaign {
     public logoUri?: string,
     public parentRef?: string,
     public surplusDonationInfo?: string,
+    public thankYouMessage?: string,
     public video?: {provider: string, key: string},
   ) {}
 }
