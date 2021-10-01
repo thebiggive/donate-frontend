@@ -35,6 +35,7 @@ export class Campaign {
     public matchFundsTotal: number,
     public problem: string,
     public quotes: Array<{person: string, quote: string}>,
+    public ready: boolean,
     public solution: string,
     public startDate: Date,
     public status: 'Active' | 'Expired' | 'Preview' | 'Pending',

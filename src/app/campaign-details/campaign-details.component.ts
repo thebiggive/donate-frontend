@@ -17,7 +17,7 @@ import { PageMetaService } from '../page-meta.service';
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   additionalImageUris: Array<string|undefined> = [];
   campaign: Campaign;
-  isPending = false;
+  isPendingOrNotReady = false;
   campaignInFuture = false;
   donateEnabled = true;
   fromFund = false;
@@ -57,7 +57,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   private setSecondaryProps(campaign: Campaign) {
     this.campaignInFuture = CampaignService.isInFuture(campaign);
     this.donateEnabled = CampaignService.isOpenForDonations(campaign);
-    this.isPending = CampaignService.isPending(campaign);
+    this.isPendingOrNotReady = CampaignService.isPendingOrNotReady(campaign);
 
     for (const originalUri of campaign.additionalImageUris) {
       this.imageService.getImageUri(originalUri.uri, 850).subscribe(uri => this.additionalImageUris.push(uri));
