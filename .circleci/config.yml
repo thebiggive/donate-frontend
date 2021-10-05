@@ -134,12 +134,13 @@ workflows:
   version: 2
   build-container:
     jobs:
-      - docker/publish: # Builds this dir's Dockerfile by default
+      - docker/publish:
           context:
             - docker-hub-creds
           docker-password: DOCKER_HUB_ACCESS_TOKEN
           docker-username: DOCKER_HUB_USERNAME
           image: thebiggive/donate-frontend-ci
+          path: ./.circleci # Working dir is project root
           tag: latest
     triggers:
       - schedule:
