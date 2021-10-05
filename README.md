@@ -63,7 +63,7 @@ donors' security. Browsers we expect to work fully with this app are:
 * all modern mobile & desktop browsers kept up to date, including extended support release cycles;
 * Internet Explorer 11
 
-See [`browserslist`](./browserslist) for the specific instructions that tell the Angular build system what support is needed during builds.
+See [`.browserslistrc`](./.browserslistrc) for the specific instructions that tell the Angular build system what support is needed during builds.
 
 Although it would be good to extend support for Internet Explorer
 9 and 10, they are unsupported by both Charity Checkout and

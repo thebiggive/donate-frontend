@@ -1,11 +1,11 @@
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
 
 $tbg-red: (
   500: #f0423b,
   800: #c1211a,
   contrast: (
     500: white,
-    800: $white-87-opacity,
+    800: rgba(white, 0.87),
   )
 );
 
@@ -30,48 +30,48 @@ $tbg-error-red: (
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$donate-primary: mat-palette($tbg-teal);
-$donate-accent: mat-palette($tbg-red);
-$donate-warn: mat-palette($tbg-error-red);
+$donate-primary: mat.define-palette($tbg-teal);
+$donate-accent: mat.define-palette($tbg-red);
+$donate-warn: mat.define-palette($tbg-error-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$donate-theme: mat-light-theme($donate-primary, $donate-accent, $donate-warn);
+$donate-theme: mat.define-light-theme($donate-primary, $donate-accent, $donate-warn);
 
 // Adapting Angular Material to override font, including on inputs.
 // https://stackoverflow.com/a/49541553/2803757
-$app-typography: mat-typography-config(
+$app-typography: mat.define-typography-config(
   $font-family:   '"Maven Pro", sans-serif',
-  $display-4:     mat-typography-level(112px, 112px, 300),
-  $display-3:     mat-typography-level(56px, 56px, 400),
-  $display-2:     mat-typography-level(45px, 48px, 400),
-  $display-1:     mat-typography-level(34px, 40px, 400),
-  $headline:      mat-typography-level(24px, 32px, 400),
-  $title:         mat-typography-level(20px, 32px, 500),
-  $subheading-2:  mat-typography-level(16px, 28px, 400),
-  $subheading-1:  mat-typography-level(15px, 24px, 400),
-  $body-2:        mat-typography-level(14px, 24px, 500),
-  $body-1:        mat-typography-level(14px, 20px, 400),
-  $caption:       mat-typography-level(12px, 20px, 400),
-  $button:        mat-typography-level(14px, 14px, 500),
+  $display-4:     mat.define-typography-level(112px, 112px, 300),
+  $display-3:     mat.define-typography-level(56px, 56px, 400),
+  $display-2:     mat.define-typography-level(45px, 48px, 400),
+  $display-1:     mat.define-typography-level(34px, 40px, 400),
+  $headline:      mat.define-typography-level(24px, 32px, 400),
+  $title:         mat.define-typography-level(20px, 32px, 500),
+  $subheading-2:  mat.define-typography-level(16px, 28px, 400),
+  $subheading-1:  mat.define-typography-level(15px, 24px, 400),
+  $body-2:        mat.define-typography-level(14px, 24px, 500),
+  $body-1:        mat.define-typography-level(14px, 20px, 400),
+  $caption:       mat.define-typography-level(12px, 20px, 400),
+  $button:        mat.define-typography-level(14px, 14px, 500),
     // Line-height must be unit-less fraction of the font-size.
-  $input:         mat-typography-level(16px, 1.25, 400)
+  $input:         mat.define-typography-level(16px, 1.25, 400)
 );
 
-@include mat-core($app-typography);
+@include mat.core($app-typography);
 
 // Include styles only for core + the components we use. SSR currently preloads the lot so it's important to keep
 // this as light (for page weight) as we can.
 // See https://github.com/angular/components/blob/master/guides/theming.md#theming-only-certain-components
-@include mat-core-theme($donate-theme);
+@include mat.core-theme($donate-theme);
 
-@include mat-button-theme($donate-theme);
-@include mat-checkbox-theme($donate-theme);
-@include mat-dialog-theme($donate-theme);
-@include mat-form-field-theme($donate-theme);
-@include mat-menu-theme($donate-theme);
-@include mat-progress-spinner-theme($donate-theme);
-@include mat-radio-theme($donate-theme);
-@include mat-select-theme($donate-theme);
-@include mat-sidenav-theme($donate-theme);
-@include mat-stepper-theme($donate-theme);
-@include mat-tabs-theme($donate-theme);
+@include mat.button-theme($donate-theme);
+@include mat.checkbox-theme($donate-theme);
+@include mat.dialog-theme($donate-theme);
+@include mat.form-field-theme($donate-theme);
+@include mat.menu-theme($donate-theme);
+@include mat.progress-spinner-theme($donate-theme);
+@include mat.radio-theme($donate-theme);
+@include mat.select-theme($donate-theme);
+@include mat.sidenav-theme($donate-theme);
+@include mat.stepper-theme($donate-theme);
+@include mat.tabs-theme($donate-theme);

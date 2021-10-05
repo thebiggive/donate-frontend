@@ -1,4 +1,4 @@
-import 'zone.js/dist/zone-node';
+import 'zone.js/node';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { enableProdMode } from '@angular/core';
@@ -80,9 +80,9 @@ export function app() {
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
-  // @ts-ignore Suppress param type error for now. See https://github.com/angular/universal/issues/1210
   server.engine('html', ngExpressEngine({
     bootstrap: AppServerModule,
+    inlineCriticalCss: false, // https://github.com/angular/universal/issues/2106#issuecomment-859720224
   }));
 
   server.set('view engine', 'html');

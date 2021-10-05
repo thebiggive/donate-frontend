@@ -83,6 +83,7 @@ describe('CampaignDetailsComponent', () => {
       undefined,
       undefined,
       undefined,
+      undefined,
       {
         provider: 'youtube',
         key: 'someFakeKey',

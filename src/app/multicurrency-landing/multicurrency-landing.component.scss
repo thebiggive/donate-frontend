@@ -34,10 +34,17 @@ $dark-grey: #333333;
             margin: 0;
             color: $dark-grey;
         }
-    
-        .multicurrency-location-pick-wrapper {
+
+        .location-wrapper-top, .location-wrapper-bottom {
             //margin: auto centers the multicurrency-location-pick-wrapper
             margin: auto;
+        }
+
+        .location-wrapper-top {
+            padding: 0 0 150px 0;
+        }
+
+        .location-wrapper-bottom {
             padding: 75px 0;
         }
     }
