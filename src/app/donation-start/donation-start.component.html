@@ -90,7 +90,7 @@
             <div class="donation-input">
               <div *ngIf="psp == 'stripe' && !campaign.feePercentage">
                 <mat-form-field appearance="outline">
-                  <mat-label for="tipPercentage">Donation to the Big Give</mat-label>
+                  <mat-label for="tipPercentage">Donation to the Big Give Trust</mat-label>
                   <mat-select formControlName="tipPercentage" id="tipPercentage" (selectionChange)="tipPercentageChange()">
                     <mat-option [value]="7.5">7.5%</mat-option>
                     <mat-option [value]="10">10%</mat-option>
@@ -374,10 +374,10 @@
                 </span>
               </button>
 
-              <div *ngIf="feeCoverAmount() > 0 || tipAmount() > 0" class="c-breakdown b-center b-grey">
+              <div *ngIf="psp == 'stripe' || feeCoverAmount() > 0 || tipAmount() > 0" class="c-breakdown b-center b-grey">
                 <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }} donation to {{ campaign.charity.name }}</p>
                 <p *ngIf="feeCoverAmount() > 0" class="b-rt-sm b-m-0"><mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon> {{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} to cover platform fee</p>
-                <p *ngIf="tipAmount() > 0" class="b-rt-sm b-m-0"><mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon> {{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give Trust &ndash; we rely on your generosity to support charities</p>
+                <p *ngIf="!campaign.feePercentage" class="b-rt-sm b-m-0"><mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon> {{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give Trust &ndash; we rely on your generosity to support charities</p>
               </div>
 
               <!-- Matching or Gift Aid reiteration -->
