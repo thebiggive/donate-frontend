@@ -217,6 +217,7 @@ a {
   @include make-donate-button;
 
   padding: 1.5rem;
+  max-width: 300px;
 }
 
 .c-donate-button-amount {
@@ -224,31 +225,25 @@ a {
 }
 
 .c-donation-receipt {
-  border-bottom: 1px solid $colour-grey-light; // Separator before 'Total for..'
+  list-style-type: none;
   padding: 1rem 0;
 
-  &__block { // A main item (donation amount, match funds, Gift Aid) within the breakdown.
-    flex-grow: 1;
-    justify-content: space-between;
-    align-items: center;
-  }
-}
+  li {
+    @include b-rt-sm;
 
-.c-donation-receipt__icon, .mat-hint > p {
-  @include size-md;
+    .mat-icon {
+      vertical-align: middle;
+    }
+  }
 }
 
 .mat-hint {
   display: block;
 }
 
-.c-receipt-total {
-  padding: 1.5rem 0 0.5rem;
-}
-
 .c-donation-summary {
-  max-width: 300px;
   margin: 1rem auto;
+  text-align: center;
 }
 
 .error {

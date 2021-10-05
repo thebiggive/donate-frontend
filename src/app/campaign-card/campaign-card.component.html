@@ -23,18 +23,22 @@
 
   <div class="c-body">
     <div fxLayout="row" class="c-icon-lists">
-      <ul fxFlex="50">
+      <div fxFlex="50">
         <p class="c-cards__description">Categories</p>
-        <li *ngFor="let category of campaign.categories">
-          <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
-        </li>
-      </ul>
-      <ul fxFlex="50">
+        <ul>
+          <li *ngFor="let category of campaign.categories">
+            <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
+          </li>
+        </ul>
+      </div>
+      <div fxFlex="50">
         <p class="c-cards__description">Beneficiaries</p>
-        <li *ngFor="let beneficiary of campaign.beneficiaries">
-          <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
-        </li>
-      </ul>
+        <ul>
+          <li *ngFor="let beneficiary of campaign.beneficiaries">
+            <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <div class="c-funds" fxLayout="row">
