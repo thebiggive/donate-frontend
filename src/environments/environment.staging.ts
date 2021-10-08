@@ -21,7 +21,7 @@ export const environment: Environment = {
     },
     stripe: {
       enabled: true,
-      prbEnabled: false, // Temporary QA test
+      prbEnabled: true, // Payment Request Buttons – Apple & Google Pay
       publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
