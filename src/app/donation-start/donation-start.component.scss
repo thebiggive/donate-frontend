@@ -216,6 +216,7 @@ a {
 .c-donate-button {
   @include make-donate-button;
 
+  margin: 1.5rem 0 0.5rem 0;
   padding: 1.5rem;
   max-width: 300px;
 }

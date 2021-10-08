@@ -376,8 +376,11 @@
 
               <div *ngIf="psp == 'stripe' || feeCoverAmount() > 0 || tipAmount() > 0" class="c-breakdown b-center b-grey">
                 <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }} donation to {{ campaign.charity.name }}</p>
-                <p *ngIf="feeCoverAmount() > 0" class="b-rt-sm b-m-0"><mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon> {{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} to cover platform fee</p>
-                <p *ngIf="!campaign.feePercentage" class="b-rt-sm b-m-0"><mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon> {{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give Trust &ndash; we rely on your generosity to support charities</p>
+                <p *ngIf="feeCoverAmount() > 0 || !campaign.feePercentage" class="b-rt-sm b-m-0">
+                  <mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon>
+                </p>
+                <p *ngIf="feeCoverAmount() > 0" class="b-rt-sm b-m-0">{{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} to cover platform fee</p>
+                <p *ngIf="!campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give Trust &ndash; we rely on your generosity to support charities</p>
               </div>
 
               <!-- Matching or Gift Aid reiteration -->
