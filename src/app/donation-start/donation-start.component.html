@@ -36,7 +36,7 @@
               Match funds are currently available!
             </p>
 
-            <div *ngIf="suggestedAmounts && suggestedAmounts[campaign.currencyCode].length > 0" class="c-suggested-amounts">
+            <div *ngIf="suggestedAmounts && suggestedAmounts[campaign.currencyCode] && suggestedAmounts[campaign.currencyCode].length > 0" class="c-suggested-amounts">
               <div fxLayout="row">
                 <button
                   type="button"
