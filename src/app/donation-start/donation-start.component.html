@@ -1,7 +1,7 @@
 <main class="b-container">
   <div class="b-back-button">
     <a mat-icon-button [routerLink]="'/campaign/' + campaign.id">
-      <mat-icon class="campaign-icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
+      <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
       Back to campaign
     </a>
   </div>
@@ -36,7 +36,7 @@
               Match funds are currently available!
             </p>
 
-            <div *ngIf="suggestedAmounts && suggestedAmounts[campaign.currencyCode].length > 0" class="c-suggested-amounts">
+            <div *ngIf="suggestedAmounts && suggestedAmounts[campaign.currencyCode] && suggestedAmounts[campaign.currencyCode].length > 0" class="c-suggested-amounts">
               <div fxLayout="row">
                 <button
                   type="button"
@@ -90,7 +90,7 @@
             <div class="donation-input">
               <div *ngIf="psp == 'stripe' && !campaign.feePercentage">
                 <mat-form-field appearance="outline">
-                  <mat-label for="tipPercentage">Donation to the Big Give</mat-label>
+                  <mat-label for="tipPercentage">Donation to the Big Give Trust</mat-label>
                   <mat-select formControlName="tipPercentage" id="tipPercentage" (selectionChange)="tipPercentageChange()">
                     <mat-option [value]="7.5">7.5%</mat-option>
                     <mat-option [value]="10">10%</mat-option>
@@ -358,13 +358,6 @@
                 Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few minutes to try again.
               </p>
 
-              <div *ngIf="feeCoverAmount() > 0 || tipAmount() > 0" class="c-breakdown b-center b-grey">
-                <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }} donation to {{ campaign.charity.name }}</p>
-                <p class="b-m-0"><mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon></p>
-                <p *ngIf="feeCoverAmount() > 0" class="b-rt-sm b-m-0">{{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} platform fee cover</p>
-                <p *ngIf="tipAmount() > 0" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give</p>
-              </div>
-
               <p *ngIf="stripeError" class="error" aria-live="assertive">
                 {{ stripeError }}
               </p>
@@ -381,43 +374,32 @@
                 </span>
               </button>
 
-              <!-- Show breakdown only if either matching or Gift Aid (or both) applies -->
-              <div
-                *ngIf="expectedMatchAmount() > 0 || giftAidAmount() > 0"
-                class="c-donation-receipt"
-                fxLayout="row"
-              >
-                <div class="c-donation-receipt__block">
-                  <p class="b-center b-grey b-rt-sm b-m-0">Your donation</p>
-                  <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }}</p>
-                </div>
-                <div fxFlex="11" fxLayout="row" fxLayoutAlign="center end">
-                  <mat-icon class="c-donation-receipt__icon b-grey b-bold b-center" aria-hidden="false" aria-label="Plus">add</mat-icon>
-                </div>
-                <div *ngIf="expectedMatchAmount() > 0" class="c-donation-receipt__block">
-                  <p class="b-center b-grey b-rt-sm b-m-0">Match funds</p>
-                  <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ expectedMatchAmount() | exactCurrency:campaign.currencyCode }}</p>
-                </div>
-                <div
-                  fxFlex="11"
-                  fxLayout="row"
-                  fxLayoutAlign="center end"
-                  *ngIf="expectedMatchAmount() > 0 && giftAidAmount() > 0"
-                >
-                  <mat-icon class="c-donation-receipt__icon b-grey b-bold b-center" aria-hidden="false" aria-label="Plus">add</mat-icon>
-                </div>
-                <div
-                  *ngIf="giftAidAmount() > 0"
-                  class="c-donation-receipt__block"
-                >
-                  <p class="b-center b-grey b-rt-sm b-m-0">Gift Aid</p>
-                  <p class="b-center b-grey b-rt-0 b-bold b-m-0">{{ giftAidAmount() | exactCurrency:campaign.currencyCode }}</p>
-                </div>
+              <div *ngIf="psp == 'stripe' || feeCoverAmount() > 0 || tipAmount() > 0" class="c-breakdown b-center b-grey">
+                <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }} donation to {{ campaign.charity.name }}</p>
+                <p *ngIf="feeCoverAmount() > 0 || !campaign.feePercentage" class="b-rt-sm b-m-0">
+                  <mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon>
+                </p>
+                <p *ngIf="feeCoverAmount() > 0" class="b-rt-sm b-m-0">{{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} to cover platform fee</p>
+                <p *ngIf="!campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give Trust &ndash; we rely on your generosity to support charities</p>
               </div>
-              <div class="c-receipt-total b-grey" fxLayout="row" fxLayoutAlign="space-around center">
-                <p class="b-rt-0 b-m-0">Total for {{ campaign.charity.name }}:</p>
-                <p class="b-rt-1 b-bold b-m-0">{{ expectedTotalAmount() | exactCurrency:campaign.currencyCode }}</p>
-              </div>
+
+              <!-- Matching or Gift Aid reiteration -->
+              <ul class="c-donation-receipt">
+                <li *ngIf="giftAidAmount() > 0">
+                  <mat-icon aria-hidden="true">check</mat-icon>
+                  You have told us you would like to claim Gift Aid
+                </li>
+
+                <li *ngIf="campaign.currencyCode == 'GBP' && giftAidAmount() == 0">
+                  <mat-icon aria-hidden="true">clear</mat-icon>
+                  You have told us you do not want to claim Gift Aid
+                </li>
+
+                <li *ngIf="expectedMatchAmount() == donationAmount">
+                  <mat-icon aria-hidden="true">done_all</mat-icon>
+                  Your donation will be match funded
+                </li>
+              </ul>
             </div>
           </mat-step>
         </mat-vertical-stepper>
