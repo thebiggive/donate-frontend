@@ -42,7 +42,13 @@
 
 .c-website__icon {
   vertical-align: sub;
-  margin: 1rem 0;
+  margin: 0 0 1rem 0;
+}
+
+.c-social {
+  // Ensure good clearance between the Donate button & website link, even when there's no
+  // regulator info (exempt org) or social links.
+  min-height: 21px;
 }
 
 .c-social__link {
