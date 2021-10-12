@@ -88,7 +88,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   private stepHeaderEventsSet = false;
   private tipPercentageChanged = false;
 
-  private initialTipSuggestedPercentage = 12.5;
+  private initialTipSuggestedPercentage = 15;
   // Based on https://stackoverflow.com/questions/164979/regex-for-matching-uk-postcodes#comment82517277_164994
   // but modified to make the separating space optional.
   private postcodeRegExp = new RegExp('^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\\s?[0-9][A-Za-z]{2})$');
@@ -1100,6 +1100,8 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
             newDefault = 7.5;
           } else if (donationAmount >= 300) {
             newDefault = 10;
+          } else if (donationAmount >= 100) {
+            newDefault = 12.5;
           }
 
           updatedValues.tipPercentage = newDefault;
