@@ -8,8 +8,8 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class DonationStartMatchConfirmDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: {
     cancelCopy: string,
-    status: string,
-    statusDetail: string,
+    status: string,       // Rendered as trusted HTML
+    statusDetail: string, // Rendered as trusted HTML
     title: string,
     surplusDonationInfo: string,
   }) {}

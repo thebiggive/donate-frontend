@@ -1019,9 +1019,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
     this.analyticsService.logEvent('alerted_no_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
-      'Match funds not available',
-      'There are no match funds currently available for this campaign so your donation will not be matched.',
-      'Remember every penny helps & you can continue to make an unmatched donation to the charity!',
+      'Great news - this charity has reached their target',
+      'There are no match funds currently available for this charity.',
+      'Remember, every penny helps. Please continue to make an <strong>unmatched donation</strong> to the charity!',
       'Cancel',
       donation,
       this.campaign.surplusDonationInfo,
@@ -1037,9 +1037,9 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     const formattedReservedAmount = (new ExactCurrencyPipe()).transform(donation.matchReservedAmount, donation.currencyCode);
     this.promptToContinue(
       'Not all match funds are available',
-      'There are not enough match funds currently available to fully match your donation. ' +
-        `${formattedReservedAmount} will be matched.`,
-      'Remember every penny helps & you can continue to make a partially matched donation to the charity!',
+      'There aren\'t enough match funds currently available to fully match your donation. ' +
+        `<strong>${formattedReservedAmount}</strong> will be matched.`,
+      'Remember, every penny helps, and you can continue to make a <strong>partially matched donation</strong> to the charity!',
       'Cancel and release match funds',
       donation,
       this.campaign.surplusDonationInfo,
