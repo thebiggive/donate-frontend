@@ -78,12 +78,8 @@
             </mat-hint>
 
             <div *ngIf="campaign.feePercentage">
-              <mat-hint>
-                Bespoke <a href="https://www.thebiggive.org.uk/s/our-fees" target="_blank">processing fees <mat-icon class="c-website__icon b-rt-0" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon></a> apply for this campaign.
-              </mat-hint>
-
               <mat-checkbox formControlName="coverFee" id="coverFee">
-                Cover the {{ campaign.feePercentage}}% fee for {{ campaign.charity.name }}?
+                Cover the {{ campaign.feePercentage}}% <a href="https://www.thebiggive.org.uk/s/gogiveone-fees" target="_blank">platform fee</a> for the {{ campaign.title }} campaign?
               </mat-checkbox>
             </div>
 
