@@ -171,8 +171,9 @@
                   formControlName="homeAddress"
                   id="homeAddress"
                   matInput
+                  autocomplete="off"
                   [matAutocomplete]="autoAddress"
-                  [matAutocompleteDisabled]="!showAddressLookup || !haveAddressSuggestions()"
+                  [matAutocompleteDisabled]="!showAddressLookup"
                 >
 
                 <mat-autocomplete
