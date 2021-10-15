@@ -186,7 +186,10 @@
                   </mat-option>
                 </mat-autocomplete>
 
-                <mat-hint>For your Gift Aid declaration to HMRC.</mat-hint>
+                <mat-hint>
+                  For your Gift Aid declaration to HMRC.
+                  <mat-spinner *ngIf="loadingAddressSuggestions" color="primary" diameter="15" class="address-loading-spinner"></mat-spinner>
+                </mat-hint>
               </mat-form-field>
               <div class="error" *ngIf="giftAidGroup.get('homeAddress')?.errors?.maxlength">Maximum 255 characters exceeded</div>
 

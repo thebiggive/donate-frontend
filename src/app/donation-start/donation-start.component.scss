@@ -246,6 +246,12 @@ a {
 
 .mat-hint {
   display: block;
+  width: 100%;
+
+  .address-loading-spinner {
+    float: right;
+    margin: 0;
+  }
 }
 
 .c-donation-summary {

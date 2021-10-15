@@ -88,6 +88,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   donationUpdateError = false;
   /** setTimeout reference (timer ID) if applicable. */
   expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
+  loadingAddressSuggestions = false;
   privacyUrl = 'https://www.thebiggive.org.uk/s/privacy-policy';
   showAddressLookup: boolean;
   stripePaymentMethodReady = false;
@@ -287,11 +288,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
           return EMPTY;
         }
 
+        this.loadingAddressSuggestions = true;
         return this.postcodeService.getSuggestions(initialAddress);
       }),
     ) || EMPTY;
 
     observable.subscribe(suggestions => {
+      this.loadingAddressSuggestions = false;
       this.addressSuggestions = suggestions;
     });
   }
