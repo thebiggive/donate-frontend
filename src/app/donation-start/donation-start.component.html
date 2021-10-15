@@ -164,17 +164,33 @@
             </mat-radio-group>
 
             <div *ngIf="psp == 'stripe' && giftAidGroup.value.giftAid">
-              <!-- TODO split out pieces, probably use a lookup service -->
               <mat-form-field>
+
                 <mat-label for="homeAddress">Home address</mat-label>
-                <input formControlName="homeAddress" id="homeAddress" matInput>
+                <input
+                  formControlName="homeAddress"
+                  id="homeAddress"
+                  matInput
+                  [matAutocomplete]="autoAddress"
+                  [matAutocompleteDisabled]="!showAddressLookup || !haveAddressSuggestions"
+                >
+
+                <mat-autocomplete
+                  #autoAddress="matAutocomplete"
+                  (optionSelected)="addressChosen($event)"
+                >
+                  <mat-option *ngFor="let suggestion of addressSuggestions" [value]="suggestion">
+                    {{ suggestion.address }}
+                  </mat-option>
+                </mat-autocomplete>
+
+                <mat-hint>For your Gift Aid declaration to HMRC.</mat-hint>
               </mat-form-field>
               <div class="error" *ngIf="giftAidGroup.get('homeAddress')?.errors?.maxlength">Maximum 255 characters exceeded</div>
 
               <mat-form-field>
                 <mat-label for="homePostcode">Home postcode</mat-label>
                 <input formControlName="homePostcode" id="homePostcode" matInput>
-                <mat-hint>For your Gift Aid declaration to HMRC.</mat-hint>
               </mat-form-field>
             </div>
 

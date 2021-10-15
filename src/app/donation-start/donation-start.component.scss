@@ -1,6 +1,10 @@
 @use '~@angular/material' as mat;
 @import '../../abstract';
 
+input:disabled {
+  cursor: not-allowed; // Visual help on desktop when e.g. address lookup has frozen postcode field.
+}
+
 .b-back-button {
   @include make-back-button;
 }
