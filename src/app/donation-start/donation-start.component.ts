@@ -340,9 +340,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     return this.addressSuggestions.length > 0;
   }
 
-  // This should work and *not* be passed strings only by virtue of `addressChosen()` using `{emit: false}`
-  // option when patching the data. If we find this to be unreliable we should add a type check to make
-  // this more conservative about when it chooses to newly summarise address values.
   summariseAddressSuggestion(suggestion: GiftAidAddressSuggestion | string | undefined): string {
     // Patching the `giftAidGroup` seems to lead to a re-evaluation via this method, even if we use
     // `{emit: false}`. So it seems like the only safe way for the slightly hacky autocomplete return
