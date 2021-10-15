@@ -355,8 +355,14 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   addressChosen(event: MatAutocompleteSelectedEvent) {
     // Autocomplete's value.url should be an address we can /get.
     this.postcodeService.get(event.option.value.url).subscribe((address: GiftAidAddress) => {
+      const addressParts = [address.line_1];
+      if (address.line_2) {
+        addressParts.push(address.line_2);
+      }
+      addressParts.push(address.town_or_city);
+
       this.giftAidGroup.patchValue({
-        homeAddress: `${address.line_1}, ${address.line_2}, ${address.town_or_city}`,
+        homeAddress: addressParts.join(', '),
         homeBuildingNumber: address.building_number,
         homePostcode: address.postcode,
       });
