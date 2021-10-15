@@ -172,11 +172,12 @@
                   id="homeAddress"
                   matInput
                   [matAutocomplete]="autoAddress"
-                  [matAutocompleteDisabled]="!showAddressLookup || !haveAddressSuggestions"
+                  [matAutocompleteDisabled]="!showAddressLookup || !haveAddressSuggestions()"
                 >
 
                 <mat-autocomplete
                   #autoAddress="matAutocomplete"
+                  [displayWith]="summariseAddressSuggestion"
                   (optionSelected)="addressChosen($event)"
                 >
                   <mat-option *ngFor="let suggestion of addressSuggestions" [value]="suggestion">
