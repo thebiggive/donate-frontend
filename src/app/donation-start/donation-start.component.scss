@@ -150,6 +150,8 @@
 
   .to-charity {
     padding-top: 0.3rem;
+    // make text run onto next line instead of overflowing parent div:
+    white-space: initial;
     @media only screen and (max-width: 650px) {
       display: none;
     }
