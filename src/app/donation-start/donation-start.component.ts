@@ -1,14 +1,26 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { getCurrencySymbol, isPlatformBrowser } from '@angular/common';
-import { AfterContentChecked, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import {
+  AfterContentChecked,
+  AfterContentInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { countries } from 'country-code-lookup';
-import { retryWhen, tap  } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
 import { PaymentMethod, StripeElementChangeEvent } from '@stripe/stripe-js';
-import { Observer } from 'rxjs';
+import { EMPTY, Observer } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
@@ -23,7 +35,10 @@ import { DonationStartMatchingExpiredDialogComponent } from './donation-start-ma
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
 import { environment } from '../../environments/environment';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
+import { GiftAidAddress } from '../gift-aid-address.model';
+import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
 import { PageMetaService } from '../page-meta.service';
+import { PostcodeService } from '../postcode.service';
 import { retryStrategy } from '../observable-retry';
 import { StripeService } from '../stripe.service';
 import { ValidateCurrencyMax } from '../validators/currency-max';
@@ -34,7 +49,7 @@ import { ValidateCurrencyMin } from '../validators/currency-min';
   templateUrl: './donation-start.component.html',
   styleUrls: ['./donation-start.component.scss'],
 })
-export class DonationStartComponent implements AfterContentChecked, OnDestroy, OnInit {
+export class DonationStartComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
@@ -68,9 +83,14 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   retrying = false;
   skipPRBs: boolean;
   suggestedAmounts: {[key: string]: number[]};
+  addressSuggestions: GiftAidAddressSuggestion[] = [];
   donationCreateError = false;
   donationUpdateError = false;
+  /** setTimeout reference (timer ID) if applicable. */
+  expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
+  loadingAddressSuggestions = false;
   privacyUrl = 'https://www.thebiggive.org.uk/s/privacy-policy';
+  showAddressLookup: boolean;
   stripePaymentMethodReady = false;
   stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
   stripeError?: string;
@@ -93,8 +113,6 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
   // but modified to make the separating space optional.
   // Note this must be a pattern *string*, NOT a RegExp. https://stackoverflow.com/a/42392880/2803757
   private postcodeRegExpPattern = '^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\\s?[0-9][A-Za-z]{2})$';
-  /** setTimeout reference (timer ID) if applicable. */
-  expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -105,6 +123,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
     private pageMeta: PageMetaService,
+    private postcodeService: PostcodeService,
     // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
@@ -160,6 +179,7 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       giftAid: this.formBuilder.group({
         giftAid: [null],        // See addUKValidators().
         homeAddress: [null],  // See addStripeValidators().
+        homeBuildingNumber: [null],
         homePostcode: [null], // See addStripeValidators().
       }),
       marketing: this.formBuilder.group({
@@ -240,6 +260,45 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     });
   }
 
+  ngAfterContentInit() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    this.showAddressLookup =
+      this.psp === 'stripe' &&
+      environment.postcodeLookupKey &&
+      environment.postcodeLookupUri;
+
+    if (!this.showAddressLookup) {
+      return;
+    }
+
+    const observable = this.giftAidGroup.get('homeAddress')?.valueChanges.pipe(
+      startWith(''),
+      // https://stackoverflow.com/a/51470735/2803757
+      debounceTime(400),
+      distinctUntilChanged(),
+      // switchMap *seems* like the best operator to swap out the Observable on the value change
+      // itself and swap in the observable on a lookup. But I'm not an expert with RxJS! I think/
+      // hope this may also cancel previous outstanding lookup resolutions that are in flight?
+      // https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap
+      switchMap((initialAddress: any) => {
+        if (!initialAddress) {
+          return EMPTY;
+        }
+
+        this.loadingAddressSuggestions = true;
+        return this.postcodeService.getSuggestions(initialAddress);
+      }),
+    ) || EMPTY;
+
+    observable.subscribe(suggestions => {
+      this.loadingAddressSuggestions = false;
+      this.addressSuggestions = suggestions;
+    });
+  }
+
   ngAfterContentChecked() {
     // Because the Stepper header elements are built by Angular from the `mat-step` elements,
     // there is no nice 'Angular way' to listen for click events on them, which we need to do
@@ -278,6 +337,40 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
     }
 
     this.stepHeaderEventsSet = true;
+  }
+
+  haveAddressSuggestions(): boolean {
+    return this.addressSuggestions.length > 0;
+  }
+
+  summariseAddressSuggestion(suggestion: GiftAidAddressSuggestion | string | undefined): string {
+    // Patching the `giftAidGroup` seems to lead to a re-evaluation via this method, even if we use
+    // `{emit: false}`. So it seems like the only safe way for the slightly hacky autocomplete return
+    // approach of returning an object, then resolving from it, to work, is to explicitly check which
+    // type this field has got before re-summarising it.
+    if (typeof suggestion === 'string') {
+      return suggestion;
+    }
+
+    return suggestion?.address || '';
+  }
+
+  addressChosen(event: MatAutocompleteSelectedEvent) {
+    // Autocomplete's value.url should be an address we can /get.
+    this.postcodeService.get(event.option.value.url).subscribe((address: GiftAidAddress) => {
+      const addressParts = [address.line_1];
+      if (address.line_2) {
+        addressParts.push(address.line_2);
+      }
+      addressParts.push(address.town_or_city);
+
+      this.giftAidGroup.patchValue({
+        homeAddress: addressParts.join(', '),
+        homeBuildingNumber: address.building_number,
+        homePostcode: address.postcode,
+      });
+      this.giftAidGroup.get('homePostcode')?.disable(); // TODO probably need a link to force override this.
+    });
   }
 
   async stepChanged(event: StepperSelectionEvent) {
@@ -335,9 +428,12 @@ export class DonationStartComponent implements AfterContentChecked, OnDestroy, O
       if (this.donation.giftAid || this.donation.tipGiftAid) {
         this.donation.homePostcode = this.giftAidGroup.value.homePostcode;
         this.donation.homeAddress = this.giftAidGroup.value.homeAddress;
+        // Optional additional field to improve data alignment w/ HMRC when a lookup was used.
+        this.donation.homeBuildingNumber = this.giftAidGroup.value.homeBuildingNumber || undefined;
       } else {
         this.donation.homePostcode = undefined;
         this.donation.homeAddress = undefined;
+        this.donation.homeBuildingNumber = undefined;
       }
       this.donationService.updateLocalDonation(this.donation);
 

@@ -177,6 +177,7 @@ describe('DonationStartComponent', () => {
       giftAid: {
         giftAid: true,
         homeAddress: '123 Main St',
+        homeBuildingNumber: '123',
         homePostcode: 'N1 1AA',
       },
       payment: {
@@ -219,6 +220,7 @@ describe('DonationStartComponent', () => {
         giftAid: null,
         homePostcode: null,
         homeAddress: null,
+        homeBuildingNumber: null,
       },
       payment: {
         firstName: null,
@@ -262,6 +264,7 @@ describe('DonationStartComponent', () => {
         giftAid: false,
         homePostcode: null,
         homeAddress: null,
+        homeBuildingNumber: null,
       },
       payment: {
         firstName: null,
@@ -303,6 +306,7 @@ describe('DonationStartComponent', () => {
         giftAid: false,
         homePostcode: null,
         homeAddress: null,
+        homeBuildingNumber: null,
       },
       payment: {
         firstName: null,
@@ -344,6 +348,7 @@ describe('DonationStartComponent', () => {
         giftAid: false,
         homePostcode: null,
         homeAddress: null,
+        homeBuildingNumber: null,
       },
       payment: {
         firstName: null,
@@ -385,6 +390,7 @@ describe('DonationStartComponent', () => {
         giftAid: false,
         homePostcode: null,
         homeAddress: null,
+        homeBuildingNumber: null,
       },
       payment: {
         firstName: null,
@@ -429,6 +435,7 @@ describe('DonationStartComponent', () => {
         giftAid: null,
         homeAddress: null,
         homePostcode: null,
+        homeBuildingNumber: null,
       },
       payment: {
         firstName: null,
@@ -474,6 +481,7 @@ describe('DonationStartComponent', () => {
         giftAid: false,
         homePostcode: null,
         homeAddress: null,
+        homeBuildingNumber: null,
       },
       payment: {
         firstName: null,
@@ -518,6 +526,7 @@ describe('DonationStartComponent', () => {
         giftAid: false,
         homePostcode: null,
         homeAddress: null,
+        homeBuildingNumber: null,
       },
       marketing: {
         optInCharityEmail: true,
