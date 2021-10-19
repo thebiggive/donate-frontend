@@ -12,12 +12,14 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
 import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
+import { TBG_DONATE_STORAGE } from '../donation.service';
 import { FiltersComponent } from './../filters/filters.component';
 import { HeroComponent } from '../hero/hero.component';
 import { MetaCampaignComponent } from './meta-campaign.component';
@@ -105,6 +107,9 @@ describe('MetaCampaignComponent', () => {
             },
           },
         },
+        // Inject in-memory storage for tests, in place of local storage.
+        { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
+        InMemoryStorageService,
       ],
     })
     .compileComponents();
