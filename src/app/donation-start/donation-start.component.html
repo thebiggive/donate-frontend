@@ -284,7 +284,7 @@
             [stepControl]="marketingGroup"
             label="Receive updates"
           >
-            <p class="b-rt-1 b-bold" id="optInCharityEmail-label">Would you be happy to receive email updates from {{ campaign.charity.name }}?</p>
+            <p class="b-bold b-rt-sm" id="optInCharityEmail-label">Would you be happy to receive email updates from {{ campaign.charity.name }}?</p>
             <mat-radio-group tabindex="0" aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.charity.name }}</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.charity.name }}</mat-radio-button>
@@ -294,16 +294,20 @@
             </mat-radio-group>
 
             <mat-hint>
-              <p *ngIf="campaign.charity.optInStatement">{{ campaign.charity.optInStatement }}</p>
+              <p *ngIf="campaign.charity.optInStatement" class="no-margin-top b-rt-sm b-grey">{{ campaign.charity.optInStatement }}</p>
 
-              <p *ngIf="marketingGroup.value.optInCharityEmail === false" aria-live="polite">
+              <p
+                *ngIf="marketingGroup.value.optInCharityEmail === false"
+                aria-live="polite"
+                class="no-margin-top b-rt-sm b-grey"
+              >
                 <span *ngIf="giftAidGroup.value.giftAid">We will pass on your details for Gift Aid processing purposes, but the charity will be informed that you do not wish to receive communications.</span>
 
                 Please note that you might continue to receive communications from the charity if you have already shared your details with them via other methods.
               </p>
             </mat-hint>
 
-            <p class="b-rt-1 b-bold" id="optInTbgEmail-label">Would you be happy to receive emails from the Big Give?</p>
+            <p class="b-bold b-rt-sm" id="optInTbgEmail-label">Would you be happy to receive emails from the Big Give?</p>
             <mat-radio-group tabindex="0" aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from the Big Give</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from the Big Give</mat-radio-button>
@@ -312,13 +316,13 @@
               </p>
             </mat-radio-group>
             <mat-hint *ngIf="marketingGroup.value.optInTbgEmail === false" aria-live="polite">
-              <p>
+              <p class="no-margin-top b-rt-sm b-grey">
                 By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
               </p>
             </mat-hint>
 
             <div *ngIf="showChampionOptIn">
-              <p class="b-rt-1 b-bold" id="optInChampionEmail-label">Would you be happy to receive emails from {{ campaign.championName }}?</p>
+              <p class="b-bold b-rt-sm" id="optInChampionEmail-label">Would you be happy to receive emails from {{ campaign.championName }}?</p>
               <mat-radio-group tabindex="0" aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
                 <mat-hint>{{ campaign.championOptInStatement }}.</mat-hint>
                 <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.championName }} </mat-radio-button>
@@ -327,13 +331,11 @@
                   Please choose whether you wish to receive updates from {{ campaign.championName }}.
                 </p>
               </mat-radio-group>
-              <p *ngIf="marketingGroup.value.optInChampionEmail === false">
-                <mat-hint aria-live="polite">
-                  <p>
+              <mat-hint *ngIf="marketingGroup.value.optInChampionEmail === false" aria-live="polite">
+                <p class="no-margin-top b-rt-sm b-grey">
                     Please note that you might continue to receive communications from the champion if you have already shared your details with them via other methods.
-                  </p>
-                </mat-hint>
-              </p>
+                </p>
+              </mat-hint>
             </div>
 
             <div>
