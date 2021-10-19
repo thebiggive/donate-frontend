@@ -109,10 +109,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private tipPercentageChanged = false;
 
   private initialTipSuggestedPercentage = 15;
-  // Based on https://stackoverflow.com/questions/164979/regex-for-matching-uk-postcodes#comment82517277_164994
-  // but modified to make the separating space optional.
-  // Note this must be a pattern *string*, NOT a RegExp. https://stackoverflow.com/a/42392880/2803757
-  private postcodeRegExpPattern = '^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\\s?[0-9][A-Za-z]{2})$';
+  // Based on the simplified pattern suggestions in https://stackoverflow.com/a/51885364/2803757
+  private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? ?\\d[A-Z]{2}|GIR ?0A{2})$', 'i');
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -1227,7 +1225,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       if (giftAidChecked) {
         this.giftAidGroup.controls.homePostcode.setValidators([
           Validators.required,
-          Validators.pattern(this.postcodeRegExpPattern),
+          Validators.pattern(this.postcodeRegExp),
         ]);
         this.giftAidGroup.controls.homeAddress.setValidators([
           Validators.required,
