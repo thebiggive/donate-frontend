@@ -94,7 +94,7 @@ app-campaign-card {
   margin-bottom: 0.5rem;
   margin-top: 3rem;
   border: 2px mat.get-color-from-palette($donate-primary) solid;
-  border-radius: 1rem;
+  border-radius: 10px; // Fixed px, so fields with different font sizes have aligned round corners.
   padding: 0.7em 0;
 }
 

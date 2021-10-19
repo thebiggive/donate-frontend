@@ -40,12 +40,12 @@
               <div fxLayout="row">
                 <button
                   type="button"
-                  class="c-suggested-amount__button b-rh-2 b-bold"
+                  class="c-suggested-amount__button b-bold"
                   *ngFor="let suggestedAmount of suggestedAmounts[campaign.currencyCode]"
                   (click)="setAmount(suggestedAmount)"
                 >{{ suggestedAmount | exactCurrency:campaign.currencyCode }}</button>
               </div>
-              <p class="b-center b-grey b-rt-0 c-your-donation__suggestion-separator">Or, choose</p>
+              <p class="b-center b-grey c-your-donation__suggestion-separator">Or, choose</p>
             </div>
             <div class="donation-input">
               <p class="c-your-donation__to">Donation to {{ campaign.charity.name }}</p>
@@ -98,10 +98,14 @@
 
                 <mat-form-field
                   [ngClass]="'b-center ' + (customTip() ? '' : 'b-hidden')"
-                  appearance="outline"
                   color="primary"
                 >
                   <span class="prefix-tbg" matPrefix>{{ currencySymbol }}</span>
+                  <mat-label class="c-your-donation__placeholder" for="donationAmount">
+                    <div class="to-tbg">
+                      Donation to the Big Give Trust
+                    </div>
+                  </mat-label>
                   <input formControlName="tipAmount" id="tipAmount" matInput>
                 </mat-form-field>
 
