@@ -168,7 +168,7 @@ export class SearchQuery implements SearchQueryInterface {
   public country?: string;
   public fundSlug?: string;
   public limit = 6;
-  public offset = 0;
+  public offset?: number|undefined = 0;
   public onlyMatching?: boolean;
   public parentId?: string;
   public parentSlug?: string;
