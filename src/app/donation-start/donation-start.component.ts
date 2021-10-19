@@ -436,8 +436,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       }
       this.donationService.updateLocalDonation(this.donation);
 
-      console.log('DONATION NOW', this.donation);
-
       if (this.donation.psp === 'stripe') {
         if (event.selectedStep.label === 'Receive updates') {
           // Step 2 'Details' – whichever step(s) come before marketing prefs is the best fit for this #.
