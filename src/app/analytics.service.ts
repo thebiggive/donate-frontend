@@ -39,10 +39,38 @@ export class AnalyticsService {
     `;
   }
 
+  /**
+   * For safely allowing in CSP.
+   */
+  static getOptimizeAntiFlickerScript() {
+    return `
+      (function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
+      h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
+      (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
+      })(window,document.documentElement,'async-hide','dataLayer',4000,
+      {'${environment.googleOptimizeId}':true});
+    `;
+  }
+
   init() {
+    if (environment.googleOptimizeId) {
+      const optimizeAntiFlickerStyle = document.createElement('style');
+      optimizeAntiFlickerStyle.innerHTML = '.async-hide { opacity: 0 !important}';
+      document.head.appendChild(optimizeAntiFlickerStyle);
+
+      const optimizeAntiFlickerScript = document.createElement('script');
+      optimizeAntiFlickerScript.innerHTML = AnalyticsService.getOptimizeAntiFlickerScript();
+      document.head.appendChild(optimizeAntiFlickerScript);
+
+      const optimizeTag = document.createElement('script');
+      optimizeTag.async = true;
+      optimizeTag.src = `https://www.googleoptimize.com/optimize.js?id=${environment.googleOptimizeId}`;
+      document.head.appendChild(optimizeTag);
+    }
+
     const scriptInitGtag = document.createElement('script');
     scriptInitGtag.async = true;
-    scriptInitGtag.src = 'https://www.googletagmanager.com/gtag/js?id=' + environment.googleAnalyticsId;
+    scriptInitGtag.src = `https://www.googletagmanager.com/gtag/js?id=${environment.googleAnalyticsId}`;
     document.head.appendChild(scriptInitGtag);
 
     const scriptConfigureGtag = document.createElement('script');
@@ -192,10 +220,17 @@ export class AnalyticsService {
             dimension4: 'charity_campaign', // As opposed to GA campaign.
           },
         });
+
+        if (environment.googleOptimizeId) {
+          this.callGtag({event: 'optimize.activate'});
+        }
       }
     });
   }
 
+  /**
+   * Safely relay data to `dataLayer.push()` iff appropriate.
+   */
   private callGtag(...args: Array<string | { [key: string]: any }>) {
     // Skip the call gracefully if on the server (don't want to double track router-based events),
     // or if loading fails or 3rd party JS is blocked (no usable `gtag`).
