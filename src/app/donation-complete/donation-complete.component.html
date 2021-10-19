@@ -20,23 +20,26 @@
 
     <div class="c-card">
       <div class="c-main">
-        <h3 class="b-rh-2 b-light">
+        <h3 class="b-rh-2 b-bold">Donation successful</h3>
+
+        <p class="b-rt-0">
           Your donation of
           <span class="b-bold">
             {{ donation.donationAmount | exactCurrency:donation.currencyCode }}
           </span>
-           has been made.
-        </h3>
-        <h3 *ngIf="totalValue > donation.donationAmount" class="b-rh-2 b-light">
-          That's worth
-          <span class="b-bold">
-            {{ totalValue | exactCurrency:donation.currencyCode }}
+          has been made.
+
+          <span *ngIf="totalValue > donation.donationAmount" class="b-rt-0">
+            That's worth
+            <span class="b-bold">
+              {{ totalValue | exactCurrency:donation.currencyCode }}
+            </span>
+            to {{ donation.charityName }}.
           </span>
-          to {{ donation.charityName }}.
-        </h3>
+        </p>
         <p class="b-rt-0" *ngIf="campaign?.thankYouMessage">{{ campaign.thankYouMessage }}</p>
 
-        <div class="c-receipt b-grey">
+        <div class="c-receipt">
           <h3 class="c-receipt__heading b-rh-2 b-bold">Your receipt</h3>
           <ul class="c-receipt__list b-w-100">
             <li class="c-receipt__item c-receipt__item--highlighted b-db">
