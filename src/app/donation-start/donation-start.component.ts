@@ -369,7 +369,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         homeBuildingNumber: address.building_number,
         homePostcode: address.postcode,
       });
-      this.giftAidGroup.get('homePostcode')?.disable(); // TODO probably need a link to force override this.
     });
   }
 
@@ -436,6 +435,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         this.donation.homeBuildingNumber = undefined;
       }
       this.donationService.updateLocalDonation(this.donation);
+
+      console.log('DONATION NOW', this.donation);
 
       if (this.donation.psp === 'stripe') {
         if (event.selectedStep.label === 'Receive updates') {
