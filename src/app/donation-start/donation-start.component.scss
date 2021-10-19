@@ -85,11 +85,13 @@ input:disabled {
 }
 
 .c-header {
-  h2 {
-    margin: 0;
+  h1, h3 {
     margin-top: 0.25rem;
   }
-  h1, h3 {
+
+  &__to {
+    @include size-md;
+    margin: 0;
     margin-top: 0.25rem;
   }
 }
