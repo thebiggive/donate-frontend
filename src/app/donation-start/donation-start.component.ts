@@ -369,7 +369,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         homeBuildingNumber: address.building_number,
         homePostcode: address.postcode,
       });
-      this.giftAidGroup.get('homePostcode')?.disable(); // TODO probably need a link to force override this.
     });
   }
 
