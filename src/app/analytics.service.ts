@@ -220,10 +220,6 @@ export class AnalyticsService {
             dimension4: 'charity_campaign', // As opposed to GA campaign.
           },
         });
-
-        if (environment.googleOptimizeId) {
-          this.callGtag({event: 'optimize.activate'});
-        }
       }
     });
   }
