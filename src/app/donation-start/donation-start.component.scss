@@ -85,11 +85,13 @@ input:disabled {
 }
 
 .c-header {
-  h2 {
-    margin: 0;
+  h1, h3 {
     margin-top: 0.25rem;
   }
-  h1, h3 {
+
+  &__to {
+    @include size-md;
+    margin: 0;
     margin-top: 0.25rem;
   }
 }
@@ -130,7 +132,8 @@ input:disabled {
 }
 
 .c-your-donation__suggestion-separator {
-  margin-bottom: -1rem;
+  font-size: 14px;
+  margin-bottom: -1.5rem;
 }
 
 .c-your-donation__form-field {
@@ -152,23 +155,12 @@ input:disabled {
     font-size: 10px;
   }
 
-  .to-charity {
+  .to-charity, .to-tbg {
     padding-top: 0.3rem;
     // make text run onto next line instead of overflowing parent div:
     white-space: initial;
     @media only screen and (max-width: 650px) {
       display: none;
-    }
-  }
-
-  .to-tbg {
-    margin-top: -0.2rem;
-    @media only screen and (max-width: 800px) {
-      margin-top: 0.1rem;
-    }
-
-    @media only screen and (max-width: 650px) {
-      margin-top: 0.2rem;
     }
   }
 }
@@ -188,6 +180,9 @@ input:disabled {
 
 .c-suggested-amount__button {
   flex: 1 0 auto;
+  font-size: 20px;
+  line-height: 26px;
+  color: $colour-teal-dark;
   width: calc((100 - 1rem) / 3);
   background-color: $colour-teal-light;
   box-shadow: inset 0px 1px 4px rgba(0, 131, 143, 0.2);
@@ -195,7 +190,6 @@ input:disabled {
   border: none;
   border-radius: 4px;
   margin-right: 0.5rem;
-  @include b-rt-2;
   &:last-child {
     margin-right: 0;
   }
@@ -269,5 +263,5 @@ a {
 }
 
 .prefix-tbg {
-  font-size: 1.5rem
+  font-weight: 700; // Match the bigger donate field's input style weight, which the infix matches.
 }
