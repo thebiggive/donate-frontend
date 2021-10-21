@@ -53,6 +53,7 @@ mat-radio-button {
   margin-bottom: 1rem;
   .mat-radio-label {
     white-space: initial;
+    @include b-rt-0;
   }
 }
 
