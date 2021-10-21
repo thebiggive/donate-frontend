@@ -12,6 +12,7 @@ import {
 import { AnalyticsService } from './analytics.service';
 import { DonationService } from './donation.service';
 import { GetSiteControlService } from './getsitecontrol.service';
+import { NavigationService } from './navigation.service';
 
 @Component({
   selector: 'app-root',
@@ -25,12 +26,17 @@ export class AppComponent implements OnInit {
     private analyticsService: AnalyticsService,
     private donationService: DonationService,
     private getSiteControlService: GetSiteControlService,
+    private navigationService: NavigationService,
     // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
   ) {
     // https://www.amadousall.com/angular-routing-how-to-display-a-loading-indicator-when-navigating-between-routes/
     this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationEnd) {
+        this.navigationService.saveNewUrl(event.urlAfterRedirects);
+      }
+
       switch (true) {
         case event instanceof NavigationStart: {
           this.navigating = true;

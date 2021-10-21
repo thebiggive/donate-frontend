@@ -1,12 +1,13 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, Location } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { ImageService } from '../image.service';
+import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 
 @Component({
@@ -30,9 +31,12 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     private analyticsService: AnalyticsService,
     private pageMeta: PageMetaService,
     private imageService: ImageService,
+    private location: Location,
+    private navigationService: NavigationService,
     // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
+    private router: Router,
     private sanitizer: DomSanitizer,
   ) {
     route.queryParams.forEach((params: Params) => {
@@ -52,6 +56,17 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       window.clearTimeout(this.timer);
       this.timer = undefined;
     }
+  }
+
+  goBackToMetacampaign() {
+    const url = `/${this.campaign.parentRef}`;
+
+    if (this.navigationService.isLastUrl(url)) {
+      this.location.back();
+      return;
+    }
+
+    this.router.navigateByUrl(url);
   }
 
   private setSecondaryProps(campaign: Campaign) {
