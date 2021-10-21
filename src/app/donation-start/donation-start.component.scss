@@ -131,51 +131,44 @@ input:disabled {
   margin-top: 0;
 }
 
-.c-your-donation__suggestion-separator {
-  font-size: 14px;
-  margin-bottom: -1.5rem;
-}
+.donation-input {
+  .form-field {
+    margin: 0;
+    display: block;
+    font-weight: 700;
 
-.c-your-donation__form-field {
-  max-width: $full-copy-max-width;
-  margin: 0 auto;
-  display: block;
-  font-weight: 700;
-  font-size: 22px;
-}
-
-.c-your-donation__placeholder {
-  padding-bottom: 1rem;
-  font-size: 16px;
-  @media only screen and (max-width: 1200px) {
-    font-size: 12px;
+    &.form-field-larger {
+      font-size: 22px;
+    }
   }
 
-  @media only screen and (max-width: 800px) {
-    font-size: 10px;
-  }
 
-  .to-charity, .to-tbg {
-    padding-top: 0.3rem;
+  // Larger breakpoints only
+  .floating-label {
     // make text run onto next line instead of overflowing parent div:
     white-space: initial;
     @media only screen and (max-width: 650px) {
       display: none;
     }
   }
+
+  // Small breakpoints only
+  .fixed-label {
+    display: none;
+
+    @media only screen and (max-width: 650px) {
+      color: mat.get-color-from-palette($donate-primary);
+      font-size: 10px;
+      text-align: center;
+      margin: 2rem 0 $donation-box-offset 0;
+      padding-left: 1.5rem;
+      display: block;
+    }
+  }
 }
 
-.c-your-donation__to {
-  display: none;
-
-  @media only screen and (max-width: 650px) {
-    color: mat.get-color-from-palette($donate-primary);
-    font-size: 10px;
-    text-align: center;
-    margin: 2rem 0 -3rem 0;
-    padding-left: 1.5rem;
-    display: block;
-  }
+.suggestion-separator {
+  margin-bottom: -1.5rem;
 }
 
 .c-suggested-amount__button {
