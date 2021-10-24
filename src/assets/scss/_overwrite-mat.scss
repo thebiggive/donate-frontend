@@ -103,8 +103,8 @@ app-campaign-card {
 // Seems to be needed for the smaller custom tip input's floating label to not hug/slightly overlap
 // the field. Angular Material default is equivalent but with 0.9375em.
 .donation-input-tip .mat-form-field-label-wrapper {
-  top: -1.1rem;
-  padding-top: 1.1rem;
+  top: -1.5rem;
+  padding-top: 1.5rem;
 }
 
 .donation-input .mat-form-field-appearance-legacy .mat-form-field-underline {
