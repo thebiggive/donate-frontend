@@ -136,19 +136,24 @@ input:disabled {
     margin: 0;
     display: block;
     font-weight: 700;
-
-    &.form-field-larger {
-      font-size: 22px;
-    }
   }
-
 
   // Larger breakpoints only
   .floating-label {
-    // make text run onto next line instead of overflowing parent div:
-    white-space: initial;
+    white-space: initial; // make text run onto next line instead of overflowing parent div.
+    font-size: 16px; // Even larger input fields need small placeholders to fit long charity names.
+    margin-top: 1.5rem;
+
     @media only screen and (max-width: 650px) {
       display: none;
+    }
+
+    @media only screen and (max-width: 1200px) {
+      font-size: 12px;
+    }
+
+    @media only screen and (max-width: 800px) {
+      font-size: 10px;
     }
   }
 
@@ -157,18 +162,37 @@ input:disabled {
     display: none;
 
     @media only screen and (max-width: 650px) {
+      display: block;
       color: mat.get-color-from-palette($donate-primary);
       font-size: 10px;
       text-align: center;
-      margin: 2rem 0 $donation-box-offset 0;
+      margin-top: 0;
+      margin-bottom: 0;
       padding-left: 1.5rem;
-      display: block;
     }
   }
 }
 
+.donation-input.donation-input-main {
+  margin-top: 1.5rem;
+
+  .fixed-label {
+    margin-top: 2rem;
+  }
+
+  .floating-label {
+    margin-top: 2rem;
+  }
+
+  .form-field {
+    font-size: 22px;
+  }
+}
+
 .suggestion-separator {
-  margin-bottom: -1.5rem;
+  @media only screen and (max-width: 650px) {
+    margin-bottom: -1.5rem;
+  }
 }
 
 .c-suggested-amount__button {
