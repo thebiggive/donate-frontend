@@ -23,9 +23,12 @@ export class PageMetaService {
   setCommon(title: string, description: string, useGlobal: boolean, imageUri?: string) {
     const baseUri = useGlobal ? environment.donateGlobalUriPrefix : environment.donateUriPrefix;
     const canonicalUri = `${baseUri}${this.router.url}`;
-    const link: HTMLLinkElement = this.dom.createElement('link');
-    link.setAttribute('rel', 'canonical');
-    this.dom.head.appendChild(link);
+    const links = this.dom.getElementsByTagName('link');
+    // We patch the index 0 `<link />` from the source HTML. Appending a new element
+    // causes some crawlers to see pages as duplicate content with different canonical
+    // URLs. Angular doesn't seem to provide a more elegant abstraction
+    // for manipulating `<link />`s.
+    const link: HTMLLinkElement = links[0];
     link.setAttribute('href', canonicalUri);
 
     this.title.setTitle(title);
