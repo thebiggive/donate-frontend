@@ -37,6 +37,7 @@ import { environment } from '../../environments/environment';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { GiftAidAddress } from '../gift-aid-address.model';
 import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
+import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 import { PostcodeService } from '../postcode.service';
 import { retryStrategy } from '../observable-retry';
@@ -120,6 +121,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     private donationService: DonationService,
     @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
+    private navigationService: NavigationService,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
     // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
@@ -806,6 +808,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     if (this.campaign.championOptInStatement) {
       this.showChampionOptIn = true;
     }
+
+    this.navigationService.saveLastSingleCampaignId(this.campaignId);
   }
 
   private handleCampaignViewUpdates() {

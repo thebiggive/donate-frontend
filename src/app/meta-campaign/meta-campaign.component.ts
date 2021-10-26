@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { StorageService } from 'ngx-webstorage-service';
@@ -11,15 +11,17 @@ import { TBG_DONATE_STORAGE } from '../donation.service';
 import { environment } from '../../environments/environment';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
+import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
+import { isPlatformBrowser, ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-meta-campaign',
   templateUrl: './meta-campaign.component.html',
   styleUrls: ['./meta-campaign.component.scss'],
 })
-export class MetaCampaignComponent implements OnDestroy, OnInit {
+export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
   public campaign: Campaign;
   public children: CampaignSummary[] = [];
   public filterError = false;
@@ -34,18 +36,23 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
   private routeChangeListener: Subscription;
   private routeParamSubscription: Subscription;
   private searchServiceSubscription: Subscription;
+  private shouldAutoScroll: boolean;
 
   private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v2`; // Key is per-domain/env
 
   constructor(
     private campaignService: CampaignService,
     private fundService: FundService,
+    private navigationService: NavigationService,
     private pageMeta: PageMetaService,
+    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
+    @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
     private route: ActivatedRoute,
     public searchService: SearchService,
     private state: TransferState,
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
+    private scroller: ViewportScroller,
   ) {
     route.params.pipe().subscribe(params => {
       this.campaignSlug = params.campaignSlug;
@@ -89,7 +96,16 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
     }
   }
 
+  ngAfterViewChecked() {
+    if (this.shouldAutoScroll) {
+      // Keep updating scroll in this scenario, until the donor scrolls themselves and we turn off `shouldAutoScroll`.
+      this.updateScroll(this.navigationService.getLastSingleCampaignId());
+    }
+  }
+
   onScroll() {
+    this.shouldAutoScroll = false;
+
     if (this.moreMightExist()) {
       this.more();
     }
@@ -174,6 +190,10 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
       // campaigns still works after we reinstate the existing children.
       this.offset = recentChildrenData.offset;
 
+      if (this.navigationService.getLastSingleCampaignId()) {
+        this.shouldAutoScroll = true;
+      }
+
       return;
     }
 
@@ -234,5 +254,11 @@ export class MetaCampaignComponent implements OnDestroy, OnInit {
         this.run();
       }
     });
+  }
+
+  private updateScroll(campaignId: string | undefined) {
+    if (isPlatformBrowser(this.platformId) && campaignId) {
+      this.scroller.scrollToAnchor(`campaign-${campaignId}`);
+    }
   }
 }
