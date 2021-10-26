@@ -2,10 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import {
   Event,
-  NavigationCancel,
   NavigationEnd,
-  NavigationError,
-  NavigationStart,
   Router,
 } from '@angular/router';
 
@@ -20,8 +17,6 @@ import { NavigationService } from './navigation.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  navigating = false;
-
   constructor(
     private analyticsService: AnalyticsService,
     private donationService: DonationService,
@@ -33,25 +28,8 @@ export class AppComponent implements OnInit {
   ) {
     // https://www.amadousall.com/angular-routing-how-to-display-a-loading-indicator-when-navigating-between-routes/
     this.router.events.subscribe((event: Event) => {
-      if (event instanceof NavigationEnd) {
+      if (isPlatformBrowser(this.platformId) && event instanceof NavigationEnd) {
         this.navigationService.saveNewUrl(event.urlAfterRedirects);
-      }
-
-      switch (true) {
-        case event instanceof NavigationStart: {
-          this.navigating = true;
-          break;
-        }
-
-        case event instanceof NavigationEnd:
-        case event instanceof NavigationCancel:
-        case event instanceof NavigationError: {
-          this.navigating = false;
-          break;
-        }
-        default: {
-          break;
-        }
       }
     });
   }

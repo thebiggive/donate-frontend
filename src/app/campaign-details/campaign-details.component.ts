@@ -114,5 +114,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.analyticsService.logCampaignProductImpression(campaign);
+    this.navigationService.saveLastSingleCampaignId(campaign.id);
   }
 }
