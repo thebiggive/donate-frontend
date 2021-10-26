@@ -17,8 +17,6 @@ import { NavigationService } from './navigation.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  navigating = false;
-
   constructor(
     private analyticsService: AnalyticsService,
     private donationService: DonationService,
