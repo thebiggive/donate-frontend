@@ -23,6 +23,13 @@ input:disabled {
 
 .b-rt-sm {
   @include b-rt-sm;
+
+  .material-icons {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: top;
+  }
 }
 
 .b-rt-0 {
