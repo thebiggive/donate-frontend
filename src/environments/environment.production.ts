@@ -11,7 +11,7 @@ export const environment: Environment = {
   googleAnalyticsId: 'UA-2979952-1',
   googleOptimizeId: 'OPT-W78W6BT',
   maximumDonationAmount: 25000,
-  postcodeLookupKey: 'K2S2_fcsVkiTDsgMGiAjdw27536',
+  postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
   postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.
   psps: {
     enthuse: {
