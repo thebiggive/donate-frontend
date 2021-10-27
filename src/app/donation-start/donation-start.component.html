@@ -72,14 +72,14 @@
             </div>
 
             <mat-hint *ngIf="!campaign.feePercentage">
-              We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://www.thebiggive.org.uk/s/about" target="_blank"><mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too).
+              We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://www.thebiggive.org.uk/s/about" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too).
               <span *ngIf="psp == 'enthuse'">Please consider adding an optional tip when finalising your donation.</span>
               <span *ngIf="psp == 'stripe'">Please consider adding an optional tip.</span>
             </mat-hint>
 
             <div *ngIf="campaign.feePercentage">
               <mat-checkbox formControlName="coverFee" id="coverFee">
-                Cover the {{ campaign.feePercentage}}% <a href="https://www.thebiggive.org.uk/s/gogiveone-fees" target="_blank"><mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> platform fee</a> for the &quot;{{ campaign.title }}&quot; campaign?
+                Cover the {{ campaign.feePercentage}}% <a href="https://www.thebiggive.org.uk/s/gogiveone-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> platform fee</a> for the &quot;{{ campaign.title }}&quot; campaign?
               </mat-checkbox>
             </div>
 
@@ -153,7 +153,7 @@
             <p class="b-grey b-rt-sm">'I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of Gift Aid claimed on all my donations it is my responsibility to pay the difference'.</p>
             <p class="b-grey b-rt-sm">Gift Aid is a government scheme for UK charities to reclaim the tax you have paid and gain 25% more at no cost or hassle to you.
               <a [href]="termsUrl" target="_blank">
-                <mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+                <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
                   Find out more about Gift Aid</a>.
             </p>
             <mat-radio-group tabindex="0" aria-labelledby="giftAid-label" formControlName="giftAid">
@@ -217,6 +217,12 @@
             [stepControl]="paymentGroup"
             label="Payment details"
           >
+            <p class="b-grey b-rt-sm">
+              <mat-icon class="b-va-bottom" aria-hidden="true">lock</mat-icon>
+              Payments processed securely by Stripe.
+              <a href="https://stripe.com/docs/security/stripe" target="_blank"><mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> Learn more</a>.
+            </p>
+
             <mat-form-field>
               <mat-label for="firstName">First name</mat-label>
               <input formControlName="firstName" id="firstName" matInput>
@@ -352,12 +358,12 @@
           >
             <p class="b-rt-0 b-m-0">By clicking on the <em>Donate</em> button, you agree to the {{ termsProvider }}
               <a [href]="termsUrl" target="_blank">
-                <mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+                <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
                   Terms and Conditions
               </a>
                 and
               <a [href]="privacyUrl" target="_blank">
-                <mat-icon class="b-va-mid" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+                <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
                 Privacy Policy</a>.
             </p>
 
