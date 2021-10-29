@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { MainMenuComponent } from './main-menu.component';
 
@@ -16,6 +17,7 @@ describe('MainMenuComponent', () => {
         MatIconModule,
         MatListModule,
         MatMenuModule,
+        RouterTestingModule,
       ],
     })
     .compileComponents();
