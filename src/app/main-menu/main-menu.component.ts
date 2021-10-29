@@ -8,7 +8,7 @@ import { Router, NavigationEnd, Event } from '@angular/router';
 })
 export class MainMenuComponent implements OnInit {
   @Input() listClass: 'bar' | 'tray';
-  isGoGiveOneMenu: boolean = false;
+  isGoGiveOneMenu: boolean;
   urlChanges;
   
   constructor(
