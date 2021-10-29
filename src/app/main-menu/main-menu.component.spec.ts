@@ -17,16 +17,7 @@ describe('MainMenuComponent', () => {
         MatIconModule,
         MatListModule,
         MatMenuModule,
-        RouterTestingModule.withRoutes([
-          {
-            path: '',
-            component: MainMenuComponent,
-          },
-          {
-            path: 'gogiveone',
-            component: MainMenuComponent,
-          },
-        ]),
+        RouterTestingModule,
       ],
     })
     .compileComponents();
