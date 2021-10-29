@@ -13,7 +13,10 @@ export const environment: Environment = {
   donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
+  googleOptimizeId: 'OPT-NV3NHD3',
   maximumDonationAmount: 25000,
+  postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
+  postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.
   psps: {
     enthuse: {
       enabled: true,

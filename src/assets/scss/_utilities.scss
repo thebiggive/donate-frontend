@@ -36,8 +36,8 @@
 }
 
 // Vertical align
-.b-va-mid {
-  vertical-align: middle;
+.b-va-bottom {
+  vertical-align: bottom;
 }
 
 // Width
@@ -64,8 +64,4 @@
 
 .b-uppercase {
   text-transform: uppercase;
-}
-
-mat-spinner.b-full-page {
-  margin-bottom: 1500px; // Reduce perceived footer glitches during page load
 }

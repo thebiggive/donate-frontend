@@ -1,6 +1,10 @@
 @use '~@angular/material' as mat;
 @import '../../abstract';
 
+input:disabled {
+  cursor: not-allowed; // Visual help on desktop when e.g. address lookup has frozen postcode field.
+}
+
 .b-back-button {
   @include make-back-button;
 }
@@ -19,6 +23,13 @@
 
 .b-rt-sm {
   @include b-rt-sm;
+
+  .material-icons {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+    vertical-align: top;
+  }
 }
 
 .b-rt-0 {
@@ -81,11 +92,13 @@
 }
 
 .c-header {
-  h2 {
-    margin: 0;
+  h1, h3 {
     margin-top: 0.25rem;
   }
-  h1, h3 {
+
+  &__to {
+    @include size-md;
+    margin: 0;
     margin-top: 0.25rem;
   }
 }
@@ -125,63 +138,75 @@
   margin-top: 0;
 }
 
-.c-your-donation__suggestion-separator {
-  margin-bottom: -1rem;
-}
-
-.c-your-donation__form-field {
-  max-width: $full-copy-max-width;
-  margin: 0 auto;
-  display: block;
-  font-weight: 700;
-  font-size: 22px;
-}
-
-.c-your-donation__placeholder {
-  padding-bottom: 1rem;
-  font-size: 16px;
-  @media only screen and (max-width: 1200px) {
-    font-size: 12px;
+.donation-input {
+  .form-field {
+    margin: 0;
+    display: block;
+    font-weight: 700;
   }
 
-  @media only screen and (max-width: 800px) {
-    font-size: 10px;
-  }
+  // Larger breakpoints only
+  .floating-label {
+    white-space: initial; // make text run onto next line instead of overflowing parent div.
+    font-size: 16px; // Even larger input fields need small placeholders to fit long charity names.
+    margin-top: 1.5rem;
 
-  .to-charity {
-    padding-top: 0.3rem;
     @media only screen and (max-width: 650px) {
       display: none;
     }
-  }
 
-  .to-tbg {
-    margin-top: -0.2rem;
-    @media only screen and (max-width: 800px) {
-      margin-top: 0.1rem;
+    @media only screen and (max-width: 1200px) {
+      font-size: 12px;
     }
 
+    @media only screen and (max-width: 800px) {
+      font-size: 10px;
+    }
+  }
+
+  // Small breakpoints only
+  .fixed-label {
+    display: none;
+
     @media only screen and (max-width: 650px) {
-      margin-top: 0.2rem;
+      display: block;
+      color: mat.get-color-from-palette($donate-primary);
+      font-size: 10px;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-left: 1.5rem;
     }
   }
 }
 
-.c-your-donation__to {
-  display: none;
+.donation-input.donation-input-main {
+  margin-top: 1.5rem;
 
+  .fixed-label {
+    margin-top: 2rem;
+  }
+
+  .floating-label {
+    margin-top: 2rem;
+  }
+
+  .form-field {
+    font-size: 22px;
+  }
+}
+
+.suggestion-separator {
   @media only screen and (max-width: 650px) {
-    color: mat.get-color-from-palette($donate-primary);
-    font-size: 10px;
-    text-align: center;
-    margin: 2rem 0 -3rem 0;
-    padding-left: 1.5rem;
-    display: block;
+    margin-bottom: -1.5rem;
   }
 }
 
 .c-suggested-amount__button {
   flex: 1 0 auto;
+  font-size: 20px;
+  line-height: 26px;
+  color: $colour-teal-dark;
   width: calc((100 - 1rem) / 3);
   background-color: $colour-teal-light;
   box-shadow: inset 0px 1px 4px rgba(0, 131, 143, 0.2);
@@ -189,7 +214,6 @@
   border: none;
   border-radius: 4px;
   margin-right: 0.5rem;
-  @include b-rt-2;
   &:last-child {
     margin-right: 0;
   }
@@ -240,6 +264,12 @@ a {
 
 .mat-hint {
   display: block;
+  width: 100%;
+
+  .address-loading-spinner {
+    float: right;
+    margin: 0;
+  }
 }
 
 .c-donation-summary {
@@ -257,5 +287,5 @@ a {
 }
 
 .prefix-tbg {
-  font-size: 1.5rem
+  font-weight: 700; // Match the bigger donate field's input style weight, which the infix matches.
 }

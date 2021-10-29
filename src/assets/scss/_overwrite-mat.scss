@@ -53,7 +53,6 @@ mat-radio-button {
   margin-bottom: 1rem;
   .mat-radio-label {
     white-space: initial;
-    @include b-rt-0;
   }
 }
 
@@ -91,11 +90,20 @@ app-campaign-card {
 }
 
 .donation-input .mat-form-field-appearance-legacy .mat-form-field-infix {
-  margin-bottom: 0.5rem;
-  margin-top: 3rem;
   border: 2px mat.get-color-from-palette($donate-primary) solid;
-  border-radius: 1rem;
+  border-radius: 10px; // Fixed px, so fields with different font sizes have aligned round corners.
+  margin-bottom: 0.5rem; // Gap between custom border style and active input underline.
+}
+
+.donation-input-main .mat-form-field-appearance-legacy .mat-form-field-infix {
   padding: 0.7em 0;
+}
+
+// Seems to be needed for the inputs' floating labels to not hug/slightly overlap
+// the field. Angular Material default is equivalent but with 0.9375em.
+.donation-input .mat-form-field-label-wrapper {
+  top: -2.5rem;
+  padding-top: 2.5rem;
 }
 
 .donation-input .mat-form-field-appearance-legacy .mat-form-field-underline {

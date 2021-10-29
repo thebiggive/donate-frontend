@@ -4,7 +4,12 @@
       <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
       All {{ campaign.championName }} campaigns<br>
     </a>
-    <a class="c-listing-button" *ngIf="campaign.parentRef" mat-icon-button [routerLink]="'/' + campaign.parentRef">
+    <a
+      class="c-listing-button"
+      *ngIf="campaign.parentRef"
+      mat-icon-button
+      (click)="goBackToMetacampaign()"
+    >
       <mat-icon class="c-listing-icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
       All participating campaigns
     </a>

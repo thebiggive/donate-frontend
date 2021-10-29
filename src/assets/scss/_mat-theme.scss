@@ -64,6 +64,7 @@ $app-typography: mat.define-typography-config(
 // See https://github.com/angular/components/blob/master/guides/theming.md#theming-only-certain-components
 @include mat.core-theme($donate-theme);
 
+@include mat.autocomplete-theme($donate-theme);
 @include mat.button-theme($donate-theme);
 @include mat.checkbox-theme($donate-theme);
 @include mat.dialog-theme($donate-theme);

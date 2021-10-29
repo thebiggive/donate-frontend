@@ -31,6 +31,9 @@ export interface Donation {
     tipGiftAid?: boolean;
     homePostcode?: string;
     homeAddress?: string;
+    // Could include letters. Up to 40 chars. Denormalised from homeAddress to increase
+    // chance of accuracy for Gift Aid when a lookup service was used.
+    homeBuildingNumber?: string;
 
     optInCharityEmail?: boolean;
 
