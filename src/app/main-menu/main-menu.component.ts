@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router, NavigationEnd, Event } from '@angular/router';
 
 @Component({
   selector: 'app-main-menu',
@@ -7,9 +8,24 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class MainMenuComponent implements OnInit {
   @Input() listClass: 'bar' | 'tray';
-
-  constructor() { }
+  isGoGiveOneMenu: boolean = false;
+  urlChanges;
+  
+  constructor(
+    private router: Router
+  ) {
+    // Listen to url changes and update 'this.isGoGiveOne' accordingly
+    this.urlChanges = router.events.subscribe((event : Event) => {
+      if (event instanceof NavigationEnd) {
+        this.isGoGiveOneMenu = (event.url == '/gogiveone');
+      }
+    });
+  }
 
   ngOnInit(): void {
+  }
+
+  ngOnDestroy(): void {
+    this.urlChanges.unsubscribe();
   }
 }
