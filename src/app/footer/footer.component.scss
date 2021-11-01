@@ -111,7 +111,8 @@ li {
 
 .reed-logo__wrap,
 .fundraising-regulator-logo__wrap,
-.copyright-text__wrap {
+.copyright-text__wrap,
+.address__wrap {
   margin-top: 2rem;
   @media #{$breakpoint-md} {
     width: 50%;
@@ -129,6 +130,7 @@ li {
 }
 
 .copyright-text__wrap {
+  text-align: center;
   @media #{$breakpoint-md} {
     width: 100%;
   }
