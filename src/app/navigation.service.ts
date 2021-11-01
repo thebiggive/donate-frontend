@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 /**
  * Support scroll resoration when using custom 'back' links e.g. to MetacampaignComponent.
@@ -10,6 +11,7 @@ export class NavigationService {
   private lastSingleCampaignId?: string;
   private lastUrl?: string;
   private currentUrl?: string;
+  private isGG1PageEvent = new BehaviorSubject<boolean>(false);
 
   isLastUrl(url: string): boolean {
     return url === this.lastUrl;
@@ -29,5 +31,13 @@ export class NavigationService {
 
   saveLastSingleCampaignId(campaignId: string) {
     this.lastSingleCampaignId = campaignId;
+  }
+
+  emitIsGG1PageEvent(isGG1Page: boolean) {
+    this.isGG1PageEvent.next(isGG1Page);
+  }
+
+  isGG1PageEventListener() {
+    return this.isGG1PageEvent.asObservable();
   }
 }
