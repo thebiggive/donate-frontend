@@ -22,7 +22,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     });
 
     this.navigationService.isGG1PageEventListener().subscribe(isGoGiveOnePage => {
-      this.isGoGiveOnePage = isGoGiveOnePage
+      this.isGoGiveOnePage = isGoGiveOnePage;
     });
   }
 
