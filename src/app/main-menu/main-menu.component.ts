@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class MainMenuComponent implements OnInit {
   @Input() listClass: 'bar' | 'tray';
-  @Input() isGoGiveOnePage: Boolean;
+  @Input() isGoGiveOnePage: boolean;
 
   constructor() {
   }

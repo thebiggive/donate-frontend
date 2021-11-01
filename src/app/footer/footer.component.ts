@@ -5,7 +5,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
-  @Input() isGoGiveOnePage: Boolean;
+  @Input() isGoGiveOnePage: boolean;
   public now: number = Date.now();
 
   constructor() { }
