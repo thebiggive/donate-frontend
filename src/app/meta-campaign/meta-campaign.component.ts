@@ -258,7 +258,16 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   private updateScroll(campaignId: string | undefined) {
     if (isPlatformBrowser(this.platformId) && campaignId) {
-      this.scroller.scrollToAnchor(`campaign-${campaignId}`);
+      // We need to allow enough time for the card layout to be in place. Firefox & Chrome both seemed to consistently
+      // use a too-low Y position when lots of card were shown and we didn't have a delay, both with `scrollToAnchor()`
+      // and manual calculation + `scrollToPosition()`.
+      setTimeout(() => {
+        // Scroll to the anchor's `offsetTop` y-position, minus $toolbar-height.
+        const activeCard = document.getElementById(`campaign-${campaignId}`);
+        if (activeCard) {
+          this.scroller.scrollToPosition([0, activeCard.offsetTop - 64]);
+        }
+      }, 1500);
     }
   }
 }
