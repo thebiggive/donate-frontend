@@ -1,11 +1,11 @@
 <mat-nav-list [class]="listClass">
-  <mat-list-item>
+  <mat-list-item *ngIf="!isGoGiveOneMenu">
     <button mat-icon-button routerLink="/explore">
       Explore campaigns
       <mat-icon aria-hidden="true">search</mat-icon>
     </button>
   </mat-list-item>
-  <mat-list-item>
+  <mat-list-item *ngIf="!isGoGiveOneMenu">
     <button mat-icon-button [matMenuTriggerFor]="about">
       About
       <mat-icon aria-hidden="false" aria-label="Dropdown">arrow_drop_down</mat-icon>
@@ -24,7 +24,7 @@
       </ul>
     </mat-menu>
   </mat-list-item>
-  <mat-list-item>
+  <mat-list-item *ngIf="!isGoGiveOneMenu">
     <button mat-icon-button [matMenuTriggerFor]="howcanwehelp">
       How can we help
       <mat-icon aria-hidden="false" aria-label="Dropdown">arrow_drop_down</mat-icon>
