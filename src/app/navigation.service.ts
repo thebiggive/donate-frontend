@@ -11,7 +11,7 @@ export class NavigationService {
   private lastSingleCampaignId?: string;
   private lastUrl?: string;
   private currentUrl?: string;
-  private isGG1PageEvent = new BehaviorSubject<boolean>(false);
+  private isCurrentCampaignForGG1: boolean;
 
   isLastUrl(url: string): boolean {
     return url === this.lastUrl;
@@ -33,11 +33,14 @@ export class NavigationService {
     this.lastSingleCampaignId = campaignId;
   }
 
-  emitIsGG1PageEvent(isGG1Page: boolean) {
-    this.isGG1PageEvent.next(isGG1Page);
+  // called by campaign-details & donation-start components to define
+  // if the loaded campaign page is a GG1 specific campaign
+  saveIsCurrentCampaignForGG1(isCurrentCampaignForGG1: boolean) {
+    this.isCurrentCampaignForGG1 = isCurrentCampaignForGG1;
   }
 
-  isGG1PageEventListener() {
-    return this.isGG1PageEvent.asObservable();
+  // returns true if either on GG1 homepage, or on a GG1 campaign/donation page
+  getIsGoGiveOnePage() {
+    return (this.currentUrl === '/gogiveone' || this.isCurrentCampaignForGG1);
   }
 }

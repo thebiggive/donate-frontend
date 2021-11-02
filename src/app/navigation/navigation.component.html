@@ -3,7 +3,7 @@
     <a routerLink="/" class="logo__link"><img class="logo" src="/assets/images/logo.png" alt="The Big Give"></a>
   </div>
   <div class="main-nav">
-    <app-main-menu [listClass]="'bar'" [isGoGiveOnePage]="isGoGiveOnePage"></app-main-menu>
+    <app-main-menu [listClass]="'bar'"></app-main-menu>
   </div>
   <div class="side-nav-button">
     <button mat-icon-button (click)="sidenav.toggle()">
@@ -26,6 +26,6 @@
 
   <mat-sidenav-content>
     <router-outlet></router-outlet>
-    <app-footer [isGoGiveOnePage]="isGoGiveOnePage"></app-footer>
+    <app-footer></app-footer>
   </mat-sidenav-content>
 </mat-sidenav-container>

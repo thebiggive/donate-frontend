@@ -137,6 +137,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         this.enthuseError = params.error;
       }
     });
+
+    const campaign = route.snapshot.data.campaign;
+    if (campaign) {
+      this.navigationService.saveIsCurrentCampaignForGG1(campaign.parentRef === 'gogiveone');
+    }
   }
 
   ngOnDestroy() {
@@ -156,15 +161,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     this.campaign = this.route.snapshot.data.campaign;
-
-    if (this.campaign.parentRef === 'gogiveone') {
-      this.navigationService.emitIsGG1PageEvent(true);
-    }
-
-    else {
-      this.navigationService.emitIsGG1PageEvent(false);
-    }
-
     this.setCampaignBasedVars();
 
     const formGroups: {

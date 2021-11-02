@@ -44,17 +44,15 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
         this.fromFund = true;
       }
     });
+
+    const campaign = route.snapshot.data.campaign;
+    if (campaign) {
+      this.navigationService.saveIsCurrentCampaignForGG1(campaign.parentRef === 'gogiveone');
+    }
   }
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
-    if (this.campaign.parentRef === 'gogiveone') {
-      this.navigationService.emitIsGG1PageEvent(true);
-    }
-
-    else {
-      this.navigationService.emitIsGG1PageEvent(false);
-    }
     this.setSecondaryProps(this.campaign);
   }
 
