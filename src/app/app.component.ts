@@ -28,8 +28,13 @@ export class AppComponent implements OnInit {
   ) {
     // https://www.amadousall.com/angular-routing-how-to-display-a-loading-indicator-when-navigating-between-routes/
     this.router.events.subscribe((event: Event) => {
-      if (isPlatformBrowser(this.platformId) && event instanceof NavigationEnd) {
-        this.navigationService.saveNewUrl(event.urlAfterRedirects);
+      if (event instanceof NavigationEnd) {
+        if (isPlatformBrowser(this.platformId)) {
+          this.navigationService.saveNewUrl(event.urlAfterRedirects);
+        }
+        if (event.url !== '/gogiveone' && !event.url.startsWith('/donate') && !event.url.startsWith('/campaign')) {
+          navigationService.saveIsCurrentCampaignForGG1(false);
+        }
       }
     });
   }

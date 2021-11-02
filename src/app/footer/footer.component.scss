@@ -129,6 +129,7 @@ li {
 }
 
 .copyright-text__wrap {
+  text-align: center;
   @media #{$breakpoint-md} {
     width: 100%;
   }

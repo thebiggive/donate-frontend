@@ -137,6 +137,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         this.enthuseError = params.error;
       }
     });
+
+    const campaign = route.snapshot.data.campaign;
+    if (campaign) {
+      this.navigationService.saveIsCurrentCampaignForGG1(campaign.parentRef === 'gogiveone');
+    }
   }
 
   ngOnDestroy() {
