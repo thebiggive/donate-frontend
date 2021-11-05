@@ -1178,7 +1178,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         }
 
         const feeCoverAmount = this.amountsGroup.get('coverFee')?.value
-          ? this.getTipOrFeeAmount(this.campaign.feePercentage, donationAmount)
+          ? this.getTipOrFeeAmount(this.campaign.feePercentage, this.sanitiseCurrency(donationAmount))
           : '0.00';
 
         this.amountsGroup.patchValue({ feeCoverAmount });
@@ -1196,6 +1196,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
           tipPercentage?: number | string,
           tipAmount?: string,
         } = {};
+
+        donationAmount = this.sanitiseCurrency(donationAmount);
 
         if (!this.tipPercentageChanged) {
           let newDefault = this.initialTipSuggestedPercentage;
