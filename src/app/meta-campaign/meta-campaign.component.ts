@@ -178,6 +178,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   private run() {
+    this.loading = true;
     this.offset = 0;
     const query = this.campaignService.buildQuery(this.searchService.selected, 0, this.campaignId, this.campaignSlug, this.fundSlug);
 
@@ -194,12 +195,13 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
         this.shouldAutoScroll = true;
       }
 
+      this.loading = false;
+
       return;
     }
 
     // Else need to load children newly.
     this.children = [];
-    this.loading = true;
     this.doCampaignSearch(query as SearchQuery, true);
   }
 
