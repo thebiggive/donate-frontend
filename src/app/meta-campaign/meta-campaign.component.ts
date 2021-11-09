@@ -39,6 +39,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   private shouldAutoScroll: boolean;
 
   private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v2`; // Key is per-domain/env
+  private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
 
   constructor(
     private campaignService: CampaignService,
@@ -164,6 +165,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
         query: this.normaliseQueryForRecentChildrenComparison(query),
         offset: this.offset,
         children: this.children,
+        time: Date.now(), // ms
       };
 
       this.storage.set(this.recentChildrenKey, recentChildrenData);
@@ -184,7 +186,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
     const recentChildrenData = this.storage.get(this.recentChildrenKey);
     // Only an exact query match should reinstate the same child campaigns on load.
-    if (recentChildrenData && recentChildrenData.query === this.normaliseQueryForRecentChildrenComparison(query as SearchQuery)) {
+    if (
+      recentChildrenData &&
+      recentChildrenData.time > (Date.now() - (60000 * this.recentChildrenMaxMinutes)) &&
+      recentChildrenData.query === this.normaliseQueryForRecentChildrenComparison(query as SearchQuery)
+    ) {
       this.children = recentChildrenData.children;
       // We need to separately reinstate the offset, while excluding it from the normalised query params
       // we use for equality comparison, so that moreMightExist() and therefore scrolling to load more
