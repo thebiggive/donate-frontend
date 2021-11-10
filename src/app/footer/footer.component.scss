@@ -16,19 +16,42 @@
 }
 
 .footer__row {
-  width: 100%;
+  @media #{$breakpoint-md} {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+}
+
+.footer-col {
+  margin-bottom: 20px;
+  @media #{$breakpoint-md} {
+    width: 50%;
+    padding: 10px;
+    box-sizing: border-box; // so padding of 10px is internal - div size doesn't change
+  }
+
+  @media #{$breakpoint-xl} {
+    width: unset;
+    padding: 0px;
+  }
 }
 
 .logo__wrap {
-  width: 100%;
   @media #{$breakpoint-lg} {
-    width: 25%;
     display: inline-block;
   }
 }
 
-img {
+.logo {
   width: 180px;
+}
+
+.smaller-logo {
+  width: 120px;
+  display: block;
+  margin-top: 10px;
 }
 
 h3 {
@@ -66,52 +89,17 @@ li {
 }
 
 .nav-links {
-  margin-top: 2rem;
   @media screen and #{$breakpoint-lg} {
     margin-top: 0;
   }
 }
 
-.nav-links__about,
-.nav-links__row {
-  @media #{$breakpoint-md} {
-    width: 50%;
-    display: inline-block;
-    vertical-align: top;
-  }
-}
-
-.nav-links__about {
-  @media #{$breakpoint-lg} {
-    width: 25%;
-  }
-}
-
-.nav-links__how-we-can-help,
-.nav-links__teal {
-  @media #{$breakpoint-lg} {
-    width: 50%;
-    display: inline-block;
-  }
-}
-
 .nav-links__teal {
   vertical-align: top;
-  @media #{$breakpoint-md} {
-    margin-top: 1rem;
-  }
-  @media #{$breakpoint-lg} {
-    margin-top: 0;
-  }
-}
-
-.sponsors {
-  width: 100%;
 }
 
 .reed-logo__wrap,
-.fundraising-regulator-logo__wrap,
-.copyright-text__wrap {
+.fundraising-regulator-logo__wrap {
   margin-top: 2rem;
   @media #{$breakpoint-md} {
     width: 50%;
@@ -124,20 +112,15 @@ li {
   }
 }
 
-.reed-logo__text {
-  margin-top: 0;
-}
-
-.copyright-text__wrap {
-  @media #{$breakpoint-md} {
-    width: 100%;
+.copyright-and-address {
+  .copyright-text {
+    margin-top: 0;
   }
-  @media #{$breakpoint-lg} {
-    width: 33.33%;
-    vertical-align: unset;
+  p {
+    font-size: 1.1rem;
   }
 }
 
-.copyright-text {
-  margin: 0;
+.supported-by__text {
+  margin: 20px 0 0 0;
 }

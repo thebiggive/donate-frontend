@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavigationStart, Router, RouterEvent } from '@angular/router';
+import { Router, NavigationStart, RouterEvent } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -10,7 +10,8 @@ import { filter } from 'rxjs/operators';
 export class NavigationComponent implements OnInit {
   opened = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+  }
 
   ngOnInit() {
     this.router.events.pipe(

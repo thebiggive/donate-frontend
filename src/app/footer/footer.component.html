@@ -1,54 +1,57 @@
 <footer class="footer">
   <div class="footer__row">
-    <div class="logo__wrap">
+    <div class="logo__wrap footer-col">
       <img class="logo" src="/assets/images/logo-white.png" alt="The Big Give">
+      <img class="smaller-logo" src="/assets/images/fundraising-regulator-logo.png" alt="Registered with the Fundraising Regulator">
+      <p class="supported-by__text">Supported by</p>
+      <img class="smaller-logo" src="/assets/images/reed-logo.png" alt="reed.co.uk">
     </div>
-    <div class="nav-links nav-links__about">
+    <div class="nav-links nav-links__about footer-col">
       <h3>About</h3>
       <ul>
         <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/about">The Big Give</a></li>
         <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/our-story">Our story</a></li>
         <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/team">Team</a></li>
-        <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/press">Press</a></li>
-        <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/our-fees">Our fees</a></li>
-        <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/privacy-policy">Privacy policy</a></li>
+        <li *ngIf="!isGoGiveOnePage"><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/press">Press</a></li>
+        <li><a mat-button class="nav-link" href="{{isGoGiveOnePage ? 'https://www.thebiggive.org.uk/s/gogiveone-fees' : 'https://www.thebiggive.org.uk/s/our-fees'}}">Our fees</a></li>
+        <li><a mat-button class="nav-link" href="{{isGoGiveOnePage ? 'https://www.thebiggive.org.uk/s/gogiveone-privacy' : 'https://www.thebiggive.org.uk/s/privacy-policy'}}">Privacy policy</a></li>
         <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/cookies">Cookie policy</a></li>
-        <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/terms-and-conditions">Terms and conditions</a></li>
+        <li><a mat-button class="nav-link" href="{{isGoGiveOnePage ? 'https://www.thebiggive.org.uk/s/gogiveone-terms' : 'https://www.thebiggive.org.uk/s/terms-and-conditions'}}">Terms and conditions</a></li>
       </ul>
     </div>
-    <div class="nav-links__row">
-      <div class="nav-links nav-links__how-we-can-help">
-        <h3>How can we help</h3>
-        <ul>
-          <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/charities">Charities</a></li>
-          <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/philanthropists">Philanthropists</a></li>
-          <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/individuals">Individuals</a></li>
-          <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/christmas-challenge">Christmas Challenge</a></li>
-          <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/champions-for-children">Champions for Children</a></li>
-          <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/green-match-fund">Green Match Fund</a></li>
-          <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/run-your-own-campaign">Run your own campaign</a></li>
-        </ul>
-      </div>
-      <div class="nav-links nav-links__teal">
-        <ul class="teal-nav">
-          <li><a mat-button class="nav-link" routerLink="/explore">Explore campaigns</a></li>
-          <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/contact-us">Contact us</a></li>
-          <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/charities/s/login/">Login</a></li>
-          <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/charities/s/login/SelfRegister">Register</a></li>
-        </ul>
-      </div>
+    <div class="nav-links nav-links__how-we-can-help footer-col" *ngIf="!isGoGiveOnePage">
+      <h3>How can we help</h3>
+      <ul>
+        <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/charities">Charities</a></li>
+        <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/philanthropists">Philanthropists</a></li>
+        <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/individuals">Individuals</a></li>
+        <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/christmas-challenge">Christmas Challenge</a></li>
+        <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/champions-for-children">Champions for Children</a></li>
+        <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/green-match-fund">Green Match Fund</a></li>
+        <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/run-your-own-campaign">Run your own campaign</a></li>
+      </ul>
     </div>
-    <div class="sponsors">
-      <div class="reed-logo__wrap">
-        <p class="reed-logo__text">Supported by</p>
-        <img class="logo" src="/assets/images/reed-logo.png" alt="reed.co.uk">
-      </div>
-      <div class="fundraising-regulator-logo__wrap">
-        <img class="logo" src="/assets/images/fundraising-regulator-logo.png" alt="Registered with the Fundraising Regulator">
-      </div>
-      <div class="copyright-text__wrap">
-        <p class="copyright-text"><small>&copy; 2007 &ndash; {{ now | date: 'yyyy' }} The Big Give Trust (1136547</small>)</p>
-      </div>
+    <div class="nav-links nav-links__teal footer-col">
+      <ul class="teal-nav">
+        <li *ngIf="!isGoGiveOnePage"><a mat-button class="nav-link" routerLink="/explore">Explore campaigns</a></li>
+        <li *ngIf="isGoGiveOnePage"><a mat-button class="nav-link" routerLink="/gogiveone">Home</a></li>
+        <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/s/contact-us">Contact us</a></li>
+        <li><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/charities/s/login/">Login</a></li>
+        <li *ngIf="!isGoGiveOnePage"><a mat-button class="nav-link" href="https://www.thebiggive.org.uk/charities/s/login/SelfRegister">Register</a></li>
+      </ul>
+    </div>
+
+    <div class="copyright-and-address footer-col">
+      <p class="copyright-text"><small>&copy; 2007 &ndash; {{ now | date: 'yyyy' }} The Big Give Trust (1136547)</small></p>
+      <p>
+        <small>
+          Company number 07273065 <br>
+          Dragon Court <br>
+          27-29 Macklin Street <br>
+          London WC2B 5LX <br>
+          United Kingdom
+        </small>
+      </p>
     </div>
   </div>
 </footer>

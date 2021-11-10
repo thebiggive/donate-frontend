@@ -1,31 +1,26 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router, NavigationEnd, Event } from '@angular/router';
+import { NavigationService } from '../navigation.service';
 
 @Component({
   selector: 'app-main-menu',
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.scss'],
 })
-export class MainMenuComponent implements OnInit, OnDestroy {
+export class MainMenuComponent implements OnInit {
   @Input() listClass: 'bar' | 'tray';
-  isGoGiveOneMenu: boolean;
+  isGoGiveOnePage: boolean;
   urlChanges;
 
-  constructor(
-    private router: Router,
-  ) {
+  constructor(private router: Router, private navigationService: NavigationService) {
     // Listen to url changes and update 'this.isGoGiveOne' accordingly
     this.urlChanges = router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
-        this.isGoGiveOneMenu = (event.url === '/gogiveone');
+        this.isGoGiveOnePage = navigationService.getIsGoGiveOnePage();
       }
     });
   }
 
   ngOnInit(): void {
-  }
-
-  ngOnDestroy(): void {
-    this.urlChanges.unsubscribe();
   }
 }
