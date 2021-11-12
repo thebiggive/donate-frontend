@@ -38,9 +38,11 @@ export function app() {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
         'connect-src': [
+          'wss:', // For GetSiteControl. wss:// is for secure-only WebSockets.
           apiHost,
           donationsApiHost,
           'api.getAddress.io',
+          '*.getsitecontrol.com',
           'fonts.googleapis.com',
           'stats.g.doubleclick.net',
           'www.google-analytics.com',
@@ -69,8 +71,7 @@ export function app() {
           `'sha256-${createHash('sha256').update(AnalyticsService.getOptimizeAntiFlickerScript()).digest('base64')}'`,
           `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
           'api.getAddress.io',
-          'st.getsitecontrol.com',
-          'widgets.getsitecontrol.com',
+          '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
           'js.stripe.com',
           // https://support.google.com/optimize/answer/7388531?hl=en
           'optimize.google.com',
