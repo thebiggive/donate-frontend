@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map  } from 'rxjs/operators';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError, map  } from 'rxjs/operators';
 
 import { environment } from '../environments/environment';
 import { GiftAidAddress } from './gift-aid-address.model';
@@ -19,6 +19,7 @@ export class PostcodeService {
 
     return this.http.get<GiftAidAddressSuggestion[]>(uri).pipe(
       map((response: any) => response.suggestions),
+      catchError(() => EMPTY),
     );
   }
 
