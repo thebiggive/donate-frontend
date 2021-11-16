@@ -19,7 +19,10 @@ export class PostcodeService {
 
     return this.http.get<GiftAidAddressSuggestion[]>(uri).pipe(
       map((response: any) => response.suggestions),
-      catchError(() => EMPTY),
+      catchError((error) => {
+        console.log('PostcodeService.getSuggestions() error', error);
+        return EMPTY;
+      }),
     );
   }
 
