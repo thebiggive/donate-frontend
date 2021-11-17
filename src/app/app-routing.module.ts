@@ -16,7 +16,7 @@ import { MulticurrencyCampaignResolver } from './multicurrency-campaign.resolver
 import { MulticurrencyCampaignListResolver } from './multicurrency-campaign-list.resolver';
 import { MulticurrencyLandingComponent } from './multicurrency-landing/multicurrency-landing.component';
 
-const routePath = environment.redirectHomepageToChirstmasChallenge ? {
+const rootPath = environment.redirectHomepageToChirstmasChallenge ? {
   path: '',
   redirectTo: 'christmas-challenge-2021',
   pathMatch: 'full',
@@ -94,7 +94,7 @@ const routes: Routes = [
       campaign: CampaignResolver,
     },
   },
-  routePath,
+  rootPath,
   {
     path: '**',
     redirectTo: '',
