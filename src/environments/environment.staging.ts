@@ -9,10 +9,10 @@ export const environment: Environment = {
   productionLike: true,
   redirectHomepageToChirstmasChallenge: true,
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
-  donateGlobalUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
+  donateGlobalUriPrefix: 'http://localhost:4000',
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
-  getSiteControlId: '97792',
+  getSiteControlId: '97792', // todo undefined to switch off?
   googleAnalyticsId: 'UA-2979952-3',
   googleOptimizeId: 'OPT-NV3NHD3',
   maximumDonationAmount: 25000,
@@ -50,4 +50,4 @@ export const environment: Environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
