@@ -3,6 +3,7 @@ import { Environment } from './environment.interface';
 export const environment: Environment = {
   production: true,
   productionLike: true,
+  redirectHomepageToChirstmasChallenge: true,
   apiUriPrefix: 'https://sf-api-production.thebiggive.org.uk',
   donateGlobalUriPrefix: 'https://thebiggive.com',
   donateUriPrefix: 'https://donate.thebiggive.org.uk',
