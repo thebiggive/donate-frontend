@@ -9,6 +9,7 @@ import { Environment } from './environment.interface';
 export const environment: Environment = {
   production: false,
   productionLike: true,
+  redirectHomepageToChirstmasChallenge: false,
   apiUriPrefix: 'https://regtest1-biggive.cs100.force.com',
   donateGlobalUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
   donateUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',

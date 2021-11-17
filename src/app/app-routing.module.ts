@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { environment } from '../environments/environment';
 
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
 import { CampaignListResolver } from './campaign-list.resolver';
@@ -14,6 +15,18 @@ import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { MulticurrencyCampaignResolver } from './multicurrency-campaign.resolver';
 import { MulticurrencyCampaignListResolver } from './multicurrency-campaign-list.resolver';
 import { MulticurrencyLandingComponent } from './multicurrency-landing/multicurrency-landing.component';
+
+const routePath = environment.redirectHomepageToChirstmasChallenge ? {
+  path: '',
+  redirectTo: 'christmas-challenge-2021',
+  pathMatch: 'full',
+} : {
+  path: '',
+  component: HomeComponent,
+  resolve: {
+    campaigns: CampaignListResolver,
+  },
+};
 
 const routes: Routes = [
   {
@@ -81,13 +94,7 @@ const routes: Routes = [
       campaign: CampaignResolver,
     },
   },
-  {
-    path: '',
-    component: HomeComponent,
-    resolve: {
-      campaigns: CampaignListResolver,
-    },
-  },
+  routePath,
   {
     path: '**',
     redirectTo: '',
