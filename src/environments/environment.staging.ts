@@ -7,7 +7,7 @@ import { Environment } from './environment.interface';
 export const environment: Environment = {
   production: false,
   productionLike: true,
-  redirectHomepageToChirstmasChallenge: false,
+  redirectHomepageToChirstmasChallenge: true,
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
   donateGlobalUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
