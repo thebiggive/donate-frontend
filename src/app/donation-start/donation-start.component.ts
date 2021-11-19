@@ -977,6 +977,14 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.campaign.currencyCode,
     );
 
+    if (response.donation.tipAmount > 0) {
+      this.analyticsService.logTipAmountChosen(
+        response.donation.tipAmount,
+        this.campaignId,
+        this.campaign.currencyCode,
+      );
+    }
+
     if (this.psp === 'stripe') {
       this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
 
