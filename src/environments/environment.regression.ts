@@ -33,10 +33,10 @@ export const environment: Environment = {
   reservationMinutes: 15,
   suggestedAmounts: {
     GBP: [
-      { weight: 1, values: [30, 100, 250] }
+      { weight: 1, values: [] },
     ],
     USD: [
-      { weight: 1, values: [70, 300, 700] },
+      { weight: 1, values: [] },
     ],
   },
   thanksUriPrefix: 'https://donate-regression.thebiggivetest.org.uk/thanks/',

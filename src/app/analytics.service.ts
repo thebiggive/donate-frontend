@@ -103,6 +103,17 @@ export class AnalyticsService {
     });
   }
 
+  logTipAmountChosen(tipAmountChosen: number, campaignId: string, currencyCode: string) {
+    this.sendEvent('Tip included', {
+      event_category: `tip_amount_chosen_${currencyCode}`,
+      event_label: `Tip alongside donation to campaign ${campaignId}`,
+      // Note this is in PENCE as tips are more often fractional. To enable historic comparison, and because
+      // only whole numbers are allowed for donation amount, `donate_amount_chosen_GBP` and friends remain
+      // in POUNDS.
+      value: 100 * tipAmountChosen,
+    });
+  }
+
   logCampaignProductImpression(campaign: Campaign) {
     // https://developers.google.com/analytics/devguides/collection/gtagjs/enhanced-ecommerce#measure_product_detail_views
     this.callGtag('event', 'view_item', { items: [ this.buildProductData(campaign) ] });

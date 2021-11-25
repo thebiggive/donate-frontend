@@ -32,12 +32,10 @@ export const environment: Environment = {
   reservationMinutes: 15,
   suggestedAmounts: {
     GBP: [
-      // One suggestion set for 30% of donors, no suggestions for the other 70%.
-      { weight: 3, values: [50, 200, 500] },
       { weight: 1, values: [] },
     ],
     USD: [
-      { weight: 1, values: [70, 300, 700] },
+      { weight: 1, values: [] },
     ],
   },
   thanksUriPrefix: 'http://localhost:4200/thanks/',
