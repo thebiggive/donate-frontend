@@ -1214,6 +1214,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.amountsGroup.controls.tipAmount.setValidators([
         Validators.required,
         Validators.pattern('^[£$]?[0-9]+?(\\.[0-9]{2})?$'),
+        ValidateCurrencyMax,
       ]);
 
       this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
