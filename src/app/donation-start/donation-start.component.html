@@ -116,7 +116,7 @@
                 *ngIf="tipAmountField?.invalid && tipAmountField?.errors && (tipAmountField?.dirty || tipAmountField?.touched)"
               >
                 Please enter how much you would like to donate to the Big Give as a number of
-                {{ currencySymbol }}, optionally with 2 decimals.
+                {{ currencySymbol }}, optionally with 2 decimals and up to {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }}.
               </div>
 
               <mat-hint *ngIf="!customTip()">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to support the Big Give</mat-hint>
