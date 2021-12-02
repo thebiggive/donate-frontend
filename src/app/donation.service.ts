@@ -186,10 +186,14 @@ export class DonationService {
   }
 
   /**
-   * Sets card metadata to ensure the correct fees are applied. Also updated the local copy
+   * Sets card metadata to ensure the correct fees are applied. Also updates the local copy
    * of the donation as a side effect.
    */
   updatePaymentDetails(donation: Donation, cardBrand = 'N/A', cardCountry = 'N/A'): Observable<Donation> {
+    if (donation.cardBrand === cardBrand && donation.cardCountry === cardCountry) {
+      return of(donation); // No-op. No fee change or new info -> don't call the server.
+    }
+
     donation.cardBrand = cardBrand;
     donation.cardCountry = cardCountry;
 
