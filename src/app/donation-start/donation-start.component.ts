@@ -746,6 +746,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // error elements are still present. So the safest fix for now is to skip it
     // when we know we have only just hidden the error in this call.
     if (this.donationCreateError && this.stepper.selected?.label === 'Your donation') {
+      if (this.donation) {
+        this.clearDonation(this.donation, true);
+        this.analyticsService.logEvent(
+          'create_retry',
+          `Donation cleared ahead of creation retry for campaign ${this.campaignId}`,
+        );
+      }
       this.donationCreateError = false;
       this.stepper.next();
       return;
