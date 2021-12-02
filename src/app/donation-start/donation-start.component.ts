@@ -737,6 +737,21 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   next() {
+    // If the initial donation *create* has failed, we want to try again each time,
+    // not just re-surface the existing error. The step change event is what
+    // leads to the DonationService.create() [POST] call. Note that just setting the
+    // bool and letting `goToFirstVisibleError()` proceed doesn't work on the first
+    // click, probably because that method needs a refreshed DOM to detect if custom
+    // error elements are still present. So the safest fix for now is to skip it
+    // when we know we have only just hidden the error in this call.
+    if (this.donationCreateError && this.stepper.selected?.label === 'Your donation') {
+      this.donationCreateError = false;
+      this.stepper.next();
+      return;
+    }
+
+    // For all other errors, attempting to proceed should just help the donor find
+    // the error on the page if there is one.
     if (!this.goToFirstVisibleError()) {
       this.stepper.next();
     }
@@ -1199,6 +1214,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.amountsGroup.controls.tipAmount.setValidators([
         Validators.required,
         Validators.pattern('^[£$]?[0-9]+?(\\.[0-9]{2})?$'),
+        ValidateCurrencyMax,
       ]);
 
       this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
