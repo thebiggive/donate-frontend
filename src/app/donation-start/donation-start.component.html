@@ -197,10 +197,16 @@
               </mat-form-field>
               <div class="error" *ngIf="giftAidGroup.get('homeAddress')?.errors?.maxlength">Maximum 255 characters exceeded</div>
 
-              <mat-form-field>
+              <mat-form-field *ngIf="!giftAidGroup.value.homeOutsideUK">
                 <mat-label for="homePostcode">Home postcode</mat-label>
                 <input formControlName="homePostcode" id="homePostcode" matInput>
               </mat-form-field>
+
+              <div class="homeOutsideUK-wrapper">
+                <mat-checkbox formControlName="homeOutsideUK" id="homeOutsideUK">
+                  Live outside the UK?
+                </mat-checkbox>
+              </div>
             </div>
 
             <div>

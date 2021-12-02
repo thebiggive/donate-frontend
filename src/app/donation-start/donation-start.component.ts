@@ -185,6 +185,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         giftAid: [null],        // See addUKValidators().
         homeAddress: [null],  // See addStripeValidators().
         homeBuildingNumber: [null],
+        homeOutsideUK: [null],
         homePostcode: [null], // See addStripeValidators().
       }),
       marketing: this.formBuilder.group({
@@ -432,7 +433,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.donation.tipAmount = this.sanitiseCurrency(this.amountsGroup.value.tipAmount);
 
       if (this.donation.giftAid || this.donation.tipGiftAid) {
-        this.donation.homePostcode = this.giftAidGroup.value.homePostcode;
+        this.donation.homePostcode = this.giftAidGroup.value.homeOutsideUK ? 'OVERSEAS' : this.giftAidGroup.value.homePostcode;
         this.donation.homeAddress = this.giftAidGroup.value.homeAddress;
         // Optional additional field to improve data alignment w/ HMRC when a lookup was used.
         this.donation.homeBuildingNumber = this.giftAidGroup.value.homeBuildingNumber || undefined;
@@ -1256,14 +1257,20 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       });
     }
 
+    this.giftAidGroup.get('homeOutsideUK')?.valueChanges.subscribe(homeOutsideUK => {
+      this.giftAidGroup.controls.homePostcode.setValidators(
+        this.getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK),
+      );
+      this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
+    });
+
     // Gift Aid home address fields are validated only in Stripe mode and also
     // conditionally on the donor claiming Gift Aid.
     this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
       if (giftAidChecked) {
-        this.giftAidGroup.controls.homePostcode.setValidators([
-          Validators.required,
-          Validators.pattern(this.postcodeRegExp),
-        ]);
+        this.giftAidGroup.controls.homePostcode.setValidators(
+          this.getHomePostcodeValidatorsWhenClaimingGiftAid(this.giftAidGroup.value.homeOutsideUK),
+        );
         this.giftAidGroup.controls.homeAddress.setValidators([
           Validators.required,
           Validators.maxLength(255),
@@ -1291,6 +1298,17 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     ]);
 
     this.addStripeCardBillingValidators();
+  }
+
+  private getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK: boolean) {
+    if (homeOutsideUK) {
+      return [];
+    }
+
+    return [
+      Validators.required,
+      Validators.pattern(this.postcodeRegExp),
+    ];
   }
 
   private removeStripeCardBillingValidators() {
