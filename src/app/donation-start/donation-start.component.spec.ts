@@ -179,6 +179,7 @@ describe('DonationStartComponent', () => {
         homeAddress: '123 Main St',
         homeBuildingNumber: '123',
         homePostcode: 'N1 1AA',
+        homeOutsideUK: false,
       },
       payment: {
         firstName: 'Ezra',
@@ -205,6 +206,44 @@ describe('DonationStartComponent', () => {
     expect(component.tipAmount()).toBe(154.25);
   });
 
+  /**
+   * homePostcode is not required in this scenario.
+   */
+  it('should have no errors with a non-UK-resident claim for UK Gift Aid', () => {
+    fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
+
+    component.donationForm.setValue({
+      amounts: {
+        coverFee: false,
+        donationAmount: '£1234',
+        feeCoverAmount: null,
+        tipAmount: '20',
+        tipPercentage: 12.5,
+      },
+      giftAid: {
+        giftAid: true,
+        homeAddress: '123 Main St',
+        homeBuildingNumber: '123',
+        homePostcode: null,
+        homeOutsideUK: true,
+      },
+      payment: {
+        firstName: 'Ezra',
+        lastName: 'Furman',
+        emailAddress: 'test@example.com',
+        billingCountry: 'GB',
+        billingPostcode: 'N1 1AA',
+      },
+      marketing: {
+        optInCharityEmail: false,
+        optInTbgEmail: true,
+        optInChampionEmail: false,
+      },
+    });
+
+    expect(component.donationForm.valid).toBe(true);
+  });
+
   it('should have an error with required radio buttons not set', () => {
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
@@ -221,6 +260,7 @@ describe('DonationStartComponent', () => {
         homePostcode: null,
         homeAddress: null,
         homeBuildingNumber: null,
+        homeOutsideUK: null,
       },
       payment: {
         firstName: null,
@@ -265,6 +305,7 @@ describe('DonationStartComponent', () => {
         homePostcode: null,
         homeAddress: null,
         homeBuildingNumber: null,
+        homeOutsideUK: null,
       },
       payment: {
         firstName: null,
@@ -307,6 +348,7 @@ describe('DonationStartComponent', () => {
         homePostcode: null,
         homeAddress: null,
         homeBuildingNumber: null,
+        homeOutsideUK: null,
       },
       payment: {
         firstName: null,
@@ -349,6 +391,7 @@ describe('DonationStartComponent', () => {
         homePostcode: null,
         homeAddress: null,
         homeBuildingNumber: null,
+        homeOutsideUK: null,
       },
       payment: {
         firstName: null,
@@ -391,6 +434,7 @@ describe('DonationStartComponent', () => {
         homePostcode: null,
         homeAddress: null,
         homeBuildingNumber: null,
+        homeOutsideUK: null,
       },
       payment: {
         firstName: null,
@@ -436,6 +480,7 @@ describe('DonationStartComponent', () => {
         homeAddress: null,
         homePostcode: null,
         homeBuildingNumber: null,
+        homeOutsideUK: null,
       },
       payment: {
         firstName: null,
@@ -482,6 +527,7 @@ describe('DonationStartComponent', () => {
         homePostcode: null,
         homeAddress: null,
         homeBuildingNumber: null,
+        homeOutsideUK: null,
       },
       payment: {
         firstName: null,
@@ -527,6 +573,7 @@ describe('DonationStartComponent', () => {
         homePostcode: null,
         homeAddress: null,
         homeBuildingNumber: null,
+        homeOutsideUK: null,
       },
       marketing: {
         optInCharityEmail: true,
