@@ -44,6 +44,8 @@ export function app() {
           'api.getAddress.io',
           '*.getsitecontrol.com',
           'fonts.googleapis.com',
+          'hcaptcha.com',
+          'newassets.hcaptcha.com',
           'stats.g.doubleclick.net',
           'www.google-analytics.com',
         ],
@@ -53,6 +55,10 @@ export function app() {
           donationsApiHost,
           'fonts.googleapis.com',
           'fonts.gstatic.com',
+          // TODO figure out minimal needed host contexts and
+          // fix remaining error if keeping this branch.
+          'hcaptcha.com',
+          'newassets.hcaptcha.com',
           'js.stripe.com',
           'optimize.google.com',
           'player.vimeo.com',
@@ -74,6 +80,8 @@ export function app() {
           `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
+          'hcaptcha.com',
+          'newassets.hcaptcha.com',
           'js.stripe.com',
           // https://support.google.com/optimize/answer/7388531?hl=en
           'optimize.google.com',

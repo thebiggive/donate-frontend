@@ -50,6 +50,7 @@
     "helmet": "^4.4.1",
     "material-icons-font": "^2.1.0",
     "morgan": "^1.10.0",
+    "ng-hcaptcha": "^1.2.0",
     "ngx-infinite-scroll": "^10.0.1",
     "ngx-webstorage-service": "^4.1.0",
     "rxjs": "^6.6.3",

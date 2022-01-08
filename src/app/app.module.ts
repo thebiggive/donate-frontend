@@ -22,6 +22,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgHcaptchaModule } from 'ng-hcaptcha';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
@@ -53,6 +54,8 @@ import { TimeLeftPipe } from './time-left.pipe';
 import { HomeComponent } from './home/home.component';
 import { MulticurrencyLandingComponent } from './multicurrency-landing/multicurrency-landing.component';
 import { MulticurrencyLocationPickComponent } from './multicurrency-location-pick/multicurrency-location-pick.component';
+// TODO tidy import if using this branch
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -109,6 +112,9 @@ import { MulticurrencyLocationPickComponent } from './multicurrency-location-pic
     MatStepperModule,
     MatTabsModule,
     MatToolbarModule,
+    NgHcaptchaModule.forRoot({
+      siteKey: environment.hCaptchaSiteKey,
+    }),
     ReactiveFormsModule,
   ],
   providers: [

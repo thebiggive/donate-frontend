@@ -765,6 +765,22 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
   }
 
+  onCaptchaVerify(token: string) {
+    console.log('captcha done!', token);
+    // The verification process was successful.
+    // You can verify the token on your server now.
+  }
+
+  onCaptchaExpired(response: any) {
+    console.log('captcha expired!', response);
+    // The verification expired.
+  }
+
+  onCaptchaError(error: any) {
+    console.log('catcha error!', error);
+      // An error occured during the verification process.
+  }
+
   private jumpToStep(stepLabel: string) {
     this.stepper.steps
       .filter(step => step.label === stepLabel)

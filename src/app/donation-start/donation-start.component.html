@@ -36,6 +36,12 @@
               Match funds are currently available!
             </p>
 
+            <!-- Dummy button to demo hCaptcha -->
+            <button ngHcaptchaInvisibleButton
+              (verify)="onCaptchaVerify($event)"
+              (expired)="onCaptchaExpired($event)"
+              (error)="onCaptchaError($event)">Click me</button>
+
             <div *ngIf="suggestedAmounts && suggestedAmounts[campaign.currencyCode] && suggestedAmounts[campaign.currencyCode].length > 0" class="c-suggested-amounts">
               <div fxLayout="row">
                 <button

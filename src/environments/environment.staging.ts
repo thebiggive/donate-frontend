@@ -15,6 +15,7 @@ export const environment: Environment = {
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
   googleOptimizeId: 'OPT-NV3NHD3',
+  hCaptchaSiteKey: '1f2d33d8-9ae4-4529-beaf-89c57db20415',
   maximumDonationAmount: 25000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
   postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.
