@@ -48,10 +48,10 @@
   <section id="social">
     <div class="b-container">
       <h2>Share this</h2>
-      <div class="socials-wrapper">
-        <a href="http://www.facebook.com/share.php?u=donate.thebiggive.org.uk/gogiveone" target="blank"><fa-icon [icon]="faFacebookSquare" class="social-icon"></fa-icon></a>
-        <a href="https://twitter.com/intent/tweet?text=Go%20Give%20One&url=donate.thebiggive.org.uk/gogiveone" target="blank"><fa-icon [icon]="faTwitter" class="social-icon"></fa-icon></a>
-        <a href="https://www.linkedin.com/sharing/share-offsite/?url=donate.thebiggive.org.uk/gogiveone" target="blank"><fa-icon [icon]="faLinkedin" class="social-icon"></fa-icon></a>
+      <div class="socials-wrapper">      
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ shareUrl }}" target="_blank" rel="noopener"><fa-icon [icon]="faFacebookSquare" class="social-icon"></fa-icon></a>
+        <a href="https://twitter.com/share?url={{ shareUrl }}&text={{ prefilledText }}" target="_blank" rel="noopener"><fa-icon [icon]="faTwitter" class="social-icon"></fa-icon></a>
+        <a href="https://www.linkedin.com/cws/share?url={{ shareUrl }}" target="_blank" rel="noopener"><fa-icon [icon]="faLinkedin" class="social-icon"></fa-icon></a>  
       </div>
     </div>
   </section>
