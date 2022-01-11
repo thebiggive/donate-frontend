@@ -12,7 +12,7 @@ export const environment: Environment = {
   googleAnalyticsId: 'UA-2979952-1',
   googleOptimizeId: 'OPT-W78W6BT',
   gg1FunderLogos: [
-    'https://thebiggive--c.visualforce.com/resource/1641902289000/imageGG1FunderExperian'
+    'https://thebiggive--c.visualforce.com/resource/1641902289000/imageGG1FunderExperian',
   ],
   maximumDonationAmount: 25000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
