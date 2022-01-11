@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { faFacebookSquare, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faFacebookSquare, faTwitter, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 import { PageMetaService } from '../page-meta.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-multicurrency-landing',
@@ -11,8 +12,10 @@ import { PageMetaService } from '../page-meta.service';
 })
 export class MulticurrencyLandingComponent implements OnInit {
   faFacebookSquare = faFacebookSquare;
-  faInstagram = faInstagram;
   faTwitter = faTwitter;
+  faLinkedin = faLinkedin;
+  shareUrl = environment.donateGlobalUriPrefix + '/gogiveone';
+  prefilledText = 'Go Give One!';
 
   constructor(private pageMeta: PageMetaService, private route: ActivatedRoute) {}
 
