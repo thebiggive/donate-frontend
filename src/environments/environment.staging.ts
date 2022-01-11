@@ -29,6 +29,7 @@ export const environment: Environment = {
       publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
+  recaptchaSiteKey: '6LfJPAceAAAAAPnbqSG-lMNCiawYsTrT_daIW6sq',
   reservationMinutes: 15,
   // As agreed 23 Nov '21, no amount suggestions for CC21 / while we explore Optimize
   // tip amount copy experiments.

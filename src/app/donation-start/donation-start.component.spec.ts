@@ -16,6 +16,7 @@ import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { RecaptchaModule } from 'ng-recaptcha';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
@@ -127,6 +128,7 @@ describe('DonationStartComponent', () => {
         MatStepperModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
+        RecaptchaModule,
         RouterTestingModule.withRoutes([
           {
             path: 'donate/:campaignId',

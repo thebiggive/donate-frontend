@@ -22,6 +22,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { RecaptchaModule } from 'ng-recaptcha';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
@@ -110,6 +111,7 @@ import { MulticurrencyLocationPickComponent } from './multicurrency-location-pic
     MatTabsModule,
     MatToolbarModule,
     ReactiveFormsModule,
+    RecaptchaModule,
   ],
   providers: [
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },

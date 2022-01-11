@@ -12,6 +12,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { RecaptchaModule } from 'ng-recaptcha';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { AppComponent } from './app.component';
@@ -37,6 +38,7 @@ describe('AppComponent', () => {
         MatToolbarModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
+        RecaptchaModule,
         RouterTestingModule,
       ],
       declarations: [
