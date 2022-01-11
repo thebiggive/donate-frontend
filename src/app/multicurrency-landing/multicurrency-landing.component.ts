@@ -16,6 +16,7 @@ export class MulticurrencyLandingComponent implements OnInit {
   faLinkedin = faLinkedin;
   shareUrl = environment.donateGlobalUriPrefix + '/gogiveone';
   prefilledText = 'Go Give One!';
+  funderLogos = environment.gg1FunderLogos;
 
   constructor(private pageMeta: PageMetaService, private route: ActivatedRoute) {}
 

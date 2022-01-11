@@ -20,7 +20,7 @@
       <h3>Match Funded By</h3>
 
       <div class="logo-wrapper">
-        <img src="/assets/images/experian-logo.png">
+        <img *ngFor="let funderLogo of funderLogos" src="{{funderLogo}}">
       </div>
   
       <a href="">Companies, join the campaign</a>
