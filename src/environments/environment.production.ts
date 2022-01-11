@@ -11,9 +11,6 @@ export const environment: Environment = {
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-1',
   googleOptimizeId: 'OPT-W78W6BT',
-  gg1FunderLogos: [
-    'https://thebiggive--c.visualforce.com/resource/1641902289000/imageGG1FunderExperian',
-  ],
   maximumDonationAmount: 25000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
   postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.

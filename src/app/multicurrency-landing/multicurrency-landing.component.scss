@@ -73,13 +73,10 @@ $dark-grey: #333333;
         .logo-wrapper {
             padding: 25px 0 50px 0;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
             
             img {
-                max-width: 250px;
-                align-self: center;
-                margin: 20px;
+                max-width: 350px;
+                margin: auto;
                 border-radius: 10px;
                 background-color: rgb(300, 300, 300);
             }
@@ -169,9 +166,8 @@ $dark-grey: #333333;
             .logo-wrapper {
                 padding: 20px 0 40px 0;
                 img {
-                    max-width: 225px;
+                    max-width: 325px;
                     align-self: center;
-                    margin: 15px;
                     border-radius: 9px;
                 }
             }
@@ -227,9 +223,8 @@ $dark-grey: #333333;
             .logo-wrapper {
                 padding: 15px 0 35px 0;
                 img {
-                    max-width: 200px;
+                    max-width: 250px;
                     align-self: center;
-                    margin: 10px;
                     border-radius: 8px;
                 }
             }
@@ -286,12 +281,11 @@ $dark-grey: #333333;
             .logo-wrapper {
                 padding: 15px 0 35px 0;
                 img {
-                    max-width: 175px;
+                    max-width: 225px;
                     align-self: center;
-                    margin: 5px;
                 }
             }
-        
+
             a {
                 font-size: 1rem;
             }
@@ -306,7 +300,7 @@ $dark-grey: #333333;
                 font-size: 1.6rem;
                 margin: 0 0 25px 0;
             }
-    
+
             p {
                 font-size: 1.2rem;
                 margin: 0 auto 10px auto;
@@ -356,9 +350,8 @@ $dark-grey: #333333;
             .logo-wrapper {
                 padding: 15px 0 35px 0;
                 img {
-                    max-width: 125px;
+                    max-width: 175px;
                     align-self: center;
-                    margin: 5px;
                 }
             }
         
