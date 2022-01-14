@@ -76,6 +76,7 @@ export function app() {
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
           'js.stripe.com',
           // https://support.google.com/optimize/answer/7388531?hl=en
+          'www.gstatic.com',
           'optimize.google.com',
           'www.googleanalytics.com',
           'www.google-analytics.com',
