@@ -56,6 +56,9 @@ export function app() {
           'js.stripe.com',
           'optimize.google.com',
           'player.vimeo.com',
+          // Next 2 needed for reCAPTCHA to fully load.
+          'recaptcha.google.com',
+          'www.google.com',
           'www.youtube.com',
         ],
         'img-src': [
@@ -76,7 +79,9 @@ export function app() {
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
           'js.stripe.com',
-          'www.gstatic.com', // reCAPATCH translation JS loads from here + not covered by nonce.
+          // Next 2 needed for reCAPTCHA to fully load.
+          'www.google.com',
+          'www.gstatic.com',
           // https://support.google.com/optimize/answer/7388531?hl=en
           'optimize.google.com',
           'www.googleanalytics.com',
