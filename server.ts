@@ -76,6 +76,7 @@ export function app() {
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
           'js.stripe.com',
+          'www.gstatic.com', // reCAPATCH translation JS loads from here + not covered by nonce.
           // https://support.google.com/optimize/answer/7388531?hl=en
           'optimize.google.com',
           'www.googleanalytics.com',
