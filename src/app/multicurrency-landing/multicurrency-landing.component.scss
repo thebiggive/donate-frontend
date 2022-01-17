@@ -56,7 +56,6 @@ $dark-grey: #333333;
 
 
 #match-funders {
-    min-height: 50vh;
     padding: 100px 0;
     background-color: lightgrey;
 
@@ -68,10 +67,11 @@ $dark-grey: #333333;
             text-align: center;
             font-size: 2rem;
             text-transform: uppercase;
+            margin: 0;
         }
     
         .logo-wrapper {
-            padding: 25px 0 50px 0;
+            padding: 30px 0;
             display: flex;
             
             img {
@@ -164,7 +164,6 @@ $dark-grey: #333333;
             }
         
             .logo-wrapper {
-                padding: 20px 0 40px 0;
                 img {
                     max-width: 325px;
                     align-self: center;
@@ -221,7 +220,6 @@ $dark-grey: #333333;
             }
         
             .logo-wrapper {
-                padding: 15px 0 35px 0;
                 img {
                     max-width: 250px;
                     align-self: center;
@@ -279,7 +277,6 @@ $dark-grey: #333333;
             }
         
             .logo-wrapper {
-                padding: 15px 0 35px 0;
                 img {
                     max-width: 225px;
                     align-self: center;
@@ -348,7 +345,6 @@ $dark-grey: #333333;
             }
         
             .logo-wrapper {
-                padding: 15px 0 35px 0;
                 img {
                     max-width: 175px;
                     align-self: center;
