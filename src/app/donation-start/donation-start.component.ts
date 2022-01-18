@@ -688,7 +688,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   captchaReturn(captchaResponse: string) {
     this.captchaCode = captchaResponse;
-    this.next();
+    this.createDonation();
   }
 
   customTip(): boolean {
@@ -745,10 +745,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
    */
   tipPercentageChange() {
     this.tipPercentageChanged = true;
-  }
-
-  captchaAndNext() {
-    this.captcha.execute();
   }
 
   next() {
@@ -884,6 +880,17 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   private createDonation(): void {
+    if (!this.captchaCode) {
+      // We need a captcha code before we can *really* proceed. By doing this here we ensure
+      // this happens consistently regardless of whether donors click Next or a subsequent stepper
+      // heading, while only configuring it in one place.
+      //
+      // captchaReturn() is called on resolution of a valid captcha and calls `createDonation()` again. We
+      // don't get stuck in this logic branch because `this.captchaCode` is non-empty then.
+      this.captcha.execute();
+      return;
+    }
+
     if (!this.campaign || !this.campaign.charity.id || !this.psp) {
       this.donationCreateError = true;
       return;
