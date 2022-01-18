@@ -15,7 +15,8 @@ export class MulticurrencyLandingComponent implements OnInit {
   faTwitter = faTwitter;
   faLinkedin = faLinkedin;
   shareUrl = environment.donateGlobalUriPrefix + '/gogiveone';
-  prefilledText = 'Go Give One!';
+  // Ticket DON-474.
+  prefilledText = encodeURIComponent('Donate to the #GoGiveOne campaign to help COVID-19 vaccines reach the rest of the world, prioritizing those who need them the most in countries that cannot afford them! Click below to donate today!');
 
   constructor(private pageMeta: PageMetaService, private route: ActivatedRoute) {}
 
