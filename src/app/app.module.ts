@@ -22,6 +22,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { RecaptchaModule, RECAPTCHA_NONCE } from 'ng-recaptcha';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
@@ -39,6 +40,7 @@ import { DonationStartErrorDialogComponent } from './donation-start/donation-sta
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartMatchingExpiredDialogComponent } from './donation-start/donation-start-matching-expired-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
+import { environment } from 'src/environments/environment';
 import { ExactCurrencyPipe } from './exact-currency.pipe';
 import { ExploreComponent } from './explore/explore.component';
 import { FiltersComponent } from './filters/filters.component';
@@ -110,11 +112,13 @@ import { MulticurrencyLocationPickComponent } from './multicurrency-location-pic
     MatTabsModule,
     MatToolbarModule,
     ReactiveFormsModule,
+    RecaptchaModule,
   ],
   providers: [
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
+    { provide: RECAPTCHA_NONCE, useValue: environment.recaptchaNonce },
   ],
   bootstrap: [AppComponent],
 })

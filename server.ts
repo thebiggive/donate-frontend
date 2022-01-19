@@ -56,6 +56,9 @@ export function app() {
           'js.stripe.com',
           'optimize.google.com',
           'player.vimeo.com',
+          // Next 2 needed for reCAPTCHA to fully load.
+          'recaptcha.google.com',
+          'www.google.com',
           'www.youtube.com',
         ],
         'img-src': [
@@ -68,6 +71,7 @@ export function app() {
           donateHost,
           `'unsafe-eval'`,
           `'unsafe-inline'`,
+          `'nonce-${environment.recaptchaNonce}'`,
           `'sha256-lAAe/2BNa8LfOLFsGspOHNtIPGU+RpI2Ne1/HaNdnLE='`, // IE fallback inline script?
           `'sha256-${createHash('sha256').update(AnalyticsService.getConfigureContent()).digest('base64')}'`,
           `'sha256-${createHash('sha256').update(AnalyticsService.getOptimizeAntiFlickerScript()).digest('base64')}'`,
@@ -75,6 +79,9 @@ export function app() {
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
           'js.stripe.com',
+          // Next 2 needed for reCAPTCHA to fully load.
+          'www.google.com',
+          'www.gstatic.com',
           // https://support.google.com/optimize/answer/7388531?hl=en
           'optimize.google.com',
           'www.googleanalytics.com',

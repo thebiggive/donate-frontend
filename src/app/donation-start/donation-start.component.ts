@@ -18,7 +18,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { countries } from 'country-code-lookup';
-import { debounceTime, distinctUntilChanged, map, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
+import { RecaptchaComponent } from 'ng-recaptcha';
+import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
 import { PaymentMethod, StripeElementChangeEvent } from '@stripe/stripe-js';
 import { EMPTY, Observer } from 'rxjs';
 
@@ -51,6 +52,7 @@ import { ValidateCurrencyMin } from '../validators/currency-min';
   styleUrls: ['./donation-start.component.scss'],
 })
 export class DonationStartComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
+  @ViewChild('captcha') captcha: RecaptchaComponent;
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
@@ -65,6 +67,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   donation?: Donation;
 
   campaignOpenOnLoad: boolean;
+
+  recaptchaSiteKey = environment.recaptchaSiteKey;
 
   // Sort by name, with locale support so Åland Islands doesn't come after 'Z..'.
   // https://stackoverflow.com/a/39850483/2803757
@@ -112,6 +116,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private initialTipSuggestedPercentage = 15;
   // Based on the simplified pattern suggestions in https://stackoverflow.com/a/51885364/2803757
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? ?\\d[A-Z]{2}|GIR ?0A{2})$', 'i');
+  private captchaCode?: string;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -681,6 +686,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     return this.donationAmount + this.tipAmount() + this.feeCoverAmount();
   }
 
+  captchaReturn(captchaResponse: string) {
+    this.captchaCode = captchaResponse;
+    this.createDonation();
+  }
+
   customTip(): boolean {
     return this.amountsGroup.value.tipPercentage === 'Other';
   }
@@ -870,6 +880,17 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   private createDonation(): void {
+    if (!this.captchaCode) {
+      // We need a captcha code before we can *really* proceed. By doing this here we ensure
+      // this happens consistently regardless of whether donors click Next or a subsequent stepper
+      // heading, while only configuring it in one place.
+      //
+      // captchaReturn() is called on resolution of a valid captcha and calls `createDonation()` again. We
+      // don't get stuck in this logic branch because `this.captchaCode` is non-empty then.
+      this.captcha.execute();
+      return;
+    }
+
     if (!this.campaign || !this.campaign.charity.id || !this.psp) {
       this.donationCreateError = true;
       return;
@@ -881,6 +902,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
       countryCode: this.paymentGroup?.value.billingCountry || 'GB', // Group N/A for Enthuse.
+      creationRecaptchaCode: this.captchaCode,
       currencyCode: this.campaign.currencyCode || 'GBP',
       donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
       donationMatched: this.campaign.isMatched,

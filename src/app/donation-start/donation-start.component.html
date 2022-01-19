@@ -135,6 +135,13 @@
               if this message persists.
             </p>
 
+            <re-captcha
+              #captcha
+              size="invisible"
+              (resolved)="captchaReturn($event)"
+              siteKey="{{ recaptchaSiteKey }}"
+            ></re-captcha>
+
             <div>
               <button
                 type="button"
