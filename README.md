@@ -58,32 +58,16 @@ fund allocation. For data in Salesforce to be eventually consistent, it must als
 ## Browser support
 
 We want donations to work as widely as possible within the constraints set by our technology partners, unless doing so would compromise
-donors' security. Browsers we expect to work fully with this app are:
+donors' security.
 
-* all modern mobile & desktop browsers kept up to date, including extended support release cycles;
-* Internet Explorer 11
+Browsers we expect to work fully with this app are all modern mobile & desktop browsers kept up to date, including extended support release cycles. Where we want to communicate specific brands that should work
+we are likely best off mirroring [Stripe's appendix](https://stripe.com/docs/js/appendix/supported_browsers)
+for Stripe.js, as we must depend on that library for donations.
+
+We no longer support any versions of Internet Explorer as Stripe dropped support from February 2022, meaning
+we cannot offer a meaningfully functional experience to IE donors.
 
 See [`.browserslistrc`](./.browserslistrc) for the specific instructions that tell the Angular build system what support is needed during builds.
-
-Although it would be good to extend support for Internet Explorer
-9 and 10, they are unsupported by both Charity Checkout and
-Angular Material so this is not an option. We use user agent
-detection to explain the situation to users of these browsers.
-
-### Debugging Internet Explorer
-
-If you only need to check an issue that is already happening on staging, the easiest way is through a manual test session on [TestingBot](https://testingbot.com/).
-
-It is possible, though more fiddly, to test Internet Explorer 11 complete with live reload to dig into an issue while trying changes locally.
-These steps were used on macOS but should work cross-platform:
-
-* Temporarily target ES5 for local builds - makes output less optimised but this is necessary to use the local server with IE11: in the project root `tsconfig.json` change the config to `... "target": "es5", ...`. Do not commit this change outside of a debug branch!
-* Get the latest [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and a free [test image from Microsoft](https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/)
-* In the VirtualBox Network config, choose the Bridged Adapter and the host network you connect to the internet with
-* Boot the app with `npm run start-dangerously` to open up the development server to anyone on your local network(!)
-* Check your IP on the local network, e.g. with `ifconfig | grep inet` - you typically want a `192....` or `10....` one
-* Access in the Virtual Machine's IE11 browser at `http://{local IP from previous step}`
-* If using this approach rather than port forwarding to `127.0.0.1` you will also need to temporarily CORS whitelist your current local IP as an origin with any APIs you need to test from IE, in their staging environments
 
 ## Docker configuration
 
