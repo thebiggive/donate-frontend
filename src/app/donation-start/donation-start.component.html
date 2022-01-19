@@ -38,7 +38,7 @@
 
             <div class="donation-input donation-input-main">
               <p class="fixed-label">Donation to {{ campaign.charity.name }}</p>
-              <mat-form-field class="form-field b-center size-lg" color="primary">
+              <mat-form-field hideRequiredMarker class="form-field b-center size-lg" color="primary">
                 <span class="prefix" matPrefix>{{ currencySymbol }}</span>
                 <mat-label for="donationAmount">
                   <div class="floating-label">
@@ -88,7 +88,7 @@
                 <p id="custom-tip-status" class="b-grey b-rt-sm donation-input-tip__status-help" aria-live="assertive">You've selected to give {{ tipAmount() | exactCurrency:campaign.currencyCode }} to the Big Give Trust. You can edit the amount in the next field.</p>
 
                 <p class="fixed-label">Donation to the Big Give Trust</p>
-                <mat-form-field class="form-field b-center b-rt-0" color="primary">
+                <mat-form-field hideRequiredMarker class="form-field b-center b-rt-0" color="primary">
                   <span class="prefix-tbg" matPrefix>{{ currencySymbol }}</span>
                   <mat-label for="donationAmount">
                     <div class="floating-label">
@@ -165,7 +165,6 @@
 
             <div *ngIf="psp === 'stripe' && giftAidGroup.value.giftAid">
               <mat-form-field>
-
                 <mat-label for="homeAddress">Home address</mat-label>
                 <input
                   formControlName="homeAddress"
