@@ -35,14 +35,6 @@ export const environment: Environment = {
   // https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do
   recaptchaSiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
   reservationMinutes: 15,
-  suggestedAmounts: {
-    GBP: [
-      { weight: 1, values: [] },
-    ],
-    USD: [
-      { weight: 1, values: [] },
-    ],
-  },
   thanksUriPrefix: 'http://localhost:4200/thanks/',
 };
 

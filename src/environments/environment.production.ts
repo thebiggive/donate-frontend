@@ -30,15 +30,5 @@ export const environment: Environment = {
   recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
   recaptchaSiteKey: '6LfmOwceAAAAAAYciCtwF6ZPQHJdvJZ5cqYqm1kk',
   reservationMinutes: 15,
-  // As agreed 23 Nov '21, no amount suggestions for CC21 / while we explore Optimize
-  // tip amount copy experiments.
-  suggestedAmounts: {
-    GBP: [
-      { weight: 1, values: [] },
-    ],
-    USD: [
-      { weight: 1, values: [] },
-    ],
-  },
   thanksUriPrefix: 'https://donate.thebiggive.org.uk/thanks/',
 };

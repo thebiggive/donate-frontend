@@ -36,17 +36,6 @@
               Match funds are currently available!
             </p>
 
-            <div *ngIf="suggestedAmounts && suggestedAmounts[campaign.currencyCode] && suggestedAmounts[campaign.currencyCode].length > 0" class="c-suggested-amounts">
-              <div fxLayout="row">
-                <button
-                  type="button"
-                  class="c-suggested-amount__button b-bold"
-                  *ngFor="let suggestedAmount of suggestedAmounts[campaign.currencyCode]"
-                  (click)="setAmount(suggestedAmount)"
-                >{{ suggestedAmount | exactCurrency:campaign.currencyCode }}</button>
-              </div>
-              <p class="b-center b-grey b-rt-sm suggestion-separator">Or, choose</p>
-            </div>
             <div class="donation-input donation-input-main">
               <p class="fixed-label">Donation to {{ campaign.charity.name }}</p>
               <mat-form-field class="form-field b-center size-lg" color="primary">
