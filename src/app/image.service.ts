@@ -9,7 +9,6 @@ export class ImageService {
   /** Track whether we should request images converted to webp to be as small as possible on modern browsers. */
   private webp?: boolean;
 
-  // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   getImageUri(originalImageUri: string, width: number): Observable<string|undefined> {

@@ -26,7 +26,6 @@ export class DonationService {
     private analyticsService: AnalyticsService,
     @Optional() @Inject(COUNTRY_CODE) private defaultCountryCode: string,
     private http: HttpClient,
-    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
     private state: TransferState,

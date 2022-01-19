@@ -128,7 +128,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     private navigationService: NavigationService,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
-    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,
