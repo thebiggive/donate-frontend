@@ -1,4 +1,4 @@
-@use '~@angular/material' as mat;
+@use '@angular/material' as mat;
 @import '../../abstract';
 
 input:disabled {
@@ -200,34 +200,6 @@ input:disabled {
   margin-bottom: 1.5rem;
 }
 
-.suggestion-separator {
-  @media only screen and (max-width: 650px) {
-    margin-bottom: -1.5rem;
-  }
-}
-
-.c-suggested-amount__button {
-  flex: 1 0 auto;
-  font-size: 20px;
-  line-height: 26px;
-  color: $colour-teal-dark;
-  width: calc((100 - 1rem) / 3);
-  background-color: $colour-teal-light;
-  box-shadow: inset 0px 1px 4px rgba(0, 131, 143, 0.2);
-  padding: 1rem;
-  border: none;
-  border-radius: 4px;
-  margin-right: 0.5rem;
-  &:last-child {
-    margin-right: 0;
-  }
-  &:active,
-  &:focus,
-  &:visited {
-    background-color: $colour-teal-lightest;
-    border: 2px solid $colour-teal-lightish;
-  }
-}
 
 a {
   text-decoration: none;

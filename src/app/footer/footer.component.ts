@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { NavigationService } from '../navigation.service';
 
@@ -7,7 +7,7 @@ import { NavigationService } from '../navigation.service';
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
   public now: number = Date.now();
   isGoGiveOnePage = false;
   urlChanges;
@@ -20,8 +20,4 @@ export class FooterComponent implements OnInit {
       }
     });
   }
-
-  ngOnInit() {
-  }
-
 }

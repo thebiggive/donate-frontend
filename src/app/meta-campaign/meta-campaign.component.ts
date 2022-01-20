@@ -46,7 +46,6 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     private fundService: FundService,
     private navigationService: NavigationService,
     private pageMeta: PageMetaService,
-    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
     private route: ActivatedRoute,

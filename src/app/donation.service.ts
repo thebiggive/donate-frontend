@@ -21,13 +21,11 @@ export class DonationService {
   private readonly completeStatuses = ['Collected', 'Paid'];
   private readonly resumableStatuses = ['Pending', 'Reserved'];
   private readonly storageKey = `${environment.donateUriPrefix}/v2`; // Key is per-domain/env
-  private readonly uxConfigKey = `${environment.donateUriPrefix}/ux/v2`;
 
   constructor(
     private analyticsService: AnalyticsService,
     @Optional() @Inject(COUNTRY_CODE) private defaultCountryCode: string,
     private http: HttpClient,
-    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
     private state: TransferState,
@@ -89,51 +87,6 @@ export class DonationService {
     // We have at least one existing donation that may be a candidate to re-try.
     // We'll take an arbitrary 'first' matching donation since presenting multiple to the donor would be too confusing.
     return this.get(existingDonations[0].donation);
-  }
-
-  /**
-   * Supports variant tests for now. Uses local storage to give each donor
-   * a consistent experience while they are on the same device.
-   *
-   * @returns a pseudo-map where keys are currency code strings and
-   *          values are arrays of suggested amounts.
-   */
-  getSuggestedAmounts(): {[key: string]: number[]} {
-    const stateKey = this.uxConfigKey;
-    const existingConfig = this.storage.get(stateKey);
-
-    if (existingConfig && existingConfig.suggestedAmounts) {
-      // For now we remember a previously configured set of suggested
-      // amounts indefinitely for a given donor.
-      return existingConfig.suggestedAmounts;
-    }
-
-    const suggestedAmounts: {[key: string]: number[]} = {};
-
-    for (const currency in environment.suggestedAmounts) {
-      if (environment.suggestedAmounts[currency].length > 0) {
-        // Approach inspired by https://blobfolio.com/2019/10/randomizing-weighted-choices-in-javascript/
-        let thresholdCounter = 0;
-        for (const suggestedAmount of environment.suggestedAmounts[currency]) {
-          thresholdCounter += suggestedAmount.weight;
-        }
-        const threshold = Math.floor(Math.random() * thresholdCounter);
-
-        thresholdCounter = 0;
-        for (const suggestedAmount of environment.suggestedAmounts[currency]) {
-          thresholdCounter += suggestedAmount.weight;
-
-          if (thresholdCounter > threshold) {
-            suggestedAmounts[currency] = suggestedAmount.values;
-            break;
-          }
-        }
-      }
-    }
-
-    this.storage.set(stateKey, { suggestedAmounts });
-
-    return suggestedAmounts;
   }
 
   /**

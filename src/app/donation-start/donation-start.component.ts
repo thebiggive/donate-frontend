@@ -87,7 +87,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   psp: 'enthuse' | 'stripe';
   retrying = false;
   skipPRBs: boolean;
-  suggestedAmounts: {[key: string]: number[]};
   addressSuggestions: GiftAidAddressSuggestion[] = [];
   donationCreateError = false;
   donationUpdateError = false;
@@ -129,7 +128,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     private navigationService: NavigationService,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
-    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,
@@ -238,14 +236,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.maximumDonationAmount = environment.maximumDonationAmount;
     this.skipPRBs = !environment.psps.stripe.prbEnabled;
 
-    // We need each donor to get a randomised but consistent for them set of
-    // amount suggestions, while we support variant tests of this. So
-    // we can't set this up for them on the server. It is therefore best
-    // to skip this entirely on the server side and always have it return
-    // suggestions, then have them 'injected' as the page loads when
-    // appropriate based on the options applicable for the particular donor.
     if (isPlatformBrowser(this.platformId)) {
-      this.suggestedAmounts = this.donationService.getSuggestedAmounts();
       this.handleCampaignViewUpdates();
     }
 
@@ -1018,7 +1009,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.analyticsService.logAmountChosen(
       response.donation.donationAmount,
       this.campaignId,
-      this.suggestedAmounts[this.campaign.currencyCode],
+      [],
       this.campaign.currencyCode,
     );
 

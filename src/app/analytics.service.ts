@@ -120,7 +120,6 @@ export class AnalyticsService {
   }
 
   logCampaignChosen(campaign: Campaign) {
-    // tslint:disable-next-line max-line-length
     // https://developers.google.com/analytics/devguides/collection/gtagjs/enhanced-ecommerce#measure_additions_to_and_removals_from_shopping_carts
     this.callGtag('event', 'add_to_cart', { items: [ this.buildProductData(campaign) ] });
   }

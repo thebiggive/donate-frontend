@@ -1,9 +1,5 @@
 @import '../../abstract';
 
-.c-ticker {
-  height: 40px; // Make height explicit; avoids e.g. heading overlap on IE11
-}
-
 .c-ticker__total {
   @include b-rt-0;
   position: absolute;
@@ -58,12 +54,6 @@
   }
   @media #{$breakpoint-xl} {
     animation-duration: 15s;
-  }
-
-  // IE11 really can't handle the moving bar's layout, so to keep the basics usable, for now
-  // we're unfortunately hiding it with a vendor-specific hack.
-  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-    display: none;
   }
 }
 
