@@ -27,7 +27,7 @@
       <p class="c-campaign-raised__value b-bold">{{ campaign.amountRaised | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</p>
     </div>
     <div fxLayout="row">
-      <div class="c-campaign-status" *ngIf="campaign.status == 'Active'" fxFlex="50">
+      <div class="c-campaign-status" *ngIf="campaign.status === 'Active'" fxFlex="50">
         <p class="c-campaign-status__description b-grey b-light">Time left</p>
         <p class="c-campaign-status__value b-bold">{{ campaign.endDate | timeLeft }}</p>
       </div>

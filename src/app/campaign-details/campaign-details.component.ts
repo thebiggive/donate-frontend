@@ -33,7 +33,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     private imageService: ImageService,
     private location: Location,
     private navigationService: NavigationService,
-    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,

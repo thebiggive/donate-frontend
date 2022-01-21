@@ -30,20 +30,11 @@ export const environment: Environment = {
       publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
-  // tslint:disable-next-line: max-line-length
   // https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
   recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
   // https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do
   recaptchaSiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
   reservationMinutes: 15,
-  suggestedAmounts: {
-    GBP: [
-      { weight: 1, values: [] },
-    ],
-    USD: [
-      { weight: 1, values: [] },
-    ],
-  },
   thanksUriPrefix: 'https://donate-regression.thebiggivetest.org.uk/thanks/',
 };
 

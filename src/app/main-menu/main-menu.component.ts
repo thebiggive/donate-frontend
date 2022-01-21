@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router, NavigationEnd, Event } from '@angular/router';
 import { NavigationService } from '../navigation.service';
 
@@ -7,7 +7,7 @@ import { NavigationService } from '../navigation.service';
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.scss'],
 })
-export class MainMenuComponent implements OnInit {
+export class MainMenuComponent {
   @Input() listClass: 'bar' | 'tray';
   isGoGiveOnePage: boolean;
   urlChanges;
@@ -19,8 +19,5 @@ export class MainMenuComponent implements OnInit {
         this.isGoGiveOnePage = navigationService.getIsGoGiveOnePage();
       }
     });
-  }
-
-  ngOnInit(): void {
   }
 }

@@ -29,21 +29,10 @@ export const environment: Environment = {
       publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
-  // tslint:disable-next-line: max-line-length
   // https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
   recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
   recaptchaSiteKey: '6LfJPAceAAAAAPnbqSG-lMNCiawYsTrT_daIW6sq',
   reservationMinutes: 15,
-  // As agreed 23 Nov '21, no amount suggestions for CC21 / while we explore Optimize
-  // tip amount copy experiments.
-  suggestedAmounts: {
-    GBP: [
-      { weight: 1, values: [] },
-    ],
-    USD: [
-      { weight: 1, values: [] },
-    ],
-  },
   thanksUriPrefix: 'https://donate-staging.thebiggivetest.org.uk/thanks/',
 };
 

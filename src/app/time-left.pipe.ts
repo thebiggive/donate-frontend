@@ -36,7 +36,6 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
   value: Date;
 
   constructor(
-    // tslint:disable-next-line:ban-types Angular types this ID as `Object` so we must follow suit.
     @Inject(PLATFORM_ID) private platformId: Object,
     private ref: ChangeDetectorRef,
   ) {
