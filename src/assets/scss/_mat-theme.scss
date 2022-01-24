@@ -1,7 +1,9 @@
 @use '@angular/material' as mat;
 
 $tbg-red: (
+  100: #ff9999,
   500: #f0423b,
+  700: #d1312a,
   800: #c1211a,
   contrast: (
     500: white,
@@ -10,8 +12,10 @@ $tbg-red: (
 );
 
 $tbg-teal: (
+  100: #5fc3cf,
   200: #4fb3bf,
   500: #008085,
+  700: #006672,
   800: #005662,
   contrast: (
     200: black,
@@ -21,7 +25,9 @@ $tbg-teal: (
 );
 
 $tbg-error-red: (
+  100: #ff9999,
   500: #bb2222,
+  700: #990000,
   contrast: (
     500: black,
   )
