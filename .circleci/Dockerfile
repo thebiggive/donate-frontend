@@ -1,7 +1,7 @@
 # Customised version of CircleCI Node image, published to Docker Hub as `thebiggive/donate-frontend-ci:latest` so it can be cached.
 # This avoids CI runs having to install lots of packages on every build.
 
-FROM cimg/node:12
+FROM cimg/node:12.22
 
 # Dependencies for Chrome + Puppeteer. See https://medium.com/ramsatt/gitlab-ci-cd-with-angular-7-firebase-779bf040bb82
 RUN sudo apt-get install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 \
