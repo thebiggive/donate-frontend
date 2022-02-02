@@ -4,7 +4,11 @@
 FROM cimg/node:12.22
 
 # Dependencies for Chrome + Puppeteer. See https://medium.com/ramsatt/gitlab-ci-cd-with-angular-7-firebase-779bf040bb82
-RUN sudo apt-get install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 \
+# See https://stackoverflow.com/a/27273543/2803757 re requiring update –
+# this is needed since the new cimg/ base follows Docker best practice and
+# doesn't keep the apt cache in its layers.
+# See https://stackoverflow.com/a/42981752/2803757 re combining update.
+RUN sudo apt-get update && sudo apt-get -qq -y install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 \
   libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 \
   libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 \
   libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
