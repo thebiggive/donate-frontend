@@ -43,7 +43,8 @@ These workarounds are needed in different runtime scenarios and we should probab
 if all are still needed in all the contexts they are used.
 
 To deal with difficulty matching Chromium / ChromeDriver / Puppeteer versions, it may be helpful to review
-[this page](). You might need to vary commands based on your platform, e.g. to check the Chrome release
+[this page](https://how-to.dev/how-to-find-the-right-chromiumrevision-value-for-a-given-chromium-version).
+You might need to vary commands based on your platform, e.g. to check the Chrome release
 version for a locally downloaded `chromium` on MacOS:
 
 `./node_modules/chromium/lib/chromium/chrome-mac/Chromium.app/Contents/MacOS/Chromium --version`
