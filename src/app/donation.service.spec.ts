@@ -32,7 +32,7 @@ describe('DonationService', () => {
       optInCharityEmail: true,
       optInTbgEmail: false,
       projectId: '11I400000009Sds3e3',
-      psp: 'enthuse',
+      psp: 'stripe',
       status,
       tipAmount: 2.75,
       transactionId: 'd290f1ee-6c54-4b01-90e6-d701748f0851',

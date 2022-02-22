@@ -553,38 +553,4 @@ describe('DonationStartComponent', () => {
 
     expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
   });
-
-  // Email address is recorded on Enthuse's hosted page in this case.
-  it('should NOT have missing email address error in Enthuse mode', () => {
-    // Replace the default Stripe campaign prior to detecting changes.
-    const route: ActivatedRoute = TestBed.inject(ActivatedRoute);
-    route.snapshot.data.campaign = getDummyCampaign('testCampaignIdForEnthuse');
-    TestBed.compileComponents();
-    fixture.detectChanges();
-
-    component.donationForm.setValue({
-      amounts: {
-        coverFee: false,
-        donationAmount: '£1234',
-        feeCoverAmount: null,
-        tipAmount: null,
-        tipPercentage: 12.5,
-      },
-      giftAid: {
-        giftAid: false,
-        homePostcode: null,
-        homeAddress: null,
-        homeBuildingNumber: null,
-        homeOutsideUK: null,
-      },
-      marketing: {
-        optInCharityEmail: true,
-        optInTbgEmail: true,
-        optInChampionEmail: false,
-      },
-    });
-
-    expect(component.donationForm.valid).toBe(true);
-    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
-  });
 });

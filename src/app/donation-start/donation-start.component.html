@@ -61,9 +61,7 @@
             </div>
 
             <mat-hint *ngIf="!campaign.feePercentage">
-              We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://www.thebiggive.org.uk/s/about" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too).
-              <span *ngIf="psp === 'enthuse'">Please consider adding an optional tip when finalising your donation.</span>
-              <span *ngIf="psp === 'stripe'">Please consider adding an optional tip.</span>
+              We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://www.thebiggive.org.uk/s/about" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too). Please consider adding an optional tip.
             </mat-hint>
 
             <div *ngIf="campaign.feePercentage">
@@ -72,7 +70,7 @@
               </mat-checkbox>
             </div>
 
-            <div *ngIf="psp === 'stripe' && !campaign.feePercentage">
+            <div *ngIf="!campaign.feePercentage">
               <mat-form-field appearance="outline">
                 <mat-label for="tipPercentage">Donation to the Big Give Trust</mat-label>
                 <mat-select formControlName="tipPercentage" id="tipPercentage" (selectionChange)="tipPercentageChange()">
@@ -163,7 +161,7 @@
               </p>
             </mat-radio-group>
 
-            <div *ngIf="psp === 'stripe' && giftAidGroup.value.giftAid">
+            <div *ngIf="giftAidGroup.value.giftAid">
               <mat-form-field>
                 <mat-label for="homeAddress">Home address</mat-label>
                 <input
@@ -215,7 +213,6 @@
           </mat-step>
 
           <mat-step
-            *ngIf="psp === 'stripe'"
             formGroupName="payment"
             [stepControl]="paymentGroup"
             label="Payment details"
@@ -404,7 +401,7 @@
                 </span>
               </button>
 
-              <div *ngIf="psp === 'stripe' || feeCoverAmount() > 0 || tipAmount() > 0" class="c-breakdown b-center b-grey">
+              <div class="c-breakdown b-center b-grey">
                 <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }} donation to {{ campaign.charity.name }}</p>
                 <p *ngIf="feeCoverAmount() > 0 || !campaign.feePercentage" class="b-rt-sm b-m-0">
                   <mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon>
