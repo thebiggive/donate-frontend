@@ -31,14 +31,24 @@ To run style, unit and e2e tests together from your local, as CircleCI build che
 
     npm run ci
 
+### e2e tests
+
 The latest tagged [Puppeteer](https://www.npmjs.com/package/puppeteer) typically uses the latest available Chromium and updates do not follow
-semantic versioning. So for it to continue working, it currently needs to be pinned to a particular "feature release", e.g. `13.1.*` for Chromium 98.
+semantic versioning. So for it to continue working, it currently needs to be pinned to a particular "feature release", e.g. `13.3.*` for Chromium 99.
 
 We have also worked around some remaining Chromium compatibilty issues using the
 `puppeteer_skip_chromium_download` npm config flag, the `webdriver-manager` option
 override `versions.chrome` and the Angular e2e env var `PUPPETEER_CHROMIUM_REVISION`.
 These workarounds are needed in different runtime scenarios and we should probably review
 if all are still needed in all the contexts they are used.
+
+To deal with difficulty matching Chromium / ChromeDriver / Puppeteer versions, it may be helpful to review
+[this page](). You might need to vary commands based on your platform, e.g. to check the Chrome release
+version for a locally downloaded `chromium` on MacOS:
+
+`./node_modules/chromium/lib/chromium/chrome-mac/Chromium.app/Contents/MacOS/Chromium --version`
+
+### Env vars
 
 Environment Variables configured in the CircleCI interface for this app are:
 
