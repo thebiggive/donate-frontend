@@ -142,13 +142,13 @@ workflows:
           image: thebiggive/donate-frontend-ci
           path: ./.circleci # Working dir is project root
           tag: latest
-    # triggers:
-    #   - schedule:
-    #       cron: "3 5 * * *"
-    #       filters:
-    #         branches:
-    #           only:
-    #             - develop
+    triggers:
+      - schedule:
+          cron: "3 5 * * *"
+          filters:
+            branches:
+              only:
+                - develop
   build:
     jobs:
       - build:
