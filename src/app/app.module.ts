@@ -36,7 +36,6 @@ import { CharityComponent } from './charity/charity.component';
 import { TBG_DONATE_STORAGE } from './donation.service';
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
-import { DonationStartErrorDialogComponent } from './donation-start/donation-start-error-dialog.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartMatchingExpiredDialogComponent } from './donation-start/donation-start-matching-expired-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
@@ -66,7 +65,6 @@ import { MulticurrencyLocationPickComponent } from './multicurrency-location-pic
     CharityComponent,
     DonationCompleteComponent,
     DonationStartComponent,
-    DonationStartErrorDialogComponent,
     DonationStartMatchConfirmDialogComponent,
     DonationStartMatchingExpiredDialogComponent,
     DonationStartOfferReuseDialogComponent,
