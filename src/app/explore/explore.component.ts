@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { CampaignService, SearchQuery } from '../campaign.service';
+import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
@@ -16,6 +17,8 @@ import { SearchService } from '../search.service';
 export class ExploreComponent implements OnDestroy, OnInit {
   campaigns: CampaignSummary[];
   loading = false; // Server render gets initial result set; set true when filters change.
+  promotedCampaign1: Campaign;
+  promotedCampaign2: Campaign;
   searched = false;
 
   private offset = 0;
@@ -41,6 +44,9 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    this.promotedCampaign1 = this.route.snapshot.data.promotedMetacampaign1;
+    this.promotedCampaign2 = this.route.snapshot.data.promotedMetacampaign2;
+
     this.pageMeta.setCommon(
       'The Big Give',
       'The Big Give &ndash; discover campaigns and donate',
