@@ -211,7 +211,7 @@ export class AnalyticsService {
       // Custom dimensions – see 'config' call for setup.
       charity_campaign: campaign.title,
       gift_aid: (donation && donation.giftAid !== null) ? (donation.giftAid) : undefined,
-      psp: donation?.psp || (campaign.charity.stripeAccountId ? 'stripe' : 'enthuse'),
+      psp: donation?.psp || 'stripe',
     };
   }
 

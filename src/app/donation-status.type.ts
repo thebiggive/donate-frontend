@@ -9,7 +9,7 @@ enum DonationStatusEnum {
   'PendingCancellation',
   'Refunded',
   'RefundingPending',
-  'Reserved', // TBG status set in Salesforce by Apex code, rather than by Charity Checkout hooks
+  'Reserved', // TBG status set in Salesforce by Apex code, rather than following PSP webhooks
 }
 
 // See https://www.typescriptlang.org/docs/handbook/enums.html#enums-at-compile-time

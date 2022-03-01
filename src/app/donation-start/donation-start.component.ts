@@ -26,7 +26,6 @@ import { EMPTY, Observer } from 'rxjs';
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
 import { CampaignService } from '../campaign.service';
-import { CharityCheckoutService } from '../charity-checkout.service';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
@@ -84,7 +83,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   maximumDonationAmount: number;
   noPsps = false;
-  psp: 'enthuse' | 'stripe';
+  psp: 'stripe';
   retrying = false;
   skipPRBs: boolean;
   addressSuggestions: GiftAidAddressSuggestion[] = [];
@@ -107,7 +106,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private campaignId: string;
   private defaultCountryCode: string;
-  private enthuseError?: string;  // Enthuse donation start error message
   private previousDonation?: Donation;
   private stepHeaderEventsSet = false;
   private tipPercentageChanged = false;
@@ -120,7 +118,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   constructor(
     private analyticsService: AnalyticsService,
     private cd: ChangeDetectorRef,
-    private charityCheckoutService: CharityCheckoutService,
     public dialog: MatDialog,
     private donationService: DonationService,
     @Inject(ElementRef) private elRef: ElementRef,
@@ -134,12 +131,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     private stripeService: StripeService,
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
-
-    route.queryParams.forEach((params: Params) => {
-      if (params.error) {
-        this.enthuseError = params.error;
-      }
-    });
 
     const campaign = route.snapshot.data.campaign;
     if (campaign) {
@@ -168,9 +159,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     const formGroups: {
       amounts: FormGroup,   // Matching reservation happens at the end of this group.
-      payment?: FormGroup,  // Added in Stripe mode only.
       giftAid: FormGroup,
       marketing: FormGroup,
+      payment: FormGroup,  // Always present now we're Stripe-only.
     } = {
       amounts: this.formBuilder.group({
         donationAmount: [null, [
@@ -181,33 +172,39 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         ]],
         coverFee: [false],
         feeCoverAmount: [null],
-        tipPercentage: [this.initialTipSuggestedPercentage], // See addStripeValidators().
-        tipAmount: [null], // See addStripeValidators().
+        tipPercentage: [this.initialTipSuggestedPercentage], // See setConditionalValidators().
+        tipAmount: [null], // See setConditionalValidators().
       }),
       giftAid: this.formBuilder.group({
         giftAid: [null],        // See addUKValidators().
-        homeAddress: [null],  // See addStripeValidators().
+        homeAddress: [null],  // See setConditionalValidators().
         homeBuildingNumber: [null],
         homeOutsideUK: [null],
-        homePostcode: [null], // See addStripeValidators().
+        homePostcode: [null], // See setConditionalValidators().
       }),
       marketing: this.formBuilder.group({
         optInCharityEmail: [null, Validators.required],
         optInTbgEmail: [null, Validators.required],
         optInChampionEmail: [null],
       }),
+      payment: this.formBuilder.group({
+        firstName: [null, [
+          Validators.maxLength(40),
+          Validators.required,
+        ]],
+        lastName: [null, [
+          Validators.maxLength(80),
+          Validators.required,
+        ]],
+        emailAddress: [null, [
+          Validators.required,
+          Validators.email,
+        ]],
+        billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
+        billingPostcode: [null],  // See setConditionalValidators().
+      }),
       // T&Cs agreement is implicit through submitting the form.
     };
-
-    if (this.psp === 'stripe') {
-      formGroups.payment = this.formBuilder.group({
-        firstName: [null],        // See addStripeValidators().
-        lastName: [null],         // See addStripeValidators().
-        emailAddress: [null],     // See addStripeValidators().
-        billingCountry: [this.defaultCountryCode], // See addStripeValidators().
-        billingPostcode: [null],  // See addStripeValidators().
-      });
-    }
 
     this.donationForm = this.formBuilder.group(formGroups);
 
@@ -243,11 +240,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.donationService.getProbablyResumableDonation(this.campaignId)
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;
-
-        if (this.enthuseError) {
-          this.processEnthuseDonationError();
-          return;
-        }
 
         // The local check might not have the latest donation status in edge cases, so we need to check the copy
         // the Donations API returned still has a resumable status and wasn't completed or cancelled since being
@@ -558,7 +550,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     this.submitting = true;
-    this.enthuseError = undefined;
     this.donationUpdateError = false;
 
     // Can't proceed if campaign info not looked up yet or no usable PSP
@@ -579,11 +570,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         }),
       )
       .subscribe(async (donation: Donation) => {
-        if (donation.psp === 'enthuse') {
-          this.cancelExpiryWarning();
-          this.redirectToEnthuse(donation, this.campaign.charity.logoUri);
-          return;
-        } else if (donation.psp === 'stripe') {
+        if (donation.psp === 'stripe') {
           this.analyticsService.logCheckoutStep(4, this.campaign, donation); // 'Pay'.
           this.payWithStripe();
         }
@@ -830,8 +817,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     if (environment.psps.stripe.enabled && this.campaign.charity.stripeAccountId) {
       this.psp = 'stripe';
-    } else if (environment.psps.enthuse.enabled) {
-      this.psp = 'enthuse';
     } else {
       this.noPsps = true;
     }
@@ -848,10 +833,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.addUKValidators();
     }
 
-    if (this.psp === 'stripe') {
-      this.addStripeValidators();
-    }
-
+    this.setConditionalValidators();
     this.setChampionOptInValidity();
 
     this.analyticsService.logCampaignChosen(this.campaign);
@@ -892,7 +874,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
-      countryCode: this.paymentGroup?.value.billingCountry || 'GB', // Group N/A for Enthuse.
+      countryCode: this.paymentGroup?.value.billingCountry || 'GB',
       creationRecaptchaCode: this.captchaCode,
       currencyCode: this.campaign.currencyCode || 'GBP',
       donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
@@ -1107,45 +1089,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
   }
 
-  /**
-   * Auto-cancel the attempted donation (it's unlikely to start working for the same project immediately so better to start a
-   * 'clean' one) and let the user know about the error.
-   */
-  private processEnthuseDonationError() {
-    this.analyticsService.logError(
-      'charity_checkout_error', // Keep event name for historic comparisons
-      `Enthuse rejected donation setup for campaign ${this.campaignId}: ${this.enthuseError}`,
-    );
-
-    if (this.previousDonation) {
-      this.analyticsService.logEvent(
-        'cancel_auto',
-        `Cancelled failing donation ${this.previousDonation.donationId} to campaign ${this.campaignId}`,
-      );
-      this.donationService.cancel(this.previousDonation).subscribe(() => {
-        if (!this.previousDonation) {
-          return;
-        }
-        this.clearDonation(this.previousDonation, true);
-      });
-    }
-
-    const errorDialog = this.dialog.open(DonationStartErrorDialogComponent, {
-      data: { pspError: this.enthuseError },
-      disableClose: true,
-      role: 'alertdialog',
-    });
-
-    errorDialog.afterClosed().subscribe(() => {
-      // Direct user to project page without the error URL param, so returning from browser history or sharing the link
-      // doesn't show the error again.
-      this.router.navigate(['donate', this.campaignId], {
-        queryParams: { error: null },
-        replaceUrl: true,
-      });
-    });
-  }
-
   private clearDonation(donation: Donation, clearAllRecord: boolean) {
     if (clearAllRecord) { // i.e. don't keep donation around for /thanks/... or reuse.
       this.donationService.removeLocalDonation(donation);
@@ -1158,11 +1101,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     delete this.donation;
-  }
-
-  private redirectToEnthuse(donation: Donation, logoUri?: string) {
-    this.analyticsService.logEvent('payment_redirect_click', `Donating to campaign ${this.campaignId}`);
-    this.charityCheckoutService.startDonation(donation, logoUri);
   }
 
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
@@ -1199,7 +1137,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.giftAidGroup.controls.giftAid.setValidators([Validators.required]);
   }
 
-  private addStripeValidators(): void {
+  private setConditionalValidators(): void {
     // Do not add a validator on `tipPercentage` because as a dropdown it always
     // has a value anyway, and this complicates repopulating the form when e.g.
     // reusing an existing donation.
@@ -1284,8 +1222,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
     });
 
-    // Gift Aid home address fields are validated only in Stripe mode and also
-    // conditionally on the donor claiming Gift Aid.
+    // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
     this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
       if (giftAidChecked) {
         this.giftAidGroup.controls.homePostcode.setValidators(
@@ -1303,19 +1240,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
       this.giftAidGroup.controls.homeAddress.updateValueAndValidity();
     });
-
-    this.paymentGroup.controls.firstName.setValidators([
-      Validators.maxLength(40),
-      Validators.required,
-    ]);
-    this.paymentGroup.controls.lastName.setValidators([
-      Validators.maxLength(80),
-      Validators.required,
-    ]);
-    this.paymentGroup.controls.emailAddress.setValidators([
-      Validators.required,
-      Validators.email,
-    ]);
 
     this.addStripeCardBillingValidators();
   }

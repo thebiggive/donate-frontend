@@ -3,7 +3,7 @@ import { DonationStatus } from './donation-status.type';
 /**
  * Many properties on `Donation` are nullable, because they are set only:
  * * after the donation has been persisted in Salesforce (e.g. `status`, `createdTime`, ...); or
- * * after the donor has completed the Charity Checkout forms (e.g. `countryCode`, `emailAddress`, ...); or
+ * * after the donor has completed payment section (e.g. `countryCode`, `emailAddress`, ...); or
  * * after the donation is fully processed and webhook returned (e.g. `matchedAmount`).
  */
 export interface Donation {
@@ -49,7 +49,7 @@ export interface Donation {
      */
     projectId: string;
 
-    psp: 'enthuse' | 'stripe';
+    psp: 'stripe';
 
     /**
      * Donor's address including postcode, or just postcode with Stripe. May be
@@ -76,7 +76,7 @@ export interface Donation {
 
     /**
      * Unique ID for a donation, in Salesforce case-insensitive format. 18 character string.
-     * Assigned earlier than Charity Checkout's `transactionId`.
+     * Assigned earlier than PSP's `transactionId`.
      */
     donationId?: string;
 
@@ -99,7 +99,7 @@ export interface Donation {
     matchReservedAmount: number;
 
     /**
-     * One of the Charity Checkout status strings defined in the `DonationStatus` type.
+     * One of the status strings defined in the `DonationStatus` type.
      * See `donation-status.enum.ts` where the type and backing enum are defined.
      */
     status?: DonationStatus;
@@ -107,7 +107,7 @@ export interface Donation {
     tipAmount: number;
 
     /**
-     * ID assigned by Charity Checkout upon checkout initiation.
+     * ID assigned by PSP upon checkout initiation.
      */
     transactionId?: string;
 
