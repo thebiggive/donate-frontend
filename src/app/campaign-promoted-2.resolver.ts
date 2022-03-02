@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 
 import { CampaignService } from './campaign.service';
+import { environment } from '../environments/environment';
 
 /**
  * One per campaign as this is a temporary workaround.
@@ -11,6 +12,6 @@ export class CampaignPromoted2Resolver implements Resolve<any> {
   constructor(private campaignService: CampaignService) {}
 
   resolve(route: ActivatedRouteSnapshot) {
-    return this.campaignService.getOneBySlug('christmas-challenge-2021');
+    return this.campaignService.getOneBySlug(environment.promotedMetacampaign2Slug);
   }
 }
