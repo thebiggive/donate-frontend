@@ -29,7 +29,6 @@ import { CampaignService } from '../campaign.service';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
-import { DonationStartErrorDialogComponent } from './donation-start-error-dialog.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
 import { DonationStartMatchingExpiredDialogComponent } from './donation-start-matching-expired-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
@@ -198,7 +197,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         ]],
         emailAddress: [null, [
           Validators.required,
-          Validators.email,
+          // RegExp loosely based on SF charity onboarding one with some improvements for readability and length
+          // check on final a-z token. We found Angular's `Validators.email` too permissive.
+          Validators.pattern(new RegExp('[a-z0-9.!#$%&*/=?^_+-`{|}~\'_%+-]+@[a-z0-9.-]+\\.[a-z]{2,10}$', 'i')),
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
         billingPostcode: [null],  // See setConditionalValidators().

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
 
@@ -11,11 +12,15 @@ import { PageMetaService } from '../page-meta.service';
 })
 export class HomeComponent implements OnInit {
   campaigns: CampaignSummary[];
+  promotedCampaign1: Campaign;
+  promotedCampaign2: Campaign;
 
   public constructor(private pageMeta: PageMetaService, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.campaigns = this.route.snapshot.data.campaigns;
+    this.promotedCampaign1 = this.route.snapshot.data.promotedMetacampaign1;
+    this.promotedCampaign2 = this.route.snapshot.data.promotedMetacampaign2;
     this.pageMeta.setCommon(
       'The Big Give',
       'The Big Give &ndash; discover campaigns and donate',

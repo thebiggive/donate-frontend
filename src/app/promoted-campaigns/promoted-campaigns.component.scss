@@ -1,0 +1,9 @@
+@import '../../abstract';
+
+// Like the normal campaign grid but with max 2 cols.
+.c-grid {
+  @include campaign-grid;
+  @media #{$breakpoint-lg} {
+    grid-template-columns: calc((100% - 30px)/2) calc((100% - 30px)/2);
+  }
+}
