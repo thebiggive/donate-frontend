@@ -31,6 +31,7 @@ import { AppComponent } from './app.component';
 import { CampaignCardComponent } from './campaign-card/campaign-card.component';
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
 import { CampaignDetailsCardComponent } from './campaign-details-card/campaign-details-card.component';
+import { CampaignPromoCardComponent } from './campaign-promo-card/campaign-promo-card.component';
 import { CampaignSearchFormComponent } from './campaign-search-form/campaign-search-form.component';
 import { CharityComponent } from './charity/charity.component';
 import { TBG_DONATE_STORAGE } from './donation.service';
@@ -54,6 +55,7 @@ import { TimeLeftPipe } from './time-left.pipe';
 import { HomeComponent } from './home/home.component';
 import { MulticurrencyLandingComponent } from './multicurrency-landing/multicurrency-landing.component';
 import { MulticurrencyLocationPickComponent } from './multicurrency-location-pick/multicurrency-location-pick.component';
+import { PromotedCampaignsComponent } from './promoted-campaigns/promoted-campaigns.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,7 @@ import { MulticurrencyLocationPickComponent } from './multicurrency-location-pic
     CampaignCardComponent,
     CampaignDetailsComponent,
     CampaignDetailsCardComponent,
+    CampaignPromoCardComponent,
     CampaignSearchFormComponent,
     CharityComponent,
     DonationCompleteComponent,
@@ -82,6 +85,7 @@ import { MulticurrencyLocationPickComponent } from './multicurrency-location-pic
     HomeComponent,
     MulticurrencyLandingComponent,
     MulticurrencyLocationPickComponent,
+    PromotedCampaignsComponent,
   ],
   imports: [
     AppRoutingModule,
