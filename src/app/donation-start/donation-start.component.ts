@@ -156,6 +156,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.campaign = this.route.snapshot.data.campaign;
     this.setCampaignBasedVars();
 
+    const emailRegex : RegExp = /^(?=.{1,254}$)(?=[a-zA-Z0-9+=_.-]{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-z]{2,})+$/;
+
     const formGroups: {
       amounts: FormGroup,   // Matching reservation happens at the end of this group.
       giftAid: FormGroup,
@@ -198,7 +200,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         emailAddress: [null, [
           Validators.required,
           // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
-          Validators.pattern(new RegExp("^(?=.{1,254}$)(?=[a-zA-Z0-9+=_.-]{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-z]{2,})+$", 'i')),
+          Validators.pattern(emailRegex),
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
         billingPostcode: [null],  // See setConditionalValidators().
