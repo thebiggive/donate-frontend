@@ -197,13 +197,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         ]],
         emailAddress: [null, [
           Validators.required,
-          Validators.email,
-          // Validators.email regexp above rejects most invalid emails but has a few edge-cases slip through.
-          // For example, it allows emails ending with numbers like hello@thebiggive.org.uk.123
-          // However, this is invalid, so we need some tighter validation. The additional regexp below
-          // ensures that emails finish with format like .org.uk or .abc.abc or .io or .com or .whatever
-          // as long as there are no numbers. See ticked DON-490.
-          Validators.pattern(new RegExp('(\.[a-z]{2,})+$', 'i')),
+          // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
+          Validators.pattern(new RegExp("^(?=.{1,254}$)(?=[a-zA-Z0-9+=_.-]{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z](?:[a-zA-Z]{0,61}[a-zA-Z])?)*$", 'i')),
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
         billingPostcode: [null],  // See setConditionalValidators().
