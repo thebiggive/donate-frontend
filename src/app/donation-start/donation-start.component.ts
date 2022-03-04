@@ -197,9 +197,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         ]],
         emailAddress: [null, [
           Validators.required,
-          // RegExp loosely based on SF charity onboarding one with some improvements for readability and length
-          // check on final a-z token. We found Angular's `Validators.email` too permissive.
-          Validators.pattern(new RegExp('[a-z0-9.!#$%&*/=?^_+-`{|}~\'_%+-]+@[a-z0-9.-]+\\.[a-z]{2,10}$', 'i')),
+          Validators.email,
+          // Validators.email regexp above rejects most invalid emails but has a few edge-cases slip through.
+          // For example, it allows emails ending with numbers like hello@thebiggive.org.uk.123.
+          // However, this is invalid, so we need some tighter validation. The additional regexp below
+          // ensures that emails finish with format like .org.uk or .abc.abc or .io or .com or .whatever
+          // as long as there are no numbers. See ticked DON-490.
+          Validators.pattern(new RegExp('(\.[a-z]{2,})+$', 'i')),
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
         billingPostcode: [null],  // See setConditionalValidators().
