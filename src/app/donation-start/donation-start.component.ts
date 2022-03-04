@@ -43,7 +43,6 @@ import { retryStrategy } from '../observable-retry';
 import { StripeService } from '../stripe.service';
 import { ValidateCurrencyMax } from '../validators/currency-max';
 import { ValidateCurrencyMin } from '../validators/currency-min';
-import { ValidateEmail } from '../validators/validate-email';
 
 @Component({
   selector: 'app-donation-start',
@@ -198,7 +197,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         ]],
         emailAddress: [null, [
           Validators.required,
-          ValidateEmail,
+          // RegExp loosely based on SF charity onboarding one with some improvements for readability and length
+          // check on final a-z token. We found Angular's `Validators.email` too permissive.
+          Validators.pattern(new RegExp('[a-z0-9.!#$%&*/=?^_+-`{|}~\'_%+-]+@[a-z0-9.-]+\\.[a-z]{2,10}$', 'i')),
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
         billingPostcode: [null],  // See setConditionalValidators().
