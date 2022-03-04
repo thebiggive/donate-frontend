@@ -198,7 +198,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         emailAddress: [null, [
           Validators.required,
           // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
-          Validators.pattern(new RegExp("^(?=.{1,254}$)(?=[a-zA-Z0-9+=_.-]{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z](?:[a-zA-Z]{0,61}[a-zA-Z])?)*$", 'i')),
+          Validators.pattern(new RegExp("^(?=.{1,254}$)(?=[a-zA-Z0-9+=_.-]{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-z]{2,})+$", 'i')),
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
         billingPostcode: [null],  // See setConditionalValidators().
