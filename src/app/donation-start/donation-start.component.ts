@@ -156,7 +156,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.campaign = this.route.snapshot.data.campaign;
     this.setCampaignBasedVars();
 
-    const emailRegex : RegExp = /^(?=.{1,254}$)(?=[a-zA-Z0-9+=_.-]{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
+    const emailRegex : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
 
     const formGroups: {
       amounts: FormGroup,   // Matching reservation happens at the end of this group.
