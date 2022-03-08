@@ -616,11 +616,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     // See https://stripe.com/docs/payments/intents
     if (['succeeded', 'processing'].includes(result.paymentIntent.status)) {
-      const eventAction = (this.stripePRBMethodReady ? 'stripe_prb_payment_success' : 'stripe_card_payment_success');
-      this.analyticsService.logEvent(
-        eventAction,
-        `Stripe Intent processing or done for donation ${this.donation.donationId} to campaign ${this.campaignId}`,
-      );
       this.analyticsService.logCheckoutDone(this.campaign, this.donation);
       this.cancelExpiryWarning();
       this.router.navigate(['thanks', this.donation.donationId], {
