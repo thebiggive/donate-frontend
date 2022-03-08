@@ -19,6 +19,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
   loading = false; // Server render gets initial result set; set true when filters change.
   promotedCampaign1: Campaign;
   promotedCampaign2: Campaign;
+  /** Whether any non-default search logic besides an order change has been applied. */
   searched = false;
 
   private offset = 0;
@@ -105,6 +106,8 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   private run() {
+    this.searched = this.searchService.nonDefaultsActive;
+
     this.offset = 0;
     const query = this.campaignService.buildQuery(this.searchService.selected, 0);
     this.campaigns = [];

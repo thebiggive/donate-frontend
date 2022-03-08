@@ -17,9 +17,12 @@ export class SearchService {
 
   changed: EventEmitter<boolean>; // Value indicates if an interactive UI change triggered this.
 
+  nonDefaultsActive: boolean;
+
   constructor() {
     this.changed = new EventEmitter();
     this.selected = SearchService.selectedDefaults();
+    this.nonDefaultsActive = false;
   }
 
   static selectedDefaults(defaultSort = ''): SelectedType {
@@ -34,6 +37,7 @@ export class SearchService {
   }
 
   filter(filterName: string, value: string) {
+    this.nonDefaultsActive = true;
     this.selected[filterName] = value;
     this.changed.emit(true);
   }
@@ -74,6 +78,10 @@ export class SearchService {
         } else {
           this.selected[key] = queryParams[key];
         }
+
+        if (key !== 'sortField' && this.selected[key]) {
+          this.nonDefaultsActive = true;
+        }
       }
     }
 
@@ -81,6 +89,7 @@ export class SearchService {
   }
 
   reset(defaultSort: string, skipChangeEvent: boolean) {
+    this.nonDefaultsActive = false;
     this.selected = SearchService.selectedDefaults(defaultSort);
 
     if (!skipChangeEvent) {
@@ -89,6 +98,7 @@ export class SearchService {
   }
 
   search(term: string, defaultSort: string) {
+    this.nonDefaultsActive = true;
     this.selected.term = term;
     this.selected.sortField = term.length > 0 ? '' : defaultSort;
     this.changed.emit(true);
