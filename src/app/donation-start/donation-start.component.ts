@@ -96,7 +96,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   stripePaymentMethodReady = false;
   stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
   stripeError?: string;
-  stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
   submitting = false;
   termsProvider = `Big Give's`;
   termsUrl = 'https://www.thebiggive.org.uk/s/terms-and-conditions';
@@ -114,6 +113,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   // Based on the simplified pattern suggestions in https://stackoverflow.com/a/51885364/2803757
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? ?\\d[A-Z]{2}|GIR ?0A{2})$', 'i');
   private captchaCode?: string;
+  private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -545,9 +545,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     if (
-      this.psp === 'stripe' &&
-      this.paymentGroup &&
-      !this.donation?.billingPostalAddress &&
       this.paymentGroup.value.billingPostcode
     ) {
       this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
@@ -758,16 +755,21 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   onBillingPostCodeChanged(event: Event) {
-    if (this.stripeResponseErrorCode === 'incorrect_zip') {
+    // If previous payment attempt failed due to incorrect post code
+    // and the post code has just been changed again, clear stripeError
+    // and clear stripeResponseErrorCode. This is because if we don't,
+    // then when the user goes back to the Payment details step and
+    // updates their post code, pressing the 'Next' button will keep them
+    // where they are and not proceed them to the next step, because the
+    // next() method calls goToFirstVisibleError().
+    if (this.isBillingPostCodeInvalid()) {
       this.stripeError = undefined;
       this.stripeResponseErrorCode = undefined;
     }
+  }
 
-    if (this.donation) {
-      // Update the donation billingPostalAddress to ensure re-attempt of Stripe payment has the new post code
-      // See ticket DON-493 for more information.
-      this.donation.billingPostalAddress = (<HTMLInputElement>event.target).value;
-    }
+  isBillingPostCodeInvalid() {
+    return this.stripeResponseErrorCode === 'incorrect_zip';
   }
 
   private jumpToStep(stepLabel: string) {
