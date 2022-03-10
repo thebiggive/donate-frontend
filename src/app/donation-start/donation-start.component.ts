@@ -764,7 +764,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     if (this.donation) {
-      // Update the donation billingPostalAddress to ensure re-attempt of Stripe payment has the new address
+      // Update the donation billingPostalAddress to ensure re-attempt of Stripe payment has the new post code
       // See ticket DON-493 for more information.
       this.donation.billingPostalAddress = (<HTMLInputElement>event.target).value;
     }
