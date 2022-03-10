@@ -266,7 +266,7 @@
                 <mat-label for="billingPostcode">Billing postcode</mat-label>
                 <input formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)">
               </mat-form-field>
-              <div class="error" *ngIf="isBillingPostCodeInvalid()">Post code doesn't match the one used for your card.</div>
+              <div class="error" *ngIf="paymentGroup.get('billingPostcode')?.errors">Post code doesn't match the one used for your card.</div>
             </div>
 
             <p *ngIf="stripeError" class="error" aria-live="assertive">
