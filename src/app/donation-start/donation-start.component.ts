@@ -96,6 +96,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   stripePaymentMethodReady = false;
   stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
   stripeError?: string;
+  stripeErrorCode?: string;
   submitting = false;
   termsProvider = `Big Give's`;
   termsUrl = 'https://www.thebiggive.org.uk/s/terms-and-conditions';
@@ -490,8 +491,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.stripePaymentMethodReady = state.complete;
     if (state.error) {
       this.stripeError = `Payment method update failed: ${state.error.message}`;
+      this.stripeErrorCode = state.error.code;
     } else {
       this.stripeError = undefined; // Clear any previous card errors if number fixed.
+      this.stripeErrorCode = undefined;
     }
 
     // Jump back if we get an out of band message back that the card is *not* valid/ready.
@@ -510,6 +513,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     if (paymentMethodResult.error) {
       this.stripeError = `Payment setup failed:  ${paymentMethodResult.error.message}`;
+      this.stripeErrorCode = paymentMethodResult.error.code;
       this.submitting = false;
       this.analyticsService.logError('stripe_payment_method_error', paymentMethodResult.error.message ?? '[No message]');
 
@@ -594,6 +598,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   async payWithStripe() {
     if (!this.donation || !this.donation.clientSecret) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
+      this.stripeErrorCode = 'secret-key-required'; // is this accurate?
       this.analyticsService.logError('stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
       return;
     }
@@ -603,6 +608,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     if (!result || result.error) {
       if (result) {
         this.stripeError = `Payment processing failed: ${result.error.message}`;
+        this.stripeErrorCode = result.error.code;
       }
       this.submitting = false;
 
@@ -628,6 +634,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // else Intent 'done' but not a successful status.
     this.analyticsService.logError('stripe_intent_not_success', result.paymentIntent.status);
     this.stripeError = `Status: ${result.paymentIntent.status}`;
+    this.stripeErrorCode = undefined; // is this correct?
     this.submitting = false;
   }
 
@@ -747,6 +754,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // the error on the page if there is one.
     if (!this.goToFirstVisibleError()) {
       this.stepper.next();
+    }
+  }
+
+  onBillingPostCodeChanged() {
+    if (this.stripeErrorCode === 'incorrect_zip') {
+      this.stripeError = undefined;
+      this.stripeErrorCode = undefined;
     }
   }
 
@@ -943,12 +957,14 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         this.stripePRBMethodReady = false;
         this.addStripeCardBillingValidators();
         this.stripeError = 'Payment failed – please try again';
+        this.stripeErrorCode = undefined; // is this correct?
       },
       error: (err) => {
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
         this.addStripeCardBillingValidators();
         this.stripeError = 'Payment method handling failed';
+        this.stripeErrorCode = undefined; // is this correct?
       },
       complete: () => {},
     };
