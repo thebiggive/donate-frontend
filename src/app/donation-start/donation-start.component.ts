@@ -782,12 +782,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.stripeError = undefined;
       this.stripeResponseErrorCode = undefined;
 
-      // Remove the ValidateBillingPostCode custom validator so billing postcode
-      // doesn't show as invalid after a change
-      this.paymentGroup.controls.billingPostcode.setValidators([
-        Validators.required,
-        Validators.pattern('^[0-9a-zA-Z ]{2,8}$')
-      ]);
+      // Reset Stripe validators so the ValidateBillingPostCode custom validator
+      // is removed, so billing postcode doesn't show as invalid after a change
+      this.addStripeCardBillingValidators();
       this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
     }
   }
