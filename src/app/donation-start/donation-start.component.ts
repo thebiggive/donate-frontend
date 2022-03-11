@@ -489,6 +489,14 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.stripePRBMethodReady = false; // Using card instead
     this.addStripeCardBillingValidators();
 
+    if (this.isBillingPostCodeInvalid()) {
+      // Re-evaluate stripe card billing validators after being set above.
+      // This should remove old errors after card details change, e.g. it
+      // should remove an invalid post-code error in such a scenario
+      // this.paymentGroup.markAllAsTouched();
+      this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
+    }
+
     this.stripePaymentMethodReady = state.complete;
     if (state.error) {
       this.stripeError = `Payment method update failed: ${state.error.message}`;
@@ -608,7 +616,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         this.stripeError = `Payment processing failed: ${result.error.message}`;
         this.stripeResponseErrorCode = result.error.code;
         if (this.isBillingPostCodeInvalid()) {
-          this.paymentGroup.controls.billingPostcode.setValidators([ValidateBillingPostCode]);
+          this.paymentGroup.controls.billingPostcode.setValidators([
+            Validators.required,
+            Validators.pattern('^[0-9a-zA-Z ]{2,8}$'),
+            ValidateBillingPostCode
+          ]);
           this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
         }
       }
@@ -770,6 +782,14 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     if (this.isBillingPostCodeInvalid()) {
       this.stripeError = undefined;
       this.stripeResponseErrorCode = undefined;
+
+      // Remove the ValidateBillingPostCode custom validator so billing postcode
+      // doesn't show as invalid after a change
+      this.paymentGroup.controls.billingPostcode.setValidators([
+        Validators.required,
+        Validators.pattern('^[0-9a-zA-Z ]{2,8}$')
+      ]);
+      this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
     }
   }
 
