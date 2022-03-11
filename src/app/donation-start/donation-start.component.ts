@@ -43,6 +43,7 @@ import { retryStrategy } from '../observable-retry';
 import { StripeService } from '../stripe.service';
 import { ValidateCurrencyMax } from '../validators/currency-max';
 import { ValidateCurrencyMin } from '../validators/currency-min';
+import { ValidateBillingPostCode } from '../validators/validate-billing-post-code';
 
 @Component({
   selector: 'app-donation-start',
@@ -113,6 +114,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   // Based on the simplified pattern suggestions in https://stackoverflow.com/a/51885364/2803757
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? ?\\d[A-Z]{2}|GIR ?0A{2})$', 'i');
   private captchaCode?: string;
+  private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -487,11 +489,20 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.stripePRBMethodReady = false; // Using card instead
     this.addStripeCardBillingValidators();
 
+    if (this.isBillingPostCodeInvalid()) {
+      // Re-evaluate stripe card billing validators after being set above.
+      // This should remove old errors after card details change, e.g. it
+      // should remove an invalid post-code error in such a scenario.
+      this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
+    }
+
     this.stripePaymentMethodReady = state.complete;
     if (state.error) {
       this.stripeError = `Payment method update failed: ${state.error.message}`;
+      this.stripeResponseErrorCode = state.error.code;
     } else {
       this.stripeError = undefined; // Clear any previous card errors if number fixed.
+      this.stripeResponseErrorCode = undefined;
     }
 
     // Jump back if we get an out of band message back that the card is *not* valid/ready.
@@ -510,6 +521,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     if (paymentMethodResult.error) {
       this.stripeError = `Payment setup failed:  ${paymentMethodResult.error.message}`;
+      this.stripeResponseErrorCode = paymentMethodResult.error.code;
       this.submitting = false;
       this.analyticsService.logError('stripe_payment_method_error', paymentMethodResult.error.message ?? '[No message]');
 
@@ -541,9 +553,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     if (
-      this.psp === 'stripe' &&
-      this.paymentGroup &&
-      !this.donation?.billingPostalAddress &&
       this.paymentGroup.value.billingPostcode
     ) {
       this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
@@ -594,6 +603,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   async payWithStripe() {
     if (!this.donation || !this.donation.clientSecret) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
+      this.stripeResponseErrorCode = undefined;
       this.analyticsService.logError('stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
       return;
     }
@@ -603,6 +613,15 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     if (!result || result.error) {
       if (result) {
         this.stripeError = `Payment processing failed: ${result.error.message}`;
+        this.stripeResponseErrorCode = result.error.code;
+        if (this.isBillingPostCodeInvalid()) {
+          this.paymentGroup.controls.billingPostcode.setValidators([
+            Validators.required,
+            Validators.pattern('^[0-9a-zA-Z ]{2,8}$'),
+            ValidateBillingPostCode
+          ]);
+          this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
+        }
       }
       this.submitting = false;
 
@@ -628,6 +647,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // else Intent 'done' but not a successful status.
     this.analyticsService.logError('stripe_intent_not_success', result.paymentIntent.status);
     this.stripeError = `Status: ${result.paymentIntent.status}`;
+    this.stripeResponseErrorCode = undefined;
     this.submitting = false;
   }
 
@@ -748,6 +768,29 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     if (!this.goToFirstVisibleError()) {
       this.stepper.next();
     }
+  }
+
+  onBillingPostCodeChanged(event: Event) {
+    // If previous payment attempt failed due to incorrect post code
+    // and the post code has just been changed again, clear stripeError
+    // and clear stripeResponseErrorCode. This is because if we don't,
+    // then when the user goes back to the Payment details step and
+    // updates their post code, pressing the 'Next' button will keep them
+    // where they are and not proceed them to the next step, because the
+    // next() method calls goToFirstVisibleError().
+    if (this.isBillingPostCodeInvalid()) {
+      this.stripeError = undefined;
+      this.stripeResponseErrorCode = undefined;
+
+      // Reset Stripe validators so the ValidateBillingPostCode custom validator
+      // is removed, so billing postcode doesn't show as invalid after a change
+      this.addStripeCardBillingValidators();
+      this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
+    }
+  }
+
+  private isBillingPostCodeInvalid() {
+    return this.stripeResponseErrorCode === 'incorrect_zip';
   }
 
   private jumpToStep(stepLabel: string) {
@@ -943,12 +986,14 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         this.stripePRBMethodReady = false;
         this.addStripeCardBillingValidators();
         this.stripeError = 'Payment failed – please try again';
+        this.stripeResponseErrorCode = undefined;
       },
       error: (err) => {
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
         this.addStripeCardBillingValidators();
         this.stripeError = 'Payment method handling failed';
+        this.stripeResponseErrorCode = undefined;
       },
       complete: () => {},
     };
