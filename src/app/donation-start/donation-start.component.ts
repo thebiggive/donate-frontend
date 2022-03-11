@@ -492,8 +492,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     if (this.isBillingPostCodeInvalid()) {
       // Re-evaluate stripe card billing validators after being set above.
       // This should remove old errors after card details change, e.g. it
-      // should remove an invalid post-code error in such a scenario
-      // this.paymentGroup.markAllAsTouched();
+      // should remove an invalid post-code error in such a scenario.
       this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
     }
 
