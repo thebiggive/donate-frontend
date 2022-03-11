@@ -205,7 +205,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
           Validators.pattern(emailRegex),
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
-        billingPostcode: [null, [Validators.required, ValidateBillingPostCode(this.stripeResponseErrorCode)]],  // See setConditionalValidators().
+        billingPostcode: [null],  // See setConditionalValidators().
       }),
       // T&Cs agreement is implicit through submitting the form.
     };
@@ -608,13 +608,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         this.stripeError = `Payment processing failed: ${result.error.message}`;
         this.stripeResponseErrorCode = result.error.code;
         if (this.isBillingPostCodeInvalid()) {
-          console.log(this.paymentGroup);
+          this.paymentGroup.controls.billingPostcode.setValidators([ValidateBillingPostCode]);
           this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
-          this.paymentGroup.markAllAsTouched();
-
-          // problem is here. billingPostcode validation is not re-evaluated to be invalid
-
-          console.log(this.paymentGroup);
         }
       }
       this.submitting = false;
