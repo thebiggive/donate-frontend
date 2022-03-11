@@ -153,15 +153,20 @@ export class StripeService {
 
           if (confirmResult.paymentIntent.status !== 'requires_action') {
             // Success w/ no extra action needed
+            this.analyticsService.logEvent(
+              `${analyticsEventActionPrefix}payment_success`,
+              `Stripe Intent processing or done for donation ${donation.donationId} to campaign ${donation.projectId}`,
+            );
+
             resolve(confirmResult);
             return;
           }
 
           // The PaymentIntent requires an action e.g. 3DS verification; let Stripe.js handle the flow.
-          this.analyticsService.logEvent(`${analyticsEventActionPrefix}_requires_action`, confirmResult.paymentIntent.next_action?.type ?? '[Action unknown]');
+          this.analyticsService.logEvent(`${analyticsEventActionPrefix}requires_action`, confirmResult.paymentIntent.next_action?.type ?? '[Action unknown]');
           this.stripe?.confirmCardPayment(donation.clientSecret || '').then(confirmAgainResult => {
             if (confirmAgainResult.error) {
-              this.analyticsService.logError(`${analyticsEventActionPrefix}_further_action_error`, confirmAgainResult.error.message ?? '[No message]');
+              this.analyticsService.logError(`${analyticsEventActionPrefix}further_action_error`, confirmAgainResult.error.message ?? '[No message]');
             }
 
             // Extra action done, whether successfully or not.
