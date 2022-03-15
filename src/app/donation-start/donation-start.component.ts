@@ -20,7 +20,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { countries } from 'country-code-lookup';
 import { RecaptchaComponent } from 'ng-recaptcha';
 import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
-import { PaymentMethod, StripeElementChangeEvent } from '@stripe/stripe-js';
+import { PaymentMethod, StripeElementChangeEvent, StripeError } from '@stripe/stripe-js';
 import { EMPTY, Observer } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
@@ -489,16 +489,14 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.stripePRBMethodReady = false; // Using card instead
     this.addStripeCardBillingValidators();
 
-    if (this.isBillingPostCodeInvalid()) {
-      // Re-evaluate stripe card billing validators after being set above.
-      // This should remove old errors after card details change, e.g. it
-      // should remove an invalid post-code error in such a scenario.
-      this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
-    }
+    // Re-evaluate stripe card billing validators after being set above.
+    // This should remove old errors after card details change, e.g. it
+    // should remove an invalid post-code error in such a scenario.
+    this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
 
     this.stripePaymentMethodReady = state.complete;
     if (state.error) {
-      this.stripeError = `Payment method update failed: ${state.error.message}`;
+      this.stripeError = this.getStripeFriendlyError(state.error, 'card_change');
       this.stripeResponseErrorCode = state.error.code;
     } else {
       this.stripeError = undefined; // Clear any previous card errors if number fixed.
@@ -520,7 +518,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     );
 
     if (paymentMethodResult.error) {
-      this.stripeError = `Payment setup failed:  ${paymentMethodResult.error.message}`;
+      this.stripeError = this.getStripeFriendlyError(paymentMethodResult.error, 'method_setup');
       this.stripeResponseErrorCode = paymentMethodResult.error.code;
       this.submitting = false;
       this.analyticsService.logError('stripe_payment_method_error', paymentMethodResult.error.message ?? '[No message]');
@@ -612,9 +610,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     if (!result || result.error) {
       if (result) {
-        this.stripeError = `Payment processing failed: ${result.error.message}`;
+        this.stripeError = this.getStripeFriendlyError(result.error, 'confirm');
         this.stripeResponseErrorCode = result.error.code;
-        if (this.isBillingPostCodeInvalid()) {
+        if (this.isBillingPostcodePossiblyInvalid()) {
           this.paymentGroup.controls.billingPostcode.setValidators([
             Validators.required,
             Validators.pattern('^[0-9a-zA-Z ]{2,8}$'),
@@ -778,7 +776,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // updates their post code, pressing the 'Next' button will keep them
     // where they are and not proceed them to the next step, because the
     // next() method calls goToFirstVisibleError().
-    if (this.isBillingPostCodeInvalid()) {
+    if (this.isBillingPostcodePossiblyInvalid()) {
       this.stripeError = undefined;
       this.stripeResponseErrorCode = undefined;
 
@@ -789,8 +787,41 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
   }
 
-  private isBillingPostCodeInvalid() {
-    return this.stripeResponseErrorCode === 'incorrect_zip';
+  /**
+   * @param error 
+   * @param context 'method_setup', 'card_change' or 'confirm'.
+   */
+  private getStripeFriendlyError(error: StripeError, context: string): string {
+    let prefix = '';
+    switch (context) {
+      case 'method_setup':
+        prefix = 'Payment setup failed: ';
+        break;
+      case 'card_change':
+        prefix = 'Payment method update failed: ';
+        break;
+      case 'confirm':
+        prefix = 'Payment processing failed: ';
+    }
+
+    let friendlyError = error.message;
+
+    let customMessage = false;
+    if (error.code === 'card_declined' && error.decline_code === 'generic_decline') {
+      // Probably a custom Radar rule -> relatively likely to be an incorrect postcode.
+      friendlyError = `The payment was declined. Please ensure details provided (including postcode) match your card. Contact your bank or hello@thebiggive.org.uk if the problem persists.`;
+      customMessage = true;
+    }
+
+    if (customMessage && context === 'confirm') {
+      prefix = ''; // Don't show extra context info in the most common `context`, when showing our already-long custom copy.
+    }
+
+    return `${prefix}${friendlyError}`;
+  }
+
+  private isBillingPostcodePossiblyInvalid() {
+    return this.stripeResponseErrorCode === 'card_declined';
   }
 
   private jumpToStep(stepLabel: string) {
