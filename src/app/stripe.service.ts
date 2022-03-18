@@ -285,7 +285,10 @@ export class StripeService {
     return {
       label,
       // In pence/cents, inc. tip
-      amount: (100 * donation.donationAmount) + (100 * donation.tipAmount) + 100 * (donation.feeCoverAmount),
+      amount:
+        (100 * donation.donationAmount) +
+        (100 * donation.tipAmount) +
+        (100 * donation.feeCoverAmount),
     };
   }
 
