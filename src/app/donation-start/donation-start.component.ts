@@ -931,6 +931,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       //
       // captchaReturn() is called on resolution of a valid captcha and calls `createDonation()` again. We
       // don't get stuck in this logic branch because `this.captchaCode` is non-empty then.
+      // As well as happening the first time the donor leaves step 1, we expect to do this again and get
+      // a new code any time a previously used one was cleared in `clearDonation()`.
       this.captcha.execute();
       return;
     }
@@ -1168,6 +1170,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     this.cancelExpiryWarning();
+
+    // Ensure we get a new code on donation setup. Sending one we already verified
+    // again will fail and block creating a new donation without a page refresh.
+    this.captchaCode = undefined;
 
     this.donationCreateError = false;
     this.donationUpdateError = false;
