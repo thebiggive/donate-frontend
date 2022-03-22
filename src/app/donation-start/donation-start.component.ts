@@ -20,7 +20,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { countries } from 'country-code-lookup';
 import { RecaptchaComponent } from 'ng-recaptcha';
 import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
-import { PaymentMethod, StripeElementChangeEvent, StripeError } from '@stripe/stripe-js';
+import { PaymentMethod, StripeCardElement, StripeElementChangeEvent, StripeError, StripePaymentRequestButtonElement } from '@stripe/stripe-js';
 import { EMPTY, Observer } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
@@ -55,9 +55,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
-  card: any;
+  card: StripeCardElement | null;
   cardHandler = this.onStripeCardChange.bind(this);
-  paymentRequestButton: any;
+  paymentRequestButton: StripePaymentRequestButtonElement | null;
 
   requestButtonShown = false;
   showChampionOptIn = false;
@@ -145,7 +145,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     if (this.card) {
-      this.card.removeEventListener('change', this.cardHandler);
+      this.card.off('change');
       this.card.destroy();
     }
   }
@@ -470,7 +470,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         this.card = this.stripeService.getCard();
         if (this.cardInfo && this.card) { // Ensure #cardInfo not hidden by PRB success.
           this.card.mount(this.cardInfo.nativeElement);
-          this.card.addEventListener('change', this.cardHandler);
+          this.card.on('change', this.cardHandler);
         }
       }
 
@@ -506,7 +506,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // Jump back if we get an out of band message back that the card is *not* valid/ready.
     // Don't jump forward when the card *is* valid, as the donor might have been
     // intending to edit something else in the `payment` step; let them click Next.
-    if (!this.donation || !this.stripePaymentMethodReady) {
+    if (!this.donation || !this.stripePaymentMethodReady || !this.card) {
       this.jumpToStep('Payment details');
 
       return;
@@ -599,7 +599,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   async payWithStripe() {
-    if (!this.donation || !this.donation.clientSecret) {
+    if (!this.donation || !this.donation.clientSecret || !this.card) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
       this.stripeResponseErrorCode = undefined;
       this.analyticsService.logError('stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
@@ -931,6 +931,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       //
       // captchaReturn() is called on resolution of a valid captcha and calls `createDonation()` again. We
       // don't get stuck in this logic branch because `this.captchaCode` is non-empty then.
+      // As well as happening the first time the donor leaves step 1, we expect to do this again and get
+      // a new code any time a previously used one was cleared in `clearDonation()`.
       this.captcha.execute();
       return;
     }
@@ -988,7 +990,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     if (this.paymentRequestButton) {
-      delete this.paymentRequestButton;
+      this.paymentRequestButton.clear();
     }
 
     const paymentRequestResultObserver: Observer<PaymentMethod.BillingDetails | undefined> = {
@@ -1032,7 +1034,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.paymentRequestButton = this.stripeService.getPaymentRequestButton(donation, paymentRequestResultObserver);
 
     this.stripeService.canUsePaymentRequest().then(canUse => {
-      if (canUse) {
+      if (canUse && this.paymentRequestButton) {
         this.paymentRequestButton.mount(this.paymentRequestButtonEl.nativeElement);
         this.requestButtonShown = true;
       } else {
@@ -1169,8 +1171,27 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     this.cancelExpiryWarning();
 
+    // Ensure we get a new code on donation setup. Sending one we already verified
+    // again will fail and block creating a new donation without a page refresh.
+    this.captchaCode = undefined;
+
+    this.donationCreateError = false;
+    this.donationUpdateError = false;
+    this.stripeError = undefined;
+    this.stripeResponseErrorCode = undefined;
+
+    this.stripePaymentMethodReady = false;
+    this.stripePRBMethodReady = false;
+
+    this.retrying = false;
+    this.submitting = false;
+
+    if (this.card) {
+      this.card.clear();
+    }
+
     if (this.paymentRequestButton) {
-      delete this.paymentRequestButton;
+      this.paymentRequestButton.clear();
     }
 
     delete this.donation;

@@ -217,12 +217,14 @@ export class StripeService {
       this.paymentRequest.update({
         currency: donation.currencyCode.toLowerCase() || 'gbp',
         total: this.getPaymentRequestButtonTotal(donation),
+        displayItems: this.getPaymentRequestButtonDisplayItems(donation),
       });
     } else {
       this.paymentRequest = this.stripe.paymentRequest({
         country: donation.countryCode || 'GB',
         currency: donation.currencyCode.toLowerCase() || 'gbp',
         total: this.getPaymentRequestButtonTotal(donation),
+        displayItems: this.getPaymentRequestButtonDisplayItems(donation),
         requestPayerName: true,
         requestPayerEmail: true,
       });
@@ -270,10 +272,52 @@ export class StripeService {
   }
 
   private getPaymentRequestButtonTotal(donation: Donation): PaymentRequestItem {
+    let label = `Donation to ${donation.charityName}`;
+
+    if (donation.tipAmount > 0) {
+      label = `${label} and the Big Give`;
+    }
+
+    if (donation.feeCoverAmount > 0) {
+      label = `${label} and fee cover`;
+    }
+
     return {
-      label: `Donation to ${donation.charityName}`,
+      label,
       // In pence/cents, inc. tip
-      amount: (100 * donation.donationAmount) + (100 * donation.tipAmount),
+      amount:
+        (100 * donation.donationAmount) +
+        (100 * donation.tipAmount) +
+        (100 * donation.feeCoverAmount),
     };
+  }
+
+  private getPaymentRequestButtonDisplayItems(donation: Donation): PaymentRequestItem[] | undefined {
+    if (!donation.tipAmount && !donation.feeCoverAmount) {
+      return undefined;
+    }
+
+    const items = [
+      {
+        amount: 100 * donation.donationAmount,
+        label: `Donation to ${donation.charityName}`,
+      },
+    ];
+
+    if (donation.tipAmount > 0) {
+      items.push({
+        amount: 100 * donation.tipAmount,
+        label: 'Donation to the Big Give',
+      });
+    }
+
+    if (donation.feeCoverAmount > 0) {
+      items.push({
+        amount: 100 * donation.feeCoverAmount,
+        label: 'Fee cover',
+      });
+    }
+
+    return items;
   }
 }
