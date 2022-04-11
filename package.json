@@ -46,7 +46,7 @@
     "@nguniversal/express-engine": "^13.0.2",
     "@stripe/stripe-js": "^1.23.0",
     "compression": "^1.7.4",
-    "country-code-lookup": "^0.0.19",
+    "country-code-lookup": "~0.0.20",
     "express": "^4.17.3",
     "helmet": "^4.4.1",
     "material-icons-font": "^2.1.0",
