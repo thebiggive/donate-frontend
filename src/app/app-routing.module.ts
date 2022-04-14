@@ -82,11 +82,6 @@ const routes: Routes = [
     },
   },
   {
-    path: 'women-and-girls-match-fund-2021',
-    redirectTo: 'women-and-girls-match-fund-2022',
-    pathMatch: 'full',
-  },
-  {
     path: ':campaignSlug',
     component: MetaCampaignComponent,
     resolve: {
