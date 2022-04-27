@@ -29,7 +29,7 @@ export const environment: Environment = {
   },
   // https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
   recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
-  recaptchaSiteKey: '6LfJPAceAAAAAPnbqSG-lMNCiawYsTrT_daIW6sq',
+  recaptchaSiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
   reservationMinutes: 15,
   thanksUriPrefix: 'https://donate-staging.thebiggivetest.org.uk/thanks/',
 };
