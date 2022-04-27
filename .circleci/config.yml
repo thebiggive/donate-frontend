@@ -1,12 +1,12 @@
 version: 2.1
 
 orbs:
-  aws-ecr: circleci/aws-ecr@6.15.3
-  aws-ecs: circleci/aws-ecs@2.1.0
+  aws-ecr: circleci/aws-ecr@8.1.0
+  aws-ecs: circleci/aws-ecs@2.2.1
   aws-s3: circleci/aws-s3@3.0.0
-  docker: circleci/docker@1.7.0
-  jira: circleci/jira@1.1.2
-  slack: circleci/slack@3.4.2
+  docker: circleci/docker@2.0.3
+  jira: circleci/jira@1.3.1
+  slack: circleci/slack@4.9.3
 
 jobs:
   build:
@@ -154,6 +154,7 @@ workflows:
       - build:
           context:
             - docker-hub-creds
+            - jira
           post-steps:
             - jira/notify:
                 job_type: build
@@ -188,7 +189,9 @@ workflows:
           cluster-name: 'tbg-regression-${AWS_REGION}'
           container-image-name-updates: 'container=donate,tag=regression-${CIRCLE_SHA1}'
           post-steps:
-            - slack/notify-on-failure: ~
+            - slack/notify:
+                event: fail
+                template: basic_fail_1
 
   deploy-staging:
     jobs:
@@ -212,6 +215,7 @@ workflows:
       - aws-ecs/deploy-service-update:
           context:
             - ecs-deploys
+            - jira
           requires:
             - aws-ecr/build-and-push-image
           aws-region: AWS_REGION
@@ -223,11 +227,23 @@ workflows:
                 job_type: deployment
                 environment_type: staging
             - slack/notify:
-                color: '#009900'
-                message: 'We use rolling blue/green deploys. All visitors to staging will see the updated app version within ~20 minutes.'
-                title: 'Staging: Donate frontend deployed!'
-                title_link: 'https://donate-staging.thebiggivetest.org.uk'
-            - slack/notify-on-failure: ~
+                custom: |
+                  {
+                    "blocks": [
+                      {
+                        "type": "section",
+                        "fields": [
+                          {
+                            "type": "mrkdwn",
+                            "text": "*Staging: Donate frontend deployed!* All visitors should see the updated app version within 30 minutes."
+                          }
+                        ]
+                      }
+                    ]
+                  }
+            - slack/notify:
+                event: fail
+                template: basic_fail_1
 
   deploy-production:
     jobs:
@@ -251,6 +267,7 @@ workflows:
       - aws-ecs/deploy-service-update:
           context:
             - ecs-deploys
+            - jira
           requires:
             - aws-ecr/build-and-push-image
           aws-region: AWS_REGION
@@ -262,8 +279,20 @@ workflows:
                 job_type: deployment
                 environment_type: production
             - slack/notify:
-                color: '#009900'
-                message: 'We use rolling blue/green deploys. All visitors to production will see the updated app version within ~20 minutes.'
-                title: 'Production: Donate frontend deployed!'
-                title_link: 'https://donate.thebiggive.org.uk'
-            - slack/notify-on-failure: ~
+                custom: |
+                  {
+                    "blocks": [
+                      {
+                        "type": "section",
+                        "fields": [
+                          {
+                            "type": "mrkdwn",
+                            "text": "*Production: Donate frontend deployed!* All visitors should see the updated app version within 30 minutes."
+                          }
+                        ]
+                      }
+                    ]
+                  }
+            - slack/notify:
+                event: fail
+                template: basic_fail_1
