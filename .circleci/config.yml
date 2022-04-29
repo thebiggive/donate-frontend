@@ -182,6 +182,7 @@ workflows:
       - aws-ecs/deploy-service-update:
           context:
             - ecs-deploys
+            - slack
           requires:
             - aws-ecr/build-and-push-image
           aws-region: AWS_REGION
@@ -216,6 +217,7 @@ workflows:
           context:
             - ecs-deploys
             - jira
+            - slack
           requires:
             - aws-ecr/build-and-push-image
           aws-region: AWS_REGION
@@ -268,6 +270,7 @@ workflows:
           context:
             - ecs-deploys
             - jira
+            - slack
           requires:
             - aws-ecr/build-and-push-image
           aws-region: AWS_REGION
