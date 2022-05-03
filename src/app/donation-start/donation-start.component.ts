@@ -113,6 +113,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private initialTipSuggestedPercentage = 15;
 
   private emailRegExp : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
+  /**
+   * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
+   * input was valid (even if differently formatted). Loosely based on https://stackoverflow.com/a/10701634/2803757
+   * with an additional tweak to allow (and trim) surrounding spaces.
+   */
+  private postcodeFormatHelpRegExp = new RegExp('^\\s*([A-Z]{1,2}\\d{1,2}[A-Z]?)\\s*(\\d[A-Z]{2})\\s*$');
   // Based on the simplified pattern suggestions in https://stackoverflow.com/a/51885364/2803757
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? ?\\d[A-Z]{2}|GIR ?0A{2})$', 'i');
   private captchaCode?: string;
@@ -788,7 +794,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   /**
-   * @param error 
+   * @param error
    * @param context 'method_setup', 'card_change' or 'confirm'.
    */
   private getStripeFriendlyError(error: StripeError, context: string): string {
@@ -1314,6 +1320,29 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         this.getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK),
       );
       this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
+    });
+
+    this.giftAidGroup.get('homePostcode')?.valueChanges.subscribe(homePostcode => {
+      if (homePostcode !== null) {
+        const homePostcodeAsIs = homePostcode;
+
+        // Uppercase it in-place, then we can use patterns that assume upper case.
+        homePostcode = homePostcode.toUpperCase();
+        var parts = homePostcode.match(this.postcodeFormatHelpRegExp);
+        if (parts === null) {
+          // If the input doesn't even match the much looser pattern here, it's going to fail
+          // the validator check in a moment and there's nothing we can/should do with it
+          // formatting-wise.
+          return;
+        }
+        parts.shift();
+        let formattedPostcode = parts.join(' ');
+        if (formattedPostcode !== homePostcodeAsIs) {
+          this.giftAidGroup.patchValue({
+            homePostcode: formattedPostcode,
+          });
+        }
+      }
     });
 
     // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
