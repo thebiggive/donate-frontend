@@ -120,7 +120,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
    */
   private postcodeFormatHelpRegExp = new RegExp('^\\s*([A-Z]{1,2}\\d{1,2}[A-Z]?)\\s*(\\d[A-Z]{2})\\s*$');
   // Based on the simplified pattern suggestions in https://stackoverflow.com/a/51885364/2803757
-  private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? ?\\d[A-Z]{2}|GIR ?0A{2})$', 'i');
+  private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
   private captchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
 
