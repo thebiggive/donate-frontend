@@ -16,7 +16,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { countries } from 'country-code-lookup';
 import { RecaptchaComponent } from 'ng-recaptcha';
 import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
@@ -111,6 +111,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private tipPercentageChanged = false;
 
   private initialTipSuggestedPercentage = 15;
+
+  private emailRegExp : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
   // Based on the simplified pattern suggestions in https://stackoverflow.com/a/51885364/2803757
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? ?\\d[A-Z]{2}|GIR ?0A{2})$', 'i');
   private captchaCode?: string;
@@ -158,8 +160,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.campaign = this.route.snapshot.data.campaign;
     this.setCampaignBasedVars();
 
-    const emailRegex : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
-
     const formGroups: {
       amounts: FormGroup,   // Matching reservation happens at the end of this group.
       giftAid: FormGroup,
@@ -202,7 +202,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         emailAddress: [null, [
           Validators.required,
           // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
-          Validators.pattern(emailRegex),
+          Validators.pattern(this.emailRegExp),
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
         billingPostcode: [null],  // See setConditionalValidators().
