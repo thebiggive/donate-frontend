@@ -139,12 +139,11 @@ export class AnalyticsService {
 
     if (step === 1) {
       this.callGtag('event', 'begin_checkout', { items });
-      return;
     }
 
     this.callGtag('event', 'checkout_progress', {
       checkout_step: step,
-      items: this.buildAllProductsData(campaign, donation),
+      items,
     });
   }
 
