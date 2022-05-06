@@ -442,19 +442,18 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       }
       this.donationService.updateLocalDonation(this.donation);
 
-      if (this.donation.psp === 'stripe') {
-        if (event.selectedStep.label === 'Receive updates') {
-          // Step 2 'Details' – whichever step(s) come before marketing prefs is the best fit for this #.
-          this.analyticsService.logCheckoutStep(2, this.campaign, this.donation);
-        } else if (event.selectedStep.label === 'Confirm') {
-          // Step 3 'Confirm'.
-          this.analyticsService.logCheckoutStep(2, this.campaign, this.donation);
-        }
-        // Else it's not a step that cleanly maps to the historically-comparable
-        // e-commece funnel steps defined in our Analytics campaign, besides 1
-        // (which we fire on donation create API callback) and 4 (which we fire
-        // alongside calling payWithStripe()).
+      if (event.selectedStep.label === 'Receive updates') {
+        // Step 2 'Details' – whichever step(s) come before marketing prefs is the best fit for this step number.
+        this.analyticsService.logCheckoutStep(2, this.campaign, this.donation);
+      } else if (event.selectedStep.label === 'Confirm') {
+        // Step 3 'Confirm' is actually fired when comms preferences are done (to maintain
+        // historic order), i.e. when the new step is for finalising payment.
+        this.analyticsService.logCheckoutStep(3, this.campaign, this.donation);
       }
+      // Else it's not a step that cleanly maps to the historically-comparable
+      // e-commerce funnel steps defined in our Analytics campaign, besides 1
+      // (which we fire on donation create API callback) and 4 (which we fire
+      // alongside calling payWithStripe()).
     }
 
     // Create a donation if coming from first step and not offering to resume
