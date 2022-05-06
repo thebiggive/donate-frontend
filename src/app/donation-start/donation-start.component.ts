@@ -1109,7 +1109,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.analyticsService.logEvent('existing_donation_offered', `Found pending donation to campaign ${this.campaignId}`);
 
     // Ensure we do not claim match funds are reserved when offering an old
-    // donation if the reservation time is up.
+    // donation if the reservation time is up. See also the on-page-timeout counterpart
+    // in `this.expiryWarning`'s timeout callback.
     if (
       donation.matchReservedAmount > 0 &&
       donation.createdTime &&
@@ -1155,6 +1156,15 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     this.expiryWarning = setTimeout(() => {
+      if (!this.donation) {
+        return;
+      }
+
+      // The expiry's happened, so we should ignore the amount of funds returned by the API
+      // and set this to 0. See also offerExistingDonation() which does the equivalent for donation
+      // loaded from browser storage into a new load of this page.
+      this.donation.matchReservedAmount = 0;
+
       const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
         disableClose: true,
         role: 'alertdialog',
