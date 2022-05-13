@@ -17,6 +17,8 @@ import { NavigationService } from './navigation.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  public fontsLoaded = false;
+
   constructor(
     private analyticsService: AnalyticsService,
     private donationService: DonationService,
@@ -39,6 +41,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    document.fonts.ready.then(() => this.fontsLoaded = true);
+
     if (isPlatformBrowser(this.platformId)) {
       this.analyticsService.init();
       this.getSiteControlService.init();
