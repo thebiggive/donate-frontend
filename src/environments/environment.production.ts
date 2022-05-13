@@ -10,7 +10,8 @@ export const environment: Environment = {
   donationsApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-1',
-  googleOptimizeId: 'OPT-W78W6BT',
+  googleOptimizeId: null,
+  // googleOptimizeId: 'OPT-W78W6BT', // Bring back when we have an experiment to run
   maximumDonationAmount: 25000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
   postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.
