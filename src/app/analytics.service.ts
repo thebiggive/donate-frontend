@@ -125,38 +125,25 @@ export class AnalyticsService {
   }
 
   /**
-   * @param stepName  Following Enthuse convention stages are `checkout_option`s.
-   *                      Order is: Select -> Details -> Confirm -> Pay.
+   * @param {number} step Following stages are used for checkout for comparability to
+   *                          old stages.
+   *                          1 > Select – used to mean an amount was chosen
+   *                          2 > Details – used to mean Payment Details and, if applicable, Gift
+   *                                          Aid status are set
+   *                          3 > Confirm – used when comms choices (Receive updates) done
+   *                          4 > Pay     – payment finalised
    * @link https://developers.google.com/analytics/devguides/collection/gtagjs/enhanced-ecommerce#1_measure_checkout_steps
    */
   logCheckoutStep(step: number, campaign: Campaign, donation: Donation) {
-    let stepName: string;
-    switch (step) {
-      case 1:
-        stepName = 'Select';
-        break;
-      case 2:
-        stepName = 'Details';
-        break;
-      case 3:
-        stepName = 'Confirm';
-        break;
-      case 4:
-      default:
-        stepName = 'Pay';
-    }
+    const items = this.buildAllProductsData(campaign, donation);
 
     if (step === 1) {
-      this.callGtag('event', 'begin_checkout', { items: this.buildAllProductsData(campaign, donation) });
+      this.callGtag('event', 'begin_checkout', { items });
     }
 
-    this.callGtag('event', 'checkout_progress', { items: this.buildAllProductsData(campaign, donation) });
-
-    // Used for stages to match Enthuse convention for comparability.
-    // https://developers.google.com/analytics/devguides/collection/gtagjs/enhanced-ecommerce#2_measure_checkout_options
-    this.callGtag('event', 'set_checkout_option', {
+    this.callGtag('event', 'checkout_progress', {
       checkout_step: step,
-      checkout_option: stepName,
+      items,
     });
   }
 

@@ -14,7 +14,8 @@ export const environment: Environment = {
   donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
-  googleOptimizeId: 'OPT-NV3NHD3',
+  googleOptimizeId: null,
+  //googleOptimizeId: 'OPT-NV3NHD3', // Bring back when we have an experiment to run
   maximumDonationAmount: 25000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
   postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.
@@ -29,7 +30,7 @@ export const environment: Environment = {
   },
   // https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
   recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
-  recaptchaSiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+  recaptchaSiteKey: '6LfJPAceAAAAAPnbqSG-lMNCiawYsTrT_daIW6sq',
   reservationMinutes: 15,
   thanksUriPrefix: 'https://donate-staging.thebiggivetest.org.uk/thanks/',
 };

@@ -16,7 +16,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { countries } from 'country-code-lookup';
 import { RecaptchaComponent } from 'ng-recaptcha';
 import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
@@ -111,8 +111,16 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private tipPercentageChanged = false;
 
   private initialTipSuggestedPercentage = 15;
+
+  private emailRegExp : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
+  /**
+   * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
+   * input was valid (even if differently formatted). Loosely based on https://stackoverflow.com/a/10701634/2803757
+   * with an additional tweak to allow (and trim) surrounding spaces.
+   */
+  private postcodeFormatHelpRegExp = new RegExp('^\\s*([A-Z]{1,2}\\d{1,2}[A-Z]?)\\s*(\\d[A-Z]{2})\\s*$');
   // Based on the simplified pattern suggestions in https://stackoverflow.com/a/51885364/2803757
-  private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? ?\\d[A-Z]{2}|GIR ?0A{2})$', 'i');
+  private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
   private captchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
 
@@ -158,8 +166,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.campaign = this.route.snapshot.data.campaign;
     this.setCampaignBasedVars();
 
-    const emailRegex : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
-
     const formGroups: {
       amounts: FormGroup,   // Matching reservation happens at the end of this group.
       giftAid: FormGroup,
@@ -202,7 +208,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         emailAddress: [null, [
           Validators.required,
           // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
-          Validators.pattern(emailRegex),
+          Validators.pattern(this.emailRegExp),
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
         billingPostcode: [null],  // See setConditionalValidators().
@@ -436,19 +442,18 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       }
       this.donationService.updateLocalDonation(this.donation);
 
-      if (this.donation.psp === 'stripe') {
-        if (event.selectedStep.label === 'Receive updates') {
-          // Step 2 'Details' – whichever step(s) come before marketing prefs is the best fit for this #.
-          this.analyticsService.logCheckoutStep(2, this.campaign, this.donation);
-        } else if (event.selectedStep.label === 'Confirm') {
-          // Step 3 'Confirm'.
-          this.analyticsService.logCheckoutStep(2, this.campaign, this.donation);
-        }
-        // Else it's not a step that cleanly maps to the historically-comparable
-        // e-commece funnel steps defined in our Analytics campaign, besides 1
-        // (which we fire on donation create API callback) and 4 (which we fire
-        // alongside calling payWithStripe()).
+      if (event.selectedStep.label === 'Receive updates') {
+        // Step 2 'Details' – whichever step(s) come before marketing prefs is the best fit for this step number.
+        this.analyticsService.logCheckoutStep(2, this.campaign, this.donation);
+      } else if (event.selectedStep.label === 'Confirm') {
+        // Step 3 'Confirm' is actually fired when comms preferences are done (to maintain
+        // historic order), i.e. when the new step is for finalising payment.
+        this.analyticsService.logCheckoutStep(3, this.campaign, this.donation);
       }
+      // Else it's not a step that cleanly maps to the historically-comparable
+      // e-commerce funnel steps defined in our Analytics campaign, besides 1
+      // (which we fire on donation create API callback) and 4 (which we fire
+      // alongside calling payWithStripe()).
     }
 
     // Create a donation if coming from first step and not offering to resume
@@ -788,7 +793,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   /**
-   * @param error 
+   * @param error
    * @param context 'method_setup', 'card_change' or 'confirm'.
    */
   private getStripeFriendlyError(error: StripeError, context: string): string {
@@ -1103,7 +1108,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.analyticsService.logEvent('existing_donation_offered', `Found pending donation to campaign ${this.campaignId}`);
 
     // Ensure we do not claim match funds are reserved when offering an old
-    // donation if the reservation time is up.
+    // donation if the reservation time is up. See also the on-page-timeout counterpart
+    // in `this.expiryWarning`'s timeout callback.
     if (
       donation.matchReservedAmount > 0 &&
       donation.createdTime &&
@@ -1149,6 +1155,15 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     this.expiryWarning = setTimeout(() => {
+      if (!this.donation) {
+        return;
+      }
+
+      // The expiry's happened, so we should ignore the amount of funds returned by the API
+      // and set this to 0. See also offerExistingDonation() which does the equivalent for donation
+      // loaded from browser storage into a new load of this page.
+      this.donation.matchReservedAmount = 0;
+
       const continueDialog = this.dialog.open(DonationStartMatchingExpiredDialogComponent, {
         disableClose: true,
         role: 'alertdialog',
@@ -1314,6 +1329,29 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         this.getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK),
       );
       this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
+    });
+
+    this.giftAidGroup.get('homePostcode')?.valueChanges.subscribe(homePostcode => {
+      if (homePostcode !== null) {
+        const homePostcodeAsIs = homePostcode;
+
+        // Uppercase it in-place, then we can use patterns that assume upper case.
+        homePostcode = homePostcode.toUpperCase();
+        var parts = homePostcode.match(this.postcodeFormatHelpRegExp);
+        if (parts === null) {
+          // If the input doesn't even match the much looser pattern here, it's going to fail
+          // the validator check in a moment and there's nothing we can/should do with it
+          // formatting-wise.
+          return;
+        }
+        parts.shift();
+        let formattedPostcode = parts.join(' ');
+        if (formattedPostcode !== homePostcodeAsIs) {
+          this.giftAidGroup.patchValue({
+            homePostcode: formattedPostcode,
+          });
+        }
+      }
     });
 
     // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
