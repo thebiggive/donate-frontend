@@ -15,7 +15,7 @@ export const environment: Environment = {
   maximumDonationAmount: 25000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
   postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.
-  promotedMetacampaign1Slug: 'green-match-fund-2022',
+  promotedMetacampaign1Slug: 'cost-of-living-crisis',
   promotedMetacampaign2Slug: 'ukraine-refugee-appeal',
   psps: {
     stripe: {
