@@ -57,7 +57,7 @@ export class StripeService {
       this.elements = this.stripe.elements({fonts: [
         {
           family: 'Maven Pro',
-          src: `url('/d/fonts/maven-pro-latin-400.woff2') format('woff2'))`,
+          src: `url('${environment.donateUriPrefix}/d/fonts/maven-pro-latin-400.woff2') format('woff2'))`,
           weight: '400',
         },
       ]});
