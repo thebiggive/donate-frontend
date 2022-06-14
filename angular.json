@@ -24,7 +24,8 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/fonts/maven-pro-latin-400.woff2"
             ],
             "styles": [
               "src/styles.scss",
@@ -183,7 +184,8 @@
             "karmaConfig": "karma-local.conf.js",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/fonts/maven-pro-latin-400.woff2"
             ],
             "styles": [
               "src/styles.scss",
