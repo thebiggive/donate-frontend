@@ -12,6 +12,9 @@ export class CampaignPromoted2Resolver implements Resolve<any> {
   constructor(private campaignService: CampaignService) {}
 
   resolve(route: ActivatedRouteSnapshot) {
-    return this.campaignService.getOneBySlug(environment.promotedMetacampaign2Slug);
+    if (environment.promotedMetacampaign2Slug) {
+      return this.campaignService.getOneBySlug(environment.promotedMetacampaign2Slug);
+    }
+    return null;
   }
 }
