@@ -7,3 +7,13 @@
     grid-template-columns: calc((100% - 30px)/2) calc((100% - 30px)/2);
   }
 }
+
+.single-promoted-campaign-wrapper {
+  display: flex;
+  @media #{$breakpoint-lg} {
+    max-width: 50%;
+    // centre the card:
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

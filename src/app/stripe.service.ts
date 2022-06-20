@@ -56,7 +56,9 @@ export class StripeService {
     if (this.stripe) {
       this.elements = this.stripe.elements({fonts: [
         {
-          cssSrc: 'https://fonts.googleapis.com/css2?family=Maven+Pro&display=swap',
+          family: 'Maven Pro',
+          src: `url('${environment.donateUriPrefix}/d/fonts/maven-pro-latin-400.woff2') format('woff2')`,
+          weight: '400',
         },
       ]});
     }
