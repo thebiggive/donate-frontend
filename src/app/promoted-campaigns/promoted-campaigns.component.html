@@ -1,7 +1,0 @@
-<aside class="b-container promo">
-  <h3 class="b-rh-1 b-bold" fxLayoutAlign="center">{{title}}</h3>
-  <div class="promo" [ngClass]="{'c-grid': campaign2, 'single-promoted-campaign-wrapper': !campaign2}">
-    <app-campaign-promo-card [campaign]="campaign1" [campaignUri]="'/' + campaign1Slug"></app-campaign-promo-card>
-    <app-campaign-promo-card *ngIf="campaign2" [campaign]="campaign2" [campaignUri]="'/' + campaign2Slug"></app-campaign-promo-card>
-  </div>
-</aside>
