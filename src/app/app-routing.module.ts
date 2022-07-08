@@ -3,8 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
 import { CampaignListResolver } from './campaign-list.resolver';
-import { CampaignPromoted1Resolver } from './campaign-promoted-1.resolver';
-import { CampaignPromoted2Resolver } from './campaign-promoted-2.resolver';
 import { CampaignResolver } from './campaign.resolver';
 import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import { CharityComponent } from './charity/charity.component';
@@ -69,8 +67,6 @@ const routes: Routes = [
     component: ExploreComponent,
     resolve: {
       campaigns: CampaignListResolver,
-      promotedMetacampaign1: CampaignPromoted1Resolver,
-      promotedMetacampaign2: CampaignPromoted2Resolver,
     },
   },
   {
@@ -93,8 +89,6 @@ const routes: Routes = [
     component: HomeComponent,
     resolve: {
       campaigns: CampaignListResolver,
-      promotedMetacampaign1: CampaignPromoted1Resolver,
-      promotedMetacampaign2: CampaignPromoted2Resolver,
     },
   },
   {
@@ -112,8 +106,6 @@ const routes: Routes = [
   providers: [
     CampaignResolver,
     CampaignListResolver,
-    CampaignPromoted1Resolver,
-    CampaignPromoted2Resolver,
     CharityCampaignsResolver,
     MulticurrencyCampaignResolver,
     MulticurrencyCampaignListResolver,
