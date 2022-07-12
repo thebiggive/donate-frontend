@@ -17,8 +17,7 @@ import { SearchService } from '../search.service';
 export class ExploreComponent implements OnDestroy, OnInit {
   campaigns: CampaignSummary[];
   loading = false; // Server render gets initial result set; set true when filters change.
-  promotedCampaign1: Campaign;
-  promotedCampaign2: Campaign;
+
   /** Whether any non-default search logic besides an order change has been applied. */
   searched = false;
 
@@ -45,9 +44,6 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.promotedCampaign1 = this.route.snapshot.data.promotedMetacampaign1;
-    this.promotedCampaign2 = this.route.snapshot.data.promotedMetacampaign2;
-
     this.pageMeta.setCommon(
       'The Big Give',
       'The Big Give &ndash; discover campaigns and donate',
