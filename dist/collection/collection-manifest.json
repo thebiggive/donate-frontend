@@ -1,0 +1,14 @@
+{
+  "entries": [
+    "./components/my-component/my-component.js",
+    "./components/sample-component/sample-component.js",
+    "./components/sample-component-child/sample-component-child.js"
+  ],
+  "compiler": {
+    "name": "@stencil/core",
+    "version": "2.17.1",
+    "typescriptVersion": "4.5.4"
+  },
+  "collections": [],
+  "bundles": []
+}
