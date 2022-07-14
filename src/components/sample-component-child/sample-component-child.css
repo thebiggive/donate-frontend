@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.call-to-action a {
+  border: 1px solid #000000;
+  padding: 5px 10px;
+  color: #000000;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.call-to-action a:hover {
+  color: #FFFFFF;
+  background-color: #000000;
+}
