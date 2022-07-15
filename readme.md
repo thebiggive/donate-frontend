@@ -10,16 +10,14 @@ The project is based on a sample project from https://stenciljs.com/docs/getting
 ### Get latest version of codebase from github
 ```bash
 git clone https://github.com/thebiggive/components.git
-```
-
-### Enter the components directory
-```bash
 cd components
+git remote rm origin
 ```
 
 ### Install StencilJS dependencies as defined in package.json
 ```bash
 npm install
+npm start
 ```
 
 ### Make any required changes to the sample web components
@@ -34,11 +32,33 @@ npm run build
 ```
 
 
+### dist directory - https://stenciljs.com/docs/distribution
+This directory contains the distribtion files
 
-### www directory
-https://stenciljs.com/docs/www
 
+### www directory - https://stenciljs.com/docs/www
 This directory contains a static version of the web components which can be used for testing and inclusion in simple web apps. Due to CORS restrictions, the index.html file needs to be run from a webserver (not as a local file).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
