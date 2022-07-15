@@ -6,9 +6,19 @@ The project is based on a sample project from https://stenciljs.com/docs/getting
 
 ## Getting Started
 
+
+### Get latest version of codebase from github
+```bash
+git clone https://github.com/thebiggive/components.git
 ```bash
 
-https://github.com/thebiggive/components.git
+### enter the components directory
+```bash
+cd components
+```bash
+
+
+
 
 
 
