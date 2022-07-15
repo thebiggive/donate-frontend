@@ -17,14 +17,28 @@ git clone https://github.com/thebiggive/components.git
 cd components
 ```
 
-### Start
+### Install StencilJS dependencies as defined in package.json
 ```bash
-cd components
+npm install
+```
+
+### Make any required changes to the sample web components
+
+The web components are configured in /src/components
+
+The /src/index.html file can be used as a test area for displaying the web components in a static HTML page.
+
+### Run the StencilJS build command to package your changes
+```bash
+npm run build
 ```
 
 
 
+### www directory
+https://stenciljs.com/docs/www
 
+This directory contains a static version of the web components which can be used for testing and inclusion in simple web apps. Due to CORS restrictions, the index.html file needs to be run from a webserver (not as a local file).
 
 
 
