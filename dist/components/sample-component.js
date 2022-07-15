@@ -8,17 +8,17 @@ const SampleComponent$1 = /*@__PURE__*/ proxyCustomElement(class extends HTMLEle
     super();
     this.__registerHost();
     this.__attachShadow();
-    this.title = "";
+    this.label = "";
     this.meta = "";
     this.callToActionUrl = "";
     this.callToActionText = "";
   }
   render() {
-    return (h("div", { class: "container" }, h("h3", { class: "title" }, this.title), h("div", { class: "meta" }, this.meta), h("sample-component-child", { url: this.callToActionUrl, text: this.callToActionText })));
+    return (h("div", { class: "container" }, h("h3", { class: "label" }, this.title), h("div", { class: "meta" }, this.meta), h("sample-component-child", { url: this.callToActionUrl, text: this.callToActionText })));
   }
   static get style() { return sampleComponentCss; }
 }, [1, "sample-component", {
-    "title": [1025],
+    "label": [1025],
     "meta": [1025],
     "callToActionUrl": [1025, "call-to-action-url"],
     "callToActionText": [1025, "call-to-action-text"]

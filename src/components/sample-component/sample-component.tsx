@@ -7,7 +7,7 @@ import { Component, Prop, h } from '@stencil/core';
 })
 export class SampleComponent {
 
-  @Prop({ mutable: true }) title: string = "";
+  @Prop({ mutable: true }) label: string = "";
   @Prop({ mutable: true }) meta: string = "";
   @Prop({ mutable: true }) callToActionUrl: string = "";
   @Prop({ mutable: true }) callToActionText: string = "";
@@ -15,7 +15,7 @@ export class SampleComponent {
   render() {
     return (
       <div class="container">
-        <h3 class="title">{this.title}</h3>
+        <h3 class="label">{this.title}</h3>
         <div class="meta">{this.meta}</div>
         <sample-component-child url={this.callToActionUrl} text={this.callToActionText}></sample-component-child>
       </div>

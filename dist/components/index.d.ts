@@ -1,5 +1,4 @@
 /* BigGive custom elements */
-export { MyComponent as MyComponent } from '../types/components/my-component/my-component';
 export { SampleComponent as SampleComponent } from '../types/components/sample-component/sample-component';
 export { SampleComponentChild as SampleComponentChild } from '../types/components/sample-component-child/sample-component-child';
 

@@ -11,8 +11,8 @@
 | ------------------ | --------------------- | ----------- | -------- | ------- |
 | `callToActionText` | `call-to-action-text` |             | `string` | `""`    |
 | `callToActionUrl`  | `call-to-action-url`  |             | `string` | `""`    |
+| `label`            | `label`               |             | `string` | `""`    |
 | `meta`             | `meta`                |             | `string` | `""`    |
-| `title`            | `title`               |             | `string` | `""`    |
 
 
 ## Dependencies

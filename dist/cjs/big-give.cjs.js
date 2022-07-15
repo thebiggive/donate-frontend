@@ -15,5 +15,5 @@ const patchBrowser = () => {
 };
 
 patchBrowser().then(options => {
-  return index.bootstrapLazy([["my-component.cjs",[[1,"my-component",{"first":[1],"middle":[1],"last":[1]}]]],["sample-component_2.cjs",[[1,"sample-component",{"title":[1025],"meta":[1025],"callToActionUrl":[1025,"call-to-action-url"],"callToActionText":[1025,"call-to-action-text"]}],[1,"sample-component-child",{"url":[1025],"text":[1025]}]]]], options);
+  return index.bootstrapLazy([["sample-component_2.cjs",[[1,"sample-component",{"label":[1025],"meta":[1025],"callToActionUrl":[1025,"call-to-action-url"],"callToActionText":[1025,"call-to-action-text"]}],[1,"sample-component-child",{"url":[1025],"text":[1025]}]]]], options);
 });

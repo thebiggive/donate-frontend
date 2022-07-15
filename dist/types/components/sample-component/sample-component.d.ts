@@ -1,5 +1,5 @@
 export declare class SampleComponent {
-  title: string;
+  label: string;
   meta: string;
   callToActionUrl: string;
   callToActionText: string;

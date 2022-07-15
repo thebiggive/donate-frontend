@@ -1,14 +1,14 @@
 import { Component, Prop, h } from '@stencil/core';
 export class SampleComponent {
   constructor() {
-    this.title = "";
+    this.label = "";
     this.meta = "";
     this.callToActionUrl = "";
     this.callToActionText = "";
   }
   render() {
     return (h("div", { class: "container" },
-      h("h3", { class: "title" }, this.title),
+      h("h3", { class: "label" }, this.title),
       h("div", { class: "meta" }, this.meta),
       h("sample-component-child", { url: this.callToActionUrl, text: this.callToActionText })));
   }
@@ -21,7 +21,7 @@ export class SampleComponent {
     "$": ["sample-component.css"]
   }; }
   static get properties() { return {
-    "title": {
+    "label": {
       "type": "string",
       "mutable": true,
       "complexType": {
@@ -35,7 +35,7 @@ export class SampleComponent {
         "tags": [],
         "text": ""
       },
-      "attribute": "title",
+      "attribute": "label",
       "reflect": false,
       "defaultValue": "\"\""
     },

@@ -5,13 +5,13 @@ const sampleComponentCss = ":host{display:block}.container{border:1px solid #F1F
 const SampleComponent = class {
   constructor(hostRef) {
     registerInstance(this, hostRef);
-    this.title = "";
+    this.label = "";
     this.meta = "";
     this.callToActionUrl = "";
     this.callToActionText = "";
   }
   render() {
-    return (h("div", { class: "container" }, h("h3", { class: "title" }, this.title), h("div", { class: "meta" }, this.meta), h("sample-component-child", { url: this.callToActionUrl, text: this.callToActionText })));
+    return (h("div", { class: "container" }, h("h3", { class: "label" }, this.title), h("div", { class: "meta" }, this.meta), h("sample-component-child", { url: this.callToActionUrl, text: this.callToActionText })));
   }
 };
 SampleComponent.style = sampleComponentCss;

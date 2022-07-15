@@ -9,13 +9,13 @@ const sampleComponentCss = ":host{display:block}.container{border:1px solid #F1F
 const SampleComponent = class {
   constructor(hostRef) {
     index.registerInstance(this, hostRef);
-    this.title = "";
+    this.label = "";
     this.meta = "";
     this.callToActionUrl = "";
     this.callToActionText = "";
   }
   render() {
-    return (index.h("div", { class: "container" }, index.h("h3", { class: "title" }, this.title), index.h("div", { class: "meta" }, this.meta), index.h("sample-component-child", { url: this.callToActionUrl, text: this.callToActionText })));
+    return (index.h("div", { class: "container" }, index.h("h3", { class: "label" }, this.title), index.h("div", { class: "meta" }, this.meta), index.h("sample-component-child", { url: this.callToActionUrl, text: this.callToActionText })));
   }
 };
 SampleComponent.style = sampleComponentCss;
