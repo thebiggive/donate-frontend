@@ -10,12 +10,12 @@ The project is based on a sample project from https://stenciljs.com/docs/getting
 ### Get latest version of codebase from github
 ```bash
 git clone https://github.com/thebiggive/components.git
-```bash
+```
 
 ### enter the components directory
 ```bash
 cd components
-```bash
+```
 
 
 
