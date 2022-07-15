@@ -23,6 +23,9 @@ npm start
 ### Make any required changes to the sample web components
 
 The web components are configured in /src/components
+There are currently two components
+- sample-component
+- sample-component-child
 
 The /src/index.html file can be used as a test area for displaying the web components in a static HTML page.
 
