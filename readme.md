@@ -4,7 +4,7 @@
 
 The project is based on a sample project from https://stenciljs.com/docs/getting-started
 
-## Getting Started
+## Setup and Build
 
 
 ### Get latest version of codebase from github
@@ -32,6 +32,9 @@ npm run build
 ```
 
 
+
+## Outputs
+
 ### dist directory - https://stenciljs.com/docs/distribution
 This directory contains the distribtion files
 
@@ -42,7 +45,7 @@ This directory contains a static version of the web components which can be used
 
 
 
-
+## Publish to NPM
 
 
 
