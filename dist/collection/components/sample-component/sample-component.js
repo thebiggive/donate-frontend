@@ -8,7 +8,7 @@ export class SampleComponent {
   }
   render() {
     return (h("div", { class: "container" },
-      h("h3", { class: "label" }, this.title),
+      h("h3", { class: "label" }, this.label),
       h("div", { class: "meta" }, this.meta),
       h("sample-component-child", { url: this.callToActionUrl, text: this.callToActionText })));
   }

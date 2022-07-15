@@ -15,7 +15,7 @@ const SampleComponent = class {
     this.callToActionText = "";
   }
   render() {
-    return (index.h("div", { class: "container" }, index.h("h3", { class: "label" }, this.title), index.h("div", { class: "meta" }, this.meta), index.h("sample-component-child", { url: this.callToActionUrl, text: this.callToActionText })));
+    return (index.h("div", { class: "container" }, index.h("h3", { class: "label" }, this.label), index.h("div", { class: "meta" }, this.meta), index.h("sample-component-child", { url: this.callToActionUrl, text: this.callToActionText })));
   }
 };
 SampleComponent.style = sampleComponentCss;

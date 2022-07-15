@@ -15,7 +15,7 @@ export class SampleComponent {
   render() {
     return (
       <div class="container">
-        <h3 class="label">{this.title}</h3>
+        <h3 class="label">{this.label}</h3>
         <div class="meta">{this.meta}</div>
         <sample-component-child url={this.callToActionUrl} text={this.callToActionText}></sample-component-child>
       </div>

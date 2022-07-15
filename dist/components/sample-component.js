@@ -14,7 +14,7 @@ const SampleComponent$1 = /*@__PURE__*/ proxyCustomElement(class extends HTMLEle
     this.callToActionText = "";
   }
   render() {
-    return (h("div", { class: "container" }, h("h3", { class: "label" }, this.title), h("div", { class: "meta" }, this.meta), h("sample-component-child", { url: this.callToActionUrl, text: this.callToActionText })));
+    return (h("div", { class: "container" }, h("h3", { class: "label" }, this.label), h("div", { class: "meta" }, this.meta), h("sample-component-child", { url: this.callToActionUrl, text: this.callToActionText })));
   }
   static get style() { return sampleComponentCss; }
 }, [1, "sample-component", {
