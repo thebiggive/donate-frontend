@@ -12,11 +12,15 @@ The project is based on a sample project from https://stenciljs.com/docs/getting
 git clone https://github.com/thebiggive/components.git
 ```
 
-### enter the components directory
+### Enter the components directory
 ```bash
 cd components
 ```
 
+### Start
+```bash
+cd components
+```
 
 
 
