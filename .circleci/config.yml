@@ -53,7 +53,7 @@ jobs:
       - run: npm run build:staging
 
       - aws-s3/sync:
-          from: dist/browser/d
+          from: dist/browser
           to: 's3://tbg-staging-donate-static/d'
           arguments: |
             --acl public-read \
@@ -85,7 +85,7 @@ jobs:
       - run: npm run build:regression
 
       - aws-s3/sync:
-          from: dist/browser/d
+          from: dist/browser
           to: 's3://tbg-regression-donate-static/d'
           arguments: |
             --acl public-read \
@@ -117,7 +117,7 @@ jobs:
       - run: npm run build:production
 
       - aws-s3/sync:
-          from: dist/browser/d
+          from: dist/browser
           to: 's3://tbg-production-donate-static/d'
           arguments: |
             --acl public-read \
