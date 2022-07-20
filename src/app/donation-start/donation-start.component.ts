@@ -12,7 +12,7 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
@@ -75,11 +75,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   currencySymbol: string;
 
-  donationForm: UntypedFormGroup;
-  amountsGroup: UntypedFormGroup;
-  giftAidGroup: UntypedFormGroup;
-  paymentGroup: UntypedFormGroup;
-  marketingGroup: UntypedFormGroup;
+  donationForm: FormGroup;
+  amountsGroup: FormGroup;
+  giftAidGroup: FormGroup;
+  paymentGroup: FormGroup;
+  marketingGroup: FormGroup;
 
   maximumDonationAmount: number;
   noPsps = false;
@@ -130,7 +130,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     public dialog: MatDialog,
     private donationService: DonationService,
     @Inject(ElementRef) private elRef: ElementRef,
-    private formBuilder: UntypedFormBuilder,
+    private formBuilder: FormBuilder,
     private navigationService: NavigationService,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
@@ -167,10 +167,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.setCampaignBasedVars();
 
     const formGroups: {
-      amounts: UntypedFormGroup,   // Matching reservation happens at the end of this group.
-      giftAid: UntypedFormGroup,
-      marketing: UntypedFormGroup,
-      payment: UntypedFormGroup,  // Always present now we're Stripe-only.
+      amounts: FormGroup,   // Matching reservation happens at the end of this group.
+      giftAid: FormGroup,
+      marketing: FormGroup,
+      payment: FormGroup,  // Always present now we're Stripe-only.
     } = {
       amounts: this.formBuilder.group({
         donationAmount: [null, [
@@ -989,7 +989,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
 
-  private preparePaymentRequestButton(donation: Donation, paymentGroup: UntypedFormGroup) {
+  private preparePaymentRequestButton(donation: Donation, paymentGroup: FormGroup) {
     if (this.skipPRBs) {
       return;
     }
