@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { SearchService } from '../search.service';
@@ -14,10 +14,10 @@ export class CampaignSearchFormComponent implements OnInit {
   @Input() getDefaultSort: () => string;
   /** Whether to navigate to the full Explore page instead of searching in context. */
   @Input() jumpToExplore?: boolean;
-  searchForm: FormGroup;
+  searchForm: UntypedFormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private router: Router,
     public search: SearchService,
   ) {}
