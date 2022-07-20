@@ -90,7 +90,7 @@ export class BiggiveCampaignCardTest {
             <div class="meta-item">
              <span class="label">Helping</span>
              <span class="text">
-               {this.getCategoryIcons().map((categoryIcon) =>
+               {this.getBeneficiaryIcons().map((categoryIcon) =>
                  <i class={categoryIcon}></i>
                )}
              </span>

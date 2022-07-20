@@ -65,7 +65,7 @@ export class BiggiveCampaignCardTest {
               h("span", { class: "text" }, this.getCategoryIcons().map((categoryIcon) => h("i", { class: categoryIcon })))),
             h("div", { class: "meta-item" },
               h("span", { class: "label" }, "Helping"),
-              h("span", { class: "text" }, this.getCategoryIcons().map((categoryIcon) => h("i", { class: categoryIcon }))))),
+              h("span", { class: "text" }, this.getBeneficiaryIcons().map((categoryIcon) => h("i", { class: categoryIcon }))))),
           h("div", { class: "meta-wrap style-3" },
             h("div", { class: "meta-item" },
               h("span", { class: "label" },

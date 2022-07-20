@@ -80,3 +80,33 @@ More information about publishing and distribution is available at https://stenc
 <sample-component title="Test title" meta="Test meta" call-to-action-url="https://www.google.com" call-to-action-text="Go to Google"></sample-component>
 ```
 
+
+
+### Styled Component
+The first styled components are available
+- biggive-grid
+- biggive-campaign-card-test
+
+These can be added to an HTML page with the following code:
+```
+  <biggive-grid>
+
+    <biggive-campaign-card-test
+      column="1-4"
+      banner="/assets/img/banner.png"
+      days-remaining="50"
+      target="50000"
+      organisation-name="Ardent Theatre Company"
+      campaign-type="Match Funded"
+      campaign-title="Strike! A play by Tracy Ryan"
+      category-icons="theater-masks|book"
+      beneficiary-icons="universal-access"
+      match-funds-remaining="17424"
+      total-funds-raised="15424"
+      call-to-action-url="#"
+      call-to-action-label="Donate"
+      ></biggive-campaign-card-test>
+
+  </biggive-grid>
+```
+
