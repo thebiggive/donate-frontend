@@ -1,5 +1,7 @@
 {
   "entries": [
+    "./components/biggive-campaign-card-test/biggive-campaign-card-test.js",
+    "./components/biggive-grid/biggive-grid.js",
     "./components/sample-component/sample-component.js",
     "./components/sample-component-child/sample-component-child.js"
   ],

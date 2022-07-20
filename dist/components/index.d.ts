@@ -1,4 +1,6 @@
 /* BigGive custom elements */
+export { BiggiveCampaignCardTest as BiggiveCampaignCardTest } from '../types/components/biggive-campaign-card-test/biggive-campaign-card-test';
+export { BiggiveGrid as BiggiveGrid } from '../types/components/biggive-grid/biggive-grid';
 export { SampleComponent as SampleComponent } from '../types/components/sample-component/sample-component';
 export { SampleComponentChild as SampleComponentChild } from '../types/components/sample-component-child/sample-component-child';
 
