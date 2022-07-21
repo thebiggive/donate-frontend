@@ -3,7 +3,7 @@
   <form role="search" (ngSubmit)="submit()" [formGroup]="searchForm">
     <mat-form-field class="b-w-100" color="primary">
       <mat-label for="term">Charity or project</mat-label>
-      <input #term matInput [value]="search.selected?.term || ''" formControlName="term" id="term" type="text">
+      <input #term matInput [value]="search.selected.term || ''" formControlName="term" id="term" type="text">
     </mat-form-field>
 
     <button

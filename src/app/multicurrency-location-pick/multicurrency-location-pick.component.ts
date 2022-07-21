@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { countries, Country } from 'country-code-lookup';
 
@@ -14,11 +14,11 @@ import { DonationService } from '../donation.service';
 export class MulticurrencyLocationPickComponent implements OnInit {
   campaigns: CampaignSummary[];
   countryOptions: Country[];
-  pickForm: FormGroup;
+  pickForm: UntypedFormGroup;
 
   constructor(
     private donationService: DonationService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private route: ActivatedRoute,
     private router: Router,
   ) {}
