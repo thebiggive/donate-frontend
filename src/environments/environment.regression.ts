@@ -10,7 +10,7 @@ export const environment: Environment = {
   production: false,
   productionLike: true,
   redirectHomepageToChirstmasChallenge: false,
-  apiUriPrefix: 'https://regtest1-biggive.cs100.force.com',
+  apiUriPrefix: 'https://regtest1-biggive.cs160.force.com',
   donateGlobalUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
   donateUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
   donationsApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',
