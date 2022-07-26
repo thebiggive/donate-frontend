@@ -1,7 +1,7 @@
 {
-  "name": "big-give-web-components",
+  "name": "@biggive/components",
   "version": "0.0.1",
-  "description": "Stencil Component Starter",
+  "description": "Big Give Components",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "es2015": "dist/esm/index.mjs",
@@ -9,10 +9,10 @@
   "types": "dist/types/index.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
-  "unpkg": "dist/big-give/big-give.esm.js",
+  "unpkg": "dist/biggive/biggive.esm.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ionic-team/stencil-component-starter.git"
+    "url": "https://github.com/thebiggive/components.git"
   },
   "files": [
     "dist/",
@@ -26,6 +26,11 @@
     "generate": "stencil generate"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/free-brands-svg-icons": "^6.1.2",
+    "@fortawesome/free-solid-svg-icons": "^6.1.2",
+    "@fortawesome/pro-duotone-svg-icons": "^6.1.2",
+    "@fortawesome/pro-solid-svg-icons": "^6.1.2",
     "@stencil/core": "^2.13.0"
   },
   "devDependencies": {

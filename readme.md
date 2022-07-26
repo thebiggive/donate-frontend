@@ -11,10 +11,12 @@ The project is based on a sample project from https://stenciljs.com/docs/getting
 ```bash
 git clone https://github.com/thebiggive/components.git
 cd components
-git remote rm origin
 ```
 
 ### Install StencilJS dependencies as defined in package.json
+
+Set `FONTAWESOME_NPM_AUTH_TOKEN` in your environment so pro packages can be installed, and:
+
 ```bash
 npm install
 npm start
@@ -23,9 +25,6 @@ npm start
 ### Make any required changes to the sample web components
 
 The web components are configured in /src/components
-There are currently two components
-- sample-component
-- sample-component-child
 
 The /src/index.html file can be used as a test area for displaying the web components in a static HTML page.
 
@@ -33,7 +32,6 @@ The /src/index.html file can be used as a test area for displaying the web compo
 ```bash
 npm run build
 ```
-
 
 
 ## Outputs
@@ -70,14 +68,12 @@ More information about publishing and distribution is available at https://stenc
 
 ### Include the following script tag in the HTML head
 ```
-<script type='module' src='https://unpkg.com/big-give-web-components@0.0.1/dist/big-give/big-give.esm.js'></script>
+<script type='module' src='https://unpkg.com/@biggive/components@0.0.1/dist/biggive/biggive.esm.js'></script>
 ```
 
 ### Include the markup for the sample web component
 ```
-<sample-component title="Test title" meta="Test meta" call-to-action-url="https://www.google.com" call-to-action-text="Go to Google"></sample-component>
-<sample-component title="Test title" meta="Test meta" call-to-action-url="https://www.google.com" call-to-action-text="Go to Google"></sample-component>
-<sample-component title="Test title" meta="Test meta" call-to-action-url="https://www.google.com" call-to-action-text="Go to Google"></sample-component>
+<demo-campaign-cards></demo-campaign-cards>
 ```
 
 
@@ -85,27 +81,26 @@ More information about publishing and distribution is available at https://stenc
 ### Styled Component
 The first styled components are available
 - biggive-grid
-- biggive-campaign-card-test
+- biggive-campaign-card
 
 These can be added to an HTML page with the following code:
 ```
   <biggive-grid>
 
-    <biggive-campaign-card-test
-      column="1-4"
+    <biggive-campaign-card
       banner="/assets/img/banner.png"
-      days-remaining="50"
-      target="50000"
+      days-remaining={50}
+      target={50000}
       organisation-name="Ardent Theatre Company"
       campaign-type="Match Funded"
       campaign-title="Strike! A play by Tracy Ryan"
-      category-icons="theater-masks|book"
-      beneficiary-icons="universal-access"
-      match-funds-remaining="17424"
-      total-funds-raised="15424"
+      categories="Arts/Culture/Heritage|Environment/Conservation|Health/Wellbeing"
+      beneficiaries="General Public/Humankind"
+      match-funds-remaining={17424}
+      total-funds-raised={15424}
       call-to-action-url="#"
       call-to-action-label="Donate"
-      ></biggive-campaign-card-test>
+    />
 
   </biggive-grid>
 ```
