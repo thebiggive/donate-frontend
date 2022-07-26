@@ -1,7 +1,7 @@
 {
-  "name": "big-give-web-components",
+  "name": "@biggive/components",
   "version": "0.0.1",
-  "description": "Stencil Component Starter",
+  "description": "Big Give Components",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "es2015": "dist/esm/index.mjs",
@@ -12,7 +12,7 @@
   "unpkg": "dist/biggive/biggive.esm.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ionic-team/stencil-component-starter.git"
+    "url": "https://github.com/thebiggive/components.git"
   },
   "files": [
     "dist/",

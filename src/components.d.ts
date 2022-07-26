@@ -24,16 +24,6 @@ export namespace Components {
     }
     interface DemoCampaignCards {
     }
-    interface SampleComponent {
-        "callToActionText": string;
-        "callToActionUrl": string;
-        "label": string;
-        "meta": string;
-    }
-    interface SampleComponentChild {
-        "text": string;
-        "url": string;
-    }
 }
 declare global {
     interface HTMLBiggiveCampaignCardElement extends Components.BiggiveCampaignCard, HTMLStencilElement {
@@ -54,24 +44,10 @@ declare global {
         prototype: HTMLDemoCampaignCardsElement;
         new (): HTMLDemoCampaignCardsElement;
     };
-    interface HTMLSampleComponentElement extends Components.SampleComponent, HTMLStencilElement {
-    }
-    var HTMLSampleComponentElement: {
-        prototype: HTMLSampleComponentElement;
-        new (): HTMLSampleComponentElement;
-    };
-    interface HTMLSampleComponentChildElement extends Components.SampleComponentChild, HTMLStencilElement {
-    }
-    var HTMLSampleComponentChildElement: {
-        prototype: HTMLSampleComponentChildElement;
-        new (): HTMLSampleComponentChildElement;
-    };
     interface HTMLElementTagNameMap {
         "biggive-campaign-card": HTMLBiggiveCampaignCardElement;
         "biggive-grid": HTMLBiggiveGridElement;
         "demo-campaign-cards": HTMLDemoCampaignCardsElement;
-        "sample-component": HTMLSampleComponentElement;
-        "sample-component-child": HTMLSampleComponentChildElement;
     }
 }
 declare namespace LocalJSX {
@@ -93,22 +69,10 @@ declare namespace LocalJSX {
     }
     interface DemoCampaignCards {
     }
-    interface SampleComponent {
-        "callToActionText"?: string;
-        "callToActionUrl"?: string;
-        "label"?: string;
-        "meta"?: string;
-    }
-    interface SampleComponentChild {
-        "text"?: string;
-        "url"?: string;
-    }
     interface IntrinsicElements {
         "biggive-campaign-card": BiggiveCampaignCard;
         "biggive-grid": BiggiveGrid;
         "demo-campaign-cards": DemoCampaignCards;
-        "sample-component": SampleComponent;
-        "sample-component-child": SampleComponentChild;
     }
 }
 export { LocalJSX as JSX };
@@ -118,8 +82,6 @@ declare module "@stencil/core" {
             "biggive-campaign-card": LocalJSX.BiggiveCampaignCard & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardElement>;
             "biggive-grid": LocalJSX.BiggiveGrid & JSXBase.HTMLAttributes<HTMLBiggiveGridElement>;
             "demo-campaign-cards": LocalJSX.DemoCampaignCards & JSXBase.HTMLAttributes<HTMLDemoCampaignCardsElement>;
-            "sample-component": LocalJSX.SampleComponent & JSXBase.HTMLAttributes<HTMLSampleComponentElement>;
-            "sample-component-child": LocalJSX.SampleComponentChild & JSXBase.HTMLAttributes<HTMLSampleComponentChildElement>;
         }
     }
 }
