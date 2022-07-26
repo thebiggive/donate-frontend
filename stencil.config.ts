@@ -6,6 +6,10 @@ export const config: Config = {
     {
       type: 'dist',
       esmLoaderPath: '../loader',
+      copy: [
+        { src: 'assets/fonts', warn: true },
+        { src: 'assets/img', warn: true },
+      ],
     },
     {
       type: 'dist-custom-elements',
