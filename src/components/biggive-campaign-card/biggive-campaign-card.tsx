@@ -12,7 +12,7 @@ export class BiggiveCampaignCard {
   /**
    * @param {string} banner Full URL of a banner image.
    */
-  @Prop() banner: string = null;
+  @Prop() banner: string = '';
 
   /**
    * @param {string} number (Ceiling of) whole number of days until campaign end.
@@ -43,12 +43,12 @@ export class BiggiveCampaignCard {
   /**
    * @param {string} beneficiaries Pipe (|) -separated list of full category labels.
    */
-  @Prop() beneficiaries: string = null;
+  @Prop() beneficiaries: string = '';
 
   /**
    * @param {string} categories Pipe (|) -separated list of full category labels.
    */
-  @Prop() categories: string = null;
+  @Prop() categories: string = '';
 
   /**
    * @param {number} totalFundsRaised Match funds not yet used or reserved, in major unit of currency
@@ -73,11 +73,11 @@ export class BiggiveCampaignCard {
   @Prop() callToActionLabel: string = null;
 
   private getBeneficiaryIcons(): IconDefinition[] {
-    return this.beneficiaries.split('|').map(beneficiary => CampaignGroupsService.getBeneficiaryIcon(beneficiary));
+    return this.beneficiaries.length > 0 ? this.beneficiaries.split('|').map(beneficiary => CampaignGroupsService.getBeneficiaryIcon(beneficiary)) : [];
   }
 
   private getCategoryIcons(): IconDefinition[] {
-    return this.categories.split('|').map(category => CampaignGroupsService.getCategoryIcon(category));
+    return this.categories.length > 0 ? this.categories.split('|').map(category => CampaignGroupsService.getCategoryIcon(category)) : [];
   }
 
   private formatCurrency(num) {

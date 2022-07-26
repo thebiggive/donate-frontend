@@ -7,5 +7,8 @@ describe('campaign-cards', () => {
 
     const element = await page.find('demo-campaign-cards');
     expect(element).toHaveClass('hydrated');
+
+    expect(page.find('demo-campaign-cards')).toBeTruthy();
+    expect((await page.findAll('demo-campaign-cards >>> biggive-campaign-card')).length).toBe(12);
   });
 });

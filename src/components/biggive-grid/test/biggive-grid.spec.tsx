@@ -10,7 +10,9 @@ describe('biggive-grid', () => {
     expect(page.root).toEqualHtml(`
       <biggive-grid>
         <mock:shadow-root>
-          <slot></slot>
+          <div class="grid">
+            <slot></slot>
+          </div>
         </mock:shadow-root>
       </biggive-grid>
     `);
