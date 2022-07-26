@@ -7,9 +7,18 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface BiggiveCampaignCard {
+        /**
+          * @param banner Full URL of a banner image.
+         */
         "banner": string;
         "beneficiaries": string;
+        /**
+          * @param callToActionLabel Text for the link to `callToActionUrl`.
+         */
         "callToActionLabel": string;
+        /**
+          * @param callToActionUrl Full URL of a call to action.
+         */
         "callToActionUrl": string;
         "campaignTitle": string;
         "campaignType": string;
@@ -18,6 +27,9 @@ export namespace Components {
         "matchFundsRemaining": number;
         "organisationName": string;
         "target": number;
+        /**
+          * @param totalFundsRaised Total the campaign has raised so far including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP.
+         */
         "totalFundsRaised": number;
     }
     interface BiggiveGrid {
@@ -52,9 +64,18 @@ declare global {
 }
 declare namespace LocalJSX {
     interface BiggiveCampaignCard {
+        /**
+          * @param banner Full URL of a banner image.
+         */
         "banner"?: string;
         "beneficiaries"?: string;
+        /**
+          * @param callToActionLabel Text for the link to `callToActionUrl`.
+         */
         "callToActionLabel"?: string;
+        /**
+          * @param callToActionUrl Full URL of a call to action.
+         */
         "callToActionUrl"?: string;
         "campaignTitle"?: string;
         "campaignType"?: string;
@@ -63,6 +84,9 @@ declare namespace LocalJSX {
         "matchFundsRemaining"?: number;
         "organisationName"?: string;
         "target"?: number;
+        /**
+          * @param totalFundsRaised Total the campaign has raised so far including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP.
+         */
         "totalFundsRaised"?: number;
     }
     interface BiggiveGrid {

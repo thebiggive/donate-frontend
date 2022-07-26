@@ -9,32 +9,48 @@ import { CampaignGroupsService } from '../../util/campaign-groups';
   shadow: true,
 })
 export class BiggiveCampaignCard {
-  @Prop({ mutable: true }) banner: string = null;
-  @Prop({ mutable: true }) daysRemaining: number = null;
-  @Prop({ mutable: true }) target: number = null;
-  @Prop({ mutable: true }) organisationName: string = null;
-  @Prop({ mutable: true }) campaignTitle: string = null;
-  @Prop({ mutable: true }) campaignType: string = null;
-  @Prop({ mutable: true }) categories: string = null;
-  @Prop({ mutable: true }) beneficiaries: string = null;
-  @Prop({ mutable: true }) matchFundsRemaining: number = null;
-  @Prop({ mutable: true }) totalFundsRaised: number = null;
-  @Prop({ mutable: true }) callToActionUrl: string = null;
-  @Prop({ mutable: true }) callToActionLabel: string = null;
+  /**
+   * @param {string} banner Full URL of a banner image.
+   */
+  @Prop() banner: string = null;
+  @Prop() daysRemaining: number = null;
+  @Prop() target: number = null;
+  @Prop() organisationName: string = null;
+  @Prop() campaignTitle: string = null;
+  @Prop() campaignType: string = null;
+  @Prop() categories: string = null;
+  @Prop() beneficiaries: string = null;
+  @Prop() matchFundsRemaining: number = null;
 
-  getBeneficiaryIcons(): IconDefinition[] {
+  /**
+   * @param {number} totalFundsRaised Total the campaign has raised so far including matching but excluding any
+   *                                  tax relief, in major unit of currency e.g. pounds GBP.
+   */
+  @Prop() totalFundsRaised: number = null;
+
+  /**
+   * @param {string} callToActionUrl Full URL of a call to action.
+   */
+  @Prop() callToActionUrl: string = null;
+
+  /**
+   * @param {string} callToActionLabel Text for the link to `callToActionUrl`.
+   */
+  @Prop() callToActionLabel: string = null;
+
+  private getBeneficiaryIcons(): IconDefinition[] {
     return this.beneficiaries.split('|').map(
       beneficiary => CampaignGroupsService.getBeneficiaryIcon(beneficiary)
     );
   }
 
-  getCategoryIcons(): IconDefinition[] {
+  private getCategoryIcons(): IconDefinition[] {
     return this.categories.split('|').map(
       category => CampaignGroupsService.getCategoryIcon(category)
     );
   }
 
-  formatCurrency( num ) {
+  private formatCurrency( num ) {
     if ( !isNaN(num) ) {
       return parseInt(num).toLocaleString();
     }
@@ -49,7 +65,7 @@ export class BiggiveCampaignCard {
 
         <div class="campaign-type"><span>{this.campaignType}</span></div>
 
-        {this.banner
+        {this.banner.length > 0
            ? <div class="image-wrap banner" style={{'background-image' : 'url(' + this.banner + ')'}}><img src={this.banner} class="banner"/></div>
            : null
         }
