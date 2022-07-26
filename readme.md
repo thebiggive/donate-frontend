@@ -69,15 +69,15 @@ npm add_user
 ```
 
 ### Publish
+
+Continuous Integration will automatically publish `main` to NPM, but you can also do it manually if necessary.
+
 ```bash
 npm publish --access=public
 ```
-The name of the NPM package and version number can be updated in the root package.json file. It's currently set to (big-give-web-components, 0.0.1)
+The name of the NPM package and version number can be updated in the root package.json file. It's currently set to (@biggive/components, 0.0.1)
 
 More information about publishing and distribution is available at https://stenciljs.com/docs/distribution
-
-
-
 
 ## Include components in web app
 
