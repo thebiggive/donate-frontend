@@ -1,5 +1,4 @@
-import { Component, h } from '@stencil/core';
-
+import { Component, getAssetPath, h } from '@stencil/core';
 @Component({
   tag: 'demo-campaign-cards',
   styleUrl: 'demo-campaign-cards.css',
@@ -11,7 +10,7 @@ export class DemoCampaignCards {
       <biggive-grid>
         {[...Array(12)].map(() => (
           <biggive-campaign-card
-            banner="./assets/img/banner.png"
+            banner={getAssetPath('/assets/images/banner.png')}
             days-remaining={50}
             target={50000}
             organisation-name="Ardent Theatre Company"

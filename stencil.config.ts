@@ -8,7 +8,7 @@ export const config: Config = {
       esmLoaderPath: '../loader',
       copy: [
         { src: 'assets/fonts', warn: true },
-        { src: 'assets/img', warn: true },
+        { src: 'assets/images', warn: true },
       ],
     },
     {
