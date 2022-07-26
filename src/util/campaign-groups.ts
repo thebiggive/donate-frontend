@@ -30,7 +30,7 @@ import { faUsers } from '@fortawesome/pro-duotone-svg-icons';
 import { faHeadSideMedical, faHomeHeart } from '@fortawesome/pro-solid-svg-icons';
 
 export class CampaignGroupsService {
-  static getBeneficiaries(): Array<{name: string, icon: IconDefinition}> {
+  static getBeneficiaries(): Array<{ name: string; icon: IconDefinition }> {
     return [
       {
         name: 'Children (3-18)',
@@ -79,7 +79,7 @@ export class CampaignGroupsService {
     ];
   }
 
-  static getCategories(): Array<{name: string, icon: IconDefinition}> {
+  static getCategories(): Array<{ name: string; icon: IconDefinition }> {
     return [
       {
         name: 'Animals',
@@ -161,18 +161,14 @@ export class CampaignGroupsService {
   }
 
   static getBeneficiaryIcon(beneficiary: string): IconDefinition {
-    const matchingItems = CampaignGroupsService.getBeneficiaries().filter(
-      ii => ii.name === beneficiary,
-    );
+    const matchingItems = CampaignGroupsService.getBeneficiaries().filter(ii => ii.name === beneficiary);
 
     // For an unknown/invalid beneficiary, show 'other' symbol.
     return matchingItems[0].icon || faPlus;
   }
 
   static getCategoryIcon(category: string): IconDefinition {
-    const matchingItems = CampaignGroupsService.getCategories().filter(
-      ii => ii.name === category,
-    );
+    const matchingItems = CampaignGroupsService.getCategories().filter(ii => ii.name === category);
 
     // For an unknown/invalid category, show 'other' symbol.
     return matchingItems[0]?.icon || faPlus;

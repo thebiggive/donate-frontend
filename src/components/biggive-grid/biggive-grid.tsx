@@ -5,23 +5,12 @@ import { Component, h } from '@stencil/core';
   styleUrl: 'biggive-grid.css',
   shadow: true,
 })
-
-
-
-
-
 export class BiggiveGrid {
-
-
-
   render() {
     return (
       <div class="grid">
-
-          <slot></slot>
-
+        <slot></slot>
       </div>
     );
   }
-
 }
