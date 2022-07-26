@@ -72,6 +72,8 @@ npm add_user
 
 Continuous Integration will automatically publish `main` to NPM, but you can also do it manually if necessary.
 
+(Once this repo gets closer to being stable, we can update the configuration to just publish new version tags.)
+
 ```bash
 npm publish --access=public
 ```
@@ -103,7 +105,7 @@ These can be added to an HTML page with the following code:
   <biggive-grid>
 
     <biggive-campaign-card
-      banner="/assets/img/banner.png"
+      banner="./assets/img/banner.png"
       days-remaining={50}
       target={50000}
       organisation-name="Ardent Theatre Company"

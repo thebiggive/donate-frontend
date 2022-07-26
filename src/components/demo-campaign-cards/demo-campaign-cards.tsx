@@ -11,7 +11,7 @@ export class DemoCampaignCards {
       <biggive-grid>
         {[...Array(12)].map(() => (
           <biggive-campaign-card
-            banner="/assets/img/banner.png"
+            banner="./assets/img/banner.png"
             days-remaining={50}
             target={50000}
             organisation-name="Ardent Theatre Company"
