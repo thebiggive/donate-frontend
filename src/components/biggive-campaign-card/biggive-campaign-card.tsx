@@ -3,6 +3,9 @@ import { Component, Prop, h } from '@stencil/core';
 
 import { CampaignGroupsService } from '../../util/campaign-groups';
 
+/**
+ * @todo Currency code for the campaign must be passed as a `@Prop`, not localised to the prospective donor.
+ */
 @Component({
   tag: 'biggive-campaign-card',
   styleUrls: ['biggive-campaign-card.css'],
