@@ -193,7 +193,7 @@ header h3 {
 }
 
 .icon {
-  height: 1em;
-  width: auto;
-  vertical-align: -.125em;
+  height: 1rem;
+  width: 2rem;
+  vertical-align: -.125rem;
 }

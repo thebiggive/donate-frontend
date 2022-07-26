@@ -161,7 +161,6 @@ export class CampaignGroupsService {
   }
 
   static getBeneficiaryIcon(beneficiary: string): IconDefinition {
-    console.log('trying to match', beneficiary)
     const matchingItems = CampaignGroupsService.getBeneficiaries().filter(
       ii => ii.name === beneficiary,
     );
