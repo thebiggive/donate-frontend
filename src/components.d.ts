@@ -6,7 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface BiggiveCampaignCardTest {
+    interface BiggiveCampaignCard {
         "banner": string;
         "beneficiaries": string;
         "callToActionLabel": string;
@@ -36,11 +36,11 @@ export namespace Components {
     }
 }
 declare global {
-    interface HTMLBiggiveCampaignCardTestElement extends Components.BiggiveCampaignCardTest, HTMLStencilElement {
+    interface HTMLBiggiveCampaignCardElement extends Components.BiggiveCampaignCard, HTMLStencilElement {
     }
-    var HTMLBiggiveCampaignCardTestElement: {
-        prototype: HTMLBiggiveCampaignCardTestElement;
-        new (): HTMLBiggiveCampaignCardTestElement;
+    var HTMLBiggiveCampaignCardElement: {
+        prototype: HTMLBiggiveCampaignCardElement;
+        new (): HTMLBiggiveCampaignCardElement;
     };
     interface HTMLBiggiveGridElement extends Components.BiggiveGrid, HTMLStencilElement {
     }
@@ -67,7 +67,7 @@ declare global {
         new (): HTMLSampleComponentChildElement;
     };
     interface HTMLElementTagNameMap {
-        "biggive-campaign-card-test": HTMLBiggiveCampaignCardTestElement;
+        "biggive-campaign-card": HTMLBiggiveCampaignCardElement;
         "biggive-grid": HTMLBiggiveGridElement;
         "demo-campaign-cards": HTMLDemoCampaignCardsElement;
         "sample-component": HTMLSampleComponentElement;
@@ -75,7 +75,7 @@ declare global {
     }
 }
 declare namespace LocalJSX {
-    interface BiggiveCampaignCardTest {
+    interface BiggiveCampaignCard {
         "banner"?: string;
         "beneficiaries"?: string;
         "callToActionLabel"?: string;
@@ -104,7 +104,7 @@ declare namespace LocalJSX {
         "url"?: string;
     }
     interface IntrinsicElements {
-        "biggive-campaign-card-test": BiggiveCampaignCardTest;
+        "biggive-campaign-card": BiggiveCampaignCard;
         "biggive-grid": BiggiveGrid;
         "demo-campaign-cards": DemoCampaignCards;
         "sample-component": SampleComponent;
@@ -115,7 +115,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "biggive-campaign-card-test": LocalJSX.BiggiveCampaignCardTest & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardTestElement>;
+            "biggive-campaign-card": LocalJSX.BiggiveCampaignCard & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardElement>;
             "biggive-grid": LocalJSX.BiggiveGrid & JSXBase.HTMLAttributes<HTMLBiggiveGridElement>;
             "demo-campaign-cards": LocalJSX.DemoCampaignCards & JSXBase.HTMLAttributes<HTMLDemoCampaignCardsElement>;
             "sample-component": LocalJSX.SampleComponent & JSXBase.HTMLAttributes<HTMLSampleComponentElement>;

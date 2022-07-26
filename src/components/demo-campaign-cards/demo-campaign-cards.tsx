@@ -10,7 +10,7 @@ export class DemoCampaignCards {
     return (
       <biggive-grid>
         {[...Array(12)].map(() =>
-          <biggive-campaign-card-test
+          <biggive-campaign-card
             banner="/assets/img/banner.png"
             days-remaining={50}
             target={50000}

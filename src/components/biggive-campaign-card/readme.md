@@ -32,8 +32,8 @@
 ### Graph
 ```mermaid
 graph TD;
-  demo-campaign-cards --> biggive-campaign-card-test
-  style biggive-campaign-card-test fill:#f9f,stroke:#333,stroke-width:4px
+  demo-campaign-cards --> biggive-campaign-card
+  style biggive-campaign-card fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

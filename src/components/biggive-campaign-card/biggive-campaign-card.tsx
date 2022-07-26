@@ -4,11 +4,11 @@ import { Component, Prop, h } from '@stencil/core';
 import { CampaignGroupsService } from '../../util/campaign-groups';
 
 @Component({
-  tag: 'biggive-campaign-card-test',
-  styleUrls: ['biggive-campaign-card-test.css'],
+  tag: 'biggive-campaign-card',
+  styleUrls: ['biggive-campaign-card.css'],
   shadow: true,
 })
-export class BiggiveCampaignCardTest {
+export class BiggiveCampaignCard {
   @Prop({ mutable: true }) banner: string = null;
   @Prop({ mutable: true }) daysRemaining: number = null;
   @Prop({ mutable: true }) target: number = null;
