@@ -22,6 +22,7 @@
     "build": "stencil build --docs",
     "start": "stencil build --dev --watch --serve --port 3939",
     "lint": "eslint src/**/*{.ts,.tsx}",
+    "lint:fix": "eslint --fix src/**/*{.ts,.tsx}",
     "test": "stencil test --spec --e2e --port 3939",
     "test.watch": "stencil test --spec --e2e --watchAll --port 3939",
     "generate": "stencil generate"
@@ -37,8 +38,11 @@
   "devDependencies": {
     "@stencil/eslint-plugin": "^0.4.0",
     "@types/jest": "^27.0.3",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "jest": "^27.4.5",
     "jest-cli": "^27.4.5",
+    "prettier": "2.7.1",
     "puppeteer": "^15.4.0"
   },
   "license": "MIT"
