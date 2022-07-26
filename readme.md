@@ -22,6 +22,21 @@ npm install
 npm start
 ```
 
+### Follow Stencil + repository conventions
+
+CI runs lint checks, but there are tools to help you follow the expected code style so you don't have
+to fix it later.
+
+In Visual Studio Code, you might find [this ESLint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+and [this Prettier one](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+helpful.
+
+We use both tools to ensure both consistent code style and adherence to Stencil recommended practice.
+
+Husky should also set you up a pre-commit hook that fixes anything it can automatically, and complains
+about anything else. If you don't appear to have this and had already installed packages before this
+feature was set up, run `npm install` again.
+
 ### Make any required changes to the sample web components
 
 The web components are configured in /src/components

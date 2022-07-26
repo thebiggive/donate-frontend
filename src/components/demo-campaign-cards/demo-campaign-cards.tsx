@@ -9,7 +9,7 @@ export class DemoCampaignCards {
   render() {
     return (
       <biggive-grid>
-        {[...Array(12)].map(() =>
+        {[...Array(12)].map(() => (
           <biggive-campaign-card
             banner="/assets/img/banner.png"
             days-remaining={50}
@@ -24,8 +24,8 @@ export class DemoCampaignCards {
             call-to-action-url="#"
             call-to-action-label="Donate"
           />
-        )}
+        ))}
       </biggive-grid>
-    )
+    );
   }
 }
