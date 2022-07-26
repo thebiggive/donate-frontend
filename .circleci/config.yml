@@ -29,6 +29,36 @@ jobs:
       - run: npm run lint
       - run: npm run test
 
+  publish:
+    docker:
+      - image: thebiggive/donate-frontend-ci:latest
+        auth:
+          username: $DOCKER_HUB_USERNAME
+          password: $DOCKER_HUB_ACCESS_TOKEN
+
+    working_directory: ~/components
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+
+      - run: npm install --quiet
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_PUBLISH_AUTH_TOKEN" > ~/components/.npmrc
+      - run:
+          name: Publish to npm
+          command: npm publish --access=public
+
 workflows:
   version: 2
   build:
@@ -41,3 +71,16 @@ workflows:
             - jira/notify:
                 job_type: build
                 environment_type: development
+      - publish:
+          filters:
+            branches:
+              only:
+                - main
+          context:
+            - docker-hub-creds
+            - jira
+            - npm-publish
+          post-steps:
+            - jira/notify:
+                job_type: deployment
+                environment_type: production
