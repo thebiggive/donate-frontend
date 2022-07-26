@@ -127,14 +127,14 @@ export function app() {
     });
   });
 
-  // Serve static files requested via /d/ from dist/browser/d - when deployed S3 serves these up to CloudFront
+  // Serve static files requested via /d/ from dist/browser/d - when deployed, S3 serves these up to CloudFront.
   server.use('/d', express.static(distFolder, {
-    immutable: true, // Everything in here should be named with an immutable hash
+    immutable: true, // Everything in here should be named with an immutable hash.
     maxAge: '1 year',
   }));
 
   server.use('/assets', express.static(`${distFolder}/assets`, {
-    maxAge: '1 day', // Assets should be served similarly but don't have name-hashes
+    maxAge: '1 day', // Assets should be served similarly but don't have name-hashes, so cache less.
   }));
 
   // All regular routes use the Universal engine
@@ -143,7 +143,7 @@ export function app() {
     // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
     // this key to work around `fileReplacements` ending index support in Angular 8.
     res.render(indexHtml, { req, providers: [
-      { provide: APP_BASE_HREF, useValue: req.baseUrl },
+      { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix },
       { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
     ]});
   });

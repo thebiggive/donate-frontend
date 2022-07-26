@@ -82,7 +82,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
     this.setSecondaryPropsAndRun(this.campaign);
 
-    let fundKey: StateKey<string>;
+    let fundKey: StateKey<Fund>;
     if (this.fundSlug) {
       fundKey = makeStateKey<Fund>(`fund-${this.fundSlug}`);
       this.fund = this.state.get<Fund | undefined>(fundKey, undefined);

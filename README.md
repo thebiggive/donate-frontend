@@ -120,12 +120,15 @@ We use ECS blue/green deploys for dynamically-routed app requests, which enables
 However we also want to support long caching and effective cache-busting with build hashes for built
 Angular JS & CSS files. We can't guarantee that somebody accessing a new ECS container would get the new
 version when requesting the static resources, so to ensure that deploys don't break requests for anybody
-while in progress, we serve static assets via S3 and everything else via an ALB in front of the ECS cluster.
+while in progress, we serve copied assets and built JS + CSS via S3, and everything else via an ALB in front
+of the ECS cluster.
 
 Deploys must therefore:
 
 * deploy to S3 by copying built files to S3 at `/d` and `/assets`; *then*
-* deploy to ECS, which will reference any updated file hashes on S3 by using `--deploy-url=/d/`
+* deploy to ECS, which will use a mix of `<base href="/d/">` and providing `APP_BASE_HREF` *without* the `/d/`
+  suffix to get everything working, referencing any updated file hashes in S3's `/d/` directory but with dynamic
+  routes having no such suffix.
 
 CloudFront is configured to route requests to the right place based on these prefixes.
 

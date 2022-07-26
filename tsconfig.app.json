@@ -1,5 +1,8 @@
 {
   "angularCompilerOptions": {
+    "extendedDiagnostics": {
+      "defaultCategory": "warning"
+    },
     "fullTemplateTypeCheck": true,
     "strictTemplates": true
   },
