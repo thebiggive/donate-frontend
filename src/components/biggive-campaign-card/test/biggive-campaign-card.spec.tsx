@@ -1,6 +1,9 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { BiggiveCampaignCard } from '../biggive-campaign-card';
 
+/**
+ * @todo Ideally we should test *all* `@Prop`s and basics of SVG FontAwesome icon rendering.
+ */
 describe('biggive-campaign-card', () => {
   it('renders', async () => {
     const page = await newSpecPage({
