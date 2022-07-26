@@ -72,7 +72,7 @@ More information about publishing and distribution is available at https://stenc
 
 ### Include the following script tag in the HTML head
 ```
-<script type='module' src='https://unpkg.com/big-give-web-components@0.0.1/dist/big-give/big-give.esm.js'></script>
+<script type='module' src='https://unpkg.com/big-give-web-components@0.0.1/dist/biggive/biggive.esm.js'></script>
 ```
 
 ### Include the markup for the sample web component

@@ -9,9 +9,6 @@ import { CampaignGroupsService } from '../../util/campaign-groups';
   shadow: true,
 })
 export class BiggiveCampaignCardTest {
-
-  @Prop({ mutable: true }) cols: number = 3;
-
   @Prop({ mutable: true }) banner: string = null;
   @Prop({ mutable: true }) daysRemaining: number = null;
   @Prop({ mutable: true }) target: number = null;
