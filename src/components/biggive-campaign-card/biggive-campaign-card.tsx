@@ -13,13 +13,47 @@ export class BiggiveCampaignCard {
    * @param {string} banner Full URL of a banner image.
    */
   @Prop() banner: string = null;
+
+  /**
+   * @param {string} number (Ceiling of) whole number of days until campaign end.
+   */
   @Prop() daysRemaining: number = null;
+
+  /**
+   * @param {number} totalFundsRaised Target for the campaign including matching but excluding any
+   *                                        tax relief, in major unit of currency e.g. pounds GBP.
+   */
   @Prop() target: number = null;
+
+  /**
+   * @param {string} organisationName Display name of the charity or non-profit.
+   */
   @Prop() organisationName: string = null;
+
+  /**
+   * @param {string} organisationName Display name of the charity's specific time-bound fundraising campaign.
+   */
   @Prop() campaignTitle: string = null;
+
+  /**
+   * @param {string} campaignType e.g. "Match Funded".
+   */
   @Prop() campaignType: string = null;
-  @Prop() categories: string = null;
+
+  /**
+   * @param {string} beneficiaries Pipe (|) -separated list of full category labels.
+   */
   @Prop() beneficiaries: string = null;
+
+  /**
+   * @param {string} categories Pipe (|) -separated list of full category labels.
+   */
+  @Prop() categories: string = null;
+
+  /**
+   * @param {number} totalFundsRaised Match funds not yet used or reserved, in major unit of currency
+   *                                        e.g. pounds GBP.
+   */
   @Prop() matchFundsRemaining: number = null;
 
   /**
