@@ -1,12 +1,12 @@
+import { IconDefinition } from '@fortawesome/free-brands-svg-icons';
 import { Component, Prop, h } from '@stencil/core';
+
+import { CampaignGroupsService } from '../../util/campaign-groups';
 
 @Component({
   tag: 'biggive-campaign-card-test',
-  styleUrls: [
-              'biggive-campaign-card-test.css',
-              '../../assets/fonts/fontawesome/css/all.css'
-             ],
-  shadow: true
+  styleUrls: ['biggive-campaign-card-test.css'],
+  shadow: true,
 })
 export class BiggiveCampaignCardTest {
 
@@ -18,28 +18,23 @@ export class BiggiveCampaignCardTest {
   @Prop({ mutable: true }) organisationName: string = null;
   @Prop({ mutable: true }) campaignTitle: string = null;
   @Prop({ mutable: true }) campaignType: string = null;
-  @Prop({ mutable: true }) categoryIcons: string = null;
-  @Prop({ mutable: true }) beneficiaryIcons: string = null;
+  @Prop({ mutable: true }) categories: string = null;
+  @Prop({ mutable: true }) beneficiaries: string = null;
   @Prop({ mutable: true }) matchFundsRemaining: number = null;
   @Prop({ mutable: true }) totalFundsRaised: number = null;
   @Prop({ mutable: true }) callToActionUrl: string = null;
   @Prop({ mutable: true }) callToActionLabel: string = null;
 
-  
-  getCategoryIcons() {
-    var classes = this.categoryIcons.split('|');
-    for ( var prop in classes ) {
-      classes[prop] = 'fa fa-' + classes[prop];
-    }
-    return classes;
+  getBeneficiaryIcons(): IconDefinition[] {
+    return this.beneficiaries.split('|').map(
+      beneficiary => CampaignGroupsService.getBeneficiaryIcon(beneficiary)
+    );
   }
 
-  getBeneficiaryIcons() {
-    var classes = this.beneficiaryIcons.split('|');
-    for ( var prop in classes ) {
-      classes[prop] = 'fa fa-' + classes[prop];
-    }
-    return classes;
+  getCategoryIcons(): IconDefinition[] {
+    return this.categories.split('|').map(
+      category => CampaignGroupsService.getCategoryIcon(category)
+    );
   }
 
   formatCurrency( num ) {
@@ -48,7 +43,6 @@ export class BiggiveCampaignCardTest {
     }
     return num;
   }
- 
 
   render() {
     return (
@@ -82,16 +76,20 @@ export class BiggiveCampaignCardTest {
             <div class="meta-item">
               <span class="label">Categories</span>
               <span class="text">
-               {this.getCategoryIcons().map((categoryIcon) =>
-                 <i class={categoryIcon}></i>
-               )}
+                {this.getCategoryIcons().map((iconDefinition: IconDefinition) =>
+                  <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
+                    <path d={iconDefinition.icon[4].toString()} />
+                  </svg>
+                )}
               </span>
             </div>
             <div class="meta-item">
              <span class="label">Helping</span>
              <span class="text">
-               {this.getBeneficiaryIcons().map((categoryIcon) =>
-                 <i class={categoryIcon}></i>
+               {this.getBeneficiaryIcons().map((iconDefinition) =>
+                 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
+                   <path d={iconDefinition.icon[4].toString()}/>
+                 </svg>
                )}
              </span>
             </div>
@@ -106,19 +104,15 @@ export class BiggiveCampaignCardTest {
              <span class="label">Total<br/>Funds Received</span>
              <span class="text">&pound;{this.formatCurrency(this.totalFundsRaised)}</span>
             </div>
-
-
-
-
           </div>
 
           <div class="button-wrap">
             <a href={this.callToActionUrl} class="call-to-action">{this.callToActionLabel}</a>
-          </div>  
+          </div>
 
         </div>
 
-        
+
       </div>
       </div>
     );

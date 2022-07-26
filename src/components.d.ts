@@ -8,12 +8,12 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface BiggiveCampaignCardTest {
         "banner": string;
-        "beneficiaryIcons": string;
+        "beneficiaries": string;
         "callToActionLabel": string;
         "callToActionUrl": string;
         "campaignTitle": string;
         "campaignType": string;
-        "categoryIcons": string;
+        "categories": string;
         "cols": number;
         "daysRemaining": number;
         "matchFundsRemaining": number;
@@ -69,12 +69,12 @@ declare global {
 declare namespace LocalJSX {
     interface BiggiveCampaignCardTest {
         "banner"?: string;
-        "beneficiaryIcons"?: string;
+        "beneficiaries"?: string;
         "callToActionLabel"?: string;
         "callToActionUrl"?: string;
         "campaignTitle"?: string;
         "campaignType"?: string;
-        "categoryIcons"?: string;
+        "categories"?: string;
         "cols"?: number;
         "daysRemaining"?: number;
         "matchFundsRemaining"?: number;

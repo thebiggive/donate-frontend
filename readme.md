@@ -11,10 +11,12 @@ The project is based on a sample project from https://stenciljs.com/docs/getting
 ```bash
 git clone https://github.com/thebiggive/components.git
 cd components
-git remote rm origin
 ```
 
 ### Install StencilJS dependencies as defined in package.json
+
+Set `FONTAWESOME_NPM_AUTH_TOKEN` in your environment so pro packages can be installed, and:
+
 ```bash
 npm install
 npm start
