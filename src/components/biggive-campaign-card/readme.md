@@ -7,20 +7,20 @@
 
 ## Properties
 
-| Property              | Attribute               | Description | Type     | Default |
-| --------------------- | ----------------------- | ----------- | -------- | ------- |
-| `banner`              | `banner`                |             | `string` | `''`    |
-| `beneficiaries`       | `beneficiaries`         |             | `string` | `''`    |
-| `callToActionLabel`   | `call-to-action-label`  |             | `string` | `null`  |
-| `callToActionUrl`     | `call-to-action-url`    |             | `string` | `null`  |
-| `campaignTitle`       | `campaign-title`        |             | `string` | `null`  |
-| `campaignType`        | `campaign-type`         |             | `string` | `null`  |
-| `categories`          | `categories`            |             | `string` | `''`    |
-| `daysRemaining`       | `days-remaining`        |             | `number` | `null`  |
-| `matchFundsRemaining` | `match-funds-remaining` |             | `number` | `null`  |
-| `organisationName`    | `organisation-name`     |             | `string` | `null`  |
-| `target`              | `target`                |             | `number` | `null`  |
-| `totalFundsRaised`    | `total-funds-raised`    |             | `number` | `null`  |
+| Property              | Attribute               | Description | Type       | Default |
+| --------------------- | ----------------------- | ----------- | ---------- | ------- |
+| `banner`              | `banner`                |             | `string`   | `''`    |
+| `beneficiaries`       | --                      |             | `string[]` | `[]`    |
+| `callToActionLabel`   | `call-to-action-label`  |             | `string`   | `null`  |
+| `callToActionUrl`     | `call-to-action-url`    |             | `string`   | `null`  |
+| `campaignTitle`       | `campaign-title`        |             | `string`   | `null`  |
+| `campaignType`        | `campaign-type`         |             | `string`   | `null`  |
+| `categories`          | --                      |             | `string[]` | `[]`    |
+| `daysRemaining`       | `days-remaining`        |             | `number`   | `null`  |
+| `matchFundsRemaining` | `match-funds-remaining` |             | `number`   | `null`  |
+| `organisationName`    | `organisation-name`     |             | `string`   | `null`  |
+| `target`              | `target`                |             | `number`   | `null`  |
+| `totalFundsRaised`    | `total-funds-raised`    |             | `number`   | `null`  |
 
 
 ## Dependencies

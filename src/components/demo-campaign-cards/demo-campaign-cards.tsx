@@ -16,8 +16,8 @@ export class DemoCampaignCards {
             organisation-name="Ardent Theatre Company"
             campaign-type="Match Funded"
             campaign-title="Strike! A play by Tracy Ryan"
-            categories="Arts/Culture/Heritage|Environment/Conservation|Health/Wellbeing"
-            beneficiaries="General Public/Humankind"
+            categories={['Arts/Culture/Heritage', 'Environment/Conservation', 'Health/Wellbeing']}
+            beneficiaries={['General Public/Humankind']}
             match-funds-remaining={17424}
             total-funds-raised={15424}
             call-to-action-url="#"

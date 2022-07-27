@@ -44,14 +44,14 @@ export class BiggiveCampaignCard {
   @Prop() campaignType: string = null;
 
   /**
-   * @param {string} beneficiaries Pipe (|) -separated list of full category labels.
+   * @param {string} beneficiaries Array of full beneficiary labels.
    */
-  @Prop() beneficiaries: string = '';
+  @Prop() beneficiaries: string[] = [];
 
   /**
-   * @param {string} categories Pipe (|) -separated list of full category labels.
+   * @param {string} categories Array of full category labels.
    */
-  @Prop() categories: string = '';
+  @Prop() categories: string[] = [];
 
   /**
    * @param {number} totalFundsRaised Match funds not yet used or reserved, in major unit of currency
@@ -76,11 +76,11 @@ export class BiggiveCampaignCard {
   @Prop() callToActionLabel: string = null;
 
   private getBeneficiaryIcons(): IconDefinition[] {
-    return this.beneficiaries.length > 0 ? this.beneficiaries.split('|').map(beneficiary => CampaignGroupsService.getBeneficiaryIcon(beneficiary)) : [];
+    return this.beneficiaries.map(beneficiary => CampaignGroupsService.getBeneficiaryIcon(beneficiary));
   }
 
   private getCategoryIcons(): IconDefinition[] {
-    return this.categories.length > 0 ? this.categories.split('|').map(category => CampaignGroupsService.getCategoryIcon(category)) : [];
+    return this.categories.map(category => CampaignGroupsService.getCategoryIcon(category));
   }
 
   private formatCurrency(num) {

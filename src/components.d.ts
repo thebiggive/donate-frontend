@@ -12,9 +12,9 @@ export namespace Components {
          */
         "banner": string;
         /**
-          * @param beneficiaries Pipe (|) -separated list of full category labels.
+          * @param beneficiaries Array of full beneficiary labels.
          */
-        "beneficiaries": string;
+        "beneficiaries": string[];
         /**
           * @param callToActionLabel Text for the link to `callToActionUrl`.
          */
@@ -32,9 +32,9 @@ export namespace Components {
          */
         "campaignType": string;
         /**
-          * @param categories Pipe (|) -separated list of full category labels.
+          * @param categories Array of full category labels.
          */
-        "categories": string;
+        "categories": string[];
         /**
           * @param number (Ceiling of) whole number of days until campaign end.
          */
@@ -93,9 +93,9 @@ declare namespace LocalJSX {
          */
         "banner"?: string;
         /**
-          * @param beneficiaries Pipe (|) -separated list of full category labels.
+          * @param beneficiaries Array of full beneficiary labels.
          */
-        "beneficiaries"?: string;
+        "beneficiaries"?: string[];
         /**
           * @param callToActionLabel Text for the link to `callToActionUrl`.
          */
@@ -113,9 +113,9 @@ declare namespace LocalJSX {
          */
         "campaignType"?: string;
         /**
-          * @param categories Pipe (|) -separated list of full category labels.
+          * @param categories Array of full category labels.
          */
-        "categories"?: string;
+        "categories"?: string[];
         /**
           * @param number (Ceiling of) whole number of days until campaign end.
          */
