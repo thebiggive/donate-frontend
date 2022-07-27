@@ -8,7 +8,7 @@ import { CampaignGroupsService } from '../../util/campaign-groups';
  */
 @Component({
   tag: 'biggive-campaign-card',
-  styleUrls: ['biggive-campaign-card.scss'],
+  styleUrl: 'biggive-campaign-card.scss',
   shadow: true,
 })
 export class BiggiveCampaignCard {
