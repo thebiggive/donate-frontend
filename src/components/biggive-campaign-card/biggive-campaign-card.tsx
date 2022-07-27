@@ -13,65 +13,64 @@ import { CampaignGroupsService } from '../../util/campaign-groups';
 })
 export class BiggiveCampaignCard {
   /**
-   * @param {string} banner Full URL of a banner image.
+   * Full URL of a banner image.
    */
   @Prop() banner: string = '';
 
   /**
-   * @param {string} number (Ceiling of) whole number of days until campaign end.
+   * (Ceiling of) whole number of days until campaign end.
    */
   @Prop() daysRemaining: number = null;
 
   /**
-   * @param {number} totalFundsRaised Target for the campaign including matching but excluding any
-   *                                        tax relief, in major unit of currency e.g. pounds GBP.
+   * Target for the campaign including matching but excluding any
+   * tax relief, in major unit of currency e.g. pounds GBP.
    */
   @Prop() target: number = null;
 
   /**
-   * @param {string} organisationName Display name of the charity or non-profit.
+   * Display name of the charity or non-profit.
    */
   @Prop() organisationName: string = null;
 
   /**
-   * @param {string} organisationName Display name of the charity's specific time-bound fundraising campaign.
+   * Display name of the charity's specific time-bound fundraising campaign.
    */
   @Prop() campaignTitle: string = null;
 
   /**
-   * @param {string} campaignType e.g. "Match Funded".
+   * e.g. "Match Funded".
    */
   @Prop() campaignType: string = null;
 
   /**
-   * @param {string} beneficiaries Array of full beneficiary labels.
+   * Array of full beneficiary labels.
    */
   @Prop() beneficiaries: string[] = [];
 
   /**
-   * @param {string} categories Array of full category labels.
+   * Array of full category labels.
    */
   @Prop() categories: string[] = [];
 
   /**
-   * @param {number} totalFundsRaised Match funds not yet used or reserved, in major unit of currency
-   *                                        e.g. pounds GBP.
+   * Match funds not yet used or reserved, in major unit of currency e.g. pounds GBP.
    */
   @Prop() matchFundsRemaining: number = null;
 
   /**
-   * @param {number} totalFundsRaised Total the campaign has raised so far including matching but excluding any
-   *                                  tax relief, in major unit of currency e.g. pounds GBP.
+   * Total the campaign has raised so far including matching but excluding any
+   * tax relief, in major unit of currency e.g. pounds GBP.
    */
   @Prop() totalFundsRaised: number = null;
 
   /**
-   * @param {string} callToActionUrl Full URL of a call to action.
+   * Full URL of a call to action.
    */
   @Prop() callToActionUrl: string = null;
 
   /**
-   * @param {string} callToActionLabel Text for the link to `callToActionUrl`.
+   * Text for the link to `callToActionUrl`.
    */
   @Prop() callToActionLabel: string = null;
 
