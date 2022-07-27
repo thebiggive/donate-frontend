@@ -66,7 +66,9 @@ For now:
   folder as the app's own images. This is the approach taken on [this proof of concept branch](https://github.com/thebiggive/donate-frontend/tree/COM-5-proof-of-concept).
   Should we find managing image assets messy in apps generally, an alternative approach we might
   try is importing images to component style and adding [`@rollup/plugin-image`](https://github.com/rollup/plugins/tree/master/packages/image/#readme)
-  to Stencil's build config.
+  to Stencil's build config. Or if there are only a few, we could also investigate
+  whether `assetsDirs` on a `@Component` folds in what's needed in a way that works
+  in Angular et al.
 
 ### Make any required changes to the sample web components
 
