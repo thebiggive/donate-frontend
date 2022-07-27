@@ -18,6 +18,19 @@ import { COUNTRY_CODE } from './src/app/country-code.token';
 import { environment } from './src/environments/environment';
 import { GetSiteControlService } from './src/app/getsitecontrol.service';
 
+const apiHost = (new URL(environment.apiUriPrefix)).host;
+const donationsApiHost = (new URL(environment.donationsApiPrefix)).host;
+const donateGlobalHost = (new URL(environment.donateGlobalUriPrefix)).host;
+const donateHost = (new URL(environment.donateUriPrefix)).host;
+
+function getAppBaseHref(requestHost: string) {
+  if (requestHost === donateGlobalHost) {
+    return environment.donateGlobalUriPrefix;
+  }
+
+  return environment.donateUriPrefix;
+}
+
 // The Express app is exported so that it can be used by serverless Functions.
 export function app() {
   // Faster server renders w/ Prod mode (dev mode never needed)
@@ -28,11 +41,7 @@ export function app() {
   // Middleware
   server.use(compression());
   // Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
-  // https://github.com/helmetjs/helmet#reference
-  const apiHost = (new URL(environment.apiUriPrefix)).host;
-  const donationsApiHost = (new URL(environment.donationsApiPrefix)).host;
-  const donateGlobalHost = (new URL(environment.donateGlobalUriPrefix)).host;
-  const donateHost = (new URL(environment.donateUriPrefix)).host;
+  // https://github.com/helmetjs/helmet#reference  
   server.use(helmet({
     contentSecurityPolicy: {
       directives: {
@@ -143,7 +152,7 @@ export function app() {
     // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
     // this key to work around `fileReplacements` ending index support in Angular 8.
     res.render(indexHtml, { req, providers: [
-      { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix },
+      { provide: APP_BASE_HREF, useValue: getAppBaseHref(req.header('Host') || '') },
       { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
     ]});
   });
