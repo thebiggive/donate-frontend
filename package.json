@@ -1,6 +1,6 @@
 {
   "name": "@biggive/components",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Big Give Components",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@stencil/eslint-plugin": "^0.4.0",
+    "@stencil/sass": "^1.5.2",
     "@types/jest": "^27.0.3",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
