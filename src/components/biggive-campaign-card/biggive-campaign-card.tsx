@@ -8,7 +8,7 @@ import { CampaignGroupsService } from '../../util/campaign-groups';
  */
 @Component({
   tag: 'biggive-campaign-card',
-  styleUrls: ['biggive-campaign-card.css'],
+  styleUrls: ['biggive-campaign-card.scss'],
   shadow: true,
 })
 export class BiggiveCampaignCard {
@@ -132,6 +132,7 @@ export class BiggiveCampaignCard {
               <div class="meta-item">
                 <span class="label">Helping</span>
                 <span class="text">
+                  {/* TODO alt and/or title text and/or a mobile tap option for icons everywhere. */}
                   {this.getBeneficiaryIcons().map(iconDefinition => (
                     <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
                       <path d={iconDefinition.icon[4].toString()} />
