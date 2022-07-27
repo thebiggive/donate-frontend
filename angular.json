@@ -23,6 +23,11 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
+              {
+                "glob": "**/*",
+                "input": "node_modules/@biggive/components/dist/biggive/assets/images",
+                "output": "assets/images"
+              },
               "src/favicon.ico",
               "src/assets",
               "src/fonts/maven-pro-latin-400.woff2"
@@ -184,6 +189,11 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma-local.conf.js",
             "assets": [
+              {
+                "glob": "**/*",
+                "input": "node_modules/@biggive/components/dist/biggive/assets/images",
+                "output": "assets/images"
+              },
               "src/favicon.ico",
               "src/assets",
               "src/fonts/maven-pro-latin-400.woff2"
