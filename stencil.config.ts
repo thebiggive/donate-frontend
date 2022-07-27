@@ -1,7 +1,16 @@
 import { Config } from '@stencil/core';
+import { sass } from '@stencil/sass';
 
 export const config: Config = {
   namespace: 'BigGive',
+  plugins: [
+    sass({
+      injectGlobalPaths: [
+        'src/globals/variables.scss',
+        'src/globals/mixins.scss'
+      ]
+    })
+  ],
   outputTargets: [
     {
       type: 'dist',
