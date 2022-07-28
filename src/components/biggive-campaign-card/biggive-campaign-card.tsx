@@ -23,6 +23,11 @@ export class BiggiveCampaignCard {
   @Prop() daysRemaining: number = null;
 
   /**
+   * e.g. 'GBP'.
+   */
+  @Prop() currencyCode: string;
+
+  /**
    * Target for the campaign including matching but excluding any
    * tax relief, in major unit of currency e.g. pounds GBP.
    */
@@ -82,11 +87,20 @@ export class BiggiveCampaignCard {
     return this.categories.map(category => CampaignGroupsService.getCategoryIcon(category));
   }
 
-  private formatCurrency(num) {
-    if (!isNaN(num)) {
-      return parseInt(num).toLocaleString();
+  /**
+   * @returns Whole large currency units (e.g. pounds) formatted with symbol.
+   */
+  private formatCurrency(currencyCode: string, amount: number | null): string {
+    if (amount === null || isNaN(amount)) {
+      return '–';
     }
-    return num;
+
+    return Intl.NumberFormat('en-GB', {
+      style: 'currency',
+      currency: currencyCode,
+      currencyDisplay: 'symbol',
+      maximumFractionDigits: 0,
+    }).format(amount);
   }
 
   render() {
@@ -108,7 +122,7 @@ export class BiggiveCampaignCard {
                 <span class="label">Days Remaining:</span> <span class="text">{this.daysRemaining}</span>
               </div>
               <div class="meta-item">
-                <span class="label">Target:</span> <span class="text">&pound;{this.formatCurrency(this.target)}</span>
+                <span class="label">Target:</span> <span class="text">{this.formatCurrency(this.currencyCode, this.target)}</span>
               </div>
             </div>
 
@@ -148,7 +162,7 @@ export class BiggiveCampaignCard {
                   <br />
                   Funds Remaining
                 </span>
-                <span class="text">&pound;{this.formatCurrency(this.matchFundsRemaining)}</span>
+                <span class="text">{this.formatCurrency(this.currencyCode, this.matchFundsRemaining)}</span>
               </div>
               <div class="meta-item">
                 <span class="label">
@@ -156,7 +170,7 @@ export class BiggiveCampaignCard {
                   <br />
                   Funds Received
                 </span>
-                <span class="text">&pound;{this.formatCurrency(this.totalFundsRaised)}</span>
+                <span class="text">{this.formatCurrency(this.currencyCode, this.totalFundsRaised)}</span>
               </div>
             </div>
 
