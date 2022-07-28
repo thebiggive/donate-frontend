@@ -12,5 +12,13 @@ if (environment.productionLike) {
 document.addEventListener('DOMContentLoaded', () => {
   platformBrowserDynamic().bootstrapModule(AppModule)
     .catch(err => console.error(err));
+    // todo Edge polyfill? https://stenciljs.com/docs/angular#how-do-i-add-ie11-or-edge-support
   defineCustomElements(window);
 });
+
+if (window) {
+  // TODO remove proof of concept loading event log.
+  window.addEventListener('appload', (event: any) => {
+    console.log('Stencil did its thing: ' + event.detail.namespace);
+  });
+}
