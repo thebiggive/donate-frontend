@@ -2,6 +2,10 @@ dist/
 loader/
 www/
 
+# Stencil generated Angular copies. `npm run build` inside `angular` regenerates these.
+angular/projects/components/src/lib/stencil-generated
+!angular/projects/components/src/lib/stencil-generated/.gitkeep
+
 *~
 *.sw[mnpcod]
 *.log

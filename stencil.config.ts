@@ -15,8 +15,8 @@ export const config: Config = {
   outputTargets: [
     angularOutputTarget({
       componentCorePackage: '@biggive/components',
-      directivesProxyFile: '../angular-workspace/projects/component-library/src/lib/stencil-generated/components.ts',
-      directivesArrayFile: '../angular-workspace/projects/component-library/src/lib/stencil-generated/index.ts',
+      directivesProxyFile: './angular/projects/components/src/lib/stencil-generated/components.ts',
+      directivesArrayFile: './angular/projects/components/src/lib/stencil-generated/index.ts',
     }),
     {
       type: 'dist',
