@@ -1,3 +1,4 @@
+import { angularOutputTarget } from '@stencil/angular-output-target';
 import { Config } from '@stencil/core';
 import { sass } from '@stencil/sass';
 
@@ -12,6 +13,11 @@ export const config: Config = {
     })
   ],
   outputTargets: [
+    angularOutputTarget({
+      componentCorePackage: '@biggive/components',
+      directivesProxyFile: './angular/projects/components/src/lib/stencil-generated/components.ts',
+      directivesArrayFile: './angular/projects/components/src/lib/stencil-generated/index.ts',
+    }),
     {
       type: 'dist',
       esmLoaderPath: '../loader',

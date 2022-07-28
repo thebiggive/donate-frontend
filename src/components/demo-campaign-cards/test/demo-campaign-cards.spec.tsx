@@ -6,7 +6,6 @@ describe('demo-campaign-cards', () => {
     const page = await newSpecPage({
       components: [DemoCampaignCards],
       html: `<demo-campaign-cards></demo-campaign-cards>`,
-      supportsShadowDom: true,
     });
     expect(page.root.shadowRoot).not.toBe(null);
   });

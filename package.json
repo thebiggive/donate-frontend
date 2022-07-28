@@ -1,6 +1,6 @@
 {
   "name": "@biggive/components",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Big Give Components",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
@@ -38,6 +38,7 @@
     "@stencil/core": "^2.13.0"
   },
   "devDependencies": {
+    "@stencil/angular-output-target": "^0.4.0",
     "@stencil/eslint-plugin": "^0.4.0",
     "@stencil/sass": "^1.5.2",
     "@types/jest": "^27.0.3",

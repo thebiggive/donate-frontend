@@ -14,7 +14,6 @@ describe('biggive-campaign-card', () => {
         currency-code="GBP"
         target="76543"
       ></biggive-campaign-card>`,
-      supportsShadowDom: true,
     });
     expect(page.root).toEqualHtml(`
      <biggive-campaign-card campaign-type="Match Funded" days-remaining="10" currency-code="GBP" target="76543">
