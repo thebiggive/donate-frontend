@@ -56,8 +56,8 @@ jobs:
           name: Build Angular components
           command: cd angular && npm run build
       - run:
-          name: Authenticate with registry in Angular components directory
-          command: echo "//registry.npmjs.org/:_authToken=$NPM_PUBLISH_AUTH_TOKEN" > ~/components/angular/projects/components/.npmrc
+          name: Authenticate with registry in Angular components output directory
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_PUBLISH_AUTH_TOKEN" > ~/components/angular/dist/components/.npmrc
       - run:
           name: Publish Angular components to npm
           command: cd angular/dist/components && npm publish --access=public
