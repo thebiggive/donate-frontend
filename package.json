@@ -1,6 +1,6 @@
 {
   "name": "@biggive/components",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Big Give Components",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
