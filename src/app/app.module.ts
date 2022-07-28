@@ -1,4 +1,3 @@
-import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -114,7 +113,8 @@ import { MulticurrencyLocationPickComponent } from './multicurrency-location-pic
     RecaptchaModule,
   ],
   providers: [
-    { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix },
+    // Note that `APP_BASE_HREF` is set *only* in the Universal server-side render, so we can successfully serve
+    // the app on multiple live domains. See `server.ts` for the `render()` responsible for providing the token.
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
