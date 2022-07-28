@@ -1,6 +1,6 @@
 {
   "name": "@biggive/components",
-  "version": "0.0.2",
+  "version": "0.0.8",
   "description": "Big Give Components",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
@@ -20,11 +20,11 @@
   ],
   "scripts": {
     "build": "stencil build --docs",
-    "start": "stencil build --dev --watch --serve --port 3939",
+    "start": "stencil build --dev --watch --serve",
     "lint": "eslint src/**/*{.ts,.tsx}",
     "lint:fix": "eslint --fix src/**/*{.ts,.tsx}",
-    "test": "stencil test --spec --e2e --port 3939",
-    "test.watch": "stencil test --spec --e2e --watchAll --port 3939",
+    "test": "stencil test --spec --e2e",
+    "test.watch": "stencil test --spec --e2e --watchAll",
     "generate": "stencil generate",
     "prepare": "husky install",
     "pre-commit": "lint-staged"
@@ -40,6 +40,7 @@
   "devDependencies": {
     "@stencil/angular-output-target": "^0.4.0",
     "@stencil/eslint-plugin": "^0.4.0",
+    "@stencil/sass": "^1.5.2",
     "@types/jest": "^27.0.3",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",

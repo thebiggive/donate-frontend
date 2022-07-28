@@ -11,12 +11,13 @@ describe('biggive-campaign-card', () => {
       html: `<biggive-campaign-card
         campaign-type="Match Funded"
         days-remaining="10"
+        currency-code="GBP"
         target="76543"
       ></biggive-campaign-card>`,
       supportsShadowDom: true,
     });
     expect(page.root).toEqualHtml(`
-     <biggive-campaign-card campaign-type="Match Funded" days-remaining="10" target="76543">
+     <biggive-campaign-card campaign-type="Match Funded" days-remaining="10" currency-code="GBP" target="76543">
       <mock:shadow-root>
         <div class="container">
           <div class="sleeve">
@@ -70,7 +71,7 @@ describe('biggive-campaign-card', () => {
                     Funds Remaining
                   </span>
                   <span class="text">
-                    £NaN
+                    –
                   </span>
                 </div>
                 <div class="meta-item">
@@ -80,7 +81,7 @@ describe('biggive-campaign-card', () => {
                     Funds Received
                   </span>
                   <span class="text">
-                    £NaN
+                    –
                   </span>
                 </div>
               </div>

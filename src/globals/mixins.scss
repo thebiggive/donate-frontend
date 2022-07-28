@@ -1,0 +1,57 @@
+// Should only be used for Sass variables, mixins and functions; not contain any CSS.
+// https://github.com/ionic-team/stencil-sass#inject-globals-sass-paths
+
+// Text
+@mixin standard-font() {
+  font-family: 'Euclid Triangle', sans-serif;
+}
+
+// Layout + spacing
+@mixin icon() {
+  height: 1rem;
+  width: 2rem;
+  vertical-align: -.125rem;
+}
+
+@mixin lower-shadow() {
+  filter: drop-shadow(-1px 6px 3px rgba(0,0,0,0.25));
+}
+
+// Shapes
+@mixin triangle-text-badge($text-size, $width, $height) {
+  margin-left: 15px;
+  width: 0;
+  height: 0;
+  border-style: inset;
+  border-width: $height $width 0 $width;
+  border-color: $colour-secondary transparent transparent transparent;
+  float: left;
+  transform: rotate(360deg);
+
+  span {
+    display: block;
+    text-align: center;
+    top: calc(0px - $height);
+    left: -25px;
+    position: relative;
+    width: $width;
+    height: $width;
+    margin: 0;
+    color: $colour-primary;
+    font-size: $text-size;
+  }
+}
+
+@mixin corner-clip-bottom-left() {
+  clip-path:
+    polygon(
+      0% 0%,     /* top left */
+      0% 0%,     /* top left */
+      100% 0%,    /* top right */
+      100% 0%,   /* top right */
+      100% 100%,  /* bottom right */
+      100% 100%,  /* bottom right */
+      10% 100%,   /* bottom left */
+      0 90%      /* bottom left */
+    );
+}

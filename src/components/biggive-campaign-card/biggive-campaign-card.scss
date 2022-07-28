@@ -3,72 +3,22 @@
   margin-bottom: 30px;
 }
 
-:host([column='1-5']) {
-  width: 100%;
-}
-
-:host([column='1-2']) {
-  width: calc(50% - (30px / 2));
-}
-
-:host([column='1-3']) {
-  width: calc(33.3% - (60px / 3));
-}
-
-:host([column='1-4']) {
-  width: calc(25% - (90px / 4));
-}
-
-:host([column='1-5']) {
-  width: calc(20% - (120px / 5));
-}
-
 .container {
-  font-family: 'Euclid Triangle', sans-serif;
-  filter: drop-shadow(-1px 6px 3px rgba(0,0,0,0.25));
+  @include standard-font();
+  @include lower-shadow();
 }
 
 .sleeve {
-  clip-path:
-    polygon(
-      0% 0%,     /* top left */
-      0% 0%,     /* top left */
-      100% 0%,    /* top right */
-      100% 0%,   /* top right */
-      100% 100%,  /* bottom right */
-      100% 100%,  /* bottom right */
-      10% 100%,   /* bottom left */
-      0 90%      /* bottom left */
-    );
+  @include corner-clip-bottom-left();
 }
 
 .content {
   padding: 15px;
-  background-color: #FFFFFF;
+  background-color: $colour-primary-contrast;
 }
 
 .campaign-type {
-  margin-left: 15px;
-  width: 0;
-  height: 0;
-  border-style: inset;
-  border-width: 86.6px 50px 0 50px;
-  border-color: #2AF135 transparent transparent transparent;
-  float: left;
-  transform: rotate(360deg);
-}
-
-.campaign-type span {
-  display: block;
-  text-align: center;
-  top: -75px;
-  left: -25px;
-  position: relative;
-  width: 46.5px;
-  height: 46.5px;
-  margin: 0;
-  color: #2C089B;
-  font-size: 12px;
+  @include triangle-text-badge(0.9rem, 45px, 85px);
 }
 
 .banner {
@@ -98,7 +48,7 @@
 }
 
 .meta-wrap.style-1 .meta-item .text {
-  color: #2C089B;
+  color: $colour-primary;
 }
 
 header  {
@@ -174,7 +124,7 @@ header h3 {
 }
 
 .meta-wrap.style-3 .meta-item:last-child .text {
-  color: #2C089B;
+  color: $colour-primary;
 }
 
 .button-wrap {
@@ -184,8 +134,8 @@ header h3 {
 .button-wrap a {
   display: inline-block;
   padding: 15px 30px;
-  color: #FFFFFF;
-  background-color: #2C089B;
+  color: $colour-primary-contrast;
+  background-color: $colour-primary;
   cursor: pointer;
   text-transform: uppercase;
   font-size: 12px;
@@ -193,7 +143,5 @@ header h3 {
 }
 
 .icon {
-  height: 1rem;
-  width: 2rem;
-  vertical-align: -.125rem;
+  @include icon();
 }

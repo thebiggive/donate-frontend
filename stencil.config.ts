@@ -1,8 +1,17 @@
 import { angularOutputTarget } from '@stencil/angular-output-target';
 import { Config } from '@stencil/core';
+import { sass } from '@stencil/sass';
 
 export const config: Config = {
   namespace: 'BigGive',
+  plugins: [
+    sass({
+      injectGlobalPaths: [
+        'src/globals/variables.scss',
+        'src/globals/mixins.scss'
+      ]
+    })
+  ],
   outputTargets: [
     angularOutputTarget({
       componentCorePackage: '@biggive/components',
@@ -12,6 +21,10 @@ export const config: Config = {
     {
       type: 'dist',
       esmLoaderPath: '../loader',
+      copy: [
+        { src: 'assets/fonts', warn: true },
+        { src: 'assets/images', warn: true },
+      ],
     },
     {
       type: 'dist-custom-elements',
@@ -24,4 +37,7 @@ export const config: Config = {
       serviceWorker: null, // disable service workers
     },
   ],
+  devServer: {
+    port: 3939,
+  },
 };

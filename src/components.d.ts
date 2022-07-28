@@ -8,51 +8,55 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface BiggiveCampaignCard {
         /**
-          * @param banner Full URL of a banner image.
+          * Full URL of a banner image.
          */
         "banner": string;
         /**
-          * @param beneficiaries Pipe (|) -separated list of full category labels.
+          * Array of full beneficiary labels.
          */
-        "beneficiaries": string;
+        "beneficiaries": string[];
         /**
-          * @param callToActionLabel Text for the link to `callToActionUrl`.
+          * Text for the link to `callToActionUrl`.
          */
         "callToActionLabel": string;
         /**
-          * @param callToActionUrl Full URL of a call to action.
+          * Full URL of a call to action.
          */
         "callToActionUrl": string;
         /**
-          * @param organisationName Display name of the charity's specific time-bound fundraising campaign.
+          * Display name of the charity's specific time-bound fundraising campaign.
          */
         "campaignTitle": string;
         /**
-          * @param campaignType e.g. "Match Funded".
+          * e.g. "Match Funded".
          */
         "campaignType": string;
         /**
-          * @param categories Pipe (|) -separated list of full category labels.
+          * Array of full category labels.
          */
-        "categories": string;
+        "categories": string[];
         /**
-          * @param number (Ceiling of) whole number of days until campaign end.
+          * e.g. 'GBP'.
+         */
+        "currencyCode": string;
+        /**
+          * (Ceiling of) whole number of days until campaign end.
          */
         "daysRemaining": number;
         /**
-          * @param totalFundsRaised Match funds not yet used or reserved, in major unit of currency       e.g. pounds GBP.
+          * Match funds not yet used or reserved, in major unit of currency e.g. pounds GBP.
          */
         "matchFundsRemaining": number;
         /**
-          * @param organisationName Display name of the charity or non-profit.
+          * Display name of the charity or non-profit.
          */
         "organisationName": string;
         /**
-          * @param totalFundsRaised Target for the campaign including matching but excluding any       tax relief, in major unit of currency e.g. pounds GBP.
+          * Target for the campaign including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP.
          */
         "target": number;
         /**
-          * @param totalFundsRaised Total the campaign has raised so far including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP.
+          * Total the campaign has raised so far including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP.
          */
         "totalFundsRaised": number;
     }
@@ -89,51 +93,55 @@ declare global {
 declare namespace LocalJSX {
     interface BiggiveCampaignCard {
         /**
-          * @param banner Full URL of a banner image.
+          * Full URL of a banner image.
          */
         "banner"?: string;
         /**
-          * @param beneficiaries Pipe (|) -separated list of full category labels.
+          * Array of full beneficiary labels.
          */
-        "beneficiaries"?: string;
+        "beneficiaries"?: string[];
         /**
-          * @param callToActionLabel Text for the link to `callToActionUrl`.
+          * Text for the link to `callToActionUrl`.
          */
         "callToActionLabel"?: string;
         /**
-          * @param callToActionUrl Full URL of a call to action.
+          * Full URL of a call to action.
          */
         "callToActionUrl"?: string;
         /**
-          * @param organisationName Display name of the charity's specific time-bound fundraising campaign.
+          * Display name of the charity's specific time-bound fundraising campaign.
          */
         "campaignTitle"?: string;
         /**
-          * @param campaignType e.g. "Match Funded".
+          * e.g. "Match Funded".
          */
         "campaignType"?: string;
         /**
-          * @param categories Pipe (|) -separated list of full category labels.
+          * Array of full category labels.
          */
-        "categories"?: string;
+        "categories"?: string[];
         /**
-          * @param number (Ceiling of) whole number of days until campaign end.
+          * e.g. 'GBP'.
+         */
+        "currencyCode"?: string;
+        /**
+          * (Ceiling of) whole number of days until campaign end.
          */
         "daysRemaining"?: number;
         /**
-          * @param totalFundsRaised Match funds not yet used or reserved, in major unit of currency       e.g. pounds GBP.
+          * Match funds not yet used or reserved, in major unit of currency e.g. pounds GBP.
          */
         "matchFundsRemaining"?: number;
         /**
-          * @param organisationName Display name of the charity or non-profit.
+          * Display name of the charity or non-profit.
          */
         "organisationName"?: string;
         /**
-          * @param totalFundsRaised Target for the campaign including matching but excluding any       tax relief, in major unit of currency e.g. pounds GBP.
+          * Target for the campaign including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP.
          */
         "target"?: number;
         /**
-          * @param totalFundsRaised Total the campaign has raised so far including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP.
+          * Total the campaign has raised so far including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP.
          */
         "totalFundsRaised"?: number;
     }

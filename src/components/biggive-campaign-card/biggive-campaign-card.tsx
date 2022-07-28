@@ -8,86 +8,99 @@ import { CampaignGroupsService } from '../../util/campaign-groups';
  */
 @Component({
   tag: 'biggive-campaign-card',
-  styleUrls: ['biggive-campaign-card.css'],
+  styleUrl: 'biggive-campaign-card.scss',
   shadow: true,
 })
 export class BiggiveCampaignCard {
   /**
-   * @param {string} banner Full URL of a banner image.
+   * Full URL of a banner image.
    */
   @Prop() banner: string = '';
 
   /**
-   * @param {string} number (Ceiling of) whole number of days until campaign end.
+   * (Ceiling of) whole number of days until campaign end.
    */
   @Prop() daysRemaining: number = null;
 
   /**
-   * @param {number} totalFundsRaised Target for the campaign including matching but excluding any
-   *                                        tax relief, in major unit of currency e.g. pounds GBP.
+   * e.g. 'GBP'.
+   */
+  @Prop() currencyCode: string;
+
+  /**
+   * Target for the campaign including matching but excluding any
+   * tax relief, in major unit of currency e.g. pounds GBP.
    */
   @Prop() target: number = null;
 
   /**
-   * @param {string} organisationName Display name of the charity or non-profit.
+   * Display name of the charity or non-profit.
    */
   @Prop() organisationName: string = null;
 
   /**
-   * @param {string} organisationName Display name of the charity's specific time-bound fundraising campaign.
+   * Display name of the charity's specific time-bound fundraising campaign.
    */
   @Prop() campaignTitle: string = null;
 
   /**
-   * @param {string} campaignType e.g. "Match Funded".
+   * e.g. "Match Funded".
    */
   @Prop() campaignType: string = null;
 
   /**
-   * @param {string} beneficiaries Pipe (|) -separated list of full category labels.
+   * Array of full beneficiary labels.
    */
-  @Prop() beneficiaries: string = '';
+  @Prop() beneficiaries: string[] = [];
 
   /**
-   * @param {string} categories Pipe (|) -separated list of full category labels.
+   * Array of full category labels.
    */
-  @Prop() categories: string = '';
+  @Prop() categories: string[] = [];
 
   /**
-   * @param {number} totalFundsRaised Match funds not yet used or reserved, in major unit of currency
-   *                                        e.g. pounds GBP.
+   * Match funds not yet used or reserved, in major unit of currency e.g. pounds GBP.
    */
   @Prop() matchFundsRemaining: number = null;
 
   /**
-   * @param {number} totalFundsRaised Total the campaign has raised so far including matching but excluding any
-   *                                  tax relief, in major unit of currency e.g. pounds GBP.
+   * Total the campaign has raised so far including matching but excluding any
+   * tax relief, in major unit of currency e.g. pounds GBP.
    */
   @Prop() totalFundsRaised: number = null;
 
   /**
-   * @param {string} callToActionUrl Full URL of a call to action.
+   * Full URL of a call to action.
    */
   @Prop() callToActionUrl: string = null;
 
   /**
-   * @param {string} callToActionLabel Text for the link to `callToActionUrl`.
+   * Text for the link to `callToActionUrl`.
    */
   @Prop() callToActionLabel: string = null;
 
   private getBeneficiaryIcons(): IconDefinition[] {
-    return this.beneficiaries.length > 0 ? this.beneficiaries.split('|').map(beneficiary => CampaignGroupsService.getBeneficiaryIcon(beneficiary)) : [];
+    return this.beneficiaries.map(beneficiary => CampaignGroupsService.getBeneficiaryIcon(beneficiary));
   }
 
   private getCategoryIcons(): IconDefinition[] {
-    return this.categories.length > 0 ? this.categories.split('|').map(category => CampaignGroupsService.getCategoryIcon(category)) : [];
+    return this.categories.map(category => CampaignGroupsService.getCategoryIcon(category));
   }
 
-  private formatCurrency(num) {
-    if (!isNaN(num)) {
-      return parseInt(num).toLocaleString();
+  /**
+   * @returns Whole large currency units (e.g. pounds) formatted with symbol.
+   */
+  private formatCurrency(currencyCode: string, amount: number | null): string {
+    if (amount === null || isNaN(amount)) {
+      return '–';
     }
-    return num;
+
+    return Intl.NumberFormat('en-GB', {
+      style: 'currency',
+      currency: currencyCode,
+      currencyDisplay: 'symbol',
+      maximumFractionDigits: 0,
+    }).format(amount);
   }
 
   render() {
@@ -109,7 +122,7 @@ export class BiggiveCampaignCard {
                 <span class="label">Days Remaining:</span> <span class="text">{this.daysRemaining}</span>
               </div>
               <div class="meta-item">
-                <span class="label">Target:</span> <span class="text">&pound;{this.formatCurrency(this.target)}</span>
+                <span class="label">Target:</span> <span class="text">{this.formatCurrency(this.currencyCode, this.target)}</span>
               </div>
             </div>
 
@@ -132,6 +145,7 @@ export class BiggiveCampaignCard {
               <div class="meta-item">
                 <span class="label">Helping</span>
                 <span class="text">
+                  {/* TODO alt and/or title text and/or a mobile tap option for icons everywhere. */}
                   {this.getBeneficiaryIcons().map(iconDefinition => (
                     <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
                       <path d={iconDefinition.icon[4].toString()} />
@@ -148,7 +162,7 @@ export class BiggiveCampaignCard {
                   <br />
                   Funds Remaining
                 </span>
-                <span class="text">&pound;{this.formatCurrency(this.matchFundsRemaining)}</span>
+                <span class="text">{this.formatCurrency(this.currencyCode, this.matchFundsRemaining)}</span>
               </div>
               <div class="meta-item">
                 <span class="label">
@@ -156,7 +170,7 @@ export class BiggiveCampaignCard {
                   <br />
                   Funds Received
                 </span>
-                <span class="text">&pound;{this.formatCurrency(this.totalFundsRaised)}</span>
+                <span class="text">{this.formatCurrency(this.currencyCode, this.totalFundsRaised)}</span>
               </div>
             </div>
 

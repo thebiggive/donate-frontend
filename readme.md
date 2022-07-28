@@ -22,6 +22,8 @@ npm install
 npm start
 ```
 
+## Development
+
 ### Follow Stencil + repository conventions
 
 CI runs lint checks, but there are tools to help you follow the expected code style so you don't have
@@ -36,6 +38,37 @@ We use both tools to ensure both consistent code style and adherence to Stencil 
 Husky should also set you up a pre-commit hook that fixes anything it can automatically, and complains
 about anything else. If you don't appear to have this and had already installed packages before this
 feature was set up, run `npm install` again.
+
+### Dependencies and build output
+
+Anything externally managed should be loaded with npm and no copies checked into this codebase. We can use Stencil `copy` tasks and target app build strategies to get things in the right place.
+
+Generated build outputs should similarly be `.gitignore`d.
+
+### Asset dependencies
+
+So far our strategy has been to avoid separate file assets where this is an out-the-box option, but
+to choose copying over more complex build time changes (e.g. base-64-inlining images) otherwise.
+This is to get the simplest working proof of concept up quickly and we may revisit it soon.
+
+For now:
+
+* FontAwesome uses pure SVGs and not fonts. This seems to work well and I suspect is the best option
+  for performance, component interoperability, simplicity and licence compliance.
+* The Euclid font is copied with a Stencil `copy` task and available in the dist output's
+  `assets/fonts`. An Angular app's build, for example, can then use the style with the following
+  addition to an `angular.json` `"styles"` key:
+  `"node_modules/@biggive/components/dist/biggive/assets/fonts/EuclidTriangle/stylesheet.css"`
+* Images are also copied with a Stencil `copy` task, and fixed references use getAssetPath() plus
+  an absolute path, e.g. `getAssetPath('/assets/images/banner.png')`. See the
+  [Stencil asset docs](https://stenciljs.com/docs/assets) for more on this. Angular seems to be
+  able to use this without `setAssetPath()` if we config its `"assets"` key to put files in the same
+  folder as the app's own images. This is the approach taken on [this proof of concept branch](https://github.com/thebiggive/donate-frontend/tree/COM-5-proof-of-concept).
+  Should we find managing image assets messy in apps generally, an alternative approach we might
+  try is importing images to component style and adding [`@rollup/plugin-image`](https://github.com/rollup/plugins/tree/master/packages/image/#readme)
+  to Stencil's build config. Or if there are only a few, we could also investigate
+  whether `assetsDirs` on a `@Component` folds in what's needed in a way that works
+  in Angular et al.
 
 ### Make any required changes to the sample web components
 
@@ -72,6 +105,8 @@ npm add_user
 
 Continuous Integration will automatically publish `main` to NPM, but you can also do it manually if necessary.
 
+(Once this repo gets closer to being stable, we can update the configuration to just publish new version tags.)
+
 ```bash
 npm publish --access=public
 ```
@@ -103,7 +138,7 @@ These can be added to an HTML page with the following code:
   <biggive-grid>
 
     <biggive-campaign-card
-      banner="/assets/img/banner.png"
+      banner="/assets/images/banner.png"
       days-remaining={50}
       target={50000}
       organisation-name="Ardent Theatre Company"
