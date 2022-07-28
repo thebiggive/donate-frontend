@@ -36,6 +36,10 @@ export namespace Components {
          */
         "categories": string[];
         /**
+          * e.g. 'GBP'.
+         */
+        "currencyCode": string;
+        /**
           * (Ceiling of) whole number of days until campaign end.
          */
         "daysRemaining": number;
@@ -116,6 +120,10 @@ declare namespace LocalJSX {
           * Array of full category labels.
          */
         "categories"?: string[];
+        /**
+          * e.g. 'GBP'.
+         */
+        "currencyCode"?: string;
         /**
           * (Ceiling of) whole number of days until campaign end.
          */
