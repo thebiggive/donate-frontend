@@ -45,6 +45,15 @@ Anything externally managed should be loaded with npm and no copies checked into
 
 Generated build outputs should similarly be `.gitignore`d.
 
+### Angular components
+
+As well as the core package `@biggive/components`, CI automatically publishes a version best tailored to
+Angular as `@biggive/components-angular`. The former are possible to load into Angular but the latter will
+work better [as documented](https://stenciljs.com/docs/angular).
+
+Our Angular workspace and library are set up as per that documentation, but our Stencil library lives in this
+repo's root, one directory up from in the docs' structure. So far this seems to have no adverse effects.
+
 ### Asset dependencies
 
 So far our strategy has been to avoid separate file assets where this is an out-the-box option, but
