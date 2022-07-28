@@ -1,3 +1,4 @@
+import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -113,8 +114,20 @@ import { MulticurrencyLocationPickComponent } from './multicurrency-location-pic
     RecaptchaModule,
   ],
   providers: [
-    // Note that `APP_BASE_HREF` is set *only* in the Universal server-side render, so we can successfully serve
-    // the app on multiple live domains. See `server.ts` for the `render()` responsible for providing the token.
+    // In Universal / SSR mode, `APP_BASE_HREF` should vary according to the `HOST` token set up in
+    // `server.ts`, which is based on the original request's Host header forwarded by CloudFront to
+    // the ECS origin. This is necessary so we can successfully serve the app on multiple live domains.
+    {
+      provide: APP_BASE_HREF, 
+      useFactory: () => {
+        const globalDonateHost = (new URL(environment.donateGlobalUriPrefix)).host;
+        const host = (typeof window === 'undefined' ? '' : window.location.host);
+
+        return host === globalDonateHost
+          ? environment.donateGlobalUriPrefix
+          : environment.donateUriPrefix;
+      },
+    },
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
