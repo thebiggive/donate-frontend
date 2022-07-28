@@ -1,6 +1,6 @@
 {
   "name": "@biggive/components-angular",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "peerDependencies": {
     "@angular/common": "^14.1.0",
     "@angular/core": "^14.1.0"
