@@ -57,7 +57,7 @@ jobs:
           command: cd angular && npm run build
       - run:
           name: Publish Angular components to npm
-          command: cd projects/components && npm publish --access=public
+          command: cd angular/projects/components && npm publish --access=public
 
 workflows:
   version: 2
