@@ -60,7 +60,7 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=$NPM_PUBLISH_AUTH_TOKEN" > ~/components/angular/projects/components/.npmrc
       - run:
           name: Publish Angular components to npm
-          command: cd angular/projects/components && npm publish --access=public
+          command: cd angular/dist/components && npm publish --access=public
 
 workflows:
   version: 2
