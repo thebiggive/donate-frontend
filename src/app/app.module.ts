@@ -114,9 +114,9 @@ import { MulticurrencyLocationPickComponent } from './multicurrency-location-pic
     RecaptchaModule,
   ],
   providers: [
-    // In Universal / SSR mode, `APP_BASE_HREF` should vary according to the `HOST` token set up in
-    // `server.ts`, which is based on the original request's Host header forwarded by CloudFront to
-    // the ECS origin. This is necessary so we can successfully serve the app on multiple live domains.
+    // In Universal / SSR mode, `APP_BASE_HREF` should vary according to the host reported
+    // by the browser once client side JS takes over. This is necessary so we can successfully
+    // serve the app on multiple live domains.
     {
       provide: APP_BASE_HREF, 
       useFactory: () => {
