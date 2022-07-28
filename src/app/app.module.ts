@@ -22,6 +22,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DemoCampaignCards, BiggiveCampaignCard, BiggiveGrid } from '@biggive/components-angular/lib/stencil-generated/components'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RecaptchaModule, RECAPTCHA_NONCE } from 'ng-recaptcha';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -59,11 +60,14 @@ import { MulticurrencyLocationPickComponent } from './multicurrency-location-pic
 @NgModule({
   declarations: [
     AppComponent,
+    BiggiveCampaignCard,
+    BiggiveGrid,
     CampaignCardComponent,
     CampaignDetailsComponent,
     CampaignDetailsCardComponent,
     CampaignSearchFormComponent,
     CharityComponent,
+    DemoCampaignCards,
     DonationCompleteComponent,
     DonationStartComponent,
     DonationStartMatchConfirmDialogComponent,
@@ -112,6 +116,11 @@ import { MulticurrencyLocationPickComponent } from './multicurrency-location-pic
     MatToolbarModule,
     ReactiveFormsModule,
     RecaptchaModule,
+  ],
+  exports: [
+    BiggiveCampaignCard,
+    BiggiveGrid,
+    DemoCampaignCards,
   ],
   providers: [
     { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix },

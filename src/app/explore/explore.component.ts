@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { CampaignService, SearchQuery } from '../campaign.service';
-import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
