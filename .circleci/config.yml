@@ -141,11 +141,10 @@ workflows:
     jobs:
       - publish:
           filters:
-            branches:
-              only:
-                - main
             tags:
               only: /^v.*/
+            branches:
+              ignore: /.*/
           context:
             - docker-hub-creds
             - jira

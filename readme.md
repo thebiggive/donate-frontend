@@ -107,8 +107,8 @@ provide sample usage of key components: a living style guide.
 
 CI automatically publishes the Storybook preview:
 * to [its Staging site](https://components-staging.thebiggivetest.org.uk) on *any* push to `main`; and
-* to [its Production site](https://components-production.thebiggive.org.uk) on *tagged* pushes to `main` – intended for tested, new versions which are
-  also to be npm published.
+* to [its Production site](https://components-production.thebiggive.org.uk) on *tagged* pushes
+  (typically also on `main`) – intended for tested, new versions which are also to be npm published.
 
 ## Publish to NPM
 
