@@ -42,6 +42,9 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package-lock.json" }}
       - run:
+          name: Build components
+          command: npm run build
+      - run:
           name: Build Storybook
           command: npm run build-storybook
       - aws-s3/sync:
@@ -69,6 +72,9 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package-lock.json" }}
+      - run:
+          name: Build components
+          command: npm run build
       - run:
           name: Build Storybook
           command: npm run build-storybook
