@@ -100,8 +100,15 @@ This directory contains the distribtion files
 ### www directory - https://stenciljs.com/docs/www
 This directory contains a static version of the web components which can be used for testing and inclusion in simple web apps. Due to CORS restrictions, the index.html file needs to be run from a webserver (not as a local file).
 
+### Storybook
 
+We've followed [this guide](https://ionicframework.com/blog/how-to-use-storybook-with-stencil/) to
+provide sample usage of key components: a living style guide.
 
+CI automatically publishes the Storybook preview:
+* to [its Staging site](https://components-staging.thebiggivetest.org.uk) on *any* push to `main`; and
+* to [its Production site](https://components-production.thebiggive.org.uk) on *tagged* pushes to `main` – intended for tested, new versions which are
+  also to be npm published.
 
 ## Publish to NPM
 
@@ -112,9 +119,17 @@ npm add_user
 
 ### Publish
 
-Continuous Integration will automatically publish `main` to NPM, but you can also do it manually if necessary.
+Continuous Integration will automatically publish `main` to npm when you push a `v*` tag.
 
-(Once this repo gets closer to being stable, we can update the configuration to just publish new version tags.)
+Versioning is manual currently. To prepare a release for publishing:
+
+* Update the root `package.json`'s `version` field.
+* `npm install` to update `package-lock.json` to match.
+* Update `angular/projects/components/package.json`'s `version` field so that `@biggive/components-angular` matches too.
+* `git tag v0.0.1` (replace with your new version)
+* `git push --tags`
+
+You can also do it manually if necessary:
 
 ```bash
 npm publish --access=public

@@ -2,6 +2,9 @@ dist/
 loader/
 www/
 
+# Storybook builds happen as part of CI publish.
+storybook-static/
+
 # Stencil generated Angular copies. `npm run build` inside `angular` regenerates these.
 angular/projects/components/src/lib/stencil-generated
 !angular/projects/components/src/lib/stencil-generated/.gitkeep
