@@ -114,7 +114,20 @@ import { MulticurrencyLocationPickComponent } from './multicurrency-location-pic
     RecaptchaModule,
   ],
   providers: [
-    { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix },
+    // In Universal / SSR mode, `APP_BASE_HREF` should vary according to the host reported
+    // by the browser once client side JS takes over. This is necessary so we can successfully
+    // serve the app on multiple live domains.
+    {
+      provide: APP_BASE_HREF, 
+      useFactory: () => {
+        const globalDonateHost = (new URL(environment.donateGlobalUriPrefix)).host;
+        const host = (typeof window === 'undefined' ? '' : window.location.host);
+
+        return host === globalDonateHost
+          ? environment.donateGlobalUriPrefix
+          : environment.donateUriPrefix;
+      },
+    },
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
