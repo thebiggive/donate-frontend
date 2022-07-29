@@ -173,11 +173,10 @@ workflows:
       # deploy a new Storybook Production build.
       - deploy-production-storybook:
           filters:
-            branches:
-              only:
-                - main
             tags:
               only: /^v.*/
+            branches:
+              ignore: /.*/
           context:
             - docker-hub-creds
             - ecs-deploys # Includes S3 stuff used by Donate frontend.
