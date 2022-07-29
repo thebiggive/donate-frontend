@@ -105,6 +105,10 @@ This directory contains a static version of the web components which can be used
 We've followed [this guide](https://ionicframework.com/blog/how-to-use-storybook-with-stencil/) to
 provide sample usage of key components: a living style guide.
 
+CI automatically publishes the Storybook preview:
+* to [its Staging site](https://components-staging.thebiggivetest.org.uk) on *any* push to `main`; and
+* to [its Production site](https://components-production.thebiggive.org.uk) on *tagged* pushes to `main` – intended for tested, new versions which are
+  also to be npm published.
 
 ## Publish to NPM
 
