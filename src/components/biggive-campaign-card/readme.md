@@ -1,6 +1,7 @@
 # biggive-campaign-card
 
-
+Provides key information about a specific charity fundraising campaign, typically for use in a grid of multiple campaigns or
+in a secondary column alongside more detail about the same campaign.
 
 <!-- Auto Generated Below -->
 

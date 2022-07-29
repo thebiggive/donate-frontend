@@ -45,6 +45,10 @@ Anything externally managed should be loaded with npm and no copies checked into
 
 Generated build outputs should similarly be `.gitignore`d.
 
+Because Stencil components have *partly* generated readme docs, it is a good idea after changing any `@Prop`s or similar to `npm run build`
+before committing your changes. The docs should be source controlled as they can include manual content. If you make a new one, it's a good
+idea to add a one line description of its purpose to the readme before the generated section.
+
 ### Angular components
 
 As well as the core package `@biggive/components`, CI automatically publishes a version best tailored to

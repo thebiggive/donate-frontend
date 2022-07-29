@@ -1,6 +1,6 @@
 # demo-campaign-cards
 
-
+A ready-to-go sample-only component combining `biggive-grid`, `biggive-campaign-card` (x12) and pretend, hard-coded data.
 
 <!-- Auto Generated Below -->
 
