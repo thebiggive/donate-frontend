@@ -55,7 +55,7 @@ jobs:
             --cache-control "max-age=3600"
       - aws-s3/sync:
           from: storybook-static
-          to: 's3://tbg-staging-donate-static'
+          to: 's3://tbg-staging-component-library'
           arguments: |
             --acl public-read \
             --cache-control "max-age=3600"
@@ -86,7 +86,7 @@ jobs:
             --cache-control "max-age=3600"
       - aws-s3/sync:
           from: storybook-static
-          to: 's3://tbg-production-donate-static'
+          to: 's3://tbg-production-component-library'
           arguments: |
             --acl public-read \
             --cache-control "max-age=3600"
