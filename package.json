@@ -27,7 +27,9 @@
     "test.watch": "stencil test --spec --e2e --watchAll",
     "generate": "stencil generate",
     "prepare": "husky install",
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
@@ -38,10 +40,20 @@
     "@stencil/core": "^2.13.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.18.9",
     "@stencil/angular-output-target": "^0.4.0",
     "@stencil/eslint-plugin": "^0.4.0",
     "@stencil/sass": "^1.5.2",
+    "@storybook/addon-actions": "^6.5.9",
+    "@storybook/addon-essentials": "^6.5.9",
+    "@storybook/addon-interactions": "^6.5.9",
+    "@storybook/addon-links": "^6.5.9",
+    "@storybook/builder-webpack4": "^6.5.9",
+    "@storybook/html": "^6.5.9",
+    "@storybook/manager-webpack4": "^6.5.9",
+    "@storybook/testing-library": "^0.0.13",
     "@types/jest": "^27.0.3",
+    "babel-loader": "^8.2.5",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.0",

@@ -100,7 +100,10 @@ This directory contains the distribtion files
 ### www directory - https://stenciljs.com/docs/www
 This directory contains a static version of the web components which can be used for testing and inclusion in simple web apps. Due to CORS restrictions, the index.html file needs to be run from a webserver (not as a local file).
 
+### Storybook
 
+We've followed [this guide](https://ionicframework.com/blog/how-to-use-storybook-with-stencil/) to
+provide sample usage of key components: a living style guide.
 
 
 ## Publish to NPM
