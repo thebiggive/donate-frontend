@@ -114,6 +114,11 @@ CI automatically publishes the Storybook preview:
 * to [its Production site](https://components-production.thebiggive.org.uk) on *tagged* pushes
   (typically also on `main`) – intended for tested, new versions which are also to be npm published.
 
+For now, the local `npm run storybook` won't load static image assets or fonts. We've prioritised realistic
+renders in the deployed environment, where these work due to:
+* CI separately copying the main build's `assets` output to S3: see e.g. `deploy-staging-storybook` in [CI config](./.circleci/config.yml)
+* Storybook having a custom [`preview-head.html`](./.storybook/preview-head.html).
+
 ## Publish to NPM
 
 ### Connect to NPM
