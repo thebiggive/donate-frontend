@@ -45,9 +45,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     });
 
     const campaign = route.snapshot.data.campaign;
-    if (campaign) {
-      this.navigationService.saveIsCurrentCampaignForGG1(campaign.parentRef === 'gogiveone');
-    }
   }
 
   ngOnInit() {
