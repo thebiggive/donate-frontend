@@ -21,6 +21,9 @@ export const config: Config = {
       includeImportCustomElements: true,
     }),
     {
+      type: 'dist-hydrate-script',
+    },
+    {
       type: 'dist',
       esmLoaderPath: '../loader',
       copy: [

@@ -57,6 +57,7 @@ Main targets are:
 * `dist-custom-elements` – the docs don't make this terribly clear but with our current configuration,
   these are a dependency for the Angular project/target to build successfully. Angular needs to be told
   that they live inside `dist/` (so are published in `dist/components`).
+* `dist-hydrate-script` for SSR – used in [Donate frontend](https://github.com/thebiggive/donate-frontend) as initially served by ECS. Stencil [document this one separately](https://stenciljs.com/docs/hydrate-app).
 * `dist` for general web modules – used in [WordPress](https://github.com/thebiggive/wordpress).
 * Storybook has its own build step using the component from source. Currently, this is also used in
   Salesforce to embed components in iframes, the only feasible way we've been able to get Experiences

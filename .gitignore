@@ -1,5 +1,6 @@
 dist/
 loader/
+hydrate/
 www/
 
 # Storybook builds happen as part of CI publish.
