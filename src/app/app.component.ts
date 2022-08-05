@@ -33,9 +33,6 @@ export class AppComponent implements OnInit {
         if (isPlatformBrowser(this.platformId)) {
           this.navigationService.saveNewUrl(event.urlAfterRedirects);
         }
-        if (event.url !== '/gogiveone' && !event.url.startsWith('/donate') && !event.url.startsWith('/campaign')) {
-          navigationService.saveIsCurrentCampaignForGG1(false);
-        }
       }
     });
   }
