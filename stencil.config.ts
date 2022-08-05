@@ -14,7 +14,8 @@ export const config: Config = {
   ],
   outputTargets: [
     angularOutputTarget({
-      componentCorePackage: '@biggive/components',
+      // Without `dist/`, Angular build had errors saying the `components/` were missing.
+      componentCorePackage: '@biggive/components/dist',
       directivesProxyFile: './angular/projects/components/src/lib/stencil-generated/components.ts',
       directivesArrayFile: './angular/projects/components/src/lib/stencil-generated/index.ts',
       includeImportCustomElements: true,
@@ -28,7 +29,7 @@ export const config: Config = {
       ],
     },
     {
-      type: 'dist-custom-elements',
+      type: 'dist-custom-elements', // Uses default `dist/components`.
     },
     {
       type: 'docs-readme',
