@@ -1,11 +1,11 @@
 {
   "name": "@biggive/components-angular",
   "description": "Angular-packaged components for @biggive apps",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "peerDependencies": {
     "@angular/common": "^14.1.0",
     "@angular/core": "^14.1.0",
-    "@biggive/components": "~0.0.16"
+    "@biggive/components": "~0.0.20"
   },
   "dependencies": {
     "tslib": "^2.3.0"
