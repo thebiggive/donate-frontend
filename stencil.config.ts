@@ -17,8 +17,7 @@ export const config: Config = {
       componentCorePackage: '@biggive/components',
       directivesProxyFile: './angular/projects/components/src/lib/stencil-generated/components.ts',
       directivesArrayFile: './angular/projects/components/src/lib/stencil-generated/index.ts',
-      // Bails out with "Cannot find module '@biggive/components/components/demo-campaign-cards.js' or its corresponding type declarations." TODO why?
-      // includeImportCustomElements: true,
+      includeImportCustomElements: true,
     }),
     {
       type: 'dist',

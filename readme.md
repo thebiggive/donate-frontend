@@ -49,6 +49,26 @@ Because Stencil components have *partly* generated readme docs, it is a good ide
 before committing your changes. The docs should be source controlled as they can include manual content. If you make a new one, it's a good
 idea to add a one line description of its purpose to the readme before the generated section.
 
+### Output targets
+
+Main targets are:
+
+* `angularOutputTarget()` – used in [Donate frontend](https://github.com/thebiggive/donate-frontend).
+* `dist` for general web modules – used in [WordPress](https://github.com/thebiggive/wordpress).
+* Storybook has its own build step using the component from source. Currently, this is also used in
+  Salesforce to embed components in iframes, the only feasible way we've been able to get Experiences
+  to dynamically pull in components.
+* `docs-readme` for documentation.
+
+Targets we have but just for local experiments:
+
+* `www`
+
+Targets we've now removed:
+
+* `dist-custom-elements` – if reinstating this, be sure to use something like `dir: 'components'` to avoid
+  clashing with Angular's output.
+
 ### Angular components
 
 As well as the core package `@biggive/components`, CI automatically publishes a version best tailored to
