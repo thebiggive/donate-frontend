@@ -111,7 +111,7 @@ jobs:
           command: echo "//registry.npmjs.org/:_authToken=$NPM_PUBLISH_AUTH_TOKEN" > ~/components/.npmrc
       - run:
           name: Publish core components to npm
-          command: npm publish --access=public
+          command: cd dist && npm publish --access=public
       - run:
           name: Install Angular CLI
           command: npm install -g @angular/cli@latest
