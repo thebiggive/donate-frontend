@@ -1,6 +1,7 @@
 import 'zone.js/node';
 
 import { enableProdMode } from '@angular/core';
+import { renderToString } from '@biggive/components/hydrate';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as compression from 'compression';
 import { createHash } from 'crypto';
@@ -147,7 +148,20 @@ export function app() {
       { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
       // Required to set up `APP_BASE_HREF`. See `app.module.ts`.
       { provide: HOST, useValue: req.header('Host') || undefined },
-    ]});
+    ]}, async (err: Error, html: string) => {
+      if (err) {
+        console.log(`Render error: ${err}`);
+        res.sendStatus(500);
+        return;
+      }
+
+      const hydratedDoc = await renderToString(html, {
+        prettyHtml: true,
+        removeScripts: true,
+      });
+
+      res.send(hydratedDoc.html);
+    });
   });
 
   return server;
