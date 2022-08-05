@@ -22,6 +22,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ComponentsModule } from '@biggive/components-angular';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RecaptchaModule, RECAPTCHA_NONCE } from 'ng-recaptcha';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -89,6 +90,7 @@ import { MulticurrencyLocationPickComponent } from './multicurrency-location-pic
     BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
     BrowserTransferStateModule,
+    ComponentsModule,
     FlexLayoutModule,
     FontAwesomeModule,
     HttpClientModule,
