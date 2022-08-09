@@ -156,8 +156,7 @@ export function app() {
       }
 
       const hydratedDoc = await renderToString(html, {
-        prettyHtml: true,
-        removeScripts: true,
+        prettyHtml: true, // Don't `removeScripts` like Ionic does: we need them to handover to browser JS runtime successfully!
       });
 
       res.send(hydratedDoc.html);
