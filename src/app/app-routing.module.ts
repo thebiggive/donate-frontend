@@ -11,9 +11,6 @@ import { DonationStartComponent } from './donation-start/donation-start.componen
 import { ExploreComponent } from './explore/explore.component';
 import { HomeComponent } from './home/home.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
-import { MulticurrencyCampaignResolver } from './multicurrency-campaign.resolver';
-import { MulticurrencyCampaignListResolver } from './multicurrency-campaign-list.resolver';
-import { MulticurrencyLandingComponent } from './multicurrency-landing/multicurrency-landing.component';
 
 const routes: Routes = [
   {
@@ -70,14 +67,6 @@ const routes: Routes = [
     },
   },
   {
-    path: 'gogiveone',
-    component: MulticurrencyLandingComponent,
-    resolve: {
-      campaign: MulticurrencyCampaignResolver,
-      campaigns: MulticurrencyCampaignListResolver,
-    },
-  },
-  {
     path: ':campaignSlug',
     component: MetaCampaignComponent,
     resolve: {
@@ -107,8 +96,6 @@ const routes: Routes = [
     CampaignResolver,
     CampaignListResolver,
     CharityCampaignsResolver,
-    MulticurrencyCampaignResolver,
-    MulticurrencyCampaignListResolver,
   ],
   exports: [RouterModule],
 })

@@ -140,11 +140,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     private stripeService: StripeService,
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
-
-    const campaign = route.snapshot.data.campaign;
-    if (campaign) {
-      this.navigationService.saveIsCurrentCampaignForGG1(campaign.parentRef === 'gogiveone');
-    }
   }
 
   ngOnDestroy() {
@@ -884,12 +879,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.campaignOpenOnLoad = this.campaignIsOpen();
 
     this.currencySymbol = getCurrencySymbol(this.campaign.currencyCode, 'narrow', 'en-GB');
-
-    if (this.campaign.parentRef === 'gogiveone') {
-      this.termsProvider = 'Go Give One';
-      this.privacyUrl = 'https://www.thebiggive.org.uk/s/gogiveone-privacy';
-      this.termsUrl = 'https://www.thebiggive.org.uk/s/gogiveone-terms';
-    }
 
     if (environment.psps.stripe.enabled && this.campaign.charity.stripeAccountId) {
       this.psp = 'stripe';
