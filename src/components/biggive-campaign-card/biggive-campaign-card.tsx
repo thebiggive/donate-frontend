@@ -1,4 +1,4 @@
-import { IconDefinition } from '@fortawesome/free-brands-svg-icons';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Component, Prop, h } from '@stencil/core';
 
 import { CampaignGroupsService } from '../../util/campaign-groups';
