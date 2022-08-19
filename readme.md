@@ -51,6 +51,10 @@ idea to add a one line description of its purpose to the readme before the gener
 
 ### Output targets
 
+> Stencil is able to take an app's source and compile it to numerous targets
+
+[Read more in Stencil's docs.](https://stenciljs.com/docs/output-targets)
+
 Main targets are:
 
 * `angularOutputTarget()` – used in [Donate frontend](https://github.com/thebiggive/donate-frontend).
