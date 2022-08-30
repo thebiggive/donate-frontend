@@ -7,6 +7,17 @@
 }
 
 // Layout + spacing
+@mixin flex-container-row() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+}
+
 @mixin icon() {
   height: 1rem;
   width: 2rem;
@@ -53,5 +64,20 @@
       100% 100%,  /* bottom right */
       10% 100%,   /* bottom left */
       0 90%      /* bottom left */
+    );
+}
+
+
+@mixin corner-clip-bottom-right() {
+  clip-path:
+    polygon(
+      0% 0%,     /* top left */
+      0% 0%,     /* top left */
+      100% 0%,    /* top right */
+      100% 0%,   /* top right */
+      10% 100%,  /* bottom right */
+      0 90%,  /* bottom right */
+      100% 100%,   /* bottom left */
+      100% 100%      /* bottom left */
     );
 }

@@ -62,6 +62,24 @@ export namespace Components {
     }
     interface BiggiveGrid {
     }
+    interface BiggiveHeroImage {
+        /**
+          * Full URL of a main hero image.
+         */
+        "mainImage": string;
+        /**
+          * Hero image title, typically the page.
+         */
+        "mainTitle": string;
+        /**
+          * Header slug
+         */
+        "slug": string;
+        /**
+          * Introductory teaser text
+         */
+        "teaser": string;
+    }
     interface DemoCampaignCards {
     }
 }
@@ -78,6 +96,12 @@ declare global {
         prototype: HTMLBiggiveGridElement;
         new (): HTMLBiggiveGridElement;
     };
+    interface HTMLBiggiveHeroImageElement extends Components.BiggiveHeroImage, HTMLStencilElement {
+    }
+    var HTMLBiggiveHeroImageElement: {
+        prototype: HTMLBiggiveHeroImageElement;
+        new (): HTMLBiggiveHeroImageElement;
+    };
     interface HTMLDemoCampaignCardsElement extends Components.DemoCampaignCards, HTMLStencilElement {
     }
     var HTMLDemoCampaignCardsElement: {
@@ -87,6 +111,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "biggive-campaign-card": HTMLBiggiveCampaignCardElement;
         "biggive-grid": HTMLBiggiveGridElement;
+        "biggive-hero-image": HTMLBiggiveHeroImageElement;
         "demo-campaign-cards": HTMLDemoCampaignCardsElement;
     }
 }
@@ -147,11 +172,30 @@ declare namespace LocalJSX {
     }
     interface BiggiveGrid {
     }
+    interface BiggiveHeroImage {
+        /**
+          * Full URL of a main hero image.
+         */
+        "mainImage"?: string;
+        /**
+          * Hero image title, typically the page.
+         */
+        "mainTitle"?: string;
+        /**
+          * Header slug
+         */
+        "slug"?: string;
+        /**
+          * Introductory teaser text
+         */
+        "teaser"?: string;
+    }
     interface DemoCampaignCards {
     }
     interface IntrinsicElements {
         "biggive-campaign-card": BiggiveCampaignCard;
         "biggive-grid": BiggiveGrid;
+        "biggive-hero-image": BiggiveHeroImage;
         "demo-campaign-cards": DemoCampaignCards;
     }
 }
@@ -161,6 +205,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "biggive-campaign-card": LocalJSX.BiggiveCampaignCard & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardElement>;
             "biggive-grid": LocalJSX.BiggiveGrid & JSXBase.HTMLAttributes<HTMLBiggiveGridElement>;
+            "biggive-hero-image": LocalJSX.BiggiveHeroImage & JSXBase.HTMLAttributes<HTMLBiggiveHeroImageElement>;
             "demo-campaign-cards": LocalJSX.DemoCampaignCards & JSXBase.HTMLAttributes<HTMLDemoCampaignCardsElement>;
         }
     }
