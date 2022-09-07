@@ -2,13 +2,14 @@
   @include standard-font();
   width: 400px;
   box-shadow: 0px 0px 30px rgb(0 0 0 / 20%);
-  padding: 1.5rem 1rem;
+  padding: 1.5rem;
 
   h2 {
     @include standard-font();
     width: 100%;
-    font-weight: bolder;
+    font-weight: 500;
     margin-top: 0px;
+    font-size: 1.4rem;
   }
 
   input {
