@@ -1,0 +1,45 @@
+.container {
+  @include standard-font();
+  width: 400px;
+  box-shadow: 0px 0px 30px rgb(0 0 0 / 20%);
+  padding: 1.5rem 1rem;
+
+  h2 {
+    @include standard-font();
+    width: 100%;
+    font-weight: bolder;
+    margin-top: 0px;
+  }
+
+  input {
+    width: 100%;
+    font-size: 1rem;
+    padding: 1rem 2rem;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+    border: none;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+
+    &:focus {
+      outline: 1px solid lightgray;
+    }
+  }
+
+  button {
+    @include standard-font();
+    width: 100%;
+    padding: 1.5rem 0.75rem;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+    background-color: rgb(0, 0, 165);
+    color: white;
+    border: none;
+    border-radius: 5px;
+
+    &:hover {
+      cursor: pointer;
+      background-color: navy;
+    }
+  }
+}

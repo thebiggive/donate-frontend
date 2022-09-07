@@ -9,6 +9,9 @@ export class BigGiveSearch {
   render() {
     return (
       <div class="container">
+        <h2>FIND A CHARITY</h2>
+        <input type="text" placeholder='Search' />
+        <button>CHOOSE THESE FILTERS</button>
       </div>
     );
   }
