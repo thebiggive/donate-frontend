@@ -62,6 +62,8 @@ export namespace Components {
     }
     interface BiggiveGrid {
     }
+    interface BiggiveSearch {
+    }
     interface DemoCampaignCards {
     }
 }
@@ -78,6 +80,12 @@ declare global {
         prototype: HTMLBiggiveGridElement;
         new (): HTMLBiggiveGridElement;
     };
+    interface HTMLBiggiveSearchElement extends Components.BiggiveSearch, HTMLStencilElement {
+    }
+    var HTMLBiggiveSearchElement: {
+        prototype: HTMLBiggiveSearchElement;
+        new (): HTMLBiggiveSearchElement;
+    };
     interface HTMLDemoCampaignCardsElement extends Components.DemoCampaignCards, HTMLStencilElement {
     }
     var HTMLDemoCampaignCardsElement: {
@@ -87,6 +95,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "biggive-campaign-card": HTMLBiggiveCampaignCardElement;
         "biggive-grid": HTMLBiggiveGridElement;
+        "biggive-search": HTMLBiggiveSearchElement;
         "demo-campaign-cards": HTMLDemoCampaignCardsElement;
     }
 }
@@ -147,11 +156,14 @@ declare namespace LocalJSX {
     }
     interface BiggiveGrid {
     }
+    interface BiggiveSearch {
+    }
     interface DemoCampaignCards {
     }
     interface IntrinsicElements {
         "biggive-campaign-card": BiggiveCampaignCard;
         "biggive-grid": BiggiveGrid;
+        "biggive-search": BiggiveSearch;
         "demo-campaign-cards": DemoCampaignCards;
     }
 }
@@ -161,6 +173,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "biggive-campaign-card": LocalJSX.BiggiveCampaignCard & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardElement>;
             "biggive-grid": LocalJSX.BiggiveGrid & JSXBase.HTMLAttributes<HTMLBiggiveGridElement>;
+            "biggive-search": LocalJSX.BiggiveSearch & JSXBase.HTMLAttributes<HTMLBiggiveSearchElement>;
             "demo-campaign-cards": LocalJSX.DemoCampaignCards & JSXBase.HTMLAttributes<HTMLDemoCampaignCardsElement>;
         }
     }
