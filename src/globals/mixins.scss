@@ -66,18 +66,3 @@
       0 90%      /* bottom left */
     );
 }
-
-
-@mixin corner-clip-bottom-right() {
-  clip-path:
-    polygon(
-      0% 0%,     /* top left */
-      0% 0%,     /* top left */
-      100% 0%,    /* top right */
-      100% 0%,   /* top right */
-      10% 100%,  /* bottom right */
-      0 90%,  /* bottom right */
-      100% 100%,   /* bottom left */
-      100% 100%      /* bottom left */
-    );
-}
