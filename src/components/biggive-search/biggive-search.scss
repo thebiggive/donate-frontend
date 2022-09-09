@@ -1,7 +1,7 @@
 .container {
   @include standard-font();
+  @include all-round-shadow();
   width: 400px;
-  box-shadow: 0px 0px 30px rgb(0 0 0 / 20%);
   padding: 1.5rem;
 
   h2 {
@@ -9,18 +9,19 @@
     width: 100%;
     font-weight: 500;
     margin-top: 0px;
-    font-size: 1.4rem;
+    margin-bottom: 0px;
+    text-transform: uppercase;
   }
 
   input {
     width: 100%;
-    font-size: 1rem;
     padding: 1rem 2rem;
-    margin-bottom: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1.25rem;
     box-sizing: border-box;
     border: none;
     background-color: #f1f1f1;
-    border-radius: 5px;
+    border-radius: 3px;
 
     &:focus {
       outline: 1px solid lightgray;
@@ -31,16 +32,56 @@
     @include standard-font();
     width: 100%;
     padding: 1.5rem 0.75rem;
-    font-size: 0.9rem;
     box-sizing: border-box;
     background-color: rgb(0, 0, 165);
     color: white;
     border: none;
     border-radius: 5px;
+    text-transform: uppercase;
+    font-size: 1rem;
 
     &:hover {
       cursor: pointer;
       background-color: navy;
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+    .container {
+      width: 350px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    width: 275px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .container {
+    width: 100vw;
+    // so the padding doesn't mess up
+    display: table-cell;
+    box-shadow: none;
+    padding: 10px;
+
+    input {
+      background-color: white;
+      box-shadow: 0px 0px 30px rgb(0 0 0 / 20%);
+      margin-top: 1.25rem;
+      margin-bottom: 1.25rem;
+
+      &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: black;
+        opacity: 1; /* Firefox */
+      }
+    }
+
+    button {
+      text-transform: unset;
+      padding: 0.75rem;
     }
   }
 }
