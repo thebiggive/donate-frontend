@@ -82,6 +82,7 @@ export class DonationCompleteComponent {
       role: 'alertdialog',
     });
     passwordSetDialog.afterClosed().subscribe({
+      // TODO confirm that non-boolean mat close return values actually work!
       next: (password: string) => this.setPassword(password),
     });
   }

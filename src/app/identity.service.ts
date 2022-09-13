@@ -8,7 +8,7 @@ import { AnalyticsService } from './analytics.service';
 import { environment } from '../environments/environment';
 import { Person } from './person.model';
 
-export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
+export const TBG_DONATE_ID_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_ID_STORAGE');
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +21,7 @@ export class IdentityService {
   constructor(
     private analyticsService: AnalyticsService,
     private http: HttpClient,
-    @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
+    @Inject(TBG_DONATE_ID_STORAGE) private storage: StorageService,
     private state: TransferState,
   ) {}
 
