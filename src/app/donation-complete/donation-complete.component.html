@@ -22,6 +22,11 @@
       <div class="c-main">
         <h3 class="b-rh-2 b-bold">Donation successful</h3>
 
+        <div *ngIf="offerToSetPassword">
+          <h4>Want to donate faster next time?</h4>
+          <p><button (click)="openSetPasswordDialog()">Set a password</button></p>
+        </div>
+
         <p class="b-rt-0">
           Your donation of
           <span class="b-bold">
