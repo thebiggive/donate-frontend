@@ -1,5 +1,6 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { getCurrencySymbol, isPlatformBrowser } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   AfterContentChecked,
   AfterContentInit,
@@ -36,8 +37,10 @@ import { environment } from '../../environments/environment';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { GiftAidAddress } from '../gift-aid-address.model';
 import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
+import { IdentityService } from '../identity.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
+import { Person } from '../person.model';
 import { PostcodeService } from '../postcode.service';
 import { retryStrategy } from '../observable-retry';
 import { StripeService } from '../stripe.service';
@@ -131,6 +134,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     private donationService: DonationService,
     @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
+    private identityService: IdentityService,
     private navigationService: NavigationService,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
@@ -398,7 +402,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
           if (this.donation) {
             this.clearDonation(this.donation, true);
           }
-          this.createDonation(); // Re-sets-up PRB etc.
+          this.createDonationAndMaybePerson(); // Re-sets-up PRB etc.
         });
 
       return;
@@ -460,12 +464,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled') &&
         event.selectedStep.label !== 'Your donation' // Resets fire a 0 -> 0 index event.
       ) {
-        this.createDonation();
+        this.createDonationAndMaybePerson();
       }
 
       if (this.psp === 'stripe') {
         // Card element is mounted the same way regardless of donation info. See
-        // this.createDonation().subscribe(...) for Payment Request Button mount, which needs donation info
+        // this.createDonationAndMaybePerson().subscribe(...) for Payment Request Button mount, which needs donation info
         // first and so happens in `preparePaymentRequestButton()`.
         this.card = this.stripeService.getCard();
         if (this.cardInfo && this.card) { // Ensure #cardInfo not hidden by PRB success.
@@ -681,7 +685,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   captchaReturn(captchaResponse: string) {
     this.captchaCode = captchaResponse;
-    this.createDonation();
+    this.createDonationAndMaybePerson();
   }
 
   customTip(): boolean {
@@ -917,7 +921,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     );
   }
 
-  private createDonation(): void {
+  private createDonationAndMaybePerson(): void {
     if (!this.captchaCode) {
       // We need a captcha code before we can *really* proceed. By doing this here we ensure
       // this happens consistently regardless of whether donors click Next or a subsequent stepper
@@ -954,6 +958,24 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       tipAmount: this.sanitiseCurrency(this.amountsGroup.value.tipAmount),
     };
 
+    if (environment.identityEnabled) {
+      const person: Person = {};
+      this.identityService.create(person).subscribe(
+        (person: Person) => {
+          this.identityService.saveJWT(person.completion_jwt as string);
+          donation.pspCustomerId = person.stripe_customer_id;
+          this.createDonation(donation);
+        },
+        (error: HttpErrorResponse) => {
+          // todo handle Person create error well. GA log, tell donor.
+        }
+      )
+    } else {
+      this.createDonation(donation);
+    }
+  }
+
+  private createDonation(donation: Donation) {
     // No re-tries for create() where donors have only entered amounts. If the
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping

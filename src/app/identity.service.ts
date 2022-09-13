@@ -1,0 +1,62 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
+import { TransferState } from '@angular/platform-browser';
+import { StorageService } from 'ngx-webstorage-service';
+import { Observable } from 'rxjs';
+
+import { AnalyticsService } from './analytics.service';
+import { environment } from '../environments/environment';
+import { Person } from './person.model';
+
+export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
+
+@Injectable({
+  providedIn: 'root',
+})
+export class IdentityService {
+  private readonly apiPath = '/people';
+  // Key is per-domain/env. For now we simply store a single JWT (or none).
+  private readonly storageKey = `${environment.identityApiPrefix}/v1/jwt`;
+
+  constructor(
+    private analyticsService: AnalyticsService,
+    private http: HttpClient,
+    @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
+    private state: TransferState,
+  ) {}
+
+  create(person: Person): Observable<Person> {
+    return this.http.post<Person>(
+      `${environment.identityApiPrefix}${this.apiPath}`,
+      person);
+  }
+
+  update(person: Person): Observable<Person> {
+    return this.http.put<Person>(
+      `${environment.donationsApiPrefix}${this.apiPath}/${person.id}`,
+      person,
+      this.getAuthHttpOptions(person),
+    );
+  }
+
+  saveJWT(jwt: string) {
+    this.storage.set(this.storageKey, jwt);
+  }
+
+  private getAuthHttpOptions(person: Person): { headers: HttpHeaders } {
+    if (!this.storage.has(this.storageKey)) {
+      this.analyticsService.logError(
+        'auth_jwt_error',
+        `Not authorised to work with person ${person.id}`,
+      );
+
+      return { headers: new HttpHeaders({}) };
+    }
+
+    return {
+      headers: new HttpHeaders({
+        'X-Tbg-Auth': this.storage.get(this.storageKey),
+      }),
+    };
+  }
+}
