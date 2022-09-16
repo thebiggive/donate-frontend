@@ -25,6 +25,28 @@ the parent component).
 <!-- Auto Generated Below -->
 
 
+## Properties
+
+| Property          | Attribute          | Description                                                                                           | Type       | Default     |
+| ----------------- | ------------------ | ----------------------------------------------------------------------------------------------------- | ---------- | ----------- |
+| `buttonText`      | `button-text`      |                                                                                                       | `string`   | `undefined` |
+| `doSearch`        | --                 | This prop points to the memory address of the *real* search function on the parent of this component. | `Function` | `undefined` |
+| `placeholderText` | `placeholder-text` |                                                                                                       | `string`   | `undefined` |
+
+
+## Dependencies
+
+### Used by
+
+ - [biggive-grid](../biggive-grid)
+
+### Graph
+```mermaid
+graph TD;
+  biggive-grid --> biggive-search
+  style biggive-search fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

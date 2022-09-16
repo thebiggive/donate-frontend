@@ -17,6 +17,7 @@ A ready-to-go sample-only component combining `biggive-grid`, `biggive-campaign-
 graph TD;
   demo-campaign-cards --> biggive-grid
   demo-campaign-cards --> biggive-campaign-card
+  biggive-grid --> biggive-search
   style demo-campaign-cards fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

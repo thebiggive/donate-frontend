@@ -1,4 +1,4 @@
-import { Component, h, Prop } from '@stencil/core';
+import { Component, h, Prop, State } from '@stencil/core';
 import { faMagnifyingGlass, faX } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -7,7 +7,7 @@ import { faMagnifyingGlass, faX } from '@fortawesome/free-solid-svg-icons';
   shadow: true,
 })
 export class BigGiveSearch {
-  private searchText: string;
+  @State() searchText: string = null;
 
   private handleSearchTextChanged(event) {
     this.searchText = event.target.value;
@@ -19,6 +19,10 @@ export class BigGiveSearch {
    */ 
   @Prop() doSearch: Function;
 
+  @Prop() placeholderText: string;
+
+  @Prop() buttonText: string;
+
   private handleSearchButtonPressed() {
     this.doSearch(this.searchText);
   }
@@ -27,6 +31,10 @@ export class BigGiveSearch {
     if (ev.key === 'Enter') {
       this.doSearch(this.searchText);
     }
+  }
+
+  clearSearchText = () => {
+    this.searchText = '';
   }
 
   render() {
@@ -39,14 +47,14 @@ export class BigGiveSearch {
             <path d={faMagnifyingGlass.icon[4].toString()} />
           </svg>
 
-          <input type="text" placeholder="Search" onInput={event => this.handleSearchTextChanged(event)} onKeyDown={event => this.handleEnterPressed(event)} />
+          <input type="text" placeholder={this.placeholderText} onInput={event => this.handleSearchTextChanged(event)} onKeyDown={event => this.handleEnterPressed(event)} />
 
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon" id="x-icon" viewBox="0 0 512 512" onClick={() => this.clearSearchText()}>
             <path d={faX.icon[4].toString()} />
           </svg>
         </div>
 
-        <button onClick={() => this.handleSearchButtonPressed()}>Search</button>
+        <button onClick={() => this.handleSearchButtonPressed()}>{this.buttonText}</button>
       </div>
     );
   }

@@ -26,6 +26,12 @@
       filter: opacity(0.3);
       margin: auto;
     }
+
+    #x-icon {
+      &:hover {
+        cursor: pointer;
+      }
+    }
   
     input {
       width: 100%;
