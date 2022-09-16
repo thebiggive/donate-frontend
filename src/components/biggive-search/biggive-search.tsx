@@ -1,4 +1,4 @@
-import { Component, h } from '@stencil/core';
+import { Component, h, Prop } from '@stencil/core';
 import { faMagnifyingGlass, faX } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -9,17 +9,23 @@ import { faMagnifyingGlass, faX } from '@fortawesome/free-solid-svg-icons';
 export class BigGiveSearch {
   private searchText: string;
 
-  handleSearchTextChanged(event) {
+  private handleSearchTextChanged(event) {
     this.searchText = event.target.value;
   }
 
-  search() {
-    console.log(this.searchText);
+  /**
+   * This prop points to the memory address of the *real* search function
+   * on the parent of this component.
+   */ 
+  @Prop() doSearch: Function;
+
+  private handleSearchButtonPressed() {
+    this.doSearch(this.searchText);
   }
 
-  handleEnterPressed(ev: KeyboardEvent){
-    if (ev.key === 'Enter'){
-      this.search();
+  private handleEnterPressed(ev: KeyboardEvent) {
+    if (ev.key === 'Enter') {
+      this.doSearch(this.searchText);
     }
   }
 
@@ -33,14 +39,14 @@ export class BigGiveSearch {
             <path d={faMagnifyingGlass.icon[4].toString()} />
           </svg>
 
-          <input type="text" placeholder="Search" onInput={(event) => this.handleSearchTextChanged(event)} onKeyDown={(event) => this.handleEnterPressed(event)}/>
+          <input type="text" placeholder="Search" onInput={event => this.handleSearchTextChanged(event)} onKeyDown={event => this.handleEnterPressed(event)} />
 
           <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
             <path d={faX.icon[4].toString()} />
           </svg>
         </div>
 
-        <button onClick={() => this.search()}>Search</button>
+        <button onClick={() => this.handleSearchButtonPressed()}>Search</button>
       </div>
     );
   }
