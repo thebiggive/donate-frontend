@@ -4,7 +4,6 @@ import { sass } from '@stencil/sass';
 
 export const config: Config = {
   namespace: 'BigGive',
-  globalStyle: 'src/globals/global.css',
   plugins: [
     sass({
       injectGlobalPaths: [

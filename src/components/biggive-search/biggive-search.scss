@@ -1,7 +1,6 @@
 .container {
   @include standard-font();
   @include all-round-shadow();
-  width: 400px;
   padding: 1.5rem;
 
   h2 {
@@ -66,9 +65,7 @@
 }
 
 @media screen and (max-width: 1024px) {
-    .container {
-      width: 350px;
-
+  .container {
       h2 {
         font-size: 1.3rem;
       }
@@ -81,8 +78,6 @@
 
 @media screen and (max-width: 768px) {
   .container {
-    width: 275px;
-
     h2 {
       font-size: 1.2rem;
     }
@@ -91,8 +86,6 @@
 
 @media screen and (max-width: 425px) {
   .container {
-    width: 100vw;
-    display: table-cell; // so the padding doesn't mess up
     box-shadow: none;
     padding: 10px;
 
@@ -100,15 +93,15 @@
       font-size: 1rem;
     }
 
-    input {
+    .search-box {
+      box-shadow: 0px 0px 10px rgb(0 0 0 / 20%);
       background-color: white;
-      box-shadow: 0px 0px 30px rgb(0 0 0 / 20%);
-      margin-top: 1.25rem;
-      margin-bottom: 1.25rem;
-
-      &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-        color: black;
-        opacity: 1; /* Firefox */
+      input {
+        background-color: white;
+        &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+          color: black;
+          opacity: 1; /* Firefox */
+        }
       }
     }
 
