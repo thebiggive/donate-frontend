@@ -7,6 +7,22 @@ import { faMagnifyingGlass, faX } from '@fortawesome/free-solid-svg-icons';
   shadow: true,
 })
 export class BigGiveSearch {
+  private searchText: string;
+
+  handleSearchTextChanged(event) {
+    this.searchText = event.target.value;
+  }
+
+  search() {
+    console.log(this.searchText);
+  }
+
+  handleEnterPressed(ev: KeyboardEvent){
+    if (ev.key === 'Enter'){
+      this.search();
+    }
+  }
+
   render() {
     return (
       <div class="container">
@@ -17,14 +33,14 @@ export class BigGiveSearch {
             <path d={faMagnifyingGlass.icon[4].toString()} />
           </svg>
 
-          <input type="text" placeholder="Search" />
+          <input type="text" placeholder="Search" onInput={(event) => this.handleSearchTextChanged(event)} onKeyDown={(event) => this.handleEnterPressed(event)}/>
 
           <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
             <path d={faX.icon[4].toString()} />
           </svg>
         </div>
 
-        <button>Search</button>
+        <button onClick={() => this.search()}>Search</button>
       </div>
     );
   }
