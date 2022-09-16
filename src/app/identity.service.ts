@@ -33,7 +33,7 @@ export class IdentityService {
 
   update(person: Person): Observable<Person> {
     return this.http.put<Person>(
-      `${environment.donationsApiPrefix}${this.apiPath}/${person.id}`,
+      `${environment.identityApiPrefix}${this.apiPath}/${person.id}`,
       person,
       this.getAuthHttpOptions(person),
     );
