@@ -159,10 +159,16 @@ export class DonationService {
     return observable;
   }
 
-  create(donation: Donation): Observable<DonationCreatedResponse> {
+  create(donation: Donation, personId?: string, jwt?: string): Observable<DonationCreatedResponse> {
+    let endpoint = personId
+      ? `${environment.donationsApiPrefix}/people/${personId}${this.apiPath}`
+      : `${environment.donationsApiPrefix}${this.apiPath}`;
+
     return this.http.post<DonationCreatedResponse>(
-      `${environment.donationsApiPrefix}${this.apiPath}`,
-      donation);
+      endpoint,
+      donation,
+      this.getPersonAuthHttpOptions(jwt),
+    );
   }
 
   get(donation: Donation): Observable<Donation> {
@@ -236,6 +242,18 @@ export class DonationService {
     return {
       headers: new HttpHeaders({
         'X-Tbg-Auth': donationDataItems[0].jwt,
+      }),
+    };
+  }
+
+  private getPersonAuthHttpOptions(jwt?: string): { headers: HttpHeaders } {
+    if (!jwt) {
+      return { headers: new HttpHeaders({}) };
+    }
+
+    return {
+      headers: new HttpHeaders({
+        'X-Tbg-Auth': jwt,
       }),
     };
   }

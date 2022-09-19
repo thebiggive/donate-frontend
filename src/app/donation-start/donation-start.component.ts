@@ -109,6 +109,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private campaignId: string;
   private defaultCountryCode: string;
+  private personId?: string;
   private previousDonation?: Donation;
   private stepHeaderEventsSet = false;
   private tipPercentageChanged = false;
@@ -946,7 +947,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
       countryCode: this.paymentGroup?.value.billingCountry || 'GB',
-      creationRecaptchaCode: this.captchaCode,
+      // Captcha is set on Person (only) if we are making a Person + using the resulting
+      // token to authenticate the donation create.
+      creationRecaptchaCode: environment.identityEnabled ? undefined : this.captchaCode,
       currencyCode: this.campaign.currencyCode || 'GBP',
       donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
       donationMatched: this.campaign.isMatched,
@@ -960,9 +963,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     if (environment.identityEnabled) {
       const person: Person = {};
+      person.captcha_code = this.captchaCode;
       this.identityService.create(person).subscribe(
         (person: Person) => {
           this.identityService.saveJWT(person.completion_jwt as string);
+          this.personId = person.id;
           donation.pspCustomerId = person.stripe_customer_id;
           this.createDonation(donation);
         },
@@ -980,7 +985,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
-    this.donationService.create(donation)
+    this.donationService.create(donation, this.personId, this.identityService.getJWT())
       .subscribe({
         next: this.newDonationSuccess.bind(this),
         error: this.newDonationError.bind(this),

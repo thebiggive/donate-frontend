@@ -39,6 +39,10 @@ export class IdentityService {
     );
   }
 
+  getJWT() {
+    return this.storage.get(this.storageKey);
+  }
+
   saveJWT(jwt: string) {
     this.storage.set(this.storageKey, jwt);
   }
