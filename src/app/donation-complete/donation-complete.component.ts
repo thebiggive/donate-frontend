@@ -105,11 +105,17 @@ export class DonationCompleteComponent {
     }
 
     if (environment.identityEnabled) {
-      this.identityService.update(this.buildPersonFromDonation(donation))
-        .subscribe(person => {
-          this.person = person;
-          this.offerToSetPassword = !person.has_password;
-        });
+      const idAndJWT = this.identityService.getIdAndJWT();
+      if (idAndJWT) {
+        let person = this.buildPersonFromDonation(donation);
+        person.id = idAndJWT.id;
+
+        this.identityService.update(person)
+          .subscribe(person => {
+            this.person = person;
+            this.offerToSetPassword = !person.has_password;
+          });
+      }
     }
 
     this.donation = donation;

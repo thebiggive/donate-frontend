@@ -22,7 +22,6 @@ export class IdentityService {
     private analyticsService: AnalyticsService,
     private http: HttpClient,
     @Inject(TBG_DONATE_ID_STORAGE) private storage: StorageService,
-    private state: TransferState,
   ) {}
 
   create(person: Person): Observable<Person> {
@@ -39,16 +38,26 @@ export class IdentityService {
     );
   }
 
-  getJWT() {
-    return this.storage.get(this.storageKey);
+  getIdAndJWT(): { id: string, jwt: string } | undefined {
+    if (!this.storage.has(this.storageKey)) {
+      return undefined;
+    }
+
+    return this.storage.get(this.storageKey) || undefined;
   }
 
-  saveJWT(jwt: string) {
-    this.storage.set(this.storageKey, jwt);
+  getJWT(): string | undefined {
+    return this.getIdAndJWT()?.jwt || undefined;
+  }
+
+  saveJWT(id: string, jwt: string) {
+    this.storage.set(this.storageKey, { id, jwt });
   }
 
   private getAuthHttpOptions(person: Person): { headers: HttpHeaders } {
-    if (!this.storage.has(this.storageKey)) {
+    const jwt = this.getJWT();
+
+    if (jwt === undefined) {
       this.analyticsService.logError(
         'auth_jwt_error',
         `Not authorised to work with person ${person.id}`,
@@ -59,7 +68,7 @@ export class IdentityService {
 
     return {
       headers: new HttpHeaders({
-        'X-Tbg-Auth': this.storage.get(this.storageKey),
+        'X-Tbg-Auth': jwt,
       }),
     };
   }
