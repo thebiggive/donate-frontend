@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { environment } from '../../environments/environment';
 
+import { environment } from '../../environments/environment';
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
@@ -12,6 +12,7 @@ import { DonationService } from '../donation.service';
 import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-donation-complete',
@@ -79,22 +80,25 @@ export class DonationCompleteComponent {
   openSetPasswordDialog() {
     const passwordSetDialog = this.dialog.open(DonationCompleteSetPasswordDialogComponent, {
       data: { person: this.person },
-      role: 'alertdialog',
     });
-    passwordSetDialog.afterClosed().subscribe({
-      // TODO confirm that non-boolean mat close return values actually work!
-      next: (password: string) => this.setPassword(password),
+    passwordSetDialog.afterClosed().subscribe(data => {
+      if (data.password) {
+        this.setPassword(data.password);
+      }
     });
   }
 
-  setPassword(password: string) {
+  setPassword(password?: string) {
     if (!this.person) {
       console.log('Cannot set password without a person'); // TODO probably GA log and report to donor.
       return;
     }
 
     this.person.raw_password = password;
-    this.identityService.update(this.person);
+    // TODO we need to omit or reformat properties like `created_at` for this to succeed.
+    this.identityService.update(this.person)
+      .subscribe(() => {}); // Must subscribe for call to fire.
+      // TODO handle errors.
   }
 
   private setDonation(donation: Donation) {
@@ -114,6 +118,9 @@ export class DonationCompleteComponent {
           .subscribe(person => {
             this.person = person;
             this.offerToSetPassword = !person.has_password;
+          }, (error: HttpErrorResponse) => {
+            console.log('update person error: ', error);
+            // todo handle with GA + report to frontend
           });
       }
     }
