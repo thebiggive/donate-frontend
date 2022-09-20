@@ -23,6 +23,14 @@
         <h3 class="b-rh-2 b-bold">Donation successful</h3>
 
         <div *ngIf="offerToSetPassword">
+          <!-- Activated only after password set succeeds, in order to facilitate an auto-login (when donor requests to stay logged in) -->
+          <re-captcha
+            #captcha
+            size="invisible"
+            (resolved)="loginCaptchaReturn($event)"
+            siteKey="{{ recaptchaSiteKey }}"
+          ></re-captcha>
+
           <h4>Want to donate faster next time?</h4>
           <p><button (click)="openSetPasswordDialog()">Set a password</button></p>
 

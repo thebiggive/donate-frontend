@@ -1,12 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { RecaptchaComponent } from 'ng-recaptcha';
 
 import { environment } from '../../environments/environment';
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
+import { Credentials } from '../credentials.model';
 import { Donation } from '../donation.model';
 import { DonationCompleteSetPasswordDialogComponent } from './donation-complete-set-password-dialog.component';
 import { DonationService } from '../donation.service';
@@ -20,6 +22,8 @@ import { Person } from '../person.model';
   styleUrls: ['./donation-complete.component.scss'],
 })
 export class DonationCompleteComponent {
+  @ViewChild('captcha') captcha: RecaptchaComponent;
+
   campaign: Campaign;
   cardChargedAmount: number;
   complete = false;
@@ -28,10 +32,16 @@ export class DonationCompleteComponent {
   noAccess = false;
   offerToSetPassword = false;
   prefilledText: string;
+  recaptchaSiteKey = environment.recaptchaSiteKey;
   registerError?: string;
   shareUrl: string;
   timedOut = false;
   totalValue: number;
+
+  // TODO second-next: get last used card's last 4 from the donation or other short term storage.
+  // Update the account create prompt to show them back.
+  // TODO last for this ticket: have a checkbox to turn persisted sessions on/off when making account
+  // and vary JWT behaviour accordingly, including deleting local token when donor says no.
 
   private donationId: string;
   private maxTries = 5;
@@ -89,6 +99,26 @@ export class DonationCompleteComponent {
     });
   }
 
+  loginCaptchaReturn(captchaResponse: string) {
+    const credentials: Credentials = {
+      email_address: this.donation.emailAddress as string,
+      raw_password: this.person?.raw_password as string,
+      captcha_code: captchaResponse,
+    };
+
+    this.identityService.login(credentials)
+      .subscribe(response => {
+        // It's still the same person, just a longer lived token. So for now just recycle the ID. We'll probably improve
+        // `/auth` to return the ID separately soon, so we can do a normal login form that's able to call this without
+        // having to decode the JWT (though maybe that's a good thing for the frontend to be able to do anyway?).
+        console.log('Upgraded local token to a long-lived one with more permissions');
+        this.identityService.saveJWT(this.person?.id as string, response.jwt);
+      },
+      (error: HttpErrorResponse) => {
+        this.analyticsService.logError('login_failed', `${error.status}: ${error.message}`, 'identity_error');
+      });
+  }
+
   setPassword(password?: string) {
     if (!this.person) {
       this.analyticsService.logError('person_password_set_missing_data', 'No person in component', 'identity_error');
@@ -101,6 +131,9 @@ export class DonationCompleteComponent {
       .subscribe(
         () => { // Success. Must subscribe for call to fire.
           this.analyticsService.logEvent('person_password_set', 'Account password creation complete', 'identity');
+
+          // TODO This should only auto-login (and therefore execute the captcha) if the donor requested a persistent session.
+          this.captcha.execute(); // Leads to loginCaptchaReturn() assuming the captcha succeeds.
         }, 
         (error: HttpErrorResponse) => {
           this.registerError = error.message;

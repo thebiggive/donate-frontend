@@ -638,6 +638,15 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     // See https://stripe.com/docs/payments/intents
     if (['succeeded', 'processing'].includes(result.paymentIntent.status)) {
+      if (this.personId) {
+        // For now, all PMs are new PMs.
+        // TODO next-ish – determine if this is (or can be) an expanded PM object. If so, we can hopefully use it
+        // directly, maybe even making the action use Stripe PHP's model object? If not, we need to figure out how
+        // either Stripe.js or MatchBot can give us all the info we need to send onto ID.
+        console.log('The payment method in the confirm result is:', result.paymentIntent.payment_method);
+        // this.identityService.createPaymentMethod(this.personId, result.paymentIntent.payment_method)
+      }
+
       this.analyticsService.logCheckoutDone(this.campaign, this.donation);
       this.cancelExpiryWarning();
       this.router.navigate(['thanks', this.donation.donationId], {
