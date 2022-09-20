@@ -972,7 +972,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
           this.createDonation(donation);
         },
         (error: HttpErrorResponse) => {
-          // todo handle Person create error well. GA log, tell donor.
+          // In ID-on mode, we can't proceed without the Person/Stripe Customer.
+          this.analyticsService.logError('person_create_failed', `${error.status}: ${error.message}`, 'identity_error');
+          this.donationCreateError = true;
+          this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
         }
       )
     } else {

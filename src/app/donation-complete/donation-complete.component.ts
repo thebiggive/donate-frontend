@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -12,7 +13,6 @@ import { DonationService } from '../donation.service';
 import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-donation-complete',
@@ -20,17 +20,18 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./donation-complete.component.scss'],
 })
 export class DonationCompleteComponent {
-  public campaign: Campaign;
-  public cardChargedAmount: number;
-  public complete = false;
-  public donation: Donation;
-  public giftAidAmount: number;
-  public noAccess = false;
+  campaign: Campaign;
+  cardChargedAmount: number;
+  complete = false;
+  donation: Donation;
+  giftAidAmount: number;
+  noAccess = false;
   offerToSetPassword = false;
-  public prefilledText: string;
-  public timedOut = false;
-  public totalValue: number;
-  public shareUrl: string;
+  prefilledText: string;
+  registerError?: string;
+  shareUrl: string;
+  timedOut = false;
+  totalValue: number;
 
   private donationId: string;
   private maxTries = 5;
@@ -90,15 +91,22 @@ export class DonationCompleteComponent {
 
   setPassword(password?: string) {
     if (!this.person) {
-      console.log('Cannot set password without a person'); // TODO probably GA log and report to donor.
+      this.analyticsService.logError('person_password_set_missing_data', 'No person in component', 'identity_error');
+      this.registerError = 'Cannot set password without a person';
       return;
     }
 
     this.person.raw_password = password;
-    // TODO we need to omit or reformat properties like `created_at` for this to succeed.
     this.identityService.update(this.person)
-      .subscribe(() => {}); // Must subscribe for call to fire.
-      // TODO handle errors.
+      .subscribe(
+        () => { // Success. Must subscribe for call to fire.
+          this.analyticsService.logEvent('person_password_set', 'Account password creation complete', 'identity');
+        }, 
+        (error: HttpErrorResponse) => {
+          this.registerError = error.message;
+          this.analyticsService.logError('person_password_set_failed', `${error.status}: ${error.message}`, 'identity_error');
+        },
+      );
   }
 
   private setDonation(donation: Donation) {
@@ -119,8 +127,9 @@ export class DonationCompleteComponent {
             this.person = person;
             this.offerToSetPassword = !person.has_password;
           }, (error: HttpErrorResponse) => {
-            console.log('update person error: ', error);
-            // todo handle with GA + report to frontend
+            // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
+            // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
+            this.analyticsService.logError('person_core_data_update_failed', `${error.status}: ${error.message}`, 'identity_error');
           });
       }
     }

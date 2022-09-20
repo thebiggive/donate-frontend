@@ -81,16 +81,16 @@ export class AnalyticsService {
     this.listenForRouteChanges();
   }
 
-  logError(key: string, message: string) {
+  logError(key: string, message: string, category = 'donate_error') {
     this.sendEvent(key, {
-      event_category: 'donate_error',
+      event_category: category,
       event_label: message,
     });
   }
 
-  logEvent(key: string, message: string) {
+  logEvent(key: string, message: string, category = 'donate') {
     this.sendEvent(key, {
-      event_category: 'donate',
+      event_category: category,
       event_label: message,
     });
   }
