@@ -16,12 +16,12 @@ export class BigGiveSearch {
   /**
    * This prop points to the memory address of the *real* search function
    * on the parent of this component.
-   */ 
+   */
   @Prop() doSearch: Function;
 
   /**
    * Defines the text displayed as the placeholder in the input field
-   * before the user types anything.
+   * before the user types anything
    */
   @Prop() placeholderText: string;
 
@@ -42,7 +42,7 @@ export class BigGiveSearch {
 
   clearSearchText = () => {
     this.searchText = '';
-  }
+  };
 
   render() {
     return (
@@ -54,7 +54,7 @@ export class BigGiveSearch {
 
             <div class="search-box">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
-                <path d={faMagnifyingGlass.icon[4].toString()}/>
+                <path d={faMagnifyingGlass.icon[4].toString()} />
               </svg>
 
               <input

@@ -72,7 +72,7 @@ export namespace Components {
          */
         "doSearch": Function;
         /**
-          * Defines the text displayed as the placeholder in the input field before the user types anything.
+          * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText": string;
     }
@@ -178,7 +178,7 @@ declare namespace LocalJSX {
          */
         "doSearch"?: Function;
         /**
-          * Defines the text displayed as the placeholder in the input field before the user types anything.
+          * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText"?: string;
     }
