@@ -1,7 +1,12 @@
+.padding-enclosure {
+  width: 100%;
+  padding: 20px 30px 20px 10px;
+  box-sizing: border-box;
+}
+
 .outer-container {
-  width: 50%;
+  width: calc(100% - 50px);
   position: absolute;
-  @include all-round-shadow();
   background-color: white;
 
   .triangle {
@@ -14,17 +19,17 @@
   }
 
   .triangle-before {
-    top: -20px;
-    left: -30px;
+    top: -35px;
+    left: -40px;
     z-index: -1;
-    rotate: -10deg;
+    rotate: -23deg;
   }
 
   .triangle-after {
-    bottom: -20px;
-    right: -30px;
+    bottom: -15px;
+    right: -20px;
     z-index: -1;
-    rotate: -10deg;
+    rotate: -15deg;
   }
 
   .inner-container {
@@ -50,8 +55,11 @@
   
       .icon {
         @include icon();
-        filter: opacity(0.3);
         margin: auto;
+
+        > path {
+          fill: $colour-primary;
+        }
       }
   
       #x-icon {
@@ -91,30 +99,6 @@
       &:hover {
         cursor: pointer;
         background-color: navy;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 1024px) {
-  .outer-container {
-    .inner-container {
-      h2 {
-        font-size: 1.3rem;
-      }
-
-      input {
-        font-size: 0.9rem;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .outer-container {
-    .inner-container {
-      h2 {
-        font-size: 1.2rem;
       }
     }
   }

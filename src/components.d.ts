@@ -63,11 +63,17 @@ export namespace Components {
     interface BiggiveGrid {
     }
     interface BiggiveSearch {
+        /**
+          * Defines the text on the search button
+         */
         "buttonText": string;
         /**
           * This prop points to the memory address of the *real* search function on the parent of this component.
          */
         "doSearch": Function;
+        /**
+          * Defines the text displayed as the placeholder in the input field before the user types anything.
+         */
         "placeholderText": string;
     }
     interface DemoCampaignCards {
@@ -163,11 +169,17 @@ declare namespace LocalJSX {
     interface BiggiveGrid {
     }
     interface BiggiveSearch {
+        /**
+          * Defines the text on the search button
+         */
         "buttonText"?: string;
         /**
           * This prop points to the memory address of the *real* search function on the parent of this component.
          */
         "doSearch"?: Function;
+        /**
+          * Defines the text displayed as the placeholder in the input field before the user types anything.
+         */
         "placeholderText"?: string;
     }
     interface DemoCampaignCards {
