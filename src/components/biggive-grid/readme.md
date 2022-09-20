@@ -11,14 +11,9 @@ A simple flexbox grid of anything!
 
  - [demo-campaign-cards](../demo-campaign-cards)
 
-### Depends on
-
-- [biggive-search](../biggive-search)
-
 ### Graph
 ```mermaid
 graph TD;
-  biggive-grid --> biggive-search
   demo-campaign-cards --> biggive-grid
   style biggive-grid fill:#f9f,stroke:#333,stroke-width:4px
 ```

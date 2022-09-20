@@ -39,22 +39,26 @@ export class BigGiveSearch {
 
   render() {
     return (
-      <div class="container">
-        <h2>Find a charity or project</h2>
+      <div class="outer-container">
+        <div class="triangle triangle-before"></div>
+        <div class="inner-container">
+          <h2>Find a charity or project</h2>
 
-        <div class="search-box">
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon fa-thin" viewBox="0 0 512 512">
-            <path d={faMagnifyingGlass.icon[4].toString()} />
-          </svg>
+          <div class="search-box">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon fa-thin" viewBox="0 0 512 512">
+              <path d={faMagnifyingGlass.icon[4].toString()} />
+            </svg>
 
-          <input type="text" value={this.searchText} placeholder={this.placeholderText} onInput={event => this.handleSearchTextChanged(event)} onKeyDown={event => this.handleEnterPressed(event)} />
+            <input type="text" value={this.searchText} placeholder={this.placeholderText} onInput={event => this.handleSearchTextChanged(event)} onKeyDown={event => this.handleEnterPressed(event)} />
 
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon" id="x-icon" viewBox="0 0 512 512" onClick={() => this.clearSearchText()}>
-            <path d={faX.icon[4].toString()} />
-          </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" id="x-icon" viewBox="0 0 512 512" onClick={() => this.clearSearchText()}>
+              <path d={faX.icon[4].toString()} />
+            </svg>
+          </div>
+
+          <button onClick={() => this.handleSearchButtonPressed()}>{this.buttonText}</button>
         </div>
-
-        <button onClick={() => this.handleSearchButtonPressed()}>{this.buttonText}</button>
+        <div class="triangle triangle-after"></div>
       </div>
     );
   }
