@@ -47,7 +47,7 @@ export class IdentityService {
   }
 
   getJWT(): string | undefined {
-    return this.getIdAndJWT()?.jwt || undefined;
+    return this.getIdAndJWT()?.jwt;
   }
 
   saveJWT(id: string, jwt: string) {
