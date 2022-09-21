@@ -1,6 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken } from '@angular/core';
-import { TransferState } from '@angular/platform-browser';
 import { StorageService } from 'ngx-webstorage-service';
 import { Observable } from 'rxjs';
 
@@ -39,10 +38,6 @@ export class IdentityService {
   }
 
   getIdAndJWT(): { id: string, jwt: string } | undefined {
-    if (!this.storage.has(this.storageKey)) {
-      return undefined;
-    }
-
     return this.storage.get(this.storageKey) || undefined;
   }
 
