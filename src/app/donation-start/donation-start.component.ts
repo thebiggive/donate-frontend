@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -27,6 +28,7 @@ import { EMPTY, Observer } from 'rxjs';
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
 import { CampaignService } from '../campaign.service';
+import { CardIconsService } from '../card-icons.service';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
@@ -100,6 +102,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   stripePaymentMethodReady = false;
   stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
   stripeError?: string;
+  stripeFirstSavedMethod: PaymentMethod | null = null;
   submitting = false;
   termsProvider = `Big Give's`;
   termsUrl = 'https://www.thebiggive.org.uk/s/terms-and-conditions';
@@ -130,6 +133,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   constructor(
     private analyticsService: AnalyticsService,
+    public cardIconsService: CardIconsService,
     private cd: ChangeDetectorRef,
     public dialog: MatDialog,
     private donationService: DonationService,
@@ -165,6 +169,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     this.campaign = this.route.snapshot.data.campaign;
     this.setCampaignBasedVars();
+
+    const idAndJWT = this.identityService.getIdAndJWT();
+    if (idAndJWT !== undefined) {
+      if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
+        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+      }
+    }
 
     const formGroups: {
       amounts: FormGroup,   // Matching reservation happens at the end of this group.
@@ -212,6 +223,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
         billingPostcode: [null],  // See setConditionalValidators().
+        useSavedCard: [false],
       }),
       // T&Cs agreement is implicit through submitting the form.
     };
@@ -611,7 +623,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       return;
     }
 
-    const result = await this.stripeService.confirmPayment(this.donation, this.card);
+    const result = this.paymentGroup.value.useSavedCard 
+      ? await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.stripeFirstSavedMethod as PaymentMethod)
+      : await this.stripeService.confirmPaymentWithNewCardOrPRB(this.donation, this.card);
 
     if (!result || result.error) {
       if (result) {
@@ -773,6 +787,14 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
   }
 
+  onUseSavedCardChange(event: MatCheckboxChange) {
+    // For now, we assume unticking happens before card entry, so we can just set the validity flag to false.
+    // Ideally, we would later track `card`'s validity separately so that going back up the page, ticking this
+    // then unticking it leaves the card box valid without having to modify it. But this is rare and
+    // work-around-able, so for now it's not worth the refactoring time.
+    this.stripePaymentMethodReady = event.checked;
+  }
+
   onBillingPostCodeChanged(event: Event) {
     // If previous payment attempt failed due to incorrect post code
     // and the post code has just been changed again, clear stripeError
@@ -790,6 +812,36 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.addStripeCardBillingValidators();
       this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
     }
+  }
+
+  private loadAuthedPersonInfo(id: string, jwt: string) {
+    this.identityService.get(id, jwt).subscribe((person: Person) => {
+      this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
+
+      // Pre-fill rarely-changing form values from the Person.
+      this.giftAidGroup.patchValue({
+        homeAddress: person.home_address_line_1,
+        homeOutsideUK: person.home_country_code !== 'GB',
+        homePostcode: person.home_postcode,
+      });
+
+      this.paymentGroup.patchValue({
+        firstName: person.first_name,
+        lastName: person.last_name,
+        emailAddress: person.email_address,
+      });
+
+      // Load first saved Stripe card, if there are any.
+      this.donationService.getPaymentMethods(id, jwt).subscribe((response: { data: PaymentMethod[] }) => {
+        if (response.data.length > 0) {
+          this.stripePaymentMethodReady = true;
+          this.stripeFirstSavedMethod = response.data[0];
+          this.paymentGroup.patchValue({
+            useSavedCard: true,
+          });
+        }
+      });
+    });
   }
 
   /**
@@ -961,7 +1013,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       tipAmount: this.sanitiseCurrency(this.amountsGroup.value.tipAmount),
     };
 
-    if (environment.identityEnabled) {
+    // Person already set up on page load, or not applicable.
+    if (this.personId || !environment.identityEnabled) {
+      donation.pspCustomerId = this.identityService.getPspId();
+      this.createDonation(donation);
+    } else {
       const person: Person = {};
       person.captcha_code = this.captchaCode;
       this.identityService.create(person).subscribe(
@@ -978,8 +1034,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
           this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
         }
       )
-    } else {
-      this.createDonation(donation);
     }
   }
 

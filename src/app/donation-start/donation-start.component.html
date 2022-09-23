@@ -247,7 +247,22 @@
             <div id="payment-request-button" #paymentRequestButton></div>
             <p *ngIf="requestButtonShown && !stripePRBMethodReady" class="b-center b-grey b-rt-sm">Or</p>
 
-            <div *ngIf="!stripePRBMethodReady">
+            <div *ngIf="stripeFirstSavedMethod?.card">
+              <mat-checkbox
+                formControlName="useSavedCard"
+                id="useSavedCard"
+                (change)="onUseSavedCardChange($event)"
+              >
+                <fa-icon
+                  *ngIf="cardIconsService.hasCardIcon(stripeFirstSavedMethod?.card?.brand)"
+                  [title]="stripeFirstSavedMethod?.card?.brand"
+                  [icon]="cardIconsService.getCardIcon(stripeFirstSavedMethod?.card?.brand)"
+                ></fa-icon>
+                Use saved card ending {{ stripeFirstSavedMethod?.card?.last4 }}.
+              </mat-checkbox>
+            </div>
+
+            <div *ngIf="!stripePRBMethodReady && paymentGroup.value.useSavedCard === false">
               <div class="sr-combo-inputs-row">
                 <mat-label for="card-info">Card</mat-label>
                 <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>

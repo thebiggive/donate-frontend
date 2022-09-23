@@ -4,6 +4,7 @@ import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID } from '@angu
 import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { StorageService } from 'ngx-webstorage-service';
 import { Observable, of } from 'rxjs';
+import { PaymentMethod } from '@stripe/stripe-js';
 
 import { AnalyticsService } from './analytics.service';
 import { COUNTRY_CODE } from './country-code.token';
@@ -157,6 +158,13 @@ export class DonationService {
     });
 
     return observable;
+  }
+
+  getPaymentMethods(personId?: string, jwt?: string): Observable<{ data: PaymentMethod[] }> {
+    return this.http.get<{ data: PaymentMethod[] }>(
+      `${environment.donationsApiPrefix}/people/${personId}/payment_methods`,
+      this.getPersonAuthHttpOptions(jwt),
+    );
   }
 
   create(donation: Donation, personId?: string, jwt?: string): Observable<DonationCreatedResponse> {
