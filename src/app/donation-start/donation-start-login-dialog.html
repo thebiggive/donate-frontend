@@ -26,6 +26,11 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-raised-button (click)="login()" color="primary">Log in</button>
+  <button
+    mat-raised-button
+    [disabled]="!form.valid"
+    (click)="login()"
+    color="primary"
+  >Log in</button>
   <button mat-raised-button [mat-dialog-close]="false" cdkFocusInitial color="accent">Cancel</button>
 </mat-dialog-actions>
