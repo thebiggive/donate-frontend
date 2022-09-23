@@ -34,14 +34,10 @@ export class DonationCompleteComponent {
   prefilledText: string;
   recaptchaSiteKey = environment.recaptchaSiteKey;
   registerError?: string;
+  registrationComplete = false;
   shareUrl: string;
   timedOut = false;
   totalValue: number;
-
-  // TODO second-next: get last used card's last 4 from the donation or other short term storage.
-  // Update the account create prompt to show them back.
-  // TODO last for this ticket: have a checkbox to turn persisted sessions on/off when making account
-  // and vary JWT behaviour accordingly, including deleting local token when donor says no.
 
   private donationId: string;
   private maxTries = 5;
@@ -94,7 +90,7 @@ export class DonationCompleteComponent {
     });
     passwordSetDialog.afterClosed().subscribe(data => {
       if (data.password) {
-        this.setPassword(data.password);
+        this.setPassword(data.password, data.stayLoggedIn || false);
       }
     });
   }
@@ -111,6 +107,9 @@ export class DonationCompleteComponent {
         // It's still the same person, just a longer lived token. So for now just recycle the ID. We'll probably improve
         // `/auth` to return the ID separately soon, so we can do a normal login form that's able to call this without
         // having to decode the JWT (though maybe that's a good thing for the frontend to be able to do anyway?).
+        // For now, keep console logging these even live, because the app
+        // gives no visual indication that a longer-term token's been
+        // set up yet.
         console.log('Upgraded local token to a long-lived one with more permissions');
         this.identityService.saveJWT(this.person?.id as string, response.jwt);
       },
@@ -119,7 +118,7 @@ export class DonationCompleteComponent {
       });
   }
 
-  setPassword(password?: string) {
+  setPassword(password: string, stayLoggedIn: boolean) {
     if (!this.person) {
       this.analyticsService.logError('person_password_set_missing_data', 'No person in component', 'identity_error');
       this.registerError = 'Cannot set password without a person';
@@ -130,11 +129,17 @@ export class DonationCompleteComponent {
     this.identityService.update(this.person)
       .subscribe(
         () => { // Success. Must subscribe for call to fire.
+          this.registrationComplete = true;
           this.analyticsService.logEvent('person_password_set', 'Account password creation complete', 'identity');
 
-          // TODO This should only auto-login (and therefore execute the captcha) if the donor requested a persistent session.
-          this.captcha.execute(); // Leads to loginCaptchaReturn() assuming the captcha succeeds.
-        }, 
+          // We should only auto-login (and therefore execute the captcha) if the donor requested a persistent session.
+          if (stayLoggedIn) {
+            this.captcha.execute(); // Leads to loginCaptchaReturn() assuming the captcha succeeds.
+          } else {
+            // Otherwise we should remove even the temporary ID token.
+            this.identityService.clearJWT();
+          }
+        },
         (error: HttpErrorResponse) => {
           this.registerError = error.message;
           this.analyticsService.logError('person_password_set_failed', `${error.status}: ${error.message}`, 'identity_error');
@@ -155,17 +160,23 @@ export class DonationCompleteComponent {
         let person = this.buildPersonFromDonation(donation);
         person.id = idAndJWT.id;
 
-        this.identityService.update(person)
-          .subscribe(person => {
-            this.person = person;
-            this.offerToSetPassword = !person.has_password;
-          }, (error: HttpErrorResponse) => {
-            // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
-            // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
-            this.analyticsService.logError('person_core_data_update_failed', `${error.status}: ${error.message}`, 'identity_error');
-          });
-      }
-    }
+        // Try to patch the person only if they're not already a finalised donor account,
+        // e.g. they could have set a password then reloaded this page.
+        if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
+          this.registrationComplete = true;
+        } else {
+          this.identityService.update(person)
+            .subscribe(person => {
+              this.person = person;
+              this.offerToSetPassword = !person.has_password;
+            }, (error: HttpErrorResponse) => {
+              // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
+              // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
+              this.analyticsService.logError('person_core_data_update_failed', `${error.status}: ${error.message}`, 'identity_error');
+            });
+        } // End token-not-finalised condition.
+      } // Else no ID JWT saved. Donor may have already set a password but opted to log out.
+    } // End ID-feature-enabled condition.
 
     this.donation = donation;
     this.campaignService.getOneById(donation.projectId).subscribe(campaign => {

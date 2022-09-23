@@ -1,11 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken } from '@angular/core';
+import jwtDecode from 'jwt-decode';
 import { StorageService } from 'ngx-webstorage-service';
 import { Observable } from 'rxjs';
 
 import { AnalyticsService } from './analytics.service';
 import { Credentials } from './credentials.model';
 import { environment } from '../environments/environment';
+import { IdentityJWT } from './identity-jwt.model';
 import { Person } from './person.model';
 
 export const TBG_DONATE_ID_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_ID_STORAGE');
@@ -45,6 +47,10 @@ export class IdentityService {
       this.getAuthHttpOptions(person),
     );
   }
+  
+  clearJWT() {
+    this.storage.remove(this.storageKey);
+  }
 
   getIdAndJWT(): { id: string, jwt: string } | undefined {
     return this.storage.get(this.storageKey) || undefined;
@@ -52,6 +58,12 @@ export class IdentityService {
 
   getJWT(): string | undefined {
     return this.getIdAndJWT()?.jwt;
+  }
+
+  isTokenForFinalisedUser(jwt: string): boolean {
+    const data = jwtDecode<IdentityJWT>(jwt);
+
+    return data.sub.complete;
   }
 
   saveJWT(id: string, jwt: string) {
