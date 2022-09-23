@@ -170,10 +170,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.campaign = this.route.snapshot.data.campaign;
     this.setCampaignBasedVars();
 
-    const idAndJWT = this.identityService.getIdAndJWT();
-    if (idAndJWT !== undefined) {
-      if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
-        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+    if (environment.identityEnabled) {
+      const idAndJWT = this.identityService.getIdAndJWT();
+      if (idAndJWT !== undefined) {
+        if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
+          this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+        }
       }
     }
 
@@ -1013,9 +1015,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       tipAmount: this.sanitiseCurrency(this.amountsGroup.value.tipAmount),
     };
 
+    if (environment.identityEnabled && this.personId) {
+      donation.pspCustomerId = this.identityService.getPspId();
+    }
+
     // Person already set up on page load, or not applicable.
     if (this.personId || !environment.identityEnabled) {
-      donation.pspCustomerId = this.identityService.getPspId();
       this.createDonation(donation);
     } else {
       const person: Person = {};
