@@ -1,13 +1,18 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { environment } from '../../environments/environment';
 
+import { environment } from '../../environments/environment';
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { Donation } from '../donation.model';
+import { DonationCompleteSetPasswordDialogComponent } from './donation-complete-set-password-dialog.component';
 import { DonationService } from '../donation.service';
+import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
+import { Person } from '../person.model';
 
 @Component({
   selector: 'app-donation-complete',
@@ -15,26 +20,31 @@ import { PageMetaService } from '../page-meta.service';
   styleUrls: ['./donation-complete.component.scss'],
 })
 export class DonationCompleteComponent {
-  public campaign: Campaign;
-  public cardChargedAmount: number;
-  public complete = false;
-  public donation: Donation;
-  public giftAidAmount: number;
-  public noAccess = false;
-  public prefilledText: string;
-  public timedOut = false;
-  public totalValue: number;
-  public shareUrl: string;
+  campaign: Campaign;
+  cardChargedAmount: number;
+  complete = false;
+  donation: Donation;
+  giftAidAmount: number;
+  noAccess = false;
+  offerToSetPassword = false;
+  prefilledText: string;
+  registerError?: string;
+  shareUrl: string;
+  timedOut = false;
+  totalValue: number;
 
   private donationId: string;
   private maxTries = 5;
+  private person?: Person;
   private retryInterval = 2; // In seconds
   private tries = 0;
 
   constructor(
     private analyticsService: AnalyticsService,
     private campaignService: CampaignService,
+    public dialog: MatDialog,
     private donationService: DonationService,
+    private identityService: IdentityService,
     private pageMeta: PageMetaService,
     private route: ActivatedRoute,
   ) {
@@ -68,11 +78,60 @@ export class DonationCompleteComponent {
     );
   }
 
+  openSetPasswordDialog() {
+    const passwordSetDialog = this.dialog.open(DonationCompleteSetPasswordDialogComponent, {
+      data: { person: this.person },
+    });
+    passwordSetDialog.afterClosed().subscribe(data => {
+      if (data.password) {
+        this.setPassword(data.password);
+      }
+    });
+  }
+
+  setPassword(password?: string) {
+    if (!this.person) {
+      this.analyticsService.logError('person_password_set_missing_data', 'No person in component', 'identity_error');
+      this.registerError = 'Cannot set password without a person';
+      return;
+    }
+
+    this.person.raw_password = password;
+    this.identityService.update(this.person)
+      .subscribe(
+        () => { // Success. Must subscribe for call to fire.
+          this.analyticsService.logEvent('person_password_set', 'Account password creation complete', 'identity');
+        }, 
+        (error: HttpErrorResponse) => {
+          this.registerError = error.message;
+          this.analyticsService.logError('person_password_set_failed', `${error.status}: ${error.message}`, 'identity_error');
+        },
+      );
+  }
+
   private setDonation(donation: Donation) {
     if (donation === undefined) {
       this.analyticsService.logError('thank_you_lookup_failed', `Donation ID ${this.donationId}`);
       this.noAccess = true; // If we don't have the local auth token we can never load the details.
       return;
+    }
+
+    if (environment.identityEnabled) {
+      const idAndJWT = this.identityService.getIdAndJWT();
+      if (idAndJWT) {
+        let person = this.buildPersonFromDonation(donation);
+        person.id = idAndJWT.id;
+
+        this.identityService.update(person)
+          .subscribe(person => {
+            this.person = person;
+            this.offerToSetPassword = !person.has_password;
+          }, (error: HttpErrorResponse) => {
+            // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
+            // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
+            this.analyticsService.logError('person_core_data_update_failed', `${error.status}: ${error.message}`, 'identity_error');
+          });
+      }
     }
 
     this.donation = donation;
@@ -110,6 +169,22 @@ export class DonationCompleteComponent {
 
     this.analyticsService.logError('thank_you_timed_out_pre_complete', `Donation to campaign ${donation.projectId}`);
     this.timedOut = true;
+  }
+
+  private buildPersonFromDonation(donation: Donation): Person {
+    let person: Person = {
+      email_address: donation.emailAddress,
+      first_name: donation.firstName,
+      last_name: donation.lastName,
+    };
+
+    if (donation.giftAid) {
+      person.home_address_line_1 = donation.homeAddress;
+      person.home_postcode = donation.homePostcode === 'OVERSEAS' ? undefined : donation.homePostcode;
+      person.home_country_code = donation.homePostcode === 'OVERSEAS' ? 'OVERSEAS' : 'GB';
+    }
+
+    return person;
   }
 
   private setSocialShares(campaign: Campaign) {

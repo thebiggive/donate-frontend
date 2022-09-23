@@ -1,5 +1,6 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { getCurrencySymbol, isPlatformBrowser } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   AfterContentChecked,
   AfterContentInit,
@@ -36,8 +37,10 @@ import { environment } from '../../environments/environment';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { GiftAidAddress } from '../gift-aid-address.model';
 import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
+import { IdentityService } from '../identity.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
+import { Person } from '../person.model';
 import { PostcodeService } from '../postcode.service';
 import { retryStrategy } from '../observable-retry';
 import { StripeService } from '../stripe.service';
@@ -106,6 +109,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private campaignId: string;
   private defaultCountryCode: string;
+  private personId?: string;
   private previousDonation?: Donation;
   private stepHeaderEventsSet = false;
   private tipPercentageChanged = false;
@@ -131,6 +135,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     private donationService: DonationService,
     @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
+    private identityService: IdentityService,
     private navigationService: NavigationService,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
@@ -398,7 +403,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
           if (this.donation) {
             this.clearDonation(this.donation, true);
           }
-          this.createDonation(); // Re-sets-up PRB etc.
+          this.createDonationAndMaybePerson(); // Re-sets-up PRB etc.
         });
 
       return;
@@ -460,12 +465,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled') &&
         event.selectedStep.label !== 'Your donation' // Resets fire a 0 -> 0 index event.
       ) {
-        this.createDonation();
+        this.createDonationAndMaybePerson();
       }
 
       if (this.psp === 'stripe') {
         // Card element is mounted the same way regardless of donation info. See
-        // this.createDonation().subscribe(...) for Payment Request Button mount, which needs donation info
+        // this.createDonationAndMaybePerson().subscribe(...) for Payment Request Button mount, which needs donation info
         // first and so happens in `preparePaymentRequestButton()`.
         this.card = this.stripeService.getCard();
         if (this.cardInfo && this.card) { // Ensure #cardInfo not hidden by PRB success.
@@ -681,7 +686,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   captchaReturn(captchaResponse: string) {
     this.captchaCode = captchaResponse;
-    this.createDonation();
+    this.createDonationAndMaybePerson();
   }
 
   customTip(): boolean {
@@ -917,7 +922,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     );
   }
 
-  private createDonation(): void {
+  private createDonationAndMaybePerson(): void {
     if (!this.captchaCode) {
       // We need a captcha code before we can *really* proceed. By doing this here we ensure
       // this happens consistently regardless of whether donors click Next or a subsequent stepper
@@ -942,7 +947,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
       countryCode: this.paymentGroup?.value.billingCountry || 'GB',
-      creationRecaptchaCode: this.captchaCode,
+      // Captcha is set on Person (only) if we are making a Person + using the resulting
+      // token to authenticate the donation create.
+      creationRecaptchaCode: environment.identityEnabled ? undefined : this.captchaCode,
       currencyCode: this.campaign.currencyCode || 'GBP',
       donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
       donationMatched: this.campaign.isMatched,
@@ -954,11 +961,34 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       tipAmount: this.sanitiseCurrency(this.amountsGroup.value.tipAmount),
     };
 
+    if (environment.identityEnabled) {
+      const person: Person = {};
+      person.captcha_code = this.captchaCode;
+      this.identityService.create(person).subscribe(
+        (person: Person) => {
+          this.identityService.saveJWT(person.id as string, person.completion_jwt as string);
+          this.personId = person.id;
+          donation.pspCustomerId = person.stripe_customer_id;
+          this.createDonation(donation);
+        },
+        (error: HttpErrorResponse) => {
+          // In ID-on mode, we can't proceed without the Person/Stripe Customer.
+          this.analyticsService.logError('person_create_failed', `${error.status}: ${error.message}`, 'identity_error');
+          this.donationCreateError = true;
+          this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
+        }
+      )
+    } else {
+      this.createDonation(donation);
+    }
+  }
+
+  private createDonation(donation: Donation) {
     // No re-tries for create() where donors have only entered amounts. If the
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
-    this.donationService.create(donation)
+    this.donationService.create(donation, this.personId, this.identityService.getJWT())
       .subscribe({
         next: this.newDonationSuccess.bind(this),
         error: this.newDonationError.bind(this),

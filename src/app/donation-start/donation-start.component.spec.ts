@@ -25,6 +25,7 @@ import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { DonationStartComponent } from './donation-start.component';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
+import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('DonationStartComponent', () => {
@@ -147,6 +148,7 @@ describe('DonationStartComponent', () => {
           },
         },
         InMemoryStorageService,
+        { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
       ],
     }).compileComponents();

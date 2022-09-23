@@ -16,6 +16,8 @@ export const environment: Environment = {
   googleAnalyticsId: 'UA-2979952-3',
   googleOptimizeId: null,
   // googleOptimizeId: 'OPT-NV3NHD3', // Bring back when we have an experiment to run
+  identityApiPrefix: 'http://localhost:30050/v1',
+  identityEnabled: true,
   maximumDonationAmount: 25000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
   postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.

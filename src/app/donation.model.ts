@@ -51,6 +51,8 @@ export interface Donation {
 
     psp: 'stripe';
 
+    pspCustomerId?: string;
+
     /**
      * Donor's address including postcode, or just postcode with Stripe. May be
      * omitted for US donors in future?

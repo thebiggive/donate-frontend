@@ -16,6 +16,8 @@ export const environment: Environment = {
   donationsApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
+  identityApiPrefix: 'https://identity-regression.thebiggivetest.org.uk/v1',
+  identityEnabled: false,
   maximumDonationAmount: 25000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
   postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.
