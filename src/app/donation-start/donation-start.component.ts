@@ -32,6 +32,7 @@ import { CardIconsService } from '../card-icons.service';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
+import { DonationStartLoginDialogComponent } from './donation-start-login-dialog.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
 import { DonationStartMatchingExpiredDialogComponent } from './donation-start-matching-expired-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
@@ -97,12 +98,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   /** setTimeout reference (timer ID) if applicable. */
   expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
   loadingAddressSuggestions = false;
+  personId?: string;
   privacyUrl = 'https://www.thebiggive.org.uk/s/privacy-policy';
   showAddressLookup: boolean;
   stripePaymentMethodReady = false;
   stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
   stripeError?: string;
-  stripeFirstSavedMethod: PaymentMethod | null = null;
+  stripeFirstSavedMethod?: PaymentMethod;
   submitting = false;
   termsProvider = `Big Give's`;
   termsUrl = 'https://www.thebiggive.org.uk/s/terms-and-conditions';
@@ -112,7 +114,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private campaignId: string;
   private defaultCountryCode: string;
-  private personId?: string;
   private previousDonation?: Donation;
   private stepHeaderEventsSet = false;
   private tipPercentageChanged = false;
@@ -355,6 +356,22 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     this.stepHeaderEventsSet = true;
+  }
+
+  login() {
+    const loginDialog = this.dialog.open(DonationStartLoginDialogComponent);
+    loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
+      if (data && data.id) {
+        this.loadAuthedPersonInfo(data.id, data.jwt);
+      }
+    });
+  }
+
+  logout() {
+    this.personId = undefined;
+    this.stripeFirstSavedMethod = undefined;
+    this.donationForm.reset();
+    this.identityService.clearJWT();
   }
 
   haveAddressSuggestions(): boolean {
@@ -668,6 +685,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.stripeError = `Status: ${result.paymentIntent.status}`;
     this.stripeResponseErrorCode = undefined;
     this.submitting = false;
+  }
+
+  get canLogin() {
+    return environment.identityEnabled && !this.personId;
   }
 
   get donationAmountField() {
@@ -1567,6 +1588,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
             this.tipPercentageChanged = false;
             if (this.paymentGroup) {
               this.paymentGroup.patchValue({ billingCountry: this.defaultCountryCode });
+            }
+
+            if (this.personId) {
+              this.loadAuthedPersonInfo(this.personId, this.identityService.getJWT() as string);
             }
           },
           response => {
