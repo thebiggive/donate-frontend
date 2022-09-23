@@ -10,6 +10,7 @@ import { IdentityService } from '../identity.service';
 @Component({
   selector: 'app-donation-start-login-dialog',
   templateUrl: 'donation-start-login-dialog.html',
+  styleUrls: ['./donation-start-login-dialog.component.scss'],
 })
 export class DonationStartLoginDialogComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
@@ -48,7 +49,7 @@ export class DonationStartLoginDialogComponent implements OnInit {
       this.identityService.saveJWT(response.id, response.jwt);
       this.dialogRef.close(response);
     }, (error) => {
-      this.loginError = error.error;
+      this.loginError = error.error.error.description || 'Unknown error';
     });
   }
 
