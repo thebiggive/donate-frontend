@@ -47,15 +47,11 @@ export class IdentityService {
   }
 
   getIdAndJWT(): { id: string, jwt: string } | undefined {
-    if (!this.storage.has(this.storageKey)) {
-      return undefined;
-    }
-
     return this.storage.get(this.storageKey) || undefined;
   }
 
   getJWT(): string | undefined {
-    return this.getIdAndJWT()?.jwt || undefined;
+    return this.getIdAndJWT()?.jwt;
   }
 
   saveJWT(id: string, jwt: string) {
