@@ -7,6 +7,7 @@ import { Person } from '../person.model';
 @Component({
   selector: 'app-donation-complete-set-password-dialog',
   templateUrl: 'donation-complete-set-password-dialog.html',
+  styleUrls: ['./donation-complete-set-password-dialog.component.scss'],
 })
 export class DonationCompleteSetPasswordDialogComponent implements OnInit {
   form: FormGroup;
@@ -25,10 +26,14 @@ export class DonationCompleteSetPasswordDialogComponent implements OnInit {
         Validators.required,
         Validators.minLength(10),
       ]],
+      stayLoggedIn: [false],
     });
   }
 
   set() {
-    this.dialogRef.close({ password: this.form.value.password });
+    this.dialogRef.close({
+      password: this.form.value.password,
+      stayLoggedIn: this.form.value.stayLoggedIn,
+    });
   }
 }
