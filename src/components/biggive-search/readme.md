@@ -35,7 +35,7 @@ the parent component).
 | ----------------- | ------------------ | ----------------------------------------------------------------------------------------------------- | ---------- | ----------- |
 | `buttonText`      | `button-text`      | Defines the text on the search button                                                                 | `string`   | `undefined` |
 | `doSearch`        | --                 | This prop points to the memory address of the *real* search function on the parent of this component. | `Function` | `undefined` |
-| `placeholderText` | `placeholder-text` | Defines the text displayed as the placeholder in the input field before the user types anything.      | `string`   | `undefined` |
+| `placeholderText` | `placeholder-text` | Defines the text displayed as the placeholder in the input field before the user types anything       | `string`   | `undefined` |
 
 
 ----------------------------------------------
