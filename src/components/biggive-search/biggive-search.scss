@@ -37,7 +37,6 @@
       box-sizing: border-box;
     
       h2 {
-        @include standard-font();
         width: 100%;
         font-weight: 500;
         margin-top: 0px;
@@ -68,6 +67,7 @@
         }
       
         input {
+          @include standard-font();
           width: 100%;
           box-sizing: border-box;
           border: none;
