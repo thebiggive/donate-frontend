@@ -8,13 +8,8 @@
 
 // Layout + spacing
 @mixin flex-container-row() {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -webkit-flex;
   display: flex;
-  -webkit-flex-flow: row wrap;
   flex-flow: row wrap;
-  -webkit-justify-content: space-between;
   justify-content: space-between;
 }
 
