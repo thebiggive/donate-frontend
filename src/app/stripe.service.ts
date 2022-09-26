@@ -89,7 +89,7 @@ export class StripeService {
     this.lastCardCountry = cardCountry;
   }
 
-  async confirmPayment(
+  async confirmPaymentWithNewCardOrPRB(
     donationPreUpdate: Donation,
     cardElement: StripeCardElement,
   ): Promise<PaymentIntentResult | undefined> {
@@ -135,47 +135,39 @@ export class StripeService {
           };
         }
 
-        this.stripe?.confirmCardPayment(
-          donation.clientSecret,
-          { payment_method: paymentMethod },
-          { handleActions: !isPrb },
-        ).then(async confirmResult => {
-          const analyticsEventActionPrefix = isPrb ? 'stripe_prb_' : 'stripe_card_';
-
-          if (confirmResult.error) {
-            // Failure w/ no extra action applicable
-            this.analyticsService.logError(
-              `${analyticsEventActionPrefix}payment_error`,
-              confirmResult.error.message ?? '[No message]',
-            );
-
-            resolve(confirmResult);
-            return;
-          }
-
-          if (confirmResult.paymentIntent.status !== 'requires_action') {
-            // Success w/ no extra action needed
-            this.analyticsService.logEvent(
-              `${analyticsEventActionPrefix}payment_success`,
-              `Stripe Intent processing or done for donation ${donation.donationId} to campaign ${donation.projectId}`,
-            );
-
-            resolve(confirmResult);
-            return;
-          }
-
-          // The PaymentIntent requires an action e.g. 3DS verification; let Stripe.js handle the flow.
-          this.analyticsService.logEvent(`${analyticsEventActionPrefix}requires_action`, confirmResult.paymentIntent.next_action?.type ?? '[Action unknown]');
-          this.stripe?.confirmCardPayment(donation.clientSecret || '').then(confirmAgainResult => {
-            if (confirmAgainResult.error) {
-              this.analyticsService.logError(`${analyticsEventActionPrefix}further_action_error`, confirmAgainResult.error.message ?? '[No message]');
-            }
-
-            // Extra action done, whether successfully or not.
-            resolve(confirmAgainResult);
-          });
+        this.payWithMethod(donation, paymentMethod, !isPrb).then(result => {
+          resolve(result);
+        }).catch(error => {
+          reject(error);
         });
       });
+    });
+  }
+
+  async confirmPaymentWithSavedMethod(
+    donationPreUpdate: Donation,
+    paymentMethod: PaymentMethod
+  ): Promise<PaymentIntentResult | undefined> {
+    return new Promise<PaymentIntentResult>((resolve, reject) => {
+      this.setLastCardMetadata(paymentMethod.card?.brand, paymentMethod.card?.country as string);
+
+      this.donationService.updatePaymentDetails(donationPreUpdate, this.lastCardBrand, this.lastCardCountry)
+        .subscribe(donation => {
+          if (!donation.clientSecret || !donation.donationId) {
+            reject('Missing ID in card-details-updated donation');
+            return;
+          }
+
+          this.payWithMethod(
+            donation,
+            paymentMethod.id, // Sending the full object for completion means properties like "customer" crash the callout.
+            true, // Never a *new* PRB (wallet) when the method is saved, so always handle actions.
+          ).then(result => {
+            resolve(result);
+          }).catch(error => {
+            reject(error);
+          });
+        });
     });
   }
 
@@ -321,5 +313,50 @@ export class StripeService {
     }
 
     return items;
+  }
+
+  private payWithMethod(donation: Donation, payment_method: any, handleActions: boolean): Promise<PaymentIntentResult> {
+    return new Promise((resolve) => {
+      this.stripe?.confirmCardPayment(
+        donation.clientSecret as string,
+        { payment_method },
+        { handleActions },
+      ).then(async confirmResult => {
+        const analyticsEventActionPrefix = handleActions ? 'stripe_card_' : 'stripe_prb_';
+
+        if (confirmResult.error) {
+          // Failure w/ no extra action applicable
+          this.analyticsService.logError(
+            `${analyticsEventActionPrefix}payment_error`,
+            confirmResult.error.message ?? '[No message]',
+          );
+
+          resolve(confirmResult);
+          return;
+        }
+
+        if (confirmResult.paymentIntent.status !== 'requires_action') {
+          // Success w/ no extra action needed
+          this.analyticsService.logEvent(
+            `${analyticsEventActionPrefix}payment_success`,
+            `Stripe Intent processing or done for donation ${donation.donationId} to campaign ${donation.projectId}`,
+          );
+
+          resolve(confirmResult);
+          return;
+        }
+
+        // The PaymentIntent requires an action e.g. 3DS verification; let Stripe.js handle the flow.
+        this.analyticsService.logEvent(`${analyticsEventActionPrefix}requires_action`, confirmResult.paymentIntent.next_action?.type ?? '[Action unknown]');
+        this.stripe?.confirmCardPayment(donation.clientSecret || '').then(confirmAgainResult => {
+          if (confirmAgainResult.error) {
+            this.analyticsService.logError(`${analyticsEventActionPrefix}further_action_error`, confirmAgainResult.error.message ?? '[No message]');
+          }
+
+          // Extra action done, whether successfully or not.
+          resolve(confirmAgainResult);
+        });
+      });
+    });
   }
 }

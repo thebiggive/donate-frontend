@@ -191,6 +191,7 @@ describe('DonationStartComponent', () => {
         emailAddress: 'test@example.com',
         billingCountry: 'GB',
         billingPostcode: 'N1 1AA',
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: false,
@@ -237,6 +238,7 @@ describe('DonationStartComponent', () => {
         emailAddress: 'test@example.com',
         billingCountry: 'GB',
         billingPostcode: 'N1 1AA',
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: false,
@@ -272,6 +274,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         billingCountry: null,
         billingPostcode: null,
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: null,
@@ -317,6 +320,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         billingCountry: null,
         billingPostcode: null,
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: true,
@@ -360,6 +364,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         billingCountry: null,
         billingPostcode: null,
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: true,
@@ -403,6 +408,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         billingCountry: null,
         billingPostcode: null,
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: true,
@@ -446,6 +452,7 @@ describe('DonationStartComponent', () => {
         emailAddress: 'test@example.com',
         billingCountry: 'GB',
         billingPostcode: 'N1 1AA',
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: true,
@@ -492,6 +499,7 @@ describe('DonationStartComponent', () => {
         emailAddress: 'test@example.com',
         billingCountry: null,
         billingPostcode: null,
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: true,
@@ -539,6 +547,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         billingCountry: 'GB',
         billingPostcode: 'N1 1AA',
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: true,

@@ -40,6 +40,15 @@ export class IdentityService {
       person);
   }
 
+  get(id: string, jwt: string): Observable<Person> {
+    return this.http.get<Person>(
+      `${environment.identityApiPrefix}${this.peoplePath}/${id}`,
+      {
+        headers: new HttpHeaders({ 'X-Tbg-Auth': jwt }),
+      },
+    );
+  }
+
   update(person: Person): Observable<Person> {
     return this.http.put<Person>(
       `${environment.identityApiPrefix}${this.peoplePath}/${person.id}`,
@@ -58,6 +67,12 @@ export class IdentityService {
 
   getJWT(): string | undefined {
     return this.getIdAndJWT()?.jwt;
+  }
+
+  getPspId(): string {
+    const data = jwtDecode<IdentityJWT>(this.getJWT() as string);
+
+    return data.sub.psp_id;
   }
 
   isTokenForFinalisedUser(jwt: string): boolean {

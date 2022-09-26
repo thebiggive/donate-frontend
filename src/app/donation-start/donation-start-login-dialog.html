@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Log in</h2>
+
+<mat-dialog-content [formGroup]="form" class="mat-typography">
+  <re-captcha
+    #captcha
+    size="invisible"
+    (resolved)="captchaReturn($event)"
+    siteKey="{{ recaptchaSiteKey }}"
+  ></re-captcha>
+
+  <mat-form-field class="b-w-100" color="primary">
+    <mat-label for="emailAddress">Email address</mat-label>
+    <input matInput type="email" id="emailAddress" formControlName="emailAddress">
+  </mat-form-field>
+
+  <mat-form-field class="b-w-100" color="primary">
+    <mat-label for="password">Password</mat-label>
+    <input matInput type="password" id="password" formControlName="password">
+  </mat-form-field>
+
+  <p class="b-rt-0">You will be logged in for 8 days. Please log out on this page afterwards if using a shared computer.</p>
+
+  <p *ngIf="loginError" class="error" aria-live="assertive">
+    Login error: {{ loginError }}
+  </p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button
+    mat-raised-button
+    [disabled]="!form.valid"
+    (click)="login()"
+    color="primary"
+  >Log in</button>
+  <button mat-raised-button [mat-dialog-close]="false" cdkFocusInitial color="accent">Cancel</button>
+</mat-dialog-actions>
