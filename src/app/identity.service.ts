@@ -62,7 +62,7 @@ export class IdentityService {
   }
 
   getIdAndJWT(): { id: string, jwt: string } | undefined {
-    const idAndJwt = this.storage.get(this.storageKey) || undefined;
+    const idAndJwt = this.storage.get(this.storageKey);
 
     if (idAndJwt === undefined) {
       return undefined;
