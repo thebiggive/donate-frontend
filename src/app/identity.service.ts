@@ -62,7 +62,16 @@ export class IdentityService {
   }
 
   getIdAndJWT(): { id: string, jwt: string } | undefined {
-    return this.storage.get(this.storageKey) || undefined;
+    const idAndJwt = this.storage.get(this.storageKey) || undefined;
+
+    const data = this.getTokenPayload(idAndJwt?.jwt);
+    if (data.exp as number < Math.floor(Date.now() / 1000)) {
+      // JWT has expired.
+      this.clearJWT();
+      return undefined;
+    }
+
+    return idAndJwt;
   }
 
   getJWT(): string | undefined {
@@ -70,19 +79,21 @@ export class IdentityService {
   }
 
   getPspId(): string {
-    const data = jwtDecode<IdentityJWT>(this.getJWT() as string);
+    const data = this.getTokenPayload(this.getJWT() as string);
 
     return data.sub.psp_id;
   }
 
   isTokenForFinalisedUser(jwt: string): boolean {
-    const data = jwtDecode<IdentityJWT>(jwt);
-
-    return data.sub.complete;
+    return this.getTokenPayload(jwt).sub.complete;
   }
 
   saveJWT(id: string, jwt: string) {
     this.storage.set(this.storageKey, { id, jwt });
+  }
+
+  private getTokenPayload(jwt: string): IdentityJWT {
+    return jwtDecode<IdentityJWT>(jwt);
   }
 
   private getAuthHttpOptions(person: Person): { headers: HttpHeaders } {
