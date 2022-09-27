@@ -64,6 +64,10 @@ export class IdentityService {
   getIdAndJWT(): { id: string, jwt: string } | undefined {
     const idAndJwt = this.storage.get(this.storageKey) || undefined;
 
+    if (idAndJwt === undefined) {
+      return undefined;
+    }
+
     const data = this.getTokenPayload(idAndJwt?.jwt);
     if (data.exp as number < Math.floor(Date.now() / 1000)) {
       // JWT has expired.
