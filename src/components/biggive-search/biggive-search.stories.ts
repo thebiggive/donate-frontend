@@ -2,7 +2,7 @@ export default {
   title: 'Components/Demos',
 };
 
-const Template = args => `<biggive-search placeholderText="${args.placeholderText}" buttonText="${args.buttonText}" doSearch="${args.doSearch}"></biggive-search>`;
+const Template = args => `<biggive-search placeholder-text="${args.placeholderText}" button-text="${args.buttonText}" do-search="${args.doSearch}"></biggive-search>`;
 
 const search = () => {
   alert('Search Button Pressed');
