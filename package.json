@@ -38,9 +38,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.1.2",
     "@fortawesome/pro-duotone-svg-icons": "^6.1.2",
     "@fortawesome/pro-solid-svg-icons": "^6.1.2",
-    "@stencil/core": "^2.13.0",
-    "@types/react": "^18.0.21",
-    "@types/react-dom": "^18.0.6"
+    "@stencil/core": "^2.13.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.9",
