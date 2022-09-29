@@ -40,9 +40,7 @@
     "@fortawesome/pro-solid-svg-icons": "^6.1.2",
     "@stencil/core": "^2.13.0",
     "@types/react": "^18.0.21",
-    "@types/react-dom": "^18.0.6",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@types/react-dom": "^18.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.18.9",

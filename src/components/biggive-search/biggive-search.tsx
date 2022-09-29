@@ -16,7 +16,8 @@ export class BigGiveSearch {
     composed: true,
     cancelable: true,
     bubbles: true,
-  }) doSearch: EventEmitter<string>;
+  })
+  doSearch: EventEmitter<string>;
 
   @State() searchText: string = null;
 
