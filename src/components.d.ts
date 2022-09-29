@@ -68,16 +68,16 @@ export namespace Components {
          */
         "buttonText": string;
         /**
-          * This prop points to the memory address of the *real* search function on the parent of this component.
-         */
-        "doSearch": Function;
-        /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText": string;
     }
     interface DemoCampaignCards {
     }
+}
+export interface BiggiveSearchCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLBiggiveSearchElement;
 }
 declare global {
     interface HTMLBiggiveCampaignCardElement extends Components.BiggiveCampaignCard, HTMLStencilElement {
@@ -174,9 +174,9 @@ declare namespace LocalJSX {
          */
         "buttonText"?: string;
         /**
-          * This prop points to the memory address of the *real* search function on the parent of this component.
+          * This event `doSearch` event is emitted and propogates to the parent component which handles it
          */
-        "doSearch"?: Function;
+        "onDoSearch"?: (event: BiggiveSearchCustomEvent<string>) => void;
         /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */

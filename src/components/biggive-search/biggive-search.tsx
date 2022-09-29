@@ -1,4 +1,4 @@
-import { Component, h, Prop, State } from '@stencil/core';
+import { Component, h, Prop, State, Event, EventEmitter } from '@stencil/core';
 import { faMagnifyingGlass, faX } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -7,17 +7,22 @@ import { faMagnifyingGlass, faX } from '@fortawesome/free-solid-svg-icons';
   shadow: true,
 })
 export class BigGiveSearch {
+  /**
+   * This event `doSearch` event is emitted and propogates to the parent
+   * component which handles it
+   */
+  @Event({
+    eventName: 'doSearch',
+    composed: true,
+    cancelable: true,
+    bubbles: true,
+  }) doSearch: EventEmitter<string>;
+
   @State() searchText: string = null;
 
   private handleSearchTextChanged(event) {
     this.searchText = event.target.value;
   }
-
-  /**
-   * This prop points to the memory address of the *real* search function
-   * on the parent of this component.
-   */
-  @Prop() doSearch: Function;
 
   /**
    * Defines the text displayed as the placeholder in the input field
@@ -31,12 +36,12 @@ export class BigGiveSearch {
   @Prop() buttonText: string;
 
   private handleSearchButtonPressed() {
-    this.doSearch(this.searchText);
+    this.doSearch.emit(this.searchText);
   }
 
   private handleEnterPressed(ev: KeyboardEvent) {
     if (ev.key === 'Enter') {
-      this.doSearch(this.searchText);
+      this.doSearch.emit(this.searchText);
     }
   }
 
