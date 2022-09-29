@@ -62,8 +62,22 @@ export namespace Components {
     }
     interface BiggiveGrid {
     }
+    interface BiggiveSearch {
+        /**
+          * Defines the text on the search button
+         */
+        "buttonText": string;
+        /**
+          * Defines the text displayed as the placeholder in the input field before the user types anything
+         */
+        "placeholderText": string;
+    }
     interface DemoCampaignCards {
     }
+}
+export interface BiggiveSearchCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLBiggiveSearchElement;
 }
 declare global {
     interface HTMLBiggiveCampaignCardElement extends Components.BiggiveCampaignCard, HTMLStencilElement {
@@ -78,6 +92,12 @@ declare global {
         prototype: HTMLBiggiveGridElement;
         new (): HTMLBiggiveGridElement;
     };
+    interface HTMLBiggiveSearchElement extends Components.BiggiveSearch, HTMLStencilElement {
+    }
+    var HTMLBiggiveSearchElement: {
+        prototype: HTMLBiggiveSearchElement;
+        new (): HTMLBiggiveSearchElement;
+    };
     interface HTMLDemoCampaignCardsElement extends Components.DemoCampaignCards, HTMLStencilElement {
     }
     var HTMLDemoCampaignCardsElement: {
@@ -87,6 +107,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "biggive-campaign-card": HTMLBiggiveCampaignCardElement;
         "biggive-grid": HTMLBiggiveGridElement;
+        "biggive-search": HTMLBiggiveSearchElement;
         "demo-campaign-cards": HTMLDemoCampaignCardsElement;
     }
 }
@@ -147,11 +168,26 @@ declare namespace LocalJSX {
     }
     interface BiggiveGrid {
     }
+    interface BiggiveSearch {
+        /**
+          * Defines the text on the search button
+         */
+        "buttonText"?: string;
+        /**
+          * This event `doSearch` event is emitted and propogates to the parent component which handles it
+         */
+        "onDoSearch"?: (event: BiggiveSearchCustomEvent<string>) => void;
+        /**
+          * Defines the text displayed as the placeholder in the input field before the user types anything
+         */
+        "placeholderText"?: string;
+    }
     interface DemoCampaignCards {
     }
     interface IntrinsicElements {
         "biggive-campaign-card": BiggiveCampaignCard;
         "biggive-grid": BiggiveGrid;
+        "biggive-search": BiggiveSearch;
         "demo-campaign-cards": DemoCampaignCards;
     }
 }
@@ -161,6 +197,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "biggive-campaign-card": LocalJSX.BiggiveCampaignCard & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardElement>;
             "biggive-grid": LocalJSX.BiggiveGrid & JSXBase.HTMLAttributes<HTMLBiggiveGridElement>;
+            "biggive-search": LocalJSX.BiggiveSearch & JSXBase.HTMLAttributes<HTMLBiggiveSearchElement>;
             "demo-campaign-cards": LocalJSX.DemoCampaignCards & JSXBase.HTMLAttributes<HTMLDemoCampaignCardsElement>;
         }
     }
