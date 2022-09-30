@@ -99,6 +99,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
   loadingAddressSuggestions = false;
   personId?: string;
+  personIsLoginReady = false;
   privacyUrl = 'https://www.thebiggive.org.uk/s/privacy-policy';
   showAddressLookup: boolean;
   stripePaymentMethodReady = false;
@@ -369,6 +370,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   logout() {
     this.personId = undefined;
+    this.personIsLoginReady = false;
     this.stripeFirstSavedMethod = undefined;
     this.donationForm.reset();
     this.identityService.clearJWT();
@@ -840,6 +842,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private loadAuthedPersonInfo(id: string, jwt: string) {
     this.identityService.get(id, jwt).subscribe((person: Person) => {
       this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
+      this.personIsLoginReady = true;
 
       // Pre-fill rarely-changing form values from the Person.
       this.giftAidGroup.patchValue({
@@ -1050,6 +1053,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         (person: Person) => {
           this.identityService.saveJWT(person.id as string, person.completion_jwt as string);
           this.personId = person.id;
+          this.personIsLoginReady = false; // New Person -> no password etc. yet.
           donation.pspCustomerId = person.stripe_customer_id;
           this.createDonation(donation);
         },
