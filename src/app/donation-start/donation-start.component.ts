@@ -644,7 +644,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       return;
     }
 
-    const result = this.paymentGroup.value.useSavedCard 
+    const result = this.paymentGroup.value.useSavedCard
       ? await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.stripeFirstSavedMethod as PaymentMethod)
       : await this.stripeService.confirmPaymentWithNewCardOrPRB(this.donation, this.card);
 
@@ -818,6 +818,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // then unticking it leaves the card box valid without having to modify it. But this is rare and
     // work-around-able, so for now it's not worth the refactoring time.
     this.stripePaymentMethodReady = event.checked;
+
+    if (event.checked) {
+      this.updateFormWithSavedCard();
+    }
   }
 
   onBillingPostCodeChanged(event: Event) {
@@ -862,11 +866,19 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         if (response.data.length > 0) {
           this.stripePaymentMethodReady = true;
           this.stripeFirstSavedMethod = response.data[0];
-          this.paymentGroup.patchValue({
-            useSavedCard: true,
-          });
+
+          this.updateFormWithSavedCard();
         }
       });
+    });
+  }
+
+  private updateFormWithSavedCard() {
+    const billingDetails = this.stripeFirstSavedMethod?.billing_details as PaymentMethod.BillingDetails;
+    this.paymentGroup.patchValue({
+      billingCountry: billingDetails.address?.country,
+      billingPostcode: billingDetails.address?.postal_code,
+      useSavedCard: true,
     });
   }
 
