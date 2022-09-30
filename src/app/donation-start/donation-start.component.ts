@@ -1074,7 +1074,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.createDonation(donation);
     } else {
       const person: Person = {};
-      person.captcha_code = this.captchaCode;
+      person.captcha_code = this.idCaptchaCode;
       this.identityService.create(person).subscribe(
         (person: Person) => {
           this.identityService.saveJWT(person.id as string, person.completion_jwt as string);
