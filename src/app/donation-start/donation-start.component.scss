@@ -269,3 +269,11 @@ a {
 .homeOutsideUK-wrapper {
   text-align: right;
 }
+
+.id-info {
+  @include make-card($box-shadow-hard);
+
+  text-align: center;
+  margin-top: 1rem;
+  padding: 0.25rem 1rem 1rem 1rem;
+}

@@ -35,9 +35,9 @@
             <strong>Your account has been created.</strong> You can now donate faster using your chosen email address and password.
           </p>
 
-          <div *ngIf="!registrationComplete">
+          <div *ngIf="!registrationComplete" class="id-info">
             <h4>Want to donate faster next time?</h4>
-            <p><button (click)="openSetPasswordDialog()">Set a password</button></p>
+            <p><button mat-raised-button (click)="openSetPasswordDialog()">Set a password</button></p>
           </div>
 
           <p *ngIf="registerError" class="error" aria-live="assertive">

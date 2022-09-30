@@ -22,6 +22,7 @@ const apiHost = (new URL(environment.apiUriPrefix)).host;
 const donationsApiHost = (new URL(environment.donationsApiPrefix)).host;
 const donateGlobalHost = (new URL(environment.donateGlobalUriPrefix)).host;
 const donateHost = (new URL(environment.donateUriPrefix)).host;
+const identityApiHost = (new URL(environment.identityApiPrefix)).host;
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app() {
@@ -33,7 +34,7 @@ export function app() {
   // Middleware
   server.use(compression());
   // Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
-  // https://github.com/helmetjs/helmet#reference  
+  // https://github.com/helmetjs/helmet#reference
   server.use(helmet({
     contentSecurityPolicy: {
       directives: {
@@ -42,6 +43,7 @@ export function app() {
           'wss:', // For GetSiteControl. wss:// is for secure-only WebSockets.
           apiHost,
           donationsApiHost,
+          identityApiHost,
           'api.getAddress.io',
           '*.getsitecontrol.com',
           'fonts.googleapis.com',
@@ -52,6 +54,7 @@ export function app() {
           `'self'`,
           apiHost,
           donationsApiHost,
+          identityApiHost,
           'fonts.googleapis.com',
           'fonts.gstatic.com',
           'js.stripe.com',

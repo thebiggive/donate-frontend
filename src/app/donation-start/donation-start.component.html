@@ -15,14 +15,15 @@
         <h1 class="b-rh-2 b-bold">{{ campaign.title }}</h1>
       </div>
 
-      <p *ngIf="canLogin">
-        <button (click)="login()">Log in</button>
-      </p>
+      <div *ngIf="canLogin" class="id-info">
+        <h4>You can donate faster if you've already made an account with us this year.</h4>
+        <button mat-raised-button (click)="login()">Log in</button>
+      </div>
 
-      <div *ngIf="personId">
+      <div *ngIf="personId && personIsLoginReady" class="id-info">
         <p>Logged in as <strong>{{ paymentGroup.value.emailAddress }}</strong></p>
         <p>We'll pre-fill some fields with your saved details, but you can change them if you need to.</p>
-        <p><button (click)="logout()">Log out</button></p>
+        <p><button mat-raised-button (click)="logout()">Log out</button></p>
       </div>
 
       <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
