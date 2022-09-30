@@ -32,7 +32,7 @@ export class DonationCompleteComponent {
   noAccess = false;
   offerToSetPassword = false;
   prefilledText: string;
-  recaptchaSiteKey = environment.recaptchaSiteKey;
+  recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   registerError?: string;
   registrationComplete = false;
   shareUrl: string;

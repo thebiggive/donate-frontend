@@ -136,8 +136,15 @@
             <re-captcha
               #captcha
               size="invisible"
-              (resolved)="captchaReturn($event)"
+              (resolved)="captchaDonationReturn($event)"
               siteKey="{{ recaptchaSiteKey }}"
+            ></re-captcha>
+
+            <re-captcha
+              #idCaptcha
+              size="invisible"
+              (resolved)="captchaIdentityReturn($event)"
+              siteKey="{{ recaptchaIdSiteKey }}"
             ></re-captcha>
 
             <div>
