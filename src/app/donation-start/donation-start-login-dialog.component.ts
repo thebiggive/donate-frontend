@@ -14,7 +14,7 @@ import { IdentityService } from '../identity.service';
 })
 export class DonationStartLoginDialogComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
-  recaptchaSiteKey = environment.recaptchaSiteKey;
+  recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
 
   form: FormGroup;
   loginError?: string;

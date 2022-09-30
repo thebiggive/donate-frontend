@@ -58,6 +58,7 @@ import { ValidateBillingPostCode } from '../validators/validate-billing-post-cod
 })
 export class DonationStartComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
+  @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
@@ -73,6 +74,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   campaignOpenOnLoad: boolean;
 
+  recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   recaptchaSiteKey = environment.recaptchaSiteKey;
 
   // Sort by name, with locale support so Åland Islands doesn't come after 'Z..'.
@@ -131,6 +133,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   // Based on the simplified pattern suggestions in https://stackoverflow.com/a/51885364/2803757
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
   private captchaCode?: string;
+  private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
 
   constructor(
@@ -723,8 +726,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     return this.donationAmount + this.tipAmount() + this.feeCoverAmount();
   }
 
-  captchaReturn(captchaResponse: string) {
+  captchaDonationReturn(captchaResponse: string) {
     this.captchaCode = captchaResponse;
+    this.createDonationAndMaybePerson();
+  }
+
+  captchaIdentityReturn(captchaResponse: string) {
+    this.idCaptchaCode = captchaResponse;
     this.createDonationAndMaybePerson();
   }
 
@@ -1013,16 +1021,22 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   private createDonationAndMaybePerson(): void {
-    if (!this.captchaCode) {
+    if (!this.captchaCode && !this.idCaptchaCode) {
       // We need a captcha code before we can *really* proceed. By doing this here we ensure
       // this happens consistently regardless of whether donors click Next or a subsequent stepper
       // heading, while only configuring it in one place.
       //
-      // captchaReturn() is called on resolution of a valid captcha and calls `createDonation()` again. We
-      // don't get stuck in this logic branch because `this.captchaCode` is non-empty then.
+      // captcha**Return() are called on resolution of a valid captcha and call this fn again. We
+      // don't get stuck in this logic branch because `this.captchaCode` (or ID equiv) is non-empty then.
       // As well as happening the first time the donor leaves step 1, we expect to do this again and get
       // a new code any time a previously used one was cleared in `clearDonation()`.
-      this.captcha.execute();
+
+      if (this.personId || !environment.identityEnabled) {
+        this.captcha.execute(); // Prepare for a non-Person-linked donation which needs a Donation captcha.
+      } else {
+        this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
+      }
+
       return;
     }
 
@@ -1304,6 +1318,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // Ensure we get a new code on donation setup. Sending one we already verified
     // again will fail and block creating a new donation without a page refresh.
     this.captchaCode = undefined;
+    this.idCaptchaCode = undefined;
 
     this.donationCreateError = false;
     this.donationUpdateError = false;
