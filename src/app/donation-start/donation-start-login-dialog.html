@@ -28,7 +28,7 @@
 <mat-dialog-actions align="end">
   <button
     mat-raised-button
-    [disabled]="!form.valid"
+    [disabled]="!form.valid || loggingIn"
     (click)="login()"
     color="primary"
   >Log in</button>
