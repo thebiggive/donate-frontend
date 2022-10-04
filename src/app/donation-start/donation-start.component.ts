@@ -377,6 +377,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.stripeFirstSavedMethod = undefined;
     this.donationForm.reset();
     this.identityService.clearJWT();
+    this.idCaptcha.reset();
   }
 
   haveAddressSuggestions(): boolean {
@@ -1614,6 +1615,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
             this.clearDonation(donation, true);
 
             // Go back to 1st step to encourage donor to try again
+            this.captcha.reset();
+            this.idCaptcha.reset();
             this.stepper.reset();
             this.amountsGroup.patchValue({ tipPercentage: this.initialTipSuggestedPercentage });
             this.tipPercentageChanged = false;

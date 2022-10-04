@@ -14,10 +14,11 @@ import { IdentityService } from '../identity.service';
 })
 export class DonationStartLoginDialogComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
-  recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
 
   form: FormGroup;
   loginError?: string;
+  loggingIn = false;
+  recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
 
   constructor(
     private dialogRef: MatDialogRef<DonationStartLoginDialogComponent>,
@@ -39,6 +40,8 @@ export class DonationStartLoginDialogComponent implements OnInit {
   }
 
   captchaReturn(captchaResponse: string) {
+    this.loggingIn = true;
+
     const credentials: Credentials = {
       captcha_code: captchaResponse,
       email_address: this.form.value.emailAddress,
@@ -48,8 +51,11 @@ export class DonationStartLoginDialogComponent implements OnInit {
     this.identityService.login(credentials).subscribe((response: { id: string, jwt: string }) => {
       this.identityService.saveJWT(response.id, response.jwt);
       this.dialogRef.close(response);
+      this.loggingIn = false;
     }, (error) => {
+      this.captcha.reset();
       this.loginError = error.error.error.description || 'Unknown error';
+      this.loggingIn = false;
     });
   }
 

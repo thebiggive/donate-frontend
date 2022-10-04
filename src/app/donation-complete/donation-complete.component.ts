@@ -29,6 +29,7 @@ export class DonationCompleteComponent {
   complete = false;
   donation: Donation;
   giftAidAmount: number;
+  loggedIn = false;
   noAccess = false;
   offerToSetPassword = false;
   prefilledText: string;
@@ -112,13 +113,14 @@ export class DonationCompleteComponent {
         // set up yet.
         console.log('Upgraded local token to a long-lived one with more permissions');
         this.identityService.saveJWT(this.person?.id as string, response.jwt);
+        this.loggedIn = true;
       },
       (error: HttpErrorResponse) => {
         this.analyticsService.logError('login_failed', `${error.status}: ${error.message}`, 'identity_error');
       });
   }
 
-  setPassword(password: string, stayLoggedIn: boolean) {
+  private setPassword(password: string, stayLoggedIn: boolean) {
     if (!this.person) {
       this.analyticsService.logError('person_password_set_missing_data', 'No person in component', 'identity_error');
       this.registerError = 'Cannot set password without a person';
