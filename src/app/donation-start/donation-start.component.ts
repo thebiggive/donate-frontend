@@ -900,6 +900,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       billingPostcode: billingDetails.address?.postal_code,
       useSavedCard: true,
     });
+
+    this.stripePaymentMethodReady = true;
   }
 
   /**
