@@ -506,14 +506,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       }
 
       if (this.psp === 'stripe') {
-        // Card element is mounted the same way regardless of donation info. See
-        // this.createDonationAndMaybePerson().subscribe(...) for Payment Request Button mount, which needs donation info
-        // first and so happens in `preparePaymentRequestButton()`.
-        this.card = this.stripeService.getCard();
-        if (this.cardInfo && this.card) { // Ensure #cardInfo not hidden by PRB success.
-          this.card.mount(this.cardInfo.nativeElement);
-          this.card.on('change', this.cardHandler);
-        }
+        this.prepareCardInput();
       }
 
       return;
@@ -830,6 +823,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     if (event.checked) {
       this.updateFormWithSavedCard();
+    } else {
+      this.prepareCardInput();
     }
   }
 
@@ -849,6 +844,22 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       // is removed, so billing postcode doesn't show as invalid after a change
       this.addStripeCardBillingValidators();
       this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
+    }
+  }
+
+  private prepareCardInput() {
+    if (this.cardInfo.nativeElement.children.length > 0) {
+      // Card input was already ready.
+      return;
+    }
+
+    // Card element is mounted the same way regardless of donation info. See
+    // this.createDonationAndMaybePerson().subscribe(...) for Payment Request Button mount, which needs donation info
+    // first and so happens in `preparePaymentRequestButton()`.
+    this.card = this.stripeService.getCard();
+    if (this.cardInfo && this.card) { // Ensure #cardInfo not hidden by PRB success.
+      this.card.mount(this.cardInfo.nativeElement);
+      this.card.on('change', this.cardHandler);
     }
   }
 
