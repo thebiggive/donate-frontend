@@ -1634,7 +1634,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
             this.amountsGroup.patchValue({ tipPercentage: this.initialTipSuggestedPercentage });
             this.tipPercentageChanged = false;
             if (this.paymentGroup) {
-              this.paymentGroup.patchValue({ billingCountry: this.defaultCountryCode });
+              this.paymentGroup.patchValue({
+                billingCountry: this.defaultCountryCode,
+                useSavedCard: false,
+              });
             }
 
             if (this.personId) {
