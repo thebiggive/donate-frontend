@@ -1,11 +1,11 @@
 import { newE2EPage } from '@stencil/core/testing';
 
-describe('bigive-button', () => {
+describe('biggive-section', () => {
   it('renders', async () => {
     const page = await newE2EPage();
-    await page.setContent('<bigive-button></bigive-button>');
+    await page.setContent('<biggive-section></biggive-section>');
 
-    const element = await page.find('bigive-button');
+    const element = await page.find('biggive-section');
     expect(element).toHaveClass('hydrated');
   });
 });

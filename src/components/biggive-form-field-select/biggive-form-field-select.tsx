@@ -1,11 +1,11 @@
 import { Component, Host, h } from '@stencil/core';
 
 @Component({
-  tag: 'bigive-button',
-  styleUrl: 'bigive-button.css',
+  tag: 'biggive-form-field-select',
+  styleUrl: 'biggive-form-field-select.css',
   shadow: true,
 })
-export class BigiveButton {
+export class BiggiveFormFieldSelect {
 
   render() {
     return (

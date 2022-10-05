@@ -1,0 +1,13 @@
+:host {
+  display: contents;
+}
+
+.grid {
+  margin-bottom: $spacer-4;
+}
+
+ .grid[data-column-count="3"] ::slotted([slot=items]) {
+   display: flex;
+   flex-flow: row wrap;
+   justify-content: space-between;   
+}

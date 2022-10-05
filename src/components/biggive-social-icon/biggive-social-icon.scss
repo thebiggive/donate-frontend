@@ -1,0 +1,27 @@
+:host {
+  display: block;
+}
+
+.social-icon-item {
+  border-radius: 50%;
+  background-color: $colour-tertiary;
+  text-align: center;
+  transition: all ease-in-out 0.5s;
+  &:hover {
+    background-color: $colour-white;
+  }
+  a {
+    display: block;
+    position: relative;
+    padding: $spacer-1;
+    width: 30px;
+    height: 30px;
+    svg {
+      width: auto;
+      height: 60%;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}

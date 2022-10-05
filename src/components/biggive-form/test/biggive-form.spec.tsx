@@ -1,18 +1,18 @@
 import { newSpecPage } from '@stencil/core/testing';
-import { BigiveButton } from '../bigive-button';
+import { BiggiveForm } from '../biggive-form';
 
-describe('bigive-button', () => {
+describe('biggive-form', () => {
   it('renders', async () => {
     const page = await newSpecPage({
-      components: [BigiveButton],
-      html: `<bigive-button></bigive-button>`,
+      components: [BiggiveForm],
+      html: `<biggive-form></biggive-form>`,
     });
     expect(page.root).toEqualHtml(`
-      <bigive-button>
+      <biggive-form>
         <mock:shadow-root>
           <slot></slot>
         </mock:shadow-root>
-      </bigive-button>
+      </biggive-form>
     `);
   });
 });

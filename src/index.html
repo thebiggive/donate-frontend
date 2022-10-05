@@ -9,16 +9,100 @@
 
     <script type="module" src="/build/biggive.esm.js"></script>
     <script nomodule src="/build/biggive.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
   </head>
   <body>
 
 
+    <biggive-header>
+      <ul slot="nav-primary">
+        <li><a href="#">Explore Campaigns</a></li>
+        <li><a href="#">For Charities</a></li>
+        <li><a href="#">For Funders</a></li>
+        <li><a href="#">Match Funding</a></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Resources</a></li>
+      </ul>
+      <ul slot="nav-secondary">
+        <li><a href="#">Contact us</a></li>
+        <li><a href="#">Charity login</a></li>
+      </ul>
+    </biggive-header>
 
-  <biggive-hero-image slug="My Slug" main-title="This is my title" teaser="this is the intro text which I want to add"></biggive-hero-image>
+    <biggive-section colour-scheme="secondary" style="style-1">
 
-  <!--
-  <demo-campaign-cards />
-  -->
+      <biggive-grid column-count="3" column-gap="3">
+        <div slot="items">
+          <div class="grid-item">
+            <biggive-campaign-card campaign-type="Match Funded" currency-code="GBP" totalFundsRaised="76543" matchFundsRemaining="76543"></biggive-campaign-card>
+          </div>
+          <div class="grid-item">
+            <biggive-campaign-card campaign-type="Match Funded" currency-code="GBP" totalFundsRaised="76543" matchFundsRemaining="76543"></biggive-campaign-card>
+          </div>
+          <div class="grid-item">
+            <biggive-campaign-card campaign-type="Match Funded" currency-code="GBP" totalFundsRaised="76543" matchFundsRemaining="76543"></biggive-campaign-card>
+          </div>
+        </div>  
+      </biggive-grid>
+
+    </biggive-section>
+
+
+
+
+    <biggive-hero-image
+        colour-scheme="primary"
+        logo="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
+        main-image="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
+        slug="this is my slug"
+        main-title="Matching Donations. Multiplying Impact."
+        teaser="We run match funding campaigns to make an extraordinary difference to the world’s big challenges."
+        button-url="https://www.google.com"
+        button-label="Donate now"
+      ></biggive-hero-image>
+
+    <biggive-button colour-scheme="primary" label="Help" url="https://www.google.com"></biggive-button>
+
+    <biggive-button colour-scheme="secondary" label="ABC" url="https://www.google.com"></biggive-button>
+
+    <biggive-button colour-scheme="clear-secondary" label="DEF" url="https://www.google.com"></biggive-button>
+
+    <biggive-progress-bar colour-scheme="primary" counter="15" ></biggive-progress-bar>
+
+    <biggive-progress-bar colour-scheme="secondary" counter="100" ></biggive-progress-bar>
+
+    <biggive-progress-bar colour-scheme="primary" counter="75" ></biggive-progress-bar>
+
+
+
+  <biggive-footer>
+    <div slot="nav-primary-title">Match Funding Opportunities</div>
+    <ul slot="nav-primary">
+      <li><a href="#">Explore Campaigns</a></li>
+      <li><a href="#">For Charities</a></li>
+      <li><a href="#">For Funders</a></li>
+      <li><a href="#">Match Funding</a></li>
+      <li><a href="#">About Us</a></li>
+      <li><a href="#">Resources</a></li>
+    </ul>
+    <div slot="nav-secondary-title">Resources</div>
+    <ul slot="nav-secondary">
+      <li><a href="#">Contact us</a></li>
+      <li><a href="#">Charity login</a></li>
+    </ul>
+    <div slot="nav-tertiary-title">About</div>
+    <ul slot="nav-tertiary">
+      <li><a href="#">Contact us</a></li>
+      <li><a href="#">Charity login</a></li>
+    </ul>
+</biggive-footer>
+
 
   </body>
 </html>

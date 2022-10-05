@@ -4,12 +4,55 @@
 // Text
 @mixin standard-font() {
   font-family: 'Euclid Triangle', sans-serif;
+  font-size: 17px;
+  line-height: 24px;
+}
+
+
+@mixin heading-1() {
+  font-size: 50px;
+  line-height: 60px;
+  font-weight: bold;
+}
+
+@mixin heading-2() {
+  font-size: 38px;
+  line-height: 45px;
+  font-weight: bold;
+}
+
+@mixin heading-3() {
+  font-size: 25px;
+  line-height: 32px;
+  font-weight: bold;
+}
+
+@mixin heading-4() {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: bold;
+}
+
+@mixin heading-5() {
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: bold;
+}
+
+
+
+@mixin absolute-fill() {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 
 // Layout + spacing
 @mixin flex-container-row() {
   display: flex;
-  flex-flow: row wrap;
   justify-content: space-between;
 }
 
@@ -19,8 +62,142 @@
   vertical-align: -.125rem;
 }
 
+@mixin progress-bar {
+  display: flex;
+  .slider {
+    margin: auto 15px auto 0;
+    position: relative;
+    flex-grow: 1;
+    &:before {
+      content: '';
+      @include absolute-fill();
+      background-color: $colour-grey-light;
+      border-radius: 4px;
+    }
+    .progress {
+      position: relative;
+      border-radius: 4px;
+      background-color: $colour-black;
+      height: 8px;
+    }
+  }
+  .counter {
+    font-weight: 700;
+    color: $colour-black;
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+
+@mixin progress-bar-primary {
+  .slider {
+    .progress {
+      background-color: $colour-primary;
+    }
+  }
+  .counter {
+    color: $colour-primary;
+  }
+}
+
+@mixin progress-bar-secondary {
+  .slider {
+    .progress {
+      background-color: $colour-secondary;
+    }
+  }
+  .counter {
+    color: $colour-secondary;
+  }
+}
+
+@mixin button {
+  font-size: 18px;
+  line-height: 23px;
+  padding: 15px 30px;
+  border-radius: 5px;
+  border: 1px solid $colour-black;
+  background-color: $colour-black;
+  filter: drop-shadow(0px 8px 20px rgba(0, 0, 0, 0.22));
+  color: $colour-white;
+  display: block;
+  text-decoration: none;
+  text-align: center;
+  transition: all ease-in-out 0.5s;
+  &:hover {
+    background-color: $colour-white;
+    color: $colour-black;
+  }
+}
+
+@mixin button-clear-primary {
+  color: $colour-primary;
+  background-color: transparent;
+  text-decoration: underline;
+  box-shadow: none;
+  border: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-secondary {
+  color: $colour-primary;
+  background-color: transparent;
+  text-decoration: underline;
+  box-shadow: none;
+  border: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-primary {
+  color: $colour-white;
+  background-color: $colour-primary;
+  border-color: $colour-primary;
+  &:hover {
+    color: $colour-primary;
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-white {
+  color: $colour-black;
+  background-color: $colour-white;
+  border-color: $colour-white;
+  &:hover {
+    color: $colour-white;
+    background-color: $colour-black;
+  }
+}
+
+@mixin button-secondary {
+  color: $colour-primary;
+  background-color: $colour-secondary;
+  border-color: $colour-secondary;
+  &:hover {
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-tertiary {
+  color: $colour-white;
+  background-color: $colour-tertiary;
+  border-color: $colour-tertiary;
+  &:hover {
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-rounded {
+  border-radius: 50%;
+}
+
 @mixin lower-shadow() {
-  filter: drop-shadow(-1px 6px 3px rgba(0,0,0,0.25));
+  filter: drop-shadow(-1px 3px 12px rgba(0,0,0,0.25));
 }
 
 // Shapes

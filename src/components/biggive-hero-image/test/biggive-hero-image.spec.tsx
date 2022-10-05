@@ -22,11 +22,11 @@ describe('biggive-hero-image', () => {
         <div class="container">
           <div class="sleeve">
             <div class="content-wrap">
-              <div class="slug">My Slug</div>
-              <h1 class="title">This is my title</h1>
+              <div class="colour-primary slug">My Slug</div>
+              <h1 class="colour-primary title">This is my title</h1>
               <div class="teaser">this is the intro text which I want to add</div>
             </div>
-            <div class="image-wrap"></div>
+            <div class="graphic-wrap"></div>
           </div>
         </div>
       </mock:shadow-root>

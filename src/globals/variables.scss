@@ -1,5 +1,28 @@
 // Should only be used for Sass variables, mixins and functions; not contain any CSS.
 // https://github.com/ionic-team/stencil-sass#inject-globals-sass-paths
-$colour-primary: #B30510;
-$colour-primary-contrast: #FFFFFF;
+$colour-primary: #2C089B;
 $colour-secondary: #2AF135;
+$colour-tertiary: #FF7272;
+
+$colour-white: #FFFFFF;
+$colour-black: #000000;
+
+$colour-grey-extra-light: #D7D7D7;
+$colour-grey-light: #E8E8E8;
+$colour-grey-medium: #8A8A8A;
+
+
+$spacer-0: 0;
+$spacer-1: 5px;
+$spacer-2: 10px;
+$spacer-3: 15px;
+$spacer-4: 30px;
+$spacer-5: 45px;
+$spacer-6: 60px;
+$spacer-7: 90px;
+$spacer-8: 120px;
+$spacer-9: 150px;
+$spacer-10: 180px;
+
+
+$max-page-width: 1200px;

@@ -8,23 +8,25 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface BiggiveBreadcrumbs {
     }
+    interface BiggiveButton {
+        /**
+          * Colour Scheme
+         */
+        "colourScheme": string;
+        /**
+          * Text
+         */
+        "label": string;
+        /**
+          * URL
+         */
+        "url": string;
+    }
     interface BiggiveCampaignCard {
         /**
           * Full URL of a banner image.
          */
         "banner": string;
-        /**
-          * Array of full beneficiary labels.
-         */
-        "beneficiaries": string[];
-        /**
-          * Text for the link to `callToActionUrl`.
-         */
-        "callToActionLabel": string;
-        /**
-          * Full URL of a call to action.
-         */
-        "callToActionUrl": string;
         /**
           * Display name of the charity's specific time-bound fundraising campaign.
          */
@@ -34,29 +36,33 @@ export namespace Components {
          */
         "campaignType": string;
         /**
-          * Array of full category labels.
-         */
-        "categories": string[];
-        /**
           * e.g. 'GBP'.
          */
         "currencyCode": string;
         /**
-          * (Ceiling of) whole number of days until campaign end.
+          * Donate button label
          */
-        "daysRemaining": number;
+        "donateButtonLabel": string;
         /**
-          * Match funds not yet used or reserved, in major unit of currency e.g. pounds GBP.
+          * Donate button url
+         */
+        "donateButtonUrl": string;
+        /**
+          * Match funds remaining.
          */
         "matchFundsRemaining": number;
+        /**
+          * More information button label
+         */
+        "moreInfoButtonLabel": string;
+        /**
+          * More information button url
+         */
+        "moreInfoButtonUrl": string;
         /**
           * Display name of the charity or non-profit.
          */
         "organisationName": string;
-        /**
-          * Target for the campaign including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP.
-         */
-        "target": number;
         /**
           * Total the campaign has raised so far including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP.
          */
@@ -68,11 +74,39 @@ export namespace Components {
     }
     interface BiggiveFooter {
     }
+    interface BiggiveForm {
+    }
+    interface BiggiveFormFieldSelect {
+    }
     interface BiggiveGrid {
+        /**
+          * Column count
+         */
+        "columnCount": number;
+        /**
+          * Column gap
+         */
+        "columnGap": number;
     }
     interface BiggiveHeader {
     }
     interface BiggiveHeroImage {
+        /**
+          * Button Label
+         */
+        "buttonLabel": string;
+        /**
+          * Button Url
+         */
+        "buttonUrl": string;
+        /**
+          * Colour Scheme
+         */
+        "colourScheme": string;
+        /**
+          * Full URL of a logo image.
+         */
+        "logo": string;
         /**
           * Full URL of a main hero image.
          */
@@ -92,13 +126,39 @@ export namespace Components {
     }
     interface BiggiveIcon {
     }
+    interface BiggiveProgressBar {
+        /**
+          * Colour Scheme
+         */
+        "colourScheme": string;
+        /**
+          * Text
+         */
+        "counter": number;
+    }
     interface BiggiveQuote {
     }
+    interface BiggiveSection {
+        /**
+          * Colour scheme
+         */
+        "colourScheme": string;
+        /**
+          * Section style
+         */
+        "sectionStyle": string;
+    }
+    interface BiggiveSocialIcon {
+        /**
+          * service
+         */
+        "service": string;
+        /**
+          * Url
+         */
+        "url": string;
+    }
     interface BiggiveTextInput {
-    }
-    interface BigiveButton {
-    }
-    interface DemoCampaignCards {
     }
 }
 declare global {
@@ -107,6 +167,12 @@ declare global {
     var HTMLBiggiveBreadcrumbsElement: {
         prototype: HTMLBiggiveBreadcrumbsElement;
         new (): HTMLBiggiveBreadcrumbsElement;
+    };
+    interface HTMLBiggiveButtonElement extends Components.BiggiveButton, HTMLStencilElement {
+    }
+    var HTMLBiggiveButtonElement: {
+        prototype: HTMLBiggiveButtonElement;
+        new (): HTMLBiggiveButtonElement;
     };
     interface HTMLBiggiveCampaignCardElement extends Components.BiggiveCampaignCard, HTMLStencilElement {
     }
@@ -132,6 +198,18 @@ declare global {
         prototype: HTMLBiggiveFooterElement;
         new (): HTMLBiggiveFooterElement;
     };
+    interface HTMLBiggiveFormElement extends Components.BiggiveForm, HTMLStencilElement {
+    }
+    var HTMLBiggiveFormElement: {
+        prototype: HTMLBiggiveFormElement;
+        new (): HTMLBiggiveFormElement;
+    };
+    interface HTMLBiggiveFormFieldSelectElement extends Components.BiggiveFormFieldSelect, HTMLStencilElement {
+    }
+    var HTMLBiggiveFormFieldSelectElement: {
+        prototype: HTMLBiggiveFormFieldSelectElement;
+        new (): HTMLBiggiveFormFieldSelectElement;
+    };
     interface HTMLBiggiveGridElement extends Components.BiggiveGrid, HTMLStencilElement {
     }
     var HTMLBiggiveGridElement: {
@@ -156,11 +234,29 @@ declare global {
         prototype: HTMLBiggiveIconElement;
         new (): HTMLBiggiveIconElement;
     };
+    interface HTMLBiggiveProgressBarElement extends Components.BiggiveProgressBar, HTMLStencilElement {
+    }
+    var HTMLBiggiveProgressBarElement: {
+        prototype: HTMLBiggiveProgressBarElement;
+        new (): HTMLBiggiveProgressBarElement;
+    };
     interface HTMLBiggiveQuoteElement extends Components.BiggiveQuote, HTMLStencilElement {
     }
     var HTMLBiggiveQuoteElement: {
         prototype: HTMLBiggiveQuoteElement;
         new (): HTMLBiggiveQuoteElement;
+    };
+    interface HTMLBiggiveSectionElement extends Components.BiggiveSection, HTMLStencilElement {
+    }
+    var HTMLBiggiveSectionElement: {
+        prototype: HTMLBiggiveSectionElement;
+        new (): HTMLBiggiveSectionElement;
+    };
+    interface HTMLBiggiveSocialIconElement extends Components.BiggiveSocialIcon, HTMLStencilElement {
+    }
+    var HTMLBiggiveSocialIconElement: {
+        prototype: HTMLBiggiveSocialIconElement;
+        new (): HTMLBiggiveSocialIconElement;
     };
     interface HTMLBiggiveTextInputElement extends Components.BiggiveTextInput, HTMLStencilElement {
     }
@@ -168,54 +264,48 @@ declare global {
         prototype: HTMLBiggiveTextInputElement;
         new (): HTMLBiggiveTextInputElement;
     };
-    interface HTMLBigiveButtonElement extends Components.BigiveButton, HTMLStencilElement {
-    }
-    var HTMLBigiveButtonElement: {
-        prototype: HTMLBigiveButtonElement;
-        new (): HTMLBigiveButtonElement;
-    };
-    interface HTMLDemoCampaignCardsElement extends Components.DemoCampaignCards, HTMLStencilElement {
-    }
-    var HTMLDemoCampaignCardsElement: {
-        prototype: HTMLDemoCampaignCardsElement;
-        new (): HTMLDemoCampaignCardsElement;
-    };
     interface HTMLElementTagNameMap {
         "biggive-breadcrumbs": HTMLBiggiveBreadcrumbsElement;
+        "biggive-button": HTMLBiggiveButtonElement;
         "biggive-campaign-card": HTMLBiggiveCampaignCardElement;
         "biggive-card": HTMLBiggiveCardElement;
         "biggive-dropdown": HTMLBiggiveDropdownElement;
         "biggive-footer": HTMLBiggiveFooterElement;
+        "biggive-form": HTMLBiggiveFormElement;
+        "biggive-form-field-select": HTMLBiggiveFormFieldSelectElement;
         "biggive-grid": HTMLBiggiveGridElement;
         "biggive-header": HTMLBiggiveHeaderElement;
         "biggive-hero-image": HTMLBiggiveHeroImageElement;
         "biggive-icon": HTMLBiggiveIconElement;
+        "biggive-progress-bar": HTMLBiggiveProgressBarElement;
         "biggive-quote": HTMLBiggiveQuoteElement;
+        "biggive-section": HTMLBiggiveSectionElement;
+        "biggive-social-icon": HTMLBiggiveSocialIconElement;
         "biggive-text-input": HTMLBiggiveTextInputElement;
-        "bigive-button": HTMLBigiveButtonElement;
-        "demo-campaign-cards": HTMLDemoCampaignCardsElement;
     }
 }
 declare namespace LocalJSX {
     interface BiggiveBreadcrumbs {
+    }
+    interface BiggiveButton {
+        /**
+          * Colour Scheme
+         */
+        "colourScheme"?: string;
+        /**
+          * Text
+         */
+        "label"?: string;
+        /**
+          * URL
+         */
+        "url"?: string;
     }
     interface BiggiveCampaignCard {
         /**
           * Full URL of a banner image.
          */
         "banner"?: string;
-        /**
-          * Array of full beneficiary labels.
-         */
-        "beneficiaries"?: string[];
-        /**
-          * Text for the link to `callToActionUrl`.
-         */
-        "callToActionLabel"?: string;
-        /**
-          * Full URL of a call to action.
-         */
-        "callToActionUrl"?: string;
         /**
           * Display name of the charity's specific time-bound fundraising campaign.
          */
@@ -225,29 +315,33 @@ declare namespace LocalJSX {
          */
         "campaignType"?: string;
         /**
-          * Array of full category labels.
-         */
-        "categories"?: string[];
-        /**
           * e.g. 'GBP'.
          */
         "currencyCode"?: string;
         /**
-          * (Ceiling of) whole number of days until campaign end.
+          * Donate button label
          */
-        "daysRemaining"?: number;
+        "donateButtonLabel"?: string;
         /**
-          * Match funds not yet used or reserved, in major unit of currency e.g. pounds GBP.
+          * Donate button url
+         */
+        "donateButtonUrl"?: string;
+        /**
+          * Match funds remaining.
          */
         "matchFundsRemaining"?: number;
+        /**
+          * More information button label
+         */
+        "moreInfoButtonLabel"?: string;
+        /**
+          * More information button url
+         */
+        "moreInfoButtonUrl"?: string;
         /**
           * Display name of the charity or non-profit.
          */
         "organisationName"?: string;
-        /**
-          * Target for the campaign including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP.
-         */
-        "target"?: number;
         /**
           * Total the campaign has raised so far including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP.
          */
@@ -259,11 +353,39 @@ declare namespace LocalJSX {
     }
     interface BiggiveFooter {
     }
+    interface BiggiveForm {
+    }
+    interface BiggiveFormFieldSelect {
+    }
     interface BiggiveGrid {
+        /**
+          * Column count
+         */
+        "columnCount"?: number;
+        /**
+          * Column gap
+         */
+        "columnGap"?: number;
     }
     interface BiggiveHeader {
     }
     interface BiggiveHeroImage {
+        /**
+          * Button Label
+         */
+        "buttonLabel"?: string;
+        /**
+          * Button Url
+         */
+        "buttonUrl"?: string;
+        /**
+          * Colour Scheme
+         */
+        "colourScheme"?: string;
+        /**
+          * Full URL of a logo image.
+         */
+        "logo"?: string;
         /**
           * Full URL of a main hero image.
          */
@@ -283,28 +405,58 @@ declare namespace LocalJSX {
     }
     interface BiggiveIcon {
     }
+    interface BiggiveProgressBar {
+        /**
+          * Colour Scheme
+         */
+        "colourScheme"?: string;
+        /**
+          * Text
+         */
+        "counter"?: number;
+    }
     interface BiggiveQuote {
+    }
+    interface BiggiveSection {
+        /**
+          * Colour scheme
+         */
+        "colourScheme"?: string;
+        /**
+          * Section style
+         */
+        "sectionStyle"?: string;
+    }
+    interface BiggiveSocialIcon {
+        /**
+          * service
+         */
+        "service"?: string;
+        /**
+          * Url
+         */
+        "url"?: string;
     }
     interface BiggiveTextInput {
     }
-    interface BigiveButton {
-    }
-    interface DemoCampaignCards {
-    }
     interface IntrinsicElements {
         "biggive-breadcrumbs": BiggiveBreadcrumbs;
+        "biggive-button": BiggiveButton;
         "biggive-campaign-card": BiggiveCampaignCard;
         "biggive-card": BiggiveCard;
         "biggive-dropdown": BiggiveDropdown;
         "biggive-footer": BiggiveFooter;
+        "biggive-form": BiggiveForm;
+        "biggive-form-field-select": BiggiveFormFieldSelect;
         "biggive-grid": BiggiveGrid;
         "biggive-header": BiggiveHeader;
         "biggive-hero-image": BiggiveHeroImage;
         "biggive-icon": BiggiveIcon;
+        "biggive-progress-bar": BiggiveProgressBar;
         "biggive-quote": BiggiveQuote;
+        "biggive-section": BiggiveSection;
+        "biggive-social-icon": BiggiveSocialIcon;
         "biggive-text-input": BiggiveTextInput;
-        "bigive-button": BigiveButton;
-        "demo-campaign-cards": DemoCampaignCards;
     }
 }
 export { LocalJSX as JSX };
@@ -312,18 +464,22 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "biggive-breadcrumbs": LocalJSX.BiggiveBreadcrumbs & JSXBase.HTMLAttributes<HTMLBiggiveBreadcrumbsElement>;
+            "biggive-button": LocalJSX.BiggiveButton & JSXBase.HTMLAttributes<HTMLBiggiveButtonElement>;
             "biggive-campaign-card": LocalJSX.BiggiveCampaignCard & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardElement>;
             "biggive-card": LocalJSX.BiggiveCard & JSXBase.HTMLAttributes<HTMLBiggiveCardElement>;
             "biggive-dropdown": LocalJSX.BiggiveDropdown & JSXBase.HTMLAttributes<HTMLBiggiveDropdownElement>;
             "biggive-footer": LocalJSX.BiggiveFooter & JSXBase.HTMLAttributes<HTMLBiggiveFooterElement>;
+            "biggive-form": LocalJSX.BiggiveForm & JSXBase.HTMLAttributes<HTMLBiggiveFormElement>;
+            "biggive-form-field-select": LocalJSX.BiggiveFormFieldSelect & JSXBase.HTMLAttributes<HTMLBiggiveFormFieldSelectElement>;
             "biggive-grid": LocalJSX.BiggiveGrid & JSXBase.HTMLAttributes<HTMLBiggiveGridElement>;
             "biggive-header": LocalJSX.BiggiveHeader & JSXBase.HTMLAttributes<HTMLBiggiveHeaderElement>;
             "biggive-hero-image": LocalJSX.BiggiveHeroImage & JSXBase.HTMLAttributes<HTMLBiggiveHeroImageElement>;
             "biggive-icon": LocalJSX.BiggiveIcon & JSXBase.HTMLAttributes<HTMLBiggiveIconElement>;
+            "biggive-progress-bar": LocalJSX.BiggiveProgressBar & JSXBase.HTMLAttributes<HTMLBiggiveProgressBarElement>;
             "biggive-quote": LocalJSX.BiggiveQuote & JSXBase.HTMLAttributes<HTMLBiggiveQuoteElement>;
+            "biggive-section": LocalJSX.BiggiveSection & JSXBase.HTMLAttributes<HTMLBiggiveSectionElement>;
+            "biggive-social-icon": LocalJSX.BiggiveSocialIcon & JSXBase.HTMLAttributes<HTMLBiggiveSocialIconElement>;
             "biggive-text-input": LocalJSX.BiggiveTextInput & JSXBase.HTMLAttributes<HTMLBiggiveTextInputElement>;
-            "bigive-button": LocalJSX.BigiveButton & JSXBase.HTMLAttributes<HTMLBigiveButtonElement>;
-            "demo-campaign-cards": LocalJSX.DemoCampaignCards & JSXBase.HTMLAttributes<HTMLDemoCampaignCardsElement>;
         }
     }
 }
