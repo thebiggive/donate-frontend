@@ -15,6 +15,17 @@
         <h1 class="b-rh-2 b-bold">{{ campaign.title }}</h1>
       </div>
 
+      <div *ngIf="canLogin" class="id-info">
+        <h4>You can donate faster if you've already made an account with us this year.</h4>
+        <button mat-raised-button (click)="login()">Log in</button>
+      </div>
+
+      <div *ngIf="personId && personIsLoginReady" class="id-info">
+        <p>Logged in as <strong>{{ paymentGroup.value.emailAddress }}</strong></p>
+        <p>We'll pre-fill some fields with your saved details, but you can change them if you need to.</p>
+        <p><button mat-raised-button (click)="logout()">Log out</button></p>
+      </div>
+
       <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 
       <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaignOpenOnLoad">
@@ -125,8 +136,15 @@
             <re-captcha
               #captcha
               size="invisible"
-              (resolved)="captchaReturn($event)"
+              (resolved)="captchaDonationReturn($event)"
               siteKey="{{ recaptchaSiteKey }}"
+            ></re-captcha>
+
+            <re-captcha
+              #idCaptcha
+              size="invisible"
+              (resolved)="captchaIdentityReturn($event)"
+              siteKey="{{ recaptchaIdSiteKey }}"
             ></re-captcha>
 
             <div>
@@ -247,7 +265,25 @@
             <div id="payment-request-button" #paymentRequestButton></div>
             <p *ngIf="requestButtonShown && !stripePRBMethodReady" class="b-center b-grey b-rt-sm">Or</p>
 
-            <div *ngIf="!stripePRBMethodReady">
+            <div *ngIf="stripeFirstSavedMethod?.card">
+              <mat-checkbox
+                formControlName="useSavedCard"
+                id="useSavedCard"
+                (change)="onUseSavedCardChange($event)"
+              >
+                <fa-icon
+                  *ngIf="cardIconsService.hasCardIcon(stripeFirstSavedMethod?.card?.brand)"
+                  [title]="stripeFirstSavedMethod?.card?.brand"
+                  [icon]="cardIconsService.getCardIcon(stripeFirstSavedMethod?.card?.brand)"
+                ></fa-icon>
+                Use saved card ending {{ stripeFirstSavedMethod?.card?.last4 }}.
+              </mat-checkbox>
+            </div>
+
+            <!-- We need the ElementRef to always be available for Stripe.js mounting as there are
+            a few dynamic ways the input can become or cease to be relevant. So just CSS-hide the
+            element when not needed, and always mount it. -->
+            <div [style.display]="!stripePRBMethodReady && !paymentGroup.value.useSavedCard ? 'block' : 'none'">
               <div class="sr-combo-inputs-row">
                 <mat-label for="card-info">Card</mat-label>
                 <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>

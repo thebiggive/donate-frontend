@@ -12,7 +12,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -25,6 +24,7 @@ import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { DonationStartComponent } from './donation-start.component';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
+import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('DonationStartComponent', () => {
@@ -113,7 +113,6 @@ describe('DonationStartComponent', () => {
         CampaignDetailsCardComponent,
       ],
       imports: [
-        BrowserTransferStateModule,
         HttpClientTestingModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatCheckboxModule,
@@ -147,6 +146,7 @@ describe('DonationStartComponent', () => {
           },
         },
         InMemoryStorageService,
+        { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
       ],
     }).compileComponents();
@@ -189,6 +189,7 @@ describe('DonationStartComponent', () => {
         emailAddress: 'test@example.com',
         billingCountry: 'GB',
         billingPostcode: 'N1 1AA',
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: false,
@@ -235,6 +236,7 @@ describe('DonationStartComponent', () => {
         emailAddress: 'test@example.com',
         billingCountry: 'GB',
         billingPostcode: 'N1 1AA',
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: false,
@@ -270,6 +272,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         billingCountry: null,
         billingPostcode: null,
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: null,
@@ -315,6 +318,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         billingCountry: null,
         billingPostcode: null,
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: true,
@@ -358,6 +362,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         billingCountry: null,
         billingPostcode: null,
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: true,
@@ -401,6 +406,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         billingCountry: null,
         billingPostcode: null,
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: true,
@@ -444,6 +450,7 @@ describe('DonationStartComponent', () => {
         emailAddress: 'test@example.com',
         billingCountry: 'GB',
         billingPostcode: 'N1 1AA',
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: true,
@@ -490,6 +497,7 @@ describe('DonationStartComponent', () => {
         emailAddress: 'test@example.com',
         billingCountry: null,
         billingPostcode: null,
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: true,
@@ -537,6 +545,7 @@ describe('DonationStartComponent', () => {
         emailAddress: null,
         billingCountry: 'GB',
         billingPostcode: 'N1 1AA',
+        useSavedCard: false,
       },
       marketing: {
         optInCharityEmail: true,

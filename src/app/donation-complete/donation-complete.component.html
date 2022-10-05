@@ -22,6 +22,29 @@
       <div class="c-main">
         <h3 class="b-rh-2 b-bold">Donation successful</h3>
 
+        <div *ngIf="offerToSetPassword">
+          <!-- Activated only after password set succeeds, in order to facilitate an auto-login (when donor requests to stay logged in) -->
+          <re-captcha
+            #captcha
+            size="invisible"
+            (resolved)="loginCaptchaReturn($event)"
+            siteKey="{{ recaptchaIdSiteKey }}"
+          ></re-captcha>
+
+          <p *ngIf="registrationComplete">
+            <strong>You are now registered<span *ngIf="loggedIn"> and logged in</span>.</strong> You can now donate faster using your chosen email address and password.
+          </p>
+
+          <div *ngIf="!registrationComplete" class="id-info">
+            <h4>Want to donate faster next time?</h4>
+            <p><button mat-raised-button (click)="openSetPasswordDialog()">Set a password</button></p>
+          </div>
+
+          <p *ngIf="registerError" class="error" aria-live="assertive">
+            Your password could not be set. Please ensure you chose one with at least 10 characters.
+          </p>
+        </div>
+
         <p class="b-rt-0">
           Your donation of
           <span class="b-bold">
