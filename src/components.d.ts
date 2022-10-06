@@ -6,8 +6,6 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface BiggiveBreadcrumbs {
-    }
     interface BiggiveButton {
         /**
           * Colour Scheme
@@ -162,12 +160,6 @@ export namespace Components {
     }
 }
 declare global {
-    interface HTMLBiggiveBreadcrumbsElement extends Components.BiggiveBreadcrumbs, HTMLStencilElement {
-    }
-    var HTMLBiggiveBreadcrumbsElement: {
-        prototype: HTMLBiggiveBreadcrumbsElement;
-        new (): HTMLBiggiveBreadcrumbsElement;
-    };
     interface HTMLBiggiveButtonElement extends Components.BiggiveButton, HTMLStencilElement {
     }
     var HTMLBiggiveButtonElement: {
@@ -265,7 +257,6 @@ declare global {
         new (): HTMLBiggiveTextInputElement;
     };
     interface HTMLElementTagNameMap {
-        "biggive-breadcrumbs": HTMLBiggiveBreadcrumbsElement;
         "biggive-button": HTMLBiggiveButtonElement;
         "biggive-campaign-card": HTMLBiggiveCampaignCardElement;
         "biggive-card": HTMLBiggiveCardElement;
@@ -285,8 +276,6 @@ declare global {
     }
 }
 declare namespace LocalJSX {
-    interface BiggiveBreadcrumbs {
-    }
     interface BiggiveButton {
         /**
           * Colour Scheme
@@ -440,7 +429,6 @@ declare namespace LocalJSX {
     interface BiggiveTextInput {
     }
     interface IntrinsicElements {
-        "biggive-breadcrumbs": BiggiveBreadcrumbs;
         "biggive-button": BiggiveButton;
         "biggive-campaign-card": BiggiveCampaignCard;
         "biggive-card": BiggiveCard;
@@ -463,7 +451,6 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "biggive-breadcrumbs": LocalJSX.BiggiveBreadcrumbs & JSXBase.HTMLAttributes<HTMLBiggiveBreadcrumbsElement>;
             "biggive-button": LocalJSX.BiggiveButton & JSXBase.HTMLAttributes<HTMLBiggiveButtonElement>;
             "biggive-campaign-card": LocalJSX.BiggiveCampaignCard & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardElement>;
             "biggive-card": LocalJSX.BiggiveCard & JSXBase.HTMLAttributes<HTMLBiggiveCardElement>;
