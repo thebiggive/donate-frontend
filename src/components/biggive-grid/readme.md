@@ -5,18 +5,13 @@ A simple flexbox grid of anything!
 <!-- Auto Generated Below -->
 
 
-## Dependencies
+## Properties
 
-### Used by
+| Property      | Attribute      | Description  | Type     | Default |
+| ------------- | -------------- | ------------ | -------- | ------- |
+| `columnCount` | `column-count` | Column count | `number` | `3`     |
+| `columnGap`   | `column-gap`   | Column gap   | `number` | `3`     |
 
- - [demo-campaign-cards](../demo-campaign-cards)
-
-### Graph
-```mermaid
-graph TD;
-  demo-campaign-cards --> biggive-grid
-  style biggive-grid fill:#f9f,stroke:#333,stroke-width:4px
-```
 
 ----------------------------------------------
 

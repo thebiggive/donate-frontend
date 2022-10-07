@@ -1,0 +1,5 @@
+:host {
+  display: block;
+  margin-bottom: $spacer-1;
+  @include standard-font();
+}

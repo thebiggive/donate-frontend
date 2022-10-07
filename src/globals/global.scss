@@ -1,0 +1,51 @@
+body {
+    background-color: $colour-grey-extra-light;
+}
+
+.colour-primary {
+    color: $colour-primary;
+}
+
+.colour-secondary {
+    color: $colour-secondary;
+}
+
+.colour-tertiary {
+    color: $colour-tertiary;
+}
+
+.button {
+    @include button();
+}
+  
+.button-primary {
+   @include button-primary();
+}
+ 
+.button-secondary {
+    @include button-secondary();
+}
+
+.button-clear-primary {
+    @include button-clear-primary();
+ }
+  
+ .button-clear-secondary {
+     @include button-clear-secondary();
+ }
+
+.button-rounded {
+    @include button-rounded();
+ }
+
+.progress-bar {
+    @include progress-bar();
+}
+
+.progress-bar-primary {
+    @include progress-bar-primary();
+}
+
+.progress-bar-secondary {
+    @include progress-bar-secondary();
+}

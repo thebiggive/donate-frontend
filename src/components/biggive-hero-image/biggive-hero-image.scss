@@ -1,0 +1,66 @@
+:host {
+  display: contents;
+  @include standard-font();
+}
+
+.container {
+  @include standard-font();
+  overflow: hidden;
+  position: relative;
+  margin-bottom: $spacer-4;
+  .sleeve {
+    @include flex-container-row();
+  }  
+}
+
+
+.content-wrap {
+  width: 40%;
+  position: relative;
+  z-index: 1;
+  padding: $spacer-10 $spacer-6 $spacer-6 $spacer-6;
+  .logo {
+    height: 75px;
+    margin-bottom: $spacer-4;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left center;
+    img {
+      display: none;
+    }
+  }
+  .slug {
+    @include heading-4;
+    margin: 0;
+    padding: 0;
+  }
+  h1 {
+    @include heading-1;
+    margin: 0 0 $spacer-3 0;
+    padding: 0;
+  }
+  .teaser {
+    margin: 0 0 $spacer-5 0;
+    padding: 0;
+  }
+  
+}
+
+
+.graphic-wrap {
+  @include absolute-fill();
+  background-color: #F1F1F1;
+  margin-left: 20vw;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  .image-wrap {
+    @include absolute-fill();
+    background-size: cover;
+    img {
+      display: none;
+    }
+  }
+}
+
+
+
+

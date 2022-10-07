@@ -1,4 +1,4 @@
-import { faAccessibleIcon, IconDefinition } from '@fortawesome/free-brands-svg-icons';
+import { faAccessibleIcon, IconDefinition, faFacebookF, faTwitter, faYoutube, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import {
   faBaby,
   faBalanceScale,
@@ -75,6 +75,31 @@ export class CampaignGroupsService {
       {
         name: 'Other',
         icon: faPlus,
+      },
+    ];
+  }
+
+  static getSocials(): Array<{ name: string; icon: IconDefinition }> {
+    return [
+      {
+        name: 'Facebook',
+        icon: faFacebookF,
+      },
+      {
+        name: 'Twitter',
+        icon: faTwitter,
+      },
+      {
+        name: 'Instagram',
+        icon: faInstagram,
+      },
+      {
+        name: 'YouTube',
+        icon: faYoutube,
+      },
+      {
+        name: 'LinkedIn',
+        icon: faLinkedinIn,
       },
     ];
   }
@@ -162,6 +187,13 @@ export class CampaignGroupsService {
 
   static getBeneficiaryIcon(beneficiary: string): IconDefinition {
     const matchingItems = CampaignGroupsService.getBeneficiaries().filter(ii => ii.name === beneficiary);
+
+    // For an unknown/invalid beneficiary, show 'other' symbol.
+    return matchingItems[0].icon || faPlus;
+  }
+
+  static getSocialIcon(social: string): IconDefinition {
+    const matchingItems = CampaignGroupsService.getSocials().filter(ii => ii.name === social);
 
     // For an unknown/invalid beneficiary, show 'other' symbol.
     return matchingItems[0].icon || faPlus;

@@ -46,9 +46,9 @@ the parent component).
 
 ## Events
 
-| Event      | Description | Type                  |
-| ---------- | ----------- | --------------------- |
-| `doSearch` |             | `CustomEvent<string>` |
+| Event      | Description                                                                                    | Type                  |
+| ---------- | ---------------------------------------------------------------------------------------------- | --------------------- |
+| `doSearch` | This event `doSearch` event is emitted and propogates to the parent component which handles it | `CustomEvent<string>` |
 
 
 ----------------------------------------------
