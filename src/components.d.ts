@@ -122,7 +122,6 @@ export namespace Components {
          */
         "teaser": string;
     }
-
     interface BiggiveIcon {
     }
     interface BiggiveProgressBar {
@@ -167,7 +166,7 @@ export namespace Components {
          */
         "url": string;
     }
-    interface BiggiveTextInput {  
+    interface BiggiveTextInput {
     }
 }
 export interface BiggiveSearchCustomEvent<T> extends CustomEvent<T> {
@@ -505,7 +504,6 @@ declare module "@stencil/core" {
             "biggive-section": LocalJSX.BiggiveSection & JSXBase.HTMLAttributes<HTMLBiggiveSectionElement>;
             "biggive-social-icon": LocalJSX.BiggiveSocialIcon & JSXBase.HTMLAttributes<HTMLBiggiveSocialIconElement>;
             "biggive-text-input": LocalJSX.BiggiveTextInput & JSXBase.HTMLAttributes<HTMLBiggiveTextInputElement>;
-            "demo-campaign-cards": LocalJSX.DemoCampaignCards & JSXBase.HTMLAttributes<HTMLDemoCampaignCardsElement>;
         }
     }
 }
