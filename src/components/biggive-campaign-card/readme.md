@@ -8,33 +8,33 @@ in a secondary column alongside more detail about the same campaign.
 
 ## Properties
 
-| Property              | Attribute               | Description                                                                                                                      | Type       | Default     |
-| --------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------- | ----------- |
-| `banner`              | `banner`                | Full URL of a banner image.                                                                                                      | `string`   | `''`        |
-| `beneficiaries`       | --                      | Array of full beneficiary labels.                                                                                                | `string[]` | `[]`        |
-| `callToActionLabel`   | `call-to-action-label`  | Text for the link to `callToActionUrl`.                                                                                          | `string`   | `null`      |
-| `callToActionUrl`     | `call-to-action-url`    | Full URL of a call to action.                                                                                                    | `string`   | `null`      |
-| `campaignTitle`       | `campaign-title`        | Display name of the charity's specific time-bound fundraising campaign.                                                          | `string`   | `null`      |
-| `campaignType`        | `campaign-type`         | e.g. "Match Funded".                                                                                                             | `string`   | `null`      |
-| `categories`          | --                      | Array of full category labels.                                                                                                   | `string[]` | `[]`        |
-| `currencyCode`        | `currency-code`         | e.g. 'GBP'.                                                                                                                      | `string`   | `undefined` |
-| `daysRemaining`       | `days-remaining`        | (Ceiling of) whole number of days until campaign end.                                                                            | `number`   | `null`      |
-| `matchFundsRemaining` | `match-funds-remaining` | Match funds not yet used or reserved, in major unit of currency e.g. pounds GBP.                                                 | `number`   | `null`      |
-| `organisationName`    | `organisation-name`     | Display name of the charity or non-profit.                                                                                       | `string`   | `null`      |
-| `target`              | `target`                | Target for the campaign including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP.              | `number`   | `null`      |
-| `totalFundsRaised`    | `total-funds-raised`    | Total the campaign has raised so far including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP. | `number`   | `null`      |
+| Property              | Attribute                | Description                                                                                                                      | Type     | Default           |
+| --------------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | -------- | ----------------- |
+| `banner`              | `banner`                 | Full URL of a banner image.                                                                                                      | `string` | `''`              |
+| `campaignTitle`       | `campaign-title`         | Display name of the charity's specific time-bound fundraising campaign.                                                          | `string` | `null`            |
+| `campaignType`        | `campaign-type`          | e.g. "Match Funded".                                                                                                             | `string` | `null`            |
+| `currencyCode`        | `currency-code`          | e.g. 'GBP'.                                                                                                                      | `string` | `undefined`       |
+| `donateButtonLabel`   | `donate-button-label`    | Donate button label                                                                                                              | `string` | `'Donate now'`    |
+| `donateButtonUrl`     | `donate-button-url`      | Donate button url                                                                                                                | `string` | `null`            |
+| `matchFundsRemaining` | `match-funds-remaining`  | Match funds remaining.                                                                                                           | `number` | `null`            |
+| `moreInfoButtonLabel` | `more-info-button-label` | More information button label                                                                                                    | `string` | `'Find out more'` |
+| `moreInfoButtonUrl`   | `more-info-button-url`   | More information button url                                                                                                      | `string` | `null`            |
+| `organisationName`    | `organisation-name`      | Display name of the charity or non-profit.                                                                                       | `string` | `null`            |
+| `totalFundsRaised`    | `total-funds-raised`     | Total the campaign has raised so far including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP. | `number` | `null`            |
 
 
 ## Dependencies
 
-### Used by
+### Depends on
 
- - [demo-campaign-cards](../demo-campaign-cards)
+- [biggive-progress-bar](../biggive-progress-bar)
+- [biggive-button](../biggive-button)
 
 ### Graph
 ```mermaid
 graph TD;
-  demo-campaign-cards --> biggive-campaign-card
+  biggive-campaign-card --> biggive-progress-bar
+  biggive-campaign-card --> biggive-button
   style biggive-campaign-card fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

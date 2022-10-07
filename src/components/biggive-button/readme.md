@@ -18,11 +18,15 @@
 
 ### Used by
 
+ - [biggive-campaign-card](../biggive-campaign-card)
+ - [biggive-footer](../biggive-footer)
  - [biggive-hero-image](../biggive-hero-image)
 
 ### Graph
 ```mermaid
 graph TD;
+  biggive-campaign-card --> biggive-button
+  biggive-footer --> biggive-button
   biggive-hero-image --> biggive-button
   style biggive-button fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -5,17 +5,16 @@ import { Component, Host, Prop, h } from '@stencil/core';
   styleUrl: 'biggive-section.scss',
   shadow: true,
 })
-
 export class BiggiveSection {
   /**
    * Section style
    */
-   @Prop() sectionStyle: string = '';
+  @Prop() sectionStyle: string = '';
 
   /**
    * Colour scheme
    */
-   @Prop() colourScheme: string = 'primary';
+  @Prop() colourScheme: string = 'primary';
 
   render() {
     return (
@@ -26,5 +25,4 @@ export class BiggiveSection {
       </Host>
     );
   }
-
 }

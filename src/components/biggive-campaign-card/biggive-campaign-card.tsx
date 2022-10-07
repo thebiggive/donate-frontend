@@ -1,6 +1,4 @@
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Component, Prop, h } from '@stencil/core';
-import { CampaignGroupsService } from '../../util/campaign-groups';
 
 @Component({
   tag: 'biggive-campaign-card',
@@ -104,9 +102,7 @@ export class BiggiveCampaignCard {
               <span class="text">{this.formatCurrency(this.currencyCode, this.matchFundsRemaining)}</span>
             </div>
             <div class="meta-item">
-              <span class="label">
-                Total Funds Received
-              </span>
+              <span class="label">Total Funds Received</span>
               <span class="text">{this.formatCurrency(this.currencyCode, this.totalFundsRaised)}</span>
             </div>
           </div>

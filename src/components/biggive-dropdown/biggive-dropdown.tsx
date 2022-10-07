@@ -6,7 +6,6 @@ import { Component, Host, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveDropdown {
-
   render() {
     return (
       <Host>
@@ -14,5 +13,4 @@ export class BiggiveDropdown {
       </Host>
     );
   }
-
 }

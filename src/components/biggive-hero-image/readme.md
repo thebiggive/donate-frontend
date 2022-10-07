@@ -12,6 +12,7 @@ Provides a large format image-based header feature, typically used at the top of
 | `buttonLabel`  | `button-label`  | Button Label                          | `string` | `null`      |
 | `buttonUrl`    | `button-url`    | Button Url                            | `string` | `null`      |
 | `colourScheme` | `colour-scheme` | Colour Scheme                         | `string` | `'primary'` |
+| `logo`         | `logo`          | Full URL of a logo image.             | `string` | `''`        |
 | `mainImage`    | `main-image`    | Full URL of a main hero image.        | `string` | `''`        |
 | `mainTitle`    | `main-title`    | Hero image title, typically the page. | `string` | `null`      |
 | `slug`         | `slug`          | Header slug                           | `string` | `null`      |

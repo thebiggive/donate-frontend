@@ -6,11 +6,9 @@ import { Component, Element, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveHeader {
-
   @Element() host: HTMLBiggiveHeaderElement;
 
   render() {
-
     var node = null;
     var navPrimary = null;
     var navSecondary = null;
@@ -20,10 +18,10 @@ export class BiggiveHeader {
       navPrimary = [];
       node.querySelectorAll('li').forEach(el => {
         navPrimary.push(
-        <li>
-          <a href="#">{el.innerText}</a>
-        </li>
-        )
+          <li>
+            <a href="#">{el.innerText}</a>
+          </li>,
+        );
       });
     }
 
@@ -32,13 +30,12 @@ export class BiggiveHeader {
       navSecondary = [];
       node.querySelectorAll('li').forEach(el => {
         navSecondary.push(
-        <li>
-          <a href="#">{el.innerText}</a>
-        </li>
-        )
+          <li>
+            <a href="#">{el.innerText}</a>
+          </li>,
+        );
       });
     }
-
 
     return (
       <header class="header">
@@ -50,11 +47,15 @@ export class BiggiveHeader {
             <biggive-social-icon service="YouTube" url="https://www.youtube.com"></biggive-social-icon>
             <biggive-social-icon service="Instagram" url="https://www.instagram.com"></biggive-social-icon>
           </div>
-          <nav class="nav nav-secondary"><ul>{navSecondary}</ul></nav>
+          <nav class="nav nav-secondary">
+            <ul>{navSecondary}</ul>
+          </nav>
         </div>
         <div class="row row-bottom">
           <div class="logo-wrap"></div>
-          <nav class="nav nav-primary"><ul>{navPrimary}</ul></nav>
+          <nav class="nav nav-primary">
+            <ul>{navPrimary}</ul>
+          </nav>
         </div>
       </header>
     );
