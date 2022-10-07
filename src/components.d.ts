@@ -122,6 +122,7 @@ export namespace Components {
          */
         "teaser": string;
     }
+
     interface BiggiveIcon {
     }
     interface BiggiveProgressBar {
@@ -135,6 +136,16 @@ export namespace Components {
         "counter": number;
     }
     interface BiggiveQuote {
+    }
+    interface BiggiveSearch {
+        /**
+          * Defines the text on the search button
+         */
+        "buttonText": string;
+        /**
+          * Defines the text displayed as the placeholder in the input field before the user types anything
+         */
+        "placeholderText": string;
     }
     interface BiggiveSection {
         /**
@@ -156,8 +167,12 @@ export namespace Components {
          */
         "url": string;
     }
-    interface BiggiveTextInput {
+    interface BiggiveTextInput {  
     }
+}
+export interface BiggiveSearchCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLBiggiveSearchElement;
 }
 declare global {
     interface HTMLBiggiveButtonElement extends Components.BiggiveButton, HTMLStencilElement {
@@ -238,6 +253,12 @@ declare global {
         prototype: HTMLBiggiveQuoteElement;
         new (): HTMLBiggiveQuoteElement;
     };
+    interface HTMLBiggiveSearchElement extends Components.BiggiveSearch, HTMLStencilElement {
+    }
+    var HTMLBiggiveSearchElement: {
+        prototype: HTMLBiggiveSearchElement;
+        new (): HTMLBiggiveSearchElement;
+    };
     interface HTMLBiggiveSectionElement extends Components.BiggiveSection, HTMLStencilElement {
     }
     var HTMLBiggiveSectionElement: {
@@ -270,6 +291,7 @@ declare global {
         "biggive-icon": HTMLBiggiveIconElement;
         "biggive-progress-bar": HTMLBiggiveProgressBarElement;
         "biggive-quote": HTMLBiggiveQuoteElement;
+        "biggive-search": HTMLBiggiveSearchElement;
         "biggive-section": HTMLBiggiveSectionElement;
         "biggive-social-icon": HTMLBiggiveSocialIconElement;
         "biggive-text-input": HTMLBiggiveTextInputElement;
@@ -406,6 +428,20 @@ declare namespace LocalJSX {
     }
     interface BiggiveQuote {
     }
+    interface BiggiveSearch {
+        /**
+          * Defines the text on the search button
+         */
+        "buttonText"?: string;
+        /**
+          * This event `doSearch` event is emitted and propogates to the parent component which handles it
+         */
+        "onDoSearch"?: (event: BiggiveSearchCustomEvent<string>) => void;
+        /**
+          * Defines the text displayed as the placeholder in the input field before the user types anything
+         */
+        "placeholderText"?: string;
+    }
     interface BiggiveSection {
         /**
           * Colour scheme
@@ -442,6 +478,7 @@ declare namespace LocalJSX {
         "biggive-icon": BiggiveIcon;
         "biggive-progress-bar": BiggiveProgressBar;
         "biggive-quote": BiggiveQuote;
+        "biggive-search": BiggiveSearch;
         "biggive-section": BiggiveSection;
         "biggive-social-icon": BiggiveSocialIcon;
         "biggive-text-input": BiggiveTextInput;
@@ -464,9 +501,11 @@ declare module "@stencil/core" {
             "biggive-icon": LocalJSX.BiggiveIcon & JSXBase.HTMLAttributes<HTMLBiggiveIconElement>;
             "biggive-progress-bar": LocalJSX.BiggiveProgressBar & JSXBase.HTMLAttributes<HTMLBiggiveProgressBarElement>;
             "biggive-quote": LocalJSX.BiggiveQuote & JSXBase.HTMLAttributes<HTMLBiggiveQuoteElement>;
+            "biggive-search": LocalJSX.BiggiveSearch & JSXBase.HTMLAttributes<HTMLBiggiveSearchElement>;
             "biggive-section": LocalJSX.BiggiveSection & JSXBase.HTMLAttributes<HTMLBiggiveSectionElement>;
             "biggive-social-icon": LocalJSX.BiggiveSocialIcon & JSXBase.HTMLAttributes<HTMLBiggiveSocialIconElement>;
             "biggive-text-input": LocalJSX.BiggiveTextInput & JSXBase.HTMLAttributes<HTMLBiggiveTextInputElement>;
+            "demo-campaign-cards": LocalJSX.DemoCampaignCards & JSXBase.HTMLAttributes<HTMLDemoCampaignCardsElement>;
         }
     }
 }

@@ -1,0 +1,105 @@
+.padding-enclosure {
+  width: 100%;
+  padding: 20px 30px 20px 10px;
+  box-sizing: border-box;
+
+  .outer-container {
+    width: calc(100% - 50px);
+    position: absolute;
+    background-color: white;
+
+    .triangle {
+      width: 0;
+      height: 0;
+      position: absolute;
+      border-right: 50px solid  transparent; 
+      border-left: 50px solid  transparent;
+      border-bottom: 86.60254px solid $colour-secondary;
+    }
+
+    .triangle-before {
+      top: -35px;
+      left: -40px;
+      z-index: -1;
+      rotate: -23deg;
+    }
+
+    .triangle-after {
+      bottom: -15px;
+      right: -20px;
+      z-index: -1;
+      rotate: -15deg;
+    }
+
+    .inner-container {
+      @include standard-font();
+      padding: 1.5rem;
+      box-sizing: border-box;
+    
+      h2 {
+        width: 100%;
+        font-weight: 500;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        font-size: 1.2rem;
+      }
+    
+      .search-box {
+        display: flex;
+        padding: 10px 10px 5px 10px;
+        margin-top: 1rem;
+        margin-bottom: 1.25rem;
+        border-bottom: 1px solid black;
+    
+        .icon {
+          @include icon();
+          margin: auto;
+
+          > path {
+            fill: $colour-primary;
+          }
+        }
+    
+        #x-icon {
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      
+        input {
+          @include standard-font();
+          width: 100%;
+          box-sizing: border-box;
+          border: none;
+          border-radius: 3px;
+          font-size: 1.1rem;
+      
+          &::placeholder {
+            color: rgb(150, 150, 150);
+          }
+      
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+    
+      button {
+        @include standard-font();
+        width: 100%;
+        padding: 0.75rem;
+        box-sizing: border-box;
+        background-color: $colour-primary;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+    
+        &:hover {
+          cursor: pointer;
+          background-color: navy;
+        }
+      }
+    }
+  }
+}
