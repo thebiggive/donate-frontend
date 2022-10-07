@@ -37,7 +37,11 @@
 
           <div *ngIf="!registrationComplete" class="id-info">
             <h4>Want to donate faster next time?</h4>
-            <p><button mat-raised-button (click)="openSetPasswordDialog()">Set a password</button></p>
+            <p><button
+              mat-raised-button
+              color="primary"
+              (click)="openSetPasswordDialog()"
+            >Set a password</button></p>
           </div>
 
           <p *ngIf="registerError" class="error" aria-live="assertive">
