@@ -1,12 +1,4 @@
-import { 
-  faAccessibleIcon, 
-  IconDefinition, 
-  faFacebookF, 
-  faTwitter,
-  faYoutube,
-  faInstagram,
-  faLinkedinIn
-} from '@fortawesome/free-brands-svg-icons';
+import { faAccessibleIcon, IconDefinition, faFacebookF, faTwitter, faYoutube, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
 import {
   faBaby,
   faBalanceScale,
@@ -32,7 +24,7 @@ import {
   faTheaterMasks,
   faUniversalAccess,
   faUserGraduate,
-  faVenus
+  faVenus,
 } from '@fortawesome/free-solid-svg-icons';
 import { faUsers } from '@fortawesome/pro-duotone-svg-icons';
 import { faHeadSideMedical, faHomeHeart } from '@fortawesome/pro-solid-svg-icons';
