@@ -4,13 +4,13 @@ export default {
 
 const Template = args => `
   <biggive-progress-bar
-    colour-scheme="${args.placeholderText}"
+    colour-scheme="${args.colourScheme}"
     counter=${args.counter}
   </biggive-progress-bar>
   `;
 
-  export const ProgressBarComponent = Template.bind({});
-  ProgressBarComponent.args = {
+export const ProgressBarComponent = Template.bind({});
+ProgressBarComponent.args = {
   colourScheme: 'primary',
   counter: 50,
 };
