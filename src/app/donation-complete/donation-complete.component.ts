@@ -42,6 +42,7 @@ export class DonationCompleteComponent {
 
   private donationId: string;
   private maxTries = 5;
+  private patchedCorePersonInfo = false;
   private person?: Person;
   private retryInterval = 2; // In seconds
   private tries = 0;
@@ -156,7 +157,7 @@ export class DonationCompleteComponent {
       return;
     }
 
-    if (environment.identityEnabled) {
+    if (environment.identityEnabled && !this.patchedCorePersonInfo) {
       const idAndJWT = this.identityService.getIdAndJWT();
       if (idAndJWT) {
         let person = this.buildPersonFromDonation(donation);
@@ -169,6 +170,7 @@ export class DonationCompleteComponent {
         } else {
           this.identityService.update(person)
             .subscribe(person => {
+              this.patchedCorePersonInfo = true;
               this.person = person;
               this.offerToSetPassword = !person.has_password;
             }, (error: HttpErrorResponse) => {
