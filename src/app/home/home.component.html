@@ -20,6 +20,13 @@
     </div>
   </div>
 
+  <div class="promo-wrapper">
+    <app-promoted-campaigns
+      [campaign1]="promotedCampaign1"
+      [campaign2]="promotedCampaign2"
+    ></app-promoted-campaigns>
+  </div>
+
   <div *ngIf="campaigns.length > 0" class="highlights-wrapper">
     <h3 class="b-rh-1 b-bold" fxLayoutAlign="center">Charity campaigns</h3>
     <div class="b-container">
@@ -41,7 +48,7 @@
               class="c-video__iframe b-w-100"
               src="https://www.youtube.com/embed/5RWDzzBg-go"
               frameborder="0"
-              allow="encrypted-media"
+              allow="autoplay; encrypted-media"
               webkitallowfullscreen="true"
               mozallowfullscreen="true"
               allowfullscreen="true"></iframe>
