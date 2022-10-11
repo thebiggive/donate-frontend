@@ -2,7 +2,7 @@ export default {
   title: 'Components/Demos',
 };
 
-const Template = args => `
+const Template = () => `
       <biggive-footer>
         <div slot="nav-primary-title">Match Funding Opportunities</div>
         <ul slot="nav-primary">
@@ -27,4 +27,3 @@ const Template = args => `
       `;
 
 export const FooterComponent = Template.bind({});
-FooterComponent.args = {};

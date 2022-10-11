@@ -2,7 +2,7 @@ export default {
   title: 'Components/Demos',
 };
 
-const Template = args => `
+const Template = () => `
     <biggive-header>
       <ul slot="nav-primary">
         <li><a href="#">Explore Campaigns</a></li>
@@ -20,4 +20,4 @@ const Template = args => `
     `;
 
 export const HeaderComponent = Template.bind({});
-HeaderComponent.args = {};
+
