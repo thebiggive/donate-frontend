@@ -132,6 +132,7 @@ export class DonationCompleteComponent {
     this.identityService.update(this.person)
       .subscribe(
         () => { // Success. Must subscribe for call to fire.
+          this.registerError = undefined;
           this.registrationComplete = true;
           this.analyticsService.logEvent('person_password_set', 'Account password creation complete', 'identity');
 
