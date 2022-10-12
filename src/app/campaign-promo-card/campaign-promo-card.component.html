@@ -1,0 +1,15 @@
+<div [routerLink]="campaignUri" class="c-promo-card" tabindex="0" [id]="'campaign-' + campaign.id">
+  <div class="c-banner">
+    <img
+      class="c-banner__image b-w-100"
+      *ngIf="bannerUri"
+      [src]="bannerUri"
+      alt=""
+      role="presentation"
+    >
+  </div>
+
+  <div class="c-header">
+    <a class="c-header__link"><h3 class="c-header__campaign-title">{{ campaign.title }}</h3></a>
+  </div>
+</div>
