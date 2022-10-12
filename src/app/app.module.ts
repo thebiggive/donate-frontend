@@ -58,6 +58,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { PromotedCampaignsComponent } from './promoted-campaigns/promoted-campaigns.component';
 import { TickerComponent } from './ticker/ticker.component';
 import { TimeLeftPipe } from './time-left.pipe';
+import { BuyCreditsComponent } from './buy-credits/buy-credits.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     TickerComponent,
     TimeLeftPipe,
     HomeComponent,
+    BuyCreditsComponent,
   ],
   imports: [
     AppRoutingModule,

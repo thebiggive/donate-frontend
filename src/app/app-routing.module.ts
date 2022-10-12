@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { BuyCreditsComponent } from './buy-credits/buy-credits.component';
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
 import { CampaignListResolver } from './campaign-list.resolver';
 import { CampaignPromoted1Resolver } from './campaign-promoted-1.resolver';
@@ -15,6 +16,10 @@ import { HomeComponent } from './home/home.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 
 const routes: Routes = [
+  {
+    path: 'credits',
+    component: BuyCreditsComponent,
+  },
   {
     path: 'campaign/:campaignId',
     component: CampaignDetailsComponent,

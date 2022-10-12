@@ -1,0 +1,45 @@
+<main>
+    <div *ngIf="isLoggedIn" id="loggedInHeader">
+        <p>Logged in as {{userFullName}}</p>
+    </div>
+    <div class="b-container">
+        <h3 class="b-rh-1 b-bold">Purchase Donation Credits</h3>
+
+        <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
+            <mat-step [stepControl]="firstFormGroup">
+                <form [formGroup]="firstFormGroup">
+                <ng-template matStepLabel>How much would you like to credit your account?</ng-template>
+                <mat-form-field appearance="fill">
+                    <mat-label>Credit amount (£)</mat-label>
+                    <input matInput placeholder="Enter amount in £" formControlName="firstCtrl" required>
+                </mat-form-field>
+                <div>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+                </form>
+            </mat-step>
+            <mat-step [stepControl]="secondFormGroup">
+                <form [formGroup]="secondFormGroup">
+                <ng-template matStepLabel>Tip to Big Give</ng-template>
+                <mat-form-field appearance="fill">
+                    <mat-label>Tip amount (£)</mat-label>
+                    <input matInput formControlName="secondCtrl" placeholder="Thanks for your generosity"
+                            required>
+                </mat-form-field>
+                <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+                </form>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Submit</ng-template>
+                <p>Click submit to complete purchase</p>
+                <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button (click)="buyCredits()">Buy Credits</button>
+                </div>
+            </mat-step>
+        </mat-stepper>
+    </div>
+</main>

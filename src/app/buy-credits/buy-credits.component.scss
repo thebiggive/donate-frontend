@@ -1,0 +1,20 @@
+#loggedInHeader {
+    background-color: green;
+    color: white;
+    margin: 0px;
+    padding: 10px 2rem;
+    display: flex;
+    flex-direction: row-reverse;
+
+    p {
+        margin: 0;
+    }
+}
+
+.mat-stepper-vertical {
+    margin-top: 8px;
+}
+
+.mat-form-field {
+    margin-top: 16px;
+}
