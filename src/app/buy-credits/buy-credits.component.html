@@ -64,11 +64,18 @@
                 </form>
             </mat-step>
             <mat-step>
-                <ng-template matStepLabel>Submit</ng-template>
-                <p>Click submit to complete purchase</p>
+                <ng-template matStepLabel>Payment Details</ng-template>
+
+                <p><strong>Credits will be purchased from your following card:</strong></p>
+
+                <p><strong>Sort Code:</strong> 00-00-00</p>
+                <p><strong>Account Number:</strong> 12345678</p>
+                <p><strong>Account Name:</strong> John Doe</p>
+
+                <p>We use <a href="https://stripe.com">Stripe</a> as our payments processor.</p>
+
                 <div>
-                <button mat-button matStepperPrevious>Back</button>
-                <button mat-button (click)="buyCredits()">Buy Credits</button>
+                    <button mat-button (click)="buyCredits()">Purchase Credits</button>
                 </div>
             </mat-step>
         </mat-stepper>
