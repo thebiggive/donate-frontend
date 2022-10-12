@@ -26,7 +26,7 @@
                     </mat-form-field>
                     <p>£X donation to support the Big Give</p>
 
-                    <h3>How does Big Give use tips?</h3>
+                    <p><strong>How does Big Give use tips?</strong></p>
 
                     <p>Big Give is a registered charity (1136547). We don't charge charities for using our platform;
                         we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match-funding campaigns.
@@ -46,14 +46,19 @@
             </mat-step>
             <mat-step [stepControl]="secondFormGroup">
                 <form [formGroup]="secondFormGroup">
-                <ng-template matStepLabel>Tip to Big Give</ng-template>
-                <mat-form-field >
-                    <mat-label>Tip amount (£)</mat-label>
-                    <input matInput formControlName="secondCtrl" placeholder="Thanks for your generosity"
-                            required>
-                </mat-form-field>
+                <ng-template matStepLabel>Gift Aid</ng-template>
+                <p><strong>Boost your donation by 25p of Gift Aid for every £1 you donate</strong></p>
+
+                <p>I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of
+                    Gift Aid claimed on all my donations it is my responsibility to pay the difference.</p>
+
+                <p><a href="">Find out more about Gift Aid </a></p>
+                
+                <div id="giftAidOptIn">
+                    <mat-checkbox (click)="giftAidToggle($event)" class="example-margin">Yes, I want to claim <strong>£X</strong> of Gift Aid.</mat-checkbox>
+                </div>
+
                 <div>
-                    <button mat-button matStepperPrevious>Back</button>
                     <button mat-button matStepperNext>Next</button>
                 </div>
                 </form>

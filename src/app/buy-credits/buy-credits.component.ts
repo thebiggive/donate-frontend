@@ -30,4 +30,8 @@ export class BuyCreditsComponent implements OnInit {
     console.log('POST /credits');
   }
 
+  giftAidToggle(e: Event) {
+    
+  }
+
 }
