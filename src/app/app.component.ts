@@ -38,11 +38,15 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    document.fonts.ready.then(() => this.fontsLoaded = true);
-
     if (isPlatformBrowser(this.platformId)) {
       this.analyticsService.init();
       this.getSiteControlService.init();
+
+      this.fontsLoaded = false;
+      globalThis.document.fonts.ready.then(() => this.fontsLoaded = true);
+    } else {
+      // Server renders shouldn't hide elements regardless of this.
+      this.fontsLoaded = true;
     }
 
     // This service needs to be injected app-wide and this line is here, because
