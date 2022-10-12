@@ -66,8 +66,6 @@ export namespace Components {
          */
         "totalFundsRaised": number;
     }
-    interface BiggiveCard {
-    }
     interface BiggiveDropdown {
     }
     interface BiggiveFooter {
@@ -186,12 +184,6 @@ declare global {
         prototype: HTMLBiggiveCampaignCardElement;
         new (): HTMLBiggiveCampaignCardElement;
     };
-    interface HTMLBiggiveCardElement extends Components.BiggiveCard, HTMLStencilElement {
-    }
-    var HTMLBiggiveCardElement: {
-        prototype: HTMLBiggiveCardElement;
-        new (): HTMLBiggiveCardElement;
-    };
     interface HTMLBiggiveDropdownElement extends Components.BiggiveDropdown, HTMLStencilElement {
     }
     var HTMLBiggiveDropdownElement: {
@@ -279,7 +271,6 @@ declare global {
     interface HTMLElementTagNameMap {
         "biggive-button": HTMLBiggiveButtonElement;
         "biggive-campaign-card": HTMLBiggiveCampaignCardElement;
-        "biggive-card": HTMLBiggiveCardElement;
         "biggive-dropdown": HTMLBiggiveDropdownElement;
         "biggive-footer": HTMLBiggiveFooterElement;
         "biggive-form": HTMLBiggiveFormElement;
@@ -356,8 +347,6 @@ declare namespace LocalJSX {
           * Total the campaign has raised so far including matching but excluding any tax relief, in major unit of currency e.g. pounds GBP.
          */
         "totalFundsRaised"?: number;
-    }
-    interface BiggiveCard {
     }
     interface BiggiveDropdown {
     }
@@ -466,7 +455,6 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "biggive-button": BiggiveButton;
         "biggive-campaign-card": BiggiveCampaignCard;
-        "biggive-card": BiggiveCard;
         "biggive-dropdown": BiggiveDropdown;
         "biggive-footer": BiggiveFooter;
         "biggive-form": BiggiveForm;
@@ -489,7 +477,6 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "biggive-button": LocalJSX.BiggiveButton & JSXBase.HTMLAttributes<HTMLBiggiveButtonElement>;
             "biggive-campaign-card": LocalJSX.BiggiveCampaignCard & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardElement>;
-            "biggive-card": LocalJSX.BiggiveCard & JSXBase.HTMLAttributes<HTMLBiggiveCardElement>;
             "biggive-dropdown": LocalJSX.BiggiveDropdown & JSXBase.HTMLAttributes<HTMLBiggiveDropdownElement>;
             "biggive-footer": LocalJSX.BiggiveFooter & JSXBase.HTMLAttributes<HTMLBiggiveFooterElement>;
             "biggive-form": LocalJSX.BiggiveForm & JSXBase.HTMLAttributes<HTMLBiggiveFormElement>;
