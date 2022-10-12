@@ -20,4 +20,3 @@ const Template = () => `
     `;
 
 export const HeaderComponent = Template.bind({});
-
