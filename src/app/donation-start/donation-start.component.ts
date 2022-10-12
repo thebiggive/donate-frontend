@@ -116,6 +116,14 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   triedToLeaveMarketing = false;
 
   private campaignId: string;
+
+  /**
+   * Tracks internally whether (Person +) Donation setup is in flight. This is important to prevent duplicates, because multiple
+   * time-variable triggers including user-initiated stepper step changes and async, invisible reCAPTCHA returns can cause us
+   * to decide we are ready to set these things up.
+   */
+  private creatingDonation = false;
+
   private defaultCountryCode: string;
   private previousDonation?: Donation;
   private stepHeaderEventsSet = false;
@@ -1035,6 +1043,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   private createDonationAndMaybePerson(): void {
+    if (this.creatingDonation) { // Ensure only 1 trigger is doing this at a time.
+      return;
+    }
+
     if (!this.captchaCode && !this.idCaptchaCode) {
       // We need a captcha code before we can *really* proceed. By doing this here we ensure
       // this happens consistently regardless of whether donors click Next or a subsequent stepper
@@ -1059,6 +1071,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       return;
     }
 
+    this.creatingDonation = true;
     this.donationCreateError = false;
 
     const donation: Donation = {
@@ -1100,6 +1113,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         (error: HttpErrorResponse) => {
           // In ID-on mode, we can't proceed without the Person/Stripe Customer.
           this.analyticsService.logError('person_create_failed', `${error.status}: ${error.message}`, 'identity_error');
+          this.creatingDonation = false;
           this.donationCreateError = true;
           this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
         }
@@ -1107,6 +1121,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
   }
 
+  /**
+   * Creates a Donation itself. Both success and error callbacks should unconditionally set `creatingDonation` false.
+   */
   private createDonation(donation: Donation) {
     // No re-tries for create() where donors have only entered amounts. If the
     // server is having problem it's probably more helpful to fail immediately than
@@ -1128,6 +1145,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       errorMessage = `Could not create new donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
     }
     this.analyticsService.logError('donation_create_failed', errorMessage);
+    this.creatingDonation = false;
     this.donationCreateError = true;
     this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
@@ -1192,6 +1210,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   private newDonationSuccess(response: DonationCreatedResponse) {
+    this.creatingDonation = false;
+
     const createResponseMissingData = (
       !response.donation.charityId ||
       !response.donation.donationId ||
@@ -1334,6 +1354,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.captchaCode = undefined;
     this.idCaptchaCode = undefined;
 
+    this.creatingDonation = false;
     this.donationCreateError = false;
     this.donationUpdateError = false;
     this.stripeError = undefined;
