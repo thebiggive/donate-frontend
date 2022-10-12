@@ -10,6 +10,7 @@ export class BuyCreditsComponent implements OnInit {
 
   isLoggedIn: boolean = true;
   userFullName: string;
+  tipOptions: string[] = ['0%', '5%', '10%', '15%', '20%', '25%'];
 
   firstFormGroup = this._formBuilder.group({
     firstCtrl: ['', Validators.required],

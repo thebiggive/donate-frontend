@@ -8,20 +8,46 @@
         <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
             <mat-step [stepControl]="firstFormGroup">
                 <form [formGroup]="firstFormGroup">
-                <ng-template matStepLabel>How much would you like to credit your account?</ng-template>
-                <mat-form-field appearance="fill">
-                    <mat-label>Credit amount (£)</mat-label>
-                    <input matInput placeholder="Enter amount in £" formControlName="firstCtrl" required>
-                </mat-form-field>
-                <div>
-                    <button mat-button matStepperNext>Next</button>
-                </div>
+                    <ng-template matStepLabel>Your Donation Credits</ng-template>
+                    <mat-form-field  class="form-field b-center size-lg" hideRequiredMarker>
+                        <mat-label>Credit amount (£)</mat-label>
+                        <input matInput placeholder="Enter amount in £" formControlName="firstCtrl" required>
+                    </mat-form-field>
+                    <!-- <hr> -->
+                    <h3>Tip the Big Give</h3>
+                    <p class="tip-text">Big Give has a 0% platform fee. That means we're able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
+                    <mat-form-field >
+                        <mat-label>Tip amount (%)</mat-label>
+                        <mat-select>
+                            <mat-option *ngFor="let tipOption of tipOptions" [value]="tipOption">
+                            {{tipOption}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <p>£X donation to support the Big Give</p>
+
+                    <h3>How does Big Give use tips?</h3>
+
+                    <p>Big Give is a registered charity (1136547). We don't charge charities for using our platform;
+                        we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match-funding campaigns.
+                        <br>
+                        Your tips will be going to:
+                    </p>
+                    <ul>
+                        <li>Supporting our website and team, allowing charities to double their donations to good causes.</li>
+                        <li>Providing match funds in our Anchor Match Fund. Through tips, charities will receive funding to launch their own match-funded campaign on Big Give.</li>
+                    </ul>
+                    <p>Thank you for your generosity! Your tip ensures that we can continue to support charities and causes that are important to you.</p>
+
+                    <div>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
                 </form>
             </mat-step>
             <mat-step [stepControl]="secondFormGroup">
                 <form [formGroup]="secondFormGroup">
                 <ng-template matStepLabel>Tip to Big Give</ng-template>
-                <mat-form-field appearance="fill">
+                <mat-form-field >
                     <mat-label>Tip amount (£)</mat-label>
                     <input matInput formControlName="secondCtrl" placeholder="Thanks for your generosity"
                             required>
