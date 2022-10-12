@@ -8,7 +8,7 @@ if (environment.productionLike) {
   enableProdMode();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+globalThis.document.addEventListener('DOMContentLoaded', () => {
   platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
 });
