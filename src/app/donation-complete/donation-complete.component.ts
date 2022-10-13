@@ -98,6 +98,13 @@ export class DonationCompleteComponent {
   }
 
   loginCaptchaReturn(captchaResponse: string) {
+    if (captchaResponse === null) {
+      // This is expected after ~1 min when the code expires. At this point we should
+      // never be executing the login again because if the captcha was set up at all then
+      // we auto-logged-in with the password the donor just chose.
+      return;
+    }
+
     const credentials: Credentials = {
       email_address: this.donation.emailAddress as string,
       raw_password: this.person?.raw_password as string,
