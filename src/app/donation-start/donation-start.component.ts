@@ -729,13 +729,32 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   captchaDonationReturn(captchaResponse: string) {
+    if (captchaResponse === null) {
+      // Ensure no other callback tries to use the old captcha code, and will re-execute
+      // the catcha to get a new one as needed instead.
+      this.captchaCode = undefined;
+      return;
+    }
+
     this.captchaCode = captchaResponse;
-    this.createDonationAndMaybePerson();
+
+    if (!this.donation) {
+      this.createDonationAndMaybePerson();
+    }
   }
 
   captchaIdentityReturn(captchaResponse: string) {
+    if (captchaResponse === null) {
+      // Ensure no other callback tries to use the old captcha code, and will re-execute
+      // the catcha to get a new one as needed instead.
+      this.idCaptchaCode = undefined;
+      return;
+    }
+
     this.idCaptchaCode = captchaResponse;
-    this.createDonationAndMaybePerson();
+    if (!this.donation) {
+      this.createDonationAndMaybePerson();
+    }
   }
 
   customTip(): boolean {
@@ -1129,13 +1148,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
-    if (!this.donation) {
-      this.donationService.create(donation, this.personId, this.identityService.getJWT())
-      .subscribe({
-        next: this.newDonationSuccess.bind(this),
-        error: this.newDonationError.bind(this),
-      });
-    }
+    this.donationService.create(donation, this.personId, this.identityService.getJWT())
+    .subscribe({
+      next: this.newDonationSuccess.bind(this),
+      error: this.newDonationError.bind(this),
+    });
   }
 
   private newDonationError(response: any) {
