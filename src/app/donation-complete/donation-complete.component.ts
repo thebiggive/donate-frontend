@@ -152,7 +152,7 @@ export class DonationCompleteComponent {
   }
 
   private setDonation(donation: Donation) {
-    if (donation === undefined) {
+    if (donation === undefined || !donation.firstName || !donation.lastName || !donation.emailAddress) {
       this.analyticsService.logError('thank_you_lookup_failed', `Donation ID ${this.donationId}`);
       this.noAccess = true; // If we don't have the local auth token we can never load the details.
       return;
