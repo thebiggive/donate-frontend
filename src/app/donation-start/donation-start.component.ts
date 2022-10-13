@@ -1129,11 +1129,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
-    this.donationService.create(donation, this.personId, this.identityService.getJWT())
+    if (!this.donation) {
+      this.donationService.create(donation, this.personId, this.identityService.getJWT())
       .subscribe({
         next: this.newDonationSuccess.bind(this),
         error: this.newDonationError.bind(this),
       });
+    }
   }
 
   private newDonationError(response: any) {
