@@ -2,7 +2,7 @@ export default {
   title: 'Components/Demos',
 };
 
-const Template = args => `
+const Template = () => `
         <biggive-icon
         </biggive-icon>
         `;

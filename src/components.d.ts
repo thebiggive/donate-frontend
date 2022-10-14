@@ -133,6 +133,18 @@ export namespace Components {
         "counter": number;
     }
     interface BiggiveQuote {
+        /**
+          * Attribution text
+         */
+        "attribution": string;
+        /**
+          * Colour Scheme
+         */
+        "colourScheme": string;
+        /**
+          * Quote text
+         */
+        "quote": string;
     }
     interface BiggiveSearch {
         /**
@@ -415,6 +427,18 @@ declare namespace LocalJSX {
         "counter"?: number;
     }
     interface BiggiveQuote {
+        /**
+          * Attribution text
+         */
+        "attribution"?: string;
+        /**
+          * Colour Scheme
+         */
+        "colourScheme"?: string;
+        /**
+          * Quote text
+         */
+        "quote"?: string;
     }
     interface BiggiveSearch {
         /**
