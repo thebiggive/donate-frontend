@@ -1,4 +1,5 @@
 import { AbstractControl } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 
 export function ValidateCreditMin(control: AbstractControl) {
   if (!control.value) {
@@ -12,7 +13,7 @@ export function ValidateCreditMin(control: AbstractControl) {
 
   const value = Number(stringValue);
 
-  if (value < 500) {
+  if (value < environment.minimumCreditAmount) {
     return { min: true };
   }
 

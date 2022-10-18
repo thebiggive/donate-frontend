@@ -19,6 +19,8 @@ export const environment: Environment = {
   identityApiPrefix: 'https://identity-regression.thebiggivetest.org.uk/v1',
   identityEnabled: true,
   maximumDonationAmount: 25000,
+  minimumCreditAmount: 500,
+  maximumCreditAmount: 25000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
   postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.
   promotedMetacampaign1Slug: 'regtest-standard',
