@@ -5,9 +5,10 @@
     <div class="b-container">
         <h3 class="b-rh-1 b-bold">Purchase Donation Credits</h3>
 
-        <form [formGroup]="donationForm">
+        <form *ngIf="isLoggedIn" [formGroup]="creditForm">
             <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
                 <mat-step
+                    [completed]="false"
                     formGroupName="amounts"
                     [stepControl]="amountsGroup"
                 >
@@ -21,7 +22,7 @@
                     <p class="tip-text">Big Give has a 0% platform fee. That means we're able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
                     <mat-form-field >
                         <mat-label>Tip amount (%)</mat-label>
-                        <mat-select formControlName="tipPercentage">
+                        <mat-select formControlName="tipPercentage" required="true">
                             <mat-option [value]="7.5">7.5%</mat-option>
                             <mat-option [value]="10">10%</mat-option>
                             <mat-option [value]="12.5">12.5%</mat-option>
@@ -87,5 +88,17 @@
 
         </form>
 
+        <div *ngIf="!isLoggedIn && isLoading">
+            <mat-spinner [diameter]="40"></mat-spinner>
+        </div>
+
+        <div *ngIf="!isLoggedIn && !isLoading">
+            <p>You must be logged in to purchase donation credits.</p>
+            <button
+                mat-raised-button
+                color="primary"
+                (click)="showLoginDialog()"
+            >Log in</button>
+        </div>
     </div>
 </main>

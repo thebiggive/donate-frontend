@@ -16,11 +16,12 @@ import { ValidateCreditMin } from '../validators/credit-min';
 export class BuyCreditsComponent implements OnInit {
 
   isLoggedIn: boolean = false;
+  isLoading: boolean = false;
   userFullName: string;
-  donationForm: FormGroup;
+  creditForm: FormGroup;
   amountsGroup: FormGroup;
   giftAidGroup: FormGroup;
-  isLinear = false;
+  isLinear = true;
   private initialTipSuggestedPercentage = 15;
 
   constructor(
@@ -45,7 +46,7 @@ export class BuyCreditsComponent implements OnInit {
         tipPercentage: [this.initialTipSuggestedPercentage],
       }),
       giftAid: this.formBuilder.group({
-        giftAid: [null],
+        giftAid: [null, Validators.required],
         homeAddress: [null],
         homeBuildingNumber: [null],
         homeOutsideUK: [null],
@@ -54,25 +55,20 @@ export class BuyCreditsComponent implements OnInit {
       // T&Cs agreement is implicit through submitting the form.
     };
 
-    this.donationForm = this.formBuilder.group(formGroups);
+    this.creditForm = this.formBuilder.group(formGroups);
 
-    const amountsGroup: any = this.donationForm.get('amounts');
+    const amountsGroup: any = this.creditForm.get('amounts');
     if (amountsGroup != null) {
       this.amountsGroup = amountsGroup;
     }
 
-    const giftAidGroup: any = this.donationForm.get('giftAid');
+    const giftAidGroup: any = this.creditForm.get('giftAid');
     if (giftAidGroup != null) {
       this.giftAidGroup = giftAidGroup;
     }
 
     if (!this.isLoggedIn) {
-      const loginDialog = this.dialog.open(DonationStartLoginDialogComponent);
-      loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
-        if (data && data.id) {
-          this.loadAuthedPersonInfo(data.id, data.jwt);
-        }
-      });
+      this.showLoginDialog();
     }
   }
 
@@ -84,9 +80,20 @@ export class BuyCreditsComponent implements OnInit {
     
   }
 
+  showLoginDialog() {
+    const loginDialog = this.dialog.open(DonationStartLoginDialogComponent);
+    loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
+      if (data && data.id) {
+        this.loadAuthedPersonInfo(data.id, data.jwt);
+      }
+    });
+  }
+
   private loadAuthedPersonInfo(id: string, jwt: string) {
+    this.isLoading = true;
     this.identityService.get(id, jwt).subscribe((person: Person) => {
       this.isLoggedIn = true;
+      this.isLoading = false;
       this.userFullName = person.first_name + ' ' + person.last_name;
       console.log('Login success: ' + JSON.stringify(person));
 
