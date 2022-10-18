@@ -5,23 +5,28 @@
     <div class="b-container">
         <h3 class="b-rh-1 b-bold">Purchase Donation Credits</h3>
 
-        <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
-            <mat-step [stepControl]="firstFormGroup">
-                <form [formGroup]="firstFormGroup">
+        <form [formGroup]="donationForm">
+            <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
+                <mat-step
+                    formGroupName="amounts"
+                    [stepControl]="amountsGroup"
+                >
                     <ng-template matStepLabel>Your Donation Credits</ng-template>
                     <mat-form-field  class="form-field b-center size-lg" hideRequiredMarker>
                         <mat-label>Credit amount (£)</mat-label>
-                        <input matInput placeholder="Enter amount in £" formControlName="firstCtrl" required>
+                        <input matInput placeholder="Enter amount in £" formControlName="donationAmount" required>
                     </mat-form-field>
                     <!-- <hr> -->
                     <h3>Tip the Big Give</h3>
                     <p class="tip-text">Big Give has a 0% platform fee. That means we're able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
                     <mat-form-field >
                         <mat-label>Tip amount (%)</mat-label>
-                        <mat-select>
-                            <mat-option *ngFor="let tipOption of tipOptions" [value]="tipOption">
-                            {{tipOption}}
-                            </mat-option>
+                        <mat-select formControlName="tipPercentage">
+                            <mat-option [value]="7.5">7.5%</mat-option>
+                            <mat-option [value]="10">10%</mat-option>
+                            <mat-option [value]="12.5">12.5%</mat-option>
+                            <mat-option [value]="15">15%</mat-option>
+                            <mat-option [value]="'Other'">Other</mat-option>
                         </mat-select>
                     </mat-form-field>
                     <p>£X donation to support the Big Give</p>
@@ -42,42 +47,45 @@
                     <div>
                         <button mat-button matStepperNext>Next</button>
                     </div>
-                </form>
-            </mat-step>
-            <mat-step [stepControl]="secondFormGroup">
-                <form [formGroup]="secondFormGroup">
-                <ng-template matStepLabel>Gift Aid</ng-template>
-                <p><strong>Boost your donation by 25p of Gift Aid for every £1 you donate</strong></p>
+                </mat-step>
+                <mat-step
+                    formGroupName="giftAid"
+                    [stepControl]="giftAidGroup"
+                >
+                    <ng-template matStepLabel>Gift Aid</ng-template>
+                    <p><strong>Boost your donation by 25p of Gift Aid for every £1 you donate</strong></p>
 
-                <p>I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of
-                    Gift Aid claimed on all my donations it is my responsibility to pay the difference.</p>
+                    <p>I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of
+                        Gift Aid claimed on all my donations it is my responsibility to pay the difference.</p>
 
-                <p><a href="">Find out more about Gift Aid </a></p>
-                
-                <div id="giftAidOptIn">
-                    <mat-checkbox (click)="giftAidToggle($event)" class="example-margin">Yes, I want to claim <strong>£X</strong> of Gift Aid.</mat-checkbox>
-                </div>
+                    <p><a href="">Find out more about Gift Aid </a></p>
+                    
+                    <div id="giftAidOptIn">
+                        <mat-checkbox (click)="giftAidToggle($event)" class="example-margin">Yes, I want to claim <strong>£X</strong> of Gift Aid.</mat-checkbox>
+                    </div>
 
-                <div>
-                    <button mat-button matStepperNext>Next</button>
-                </div>
-                </form>
-            </mat-step>
-            <mat-step>
-                <ng-template matStepLabel>Payment Details</ng-template>
+                    <div>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Payment Details</ng-template>
 
-                <p><strong>Credits will be purchased from your following card:</strong></p>
+                    <p><strong>Credits will be purchased from your following card:</strong></p>
 
-                <p><strong>Sort Code:</strong> 00-00-00</p>
-                <p><strong>Account Number:</strong> 12345678</p>
-                <p><strong>Account Name:</strong> John Doe</p>
+                    <p><strong>Sort Code:</strong> 00-00-00</p>
+                    <p><strong>Account Number:</strong> 12345678</p>
+                    <p><strong>Account Name:</strong> John Doe</p>
 
-                <p>We use <a href="https://stripe.com">Stripe</a> as our payments processor.</p>
+                    <p>We use <a href="https://stripe.com">Stripe</a> as our payments processor.</p>
 
-                <div>
-                    <button mat-button (click)="buyCredits()">Purchase Credits</button>
-                </div>
-            </mat-step>
-        </mat-stepper>
+                    <div>
+                        <button mat-button (click)="buyCredits()">Purchase Credits</button>
+                    </div>
+                </mat-step>
+            </mat-stepper>
+
+        </form>
+
     </div>
 </main>
