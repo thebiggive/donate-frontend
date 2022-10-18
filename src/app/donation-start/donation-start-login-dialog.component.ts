@@ -67,6 +67,7 @@ export class DonationStartLoginDialogComponent implements OnInit {
   }
 
   login() {
+    this.captcha.reset();
     this.captcha.execute();
   }
 }
