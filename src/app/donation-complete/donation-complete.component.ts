@@ -98,6 +98,13 @@ export class DonationCompleteComponent {
   }
 
   loginCaptchaReturn(captchaResponse: string) {
+    if (captchaResponse === null) {
+      // This is expected after ~1 min when the code expires. At this point we should
+      // never be executing the login again because if the captcha was set up at all then
+      // we auto-logged-in with the password the donor just chose.
+      return;
+    }
+
     const credentials: Credentials = {
       email_address: this.donation.emailAddress as string,
       raw_password: this.person?.raw_password as string,
@@ -152,7 +159,7 @@ export class DonationCompleteComponent {
   }
 
   private setDonation(donation: Donation) {
-    if (donation === undefined) {
+    if (donation === undefined || !donation.firstName || !donation.lastName || !donation.emailAddress) {
       this.analyticsService.logError('thank_you_lookup_failed', `Donation ID ${this.donationId}`);
       this.noAccess = true; // If we don't have the local auth token we can never load the details.
       return;

@@ -729,13 +729,32 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   captchaDonationReturn(captchaResponse: string) {
+    if (captchaResponse === null) {
+      // Ensure no other callback tries to use the old captcha code, and will re-execute
+      // the catcha to get a new one as needed instead.
+      this.captchaCode = undefined;
+      return;
+    }
+
     this.captchaCode = captchaResponse;
-    this.createDonationAndMaybePerson();
+
+    if (!this.donation) {
+      this.createDonationAndMaybePerson();
+    }
   }
 
   captchaIdentityReturn(captchaResponse: string) {
+    if (captchaResponse === null) {
+      // Ensure no other callback tries to use the old captcha code, and will re-execute
+      // the catcha to get a new one as needed instead.
+      this.idCaptchaCode = undefined;
+      return;
+    }
+
     this.idCaptchaCode = captchaResponse;
-    this.createDonationAndMaybePerson();
+    if (!this.donation) {
+      this.createDonationAndMaybePerson();
+    }
   }
 
   customTip(): boolean {
@@ -1058,8 +1077,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       // a new code any time a previously used one was cleared in `clearDonation()`.
 
       if (this.personId || !environment.identityEnabled) {
+        this.captcha.reset();
         this.captcha.execute(); // Prepare for a non-Person-linked donation which needs a Donation captcha.
       } else {
+        this.idCaptcha.reset();
         this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
       }
 
@@ -1130,10 +1151,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
     this.donationService.create(donation, this.personId, this.identityService.getJWT())
-      .subscribe({
-        next: this.newDonationSuccess.bind(this),
-        error: this.newDonationError.bind(this),
-      });
+    .subscribe({
+      next: this.newDonationSuccess.bind(this),
+      error: this.newDonationError.bind(this),
+    });
   }
 
   private newDonationError(response: any) {
