@@ -14,6 +14,66 @@ body {
     color: $colour-tertiary;
 }
 
+.colour-white {
+    color: $colour-white;
+}
+
+.colour-black {
+    color: $colour-black;
+}
+
+
+
+.text-colour-primary {
+    color: $colour-primary;
+}
+
+.text-colour-secondary {
+    color: $colour-secondary;
+}
+
+.text-colour-tertiary {
+    color: $colour-tertiary;
+}
+
+.text-colour-white {
+    color: $colour-white;
+}
+
+.text-colour-black {
+    color: $colour-black;
+}
+
+
+
+.background-colour-primary {
+    background-color: $colour-primary;
+}
+
+.background-colour-secondary {
+    background-color: $colour-secondary;
+}
+
+.background-colour-tertiary {
+    background-color: $colour-tertiary;
+}
+
+.background-colour-white {
+    background-color: $colour-white;
+}
+
+.background-colour-black {
+    background-color: $colour-black;
+}
+
+.input-wrap {
+    @include flex-container-row();    
+}
+
+.input-text {
+    @include input-text();
+}
+
 .button {
     @include button();
 }
@@ -26,13 +86,26 @@ body {
     @include button-secondary();
 }
 
+.button-tertiary {
+    @include button-tertiary();
+}
+
 .button-clear-primary {
     @include button-clear-primary();
- }
+}
   
- .button-clear-secondary {
-     @include button-clear-secondary();
- }
+.button-clear-secondary {
+    @include button-clear-secondary();
+}
+
+.button-clear-tertiary {
+    @include button-clear-tertiary();
+}
+
+
+.button-clear-white {
+   @include button-clear-white();
+}
 
 .button-rounded {
     @include button-rounded();
@@ -49,3 +122,15 @@ body {
 .progress-bar-secondary {
     @include progress-bar-secondary();
 }
+
+.video-wrap video {
+  width: 100%;
+  height: auto;
+}
+
+.image-wrap img {
+    width: 100%;
+    height: auto;
+  }
+  
+  

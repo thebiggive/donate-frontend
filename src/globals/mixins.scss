@@ -8,6 +8,16 @@
   line-height: 24px;
 }
 
+@mixin font-size-small() {
+  font-size: 13px;
+  line-height: 17px;
+}
+
+@mixin font-size-large() {
+  font-size: 24px;
+  line-height: 30px;
+}
+
 
 @mixin heading-1() {
   font-size: 50px;
@@ -39,7 +49,14 @@
   font-weight: bold;
 }
 
+@mixin subtitle() {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: bold;
+}
 
+
+// Layout + spacing
 
 @mixin absolute-fill() {
   position: absolute;
@@ -50,12 +67,21 @@
   right: 0;
 }
 
-// Layout + spacing
+@mixin section-container() {
+  max-width: $max-page-width;
+  padding-left: $spacer-3;
+  padding-right: $spacer-3;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
 @mixin flex-container-row() {
   display: flex;
   justify-content: space-between;
 }
 
+// Features
 @mixin icon() {
   height: 1rem;
   width: 2rem;
@@ -111,6 +137,20 @@
   }
 }
 
+@mixin input-text {
+  @include standard-font();
+  color: $colour-black;
+  padding: $spacer-1 $spacer-2;
+  box-sizing: border-box;
+  width: 100%;
+  &:focus {
+    outline: 0;
+  }
+  &:placeholder {
+    color: $colour-grey-dark;
+  }
+}
+
 @mixin button {
   font-size: 18px;
   line-height: 23px;
@@ -120,10 +160,11 @@
   background-color: $colour-black;
   filter: drop-shadow(0px 8px 20px rgba(0, 0, 0, 0.22));
   color: $colour-white;
-  display: block;
+  display: inline-block;
   text-decoration: none;
   text-align: center;
   transition: all ease-in-out 0.5s;
+  cursor: pointer;
   &:hover {
     background-color: $colour-white;
     color: $colour-black;
@@ -136,6 +177,8 @@
   text-decoration: underline;
   box-shadow: none;
   border: 0;
+  padding-left: 0;
+  padding-right: 0;
   &:hover {
     text-decoration: none;
     background-color: transparent;
@@ -143,12 +186,43 @@
 }
 
 @mixin button-clear-secondary {
-  color: $colour-primary;
+  color: $colour-secondary;
   background-color: transparent;
   text-decoration: underline;
   box-shadow: none;
   border: 0;
+  padding-left: 0;
+  padding-right: 0;
   &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-tertiary {
+  color: $colour-tertiary;
+  background-color: transparent;
+  text-decoration: underline;
+  box-shadow: none;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-white {
+  color: $colour-white;
+  background-color: transparent;
+  text-decoration: underline;
+  box-shadow: none;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    color: $colour-white;
     text-decoration: none;
     background-color: transparent;
   }

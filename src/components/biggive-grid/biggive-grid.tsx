@@ -1,4 +1,4 @@
-import { Component, Prop, h } from '@stencil/core';
+import { Component, Prop, Element, h } from '@stencil/core';
 
 @Component({
   tag: 'biggive-grid',
@@ -6,6 +6,10 @@ import { Component, Prop, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveGrid {
+  @Element() host: HTMLBiggiveGridElement;
+
+  children: Element[] = [];
+
   /**
    * Column count
    */
@@ -16,14 +20,25 @@ export class BiggiveGrid {
    */
   @Prop() columnGap: number = 3;
 
-  private getClasses() {
-    return 'grid column-count-' + this.columnCount + ' column-gap-' + this.columnGap;
-  }
+  //componentDidRender() {
+  //  let slotted = this.host.shadowRoot.querySelector('slot') as HTMLSlotElement;
+  //
+  //  if (slotted != null && slotted.assignedElements().length > 0) {
+  //    this.children = slotted.assignedElements().filter(node => {
+  //      return node.nodeName !== '#text';
+  //    });
+  //  } else {
+  //    this.children = [];
+  //  }
+  //}
 
   render() {
     return (
-      <div class={this.getClasses()} data-column-count={this.columnCount} data-column-gap={this.columnGap}>
-        <slot name="items"></slot>
+      <div class={'grid column-count-' + this.columnCount + ' column-gap-' + this.columnGap} data-column-count={this.columnCount} data-column-gap={this.columnGap}>
+        <slot name="grid-items"></slot>
+        {this.children.map(child => {
+          return <div innerHTML={child.outerHTML}></div>;
+        })}
       </div>
     );
   }

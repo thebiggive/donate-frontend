@@ -20,6 +20,68 @@ export namespace Components {
          */
         "url": string;
     }
+    interface BiggiveCallToAction {
+        /**
+          * Colour Scheme
+         */
+        "colourScheme": string;
+        /**
+          * Main title
+         */
+        "mainTitle": string;
+        /**
+          * Main title colour
+         */
+        "mainTitleColour": string;
+        /**
+          * Primary button Colour Scheme
+         */
+        "primaryButtonColourScheme": string;
+        /**
+          * Primary button Label
+         */
+        "primaryButtonLabel": string;
+        /**
+          * Primary button Url
+         */
+        "primaryButtonUrl": string;
+        /**
+          * Secondary button Colour Scheme
+         */
+        "secondaryButtonColourScheme": string;
+        /**
+          * Secondary button Label
+         */
+        "secondaryButtonLabel": string;
+        /**
+          * Secondary button Url
+         */
+        "secondaryButtonUrl": string;
+        /**
+          * Slug
+         */
+        "slug": string;
+        /**
+          * Slug colour
+         */
+        "slugColour": string;
+        /**
+          * Subtitle
+         */
+        "subtitle": string;
+        /**
+          * Subtitle colour
+         */
+        "subtitleColour": string;
+        /**
+          * Teaser
+         */
+        "teaser": string;
+        /**
+          * Teaser colour
+         */
+        "teaserColour": string;
+    }
     interface BiggiveCampaignCard {
         /**
           * Full URL of a banner image.
@@ -66,6 +128,20 @@ export namespace Components {
          */
         "totalFundsRaised": number;
     }
+    interface BiggiveCampaignCardFilterGrid {
+        /**
+          * Defines the text on the search button
+         */
+        "buttonText": string;
+        /**
+          * Intro
+         */
+        "intro": string;
+        /**
+          * Defines the text displayed as the placeholder in the input field before the user types anything
+         */
+        "placeholderText": string;
+    }
     interface BiggiveDropdown {
     }
     interface BiggiveFooter {
@@ -73,6 +149,52 @@ export namespace Components {
     interface BiggiveForm {
     }
     interface BiggiveFormFieldSelect {
+    }
+    interface BiggiveGraphic {
+        /**
+          * Button Colour Scheme
+         */
+        "buttonColourScheme": string;
+        /**
+          * Button Label
+         */
+        "buttonLabel": string;
+        /**
+          * Button Url
+         */
+        "buttonUrl": string;
+        /**
+          * Colour Scheme
+         */
+        "colourScheme": string;
+        /**
+          * Full URL of a graphic.
+         */
+        "graphicUrl": string;
+        /**
+          * Video title
+         */
+        "mainTitle": string;
+        /**
+          * Slug colour
+         */
+        "mainTitleColour": string;
+        /**
+          * Slug
+         */
+        "slug": string;
+        /**
+          * Slug colour
+         */
+        "slugColour": string;
+        /**
+          * Introductory teaser text
+         */
+        "teaser": string;
+        /**
+          * Teaser colour
+         */
+        "teaserColour": string;
     }
     interface BiggiveGrid {
         /**
@@ -87,6 +209,10 @@ export namespace Components {
     interface BiggiveHeader {
     }
     interface BiggiveHeroImage {
+        /**
+          * Button Colour Scheme
+         */
+        "buttonColourScheme": string;
         /**
           * Button Label
          */
@@ -112,13 +238,25 @@ export namespace Components {
          */
         "mainTitle": string;
         /**
+          * Main title colour
+         */
+        "mainTitleColour": string;
+        /**
           * Header slug
          */
         "slug": string;
         /**
+          * Header slug colour
+         */
+        "slugColour": string;
+        /**
           * Introductory teaser text
          */
         "teaser": string;
+        /**
+          * Teaser colour
+         */
+        "teaserColour": string;
     }
     interface BiggiveIcon {
     }
@@ -162,9 +300,17 @@ export namespace Components {
          */
         "colourScheme": string;
         /**
-          * Section style
+          * Section style bottom
          */
-        "sectionStyle": string;
+        "sectionStyleBottom": string;
+        /**
+          * Section style top
+         */
+        "sectionStyleTop": string;
+        /**
+          * Space after
+         */
+        "spaceAfter": number;
     }
     interface BiggiveSocialIcon {
         /**
@@ -178,6 +324,90 @@ export namespace Components {
     }
     interface BiggiveTextInput {
     }
+    interface BiggiveTotalizer {
+        /**
+          * e.g. 'GBP'.
+         */
+        "currencyCode": string;
+        /**
+          * Include GiftAid
+         */
+        "includingGiftAid": boolean;
+        /**
+          * Primary banner colour
+         */
+        "primaryColour": string;
+        /**
+          * Primary text colour
+         */
+        "primaryTextColour": string;
+        /**
+          * Secondary banner colour
+         */
+        "secondaryColour": string;
+        /**
+          * Secondary text colour
+         */
+        "secondaryTextColour": string;
+        /**
+          * Total match funds.
+         */
+        "totalMatchFunds": number;
+        /**
+          * Total raised.
+         */
+        "totalRaised": number;
+    }
+    interface BiggiveVideo {
+        /**
+          * Button Colour Scheme
+         */
+        "buttonColourScheme": string;
+        /**
+          * Button Label
+         */
+        "buttonLabel": string;
+        /**
+          * Button Url
+         */
+        "buttonUrl": string;
+        /**
+          * Colour Scheme
+         */
+        "colourScheme": string;
+        /**
+          * Video title
+         */
+        "mainTitle": string;
+        /**
+          * Slug colour
+         */
+        "mainTitleColour": string;
+        /**
+          * Slug
+         */
+        "slug": string;
+        /**
+          * Slug colour
+         */
+        "slugColour": string;
+        /**
+          * Introductory teaser text
+         */
+        "teaser": string;
+        /**
+          * Teaser colour
+         */
+        "teaserColour": string;
+        /**
+          * Full URL of a video.
+         */
+        "videoUrl": string;
+    }
+}
+export interface BiggiveCampaignCardFilterGridCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLBiggiveCampaignCardFilterGridElement;
 }
 export interface BiggiveSearchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -190,11 +420,23 @@ declare global {
         prototype: HTMLBiggiveButtonElement;
         new (): HTMLBiggiveButtonElement;
     };
+    interface HTMLBiggiveCallToActionElement extends Components.BiggiveCallToAction, HTMLStencilElement {
+    }
+    var HTMLBiggiveCallToActionElement: {
+        prototype: HTMLBiggiveCallToActionElement;
+        new (): HTMLBiggiveCallToActionElement;
+    };
     interface HTMLBiggiveCampaignCardElement extends Components.BiggiveCampaignCard, HTMLStencilElement {
     }
     var HTMLBiggiveCampaignCardElement: {
         prototype: HTMLBiggiveCampaignCardElement;
         new (): HTMLBiggiveCampaignCardElement;
+    };
+    interface HTMLBiggiveCampaignCardFilterGridElement extends Components.BiggiveCampaignCardFilterGrid, HTMLStencilElement {
+    }
+    var HTMLBiggiveCampaignCardFilterGridElement: {
+        prototype: HTMLBiggiveCampaignCardFilterGridElement;
+        new (): HTMLBiggiveCampaignCardFilterGridElement;
     };
     interface HTMLBiggiveDropdownElement extends Components.BiggiveDropdown, HTMLStencilElement {
     }
@@ -219,6 +461,12 @@ declare global {
     var HTMLBiggiveFormFieldSelectElement: {
         prototype: HTMLBiggiveFormFieldSelectElement;
         new (): HTMLBiggiveFormFieldSelectElement;
+    };
+    interface HTMLBiggiveGraphicElement extends Components.BiggiveGraphic, HTMLStencilElement {
+    }
+    var HTMLBiggiveGraphicElement: {
+        prototype: HTMLBiggiveGraphicElement;
+        new (): HTMLBiggiveGraphicElement;
     };
     interface HTMLBiggiveGridElement extends Components.BiggiveGrid, HTMLStencilElement {
     }
@@ -280,13 +528,28 @@ declare global {
         prototype: HTMLBiggiveTextInputElement;
         new (): HTMLBiggiveTextInputElement;
     };
+    interface HTMLBiggiveTotalizerElement extends Components.BiggiveTotalizer, HTMLStencilElement {
+    }
+    var HTMLBiggiveTotalizerElement: {
+        prototype: HTMLBiggiveTotalizerElement;
+        new (): HTMLBiggiveTotalizerElement;
+    };
+    interface HTMLBiggiveVideoElement extends Components.BiggiveVideo, HTMLStencilElement {
+    }
+    var HTMLBiggiveVideoElement: {
+        prototype: HTMLBiggiveVideoElement;
+        new (): HTMLBiggiveVideoElement;
+    };
     interface HTMLElementTagNameMap {
         "biggive-button": HTMLBiggiveButtonElement;
+        "biggive-call-to-action": HTMLBiggiveCallToActionElement;
         "biggive-campaign-card": HTMLBiggiveCampaignCardElement;
+        "biggive-campaign-card-filter-grid": HTMLBiggiveCampaignCardFilterGridElement;
         "biggive-dropdown": HTMLBiggiveDropdownElement;
         "biggive-footer": HTMLBiggiveFooterElement;
         "biggive-form": HTMLBiggiveFormElement;
         "biggive-form-field-select": HTMLBiggiveFormFieldSelectElement;
+        "biggive-graphic": HTMLBiggiveGraphicElement;
         "biggive-grid": HTMLBiggiveGridElement;
         "biggive-header": HTMLBiggiveHeaderElement;
         "biggive-hero-image": HTMLBiggiveHeroImageElement;
@@ -297,6 +560,8 @@ declare global {
         "biggive-section": HTMLBiggiveSectionElement;
         "biggive-social-icon": HTMLBiggiveSocialIconElement;
         "biggive-text-input": HTMLBiggiveTextInputElement;
+        "biggive-totalizer": HTMLBiggiveTotalizerElement;
+        "biggive-video": HTMLBiggiveVideoElement;
     }
 }
 declare namespace LocalJSX {
@@ -313,6 +578,68 @@ declare namespace LocalJSX {
           * URL
          */
         "url"?: string;
+    }
+    interface BiggiveCallToAction {
+        /**
+          * Colour Scheme
+         */
+        "colourScheme"?: string;
+        /**
+          * Main title
+         */
+        "mainTitle"?: string;
+        /**
+          * Main title colour
+         */
+        "mainTitleColour"?: string;
+        /**
+          * Primary button Colour Scheme
+         */
+        "primaryButtonColourScheme"?: string;
+        /**
+          * Primary button Label
+         */
+        "primaryButtonLabel"?: string;
+        /**
+          * Primary button Url
+         */
+        "primaryButtonUrl"?: string;
+        /**
+          * Secondary button Colour Scheme
+         */
+        "secondaryButtonColourScheme"?: string;
+        /**
+          * Secondary button Label
+         */
+        "secondaryButtonLabel"?: string;
+        /**
+          * Secondary button Url
+         */
+        "secondaryButtonUrl"?: string;
+        /**
+          * Slug
+         */
+        "slug"?: string;
+        /**
+          * Slug colour
+         */
+        "slugColour"?: string;
+        /**
+          * Subtitle
+         */
+        "subtitle"?: string;
+        /**
+          * Subtitle colour
+         */
+        "subtitleColour"?: string;
+        /**
+          * Teaser
+         */
+        "teaser"?: string;
+        /**
+          * Teaser colour
+         */
+        "teaserColour"?: string;
     }
     interface BiggiveCampaignCard {
         /**
@@ -360,6 +687,24 @@ declare namespace LocalJSX {
          */
         "totalFundsRaised"?: number;
     }
+    interface BiggiveCampaignCardFilterGrid {
+        /**
+          * Defines the text on the search button
+         */
+        "buttonText"?: string;
+        /**
+          * Intro
+         */
+        "intro"?: string;
+        /**
+          * This event `doTextSearch` event is emitted and propogates to the parent component which handles it
+         */
+        "onDoTextSearch"?: (event: BiggiveCampaignCardFilterGridCustomEvent<string>) => void;
+        /**
+          * Defines the text displayed as the placeholder in the input field before the user types anything
+         */
+        "placeholderText"?: string;
+    }
     interface BiggiveDropdown {
     }
     interface BiggiveFooter {
@@ -367,6 +712,52 @@ declare namespace LocalJSX {
     interface BiggiveForm {
     }
     interface BiggiveFormFieldSelect {
+    }
+    interface BiggiveGraphic {
+        /**
+          * Button Colour Scheme
+         */
+        "buttonColourScheme"?: string;
+        /**
+          * Button Label
+         */
+        "buttonLabel"?: string;
+        /**
+          * Button Url
+         */
+        "buttonUrl"?: string;
+        /**
+          * Colour Scheme
+         */
+        "colourScheme"?: string;
+        /**
+          * Full URL of a graphic.
+         */
+        "graphicUrl"?: string;
+        /**
+          * Video title
+         */
+        "mainTitle"?: string;
+        /**
+          * Slug colour
+         */
+        "mainTitleColour"?: string;
+        /**
+          * Slug
+         */
+        "slug"?: string;
+        /**
+          * Slug colour
+         */
+        "slugColour"?: string;
+        /**
+          * Introductory teaser text
+         */
+        "teaser"?: string;
+        /**
+          * Teaser colour
+         */
+        "teaserColour"?: string;
     }
     interface BiggiveGrid {
         /**
@@ -381,6 +772,10 @@ declare namespace LocalJSX {
     interface BiggiveHeader {
     }
     interface BiggiveHeroImage {
+        /**
+          * Button Colour Scheme
+         */
+        "buttonColourScheme"?: string;
         /**
           * Button Label
          */
@@ -406,13 +801,25 @@ declare namespace LocalJSX {
          */
         "mainTitle"?: string;
         /**
+          * Main title colour
+         */
+        "mainTitleColour"?: string;
+        /**
           * Header slug
          */
         "slug"?: string;
         /**
+          * Header slug colour
+         */
+        "slugColour"?: string;
+        /**
           * Introductory teaser text
          */
         "teaser"?: string;
+        /**
+          * Teaser colour
+         */
+        "teaserColour"?: string;
     }
     interface BiggiveIcon {
     }
@@ -460,9 +867,17 @@ declare namespace LocalJSX {
          */
         "colourScheme"?: string;
         /**
-          * Section style
+          * Section style bottom
          */
-        "sectionStyle"?: string;
+        "sectionStyleBottom"?: string;
+        /**
+          * Section style top
+         */
+        "sectionStyleTop"?: string;
+        /**
+          * Space after
+         */
+        "spaceAfter"?: number;
     }
     interface BiggiveSocialIcon {
         /**
@@ -476,13 +891,96 @@ declare namespace LocalJSX {
     }
     interface BiggiveTextInput {
     }
+    interface BiggiveTotalizer {
+        /**
+          * e.g. 'GBP'.
+         */
+        "currencyCode"?: string;
+        /**
+          * Include GiftAid
+         */
+        "includingGiftAid"?: boolean;
+        /**
+          * Primary banner colour
+         */
+        "primaryColour"?: string;
+        /**
+          * Primary text colour
+         */
+        "primaryTextColour"?: string;
+        /**
+          * Secondary banner colour
+         */
+        "secondaryColour"?: string;
+        /**
+          * Secondary text colour
+         */
+        "secondaryTextColour"?: string;
+        /**
+          * Total match funds.
+         */
+        "totalMatchFunds"?: number;
+        /**
+          * Total raised.
+         */
+        "totalRaised"?: number;
+    }
+    interface BiggiveVideo {
+        /**
+          * Button Colour Scheme
+         */
+        "buttonColourScheme"?: string;
+        /**
+          * Button Label
+         */
+        "buttonLabel"?: string;
+        /**
+          * Button Url
+         */
+        "buttonUrl"?: string;
+        /**
+          * Colour Scheme
+         */
+        "colourScheme"?: string;
+        /**
+          * Video title
+         */
+        "mainTitle"?: string;
+        /**
+          * Slug colour
+         */
+        "mainTitleColour"?: string;
+        /**
+          * Slug
+         */
+        "slug"?: string;
+        /**
+          * Slug colour
+         */
+        "slugColour"?: string;
+        /**
+          * Introductory teaser text
+         */
+        "teaser"?: string;
+        /**
+          * Teaser colour
+         */
+        "teaserColour"?: string;
+        /**
+          * Full URL of a video.
+         */
+        "videoUrl"?: string;
+    }
     interface IntrinsicElements {
         "biggive-button": BiggiveButton;
+        "biggive-call-to-action": BiggiveCallToAction;
         "biggive-campaign-card": BiggiveCampaignCard;
+        "biggive-campaign-card-filter-grid": BiggiveCampaignCardFilterGrid;
         "biggive-dropdown": BiggiveDropdown;
         "biggive-footer": BiggiveFooter;
         "biggive-form": BiggiveForm;
         "biggive-form-field-select": BiggiveFormFieldSelect;
+        "biggive-graphic": BiggiveGraphic;
         "biggive-grid": BiggiveGrid;
         "biggive-header": BiggiveHeader;
         "biggive-hero-image": BiggiveHeroImage;
@@ -493,6 +991,8 @@ declare namespace LocalJSX {
         "biggive-section": BiggiveSection;
         "biggive-social-icon": BiggiveSocialIcon;
         "biggive-text-input": BiggiveTextInput;
+        "biggive-totalizer": BiggiveTotalizer;
+        "biggive-video": BiggiveVideo;
     }
 }
 export { LocalJSX as JSX };
@@ -500,11 +1000,14 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "biggive-button": LocalJSX.BiggiveButton & JSXBase.HTMLAttributes<HTMLBiggiveButtonElement>;
+            "biggive-call-to-action": LocalJSX.BiggiveCallToAction & JSXBase.HTMLAttributes<HTMLBiggiveCallToActionElement>;
             "biggive-campaign-card": LocalJSX.BiggiveCampaignCard & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardElement>;
+            "biggive-campaign-card-filter-grid": LocalJSX.BiggiveCampaignCardFilterGrid & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardFilterGridElement>;
             "biggive-dropdown": LocalJSX.BiggiveDropdown & JSXBase.HTMLAttributes<HTMLBiggiveDropdownElement>;
             "biggive-footer": LocalJSX.BiggiveFooter & JSXBase.HTMLAttributes<HTMLBiggiveFooterElement>;
             "biggive-form": LocalJSX.BiggiveForm & JSXBase.HTMLAttributes<HTMLBiggiveFormElement>;
             "biggive-form-field-select": LocalJSX.BiggiveFormFieldSelect & JSXBase.HTMLAttributes<HTMLBiggiveFormFieldSelectElement>;
+            "biggive-graphic": LocalJSX.BiggiveGraphic & JSXBase.HTMLAttributes<HTMLBiggiveGraphicElement>;
             "biggive-grid": LocalJSX.BiggiveGrid & JSXBase.HTMLAttributes<HTMLBiggiveGridElement>;
             "biggive-header": LocalJSX.BiggiveHeader & JSXBase.HTMLAttributes<HTMLBiggiveHeaderElement>;
             "biggive-hero-image": LocalJSX.BiggiveHeroImage & JSXBase.HTMLAttributes<HTMLBiggiveHeroImageElement>;
@@ -515,6 +1018,8 @@ declare module "@stencil/core" {
             "biggive-section": LocalJSX.BiggiveSection & JSXBase.HTMLAttributes<HTMLBiggiveSectionElement>;
             "biggive-social-icon": LocalJSX.BiggiveSocialIcon & JSXBase.HTMLAttributes<HTMLBiggiveSocialIconElement>;
             "biggive-text-input": LocalJSX.BiggiveTextInput & JSXBase.HTMLAttributes<HTMLBiggiveTextInputElement>;
+            "biggive-totalizer": LocalJSX.BiggiveTotalizer & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerElement>;
+            "biggive-video": LocalJSX.BiggiveVideo & JSXBase.HTMLAttributes<HTMLBiggiveVideoElement>;
         }
     }
 }

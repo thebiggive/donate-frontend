@@ -18,6 +18,11 @@ export class BiggiveHeroImage {
    @Prop() slug: string = null;
 
   /**
+   * Header slug colour
+   */
+   @Prop() slugColour: string = null;
+
+  /**
    * Full URL of a logo image.
    */
    @Prop() logo: string = '';
@@ -31,12 +36,18 @@ export class BiggiveHeroImage {
    * Hero image title, typically the page.
    */
   @Prop() mainTitle: string = null;
-
+  /**
+   * Main title colour
+   */
+   @Prop() mainTitleColour: string = null;
   /**
    * Introductory teaser text
    */
   @Prop() teaser: string = null;
-
+  /**
+   * Teaser colour
+   */
+   @Prop() teaserColour: string = null;
   /**
    * Button Url
    */
@@ -47,9 +58,15 @@ export class BiggiveHeroImage {
    */
    @Prop() buttonLabel: string = null;
 
+  /**
+   * Button Colour Scheme
+   */
+  @Prop() buttonColourScheme: string = 'primary';
+
+
   render() {
     return (
-      <div class="container">
+      <div class={'container colour-scheme-' + this.colourScheme}>
         <div class="sleeve">
           <div class="content-wrap">
             {this.logo.length > 0 ? (
@@ -57,11 +74,11 @@ export class BiggiveHeroImage {
                 <img src={this.logo} />
               </div>
             ) : null}
-            <div class={'slug colour-'+this.colourScheme}>{this.slug}</div>
-            <h1 class={'title colour-'+this.colourScheme}>{this.mainTitle}</h1>
-            <div class="teaser">{this.teaser}</div>
+            <div class={'slug text-colour-'+this.slugColour}>{this.slug}</div>
+            <h1 class={'main-title text-colour-'+this.mainTitleColour}>{this.mainTitle}</h1>
+            <div class={'teaser text-colour-'+this.teaserColour}>{this.teaser}</div>
             {this.buttonLabel != null && this.buttonUrl != null
-              ? <biggive-button colour-scheme={this.colourScheme} url={this.buttonUrl} label={this.buttonLabel}></biggive-button>
+              ? <biggive-button colour-scheme={this.buttonColourScheme} url={this.buttonUrl} label={this.buttonLabel}></biggive-button>
               : null
             }
           </div>

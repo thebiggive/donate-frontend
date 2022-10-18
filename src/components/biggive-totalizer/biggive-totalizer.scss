@@ -1,0 +1,28 @@
+:host {
+  display: contents;
+  @include standard-font();
+}
+
+
+.container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  .total-raised-wrap {
+    position: absolute;
+    padding: $spacer-2 $spacer-4;
+    left: 0;
+    top: 0;
+    @include font-size-large();
+    font-weight: 600;
+  }
+  .total-matched-funds-wrap {
+    text-align: right;
+    padding: $spacer-2 $spacer-4;
+    @include font-size-small();
+    .currency {
+      font-weight: bold;
+    }
+  }
+}

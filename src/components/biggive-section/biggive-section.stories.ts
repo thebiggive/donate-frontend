@@ -5,12 +5,16 @@ export default {
 const Template = args => `
         <biggive-section
           colour-scheme="${args.colourScheme}"
-          section-style="${args.sectionStyle}"
+          space-after="${args.spaceAfter}"
+          section-style-top="${args.sectionStyleTop}"
+          section-style-bottom="${args.sectionStyleBottom}">
         </biggive-section>
         `;
 
 export const SectionComponent = Template.bind({});
 SectionComponent.args = {
   colourScheme: 'primary',
-  sectionStyle: 'standard',
+  spaceAfter: 4,
+  sectionStyleTop: 'straight',
+  sectionStyleBottom: 'straight',
 };

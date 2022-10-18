@@ -21,13 +21,9 @@ export class BiggiveButton {
    */
   @Prop() url: string = '#';
 
-  private getClasses(): string {
-    return 'button button-' + this.colourScheme;
-  }
-
   render() {
     return (
-      <a href={this.url} class={this.getClasses()} data-prop={this.colourScheme}>
+      <a href={this.url} class={'button button-' + this.colourScheme} data-prop={this.colourScheme}>
         {this.label}
       </a>
     );

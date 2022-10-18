@@ -11,7 +11,7 @@ describe('biggive-grid', () => {
       <biggive-grid column-count=3 column-gap=3>
         <mock:shadow-root>
           <div class="column-count-3 column-gap-3 grid" data-column-count="3" data-column-gap="3">
-            <slot name="items"></slot>
+            <slot name="grid-items"></slot>
           </div>
         </mock:shadow-root>
       </biggive-grid>

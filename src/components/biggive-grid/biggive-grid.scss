@@ -1,13 +1,19 @@
 :host {
-  display: contents;
 }
 
 .grid {
   margin-bottom: $spacer-4;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;  
 }
 
- .grid[data-column-count="3"] ::slotted([slot=items]) {
-   display: flex;
-   flex-flow: row wrap;
-   justify-content: space-between;   
+.grid::slotted([slot=grid-items]) {
+ display: none;
 }
+
+
+.hide {
+  display: none;
+}
+

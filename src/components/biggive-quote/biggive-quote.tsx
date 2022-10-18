@@ -6,11 +6,10 @@ import { Component, Host, Prop, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveQuote {
-
   /**
    * Colour Scheme
    */
-   @Prop() colourScheme: string = 'primary';
+  @Prop() colourScheme: string = 'primary';
 
   /**
    * Quote text
@@ -20,8 +19,7 @@ export class BiggiveQuote {
   /**
    * Attribution text
    */
-   @Prop() attribution: string = '';
-
+  @Prop() attribution: string = '';
 
   render() {
     return (
