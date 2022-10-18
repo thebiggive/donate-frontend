@@ -33,6 +33,18 @@ export class BuyCreditsComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+
+    const idAndJWT = this.identityService.getIdAndJWT();
+    if (idAndJWT !== undefined) {
+      if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
+        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+      }
+    }
+
+    else {
+      this.showLoginDialog();
+    }
+
     const formGroups: {
       amounts: FormGroup,
       giftAid: FormGroup
@@ -66,10 +78,6 @@ export class BuyCreditsComponent implements OnInit {
     const giftAidGroup: any = this.creditForm.get('giftAid');
     if (giftAidGroup != null) {
       this.giftAidGroup = giftAidGroup;
-    }
-
-    if (!this.isLoggedIn) {
-      this.showLoginDialog();
     }
   }
 
