@@ -1077,8 +1077,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       // a new code any time a previously used one was cleared in `clearDonation()`.
 
       if (this.personId || !environment.identityEnabled) {
+        this.captcha.reset();
         this.captcha.execute(); // Prepare for a non-Person-linked donation which needs a Donation captcha.
       } else {
+        this.idCaptcha.reset();
         this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
       }
 
