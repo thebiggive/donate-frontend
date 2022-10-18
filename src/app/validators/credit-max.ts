@@ -2,7 +2,7 @@ import { AbstractControl } from '@angular/forms';
 
 import { environment } from '../../environments/environment';
 
-export function ValidateCurrencyMax(control: AbstractControl) {
+export function ValidateCreditMax(control: AbstractControl) {
   if (!control.value) {
     return null;
   }

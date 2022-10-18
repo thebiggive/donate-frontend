@@ -7,6 +7,7 @@ import { DonationService } from '../donation.service';
 import { IdentityService } from '../identity.service';
 import { Person } from '../person.model';
 import { ValidateCreditMin } from '../validators/credit-min';
+import { ValidateCreditMax } from '../validators/credit-max';
 
 @Component({
   selector: 'app-buy-credits',
@@ -40,13 +41,13 @@ export class BuyCreditsComponent implements OnInit {
         donationAmount: [null, [
           Validators.required,
           ValidateCreditMin,
-          //ValidateCreditMax,
+          ValidateCreditMax,
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
         tipPercentage: [this.initialTipSuggestedPercentage],
       }),
       giftAid: this.formBuilder.group({
-        giftAid: [null, Validators.required],
+        giftAid: [null],
         homeAddress: [null],
         homeBuildingNumber: [null],
         homeOutsideUK: [null],
