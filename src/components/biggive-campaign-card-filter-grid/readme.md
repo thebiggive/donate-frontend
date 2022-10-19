@@ -12,6 +12,7 @@
 | `buttonText`      | `button-text`      | Defines the text on the search button                                                           | `string` | `'Search'`                    |
 | `intro`           | `intro`            | Intro                                                                                           | `string` | `'Find a charity or project'` |
 | `placeholderText` | `placeholder-text` | Defines the text displayed as the placeholder in the input field before the user types anything | `string` | `'Search'`                    |
+| `spaceBelow`      | `space-below`      | Space below component                                                                           | `number` | `0`                           |
 
 
 ## Events

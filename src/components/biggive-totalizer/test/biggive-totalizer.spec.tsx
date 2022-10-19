@@ -10,7 +10,7 @@ describe('biggive-totalizer', () => {
     expect(page.root).toEqualHtml(`
       <biggive-totalizer>
         <mock:shadow-root>
-          <div class="container">
+          <div class="container space-below-0">
              <div class="sleeve">
                <div class="banner">
                  <div class="background-colour-secondary text-colour-black total-raised-wrap">

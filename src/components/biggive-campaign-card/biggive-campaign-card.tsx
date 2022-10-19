@@ -7,28 +7,23 @@ import { Component, Prop, h } from '@stencil/core';
 })
 export class BiggiveCampaignCard {
   /**
+   * Space below component
+   */
+  @Prop() spaceBelow: number = 4;
+  /**
+   * e.g. "Match Funded".
+   */
+  @Prop() campaignType: string = null;
+
+  /**
    * Full URL of a banner image.
    */
   @Prop() banner: string = '';
 
   /**
-   * e.g. 'GBP'.
-   */
-  @Prop() currencyCode: string;
-
-  /**
-   * Match funds remaining.
-   */
-  @Prop() matchFundsRemaining: number = null;
-
-  /**
    * Display name of the charity's specific time-bound fundraising campaign.
    */
   @Prop() campaignTitle: string = null;
-  /**
-   * e.g. "Match Funded".
-   */
-  @Prop() campaignType: string = null;
 
   /**
    * Display name of the charity or non-profit.
@@ -36,10 +31,34 @@ export class BiggiveCampaignCard {
   @Prop() organisationName: string = null;
 
   /**
-   * Total the campaign has raised so far including matching but excluding any
-   * tax relief, in major unit of currency e.g. pounds GBP.
+   * e.g. 'GBP'.
    */
-  @Prop() totalFundsRaised: number = null;
+  @Prop() currencyCode: string;
+
+  /**
+   * Label for the primary figure
+   */
+  @Prop() primaryFigureLabel: string = null;
+
+  /**
+   * Amount for the primary figure
+   */
+  @Prop() primaryFigureAmount: number = null;
+
+  /**
+   * Label for the secondary figure
+   */
+  @Prop() secondaryFigureLabel: string = null;
+
+  /**
+   * Amount for the secondary figure
+   */
+  @Prop() secondaryFigureAmount: number = null;
+
+  /**
+   * Progress bar percentage
+   */
+  @Prop() progressBarCounter: number = 100;
 
   /**
    * Donate button label
@@ -52,6 +71,11 @@ export class BiggiveCampaignCard {
   @Prop() donateButtonUrl: string = null;
 
   /**
+   * Donate button colour scheme
+   */
+  @Prop() donateButtonColourScheme: string = 'primary';
+
+  /**
    * More information button label
    */
   @Prop() moreInfoButtonLabel: string = 'Find out more';
@@ -60,6 +84,11 @@ export class BiggiveCampaignCard {
    * More information button url
    */
   @Prop() moreInfoButtonUrl: string = null;
+
+  /**
+   * Donate button colour scheme
+   */
+  @Prop() moreInfoButtonColourScheme: string = 'clear-primary';
 
   /**
    * @returns Whole large currency units (e.g. pounds) formatted with symbol.
@@ -78,37 +107,46 @@ export class BiggiveCampaignCard {
   }
 
   render() {
+
     return (
-      <div class="container">
+      <div class={'container space-below-' + this.spaceBelow.toString()}>
         <div class="sleeve">
-          <div class="campaign-type">
-            <span>{this.campaignType}</span>
-          </div>
+          {this.campaignType.length > 0 ? (
+            <div class="campaign-type">
+              <span>{this.campaignType}</span>
+            </div>
+          ) : null}
 
           {this.banner.length > 0 ? (
             <div class="image-wrap banner" style={{ 'background-image': 'url(' + this.banner + ')' }}>
               <img src={this.banner} class="banner" />
             </div>
-          ) : null}
+          ) : (
+            <div class="image-wrap banner"></div>
+          )}
 
           <div class="title-wrap">
             <h3>{this.campaignTitle}</h3>
-            <div class="slug">By {this.organisationName}</div>
+            <div class="organisation-name">By {this.organisationName}</div>
           </div>
 
           <div class="meta-wrap">
             <div class="meta-item">
-              <span class="label">Match Funds Remaining</span>
-              <span class="text">{this.formatCurrency(this.currencyCode, this.matchFundsRemaining)}</span>
+              <span class="label">{this.primaryFigureLabel}</span>
+              <span class="text">{this.formatCurrency(this.currencyCode, this.primaryFigureAmount)}</span>
             </div>
             <div class="meta-item">
-              <span class="label">Total Funds Received</span>
-              <span class="text">{this.formatCurrency(this.currencyCode, this.totalFundsRaised)}</span>
+              <span class="label">{this.secondaryFigureLabel}</span>
+              <span class="text">{this.formatCurrency(this.currencyCode, this.secondaryFigureAmount)}</span>
             </div>
           </div>
-          <biggive-progress-bar colour-scheme="primary"></biggive-progress-bar>
-          <biggive-button colour-scheme="primary" url={this.donateButtonUrl} label={this.donateButtonLabel}></biggive-button>
-          <biggive-button colour-scheme="clear" url={this.moreInfoButtonUrl} label={this.moreInfoButtonLabel}></biggive-button>
+          <div class="progress-bar-wrap">
+            <biggive-progress-bar counter={this.progressBarCounter} colour-scheme="primary"></biggive-progress-bar>
+          </div>
+          <div class="button-wrap">
+            <biggive-button full-width="true" colour-scheme={this.donateButtonColourScheme} url={this.donateButtonUrl} label={this.donateButtonLabel}></biggive-button>
+            <biggive-button full-width="true" colour-scheme={this.moreInfoButtonColourScheme} url={this.moreInfoButtonUrl} label={this.moreInfoButtonLabel}></biggive-button>
+          </div>
         </div>
       </div>
     );

@@ -2,6 +2,35 @@ body {
     background-color: $colour-grey-extra-light;
 }
 
+h1 {
+    @include heading-1();
+}
+
+h2 {
+    @include heading-2();
+}
+
+h3 {
+    @include heading-3();
+}
+
+h4 {
+    @include heading-4();
+}
+
+h5 {
+    @include heading-5();
+}
+
+a {
+    color: inherit;
+    text-decoration: underline;
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+
 .colour-primary {
     color: $colour-primary;
 }
@@ -20,9 +49,7 @@ body {
 
 .colour-black {
     color: $colour-black;
-}
-
-
+} 
 
 .text-colour-primary {
     color: $colour-primary;
@@ -131,6 +158,13 @@ body {
 .image-wrap img {
     width: 100%;
     height: auto;
-  }
+}
   
   
+.space-below-0 { margin-bottom: 0; }
+.space-below-1 { margin-bottom: $spacer-1; }
+.space-below-2 { margin-bottom: $spacer-2; }
+.space-below-3 { margin-bottom: $spacer-3; }
+.space-below-4 { margin-bottom: $spacer-4; }
+.space-below-5 { margin-bottom: $spacer-5; }
+.space-below-6 { margin-bottom: $spacer-6; }

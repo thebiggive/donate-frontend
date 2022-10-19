@@ -8,6 +8,16 @@
   line-height: 24px;
 }
 
+@mixin font-size-xx-small() {
+  font-size: 9px;
+  line-height: 11px;
+}
+
+@mixin font-size-x-small() {
+  font-size: 11px;
+  line-height: 14px;
+}
+
 @mixin font-size-small() {
   font-size: 13px;
   line-height: 17px;
@@ -17,7 +27,6 @@
   font-size: 24px;
   line-height: 30px;
 }
-
 
 @mixin heading-1() {
   font-size: 50px;
@@ -81,11 +90,50 @@
   justify-content: space-between;
 }
 
+@mixin flex-container-column() {
+  display: flex;
+  flex-direction: column;
+}
+
 // Features
 @mixin icon() {
   height: 1rem;
   width: 2rem;
   vertical-align: -.125rem;
+}
+
+@mixin icon-medium() {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  text-align: center;
+  transition: all ease-in-out 0.5s;
+  display: inline-block;
+  &.colour-scheme-primary {background-color: $colour-primary; svg {fill: $colour-white;}}
+  &.colour-scheme-secondary {background-color: $colour-secondary; svg {fill: $colour-black;}}
+  &.colour-scheme-tertiary {background-color: $colour-tertiary; svg {fill: $colour-black;}}
+  &.colour-scheme-white {background-color: $colour-white; svg {fill: $colour-black;}}
+  &.colour-scheme-black {background-color: $colour-black; svg {fill: $colour-white;}}
+  &:hover {
+    background-color: $colour-white;
+    svg {
+      fill: $colour-black;
+    }
+  }
+  a {
+    display: block;
+    position: relative;
+    padding: $spacer-1;
+    width: 30px;
+    height: 30px;
+    svg {
+      width: auto;
+      height: 60%;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
 }
 
 @mixin progress-bar {

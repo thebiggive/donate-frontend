@@ -1,0 +1,7 @@
+:host {
+  display: contents;
+}
+
+.misc-icon-item {
+  @include icon-medium();
+}

@@ -1,12 +1,20 @@
 :host {
   display: contents;
-  margin-bottom: $spacer-1;
-  @include standard-font();
+  
 }
 
-a {
-  display: inline-block;
+.container {
+  @include standard-font();
+  a {
+    display: inline-block;
+    &.full-width-true {
+      display: block;
+    }
+  }
 }
+
+
+
 
 
 

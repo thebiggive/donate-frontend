@@ -1,5 +1,5 @@
 import { Component, h, Prop, State, Event, EventEmitter } from '@stencil/core';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
   tag: 'biggive-campaign-card-filter-grid',
@@ -20,6 +20,11 @@ export class BiggiveCampaignCardFilterGrid {
   doSearch: EventEmitter<string>;
 
   @State() searchText: string = null;
+
+  /**
+   * Space below component
+   */
+  @Prop() spaceBelow: number = 0;
 
   /**
    * Intro
@@ -53,7 +58,7 @@ export class BiggiveCampaignCardFilterGrid {
 
   render() {
     return (
-      <div class="container">
+      <div class={'container space-below-' + this.spaceBelow}>
         <div class="sleeve">
           <div class="search-wrap">
             <h4>{this.intro}</h4>

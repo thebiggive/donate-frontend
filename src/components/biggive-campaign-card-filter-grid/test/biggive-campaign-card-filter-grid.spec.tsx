@@ -5,12 +5,12 @@ describe('biggive-campaign-card-filter-grid', () => {
   it('renders', async () => {
     const page = await newSpecPage({
       components: [BiggiveCampaignCardFilterGrid],
-      html: `<biggive-campaign-card-filter-grid></biggive-campaign-card-filter-grid>`,
+      html: `<biggive-campaign-card-filter-grid ></biggive-campaign-card-filter-grid>`,
     });
     expect(page.root).toEqualHtml(`
     <biggive-campaign-card-filter-grid>
     <mock:shadow-root>
-      <div class="container">
+      <div class="container space-below-0">
         <div class="sleeve">
           <div class="search-wrap">
             <h4>

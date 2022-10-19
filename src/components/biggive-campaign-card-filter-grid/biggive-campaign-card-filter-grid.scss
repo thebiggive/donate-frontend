@@ -1,11 +1,10 @@
 :host {
   display: content;
-  @include standard-font();
 }
 
 
 .container {
-  @include section-container();
+  @include standard-font();
   position: relative;
   .search-wrap {
     @include lower-shadow();

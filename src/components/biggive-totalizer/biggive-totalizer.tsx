@@ -7,6 +7,10 @@ import { Component, Prop, h } from '@stencil/core';
 })
 export class BiggiveTotalizer {
   /**
+   * Space below component
+   */
+  @Prop() spaceBelow: number = 0;
+  /**
    * Primary banner colour
    */
   @Prop() primaryColour: string = 'primary';
@@ -64,7 +68,7 @@ export class BiggiveTotalizer {
 
   render() {
     return (
-      <div class="container">
+      <div class={'container space-below-' + this.spaceBelow}>
         <div class="sleeve">
           <div class="banner">
             <div class={'total-raised-wrap background-colour-' + this.secondaryColour + ' text-colour-' + this.secondaryTextColour}>

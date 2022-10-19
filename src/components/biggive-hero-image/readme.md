@@ -19,6 +19,7 @@ Provides a large format image-based header feature, typically used at the top of
 | `mainTitleColour`    | `main-title-colour`    | Main title colour                     | `string` | `null`      |
 | `slug`               | `slug`                 | Header slug                           | `string` | `null`      |
 | `slugColour`         | `slug-colour`          | Header slug colour                    | `string` | `null`      |
+| `spaceBelow`         | `space-below`          | Space below component                 | `number` | `0`         |
 | `teaser`             | `teaser`               | Introductory teaser text              | `string` | `null`      |
 | `teaserColour`       | `teaser-colour`        | Teaser colour                         | `string` | `null`      |
 

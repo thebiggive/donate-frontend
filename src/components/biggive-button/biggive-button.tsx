@@ -7,6 +7,11 @@ import { Component, Prop, h } from '@stencil/core';
 })
 export class BiggiveButton {
   /**
+   * Space below component
+   */
+  @Prop() spaceBelow: number = 1;
+
+  /**
    * Colour Scheme
    */
   @Prop() colourScheme: string = 'primary';
@@ -21,11 +26,18 @@ export class BiggiveButton {
    */
   @Prop() url: string = '#';
 
+  /**
+   * Display full width
+   */
+  @Prop() fullWidth: boolean = false;
+
   render() {
     return (
-      <a href={this.url} class={'button button-' + this.colourScheme} data-prop={this.colourScheme}>
-        {this.label}
-      </a>
+      <div class={'container space-below-' + this.spaceBelow}>
+        <a href={this.url} class={'button button-' + this.colourScheme + ' full-width-' + this.fullWidth.toString()}>
+          {this.label}
+        </a>
+      </div>
     );
   }
 }

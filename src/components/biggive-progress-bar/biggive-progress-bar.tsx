@@ -7,6 +7,10 @@ import { Component, Prop, h } from '@stencil/core';
 })
 export class BiggiveProgressBar {
   /**
+   * Space below component
+   */
+  @Prop() spaceBelow: number = 0;
+  /**
    * Colour Scheme
    */
   @Prop() colourScheme: string = 'primary';
@@ -20,13 +24,9 @@ export class BiggiveProgressBar {
     return Math.round(this.counter);
   }
 
-  private getClasses(): string {
-    return 'progress-bar progress-bar-' + this.colourScheme;
-  }
-
   render() {
     return (
-      <div class={this.getClasses()}>
+      <div class={'progress-bar progress-bar-' + this.colourScheme + ' space-below-' + this.spaceBelow}>
         <div class="slider">
           <div class="progress" style={{ width: this.getPercentage() + '%' }}></div>
         </div>

@@ -7,6 +7,10 @@ import { Component, Host, Prop, h } from '@stencil/core';
 })
 export class BiggiveQuote {
   /**
+   * Space below component
+   */
+  @Prop() spaceBelow: number = 0;
+  /**
    * Colour Scheme
    */
   @Prop() colourScheme: string = 'primary';

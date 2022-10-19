@@ -6,11 +6,15 @@ const Template = args => `
       <biggive-campaign-card
         banner="${args.banner}"
         currency-code="${args.currencyCode}"
-        match-funds-remaining=${args.matchFundsRemaining}
+        primary-figure-label=${args.primaryFigureLabel}
+        primary-figure-amount=${args.primaryFigureAmount}
+        secondary-figure-label=${args.secondaryFigureLabel}
+        secondary-figure-amount=${args.secondaryFigureAmount}
         campaign-title=${args.campaignTitle}
         campaign-type=${args.campaignType}
         organisation-name=${args.organisationName}
         total-funds-raised=${args.totalFundsRaised}
+        progress-bar-counter=${args.progressBarCounter}
         donate-button-label=${args.donateButtonLabel}
         donate-button-url=${args.donateButtonUrl}
         more-info-button-label=${args.moreInfoButtonLabel}
@@ -22,11 +26,14 @@ export const CampaignCardComponent = Template.bind({});
 CampaignCardComponent.args = {
   banner: 'https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693',
   currencyCode: 'GBP',
-  matchFundsRemaining: 1000,
+  primaryFigureLabel: 'Total raised',
+  primaryFigureAmount: 1000,
+  secondaryFigureLabel: 'Total remaining',
+  secondaryFigureAmount: 1000,
   campaignTitle: 'My Campaign Title',
   campaignType: 'match funding',
   organisationName: 'My Test Organisation',
-  totalFundsRaised: 5000,
+  progressBarCounter: 100,
   donateButtonLabel: 'Donate now',
   donateButtonUrl: '#',
   moreInfoButtonLabel: 'More information',

@@ -20,6 +20,7 @@
 | `secondaryButtonUrl`          | `secondary-button-url`           | Secondary button Url           | `string` | `null`      |
 | `slug`                        | `slug`                           | Slug                           | `string` | `null`      |
 | `slugColour`                  | `slug-colour`                    | Slug colour                    | `string` | `''`        |
+| `spaceBelow`                  | `space-below`                    | Space below component          | `number` | `0`         |
 | `subtitle`                    | `subtitle`                       | Subtitle                       | `string` | `null`      |
 | `subtitleColour`              | `subtitle-colour`                | Subtitle colour                | `string` | `''`        |
 | `teaser`                      | `teaser`                         | Teaser                         | `string` | `null`      |

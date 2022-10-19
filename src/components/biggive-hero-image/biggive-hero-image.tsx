@@ -7,6 +7,10 @@ import { Component, Prop, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveHeroImage {
+        /**
+   * Space below component
+   */
+         @Prop() spaceBelow: number = 0;
   /**
    * Colour Scheme
    */
@@ -66,7 +70,7 @@ export class BiggiveHeroImage {
 
   render() {
     return (
-      <div class={'container colour-scheme-' + this.colourScheme}>
+      <div class={'container colour-scheme-' + this.colourScheme + ' space-below-' + this.spaceBelow}>
         <div class="sleeve">
           <div class="content-wrap">
             {this.logo.length > 0 ? (

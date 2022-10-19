@@ -1,0 +1,41 @@
+:host {
+  display: contents;
+}
+
+.container {
+  @include standard-font();
+  @include lower-shadow();
+  background-color: $colour-white;
+  padding: $spacer-3;
+  box-sizing: border-box;
+  .meta-wrap {
+    @include flex-container-row();
+    margin-top: auto;
+    margin-bottom: $spacer-3;
+    .meta-item {
+      width: calc( 50% - $spacer-3 );
+      .label {
+        @include font-size-x-small();
+        display: block;
+      }
+      .text {
+        @include heading-3();
+        display: block;
+      }
+      &:last-child {
+        text-align: right;
+        .text {
+          color: $colour-primary;
+        }
+      }
+    }
+  }
+  .progress-bar-wrap {
+    padding-bottom: $spacer-2;
+    margin-bottom: $spacer-2;
+    border-bottom: 1px solid $colour-grey-light;
+  }
+}
+
+
+

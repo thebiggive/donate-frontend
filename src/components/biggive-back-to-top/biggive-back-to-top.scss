@@ -1,0 +1,16 @@
+:host {
+  display: contents;
+}
+
+
+.container {
+  @include standard-font();
+  margin: $spacer-4 0;
+  text-align: center;
+  a {
+    display: inline-block;
+    .text {
+      display: block;
+    }
+  }
+}

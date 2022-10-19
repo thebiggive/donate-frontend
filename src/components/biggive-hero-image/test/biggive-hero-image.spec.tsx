@@ -19,7 +19,7 @@ describe('biggive-hero-image', () => {
     expect(page.root).toEqualHtml(`
      <biggive-hero-image slug="My Slug" main-image="" main-title="This is my title" teaser="this is the intro text which I want to add">
        <mock:shadow-root>
-         <div class="colour-scheme-primary container">
+         <div class="colour-scheme-primary container space-below-0">
            <div class="sleeve">
              <div class="content-wrap">
                <div class="slug text-colour-null">
