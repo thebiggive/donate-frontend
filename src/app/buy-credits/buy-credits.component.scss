@@ -35,3 +35,8 @@ button[mat-button] {
 #giftAidOptIn {
     margin-bottom: 20px;
 }
+
+.error {
+    color: mat.get-color-from-palette($donate-warn);
+    font-size: 1rem; // slightly smaller text
+}

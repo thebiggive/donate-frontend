@@ -8,6 +8,8 @@ import { IdentityService } from '../identity.service';
 import { Person } from '../person.model';
 import { ValidateCreditMin } from '../validators/credit-min';
 import { ValidateCreditMax } from '../validators/credit-max';
+import { environment } from 'src/environments/environment';
+import { ValidateCurrencyMax } from '../validators/currency-max';
 
 @Component({
   selector: 'app-buy-credits',
@@ -23,6 +25,9 @@ export class BuyCreditsComponent implements OnInit {
   amountsGroup: FormGroup;
   giftAidGroup: FormGroup;
   isLinear = true;
+  minimumCreditAmount = environment.minimumCreditAmount;
+  maximumCreditAmount = environment.maximumCreditAmount;
+  maximumDonationAmount = environment.maximumDonationAmount;
   private initialTipSuggestedPercentage = 15;
 
   constructor(
@@ -50,13 +55,24 @@ export class BuyCreditsComponent implements OnInit {
       giftAid: FormGroup
     } = {
       amounts: this.formBuilder.group({
-        donationAmount: [null, [
+        creditAmount: [null, [
           Validators.required,
           ValidateCreditMin,
           ValidateCreditMax,
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
         tipPercentage: [this.initialTipSuggestedPercentage],
+        customTipAmount: [null, [
+          Validators.required,
+          // Explicitly enforce minimum custom tip amount of £0. This is already covered by the regexp
+          // validation rule below, but it's good to add the explicit check for future-proofness
+          Validators.min(0),
+          // Below we use the donation flow validator (ValidateCurrencyMax) for the tip because
+          // when buying donation credits, tips are set as real donations to a dedicated Big Give
+          // SF campaign. See MAT-266 and the Slack thread linked it its description for more context.
+          ValidateCurrencyMax,
+          Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
+        ]],
       }),
       giftAid: this.formBuilder.group({
         giftAid: [null],
@@ -96,6 +112,57 @@ export class BuyCreditsComponent implements OnInit {
         this.loadAuthedPersonInfo(data.id, data.jwt);
       }
     });
+  }
+
+  customTip(): boolean {
+    return this.amountsGroup.value.tipPercentage === 'Other';
+  }
+
+  get creditAmountField() {
+    if (!this.creditForm) {
+      return undefined;
+    }
+
+    return this.creditForm.controls.amounts.get('creditAmount');
+  }
+
+  get customTipAmountField() {
+    if (!this.creditForm) {
+      return undefined;
+    }
+
+    return this.creditForm.controls.amounts.get('customTipAmount');
+  }
+
+  /**
+  * @returns Amount without any £/$s
+  */
+  sanitiseCurrency(amount: string): number {
+    return Number((amount || '0').replace('£', '').replace('$', ''));
+  }
+
+  calculatedTipAmount() : number {
+    const unsanitisedCreditAmount = this.amountsGroup.value.creditAmount;
+
+    if (!unsanitisedCreditAmount) {
+      return 0;
+    }
+
+    if (this.customTip()) {
+      const unsanitisedCustomTipAmount = this.amountsGroup.value.customTipAmount;
+      if (unsanitisedCustomTipAmount) {
+        return this.sanitiseCurrency(unsanitisedCustomTipAmount)
+      }
+      else {
+        return 0;
+      }
+    }
+
+    else {
+      const creditAmount: number = this.sanitiseCurrency(unsanitisedCreditAmount);
+      const tipPercentage: number = this.amountsGroup.value.tipPercentage;
+      return (creditAmount * (tipPercentage / 100));
+    }
   }
 
   private loadAuthedPersonInfo(id: string, jwt: string) {

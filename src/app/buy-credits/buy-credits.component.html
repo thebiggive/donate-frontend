@@ -1,6 +1,6 @@
 <main>
     <div *ngIf="isLoggedIn" id="loggedInHeader">
-        <p>Logged in as {{userFullName}}</p>
+        <p>Logged in as {{ userFullName }}</p>
     </div>
     <div class="b-container">
         <h3 class="b-rh-1 b-bold">Purchase Donation Credits</h3>
@@ -15,8 +15,12 @@
                     <ng-template matStepLabel>Your Donation Credits</ng-template>
                     <mat-form-field  class="form-field b-center size-lg" hideRequiredMarker>
                         <mat-label>Credit amount (£)</mat-label>
-                        <input matInput placeholder="Enter amount in £" formControlName="donationAmount" required>
+                        <input matInput placeholder="Enter amount in £" formControlName="creditAmount" required>
                     </mat-form-field>
+                    <p class="error" *ngIf="creditAmountField?.errors && creditAmountField?.invalid && (creditAmountField?.dirty || creditAmountField?.touched)">
+                        Please enter your credit amount. Must be between {{ minimumCreditAmount | exactCurrency:'£' }} and {{ maximumCreditAmount | exactCurrency:'£' }} inclusive.
+                    </p>
+
                     <!-- <hr> -->
                     <h3>Tip the Big Give</h3>
                     <p class="tip-text">Big Give has a 0% platform fee. That means we're able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
@@ -30,7 +34,18 @@
                             <mat-option [value]="'Other'">Other</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <p>£X donation to support the Big Give</p>
+
+                    <div *ngIf="customTip()">
+                        <mat-form-field  class="form-field b-center size-lg" hideRequiredMarker>
+                            <mat-label>Custom Tip amount (£)</mat-label>
+                            <input matInput placeholder="Enter amount in £" formControlName="customTipAmount" required>
+                        </mat-form-field>
+                        <p class="error" *ngIf="customTipAmountField?.errors && customTipAmountField?.invalid && (customTipAmountField?.dirty || customTipAmountField?.touched)">
+                            Custom tips can range from £0 and {{ maximumDonationAmount | exactCurrency:'£' }} inclusive.
+                        </p>
+                    </div>
+
+                    <p>{{ calculatedTipAmount() | exactCurrency:'£' }} donation to support the Big Give</p>
 
                     <p><strong>How does Big Give use tips?</strong></p>
 
@@ -53,11 +68,14 @@
                     formGroupName="giftAid"
                     [stepControl]="giftAidGroup"
                 >
-                    <ng-template matStepLabel>Gift Aid</ng-template>
+                    <ng-template matStepLabel>Gift Aid (for tips to Big Give only)</ng-template>
                     <p><strong>Boost your donation by 25p of Gift Aid for every £1 you donate</strong></p>
 
                     <p>I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of
                         Gift Aid claimed on all my donations it is my responsibility to pay the difference.</p>
+
+                    <p><strong>Note:</strong>This Gift Aid section is only for claiming Gift Aid on the tip to Big Give. If you wish to claim Gift Aid on the credit amount used for making donations, you may do so when donating
+                    to a charity's campaign.</p>
 
                     <p><a href="">Find out more about Gift Aid </a></p>
                     
