@@ -21,8 +21,7 @@
                         Please enter your credit amount. Must be between {{ minimumCreditAmount | exactCurrency:'£' }} and {{ maximumCreditAmount | exactCurrency:'£' }} inclusive.
                     </p>
 
-                    <!-- <hr> -->
-                    <h3>Tip the Big Give</h3>
+                    <p><strong>Tip the Big Give</strong></p>
                     <p class="tip-text">Big Give has a 0% platform fee. That means we're able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
                     <mat-form-field >
                         <mat-label>Tip amount (%)</mat-label>
@@ -36,16 +35,28 @@
                     </mat-form-field>
 
                     <div *ngIf="customTip()">
-                        <mat-form-field  class="form-field b-center size-lg" hideRequiredMarker>
+                        <mat-form-field  class="form-field b-center size-lg">
                             <mat-label>Custom Tip amount (£)</mat-label>
-                            <input matInput placeholder="Enter amount in £" formControlName="customTipAmount" required>
+                            <input matInput placeholder="Enter amount in £" formControlName="customTipAmount">
                         </mat-form-field>
                         <p class="error" *ngIf="customTipAmountField?.errors && customTipAmountField?.invalid && (customTipAmountField?.dirty || customTipAmountField?.touched)">
                             Custom tips can range from £0 and {{ maximumDonationAmount | exactCurrency:'£' }} inclusive.
                         </p>
                     </div>
 
-                    <p>{{ calculatedTipAmount() | exactCurrency:'£' }} donation to support the Big Give</p>
+                    <!-- Only show the calculated tip copy if the credit amount entered is valid AND if either a % tip is selected 
+                    from the dropdown OR a custom tip amount has been entered. In other words, this copy will not show if the credit
+                    amount entered is out of range, or invalid, or if the user clicks on 'Other' for the tip amount but has not yet
+                    specified how much the custom tip will be (i.e. blank custom tip) -->
+                    <p *ngIf="
+                        creditAmountField?.value &&
+                        !creditAmountField?.errors &&
+                        !creditAmountField?.invalid &&
+                        !(customTip() && !customTipAmountField?.value)
+                    "><strong>{{ calculatedTipAmount() | exactCurrency:'£' }}</strong> donation (tip) to support Big Give
+                        <span *ngIf="calculatedTipAmount() > 0">💗</span> <!-- display heart emoji if tip > £0 -->
+                        <span *ngIf="calculatedTipAmount() === 0 && customTip() && customTipAmountField?.value">😢</span> <!-- display sad emoji if custom tip amount set to £0 -->
+                    </p>
 
                     <p><strong>How does Big Give use tips?</strong></p>
 

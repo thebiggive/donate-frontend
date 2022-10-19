@@ -39,4 +39,5 @@ button[mat-button] {
 .error {
     color: mat.get-color-from-palette($donate-warn);
     font-size: 1rem; // slightly smaller text
+    margin: 0;
 }
