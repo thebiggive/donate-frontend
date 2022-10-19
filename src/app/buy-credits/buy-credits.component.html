@@ -92,9 +92,14 @@
 
                     <p><a href="">Find out more about Gift Aid </a></p>
                     
-                    <div id="giftAidOptIn">
-                        <mat-checkbox (click)="giftAidToggle($event)" class="example-margin">Yes, I want to claim <strong>£X</strong> of Gift Aid.</mat-checkbox>
-                    </div>
+                    <!-- <div id="giftAidOptIn">
+                        <mat-checkbox (click)="giftAidToggle($event)" class="example-margin">Yes, I want to claim <strong>{{ giftAidAmount() | exactCurrency:'£' }}</strong> of Gift Aid.</mat-checkbox>
+                    </div> -->
+
+                    <mat-radio-group aria-label="Select an option">
+                        <mat-radio-button value="1">Yes, I want to claim <strong>{{ giftAidAmount() | exactCurrency:'£' }}</strong> Gift Aid on my tip to Big Give, and any additional charitable donations via Big Give from the past 4 years and in the future.</mat-radio-button>
+                        <mat-radio-button value="2">No, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed.</mat-radio-button>
+                    </mat-radio-group>
 
                     <div>
                         <button mat-button matStepperNext>Next</button>

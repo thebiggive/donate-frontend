@@ -41,3 +41,16 @@ button[mat-button] {
     font-size: 1rem; // slightly smaller text
     margin: 0;
 }
+
+mat-radio-group {
+    display: flex;
+    justify-content: space-between;
+    mat-radio-button {
+        width: 50%;
+        padding: 30px;
+        box-shadow: $box-shadow-super-soft;
+        margin: 20px;
+        border-radius: 10px;
+        font-size: 1.2rem;
+    }
+}

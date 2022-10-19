@@ -131,6 +131,11 @@ export class BuyCreditsComponent implements OnInit {
     this.creditForm.get('amounts')?.get('customTipAmount')?.updateValueAndValidity();
   }
 
+  giftAidAmount() : number {
+    // Gift Aid on the tip only when buying credits!
+    return this.calculatedTipAmount() * 0.25;
+  }
+
   get creditAmountField() {
     if (!this.creditForm) {
       return undefined;
