@@ -10,6 +10,7 @@ import { ValidateCreditMin } from '../validators/credit-min';
 import { ValidateCreditMax } from '../validators/credit-max';
 import { environment } from 'src/environments/environment';
 import { ValidateCurrencyMax } from '../validators/currency-max';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-buy-credits',
@@ -63,7 +64,6 @@ export class BuyCreditsComponent implements OnInit {
         ]],
         tipPercentage: [this.initialTipSuggestedPercentage],
         customTipAmount: [null, [
-          Validators.required,
           // Explicitly enforce minimum custom tip amount of £0. This is already covered by the regexp
           // validation rule below, but it's good to add the explicit check for future-proofness
           Validators.min(0),
@@ -116,6 +116,19 @@ export class BuyCreditsComponent implements OnInit {
 
   customTip(): boolean {
     return this.amountsGroup.value.tipPercentage === 'Other';
+  }
+
+  onTipSelectorChanged(e: MatSelectChange) {
+    if (e.value === 'Other') {
+      this.creditForm.get('amounts')?.get('customTipAmount')?.addValidators(Validators.required);
+
+    }
+
+    else {
+      this.creditForm.get('amounts')?.get('customTipAmount')?.removeValidators(Validators.required);
+    }
+
+    this.creditForm.get('amounts')?.get('customTipAmount')?.updateValueAndValidity();
   }
 
   get creditAmountField() {

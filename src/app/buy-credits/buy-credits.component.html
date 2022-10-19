@@ -18,14 +18,14 @@
                         <input matInput placeholder="Enter amount in £" formControlName="creditAmount" required>
                     </mat-form-field>
                     <p class="error" *ngIf="creditAmountField?.errors && creditAmountField?.invalid && (creditAmountField?.dirty || creditAmountField?.touched)">
-                        Please enter your credit amount. Must be between {{ minimumCreditAmount | exactCurrency:'£' }} and {{ maximumCreditAmount | exactCurrency:'£' }} inclusive.
+                        Must be between {{ minimumCreditAmount | exactCurrency:'£' }} and {{ maximumCreditAmount | exactCurrency:'£' }} inclusive.
                     </p>
 
                     <p><strong>Tip the Big Give</strong></p>
                     <p class="tip-text">Big Give has a 0% platform fee. That means we're able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
                     <mat-form-field >
                         <mat-label>Tip amount (%)</mat-label>
-                        <mat-select formControlName="tipPercentage" required="true">
+                        <mat-select formControlName="tipPercentage" required="true" (selectionChange)="onTipSelectorChanged($event)">
                             <mat-option [value]="7.5">7.5%</mat-option>
                             <mat-option [value]="10">10%</mat-option>
                             <mat-option [value]="12.5">12.5%</mat-option>
@@ -45,14 +45,16 @@
                     </div>
 
                     <!-- Only show the calculated tip copy if the credit amount entered is valid AND if either a % tip is selected 
-                    from the dropdown OR a custom tip amount has been entered. In other words, this copy will not show if the credit
+                    from the dropdown OR a valid custom tip amount has been entered. In other words, this copy will not show if the credit
                     amount entered is out of range, or invalid, or if the user clicks on 'Other' for the tip amount but has not yet
-                    specified how much the custom tip will be (i.e. blank custom tip) -->
+                    specified how much the custom tip will be (i.e. blank custom tip), or has specified an invalid custom tip amount. -->
                     <p *ngIf="
                         creditAmountField?.value &&
                         !creditAmountField?.errors &&
                         !creditAmountField?.invalid &&
-                        !(customTip() && !customTipAmountField?.value)
+                        !(customTip() && !customTipAmountField?.value) &&
+                        !customTipAmountField?.errors &&
+                        !customTipAmountField?.invalid
                     "><strong>{{ calculatedTipAmount() | exactCurrency:'£' }}</strong> donation (tip) to support Big Give
                         <span *ngIf="calculatedTipAmount() > 0">💗</span> <!-- display heart emoji if tip > £0 -->
                         <span *ngIf="calculatedTipAmount() === 0 && customTip() && customTipAmountField?.value">😢</span> <!-- display sad emoji if custom tip amount set to £0 -->
