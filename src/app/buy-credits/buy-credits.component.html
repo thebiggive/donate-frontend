@@ -5,7 +5,7 @@
     <div class="b-container">
         <h3 class="b-rh-1 b-bold">Purchase Donation Credits</h3>
 
-        <form *ngIf="isLoggedIn" [formGroup]="creditForm">
+        <form *ngIf="isLoggedIn && !isLoading && !isPurchaseComplete" [formGroup]="creditForm">
             <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
                 <mat-step
                     [completed]="false"
@@ -91,14 +91,10 @@
                     to a charity's campaign.</p>
 
                     <p><a href="">Find out more about Gift Aid </a></p>
-                    
-                    <!-- <div id="giftAidOptIn">
-                        <mat-checkbox (click)="giftAidToggle($event)" class="example-margin">Yes, I want to claim <strong>{{ giftAidAmount() | exactCurrency:'£' }}</strong> of Gift Aid.</mat-checkbox>
-                    </div> -->
 
-                    <mat-radio-group aria-label="Select an option">
-                        <mat-radio-button value="1">Yes, I want to claim <strong>{{ giftAidAmount() | exactCurrency:'£' }}</strong> Gift Aid on my tip to Big Give, and any additional charitable donations via Big Give from the past 4 years and in the future.</mat-radio-button>
-                        <mat-radio-button value="2">No, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed.</mat-radio-button>
+                    <mat-radio-group aria-label="Select an option" (change)="giftAidChoiceSelected($event)">
+                        <mat-radio-button value="yes" [checked]="false">Yes, I want to claim <strong>{{ giftAidAmount() | exactCurrency:'£' }}</strong> Gift Aid on my tip to Big Give, and any additional charitable donations via Big Give from the past 4 years and in the future.</mat-radio-button>
+                        <mat-radio-button value="no" [checked]="true">No, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed.</mat-radio-button>
                     </mat-radio-group>
 
                     <div>
@@ -122,7 +118,8 @@
 
         </form>
 
-        <div *ngIf="!isLoggedIn && isLoading">
+        <div *ngIf="isLoading">
+            <div id="loading-text">One moment...</div>
             <mat-spinner [diameter]="40"></mat-spinner>
         </div>
 
@@ -133,6 +130,21 @@
                 color="primary"
                 (click)="showLoginDialog()"
             >Log in</button>
+        </div>
+
+        <div *ngIf="isLoggedIn && isPurchaseComplete">
+            <h2>Purchase complete 🎉🎊</h2>
+            <p>Please bank transfer us the credit amount of {{ creditAmountField?.value | exactCurrency: '£' }} using the following details (keep them safe!):</p>
+            <p><strong>Recipient</strong> {{ accountHolderName }}</p>
+            <p><strong>Sort Code:</strong> {{ sortCode }}</p>
+            <p><strong>Account Number:</strong> {{ accountNumber }}</p>
+
+            <hr>
+
+            <!-- should we keep this copy? -->
+            <p><strong>Note:</strong>You will shortly receive a confirmation email with the details of your credit purchase and the bank details above enclosed.
+                We will email you upon safe receipt of the bank-transferred credit amount.
+            </p>
         </div>
     </div>
 </main>

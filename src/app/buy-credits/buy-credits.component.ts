@@ -11,6 +11,8 @@ import { ValidateCreditMax } from '../validators/credit-max';
 import { environment } from 'src/environments/environment';
 import { ValidateCurrencyMax } from '../validators/currency-max';
 import { MatSelectChange } from '@angular/material/select';
+import { FundingInstruction } from '../fundingInstruction.model';
+import { MatRadioChange } from '@angular/material/radio';
 
 @Component({
   selector: 'app-buy-credits',
@@ -21,6 +23,8 @@ export class BuyCreditsComponent implements OnInit {
 
   isLoggedIn: boolean = false;
   isLoading: boolean = false;
+  isPurchaseComplete = false;
+  isOptedIntoGiftAid = false;
   userFullName: string;
   creditForm: FormGroup;
   amountsGroup: FormGroup;
@@ -29,6 +33,9 @@ export class BuyCreditsComponent implements OnInit {
   minimumCreditAmount = environment.minimumCreditAmount;
   maximumCreditAmount = environment.maximumCreditAmount;
   maximumDonationAmount = environment.maximumDonationAmount;
+  sortCode: string;
+  accountNumber: string;
+  accountHolderName: string;
   private initialTipSuggestedPercentage = 15;
 
   constructor(
@@ -98,11 +105,26 @@ export class BuyCreditsComponent implements OnInit {
   }
 
   buyCredits(): void {
-    console.log('POST /credits');
+    this.isLoading = true;
+    const idAndJWT = this.identityService.getIdAndJWT();
+    if (idAndJWT !== undefined) {
+      this.identityService.getFundingInstructions(idAndJWT?.id, idAndJWT.jwt).subscribe((response: FundingInstruction) => {
+        this.isLoading = false;
+        this.isPurchaseComplete = true;
+        this.accountNumber = response.bank_transfer.financial_addresses[0].sort_code.account_number;
+        this.sortCode = response.bank_transfer.financial_addresses[0].sort_code.sort_code;
+        this.accountHolderName = response.bank_transfer.financial_addresses[0].sort_code.account_holder_name;
+      });
+    }
   }
 
-  giftAidToggle(e: Event) {
-    
+  giftAidChoiceSelected(e: MatRadioChange) {
+    if (e.value === "yes") {
+      this.isOptedIntoGiftAid = true;
+    }
+    else {
+      this.isOptedIntoGiftAid = false;
+    }
   }
 
   showLoginDialog() {
@@ -189,7 +211,6 @@ export class BuyCreditsComponent implements OnInit {
       this.isLoggedIn = true;
       this.isLoading = false;
       this.userFullName = person.first_name + ' ' + person.last_name;
-      console.log('Login success: ' + JSON.stringify(person));
 
       // this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
       // this.personIsLoginReady = true;
@@ -211,7 +232,7 @@ export class BuyCreditsComponent implements OnInit {
       this.donationService.getPaymentMethods(id, jwt).subscribe((response: { data: PaymentMethod[] }) => {
         if (response.data.length > 0) {
 
-          console.log('Payment details: ' + JSON.stringify(response.data[0]));
+          // console.log('Payment details: ' + JSON.stringify(response.data[0]));
           // this.stripePaymentMethodReady = true;
           // this.stripeFirstSavedMethod = response.data[0];
 

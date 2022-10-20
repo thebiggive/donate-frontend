@@ -96,6 +96,15 @@ export class IdentityService {
     this.storage.set(this.storageKey, { id, jwt });
   }
 
+  getFundingInstructions(id: string, jwt: string): Observable<any> {
+    return this.http.get<Person>(
+      `${environment.identityApiPrefix}${this.peoplePath}/${id}/funding_instructions?currency=gbp`,
+      {
+        headers: new HttpHeaders({ 'X-Tbg-Auth': jwt }),
+      },
+    );
+  }
+
   private getTokenPayload(jwt: string): IdentityJWT {
     return jwtDecode<IdentityJWT>(jwt);
   }

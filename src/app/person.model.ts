@@ -10,6 +10,11 @@ export interface Person {
     captcha_code?: string;
 
     /**
+     * Stores the credit available for the given Person
+     */
+    cash_balance?: { [currencyCode: string]: string };
+
+    /**
      * These 3 expected on first update.
      */
     email_address?: string;
