@@ -18,8 +18,8 @@ export default {
     counter: {
       name: 'Counter',
     },
-  }
-}
+  },
+};
 
 const Template = args => `
   <biggive-progress-bar

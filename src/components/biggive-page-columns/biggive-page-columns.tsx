@@ -10,6 +10,7 @@ export class BiggivePageColumns {
    * Space below component
    */
   @Prop() spaceBelow: number = 0;
+
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>

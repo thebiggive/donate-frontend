@@ -91,3 +91,11 @@
 }
 
 
+.container.background-color-black:before,
+.container.background-color-black:after,
+.container.background-color-black .sleeve:before,
+.container.background-color-black .sleeve {
+  background-color: $colour-black;
+  color: $colour-white;
+}
+

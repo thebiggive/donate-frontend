@@ -1,6 +1,6 @@
 //import { BiggiveCampaignCard } from 'biggive-campaign-card/biggive-campaign-card';
 export default {
-  title: 'Components/Demos',
+  title: 'Components/Campaign Cards',
   //subcomponents: {BiggiveCampaignCard}
 };
 
