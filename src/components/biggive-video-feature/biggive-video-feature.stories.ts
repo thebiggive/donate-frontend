@@ -4,6 +4,7 @@ export default {
 
 const Template = args => `
           <biggive-video-feature
+            space-below="${args.spaceBelow}"
             colour-scheme="${args.colourScheme}"
             video-url="${args.videoUrl}"
             slug="${args.slug}"
@@ -20,6 +21,7 @@ const Template = args => `
 
 export const VideoFeatureComponent = Template.bind({});
 VideoFeatureComponent.args = {
+  spaceBelow: 4,
   colourScheme: 'primary',
   videoUrl: 'http://techslides.com/demos/sample-videos/small.mp4',
   slug: 'Test slug',
