@@ -1,9 +1,77 @@
 export default {
   title: 'Components/Demos',
+  argTypes: {
+    spaceBelow: {
+      name: 'Space below',
+      control: {
+        type: 'select',
+        options: [0, 1, 2, 3, 4, 5, 6],
+      },
+    },
+    banner: {
+      name: 'Banner image url',
+    },
+    currencyCode: {
+      name: 'Currency code',
+    },
+    primaryFigureLabel: {
+      name: 'Primary figure label',
+    },
+    primaryFigureAmount: {
+      name: 'Primary figure amount',
+    },
+    secondaryFigureLabel: {
+      name: 'Secondary figure label',
+    },
+    secondaryFigureAmount: {
+      name: 'Secondary figure amount',
+    },
+    campaignTitle: {
+      name: 'Campaign title',
+    },
+    campaignType: {
+      name: 'Campaign type',
+    },
+    organisationName: {
+      name: 'Organisation name',
+      type: { name: 'string', required: false },
+    },
+    progressBarCounter: {
+      name: 'Progress bar counter',
+    },
+
+    donateButtonUrl: {
+      name: 'Donate button url',
+    },
+    donateButtonLabel: {
+      name: 'Donate button label',
+    },
+    donateButtonColourScheme: {
+      name: 'Donate button colour scheme',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black', 'clear-primary', 'clear-secondary', 'clear-tertiary', 'clear-white', 'clear-black'],
+      },
+    },
+    moreInfoButtonUrl: {
+      name: 'More info button url',
+    },
+    moreInfoButtonLabel: {
+      name: 'More info button label',
+    },
+    moreInfoButtonColourScheme: {
+      name: 'More info button colour scheme',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black', 'clear-primary', 'clear-secondary', 'clear-tertiary', 'clear-white', 'clear-black'],
+      },
+    },
+  },
 };
 
 const Template = args => `
       <biggive-campaign-card
+        space-below=${args.spaceBelow}
         banner="${args.banner}"
         currency-code="${args.currencyCode}"
         primary-figure-label=${args.primaryFigureLabel}
@@ -13,7 +81,6 @@ const Template = args => `
         campaign-title=${args.campaignTitle}
         campaign-type=${args.campaignType}
         organisation-name=${args.organisationName}
-        total-funds-raised=${args.totalFundsRaised}
         progress-bar-counter=${args.progressBarCounter}
         donate-button-label=${args.donateButtonLabel}
         donate-button-url=${args.donateButtonUrl}
@@ -24,6 +91,7 @@ const Template = args => `
 
 export const CampaignCardComponent = Template.bind({});
 CampaignCardComponent.args = {
+  spaceBelow: 0,
   banner: 'https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693',
   currencyCode: 'GBP',
   primaryFigureLabel: 'Total raised',
@@ -31,7 +99,7 @@ CampaignCardComponent.args = {
   secondaryFigureLabel: 'Total remaining',
   secondaryFigureAmount: 1000,
   campaignTitle: 'My Campaign Title',
-  campaignType: 'match funding',
+  campaignType: 'Match funding',
   organisationName: 'My Test Organisation',
   progressBarCounter: 100,
   donateButtonLabel: 'Donate now',

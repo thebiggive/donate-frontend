@@ -16,7 +16,7 @@ export class BiggiveSocialIcon {
   /**
    * Colour Scheme
    */
-   @Prop() colourScheme: string = 'primary';
+  @Prop() colourScheme: string = 'primary';
 
   /**
    * Url
@@ -30,7 +30,7 @@ export class BiggiveSocialIcon {
 
   render() {
     return (
-      <div class={'social-icon-item colour-scheme-'+this.colourScheme}>
+      <div class={'social-icon-item colour-scheme-' + this.colourScheme}>
         <a href={this.url}>
           <svg
             width={this.getSocialIcon().icon[0]}

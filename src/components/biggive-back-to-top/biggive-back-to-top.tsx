@@ -6,7 +6,6 @@ import { Component, getAssetPath, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveBackToTop {
-
   render() {
     return (
       <div class="container">
@@ -14,10 +13,7 @@ export class BiggiveBackToTop {
           <img src={getAssetPath('../assets/images/triangles-combined.svg')} />
           <span class="text">Back to top</span>
         </a>
-        
-        
       </div>
     );
   }
-
 }

@@ -6,11 +6,7 @@ import { Component, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggivePageColumn {
-
   render() {
-    return (
-      <slot></slot>
-    );
+    return <slot></slot>;
   }
-
 }

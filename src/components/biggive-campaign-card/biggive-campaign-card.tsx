@@ -107,7 +107,6 @@ export class BiggiveCampaignCard {
   }
 
   render() {
-
     return (
       <div class={'container space-below-' + this.spaceBelow.toString()}>
         <div class="sleeve">

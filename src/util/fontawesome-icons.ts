@@ -29,7 +29,6 @@ import {
 import { faUsers } from '@fortawesome/pro-duotone-svg-icons';
 import { faHeadSideMedical, faHomeHeart, faHeart, faAlarmClock } from '@fortawesome/pro-solid-svg-icons';
 
-
 export class FontAwesomeIconsService {
   static getBeneficiaries(): Array<{ name: string; icon: IconDefinition }> {
     return [

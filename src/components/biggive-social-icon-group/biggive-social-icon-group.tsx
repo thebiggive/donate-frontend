@@ -9,7 +9,7 @@ export class BiggiveSocialIconGroup {
   /**
    * Space below component
    */
-   @Prop() spaceBelow: number = 0;
+  @Prop() spaceBelow: number = 0;
 
   render() {
     return (
@@ -18,5 +18,4 @@ export class BiggiveSocialIconGroup {
       </div>
     );
   }
-
 }
