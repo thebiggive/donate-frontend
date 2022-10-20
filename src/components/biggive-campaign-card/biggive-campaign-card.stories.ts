@@ -1,5 +1,5 @@
 export default {
-  title: 'Components/Campaign Cards',
+  title: 'Components/Campaign Features',
   argTypes: {
     spaceBelow: {
       name: 'Space below',
@@ -34,7 +34,6 @@ export default {
     },
     organisationName: {
       name: 'Organisation name',
-      type: { name: 'string', required: false },
     },
     progressBarCounter: {
       name: 'Progress bar counter',

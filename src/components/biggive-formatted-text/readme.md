@@ -7,9 +7,10 @@
 
 ## Properties
 
-| Property     | Attribute     | Description           | Type     | Default |
-| ------------ | ------------- | --------------------- | -------- | ------- |
-| `spaceBelow` | `space-below` | Space below component | `number` | `0`     |
+| Property            | Attribute             | Description           | Type     | Default     |
+| ------------------- | --------------------- | --------------------- | -------- | ----------- |
+| `defaultTextColour` | `default-text-colour` | Default text colour   | `string` | `'primary'` |
+| `spaceBelow`        | `space-below`         | Space below component | `number` | `0`         |
 
 
 ----------------------------------------------

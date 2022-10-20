@@ -29,10 +29,7 @@ describe('biggive-campaign-highlights', () => {
               <div class="progress-bar-wrap">
                 <biggive-progress-bar colour-scheme="primary" counter="100"></biggive-progress-bar>
               </div>
-              <div class="stat-wrap">
-                <biggive-misc-icon icon="AlarmClock"></biggive-misc-icon>
-                <biggive-misc-icon icon="Heart"></biggive-misc-icon>
-              </div>
+              <div class="stat-wrap"></div>
             </div>
           </div>
         </mock:shadow-root>

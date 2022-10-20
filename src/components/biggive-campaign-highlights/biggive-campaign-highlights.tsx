@@ -95,8 +95,18 @@ export class BiggiveCampaignHighlights {
             <biggive-progress-bar counter={this.progressBarCounter} colour-scheme="primary"></biggive-progress-bar>
           </div>
           <div class="stat-wrap">
-            <biggive-misc-icon icon="AlarmClock"></biggive-misc-icon>
-            <biggive-misc-icon icon="Heart"></biggive-misc-icon>
+            {this.primaryStatIcon != null ? (
+              <div class="stat-item">
+                <biggive-misc-icon icon={this.primaryStatIcon}></biggive-misc-icon>
+                <span>{this.primaryStatText}</span>
+              </div>
+            ) : null}
+            {this.secondaryStatIcon != null ? (
+              <div class="stat-item">
+                <biggive-misc-icon icon={this.secondaryStatIcon}></biggive-misc-icon>
+                <span>{this.secondaryStatText}</span>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

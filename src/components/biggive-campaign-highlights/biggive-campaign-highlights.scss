@@ -35,6 +35,17 @@
     margin-bottom: $spacer-2;
     border-bottom: 1px solid $colour-grey-light;
   }
+  .stat-wrap {
+    @include flex-container-row();
+    .stat-item {
+      width: calc( 50% - $spacer-3 );
+      margin: auto;
+      font-weight: 600;
+      svg {
+        fill: $colour-tertiary;
+      }
+    } 
+  }
 }
 
 

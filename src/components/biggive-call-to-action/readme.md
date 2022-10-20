@@ -9,7 +9,7 @@
 
 | Property                      | Attribute                        | Description                    | Type     | Default     |
 | ----------------------------- | -------------------------------- | ------------------------------ | -------- | ----------- |
-| `colourScheme`                | `colour-scheme`                  | Colour Scheme                  | `string` | `'primary'` |
+| `defaultTextColour`           | `default-text-colour`            | Default text colour            | `string` | `'primary'` |
 | `mainTitle`                   | `main-title`                     | Main title                     | `string` | `null`      |
 | `mainTitleColour`             | `main-title-colour`              | Main title colour              | `string` | `''`        |
 | `primaryButtonColourScheme`   | `primary-button-colour-scheme`   | Primary button Colour Scheme   | `string` | `'primary'` |

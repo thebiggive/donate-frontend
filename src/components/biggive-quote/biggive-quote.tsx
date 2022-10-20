@@ -1,8 +1,8 @@
-import { Component, Host, Prop, h } from '@stencil/core';
+import { Component, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'biggive-quote',
-  styleUrl: 'biggive-quote.css',
+  styleUrl: 'biggive-quote.scss',
   shadow: true,
 })
 export class BiggiveQuote {
@@ -11,10 +11,9 @@ export class BiggiveQuote {
    */
   @Prop() spaceBelow: number = 0;
   /**
-   * Colour Scheme
+   * Default text colour
    */
-  @Prop() colourScheme: string = 'primary';
-
+  @Prop() defaultTextColour: string = 'black';
   /**
    * Quote text
    */
@@ -27,9 +26,10 @@ export class BiggiveQuote {
 
   render() {
     return (
-      <Host>
-        <slot></slot>
-      </Host>
+      <div class={'container text-colour-' + this.defaultTextColour + ' space-below-' + this.spaceBelow}>
+        <div class="quote">{this.quote}</div>
+        <div class="attribution">{this.attribution}</div>
+      </div>
     );
   }
 }

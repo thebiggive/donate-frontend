@@ -1,5 +1,5 @@
 export default {
-  title: 'Components/Demos',
+  title: 'Components/Buttons',
 };
 
 const Template = () => `

@@ -1,20 +1,27 @@
 import { Component, Prop, h } from '@stencil/core';
 
 @Component({
-  tag: 'biggive-social-icon-group',
-  styleUrl: 'biggive-social-icon-group.scss',
+  tag: 'biggive-image',
+  styleUrl: 'biggive-image.scss',
   shadow: true,
 })
-export class BiggiveSocialIconGroup {
+export class BiggiveImage {
   /**
    * Space below component
    */
   @Prop() spaceBelow: number = 0;
 
+  /**
+   * Full URL of a image.
+   */
+  @Prop() imageUrl: string = '';
+
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
-        <slot></slot>
+        <div class="image-wrap">
+          <img src={this.imageUrl} />
+        </div>
       </div>
     );
   }

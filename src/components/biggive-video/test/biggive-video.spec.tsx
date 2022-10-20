@@ -10,7 +10,11 @@ describe('biggive-video', () => {
     expect(page.root).toEqualHtml(`
       <biggive-video>
         <mock:shadow-root>
-          <slot></slot>
+          <div class="container space-below-0">
+            <div class="video-wrap">
+              <video controls="" src=""></video>
+            </div>
+          </div>
         </mock:shadow-root>
       </biggive-video>
     `);

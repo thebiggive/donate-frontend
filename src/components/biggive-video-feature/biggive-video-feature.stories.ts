@@ -1,11 +1,73 @@
 export default {
-  title: 'Components/Demos',
+  title: 'Components/Content',
+  argTypes: {
+    spaceBelow: {
+      name: 'Space below',
+      control: {
+        type: 'select',
+        options: [0, 1, 2, 3, 4, 5, 6],
+      },
+    },
+    defaultTextColour: {
+      name: 'Default text colour',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+      },
+    },
+    videoUrl: {
+      name: 'Video URL',
+    },
+    slug: {
+      name: 'Slug',
+    },
+    slugColour: {
+      name: 'Slug colour',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+      },
+    },
+    mainTitle: {
+      name: 'Main title',
+    },
+    mainTitleColour: {
+      name: 'Main title colour',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+      },
+    },
+    teaser: {
+      name: 'Teaser',
+    },
+    teaserColour: {
+      name: 'Teaser colour',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+      },
+    },
+    buttonUrl: {
+      name: 'Button url',
+    },
+    buttonLabel: {
+      name: 'Button label',
+    },
+    primaryButtonColourScheme: {
+      name: 'Button colour scheme',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black', 'clear-primary', 'clear-secondary', 'clear-tertiary', 'clear-white', 'clear-black'],
+      },
+    },
+  },
 };
 
 const Template = args => `
           <biggive-video-feature
             space-below="${args.spaceBelow}"
-            colour-scheme="${args.colourScheme}"
+            default-text-colour="${args.defaultTextColour}"
             video-url="${args.videoUrl}"
             slug="${args.slug}"
             slug-colour="${args.slugColour}"
@@ -22,7 +84,7 @@ const Template = args => `
 export const VideoFeatureComponent = Template.bind({});
 VideoFeatureComponent.args = {
   spaceBelow: 4,
-  colourScheme: 'primary',
+  defaultTextColour: 'primary',
   videoUrl: 'http://techslides.com/demos/sample-videos/small.mp4',
   slug: 'Test slug',
   slugColour: null,

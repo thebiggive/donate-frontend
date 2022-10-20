@@ -7,11 +7,6 @@
   @include section-container();
   position: relative;
   text-align: center;
-  &.colour-scheme-primary { color: $colour-primary; }
-  &.colour-scheme-secondary {  color: $colour-secondary; }
-  &.colour-scheme-tertiary { color: $colour-tertiary; }
-  &.colour-scheme-white { color: $colour-white; }
-  &.colour-scheme-black { color: $colour-black; }
 }
 
 

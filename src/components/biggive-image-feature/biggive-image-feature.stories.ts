@@ -1,10 +1,73 @@
 export default {
-  title: 'Components/Demos',
+  title: 'Components/Content',
+  argTypes: {
+    spaceBelow: {
+      name: 'Space below',
+      control: {
+        type: 'select',
+        options: [0, 1, 2, 3, 4, 5, 6],
+      },
+    },
+    defaultTextColour: {
+      name: 'Default text colour',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+      },
+    },
+    imageUrl: {
+      name: 'Image URL',
+    },
+    slug: {
+      name: 'Slug',
+    },
+    slugColour: {
+      name: 'Slug colour',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+      },
+    },
+    mainTitle: {
+      name: 'Main title',
+    },
+    mainTitleColour: {
+      name: 'Main title colour',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+      },
+    },
+    teaser: {
+      name: 'Teaser',
+    },
+    teaserColour: {
+      name: 'Teaser colour',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+      },
+    },
+    buttonUrl: {
+      name: 'Button url',
+    },
+    buttonLabel: {
+      name: 'Button label',
+    },
+    primaryButtonColourScheme: {
+      name: 'Button colour scheme',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black', 'clear-primary', 'clear-secondary', 'clear-tertiary', 'clear-white', 'clear-black'],
+      },
+    },
+  },
 };
 
 const Template = args => `
             <biggive-image-feature
-              colour-scheme="${args.colourScheme}"
+              space-below="${args.spaceBelow}"
+              default-text-colour="${args.defaultTextColour}"
               image-url="${args.imageUrl}"
               slug="${args.slug}"
               slugColour="${args.slugColour}"
@@ -20,8 +83,9 @@ const Template = args => `
 
 export const ImageFeatureComponent = Template.bind({});
 ImageFeatureComponent.args = {
-  colourScheme: 'primary',
-  imageUrl: 'http://techslides.com/demos/sample-videos/small.mp4',
+  spaceBelow: 4,
+  defaultTextColour: 'primary',
+  imageUrl: 'https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693',
   slug: 'Test slug',
   slugColour: null,
   mainTitle: 'Test title',

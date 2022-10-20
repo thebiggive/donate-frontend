@@ -8,6 +8,28 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface BiggiveBackToTop {
     }
+    interface BiggiveBoxedContent {
+        /**
+          * Background colour
+         */
+        "backgroundColour": string;
+        /**
+          * Horizontal padding
+         */
+        "horizontalPadding": number;
+        /**
+          * Shadow
+         */
+        "shadow": boolean;
+        /**
+          * Space below component
+         */
+        "spaceBelow": number;
+        /**
+          * Vertical padding
+         */
+        "verticalPadding": number;
+    }
     interface BiggiveButton {
         /**
           * Colour Scheme
@@ -32,9 +54,9 @@ export namespace Components {
     }
     interface BiggiveCallToAction {
         /**
-          * Colour Scheme
+          * Default text colour
          */
-        "colourScheme": string;
+        "defaultTextColour": string;
         /**
           * Main title
          */
@@ -230,8 +252,6 @@ export namespace Components {
          */
         "spaceBelow": number;
     }
-    interface BiggiveDropdown {
-    }
     interface BiggiveFooter {
     }
     interface BiggiveForm {
@@ -239,6 +259,10 @@ export namespace Components {
     interface BiggiveFormFieldSelect {
     }
     interface BiggiveFormattedText {
+        /**
+          * Default text colour
+         */
+        "defaultTextColour": string;
         /**
           * Space below component
          */
@@ -340,6 +364,22 @@ export namespace Components {
          */
         "teaserColour": string;
     }
+    interface BiggiveIconGroup {
+        /**
+          * Space below component
+         */
+        "spaceBelow": number;
+    }
+    interface BiggiveImage {
+        /**
+          * Full URL of a image.
+         */
+        "imageUrl": string;
+        /**
+          * Space below component
+         */
+        "spaceBelow": number;
+    }
     interface BiggiveImageFeature {
         /**
           * Button Colour Scheme
@@ -354,9 +394,9 @@ export namespace Components {
          */
         "buttonUrl": string;
         /**
-          * Colour Scheme
+          * Default text colour
          */
-        "colourScheme": string;
+        "defaultTextColour": string;
         /**
           * Full URL of a image.
          */
@@ -446,9 +486,9 @@ export namespace Components {
          */
         "attribution": string;
         /**
-          * Colour Scheme
+          * Default text colour
          */
-        "colourScheme": string;
+        "defaultTextColour": string;
         /**
           * Quote text
          */
@@ -481,12 +521,6 @@ export namespace Components {
           * Url
          */
         "url": string;
-    }
-    interface BiggiveSocialIconGroup {
-        /**
-          * Space below component
-         */
-        "spaceBelow": number;
     }
     interface BiggiveTextInput {
     }
@@ -529,6 +563,14 @@ export namespace Components {
         "totalRaised": number;
     }
     interface BiggiveVideo {
+        /**
+          * Space below component
+         */
+        "spaceBelow": number;
+        /**
+          * Full URL of a video.
+         */
+        "videoUrl": string;
     }
     interface BiggiveVideoFeature {
         /**
@@ -544,9 +586,9 @@ export namespace Components {
          */
         "buttonUrl": string;
         /**
-          * Colour Scheme
+          * Default text colour
          */
-        "colourScheme": string;
+        "defaultTextColour": string;
         /**
           * Video title
          */
@@ -596,6 +638,12 @@ declare global {
         prototype: HTMLBiggiveBackToTopElement;
         new (): HTMLBiggiveBackToTopElement;
     };
+    interface HTMLBiggiveBoxedContentElement extends Components.BiggiveBoxedContent, HTMLStencilElement {
+    }
+    var HTMLBiggiveBoxedContentElement: {
+        prototype: HTMLBiggiveBoxedContentElement;
+        new (): HTMLBiggiveBoxedContentElement;
+    };
     interface HTMLBiggiveButtonElement extends Components.BiggiveButton, HTMLStencilElement {
     }
     var HTMLBiggiveButtonElement: {
@@ -625,12 +673,6 @@ declare global {
     var HTMLBiggiveCampaignHighlightsElement: {
         prototype: HTMLBiggiveCampaignHighlightsElement;
         new (): HTMLBiggiveCampaignHighlightsElement;
-    };
-    interface HTMLBiggiveDropdownElement extends Components.BiggiveDropdown, HTMLStencilElement {
-    }
-    var HTMLBiggiveDropdownElement: {
-        prototype: HTMLBiggiveDropdownElement;
-        new (): HTMLBiggiveDropdownElement;
     };
     interface HTMLBiggiveFooterElement extends Components.BiggiveFooter, HTMLStencilElement {
     }
@@ -679,6 +721,18 @@ declare global {
     var HTMLBiggiveHeroImageElement: {
         prototype: HTMLBiggiveHeroImageElement;
         new (): HTMLBiggiveHeroImageElement;
+    };
+    interface HTMLBiggiveIconGroupElement extends Components.BiggiveIconGroup, HTMLStencilElement {
+    }
+    var HTMLBiggiveIconGroupElement: {
+        prototype: HTMLBiggiveIconGroupElement;
+        new (): HTMLBiggiveIconGroupElement;
+    };
+    interface HTMLBiggiveImageElement extends Components.BiggiveImage, HTMLStencilElement {
+    }
+    var HTMLBiggiveImageElement: {
+        prototype: HTMLBiggiveImageElement;
+        new (): HTMLBiggiveImageElement;
     };
     interface HTMLBiggiveImageFeatureElement extends Components.BiggiveImageFeature, HTMLStencilElement {
     }
@@ -734,12 +788,6 @@ declare global {
         prototype: HTMLBiggiveSocialIconElement;
         new (): HTMLBiggiveSocialIconElement;
     };
-    interface HTMLBiggiveSocialIconGroupElement extends Components.BiggiveSocialIconGroup, HTMLStencilElement {
-    }
-    var HTMLBiggiveSocialIconGroupElement: {
-        prototype: HTMLBiggiveSocialIconGroupElement;
-        new (): HTMLBiggiveSocialIconGroupElement;
-    };
     interface HTMLBiggiveTextInputElement extends Components.BiggiveTextInput, HTMLStencilElement {
     }
     var HTMLBiggiveTextInputElement: {
@@ -766,12 +814,12 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "biggive-back-to-top": HTMLBiggiveBackToTopElement;
+        "biggive-boxed-content": HTMLBiggiveBoxedContentElement;
         "biggive-button": HTMLBiggiveButtonElement;
         "biggive-call-to-action": HTMLBiggiveCallToActionElement;
         "biggive-campaign-card": HTMLBiggiveCampaignCardElement;
         "biggive-campaign-card-filter-grid": HTMLBiggiveCampaignCardFilterGridElement;
         "biggive-campaign-highlights": HTMLBiggiveCampaignHighlightsElement;
-        "biggive-dropdown": HTMLBiggiveDropdownElement;
         "biggive-footer": HTMLBiggiveFooterElement;
         "biggive-form": HTMLBiggiveFormElement;
         "biggive-form-field-select": HTMLBiggiveFormFieldSelectElement;
@@ -780,6 +828,8 @@ declare global {
         "biggive-header": HTMLBiggiveHeaderElement;
         "biggive-heading": HTMLBiggiveHeadingElement;
         "biggive-hero-image": HTMLBiggiveHeroImageElement;
+        "biggive-icon-group": HTMLBiggiveIconGroupElement;
+        "biggive-image": HTMLBiggiveImageElement;
         "biggive-image-feature": HTMLBiggiveImageFeatureElement;
         "biggive-misc-icon": HTMLBiggiveMiscIconElement;
         "biggive-page-column": HTMLBiggivePageColumnElement;
@@ -789,7 +839,6 @@ declare global {
         "biggive-quote": HTMLBiggiveQuoteElement;
         "biggive-search": HTMLBiggiveSearchElement;
         "biggive-social-icon": HTMLBiggiveSocialIconElement;
-        "biggive-social-icon-group": HTMLBiggiveSocialIconGroupElement;
         "biggive-text-input": HTMLBiggiveTextInputElement;
         "biggive-totalizer": HTMLBiggiveTotalizerElement;
         "biggive-video": HTMLBiggiveVideoElement;
@@ -798,6 +847,28 @@ declare global {
 }
 declare namespace LocalJSX {
     interface BiggiveBackToTop {
+    }
+    interface BiggiveBoxedContent {
+        /**
+          * Background colour
+         */
+        "backgroundColour"?: string;
+        /**
+          * Horizontal padding
+         */
+        "horizontalPadding"?: number;
+        /**
+          * Shadow
+         */
+        "shadow"?: boolean;
+        /**
+          * Space below component
+         */
+        "spaceBelow"?: number;
+        /**
+          * Vertical padding
+         */
+        "verticalPadding"?: number;
     }
     interface BiggiveButton {
         /**
@@ -823,9 +894,9 @@ declare namespace LocalJSX {
     }
     interface BiggiveCallToAction {
         /**
-          * Colour Scheme
+          * Default text colour
          */
-        "colourScheme"?: string;
+        "defaultTextColour"?: string;
         /**
           * Main title
          */
@@ -1025,8 +1096,6 @@ declare namespace LocalJSX {
          */
         "spaceBelow"?: number;
     }
-    interface BiggiveDropdown {
-    }
     interface BiggiveFooter {
     }
     interface BiggiveForm {
@@ -1034,6 +1103,10 @@ declare namespace LocalJSX {
     interface BiggiveFormFieldSelect {
     }
     interface BiggiveFormattedText {
+        /**
+          * Default text colour
+         */
+        "defaultTextColour"?: string;
         /**
           * Space below component
          */
@@ -1135,6 +1208,22 @@ declare namespace LocalJSX {
          */
         "teaserColour"?: string;
     }
+    interface BiggiveIconGroup {
+        /**
+          * Space below component
+         */
+        "spaceBelow"?: number;
+    }
+    interface BiggiveImage {
+        /**
+          * Full URL of a image.
+         */
+        "imageUrl"?: string;
+        /**
+          * Space below component
+         */
+        "spaceBelow"?: number;
+    }
     interface BiggiveImageFeature {
         /**
           * Button Colour Scheme
@@ -1149,9 +1238,9 @@ declare namespace LocalJSX {
          */
         "buttonUrl"?: string;
         /**
-          * Colour Scheme
+          * Default text colour
          */
-        "colourScheme"?: string;
+        "defaultTextColour"?: string;
         /**
           * Full URL of a image.
          */
@@ -1241,9 +1330,9 @@ declare namespace LocalJSX {
          */
         "attribution"?: string;
         /**
-          * Colour Scheme
+          * Default text colour
          */
-        "colourScheme"?: string;
+        "defaultTextColour"?: string;
         /**
           * Quote text
          */
@@ -1280,12 +1369,6 @@ declare namespace LocalJSX {
           * Url
          */
         "url"?: string;
-    }
-    interface BiggiveSocialIconGroup {
-        /**
-          * Space below component
-         */
-        "spaceBelow"?: number;
     }
     interface BiggiveTextInput {
     }
@@ -1328,6 +1411,14 @@ declare namespace LocalJSX {
         "totalRaised"?: number;
     }
     interface BiggiveVideo {
+        /**
+          * Space below component
+         */
+        "spaceBelow"?: number;
+        /**
+          * Full URL of a video.
+         */
+        "videoUrl"?: string;
     }
     interface BiggiveVideoFeature {
         /**
@@ -1343,9 +1434,9 @@ declare namespace LocalJSX {
          */
         "buttonUrl"?: string;
         /**
-          * Colour Scheme
+          * Default text colour
          */
-        "colourScheme"?: string;
+        "defaultTextColour"?: string;
         /**
           * Video title
          */
@@ -1381,12 +1472,12 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "biggive-back-to-top": BiggiveBackToTop;
+        "biggive-boxed-content": BiggiveBoxedContent;
         "biggive-button": BiggiveButton;
         "biggive-call-to-action": BiggiveCallToAction;
         "biggive-campaign-card": BiggiveCampaignCard;
         "biggive-campaign-card-filter-grid": BiggiveCampaignCardFilterGrid;
         "biggive-campaign-highlights": BiggiveCampaignHighlights;
-        "biggive-dropdown": BiggiveDropdown;
         "biggive-footer": BiggiveFooter;
         "biggive-form": BiggiveForm;
         "biggive-form-field-select": BiggiveFormFieldSelect;
@@ -1395,6 +1486,8 @@ declare namespace LocalJSX {
         "biggive-header": BiggiveHeader;
         "biggive-heading": BiggiveHeading;
         "biggive-hero-image": BiggiveHeroImage;
+        "biggive-icon-group": BiggiveIconGroup;
+        "biggive-image": BiggiveImage;
         "biggive-image-feature": BiggiveImageFeature;
         "biggive-misc-icon": BiggiveMiscIcon;
         "biggive-page-column": BiggivePageColumn;
@@ -1404,7 +1497,6 @@ declare namespace LocalJSX {
         "biggive-quote": BiggiveQuote;
         "biggive-search": BiggiveSearch;
         "biggive-social-icon": BiggiveSocialIcon;
-        "biggive-social-icon-group": BiggiveSocialIconGroup;
         "biggive-text-input": BiggiveTextInput;
         "biggive-totalizer": BiggiveTotalizer;
         "biggive-video": BiggiveVideo;
@@ -1416,12 +1508,12 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "biggive-back-to-top": LocalJSX.BiggiveBackToTop & JSXBase.HTMLAttributes<HTMLBiggiveBackToTopElement>;
+            "biggive-boxed-content": LocalJSX.BiggiveBoxedContent & JSXBase.HTMLAttributes<HTMLBiggiveBoxedContentElement>;
             "biggive-button": LocalJSX.BiggiveButton & JSXBase.HTMLAttributes<HTMLBiggiveButtonElement>;
             "biggive-call-to-action": LocalJSX.BiggiveCallToAction & JSXBase.HTMLAttributes<HTMLBiggiveCallToActionElement>;
             "biggive-campaign-card": LocalJSX.BiggiveCampaignCard & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardElement>;
             "biggive-campaign-card-filter-grid": LocalJSX.BiggiveCampaignCardFilterGrid & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardFilterGridElement>;
             "biggive-campaign-highlights": LocalJSX.BiggiveCampaignHighlights & JSXBase.HTMLAttributes<HTMLBiggiveCampaignHighlightsElement>;
-            "biggive-dropdown": LocalJSX.BiggiveDropdown & JSXBase.HTMLAttributes<HTMLBiggiveDropdownElement>;
             "biggive-footer": LocalJSX.BiggiveFooter & JSXBase.HTMLAttributes<HTMLBiggiveFooterElement>;
             "biggive-form": LocalJSX.BiggiveForm & JSXBase.HTMLAttributes<HTMLBiggiveFormElement>;
             "biggive-form-field-select": LocalJSX.BiggiveFormFieldSelect & JSXBase.HTMLAttributes<HTMLBiggiveFormFieldSelectElement>;
@@ -1430,6 +1522,8 @@ declare module "@stencil/core" {
             "biggive-header": LocalJSX.BiggiveHeader & JSXBase.HTMLAttributes<HTMLBiggiveHeaderElement>;
             "biggive-heading": LocalJSX.BiggiveHeading & JSXBase.HTMLAttributes<HTMLBiggiveHeadingElement>;
             "biggive-hero-image": LocalJSX.BiggiveHeroImage & JSXBase.HTMLAttributes<HTMLBiggiveHeroImageElement>;
+            "biggive-icon-group": LocalJSX.BiggiveIconGroup & JSXBase.HTMLAttributes<HTMLBiggiveIconGroupElement>;
+            "biggive-image": LocalJSX.BiggiveImage & JSXBase.HTMLAttributes<HTMLBiggiveImageElement>;
             "biggive-image-feature": LocalJSX.BiggiveImageFeature & JSXBase.HTMLAttributes<HTMLBiggiveImageFeatureElement>;
             "biggive-misc-icon": LocalJSX.BiggiveMiscIcon & JSXBase.HTMLAttributes<HTMLBiggiveMiscIconElement>;
             "biggive-page-column": LocalJSX.BiggivePageColumn & JSXBase.HTMLAttributes<HTMLBiggivePageColumnElement>;
@@ -1439,7 +1533,6 @@ declare module "@stencil/core" {
             "biggive-quote": LocalJSX.BiggiveQuote & JSXBase.HTMLAttributes<HTMLBiggiveQuoteElement>;
             "biggive-search": LocalJSX.BiggiveSearch & JSXBase.HTMLAttributes<HTMLBiggiveSearchElement>;
             "biggive-social-icon": LocalJSX.BiggiveSocialIcon & JSXBase.HTMLAttributes<HTMLBiggiveSocialIconElement>;
-            "biggive-social-icon-group": LocalJSX.BiggiveSocialIconGroup & JSXBase.HTMLAttributes<HTMLBiggiveSocialIconGroupElement>;
             "biggive-text-input": LocalJSX.BiggiveTextInput & JSXBase.HTMLAttributes<HTMLBiggiveTextInputElement>;
             "biggive-totalizer": LocalJSX.BiggiveTotalizer & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerElement>;
             "biggive-video": LocalJSX.BiggiveVideo & JSXBase.HTMLAttributes<HTMLBiggiveVideoElement>;

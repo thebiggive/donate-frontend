@@ -1,5 +1,5 @@
 export default {
-  title: 'Components/Demos',
+  title: 'Components/Content',
   argTypes: {
     spaceBelow: {
       name: 'Space below',
@@ -8,8 +8,8 @@ export default {
         options: [0, 1, 2, 3, 4, 5, 6],
       },
     },
-    colourScheme: {
-      name: 'Colour scheme',
+    defaultTextColour: {
+      name: 'Default text colour',
       control: {
         type: 'select',
         options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
@@ -87,7 +87,7 @@ export default {
 const Template = args => `
       <biggive-call-to-action
         space-below=${args.spaceBelow}
-        colour-scheme="${args.colourScheme}"
+        default-text-colour="${args.defaultTextColour}"
         slug-colour="${args.slugColour}"
         slug="${args.slug}"
         main-title-colour="${args.mainTitleColour}"
@@ -108,7 +108,7 @@ const Template = args => `
 export const CallToActionComponent = Template.bind({});
 CallToActionComponent.args = {
   spaceBelow: 0,
-  colourScheme: 'primary',
+  defaultTextColour: 'primary',
   slugColour: '',
   slug: 'Test Slug',
   mainTitleColour: '',

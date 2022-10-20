@@ -11,9 +11,9 @@ export class BiggiveVideoFeature {
    */
   @Prop() spaceBelow: number = 0;
   /**
-   * Colour Scheme
+   * Default text colour
    */
-  @Prop() colourScheme: string = 'primary';
+  @Prop() defaultTextColour: string = 'primary';
 
   /**
    * Full URL of a video.
@@ -67,7 +67,7 @@ export class BiggiveVideoFeature {
 
   render() {
     return (
-      <div class={'container colour-scheme-' + this.colourScheme + ' space-below-' + this.spaceBelow}>
+      <div class={'container text-colour-' + this.defaultTextColour + ' space-below-' + this.spaceBelow}>
         <div class="sleeve">
           <div class="content-wrap">
             <div class={'slug text-colour-' + this.slugColour}>{this.slug}</div>

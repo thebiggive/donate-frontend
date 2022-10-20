@@ -32,6 +32,6 @@ const Template = args => `
 export const SocialIconComponent = Template.bind({});
 SocialIconComponent.args = {
   colourScheme: 'primary',
-  service: 'twitter',
+  service: 'Twitter',
   url: '#',
 };

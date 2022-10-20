@@ -1,11 +1,9 @@
 :host {
   display: contents;
-  margin-bottom: $spacer-3;
 }
 
 .container {
   @include standard-font();
-  @include lower-shadow();
   .heading-colour-primary { color: $colour-primary; }
   .heading-colour-secondary { color: $colour-secondary; }
   .heading-colour-tertiary { color: $colour-tertiary; }
