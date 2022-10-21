@@ -91,7 +91,7 @@
 
                     <p><a href="">Find out more about Gift Aid </a></p>
 
-                    <mat-radio-group aria-label="Select a Gift Aid option" formControlName="giftAid">
+                    <mat-radio-group required aria-label="Select a Gift Aid option" formControlName="giftAid">
                         <mat-radio-button [value]="true">Yes, I want to claim <strong>{{ giftAidAmount() | exactCurrency:currency }}</strong> Gift Aid on my tip to Big Give, and any additional charitable donations via Big Give from the past 4 years and in the future.</mat-radio-button>
                         <mat-radio-button [value]="false">No, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed.</mat-radio-button>
                     </mat-radio-group>
@@ -136,12 +136,6 @@
             <p><strong>Recipient</strong> {{ accountHolderName }}</p>
             <p><strong>Sort Code:</strong> {{ sortCode }}</p>
             <p><strong>Account Number:</strong> {{ accountNumber }}</p>
-
-            <!-- should we keep this copy? -->
-            <!-- <hr> -->
-            <!-- <p><strong>Note:</strong>You will shortly receive a confirmation email with the details of your credit purchase and the bank details above enclosed.
-                We will email you upon safe receipt of the bank-transferred credit amount.
-            </p> -->
         </div>
     </div>
 </main>
