@@ -1,0 +1,35 @@
+:host {
+  display: contents;
+  @include standard-font();
+}
+
+.container {
+  @include section-container();
+  position: relative;
+  text-align: center;
+}
+
+
+.content-wrap {
+  .slug {
+    @include heading-4();
+    margin: 0;
+    padding: 0;
+  }
+  h2 {
+    @include heading-2();
+    margin: 0 0 $spacer-1 0;
+    padding: 0;
+  }
+  .subtitle {
+    @include subtitle();
+    margin: 0 0 $spacer-1 0;
+    padding: 0;
+  }
+  .teaser {
+    margin: $spacer-3 auto $spacer-3 auto;
+    max-width: 400px;
+    padding: 0;
+  }
+}
+

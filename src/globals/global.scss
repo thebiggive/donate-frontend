@@ -2,6 +2,35 @@ body {
     background-color: $colour-grey-extra-light;
 }
 
+h1 {
+    @include heading-1();
+}
+
+h2 {
+    @include heading-2();
+}
+
+h3 {
+    @include heading-3();
+}
+
+h4 {
+    @include heading-4();
+}
+
+h5 {
+    @include heading-5();
+}
+
+a {
+    color: inherit;
+    text-decoration: underline;
+    &:hover {
+        text-decoration: none;
+    }
+}
+
+
 .colour-primary {
     color: $colour-primary;
 }
@@ -12,6 +41,64 @@ body {
 
 .colour-tertiary {
     color: $colour-tertiary;
+}
+
+.colour-white {
+    color: $colour-white;
+}
+
+.colour-black {
+    color: $colour-black;
+} 
+
+.text-colour-primary {
+    color: $colour-primary;
+}
+
+.text-colour-secondary {
+    color: $colour-secondary;
+}
+
+.text-colour-tertiary {
+    color: $colour-tertiary;
+}
+
+.text-colour-white {
+    color: $colour-white;
+}
+
+.text-colour-black {
+    color: $colour-black;
+}
+
+
+
+.background-colour-primary {
+    background-color: $colour-primary;
+}
+
+.background-colour-secondary {
+    background-color: $colour-secondary;
+}
+
+.background-colour-tertiary {
+    background-color: $colour-tertiary;
+}
+
+.background-colour-white {
+    background-color: $colour-white;
+}
+
+.background-colour-black {
+    background-color: $colour-black;
+}
+
+.input-wrap {
+    @include flex-container-row();    
+}
+
+.input-text {
+    @include input-text();
 }
 
 .button {
@@ -26,13 +113,26 @@ body {
     @include button-secondary();
 }
 
+.button-tertiary {
+    @include button-tertiary();
+}
+
 .button-clear-primary {
     @include button-clear-primary();
- }
+}
   
- .button-clear-secondary {
-     @include button-clear-secondary();
- }
+.button-clear-secondary {
+    @include button-clear-secondary();
+}
+
+.button-clear-tertiary {
+    @include button-clear-tertiary();
+}
+
+
+.button-clear-white {
+   @include button-clear-white();
+}
 
 .button-rounded {
     @include button-rounded();
@@ -49,3 +149,37 @@ body {
 .progress-bar-secondary {
     @include progress-bar-secondary();
 }
+
+.video-wrap video {
+  width: 100%;
+  height: auto;
+}
+
+.image-wrap img {
+    width: 100%;
+    height: auto;
+}
+  
+  
+.space-below-0 { margin-bottom: 0; }
+.space-below-1 { margin-bottom: $spacer-1; }
+.space-below-2 { margin-bottom: $spacer-2; }
+.space-below-3 { margin-bottom: $spacer-3; }
+.space-below-4 { margin-bottom: $spacer-4; }
+.space-below-5 { margin-bottom: $spacer-5; }
+.space-below-6 { margin-bottom: $spacer-6; }
+
+
+.horizontal-padding-1 { padding-left: $spacer-1; padding-right: $spacer-1; }
+.horizontal-padding-2 { padding-left: $spacer-2; padding-right: $spacer-2; }
+.horizontal-padding-3 { padding-left: $spacer-3; padding-right: $spacer-3; }
+.horizontal-padding-4 { padding-left: $spacer-4; padding-right: $spacer-4; }
+.horizontal-padding-5 { padding-left: $spacer-5; padding-right: $spacer-5; }
+.horizontal-padding-6 { padding-left: $spacer-6; padding-right: $spacer-6; }
+
+.vertical-padding-1 { padding-top: $spacer-1; padding-bottom: $spacer-1; }
+.vertical-padding-2 { padding-top: $spacer-2; padding-bottom: $spacer-2; }
+.vertical-padding-3 { padding-top: $spacer-3; padding-bottom: $spacer-3; }
+.vertical-padding-4 { padding-top: $spacer-4; padding-bottom: $spacer-4; }
+.vertical-padding-5 { padding-top: $spacer-5; padding-bottom: $spacer-5; }
+.vertical-padding-6 { padding-top: $spacer-6; padding-bottom: $spacer-6; }

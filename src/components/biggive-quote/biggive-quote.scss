@@ -1,0 +1,20 @@
+:host {
+  display: contents;
+}
+
+
+.container {
+  @include standard-font();
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 600px;
+  .quote {
+    padding-top: 90px;
+    background-image: url(/assets/quote.svg);
+    background-position: center top;
+    background-size: auto 45px;
+    background-repeat: no-repeat;
+    margin-bottom: $spacer-6;
+  }
+}

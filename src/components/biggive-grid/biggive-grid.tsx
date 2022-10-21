@@ -7,23 +7,24 @@ import { Component, Prop, h } from '@stencil/core';
 })
 export class BiggiveGrid {
   /**
-   * Column count
+   * Space below component
+   */
+  @Prop() spaceBelow: number = 4;
+
+  /**
+   * Number of columns in grid
    */
   @Prop() columnCount: number = 3;
 
   /**
-   * Column gap
+   * Gap between columns, based on spacer CSS variable
    */
   @Prop() columnGap: number = 3;
 
-  private getClasses() {
-    return 'grid column-count-' + this.columnCount + ' column-gap-' + this.columnGap;
-  }
-
   render() {
     return (
-      <div class={this.getClasses()} data-column-count={this.columnCount} data-column-gap={this.columnGap}>
-        <slot name="items"></slot>
+      <div class={'grid column-count-' + this.columnCount + ' column-gap-' + this.columnGap + ' space-below-' + this.spaceBelow}>
+        <slot></slot>
       </div>
     );
   }

@@ -1,0 +1,18 @@
+:host {
+  display: contents;
+}
+
+.container {
+  @include standard-font();
+  .heading-colour-primary { color: $colour-primary; }
+  .heading-colour-secondary { color: $colour-secondary; }
+  .heading-colour-tertiary { color: $colour-tertiary; }
+  .heading-colour-white { color: $colour-white; }
+  .heading-colour-black { color: $colour-black; }
+  .heading-size-1 { @include heading-1(); }
+  .heading-size-2 { @include heading-2(); }
+  .heading-size-3 { @include heading-3(); }
+  .heading-size-4 { @include heading-4(); }
+  .heading-size-5 { @include heading-5(); }
+}
+

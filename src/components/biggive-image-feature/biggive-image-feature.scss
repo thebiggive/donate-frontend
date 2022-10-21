@@ -1,0 +1,40 @@
+:host {
+  display: contents;
+}
+
+.container {
+  @include standard-font();
+  position: relative;
+  .sleeve {
+    @include flex-container-row();
+  }
+
+  .content-wrap {
+    width: calc(40% - $spacer-3);
+    position: relative;
+    z-index: 1;
+    .slug {
+      @include heading-4;
+      margin: 0;
+      padding: 0;
+    }
+    h2 {
+      @include heading-2;
+      margin: 0 0 $spacer-3 0;
+      padding: 0;
+    }
+    .teaser {
+      margin: 0 0 $spacer-5 0;
+      padding: 0;
+    }
+  }
+  
+  
+  .graphic-wrap {
+    width: calc(60% - $spacer-3);
+  }
+
+}
+
+
+

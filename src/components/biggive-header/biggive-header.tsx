@@ -1,4 +1,4 @@
-import { Component, Element, h } from '@stencil/core';
+import { Component, Prop, Element, h } from '@stencil/core';
 
 @Component({
   tag: 'biggive-header',
@@ -7,6 +7,11 @@ import { Component, Element, h } from '@stencil/core';
 })
 export class BiggiveHeader {
   @Element() host: HTMLBiggiveHeaderElement;
+
+  /**
+   * Space below component
+   */
+  @Prop() spaceBelow: number = 0;
 
   render() {
     var node = null;
@@ -38,14 +43,14 @@ export class BiggiveHeader {
     }
 
     return (
-      <header class="header">
+      <header class={'header space-below' + this.spaceBelow}>
         <div class="row row-top">
           <div class="social-icon-wrap">
-            <biggive-social-icon service="Facebook" url="https://www.facebook.com"></biggive-social-icon>
-            <biggive-social-icon service="Twitter" url="https://www.twitter.com"></biggive-social-icon>
-            <biggive-social-icon service="LinkedIn" url="https://www.linkedin.com"></biggive-social-icon>
-            <biggive-social-icon service="YouTube" url="https://www.youtube.com"></biggive-social-icon>
-            <biggive-social-icon service="Instagram" url="https://www.instagram.com"></biggive-social-icon>
+            <biggive-social-icon service="Facebook" url="https://www.facebook.com" colour-scheme="tertiary"></biggive-social-icon>
+            <biggive-social-icon service="Twitter" url="https://www.twitter.com" colour-scheme="tertiary"></biggive-social-icon>
+            <biggive-social-icon service="LinkedIn" url="https://www.linkedin.com" colour-scheme="tertiary"></biggive-social-icon>
+            <biggive-social-icon service="YouTube" url="https://www.youtube.com" colour-scheme="tertiary"></biggive-social-icon>
+            <biggive-social-icon service="Instagram" url="https://www.instagram.com" colour-scheme="tertiary"></biggive-social-icon>
           </div>
           <nav class="nav nav-secondary">
             <ul>{navSecondary}</ul>

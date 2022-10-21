@@ -1,0 +1,11 @@
+:host {
+  display: content;
+}
+
+
+.container {
+  @include standard-font();
+  &.shadow-true {
+    @include lower-shadow();
+  }  
+}

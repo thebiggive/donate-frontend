@@ -1,0 +1,101 @@
+:host {
+  display: contents;
+  
+}
+
+.container {
+  @include standard-font();
+  position: relative;
+  .sleeve {
+    @include section-container();
+    padding: $spacer-4;
+  }
+}
+
+.container.style-top-crop-right:before {
+  content: '';
+  display: block;
+  height: 75px;
+  clip-path: polygon(0 0, 0% 100%, 100% 100%);
+  transform: translateY(1px);
+}
+
+.container.style-top-crop-left:before {
+  content: '';
+  display: block;
+  height: 75px;
+  clip-path: polygon(100% 0, 100% 0%, 100% 100%, 0 100%);
+  transform: translateY(1px);
+}
+
+.container.style-bottom-crop-right:after {
+  content: '';
+  display: block;
+  height: 75px;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  transform: translateY(-1px);
+}
+
+.container.style-bottom-crop-left:after {
+  content: '';
+  display: block;
+  height: 75px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  transform: translateY(-1px);
+}
+
+.container .sleeve {
+  position: relative;
+}
+
+.container .sleeve:before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  top: 0;
+  bottom: 0;
+}
+
+.container.background-color-primary:before,
+.container.background-color-primary:after,
+.container.background-color-primary .sleeve,
+.container.background-color-primary .sleeve:before {
+  background-color: $colour-primary;
+  color: $colour-white;
+}
+
+.container.background-color-secondary:before,
+.container.background-color-secondary:after,
+.container.background-color-secondary .sleeve:before,
+.container.background-color-secondary .sleeve {
+  background-color: $colour-secondary;
+  color: $colour-white;
+}
+
+.container.background-color-tertiary:before,
+.container.background-color-tertiary:after,
+.container.background-color-tertiary .sleeve:before,
+.container.background-color-tertiary .sleeve {
+    background-color: $colour-tertiary;
+  color: $colour-white;
+}
+
+.container.background-color-white:before,
+.container.background-color-white:after,
+.container.background-color-white .sleeve:before,
+.container.background-color-white .sleeve {
+  background-color: $colour-white;
+  color: $colour-black;
+}
+
+
+.container.background-color-black:before,
+.container.background-color-black:after,
+.container.background-color-black .sleeve:before,
+.container.background-color-black .sleeve {
+  background-color: $colour-black;
+  color: $colour-white;
+}
+

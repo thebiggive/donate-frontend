@@ -1,0 +1,12 @@
+:host {
+  display: block;
+}
+
+
+.container {
+  @include standard-font();
+  img {
+    width: 100%;
+    height: auto;
+  }
+}

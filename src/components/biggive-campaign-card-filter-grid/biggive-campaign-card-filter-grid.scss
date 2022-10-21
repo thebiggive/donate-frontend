@@ -1,0 +1,43 @@
+:host {
+  display: content;
+}
+
+
+.container {
+  @include standard-font();
+  position: relative;
+  .search-wrap {
+    @include lower-shadow();
+    background-color: $colour-white;
+    padding: $spacer-3 $spacer-4;
+    margin-bottom: $spacer-6;
+    .field-wrap {
+      @include flex-container-row();
+      .input-wrap {
+        padding-bottom: $spacer-1;
+        border-bottom: 1px solid $colour-black;
+        margin-right: $spacer-4;
+        flex-grow: 1;
+        input {
+          border: 0;
+        }
+      }
+      button {
+        padding: 5px 30px;
+      }
+    }
+
+
+    
+
+  }
+}
+
+.icon {
+  @include icon();
+  margin: auto;
+
+  > path {
+    fill: $colour-primary;
+  }
+}

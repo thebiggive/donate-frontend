@@ -10,7 +10,11 @@ describe('biggive-button', () => {
     expect(page.root).toEqualHtml(`
       <biggive-button colour-scheme="primary" label="Donate now" url="https://www.google.com">
         <mock:shadow-root>
-          <a href="https://www.google.com" class="button button-primary" data-prop="primary">Donate now</a>
+          <div class="container space-below-1">
+            <a class="button button-primary full-width-false" href="https://www.google.com">
+              Donate now
+            </a>
+          </div>
         </mock:shadow-root>
       </biggive-button>
     `);

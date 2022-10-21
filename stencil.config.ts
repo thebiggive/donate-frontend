@@ -26,7 +26,6 @@ export const config: Config = {
     },
     {
       type: 'dist',
-      esmLoaderPath: '../loader',
       copy: [
         { src: 'assets/fonts', warn: true },
         { src: 'assets/images', warn: true },
@@ -41,6 +40,10 @@ export const config: Config = {
     {
       type: 'www',
       serviceWorker: null, // disable service workers
+        copy: [
+        { src: 'assets/fonts', warn: true },
+        { src: 'assets/images', warn: true },
+      ],
     },
   ],
   devServer: {

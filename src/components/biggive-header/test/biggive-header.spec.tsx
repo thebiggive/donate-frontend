@@ -10,16 +10,18 @@ describe('biggive-header', () => {
     expect(page.root).toEqualHtml(`
       <biggive-header>
         <mock:shadow-root>
-          <header class="header">
+          <header class="header space-below0">
             <div class="row row-top">
               <div class="social-icon-wrap">
-                <biggive-social-icon service="Facebook" url="https://www.facebook.com"></biggive-social-icon>
-                <biggive-social-icon service="Twitter" url="https://www.twitter.com"></biggive-social-icon>
-                <biggive-social-icon service="LinkedIn" url="https://www.linkedin.com"></biggive-social-icon>
-                <biggive-social-icon service="YouTube" url="https://www.youtube.com"></biggive-social-icon>
-                <biggive-social-icon service="Instagram" url="https://www.instagram.com"></biggive-social-icon>
+                <biggive-social-icon colour-scheme="tertiary" service="Facebook" url="https://www.facebook.com"></biggive-social-icon>
+                <biggive-social-icon colour-scheme="tertiary" service="Twitter" url="https://www.twitter.com"></biggive-social-icon>
+                <biggive-social-icon colour-scheme="tertiary" service="LinkedIn" url="https://www.linkedin.com"></biggive-social-icon>
+                <biggive-social-icon colour-scheme="tertiary" service="YouTube" url="https://www.youtube.com"></biggive-social-icon>
+                <biggive-social-icon colour-scheme="tertiary" service="Instagram" url="https://www.instagram.com"></biggive-social-icon>
               </div>
-              <nav class="nav nav-secondary"><ul></ul></nav>
+              <nav class="nav nav-secondary">
+                <ul></ul>
+              </nav>
             </div>
             <div class="row row-bottom">
               <div class="logo-wrap"></div>

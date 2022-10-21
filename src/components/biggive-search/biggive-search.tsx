@@ -1,5 +1,5 @@
 import { Component, h, Prop, State, Event, EventEmitter } from '@stencil/core';
-import { faMagnifyingGlass, faX } from '@fortawesome/free-solid-svg-icons';
+import { faMagnifyingGlass, faX } from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
   tag: 'biggive-search',

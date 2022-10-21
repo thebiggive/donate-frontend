@@ -7,10 +7,11 @@
 
 ## Properties
 
-| Property  | Attribute | Description | Type     | Default     |
-| --------- | --------- | ----------- | -------- | ----------- |
-| `service` | `service` | service     | `string` | `'Twitter'` |
-| `url`     | `url`     | Url         | `string` | `'#'`       |
+| Property       | Attribute       | Description   | Type     | Default     |
+| -------------- | --------------- | ------------- | -------- | ----------- |
+| `colourScheme` | `colour-scheme` | Colour Scheme | `string` | `'primary'` |
+| `service`      | `service`       | service       | `string` | `'Twitter'` |
+| `url`          | `url`           | Url           | `string` | `'#'`       |
 
 
 ## Dependencies

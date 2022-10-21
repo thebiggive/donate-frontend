@@ -18,19 +18,25 @@ describe('biggive-hero-image', () => {
     });
     expect(page.root).toEqualHtml(`
      <biggive-hero-image slug="My Slug" main-image="" main-title="This is my title" teaser="this is the intro text which I want to add">
-      <mock:shadow-root>
-        <div class="container">
-          <div class="sleeve">
-            <div class="content-wrap">
-              <div class="colour-primary slug">My Slug</div>
-              <h1 class="colour-primary title">This is my title</h1>
-              <div class="teaser">this is the intro text which I want to add</div>
-            </div>
-            <div class="graphic-wrap"></div>
+       <mock:shadow-root>
+         <div class="colour-scheme-primary container space-below-0">
+           <div class="sleeve">
+             <div class="content-wrap">
+               <div class="slug text-colour-null">
+                 My Slug
+               </div>
+               <h1 class="main-title text-colour-null">
+                 This is my title
+               </h1>
+               <div class="teaser text-colour-null">
+                 this is the intro text which I want to add
+               </div>
+             </div>
+             <div class="graphic-wrap"></div>
+           </div>
           </div>
-        </div>
-      </mock:shadow-root>
-    </biggive-hero-image>
+        </mock:shadow-root>
+      </biggive-hero-image>
     `);
   });
 });

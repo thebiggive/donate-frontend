@@ -10,7 +10,10 @@ describe('biggive-quote', () => {
     expect(page.root).toEqualHtml(`
       <biggive-quote>
         <mock:shadow-root>
-          <slot></slot>
+          <div class="container space-below-0 text-colour-black">
+            <div class="quote"></div>
+            <div class="attribution"></div>
+          </div>
         </mock:shadow-root>
       </biggive-quote>
     `);

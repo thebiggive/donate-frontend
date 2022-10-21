@@ -35,24 +35,58 @@
       </ul>
     </biggive-header>
 
-    <biggive-section colour-scheme="secondary" style="style-1">
 
-      <biggive-grid column-count="3" column-gap="3">
-        <div slot="items">
-          <div class="grid-item">
-            <biggive-campaign-card campaign-type="Match Funded" currency-code="GBP" totalFundsRaised="76543" matchFundsRemaining="76543"></biggive-campaign-card>
-          </div>
-          <div class="grid-item">
-            <biggive-campaign-card campaign-type="Match Funded" currency-code="GBP" totalFundsRaised="76543" matchFundsRemaining="76543"></biggive-campaign-card>
-          </div>
-          <div class="grid-item">
-            <biggive-campaign-card campaign-type="Match Funded" currency-code="GBP" totalFundsRaised="76543" matchFundsRemaining="76543"></biggive-campaign-card>
-          </div>
-        </div>  
-      </biggive-grid>
+    <biggive-page-columns>
 
-    </biggive-section>
+      <biggive-page-column slot="column-primary">
 
+        <biggive-heading  text="This is my title" size="4"></biggive-heading>
+        
+        <biggive-social-icon-group>
+          <biggive-social-icon service="Twitter" url="#" colour-scheme="black"></biggive-social-icon>
+          <biggive-social-icon service="Facebook" url="#" colour-scheme="black"></biggive-social-icon>
+        </biggive-social-icon-group>
+
+        <biggive-back-to-top></biggive-back-to-top>
+      
+      </biggive-page-column>
+
+
+      <biggive-page-column slot="column-secondary">
+
+        <biggive-campaign-highlights
+        space-below="3"
+        progress-bar-counter="75"
+        primary-figure-label="Label one"
+        primary-figure-amount="1000"
+        secondary-figure-label="Label two"
+        secondary-figure-amount="2000"
+        ></biggive-campaign-highlights>
+
+        <biggive-button
+        full-width="true"
+        label="Donate now"
+        url="#"
+        ></biggive-button>
+
+
+      </biggive-page-column>
+
+
+
+    </biggive-page-columns>
+
+
+
+<!--
+
+
+    <biggive-totalizer
+      total-raised="1500"
+      total-match-funds="10000"
+    >
+
+    </biggive-totalizer>
 
 
 
@@ -62,16 +96,173 @@
         main-image="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
         slug="this is my slug"
         main-title="Matching Donations. Multiplying Impact."
+        main-title-colour="secondary" 
         teaser="We run match funding campaigns to make an extraordinary difference to the world’s big challenges."
         button-url="https://www.google.com"
         button-label="Donate now"
       ></biggive-hero-image>
 
-    <biggive-button colour-scheme="primary" label="Help" url="https://www.google.com"></biggive-button>
 
-    <biggive-button colour-scheme="secondary" label="ABC" url="https://www.google.com"></biggive-button>
 
-    <biggive-button colour-scheme="clear-secondary" label="DEF" url="https://www.google.com"></biggive-button>
+    <biggive-page-section>
+
+    <biggive-campaign-card-filter-grid>
+      <biggive-grid slot="campaign-grid" column-count="3">
+        <biggive-campaign-card 
+          campaign-type="Match Funded"
+          campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community" 
+          organisation-name="Oxford Philharmonic Orchestra"
+          currency-code="GBP" 
+          primary-figure-label="Total Raised" 
+          primary-figure-amount="76543" 
+          secondary-figure-label="Total Raised" 
+          secondary-figure-amount="76543" 
+          progress-bar-counter="75">
+        </biggive-campaign-card>
+        <biggive-campaign-card 
+          campaign-type="Match Funded" 
+          campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community" 
+          organisation-name="Oxford Philharmonic Orchestra"
+          currency-code="GBP" 
+          primary-figure-label="Total Raised" 
+          primary-figure-amount="76543" 
+          secondary-figure-label="Total Raised" 
+          secondary-figure-amount="76543" 
+          >
+        </biggive-campaign-card>
+        <biggive-campaign-card 
+          campaign-type="Match Funded" 
+          currency-code="GBP" 
+          primary-figure-label="Total Raised" 
+          primary-figure-amount="76543" 
+          secondary-figure-label="Total Raised" 
+          secondary-figure-amount="76543" 
+          >
+        </biggive-campaign-card>
+        <biggive-campaign-card 
+          campaign-type="Match Funded" 
+          currency-code="GBP" 
+          primary-figure-label="Total Raised" 
+          primary-figure-amount="76543" 
+          secondary-figure-label="Total Raised" 
+          secondary-figure-amount="76543" 
+          >
+        </biggive-campaign-card>
+        <biggive-campaign-card 
+          campaign-type="Match Funded" 
+          currency-code="GBP" 
+          primary-figure-label="Total Raised" 
+          primary-figure-amount="76543" 
+          secondary-figure-label="Total Raised" 
+          secondary-figure-amount="76543" 
+          >
+        </biggive-campaign-card>
+        </div>
+      </biggive-grid>
+    </biggive-campaign-card-filter-grid>
+
+  </biggive-page-section>
+
+      <biggive-page-section colour-scheme="primary" space-after="4" colour-scheme="tertiary" section-style-top="crop-right">
+        <biggive-call-to-action
+        colourScheme="black" 
+        slug="My test slug" 
+        slug-colour="primary"
+        main-title="This is the title" 
+        main-title-colour="secondary" 
+        subtitle="This is the subtitle" 
+        subtitle-colour="white"
+        teaser="This is the teaser This is the teaser This is the teaser This is the teaserThis is the teaser" 
+        teaser-colour="white"
+        primary-button-url="#"
+        primary-button-label="Click me"
+        primary-button-colour-scheme="primary"
+        secondary-button-url="#"
+        secondary-button-label="Click me"
+        secondary-button-colour-scheme="clear-primary"
+        ></biggive-call-to-action>
+      </biggive-page-section>
+
+
+      <biggive-page-section space-after="4" colour-scheme="white">
+        <biggive-image-feature 
+          teaser="this is my teaser this is my teaser" 
+          slug="My test slug" 
+          main-title="My title" 
+          teaser="This is my teaser This is my teaser This is my teaser This is my teaserThis is my teaser This is my teaser This is my teaser This is my teaser This is my teaser This is my teaser" 
+          colour-scheme="primary"  
+          image-url="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693" 
+          button-url="#"
+          button-label="Click here" 
+          button-colour-scheme="tertiary">
+        </biggive-image-feature>
+          
+      </biggive-page-section>
+
+      
+      <biggive-page-section space-after="4" colour-scheme="white">
+        <biggive-call-to-action colourScheme="black" slug="My test slug" main-title-colour="secondary" main-title="This is the title" subtitle="This is the subtitle" subtitleColour="secondary"
+        primary-button-url="#"
+        primary-button-label="Click me"
+        primary-button-colour-scheme="primary"
+        secondary-button-url="#"
+        secondary-button-label="Click me"
+        secondary-button-colour-scheme="clear-primary"
+        ></biggive-call-to-action>
+      </biggive-page-section>
+
+      <biggive-page-section space-after="4" section-style-top="crop-right" colour-scheme="tertiary">
+        <biggive-video-feature teaser="this is my teaser this is my teaser" slug="My test slug" main-title="My title" teaser="This is my teaser This is my teaser This is my teaser This is my teaserThis is my teaser This is my teaser This is my teaser This is my teaser This is my teaser This is my teaser" colour-scheme="white"  video-url="http://techslides.com/demos/sample-videos/small.mp4" button-url="#" button-label="Click here" button-colour-scheme="clear-white"></biggive-video-feature>
+      </biggive-page-section>
+
+
+
+      <biggive-page-section>
+        <biggive-grid column-count="3">
+          <biggive-campaign-card
+            campaign-type="Match Funded"
+            campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community" 
+            organisation-name="Oxford Philharmonic Orchestra"
+            currency-code="GBP" 
+            primary-figure-label="Total Raised" 
+            primary-figure-amount="76543" 
+            secondary-figure-label="Total Raised" 
+            secondary-figure-amount="76543" 
+            progress-bar-counter="75">
+          </biggive-campaign-card>
+          <biggive-campaign-card
+            campaign-type="Match Funded"
+            campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community" 
+            organisation-name="Oxford Philharmonic Orchestra"
+            currency-code="GBP" 
+            primary-figure-label="Total Raised" 
+            primary-figure-amount="76543" 
+            secondary-figure-label="Total Raised" 
+            secondary-figure-amount="76543" 
+            progress-bar-counter="75">
+          </biggive-campaign-card>
+          <biggive-campaign-card
+            campaign-type="Match Funded"
+            campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community" 
+            organisation-name="Oxford Philharmonic Orchestra"
+            currency-code="GBP" 
+            primary-figure-label="Total Raised" 
+            primary-figure-amount="76543" 
+            secondary-figure-label="Total Raised" 
+            secondary-figure-amount="76543" 
+            progress-bar-counter="75">
+          </biggive-campaign-card>
+        </biggive-grid>
+  
+      </biggive-page-section>
+
+      
+
+    <biggive-button full-width="true"  colour-scheme="primary" label="Help" url="https://www.google.com"></biggive-button>
+
+    <biggive-button full-width="true" colour-scheme="secondary" label="ABC" url="https://www.google.com"></biggive-button>
+
+    <biggive-button full-width="true" colour-scheme="clear-primary" label="DEF" url="https://www.google.com"></biggive-button>
 
     <biggive-progress-bar colour-scheme="primary" counter="15" ></biggive-progress-bar>
 
@@ -79,7 +270,7 @@
 
     <biggive-progress-bar colour-scheme="primary" counter="75" ></biggive-progress-bar>
 
-
+    -->
 
   <biggive-footer>
     <div slot="nav-primary-title">Match Funding Opportunities</div>
@@ -102,6 +293,8 @@
       <li><a href="#">Charity login</a></li>
     </ul>
 </biggive-footer>
+
+
 
 
   </body>
