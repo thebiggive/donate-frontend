@@ -26,6 +26,7 @@ export const config: Config = {
     },
     {
       type: 'dist',
+      esmLoaderPath: '../loader',
       copy: [
         { src: 'assets/fonts', warn: true },
         { src: 'assets/images', warn: true },
