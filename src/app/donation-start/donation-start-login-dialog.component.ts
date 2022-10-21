@@ -40,6 +40,13 @@ export class DonationStartLoginDialogComponent implements OnInit {
   }
 
   captchaReturn(captchaResponse: string) {
+    if (captchaResponse === null) {
+      // We had a code but now don't, e.g. after expiry at 1 minute. In this case
+      // the trigger wasn't a login click so do nothing. A repeat login attempt will
+      // re-execute the captcha in `login()`.
+      return;
+    }
+
     this.loggingIn = true;
 
     const credentials: Credentials = {
@@ -60,6 +67,7 @@ export class DonationStartLoginDialogComponent implements OnInit {
   }
 
   login() {
+    this.captcha.reset();
     this.captcha.execute();
   }
 }
