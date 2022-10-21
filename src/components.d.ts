@@ -522,6 +522,22 @@ export namespace Components {
          */
         "url": string;
     }
+    interface BiggiveTab {
+        /**
+          * Title
+         */
+        "tabTitle": string;
+    }
+    interface BiggiveTabbedContent {
+        /**
+          * Default text colour
+         */
+        "defaultTextColour": string;
+        /**
+          * Space below component
+         */
+        "spaceBelow": number;
+    }
     interface BiggiveTextInput {
     }
     interface BiggiveTotalizer {
@@ -788,6 +804,18 @@ declare global {
         prototype: HTMLBiggiveSocialIconElement;
         new (): HTMLBiggiveSocialIconElement;
     };
+    interface HTMLBiggiveTabElement extends Components.BiggiveTab, HTMLStencilElement {
+    }
+    var HTMLBiggiveTabElement: {
+        prototype: HTMLBiggiveTabElement;
+        new (): HTMLBiggiveTabElement;
+    };
+    interface HTMLBiggiveTabbedContentElement extends Components.BiggiveTabbedContent, HTMLStencilElement {
+    }
+    var HTMLBiggiveTabbedContentElement: {
+        prototype: HTMLBiggiveTabbedContentElement;
+        new (): HTMLBiggiveTabbedContentElement;
+    };
     interface HTMLBiggiveTextInputElement extends Components.BiggiveTextInput, HTMLStencilElement {
     }
     var HTMLBiggiveTextInputElement: {
@@ -839,6 +867,8 @@ declare global {
         "biggive-quote": HTMLBiggiveQuoteElement;
         "biggive-search": HTMLBiggiveSearchElement;
         "biggive-social-icon": HTMLBiggiveSocialIconElement;
+        "biggive-tab": HTMLBiggiveTabElement;
+        "biggive-tabbed-content": HTMLBiggiveTabbedContentElement;
         "biggive-text-input": HTMLBiggiveTextInputElement;
         "biggive-totalizer": HTMLBiggiveTotalizerElement;
         "biggive-video": HTMLBiggiveVideoElement;
@@ -1370,6 +1400,22 @@ declare namespace LocalJSX {
          */
         "url"?: string;
     }
+    interface BiggiveTab {
+        /**
+          * Title
+         */
+        "tabTitle"?: string;
+    }
+    interface BiggiveTabbedContent {
+        /**
+          * Default text colour
+         */
+        "defaultTextColour"?: string;
+        /**
+          * Space below component
+         */
+        "spaceBelow"?: number;
+    }
     interface BiggiveTextInput {
     }
     interface BiggiveTotalizer {
@@ -1497,6 +1543,8 @@ declare namespace LocalJSX {
         "biggive-quote": BiggiveQuote;
         "biggive-search": BiggiveSearch;
         "biggive-social-icon": BiggiveSocialIcon;
+        "biggive-tab": BiggiveTab;
+        "biggive-tabbed-content": BiggiveTabbedContent;
         "biggive-text-input": BiggiveTextInput;
         "biggive-totalizer": BiggiveTotalizer;
         "biggive-video": BiggiveVideo;
@@ -1533,6 +1581,8 @@ declare module "@stencil/core" {
             "biggive-quote": LocalJSX.BiggiveQuote & JSXBase.HTMLAttributes<HTMLBiggiveQuoteElement>;
             "biggive-search": LocalJSX.BiggiveSearch & JSXBase.HTMLAttributes<HTMLBiggiveSearchElement>;
             "biggive-social-icon": LocalJSX.BiggiveSocialIcon & JSXBase.HTMLAttributes<HTMLBiggiveSocialIconElement>;
+            "biggive-tab": LocalJSX.BiggiveTab & JSXBase.HTMLAttributes<HTMLBiggiveTabElement>;
+            "biggive-tabbed-content": LocalJSX.BiggiveTabbedContent & JSXBase.HTMLAttributes<HTMLBiggiveTabbedContentElement>;
             "biggive-text-input": LocalJSX.BiggiveTextInput & JSXBase.HTMLAttributes<HTMLBiggiveTextInputElement>;
             "biggive-totalizer": LocalJSX.BiggiveTotalizer & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerElement>;
             "biggive-video": LocalJSX.BiggiveVideo & JSXBase.HTMLAttributes<HTMLBiggiveVideoElement>;
