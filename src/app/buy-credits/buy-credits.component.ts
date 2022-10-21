@@ -2,17 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentMethod } from '@stripe/stripe-js';
-import { DonationStartLoginDialogComponent } from '../donation-start/donation-start-login-dialog.component';
+import { LoginModal } from '../login-modal/login-modal.component';
 import { DonationService } from '../donation.service';
 import { IdentityService } from '../identity.service';
 import { Person } from '../person.model';
-import { ValidateCreditMin } from '../validators/credit-min';
-import { ValidateCreditMax } from '../validators/credit-max';
+import { minMaxCurrencyValidatorWrapper } from '../validators/minMaxCurrencyValidatorWrapper';
 import { environment } from 'src/environments/environment';
-import { ValidateCurrencyMax } from '../validators/currency-max';
 import { MatSelectChange } from '@angular/material/select';
 import { FundingInstruction } from '../fundingInstruction.model';
-import { MatRadioChange } from '@angular/material/radio';
 
 @Component({
   selector: 'app-buy-credits',
@@ -65,8 +62,8 @@ export class BuyCreditsComponent implements OnInit {
       amounts: this.formBuilder.group({
         creditAmount: [null, [
           Validators.required,
-          ValidateCreditMin,
-          ValidateCreditMax,
+          minMaxCurrencyValidatorWrapper(true, environment.minimumCreditAmount),
+          minMaxCurrencyValidatorWrapper(false, environment.maximumCreditAmount),
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
         tipPercentage: [this.initialTipSuggestedPercentage],
@@ -74,10 +71,10 @@ export class BuyCreditsComponent implements OnInit {
           // Explicitly enforce minimum custom tip amount of £0. This is already covered by the regexp
           // validation rule below, but it's good to add the explicit check for future-proofness
           Validators.min(0),
-          // Below we use the donation flow validator (ValidateCurrencyMax) for the tip because
-          // when buying donation credits, tips are set as real donations to a dedicated Big Give
-          // SF campaign. See MAT-266 and the Slack thread linked it its description for more context.
-          ValidateCurrencyMax,
+          // Below we validate the tip as a donation because when buying donation credits, tips are set
+          // set as real donations to a dedicated Big Give SF campaign.
+          // See MAT-266 and the Slack thread linked it its description for more context.
+          minMaxCurrencyValidatorWrapper(false, environment.maximumDonationAmount),
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
       }),
@@ -140,7 +137,7 @@ export class BuyCreditsComponent implements OnInit {
   }
 
   showLoginDialog() {
-    const loginDialog = this.dialog.open(DonationStartLoginDialogComponent);
+    const loginDialog = this.dialog.open(LoginModal);
     loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
       if (data && data.id) {
         this.loadAuthedPersonInfo(data.id, data.jwt);

@@ -57,7 +57,6 @@
                         !customTipAmountField?.invalid
                     "><strong>{{ calculatedTipAmount() | exactCurrency:currency }}</strong> donation (tip) to support Big Give
                         <span *ngIf="calculatedTipAmount() > 0">💗</span> <!-- display heart emoji if tip > £0 -->
-                        <span *ngIf="calculatedTipAmount() === 0 && customTip() && customTipAmountField?.value">😢</span> <!-- display sad emoji if custom tip amount set to £0 -->
                     </p>
 
                     <p><strong>How does Big Give use tips?</strong></p>
