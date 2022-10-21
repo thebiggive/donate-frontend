@@ -17,7 +17,7 @@ import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 
 const routes: Routes = [
   {
-    path: 'credits',
+    path: 'buy-credits',
     component: BuyCreditsComponent,
   },
   {

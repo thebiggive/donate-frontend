@@ -2,7 +2,7 @@
 @import '../../abstract';
 
 #loggedInHeader {
-    background-color: green;
+    background-color: mat.get-color-from-palette($donate-primary);
     color: white;
     margin: 0px;
     padding: 10px 2rem;
@@ -53,9 +53,4 @@ mat-radio-group {
         border-radius: 10px;
         font-size: 1.2rem;
     }
-}
-
-#loading-text {
-    font-size: 2rem;
-    text-align: center;
 }

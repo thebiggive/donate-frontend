@@ -6,7 +6,7 @@ export class FundingInstruction {
     public object: string,
     public bank_transfer: {
       country: string;
-      financial_addresses: FinancialAddresses[];
+      financial_addresses: FinancialAddress[];
       type: string;
     },
     public currency: string,
@@ -15,7 +15,7 @@ export class FundingInstruction {
     ) {}
 }
 
-class FinancialAddresses {
+class FinancialAddress {
   constructor(
     public sort_code: SortCode,
     public supported_networks: string[],

@@ -9,6 +9,7 @@ import { Credentials } from './credentials.model';
 import { environment } from '../environments/environment';
 import { IdentityJWT } from './identity-jwt.model';
 import { Person } from './person.model';
+import { FundingInstruction } from './fundingInstruction.model';
 
 export const TBG_DONATE_ID_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_ID_STORAGE');
 
@@ -96,8 +97,8 @@ export class IdentityService {
     this.storage.set(this.storageKey, { id, jwt });
   }
 
-  getFundingInstructions(id: string, jwt: string): Observable<any> {
-    return this.http.get<Person>(
+  getFundingInstructions(id: string, jwt: string): Observable<FundingInstruction> {
+    return this.http.get<FundingInstruction>(
       `${environment.identityApiPrefix}${this.peoplePath}/${id}/funding_instructions?currency=gbp`,
       {
         headers: new HttpHeaders({ 'X-Tbg-Auth': jwt }),

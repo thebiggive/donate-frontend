@@ -6,7 +6,7 @@
         <h3 class="b-rh-1 b-bold">Purchase Donation Credits</h3>
 
         <form *ngIf="isLoggedIn && !isLoading && !isPurchaseComplete" [formGroup]="creditForm">
-            <mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
+            <mat-stepper orientation="vertical" [linear]="true" #stepper>
                 <mat-step
                     [completed]="false"
                     formGroupName="amounts"
@@ -14,11 +14,11 @@
                 >
                     <ng-template matStepLabel>Your Donation Credits</ng-template>
                     <mat-form-field  class="form-field b-center size-lg" hideRequiredMarker>
-                        <mat-label>Credit amount (£)</mat-label>
-                        <input matInput placeholder="Enter amount in £" formControlName="creditAmount" required>
+                        <mat-label>Credit amount ({{ currency }})</mat-label>
+                        <input matInput placeholder="Enter amount in {{ currency }}" formControlName="creditAmount" required>
                     </mat-form-field>
                     <p class="error" *ngIf="creditAmountField?.errors && creditAmountField?.invalid && (creditAmountField?.dirty || creditAmountField?.touched)">
-                        Must be between {{ minimumCreditAmount | exactCurrency:'£' }} and {{ maximumCreditAmount | exactCurrency:'£' }} inclusive.
+                        Must be between {{ minimumCreditAmount | exactCurrency:currency }} and {{ maximumCreditAmount | exactCurrency:currency }} inclusive.
                     </p>
 
                     <p><strong>Tip the Big Give</strong></p>
@@ -36,11 +36,11 @@
 
                     <div *ngIf="customTip()">
                         <mat-form-field  class="form-field b-center size-lg">
-                            <mat-label>Custom Tip amount (£)</mat-label>
-                            <input matInput placeholder="Enter amount in £" formControlName="customTipAmount">
+                            <mat-label>Custom Tip amount ({{ currency }})</mat-label>
+                            <input matInput placeholder="Enter amount in {{ currency }}" formControlName="customTipAmount">
                         </mat-form-field>
                         <p class="error" *ngIf="customTipAmountField?.errors && customTipAmountField?.invalid && (customTipAmountField?.dirty || customTipAmountField?.touched)">
-                            Custom tips can range from £0 and {{ maximumDonationAmount | exactCurrency:'£' }} inclusive.
+                            Custom tips can range from {{ 0 | exactCurrency:currency }} and {{ maximumDonationAmount | exactCurrency:currency }} inclusive.
                         </p>
                     </div>
 
@@ -55,7 +55,7 @@
                         !(customTip() && !customTipAmountField?.value) &&
                         !customTipAmountField?.errors &&
                         !customTipAmountField?.invalid
-                    "><strong>{{ calculatedTipAmount() | exactCurrency:'£' }}</strong> donation (tip) to support Big Give
+                    "><strong>{{ calculatedTipAmount() | exactCurrency:currency }}</strong> donation (tip) to support Big Give
                         <span *ngIf="calculatedTipAmount() > 0">💗</span> <!-- display heart emoji if tip > £0 -->
                         <span *ngIf="calculatedTipAmount() === 0 && customTip() && customTipAmountField?.value">😢</span> <!-- display sad emoji if custom tip amount set to £0 -->
                     </p>
@@ -92,9 +92,9 @@
 
                     <p><a href="">Find out more about Gift Aid </a></p>
 
-                    <mat-radio-group aria-label="Select an option" (change)="giftAidChoiceSelected($event)">
-                        <mat-radio-button value="yes" [checked]="false">Yes, I want to claim <strong>{{ giftAidAmount() | exactCurrency:'£' }}</strong> Gift Aid on my tip to Big Give, and any additional charitable donations via Big Give from the past 4 years and in the future.</mat-radio-button>
-                        <mat-radio-button value="no" [checked]="true">No, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed.</mat-radio-button>
+                    <mat-radio-group aria-label="Select a Gift Aid option" formControlName="giftAid">
+                        <mat-radio-button [value]="true">Yes, I want to claim <strong>{{ giftAidAmount() | exactCurrency:currency }}</strong> Gift Aid on my tip to Big Give, and any additional charitable donations via Big Give from the past 4 years and in the future.</mat-radio-button>
+                        <mat-radio-button [value]="false">No, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed.</mat-radio-button>
                     </mat-radio-group>
 
                     <div>
@@ -108,7 +108,7 @@
                         displayed on the next screen. See our <a href="https://www.thebiggive.org.uk/s/terms-and-conditions">Terms and Conditions</a> for more information.
                     </p>
 
-                    <p>We use <a href="https://stripe.com">Stripe</a> as our payments processor.</p>
+                    <p>We use <a href="https://stripe.com" target="_blank">Stripe</a> as our payments processor.</p>
 
                     <div>
                         <button mat-button (click)="buyCredits()">Purchase Credits</button>
@@ -119,7 +119,6 @@
         </form>
 
         <div *ngIf="isLoading">
-            <div id="loading-text">One moment...</div>
             <mat-spinner [diameter]="40"></mat-spinner>
         </div>
 
@@ -133,18 +132,17 @@
         </div>
 
         <div *ngIf="isLoggedIn && isPurchaseComplete">
-            <h2>Purchase complete 🎉🎊</h2>
-            <p>Please bank transfer us the credit amount of {{ creditAmountField?.value | exactCurrency: '£' }} using the following details (keep them safe!):</p>
+            <h2>Transfer Instructions</h2>
+            <p>Please bank transfer us the credit amount of {{ creditAmountField?.value | exactCurrency: currency }} using the following details (keep them safe!):</p>
             <p><strong>Recipient</strong> {{ accountHolderName }}</p>
             <p><strong>Sort Code:</strong> {{ sortCode }}</p>
             <p><strong>Account Number:</strong> {{ accountNumber }}</p>
 
-            <hr>
-
             <!-- should we keep this copy? -->
-            <p><strong>Note:</strong>You will shortly receive a confirmation email with the details of your credit purchase and the bank details above enclosed.
+            <!-- <hr> -->
+            <!-- <p><strong>Note:</strong>You will shortly receive a confirmation email with the details of your credit purchase and the bank details above enclosed.
                 We will email you upon safe receipt of the bank-transferred credit amount.
-            </p>
+            </p> -->
         </div>
     </div>
 </main>

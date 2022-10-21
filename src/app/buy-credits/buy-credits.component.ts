@@ -25,11 +25,11 @@ export class BuyCreditsComponent implements OnInit {
   isLoading: boolean = false;
   isPurchaseComplete = false;
   isOptedIntoGiftAid = false;
+  currency = '£';
   userFullName: string;
   creditForm: FormGroup;
   amountsGroup: FormGroup;
   giftAidGroup: FormGroup;
-  isLinear = true;
   minimumCreditAmount = environment.minimumCreditAmount;
   maximumCreditAmount = environment.maximumCreditAmount;
   maximumDonationAmount = environment.maximumDonationAmount;
@@ -102,6 +102,27 @@ export class BuyCreditsComponent implements OnInit {
     if (giftAidGroup != null) {
       this.giftAidGroup = giftAidGroup;
     }
+
+    // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
+    this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
+    if (giftAidChecked) {
+      this.isOptedIntoGiftAid = true;
+        // this.giftAidGroup.controls.homePostcode.setValidators(
+        //   this.getHomePostcodeValidatorsWhenClaimingGiftAid(this.giftAidGroup.value.homeOutsideUK),
+        // );
+        // this.giftAidGroup.controls.homeAddress.setValidators([
+        //   Validators.required,
+        //   Validators.maxLength(255),
+        // ]);
+      } else {
+        this.isOptedIntoGiftAid = false;
+        // this.giftAidGroup.controls.homePostcode.setValidators([]);
+        // this.giftAidGroup.controls.homeAddress.setValidators([]);
+      }
+
+      // this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
+      // this.giftAidGroup.controls.homeAddress.updateValueAndValidity();
+    });
   }
 
   buyCredits(): void {
@@ -115,15 +136,6 @@ export class BuyCreditsComponent implements OnInit {
         this.sortCode = response.bank_transfer.financial_addresses[0].sort_code.sort_code;
         this.accountHolderName = response.bank_transfer.financial_addresses[0].sort_code.account_holder_name;
       });
-    }
-  }
-
-  giftAidChoiceSelected(e: MatRadioChange) {
-    if (e.value === "yes") {
-      this.isOptedIntoGiftAid = true;
-    }
-    else {
-      this.isOptedIntoGiftAid = false;
     }
   }
 
@@ -193,16 +205,12 @@ export class BuyCreditsComponent implements OnInit {
       if (unsanitisedCustomTipAmount) {
         return this.sanitiseCurrency(unsanitisedCustomTipAmount)
       }
-      else {
-        return 0;
-      }
+      return 0;
     }
 
-    else {
-      const creditAmount: number = this.sanitiseCurrency(unsanitisedCreditAmount);
-      const tipPercentage: number = this.amountsGroup.value.tipPercentage;
-      return (creditAmount * (tipPercentage / 100));
-    }
+    const creditAmount: number = this.sanitiseCurrency(unsanitisedCreditAmount);
+    const tipPercentage: number = this.amountsGroup.value.tipPercentage;
+    return (creditAmount * (tipPercentage / 100));
   }
 
   private loadAuthedPersonInfo(id: string, jwt: string) {

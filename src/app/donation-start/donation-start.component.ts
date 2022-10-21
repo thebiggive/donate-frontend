@@ -1542,7 +1542,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
     this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
+      console.log(giftAidChecked);
       if (giftAidChecked) {
+      console.log('gift aid true');
         this.giftAidGroup.controls.homePostcode.setValidators(
           this.getHomePostcodeValidatorsWhenClaimingGiftAid(this.giftAidGroup.value.homeOutsideUK),
         );
@@ -1551,6 +1553,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
           Validators.maxLength(255),
         ]);
       } else {
+        console.log('gift aid false');
         this.giftAidGroup.controls.homePostcode.setValidators([]);
         this.giftAidGroup.controls.homeAddress.setValidators([]);
       }
