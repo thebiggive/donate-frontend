@@ -15,32 +15,37 @@ export default {
         options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
       },
     },
-    service: {
+    icon: {
       name: 'Service',
       control: {
         type: 'select',
-        options: ['Twitter', 'Facebook', 'Instagram', 'LinkedIn'],
+        options: ['AlarmClock', 'Heart'],
       },
     },
     url: {
       name: 'Url',
     },
+    label: {
+      name: 'Label',
+    },
   },
 };
 
 const Template = args => `
-          <biggive-social-icon
-            background-colour="${args.backgroundColour}"
-            icon-colour="${args.iconColour}"
-            service="${args.service}"
-            url="${args.url}"
-          </biggive-social-icon>
-          `;
+            <biggive-category-icon
+              background-colour="${args.backgroundColour}"
+              icon-colour="${args.iconColour}"
+              icon="${args.icon}"
+              url="${args.url}"
+              label="${args.label}"
+            </biggive-category-icon>
+            `;
 
-export const SocialIconComponent = Template.bind({});
-SocialIconComponent.args = {
+export const CategoryIconComponent = Template.bind({});
+CategoryIconComponent.args = {
   backgroundColour: 'primary',
   iconColour: 'white',
-  service: 'Twitter',
+  icon: 'Animals',
   url: '#',
+  label: 'This is the category label',
 };

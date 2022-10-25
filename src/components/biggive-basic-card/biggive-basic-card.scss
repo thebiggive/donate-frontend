@@ -1,0 +1,34 @@
+:host {
+  display: contents;
+}
+
+.container {
+  @include standard-font();
+  position: relative;
+  text-align: center;
+  background-size: cover;
+  background-position: center center;
+  padding: $spacer-4;
+  .sleeve {
+    background-color: $colour-white;
+    padding: $spacer-4;
+    @include corner-clip-medium-bottom-left-top-right();
+  }
+  .icon {
+    svg {
+      width: 50px;
+      height: auto;
+    }
+  }
+  h3 {
+    @include heading-3();
+    margin-bottom: $spacer-3;
+  }
+  .subtitle {
+    margin-bottom: $spacer-3;
+  }
+  button {
+    @include standard-font();
+  }
+
+}

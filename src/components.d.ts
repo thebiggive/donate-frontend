@@ -8,6 +8,46 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface BiggiveBackToTop {
     }
+    interface BiggiveBasicCard {
+        /**
+          * Full URL of the background image.
+         */
+        "backgroundColour": string;
+        /**
+          * Full URL of the background image.
+         */
+        "backgroundImageUrl": string;
+        /**
+          * Button Colour Scheme
+         */
+        "buttonColourScheme": string;
+        /**
+          * Button label
+         */
+        "buttonLabel": string;
+        /**
+          * Button URL
+         */
+        "buttonUrl": string;
+        /**
+          * Icon colour
+         */
+        "iconColour": string;
+        /**
+          * Main title
+         */
+        "mainTitle": string;
+        /**
+          * Space below component
+         */
+        "spaceBelow": number;
+        /**
+          * Subtitle title
+         */
+        "subtitle": string;
+    }
+    interface BiggiveBeneficiaryIcon {
+    }
     interface BiggiveBoxedContent {
         /**
           * Background colour
@@ -36,7 +76,7 @@ export namespace Components {
          */
         "imageUrl": string;
         /**
-          * Full URL of a image.
+          * Full URL of the logo.
          */
         "logoUrl": string;
         /**
@@ -270,6 +310,28 @@ export namespace Components {
          */
         "spaceBelow": number;
     }
+    interface BiggiveCategoryIcon {
+        /**
+          * Background colour
+         */
+        "backgroundColour": string;
+        /**
+          * Icon
+         */
+        "icon": string;
+        /**
+          * Background colour
+         */
+        "iconColour": string;
+        /**
+          * Label
+         */
+        "label": string;
+        /**
+          * Url
+         */
+        "url": string;
+    }
     interface BiggiveFooter {
     }
     interface BiggiveForm {
@@ -450,9 +512,17 @@ export namespace Components {
     }
     interface BiggiveMiscIcon {
         /**
+          * Background colour
+         */
+        "backgroundColour": string;
+        /**
           * Icon
          */
         "icon": string;
+        /**
+          * Background colour
+         */
+        "iconColour": string;
         /**
           * Url
          */
@@ -528,9 +598,13 @@ export namespace Components {
     }
     interface BiggiveSocialIcon {
         /**
-          * Colour Scheme
+          * Background colour
          */
-        "colourScheme": string;
+        "backgroundColour": string;
+        /**
+          * Background colour
+         */
+        "iconColour": string;
         /**
           * service
          */
@@ -672,6 +746,18 @@ declare global {
         prototype: HTMLBiggiveBackToTopElement;
         new (): HTMLBiggiveBackToTopElement;
     };
+    interface HTMLBiggiveBasicCardElement extends Components.BiggiveBasicCard, HTMLStencilElement {
+    }
+    var HTMLBiggiveBasicCardElement: {
+        prototype: HTMLBiggiveBasicCardElement;
+        new (): HTMLBiggiveBasicCardElement;
+    };
+    interface HTMLBiggiveBeneficiaryIconElement extends Components.BiggiveBeneficiaryIcon, HTMLStencilElement {
+    }
+    var HTMLBiggiveBeneficiaryIconElement: {
+        prototype: HTMLBiggiveBeneficiaryIconElement;
+        new (): HTMLBiggiveBeneficiaryIconElement;
+    };
     interface HTMLBiggiveBoxedContentElement extends Components.BiggiveBoxedContent, HTMLStencilElement {
     }
     var HTMLBiggiveBoxedContentElement: {
@@ -713,6 +799,12 @@ declare global {
     var HTMLBiggiveCampaignHighlightsElement: {
         prototype: HTMLBiggiveCampaignHighlightsElement;
         new (): HTMLBiggiveCampaignHighlightsElement;
+    };
+    interface HTMLBiggiveCategoryIconElement extends Components.BiggiveCategoryIcon, HTMLStencilElement {
+    }
+    var HTMLBiggiveCategoryIconElement: {
+        prototype: HTMLBiggiveCategoryIconElement;
+        new (): HTMLBiggiveCategoryIconElement;
     };
     interface HTMLBiggiveFooterElement extends Components.BiggiveFooter, HTMLStencilElement {
     }
@@ -866,6 +958,8 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "biggive-back-to-top": HTMLBiggiveBackToTopElement;
+        "biggive-basic-card": HTMLBiggiveBasicCardElement;
+        "biggive-beneficiary-icon": HTMLBiggiveBeneficiaryIconElement;
         "biggive-boxed-content": HTMLBiggiveBoxedContentElement;
         "biggive-branded-image": HTMLBiggiveBrandedImageElement;
         "biggive-button": HTMLBiggiveButtonElement;
@@ -873,6 +967,7 @@ declare global {
         "biggive-campaign-card": HTMLBiggiveCampaignCardElement;
         "biggive-campaign-card-filter-grid": HTMLBiggiveCampaignCardFilterGridElement;
         "biggive-campaign-highlights": HTMLBiggiveCampaignHighlightsElement;
+        "biggive-category-icon": HTMLBiggiveCategoryIconElement;
         "biggive-footer": HTMLBiggiveFooterElement;
         "biggive-form": HTMLBiggiveFormElement;
         "biggive-form-field-select": HTMLBiggiveFormFieldSelectElement;
@@ -903,6 +998,46 @@ declare global {
 declare namespace LocalJSX {
     interface BiggiveBackToTop {
     }
+    interface BiggiveBasicCard {
+        /**
+          * Full URL of the background image.
+         */
+        "backgroundColour"?: string;
+        /**
+          * Full URL of the background image.
+         */
+        "backgroundImageUrl"?: string;
+        /**
+          * Button Colour Scheme
+         */
+        "buttonColourScheme"?: string;
+        /**
+          * Button label
+         */
+        "buttonLabel"?: string;
+        /**
+          * Button URL
+         */
+        "buttonUrl"?: string;
+        /**
+          * Icon colour
+         */
+        "iconColour"?: string;
+        /**
+          * Main title
+         */
+        "mainTitle"?: string;
+        /**
+          * Space below component
+         */
+        "spaceBelow"?: number;
+        /**
+          * Subtitle title
+         */
+        "subtitle"?: string;
+    }
+    interface BiggiveBeneficiaryIcon {
+    }
     interface BiggiveBoxedContent {
         /**
           * Background colour
@@ -931,7 +1066,7 @@ declare namespace LocalJSX {
          */
         "imageUrl"?: string;
         /**
-          * Full URL of a image.
+          * Full URL of the logo.
          */
         "logoUrl"?: string;
         /**
@@ -1169,6 +1304,28 @@ declare namespace LocalJSX {
          */
         "spaceBelow"?: number;
     }
+    interface BiggiveCategoryIcon {
+        /**
+          * Background colour
+         */
+        "backgroundColour"?: string;
+        /**
+          * Icon
+         */
+        "icon"?: string;
+        /**
+          * Background colour
+         */
+        "iconColour"?: string;
+        /**
+          * Label
+         */
+        "label"?: string;
+        /**
+          * Url
+         */
+        "url"?: string;
+    }
     interface BiggiveFooter {
     }
     interface BiggiveForm {
@@ -1349,9 +1506,17 @@ declare namespace LocalJSX {
     }
     interface BiggiveMiscIcon {
         /**
+          * Background colour
+         */
+        "backgroundColour"?: string;
+        /**
           * Icon
          */
         "icon"?: string;
+        /**
+          * Background colour
+         */
+        "iconColour"?: string;
         /**
           * Url
          */
@@ -1431,9 +1596,13 @@ declare namespace LocalJSX {
     }
     interface BiggiveSocialIcon {
         /**
-          * Colour Scheme
+          * Background colour
          */
-        "colourScheme"?: string;
+        "backgroundColour"?: string;
+        /**
+          * Background colour
+         */
+        "iconColour"?: string;
         /**
           * service
          */
@@ -1561,6 +1730,8 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "biggive-back-to-top": BiggiveBackToTop;
+        "biggive-basic-card": BiggiveBasicCard;
+        "biggive-beneficiary-icon": BiggiveBeneficiaryIcon;
         "biggive-boxed-content": BiggiveBoxedContent;
         "biggive-branded-image": BiggiveBrandedImage;
         "biggive-button": BiggiveButton;
@@ -1568,6 +1739,7 @@ declare namespace LocalJSX {
         "biggive-campaign-card": BiggiveCampaignCard;
         "biggive-campaign-card-filter-grid": BiggiveCampaignCardFilterGrid;
         "biggive-campaign-highlights": BiggiveCampaignHighlights;
+        "biggive-category-icon": BiggiveCategoryIcon;
         "biggive-footer": BiggiveFooter;
         "biggive-form": BiggiveForm;
         "biggive-form-field-select": BiggiveFormFieldSelect;
@@ -1600,6 +1772,8 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "biggive-back-to-top": LocalJSX.BiggiveBackToTop & JSXBase.HTMLAttributes<HTMLBiggiveBackToTopElement>;
+            "biggive-basic-card": LocalJSX.BiggiveBasicCard & JSXBase.HTMLAttributes<HTMLBiggiveBasicCardElement>;
+            "biggive-beneficiary-icon": LocalJSX.BiggiveBeneficiaryIcon & JSXBase.HTMLAttributes<HTMLBiggiveBeneficiaryIconElement>;
             "biggive-boxed-content": LocalJSX.BiggiveBoxedContent & JSXBase.HTMLAttributes<HTMLBiggiveBoxedContentElement>;
             "biggive-branded-image": LocalJSX.BiggiveBrandedImage & JSXBase.HTMLAttributes<HTMLBiggiveBrandedImageElement>;
             "biggive-button": LocalJSX.BiggiveButton & JSXBase.HTMLAttributes<HTMLBiggiveButtonElement>;
@@ -1607,6 +1781,7 @@ declare module "@stencil/core" {
             "biggive-campaign-card": LocalJSX.BiggiveCampaignCard & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardElement>;
             "biggive-campaign-card-filter-grid": LocalJSX.BiggiveCampaignCardFilterGrid & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardFilterGridElement>;
             "biggive-campaign-highlights": LocalJSX.BiggiveCampaignHighlights & JSXBase.HTMLAttributes<HTMLBiggiveCampaignHighlightsElement>;
+            "biggive-category-icon": LocalJSX.BiggiveCategoryIcon & JSXBase.HTMLAttributes<HTMLBiggiveCategoryIconElement>;
             "biggive-footer": LocalJSX.BiggiveFooter & JSXBase.HTMLAttributes<HTMLBiggiveFooterElement>;
             "biggive-form": LocalJSX.BiggiveForm & JSXBase.HTMLAttributes<HTMLBiggiveFormElement>;
             "biggive-form-field-select": LocalJSX.BiggiveFormFieldSelect & JSXBase.HTMLAttributes<HTMLBiggiveFormFieldSelectElement>;

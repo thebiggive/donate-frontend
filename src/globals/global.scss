@@ -72,6 +72,25 @@ a {
 }
 
 
+.fill-primary {
+    fill: $colour-primary;
+}
+
+.fill-secondary {
+    fill: $colour-secondary;
+}
+
+.fill-tertiary {
+    fill: $colour-tertiary;
+}
+
+.fill-white {
+    fill: $colour-white;
+}
+
+.fill-black {
+    fill: $colour-black;
+}
 
 .background-colour-primary {
     background-color: $colour-primary;

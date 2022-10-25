@@ -16,7 +16,7 @@ export class BiggiveBrandedImage {
   @Prop() imageUrl: string = '';
 
   /**
-   * Full URL of a image.
+   * Full URL of the logo.
    */
   @Prop() logoUrl: string = '';
 
@@ -28,7 +28,9 @@ export class BiggiveBrandedImage {
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
-        <div class="slug">{this.slug}</div>
+        <div class="slug">
+          <span>{this.slug}</span>
+        </div>
         {this.imageUrl.length > 0 ? (
           <div class="image-wrap">
             <img src={this.imageUrl} />

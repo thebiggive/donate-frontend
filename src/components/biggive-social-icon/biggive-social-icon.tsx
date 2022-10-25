@@ -14,9 +14,14 @@ export class BiggiveSocialIcon {
   @Prop() service: string = 'Twitter';
 
   /**
-   * Colour Scheme
+   * Background colour
    */
-  @Prop() colourScheme: string = 'primary';
+  @Prop() backgroundColour: string = 'primary';
+
+  /**
+   * Background colour
+   */
+  @Prop() iconColour: string = 'white';
 
   /**
    * Url
@@ -30,13 +35,13 @@ export class BiggiveSocialIcon {
 
   render() {
     return (
-      <div class={'social-icon-item colour-scheme-' + this.colourScheme}>
+      <div class={'social-icon-item background-colour-' + this.backgroundColour}>
         <a href={this.url}>
           <svg
             width={this.getSocialIcon().icon[0]}
             height={this.getSocialIcon().icon[1]}
             xmlns="http://www.w3.org/2000/svg"
-            class="icon"
+            class={'fill-' + this.iconColour}
             viewBox={'0 0 ' + this.getSocialIcon().icon[0] + ' ' + this.getSocialIcon().icon[1]}
           >
             <path d={this.getSocialIcon().icon[4].toString()} />

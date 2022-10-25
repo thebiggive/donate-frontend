@@ -11,7 +11,9 @@ describe('biggive-branded-image', () => {
       <biggive-branded-image>
         <mock:shadow-root>
           <div class="container space-below-0">
-            <div class="slug"></div>
+            <div class="slug">
+              <span></span>
+            </div>
           </div>
         </mock:shadow-root>
       </biggive-header-image>

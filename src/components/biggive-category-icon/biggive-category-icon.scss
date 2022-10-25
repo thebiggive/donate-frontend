@@ -1,0 +1,8 @@
+:host {
+  display: contents;
+}
+
+.category-icon-item {
+  @include standard-font();
+  @include icon-medium();
+}

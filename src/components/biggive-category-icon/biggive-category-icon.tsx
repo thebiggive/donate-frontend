@@ -3,11 +3,11 @@ import { Component, Prop, h } from '@stencil/core';
 import { FontAwesomeIconsService } from '../../util/fontawesome-icons';
 
 @Component({
-  tag: 'biggive-misc-icon',
-  styleUrl: 'biggive-misc-icon.scss',
+  tag: 'biggive-category-icon',
+  styleUrl: 'biggive-category-icon.scss',
   shadow: false,
 })
-export class BiggiveMiscIcon {
+export class BiggiveCategoryIcon {
   /**
    * Background colour
    */
@@ -17,35 +17,40 @@ export class BiggiveMiscIcon {
    * Background colour
    */
   @Prop() iconColour: string = 'white';
-
   /**
    * Icon
    */
   @Prop() icon: string = null;
 
   /**
+   * Label
+   */
+  @Prop() label: string = null;
+
+  /**
    * Url
    */
   @Prop() url: string = '#';
 
-  private getMiscIcon(): IconDefinition {
-    var icon = FontAwesomeIconsService.getMiscIcon(this.icon);
+  private getCategoryIcon(): IconDefinition {
+    var icon = FontAwesomeIconsService.getCategoryIcon(this.icon);
     return icon;
   }
 
   render() {
     return (
-      <div class={'misc-icon-item background-colour-' + this.backgroundColour}>
+      <div class={'category-icon-item background-colour-' + this.backgroundColour}>
         <a href={this.url}>
           <svg
-            width={this.getMiscIcon().icon[0]}
-            height={this.getMiscIcon().icon[1]}
+            width={this.getCategoryIcon().icon[0]}
+            height={this.getCategoryIcon().icon[1]}
             xmlns="http://www.w3.org/2000/svg"
             class={'fill-' + this.iconColour}
-            viewBox={'0 0 ' + this.getMiscIcon().icon[0] + ' ' + this.getMiscIcon().icon[1]}
+            viewBox={'0 0 ' + this.getCategoryIcon().icon[0] + ' ' + this.getCategoryIcon().icon[1]}
           >
-            <path d={this.getMiscIcon().icon[4].toString()} />
+            <path d={this.getCategoryIcon().icon[4].toString()} />
           </svg>
+          <span class="label">{this.label}</span>
         </a>
       </div>
     );

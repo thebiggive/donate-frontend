@@ -31,6 +31,43 @@ const Template = args => `
             column-count="${args.columnCount}"    
             column-gap="${args.columnGap}">
 
+            <biggive-basic-card 
+              space-below='4'
+              icon-colour='primary'
+              background-image-url='https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693'
+              main-title='Sample main title'
+              subtitle='Sample subtitle'
+              button-url='#'
+              button-label='Click here'
+              button-colour-scheme='clear-primary'
+            >
+            </biggive-basic-card>
+
+            <biggive-basic-card 
+              space-below='4'
+              icon-colour='secondary'
+              background-image-url='https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693'
+              main-title='Sample main title'
+              subtitle='Sample subtitle'
+              button-url='#'
+              button-label='Click here'
+              button-colour-scheme='clear-primary'
+            >
+            </biggive-basic-card>
+
+            <biggive-basic-card 
+              space-below='4'
+              icon-colour='primary'
+              background-colour='primary'
+              x-background-image-url='https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693'
+              main-title='Sample main title'
+              subtitle='Sample subtitle'
+              button-url='#'
+              button-label='Click here'
+              button-colour-scheme='clear-primary'
+            >
+            </biggive-basic-card>
+          <!--
           <biggive-campaign-card 
             campaign-type="Match Funded"
             campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community" 
@@ -62,6 +99,7 @@ const Template = args => `
             secondary-figure-label="Total Raised" 
             secondary-figure-amount="76543">
           </biggive-campaign-card>
+          -->
           </biggive-grid>
           `;
 
