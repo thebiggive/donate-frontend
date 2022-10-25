@@ -3,7 +3,15 @@
 }
 
 .container {
-  display: flex;
+  @include standard-font();
+  .label {
+    border-bottom: 1px solid $colour-grey-dark;
+    padding-bottom: $spacer-1;
+    margin-bottom: $spacer-2;
+  }
+  .sleeve {
+    display: flex;
+  }
 }
 
 

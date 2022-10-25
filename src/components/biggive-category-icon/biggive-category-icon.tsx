@@ -39,19 +39,21 @@ export class BiggiveCategoryIcon {
 
   render() {
     return (
-      <div class={'category-icon-item background-colour-' + this.backgroundColour}>
-        <a href={this.url}>
-          <svg
-            width={this.getCategoryIcon().icon[0]}
-            height={this.getCategoryIcon().icon[1]}
-            xmlns="http://www.w3.org/2000/svg"
-            class={'fill-' + this.iconColour}
-            viewBox={'0 0 ' + this.getCategoryIcon().icon[0] + ' ' + this.getCategoryIcon().icon[1]}
-          >
-            <path d={this.getCategoryIcon().icon[4].toString()} />
-          </svg>
-          <span class="label">{this.label}</span>
-        </a>
+      <div class="container">
+        <div class={'category-icon-item background-colour-' + this.backgroundColour}>
+          <a href={this.url}>
+            <svg
+              width={this.getCategoryIcon().icon[0]}
+              height={this.getCategoryIcon().icon[1]}
+              xmlns="http://www.w3.org/2000/svg"
+              class={'fill-' + this.iconColour}
+              viewBox={'0 0 ' + this.getCategoryIcon().icon[0] + ' ' + this.getCategoryIcon().icon[1]}
+            >
+              <path d={this.getCategoryIcon().icon[4].toString()} />
+            </svg>
+          </a>
+        </div>
+        <div class="label">{this.label}</div>
       </div>
     );
   }

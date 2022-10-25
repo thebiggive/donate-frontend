@@ -47,6 +47,26 @@ export namespace Components {
         "subtitle": string;
     }
     interface BiggiveBeneficiaryIcon {
+        /**
+          * Background colour
+         */
+        "backgroundColour": string;
+        /**
+          * Icon
+         */
+        "icon": string;
+        /**
+          * Background colour
+         */
+        "iconColour": string;
+        /**
+          * Label
+         */
+        "label": string;
+        /**
+          * Url
+         */
+        "url": string;
     }
     interface BiggiveBoxedContent {
         /**
@@ -266,6 +286,14 @@ export namespace Components {
     }
     interface BiggiveCampaignHighlights {
         /**
+          * Full URL of a banner image.
+         */
+        "banner": string;
+        /**
+          * Display name of the charity's specific time-bound fundraising campaign.
+         */
+        "campaignTitle": string;
+        /**
           * e.g. 'GBP'.
          */
         "currencyCode": string;
@@ -445,6 +473,10 @@ export namespace Components {
         "teaserColour": string;
     }
     interface BiggiveIconGroup {
+        /**
+          * Label
+         */
+        "label": string;
         /**
           * Space below component
          */
@@ -1037,6 +1069,26 @@ declare namespace LocalJSX {
         "subtitle"?: string;
     }
     interface BiggiveBeneficiaryIcon {
+        /**
+          * Background colour
+         */
+        "backgroundColour"?: string;
+        /**
+          * Icon
+         */
+        "icon"?: string;
+        /**
+          * Background colour
+         */
+        "iconColour"?: string;
+        /**
+          * Label
+         */
+        "label"?: string;
+        /**
+          * Url
+         */
+        "url"?: string;
     }
     interface BiggiveBoxedContent {
         /**
@@ -1260,6 +1312,14 @@ declare namespace LocalJSX {
     }
     interface BiggiveCampaignHighlights {
         /**
+          * Full URL of a banner image.
+         */
+        "banner"?: string;
+        /**
+          * Display name of the charity's specific time-bound fundraising campaign.
+         */
+        "campaignTitle"?: string;
+        /**
           * e.g. 'GBP'.
          */
         "currencyCode"?: string;
@@ -1439,6 +1499,10 @@ declare namespace LocalJSX {
         "teaserColour"?: string;
     }
     interface BiggiveIconGroup {
+        /**
+          * Label
+         */
+        "label"?: string;
         /**
           * Space below component
          */

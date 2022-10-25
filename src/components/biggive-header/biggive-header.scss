@@ -75,8 +75,14 @@
 .row-bottom {
   padding: $spacer-3 $spacer-4;
   background-color: $colour-white;
+  display: flex;;
   .logo-wrap {
     width: 200px;
+    margin-right: auto;
+    svg {
+      height: 100%;
+      width: auto;
+    }
   }
   .nav-primary {
     font-weight: 700;

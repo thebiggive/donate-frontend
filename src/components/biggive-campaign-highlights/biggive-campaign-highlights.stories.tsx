@@ -8,6 +8,12 @@ export default {
         options: [0, 1, 2, 3, 4, 5, 6],
       },
     },
+    banner: {
+      name: 'Banner image url',
+    },
+    campaignTitle: {
+      name: 'Camapign title',
+    },
     currencyCode: {
       name: 'Currency code',
     },
@@ -52,6 +58,8 @@ export default {
 const Template = args => `
         <biggive-campaign-highlights
           space-below=${args.spaceBelow}
+          banner="${args.banner}"
+          campaign-title="${args.campaignTitle}"
           currency-code="${args.currencyCode}"
           primary-figure-label=${args.primaryFigureLabel}
           primary-figure-amount=${args.primaryFigureAmount}
@@ -68,6 +76,8 @@ const Template = args => `
 export const CampaignHighlightsComponent = Template.bind({});
 CampaignHighlightsComponent.args = {
   spaceBelow: 0,
+  banner: 'https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693',
+  campaignTitle: 'this is my sample title',
   currencyCode: 'GBP',
   primaryFigureLabel: 'Total raised',
   primaryFigureAmount: 1000,

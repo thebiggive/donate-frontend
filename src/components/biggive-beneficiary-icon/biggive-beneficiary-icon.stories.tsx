@@ -32,20 +32,20 @@ export default {
 };
 
 const Template = args => `
-            <biggive-category-icon
-              background-colour="${args.backgroundColour}"
-              icon-colour="${args.iconColour}"
-              icon="${args.icon}"
-              url="${args.url}"
-              label="${args.label}"
-            </biggive-category-icon>
-            `;
+              <biggive-beneficiary-icon
+                background-colour="${args.backgroundColour}"
+                icon-colour="${args.iconColour}"
+                icon="${args.icon}"
+                url="${args.url}"
+                label="${args.label}"
+              </biggive-beneficiary-icon>
+              `;
 
-export const CategoryIconComponent = Template.bind({});
-CategoryIconComponent.args = {
+export const BeneficiaryIconComponent = Template.bind({});
+BeneficiaryIconComponent.args = {
   backgroundColour: 'primary',
   iconColour: 'white',
-  icon: 'Animals',
+  icon: 'Other',
   url: '#',
-  label: 'Category label',
+  label: 'This is the category label',
 };
