@@ -7,6 +7,8 @@ import { DonationStatus } from './donation-status.type';
  * * after the donation is fully processed and webhook returned (e.g. `matchedAmount`).
  */
 export interface Donation {
+    autoConfirmFromCashBalance?: boolean;
+
     /**
      * Unique ID for a charity Account assigned by the Big Give, in Salesforce
      * case-insensitive format. 18 character string.
@@ -42,6 +44,8 @@ export interface Donation {
     optInTbgEmail?: boolean;
 
     optInChampionEmail?: boolean;
+
+    paymentMethodType: 'card' | 'customer_balance';
 
     /**
      * Unique ID for a CCampaign / project assigned by the Big Give, in Salesforce

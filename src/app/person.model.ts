@@ -41,4 +41,6 @@ export interface Person {
      */
     created_time?: string;
     updated_time?: string;
+
+    cash_balance?: { [currencyCode: string]: number };
 }
