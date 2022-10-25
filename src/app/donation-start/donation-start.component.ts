@@ -387,10 +387,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.idCaptcha.reset();
   }
 
-  haveAddressSuggestions(): boolean {
-    return this.addressSuggestions.length > 0;
-  }
-
   summariseAddressSuggestion(suggestion: GiftAidAddressSuggestion | string | undefined): string {
     // Patching the `giftAidGroup` seems to lead to a re-evaluation via this method, even if we use
     // `{emit: false}`. So it seems like the only safe way for the slightly hacky autocomplete return

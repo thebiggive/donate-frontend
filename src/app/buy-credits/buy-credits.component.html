@@ -96,6 +96,52 @@
                         <mat-radio-button [value]="false">No, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed.</mat-radio-button>
                     </mat-radio-group>
 
+                    <div *ngIf="isOptedIntoGiftAid" id="addressWrapper">
+                        <mat-form-field>
+                            <mat-label for="homeAddress">Home address</mat-label>
+                            <input
+                              formControlName="homeAddress"
+                              id="homeAddress"
+                              matInput
+                              autocomplete="off"
+                              [matAutocomplete]="autoAddress"
+                              [matAutocompleteDisabled]="!showAddressLookup"
+                            >
+
+                            <mat-autocomplete
+                              #autoAddress="matAutocomplete"
+                              [displayWith]="summariseAddressSuggestion"
+                              (optionSelected)="addressChosen($event)"
+                            >
+                              <mat-option *ngFor="let suggestion of addressSuggestions" [value]="suggestion">
+                                {{ suggestion.address }}
+                              </mat-option>
+                            </mat-autocomplete>
+
+                            <mat-hint>
+                              For your Gift Aid declaration to HMRC.
+                              <mat-spinner *ngIf="loadingAddressSuggestions" color="primary" diameter="15" class="address-loading-spinner"></mat-spinner>
+                            </mat-hint>
+                        </mat-form-field>
+                        
+                        <div class="error" *ngIf="giftAidGroup.get('homeAddress')?.errors?.maxlength">
+                            Maximum 255 characters exceeded
+                        </div>
+
+                        <mat-form-field *ngIf="!giftAidGroup.value.homeOutsideUK">
+                            <mat-label for="homePostcode">
+                                Home postcode
+                            </mat-label>
+                            <input formControlName="homePostcode" id="homePostcode" matInput>
+                        </mat-form-field>
+
+                        <div class="homeOutsideUK-wrapper">
+                            <mat-checkbox formControlName="homeOutsideUK" id="homeOutsideUK">
+                                Live outside the UK?
+                            </mat-checkbox>
+                        </div>
+                    </div>
+
                     <div>
                         <button mat-button matStepperNext>Next</button>
                     </div>

@@ -10,6 +10,12 @@ import { minMaxCurrencyValidatorWrapper } from '../validators/minMaxCurrencyVali
 import { environment } from 'src/environments/environment';
 import { MatSelectChange } from '@angular/material/select';
 import { FundingInstruction } from '../fundingInstruction.model';
+import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { GiftAidAddress } from '../gift-aid-address.model';
+import { PostcodeService } from '../postcode.service';
+import { EMPTY } from 'rxjs';
+import { startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-buy-credits',
@@ -18,6 +24,7 @@ import { FundingInstruction } from '../fundingInstruction.model';
 })
 export class BuyCreditsComponent implements OnInit {
 
+  addressSuggestions: GiftAidAddressSuggestion[] = [];
   isLoggedIn: boolean = false;
   isLoading: boolean = false;
   isPurchaseComplete = false;
@@ -27,19 +34,23 @@ export class BuyCreditsComponent implements OnInit {
   creditForm: FormGroup;
   amountsGroup: FormGroup;
   giftAidGroup: FormGroup;
+  loadingAddressSuggestions = false;
   minimumCreditAmount = environment.minimumCreditAmount;
   maximumCreditAmount = environment.maximumCreditAmount;
   maximumDonationAmount = environment.maximumDonationAmount;
+  showAddressLookup: boolean = true;
   sortCode: string;
   accountNumber: string;
   accountHolderName: string;
   private initialTipSuggestedPercentage = 15;
+  private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
 
   constructor(
     private formBuilder: FormBuilder,
     public dialog: MatDialog,
     private donationService: DonationService,
     private identityService: IdentityService,
+    private postcodeService: PostcodeService,
     ) { }
 
   ngOnInit(): void {
@@ -104,21 +115,91 @@ export class BuyCreditsComponent implements OnInit {
     this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
     if (giftAidChecked) {
       this.isOptedIntoGiftAid = true;
-        // this.giftAidGroup.controls.homePostcode.setValidators(
-        //   this.getHomePostcodeValidatorsWhenClaimingGiftAid(this.giftAidGroup.value.homeOutsideUK),
-        // );
-        // this.giftAidGroup.controls.homeAddress.setValidators([
-        //   Validators.required,
-        //   Validators.maxLength(255),
-        // ]);
+        this.giftAidGroup.controls.homePostcode.setValidators(
+          this.getHomePostcodeValidatorsWhenClaimingGiftAid(this.giftAidGroup.value.homeOutsideUK),
+        );
+        this.giftAidGroup.controls.homeAddress.setValidators([
+          Validators.required,
+          Validators.maxLength(255),
+        ]);
       } else {
         this.isOptedIntoGiftAid = false;
-        // this.giftAidGroup.controls.homePostcode.setValidators([]);
-        // this.giftAidGroup.controls.homeAddress.setValidators([]);
+        this.giftAidGroup.controls.homePostcode.setValidators([]);
+        this.giftAidGroup.controls.homeAddress.setValidators([]);
       }
 
-      // this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
-      // this.giftAidGroup.controls.homeAddress.updateValueAndValidity();
+      this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
+      this.giftAidGroup.controls.homeAddress.updateValueAndValidity();
+    });
+  }
+
+  ngAfterContentInit() {
+    // if (!isPlatformBrowser(this.platformId)) {
+    //   return;
+    // }
+
+    // this.showAddressLookup =
+    //   this.psp === 'stripe' &&
+    //   environment.postcodeLookupKey &&
+    //   environment.postcodeLookupUri;
+
+    // if (!this.showAddressLookup) {
+    //   return;
+    // }
+
+    const observable = this.giftAidGroup.get('homeAddress')?.valueChanges.pipe(
+      startWith(''),
+      // https://stackoverflow.com/a/51470735/2803757
+      debounceTime(400),
+      distinctUntilChanged(),
+      // switchMap *seems* like the best operator to swap out the Observable on the value change
+      // itself and swap in the observable on a lookup. But I'm not an expert with RxJS! I think/
+      // hope this may also cancel previous outstanding lookup resolutions that are in flight?
+      // https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap
+      switchMap((initialAddress: any) => {
+        if (!initialAddress) {
+          return EMPTY;
+        }
+
+        this.loadingAddressSuggestions = true;
+        return this.postcodeService.getSuggestions(initialAddress);
+      }),
+    ) || EMPTY;
+
+    observable.subscribe(suggestions => {
+      this.loadingAddressSuggestions = false;
+      this.addressSuggestions = suggestions;
+    });
+  }
+
+  summariseAddressSuggestion(suggestion: GiftAidAddressSuggestion | string | undefined): string {
+    // Patching the `giftAidGroup` seems to lead to a re-evaluation via this method, even if we use
+    // `{emit: false}`. So it seems like the only safe way for the slightly hacky autocomplete return
+    // approach of returning an object, then resolving from it, to work, is to explicitly check which
+    // type this field has got before re-summarising it.
+    if (typeof suggestion === 'string') {
+      return suggestion;
+    }
+
+    return suggestion?.address || '';
+  }
+
+  addressChosen(event: MatAutocompleteSelectedEvent) {
+    // Autocomplete's value.url should be an address we can /get.
+    this.postcodeService.get(event.option.value.url).subscribe((address: GiftAidAddress) => {
+      const addressParts = [address.line_1];
+      if (address.line_2) {
+        addressParts.push(address.line_2);
+      }
+      addressParts.push(address.town_or_city);
+
+      this.giftAidGroup.patchValue({
+        homeAddress: addressParts.join(', '),
+        homeBuildingNumber: address.building_number,
+        homePostcode: address.postcode,
+      });
+    }, error => {
+      console.log('Postcode resolve error', error);
     });
   }
 
@@ -245,6 +326,17 @@ export class BuyCreditsComponent implements OnInit {
         }
       });
     });
+  }
+
+  private getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK: boolean) {
+    if (homeOutsideUK) {
+      return [];
+    }
+
+    return [
+      Validators.required,
+      Validators.pattern(this.postcodeRegExp),
+    ];
   }
 
 }
