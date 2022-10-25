@@ -1,6 +1,5 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
@@ -31,6 +30,7 @@ describe('DonationService', () => {
       matchReservedAmount: 500.01,
       optInCharityEmail: true,
       optInTbgEmail: false,
+      paymentMethodType: 'card',
       projectId: '11I400000009Sds3e3',
       psp: 'stripe',
       status,
@@ -42,7 +42,6 @@ describe('DonationService', () => {
 
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
-      BrowserTransferStateModule,
       HttpClientTestingModule,
       RouterTestingModule,
     ],

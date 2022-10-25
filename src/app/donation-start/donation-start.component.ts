@@ -1502,7 +1502,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.amountsGroup.controls.donationAmount.setValidators([
         Validators.required,
         ValidateCurrencyMin,
-        getCurrencyMaxValidator(this.creditPenceToUse / 100),
+        getCurrencyMaxValidator(this.creditPenceToUse === 0 ? undefined : this.creditPenceToUse / 100),
         Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
       ]);
 
