@@ -39,7 +39,7 @@ import { TBG_DONATE_STORAGE } from './donation.service';
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
 import { DonationCompleteSetPasswordDialogComponent } from './donation-complete/donation-complete-set-password-dialog.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
-import { LoginModal } from './login-modal/login-modal.component';
+import { LoginModalComponent } from './login-modal/login-modal.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartMatchingExpiredDialogComponent } from './donation-start/donation-start-matching-expired-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
@@ -72,7 +72,7 @@ import { BuyCreditsComponent } from './buy-credits/buy-credits.component';
     DonationCompleteComponent,
     DonationCompleteSetPasswordDialogComponent,
     DonationStartComponent,
-    LoginModal,
+    LoginModalComponent,
     DonationStartMatchConfirmDialogComponent,
     DonationStartMatchingExpiredDialogComponent,
     DonationStartOfferReuseDialogComponent,

@@ -32,7 +32,7 @@ import { CardIconsService } from '../card-icons.service';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
-import { LoginModal } from '../login-modal/login-modal.component';
+import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
 import { DonationStartMatchingExpiredDialogComponent } from './donation-start-matching-expired-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
@@ -370,7 +370,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   login() {
-    const loginDialog = this.dialog.open(LoginModal);
+    const loginDialog = this.dialog.open(LoginModalComponent);
     loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
       if (data && data.id) {
         this.loadAuthedPersonInfo(data.id, data.jwt);

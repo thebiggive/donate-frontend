@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentMethod } from '@stripe/stripe-js';
-import { LoginModal } from '../login-modal/login-modal.component';
+import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { DonationService } from '../donation.service';
 import { IdentityService } from '../identity.service';
 import { Person } from '../person.model';
@@ -218,7 +218,7 @@ export class BuyCreditsComponent implements OnInit {
   }
 
   showLoginDialog() {
-    const loginDialog = this.dialog.open(LoginModal);
+    const loginDialog = this.dialog.open(LoginModalComponent);
     loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
       if (data && data.id) {
         this.loadAuthedPersonInfo(data.id, data.jwt);
@@ -299,32 +299,14 @@ export class BuyCreditsComponent implements OnInit {
       this.userFullName = person.first_name + ' ' + person.last_name;
 
       // this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
-      // this.personIsLoginReady = true;
 
-      // // Pre-fill rarely-changing form values from the Person.
-      // this.giftAidGroup.patchValue({
-      //   homeAddress: person.home_address_line_1,
-      //   homeOutsideUK: person.home_country_code !== 'GB',
-      //   homePostcode: person.home_postcode,
-      // });
-
-      // this.paymentGroup.patchValue({
-      //   firstName: person.first_name,
-      //   lastName: person.last_name,
-      //   emailAddress: person.email_address,
-      // });
-
-      // Load first saved Stripe card, if there are any.
-      this.donationService.getPaymentMethods(id, jwt).subscribe((response: { data: PaymentMethod[] }) => {
-        if (response.data.length > 0) {
-
-          // console.log('Payment details: ' + JSON.stringify(response.data[0]));
-          // this.stripePaymentMethodReady = true;
-          // this.stripeFirstSavedMethod = response.data[0];
-
-          // this.updateFormWithSavedCard();
-        }
+      // Pre-fill rarely-changing form values from the Person.
+      this.giftAidGroup.patchValue({
+        homeAddress: person.home_address_line_1,
+        homeOutsideUK: person.home_country_code !== 'GB',
+        homePostcode: person.home_postcode,
       });
+      
     });
   }
 

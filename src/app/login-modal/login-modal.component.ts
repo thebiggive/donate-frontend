@@ -12,7 +12,7 @@ import { IdentityService } from '../identity.service';
   templateUrl: 'login-modal.html',
   styleUrls: ['./login-modal.component.scss'],
 })
-export class LoginModal implements OnInit {
+export class LoginModalComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
 
   form: FormGroup;
@@ -21,7 +21,7 @@ export class LoginModal implements OnInit {
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
 
   constructor(
-    private dialogRef: MatDialogRef<LoginModal>,
+    private dialogRef: MatDialogRef<LoginModalComponent>,
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
   ) {}
