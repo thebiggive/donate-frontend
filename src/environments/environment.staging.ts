@@ -8,6 +8,7 @@ export const environment: Environment = {
   production: false,
   productionLike: true,
   redirectHomepageToChirstmasChallenge: false,
+  creditTipsCampaign: 'a056900002Jv4eaAAB',
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
   donateGlobalUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',

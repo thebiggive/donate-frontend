@@ -4,6 +4,7 @@ export const environment: Environment = {
   production: true,
   productionLike: true,
   redirectHomepageToChirstmasChallenge: false,
+  creditTipsCampaign: 'a056900002Jv4eaAAB',
   apiUriPrefix: 'https://sf-api-production.thebiggive.org.uk',
   donateGlobalUriPrefix: 'https://thebiggive.com',
   donateUriPrefix: 'https://donate.thebiggive.org.uk',

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { PaymentMethod } from '@stripe/stripe-js';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { DonationService } from '../donation.service';
 import { IdentityService } from '../identity.service';
@@ -16,6 +15,11 @@ import { GiftAidAddress } from '../gift-aid-address.model';
 import { PostcodeService } from '../postcode.service';
 import { EMPTY } from 'rxjs';
 import { startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Donation } from '../donation.model';
+import { Campaign } from '../campaign.model';
+import { CampaignService } from '../campaign.service';
+import { DonationCreatedResponse } from '../donation-created-response.model';
+import { AnalyticsService } from '../analytics.service';
 
 @Component({
   selector: 'app-buy-credits',
@@ -30,6 +34,8 @@ export class BuyCreditsComponent implements OnInit {
   isPurchaseComplete = false;
   isOptedIntoGiftAid = false;
   currency = '£';
+  campaign: Campaign;
+  donation?: Donation;
   userFullName: string;
   creditForm: FormGroup;
   amountsGroup: FormGroup;
@@ -39,15 +45,22 @@ export class BuyCreditsComponent implements OnInit {
   maximumCreditAmount = environment.maximumCreditAmount;
   maximumDonationAmount = environment.maximumDonationAmount;
   showAddressLookup: boolean = true;
+  personId?: string;
   sortCode: string;
   accountNumber: string;
   accountHolderName: string;
+  recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
+  recaptchaSiteKey = environment.recaptchaSiteKey;
+  private captchaCode?: string;
+  private idCaptchaCode?: string;
   private initialTipSuggestedPercentage = 15;
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
 
   constructor(
     private formBuilder: FormBuilder,
     public dialog: MatDialog,
+    private analyticsService: AnalyticsService,
+    private campaignService: CampaignService,
     private donationService: DonationService,
     private identityService: IdentityService,
     private postcodeService: PostcodeService,
@@ -130,6 +143,11 @@ export class BuyCreditsComponent implements OnInit {
 
       this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
       this.giftAidGroup.controls.homeAddress.updateValueAndValidity();
+    });
+
+    // get the tips campaign data on page load
+    this.campaignService.getOneById(environment.creditTipsCampaign).subscribe(campaign => {
+      this.campaign = campaign;
     });
   }
 
@@ -214,6 +232,8 @@ export class BuyCreditsComponent implements OnInit {
         this.sortCode = response.bank_transfer.financial_addresses[0].sort_code.sort_code;
         this.accountHolderName = response.bank_transfer.financial_addresses[0].sort_code.account_holder_name;
       });
+
+      this.createTipDonation();
     }
   }
 
@@ -291,6 +311,35 @@ export class BuyCreditsComponent implements OnInit {
     return (creditAmount * (tipPercentage / 100));
   }
 
+  captchaDonationReturn(captchaResponse: string) {
+    if (captchaResponse === null) {
+      // Ensure no other callback tries to use the old captcha code, and will re-execute
+      // the catcha to get a new one as needed instead.
+      this.captchaCode = undefined;
+      return;
+    }
+
+    this.captchaCode = captchaResponse;
+
+    if (!this.donation) {
+      this.createTipDonation();
+    }
+  }
+
+  captchaIdentityReturn(captchaResponse: string) {
+    if (captchaResponse === null) {
+      // Ensure no other callback tries to use the old captcha code, and will re-execute
+      // the catcha to get a new one as needed instead.
+      this.idCaptchaCode = undefined;
+      return;
+    }
+
+    this.idCaptchaCode = captchaResponse;
+    if (!this.donation) {
+      this.createTipDonation();
+    }
+  }
+
   private loadAuthedPersonInfo(id: string, jwt: string) {
     this.isLoading = true;
     this.identityService.get(id, jwt).subscribe((person: Person) => {
@@ -298,7 +347,7 @@ export class BuyCreditsComponent implements OnInit {
       this.isLoading = false;
       this.userFullName = person.first_name + ' ' + person.last_name;
 
-      // this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
+      this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
 
       // Pre-fill rarely-changing form values from the Person.
       this.giftAidGroup.patchValue({
@@ -319,6 +368,156 @@ export class BuyCreditsComponent implements OnInit {
       Validators.required,
       Validators.pattern(this.postcodeRegExp),
     ];
+  }
+
+
+  private createTipDonation() {
+    // if (this.creatingDonation) { // Ensure only 1 trigger is doing this at a time.
+    //   return;
+    // }
+
+    // if (!this.captchaCode && !this.idCaptchaCode) {
+    //   // We need a captcha code before we can *really* proceed. By doing this here we ensure
+    //   // this happens consistently regardless of whether donors click Next or a subsequent stepper
+    //   // heading, while only configuring it in one place.
+    //   //
+    //   // captcha**Return() are called on resolution of a valid captcha and call this fn again. We
+    //   // don't get stuck in this logic branch because `this.captchaCode` (or ID equiv) is non-empty then.
+    //   // As well as happening the first time the donor leaves step 1, we expect to do this again and get
+    //   // a new code any time a previously used one was cleared in `clearDonation()`.
+
+    //   if (this.personId || !environment.identityEnabled) {
+    //     this.captcha.reset();
+    //     this.captcha.execute(); // Prepare for a non-Person-linked donation which needs a Donation captcha.
+    //   } else {
+    //     this.idCaptcha.reset();
+    //     this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
+    //   }
+
+    //   return;
+    // }
+
+    // if (!this.campaign || !this.campaign.charity.id || !this.psp) {
+    //   this.donationCreateError = true;
+    //   return;
+    // }
+
+    // this.creatingDonation = true;
+    // this.donationCreateError = false;
+
+    const donation: Donation = {
+      charityId: this.campaign.charity.id,
+      charityName: this.campaign.charity.name,
+      countryCode: 'GB', // hard coded to GB only for now
+      // Captcha is set on Person (only) if we are making a Person + using the resulting
+      // token to authenticate the donation create.
+      creationRecaptchaCode: environment.identityEnabled ? undefined : this.captchaCode,
+      currencyCode: this.campaign.currencyCode || 'GBP',
+      // IMPORTANT: donationAmount set as the tip value
+      donationAmount: this.calculatedTipAmount(),
+      donationMatched: this.campaign.isMatched, // this should always be false
+      feeCoverAmount: this.sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
+      matchedAmount: 0, // Tips are always unmatched
+      matchReservedAmount: 0, // Tips are always unmatched
+      projectId: this.campaign.id,
+      psp: 'stripe',
+      tipAmount: this.sanitiseCurrency(this.amountsGroup.value.tipAmount),
+    };
+
+    if (environment.identityEnabled && this.personId) {
+      donation.pspCustomerId = this.identityService.getPspId();
+    }
+
+    this.createDonation(donation);
+  }
+
+  /**
+   * Creates a Donation itself. Both success and error callbacks should unconditionally set `creatingDonation` false.
+   */
+  private createDonation(donation: Donation) {
+    // No re-tries for create() where donors have only entered amounts. If the
+    // server is having problem it's probably more helpful to fail immediately than
+    // to wait until they're ~10 seconds into further data entry before jumping
+    // back to the start.
+    this.donationService.create(donation, this.personId, this.identityService.getJWT())
+    .subscribe({
+      next: this.newDonationSuccess.bind(this),
+      error: this.newDonationError.bind(this),
+    });
+  }
+
+  private newDonationSuccess(response: DonationCreatedResponse) {
+    console.log('success: ' + JSON.stringify(response));
+    // this.creatingDonation = false;
+
+    const createResponseMissingData = (
+      !response.donation.charityId ||
+      !response.donation.donationId ||
+      !response.donation.projectId
+    );
+    if (createResponseMissingData) {
+      this.analyticsService.logError(
+        'donation_create_response_incomplete',
+        `Missing expected response data creating new donation for campaign ${this.campaign.id}`,
+      );
+      // this.donationCreateError = true;
+      // this.stepper.previous(); // Go back to step 1 to surface the internal error.
+
+      return;
+    }
+
+    this.donationService.saveDonation(response.donation, response.jwt);
+    this.donation = response.donation; // Simplify update() while we're on this page.
+
+    this.analyticsService.logAmountChosen(
+      response.donation.donationAmount,
+      this.campaign.id,
+      [],
+      this.campaign.currencyCode,
+    );
+
+    if (response.donation.tipAmount > 0) {
+      this.analyticsService.logTipAmountChosen(
+        response.donation.tipAmount,
+        this.campaign.id,
+        this.campaign.currencyCode,
+      );
+    }
+
+    // if (this.psp === 'stripe') {
+      this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
+
+      // this.preparePaymentRequestButton(this.donation, this.paymentGroup);
+    // }
+
+    // Amount reserved for matching is 'false-y', i.e. 0
+    // if (response.donation.donationMatched && !response.donation.matchReservedAmount) {
+    //   this.promptToContinueWithNoMatchingLeft(response.donation);
+    //   return;
+    // }
+
+    // Amount reserved for matching is > 0 but less than the full donation
+    // if (response.donation.donationMatched && response.donation.matchReservedAmount < response.donation.donationAmount) {
+    //   this.promptToContinueWithPartialMatching(response.donation);
+    //   return;
+    // }
+
+    // this.scheduleMatchingExpiryWarning(this.donation);
+  }
+
+  private newDonationError(response: any) {
+    console.log('error: ', JSON.stringify(response));
+    let errorMessage: string;
+    if (response.message) {
+      errorMessage = `Could not create new donation for campaign ${this.campaign.id}: ${response.message}`;
+    } else {
+      // Unhandled 5xx crashes etc.
+      errorMessage = `Could not create new donation for campaign ${this.campaign.id}: HTTP code ${response.status}`;
+    }
+    this.analyticsService.logError('donation_create_failed', errorMessage);
+    // this.creatingDonation = false;
+    // this.donationCreateError = true;
+    // this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
 
 }
