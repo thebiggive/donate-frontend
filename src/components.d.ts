@@ -30,6 +30,24 @@ export namespace Components {
          */
         "verticalPadding": number;
     }
+    interface BiggiveBrandedImage {
+        /**
+          * Full URL of a image.
+         */
+        "imageUrl": string;
+        /**
+          * Full URL of a image.
+         */
+        "logoUrl": string;
+        /**
+          * Slug
+         */
+        "slug": string;
+        /**
+          * Space below component
+         */
+        "spaceBelow": number;
+    }
     interface BiggiveButton {
         /**
           * Colour Scheme
@@ -660,6 +678,12 @@ declare global {
         prototype: HTMLBiggiveBoxedContentElement;
         new (): HTMLBiggiveBoxedContentElement;
     };
+    interface HTMLBiggiveBrandedImageElement extends Components.BiggiveBrandedImage, HTMLStencilElement {
+    }
+    var HTMLBiggiveBrandedImageElement: {
+        prototype: HTMLBiggiveBrandedImageElement;
+        new (): HTMLBiggiveBrandedImageElement;
+    };
     interface HTMLBiggiveButtonElement extends Components.BiggiveButton, HTMLStencilElement {
     }
     var HTMLBiggiveButtonElement: {
@@ -843,6 +867,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "biggive-back-to-top": HTMLBiggiveBackToTopElement;
         "biggive-boxed-content": HTMLBiggiveBoxedContentElement;
+        "biggive-branded-image": HTMLBiggiveBrandedImageElement;
         "biggive-button": HTMLBiggiveButtonElement;
         "biggive-call-to-action": HTMLBiggiveCallToActionElement;
         "biggive-campaign-card": HTMLBiggiveCampaignCardElement;
@@ -899,6 +924,24 @@ declare namespace LocalJSX {
           * Vertical padding
          */
         "verticalPadding"?: number;
+    }
+    interface BiggiveBrandedImage {
+        /**
+          * Full URL of a image.
+         */
+        "imageUrl"?: string;
+        /**
+          * Full URL of a image.
+         */
+        "logoUrl"?: string;
+        /**
+          * Slug
+         */
+        "slug"?: string;
+        /**
+          * Space below component
+         */
+        "spaceBelow"?: number;
     }
     interface BiggiveButton {
         /**
@@ -1519,6 +1562,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "biggive-back-to-top": BiggiveBackToTop;
         "biggive-boxed-content": BiggiveBoxedContent;
+        "biggive-branded-image": BiggiveBrandedImage;
         "biggive-button": BiggiveButton;
         "biggive-call-to-action": BiggiveCallToAction;
         "biggive-campaign-card": BiggiveCampaignCard;
@@ -1557,6 +1601,7 @@ declare module "@stencil/core" {
         interface IntrinsicElements {
             "biggive-back-to-top": LocalJSX.BiggiveBackToTop & JSXBase.HTMLAttributes<HTMLBiggiveBackToTopElement>;
             "biggive-boxed-content": LocalJSX.BiggiveBoxedContent & JSXBase.HTMLAttributes<HTMLBiggiveBoxedContentElement>;
+            "biggive-branded-image": LocalJSX.BiggiveBrandedImage & JSXBase.HTMLAttributes<HTMLBiggiveBrandedImageElement>;
             "biggive-button": LocalJSX.BiggiveButton & JSXBase.HTMLAttributes<HTMLBiggiveButtonElement>;
             "biggive-call-to-action": LocalJSX.BiggiveCallToAction & JSXBase.HTMLAttributes<HTMLBiggiveCallToActionElement>;
             "biggive-campaign-card": LocalJSX.BiggiveCampaignCard & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardElement>;
