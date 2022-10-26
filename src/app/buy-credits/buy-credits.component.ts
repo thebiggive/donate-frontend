@@ -323,9 +323,9 @@ export class BuyCreditsComponent implements OnInit {
 
     this.captchaCode = captchaResponse;
 
-    if (!this.donation) {
-      this.createTipDonation();
-    }
+    // if (!this.donation) {
+    //   this.createTipDonation();
+    // }
   }
 
   captchaIdentityReturn(captchaResponse: string) {
@@ -337,9 +337,9 @@ export class BuyCreditsComponent implements OnInit {
     }
 
     this.idCaptchaCode = captchaResponse;
-    if (!this.donation) {
-      this.createTipDonation();
-    }
+    // if (!this.donation) {
+    //   this.createTipDonation();
+    // }
   }
 
   private loadAuthedPersonInfo(id: string, jwt: string) {

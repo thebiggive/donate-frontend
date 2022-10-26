@@ -26,6 +26,8 @@
                     <mat-form-field >
                         <mat-label>Tip amount (%)</mat-label>
                         <mat-select formControlName="tipPercentage" required="true" (selectionChange)="onTipSelectorChanged($event)">
+                            <mat-option [value]="2.5">2.5%</mat-option>
+                            <mat-option [value]="5">5%</mat-option>
                             <mat-option [value]="7.5">7.5%</mat-option>
                             <mat-option [value]="10">10%</mat-option>
                             <mat-option [value]="12.5">12.5%</mat-option>
@@ -78,7 +80,7 @@
                         (resolved)="captchaDonationReturn($event)"
                         siteKey="{{ recaptchaSiteKey }}"
                     ></re-captcha>
-        
+
                     <re-captcha
                         #idCaptcha
                         size="invisible"
