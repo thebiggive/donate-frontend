@@ -7,6 +7,7 @@ describe('biggive-beneficiary-icon', () => {
       components: [BiggiveBeneficiaryIcon],
       html: `<biggive-beneficiary-icon></biggive-beneficiary-icon>`,
     });
+    
     expect(page.root).toEqualHtml(`
       <biggive-beneficiary-icon>
         <div class="container">
