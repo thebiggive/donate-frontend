@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { LoginModalComponent } from './login-modal.component';
 
@@ -11,7 +11,6 @@ describe('LoginModalComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ LoginModalComponent ],
       imports: [
-        MatDialogRef,
         MatDialogModule
       ]
     })
