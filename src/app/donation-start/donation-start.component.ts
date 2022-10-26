@@ -47,7 +47,8 @@ import { Person } from '../person.model';
 import { PostcodeService } from '../postcode.service';
 import { retryStrategy } from '../observable-retry';
 import { StripeService } from '../stripe.service';
-import { minMaxCurrencyValidatorWrapper } from '../validators/minMaxCurrencyValidatorWrapper';
+import { getCurrencyMaxValidator } from '../validators/currency-max';
+import { ValidateCurrencyMin } from '../validators/currency-min';
 import { ValidateBillingPostCode } from '../validators/validate-billing-post-code';
 
 @Component({
@@ -80,6 +81,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   // https://stackoverflow.com/a/39850483/2803757
   countryOptions = countries.sort((cA, cB)  => cA.country.localeCompare(cB.country));
 
+  creditPenceToUse = 0; // Set non-zero if logged in and Customer has a credit balance to spend. Caps donation amount too in that case.
   currencySymbol: string;
 
   donationForm: FormGroup;
@@ -200,8 +202,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       amounts: this.formBuilder.group({
         donationAmount: [null, [
           Validators.required,
-          minMaxCurrencyValidatorWrapper(true, 1),
-          minMaxCurrencyValidatorWrapper(false, environment.maximumDonationAmount),
+          ValidateCurrencyMin,
+          getCurrencyMaxValidator(),
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
         coverFee: [false],
@@ -605,8 +607,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       return;
     }
 
-    this.donationService
-      .update(this.donation)
+    this.donationService.update(this.donation)
       // excluding status code, delay for logging clarity
       .pipe(
         retryWhen(updateError => {
@@ -644,9 +645,32 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       return;
     }
 
+    if (this.creditPenceToUse > 0) {
+      // Settlement is via the Customer's cash balance, with no client-side provision of a Payment Method.
+      this.donationService.finaliseCashBalancePurchase(this.donation).subscribe(
+        (donation) => {
+          this.analyticsService.logEvent(
+            '`stripe_customer_balance_payment_success',
+            `Stripe Intent expected to auto-confirm for donation ${donation.donationId} to campaign ${donation.projectId}`,
+          );
+          this.exitPostDonationSuccess(donation);
+        },
+        (error: HttpErrorResponse) => {
+          this.analyticsService.logError(
+            'stripe_customer_balance_payment_error',
+            error.message ?? '[No message]',
+          );
+          this.stripeError = `Cash balance application failed: ${error.message}`;
+        },
+      );
+
+      return;
+    }
+
+    // Else settlement is via a new or saved card (including wallets / Payment Request Buttons).
     const result = this.paymentGroup.value.useSavedCard
-      ? await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.stripeFirstSavedMethod as PaymentMethod)
-      : await this.stripeService.confirmPaymentWithNewCardOrPRB(this.donation, this.card);
+        ? await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.stripeFirstSavedMethod as PaymentMethod)
+        : await this.stripeService.confirmPaymentWithNewCardOrPRB(this.donation, this.card);
 
     if (!result || result.error) {
       if (result) {
@@ -673,12 +697,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     // See https://stripe.com/docs/payments/intents
     if (['succeeded', 'processing'].includes(result.paymentIntent.status)) {
-      this.analyticsService.logCheckoutDone(this.campaign, this.donation);
-      this.cancelExpiryWarning();
-      this.router.navigate(['thanks', this.donation.donationId], {
-        replaceUrl: true,
-      });
-
+      this.exitPostDonationSuccess(this.donation);
       return;
     }
 
@@ -889,6 +908,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.identityService.get(id, jwt).subscribe((person: Person) => {
       this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
       this.personIsLoginReady = true;
+
+      if (environment.creditDonationsEnabled && person.cash_balance && person.cash_balance[this.campaign.currencyCode.toLowerCase()] > 0) {
+        this.creditPenceToUse = person.cash_balance[this.campaign.currencyCode.toLowerCase()];
+        this.setConditionalValidators();
+      }
 
       // Pre-fill rarely-changing form values from the Person.
       this.giftAidGroup.patchValue({
@@ -1103,6 +1127,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       feeCoverAmount: this.sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
+      paymentMethodType: (this.creditPenceToUse > 0) ? 'customer_balance' : 'card',
       projectId: this.campaignId,
       psp: this.psp,
       tipAmount: this.sanitiseCurrency(this.amountsGroup.value.tipAmount),
@@ -1459,11 +1484,22 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       });
     } else {
       // On the default fee model, we need to listen for tip percentage
-      // field changes and don't have a cover fee checkbox.
-      this.amountsGroup.controls.tipAmount.setValidators([
+      // field changes and don't have a cover fee checkbox. We don't ask for a
+      // tip on donation when using a donor's credit balance.
+      if (this.creditPenceToUse === 0) {
+        this.amountsGroup.controls.tipAmount.setValidators([
+          Validators.required,
+          Validators.pattern('^[£$]?[0-9]+?(\\.[0-9]{2})?$'),
+          getCurrencyMaxValidator(),
+        ]);
+      }
+
+      // Reduce the maximum to the credit balance if using donor credit and it's below the global max.
+      this.amountsGroup.controls.donationAmount.setValidators([
         Validators.required,
-        Validators.pattern('^[£$]?[0-9]+?(\\.[0-9]{2})?$'),
-        minMaxCurrencyValidatorWrapper(false, environment.maximumDonationAmount),
+        ValidateCurrencyMin,
+        getCurrencyMaxValidator(this.creditPenceToUse === 0 ? undefined : this.creditPenceToUse / 100),
+        Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
       ]);
 
       this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
@@ -1592,6 +1628,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
    * @returns Tip or fee cover amount as a decimal string, as if input directly into a form field.
    */
   private getTipOrFeeAmount(percentage: number, donationAmount?: number): string {
+    if (this.creditPenceToUse > 0) {
+      return '0'; // No tips on donation credit settlements.
+    }
+
     return (percentage / 100 * (donationAmount || 0))
       .toFixed(2);
   }
@@ -1700,5 +1740,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         Validators.required,
       ]);
     }
+  }
+
+  private exitPostDonationSuccess(donation: Donation) {
+    this.analyticsService.logCheckoutDone(this.campaign, donation);
+    this.cancelExpiryWarning();
+    this.router.navigate(['thanks', donation.donationId], {
+      replaceUrl: true,
+    });
   }
 }

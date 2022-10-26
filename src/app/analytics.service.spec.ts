@@ -98,6 +98,7 @@ describe('AnalyticsService', () => {
       giftAid: true,
       matchedAmount: 0,
       matchReservedAmount: 6,
+      paymentMethodType: 'card',
       projectId: 'someProjectId',
       psp: 'stripe',
       tipAmount: 2,

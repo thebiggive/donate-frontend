@@ -12,6 +12,7 @@ export const environment: Environment = {
   redirectHomepageToChirstmasChallenge: false,
   creditTipsCampaign: 'a056900002Jv4eaAAB',
   apiUriPrefix: 'https://sf-api-regression.thebiggivetest.org.uk',
+  creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateGlobalUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
   donateUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
   donationsApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',

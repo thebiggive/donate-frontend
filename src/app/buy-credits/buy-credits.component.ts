@@ -420,6 +420,7 @@ export class BuyCreditsComponent implements OnInit {
       feeCoverAmount: this.sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
       matchedAmount: 0, // Tips are always unmatched
       matchReservedAmount: 0, // Tips are always unmatched
+      paymentMethodType: 'customer_balance',
       projectId: this.campaign.id,
       psp: 'stripe',
       tipAmount: this.sanitiseCurrency(this.amountsGroup.value.tipAmount),

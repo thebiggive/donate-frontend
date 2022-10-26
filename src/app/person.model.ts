@@ -12,7 +12,7 @@ export interface Person {
     /**
      * Stores the credit available for the given Person
      */
-    cash_balance?: { [currencyCode: string]: string };
+    cash_balance?: { [currencyCode: string]: number };
 
     /**
      * These 3 expected on first update.
