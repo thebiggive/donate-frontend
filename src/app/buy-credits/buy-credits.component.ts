@@ -5,7 +5,6 @@ import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { DonationService } from '../donation.service';
 import { IdentityService } from '../identity.service';
 import { Person } from '../person.model';
-import { minMaxCurrencyValidatorWrapper } from '../validators/minMaxCurrencyValidatorWrapper';
 import { environment } from 'src/environments/environment';
 import { MatSelectChange } from '@angular/material/select';
 import { FundingInstruction } from '../fundingInstruction.model';
@@ -22,6 +21,8 @@ import { DonationCreatedResponse } from '../donation-created-response.model';
 import { AnalyticsService } from '../analytics.service';
 import { RecaptchaComponent } from 'ng-recaptcha';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { getCurrencyMinValidator } from '../validators/currency-min';
+import { getCurrencyMaxValidator } from '../validators/currency-max';
 
 @Component({
   selector: 'app-buy-credits',
@@ -89,19 +90,19 @@ export class BuyCreditsComponent implements OnInit {
       amounts: this.formBuilder.group({
         creditAmount: [null, [
           Validators.required,
-          minMaxCurrencyValidatorWrapper(true, environment.minimumCreditAmount),
-          minMaxCurrencyValidatorWrapper(false, environment.maximumCreditAmount),
+          getCurrencyMinValidator(environment.minimumCreditAmount), // overrides the min amount to value from env file
+          getCurrencyMaxValidator(environment.maximumCreditAmount),
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
         tipPercentage: [this.initialTipSuggestedPercentage],
         customTipAmount: [null, [
           // Explicitly enforce minimum custom tip amount of £0. This is already covered by the regexp
           // validation rule below, but it's good to add the explicit check for future-proofness
-          Validators.min(0),
+          getCurrencyMinValidator(), // no override, so custom tip amount min is £0 (default)
           // Below we validate the tip as a donation because when buying donation credits, tips are set
           // set as real donations to a dedicated Big Give SF campaign.
           // See MAT-266 and the Slack thread linked it its description for more context.
-          minMaxCurrencyValidatorWrapper(false, environment.maximumDonationAmount),
+          getCurrencyMaxValidator(environment.maximumDonationAmount),
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
       }),

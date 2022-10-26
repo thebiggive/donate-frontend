@@ -48,7 +48,7 @@ import { PostcodeService } from '../postcode.service';
 import { retryStrategy } from '../observable-retry';
 import { StripeService } from '../stripe.service';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
-import { ValidateCurrencyMin } from '../validators/currency-min';
+import { getCurrencyMinValidator } from '../validators/currency-min';
 import { ValidateBillingPostCode } from '../validators/validate-billing-post-code';
 
 @Component({
@@ -202,7 +202,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       amounts: this.formBuilder.group({
         donationAmount: [null, [
           Validators.required,
-          ValidateCurrencyMin,
+          getCurrencyMinValidator(1), // min donation is £1
           getCurrencyMaxValidator(),
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
@@ -1497,7 +1497,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       // Reduce the maximum to the credit balance if using donor credit and it's below the global max.
       this.amountsGroup.controls.donationAmount.setValidators([
         Validators.required,
-        ValidateCurrencyMin,
+        getCurrencyMinValidator(1), // min donation is £1
         getCurrencyMaxValidator(this.creditPenceToUse === 0 ? undefined : this.creditPenceToUse / 100),
         Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
       ]);
