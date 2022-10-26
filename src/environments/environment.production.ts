@@ -5,6 +5,7 @@ export const environment: Environment = {
   productionLike: true,
   redirectHomepageToChirstmasChallenge: false,
   apiUriPrefix: 'https://sf-api-production.thebiggive.org.uk',
+  creditDonationsEnabled: false, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateGlobalUriPrefix: 'https://thebiggive.com',
   donateUriPrefix: 'https://donate.thebiggive.org.uk',
   donationsApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',

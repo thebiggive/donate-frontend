@@ -131,6 +131,13 @@ export class DonationService {
     return this.update(donation);
   }
 
+  finaliseCashBalancePurchase(donation: Donation): Observable<Donation> {
+    donation.autoConfirmFromCashBalance = true;
+    donation.tipAmount = 0; // Make extra sure no background magic can take an invisible tip!
+
+    return this.update(donation);
+  }
+
   update(donation: Donation): Observable<Donation> {
     return this.http.put<Donation>(
       `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}`,
