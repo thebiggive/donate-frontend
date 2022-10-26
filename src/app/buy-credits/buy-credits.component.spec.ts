@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 import { BuyCreditsComponent } from './buy-credits.component';
 
@@ -13,7 +13,6 @@ describe('BuyCreditsComponent', () => {
       declarations: [ BuyCreditsComponent ],
       imports: [
         FormsModule,
-        MatDialog,
         MatDialogRef,
         MatDialogModule,
         ReactiveFormsModule,
