@@ -1,8 +1,15 @@
 export default {
   title: 'Components/Icons',
   argTypes: {
-    colourScheme: {
-      name: 'Colour scheme',
+    backgroundColour: {
+      name: 'Background Colour',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+      },
+    },
+    iconColour: {
+      name: 'Icon Colour',
       control: {
         type: 'select',
         options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
@@ -23,7 +30,8 @@ export default {
 
 const Template = args => `
           <biggive-misc-icon
-            colour-scheme="${args.colourScheme}"
+            background-colour="${args.backgroundColour}"
+            icon-colour="${args.iconColour}"
             icon="${args.icon}"
             url="${args.url}"
           </biggive-misc-icon>
@@ -31,7 +39,8 @@ const Template = args => `
 
 export const MiscIconComponent = Template.bind({});
 MiscIconComponent.args = {
-  colourScheme: 'primary',
+  backgroundColour: 'primary',
+  iconColour: 'white',
   icon: 'AlarmClock',
   url: '#',
 };

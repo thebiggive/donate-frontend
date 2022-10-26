@@ -9,6 +9,16 @@ import { FontAwesomeIconsService } from '../../util/fontawesome-icons';
 })
 export class BiggiveMiscIcon {
   /**
+   * Background colour
+   */
+  @Prop() backgroundColour: string = 'primary';
+
+  /**
+   * Background colour
+   */
+  @Prop() iconColour: string = 'white';
+
+  /**
    * Icon
    */
   @Prop() icon: string = null;
@@ -25,13 +35,13 @@ export class BiggiveMiscIcon {
 
   render() {
     return (
-      <div class="misc-icon-item">
+      <div class={'misc-icon-item background-colour-' + this.backgroundColour}>
         <a href={this.url}>
           <svg
             width={this.getMiscIcon().icon[0]}
             height={this.getMiscIcon().icon[1]}
             xmlns="http://www.w3.org/2000/svg"
-            class="icon"
+            class={'fill-' + this.iconColour}
             viewBox={'0 0 ' + this.getMiscIcon().icon[0] + ' ' + this.getMiscIcon().icon[1]}
           >
             <path d={this.getMiscIcon().icon[4].toString()} />

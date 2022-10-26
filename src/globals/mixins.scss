@@ -364,3 +364,18 @@
       0 90%      /* bottom left */
     );
 }
+
+
+@mixin corner-clip-medium-bottom-left-top-right() {
+  clip-path:
+    polygon(
+      0% 0%,     /* top left */
+      0% 0%,     /* top left */
+      calc(100% - 50px) 0%,    /* top right */
+      100% 50px,   /* top right */
+      100% 100%,  /* bottom right */
+      100% 100%,  /* bottom right */
+      50px 100%,   /* bottom left */
+      0 calc(100% - 50px)      /* bottom left */
+    );
+}

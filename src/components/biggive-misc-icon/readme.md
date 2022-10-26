@@ -7,10 +7,12 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type     | Default |
-| -------- | --------- | ----------- | -------- | ------- |
-| `icon`   | `icon`    | Icon        | `string` | `null`  |
-| `url`    | `url`     | Url         | `string` | `'#'`   |
+| Property           | Attribute           | Description       | Type     | Default     |
+| ------------------ | ------------------- | ----------------- | -------- | ----------- |
+| `backgroundColour` | `background-colour` | Background colour | `string` | `'primary'` |
+| `icon`             | `icon`              | Icon              | `string` | `null`      |
+| `iconColour`       | `icon-colour`       | Background colour | `string` | `'white'`   |
+| `url`              | `url`               | Url               | `string` | `'#'`       |
 
 
 ## Dependencies

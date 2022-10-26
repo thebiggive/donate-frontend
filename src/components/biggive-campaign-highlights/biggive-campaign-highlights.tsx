@@ -12,6 +12,16 @@ export class BiggiveCampaignHighlights {
   @Prop() spaceBelow: number = 0;
 
   /**
+   * Full URL of a banner image.
+   */
+  @Prop() banner: string = '';
+
+  /**
+   * Display name of the charity's specific time-bound fundraising campaign.
+   */
+  @Prop() campaignTitle: string = null;
+
+  /**
    * e.g. 'GBP'.
    */
   @Prop() currencyCode: string = 'GBP';
@@ -81,6 +91,18 @@ export class BiggiveCampaignHighlights {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
         <div class="sleeve">
+          {this.campaignTitle != null ? (
+            <div class="campaign-title">
+              <span>{this.campaignTitle}</span>
+            </div>
+          ) : null}
+
+          {this.banner.length > 0 ? (
+            <div class="image-wrap banner" style={{ 'background-image': 'url(' + this.banner + ')' }}>
+              <img src={this.banner} class="banner" />
+            </div>
+          ) : null}
+
           <div class="meta-wrap">
             <div class="meta-item">
               <span class="label">{this.primaryFigureLabel}</span>
@@ -97,14 +119,14 @@ export class BiggiveCampaignHighlights {
           <div class="stat-wrap">
             {this.primaryStatIcon != null ? (
               <div class="stat-item">
-                <biggive-misc-icon icon={this.primaryStatIcon}></biggive-misc-icon>
-                <span>{this.primaryStatText}</span>
+                <biggive-misc-icon icon={this.primaryStatIcon} background-colour="white" icon-colour="tertiary"></biggive-misc-icon>
+                <span class="label">{this.primaryStatText}</span>
               </div>
             ) : null}
             {this.secondaryStatIcon != null ? (
               <div class="stat-item">
-                <biggive-misc-icon icon={this.secondaryStatIcon}></biggive-misc-icon>
-                <span>{this.secondaryStatText}</span>
+                <biggive-misc-icon icon={this.secondaryStatIcon} background-colour="white" icon-colour="tertiary"></biggive-misc-icon>
+                <span class="label">{this.secondaryStatText}</span>
               </div>
             ) : null}
           </div>

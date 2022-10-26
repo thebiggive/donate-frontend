@@ -11,10 +11,18 @@ export class BiggiveIconGroup {
    */
   @Prop() spaceBelow: number = 0;
 
+  /**
+   * Label
+   */
+  @Prop() label: string = null;
+
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
-        <slot></slot>
+        {this.label != null ? <div class="label">{this.label}</div> : null}
+        <div class="sleeve">
+          <slot></slot>
+        </div>
       </div>
     );
   }

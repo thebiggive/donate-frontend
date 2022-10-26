@@ -20,6 +20,7 @@
 
 ### Used by
 
+ - [biggive-basic-card](../biggive-basic-card)
  - [biggive-call-to-action](../biggive-call-to-action)
  - [biggive-campaign-card](../biggive-campaign-card)
  - [biggive-footer](../biggive-footer)
@@ -30,6 +31,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  biggive-basic-card --> biggive-button
   biggive-call-to-action --> biggive-button
   biggive-campaign-card --> biggive-button
   biggive-footer --> biggive-button

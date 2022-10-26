@@ -11,7 +11,9 @@ describe('biggive-social-icon-group', () => {
       <biggive-icon-group>
         <mock:shadow-root>
           <div class="container space-below-0">
-            <slot></slot>
+            <div class="sleeve">
+              <slot></slot>
+            </div>
           </div>
         </mock:shadow-root>
       </biggive-icon-group>
