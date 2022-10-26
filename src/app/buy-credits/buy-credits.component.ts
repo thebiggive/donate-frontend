@@ -21,6 +21,7 @@ import { CampaignService } from '../campaign.service';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { AnalyticsService } from '../analytics.service';
 import { RecaptchaComponent } from 'ng-recaptcha';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-buy-credits',
@@ -322,10 +323,6 @@ export class BuyCreditsComponent implements OnInit {
     }
 
     this.captchaCode = captchaResponse;
-
-    // if (!this.donation) {
-    //   this.createTipDonation();
-    // }
   }
 
   captchaIdentityReturn(captchaResponse: string) {
@@ -337,9 +334,14 @@ export class BuyCreditsComponent implements OnInit {
     }
 
     this.idCaptchaCode = captchaResponse;
-    // if (!this.donation) {
-    //   this.createTipDonation();
-    // }
+  }
+
+  async stepChanged(event: StepperSelectionEvent)  {
+    console.log(event.previouslySelectedStep);
+    if (event.previouslySelectedStep.label === 'Your Donation Credits') {
+      this.captcha.execute(); // Prepare for a non-Person-linked donation which needs a Donation captcha.
+      this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
+    }
   }
 
   private loadAuthedPersonInfo(id: string, jwt: string) {
@@ -376,27 +378,6 @@ export class BuyCreditsComponent implements OnInit {
   private createTipDonation() {
     console.log(this.captchaCode);
     console.log(this.idCaptchaCode);
-
-    if (!this.captchaCode && !this.idCaptchaCode) {
-      // We need a captcha code before we can *really* proceed. By doing this here we ensure
-      // this happens consistently regardless of whether donors click Next or a subsequent stepper
-      // heading, while only configuring it in one place.
-      //
-      // captcha**Return() are called on resolution of a valid captcha and call this fn again. We
-      // don't get stuck in this logic branch because `this.captchaCode` (or ID equiv) is non-empty then.
-      // As well as happening the first time the donor leaves step 1, we expect to do this again and get
-      // a new code any time a previously used one was cleared in `clearDonation()`.
-
-      if (this.personId || !environment.identityEnabled) {
-        this.captcha.reset();
-        this.captcha.execute(); // Prepare for a non-Person-linked donation which needs a Donation captcha.
-      } else {
-        this.idCaptcha.reset();
-        this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
-      }
-
-      return;
-    }
 
     // if (!this.campaign || !this.campaign.charity.id || !this.psp) {
     //   this.donationCreateError = true;

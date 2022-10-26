@@ -6,13 +6,13 @@
         <h3 class="b-rh-1 b-bold">Purchase Donation Credits</h3>
 
         <form *ngIf="isLoggedIn && !isLoading && !isPurchaseComplete" [formGroup]="creditForm">
-            <mat-stepper orientation="vertical" [linear]="true" #stepper>
+            <mat-stepper orientation="vertical" [linear]="true" #stepper (selectionChange)="stepChanged($event)">
                 <mat-step
                     [completed]="false"
                     formGroupName="amounts"
                     [stepControl]="amountsGroup"
+                    label="Your Donation Credits"
                 >
-                    <ng-template matStepLabel>Your Donation Credits</ng-template>
                     <mat-form-field  class="form-field b-center size-lg" hideRequiredMarker>
                         <mat-label>Credit amount ({{ currency }})</mat-label>
                         <input matInput placeholder="Enter amount in {{ currency }}" formControlName="creditAmount" required>
