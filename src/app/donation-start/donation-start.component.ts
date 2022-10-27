@@ -32,7 +32,7 @@ import { CardIconsService } from '../card-icons.service';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
-import { DonationStartLoginDialogComponent } from './donation-start-login-dialog.component';
+import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
 import { DonationStartMatchingExpiredDialogComponent } from './donation-start-matching-expired-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
@@ -48,7 +48,7 @@ import { PostcodeService } from '../postcode.service';
 import { retryStrategy } from '../observable-retry';
 import { StripeService } from '../stripe.service';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
-import { ValidateCurrencyMin } from '../validators/currency-min';
+import { getCurrencyMinValidator } from '../validators/currency-min';
 import { ValidateBillingPostCode } from '../validators/validate-billing-post-code';
 
 @Component({
@@ -202,7 +202,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       amounts: this.formBuilder.group({
         donationAmount: [null, [
           Validators.required,
-          ValidateCurrencyMin,
+          getCurrencyMinValidator(1), // min donation is £1
           getCurrencyMaxValidator(),
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
@@ -372,7 +372,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   login() {
-    const loginDialog = this.dialog.open(DonationStartLoginDialogComponent);
+    const loginDialog = this.dialog.open(LoginModalComponent);
     loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
       if (data && data.id) {
         this.loadAuthedPersonInfo(data.id, data.jwt);
@@ -387,10 +387,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.donationForm.reset();
     this.identityService.clearJWT();
     this.idCaptcha.reset();
-  }
-
-  haveAddressSuggestions(): boolean {
-    return this.addressSuggestions.length > 0;
   }
 
   summariseAddressSuggestion(suggestion: GiftAidAddressSuggestion | string | undefined): string {
@@ -1501,7 +1497,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       // Reduce the maximum to the credit balance if using donor credit and it's below the global max.
       this.amountsGroup.controls.donationAmount.setValidators([
         Validators.required,
-        ValidateCurrencyMin,
+        getCurrencyMinValidator(1), // min donation is £1
         getCurrencyMaxValidator(this.creditPenceToUse === 0 ? undefined : this.creditPenceToUse / 100),
         Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
       ]);

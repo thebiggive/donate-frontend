@@ -8,11 +8,11 @@ import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
 
 @Component({
-  selector: 'app-donation-start-login-dialog',
-  templateUrl: 'donation-start-login-dialog.html',
-  styleUrls: ['./donation-start-login-dialog.component.scss'],
+  selector: 'app-login-modal',
+  templateUrl: 'login-modal.html',
+  styleUrls: ['./login-modal.component.scss'],
 })
-export class DonationStartLoginDialogComponent implements OnInit {
+export class LoginModalComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
 
   form: FormGroup;
@@ -21,7 +21,7 @@ export class DonationStartLoginDialogComponent implements OnInit {
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
 
   constructor(
-    private dialogRef: MatDialogRef<DonationStartLoginDialogComponent>,
+    private dialogRef: MatDialogRef<LoginModalComponent>,
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
   ) {}
