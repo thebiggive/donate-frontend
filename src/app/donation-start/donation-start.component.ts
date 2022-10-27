@@ -1038,7 +1038,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     // We want to let donors finish the journey if they're on the page before the campaign
     // close date and it passes while they're completing the form – in particular they should
-    // be able to use match funds secured until 15 minutes after the close time.
+    // be able to use match funds secured until 30 minutes after the close time.
     this.campaignOpenOnLoad = this.campaignIsOpen();
 
     this.currencySymbol = getCurrencySymbol(this.campaign.currencyCode, 'narrow', 'en-GB');
@@ -1347,7 +1347,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     // To make this safe to call for both new and resumed donations, we look up
     // the donation's creation time and determine the timeout based on that rather
-    // than e.g. always using 15 minutes.
+    // than e.g. always using 30 minutes.
     const msUntilExpiryTime = environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() - Date.now();
 
     // Only set the timeout when relevant part 2/2: exclude cases where
