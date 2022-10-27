@@ -81,13 +81,6 @@
                         siteKey="{{ recaptchaSiteKey }}"
                     ></re-captcha>
 
-                    <re-captcha
-                        #idCaptcha
-                        size="invisible"
-                        (resolved)="captchaIdentityReturn($event)"
-                        siteKey="{{ recaptchaIdSiteKey }}"
-                    ></re-captcha>
-
                     <div>
                         <button mat-button matStepperNext>Next</button>
                     </div>

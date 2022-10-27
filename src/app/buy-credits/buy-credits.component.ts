@@ -56,7 +56,6 @@ export class BuyCreditsComponent implements OnInit {
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   recaptchaSiteKey = environment.recaptchaSiteKey;
   private captchaCode?: string;
-  private idCaptchaCode?: string;
   private initialTipSuggestedPercentage = 15;
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
 
@@ -71,7 +70,6 @@ export class BuyCreditsComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
-
     const idAndJWT = this.identityService.getIdAndJWT();
     if (idAndJWT !== undefined) {
       if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
@@ -311,17 +309,6 @@ export class BuyCreditsComponent implements OnInit {
     }
 
     this.captchaCode = captchaResponse;
-  }
-
-  captchaIdentityReturn(captchaResponse: string) {
-    if (captchaResponse === null) {
-      // Ensure no other callback tries to use the old captcha code, and will re-execute
-      // the catcha to get a new one as needed instead.
-      this.idCaptchaCode = undefined;
-      return;
-    }
-
-    this.idCaptchaCode = captchaResponse;
   }
 
   async stepChanged(event: StepperSelectionEvent)  {
