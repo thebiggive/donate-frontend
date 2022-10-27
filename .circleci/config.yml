@@ -113,9 +113,6 @@ jobs:
           name: Publish core components to npm
           command: npm publish --access=public
       - run:
-          name: Install Angular CLI
-          command: npm install -g @angular/cli@7.24.2
-      - run:
           name: Build Angular components
           command: cd angular && npm run build
       - run:
