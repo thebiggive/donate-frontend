@@ -9,6 +9,7 @@ export const environment: Environment = {
   productionLike: false,
   redirectHomepageToChirstmasChallenge: false,
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
+  creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateGlobalUriPrefix: 'http://localhost:4200',
   donateUriPrefix: 'http://localhost:4200',
   donationsApiPrefix: 'http://localhost:30030/v1',
@@ -16,9 +17,13 @@ export const environment: Environment = {
   googleAnalyticsId: 'UA-2979952-3',
   googleOptimizeId: null,
   // googleOptimizeId: 'OPT-NV3NHD3', // Bring back when we have an experiment to run
+  identityApiPrefix: 'http://localhost:30050/v1',
+  identityEnabled: true,
   maximumDonationAmount: 25000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
   postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.
+  promotedMetacampaign1Slug: 'Pakistan-Floods-Appeal-2022',
+  promotedMetacampaign2Slug: 'mental-health-match-fund-2022',
   psps: {
     stripe: {
       enabled: true,
@@ -30,6 +35,7 @@ export const environment: Environment = {
   recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
   // https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do
   recaptchaSiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+  recaptchaIdentitySiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
   reservationMinutes: 15,
   thanksUriPrefix: 'http://localhost:4200/thanks/',
 };

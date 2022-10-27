@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { faAccessibleIcon, IconDefinition } from '@fortawesome/free-brands-svg-icons';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { faAccessibleIcon } from '@fortawesome/free-brands-svg-icons';
 import {
   faBaby,
   faBalanceScale,

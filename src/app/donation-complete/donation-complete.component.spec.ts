@@ -1,7 +1,8 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
@@ -10,6 +11,7 @@ import { of } from 'rxjs';
 import { AnalyticsService } from '../analytics.service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { DonationCompleteComponent } from './donation-complete.component';
+import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 
 describe('DonationCompleteComponent', () => {
   let analyticsService: AnalyticsService;
@@ -20,8 +22,9 @@ describe('DonationCompleteComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ DonationCompleteComponent ],
       imports: [
-        BrowserTransferStateModule,
         HttpClientTestingModule,
+        MatButtonModule,
+        MatDialogModule,
         MatProgressSpinnerModule,
         RouterTestingModule.withRoutes([
           {
@@ -34,6 +37,7 @@ describe('DonationCompleteComponent', () => {
         AnalyticsService,
         { provide: ActivatedRoute, useValue: { params: of({donationId: 'myTestDonationId'})}},
         InMemoryStorageService,
+        { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
       ],
     });

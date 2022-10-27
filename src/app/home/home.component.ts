@@ -12,6 +12,8 @@ import { PageMetaService } from '../page-meta.service';
 })
 export class HomeComponent implements OnInit {
   campaigns: CampaignSummary[];
+  promotedCampaign1: Campaign;
+  promotedCampaign2: Campaign;
 
   public constructor(private pageMeta: PageMetaService, private route: ActivatedRoute) {}
 
@@ -19,6 +21,8 @@ export class HomeComponent implements OnInit {
     // For now, we share the resolver with Explore, so it gives us the up-to-6 campaigns from
     // the API directly, with no further constraints. We need to check their suitability here.
     this.campaigns = this.getHighlightReadyCampaigns(this.route.snapshot.data.campaigns);
+    this.promotedCampaign1 = this.route.snapshot.data.promotedMetacampaign1;
+    this.promotedCampaign2 = this.route.snapshot.data.promotedMetacampaign2;
     this.pageMeta.setCommon(
       'The Big Give',
       'The Big Give &ndash; discover campaigns and donate',

@@ -33,11 +33,14 @@ import { AppComponent } from './app.component';
 import { CampaignCardComponent } from './campaign-card/campaign-card.component';
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
 import { CampaignDetailsCardComponent } from './campaign-details-card/campaign-details-card.component';
+import { CampaignPromoCardComponent } from './campaign-promo-card/campaign-promo-card.component';
 import { CampaignSearchFormComponent } from './campaign-search-form/campaign-search-form.component';
 import { CharityComponent } from './charity/charity.component';
 import { TBG_DONATE_STORAGE } from './donation.service';
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
+import { DonationCompleteSetPasswordDialogComponent } from './donation-complete/donation-complete-set-password-dialog.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
+import { DonationStartLoginDialogComponent } from './donation-start/donation-start-login-dialog.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartMatchingExpiredDialogComponent } from './donation-start/donation-start-matching-expired-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
@@ -48,12 +51,14 @@ import { FiltersComponent } from './filters/filters.component';
 import { FiltersSelectDialogComponent } from './filters/filters-select-dialog.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeroComponent } from './hero/hero.component';
+import { HomeComponent } from './home/home.component';
+import { TBG_DONATE_ID_STORAGE } from './identity.service';
 import { MainMenuComponent } from './main-menu/main-menu.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 import { NavigationComponent } from './navigation/navigation.component';
+import { PromotedCampaignsComponent } from './promoted-campaigns/promoted-campaigns.component';
 import { TickerComponent } from './ticker/ticker.component';
 import { TimeLeftPipe } from './time-left.pipe';
-import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -61,10 +66,13 @@ import { HomeComponent } from './home/home.component';
     CampaignCardComponent,
     CampaignDetailsComponent,
     CampaignDetailsCardComponent,
+    CampaignPromoCardComponent,
     CampaignSearchFormComponent,
     CharityComponent,
     DonationCompleteComponent,
+    DonationCompleteSetPasswordDialogComponent,
     DonationStartComponent,
+    DonationStartLoginDialogComponent,
     DonationStartMatchConfirmDialogComponent,
     DonationStartMatchingExpiredDialogComponent,
     DonationStartOfferReuseDialogComponent,
@@ -76,6 +84,7 @@ import { HomeComponent } from './home/home.component';
     MainMenuComponent,
     MetaCampaignComponent,
     NavigationComponent,
+    PromotedCampaignsComponent,
     ExploreComponent,
     TickerComponent,
     TimeLeftPipe,
@@ -126,6 +135,7 @@ import { HomeComponent } from './home/home.component';
           : environment.donateUriPrefix;
       },
     },
+    { provide: TBG_DONATE_ID_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },

@@ -11,7 +11,7 @@ if (environment.productionLike) {
 
 setAssetPath(`${environment.donateUriPrefix}/assets`);
 
-document.addEventListener('DOMContentLoaded', () => {
+globalThis.document.addEventListener('DOMContentLoaded', () => {
   platformBrowserDynamic().bootstrapModule(AppModule)
     .catch(err => console.error(err));
 });

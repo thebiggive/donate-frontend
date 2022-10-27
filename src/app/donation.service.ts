@@ -4,6 +4,7 @@ import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID } from '@angu
 import { makeStateKey, TransferState } from '@angular/platform-browser';
 import { StorageService } from 'ngx-webstorage-service';
 import { Observable, of } from 'rxjs';
+import { PaymentMethod } from '@stripe/stripe-js';
 
 import { AnalyticsService } from './analytics.service';
 import { COUNTRY_CODE } from './country-code.token';
@@ -130,6 +131,13 @@ export class DonationService {
     return this.update(donation);
   }
 
+  finaliseCashBalancePurchase(donation: Donation): Observable<Donation> {
+    donation.autoConfirmFromCashBalance = true;
+    donation.tipAmount = 0; // Make extra sure no background magic can take an invisible tip!
+
+    return this.update(donation);
+  }
+
   update(donation: Donation): Observable<Donation> {
     return this.http.put<Donation>(
       `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}`,
@@ -159,10 +167,23 @@ export class DonationService {
     return observable;
   }
 
-  create(donation: Donation): Observable<DonationCreatedResponse> {
+  getPaymentMethods(personId?: string, jwt?: string): Observable<{ data: PaymentMethod[] }> {
+    return this.http.get<{ data: PaymentMethod[] }>(
+      `${environment.donationsApiPrefix}/people/${personId}/payment_methods`,
+      this.getPersonAuthHttpOptions(jwt),
+    );
+  }
+
+  create(donation: Donation, personId?: string, jwt?: string): Observable<DonationCreatedResponse> {
+    let endpoint = personId
+      ? `${environment.donationsApiPrefix}/people/${personId}${this.apiPath}`
+      : `${environment.donationsApiPrefix}${this.apiPath}`;
+
     return this.http.post<DonationCreatedResponse>(
-      `${environment.donationsApiPrefix}${this.apiPath}`,
-      donation);
+      endpoint,
+      donation,
+      this.getPersonAuthHttpOptions(jwt),
+    );
   }
 
   get(donation: Donation): Observable<Donation> {
@@ -236,6 +257,18 @@ export class DonationService {
     return {
       headers: new HttpHeaders({
         'X-Tbg-Auth': donationDataItems[0].jwt,
+      }),
+    };
+  }
+
+  private getPersonAuthHttpOptions(jwt?: string): { headers: HttpHeaders } {
+    if (!jwt) {
+      return { headers: new HttpHeaders({}) };
+    }
+
+    return {
+      headers: new HttpHeaders({
+        'X-Tbg-Auth': jwt,
       }),
     };
   }
