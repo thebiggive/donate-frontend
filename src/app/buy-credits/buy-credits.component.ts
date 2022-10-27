@@ -361,13 +361,13 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
       // IMPORTANT: donationAmount set as the tip value
       donationAmount: this.calculatedTipAmount(),
       donationMatched: this.campaign.isMatched, // this should always be false
-      feeCoverAmount: this.sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
+      feeCoverAmount: 0,
       matchedAmount: 0, // Tips are always unmatched
       matchReservedAmount: 0, // Tips are always unmatched
       paymentMethodType: 'customer_balance',
       projectId: this.campaign.id,
       psp: 'stripe',
-      tipAmount: this.sanitiseCurrency(this.amountsGroup.value.tipAmount),
+      tipAmount: 0,
     };
 
     if (environment.identityEnabled && this.personId) {
@@ -416,14 +416,6 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
       [],
       this.campaign.currencyCode,
     );
-
-    if (response.donation.tipAmount > 0) {
-      this.analyticsService.logTipAmountChosen(
-        response.donation.tipAmount,
-        this.campaign.id,
-        this.campaign.currencyCode,
-      );
-    }
 
     this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
   }
