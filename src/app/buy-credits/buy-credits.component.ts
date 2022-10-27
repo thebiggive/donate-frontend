@@ -156,19 +156,6 @@ export class BuyCreditsComponent implements OnInit {
   }
 
   ngAfterContentInit() {
-    // if (!isPlatformBrowser(this.platformId)) {
-    //   return;
-    // }
-
-    // this.showAddressLookup =
-    //   this.psp === 'stripe' &&
-    //   environment.postcodeLookupKey &&
-    //   environment.postcodeLookupUri;
-
-    // if (!this.showAddressLookup) {
-    //   return;
-    // }
-
     const observable = this.giftAidGroup.get('homeAddress')?.valueChanges.pipe(
       startWith(''),
       // https://stackoverflow.com/a/51470735/2803757
@@ -220,8 +207,6 @@ export class BuyCreditsComponent implements OnInit {
         homeBuildingNumber: address.building_number,
         homePostcode: address.postcode,
       });
-    }, error => {
-      console.log('Postcode resolve error', error);
     });
   }
 
@@ -338,7 +323,6 @@ export class BuyCreditsComponent implements OnInit {
   }
 
   async stepChanged(event: StepperSelectionEvent)  {
-    console.log(event.previouslySelectedStep);
     if (event.previouslySelectedStep.label === 'Your Donation Credits') {
       this.captcha.execute(); // Prepare for a non-Person-linked donation which needs a Donation captcha.
       this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
@@ -377,17 +361,6 @@ export class BuyCreditsComponent implements OnInit {
 
 
   private createTipDonation() {
-    console.log(this.captchaCode);
-    console.log(this.idCaptchaCode);
-
-    // if (!this.campaign || !this.campaign.charity.id || !this.psp) {
-    //   this.donationCreateError = true;
-    //   return;
-    // }
-
-    // this.creatingDonation = true;
-    // this.donationCreateError = false;
-
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
@@ -431,9 +404,6 @@ export class BuyCreditsComponent implements OnInit {
   }
 
   private newDonationSuccess(response: DonationCreatedResponse) {
-    console.log('success: ' + JSON.stringify(response));
-    // this.creatingDonation = false;
-
     const createResponseMissingData = (
       !response.donation.charityId ||
       !response.donation.donationId ||
@@ -444,8 +414,6 @@ export class BuyCreditsComponent implements OnInit {
         'donation_create_response_incomplete',
         `Missing expected response data creating new donation for campaign ${this.campaign.id}`,
       );
-      // this.donationCreateError = true;
-      // this.stepper.previous(); // Go back to step 1 to surface the internal error.
 
       return;
     }
@@ -468,40 +436,17 @@ export class BuyCreditsComponent implements OnInit {
       );
     }
 
-    // if (this.psp === 'stripe') {
-      this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
-
-      // this.preparePaymentRequestButton(this.donation, this.paymentGroup);
-    // }
-
-    // Amount reserved for matching is 'false-y', i.e. 0
-    // if (response.donation.donationMatched && !response.donation.matchReservedAmount) {
-    //   this.promptToContinueWithNoMatchingLeft(response.donation);
-    //   return;
-    // }
-
-    // Amount reserved for matching is > 0 but less than the full donation
-    // if (response.donation.donationMatched && response.donation.matchReservedAmount < response.donation.donationAmount) {
-    //   this.promptToContinueWithPartialMatching(response.donation);
-    //   return;
-    // }
-
-    // this.scheduleMatchingExpiryWarning(this.donation);
+    this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
   }
 
   private newDonationError(response: any) {
-    console.log('error: ', JSON.stringify(response));
     let errorMessage: string;
     if (response.message) {
       errorMessage = `Could not create new donation for campaign ${this.campaign.id}: ${response.message}`;
     } else {
-      // Unhandled 5xx crashes etc.
       errorMessage = `Could not create new donation for campaign ${this.campaign.id}: HTTP code ${response.status}`;
     }
     this.analyticsService.logError('donation_create_failed', errorMessage);
-    // this.creatingDonation = false;
-    // this.donationCreateError = true;
-    // this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
 
 }
