@@ -1,9 +1,13 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
+  standalone: true,
   selector: 'app-donation-start-match-confirm-dialog',
   templateUrl: 'donation-start-match-confirm-dialog.html',
+  imports: [
+    MatDialogModule,
+  ],
 })
 export class DonationStartMatchConfirmDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: {

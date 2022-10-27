@@ -1,15 +1,17 @@
 import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectChange } from '@angular/material/select';
+
 import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { DonationService } from '../donation.service';
 import { IdentityService } from '../identity.service';
 import { Person } from '../person.model';
 import { environment } from 'src/environments/environment';
-import { MatSelectChange } from '@angular/material/select';
 import { FundingInstruction } from '../fundingInstruction.model';
 import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { GiftAidAddress } from '../gift-aid-address.model';
 import { PostcodeService } from '../postcode.service';
 import { EMPTY } from 'rxjs';
@@ -25,9 +27,13 @@ import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
 
 @Component({
+  standalone: true,
   selector: 'app-buy-credits',
   templateUrl: './buy-credits.component.html',
-  styleUrls: ['./buy-credits.component.scss']
+  styleUrls: ['./buy-credits.component.scss'],
+  imports: [
+    MatProgressSpinnerModule,
+  ]
 })
 export class BuyCreditsComponent implements AfterContentInit, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;

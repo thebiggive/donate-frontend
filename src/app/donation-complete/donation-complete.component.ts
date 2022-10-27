@@ -1,7 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { RecaptchaComponent } from 'ng-recaptcha';
 
 import { environment } from '../../environments/environment';
@@ -12,14 +13,21 @@ import { Credentials } from '../credentials.model';
 import { Donation } from '../donation.model';
 import { DonationCompleteSetPasswordDialogComponent } from './donation-complete-set-password-dialog.component';
 import { DonationService } from '../donation.service';
+import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
 
 @Component({
+  standalone: true,
   selector: 'app-donation-complete',
   templateUrl: './donation-complete.component.html',
   styleUrls: ['./donation-complete.component.scss'],
+  imports: [
+    ExactCurrencyPipe,
+    MatProgressSpinnerModule,
+    RouterModule,
+  ]
 })
 export class DonationCompleteComponent {
   @ViewChild('captcha') captcha: RecaptchaComponent;

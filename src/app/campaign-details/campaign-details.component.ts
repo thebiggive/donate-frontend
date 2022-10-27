@@ -1,5 +1,6 @@
 import { isPlatformBrowser, Location } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
@@ -11,9 +12,13 @@ import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 
 @Component({
+  standalone: true,
   selector: 'app-campaign-details',
   templateUrl: './campaign-details.component.html',
   styleUrls: ['./campaign-details.component.scss'],
+  imports: [
+    MatProgressSpinnerModule,
+  ]
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   additionalImageUris: Array<string|undefined> = [];

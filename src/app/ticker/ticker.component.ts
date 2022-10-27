@@ -1,13 +1,21 @@
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { Fund } from '../fund.model';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 @Component({
+  standalone: true,
   selector: 'app-ticker',
   templateUrl: './ticker.component.html',
   styleUrls: ['./ticker.component.scss'],
+  imports: [
+    CommonModule,
+    CurrencyPipe,
+    TimeLeftPipe,
+  ],
 })
 export class TickerComponent implements OnInit {
   @Input() public campaign: Campaign;

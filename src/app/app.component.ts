@@ -5,6 +5,8 @@ import {
   NavigationEnd,
   Router,
 } from '@angular/router';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AnalyticsService } from './analytics.service';
 import { DonationService } from './donation.service';
@@ -12,9 +14,14 @@ import { GetSiteControlService } from './getsitecontrol.service';
 import { NavigationService } from './navigation.service';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  imports: [
+    BrowserAnimationsModule,
+    FlexLayoutModule,
+  ],
 })
 export class AppComponent implements OnInit {
   public fontsLoaded = false;

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CampaignSummary } from '../campaign-summary.model';
 
 @Component({
+  standalone: true,
   selector: 'app-charity',
   templateUrl: './charity.component.html',
   styleUrls: ['./charity.component.scss'],

@@ -15,7 +15,7 @@ import { ExploreComponent } from './explore/explore.component';
 import { HomeComponent } from './home/home.component';
 import { MetaCampaignComponent } from './meta-campaign/meta-campaign.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'buy-credits',
     component: BuyCreditsComponent,

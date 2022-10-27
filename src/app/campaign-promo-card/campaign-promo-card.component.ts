@@ -4,6 +4,7 @@ import { Campaign } from '../campaign.model';
 import { ImageService } from '../image.service';
 
 @Component({
+  standalone: true,
   selector: 'app-campaign-promo-card',
   templateUrl: './campaign-promo-card.component.html',
   styleUrls: ['./campaign-promo-card.component.scss'],

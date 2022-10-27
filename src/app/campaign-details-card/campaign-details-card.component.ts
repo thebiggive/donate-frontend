@@ -6,6 +6,7 @@ import { CampaignService } from '../campaign.service';
 import { ImageService } from '../image.service';
 
 @Component({
+  standalone: true,
   selector: 'app-campaign-details-card',
   templateUrl: './campaign-details-card.component.html',
   styleUrls: ['./campaign-details-card.component.scss'],

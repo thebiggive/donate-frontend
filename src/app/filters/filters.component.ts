@@ -3,6 +3,10 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { FiltersSelectDialogComponent } from './filters-select-dialog.component';
 import { SearchService } from '../search.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 enum FilterEnum {
   'beneficiary',
@@ -15,9 +19,16 @@ enum FilterEnum {
 export type FilterType = keyof typeof FilterEnum;
 
 @Component({
+  standalone: true,
   selector: 'app-filters',
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.scss'],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatOptionModule,
+    MatSelectModule,
+  ],
 })
 export class FiltersComponent {
   @Input() getDefaultSort: () => string;

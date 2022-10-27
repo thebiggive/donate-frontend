@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Person } from '../person.model';
 
 @Component({
+  standalone: true,
   selector: 'app-donation-complete-set-password-dialog',
   templateUrl: 'donation-complete-set-password-dialog.html',
   styleUrls: ['./donation-complete-set-password-dialog.component.scss'],

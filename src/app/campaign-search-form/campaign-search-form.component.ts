@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { SearchService } from '../search.service';
 
 @Component({
+  standalone: true,
   selector: 'app-campaign-search-form',
   templateUrl: './campaign-search-form.component.html',
   styleUrls: ['./campaign-search-form.component.scss'],

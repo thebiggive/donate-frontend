@@ -1,16 +1,25 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
-import { RecaptchaComponent } from 'ng-recaptcha';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
 
 import { Credentials } from '../credentials.model';
 import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
 
 @Component({
+  standalone: true,
   selector: 'app-login-modal',
   templateUrl: 'login-modal.html',
   styleUrls: ['./login-modal.component.scss'],
+  imports: [
+    FormsModule,
+    MatDialogModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    RecaptchaModule,
+  ],
 })
 export class LoginModalComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
