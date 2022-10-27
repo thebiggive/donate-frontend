@@ -10,6 +10,7 @@
     ],
     "moduleResolution": "node",
     "module": "esnext",
+    "skipLibCheck": true, //https://stackoverflow.com/a/68262351/20012370
     "target": "es2017",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
