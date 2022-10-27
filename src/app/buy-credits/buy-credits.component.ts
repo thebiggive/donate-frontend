@@ -207,6 +207,8 @@ export class BuyCreditsComponent implements OnInit {
         homeBuildingNumber: address.building_number,
         homePostcode: address.postcode,
       });
+    }, error => {
+      console.log('Postcode resolve error', error);
     });
   }
 
