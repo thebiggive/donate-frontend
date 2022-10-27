@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
@@ -29,7 +29,7 @@ import { getCurrencyMaxValidator } from '../validators/currency-max';
   templateUrl: './buy-credits.component.html',
   styleUrls: ['./buy-credits.component.scss']
 })
-export class BuyCreditsComponent implements OnInit {
+export class BuyCreditsComponent implements AfterContentInit, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
   @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
   addressSuggestions: GiftAidAddressSuggestion[] = [];
