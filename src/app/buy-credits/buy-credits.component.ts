@@ -31,7 +31,6 @@ import { getCurrencyMaxValidator } from '../validators/currency-max';
 })
 export class BuyCreditsComponent implements AfterContentInit, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
-  @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
   addressSuggestions: GiftAidAddressSuggestion[] = [];
   isLoggedIn: boolean = false;
   isLoading: boolean = false;
@@ -53,7 +52,6 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
   sortCode: string;
   accountNumber: string;
   accountHolderName: string;
-  recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   recaptchaSiteKey = environment.recaptchaSiteKey;
   private captchaCode?: string;
   private initialTipSuggestedPercentage = 15;
@@ -313,8 +311,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
 
   async stepChanged(event: StepperSelectionEvent)  {
     if (event.previouslySelectedStep.label === 'Your Donation Credits') {
-      this.captcha.execute(); // Prepare for a non-Person-linked donation which needs a Donation captcha.
-      this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
+      this.captcha.execute();
     }
   }
 
