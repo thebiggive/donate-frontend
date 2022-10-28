@@ -385,6 +385,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.personId = undefined;
     this.personIsLoginReady = false;
     this.stripeFirstSavedMethod = undefined;
+    this.stripePaymentMethodReady = false;
     this.donationForm.reset();
     this.identityService.clearJWT();
     this.idCaptcha.reset();
@@ -911,7 +912,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.personIsLoginReady = true;
 
       if (environment.creditDonationsEnabled && person.cash_balance && person.cash_balance[this.campaign.currencyCode.toLowerCase()] > 0) {
-        this.creditPenceToUse = person.cash_balance[this.campaign.currencyCode.toLowerCase()];
+        this.creditPenceToUse = parseInt(
+          person.cash_balance[this.campaign.currencyCode.toLowerCase()].toString() as string,
+          10
+        );
+        this.stripePaymentMethodReady = true;
         this.setConditionalValidators();
       }
 
@@ -1591,7 +1596,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.giftAidGroup.controls.homeAddress.updateValueAndValidity();
     });
 
-    this.addStripeCardBillingValidators();
+    if (this.creditPenceToUse > 0) {
+      this.removeStripeCardBillingValidators();
+    } else {
+      this.addStripeCardBillingValidators();
+    }
   }
 
   private getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK: boolean) {
