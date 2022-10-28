@@ -2,10 +2,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { RecaptchaComponent } from 'ng-recaptcha';
+import { ActivatedRoute } from '@angular/router';
+import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
 
-import { environment } from '../../environments/environment';
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
@@ -14,6 +14,7 @@ import { Donation } from '../donation.model';
 import { DonationCompleteSetPasswordDialogComponent } from './donation-complete-set-password-dialog.component';
 import { DonationService } from '../donation.service';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
+import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
@@ -24,9 +25,10 @@ import { Person } from '../person.model';
   templateUrl: './donation-complete.component.html',
   styleUrls: ['./donation-complete.component.scss'],
   imports: [
+    ...allChildComponentImports,
     ExactCurrencyPipe,
     MatProgressSpinnerModule,
-    RouterModule,
+    RecaptchaModule,
   ]
 })
 export class DonationCompleteComponent {

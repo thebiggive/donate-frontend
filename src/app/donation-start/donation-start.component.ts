@@ -24,7 +24,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { countries } from 'country-code-lookup';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
@@ -32,6 +32,7 @@ import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, ta
 import { PaymentMethod, StripeCardElement, StripeElementChangeEvent, StripeError, StripePaymentRequestButtonElement } from '@stripe/stripe-js';
 import { EMPTY, Observer } from 'rxjs';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
 import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
@@ -66,6 +67,7 @@ import { ValidateBillingPostCode } from '../validators/validate-billing-post-cod
   templateUrl: './donation-start.component.html',
   styleUrls: ['./donation-start.component.scss'],
   imports: [
+    ...allChildComponentImports,
     CampaignDetailsCardComponent,
     DatePipe,
     ExactCurrencyPipe,
@@ -82,7 +84,6 @@ import { ValidateBillingPostCode } from '../validators/validate-billing-post-cod
     PercentPipe,
     ReactiveFormsModule,
     RecaptchaModule,
-    RouterModule,
     TimeLeftPipe,
   ],
 })

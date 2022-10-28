@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
 import { ImageService } from '../image.service';
 
@@ -8,6 +9,9 @@ import { ImageService } from '../image.service';
   selector: 'app-campaign-promo-card',
   templateUrl: './campaign-promo-card.component.html',
   styleUrls: ['./campaign-promo-card.component.scss'],
+  imports: [
+    ...allChildComponentImports,
+  ],
 })
 export class CampaignPromoCardComponent implements OnInit {
   @Input() campaign: Campaign;

@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { CampaignGroupsService } from '../campaign-groups.service';
 import { CampaignSummary } from '../campaign-summary.model';
 import { ImageService } from '../image.service';
@@ -9,6 +12,11 @@ import { ImageService } from '../image.service';
   selector: 'app-campaign-card',
   templateUrl: './campaign-card.component.html',
   styleUrls: ['./campaign-card.component.scss'],
+  imports: [
+    ...allChildComponentImports,
+    FontAwesomeModule,
+    MatIconModule,
+  ],
 })
 export class CampaignCardComponent implements OnInit {
   @Input() campaign: CampaignSummary;

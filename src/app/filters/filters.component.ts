@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { FiltersSelectDialogComponent } from './filters-select-dialog.component';
 import { SearchService } from '../search.service';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,6 +25,7 @@ export type FilterType = keyof typeof FilterEnum;
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.scss'],
   imports: [
+    ...allChildComponentImports,
     MatButtonModule,
     MatIconModule,
     MatOptionModule,

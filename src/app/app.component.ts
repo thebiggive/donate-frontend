@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AnalyticsService } from './analytics.service';
 import { DonationService } from './donation.service';
 import { GetSiteControlService } from './getsitecontrol.service';
+import { NavigationComponent } from './navigation/navigation.component';
 import { NavigationService } from './navigation.service';
 
 @Component({
@@ -21,6 +22,7 @@ import { NavigationService } from './navigation.service';
   imports: [
     BrowserAnimationsModule,
     FlexLayoutModule,
+    NavigationComponent,
   ],
 })
 export class AppComponent implements OnInit {

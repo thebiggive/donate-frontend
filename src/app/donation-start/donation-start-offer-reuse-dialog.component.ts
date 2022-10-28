@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { Donation } from '../donation.model';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
 
@@ -9,6 +10,7 @@ import { ExactCurrencyPipe } from '../exact-currency.pipe';
   selector: 'app-donation-start-offer-reuse-dialog',
   templateUrl: 'donation-start-offer-reuse-dialog.html',
   imports: [
+    ...allChildComponentImports,
     ExactCurrencyPipe,
     MatDialogModule,
   ],

@@ -1,7 +1,9 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { SearchService } from '../search.service';
 
 @Component({
@@ -9,6 +11,11 @@ import { SearchService } from '../search.service';
   selector: 'app-campaign-search-form',
   templateUrl: './campaign-search-form.component.html',
   styleUrls: ['./campaign-search-form.component.scss'],
+  imports: [
+    ...allChildComponentImports,
+    MatInputModule,
+    ReactiveFormsModule,
+  ],
 })
 export class CampaignSearchFormComponent implements OnInit {
   @ViewChild('term') termField: ElementRef;

@@ -4,6 +4,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { Credentials } from '../credentials.model';
 import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
@@ -14,6 +15,7 @@ import { IdentityService } from '../identity.service';
   templateUrl: 'login-modal.html',
   styleUrls: ['./login-modal.component.scss'],
   imports: [
+    ...allChildComponentImports,
     FormsModule,
     MatDialogModule,
     MatInputModule,

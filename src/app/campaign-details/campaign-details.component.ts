@@ -1,10 +1,15 @@
-import { isPlatformBrowser, Location } from '@angular/common';
+import { CurrencyPipe, DatePipe, isPlatformBrowser, Location } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTabsModule } from '@angular/material/tabs';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { AnalyticsService } from '../analytics.service';
+import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { ImageService } from '../image.service';
@@ -17,8 +22,15 @@ import { PageMetaService } from '../page-meta.service';
   templateUrl: './campaign-details.component.html',
   styleUrls: ['./campaign-details.component.scss'],
   imports: [
+    ...allChildComponentImports,
+    CampaignDetailsCardComponent,
+    CurrencyPipe,
+    DatePipe,
+    MatCardModule,
+    MatIconModule,
     MatProgressSpinnerModule,
-  ]
+    MatTabsModule,
+  ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   additionalImageUris: Array<string|undefined> = [];

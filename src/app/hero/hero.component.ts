@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
 import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { Fund } from '../fund.model';
@@ -12,6 +13,7 @@ import { TickerComponent } from '../ticker/ticker.component';
   templateUrl: './hero.component.html',
   styleUrls: ['./hero.component.scss'],
   imports: [
+    ...allChildComponentImports,
     CampaignSearchFormComponent,
     TickerComponent,
   ]

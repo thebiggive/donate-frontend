@@ -7,6 +7,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { StorageService } from 'ngx-webstorage-service';
 import { Subscription } from 'rxjs';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
 import { CampaignSummary } from '../campaign-summary.model';
@@ -20,6 +21,7 @@ import { HeroComponent } from '../hero/hero.component';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   standalone: true,
@@ -27,12 +29,16 @@ import { SearchService } from '../search.service';
   templateUrl: './meta-campaign.component.html',
   styleUrls: ['./meta-campaign.component.scss'],
   imports: [
+    ...allChildComponentImports,
     CampaignCardComponent,
     FiltersComponent,
     HeroComponent,
     InfiniteScrollModule,
     MatProgressSpinnerModule,
-  ]
+  ],
+  providers: [
+    HttpClientModule,
+  ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
   public campaign: Campaign;
