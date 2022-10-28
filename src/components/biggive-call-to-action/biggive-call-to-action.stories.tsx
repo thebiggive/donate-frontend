@@ -1,6 +1,13 @@
 export default {
   title: 'Components/Content',
   argTypes: {
+    spaceAbove: {
+      name: 'Space above',
+      control: {
+        type: 'select',
+        options: [0, 1, 2, 3, 4, 5, 6],
+      },
+    },
     spaceBelow: {
       name: 'Space below',
       control: {
@@ -86,6 +93,7 @@ export default {
 
 const Template = args => `
       <biggive-call-to-action
+        space-anove=${args.spaceAbove}
         space-below=${args.spaceBelow}
         default-text-colour="${args.defaultTextColour}"
         slug-colour="${args.slugColour}"
@@ -107,6 +115,7 @@ const Template = args => `
 
 export const CallToActionComponent = Template.bind({});
 CallToActionComponent.args = {
+  spaceAbove: 0,
   spaceBelow: 0,
   defaultTextColour: 'primary',
   slugColour: '',

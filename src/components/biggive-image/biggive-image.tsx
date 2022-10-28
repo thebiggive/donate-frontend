@@ -7,6 +7,11 @@ import { Component, Prop, h } from '@stencil/core';
 })
 export class BiggiveImage {
   /**
+   * Space above component
+   */
+  @Prop() spaceAbove: number = 0;
+
+  /**
    * Space below component
    */
   @Prop() spaceBelow: number = 0;
@@ -16,11 +21,42 @@ export class BiggiveImage {
    */
   @Prop() imageUrl: string = '';
 
+  /**
+   * Image width
+   */
+  @Prop() width: number = 0;
+
+  /**
+   * Image width
+   */
+  @Prop() height: number = 0;
+
+  /**
+   * Size unit
+   */
+  @Prop() sizeUnit: string = 'px';
+
+  getWidth(): string {
+    var width = 'auto';
+    if (this.width > 0) {
+      width = this.width + this.sizeUnit;
+    }
+    return width;
+  }
+
+  getHeight(): string {
+    var height = 'auto';
+    if (this.height > 0) {
+      height = this.height + this.sizeUnit;
+    }
+    return height;
+  }
+
   render() {
     return (
-      <div class={'container space-below-' + this.spaceBelow}>
+      <div class={'container space-above-' + this.spaceAbove + ' space-below-' + this.spaceBelow} style={{ width: this.getWidth(), height: this.getHeight() }}>
         <div class="image-wrap">
-          <img src={this.imageUrl} />
+          <img src={this.imageUrl} style={{ width: this.getWidth(), height: this.getHeight() }} />
         </div>
       </div>
     );
