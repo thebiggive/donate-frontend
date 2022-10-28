@@ -1,0 +1,62 @@
+@use '@angular/material' as mat;
+@import '../../abstract';
+
+#loggedInHeader {
+    background-color: mat.get-color-from-palette($donate-primary);
+    color: white;
+    margin: 0px;
+    padding: 10px 2rem;
+    display: flex;
+    flex-direction: row-reverse;
+
+    p {
+        margin: 0;
+    }
+}
+
+.mat-stepper-vertical {
+    margin-top: 8px;
+}
+
+.mat-form-field {
+    margin-top: 16px;
+}
+
+button[mat-button] {
+    background-color: mat.get-color-from-palette($donate-primary);
+    color: white;
+    box-shadow: $box-shadow-hard;
+}
+
+.tip-text {
+    margin-bottom: 0;
+}
+
+#giftAidOptIn {
+    margin-bottom: 20px;
+}
+
+.error {
+    color: mat.get-color-from-palette($donate-warn);
+    font-size: 1rem; // slightly smaller text
+    margin: 0;
+}
+
+mat-radio-group {
+    display: flex;
+    justify-content: space-between;
+    mat-radio-button {
+        width: 50%;
+        padding: 30px;
+        box-shadow: $box-shadow-super-soft;
+        margin: 20px;
+        border-radius: 10px;
+        font-size: 1.2rem;
+    }
+}
+
+#addressWrapper {
+    display: inline-grid;
+    width: 50%;
+    padding: 0 30px 60px 30px;
+}
