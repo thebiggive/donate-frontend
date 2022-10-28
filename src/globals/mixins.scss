@@ -23,6 +23,11 @@
   line-height: 17px;
 }
 
+@mixin font-size-medium() {
+  font-size: 17px;
+  line-height: 24px;
+}
+
 @mixin font-size-large() {
   font-size: 24px;
   line-height: 30px;
@@ -200,9 +205,8 @@
 }
 
 @mixin button {
-  font-size: 18px;
-  line-height: 23px;
-  padding: 15px 30px;
+  @include font-size-medium();
+  padding: 10px 30px;
   border-radius: 5px;
   border: 1px solid $colour-black;
   background-color: $colour-black;
@@ -216,6 +220,18 @@
   &:hover {
     background-color: $colour-white;
     color: $colour-black;
+  }
+}
+
+@mixin button-small {
+  @include font-size-small();
+  padding: 5px 15px;
+}
+
+@mixin button-rounded {
+  border-radius: 27.5px;
+  &.size-small {
+    border-radius: 20px;
   }
 }
 
@@ -314,10 +330,6 @@
   }
 }
 
-@mixin button-rounded {
-  border-radius: 50%;
-}
-
 @mixin lower-shadow() {
   filter: drop-shadow(-1px 3px 12px rgba(0,0,0,0.25));
 }
@@ -373,6 +385,20 @@
       0% 0%,     /* top left */
       calc(100% - 50px) 0%,    /* top right */
       100% 50px,   /* top right */
+      100% 100%,  /* bottom right */
+      100% 100%,  /* bottom right */
+      50px 100%,   /* bottom left */
+      0 calc(100% - 50px)      /* bottom left */
+    );
+}
+
+@mixin corner-clip-medium-bottom-left() {
+  clip-path:
+    polygon(
+      0% 0%,     /* top left */
+      0% 0%,     /* top left */
+      100% 0%,    /* top right */
+      100% 0,   /* top right */
       100% 100%,  /* bottom right */
       100% 100%,  /* bottom right */
       50px 100%,   /* bottom left */

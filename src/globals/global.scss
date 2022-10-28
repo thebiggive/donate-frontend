@@ -2,6 +2,8 @@ body {
     background-color: $colour-grey-extra-light;
 }
 
+h1, h3, h3, h4, h5, h6 {margin-bottom: 0;}
+
 h1, .heading-1 {
     @include heading-1();
 }
@@ -51,22 +53,28 @@ a {
     color: $colour-black;
 } 
 
+
+.text-colour-hover-primary:hover,
 .text-colour-primary {
     color: $colour-primary;
 }
 
+.text-colour-hover-secondary:hover,
 .text-colour-secondary {
     color: $colour-secondary;
 }
 
+.text-colour-hover-tertiary:hover,
 .text-colour-tertiary {
     color: $colour-tertiary;
 }
 
+.text-colour-hover-white:hover,
 .text-colour-white {
     color: $colour-white;
 }
 
+.text-colour-hover-black:hover,
 .text-colour-black {
     color: $colour-black;
 }
@@ -92,22 +100,27 @@ a {
     fill: $colour-black;
 }
 
+.background-colour-hover-primary:hover,
 .background-colour-primary {
     background-color: $colour-primary;
 }
 
+.background-colour-hover-secondary:hover,
 .background-colour-secondary {
     background-color: $colour-secondary;
 }
 
+.background-colour-hover-tertiary:hover,
 .background-colour-tertiary {
     background-color: $colour-tertiary;
 }
 
+.background-colour-hover-white:hover,
 .background-colour-white {
     background-color: $colour-white;
 }
 
+.background-colour-hover-black:hover,
 .background-colour-black {
     background-color: $colour-black;
 }
@@ -122,8 +135,16 @@ a {
 
 .button {
     @include button();
+    &.size-small {
+      @include button-small();
+    }
+    &.button.rounded-true {
+      @include button-rounded();
+    }
 }
-  
+
+
+
 .button-primary {
    @include button-primary();
 }

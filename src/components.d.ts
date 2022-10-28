@@ -6,6 +6,52 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
+    interface BiggiveArticleCard {
+        /**
+          * Card background colour
+         */
+        "backgroundColour": string;
+        /**
+          * Card background colour hover
+         */
+        "backgroundColourHover": string;
+        /**
+          * Button label
+         */
+        "buttonLabel": string;
+        /**
+          * Button URL
+         */
+        "buttonUrl": string;
+        /**
+          * Date
+         */
+        "date": string;
+        /**
+          * Image Label
+         */
+        "imageLabel": string;
+        /**
+          * Image URL
+         */
+        "imageUrl": string;
+        /**
+          * Main title
+         */
+        "mainTitle": string;
+        /**
+          * Slug
+         */
+        "slug": string;
+        /**
+          * Space below component
+         */
+        "spaceBelow": number;
+        /**
+          * Text colour
+         */
+        "textColour": string;
+    }
     interface BiggiveBackToTop {
     }
     interface BiggiveBasicCard {
@@ -129,6 +175,14 @@ export namespace Components {
           * Text
          */
         "label": string;
+        /**
+          * Rounded corners
+         */
+        "rounded": boolean;
+        /**
+          * Size
+         */
+        "size": string;
         /**
           * Space below component
          */
@@ -832,6 +886,12 @@ export interface BiggiveSearchCustomEvent<T> extends CustomEvent<T> {
     target: HTMLBiggiveSearchElement;
 }
 declare global {
+    interface HTMLBiggiveArticleCardElement extends Components.BiggiveArticleCard, HTMLStencilElement {
+    }
+    var HTMLBiggiveArticleCardElement: {
+        prototype: HTMLBiggiveArticleCardElement;
+        new (): HTMLBiggiveArticleCardElement;
+    };
     interface HTMLBiggiveBackToTopElement extends Components.BiggiveBackToTop, HTMLStencilElement {
     }
     var HTMLBiggiveBackToTopElement: {
@@ -1049,6 +1109,7 @@ declare global {
         new (): HTMLBiggiveVideoFeatureElement;
     };
     interface HTMLElementTagNameMap {
+        "biggive-article-card": HTMLBiggiveArticleCardElement;
         "biggive-back-to-top": HTMLBiggiveBackToTopElement;
         "biggive-basic-card": HTMLBiggiveBasicCardElement;
         "biggive-beneficiary-icon": HTMLBiggiveBeneficiaryIconElement;
@@ -1088,6 +1149,52 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface BiggiveArticleCard {
+        /**
+          * Card background colour
+         */
+        "backgroundColour"?: string;
+        /**
+          * Card background colour hover
+         */
+        "backgroundColourHover"?: string;
+        /**
+          * Button label
+         */
+        "buttonLabel"?: string;
+        /**
+          * Button URL
+         */
+        "buttonUrl"?: string;
+        /**
+          * Date
+         */
+        "date"?: string;
+        /**
+          * Image Label
+         */
+        "imageLabel"?: string;
+        /**
+          * Image URL
+         */
+        "imageUrl"?: string;
+        /**
+          * Main title
+         */
+        "mainTitle"?: string;
+        /**
+          * Slug
+         */
+        "slug"?: string;
+        /**
+          * Space below component
+         */
+        "spaceBelow"?: number;
+        /**
+          * Text colour
+         */
+        "textColour"?: string;
+    }
     interface BiggiveBackToTop {
     }
     interface BiggiveBasicCard {
@@ -1211,6 +1318,14 @@ declare namespace LocalJSX {
           * Text
          */
         "label"?: string;
+        /**
+          * Rounded corners
+         */
+        "rounded"?: boolean;
+        /**
+          * Size
+         */
+        "size"?: string;
         /**
           * Space below component
          */
@@ -1913,6 +2028,7 @@ declare namespace LocalJSX {
         "videoUrl"?: string;
     }
     interface IntrinsicElements {
+        "biggive-article-card": BiggiveArticleCard;
         "biggive-back-to-top": BiggiveBackToTop;
         "biggive-basic-card": BiggiveBasicCard;
         "biggive-beneficiary-icon": BiggiveBeneficiaryIcon;
@@ -1955,6 +2071,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "biggive-article-card": LocalJSX.BiggiveArticleCard & JSXBase.HTMLAttributes<HTMLBiggiveArticleCardElement>;
             "biggive-back-to-top": LocalJSX.BiggiveBackToTop & JSXBase.HTMLAttributes<HTMLBiggiveBackToTopElement>;
             "biggive-basic-card": LocalJSX.BiggiveBasicCard & JSXBase.HTMLAttributes<HTMLBiggiveBasicCardElement>;
             "biggive-beneficiary-icon": LocalJSX.BiggiveBeneficiaryIcon & JSXBase.HTMLAttributes<HTMLBiggiveBeneficiaryIconElement>;

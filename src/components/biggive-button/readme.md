@@ -12,6 +12,8 @@
 | `colourScheme` | `colour-scheme` | Colour Scheme         | `string`  | `'primary'`  |
 | `fullWidth`    | `full-width`    | Display full width    | `boolean` | `false`      |
 | `label`        | `label`         | Text                  | `string`  | `'Click me'` |
+| `rounded`      | `rounded`       | Rounded corners       | `boolean` | `true`       |
+| `size`         | `size`          | Size                  | `string`  | `'medium'`   |
 | `spaceBelow`   | `space-below`   | Space below component | `number`  | `1`          |
 | `url`          | `url`           | URL                   | `string`  | `'#'`        |
 
@@ -20,6 +22,7 @@
 
 ### Used by
 
+ - [biggive-article-card](../biggive-article-card)
  - [biggive-basic-card](../biggive-basic-card)
  - [biggive-call-to-action](../biggive-call-to-action)
  - [biggive-campaign-card](../biggive-campaign-card)
@@ -31,6 +34,7 @@
 ### Graph
 ```mermaid
 graph TD;
+  biggive-article-card --> biggive-button
   biggive-basic-card --> biggive-button
   biggive-call-to-action --> biggive-button
   biggive-campaign-card --> biggive-button
