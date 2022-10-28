@@ -9,7 +9,7 @@ describe('CharityComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CharityComponent ],
+      declarations: [],
       providers: [
         { provide: ActivatedRoute, useValue: { snapshot: { data: { campaigns: [] }} } },
       ],

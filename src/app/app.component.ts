@@ -5,10 +5,12 @@ import {
   NavigationEnd,
   Router,
 } from '@angular/router';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { AnalyticsService } from './analytics.service';
 import { DonationService } from './donation.service';
 import { GetSiteControlService } from './getsitecontrol.service';
+import { NavigationComponent } from './navigation/navigation.component';
 import { NavigationService } from './navigation.service';
 
 @Component({

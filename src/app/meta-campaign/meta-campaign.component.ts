@@ -1,25 +1,40 @@
+import { isPlatformBrowser, ViewportScroller } from '@angular/common';
 import { AfterViewChecked, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { StorageService } from 'ngx-webstorage-service';
 import { Subscription } from 'rxjs';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
+import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { environment } from '../../environments/environment';
+import { FiltersComponent } from '../filters/filters.component';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
+import { HeroComponent } from '../hero/hero.component';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
-import { isPlatformBrowser, ViewportScroller } from '@angular/common';
 
 @Component({
+  standalone: true,
   selector: 'app-meta-campaign',
   templateUrl: './meta-campaign.component.html',
   styleUrls: ['./meta-campaign.component.scss'],
+  imports: [
+    ...allChildComponentImports,
+    CampaignCardComponent,
+    FiltersComponent,
+    HeroComponent,
+    InfiniteScrollModule,
+    MatProgressSpinnerModule,
+  ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
   public campaign: Campaign;
