@@ -187,7 +187,7 @@
 
         <div *ngIf="isLoggedIn && isPurchaseComplete">
             <h2>Transfer Instructions</h2>
-            <p>Please bank transfer us {{ (creditAmountField?.value + calculatedTipAmount()) | exactCurrency: currency }} using the following details (keep them safe!):</p>
+            <p>Please bank transfer us {{ totalToTransfer | exactCurrency: currency }} using the following details (keep them safe!):</p>
             <p><strong>Recipient</strong> {{ accountHolderName }}</p>
             <p><strong>Sort Code:</strong> {{ sortCode }}</p>
             <p><strong>Account Number:</strong> {{ accountNumber }}</p>

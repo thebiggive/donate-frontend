@@ -271,6 +271,10 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     return this.creditForm.controls.amounts.get('customTipAmount');
   }
 
+  get totalToTransfer(): number {
+    return parseFloat(this.creditAmountField?.value) + this.calculatedTipAmount();
+  }
+
   /**
   * @returns Amount without any £/$s
   */
