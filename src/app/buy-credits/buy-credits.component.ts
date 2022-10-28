@@ -220,7 +220,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
         this.accountHolderName = response.bank_transfer.financial_addresses[0].sort_code.account_holder_name;
       });
 
-      this.createTipDonation();
+      this.createAndFinaliseTipDonation();
     }
   }
 
@@ -345,8 +345,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     ];
   }
 
-
-  private createTipDonation() {
+  private createAndFinaliseTipDonation() {
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
@@ -397,7 +396,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     );
     if (createResponseMissingData) {
       this.analyticsService.logError(
-        'donation_create_response_incomplete',
+        'credit_tip_donation_create_response_incomplete',
         `Missing expected response data creating new donation for campaign ${this.campaign.id}`,
       );
 
@@ -405,16 +404,9 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     }
 
     this.donationService.saveDonation(response.donation, response.jwt);
-    this.donation = response.donation; // Simplify update() while we're on this page.
-
-    this.analyticsService.logAmountChosen(
-      response.donation.donationAmount,
-      this.campaign.id,
-      [],
-      this.campaign.currencyCode,
-    );
-
-    this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
+    this.donationService.finaliseCashBalancePurchase(response.donation).subscribe((donation) => {
+      this.donation = donation;
+    });
   }
 
   private newDonationError(response: any) {
@@ -424,7 +416,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     } else {
       errorMessage = `Could not create new donation for campaign ${this.campaign.id}: HTTP code ${response.status}`;
     }
-    this.analyticsService.logError('donation_create_failed', errorMessage);
+    this.analyticsService.logError('credit_tip_donation_create_failed', errorMessage);
   }
 
 }
