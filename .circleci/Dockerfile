@@ -1,7 +1,7 @@
 # Customised version of CircleCI Node image, published to Docker Hub as `thebiggive/donate-frontend-ci:latest` so it can be cached.
 # This avoids CI runs having to install lots of packages on every build.
 
-FROM cimg/node:16.18
+FROM cimg/node:16.18.0
 
 # Dependencies for Chrome + Puppeteer. See https://medium.com/ramsatt/gitlab-ci-cd-with-angular-7-firebase-779bf040bb82
 # See https://stackoverflow.com/a/27273543/2803757 re requiring update –
