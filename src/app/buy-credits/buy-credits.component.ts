@@ -358,13 +358,30 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
       donationAmount: this.calculatedTipAmount(),
       donationMatched: this.campaign.isMatched, // this should always be false
       feeCoverAmount: 0,
+      giftAid: this.giftAidGroup.value.giftAid,
       matchedAmount: 0, // Tips are always unmatched
       matchReservedAmount: 0, // Tips are always unmatched
+      optInCharityEmail: false,
+      // For now, corporate partners can be auto opted in under legit interest
+      // to keep the form simpler.
+      optInTbgEmail: true,
       paymentMethodType: 'customer_balance',
       projectId: this.campaign.id,
       psp: 'stripe',
       tipAmount: 0,
+      tipGiftAid: false,
     };
+
+    if (this.giftAidGroup.value.giftAid) {
+      donation.homePostcode = this.giftAidGroup.value.homeOutsideUK ? 'OVERSEAS' : this.giftAidGroup.value.homePostcode;
+      donation.homeAddress = this.giftAidGroup.value.homeAddress;
+      // Optional additional field to improve data alignment w/ HMRC when a lookup was used.
+      donation.homeBuildingNumber = this.giftAidGroup.value.homeBuildingNumber || undefined;
+    } else {
+      donation.homePostcode = undefined;
+      donation.homeAddress = undefined;
+      donation.homeBuildingNumber = undefined;
+    }
 
     if (environment.identityEnabled && this.personId) {
       donation.pspCustomerId = this.identityService.getPspId();
