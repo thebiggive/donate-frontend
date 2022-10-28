@@ -7,6 +7,10 @@ import { Component, Prop, h } from '@stencil/core';
 })
 export class BiggiveCallToAction {
   /**
+   * Space above component
+   */
+  @Prop() spaceAbove: number = 0;
+  /**
    * Space below component
    */
   @Prop() spaceBelow: number = 0;
@@ -86,7 +90,7 @@ export class BiggiveCallToAction {
 
   render() {
     return (
-      <div class={'container text-colour-' + this.defaultTextColour + ' space-below-' + this.spaceBelow}>
+      <div class={'container text-colour-' + this.defaultTextColour + ' space-above-' + this.spaceAbove + ' space-below-' + this.spaceBelow}>
         <div class="sleeve">
           <div class="content-wrap">
             <div class={'slug text-colour-' + this.slugColour}>{this.slug}</div>

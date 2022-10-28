@@ -176,6 +176,10 @@ export namespace Components {
          */
         "slugColour": string;
         /**
+          * Space above component
+         */
+        "spaceAbove": number;
+        /**
           * Space below component
          */
         "spaceBelow": number;
@@ -398,6 +402,10 @@ export namespace Components {
     }
     interface BiggiveHeading {
         /**
+          * Text alignment
+         */
+        "align": string;
+        /**
           * Colour Scheme
          */
         "colour": string;
@@ -409,6 +417,10 @@ export namespace Components {
           * Heading size
          */
         "size": number;
+        /**
+          * Space above component
+         */
+        "spaceAbove": number;
         /**
           * Space below component
          */
@@ -484,13 +496,29 @@ export namespace Components {
     }
     interface BiggiveImage {
         /**
+          * Image width
+         */
+        "height": number;
+        /**
           * Full URL of a image.
          */
         "imageUrl": string;
         /**
+          * Size unit
+         */
+        "sizeUnit": string;
+        /**
+          * Space above component
+         */
+        "spaceAbove": number;
+        /**
           * Space below component
          */
         "spaceBelow": number;
+        /**
+          * Image width
+         */
+        "width": number;
     }
     interface BiggiveImageFeature {
         /**
@@ -1198,6 +1226,10 @@ declare namespace LocalJSX {
          */
         "slugColour"?: string;
         /**
+          * Space above component
+         */
+        "spaceAbove"?: number;
+        /**
           * Space below component
          */
         "spaceBelow"?: number;
@@ -1424,6 +1456,10 @@ declare namespace LocalJSX {
     }
     interface BiggiveHeading {
         /**
+          * Text alignment
+         */
+        "align"?: string;
+        /**
           * Colour Scheme
          */
         "colour"?: string;
@@ -1435,6 +1471,10 @@ declare namespace LocalJSX {
           * Heading size
          */
         "size"?: number;
+        /**
+          * Space above component
+         */
+        "spaceAbove"?: number;
         /**
           * Space below component
          */
@@ -1510,13 +1550,29 @@ declare namespace LocalJSX {
     }
     interface BiggiveImage {
         /**
+          * Image width
+         */
+        "height"?: number;
+        /**
           * Full URL of a image.
          */
         "imageUrl"?: string;
         /**
+          * Size unit
+         */
+        "sizeUnit"?: string;
+        /**
+          * Space above component
+         */
+        "spaceAbove"?: number;
+        /**
           * Space below component
          */
         "spaceBelow"?: number;
+        /**
+          * Image width
+         */
+        "width"?: number;
     }
     interface BiggiveImageFeature {
         /**

@@ -7,6 +7,10 @@ import { Component, Prop, h } from '@stencil/core';
 })
 export class BiggiveHeading {
   /**
+   * Space above component
+   */
+  @Prop() spaceAbove: number = 0;
+  /**
    * Space below component
    */
   @Prop() spaceBelow: number = 0;
@@ -27,6 +31,11 @@ export class BiggiveHeading {
   @Prop() size: number = 1;
 
   /**
+   * Text alignment
+   */
+  @Prop() align: string = 'left';
+
+  /**
    * Heading text
    */
   @Prop() text: string = '';
@@ -34,7 +43,7 @@ export class BiggiveHeading {
   render() {
     const Tag = this.htmlElement;
     return (
-      <div class={'container space-below-' + this.spaceBelow}>
+      <div class={'container align-' + this.align + ' space-above-' + this.spaceAbove + ' space-below-' + this.spaceBelow}>
         <Tag class={'heading-colour-' + this.colour + ' heading-size-' + this.size}>{this.text}</Tag>
       </div>
     );

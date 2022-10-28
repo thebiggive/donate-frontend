@@ -10,7 +10,7 @@ describe('biggive-call-to-action', () => {
     expect(page.root).toEqualHtml(`
       <biggive-call-to-action>
         <mock:shadow-root>
-          <div class="text-colour-primary container space-below-0">
+          <div class="text-colour-primary container space-above-0 space-below-0">
             <div class="sleeve">
               <div class="content-wrap">
                 <div class="slug text-colour-"></div>
