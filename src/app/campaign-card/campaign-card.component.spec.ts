@@ -15,6 +15,7 @@ describe('CampaignCardComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [ CampaignCardComponent ],
       imports: [
         FontAwesomeModule,
         MatButtonModule,

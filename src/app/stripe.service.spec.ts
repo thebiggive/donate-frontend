@@ -1,5 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
@@ -12,6 +13,7 @@ describe('StripeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
+        BrowserTransferStateModule,
         HttpClientTestingModule,
         RouterTestingModule,
       ],

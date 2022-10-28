@@ -2,7 +2,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { LoginModalComponent } from './login-modal.component';
@@ -14,12 +13,11 @@ describe('LoginModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [],
+      declarations: [ LoginModalComponent ],
       imports: [
         FormsModule,
         HttpClientTestingModule,
         MatDialogModule,
-        NoopAnimationsModule,
         ReactiveFormsModule,
       ],
       providers: [

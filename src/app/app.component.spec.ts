@@ -9,6 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RecaptchaModule } from 'ng-recaptcha';
@@ -25,6 +26,7 @@ describe('AppComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
+        BrowserTransferStateModule,
         HttpClientTestingModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatIconModule,
@@ -40,6 +42,11 @@ describe('AppComponent', () => {
         RouterTestingModule,
       ],
       declarations: [
+        AppComponent,
+        CampaignSearchFormComponent,
+        FooterComponent,
+        MainMenuComponent,
+        NavigationComponent,
       ],
       providers: [
         InMemoryStorageService,

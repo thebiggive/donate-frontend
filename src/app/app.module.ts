@@ -20,27 +20,20 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RecaptchaModule, RECAPTCHA_NONCE } from 'ng-recaptcha';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { routes } from './app-routing';
-import { BuyCreditsComponent } from './buy-credits/buy-credits.component';
 import { CampaignCardComponent } from './campaign-card/campaign-card.component';
 import { CampaignDetailsComponent } from './campaign-details/campaign-details.component';
 import { CampaignDetailsCardComponent } from './campaign-details-card/campaign-details-card.component';
-import { CampaignListResolver } from './campaign-list.resolver';
 import { CampaignPromoCardComponent } from './campaign-promo-card/campaign-promo-card.component';
-import { CampaignPromoted1Resolver } from './campaign-promoted-1.resolver';
-import { CampaignPromoted2Resolver } from './campaign-promoted-2.resolver';
-import { CampaignResolver } from './campaign.resolver';
 import { CampaignSearchFormComponent } from './campaign-search-form/campaign-search-form.component';
-import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import { CharityComponent } from './charity/charity.component';
 import { TBG_DONATE_STORAGE } from './donation.service';
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
@@ -50,7 +43,7 @@ import { LoginModalComponent } from './login-modal/login-modal.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartMatchingExpiredDialogComponent } from './donation-start/donation-start-matching-expired-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
-import { environment } from '../environments/environment';
+import { environment } from 'src/environments/environment';
 import { ExactCurrencyPipe } from './exact-currency.pipe';
 import { ExploreComponent } from './explore/explore.component';
 import { FiltersComponent } from './filters/filters.component';
@@ -65,15 +58,11 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { PromotedCampaignsComponent } from './promoted-campaigns/promoted-campaigns.component';
 import { TickerComponent } from './ticker/ticker.component';
 import { TimeLeftPipe } from './time-left.pipe';
+import { BuyCreditsComponent } from './buy-credits/buy-credits.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-  ],
-  imports: [    
-    BrowserAnimationsModule,
-    BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
-    BuyCreditsComponent,
     CampaignCardComponent,
     CampaignDetailsComponent,
     CampaignDetailsCardComponent,
@@ -83,23 +72,35 @@ import { TimeLeftPipe } from './time-left.pipe';
     DonationCompleteComponent,
     DonationCompleteSetPasswordDialogComponent,
     DonationStartComponent,
+    LoginModalComponent,
     DonationStartMatchConfirmDialogComponent,
     DonationStartMatchingExpiredDialogComponent,
     DonationStartOfferReuseDialogComponent,
     ExactCurrencyPipe,
-    ExploreComponent,
     FiltersComponent,
     FiltersSelectDialogComponent,
+    FooterComponent,
+    HeroComponent,
+    MainMenuComponent,
+    MetaCampaignComponent,
+    NavigationComponent,
+    PromotedCampaignsComponent,
+    ExploreComponent,
+    TickerComponent,
+    TimeLeftPipe,
+    HomeComponent,
+    BuyCreditsComponent,
+  ],
+  imports: [
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
+    BrowserTransferStateModule,
     FlexLayoutModule,
     FontAwesomeModule,
-    FooterComponent,
     FormsModule,
-    HeroComponent,
-    HomeComponent,
     HttpClientModule,
     InfiniteScrollModule,
-    LoginModalComponent,
-    MainMenuComponent,
     MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
@@ -117,25 +118,10 @@ import { TimeLeftPipe } from './time-left.pipe';
     MatStepperModule,
     MatTabsModule,
     MatToolbarModule,
-    MetaCampaignComponent,
-    NavigationComponent,
-    PromotedCampaignsComponent,
     ReactiveFormsModule,
     RecaptchaModule,
-    RouterModule.forRoot(routes, {
-      initialNavigation: 'enabledBlocking', // "This value is required for server-side rendering to work." https://angular.io/api/router/InitialNavigation
-      onSameUrlNavigation: 'reload', // Allows Explore & home logo links to clear search filters in ExploreComponent
-      scrollPositionRestoration: 'enabled',
-    }),
-    TickerComponent,
-    TimeLeftPipe,
   ],
   providers: [
-    CampaignListResolver,
-    CampaignPromoted1Resolver,
-    CampaignPromoted2Resolver,
-    CampaignResolver,
-    CharityCampaignsResolver,
     // In Universal / SSR mode, `APP_BASE_HREF` should vary according to the host reported
     // by the browser once client side JS takes over. This is necessary so we can successfully
     // serve the app on multiple live domains.

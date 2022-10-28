@@ -1,23 +1,13 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { SearchService } from '../search.service';
 
 @Component({
-  standalone: true,
   selector: 'app-campaign-search-form',
   templateUrl: './campaign-search-form.component.html',
   styleUrls: ['./campaign-search-form.component.scss'],
-  imports: [
-    ...allChildComponentImports,
-    MatButtonModule,
-    MatInputModule,
-    ReactiveFormsModule,
-  ],
 })
 export class CampaignSearchFormComponent implements OnInit {
   @ViewChild('term') termField: ElementRef;

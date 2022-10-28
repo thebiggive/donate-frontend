@@ -8,7 +8,6 @@ import { map, startWith } from 'rxjs/operators';
  * Realtime update / AsyncPipe adaptation based on https://stackoverflow.com/a/36667685/2803757
  */
 @Pipe({
-  standalone: true,
   name: 'timeLeft',
   pure: false,
 })
