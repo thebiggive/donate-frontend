@@ -7,7 +7,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
@@ -16,15 +15,9 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
-import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
-import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
 import { TBG_DONATE_STORAGE } from '../donation.service';
-import { FiltersComponent } from './../filters/filters.component';
-import { HeroComponent } from '../hero/hero.component';
 import { MetaCampaignComponent } from './meta-campaign.component';
-import { TickerComponent } from './../ticker/ticker.component';
-import { TimeLeftPipe } from '../time-left.pipe';
 
 
 describe('MetaCampaignComponent', () => {
@@ -73,17 +66,7 @@ describe('MetaCampaignComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        CampaignCardComponent,
-        CampaignSearchFormComponent,
-        FiltersComponent,
-        HeroComponent,
-        MetaCampaignComponent,
-        TickerComponent,
-        TimeLeftPipe,
-      ],
       imports: [
-        BrowserTransferStateModule,
         HttpClientTestingModule,
         InfiniteScrollModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic

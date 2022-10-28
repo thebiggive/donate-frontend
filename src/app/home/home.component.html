@@ -21,7 +21,7 @@
   </div>
 
   <div class="promo-wrapper">
-    <app-promoted-campaigns
+    <app-promoted-campaigns *ngIf="promotedCampaign1 && promotedCampaign2"
       [campaign1]="promotedCampaign1"
       [campaign2]="promotedCampaign2"
     ></app-promoted-campaigns>
