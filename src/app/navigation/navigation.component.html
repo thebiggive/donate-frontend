@@ -1,4 +1,4 @@
-<mat-toolbar role="navigation" class="main-nav-toolbar">
+<!-- <mat-toolbar role="navigation" class="main-nav-toolbar">
   <div class="logo__wrap">
     <a routerLink="/" class="logo__link"><img class="logo" src="/assets/images/logo.png" alt="The Big Give"></a>
   </div>
@@ -28,4 +28,21 @@
     <router-outlet></router-outlet>
     <app-footer></app-footer>
   </mat-sidenav-content>
-</mat-sidenav-container>
+</mat-sidenav-container> -->
+
+<biggive-header>
+  <ul slot="nav-primary">
+    <li><a href="/explore">Explore Campaigns</a></li>
+    <li><a href="#">For Charities</a></li>
+    <li><a href="#">For Funders</a></li>
+    <li><a href="#">Match Funding</a></li>
+    <li><a href="#">About Us</a></li>
+    <li><a href="#">Resources</a></li>
+  </ul>
+  <ul slot="nav-secondary">
+    <li><a href="#">Contact us</a></li>
+    <li><a href="#">Charity login</a></li>
+  </ul>
+</biggive-header>
+<router-outlet></router-outlet>
+<app-footer></app-footer>

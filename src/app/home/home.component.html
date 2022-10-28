@@ -1,64 +1,119 @@
 <main>
-  <div class="home-hero">
-    <div class="b-container-sm">
-      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center">
-        <div class="home-hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
-          <div fxLayout="column">
-            <h1 class="b-rh-1 b-bold c-home-hero__heading">The leading online match funding platform</h1>
-          </div>
-          <div fxLayout="column">
-            <p class="home-hero__description">The Big Give brings charities, philanthropists and the public together to multiply their impact. The Big Give has raised over £190m for thousands of great causes through the power of match funding.</p>
-          </div>
-        </div>
-        <div class="home-hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
-          <app-campaign-search-form
-            [getDefaultSort]="getDefaultSort"
-            [jumpToExplore]="true"
-          ></app-campaign-search-form>
-        </div>
-      </div>
-    </div>
+  <biggive-hero-image
+    colour-scheme="primary"
+    main-image="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
+    main-title="Multiplying Donations & Impact."
+    teaser="We run match funding campaigns to make an extraordinary difference to the world’s big challenges."
+    button-url="/explore"
+    button-label="Donate now"
+    button-colour-scheme="primary"
+  ></biggive-hero-image>
+
+  <div class="b-container">
+    <biggive-grid>
+      <biggive-basic-card 
+        space-below='4'
+        icon-colour='primary'
+        background-image-url='https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693'
+        main-title='Application process for our Green Match Fund now open'
+        subtitle='Apply before: DDMMYYYY'
+        button-url='#'
+        button-label='Apply now'
+        button-colour-scheme='clear-primary'
+      >
+      </biggive-basic-card>
+
+      <biggive-basic-card 
+        space-below='4'
+        icon-colour='secondary'
+        background-image-url='https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693'
+        main-title='Application process for our Green Match Fund now open'
+        subtitle='Apply before: DDMMYYYY'
+        button-url='#'
+        button-label='Apply now'
+        button-colour-scheme='clear-primary'
+      >
+      </biggive-basic-card>
+
+      <biggive-basic-card 
+        space-below='4'
+        icon-colour='primary'
+        background-colour='primary'
+        x-background-image-url='https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693'
+        main-title='Application process for our Green Match Fund now open'
+        subtitle='Apply before: DDMMYYYY'
+        button-url='#'
+        button-label='Apply now'
+        button-colour-scheme='clear-primary'
+      >
+      </biggive-basic-card>
+    </biggive-grid>
   </div>
 
-  <div class="promo-wrapper">
-    <app-promoted-campaigns
-      [campaign1]="promotedCampaign1"
-      [campaign2]="promotedCampaign2"
-    ></app-promoted-campaigns>
-  </div>
+  <biggive-page-section
+    colour-scheme="primary"
+    section-style-bottom="crop-right">
 
-  <div *ngIf="campaigns.length > 0" class="highlights-wrapper">
-    <h3 class="b-rh-1 b-bold" fxLayoutAlign="center">Charity campaigns</h3>
-    <div class="b-container">
-      <div class="c-grid">
-        <div *ngFor="let campaign of campaigns">
-          <app-campaign-card [campaign]="campaign"></app-campaign-card>
-        </div>
+    <div style="padding: 50px 0 40px 0;">
+      <biggive-call-to-action
+        default-text-colour="secondary"
+        main-title="£200,000,000"
+        subtitle="raised for 6987 charities since 2008"
+        subtitle-colour="white"
+        secondary-button-label="Read about our impact"
+        secondary-button-url="/about"
+        secondary-button-colour-scheme="clear-white">
+      </biggive-call-to-action>
+    </div>
+
+  </biggive-page-section>
+
+  <biggive-page-section>
+    <div style="text-align: center;">
+      <biggive-heading
+        heading-colour="primary"
+        html-element="h2"
+        size="3"
+        text="We're proud to support thousands of charities"
+        >
+      </biggive-heading>
+    </div>
+  </biggive-page-section>
+
+  <biggive-page-section>
+    <biggive-grid
+      column-count="6">
+      <img
+        src="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
+        alt=""
+      >
+      <img
+        src="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
+        alt=""
+      >
+      <img
+        src="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
+        alt=""
+      >
+      <img
+        src="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
+        alt=""
+      >
+      <img
+        src="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
+        alt=""
+      >
+    </biggive-grid>
+
+    <div class="button-wrapper">
+      <div class="button">
+        <biggive-button
+          colour-scheme="primary"
+          label="Join us today"
+          url="/"
+          full-width="false">
+        </biggive-button>
       </div>
     </div>
-  </div>
-
-  <div class="about-container">
-    <h3 class="b-rh-1 b-bold" fxLayoutAlign="center">About the Big Give</h3>
-    <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center">
-      <div fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
-        <div fxLayout="column">
-          <div class="c-video">
-            <iframe
-              class="c-video__iframe b-w-100"
-              src="https://www.youtube.com/embed/5RWDzzBg-go"
-              frameborder="0"
-              allow="encrypted-media"
-              webkitallowfullscreen="true"
-              mozallowfullscreen="true"
-              allowfullscreen="true"></iframe>
-          </div>
-        </div>
-      </div>
-      <div class="home-hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
-        <p>The Big Give is the UK's #1 match funding platform. We specialise in bringing charities, philanthropists and the public together to multiply their impact.</p>
-        <p>We run the Christmas Challenge, an annual match funding campaign which raises millions of pounds for good cases, as well as other match funding campaigns. We also provide a platform for charities to run their own fundraising campaigns.</p>
-      </div>
-    </div>
-  </div>
+  </biggive-page-section>
 </main>
