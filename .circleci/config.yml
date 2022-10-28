@@ -155,10 +155,10 @@ workflows:
           context:
             - docker-hub-creds
             - jira
-          # post-steps:
-          #   - jira/notify:
-          #       job_type: build
-          #       environment_type: development
+          post-steps:
+            - jira/notify:
+                job_type: build
+                environment_type: development
 
   deploy-regression:
     jobs:
@@ -225,9 +225,9 @@ workflows:
           cluster-name: 'tbg-staging-${AWS_REGION}'
           container-image-name-updates: 'container=donate,tag=staging-${CIRCLE_SHA1}'
           post-steps:
-            # - jira/notify:
-            #     job_type: deployment
-            #     environment_type: staging
+            - jira/notify:
+                job_type: deployment
+                environment_type: staging
             - slack/notify:
                 custom: |
                   {
@@ -278,10 +278,9 @@ workflows:
           cluster-name: 'tbg-production-${AWS_REGION}'
           container-image-name-updates: "container=donate,tag=production-${CIRCLE_SHA1}"
           post-steps:
-            # TODO reinstate jira notify x3
-            # - jira/notify:
-            #     job_type: deployment
-            #     environment_type: production
+            - jira/notify:
+                job_type: deployment
+                environment_type: production
             - slack/notify:
                 custom: |
                   {
