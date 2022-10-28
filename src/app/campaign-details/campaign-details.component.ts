@@ -62,8 +62,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
         this.fromFund = true;
       }
     });
-
-    const campaign = route.snapshot.data.campaign;
   }
 
   ngOnInit() {

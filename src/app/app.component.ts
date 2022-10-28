@@ -14,14 +14,9 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { NavigationService } from './navigation.service';
 
 @Component({
-  standalone: true,
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [
-    FlexLayoutModule,
-    NavigationComponent,
-  ],
 })
 export class AppComponent implements OnInit {
   public fontsLoaded = false;
