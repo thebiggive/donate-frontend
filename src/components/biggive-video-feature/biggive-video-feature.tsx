@@ -1,4 +1,5 @@
 import { Component, Prop, h } from '@stencil/core';
+import { VideoService } from '../../util/video';
 
 @Component({
   tag: 'biggive-video-feature',
@@ -6,6 +7,10 @@ import { Component, Prop, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveVideoFeature {
+  /**
+   * Space above component
+   */
+  @Prop() spaceAbove: number = 0;
   /**
    * Space below component
    */
@@ -67,7 +72,7 @@ export class BiggiveVideoFeature {
 
   render() {
     return (
-      <div class={'container text-colour-' + this.defaultTextColour + ' space-below-' + this.spaceBelow}>
+      <div class={'container text-colour-' + this.defaultTextColour + ' space-above-' + this.spaceAbove + ' space-below-' + this.spaceBelow}>
         <div class="sleeve">
           <div class="content-wrap">
             <div class={'slug text-colour-' + this.slugColour}>{this.slug}</div>
@@ -77,13 +82,7 @@ export class BiggiveVideoFeature {
               <biggive-button colour-scheme={this.buttonColourScheme} url={this.buttonUrl} label={this.buttonLabel}></biggive-button>
             ) : null}
           </div>
-          <div class="graphic-wrap">
-            {this.videoUrl.length > 0 ? (
-              <div class="video-wrap">
-                <video controls src={this.videoUrl} />
-              </div>
-            ) : null}
-          </div>
+          <div class="graphic-wrap">{this.videoUrl.length > 0 ? <div class="video-wrap" innerHTML={VideoService.getEmbedHtml(this.videoUrl)}></div> : null}</div>
         </div>
       </div>
     );

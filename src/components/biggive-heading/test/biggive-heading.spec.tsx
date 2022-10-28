@@ -11,7 +11,7 @@ describe('biggive-heading', () => {
       <biggive-heading>
         <mock:shadow-root>
           <div class="container align-left space-above-0 space-below-0">
-            <h1 class="heading-colour-primary heading-size-1"></h1>
+            <h1 class="heading-1 heading-colour-primary"></h1>
           </div>
         </mock:shadow-root>
       </biggive-heading>

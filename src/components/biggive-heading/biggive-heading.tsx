@@ -44,7 +44,7 @@ export class BiggiveHeading {
     const Tag = this.htmlElement;
     return (
       <div class={'container align-' + this.align + ' space-above-' + this.spaceAbove + ' space-below-' + this.spaceBelow}>
-        <Tag class={'heading-colour-' + this.colour + ' heading-size-' + this.size}>{this.text}</Tag>
+        <Tag class={'heading-colour-' + this.colour + ' heading-' + this.size}>{this.text}</Tag>
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import { Component, Prop, h } from '@stencil/core';
+import { VideoService } from '../../util/video';
 
 @Component({
   tag: 'biggive-video',
@@ -6,6 +7,10 @@ import { Component, Prop, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveVideo {
+  /**
+   * Space above component
+   */
+  @Prop() spaceAbove: number = 0;
   /**
    * Space below component
    */
@@ -17,10 +22,8 @@ export class BiggiveVideo {
 
   render() {
     return (
-      <div class={'container space-below-' + this.spaceBelow}>
-        <div class="video-wrap">
-          <video controls src={this.videoUrl} />
-        </div>
+      <div class={'container space-above-' + this.spaceAbove + ' space-below-' + this.spaceBelow}>
+        <div class="video-wrap" innerHTML={VideoService.getEmbedHtml(this.videoUrl)}></div>
       </div>
     );
   }

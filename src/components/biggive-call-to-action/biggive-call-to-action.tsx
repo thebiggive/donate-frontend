@@ -20,24 +20,35 @@ export class BiggiveCallToAction {
   @Prop() defaultTextColour: string = 'primary';
 
   /**
+   * Slug size
+   */
+  @Prop() slugSize: number = 4;
+  /**
    * Slug colour
    */
   @Prop() slugColour: string = '';
-
   /**
    * Slug
    */
   @Prop() slug: string = null;
+
   /**
    * Main title colour
    */
   @Prop() mainTitleColour: string = '';
-
+  /**
+   * Main title size
+   */
+  @Prop() mainTitleSize: number = 2;
   /**
    * Main title
    */
   @Prop() mainTitle: string = null;
 
+  /**
+   * Main title size
+   */
+  @Prop() subtitleSize: number = 4;
   /**
    * Subtitle colour
    */
@@ -93,9 +104,9 @@ export class BiggiveCallToAction {
       <div class={'container text-colour-' + this.defaultTextColour + ' space-above-' + this.spaceAbove + ' space-below-' + this.spaceBelow}>
         <div class="sleeve">
           <div class="content-wrap">
-            <div class={'slug text-colour-' + this.slugColour}>{this.slug}</div>
-            <h2 class={'title text-colour-' + this.mainTitleColour}>{this.mainTitle}</h2>
-            <div class={'slug text-colour-' + this.subtitleColour}>{this.subtitle}</div>
+            <div class={'slug heading-' + this.slugSize + ' text-colour-' + this.slugColour}>{this.slug}</div>
+            <h2 class={'title heading-' + this.mainTitleSize + ' text-colour-' + this.mainTitleColour}>{this.mainTitle}</h2>
+            <div class={'slug heading-' + this.subtitleSize + ' text-colour-' + this.subtitleColour}>{this.subtitle}</div>
             <div class={'teaser text-colour-' + this.teaserColour}>{this.teaser}</div>
             {this.primaryButtonLabel != null && this.primaryButtonUrl != null ? (
               <div class="button-wrap">

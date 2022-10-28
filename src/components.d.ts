@@ -10,7 +10,7 @@ export namespace Components {
     }
     interface BiggiveBasicCard {
         /**
-          * Full URL of the background image.
+          * Background colour.
          */
         "backgroundColour": string;
         /**
@@ -30,6 +30,10 @@ export namespace Components {
          */
         "buttonUrl": string;
         /**
+          * Card colour
+         */
+        "cardColour": string;
+        /**
           * Icon colour
          */
         "iconColour": string;
@@ -45,6 +49,10 @@ export namespace Components {
           * Subtitle title
          */
         "subtitle": string;
+        /**
+          * Text colour
+         */
+        "textColour": string;
     }
     interface BiggiveBeneficiaryIcon {
         /**
@@ -144,6 +152,10 @@ export namespace Components {
          */
         "mainTitleColour": string;
         /**
+          * Main title size
+         */
+        "mainTitleSize": number;
+        /**
           * Primary button Colour Scheme
          */
         "primaryButtonColourScheme": string;
@@ -176,6 +188,10 @@ export namespace Components {
          */
         "slugColour": string;
         /**
+          * Slug size
+         */
+        "slugSize": number;
+        /**
           * Space above component
          */
         "spaceAbove": number;
@@ -191,6 +207,10 @@ export namespace Components {
           * Subtitle colour
          */
         "subtitleColour": string;
+        /**
+          * Main title size
+         */
+        "subtitleSize": number;
         /**
           * Teaser
          */
@@ -395,6 +415,10 @@ export namespace Components {
         "spaceBelow": number;
     }
     interface BiggiveHeader {
+        /**
+          * Logo hyperlink URL
+         */
+        "logoUrl": string;
         /**
           * Space below component
          */
@@ -732,6 +756,10 @@ export namespace Components {
     }
     interface BiggiveVideo {
         /**
+          * Space above component
+         */
+        "spaceAbove": number;
+        /**
           * Space below component
          */
         "spaceBelow": number;
@@ -773,6 +801,10 @@ export namespace Components {
           * Slug colour
          */
         "slugColour": string;
+        /**
+          * Space above component
+         */
+        "spaceAbove": number;
         /**
           * Space below component
          */
@@ -1060,7 +1092,7 @@ declare namespace LocalJSX {
     }
     interface BiggiveBasicCard {
         /**
-          * Full URL of the background image.
+          * Background colour.
          */
         "backgroundColour"?: string;
         /**
@@ -1080,6 +1112,10 @@ declare namespace LocalJSX {
          */
         "buttonUrl"?: string;
         /**
+          * Card colour
+         */
+        "cardColour"?: string;
+        /**
           * Icon colour
          */
         "iconColour"?: string;
@@ -1095,6 +1131,10 @@ declare namespace LocalJSX {
           * Subtitle title
          */
         "subtitle"?: string;
+        /**
+          * Text colour
+         */
+        "textColour"?: string;
     }
     interface BiggiveBeneficiaryIcon {
         /**
@@ -1194,6 +1234,10 @@ declare namespace LocalJSX {
          */
         "mainTitleColour"?: string;
         /**
+          * Main title size
+         */
+        "mainTitleSize"?: number;
+        /**
           * Primary button Colour Scheme
          */
         "primaryButtonColourScheme"?: string;
@@ -1226,6 +1270,10 @@ declare namespace LocalJSX {
          */
         "slugColour"?: string;
         /**
+          * Slug size
+         */
+        "slugSize"?: number;
+        /**
           * Space above component
          */
         "spaceAbove"?: number;
@@ -1241,6 +1289,10 @@ declare namespace LocalJSX {
           * Subtitle colour
          */
         "subtitleColour"?: string;
+        /**
+          * Main title size
+         */
+        "subtitleSize"?: number;
         /**
           * Teaser
          */
@@ -1449,6 +1501,10 @@ declare namespace LocalJSX {
         "spaceBelow"?: number;
     }
     interface BiggiveHeader {
+        /**
+          * Logo hyperlink URL
+         */
+        "logoUrl"?: string;
         /**
           * Space below component
          */
@@ -1790,6 +1846,10 @@ declare namespace LocalJSX {
     }
     interface BiggiveVideo {
         /**
+          * Space above component
+         */
+        "spaceAbove"?: number;
+        /**
           * Space below component
          */
         "spaceBelow"?: number;
@@ -1831,6 +1891,10 @@ declare namespace LocalJSX {
           * Slug colour
          */
         "slugColour"?: string;
+        /**
+          * Space above component
+         */
+        "spaceAbove"?: number;
         /**
           * Space below component
          */

@@ -9,21 +9,9 @@
 
 | Property     | Attribute     | Description           | Type     | Default |
 | ------------ | ------------- | --------------------- | -------- | ------- |
+| `logoUrl`    | `logo-url`    | Logo hyperlink URL    | `string` | `'/'`   |
 | `spaceBelow` | `space-below` | Space below component | `number` | `0`     |
 
-
-## Dependencies
-
-### Depends on
-
-- [biggive-social-icon](../biggive-social-icon)
-
-### Graph
-```mermaid
-graph TD;
-  biggive-header --> biggive-social-icon
-  style biggive-header fill:#f9f,stroke:#333,stroke-width:4px
-```
 
 ----------------------------------------------
 

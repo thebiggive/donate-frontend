@@ -17,6 +17,7 @@
 | `mainTitleColour`    | `main-title-colour`    | Slug colour              | `string` | `''`        |
 | `slug`               | `slug`                 | Slug                     | `string` | `null`      |
 | `slugColour`         | `slug-colour`          | Slug colour              | `string` | `''`        |
+| `spaceAbove`         | `space-above`          | Space above component    | `number` | `0`         |
 | `spaceBelow`         | `space-below`          | Space below component    | `number` | `0`         |
 | `teaser`             | `teaser`               | Introductory teaser text | `string` | `null`      |
 | `teaserColour`       | `teaser-colour`        | Teaser colour            | `string` | `''`        |
