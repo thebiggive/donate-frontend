@@ -263,7 +263,7 @@
                 confirm it's you in case you have any queries.</mat-hint>
             </mat-form-field>
 
-            <div *ngIf="creditPenceToUse === 0" id="payment-request-button" #paymentRequestButton></div>
+            <div [style.display]="creditPenceToUse === 0 ? 'block' : 'none'" id="payment-request-button" #paymentRequestButton></div>
             <p *ngIf="requestButtonShown && !stripePRBMethodReady" class="b-center b-grey b-rt-sm">Or</p>
 
             <div *ngIf="creditPenceToUse > 0">
