@@ -1,9 +1,16 @@
-import { isPlatformBrowser, Location } from '@angular/common';
+import { CurrencyPipe, DatePipe, isPlatformBrowser, Location } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTabsModule } from '@angular/material/tabs';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { AnalyticsService } from '../analytics.service';
+import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { ImageService } from '../image.service';
@@ -11,9 +18,21 @@ import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 
 @Component({
+  standalone: true,
   selector: 'app-campaign-details',
   templateUrl: './campaign-details.component.html',
   styleUrls: ['./campaign-details.component.scss'],
+  imports: [
+    ...allChildComponentImports,
+    CampaignDetailsCardComponent,
+    CurrencyPipe,
+    DatePipe,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatTabsModule,
+  ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   additionalImageUris: Array<string|undefined> = [];
@@ -43,8 +62,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
         this.fromFund = true;
       }
     });
-
-    const campaign = route.snapshot.data.campaign;
   }
 
   ngOnInit() {

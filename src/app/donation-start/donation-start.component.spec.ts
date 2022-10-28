@@ -20,12 +20,9 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
-import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { DonationStartComponent } from './donation-start.component';
-import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
-import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('DonationStartComponent', () => {
   (window as any).gtag = (...args: any[]) => args;
@@ -106,12 +103,6 @@ describe('DonationStartComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        DonationStartComponent,
-        ExactCurrencyPipe,
-        TimeLeftPipe,
-        CampaignDetailsCardComponent,
-      ],
       imports: [
         HttpClientTestingModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic

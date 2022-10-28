@@ -15,7 +15,7 @@ describe('CampaignSearchFormComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CampaignSearchFormComponent ],
+      declarations: [],
       imports: [
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatInputModule,
