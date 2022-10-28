@@ -381,6 +381,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   logout() {
+    this.creditPenceToUse = 0;
     this.personId = undefined;
     this.personIsLoginReady = false;
     this.stripeFirstSavedMethod = undefined;
