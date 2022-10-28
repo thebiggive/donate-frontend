@@ -10,9 +10,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
-import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
-import { CampaignPromoCardComponent } from '../campaign-promo-card/campaign-promo-card.component';
 import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {
