@@ -1,24 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatRadioModule } from '@angular/material/radio';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { Person } from '../person.model';
 
 @Component({
-  standalone: true,
   selector: 'app-donation-complete-set-password-dialog',
   templateUrl: 'donation-complete-set-password-dialog.html',
   styleUrls: ['./donation-complete-set-password-dialog.component.scss'],
-  imports: [
-    MatDialogModule,
-    MatIconModule,
-    MatInputModule,
-    MatRadioModule,
-    ReactiveFormsModule,
-  ]
 })
 export class DonationCompleteSetPasswordDialogComponent implements OnInit {
   form: FormGroup;

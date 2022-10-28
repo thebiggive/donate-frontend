@@ -1,61 +1,33 @@
-import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatOptionModule } from '@angular/material/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { MatStepperModule } from '@angular/material/stepper';
-import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
-import { EMPTY } from 'rxjs';
-import { startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-
-import { allChildComponentImports } from '../../allChildComponentImports';
-import { AnalyticsService } from '../analytics.service';
-import { Campaign } from '../campaign.model';
-import { CampaignService } from '../campaign.service';
+import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { DonationService } from '../donation.service';
-import { Donation } from '../donation.model';
-import { DonationCreatedResponse } from '../donation-created-response.model';
-import { ExactCurrencyPipe } from '../exact-currency.pipe';
+import { IdentityService } from '../identity.service';
+import { Person } from '../person.model';
 import { environment } from 'src/environments/environment';
+import { MatSelectChange } from '@angular/material/select';
 import { FundingInstruction } from '../fundingInstruction.model';
 import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { GiftAidAddress } from '../gift-aid-address.model';
-import { IdentityService } from '../identity.service';
-import { LoginModalComponent } from '../login-modal/login-modal.component';
-import { Person } from '../person.model';
 import { PostcodeService } from '../postcode.service';
-import { TimeLeftPipe } from '../time-left.pipe';
+import { EMPTY } from 'rxjs';
+import { startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Donation } from '../donation.model';
+import { Campaign } from '../campaign.model';
+import { CampaignService } from '../campaign.service';
+import { DonationCreatedResponse } from '../donation-created-response.model';
+import { AnalyticsService } from '../analytics.service';
+import { RecaptchaComponent } from 'ng-recaptcha';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
 
 @Component({
-  standalone: true,
   selector: 'app-buy-credits',
   templateUrl: './buy-credits.component.html',
-  styleUrls: ['./buy-credits.component.scss'],
-  imports: [
-    ...allChildComponentImports,
-    ExactCurrencyPipe,
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatInputModule,
-    MatOptionModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatStepperModule,
-    ReactiveFormsModule,
-    RecaptchaModule,
-    TimeLeftPipe,
-  ],
+  styleUrls: ['./buy-credits.component.scss']
 })
 export class BuyCreditsComponent implements AfterContentInit, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;

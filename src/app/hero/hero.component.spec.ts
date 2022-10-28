@@ -1,12 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { Observable } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
+import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { HeroComponent } from './hero.component';
+import { TickerComponent } from '../ticker/ticker.component';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('HeroComponent', () => {
   let component: HeroComponent;
@@ -14,7 +19,14 @@ describe('HeroComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        CampaignSearchFormComponent,
+        HeroComponent,
+        TickerComponent,
+        TimeLeftPipe,
+      ],
       imports: [
+        MatButtonModule,
         MatInputModule,
         MatProgressBarModule,
         MatSelectModule,

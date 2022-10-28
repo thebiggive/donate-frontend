@@ -7,6 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Campaign } from '../campaign.model';
 import { CampaignDetailsCardComponent } from './campaign-details-card.component';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('CampaignDetailsCardComponent', () => {
   let component: CampaignDetailsCardComponent;
@@ -14,6 +15,7 @@ describe('CampaignDetailsCardComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [ CampaignDetailsCardComponent, TimeLeftPipe ],
       imports: [
         MatButtonModule,
         MatIconModule,

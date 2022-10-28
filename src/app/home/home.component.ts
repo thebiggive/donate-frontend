@@ -1,25 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
-import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
-import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
-import { PromotedCampaignsComponent } from '../promoted-campaigns/promoted-campaigns.component';
 
 @Component({
-  standalone: true,
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  imports: [
-    ...allChildComponentImports,
-    CampaignCardComponent,
-    CampaignSearchFormComponent,
-    PromotedCampaignsComponent,
-  ]
 })
 export class HomeComponent implements OnInit {
   campaigns: CampaignSummary[];

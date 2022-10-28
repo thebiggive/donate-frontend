@@ -20,7 +20,7 @@ describe('FiltersComponent', () => {
         MatSelectModule,
         NoopAnimationsModule,
       ],
-      declarations: [],
+      declarations: [ FiltersComponent ],
     })
     .compileComponents();
   }));

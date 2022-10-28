@@ -1,19 +1,12 @@
 import { Component, Input } from '@angular/core';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
-import { CampaignPromoCardComponent } from '../campaign-promo-card/campaign-promo-card.component';
 import { environment } from '../../environments/environment';
 
 @Component({
-  standalone: true,
   selector: 'app-promoted-campaigns',
   templateUrl: './promoted-campaigns.component.html',
-  styleUrls: ['./promoted-campaigns.component.scss'],
-  imports: [
-    ...allChildComponentImports,
-    CampaignPromoCardComponent,
-  ],
+  styleUrls: ['./promoted-campaigns.component.scss']
 })
 export class PromotedCampaignsComponent {
   @Input() campaign1: Campaign;
