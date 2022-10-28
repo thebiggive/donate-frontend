@@ -220,7 +220,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
         this.accountHolderName = response.bank_transfer.financial_addresses[0].sort_code.account_holder_name;
       });
 
-      this.createTipDonation();
+      this.createAndFinaliseTipDonation();
     }
   }
 
@@ -269,6 +269,10 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     }
 
     return this.creditForm.controls.amounts.get('customTipAmount');
+  }
+
+  get totalToTransfer(): number {
+    return parseFloat(this.creditAmountField?.value) + this.calculatedTipAmount();
   }
 
   /**
@@ -345,8 +349,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     ];
   }
 
-
-  private createTipDonation() {
+  private createAndFinaliseTipDonation() {
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
@@ -359,13 +362,30 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
       donationAmount: this.calculatedTipAmount(),
       donationMatched: this.campaign.isMatched, // this should always be false
       feeCoverAmount: 0,
+      giftAid: this.giftAidGroup.value.giftAid,
       matchedAmount: 0, // Tips are always unmatched
       matchReservedAmount: 0, // Tips are always unmatched
+      optInCharityEmail: false,
+      // For now, corporate partners can be auto opted in under legit interest
+      // to keep the form simpler.
+      optInTbgEmail: true,
       paymentMethodType: 'customer_balance',
       projectId: this.campaign.id,
       psp: 'stripe',
       tipAmount: 0,
+      tipGiftAid: false,
     };
+
+    if (this.giftAidGroup.value.giftAid) {
+      donation.homePostcode = this.giftAidGroup.value.homeOutsideUK ? 'OVERSEAS' : this.giftAidGroup.value.homePostcode;
+      donation.homeAddress = this.giftAidGroup.value.homeAddress;
+      // Optional additional field to improve data alignment w/ HMRC when a lookup was used.
+      donation.homeBuildingNumber = this.giftAidGroup.value.homeBuildingNumber || undefined;
+    } else {
+      donation.homePostcode = undefined;
+      donation.homeAddress = undefined;
+      donation.homeBuildingNumber = undefined;
+    }
 
     if (environment.identityEnabled && this.personId) {
       donation.pspCustomerId = this.identityService.getPspId();
@@ -397,7 +417,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     );
     if (createResponseMissingData) {
       this.analyticsService.logError(
-        'donation_create_response_incomplete',
+        'credit_tip_donation_create_response_incomplete',
         `Missing expected response data creating new donation for campaign ${this.campaign.id}`,
       );
 
@@ -405,16 +425,9 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     }
 
     this.donationService.saveDonation(response.donation, response.jwt);
-    this.donation = response.donation; // Simplify update() while we're on this page.
-
-    this.analyticsService.logAmountChosen(
-      response.donation.donationAmount,
-      this.campaign.id,
-      [],
-      this.campaign.currencyCode,
-    );
-
-    this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
+    this.donationService.finaliseCashBalancePurchase(response.donation).subscribe((donation) => {
+      this.donation = donation;
+    });
   }
 
   private newDonationError(response: any) {
@@ -424,7 +437,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     } else {
       errorMessage = `Could not create new donation for campaign ${this.campaign.id}: HTTP code ${response.status}`;
     }
-    this.analyticsService.logError('donation_create_failed', errorMessage);
+    this.analyticsService.logError('credit_tip_donation_create_failed', errorMessage);
   }
 
 }
