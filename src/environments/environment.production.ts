@@ -4,7 +4,9 @@ export const environment: Environment = {
   production: true,
   productionLike: true,
   redirectHomepageToChirstmasChallenge: false,
+  creditTipsCampaign: 'a056900002LDXWgAAP',
   apiUriPrefix: 'https://sf-api-production.thebiggive.org.uk',
+  creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateGlobalUriPrefix: 'https://thebiggive.com',
   donateUriPrefix: 'https://donate.thebiggive.org.uk',
   donationsApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',
@@ -15,6 +17,8 @@ export const environment: Environment = {
   identityApiPrefix: 'https://identity-production.thebiggive.org.uk/v1',
   identityEnabled: true,
   maximumDonationAmount: 25000,
+  minimumCreditAmount: 500,
+  maximumCreditAmount: 25000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
   postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.
   promotedMetacampaign1Slug: 'Pakistan-Floods-Appeal-2022',

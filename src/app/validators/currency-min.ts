@@ -1,20 +1,24 @@
-import { AbstractControl } from '@angular/forms';
+import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
 
-export function ValidateCurrencyMin(control: AbstractControl) {
-  if (!control.value) {
-    return null;
-  }
+export function getCurrencyMinValidator(limitOverride?: number): ValidatorFn {
+  return (control: AbstractControl) : ValidationErrors | null => {
+      if (!control.value) {
+          return null;
+      }
 
-  const stringValue = control.value.replace('£', '').replace('$', '');
-  if (stringValue === '') {
-    return null;
-  }
+      const value = Number(control.value.replace('£', '').replace('$', ''));
 
-  const value = Number(stringValue);
+      let effectiveLimit = 0;
+      if (limitOverride !== undefined) {
+        effectiveLimit = Math.max(effectiveLimit, limitOverride);
+      }
 
-  if (value < 1) {
-    return { min: true };
-  }
+      if (value < effectiveLimit) {
+          return {
+              min: true
+          };
+      }
 
-  return null;
+      return null;
+  };
 }

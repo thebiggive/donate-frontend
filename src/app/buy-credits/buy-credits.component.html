@@ -1,0 +1,196 @@
+<main>
+    <div *ngIf="isLoggedIn" id="loggedInHeader">
+        <p>Logged in as {{ userFullName }}</p>
+    </div>
+    <div class="b-container">
+        <h3 class="b-rh-1 b-bold">Purchase Donation Credits</h3>
+
+        <form *ngIf="isLoggedIn && !isLoading && !isPurchaseComplete" [formGroup]="creditForm">
+            <mat-stepper orientation="vertical" [linear]="true" #stepper (selectionChange)="stepChanged($event)">
+                <mat-step
+                    [completed]="false"
+                    formGroupName="amounts"
+                    [stepControl]="amountsGroup"
+                    label="Your Donation Credits"
+                >
+                    <mat-form-field  class="form-field b-center size-lg" hideRequiredMarker>
+                        <mat-label>Credit amount ({{ currency }})</mat-label>
+                        <input matInput placeholder="Enter amount in {{ currency }}" formControlName="creditAmount" required>
+                    </mat-form-field>
+                    <p class="error" *ngIf="creditAmountField?.errors && creditAmountField?.invalid && (creditAmountField?.dirty || creditAmountField?.touched)">
+                        Must be between {{ minimumCreditAmount | exactCurrency:currency }} and {{ maximumCreditAmount | exactCurrency:currency }} inclusive.
+                    </p>
+
+                    <p><strong>Tip the Big Give</strong></p>
+                    <p class="tip-text">Big Give has a 0% platform fee. That means we're able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
+                    <mat-form-field >
+                        <mat-label>Tip amount (%)</mat-label>
+                        <mat-select formControlName="tipPercentage" required="true" (selectionChange)="onTipSelectorChanged($event)">
+                            <mat-option [value]="2.5">2.5%</mat-option>
+                            <mat-option [value]="5">5%</mat-option>
+                            <mat-option [value]="7.5">7.5%</mat-option>
+                            <mat-option [value]="10">10%</mat-option>
+                            <mat-option [value]="12.5">12.5%</mat-option>
+                            <mat-option [value]="15">15%</mat-option>
+                            <mat-option [value]="'Other'">Other</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <div *ngIf="customTip()">
+                        <mat-form-field  class="form-field b-center size-lg">
+                            <mat-label>Custom Tip amount ({{ currency }})</mat-label>
+                            <input matInput placeholder="Enter amount in {{ currency }}" formControlName="customTipAmount">
+                        </mat-form-field>
+                        <p class="error" *ngIf="customTipAmountField?.errors && customTipAmountField?.invalid && (customTipAmountField?.dirty || customTipAmountField?.touched)">
+                            Custom tips can range from {{ 0 | exactCurrency:currency }} and {{ maximumDonationAmount | exactCurrency:currency }} inclusive.
+                        </p>
+                    </div>
+
+                    <!-- Only show the calculated tip copy if the credit amount entered is valid AND if either a % tip is selected 
+                    from the dropdown OR a valid custom tip amount has been entered. In other words, this copy will not show if the credit
+                    amount entered is out of range, or invalid, or if the user clicks on 'Other' for the tip amount but has not yet
+                    specified how much the custom tip will be (i.e. blank custom tip), or has specified an invalid custom tip amount. -->
+                    <p *ngIf="
+                        creditAmountField?.value &&
+                        !creditAmountField?.errors &&
+                        !creditAmountField?.invalid &&
+                        !(customTip() && !customTipAmountField?.value) &&
+                        !customTipAmountField?.errors &&
+                        !customTipAmountField?.invalid
+                    "><strong>{{ calculatedTipAmount() | exactCurrency:currency }}</strong> donation (tip) to support Big Give
+                        <span *ngIf="calculatedTipAmount() > 0">💗</span> <!-- display heart emoji if tip > £0 -->
+                    </p>
+
+                    <p><strong>How does Big Give use tips?</strong></p>
+
+                    <p>Big Give is a registered charity (1136547). We don't charge charities for using our platform;
+                        we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match-funding campaigns.
+                        <br>
+                        Your tips will be going to:
+                    </p>
+                    <ul>
+                        <li>Supporting our website and team, allowing charities to double their donations to good causes.</li>
+                        <li>Providing match funds in our Anchor Match Fund. Through tips, charities will receive funding to launch their own match-funded campaign on Big Give.</li>
+                    </ul>
+                    <p>Thank you for your generosity! Your tip ensures that we can continue to support charities and causes that are important to you.</p>
+
+                    <re-captcha
+                        #captcha
+                        size="invisible"
+                        (resolved)="captchaDonationReturn($event)"
+                        siteKey="{{ recaptchaSiteKey }}"
+                    ></re-captcha>
+
+                    <div>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                </mat-step>
+                <mat-step
+                    formGroupName="giftAid"
+                    [stepControl]="giftAidGroup"
+                >
+                    <ng-template matStepLabel>Gift Aid (for tips to Big Give only)</ng-template>
+                    <p><strong>Boost your donation by 25p of Gift Aid for every £1 you donate</strong></p>
+
+                    <p>I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of
+                        Gift Aid claimed on all my donations it is my responsibility to pay the difference.</p>
+
+                    <p><strong>Note:</strong>This Gift Aid section is only for claiming Gift Aid on the tip to Big Give. If you wish to claim Gift Aid on the credit amount used for making donations, you may do so when donating
+                    to a charity's campaign.</p>
+
+                    <p><a href="">Find out more about Gift Aid </a></p>
+
+                    <mat-radio-group required aria-label="Select a Gift Aid option" formControlName="giftAid">
+                        <mat-radio-button [value]="true">Yes, I want to claim <strong>{{ giftAidAmount() | exactCurrency:currency }}</strong> Gift Aid on my tip to Big Give, and any additional charitable donations via Big Give from the past 4 years and in the future.</mat-radio-button>
+                        <mat-radio-button [value]="false">No, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed.</mat-radio-button>
+                    </mat-radio-group>
+
+                    <div *ngIf="isOptedIntoGiftAid" id="addressWrapper">
+                        <mat-form-field>
+                            <mat-label for="homeAddress">Home address</mat-label>
+                            <input
+                              formControlName="homeAddress"
+                              id="homeAddress"
+                              matInput
+                              autocomplete="off"
+                              [matAutocomplete]="autoAddress"
+                              [matAutocompleteDisabled]="!showAddressLookup"
+                            >
+
+                            <mat-autocomplete
+                              #autoAddress="matAutocomplete"
+                              [displayWith]="summariseAddressSuggestion"
+                              (optionSelected)="addressChosen($event)"
+                            >
+                              <mat-option *ngFor="let suggestion of addressSuggestions" [value]="suggestion">
+                                {{ suggestion.address }}
+                              </mat-option>
+                            </mat-autocomplete>
+
+                            <mat-hint>
+                              For your Gift Aid declaration to HMRC.
+                              <mat-spinner *ngIf="loadingAddressSuggestions" color="primary" diameter="15" class="address-loading-spinner"></mat-spinner>
+                            </mat-hint>
+                        </mat-form-field>
+                        
+                        <div class="error" *ngIf="giftAidGroup.get('homeAddress')?.errors?.maxlength">
+                            Maximum 255 characters exceeded
+                        </div>
+
+                        <mat-form-field *ngIf="!giftAidGroup.value.homeOutsideUK">
+                            <mat-label for="homePostcode">
+                                Home postcode
+                            </mat-label>
+                            <input formControlName="homePostcode" id="homePostcode" matInput>
+                        </mat-form-field>
+
+                        <div class="homeOutsideUK-wrapper">
+                            <mat-checkbox formControlName="homeOutsideUK" id="homeOutsideUK">
+                                Live outside the UK?
+                            </mat-checkbox>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Submission</ng-template>
+
+                    <p>By clicking on the 'Purchase Credits' button below, you legally agree to transfer the credit funds via bank transfer to the bank account and sort code
+                        displayed on the next screen. See our <a href="https://www.thebiggive.org.uk/s/terms-and-conditions">Terms and Conditions</a> for more information.
+                    </p>
+
+                    <p>We use <a href="https://stripe.com" target="_blank">Stripe</a> as our payments processor.</p>
+
+                    <div>
+                        <button mat-button (click)="buyCredits()">Purchase Credits</button>
+                    </div>
+                </mat-step>
+            </mat-stepper>
+
+        </form>
+
+        <div *ngIf="isLoading">
+            <mat-spinner [diameter]="40"></mat-spinner>
+        </div>
+
+        <div *ngIf="!isLoggedIn && !isLoading">
+            <p>You must be logged in to purchase donation credits.</p>
+            <button
+                mat-raised-button
+                color="primary"
+                (click)="showLoginDialog()"
+            >Log in</button>
+        </div>
+
+        <div *ngIf="isLoggedIn && isPurchaseComplete">
+            <h2>Transfer Instructions</h2>
+            <p>Please bank transfer us {{ totalToTransfer | exactCurrency: currency }} using the following details (keep them safe!):</p>
+            <p><strong>Recipient</strong> {{ accountHolderName }}</p>
+            <p><strong>Sort Code:</strong> {{ sortCode }}</p>
+            <p><strong>Account Number:</strong> {{ accountNumber }}</p>
+        </div>
+    </div>
+</main>

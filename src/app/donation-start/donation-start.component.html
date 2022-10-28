@@ -23,6 +23,7 @@
       <div *ngIf="personId && personIsLoginReady" class="id-info">
         <p>Logged in as <strong>{{ paymentGroup.value.emailAddress }}</strong></p>
         <p>We'll pre-fill some fields with your saved details, but you can change them if you need to.</p>
+        <p *ngIf="creditPenceToUse > 0">Your credit balance will be used and the donation value capped at {{ creditPenceToUse / 100 | exactCurrency:campaign.currencyCode }}</p>
         <p><button mat-raised-button (click)="logout()">Log out</button></p>
       </div>
 
@@ -71,17 +72,17 @@
               <div *ngIf="donationAmountField?.errors?.required">Please enter how much you would like to donate.</div>
             </div>
 
-            <mat-hint *ngIf="!campaign.feePercentage">
+            <mat-hint *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
               We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://www.thebiggive.org.uk/s/about" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too). Please consider adding an optional tip.
             </mat-hint>
 
-            <div *ngIf="campaign.feePercentage">
+            <div *ngIf="campaign.feePercentage && creditPenceToUse === 0">
               <mat-checkbox formControlName="coverFee" id="coverFee">
                 Cover the {{ campaign.feePercentage}}% <a href="https://www.thebiggive.org.uk/s/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> platform fee</a> for the &quot;{{ campaign.title }}&quot; campaign?
               </mat-checkbox>
             </div>
 
-            <div *ngIf="!campaign.feePercentage">
+            <div *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
               <mat-form-field appearance="outline">
                 <mat-label for="tipPercentage">Donation to the Big Give Trust</mat-label>
                 <mat-select formControlName="tipPercentage" id="tipPercentage" (selectionChange)="tipPercentageChange()">
@@ -262,10 +263,14 @@
                 confirm it's you in case you have any queries.</mat-hint>
             </mat-form-field>
 
-            <div id="payment-request-button" #paymentRequestButton></div>
+            <div [style.display]="creditPenceToUse === 0 ? 'block' : 'none'" id="payment-request-button" #paymentRequestButton></div>
             <p *ngIf="requestButtonShown && !stripePRBMethodReady" class="b-center b-grey b-rt-sm">Or</p>
 
-            <div *ngIf="stripeFirstSavedMethod?.card">
+            <div *ngIf="creditPenceToUse > 0">
+              <p class="b-center">Your credit balance will be applied against this donation. No further funds will be taken.</p>
+            </div>
+
+            <div *ngIf="creditPenceToUse === 0 && stripeFirstSavedMethod?.card">
               <mat-checkbox
                 formControlName="useSavedCard"
                 id="useSavedCard"
@@ -283,7 +288,7 @@
             <!-- We need the ElementRef to always be available for Stripe.js mounting as there are
             a few dynamic ways the input can become or cease to be relevant. So just CSS-hide the
             element when not needed, and always mount it. -->
-            <div [style.display]="!stripePRBMethodReady && !paymentGroup.value.useSavedCard ? 'block' : 'none'">
+            <div [style.display]="!stripePRBMethodReady && !paymentGroup.value.useSavedCard && creditPenceToUse === 0 ? 'block' : 'none'">
               <div class="sr-combo-inputs-row">
                 <mat-label for="card-info">Card</mat-label>
                 <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
@@ -439,11 +444,11 @@
 
               <div class="c-breakdown b-center b-grey">
                 <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }} donation to {{ campaign.charity.name }}</p>
-                <p *ngIf="feeCoverAmount() > 0 || !campaign.feePercentage" class="b-rt-sm b-m-0">
+                <p *ngIf="feeCoverAmount() > 0 || (creditPenceToUse === 0 && !campaign.feePercentage)" class="b-rt-sm b-m-0">
                   <mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon>
                 </p>
                 <p *ngIf="feeCoverAmount() > 0" class="b-rt-sm b-m-0">{{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} to cover platform fee</p>
-                <p *ngIf="!campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give Trust &ndash; we rely on your generosity to support charities</p>
+                <p *ngIf="creditPenceToUse === 0 && !campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give Trust &ndash; we rely on your generosity to support charities</p>
               </div>
 
               <!-- Matching or Gift Aid reiteration -->

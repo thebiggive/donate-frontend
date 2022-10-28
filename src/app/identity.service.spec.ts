@@ -46,7 +46,6 @@ describe('IdentityService', () => {
         const person = getDummyPerson();
 
         service.create(person).subscribe(result => {
-          console.log('got to callback.')
           expect(result.first_name).toEqual('Michelle');
         }, () => {
           expect(false).toBe(true); // Always fail if observable errors

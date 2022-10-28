@@ -2,7 +2,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -39,7 +39,7 @@ import { TBG_DONATE_STORAGE } from './donation.service';
 import { DonationCompleteComponent } from './donation-complete/donation-complete.component';
 import { DonationCompleteSetPasswordDialogComponent } from './donation-complete/donation-complete-set-password-dialog.component';
 import { DonationStartComponent } from './donation-start/donation-start.component';
-import { DonationStartLoginDialogComponent } from './donation-start/donation-start-login-dialog.component';
+import { LoginModalComponent } from './login-modal/login-modal.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start/donation-start-match-confirm-dialog.component';
 import { DonationStartMatchingExpiredDialogComponent } from './donation-start/donation-start-matching-expired-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start/donation-start-offer-reuse-dialog.component';
@@ -58,6 +58,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { PromotedCampaignsComponent } from './promoted-campaigns/promoted-campaigns.component';
 import { TickerComponent } from './ticker/ticker.component';
 import { TimeLeftPipe } from './time-left.pipe';
+import { BuyCreditsComponent } from './buy-credits/buy-credits.component';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     DonationCompleteComponent,
     DonationCompleteSetPasswordDialogComponent,
     DonationStartComponent,
-    DonationStartLoginDialogComponent,
+    LoginModalComponent,
     DonationStartMatchConfirmDialogComponent,
     DonationStartMatchingExpiredDialogComponent,
     DonationStartOfferReuseDialogComponent,
@@ -88,6 +89,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     TickerComponent,
     TimeLeftPipe,
     HomeComponent,
+    BuyCreditsComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -96,6 +98,7 @@ import { TimeLeftPipe } from './time-left.pipe';
     BrowserTransferStateModule,
     FlexLayoutModule,
     FontAwesomeModule,
+    FormsModule,
     HttpClientModule,
     InfiniteScrollModule,
     MatAutocompleteModule,
