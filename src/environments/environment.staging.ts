@@ -38,7 +38,7 @@ export const environment: Environment = {
   recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
   recaptchaSiteKey: '6LfJPAceAAAAAPnbqSG-lMNCiawYsTrT_daIW6sq',
   recaptchaIdentitySiteKey: '6LfisFAgAAAAAOPEarzMPQ2gln_0Q-RENbD3bHzd',
-  reservationMinutes: 15,
+  reservationMinutes: 30,
   thanksUriPrefix: 'https://donate-staging.thebiggivetest.org.uk/thanks/',
 };
 
