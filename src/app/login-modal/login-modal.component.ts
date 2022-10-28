@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
@@ -17,6 +18,7 @@ import { IdentityService } from '../identity.service';
   imports: [
     ...allChildComponentImports,
     FormsModule,
+    MatButtonModule,
     MatDialogModule,
     MatInputModule,
     ReactiveFormsModule,
