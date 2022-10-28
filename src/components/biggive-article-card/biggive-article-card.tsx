@@ -64,7 +64,7 @@ export class BiggiveArticleCard {
             </h3>
             {this.imageUrl != '' ? (
               <div class="image-group">
-                <div class="image-wrap" style={{ 'background-image': 'url(\'' + this.imageUrl + '\')' }}>
+                <div class="image-wrap" style={{ 'background-image': "url('" + this.imageUrl + "')" }}>
                   <img src={this.imageUrl} />
                 </div>
                 <div class="image-label">{this.imageLabel}</div>
