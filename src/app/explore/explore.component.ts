@@ -1,5 +1,5 @@
-import { HttpClientModule } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -30,11 +30,9 @@ import { SearchService } from '../search.service';
     FiltersComponent,
     HeroComponent,
     InfiniteScrollModule,
+    MatDialogModule,
     MatProgressSpinnerModule,
     PromotedCampaignsComponent,
-  ],
-  providers: [
-    HttpClientModule,
   ],
 })
 export class ExploreComponent implements OnDestroy, OnInit {

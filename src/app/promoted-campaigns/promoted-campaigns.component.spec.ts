@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { PromotedCampaignsComponent } from './promoted-campaigns.component';
+import { routes } from '../app-routing';
 
 describe('PromotedCampaignsComponent', () => {
   let component: PromotedCampaignsComponent;
@@ -8,7 +10,9 @@ describe('PromotedCampaignsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PromotedCampaignsComponent ]
+      providers: [
+        RouterTestingModule.withRoutes(routes),
+      ],
     })
     .compileComponents();
   });

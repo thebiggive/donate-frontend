@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -73,6 +74,7 @@ import { ValidateBillingPostCode } from '../validators/validate-billing-post-cod
     ExactCurrencyPipe,
     FontAwesomeModule,
     MatAutocompleteModule,
+    MatButtonModule,
     MatCheckboxModule,
     MatIconModule,
     MatInputModule,

@@ -21,7 +21,6 @@ import { HeroComponent } from '../hero/hero.component';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   standalone: true,
@@ -35,9 +34,6 @@ import { HttpClientModule } from '@angular/common/http';
     HeroComponent,
     InfiniteScrollModule,
     MatProgressSpinnerModule,
-  ],
-  providers: [
-    HttpClientModule,
   ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {

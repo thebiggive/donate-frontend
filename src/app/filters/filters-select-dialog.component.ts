@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,6 +17,7 @@ import { SearchService } from '../search.service';
   styleUrls: ['./filters-select-dialog.component.scss'],
   imports: [
     FontAwesomeModule,
+    MatButtonModule,
     MatDialogModule,
     MatIconModule,
     MatOptionModule,

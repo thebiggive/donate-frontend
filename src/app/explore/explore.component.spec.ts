@@ -11,11 +11,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
-import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
-import { CampaignPromoCardComponent } from '../campaign-promo-card/campaign-promo-card.component';
-import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { ExploreComponent } from './explore.component';
-import { FiltersComponent } from '../filters/filters.component';
 
 describe('ExploreComponent', () => {
   let component: ExploreComponent;
@@ -24,11 +20,6 @@ describe('ExploreComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        CampaignCardComponent,
-        CampaignPromoCardComponent,
-        CampaignSearchFormComponent,
-        ExploreComponent,
-        FiltersComponent,
       ],
       imports: [
         HttpClientTestingModule,

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 
@@ -9,6 +10,7 @@ import { allChildComponentImports } from '../../allChildComponentImports';
   styleUrls: ['./footer.component.scss'],
   imports: [
     ...allChildComponentImports,
+    MatButtonModule,
   ],
 })
 export class FooterComponent {

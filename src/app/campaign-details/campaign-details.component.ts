@@ -1,5 +1,6 @@
 import { CurrencyPipe, DatePipe, isPlatformBrowser, Location } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -26,6 +27,7 @@ import { PageMetaService } from '../page-meta.service';
     CampaignDetailsCardComponent,
     CurrencyPipe,
     DatePipe,
+    MatButtonModule,
     MatCardModule,
     MatIconModule,
     MatProgressSpinnerModule,

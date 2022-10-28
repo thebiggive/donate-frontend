@@ -1,5 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 
@@ -13,6 +14,7 @@ import { SearchService } from '../search.service';
   styleUrls: ['./campaign-search-form.component.scss'],
   imports: [
     ...allChildComponentImports,
+    MatButtonModule,
     MatInputModule,
     ReactiveFormsModule,
   ],

@@ -2,6 +2,7 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -33,7 +34,6 @@ import { PostcodeService } from '../postcode.service';
 import { TimeLeftPipe } from '../time-left.pipe';
 import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   standalone: true,
@@ -44,6 +44,7 @@ import { HttpClientModule } from '@angular/common/http';
     ...allChildComponentImports,
     ExactCurrencyPipe,
     MatAutocompleteModule,
+    MatButtonModule,
     MatCheckboxModule,
     MatInputModule,
     MatOptionModule,
@@ -54,9 +55,6 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     RecaptchaModule,
     TimeLeftPipe,
-  ],
-  providers: [
-    HttpClientModule,
   ],
 })
 export class BuyCreditsComponent implements AfterContentInit, OnInit {

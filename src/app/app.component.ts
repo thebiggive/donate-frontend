@@ -6,7 +6,6 @@ import {
   Router,
 } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AnalyticsService } from './analytics.service';
 import { DonationService } from './donation.service';
@@ -20,7 +19,6 @@ import { NavigationService } from './navigation.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   imports: [
-    BrowserAnimationsModule,
     FlexLayoutModule,
     NavigationComponent,
   ],

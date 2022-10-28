@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute } from '@angular/router';
@@ -27,6 +28,7 @@ import { Person } from '../person.model';
   imports: [
     ...allChildComponentImports,
     ExactCurrencyPipe,
+    MatButtonModule,
     MatProgressSpinnerModule,
     RecaptchaModule,
   ]

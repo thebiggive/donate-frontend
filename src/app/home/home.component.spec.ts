@@ -22,9 +22,6 @@ describe('HomeComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        CampaignCardComponent,
-        CampaignPromoCardComponent,
-        CampaignSearchFormComponent,
       ],
       imports: [
         HttpClientTestingModule,

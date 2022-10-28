@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
@@ -9,6 +10,7 @@ import { allChildComponentImports } from '../../allChildComponentImports';
   templateUrl: 'donation-start-matching-expired-dialog.html',
   imports: [
     ...allChildComponentImports,
+    MatButtonModule,
     MatDialogModule,
   ],
 })

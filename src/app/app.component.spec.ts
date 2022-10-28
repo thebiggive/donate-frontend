@@ -40,11 +40,6 @@ describe('AppComponent', () => {
         RouterTestingModule,
       ],
       declarations: [
-        AppComponent,
-        CampaignSearchFormComponent,
-        FooterComponent,
-        MainMenuComponent,
-        NavigationComponent,
       ],
       providers: [
         InMemoryStorageService,
