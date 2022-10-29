@@ -3,6 +3,8 @@
 
 FROM cimg/node:16.18.0
 
+RUN sudo apt-get update && sudo apt-get install -y apt-transport-https
+
 # Dependencies for Chrome + Puppeteer. See https://medium.com/ramsatt/gitlab-ci-cd-with-angular-7-firebase-779bf040bb82
 # See https://stackoverflow.com/a/27273543/2803757 re requiring update –
 # this is needed since the new cimg/ base follows Docker best practice and
