@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { Person } from '../person.model';
 
 @Component({
@@ -13,6 +14,7 @@ import { Person } from '../person.model';
   templateUrl: 'donation-complete-set-password-dialog.html',
   styleUrls: ['./donation-complete-set-password-dialog.component.scss'],
   imports: [
+    ...allChildComponentImports,
     MatDialogModule,
     MatIconModule,
     MatInputModule,
