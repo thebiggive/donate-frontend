@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,6 +29,7 @@ import { SearchService } from '../search.service';
     CampaignCardComponent,
     CampaignSearchFormComponent,
     FiltersComponent,
+    FlexLayoutModule,
     HeroComponent,
     InfiniteScrollModule,
     MatDialogModule,

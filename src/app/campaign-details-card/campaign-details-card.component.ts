@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -17,6 +18,7 @@ import { TimeLeftPipe } from '../time-left.pipe';
   styleUrls: ['./campaign-details-card.component.scss'],
   imports: [
     ...allChildComponentImports,
+    FlexLayoutModule,
     FontAwesomeModule,
     MatIconModule,
     MatProgressBarModule,
