@@ -33,12 +33,13 @@
               "node_modules/material-icons-font/material-icons-font.css"
             ],
             "scripts": [],
+            "commonChunk": true,
+            "namedChunks": true,
             "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
+            "buildOptimizer": true,
             "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
+            "optimization": false
           },
           "configurations": {
             "production": {
@@ -61,10 +62,16 @@
                 "fonts": true
               },
               "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
+              "sourceMap": {
+                "scripts": true,
+                "styles": false,
+                "hidden": true,
+                "vendor": true
+              },
+              "commonChunk": true,
+              "namedChunks": true,
+              "vendorChunk": true,
               "extractLicenses": true,
-              "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {
@@ -98,10 +105,16 @@
                 "fonts": true
               },
               "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
+              "sourceMap": {
+                "scripts": true,
+                "styles": false,
+                "hidden": true,
+                "vendor": true
+              },
+              "commonChunk": true,
+              "namedChunks": true,
+              "vendorChunk": true,
               "extractLicenses": true,
-              "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {
@@ -135,10 +148,16 @@
                 "fonts": true
               },
               "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
+              "sourceMap": {
+                "scripts": true,
+                "styles": false,
+                "hidden": true,
+                "vendor": true
+              },
+              "commonChunk": true,
+              "namedChunks": true,
+              "vendorChunk": true,
               "extractLicenses": true,
-              "vendorChunk": false,
               "buildOptimizer": true,
               "budgets": [
                 {

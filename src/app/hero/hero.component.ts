@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
@@ -15,6 +16,7 @@ import { TickerComponent } from '../ticker/ticker.component';
   imports: [
     ...allChildComponentImports,
     CampaignSearchFormComponent,
+    FlexLayoutModule,
     TickerComponent,
   ]
 })

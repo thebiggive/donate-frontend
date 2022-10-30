@@ -5,7 +5,7 @@ import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/ma
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatOptionModule } from '@angular/material/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
@@ -46,6 +46,7 @@ import { getCurrencyMaxValidator } from '../validators/currency-max';
     MatAutocompleteModule,
     MatButtonModule,
     MatCheckboxModule,
+    MatDialogModule,
     MatInputModule,
     MatOptionModule,
     MatProgressSpinnerModule,

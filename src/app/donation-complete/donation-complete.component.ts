@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute } from '@angular/router';
 import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
@@ -29,6 +29,7 @@ import { Person } from '../person.model';
     ...allChildComponentImports,
     ExactCurrencyPipe,
     MatButtonModule,
+    MatDialogModule,
     MatProgressSpinnerModule,
     RecaptchaModule,
   ]

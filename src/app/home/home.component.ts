@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { ActivatedRoute } from '@angular/router';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
@@ -18,6 +19,7 @@ import { PromotedCampaignsComponent } from '../promoted-campaigns/promoted-campa
     ...allChildComponentImports,
     CampaignCardComponent,
     CampaignSearchFormComponent,
+    FlexLayoutModule,
     PromotedCampaignsComponent,
   ]
 })
