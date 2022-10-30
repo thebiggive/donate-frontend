@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterLink, RouterLinkWithHref, RouterOutlet } from '@angular/router';
 
 export const allChildComponentImports = [
   CommonModule,
-  RouterModule,
+  RouterLink,
+  RouterLinkWithHref,
+  RouterOutlet,
 ]
