@@ -13,6 +13,7 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -72,6 +73,7 @@ import { ValidateBillingPostCode } from '../validators/validate-billing-post-cod
     CampaignDetailsCardComponent,
     DatePipe,
     ExactCurrencyPipe,
+    FlexLayoutModule,
     FontAwesomeModule,
     MatAutocompleteModule,
     MatButtonModule,
