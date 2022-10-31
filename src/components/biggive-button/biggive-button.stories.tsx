@@ -21,6 +21,19 @@ export default {
     url: {
       name: 'Url',
     },
+    fullWidth: {
+      name: 'Full width',
+    },
+    size: {
+      name: 'Size',
+      control: {
+        type: 'select',
+        options: ['small', 'medium'],
+      },
+    },
+    rounded: {
+      name: 'Rounded',
+    },
   },
 };
 
@@ -31,6 +44,8 @@ const Template = args => `
       label=${args.label}
       url=${args.url}
       full-width=${args.fullWidth}
+      size=${args.size}
+      rounded=${args.rounded}
     </biggive-button>
     `;
 
@@ -41,4 +56,6 @@ ButtonComponent.args = {
   label: 'Donate now',
   url: 'http://www.google.com',
   fullWidth: false,
+  size: 'medium',
+  rounded: false,
 };

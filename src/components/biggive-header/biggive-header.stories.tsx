@@ -2,8 +2,17 @@ export default {
   title: 'Components/Header and Footer',
 };
 
-const Template = () => `
-    <biggive-header>
+const Template = args => `
+    <biggive-header
+      space-below="${args.spaceBelow}"
+      >
+      <div slot="social-icons">
+        <biggive-social-icon service="Facebook" url="https://www.facebook.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+        <biggive-social-icon service="Twitter" url="https://www.twitter.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+        <biggive-social-icon service="LinkedIn" url="https://www.linkedin.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+        <biggive-social-icon service="YouTube" url="https://www.youtube.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+        <biggive-social-icon service="Instagram" url="https://www.instagram.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+      </div>
       <ul slot="nav-primary">
         <li><a href="#">Explore Campaigns</a></li>
         <li><a href="#">For Charities</a></li>
@@ -20,3 +29,7 @@ const Template = () => `
     `;
 
 export const HeaderComponent = Template.bind({});
+HeaderComponent.args = {
+  spaceBelow: '0',
+  logoUrl: '/',
+};

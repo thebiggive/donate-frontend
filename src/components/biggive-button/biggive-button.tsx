@@ -31,10 +31,20 @@ export class BiggiveButton {
    */
   @Prop() fullWidth: boolean = false;
 
+  /**
+   * Size
+   */
+  @Prop() size: string = 'medium';
+
+  /**
+   * Rounded corners
+   */
+  @Prop() rounded: boolean = true;
+
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
-        <a href={this.url} class={'button button-' + this.colourScheme + ' full-width-' + this.fullWidth.toString()}>
+        <a href={this.url} class={'button button-' + this.colourScheme + ' full-width-' + this.fullWidth.toString() + ' size-' + this.size + ' rounded-' + this.rounded.toString()}>
           {this.label}
         </a>
       </div>

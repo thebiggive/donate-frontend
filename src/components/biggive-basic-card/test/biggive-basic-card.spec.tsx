@@ -10,8 +10,8 @@ describe('biggive-basic-card', () => {
     expect(page.root).toEqualHtml(`
       <biggive-basic-card>
         <mock:shadow-root>
-          <div class="background-colour-white container space-below-0" style="background-image: url('');">
-            <div class="sleeve">
+          <div class="background-colour-primary container space-below-0" style="background-image: url('');">
+            <div class="background-colour-white sleeve text-colour-black">
               <div class="content-wrap">
                 <div class="icon">
                   <svg fill="none" height="39" viewBox="0 0 53 39" width="53" xmlns="http://www.w3.org/2000/svg">

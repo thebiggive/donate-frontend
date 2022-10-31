@@ -8,8 +8,29 @@ export default {
         options: [0, 1, 2, 3, 4, 5, 6],
       },
     },
+    backgroundColour: {
+      name: 'Background colour',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black', 'transparent'],
+      },
+    },
     backgroundImageUrl: {
       name: 'Background image URL',
+    },
+    cardColour: {
+      name: 'Card colour',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black', 'transparent'],
+      },
+    },
+    textColour: {
+      name: 'Text colour',
+      control: {
+        type: 'select',
+        options: ['primary', 'secondary', 'tertiary', 'white', 'black', 'transparent'],
+      },
     },
     iconColour: {
       name: 'Icon colour',
@@ -45,6 +66,8 @@ const Template = args => `
                 space-below="${args.spaceBelow}"
                 background-colour="${args.backgroundColour}"
                 background-image-url="${args.backgroundImageUrl}"
+                card-colour="${args.cardColour}"
+                text-colour="${args.textColour}"
                 icon-colour="${args.iconColour}"
                 mainTitle="${args.mainTitle}"
                 subtitle="${args.subtitle}"
@@ -61,6 +84,8 @@ BasicCardComponent.args = {
   iconColour: 'primary',
   backgroundColour: 'white',
   backgroundImageUrl: 'https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693',
+  cardColour: 'white',
+  textColour: 'white',
   mainTitle: 'Sample main title',
   subtitle: 'Sample subtitle',
   buttonUrl: '#',

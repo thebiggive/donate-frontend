@@ -11,7 +11,7 @@ describe('biggive-button', () => {
       <biggive-button colour-scheme="primary" label="Donate now" url="https://www.google.com">
         <mock:shadow-root>
           <div class="container space-below-1">
-            <a class="button button-primary full-width-false" href="https://www.google.com">
+            <a class="button button-primary full-width-false rounded-true size-medium" href="https://www.google.com">
               Donate now
             </a>
           </div>

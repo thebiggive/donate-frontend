@@ -12,15 +12,22 @@ export class BiggiveBasicCard {
   @Prop() spaceBelow: number = 0;
 
   /**
-   * Full URL of the background image.
+   * Background colour.
    */
-  @Prop() backgroundColour: string = 'white';
+  @Prop() backgroundColour: string = 'primary';
 
   /**
    * Full URL of the background image.
    */
   @Prop() backgroundImageUrl: string = '';
-
+  /**
+   * Card colour
+   */
+  @Prop() cardColour: string = 'white';
+  /**
+   * Text colour
+   */
+  @Prop() textColour: string = 'black';
   /**
    * Main title
    */
@@ -57,7 +64,7 @@ export class BiggiveBasicCard {
         class={'container space-below-' + this.spaceBelow + ' background-colour-' + this.backgroundColour}
         style={{ 'background-image': "url('" + this.backgroundImageUrl + "')" }}
       >
-        <div class="sleeve">
+        <div class={'sleeve background-colour-' + this.cardColour + ' text-colour-' + this.textColour}>
           <div class="content-wrap">
             <div class="icon">
               <svg width="53" height="39" viewBox="0 0 53 39" fill="none" xmlns="http://www.w3.org/2000/svg">

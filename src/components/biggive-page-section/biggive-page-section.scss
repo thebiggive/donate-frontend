@@ -5,6 +5,7 @@
 
 .container {
   @include standard-font();
+  overflow: hidden;
   position: relative;
   .sleeve {
     @include section-container();

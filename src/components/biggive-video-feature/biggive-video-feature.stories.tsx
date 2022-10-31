@@ -1,6 +1,13 @@
 export default {
   title: 'Components/Content',
   argTypes: {
+    spaceAbove: {
+      name: 'Space above',
+      control: {
+        type: 'select',
+        options: [0, 1, 2, 3, 4, 5, 6],
+      },
+    },
     spaceBelow: {
       name: 'Space below',
       control: {
@@ -66,6 +73,7 @@ export default {
 
 const Template = args => `
           <biggive-video-feature
+            space-above="${args.spaceAbove}"
             space-below="${args.spaceBelow}"
             default-text-colour="${args.defaultTextColour}"
             video-url="${args.videoUrl}"
@@ -83,9 +91,10 @@ const Template = args => `
 
 export const VideoFeatureComponent = Template.bind({});
 VideoFeatureComponent.args = {
+  spaceAbove: 0,
   spaceBelow: 4,
   defaultTextColour: 'primary',
-  videoUrl: 'http://techslides.com/demos/sample-videos/small.mp4',
+  videoUrl: 'https://www.youtube.com/embed/Ru4vGXMavf4',
   slug: 'Test slug',
   slugColour: null,
   mainTitle: 'Test title',

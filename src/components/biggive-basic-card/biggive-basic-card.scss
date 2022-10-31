@@ -10,7 +10,6 @@
   background-position: center center;
   padding: $spacer-4;
   .sleeve {
-    background-color: $colour-white;
     padding: $spacer-4;
     @include corner-clip-medium-bottom-left-top-right();
   }
@@ -26,9 +25,6 @@
   }
   .subtitle {
     margin-bottom: $spacer-3;
-  }
-  button {
-    @include standard-font();
   }
 
 }

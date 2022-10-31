@@ -12,17 +12,14 @@
 
 .content-wrap {
   .slug {
-    @include heading-4();
     margin: 0;
     padding: 0;
   }
   h2 {
-    @include heading-2();
     margin: 0 0 $spacer-1 0;
     padding: 0;
   }
   .subtitle {
-    @include subtitle();
     margin: 0 0 $spacer-1 0;
     padding: 0;
   }

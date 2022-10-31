@@ -22,6 +22,13 @@ export default {
         options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
       },
     },
+    slugSize: {
+      name: 'Slug size',
+      control: {
+        type: 'select',
+        options: [1, 2, 3, 4, 5],
+      },
+    },
     slugColour: {
       name: 'Slug colour',
       control: {
@@ -32,6 +39,13 @@ export default {
     slug: {
       name: 'Slug',
     },
+    mainTitleSize: {
+      name: 'Main title size',
+      control: {
+        type: 'select',
+        options: [1, 2, 3, 4, 5],
+      },
+    },
     mainTitleColour: {
       name: 'Main title colour',
       control: {
@@ -41,6 +55,13 @@ export default {
     },
     mainTitle: {
       name: 'Main title',
+    },
+    subtitleSize: {
+      name: 'Subtitle size',
+      control: {
+        type: 'select',
+        options: [1, 2, 3, 4, 5],
+      },
     },
     subtitleColour: {
       name: 'Subtitle colour',
@@ -96,10 +117,13 @@ const Template = args => `
         space-anove=${args.spaceAbove}
         space-below=${args.spaceBelow}
         default-text-colour="${args.defaultTextColour}"
+        slug-size="${args.slugSize}"
         slug-colour="${args.slugColour}"
         slug="${args.slug}"
+        main-title-size="${args.mainTitleSize}"
         main-title-colour="${args.mainTitleColour}"
         main-title="${args.mainTitle}"
+        subtitle-size="${args.subtitleSize}"
         subtitle-colour="${args.subtitleColour}"
         subtitle="${args.subtitle}"
         teaser-colour="${args.teaserColour}"
@@ -118,10 +142,13 @@ CallToActionComponent.args = {
   spaceAbove: 0,
   spaceBelow: 0,
   defaultTextColour: 'primary',
+  slugSize: 4,
   slugColour: '',
   slug: 'Test Slug',
+  mainTitleSize: 2,
   mainTitleColour: '',
   mainTitle: 'Test title',
+  subtitleSize: 4,
   subtitleColour: '',
   subtitle: 'Test subtitle',
   teaserColour: '',
