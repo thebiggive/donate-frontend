@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
@@ -7,8 +8,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { FooterComponent } from '../footer/footer.component';
-import { MainMenuComponent } from '../main-menu/main-menu.component';
 import { NavigationComponent } from './navigation.component';
 
 describe('NavigationComponent', () => {
@@ -18,11 +17,9 @@ describe('NavigationComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        MainMenuComponent,
-        NavigationComponent,
-        FooterComponent,
       ],
       imports: [
+        MatButtonModule,
         MatIconModule,
         MatListModule,
         MatMenuModule,

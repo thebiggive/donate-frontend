@@ -58,9 +58,6 @@ Environment Variables configured in the CircleCI interface for this app are:
 * `CIRCLE_TOKEN` - set up within CircleCI itself and used to retrieve build & deploy metadata to report back to Jira.
 * `SLACK_WEBHOOK` - destination URI to report deploys to Slack.
 
-To make builds faster, CircleCI is configured to use a custom Docker image. This is defined in this repository, in `.circleci/Dockerfile`,
-and updates to the `main` branch will trigger it to rebuild on Docker Hub.
-
 ## Salesforce API requirements
 
 For each sandbox, you need to ensure a Site is created for both `/campaigns` and `/funds`

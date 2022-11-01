@@ -1,24 +1,47 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { Subscription } from 'rxjs';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { Campaign } from '../campaign.model';
+import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
+import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
+import { FiltersComponent } from '../filters/filters.component';
+import { HeroComponent } from '../hero/hero.component';
 import { PageMetaService } from '../page-meta.service';
+import { PromotedCampaignsComponent } from '../promoted-campaigns/promoted-campaigns.component';
 import { SearchService } from '../search.service';
 
 /** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
+  standalone: true,
   selector: 'app-explore',
   templateUrl: './explore.component.html',
   styleUrls: ['./explore.component.scss'],
+  imports: [
+    ...allChildComponentImports,
+    CampaignCardComponent,
+    CampaignSearchFormComponent,
+    FiltersComponent,
+    FlexLayoutModule,
+    HeroComponent,
+    InfiniteScrollModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
+    PromotedCampaignsComponent,
+  ],
 })
 export class ExploreComponent implements OnDestroy, OnInit {
   campaigns: CampaignSummary[];
   loading = false; // Server render gets initial result set; set true when filters change.
-  promotedCampaign1: Campaign;
-  promotedCampaign2: Campaign;
+  promotedCampaign1?: Campaign;
+  promotedCampaign2?: Campaign;
   /** Whether any non-default search logic besides an order change has been applied. */
   searched = false;
 
@@ -45,8 +68,8 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.promotedCampaign1 = this.route.snapshot.data.promotedMetacampaign1;
-    this.promotedCampaign2 = this.route.snapshot.data.promotedMetacampaign2;
+    this.promotedCampaign1 = this.route.snapshot?.data?.promotedMetacampaign1;
+    this.promotedCampaign2 = this.route.snapshot?.data?.promotedMetacampaign2;
 
     this.pageMeta.setCommon(
       'The Big Give',

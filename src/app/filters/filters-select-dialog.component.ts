@@ -1,13 +1,30 @@
 import { Component, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconDefinition } from '@fortawesome/free-brands-svg-icons';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { CampaignGroupsService } from '../campaign-groups.service';
 import { SearchService } from '../search.service';
 
 @Component({
+  standalone: true,
   selector: 'app-filters-select-dialog',
   templateUrl: 'filters-select-dialog.component.html',
   styleUrls: ['./filters-select-dialog.component.scss'],
+  imports: [
+    ...allChildComponentImports,
+    FontAwesomeModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatIconModule,
+    MatOptionModule,
+    MatSelectModule,
+  ],
 })
 export class FiltersSelectDialogComponent implements OnInit {
   beneficiaryOptions: Array<{name: string, icon: IconDefinition}>;

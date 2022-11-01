@@ -1,13 +1,24 @@
 import { Component, Input, OnChanges } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
+import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { Fund } from '../fund.model';
 import { ImageService } from '../image.service';
+import { TickerComponent } from '../ticker/ticker.component';
 
 @Component({
+  standalone: true,
   selector: 'app-hero',
   templateUrl: './hero.component.html',
   styleUrls: ['./hero.component.scss'],
+  imports: [
+    ...allChildComponentImports,
+    CampaignSearchFormComponent,
+    FlexLayoutModule,
+    TickerComponent,
+  ]
 })
 export class HeroComponent implements OnChanges {
   @Input() campaign: Campaign;

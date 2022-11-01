@@ -4,6 +4,7 @@ orbs:
   aws-ecr: circleci/aws-ecr@7.3.0
   aws-ecs: circleci/aws-ecs@2.2.1
   aws-s3: circleci/aws-s3@3.0.0
+  browser-tools: circleci/browser-tools@1.4.0
   docker: circleci/docker@2.1.2
   jira: circleci/jira@1.3.1
   slack: circleci/slack@4.9.3
@@ -11,7 +12,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: thebiggive/donate-frontend-ci:latest
+      - image: cimg/node:16.18-browsers
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_ACCESS_TOKEN
@@ -19,6 +20,9 @@ jobs:
     working_directory: ~/donate
 
     steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+
       - checkout
 
       - restore_cache:
@@ -36,13 +40,16 @@ jobs:
 
   deploy-staging-static:
     docker:
-      # This image's base Node version must match that used in the *root* `Dockerfile` (not the one in this directory)
-      # which is the basis for ECS app builds. Otherwise the two builds will have different output hashes and the
-      # dynamic app will reference static files that don't exist.
-      - image: cimg/node:lts
+      # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app
+      # builds. Otherwise the two builds will have different output hashes and the dynamic app will reference
+      # static files that don't exist.
+      - image: node:16.18
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_ACCESS_TOKEN
+
+    # This must also match `Dockerfile` to avoid risking out of sync static + ECS builds.
+    working_directory: /usr/src/app
 
     steps:
       - checkout
@@ -68,13 +75,16 @@ jobs:
 
   deploy-regression-static:
     docker:
-      # This image's base Node version must match that used in the *root* `Dockerfile` (not the one in this directory)
-      # which is the basis for ECS app builds. Otherwise the two builds will have different output hashes and the
-      # dynamic app will reference static files that don't exist.
-      - image: cimg/node:lts
+      # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app
+      # builds. Otherwise the two builds will have different output hashes and the dynamic app will reference
+      # static files that don't exist.
+      - image: node:16.18
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_ACCESS_TOKEN
+
+    # This must also match `Dockerfile` to avoid risking out of sync static + ECS builds.
+    working_directory: /usr/src/app
 
     steps:
       - checkout
@@ -100,13 +110,16 @@ jobs:
 
   deploy-production-static:
     docker:
-      # This image's base Node version must match that used in the *root* `Dockerfile` (not the one in this directory)
-      # which is the basis for ECS app builds. Otherwise the two builds will have different output hashes and the
-      # dynamic app will reference static files that don't exist.
-      - image: cimg/node:lts
+      # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app
+      # builds. Otherwise the two builds will have different output hashes and the dynamic app will reference
+      # static files that don't exist.
+      - image: node:16.18
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_ACCESS_TOKEN
+
+    # This must also match `Dockerfile` to avoid risking out of sync static + ECS builds.
+    working_directory: /usr/src/app
 
     steps:
       - checkout
@@ -132,33 +145,16 @@ jobs:
 
 workflows:
   version: 2
-  build-container:
-    jobs:
-      - docker/publish:
-          context:
-            - docker-hub-creds
-          docker-password: DOCKER_HUB_ACCESS_TOKEN
-          docker-username: DOCKER_HUB_USERNAME
-          image: thebiggive/donate-frontend-ci
-          path: ./.circleci # Working dir is project root
-          tag: latest
-    triggers:
-      - schedule:
-          cron: "3 5 * * *"
-          filters:
-            branches:
-              only:
-                - develop
   build:
     jobs:
       - build:
           context:
             - docker-hub-creds
             - jira
-          # post-steps:
-          #   - jira/notify:
-          #       job_type: build
-          #       environment_type: development
+          post-steps:
+            - jira/notify:
+                job_type: build
+                environment_type: development
 
   deploy-regression:
     jobs:
@@ -225,9 +221,9 @@ workflows:
           cluster-name: 'tbg-staging-${AWS_REGION}'
           container-image-name-updates: 'container=donate,tag=staging-${CIRCLE_SHA1}'
           post-steps:
-            # - jira/notify:
-            #     job_type: deployment
-            #     environment_type: staging
+            - jira/notify:
+                job_type: deployment
+                environment_type: staging
             - slack/notify:
                 custom: |
                   {
@@ -278,10 +274,9 @@ workflows:
           cluster-name: 'tbg-production-${AWS_REGION}'
           container-image-name-updates: "container=donate,tag=production-${CIRCLE_SHA1}"
           post-steps:
-            # TODO reinstate jira notify x3
-            # - jira/notify:
-            #     job_type: deployment
-            #     environment_type: production
+            - jira/notify:
+                job_type: deployment
+                environment_type: production
             - slack/notify:
                 custom: |
                   {

@@ -8,6 +8,10 @@
   }
 }
 
+.b-center {
+  text-align: center;
+}
+
 .single-promoted-campaign-wrapper {
   display: flex;
   @media #{$breakpoint-lg} {

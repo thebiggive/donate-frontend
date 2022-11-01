@@ -8,6 +8,7 @@ import { Pipe, PipeTransform } from '@angular/core';
  * * with correct padding otherwise (£1.50 not £1.5).
  */
 @Pipe({
+  standalone: true,
   name: 'exactCurrency',
   pure: false,
 })
