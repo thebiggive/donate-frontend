@@ -25,42 +25,28 @@
   <biggive-page-section class="b-container">
     <biggive-campaign-card-filter-grid>
       <biggive-grid slot="campaign-grid" column-count="3">
-        <div class="c-grid" id="campaigns-to-show">
-
-          <!-- <biggive-campaign-card 
-            campaign-type="Match Funded" 
-            [campaignTitle]="campaign.title" 
-            organisation-name="Alloosssh"
-            currency-code="GBP" 
-            primary-figure-label="Total Raised" 
-            primary-figure-amount="76543" 
-            secondary-figure-label="Total Raised" 
-            secondary-figure-amount="76543">
-          </biggive-campaign-card> -->
-
-          <div *ngFor="let campaign of children">
-            <div
-              infiniteScroll
-              (scrolled)="onScroll()"
-              [infiniteScrollDistance]="20"
-              [scrollWindow]="true"
-              [alwaysCallback]="true"
-            ></div>
-            <biggive-campaign-card
-              [banner]="campaign.imageUri"
-              [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'" 
-              [campaignTitle]="campaign.title"
-              [currencyCode]="campaign.currencyCode"
-              [donateButtonUrl]="'/donate/' + campaign.id"
-              [moreInfoButtonUrl]="'/campaign/' + campaign.id"
-              [organisationName]="campaign.charity.name"
-              primary-figure-label="Match Funds Remaining" 
-              [primaryFigureAmount]="campaign.matchFundsRemaining" 
-              [progressBarCounter]="getPercentageRaised(campaign)"
-              secondary-figure-label="Total Funds Raised" 
-              [secondaryFigureAmount]="campaign.amountRaised">
-            </biggive-campaign-card>
-          </div>
+        <div *ngFor="let campaign of children">
+          <div
+            infiniteScroll
+            (scrolled)="onScroll()"
+            [infiniteScrollDistance]="20"
+            [scrollWindow]="true"
+            [alwaysCallback]="true"
+          ></div>
+          <biggive-campaign-card
+            [banner]="campaign.imageUri"
+            [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'" 
+            [campaignTitle]="campaign.title"
+            [currencyCode]="campaign.currencyCode"
+            [donateButtonUrl]="'/donate/' + campaign.id"
+            [moreInfoButtonUrl]="'/campaign/' + campaign.id"
+            [organisationName]="campaign.charity.name"
+            primary-figure-label="Match Funds Remaining" 
+            [primaryFigureAmount]="campaign.matchFundsRemaining" 
+            [progressBarCounter]="getPercentageRaised(campaign)"
+            secondary-figure-label="Total Funds Raised" 
+            [secondaryFigureAmount]="campaign.amountRaised">
+          </biggive-campaign-card>
         </div>
   
         <div *ngIf="!hasMore" class="t-align-center padding-top-s" >
@@ -72,6 +58,13 @@
       </biggive-grid>
     </biggive-campaign-card-filter-grid>
     
+    <div *ngIf="filterError" tabindex="0">
+      <p class="error" aria-live="assertive">
+        Could not load the campaign. You might have followed a broken link or lost connectivity.<br />
+        Not to worry, you can
+        <a routerLink="/">browse all active campaigns here</a>!
+      </p>
+    </div>
   </biggive-page-section>
 
   <!-- <app-hero
