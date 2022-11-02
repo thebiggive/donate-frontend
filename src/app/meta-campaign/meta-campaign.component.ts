@@ -155,9 +155,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       return 100;
     }
 
-    else {
-      return (childCampaign.amountRaised / childCampaign.target) * 100;
-    }
+    return (childCampaign.amountRaised / childCampaign.target) * 100;
   }
 
   private loadMoreForCurrentSearch() {
