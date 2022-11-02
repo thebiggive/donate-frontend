@@ -17,6 +17,7 @@ nav ul li a {
   background-color: $colour-primary;
   padding: $spacer-6;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   nav {
     width: calc(33.3% - 20px);
@@ -38,11 +39,15 @@ nav ul li a {
       }
     }
   }
+  .button-wrap {
+    width: 100%;
+  }
 }
 
 .row-bottom {
   background-color: $colour-black;
   padding: $spacer-6 $spacer-6 $spacer-3 $spacer-6;
+  border-top: 1px solid $colour-white;
   text-align: center;
   .social-icon-wrap {
     border-top: 1px solid $colour-white;

@@ -443,6 +443,24 @@ export namespace Components {
     interface BiggiveForm {
     }
     interface BiggiveFormFieldSelect {
+        /**
+          * Placeholder
+         */
+        "placeholder": string;
+        /**
+          * Space below component
+         */
+        "spaceBelow": number;
+    }
+    interface BiggiveFormFieldSelectOption {
+        /**
+          * Label
+         */
+        "label": string;
+        /**
+          * Value
+         */
+        "value": string;
     }
     interface BiggiveFormattedText {
         /**
@@ -692,6 +710,9 @@ export namespace Components {
          */
         "spaceBelow": number;
     }
+    interface BiggivePopup {
+        "open": () => Promise<void>;
+    }
     interface BiggiveProgressBar {
         /**
           * Colour Scheme
@@ -877,9 +898,13 @@ export namespace Components {
         "videoUrl": string;
     }
 }
-export interface BiggiveCampaignCardFilterGridCustomEvent<T> extends CustomEvent<T> {
+export interface BiggiveFormFieldSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
-    target: HTMLBiggiveCampaignCardFilterGridElement;
+    target: HTMLBiggiveFormFieldSelectElement;
+}
+export interface BiggiveFormFieldSelectOptionCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLBiggiveFormFieldSelectOptionElement;
 }
 export interface BiggiveSearchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -976,6 +1001,12 @@ declare global {
         prototype: HTMLBiggiveFormFieldSelectElement;
         new (): HTMLBiggiveFormFieldSelectElement;
     };
+    interface HTMLBiggiveFormFieldSelectOptionElement extends Components.BiggiveFormFieldSelectOption, HTMLStencilElement {
+    }
+    var HTMLBiggiveFormFieldSelectOptionElement: {
+        prototype: HTMLBiggiveFormFieldSelectOptionElement;
+        new (): HTMLBiggiveFormFieldSelectOptionElement;
+    };
     interface HTMLBiggiveFormattedTextElement extends Components.BiggiveFormattedText, HTMLStencilElement {
     }
     var HTMLBiggiveFormattedTextElement: {
@@ -1047,6 +1078,12 @@ declare global {
     var HTMLBiggivePageSectionElement: {
         prototype: HTMLBiggivePageSectionElement;
         new (): HTMLBiggivePageSectionElement;
+    };
+    interface HTMLBiggivePopupElement extends Components.BiggivePopup, HTMLStencilElement {
+    }
+    var HTMLBiggivePopupElement: {
+        prototype: HTMLBiggivePopupElement;
+        new (): HTMLBiggivePopupElement;
     };
     interface HTMLBiggiveProgressBarElement extends Components.BiggiveProgressBar, HTMLStencilElement {
     }
@@ -1124,6 +1161,7 @@ declare global {
         "biggive-footer": HTMLBiggiveFooterElement;
         "biggive-form": HTMLBiggiveFormElement;
         "biggive-form-field-select": HTMLBiggiveFormFieldSelectElement;
+        "biggive-form-field-select-option": HTMLBiggiveFormFieldSelectOptionElement;
         "biggive-formatted-text": HTMLBiggiveFormattedTextElement;
         "biggive-grid": HTMLBiggiveGridElement;
         "biggive-header": HTMLBiggiveHeaderElement;
@@ -1136,6 +1174,7 @@ declare global {
         "biggive-page-column": HTMLBiggivePageColumnElement;
         "biggive-page-columns": HTMLBiggivePageColumnsElement;
         "biggive-page-section": HTMLBiggivePageSectionElement;
+        "biggive-popup": HTMLBiggivePopupElement;
         "biggive-progress-bar": HTMLBiggiveProgressBarElement;
         "biggive-quote": HTMLBiggiveQuoteElement;
         "biggive-search": HTMLBiggiveSearchElement;
@@ -1497,10 +1536,6 @@ declare namespace LocalJSX {
          */
         "intro"?: string;
         /**
-          * This event `doTextSearch` event is emitted and propogates to the parent component which handles it
-         */
-        "onDoTextSearch"?: (event: BiggiveCampaignCardFilterGridCustomEvent<string>) => void;
-        /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText"?: string;
@@ -1590,6 +1625,32 @@ declare namespace LocalJSX {
     interface BiggiveForm {
     }
     interface BiggiveFormFieldSelect {
+        /**
+          * This event `doChange` event is emitted and propogates to the parent component which handles it
+         */
+        "onDoChange"?: (event: BiggiveFormFieldSelectCustomEvent<string>) => void;
+        /**
+          * Placeholder
+         */
+        "placeholder"?: string;
+        /**
+          * Space below component
+         */
+        "spaceBelow"?: number;
+    }
+    interface BiggiveFormFieldSelectOption {
+        /**
+          * Label
+         */
+        "label"?: string;
+        /**
+          * This event `doOptionSelect` event is emitted and propogates to the parent component which handles it
+         */
+        "onDoOptionSelect"?: (event: BiggiveFormFieldSelectOptionCustomEvent<object>) => void;
+        /**
+          * Value
+         */
+        "value"?: string;
     }
     interface BiggiveFormattedText {
         /**
@@ -1839,6 +1900,8 @@ declare namespace LocalJSX {
          */
         "spaceBelow"?: number;
     }
+    interface BiggivePopup {
+    }
     interface BiggiveProgressBar {
         /**
           * Colour Scheme
@@ -2043,6 +2106,7 @@ declare namespace LocalJSX {
         "biggive-footer": BiggiveFooter;
         "biggive-form": BiggiveForm;
         "biggive-form-field-select": BiggiveFormFieldSelect;
+        "biggive-form-field-select-option": BiggiveFormFieldSelectOption;
         "biggive-formatted-text": BiggiveFormattedText;
         "biggive-grid": BiggiveGrid;
         "biggive-header": BiggiveHeader;
@@ -2055,6 +2119,7 @@ declare namespace LocalJSX {
         "biggive-page-column": BiggivePageColumn;
         "biggive-page-columns": BiggivePageColumns;
         "biggive-page-section": BiggivePageSection;
+        "biggive-popup": BiggivePopup;
         "biggive-progress-bar": BiggiveProgressBar;
         "biggive-quote": BiggiveQuote;
         "biggive-search": BiggiveSearch;
@@ -2086,6 +2151,7 @@ declare module "@stencil/core" {
             "biggive-footer": LocalJSX.BiggiveFooter & JSXBase.HTMLAttributes<HTMLBiggiveFooterElement>;
             "biggive-form": LocalJSX.BiggiveForm & JSXBase.HTMLAttributes<HTMLBiggiveFormElement>;
             "biggive-form-field-select": LocalJSX.BiggiveFormFieldSelect & JSXBase.HTMLAttributes<HTMLBiggiveFormFieldSelectElement>;
+            "biggive-form-field-select-option": LocalJSX.BiggiveFormFieldSelectOption & JSXBase.HTMLAttributes<HTMLBiggiveFormFieldSelectOptionElement>;
             "biggive-formatted-text": LocalJSX.BiggiveFormattedText & JSXBase.HTMLAttributes<HTMLBiggiveFormattedTextElement>;
             "biggive-grid": LocalJSX.BiggiveGrid & JSXBase.HTMLAttributes<HTMLBiggiveGridElement>;
             "biggive-header": LocalJSX.BiggiveHeader & JSXBase.HTMLAttributes<HTMLBiggiveHeaderElement>;
@@ -2098,6 +2164,7 @@ declare module "@stencil/core" {
             "biggive-page-column": LocalJSX.BiggivePageColumn & JSXBase.HTMLAttributes<HTMLBiggivePageColumnElement>;
             "biggive-page-columns": LocalJSX.BiggivePageColumns & JSXBase.HTMLAttributes<HTMLBiggivePageColumnsElement>;
             "biggive-page-section": LocalJSX.BiggivePageSection & JSXBase.HTMLAttributes<HTMLBiggivePageSectionElement>;
+            "biggive-popup": LocalJSX.BiggivePopup & JSXBase.HTMLAttributes<HTMLBiggivePopupElement>;
             "biggive-progress-bar": LocalJSX.BiggiveProgressBar & JSXBase.HTMLAttributes<HTMLBiggiveProgressBarElement>;
             "biggive-quote": LocalJSX.BiggiveQuote & JSXBase.HTMLAttributes<HTMLBiggiveQuoteElement>;
             "biggive-search": LocalJSX.BiggiveSearch & JSXBase.HTMLAttributes<HTMLBiggiveSearchElement>;

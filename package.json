@@ -40,9 +40,11 @@
     "@fortawesome/pro-duotone-svg-icons": "^6.1.2",
     "@fortawesome/pro-regular-svg-icons": "^6.1.2",
     "@fortawesome/pro-solid-svg-icons": "^6.1.2",
-    "@stencil/core": "^2.13.0"
+    "@stencil/core": "^2.13.0",
+    "ng-packagr": "^14.2.2"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "^14.2.7",
     "@babel/core": "^7.18.9",
     "@stencil/angular-output-target": "^0.4.0",
     "@stencil/eslint-plugin": "^0.4.0",

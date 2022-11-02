@@ -10,7 +10,14 @@ describe('biggive-form-field-select', () => {
     expect(page.root).toEqualHtml(`
       <biggive-form-field-select>
         <mock:shadow-root>
-          <slot></slot>
+          <div class="dropdown space-below-0">
+            <div class="sleeve">
+              <span class="placeholder"></span>
+            </div>
+            <div class="options">
+              <slot></slot>
+            </div>
+          </div>
         </mock:shadow-root>
       </biggive-form-field-select>
     `);

@@ -138,6 +138,7 @@ a {
     &.size-small {
       @include button-small();
     }
+    
     &.button.rounded-true {
       @include button-rounded();
     }

@@ -1,0 +1,28 @@
+:host {
+  display: contents;
+}
+
+
+.dropdown {
+  @include standard-font();
+  position: relative;
+  text-align: left;
+  .sleeve {
+    @include dropdown();
+  }
+  .options {
+    background-color: $colour-white;
+    position: absolute;
+    display: none;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    border-left: 1px solid $colour-primary;
+    border-right: 1px solid $colour-primary;
+    border-bottom: 1px solid $colour-primary;
+  }
+  &:hover .options {
+    display: block;
+  }
+}
+

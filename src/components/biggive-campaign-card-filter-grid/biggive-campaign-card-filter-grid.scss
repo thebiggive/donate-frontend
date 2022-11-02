@@ -11,6 +11,9 @@
     background-color: $colour-white;
     padding: $spacer-3 $spacer-4;
     margin-bottom: $spacer-6;
+    h4 {
+      margin-bottom: $spacer-3;
+    }
     .field-wrap {
       @include flex-container-row();
       .input-wrap {
@@ -26,12 +29,43 @@
         padding: 5px 30px;
       }
     }
-
-
-    
-
   }
 }
+
+.sort-filter-wrap {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: $spacer-4;
+  text-align: right;
+  .sort-wrap {
+    margin-left: auto;
+  }
+  .filter-wrap {
+    margin-left: $spacer-3;
+    .button {
+      padding-left: 60px;
+      padding-right: 30px;
+      .filter-icon {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 25px;
+        top: 17px;
+        width: 13px;
+        height: 13px;
+        svg {
+          width: 100%;
+          height: auto;
+          vertical-align: top;
+          &:hover {
+            fill: $colour-primary;
+          }
+        }
+      }
+    }
+  }
+}
+
 
 .icon {
   @include icon();
