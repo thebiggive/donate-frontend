@@ -150,6 +150,16 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     return (this.campaign && new Date(this.campaign.endDate) < new Date()) ? 'amountRaised' : 'matchFundsRemaining';
   }
 
+  getPercentageRaised(childCampaign: CampaignSummary) {
+    if (childCampaign.amountRaised >= childCampaign.target) {
+      return 100;
+    }
+
+    else {
+      return (childCampaign.amountRaised / childCampaign.target) * 100;
+    }
+  }
+
   private loadMoreForCurrentSearch() {
     this.offset += CampaignService.perPage;
     this.loading = true;
