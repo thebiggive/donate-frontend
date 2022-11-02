@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
@@ -27,6 +27,7 @@ export type FilterType = keyof typeof FilterEnum;
   imports: [
     ...allChildComponentImports,
     MatButtonModule,
+    MatDialogModule,
     MatIconModule,
     MatOptionModule,
     MatSelectModule,
