@@ -1,5 +1,5 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { getCurrencySymbol, isPlatformBrowser } from '@angular/common';
+import { DatePipe, getCurrencySymbol, isPlatformBrowser, PercentPipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   AfterContentChecked,
@@ -13,26 +13,36 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatDialog } from '@angular/material/dialog';
-import { MatStepper } from '@angular/material/stepper';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatOptionModule } from '@angular/material/core';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
 import { countries } from 'country-code-lookup';
-import { RecaptchaComponent } from 'ng-recaptcha';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
 import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
 import { PaymentMethod, StripeCardElement, StripeElementChangeEvent, StripeError, StripePaymentRequestButtonElement } from '@stripe/stripe-js';
 import { EMPTY, Observer } from 'rxjs';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from './../campaign.model';
+import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
 import { CampaignService } from '../campaign.service';
 import { CardIconsService } from '../card-icons.service';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
-import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
 import { DonationStartMatchingExpiredDialogComponent } from './donation-start-matching-expired-dialog.component';
 import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
@@ -41,20 +51,46 @@ import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { GiftAidAddress } from '../gift-aid-address.model';
 import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
 import { IdentityService } from '../identity.service';
+import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
 import { PostcodeService } from '../postcode.service';
 import { retryStrategy } from '../observable-retry';
 import { StripeService } from '../stripe.service';
+import { TimeLeftPipe } from '../time-left.pipe';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
 import { getCurrencyMinValidator } from '../validators/currency-min';
 import { ValidateBillingPostCode } from '../validators/validate-billing-post-code';
 
 @Component({
+  standalone: true,
   selector: 'app-donation-start',
   templateUrl: './donation-start.component.html',
   styleUrls: ['./donation-start.component.scss'],
+  imports: [
+    ...allChildComponentImports,
+    CampaignDetailsCardComponent,
+    DatePipe,
+    ExactCurrencyPipe,
+    FlexLayoutModule,
+    FontAwesomeModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatIconModule,
+    MatInputModule,
+    MatOptionModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatStepperModule,
+    PercentPipe,
+    ReactiveFormsModule,
+    RecaptchaModule,
+    TimeLeftPipe,
+  ],
 })
 export class DonationStartComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
@@ -385,6 +421,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.personId = undefined;
     this.personIsLoginReady = false;
     this.stripeFirstSavedMethod = undefined;
+    this.stripePaymentMethodReady = false;
     this.donationForm.reset();
     this.identityService.clearJWT();
     this.idCaptcha.reset();
@@ -911,7 +948,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.personIsLoginReady = true;
 
       if (environment.creditDonationsEnabled && person.cash_balance && person.cash_balance[this.campaign.currencyCode.toLowerCase()] > 0) {
-        this.creditPenceToUse = person.cash_balance[this.campaign.currencyCode.toLowerCase()];
+        this.creditPenceToUse = parseInt(
+          person.cash_balance[this.campaign.currencyCode.toLowerCase()].toString() as string,
+          10
+        );
+        this.stripePaymentMethodReady = true;
         this.setConditionalValidators();
       }
 
@@ -1039,7 +1080,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     // We want to let donors finish the journey if they're on the page before the campaign
     // close date and it passes while they're completing the form – in particular they should
-    // be able to use match funds secured until 15 minutes after the close time.
+    // be able to use match funds secured until 30 minutes after the close time.
     this.campaignOpenOnLoad = this.campaignIsOpen();
 
     this.currencySymbol = getCurrencySymbol(this.campaign.currencyCode, 'narrow', 'en-GB');
@@ -1348,7 +1389,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     // To make this safe to call for both new and resumed donations, we look up
     // the donation's creation time and determine the timeout based on that rather
-    // than e.g. always using 15 minutes.
+    // than e.g. always using 30 minutes.
     const msUntilExpiryTime = environment.reservationMinutes * 60000 + new Date(donation.createdTime).getTime() - Date.now();
 
     // Only set the timeout when relevant part 2/2: exclude cases where
@@ -1591,7 +1632,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.giftAidGroup.controls.homeAddress.updateValueAndValidity();
     });
 
-    this.addStripeCardBillingValidators();
+    if (this.creditPenceToUse > 0) {
+      this.removeStripeCardBillingValidators();
+    } else {
+      this.addStripeCardBillingValidators();
+    }
   }
 
   private getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK: boolean) {

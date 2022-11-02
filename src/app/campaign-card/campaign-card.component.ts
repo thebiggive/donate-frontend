@@ -1,13 +1,26 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { CampaignGroupsService } from '../campaign-groups.service';
 import { CampaignSummary } from '../campaign-summary.model';
 import { ImageService } from '../image.service';
 
 @Component({
+  standalone: true,
   selector: 'app-campaign-card',
   templateUrl: './campaign-card.component.html',
   styleUrls: ['./campaign-card.component.scss'],
+  imports: [
+    ...allChildComponentImports,
+    FlexLayoutModule,
+    FontAwesomeModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
 })
 export class CampaignCardComponent implements OnInit {
   @Input() campaign: CampaignSummary;

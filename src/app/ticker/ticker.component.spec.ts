@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { Campaign } from '../campaign.model';
 import { TickerComponent } from './ticker.component';
-import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('TickerComponent', () => {
   let component: TickerComponent;
@@ -10,7 +9,6 @@ describe('TickerComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ TickerComponent, TimeLeftPipe ],
     })
     .compileComponents();
   }));

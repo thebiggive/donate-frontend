@@ -4,9 +4,9 @@ export const environment: Environment = {
   production: true,
   productionLike: true,
   redirectHomepageToChirstmasChallenge: false,
-  creditTipsCampaign: 'a053O00000J1ROLQA3',
+  creditTipsCampaign: 'a056900002LDXWgAAP',
   apiUriPrefix: 'https://sf-api-production.thebiggive.org.uk',
-  creditDonationsEnabled: false, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
+  creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateGlobalUriPrefix: 'https://thebiggive.com',
   donateUriPrefix: 'https://donate.thebiggive.org.uk',
   donationsApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',
@@ -34,6 +34,6 @@ export const environment: Environment = {
   recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
   recaptchaSiteKey: '6LfmOwceAAAAAAYciCtwF6ZPQHJdvJZ5cqYqm1kk',
   recaptchaIdentitySiteKey: '6Lc9uFAgAAAAADPHW12p_oJ3QxcNA3xglajo5hl2',
-  reservationMinutes: 15,
+  reservationMinutes: 30,
   thanksUriPrefix: 'https://donate.thebiggive.org.uk/thanks/',
 };

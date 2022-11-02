@@ -15,7 +15,7 @@ describe('CampaignPromoCardComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CampaignPromoCardComponent ],
+      declarations: [],
       imports: [
         FontAwesomeModule,
         MatButtonModule,
