@@ -48,4 +48,6 @@ const Template = () => `
       </biggive-campaign-card-filter-grid>
       `;
 
+document.addEventListener('doSearchAndFilterUpdate', () => alert('doSearchAndFilterUpdate event emitted!'));
+
 export const CampaignCardFilterGridComponent = Template.bind({});

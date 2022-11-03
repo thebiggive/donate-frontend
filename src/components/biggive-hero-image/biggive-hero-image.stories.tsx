@@ -37,5 +37,4 @@ HeroImageComponent.args = {
   buttonUrl: '#',
   buttonLabel: 'Donate now',
   buttonColourScheme: 'primary',
-  
 };

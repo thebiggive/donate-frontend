@@ -176,8 +176,8 @@ export class BiggiveCampaignCardFilterGrid {
           <div class="sort-filter-wrap">
             <div class="sort-wrap">
               <biggive-form-field-select placeholder="Sort by" id="sort-by">
-              <biggive-form-field-select-option value="most-raised" label="Most raised"></biggive-form-field-select-option>
-              <biggive-form-field-select-option value="matched-funds-remaining" label="Match funds remaining"></biggive-form-field-select-option>
+                <biggive-form-field-select-option value="most-raised" label="Most raised"></biggive-form-field-select-option>
+                <biggive-form-field-select-option value="matched-funds-remaining" label="Match funds remaining"></biggive-form-field-select-option>
               </biggive-form-field-select>
             </div>
 
