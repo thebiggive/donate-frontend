@@ -7,17 +7,19 @@
 
 ## Properties
 
-| Property      | Attribute     | Description           | Type     | Default |
-| ------------- | ------------- | --------------------- | -------- | ------- |
-| `placeholder` | `placeholder` | Placeholder           | `string` | `null`  |
-| `spaceBelow`  | `space-below` | Space below component | `number` | `0`     |
+| Property        | Attribute        | Description           | Type     | Default |
+| --------------- | ---------------- | --------------------- | -------- | ------- |
+| `placeholder`   | `placeholder`    | Placeholder           | `string` | `null`  |
+| `selectedLabel` | `selected-label` |                       | `string` | `null`  |
+| `selectedValue` | `selected-value` |                       | `string` | `null`  |
+| `spaceBelow`    | `space-below`    | Space below component | `number` | `0`     |
 
 
 ## Events
 
-| Event      | Description                                                                                    | Type                  |
-| ---------- | ---------------------------------------------------------------------------------------------- | --------------------- |
-| `doChange` | This event `doChange` event is emitted and propogates to the parent component which handles it | `CustomEvent<string>` |
+| Event            | Description                                                                                    | Type                  |
+| ---------------- | ---------------------------------------------------------------------------------------------- | --------------------- |
+| `doSelectChange` | This event `doChange` event is emitted and propogates to the parent component which handles it | `CustomEvent<object>` |
 
 
 ## Dependencies

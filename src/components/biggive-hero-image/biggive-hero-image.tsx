@@ -84,7 +84,7 @@ export class BiggiveHeroImage {
         <div class="sleeve">
           <div class="content-wrap">
             {this.logo.length > 0 ? (
-              <div class="logo image-wrap" style={{ 'background-image': 'url(' + this.logo + ')', 'background-position': this.mainImageAlignHorizontal + ' ' + this.mainImageAlignVertical }}>
+              <div class="logo image-wrap" style={{ 'background-image': 'url(' + this.logo + ')'}}>
                 <img src={this.logo} />
               </div>
             ) : null}
@@ -98,7 +98,7 @@ export class BiggiveHeroImage {
           </div>
           <div class="graphic-wrap">
             {this.mainImage.length > 0 ? (
-              <div class="image-wrap" style={{ 'background-image': 'url(' + this.mainImage + ')' }}>
+              <div class="image-wrap" style={{ 'background-image': 'url(' + this.mainImage + ')', 'background-position': this.mainImageAlignHorizontal + ' ' + this.mainImageAlignVertical }}>
                 <img src={this.mainImage} />
               </div>
             ) : null}
