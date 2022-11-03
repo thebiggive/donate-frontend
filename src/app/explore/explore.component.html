@@ -1,48 +1,48 @@
 <main>
-  <app-promoted-campaigns *ngIf="!searched && promotedCampaign1 && promotedCampaign2"
-    [campaign1]="promotedCampaign1"
-    [campaign2]="promotedCampaign2"
-  ></app-promoted-campaigns>
-  <div class="explore-hero">
-    <div class="b-container-sm">
-      <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center">
-        <div class="explore-hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
-          <div fxLayout="column">
-            <h1 class="b-rh-1 b-bold c-explore-hero__heading">Explore campaigns</h1>
-          </div>
-        </div>
-        <div class="explore-hero-flex__child" fxLayout="column" fxFlex.xs="100" fxFlex="50" fxLayoutAlign="center">
-          <app-campaign-search-form
-            [getDefaultSort]="getDefaultSort"
-          ></app-campaign-search-form>
-        </div>
-      </div>
-    </div>
-  </div>
+  <biggive-hero-image
+    slug="Explore Campaigns"
+    slug-colour="primary"
+    main-title="The leading online match funding platform"
+    main-image="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/homepage-banner.jpg"
+    colour-scheme="primary"
+  ></biggive-hero-image>
 
-  <div class="b-container" *ngIf="campaigns">
-    <app-filters [getDefaultSort]="getDefaultSort"></app-filters>
+  <biggive-page-section class="b-container">
+    <biggive-campaign-card-filter-grid>
+      <biggive-grid slot="campaign-grid" column-count="3">
+        <div *ngFor="let campaign of campaigns">
+          <div
+            infiniteScroll
+            (scrolled)="onScroll()"
+            [infiniteScrollDistance]="20"
+            [scrollWindow]="true"
+            [alwaysCallback]="true"
+          ></div>
+          <biggive-campaign-card
+            [banner]="campaign.imageUri"
+            [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'" 
+            [campaignTitle]="campaign.title"
+            [currencyCode]="campaign.currencyCode"
+            [donateButtonUrl]="'/donate/' + campaign.id"
+            [moreInfoButtonUrl]="'/campaign/' + campaign.id"
+            [organisationName]="campaign.charity.name"
+            primary-figure-label="Match Funds Remaining" 
+            [primaryFigureAmount]="campaign.matchFundsRemaining" 
+            [progressBarCounter]="getPercentageRaised(campaign)"
+            secondary-figure-label="Total Funds Raised" 
+            [secondaryFigureAmount]="campaign.amountRaised">
+          </biggive-campaign-card>
+        </div>
+      </biggive-grid>
+    </biggive-campaign-card-filter-grid>
+    <mat-spinner *ngIf="loading" color="primary" diameter="30"></mat-spinner>
 
-    <div *ngIf="campaigns.length === 0 && !loading">
+    <div *ngIf="true">
       <p class="error" aria-live="polite">
         We can't find any campaigns matching this search but there are lots more to choose from.
         <a tabindex="0" (click)="clear()">View all campaigns here</a>.
       </p>
     </div>
 
-    <div class="c-grid">
-      <div *ngFor="let campaign of campaigns">
-        <div
-          infiniteScroll
-          (scrolled)="onScroll()"
-          [infiniteScrollDistance]="20"
-          [scrollWindow]="true"
-          [alwaysCallback]="true"
-        ></div>
-        <app-campaign-card [campaign]="campaign"></app-campaign-card>
-      </div>
-    </div>
-
-    <mat-spinner *ngIf="loading" color="primary" diameter="30"></mat-spinner>
-  </div>
+  </biggive-page-section>
 </main>

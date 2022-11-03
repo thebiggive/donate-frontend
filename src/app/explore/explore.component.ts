@@ -111,6 +111,14 @@ export class ExploreComponent implements OnDestroy, OnInit {
     this.searchService.reset(this.getDefaultSort(), false);
   }
 
+  getPercentageRaised(childCampaign: CampaignSummary) {
+    if (childCampaign.amountRaised >= childCampaign.target) {
+      return 100;
+    }
+
+    return (childCampaign.amountRaised / childCampaign.target) * 100;
+  }
+
   private moreMightExist(): boolean {
     return (this.campaigns.length === (CampaignService.perPage + this.offset));
   }
