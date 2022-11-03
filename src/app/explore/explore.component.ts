@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -32,7 +31,6 @@ import { SearchService } from '../search.service';
     FlexLayoutModule,
     HeroComponent,
     InfiniteScrollModule,
-    MatDialogModule,
     MatProgressSpinnerModule,
     PromotedCampaignsComponent,
   ],
@@ -109,6 +107,14 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
   clear() {
     this.searchService.reset(this.getDefaultSort(), false);
+  }
+
+  getPercentageRaised(childCampaign: CampaignSummary) {
+    if (childCampaign.amountRaised >= childCampaign.target) {
+      return 100;
+    }
+
+    return (childCampaign.amountRaised / childCampaign.target) * 100;
   }
 
   private moreMightExist(): boolean {
