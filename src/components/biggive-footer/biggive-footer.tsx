@@ -20,7 +20,7 @@ export class BiggiveFooter {
       node.querySelectorAll('li').forEach(el => {
         navPrimary.push(
           <li>
-            <a href="#">{el.innerText}</a>
+            <a href={el.firstElementChild.getAttribute('href')}>{el.innerText}</a>
           </li>,
         );
       });
@@ -32,7 +32,7 @@ export class BiggiveFooter {
       node.querySelectorAll('li').forEach(el => {
         navSecondary.push(
           <li>
-            <a href="#">{el.innerText}</a>
+            <a href={el.firstElementChild.getAttribute('href')}>{el.innerText}</a>
           </li>,
         );
       });
@@ -44,7 +44,7 @@ export class BiggiveFooter {
       node.querySelectorAll('li').forEach(el => {
         navTertiary.push(
           <li>
-            <a href="#">{el.innerText}</a>
+            <a href={el.firstElementChild.getAttribute('href')}>{el.innerText}</a>
           </li>,
         );
       });
