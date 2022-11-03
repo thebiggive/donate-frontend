@@ -8,6 +8,8 @@ const Template = () => `
       <biggive-campaign-card-filter-grid>
       <biggive-grid slot="campaign-grid" column-count="3">
         <biggive-campaign-card 
+          data-filter-categories="[&quot;Finance&quot;]"
+          data-filter-beneficiaries="[&quot;Children&quot;,&quot;Adults&quot;]"
           campaign-type="Match Funded"
           campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community" 
           organisation-name="Oxford Philharmonic Orchestra"
@@ -19,6 +21,8 @@ const Template = () => `
           progress-bar-counter="75">
         </biggive-campaign-card>
         <biggive-campaign-card 
+          data-filter-categories="[&quot;Healthcare&quot;]"
+          data-filter-beneficiaries="[&quot;Children&quot;]"
           campaign-type="Match Funded" 
           campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community" 
           organisation-name="Oxford Philharmonic Orchestra"
@@ -29,6 +33,8 @@ const Template = () => `
           secondary-figure-amount="76543">
         </biggive-campaign-card>
         <biggive-campaign-card 
+          data-filter-categories="[&quot;Healthcare&quot;]"
+          data-filter-beneficiaries="[&quot;Children&quot;]"
           campaign-type="Match Funded" 
           campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community" 
           organisation-name="Oxford Philharmonic Orchestra"

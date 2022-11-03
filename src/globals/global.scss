@@ -142,6 +142,7 @@ a {
     &.size-small {
       @include button-small();
     }
+    
     &.button.rounded-true {
       @include button-rounded();
     }
@@ -161,6 +162,14 @@ a {
     @include button-tertiary();
 }
 
+.button-white {
+    @include button-white();
+}
+
+.button-black {
+    @include button-black();
+}
+
 .button-clear-primary {
     @include button-clear-primary();
 }
@@ -172,7 +181,6 @@ a {
 .button-clear-tertiary {
     @include button-clear-tertiary();
 }
-
 
 .button-clear-white {
    @include button-clear-white();

@@ -7,7 +7,7 @@
   @include standard-font();
   @include lower-shadow();
   position: relative;
-  z-index: 1;
+  z-index: 99;
 }
 
 .nav {
@@ -79,13 +79,82 @@
   .logo-wrap {
     width: 200px;
     margin-right: auto;
-    svg {
-      height: 100%;
-      width: auto;
+    position: relative;
+    z-index: 101;
+    a {
+      display: block;
+      svg {
+        height: 100%;
+        width: auto;
+      }
     }
+  }
+  .nav-toggle {
+    display: none;
   }
   .nav-primary {
     font-weight: 700;
     margin: $spacer-1 0;
   }
+}
+
+@media screen and (max-width: 1050px) {
+  .row-top {
+    display: none;
+  }
+  .row-bottom {
+    padding: $spacer-3 $spacer-3;
+    .logo-wrap {
+      height: 30px;
+    }
+    .nav-toggle {
+      display: block;
+      margin-left: auto;
+      width: 45px;
+      height: 30px;
+      position: relative;
+      z-index: 101;
+      background-image: url('assets/images/menu.svg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center;
+      cursor: pointer;
+      &.active {
+        background-image: url('assets/images/cross.svg?1');
+        display: block;
+        background-color: $colour-primary;
+        background-size: 50% 50%;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+      }
+    }
+    .nav-primary {
+      display: none;
+      position: fixed;
+      z-index: 99;
+      top: 0;
+      height: 100vh;
+      padding-top: 100px;
+      left: 0;
+      right: 0;
+      margin: 0;
+      background-color: $colour-grey-extra-light;
+      &[data-visible=true] {
+        display: block;
+      }
+      ul {
+        li {
+          width: 100%;
+          box-sizing: border-box;
+          text-align: center;
+          padding-bottom: $spacer-2;
+          margin-bottom: $spacer-2;
+          border-bottom: 1px solid $colour-grey-light;
+          padding-left: $spacer-4;
+          padding-right: $spacer-4;
+        }
+      }
+    }
+  } 
 }

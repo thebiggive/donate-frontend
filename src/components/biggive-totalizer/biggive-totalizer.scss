@@ -16,13 +16,28 @@
     top: 0;
     @include font-size-large();
     font-weight: 600;
+    max-width: 33.3%;
   }
   .total-matched-funds-wrap {
     text-align: right;
-    padding: $spacer-2 $spacer-4;
+    padding: $spacer-2 $spacer-4 $spacer-2 50%;
     @include font-size-small();
     .currency {
       font-weight: bold;
     }
   }
 }
+
+@media screen and (max-width: $screen-mobile-max) {
+
+  .container {
+    .total-raised-wrap {
+      @include font-size-medium();
+    }
+  }
+}
+
+
+
+
+

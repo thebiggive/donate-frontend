@@ -13,7 +13,8 @@ const Template = args => `
         <biggive-social-icon service="YouTube" url="https://www.youtube.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
         <biggive-social-icon service="Instagram" url="https://www.instagram.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
       </div>
-      <ul slot="nav-primary">
+      <div class="nav-toggle"></div>
+      <nav class="nav nav-primary">
         <li><a href="#">Explore Campaigns</a></li>
         <li><a href="#">For Charities</a></li>
         <li><a href="#">For Funders</a></li>

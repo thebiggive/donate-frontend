@@ -5,7 +5,6 @@
 .columns {
   @include standard-font();
   @include section-container();
-  margin-bottom: $spacer-3;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;  
@@ -16,6 +15,18 @@
   .column-secondary {
     width: calc(33.4% - $spacer-3);
     box-sizing: border-box;
+  }
+}
+
+@media screen and (max-width: $screen-tablet-max) {
+  .columns {
+    .column-primary {
+      width: 100%;
+      margin-bottom: $spacer-3;
+    }
+    .column-secondary {
+      width: 100%;
+    }
   }
 }
 

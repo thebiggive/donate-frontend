@@ -39,7 +39,7 @@ export class BiggiveButton {
   /**
    * Rounded corners
    */
-  @Prop() rounded: boolean = true;
+  @Prop() rounded: boolean = false;
 
   render() {
     return (

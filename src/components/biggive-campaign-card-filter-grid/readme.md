@@ -15,12 +15,22 @@
 | `spaceBelow`      | `space-below`      | Space below component                                                                           | `number` | `0`                           |
 
 
-## Events
+## Dependencies
 
-| Event          | Description                                                                                        | Type                  |
-| -------------- | -------------------------------------------------------------------------------------------------- | --------------------- |
-| `doTextSearch` | This event `doTextSearch` event is emitted and propogates to the parent component which handles it | `CustomEvent<string>` |
+### Depends on
 
+- [biggive-form-field-select](../biggive-form-field-select)
+- [biggive-form-field-select-option](../biggive-form-field-select-option)
+- [biggive-popup](../biggive-popup)
+
+### Graph
+```mermaid
+graph TD;
+  biggive-campaign-card-filter-grid --> biggive-form-field-select
+  biggive-campaign-card-filter-grid --> biggive-form-field-select-option
+  biggive-campaign-card-filter-grid --> biggive-popup
+  style biggive-campaign-card-filter-grid fill:#f9f,stroke:#333,stroke-width:4px
+```
 
 ----------------------------------------------
 

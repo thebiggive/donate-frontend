@@ -1,0 +1,15 @@
+:host {
+  display: contents;
+}
+
+
+.option {
+  @include standard-font();
+  padding: 2px $spacer-2;
+  &:hover {
+    background-color: $colour-primary;
+    color: $colour-white;
+    cursor: pointer;
+  }
+}
+
