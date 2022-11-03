@@ -349,6 +349,10 @@ export namespace Components {
           * Defines the text on the search button
          */
         "buttonText": string;
+        "filterBeneficary": string;
+        "filterCategory": string;
+        "filterFunding": string;
+        "filterLocation": string;
         /**
           * Intro
          */
@@ -357,6 +361,8 @@ export namespace Components {
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText": string;
+        "searchText": string;
+        "sortBy": string;
         /**
           * Space below component
          */
@@ -447,6 +453,8 @@ export namespace Components {
           * Placeholder
          */
         "placeholder": string;
+        "selectedLabel": string;
+        "selectedValue": string;
         /**
           * Space below component
          */
@@ -551,6 +559,14 @@ export namespace Components {
           * Full URL of a main hero image.
          */
         "mainImage": string;
+        /**
+          * Horizontal alignment of image
+         */
+        "mainImageAlignHorizontal": string;
+        /**
+          * Vertical alignment of image
+         */
+        "mainImageAlignVertical": string;
         /**
           * Hero image title, typically the page.
          */
@@ -897,6 +913,10 @@ export namespace Components {
          */
         "videoUrl": string;
     }
+}
+export interface BiggiveCampaignCardFilterGridCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLBiggiveCampaignCardFilterGridElement;
 }
 export interface BiggiveFormFieldSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1531,14 +1551,24 @@ declare namespace LocalJSX {
           * Defines the text on the search button
          */
         "buttonText"?: string;
+        "filterBeneficary"?: string;
+        "filterCategory"?: string;
+        "filterFunding"?: string;
+        "filterLocation"?: string;
         /**
           * Intro
          */
         "intro"?: string;
         /**
+          * This event `doChange` event is emitted and propogates to the parent component which handles it
+         */
+        "onDoSearchAndFilterUpdate"?: (event: BiggiveCampaignCardFilterGridCustomEvent<object>) => void;
+        /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText"?: string;
+        "searchText"?: string;
+        "sortBy"?: string;
         /**
           * Space below component
          */
@@ -1628,11 +1658,13 @@ declare namespace LocalJSX {
         /**
           * This event `doChange` event is emitted and propogates to the parent component which handles it
          */
-        "onDoChange"?: (event: BiggiveFormFieldSelectCustomEvent<string>) => void;
+        "onDoSelectChange"?: (event: BiggiveFormFieldSelectCustomEvent<object>) => void;
         /**
           * Placeholder
          */
         "placeholder"?: string;
+        "selectedLabel"?: string;
+        "selectedValue"?: string;
         /**
           * Space below component
          */
@@ -1741,6 +1773,14 @@ declare namespace LocalJSX {
           * Full URL of a main hero image.
          */
         "mainImage"?: string;
+        /**
+          * Horizontal alignment of image
+         */
+        "mainImageAlignHorizontal"?: string;
+        /**
+          * Vertical alignment of image
+         */
+        "mainImageAlignVertical"?: string;
         /**
           * Hero image title, typically the page.
          */
