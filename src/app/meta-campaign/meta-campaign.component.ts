@@ -1,5 +1,5 @@
 import { isPlatformBrowser, ViewportScroller } from '@angular/common';
-import { AfterViewChecked, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { AfterViewChecked, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -73,6 +73,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       this.campaignSlug = params.campaignSlug;
       this.fundSlug = params.fundSlug;
     });
+  }
+
+  @HostListener('doTextSearch')
+  onDoSearch(event: Event) {
+    console.log(event);
   }
 
   ngOnDestroy() {
