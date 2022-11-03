@@ -1,9 +1,19 @@
 export default {
   title: 'Components/Content',
+  argTypes: {
+    spaceBelow: {
+      name: 'Space below',
+      control: {
+        type: 'select',
+        options: [0, 1, 2, 3, 4, 5, 6],
+      },
+    }
+  },
 };
 
 const Template = args => `
     <biggive-hero-image
+      space-below="${args.spaceBelow}"
       colour-scheme="${args.colourScheme}"
       slug="${args.slug}"
       slugColour="${args.slugColour}"
@@ -23,6 +33,7 @@ const Template = args => `
 
 export const HeroImageComponent = Template.bind({});
 HeroImageComponent.args = {
+  spaceBelow: 0,
   colourScheme: 'primary',
   slug: 'Test slug',
   slugColour: null,
