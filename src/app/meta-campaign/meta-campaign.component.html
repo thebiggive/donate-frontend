@@ -48,15 +48,14 @@
             [secondaryFigureAmount]="campaign.amountRaised">
           </biggive-campaign-card>
         </div>
-  
-        <div *ngIf="!hasMore" class="t-align-center padding-top-s" >
-          <strong>No more campaigns available</strong>
-        </div>
-  
-        <mat-spinner *ngIf="loading" color="primary" diameter="30"></mat-spinner>
-
       </biggive-grid>
     </biggive-campaign-card-filter-grid>
+
+    <div *ngIf="!hasMore" class="t-align-center padding-top-s" >
+      <strong>No more campaigns available</strong>
+    </div>
+
+    <mat-spinner *ngIf="loading" color="primary" diameter="30"></mat-spinner>
     
     <div *ngIf="filterError" tabindex="0">
       <p class="error" aria-live="assertive">
