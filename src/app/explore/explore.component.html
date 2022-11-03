@@ -37,12 +37,11 @@
     </biggive-campaign-card-filter-grid>
     <mat-spinner *ngIf="loading" color="primary" diameter="30"></mat-spinner>
 
-    <div *ngIf="true">
+    <div *ngIf="campaigns.length === 0 && !loading">
       <p class="error" aria-live="polite">
         We can't find any campaigns matching this search but there are lots more to choose from.
         <a tabindex="0" (click)="clear()">View all campaigns here</a>.
       </p>
     </div>
-
   </biggive-page-section>
 </main>
