@@ -345,12 +345,22 @@
 }
 
 @mixin button-white {
-  color: $colour-black;
+  color: $colour-primary;
   background-color: $colour-white;
   border-color: $colour-white;
   &:hover {
     color: $colour-white;
-    background-color: $colour-black;
+    background-color: $colour-primary;
+  }
+}
+
+@mixin button-black {
+  color: $colour-white;
+  background-color: $colour-black;
+  border-color: $colour-black;
+  &:hover {
+    color: $colour-black;
+    background-color: $colour-white;
   }
 }
 

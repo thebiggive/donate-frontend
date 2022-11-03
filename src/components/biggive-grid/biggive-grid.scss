@@ -29,3 +29,22 @@
   @include flex-container-column();
 }
 
+
+@media screen and (max-width: $screen-tablet-max) {
+
+  .column-count-2 ::slotted(*),
+  .column-count-3 ::slotted(*),
+  .column-count-4 ::slotted(*) {
+    width: calc( 50% - (($spacer-4 * 1) / 2));
+  }
+}
+
+@media screen and (max-width: $screen-mobile-max) {
+
+  .column-count-2 ::slotted(*),
+  .column-count-3 ::slotted(*),
+  .column-count-4 ::slotted(*) {
+    width: 100%;
+  }
+}
+

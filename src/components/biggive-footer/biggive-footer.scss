@@ -14,8 +14,12 @@ nav ul li a {
 
 
 .row-top {
+  background-image: url(assets/images/biggive-triangle-green.svg);
+  background-repeat: no-repeat;
+  background-size: auto 75px;
+  background-position: $spacer-6 30px;
   background-color: $colour-primary;
-  padding: $spacer-6;
+  padding: 100px $spacer-6 $spacer-6 $spacer-6;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -40,7 +44,11 @@ nav ul li a {
     }
   }
   .button-wrap {
+    margin-top: $spacer-3;
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
 }
 
@@ -66,3 +74,30 @@ nav ul li a {
   }
 
 }
+
+
+@media screen and (max-width: $screen-tablet-max) {
+  .row-top {
+    padding: $spacer-3;
+  }
+}
+
+@media screen and (max-width: $screen-mobile-max) {
+  .row-top {
+    background-size: auto 50px;
+    padding-top: 80px;
+    padding-left: 15px;
+    nav {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom:$spacer-4;
+    }
+    .button-wrap * {
+      width: 100% !important;
+    }
+  }
+}
+
+
+
+

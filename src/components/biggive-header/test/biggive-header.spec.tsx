@@ -29,7 +29,8 @@ describe('biggive-header', () => {
                    </svg>
                  </a>
               </div>
-              <nav class="nav nav-primary"><ul></ul></nav>
+              <div class="nav-toggle"></div>
+              <nav class="nav nav-primary" data-visible="false"><ul></ul></nav>
             </div>
           </header>
         </mock:shadow-root>

@@ -19,56 +19,76 @@
     margin-left: auto;
     margin-right: auto;
   }  
-}
-
-
-.content-wrap {
-  width: 40%;
-  position: relative;
-  z-index: 1;
-  padding: $spacer-10 $spacer-6 $spacer-6 $spacer-6;
-  .logo {
-    height: 75px;
-    margin-bottom: $spacer-4;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: left center;
-    img {
-      display: none;
+  .content-wrap {
+    width: 40%;
+    position: relative;
+    z-index: 1;
+    padding: $spacer-10 $spacer-6 $spacer-6 $spacer-6;
+    .logo {
+      height: 75px;
+      margin-bottom: $spacer-4;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: left center;
+      img {
+        display: none;
+      }
     }
+    .slug {
+      @include heading-4;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      @include heading-1;
+      margin: 0 0 $spacer-3 0;
+      padding: 0;
+    }
+    .teaser {
+      margin: 0 0 $spacer-5 0;
+      padding: 0;
+    }
+    
   }
-  .slug {
-    @include heading-4;
-    margin: 0;
-    padding: 0;
-  }
-  h1 {
-    @include heading-1;
-    margin: 0 0 $spacer-3 0;
-    padding: 0;
-  }
-  .teaser {
-    margin: 0 0 $spacer-5 0;
-    padding: 0;
+
+  .graphic-wrap {
+    @include absolute-fill();
+    background-color: #F1F1F1;
+    margin-left: 20vw;
+    clip-path: polygon(0 0, 100% 0, 100% 100%);
+    .image-wrap {
+      @include absolute-fill();
+      background-size: cover;
+      img {
+        display: none;
+      }
+    }
   }
   
+
 }
 
 
-.graphic-wrap {
-  @include absolute-fill();
-  background-color: #F1F1F1;
-  margin-left: 20vw;
-  clip-path: polygon(0 0, 100% 0, 100% 100%);
-  .image-wrap {
-    @include absolute-fill();
-    background-size: cover;
-    img {
-      display: none;
+
+
+
+
+@media screen and (max-width: $screen-tablet-max) {
+  .container {
+    .sleeve {
+      flex-wrap: wrap;
+      .content-wrap {
+        width: 100%;
+        padding: 25vw $spacer-3 $spacer-3 $spacer-3;
+      }
+      .graphic-wrap {
+        margin-left: 0;
+        bottom: auto;
+        padding-bottom: 50%;
+      }
     }
   }
 }
-
 
 
 
