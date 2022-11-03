@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe, isPlatformBrowser, Location } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -19,6 +19,8 @@ import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 
 @Component({
+  // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
+  encapsulation: ViewEncapsulation.None,
   standalone: true,
   selector: 'app-campaign-details',
   templateUrl: './campaign-details.component.html',

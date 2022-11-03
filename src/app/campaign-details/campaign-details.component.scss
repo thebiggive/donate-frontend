@@ -64,13 +64,15 @@
 }
 
 .c-tabs {
-  @media #{$breakpoint-md} {
-    max-width: 50%;
-  }
-  @media #{$breakpoint-xl} {
-    max-width: 70%;
-  }
+  max-width: 100%;
   overflow-x: scroll;
+}
+
+.mat-tab-label {
+  .mat-tab-label-content {
+    color: $colour-primary;
+    font-size: large;
+  }
 }
 
 .c-quotes {
@@ -80,7 +82,7 @@
 }
 
 .c-quotes__blockquote {
-  border-left: solid 2px $colour-teal-dark;
+  border-left: solid 2px $colour-primary;
   padding-left: 2rem;
   margin: 0 0 0 2rem;
   white-space: pre-wrap;
@@ -92,8 +94,9 @@
 }
 
 .c-video {
-  width: 100%;
+  width: 70%;
   height: auto;
+  margin: 30px auto; // centres the video
 }
 
 .c-video__iframe {
@@ -109,6 +112,7 @@
 
 .c-additional__images {
   margin: 1rem auto 0 auto;
+  width: 100%;
   max-width: 100%;
 }
 
