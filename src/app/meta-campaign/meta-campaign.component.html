@@ -1,29 +1,30 @@
 <main>
-  <app-hero
-    [campaign]="campaign"
-    [fund]="fund"
-    [description]="fund && fund.description ? fund.description : campaign.summary"
-    [getDefaultSort]="getDefaultSort"
-  ></app-hero>
 
-  <div *ngIf="children">
-    <div class="b-container">
-      <app-filters
-        *ngIf="campaign.campaignCount && campaign.campaignCount > 1"
-        [getDefaultSort]="getDefaultSort"
-      ></app-filters>
+  <biggive-totalizer
+    primary-colour="primary"
+    primary-text-colour="white"
+    secondary-colour="secondary"
+    secondary-text-colour="black"
+    currency-code="GBP"
+    include-gift-aid="true"
+    [totalMatchFunds]="campaign.matchFundsTotal"
+    [totalRaised]="campaign.amountRaised">
+  </biggive-totalizer>
 
-      <div
-        *ngIf="children.length === 0 && !loading && !filterError"
-      >
-        <p class="error" aria-live="polite">
-          We can't find any campaigns matching this search but there are lots
-          more to choose from.
-          <a (click)="clear()">View all participating campaigns here</a>.
-        </p>
-      </div>
+  <biggive-hero-image
+    [mainTitle]="campaign.title"
+    [mainImage]="campaign.bannerUri"
+    [teaser]="campaign.summary"
+    colour-scheme="primary"
+    teaser="We run match funding campaigns to make an extraordinary difference to the world’s big challenges."
+    button-url="/explore"
+    button-label="Donate now"
+    button-colour-scheme="primary"
+  ></biggive-hero-image>
 
-      <div class="c-grid">
+  <biggive-page-section class="b-container">
+    <biggive-campaign-card-filter-grid>
+      <biggive-grid slot="campaign-grid" column-count="3">
         <div *ngFor="let campaign of children">
           <div
             infiniteScroll
@@ -32,24 +33,36 @@
             [scrollWindow]="true"
             [alwaysCallback]="true"
           ></div>
-          <app-campaign-card [campaign]="campaign" [inFundContext]="!!fund"></app-campaign-card>
+          <biggive-campaign-card
+            [banner]="campaign.imageUri"
+            [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'" 
+            [campaignTitle]="campaign.title"
+            [currencyCode]="campaign.currencyCode"
+            [donateButtonUrl]="'/donate/' + campaign.id"
+            [moreInfoButtonUrl]="'/campaign/' + campaign.id"
+            [organisationName]="campaign.charity.name"
+            primary-figure-label="Match Funds Remaining" 
+            [primaryFigureAmount]="campaign.matchFundsRemaining" 
+            [progressBarCounter]="getPercentageRaised(campaign)"
+            secondary-figure-label="Total Funds Raised" 
+            [secondaryFigureAmount]="campaign.amountRaised">
+          </biggive-campaign-card>
         </div>
-      </div>
+      </biggive-grid>
+    </biggive-campaign-card-filter-grid>
 
-      <div *ngIf="!hasMore" class="t-align-center padding-top-s" >
-        <strong>No more campaigns available</strong>
-      </div>
-
-      <mat-spinner *ngIf="loading" color="primary" diameter="30"></mat-spinner>
+    <div *ngIf="!hasMore" class="t-align-center padding-top-s" >
+      <strong>No more campaigns available</strong>
     </div>
 
+    <mat-spinner *ngIf="loading" color="primary" diameter="30"></mat-spinner>
+    
     <div *ngIf="filterError" tabindex="0">
-      <!-- e.g. campaign or fund slug is not recognised -->
       <p class="error" aria-live="assertive">
         Could not load the campaign. You might have followed a broken link or lost connectivity.<br />
         Not to worry, you can
         <a routerLink="/">browse all active campaigns here</a>!
       </p>
     </div>
-  </div>
+  </biggive-page-section>
 </main>

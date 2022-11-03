@@ -1,5 +1,5 @@
 import { isPlatformBrowser, ViewportScroller } from '@angular/common';
-import { AfterViewChecked, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { AfterViewChecked, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -75,6 +75,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     });
   }
 
+  @HostListener('doTextSearch')
+  onDoSearch(event: Event) {
+    console.log(event);
+  }
+
   ngOnDestroy() {
     if (this.routeChangeListener) {
       this.routeChangeListener.unsubscribe();
@@ -148,6 +153,14 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   getDefaultSort(): 'amountRaised' | 'matchFundsRemaining' {
     // Most Raised for completed Master Campaigns; Match Funds Remaining for others.
     return (this.campaign && new Date(this.campaign.endDate) < new Date()) ? 'amountRaised' : 'matchFundsRemaining';
+  }
+
+  getPercentageRaised(childCampaign: CampaignSummary) {
+    if (childCampaign.amountRaised >= childCampaign.target) {
+      return 100;
+    }
+
+    return (childCampaign.amountRaised / childCampaign.target) * 100;
   }
 
   private loadMoreForCurrentSearch() {
