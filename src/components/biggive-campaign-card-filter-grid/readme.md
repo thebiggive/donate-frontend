@@ -9,12 +9,16 @@
 
 | Property           | Attribute           | Description                                                                                     | Type     | Default                       |
 | ------------------ | ------------------- | ----------------------------------------------------------------------------------------------- | -------- | ----------------------------- |
+| `beneficaries`     | `beneficaries`      | JSON array of category key/values                                                               | `string` | `null`                        |
 | `buttonText`       | `button-text`       | Defines the text on the search button                                                           | `string` | `'Search'`                    |
+| `categories`       | `categories`        | JSON array of category key/values                                                               | `string` | `null`                        |
 | `filterBeneficary` | `filter-beneficary` |                                                                                                 | `string` | `null`                        |
 | `filterCategory`   | `filter-category`   |                                                                                                 | `string` | `null`                        |
 | `filterFunding`    | `filter-funding`    |                                                                                                 | `string` | `null`                        |
 | `filterLocation`   | `filter-location`   |                                                                                                 | `string` | `null`                        |
+| `funding`          | `funding`           | JSON array of category key/values                                                               | `string` | `null`                        |
 | `intro`            | `intro`             | Intro                                                                                           | `string` | `'Find a charity or project'` |
+| `locations`        | `locations`         | JSON array of category key/values                                                               | `string` | `null`                        |
 | `placeholderText`  | `placeholder-text`  | Defines the text displayed as the placeholder in the input field before the user types anything | `string` | `'Search'`                    |
 | `searchText`       | `search-text`       |                                                                                                 | `string` | `null`                        |
 | `sortBy`           | `sort-by`           |                                                                                                 | `string` | `null`                        |

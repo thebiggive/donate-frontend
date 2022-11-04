@@ -52,7 +52,12 @@ describe('biggive-campaign-card-filter-grid', () => {
                 <biggive-form-field-select id="beneficiaries" placeholder="Beneficiary" space-below="2"></biggive-form-field-select>
                 <biggive-form-field-select id="locations" placeholder="Location" space-below="2"></biggive-form-field-select>
                 <biggive-form-field-select id="funding" placeholder="Funding" space-below="2"></biggive-form-field-select>
-              </biggive-popup>
+                <div class="align-right">
+                  <a class="button button-primary" href="#">
+                    Apply filters
+                  </a>
+                </div>
+                </biggive-popup>
             </div>
           </div>
           <div class="campaign-grid">

@@ -5,11 +5,9 @@ export default {
 };
 
 const Template = () => `
-      <biggive-campaign-card-filter-grid>
+      <biggive-campaign-card-filter-grid categoryOptions="[&quot;Children&quot;,&quot;Adults&quot;]" beneficiaryOptions="[&quot;Children&quot;,&quot;Adults&quot;]" loctionOptions="[&quot;Children&quot;,&quot;Adults&quot;]" fundingOptions="[&quot;Children&quot;,&quot;Adults&quot;]">
       <biggive-grid slot="campaign-grid" column-count="3">
-        <biggive-campaign-card 
-          data-filter-categories="[&quot;Finance&quot;]"
-          data-filter-beneficiaries="[&quot;Children&quot;,&quot;Adults&quot;]"
+        <biggive-campaign-card
           campaign-type="Match Funded"
           campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community" 
           organisation-name="Oxford Philharmonic Orchestra"

@@ -49,6 +49,26 @@ export class BiggiveCampaignCardFilterGrid {
    */
   @Prop() buttonText: string = 'Search';
 
+  /**
+   * JSON array of category key/values
+   */
+  @Prop() categoryOptions: string = null;
+
+  /**
+   * JSON array of beneficary key/values
+   */
+  @Prop() beneficaryOptions: string = null;
+
+  /**
+   * JSON array of location key/values
+   */
+  @Prop() locationOptions: string = null;
+
+  /**
+   * JSON array of funding key/values
+   */
+  @Prop() fundingOptions: string = null;
+
   private getSearchAndFilterObject() {
     var obj = {
       searchText: this.searchText,
@@ -68,6 +88,9 @@ export class BiggiveCampaignCardFilterGrid {
     this.filterBeneficary = this.el.shadowRoot.getElementById('beneficiaries').selectedValue;
     this.filterLocation = this.el.shadowRoot.getElementById('locations').selectedValue;
     this.filterFunding = this.el.shadowRoot.getElementById('funding').selectedValue;
+  }
+
+  private handleApplyFilterButtonClick() {
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
 
@@ -89,62 +112,40 @@ export class BiggiveCampaignCardFilterGrid {
   private handleFilterButtonClick() {
     this.el.shadowRoot.getElementById('filter-popup').open();
 
-    var filters = { categories: [], beneficiaries: [], locations: [], funding: [] };
-    var cards = this.el.querySelectorAll('biggive-campaign-card');
-
-    for (var i = 0; i < cards.length; i++) {
-      var categories = JSON.parse(cards[i].getAttribute('data-filter-categories'));
-      for (var p in categories) {
-        if (!filters.categories.includes(categories[p])) {
-          filters.categories.push(categories[p]);
-        }
-      }
-      var beneficiaries = JSON.parse(cards[i].getAttribute('data-filter-beneficiaries'));
-      for (var p in beneficiaries) {
-        if (!filters.beneficiaries.includes(beneficiaries[p])) {
-          filters.beneficiaries.push(beneficiaries[p]);
-        }
-      }
-      var locations = JSON.parse(cards[i].getAttribute('data-filter-locations'));
-      for (var p in locations) {
-        if (!filters.locations.includes(locations[p])) {
-          filters.locations.push(locations[p]);
-        }
-      }
-      var funding = JSON.parse(cards[i].getAttribute('data-filter-funding'));
-      for (var p in funding) {
-        if (!filters.funding.includes(funding[p])) {
-          filters.funding.push(funding[p]);
-        }
+    if (this.categoryOptions != null) {
+      var options = JSON.parse(this.categoryOptions);
+      this.el.shadowRoot.getElementById('categories').innerHTML = '';
+      for (var prop in options) {
+        this.el.shadowRoot.getElementById('categories').innerHTML +=
+          '<biggive-form-field-select-option value="' + options[prop] + '" label="' + options[prop] + '"></biggive-form-field-select-option>';
       }
     }
 
-    filters.categories.sort();
-    this.el.shadowRoot.getElementById('categories').innerHTML = '';
-    for (var i = 0; i < filters.categories.length; i++) {
-      this.el.shadowRoot.getElementById('categories').innerHTML +=
-        '<biggive-form-field-select-option value="' + filters.categories[i] + '" label="' + filters.categories[i] + '"></biggive-form-field-select-option>';
+    if (this.beneficaryOptions != null) {
+      var options = JSON.parse(this.beneficaryOptions);
+      this.el.shadowRoot.getElementById('beneficaries').innerHTML = '';
+      for (var prop in options) {
+        this.el.shadowRoot.getElementById('beneficaries').innerHTML +=
+          '<biggive-form-field-select-option value="' + options[prop] + '" label="' + options[prop] + '"></biggive-form-field-select-option>';
+      }
     }
 
-    filters.beneficiaries.sort();
-    this.el.shadowRoot.getElementById('beneficiaries').innerHTML = '';
-    for (var i = 0; i < filters.beneficiaries.length; i++) {
-      this.el.shadowRoot.getElementById('beneficiaries').innerHTML +=
-        '<biggive-form-field-select-option value="' + filters.beneficiaries[i] + '" label="' + filters.beneficiaries[i] + '"></biggive-form-field-select-option>';
+    if (this.locationOptions != null) {
+      var options = JSON.parse(this.locationOptions);
+      this.el.shadowRoot.getElementById('locations').innerHTML = '';
+      for (var prop in options) {
+        this.el.shadowRoot.getElementById('locations').innerHTML +=
+          '<biggive-form-field-select-option value="' + options[prop] + '" label="' + options[prop] + '"></biggive-form-field-select-option>';
+      }
     }
 
-    filters.locations.sort();
-    this.el.shadowRoot.getElementById('locations').innerHTML = '';
-    for (var i = 0; i < filters.locations.length; i++) {
-      this.el.shadowRoot.getElementById('locations').innerHTML +=
-        '<biggive-form-field-select-option value="' + filters.locations[i] + '" label="' + filters.locations[i] + '"></biggive-form-field-select-option>';
-    }
-
-    filters.funding.sort();
-    this.el.shadowRoot.getElementById('funding').innerHTML = '';
-    for (var i = 0; i < filters.funding.length; i++) {
-      this.el.shadowRoot.getElementById('funding').innerHTML +=
-        '<biggive-form-field-select-option value="' + filters.funding[i] + '" label="' + filters.funding[i] + '"></biggive-form-field-select-option>';
+    if (this.fundingOptions != null) {
+      var options = JSON.parse(this.fundingOptions);
+      this.el.shadowRoot.getElementById('funding').innerHTML = '';
+      for (var prop in options) {
+        this.el.shadowRoot.getElementById('funding').innerHTML +=
+          '<biggive-form-field-select-option value="' + options[prop] + '" label="' + options[prop] + '"></biggive-form-field-select-option>';
+      }
     }
   }
 
@@ -199,6 +200,11 @@ export class BiggiveCampaignCardFilterGrid {
                 <biggive-form-field-select placeholder="Beneficiary" id="beneficiaries" space-below="2"></biggive-form-field-select>
                 <biggive-form-field-select placeholder="Location" id="locations" space-below="2"></biggive-form-field-select>
                 <biggive-form-field-select placeholder="Funding" id="funding" space-below="2"></biggive-form-field-select>
+                <div class="align-right">
+                  <a href="#" class="button button-primary" onClick={() => this.handleApplyFilterButtonClick()}>
+                    Apply filters
+                  </a>
+                </div>
               </biggive-popup>
             </div>
           </div>

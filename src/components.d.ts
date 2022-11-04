@@ -346,17 +346,33 @@ export namespace Components {
     }
     interface BiggiveCampaignCardFilterGrid {
         /**
+          * JSON array of category key/values
+         */
+        "beneficaries": string;
+        /**
           * Defines the text on the search button
          */
         "buttonText": string;
+        /**
+          * JSON array of category key/values
+         */
+        "categories": string;
         "filterBeneficary": string;
         "filterCategory": string;
         "filterFunding": string;
         "filterLocation": string;
         /**
+          * JSON array of category key/values
+         */
+        "funding": string;
+        /**
           * Intro
          */
         "intro": string;
+        /**
+          * JSON array of category key/values
+         */
+        "locations": string;
         /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
@@ -697,6 +713,26 @@ export namespace Components {
         "iconColour": string;
         /**
           * Url
+         */
+        "url": string;
+    }
+    interface BiggiveNavGroup {
+        /**
+          * Inline
+         */
+        "inline": boolean;
+    }
+    interface BiggiveNavItem {
+        /**
+          * URL
+         */
+        "iconColour": string;
+        /**
+          * Label
+         */
+        "label": string;
+        /**
+          * URL
          */
         "url": string;
     }
@@ -1081,6 +1117,18 @@ declare global {
         prototype: HTMLBiggiveMiscIconElement;
         new (): HTMLBiggiveMiscIconElement;
     };
+    interface HTMLBiggiveNavGroupElement extends Components.BiggiveNavGroup, HTMLStencilElement {
+    }
+    var HTMLBiggiveNavGroupElement: {
+        prototype: HTMLBiggiveNavGroupElement;
+        new (): HTMLBiggiveNavGroupElement;
+    };
+    interface HTMLBiggiveNavItemElement extends Components.BiggiveNavItem, HTMLStencilElement {
+    }
+    var HTMLBiggiveNavItemElement: {
+        prototype: HTMLBiggiveNavItemElement;
+        new (): HTMLBiggiveNavItemElement;
+    };
     interface HTMLBiggivePageColumnElement extends Components.BiggivePageColumn, HTMLStencilElement {
     }
     var HTMLBiggivePageColumnElement: {
@@ -1191,6 +1239,8 @@ declare global {
         "biggive-image": HTMLBiggiveImageElement;
         "biggive-image-feature": HTMLBiggiveImageFeatureElement;
         "biggive-misc-icon": HTMLBiggiveMiscIconElement;
+        "biggive-nav-group": HTMLBiggiveNavGroupElement;
+        "biggive-nav-item": HTMLBiggiveNavItemElement;
         "biggive-page-column": HTMLBiggivePageColumnElement;
         "biggive-page-columns": HTMLBiggivePageColumnsElement;
         "biggive-page-section": HTMLBiggivePageSectionElement;
@@ -1548,17 +1598,33 @@ declare namespace LocalJSX {
     }
     interface BiggiveCampaignCardFilterGrid {
         /**
+          * JSON array of category key/values
+         */
+        "beneficaries"?: string;
+        /**
           * Defines the text on the search button
          */
         "buttonText"?: string;
+        /**
+          * JSON array of category key/values
+         */
+        "categories"?: string;
         "filterBeneficary"?: string;
         "filterCategory"?: string;
         "filterFunding"?: string;
         "filterLocation"?: string;
         /**
+          * JSON array of category key/values
+         */
+        "funding"?: string;
+        /**
           * Intro
          */
         "intro"?: string;
+        /**
+          * JSON array of category key/values
+         */
+        "locations"?: string;
         /**
           * This event `doChange` event is emitted and propogates to the parent component which handles it
          */
@@ -1914,6 +1980,26 @@ declare namespace LocalJSX {
          */
         "url"?: string;
     }
+    interface BiggiveNavGroup {
+        /**
+          * Inline
+         */
+        "inline"?: boolean;
+    }
+    interface BiggiveNavItem {
+        /**
+          * URL
+         */
+        "iconColour"?: string;
+        /**
+          * Label
+         */
+        "label"?: string;
+        /**
+          * URL
+         */
+        "url"?: string;
+    }
     interface BiggivePageColumn {
     }
     interface BiggivePageColumns {
@@ -2156,6 +2242,8 @@ declare namespace LocalJSX {
         "biggive-image": BiggiveImage;
         "biggive-image-feature": BiggiveImageFeature;
         "biggive-misc-icon": BiggiveMiscIcon;
+        "biggive-nav-group": BiggiveNavGroup;
+        "biggive-nav-item": BiggiveNavItem;
         "biggive-page-column": BiggivePageColumn;
         "biggive-page-columns": BiggivePageColumns;
         "biggive-page-section": BiggivePageSection;
@@ -2201,6 +2289,8 @@ declare module "@stencil/core" {
             "biggive-image": LocalJSX.BiggiveImage & JSXBase.HTMLAttributes<HTMLBiggiveImageElement>;
             "biggive-image-feature": LocalJSX.BiggiveImageFeature & JSXBase.HTMLAttributes<HTMLBiggiveImageFeatureElement>;
             "biggive-misc-icon": LocalJSX.BiggiveMiscIcon & JSXBase.HTMLAttributes<HTMLBiggiveMiscIconElement>;
+            "biggive-nav-group": LocalJSX.BiggiveNavGroup & JSXBase.HTMLAttributes<HTMLBiggiveNavGroupElement>;
+            "biggive-nav-item": LocalJSX.BiggiveNavItem & JSXBase.HTMLAttributes<HTMLBiggiveNavItemElement>;
             "biggive-page-column": LocalJSX.BiggivePageColumn & JSXBase.HTMLAttributes<HTMLBiggivePageColumnElement>;
             "biggive-page-columns": LocalJSX.BiggivePageColumns & JSXBase.HTMLAttributes<HTMLBiggivePageColumnsElement>;
             "biggive-page-section": LocalJSX.BiggivePageSection & JSXBase.HTMLAttributes<HTMLBiggivePageSectionElement>;
