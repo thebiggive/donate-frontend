@@ -1,32 +1,13 @@
 // Write all class styling inside elements where possible
 @use '@angular/material' as mat;
 
-.mat-menu-trigger {
-  cursor: pointer;
-}
-
-.mat-menu-content {
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  li {
-    display: block;
-    a {
-      display: block;
-      text-align: left;
-    }
-  }
-}
-
 .mat-ripple {
   display: none;
 }
 
 .mat-tab-label {
   opacity: 1 !important;
-  color: $colour-grey !important;
+  color: $colour-black !important;
 }
 
 // See also .c-progress { ... } in campaign-details-card.component.scss.
@@ -35,10 +16,10 @@ mat-progress-bar {
     display: none !important;
   }
   .mat-progress-bar-fill::after {
-    background: $colour-teal-dark;
+    background: $colour-black;
   }
   .mat-progress-bar-buffer {
-    background: $colour-teal;
+    background: $colour-primary;
     opacity: 0.24;
   }
 }
@@ -56,16 +37,9 @@ mat-radio-button {
   }
 }
 
-mat-toolbar {
-  position: sticky;
-  position: -webkit-sticky;
-  top: 0;
-  z-index: 1000;
-}
-
 button.mat-icon-button {
   // Work around Safari layout issue where text following buttons was cut off.
-  // Observed in top sidenav and 'back' links next to `keyboard_arrow_left` icons.
+  // Observed in 'back' links next to `keyboard_arrow_left` icons.
   width: auto;
 }
 

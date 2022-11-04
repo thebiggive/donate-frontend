@@ -1,20 +1,13 @@
 $colour-background: #f4f4f4; // Global / main app background
-$colour-red: #f0423b;
-$colour-teal-lightest: #CAE8EC;  // Should be lighter
-$colour-teal-lighter: #6ADDC0;   // Should be lightest
-$colour-teal-light: #EAF6F7;
-$colour-teal-lightish: #69BEC9;
-$colour-teal: #00838f;
-$colour-teal-dark: #00707C;
-$colour-teal-darker: #006672;
-$colour-teal-darkest: #005360;
-$colour-teal-fade: #E0F0F2;
 $colour-grey-light: #E1E2E5;
 $colour-grey: #6c7383;
-$colour-black: #333;
+$colour-black: #000;
 $colour-black-contrast: #fff; // Suitable for legible text on `$colour-black` backgrounds
-$colour-highlight: #FDA83B;
+$colour-highlight: #2AF135;
 $colour-card-background: #fff;
+
+$colour-primary: #2C089B;
+$colour-primary-contrast: #fff;
 
 $full-copy-max-width: 600px;
 $breakpoint-sm: "(min-width: 320px)";

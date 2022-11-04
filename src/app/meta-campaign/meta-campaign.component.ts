@@ -297,10 +297,10 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       // use a too-low Y position when lots of card were shown and we didn't have a delay, both with `scrollToAnchor()`
       // and manual calculation + `scrollToPosition()`.
       setTimeout(() => {
-        // Scroll to the anchor's `offsetTop` y-position, minus $toolbar-height.
+        // Scroll to the anchor's `offsetTop` y-position (currently not minus approx header height).
         const activeCard = document.getElementById(`campaign-${campaignId}`);
         if (activeCard) {
-          this.scroller.scrollToPosition([0, activeCard.offsetTop - 64]);
+          this.scroller.scrollToPosition([0, activeCard.offsetTop - 0]);
         }
       }, 1500);
     }

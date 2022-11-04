@@ -78,24 +78,10 @@ li {
   }
 }
 
-.teal-nav {
-  text-transform: uppercase;
-  color: $colour-teal-lighter;
-  .mat-button {
-    font-size: 16px;
-    line-height: 24px;
-    margin-bottom: 12px;
-  }
-}
-
 .nav-links {
   @media screen and #{$breakpoint-lg} {
     margin-top: 0;
   }
-}
-
-.nav-links__teal {
-  vertical-align: top;
 }
 
 .reed-logo__wrap,

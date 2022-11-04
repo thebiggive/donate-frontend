@@ -33,7 +33,7 @@
 }
 
 .c-thank-you__content {
-  background-color: $colour-teal-darker;
+  background-color: $colour-black;
   padding: 1rem 2rem;
   color: $colour-black-contrast;
   border-top-left-radius: 8px;
@@ -108,7 +108,7 @@
 
 .c-button {
   background-color: $colour-background;
-  color: $colour-teal;
+  color: $colour-primary;
   padding: 1rem 0;
   &:hover {
     text-decoration: underline;
