@@ -1,5 +1,6 @@
 import { Component, h, Element, Prop, Event, EventEmitter, Listen } from '@stencil/core';
 import { faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
+import SearchAndFilterEvent from './CustomSearchAndFilterEvent';
 
 @Component({
   tag: 'biggive-campaign-card-filter-grid',
@@ -10,7 +11,7 @@ export class BiggiveCampaignCardFilterGrid {
   @Element() el;
 
   /**
-   * This event `doChange` event is emitted and propogates to the parent
+   * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent
    * component which handles it
    */
   @Event({
@@ -19,14 +20,14 @@ export class BiggiveCampaignCardFilterGrid {
     cancelable: true,
     bubbles: true,
   })
-  doSearchAndFilterUpdate: EventEmitter<object>;
+  doSearchAndFilterUpdate: EventEmitter<SearchAndFilterEvent>;
 
-  @Prop() searchText: string = null;
-  @Prop() sortBy: string = null;
-  @Prop() filterCategory: string = null;
-  @Prop() filterBeneficiary: string = null;
-  @Prop() filterLocation: string = null;
-  @Prop() filterFunding: string = null;
+  searchText: string = null;
+  sortBy: string = null;
+  filterCategory: string = null;
+  filterBeneficiary: string = null;
+  filterLocation: string = null;
+  filterFunding: string = null;
 
   /**
    * Space below component
@@ -69,16 +70,14 @@ export class BiggiveCampaignCardFilterGrid {
    */
   @Prop() fundingOptions: string[] = null;
 
-  private getSearchAndFilterObject() {
-    var obj = {
-      searchText: this.searchText,
-      sortBy: this.sortBy,
-      filterCategory: this.filterCategory,
-      filterBeneficiary: this.filterBeneficiary,
-      filterLocation: this.filterLocation,
-      filterFunding: this.filterFunding,
-    };
-    return obj;
+  private getSearchAndFilterObject(): SearchAndFilterEvent {
+    let event = new SearchAndFilterEvent();
+    event.searchText = this.searchText;
+    event.sortBy = this.sortBy;
+    event.filterCategory = this.filterCategory;
+    event.filterBeneficiary = this.filterBeneficiary;
+    event.filterFunding = this.filterFunding;
+    return event;
   }
 
   @Listen('doSelectChange')
@@ -96,6 +95,10 @@ export class BiggiveCampaignCardFilterGrid {
 
   private handleSearchButtonPressed() {
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+  }
+
+  private handleSearchTextChanged(event) {
+    this.searchText = event.target.value;
   }
 
   private handleEnterPressed(ev: KeyboardEvent) {
@@ -155,7 +158,14 @@ export class BiggiveCampaignCardFilterGrid {
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
                   <path d={faMagnifyingGlass.icon[4].toString()} />
                 </svg>
-                <input type="text" value={this.searchText} class="input-text" placeholder={this.placeholderText} onKeyDown={event => this.handleEnterPressed(event)} />
+                <input
+                  type="text"
+                  value={this.searchText}
+                  class="input-text"
+                  placeholder={this.placeholderText}
+                  onInput={event => this.handleSearchTextChanged(event)}
+                  onKeyDown={event => this.handleEnterPressed(event)}
+                />
               </div>
               <button onClick={() => this.handleSearchButtonPressed()} class="button button-primary">
                 {this.buttonText}
