@@ -34,7 +34,7 @@ export class BiggiveHeroImage {
   /**
    * Full URL of a main hero image.
    */
-  @Prop() mainImage: string = '';
+  @Prop() mainImage: string|null = null;
 
     /**
    * Horizontal alignment of image
@@ -97,7 +97,7 @@ export class BiggiveHeroImage {
             }
           </div>
           <div class="graphic-wrap">
-            {this.mainImage.length > 0 ? (
+            {this.mainImage !== null ? (
               <div class="image-wrap" style={{ 'background-image': 'url(' + this.mainImage + ')', 'background-position': this.mainImageAlignHorizontal + ' ' + this.mainImageAlignVertical }}>
                 <img src={this.mainImage} />
               </div>
