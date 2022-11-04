@@ -1,4 +1,4 @@
-export class SearchAndFilterEvent {
+export class CustomSearchAndFilterEvent {
   searchText: string;
   sortBy: string;
   filterCategory: string;
