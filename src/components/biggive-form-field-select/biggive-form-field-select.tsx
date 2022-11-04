@@ -1,4 +1,4 @@
-import { Component, Prop, h, State, Event, EventEmitter, Listen } from '@stencil/core';
+import { Component, Prop, h, Event, EventEmitter, Listen } from '@stencil/core';
 
 @Component({
   tag: 'biggive-form-field-select',
@@ -11,20 +11,21 @@ export class BiggiveFormFieldSelect {
    * component which handles it
    */
   @Event({
-    eventName: 'doChange',
+    eventName: 'doSelectChange',
     composed: true,
     cancelable: true,
     bubbles: true,
   })
-  doChange: EventEmitter<string>;
+  doSelectChange: EventEmitter<object>;
 
-  @State() selectedValue: string = null;
-  @State() selectedLabel: string = null;
+  @Prop() selectedValue: string = null;
+  @Prop() selectedLabel: string = null;
 
   @Listen('doOptionSelect')
   doOptionSelectCompletedHandler(event) {
     this.selectedValue = event.detail.value;
     this.selectedLabel = event.detail.label;
+    this.doSelectChange.emit({ value: this.selectedValue, label: this.selectedLabel });
   }
 
   /**
