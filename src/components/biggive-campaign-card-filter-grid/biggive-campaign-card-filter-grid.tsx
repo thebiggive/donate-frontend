@@ -1,6 +1,6 @@
 import { Component, h, Element, Prop, Event, EventEmitter, Listen } from '@stencil/core';
 import { faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
-import SearchAndFilterEvent from './CustomSearchAndFilterEvent';
+import { SearchAndFilterEvent } from './CustomSearchAndFilterEvent';
 
 @Component({
   tag: 'biggive-campaign-card-filter-grid',
