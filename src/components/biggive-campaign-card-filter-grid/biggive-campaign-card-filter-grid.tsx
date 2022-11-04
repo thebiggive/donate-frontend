@@ -107,7 +107,6 @@ export class BiggiveCampaignCardFilterGrid {
   private handleFilterButtonClick() {
     this.el.shadowRoot.getElementById('filter-popup').open();
 
-
     if (this.categoryOptions != null) {
       var options = this.categoryOptions;
       this.el.shadowRoot.getElementById('categories').innerHTML = '';
