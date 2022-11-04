@@ -8,6 +8,11 @@ describe('Donate Frontend', () => {
     page = new AppPage();
   });
 
+  it('should display Big Give logo', () => {
+    page.navigateTo('/explore');
+    expect(page.getLogoSvgDesc()).toBe('The Big Give');
+  });
+
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser, except Stripe's
     // non-https dev warning and the expected failure to load a non-existent
