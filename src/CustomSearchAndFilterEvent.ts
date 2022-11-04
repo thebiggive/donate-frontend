@@ -1,4 +1,4 @@
-export class CustomSearchAndFilterEvent {
+export interface CustomSearchAndFilterEvent {
   searchText: string;
   sortBy: string;
   filterCategory: string;

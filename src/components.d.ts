@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { CustomSearchAndFilterEvent } from "./components/biggive-campaign-card-filter-grid/CustomSearchAndFilterEvent";
+import { CustomSearchAndFilterEvent } from "./CustomSearchAndFilterEvent";
 export namespace Components {
     interface BiggiveArticleCard {
         /**
