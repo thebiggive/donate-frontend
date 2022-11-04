@@ -9,7 +9,6 @@ import { Subscription } from 'rxjs';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
-import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
@@ -19,6 +18,7 @@ import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
 import { HeroComponent } from '../hero/hero.component';
 import { NavigationService } from '../navigation.service';
+import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
 
@@ -29,11 +29,11 @@ import { SearchService } from '../search.service';
   styleUrls: ['./meta-campaign.component.scss'],
   imports: [
     ...allChildComponentImports,
-    CampaignCardComponent,
     FiltersComponent,
     HeroComponent,
     InfiniteScrollModule,
     MatProgressSpinnerModule,
+    OptimisedImagePipe,
   ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
