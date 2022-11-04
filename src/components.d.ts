@@ -348,7 +348,7 @@ export namespace Components {
         /**
           * JSON array of beneficary key/values
          */
-        "beneficaryOptions": string;
+        "beneficaryOptions": string[];
         /**
           * Defines the text on the search button
          */
@@ -356,7 +356,7 @@ export namespace Components {
         /**
           * JSON array of category key/values
          */
-        "categoryOptions": string;
+        "categoryOptions": string[];
         "filterBeneficary": string;
         "filterCategory": string;
         "filterFunding": string;
@@ -364,7 +364,7 @@ export namespace Components {
         /**
           * JSON array of funding key/values
          */
-        "fundingOptions": string;
+        "fundingOptions": string[];
         /**
           * Intro
          */
@@ -372,7 +372,7 @@ export namespace Components {
         /**
           * JSON array of location key/values
          */
-        "locationOptions": string;
+        "locationOptions": string[];
         /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
@@ -1600,7 +1600,7 @@ declare namespace LocalJSX {
         /**
           * JSON array of beneficary key/values
          */
-        "beneficaryOptions"?: string;
+        "beneficaryOptions"?: string[];
         /**
           * Defines the text on the search button
          */
@@ -1608,7 +1608,7 @@ declare namespace LocalJSX {
         /**
           * JSON array of category key/values
          */
-        "categoryOptions"?: string;
+        "categoryOptions"?: string[];
         "filterBeneficary"?: string;
         "filterCategory"?: string;
         "filterFunding"?: string;
@@ -1616,7 +1616,7 @@ declare namespace LocalJSX {
         /**
           * JSON array of funding key/values
          */
-        "fundingOptions"?: string;
+        "fundingOptions"?: string[];
         /**
           * Intro
          */
@@ -1624,7 +1624,7 @@ declare namespace LocalJSX {
         /**
           * JSON array of location key/values
          */
-        "locationOptions"?: string;
+        "locationOptions"?: string[];
         /**
           * This event `doChange` event is emitted and propogates to the parent component which handles it
          */

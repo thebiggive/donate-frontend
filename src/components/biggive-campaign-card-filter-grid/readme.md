@@ -7,22 +7,22 @@
 
 ## Properties
 
-| Property            | Attribute            | Description                                                                                     | Type     | Default                       |
-| ------------------- | -------------------- | ----------------------------------------------------------------------------------------------- | -------- | ----------------------------- |
-| `beneficaryOptions` | `beneficary-options` | JSON array of beneficary key/values                                                             | `string` | `null`                        |
-| `buttonText`        | `button-text`        | Defines the text on the search button                                                           | `string` | `'Search'`                    |
-| `categoryOptions`   | `category-options`   | JSON array of category key/values                                                               | `string` | `null`                        |
-| `filterBeneficary`  | `filter-beneficary`  |                                                                                                 | `string` | `null`                        |
-| `filterCategory`    | `filter-category`    |                                                                                                 | `string` | `null`                        |
-| `filterFunding`     | `filter-funding`     |                                                                                                 | `string` | `null`                        |
-| `filterLocation`    | `filter-location`    |                                                                                                 | `string` | `null`                        |
-| `fundingOptions`    | `funding-options`    | JSON array of funding key/values                                                                | `string` | `null`                        |
-| `intro`             | `intro`              | Intro                                                                                           | `string` | `'Find a charity or project'` |
-| `locationOptions`   | `location-options`   | JSON array of location key/values                                                               | `string` | `null`                        |
-| `placeholderText`   | `placeholder-text`   | Defines the text displayed as the placeholder in the input field before the user types anything | `string` | `'Search'`                    |
-| `searchText`        | `search-text`        |                                                                                                 | `string` | `null`                        |
-| `sortBy`            | `sort-by`            |                                                                                                 | `string` | `null`                        |
-| `spaceBelow`        | `space-below`        | Space below component                                                                           | `number` | `0`                           |
+| Property            | Attribute           | Description                                                                                     | Type       | Default                       |
+| ------------------- | ------------------- | ----------------------------------------------------------------------------------------------- | ---------- | ----------------------------- |
+| `beneficaryOptions` | --                  | JSON array of beneficary key/values                                                             | `string[]` | `null`                        |
+| `buttonText`        | `button-text`       | Defines the text on the search button                                                           | `string`   | `'Search'`                    |
+| `categoryOptions`   | --                  | JSON array of category key/values                                                               | `string[]` | `null`                        |
+| `filterBeneficary`  | `filter-beneficary` |                                                                                                 | `string`   | `null`                        |
+| `filterCategory`    | `filter-category`   |                                                                                                 | `string`   | `null`                        |
+| `filterFunding`     | `filter-funding`    |                                                                                                 | `string`   | `null`                        |
+| `filterLocation`    | `filter-location`   |                                                                                                 | `string`   | `null`                        |
+| `fundingOptions`    | --                  | JSON array of funding key/values                                                                | `string[]` | `null`                        |
+| `intro`             | `intro`             | Intro                                                                                           | `string`   | `'Find a charity or project'` |
+| `locationOptions`   | --                  | JSON array of location key/values                                                               | `string[]` | `null`                        |
+| `placeholderText`   | `placeholder-text`  | Defines the text displayed as the placeholder in the input field before the user types anything | `string`   | `'Search'`                    |
+| `searchText`        | `search-text`       |                                                                                                 | `string`   | `null`                        |
+| `sortBy`            | `sort-by`           |                                                                                                 | `string`   | `null`                        |
+| `spaceBelow`        | `space-below`       | Space below component                                                                           | `number`   | `0`                           |
 
 
 ## Events

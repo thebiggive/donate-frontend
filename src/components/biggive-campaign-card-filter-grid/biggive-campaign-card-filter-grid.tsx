@@ -52,22 +52,22 @@ export class BiggiveCampaignCardFilterGrid {
   /**
    * JSON array of category key/values
    */
-  @Prop() categoryOptions: string = null;
+  @Prop() categoryOptions: string[] = null;
 
   /**
    * JSON array of beneficary key/values
    */
-  @Prop() beneficaryOptions: string = null;
+  @Prop() beneficaryOptions: string[] = null;
 
   /**
    * JSON array of location key/values
    */
-  @Prop() locationOptions: string = null;
+  @Prop() locationOptions: string[] = null;
 
   /**
    * JSON array of funding key/values
    */
-  @Prop() fundingOptions: string = null;
+  @Prop() fundingOptions: string[] = null;
 
   private getSearchAndFilterObject() {
     var obj = {
@@ -107,8 +107,9 @@ export class BiggiveCampaignCardFilterGrid {
   private handleFilterButtonClick() {
     this.el.shadowRoot.getElementById('filter-popup').open();
 
+
     if (this.categoryOptions != null) {
-      var options = JSON.parse(this.categoryOptions);
+      var options = this.categoryOptions;
       this.el.shadowRoot.getElementById('categories').innerHTML = '';
       for (var prop in options) {
         this.el.shadowRoot.getElementById('categories').innerHTML +=
@@ -117,7 +118,7 @@ export class BiggiveCampaignCardFilterGrid {
     }
 
     if (this.beneficaryOptions != null) {
-      var options = JSON.parse(this.beneficaryOptions);
+      var options = this.beneficaryOptions;
       this.el.shadowRoot.getElementById('beneficaries').innerHTML = '';
       for (var prop in options) {
         this.el.shadowRoot.getElementById('beneficaries').innerHTML +=
@@ -126,7 +127,7 @@ export class BiggiveCampaignCardFilterGrid {
     }
 
     if (this.locationOptions != null) {
-      var options = JSON.parse(this.locationOptions);
+      var options = this.locationOptions;
       this.el.shadowRoot.getElementById('locations').innerHTML = '';
       for (var prop in options) {
         this.el.shadowRoot.getElementById('locations').innerHTML +=
@@ -135,7 +136,7 @@ export class BiggiveCampaignCardFilterGrid {
     }
 
     if (this.fundingOptions != null) {
-      var options = JSON.parse(this.fundingOptions);
+      var options = this.fundingOptions;
       this.el.shadowRoot.getElementById('funding').innerHTML = '';
       for (var prop in options) {
         this.el.shadowRoot.getElementById('funding').innerHTML +=

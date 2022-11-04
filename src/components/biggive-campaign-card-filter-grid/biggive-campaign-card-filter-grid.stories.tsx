@@ -50,8 +50,8 @@ document.addEventListener('doSearchAndFilterUpdate', () => alert('doSearchAndFil
 
 export const CampaignCardFilterGridComponent = Template.bind({});
 CampaignCardFilterGridComponent.args = {
-  categoryOptions: '[&quot;Children&quot;,&quot;Adults&quot;]',
-  beneficiaryOptions: '[&quot;Children&quot;,&quot;Adults&quot;]',
-  locationOptions: '[&quot;Children&quot;,&quot;Adults&quot;]',
-  fundingOptions: '[&quot;ABC&quot;,&quot;Adults&quot;]',
+  categoryOptions: '',
+  beneficiaryOptions: '',
+  locationOptions: '',
+  fundingOptions: '',
 };
