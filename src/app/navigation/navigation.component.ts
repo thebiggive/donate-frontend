@@ -1,8 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, NavigationStart, RouterEvent } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -19,10 +15,6 @@ import { MainMenuComponent } from '../main-menu/main-menu.component';
     ...allChildComponentImports,
     FooterComponent,
     MainMenuComponent,
-    MatButtonModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatToolbarModule,
   ],
 })
 export class NavigationComponent implements OnInit {

@@ -75,10 +75,8 @@ $app-typography: mat.define-typography-config(
 @include mat.checkbox-theme($donate-theme);
 @include mat.dialog-theme($donate-theme);
 @include mat.form-field-theme($donate-theme);
-@include mat.menu-theme($donate-theme);
 @include mat.progress-spinner-theme($donate-theme);
 @include mat.radio-theme($donate-theme);
 @include mat.select-theme($donate-theme);
-@include mat.sidenav-theme($donate-theme);
 @include mat.stepper-theme($donate-theme);
 @include mat.tabs-theme($donate-theme);
