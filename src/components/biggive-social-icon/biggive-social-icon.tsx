@@ -36,7 +36,7 @@ export class BiggiveSocialIcon {
   render() {
     return (
       <div class={'social-icon-item background-colour-' + this.backgroundColour}>
-        <a href={this.url}>
+        <a href={this.url} target="_blank">
           <svg
             width={this.getSocialIcon().icon[0]}
             height={this.getSocialIcon().icon[1]}

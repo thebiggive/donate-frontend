@@ -15,7 +15,7 @@
   &.colour-scheme-black { color: $colour-black; }
   .sleeve {
     @include flex-container-row();
-    max-width: 1000px;
+    max-width: $max-page-width;
     margin-left: auto;
     margin-right: auto;
   }  
@@ -23,7 +23,7 @@
     width: 40%;
     position: relative;
     z-index: 1;
-    padding: $spacer-10 $spacer-6 $spacer-6 $spacer-6;
+    padding: $spacer-10 $spacer-6 $spacer-6 $spacer-0;
     .logo {
       height: 75px;
       margin-bottom: $spacer-4;
