@@ -21,7 +21,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package-lock.json" }}
-      - run: npm install --quiet
+      - run: npm install
       - save_cache:
           paths:
             - node_modules
@@ -99,7 +99,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package-lock.json" }}
-      - run: npm install --quiet
+      - run: npm install
       - save_cache:
           paths:
             - node_modules
@@ -111,7 +111,7 @@ jobs:
       - run:
           name: Publish core components to npm
           command: npm publish --access=public
-      - run: cd angular && npm install --quiet
+      - run: cd angular && npm install
       - run:
           name: Build Angular components
           command: cd angular && npm run build
