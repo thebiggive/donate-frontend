@@ -346,9 +346,9 @@ export namespace Components {
     }
     interface BiggiveCampaignCardFilterGrid {
         /**
-          * JSON array of beneficary key/values
+          * JSON array of beneficiary key/values
          */
-        "beneficaryOptions": string[];
+        "beneficiaryOptions": string[];
         /**
           * Defines the text on the search button
          */
@@ -357,7 +357,7 @@ export namespace Components {
           * JSON array of category key/values
          */
         "categoryOptions": string[];
-        "filterBeneficary": string;
+        "filterBeneficiary": string;
         "filterCategory": string;
         "filterFunding": string;
         "filterLocation": string;
@@ -1598,9 +1598,9 @@ declare namespace LocalJSX {
     }
     interface BiggiveCampaignCardFilterGrid {
         /**
-          * JSON array of beneficary key/values
+          * JSON array of beneficiary key/values
          */
-        "beneficaryOptions"?: string[];
+        "beneficiaryOptions"?: string[];
         /**
           * Defines the text on the search button
          */
@@ -1609,7 +1609,7 @@ declare namespace LocalJSX {
           * JSON array of category key/values
          */
         "categoryOptions"?: string[];
-        "filterBeneficary"?: string;
+        "filterBeneficiary"?: string;
         "filterCategory"?: string;
         "filterFunding"?: string;
         "filterLocation"?: string;

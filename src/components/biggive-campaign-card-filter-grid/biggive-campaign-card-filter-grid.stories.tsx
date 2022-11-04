@@ -5,7 +5,7 @@ export default {
 };
 
 const Template = args => `
-      <biggive-campaign-card-filter-grid category-options="${args.categoryOptions}" beneficiary-options="${args.beneficaryOptions}" location-options="${args.locationOptions}" funding-options="${args.fundingOptions}">
+      <biggive-campaign-card-filter-grid category-options="${args.categoryOptions}" beneficiary-options="${args.beneficiaryOptions}" location-options="${args.locationOptions}" funding-options="${args.fundingOptions}">
       <biggive-grid slot="campaign-grid" column-count="3">
         <biggive-campaign-card
           campaign-type="Match Funded"

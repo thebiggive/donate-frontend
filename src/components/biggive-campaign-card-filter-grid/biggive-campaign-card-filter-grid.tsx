@@ -24,7 +24,7 @@ export class BiggiveCampaignCardFilterGrid {
   @Prop() searchText: string = null;
   @Prop() sortBy: string = null;
   @Prop() filterCategory: string = null;
-  @Prop() filterBeneficary: string = null;
+  @Prop() filterBeneficiary: string = null;
   @Prop() filterLocation: string = null;
   @Prop() filterFunding: string = null;
 
@@ -55,9 +55,9 @@ export class BiggiveCampaignCardFilterGrid {
   @Prop() categoryOptions: string[] = null;
 
   /**
-   * JSON array of beneficary key/values
+   * JSON array of beneficiary key/values
    */
-  @Prop() beneficaryOptions: string[] = null;
+  @Prop() beneficiaryOptions: string[] = null;
 
   /**
    * JSON array of location key/values
@@ -74,7 +74,7 @@ export class BiggiveCampaignCardFilterGrid {
       searchText: this.searchText,
       sortBy: this.sortBy,
       filterCategory: this.filterCategory,
-      filterBeneficary: this.filterBeneficary,
+      filterBeneficiary: this.filterBeneficiary,
       filterLocation: this.filterLocation,
       filterFunding: this.filterFunding,
     };
@@ -85,7 +85,7 @@ export class BiggiveCampaignCardFilterGrid {
   doOptionSelectCompletedHandler() {
     this.sortBy = this.el.shadowRoot.getElementById('sort-by').selectedValue;
     this.filterCategory = this.el.shadowRoot.getElementById('categories').selectedValue;
-    this.filterBeneficary = this.el.shadowRoot.getElementById('beneficiaries').selectedValue;
+    this.filterBeneficiary = this.el.shadowRoot.getElementById('beneficiaries').selectedValue;
     this.filterLocation = this.el.shadowRoot.getElementById('locations').selectedValue;
     this.filterFunding = this.el.shadowRoot.getElementById('funding').selectedValue;
   }
@@ -116,11 +116,11 @@ export class BiggiveCampaignCardFilterGrid {
       }
     }
 
-    if (this.beneficaryOptions != null) {
-      var options = this.beneficaryOptions;
-      this.el.shadowRoot.getElementById('beneficaries').innerHTML = '';
+    if (this.beneficiaryOptions != null) {
+      var options = this.beneficiaryOptions;
+      this.el.shadowRoot.getElementById('beneficiaries').innerHTML = '';
       for (var prop in options) {
-        this.el.shadowRoot.getElementById('beneficaries').innerHTML +=
+        this.el.shadowRoot.getElementById('beneficiaries').innerHTML +=
           '<biggive-form-field-select-option value="' + options[prop] + '" label="' + options[prop] + '"></biggive-form-field-select-option>';
       }
     }
