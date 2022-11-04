@@ -357,10 +357,6 @@ export namespace Components {
           * JSON array of category key/values
          */
         "categoryOptions": string[];
-        "filterBeneficiary": string;
-        "filterCategory": string;
-        "filterFunding": string;
-        "filterLocation": string;
         /**
           * JSON array of funding key/values
          */
@@ -377,8 +373,6 @@ export namespace Components {
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText": string;
-        "searchText": string;
-        "sortBy": string;
         /**
           * Space below component
          */
@@ -1609,10 +1603,6 @@ declare namespace LocalJSX {
           * JSON array of category key/values
          */
         "categoryOptions"?: string[];
-        "filterBeneficiary"?: string;
-        "filterCategory"?: string;
-        "filterFunding"?: string;
-        "filterLocation"?: string;
         /**
           * JSON array of funding key/values
          */
@@ -1626,15 +1616,13 @@ declare namespace LocalJSX {
          */
         "locationOptions"?: string[];
         /**
-          * This event `doChange` event is emitted and propogates to the parent component which handles it
+          * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it
          */
-        "onDoSearchAndFilterUpdate"?: (event: BiggiveCampaignCardFilterGridCustomEvent<object>) => void;
+        "onDoSearchAndFilterUpdate"?: (event: BiggiveCampaignCardFilterGridCustomEvent<SearchAndFilterEvent>) => void;
         /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText"?: string;
-        "searchText"?: string;
-        "sortBy"?: string;
         /**
           * Space below component
          */
