@@ -27,6 +27,9 @@ export class HomeComponent implements OnInit {
   campaigns: CampaignSummary[];
   promotedCampaign1: Campaign;
   promotedCampaign2: Campaign;
+  mainTitle = 'Matching Donations.\nMultiplying Impact.';
+  highlightCard1Title = 'Double your donation in\nthe Christmas Challenge 2022';
+  highlightCard1Subtitle = 'Donate between\n29 Nov - 6 Dec';
 
   public constructor(private pageMeta: PageMetaService, private route: ActivatedRoute) {}
 
