@@ -4,8 +4,8 @@ export default {
   //subcomponents: {BiggiveCampaignCard}
 };
 
-const Template = () => `
-      <biggive-campaign-card-filter-grid categoryOptions="[&quot;Children&quot;,&quot;Adults&quot;]" beneficiaryOptions="[&quot;Children&quot;,&quot;Adults&quot;]" loctionOptions="[&quot;Children&quot;,&quot;Adults&quot;]" fundingOptions="[&quot;Children&quot;,&quot;Adults&quot;]">
+const Template = args => `
+      <biggive-campaign-card-filter-grid category-options="${args.categoryOptions}" beneficiary-options="${args.beneficaryOptions}" location-options="${args.locationOptions}" funding-options="${args.fundingOptions}">
       <biggive-grid slot="campaign-grid" column-count="3">
         <biggive-campaign-card
           campaign-type="Match Funded"
@@ -49,3 +49,9 @@ const Template = () => `
 document.addEventListener('doSearchAndFilterUpdate', () => alert('doSearchAndFilterUpdate event emitted!'));
 
 export const CampaignCardFilterGridComponent = Template.bind({});
+CampaignCardFilterGridComponent.args = {
+  categoryOptions: '[&quot;Children&quot;,&quot;Adults&quot;]',
+  beneficiaryOptions: '[&quot;Children&quot;,&quot;Adults&quot;]',
+  locationOptions: '[&quot;Children&quot;,&quot;Adults&quot;]',
+  fundingOptions: '[&quot;Children&quot;,&quot;Adults&quot;]',
+};

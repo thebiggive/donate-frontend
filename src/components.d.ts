@@ -346,9 +346,9 @@ export namespace Components {
     }
     interface BiggiveCampaignCardFilterGrid {
         /**
-          * JSON array of category key/values
+          * JSON array of beneficary key/values
          */
-        "beneficaries": string;
+        "beneficaryOptions": string;
         /**
           * Defines the text on the search button
          */
@@ -356,23 +356,23 @@ export namespace Components {
         /**
           * JSON array of category key/values
          */
-        "categories": string;
+        "categoryOptions": string;
         "filterBeneficary": string;
         "filterCategory": string;
         "filterFunding": string;
         "filterLocation": string;
         /**
-          * JSON array of category key/values
+          * JSON array of funding key/values
          */
-        "funding": string;
+        "fundingOptions": string;
         /**
           * Intro
          */
         "intro": string;
         /**
-          * JSON array of category key/values
+          * JSON array of location key/values
          */
-        "locations": string;
+        "locationOptions": string;
         /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
@@ -1598,9 +1598,9 @@ declare namespace LocalJSX {
     }
     interface BiggiveCampaignCardFilterGrid {
         /**
-          * JSON array of category key/values
+          * JSON array of beneficary key/values
          */
-        "beneficaries"?: string;
+        "beneficaryOptions"?: string;
         /**
           * Defines the text on the search button
          */
@@ -1608,23 +1608,23 @@ declare namespace LocalJSX {
         /**
           * JSON array of category key/values
          */
-        "categories"?: string;
+        "categoryOptions"?: string;
         "filterBeneficary"?: string;
         "filterCategory"?: string;
         "filterFunding"?: string;
         "filterLocation"?: string;
         /**
-          * JSON array of category key/values
+          * JSON array of funding key/values
          */
-        "funding"?: string;
+        "fundingOptions"?: string;
         /**
           * Intro
          */
         "intro"?: string;
         /**
-          * JSON array of category key/values
+          * JSON array of location key/values
          */
-        "locations"?: string;
+        "locationOptions"?: string;
         /**
           * This event `doChange` event is emitted and propogates to the parent component which handles it
          */
