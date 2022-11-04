@@ -569,7 +569,7 @@ export namespace Components {
         /**
           * Full URL of a main hero image.
          */
-        "mainImage": string;
+        "mainImage": string|null;
         /**
           * Horizontal alignment of image
          */
@@ -1827,7 +1827,7 @@ declare namespace LocalJSX {
         /**
           * Full URL of a main hero image.
          */
-        "mainImage"?: string;
+        "mainImage"?: string|null;
         /**
           * Horizontal alignment of image
          */
