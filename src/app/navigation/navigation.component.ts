@@ -4,17 +4,14 @@ import { filter } from 'rxjs/operators';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { FooterComponent } from '../footer/footer.component';
-import { MainMenuComponent } from '../main-menu/main-menu.component';
 
 @Component({
   standalone: true,
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss'],
   imports: [
     ...allChildComponentImports,
     FooterComponent,
-    MainMenuComponent,
   ],
 })
 export class NavigationComponent implements OnInit {
