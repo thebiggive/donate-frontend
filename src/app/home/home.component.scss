@@ -123,12 +123,8 @@ img {
   width: 150px;
 }
 
-.button-wrapper {
-  display: flex;
-
-  .button {
-    margin: auto; //centres the button
-  }
+.auto-margin {
+  margin: auto; //centres the button
 }
 
 .flex-wrapper {
