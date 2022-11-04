@@ -1,4 +1,4 @@
-import { Component, h, Element, Prop, State } from '@stencil/core';
+import { Component, h, Element, Prop, Event, EventEmitter, Listen } from '@stencil/core';
 import { faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
@@ -9,7 +9,24 @@ import { faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
 export class BiggiveCampaignCardFilterGrid {
   @Element() el;
 
-  @State() searchText: string = null;
+  /**
+   * This event `doChange` event is emitted and propogates to the parent
+   * component which handles it
+   */
+  @Event({
+    eventName: 'doSearchAndFilterUpdate',
+    composed: true,
+    cancelable: true,
+    bubbles: true,
+  })
+  doSearchAndFilterUpdate: EventEmitter<object>;
+
+  @Prop() searchText: string = null;
+  @Prop() sortBy: string = null;
+  @Prop() filterCategory: string = null;
+  @Prop() filterBeneficary: string = null;
+  @Prop() filterLocation: string = null;
+  @Prop() filterFunding: string = null;
 
   /**
    * Space below component
@@ -32,53 +49,103 @@ export class BiggiveCampaignCardFilterGrid {
    */
   @Prop() buttonText: string = 'Search';
 
+  /**
+   * JSON array of category key/values
+   */
+  @Prop() categoryOptions: string = null;
+
+  /**
+   * JSON array of beneficary key/values
+   */
+  @Prop() beneficaryOptions: string = null;
+
+  /**
+   * JSON array of location key/values
+   */
+  @Prop() locationOptions: string = null;
+
+  /**
+   * JSON array of funding key/values
+   */
+  @Prop() fundingOptions: string = null;
+
+  private getSearchAndFilterObject() {
+    var obj = {
+      searchText: this.searchText,
+      sortBy: this.sortBy,
+      filterCategory: this.filterCategory,
+      filterBeneficary: this.filterBeneficary,
+      filterLocation: this.filterLocation,
+      filterFunding: this.filterFunding,
+    };
+    return obj;
+  }
+
+  @Listen('doSelectChange')
+  doOptionSelectCompletedHandler() {
+    this.sortBy = this.el.shadowRoot.getElementById('sort-by').selectedValue;
+    this.filterCategory = this.el.shadowRoot.getElementById('categories').selectedValue;
+    this.filterBeneficary = this.el.shadowRoot.getElementById('beneficiaries').selectedValue;
+    this.filterLocation = this.el.shadowRoot.getElementById('locations').selectedValue;
+    this.filterFunding = this.el.shadowRoot.getElementById('funding').selectedValue;
+  }
+
+  private handleApplyFilterButtonClick() {
+    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+  }
+
   private handleSearchTextChanged(event) {
     this.searchText = event.target.value;
+    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
 
   private handleSearchButtonPressed() {
-    //this.doSearch.emit(this.searchText);
+    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
 
   private handleEnterPressed(ev: KeyboardEvent) {
     if (ev.key === 'Enter') {
-      //this.doSearch.emit(this.searchText);
+      this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
     }
   }
 
   private handleFilterButtonClick() {
     this.el.shadowRoot.getElementById('filter-popup').open();
 
-    var filters = { categories: [], beneficiaries: [] };
-    var cards = this.el.querySelectorAll('biggive-campaign-card');
-
-    for (var i = 0; i < cards.length; i++) {
-      var categories = JSON.parse(cards[i].getAttribute('data-filter-categories'));
-      for (var p in categories) {
-        if (!filters.categories.includes(categories[p])) {
-          filters.categories.push(categories[p]);
-        }
-      }
-      var beneficiaries = JSON.parse(cards[i].getAttribute('data-filter-beneficiaries'));
-      for (var p in beneficiaries) {
-        if (!filters.beneficiaries.includes(beneficiaries[p])) {
-          filters.beneficiaries.push(beneficiaries[p]);
-        }
+    if (this.categoryOptions != null) {
+      var options = JSON.parse(this.categoryOptions);
+      this.el.shadowRoot.getElementById('categories').innerHTML = '';
+      for (var prop in options) {
+        this.el.shadowRoot.getElementById('categories').innerHTML +=
+          '<biggive-form-field-select-option value="' + options[prop] + '" label="' + options[prop] + '"></biggive-form-field-select-option>';
       }
     }
 
-    categories.sort();
-    this.el.shadowRoot.getElementById('categories').innerHTML = '';
-    for (var i = 0; i < filters.categories.length; i++) {
-      this.el.shadowRoot.getElementById('categories').innerHTML +=
-        '<biggive-form-field-select-option value="' + filters.categories[i] + '" label="' + filters.categories[i] + '"></biggive-form-field-select-option>';
+    if (this.beneficaryOptions != null) {
+      var options = JSON.parse(this.beneficaryOptions);
+      this.el.shadowRoot.getElementById('beneficaries').innerHTML = '';
+      for (var prop in options) {
+        this.el.shadowRoot.getElementById('beneficaries').innerHTML +=
+          '<biggive-form-field-select-option value="' + options[prop] + '" label="' + options[prop] + '"></biggive-form-field-select-option>';
+      }
     }
 
-    beneficiaries.sort();
-    this.el.shadowRoot.getElementById('beneficiaries').innerHTML = '';
-    for (var i = 0; i < filters.beneficiaries.length; i++) {
-      this.el.shadowRoot.getElementById('beneficiaries').innerHTML +=
-        '<biggive-form-field-select-option value="' + filters.beneficiaries[i] + '" label="' + filters.beneficiaries[i] + '"></biggive-form-field-select-option>';
+    if (this.locationOptions != null) {
+      var options = JSON.parse(this.locationOptions);
+      this.el.shadowRoot.getElementById('locations').innerHTML = '';
+      for (var prop in options) {
+        this.el.shadowRoot.getElementById('locations').innerHTML +=
+          '<biggive-form-field-select-option value="' + options[prop] + '" label="' + options[prop] + '"></biggive-form-field-select-option>';
+      }
+    }
+
+    if (this.fundingOptions != null) {
+      var options = JSON.parse(this.fundingOptions);
+      this.el.shadowRoot.getElementById('funding').innerHTML = '';
+      for (var prop in options) {
+        this.el.shadowRoot.getElementById('funding').innerHTML +=
+          '<biggive-form-field-select-option value="' + options[prop] + '" label="' + options[prop] + '"></biggive-form-field-select-option>';
+      }
     }
   }
 
@@ -109,8 +176,9 @@ export class BiggiveCampaignCardFilterGrid {
           </div>
           <div class="sort-filter-wrap">
             <div class="sort-wrap">
-              <biggive-form-field-select placeholder="Sort by">
-                <biggive-form-field-select-option value="name" label="Name"></biggive-form-field-select-option>
+              <biggive-form-field-select placeholder="Sort by" id="sort-by">
+                <biggive-form-field-select-option value="most-raised" label="Most raised"></biggive-form-field-select-option>
+                <biggive-form-field-select-option value="matched-funds-remaining" label="Match funds remaining"></biggive-form-field-select-option>
               </biggive-form-field-select>
             </div>
 
@@ -130,6 +198,13 @@ export class BiggiveCampaignCardFilterGrid {
                 <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
                 <biggive-form-field-select placeholder="Category" id="categories" space-below="2"></biggive-form-field-select>
                 <biggive-form-field-select placeholder="Beneficiary" id="beneficiaries" space-below="2"></biggive-form-field-select>
+                <biggive-form-field-select placeholder="Location" id="locations" space-below="2"></biggive-form-field-select>
+                <biggive-form-field-select placeholder="Funding" id="funding" space-below="2"></biggive-form-field-select>
+                <div class="align-right">
+                  <a href="#" class="button button-primary" onClick={() => this.handleApplyFilterButtonClick()}>
+                    Apply filters
+                  </a>
+                </div>
               </biggive-popup>
             </div>
           </div>

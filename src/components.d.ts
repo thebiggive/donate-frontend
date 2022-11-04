@@ -346,17 +346,39 @@ export namespace Components {
     }
     interface BiggiveCampaignCardFilterGrid {
         /**
+          * JSON array of beneficary key/values
+         */
+        "beneficaryOptions": string;
+        /**
           * Defines the text on the search button
          */
         "buttonText": string;
+        /**
+          * JSON array of category key/values
+         */
+        "categoryOptions": string;
+        "filterBeneficary": string;
+        "filterCategory": string;
+        "filterFunding": string;
+        "filterLocation": string;
+        /**
+          * JSON array of funding key/values
+         */
+        "fundingOptions": string;
         /**
           * Intro
          */
         "intro": string;
         /**
+          * JSON array of location key/values
+         */
+        "locationOptions": string;
+        /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText": string;
+        "searchText": string;
+        "sortBy": string;
         /**
           * Space below component
          */
@@ -447,6 +469,8 @@ export namespace Components {
           * Placeholder
          */
         "placeholder": string;
+        "selectedLabel": string;
+        "selectedValue": string;
         /**
           * Space below component
          */
@@ -551,6 +575,14 @@ export namespace Components {
           * Full URL of a main hero image.
          */
         "mainImage": string;
+        /**
+          * Horizontal alignment of image
+         */
+        "mainImageAlignHorizontal": string;
+        /**
+          * Vertical alignment of image
+         */
+        "mainImageAlignVertical": string;
         /**
           * Hero image title, typically the page.
          */
@@ -681,6 +713,26 @@ export namespace Components {
         "iconColour": string;
         /**
           * Url
+         */
+        "url": string;
+    }
+    interface BiggiveNavGroup {
+        /**
+          * Inline
+         */
+        "inline": boolean;
+    }
+    interface BiggiveNavItem {
+        /**
+          * URL
+         */
+        "iconColour": string;
+        /**
+          * Label
+         */
+        "label": string;
+        /**
+          * URL
          */
         "url": string;
     }
@@ -898,6 +950,10 @@ export namespace Components {
         "videoUrl": string;
     }
 }
+export interface BiggiveCampaignCardFilterGridCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLBiggiveCampaignCardFilterGridElement;
+}
 export interface BiggiveFormFieldSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLBiggiveFormFieldSelectElement;
@@ -1061,6 +1117,18 @@ declare global {
         prototype: HTMLBiggiveMiscIconElement;
         new (): HTMLBiggiveMiscIconElement;
     };
+    interface HTMLBiggiveNavGroupElement extends Components.BiggiveNavGroup, HTMLStencilElement {
+    }
+    var HTMLBiggiveNavGroupElement: {
+        prototype: HTMLBiggiveNavGroupElement;
+        new (): HTMLBiggiveNavGroupElement;
+    };
+    interface HTMLBiggiveNavItemElement extends Components.BiggiveNavItem, HTMLStencilElement {
+    }
+    var HTMLBiggiveNavItemElement: {
+        prototype: HTMLBiggiveNavItemElement;
+        new (): HTMLBiggiveNavItemElement;
+    };
     interface HTMLBiggivePageColumnElement extends Components.BiggivePageColumn, HTMLStencilElement {
     }
     var HTMLBiggivePageColumnElement: {
@@ -1171,6 +1239,8 @@ declare global {
         "biggive-image": HTMLBiggiveImageElement;
         "biggive-image-feature": HTMLBiggiveImageFeatureElement;
         "biggive-misc-icon": HTMLBiggiveMiscIconElement;
+        "biggive-nav-group": HTMLBiggiveNavGroupElement;
+        "biggive-nav-item": HTMLBiggiveNavItemElement;
         "biggive-page-column": HTMLBiggivePageColumnElement;
         "biggive-page-columns": HTMLBiggivePageColumnsElement;
         "biggive-page-section": HTMLBiggivePageSectionElement;
@@ -1528,17 +1598,43 @@ declare namespace LocalJSX {
     }
     interface BiggiveCampaignCardFilterGrid {
         /**
+          * JSON array of beneficary key/values
+         */
+        "beneficaryOptions"?: string;
+        /**
           * Defines the text on the search button
          */
         "buttonText"?: string;
+        /**
+          * JSON array of category key/values
+         */
+        "categoryOptions"?: string;
+        "filterBeneficary"?: string;
+        "filterCategory"?: string;
+        "filterFunding"?: string;
+        "filterLocation"?: string;
+        /**
+          * JSON array of funding key/values
+         */
+        "fundingOptions"?: string;
         /**
           * Intro
          */
         "intro"?: string;
         /**
+          * JSON array of location key/values
+         */
+        "locationOptions"?: string;
+        /**
+          * This event `doChange` event is emitted and propogates to the parent component which handles it
+         */
+        "onDoSearchAndFilterUpdate"?: (event: BiggiveCampaignCardFilterGridCustomEvent<object>) => void;
+        /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText"?: string;
+        "searchText"?: string;
+        "sortBy"?: string;
         /**
           * Space below component
          */
@@ -1628,11 +1724,13 @@ declare namespace LocalJSX {
         /**
           * This event `doChange` event is emitted and propogates to the parent component which handles it
          */
-        "onDoChange"?: (event: BiggiveFormFieldSelectCustomEvent<string>) => void;
+        "onDoSelectChange"?: (event: BiggiveFormFieldSelectCustomEvent<object>) => void;
         /**
           * Placeholder
          */
         "placeholder"?: string;
+        "selectedLabel"?: string;
+        "selectedValue"?: string;
         /**
           * Space below component
          */
@@ -1741,6 +1839,14 @@ declare namespace LocalJSX {
           * Full URL of a main hero image.
          */
         "mainImage"?: string;
+        /**
+          * Horizontal alignment of image
+         */
+        "mainImageAlignHorizontal"?: string;
+        /**
+          * Vertical alignment of image
+         */
+        "mainImageAlignVertical"?: string;
         /**
           * Hero image title, typically the page.
          */
@@ -1871,6 +1977,26 @@ declare namespace LocalJSX {
         "iconColour"?: string;
         /**
           * Url
+         */
+        "url"?: string;
+    }
+    interface BiggiveNavGroup {
+        /**
+          * Inline
+         */
+        "inline"?: boolean;
+    }
+    interface BiggiveNavItem {
+        /**
+          * URL
+         */
+        "iconColour"?: string;
+        /**
+          * Label
+         */
+        "label"?: string;
+        /**
+          * URL
          */
         "url"?: string;
     }
@@ -2116,6 +2242,8 @@ declare namespace LocalJSX {
         "biggive-image": BiggiveImage;
         "biggive-image-feature": BiggiveImageFeature;
         "biggive-misc-icon": BiggiveMiscIcon;
+        "biggive-nav-group": BiggiveNavGroup;
+        "biggive-nav-item": BiggiveNavItem;
         "biggive-page-column": BiggivePageColumn;
         "biggive-page-columns": BiggivePageColumns;
         "biggive-page-section": BiggivePageSection;
@@ -2161,6 +2289,8 @@ declare module "@stencil/core" {
             "biggive-image": LocalJSX.BiggiveImage & JSXBase.HTMLAttributes<HTMLBiggiveImageElement>;
             "biggive-image-feature": LocalJSX.BiggiveImageFeature & JSXBase.HTMLAttributes<HTMLBiggiveImageFeatureElement>;
             "biggive-misc-icon": LocalJSX.BiggiveMiscIcon & JSXBase.HTMLAttributes<HTMLBiggiveMiscIconElement>;
+            "biggive-nav-group": LocalJSX.BiggiveNavGroup & JSXBase.HTMLAttributes<HTMLBiggiveNavGroupElement>;
+            "biggive-nav-item": LocalJSX.BiggiveNavItem & JSXBase.HTMLAttributes<HTMLBiggiveNavItemElement>;
             "biggive-page-column": LocalJSX.BiggivePageColumn & JSXBase.HTMLAttributes<HTMLBiggivePageColumnElement>;
             "biggive-page-columns": LocalJSX.BiggivePageColumns & JSXBase.HTMLAttributes<HTMLBiggivePageColumnsElement>;
             "biggive-page-section": LocalJSX.BiggivePageSection & JSXBase.HTMLAttributes<HTMLBiggivePageSectionElement>;
