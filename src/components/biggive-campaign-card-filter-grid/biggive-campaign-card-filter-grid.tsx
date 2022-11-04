@@ -94,11 +94,6 @@ export class BiggiveCampaignCardFilterGrid {
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
 
-  private handleSearchTextChanged(event) {
-    this.searchText = event.target.value;
-    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  }
-
   private handleSearchButtonPressed() {
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   }
@@ -160,14 +155,7 @@ export class BiggiveCampaignCardFilterGrid {
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
                   <path d={faMagnifyingGlass.icon[4].toString()} />
                 </svg>
-                <input
-                  type="text"
-                  value={this.searchText}
-                  class="input-text"
-                  placeholder={this.placeholderText}
-                  onInput={event => this.handleSearchTextChanged(event)}
-                  onKeyDown={event => this.handleEnterPressed(event)}
-                />
+                <input type="text" value={this.searchText} class="input-text" placeholder={this.placeholderText} onKeyDown={event => this.handleEnterPressed(event)} />
               </div>
               <button onClick={() => this.handleSearchButtonPressed()} class="button button-primary">
                 {this.buttonText}
