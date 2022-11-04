@@ -1,0 +1,18 @@
+:host {
+  display: contents;
+}
+
+
+li {
+  @include standard-font();
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+
+
+}
+
+::slotted(*) {
+  display: none;
+}
