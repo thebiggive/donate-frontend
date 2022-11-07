@@ -9,6 +9,7 @@
   background-size: cover;
   background-position: center center;
   padding: $spacer-4;
+  white-space: pre-wrap; // helps render out \n
   .sleeve {
     padding: $spacer-4;
     @include corner-clip-medium-bottom-left-top-right();
@@ -26,5 +27,4 @@
   .subtitle {
     margin-bottom: $spacer-3;
   }
-
 }
