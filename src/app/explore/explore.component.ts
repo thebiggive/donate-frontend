@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,6 +16,7 @@ import { HeroComponent } from '../hero/hero.component';
 import { PageMetaService } from '../page-meta.service';
 import { PromotedCampaignsComponent } from '../promoted-campaigns/promoted-campaigns.component';
 import { SearchService } from '../search.service';
+import { CampaignGroupsService } from '../campaign-groups.service';
 
 /** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
@@ -46,6 +47,11 @@ export class ExploreComponent implements OnDestroy, OnInit {
   private offset = 0;
   private routeParamSubscription: Subscription;
   private searchServiceSubscription: Subscription;
+
+  beneficiaryOptions: string[];
+  categoryOptions: string[];
+  countryOptions: string[];
+  fundingOptions: string[];
 
   constructor(
     private campaignService: CampaignService,
@@ -78,6 +84,18 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
     this.searchService.reset(this.getDefaultSort(), true);
     this.loadQueryParamsAndRun();
+
+    this.beneficiaryOptions = CampaignGroupsService.getBeneficiaryNames();
+    this.categoryOptions = CampaignGroupsService.getCategoryNames();
+    this.countryOptions = CampaignGroupsService.getCountries();
+    this.fundingOptions = [
+      'Match Funded'
+    ]
+  }
+
+  @HostListener('doSearchAndFilterUpdate', ['$event'])
+  onDoSearchAndFilterUpdate(event: CustomEvent) {
+    this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
   }
 
   /**

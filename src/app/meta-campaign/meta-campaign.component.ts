@@ -3,6 +3,7 @@ import { AfterViewChecked, Component, HostListener, Inject, OnDestroy, OnInit, P
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { IconDefinition } from '@fortawesome/free-brands-svg-icons';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { StorageService } from 'ngx-webstorage-service';
 import { Subscription } from 'rxjs';
@@ -21,6 +22,7 @@ import { NavigationService } from '../navigation.service';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
+import { CampaignGroupsService } from '../campaign-groups.service';
 
 @Component({
   standalone: true,
@@ -44,6 +46,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   public fundSlug: string;
   public hasMore = true;
   public loading = false; // Server render gets initial result set; set true when filters change.
+
+  beneficiaryOptions: string[];
+  categoryOptions: string[];
+  countryOptions: string[];
+  fundingOptions: string[];
 
   private campaignId: string;
   private campaignSlug: string;
@@ -75,9 +82,9 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     });
   }
 
-  @HostListener('doTextSearch')
-  onDoSearch(event: Event) {
-    console.log(event);
+  @HostListener('doSearchAndFilterUpdate', ['$event'])
+  onDoSearchAndFilterUpdate(event: CustomEvent) {
+    this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
   }
 
   ngOnDestroy() {
@@ -114,6 +121,13 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
         this.fund = fund;
       });
     }
+
+    this.beneficiaryOptions = CampaignGroupsService.getBeneficiaryNames();
+    this.categoryOptions = CampaignGroupsService.getCategoryNames();
+    this.countryOptions = CampaignGroupsService.getCountries();
+    this.fundingOptions = [
+      'Match Funded'
+    ]
   }
 
   ngAfterViewChecked() {
