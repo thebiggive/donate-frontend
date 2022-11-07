@@ -53,7 +53,6 @@ export class SearchService {
 
     this.search(searchText, sortBy);
 
-
     if (customSearchEvent.filterBeneficiary) {
       this.filter('beneficiary', customSearchEvent.filterBeneficiary);
     }
@@ -69,6 +68,8 @@ export class SearchService {
     if (customSearchEvent.filterFunding) {
       this.filter('onlyMatching', customSearchEvent.filterFunding === 'Match Funded');
     }
+
+    this.sort(sortBy);
   }
 
   filter(filterName: string, value: string|boolean) {

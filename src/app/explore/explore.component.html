@@ -9,7 +9,11 @@
   ></biggive-hero-image>
 
   <biggive-page-section>
-    <biggive-campaign-card-filter-grid>
+    <biggive-campaign-card-filter-grid
+      [beneficiaryOptions]="beneficiaryOptions"
+      [categoryOptions]="categoryOptions"
+      [locationOptions]="countryOptions"
+      [fundingOptions]="fundingOptions">
       <biggive-grid slot="campaign-grid" column-count="3">
         <div *ngFor="let campaign of campaigns">
           <div
