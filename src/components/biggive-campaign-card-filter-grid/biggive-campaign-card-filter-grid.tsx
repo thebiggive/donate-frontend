@@ -198,8 +198,8 @@ export class BiggiveCampaignCardFilterGrid {
           <div class="sort-filter-wrap">
             <div class="sort-wrap">
               <biggive-form-field-select placeholder="Sort by" id="sort-by">
-                <biggive-form-field-select-option value="most-raised" label="Most raised"></biggive-form-field-select-option>
-                <biggive-form-field-select-option value="matched-funds-remaining" label="Match funds remaining"></biggive-form-field-select-option>
+                <biggive-form-field-select-option value="mostRaised" label="Most raised"></biggive-form-field-select-option>
+                <biggive-form-field-select-option value="matchFundsRemaining" label="Match funds remaining"></biggive-form-field-select-option>
               </biggive-form-field-select>
             </div>
 
@@ -222,9 +222,9 @@ export class BiggiveCampaignCardFilterGrid {
                 <biggive-form-field-select placeholder="Location" id="locations" space-below="2"></biggive-form-field-select>
                 <biggive-form-field-select placeholder="Funding" id="funding" space-below="2"></biggive-form-field-select>
                 <div class="align-right">
-                  <a href="#" class="button button-primary" onClick={() => this.handleApplyFilterButtonClick()}>
+                  <button class="button button-primary" onClick={() => this.handleApplyFilterButtonClick()}>
                     Apply filters
-                  </a>
+                  </button>
                 </div>
               </biggive-popup>
             </div>
