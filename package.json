@@ -1,6 +1,6 @@
 {
   "name": "@biggive/components",
-  "version": "1.0.106",
+  "version": "1.0.107",
   "description": "Big Give Components",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
@@ -63,7 +63,9 @@
     "jest-cli": "^27.4.5",
     "lint-staged": "^13.0.3",
     "prettier": "2.7.1",
-    "puppeteer": "^15.4.0"
+    "puppeteer": "^15.4.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "license": "MIT"
 }
