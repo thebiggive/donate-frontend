@@ -1,6 +1,5 @@
 import { Component, h, Element, Prop, Event, EventEmitter, Listen } from '@stencil/core';
 import { faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
-import { CustomSearchAndFilterEvent } from '../../interfaces';
 
 @Component({
   tag: 'biggive-campaign-card-filter-grid',
@@ -20,7 +19,14 @@ export class BiggiveCampaignCardFilterGrid {
     cancelable: true,
     bubbles: true,
   })
-  doSearchAndFilterUpdate: EventEmitter<CustomSearchAndFilterEvent>;
+  doSearchAndFilterUpdate: EventEmitter<{
+    searchText: string;
+    sortBy: string;
+    filterCategory: string;
+    filterBeneficiary: string;
+    filterLocation: string;
+    filterFunding: string;
+  }>;
 
   searchText: string = null;
   sortBy: string = null;
@@ -70,8 +76,22 @@ export class BiggiveCampaignCardFilterGrid {
    */
   @Prop() fundingOptions: string[] = null;
 
-  private getSearchAndFilterObject(): CustomSearchAndFilterEvent {
-    const event: CustomSearchAndFilterEvent = {
+  private getSearchAndFilterObject(): {
+    searchText: string;
+    sortBy: string;
+    filterCategory: string;
+    filterBeneficiary: string;
+    filterLocation: string;
+    filterFunding: string;
+  } {
+    const event: {
+      searchText: string;
+      sortBy: string;
+      filterCategory: string;
+      filterBeneficiary: string;
+      filterLocation: string;
+      filterFunding: string;
+    } = {
       searchText: this.searchText,
       sortBy: this.sortBy,
       filterCategory: this.filterCategory,
