@@ -29,7 +29,7 @@ export class BiggiveBrandedImage {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
         <div class="slug">
-          <span>{this.slug}</span>
+          <span>1111{this.slug}</span>
         </div>
         {this.imageUrl.length > 0 ? (
           <div class="image-wrap">
