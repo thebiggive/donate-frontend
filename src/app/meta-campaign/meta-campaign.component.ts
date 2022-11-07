@@ -10,7 +10,6 @@ import { Subscription } from 'rxjs';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
-import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
@@ -20,6 +19,7 @@ import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
 import { HeroComponent } from '../hero/hero.component';
 import { NavigationService } from '../navigation.service';
+import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
 import { CampaignGroupsService } from '../campaign-groups.service';
@@ -31,11 +31,11 @@ import { CampaignGroupsService } from '../campaign-groups.service';
   styleUrls: ['./meta-campaign.component.scss'],
   imports: [
     ...allChildComponentImports,
-    CampaignCardComponent,
     FiltersComponent,
     HeroComponent,
     InfiniteScrollModule,
     MatProgressSpinnerModule,
+    OptimisedImagePipe,
   ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
@@ -311,10 +311,10 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       // use a too-low Y position when lots of card were shown and we didn't have a delay, both with `scrollToAnchor()`
       // and manual calculation + `scrollToPosition()`.
       setTimeout(() => {
-        // Scroll to the anchor's `offsetTop` y-position, minus $toolbar-height.
+        // Scroll to the anchor's `offsetTop` y-position (currently not minus approx header height).
         const activeCard = document.getElementById(`campaign-${campaignId}`);
         if (activeCard) {
-          this.scroller.scrollToPosition([0, activeCard.offsetTop - 64]);
+          this.scroller.scrollToPosition([0, activeCard.offsetTop - 0]);
         }
       }, 1500);
     }

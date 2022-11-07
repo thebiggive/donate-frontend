@@ -49,7 +49,7 @@ ul {
 
 .c-header__campaign-title {
   margin: 0 0 .75rem;
-  color: $colour-teal-dark;
+  color: $colour-black;
   @include size-lg;
 }
 
@@ -98,7 +98,7 @@ ul {
   padding-left: 0.25rem;
 
   .c-funds__amount {
-    color: $colour-teal;
+    color: $colour-primary;
   }
 }
 

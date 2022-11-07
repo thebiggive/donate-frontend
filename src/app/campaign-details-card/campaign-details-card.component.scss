@@ -62,11 +62,11 @@
 .c-campaign-donations__value {
   @include size-xl;
   margin-top: 0;
-  color: $colour-teal;
+  color: $colour-primary;
 }
 
 .c-championed-by, .c-country__value {
-  color: $colour-teal;
+  color: $colour-primary;
   margin-top: 0;
   a {
     text-decoration: none;

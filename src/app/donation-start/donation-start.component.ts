@@ -959,7 +959,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       // Pre-fill rarely-changing form values from the Person.
       this.giftAidGroup.patchValue({
         homeAddress: person.home_address_line_1,
-        homeOutsideUK: person.home_country_code !== 'GB',
+        homeOutsideUK: person.home_country_code !== null && person.home_country_code !== 'GB',
         homePostcode: person.home_postcode,
       });
 

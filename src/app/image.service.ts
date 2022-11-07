@@ -11,9 +11,9 @@ export class ImageService {
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
-  getImageUri(originalImageUri: string, width: number): Observable<string|undefined> {
+  getImageUri(originalImageUri: string | null, width: number): Observable<string|null> {
     if (!originalImageUri) {
-      return of(undefined);
+      return of(null);
     }
 
     const imageUri = `${originalImageUri}?width=${width}`;

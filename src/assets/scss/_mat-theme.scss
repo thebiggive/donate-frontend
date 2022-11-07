@@ -1,26 +1,26 @@
 @use '@angular/material' as mat;
 
-$tbg-red: (
-  100: #ff9999,
-  500: #f0423b,
-  700: #d1312a,
-  800: #c1211a,
-  contrast: (
-    500: white,
-    800: rgba(white, 0.87),
-  )
-);
-
-$tbg-teal: (
-  100: #5fc3cf,
-  200: #4fb3bf,
-  500: #008085,
-  700: #006672,
-  800: #005662,
+$tbg-primary: (
+  100: #2C089B,
+  200: #2C089B,
+  500: #2C089B,
+  700: #2C089B,
+  800: #2C089B,
   contrast: (
     200: black,
     500: white,
     800: white,
+  )
+);
+
+$tbg-secondary: (
+  100: #2AF135,
+  500: #2AF135,
+  700: #2AF135,
+  800: #2AF135,
+  contrast: (
+    500: black,
+    800: rgba(black, 0.87),
   )
 );
 
@@ -36,8 +36,8 @@ $tbg-error-red: (
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$donate-primary: mat.define-palette($tbg-teal);
-$donate-accent: mat.define-palette($tbg-red);
+$donate-primary: mat.define-palette($tbg-primary);
+$donate-accent: mat.define-palette($tbg-secondary);
 $donate-warn: mat.define-palette($tbg-error-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
@@ -46,7 +46,7 @@ $donate-theme: mat.define-light-theme($donate-primary, $donate-accent, $donate-w
 // Adapting Angular Material to override font, including on inputs.
 // https://stackoverflow.com/a/49541553/2803757
 $app-typography: mat.define-typography-config(
-  $font-family:   '"Maven Pro", sans-serif',
+  $font-family:   '"Euclid Triangle", sans-serif',
   $display-4:     mat.define-typography-level(112px, 112px, 300),
   $display-3:     mat.define-typography-level(56px, 56px, 400),
   $display-2:     mat.define-typography-level(45px, 48px, 400),
@@ -75,10 +75,8 @@ $app-typography: mat.define-typography-config(
 @include mat.checkbox-theme($donate-theme);
 @include mat.dialog-theme($donate-theme);
 @include mat.form-field-theme($donate-theme);
-@include mat.menu-theme($donate-theme);
 @include mat.progress-spinner-theme($donate-theme);
 @include mat.radio-theme($donate-theme);
 @include mat.select-theme($donate-theme);
-@include mat.sidenav-theme($donate-theme);
 @include mat.stepper-theme($donate-theme);
 @include mat.tabs-theme($donate-theme);

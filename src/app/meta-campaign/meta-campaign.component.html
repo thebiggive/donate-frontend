@@ -13,7 +13,7 @@
 
   <biggive-hero-image
     [mainTitle]="campaign.title"
-    [mainImage]="campaign.bannerUri"
+    [mainImage]="campaign.bannerUri | optimisedImage:830 | async"
     [teaser]="campaign.summary"
     colour-scheme="primary"
     teaser="We run match funding campaigns to make an extraordinary difference to the world’s big challenges."
@@ -39,7 +39,7 @@
             [alwaysCallback]="true"
           ></div>
           <biggive-campaign-card
-            [banner]="campaign.imageUri"
+            [banner]="campaign.imageUri | optimisedImage:830 | async"
             [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'" 
             [campaignTitle]="campaign.title"
             [currencyCode]="campaign.currencyCode"
