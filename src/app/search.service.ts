@@ -36,7 +36,7 @@ export class SearchService {
     };
   }
 
-  filter(filterName: string, value: string) {
+  filter(filterName: string, value: string|boolean) {
     this.nonDefaultsActive = true;
     this.selected[filterName] = value;
     this.changed.emit(true);
