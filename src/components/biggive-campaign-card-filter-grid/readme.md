@@ -21,9 +21,9 @@
 
 ## Events
 
-| Event                     | Description                                                                                                   | Type                                      |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| `doSearchAndFilterUpdate` | This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it | `CustomEvent<CustomSearchAndFilterEvent>` |
+| Event                     | Description                                                                                                   | Type                                                                                                                                                     |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `doSearchAndFilterUpdate` | This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it | `CustomEvent<{ searchText: string; sortBy: string; filterCategory: string; filterBeneficiary: string; filterLocation: string; filterFunding: string; }>` |
 
 
 ## Dependencies

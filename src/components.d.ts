@@ -5,7 +5,6 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { CustomSearchAndFilterEvent } from "./interfaces";
 export namespace Components {
     interface BiggiveArticleCard {
         /**
@@ -1619,7 +1618,14 @@ declare namespace LocalJSX {
         /**
           * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it
          */
-        "onDoSearchAndFilterUpdate"?: (event: BiggiveCampaignCardFilterGridCustomEvent<CustomSearchAndFilterEvent>) => void;
+        "onDoSearchAndFilterUpdate"?: (event: BiggiveCampaignCardFilterGridCustomEvent<{
+    searchText: string;
+    sortBy: string;
+    filterCategory: string;
+    filterBeneficiary: string;
+    filterLocation: string;
+    filterFunding: string;
+  }>) => void;
         /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
