@@ -84,42 +84,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   @HostListener('doSearchAndFilterUpdate', ['$event'])
   onDoSearchAndFilterUpdate(event: CustomEvent) {
-
-    const customSearchEvent: {
-      searchText: string;
-      sortBy: string;
-      filterCategory: string;
-      filterBeneficiary: string;
-      filterLocation: string;
-      filterFunding: string;
-    } = event.detail;
-
-    let searchText = customSearchEvent.searchText;
-    if (!searchText) {
-      searchText = ''; // prevents error calling .length on 'undefined' in search.service.ts
-    }
-
-    const sortBy = customSearchEvent.sortBy ? customSearchEvent.sortBy : this.getDefaultSort();
-
-    this.searchService.search(searchText, sortBy);
-
-
-    if (customSearchEvent.filterBeneficiary) {
-      this.searchService.filter('beneficiary', customSearchEvent.filterBeneficiary);
-    }
-
-    if (customSearchEvent.filterCategory) {
-      this.searchService.filter('category', customSearchEvent.filterCategory);
-    }
-
-    if (customSearchEvent.filterLocation) {
-      this.searchService.filter('country', customSearchEvent.filterLocation);
-    }
-
-    if (customSearchEvent.filterFunding) {
-      this.searchService.filter('onlyMatching', customSearchEvent.filterFunding === 'Match Funded');
-    }
-
+    this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
   }
 
   ngOnDestroy() {
