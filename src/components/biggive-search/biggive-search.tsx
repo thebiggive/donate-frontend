@@ -63,13 +63,7 @@ export class BigGiveSearch {
                 <path d={faMagnifyingGlass.icon[4].toString()} />
               </svg>
 
-              <input
-                type="text"
-                value={this.searchText}
-                placeholder={this.placeholderText}
-                onInput={this.handleSearchTextChanged}
-                onKeyDown={this.handleEnterPressed}
-              />
+              <input type="text" value={this.searchText} placeholder={this.placeholderText} onInput={this.handleSearchTextChanged} onKeyDown={this.handleEnterPressed} />
 
               <svg xmlns="http://www.w3.org/2000/svg" class="icon" id="x-icon" viewBox="0 0 512 512" onClick={this.clearSearchText}>
                 <path d={faX.icon[4].toString()} />

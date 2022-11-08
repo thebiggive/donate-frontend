@@ -21,10 +21,10 @@ export class BiggivePopup {
 
   render() {
     return (
-      <div class="popup" onClick={event => this.close(event)}>
+      <div class="popup" onClick={this.close}>
         <div class="sleeve">
           <div class="header">
-            <div class="close" onClick={event => this.close(event)}></div>
+            <div class="close" onClick={this.close}></div>
           </div>
           <div class="content">
             <slot></slot>

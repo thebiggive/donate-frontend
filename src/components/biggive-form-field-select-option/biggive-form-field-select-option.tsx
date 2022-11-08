@@ -40,7 +40,7 @@ export class BiggiveFormFieldSelectOption {
 
   render() {
     return (
-      <div class="option" data-value={this.value} onClick={event => this.optionSelectHandler(event)}>
+      <div class="option" data-value={this.value} onClick={this.optionSelectHandler}>
         {this.label}
       </div>
     );
