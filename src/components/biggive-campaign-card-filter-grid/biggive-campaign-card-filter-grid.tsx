@@ -59,22 +59,22 @@ export class BiggiveCampaignCardFilterGrid {
   /**
    * JSON array of category key/values
    */
-  @Prop() categoryOptions: string[] = null;
+  @Prop() categoryOptions: string[] = [];
 
   /**
    * JSON array of beneficiary key/values
    */
-  @Prop() beneficiaryOptions: string[] = null;
+  @Prop() beneficiaryOptions: string[] = [];
 
   /**
    * JSON array of location key/values
    */
-  @Prop() locationOptions: string[] = null;
+  @Prop() locationOptions: string[] = [];
 
   /**
    * JSON array of funding key/values
    */
-  @Prop() fundingOptions: string[] = null;
+  @Prop() fundingOptions: string[] = [];
 
   private getSearchAndFilterObject(): {
     searchText: string;
@@ -112,31 +112,31 @@ export class BiggiveCampaignCardFilterGrid {
     this.filterFunding = this.el.shadowRoot.getElementById('funding').selectedValue;
   }
 
-  private handleSortByChanged() {
+  private handleSortByChanged = () => {
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  }
+  };
 
-  private handleApplyFilterButtonClick() {
+  private handleApplyFilterButtonClick = () => {
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  }
+  };
 
-  private handleSearchButtonPressed() {
+  private handleSearchButtonPressed = () => {
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  }
+  };
 
-  private handleSearchTextChanged(event) {
+  private handleSearchTextChanged = (event: any) => {
     this.searchText = event.target.value;
-  }
+  };
 
-  private handleEnterPressed(ev: KeyboardEvent) {
+  private handleEnterPressed = (ev: KeyboardEvent) => {
     if (ev.key === 'Enter') {
       this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
     }
-  }
+  };
 
-  private handleFilterButtonClick() {
+  private handleFilterButtonClick = () => {
     this.el.shadowRoot.getElementById('filter-popup').open();
-  }
+  };
 
   render() {
     return (
@@ -154,23 +154,23 @@ export class BiggiveCampaignCardFilterGrid {
                   value={this.searchText}
                   class="input-text"
                   placeholder={this.placeholderText}
-                  onInput={event => this.handleSearchTextChanged(event)}
-                  onKeyDown={event => this.handleEnterPressed(event)}
+                  onInput={this.handleSearchTextChanged}
+                  onKeyDown={this.handleEnterPressed}
                 />
               </div>
-              <biggive-button onClick={() => this.handleSearchButtonPressed()} label={this.buttonText} />
+              <biggive-button onClick={this.handleSearchButtonPressed} label={this.buttonText} />
             </div>
           </div>
           <div class="sort-filter-wrap">
             <div class="sort-wrap">
-              <biggive-form-field-select placeholder="Sort by" id="sort-by" onDoSelectChange={() => this.handleSortByChanged()}>
+              <biggive-form-field-select placeholder="Sort by" id="sort-by" onDoSelectChange={this.handleSortByChanged}>
                 <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>
                 <biggive-form-field-select-option value="matchFundsRemaining" label="Match funds remaining"></biggive-form-field-select-option>
               </biggive-form-field-select>
             </div>
 
             <div class="filter-wrap">
-              <biggive-button class="filter" onClick={() => this.handleFilterButtonClick()}>
+              <biggive-button class="filter" onClick={this.handleFilterButtonClick}>
                 <span class="filter-icon">
                   <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -184,30 +184,30 @@ export class BiggiveCampaignCardFilterGrid {
               <biggive-popup id="filter-popup">
                 <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
                 <biggive-form-field-select placeholder="Category" id="categories" space-below="2">
-                  {!this.categoryOptions
+                  {this.categoryOptions.length === 0
                     ? undefined
                     : this.categoryOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
                 </biggive-form-field-select>
 
                 <biggive-form-field-select placeholder="Beneficiary" id="beneficiaries" space-below="2">
-                  {!this.beneficiaryOptions
+                  {this.beneficiaryOptions.length === 0
                     ? undefined
                     : this.beneficiaryOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
                 </biggive-form-field-select>
 
                 <biggive-form-field-select placeholder="Location" id="locations" space-below="2">
-                  {!this.locationOptions
+                  {this.locationOptions.length === 0
                     ? undefined
                     : this.locationOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
                 </biggive-form-field-select>
 
                 <biggive-form-field-select placeholder="Funding" id="funding" space-below="2">
-                  {!this.fundingOptions
+                  {this.fundingOptions.length === 0
                     ? undefined
                     : this.fundingOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
                 </biggive-form-field-select>
                 <div class="align-right">
-                  <biggive-button label="Apply filters" onClick={() => this.handleApplyFilterButtonClick()} />
+                  <biggive-button label="Apply filters" onClick={this.handleApplyFilterButtonClick} />
                 </div>
               </biggive-popup>
             </div>
