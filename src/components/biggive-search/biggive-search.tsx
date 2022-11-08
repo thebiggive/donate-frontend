@@ -76,7 +76,7 @@ export class BigGiveSearch {
               </svg>
             </div>
 
-            <button onClick={() => this.handleSearchButtonPressed()}>{this.buttonText}</button>
+            <biggive-button label={this.buttonText} onClick={() => this.handleSearchButtonPressed()} />
           </div>
           <div class="triangle triangle-after"></div>
         </div>
