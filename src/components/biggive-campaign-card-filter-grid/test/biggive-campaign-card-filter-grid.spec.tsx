@@ -34,13 +34,7 @@ describe('biggive-campaign-card-filter-grid', () => {
               </biggive-form-field-select>
             </div>
             <div class="filter-wrap">
-              <biggive-button class="filter">
-                <span class="filter-icon">
-                  <svg fill="none" height="15" viewBox="0 0 16 15" width="16" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0.12042 0.76576C0.327224 0.298 0.766961 0 1.25014 0H14.7517C15.2361 0 15.6736 0.298 15.8799 0.76576C16.0893 1.23352 16.0237 1.787 15.6924 2.18745L10.0011 9.67328V13.929C10.0011 14.3341 9.7886 14.7058 9.44793 14.8866C9.1104 15.0674 8.7041 15.0306 8.40094 14.7862L6.40072 13.179C6.14756 12.9781 6.00067 12.66 6.00067 12.3218V9.67328L0.282594 2.18745C-0.023284 1.787 -0.0864161 1.23352 0.120451 0.76576H0.12042Z" fill="white"></path>
-                  </svg>
-                </span>
-                Filters
+              <biggive-button class="filter" label="Filters">
               </biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="colour-primary space-above-0 space-below-3">

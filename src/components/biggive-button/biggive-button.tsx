@@ -24,7 +24,7 @@ export class BiggiveButton {
   /**
    * URL
    */
-  @Prop() url: string = '#';
+  @Prop() url: string = undefined;
 
   /**
    * Display full width
