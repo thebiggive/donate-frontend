@@ -132,42 +132,6 @@ export class BiggiveCampaignCardFilterGrid {
 
   private handleFilterButtonClick() {
     this.el.shadowRoot.getElementById('filter-popup').open();
-
-    if (this.categoryOptions != null) {
-      var options = this.categoryOptions;
-      this.el.shadowRoot.getElementById('categories').innerHTML = '';
-      for (var prop in options) {
-        this.el.shadowRoot.getElementById('categories').innerHTML +=
-          '<biggive-form-field-select-option value="' + options[prop] + '" label="' + options[prop] + '"></biggive-form-field-select-option>';
-      }
-    }
-
-    if (this.beneficiaryOptions != null) {
-      var options = this.beneficiaryOptions;
-      this.el.shadowRoot.getElementById('beneficiaries').innerHTML = '';
-      for (var prop in options) {
-        this.el.shadowRoot.getElementById('beneficiaries').innerHTML +=
-          '<biggive-form-field-select-option value="' + options[prop] + '" label="' + options[prop] + '"></biggive-form-field-select-option>';
-      }
-    }
-
-    if (this.locationOptions != null) {
-      var options = this.locationOptions;
-      this.el.shadowRoot.getElementById('locations').innerHTML = '';
-      for (var prop in options) {
-        this.el.shadowRoot.getElementById('locations').innerHTML +=
-          '<biggive-form-field-select-option value="' + options[prop] + '" label="' + options[prop] + '"></biggive-form-field-select-option>';
-      }
-    }
-
-    if (this.fundingOptions != null) {
-      var options = this.fundingOptions;
-      this.el.shadowRoot.getElementById('funding').innerHTML = '';
-      for (var prop in options) {
-        this.el.shadowRoot.getElementById('funding').innerHTML +=
-          '<biggive-form-field-select-option value="' + options[prop] + '" label="' + options[prop] + '"></biggive-form-field-select-option>';
-      }
-    }
   }
 
   render() {
@@ -215,10 +179,29 @@ export class BiggiveCampaignCardFilterGrid {
               </biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
-                <biggive-form-field-select placeholder="Category" id="categories" space-below="2"></biggive-form-field-select>
-                <biggive-form-field-select placeholder="Beneficiary" id="beneficiaries" space-below="2"></biggive-form-field-select>
-                <biggive-form-field-select placeholder="Location" id="locations" space-below="2"></biggive-form-field-select>
-                <biggive-form-field-select placeholder="Funding" id="funding" space-below="2"></biggive-form-field-select>
+                <biggive-form-field-select placeholder="Category" id="categories" space-below="2">
+                  {!this.categoryOptions? undefined : this.categoryOptions.map(option => (
+                    <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
+                  ))}
+                </biggive-form-field-select>
+
+                <biggive-form-field-select placeholder="Beneficiary" id="beneficiaries" space-below="2">
+                  {!this.beneficiaryOptions? undefined : this.beneficiaryOptions.map(option => (
+                    <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
+                  ))}
+                </biggive-form-field-select>
+
+                <biggive-form-field-select placeholder="Location" id="locations" space-below="2">
+                  {!this.locationOptions? undefined : this.locationOptions.map(option => (
+                    <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
+                  ))}
+                </biggive-form-field-select>
+
+                <biggive-form-field-select placeholder="Funding" id="funding" space-below="2">
+                  {!this.fundingOptions? undefined : this.fundingOptions.map(option => (
+                    <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
+                  ))}
+                </biggive-form-field-select>
                 <div class="align-right">
                   <biggive-button label="Apply filters" onClick={() => this.handleApplyFilterButtonClick()} />
                 </div>
