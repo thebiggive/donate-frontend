@@ -20,7 +20,19 @@
 
     <div class="c-card">
       <div class="c-main">
-        <h3 class="b-rh-2 b-bold">Donation successful</h3>
+        <biggive-heading
+          heading-colour="primary"
+          html-element="h3"
+          size="3"
+          text="Thank you!"
+        ></biggive-heading>
+
+        <biggive-heading
+          heading-colour="primary"
+          html-element="h4"
+          size="4"
+          text="Your generous donation has been made successfully."
+        ></biggive-heading>
 
         <div *ngIf="offerToSetPassword">
           <!-- Activated only after password set succeeds, in order to facilitate an auto-login (when donor requests to stay logged in) -->
@@ -93,7 +105,7 @@
             <p class="b-rt-0 b-bold b-m-0">{{ cardChargedAmount | exactCurrency:donation.currencyCode }}</p>
           </div>
           <div class="c-misc">
-            <p>Amplify your impact. Sharing on social media helps raise more.</p>
+            <p>Boost your impact by sharing on social media</p>
             <a href="https://www.facebook.com/sharer/sharer.php?u={{ shareUrl }}" target="_blank" rel="noopener"><img class="c-social-image" src="/assets/images/share-facebook.png" alt="Facebook" aria-label="Share on Facebook" width="50"></a>
             <a href="https://twitter.com/share?url={{ shareUrl }}&text={{ prefilledText }}" target="_blank" rel="noopener"><img class="c-social-image" src="/assets/images/share-twitter.png" alt="Twitter" aria-label="Share on Twitter" width="50"></a>
             <a href="https://www.linkedin.com/cws/share?url={{ shareUrl }}" target="_blank" rel="noopener"><img class="c-social-image" src="/assets/images/share-linkedin.png" alt="LinkedIn" aria-label="Share on LinkedIn" width="50"></a>
