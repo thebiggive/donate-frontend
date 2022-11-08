@@ -190,9 +190,7 @@ export class BiggiveCampaignCardFilterGrid {
                   onKeyDown={event => this.handleEnterPressed(event)}
                 />
               </div>
-              <button onClick={() => this.handleSearchButtonPressed()} class="button button-primary">
-                {this.buttonText}
-              </button>
+              <biggive-button onClick={() => this.handleSearchButtonPressed()} label={this.buttonText} />
             </div>
           </div>
           <div class="sort-filter-wrap">
@@ -204,7 +202,7 @@ export class BiggiveCampaignCardFilterGrid {
             </div>
 
             <div class="filter-wrap">
-              <div class="button button-primary filter" onClick={() => this.handleFilterButtonClick()}>
+              <biggive-button class="filter" onClick={() => this.handleFilterButtonClick()}>
                 <span class="filter-icon">
                   <svg width="16" height="15" viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -214,7 +212,7 @@ export class BiggiveCampaignCardFilterGrid {
                   </svg>
                 </span>
                 Filters
-              </div>
+              </biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
                 <biggive-form-field-select placeholder="Category" id="categories" space-below="2"></biggive-form-field-select>
@@ -222,9 +220,7 @@ export class BiggiveCampaignCardFilterGrid {
                 <biggive-form-field-select placeholder="Location" id="locations" space-below="2"></biggive-form-field-select>
                 <biggive-form-field-select placeholder="Funding" id="funding" space-below="2"></biggive-form-field-select>
                 <div class="align-right">
-                  <button class="button button-primary" onClick={() => this.handleApplyFilterButtonClick()}>
-                    Apply filters
-                  </button>
+                  <biggive-button label="Apply filters" onClick={() => this.handleApplyFilterButtonClick()} />
                 </div>
               </biggive-popup>
             </div>
