@@ -42,10 +42,10 @@ export class ExploreComponent implements OnDestroy, OnInit {
   private routeParamSubscription: Subscription;
   private searchServiceSubscription: Subscription;
 
-  beneficiaryOptions: string[];
-  categoryOptions: string[];
-  countryOptions: string[];
-  fundingOptions: string[];
+  beneficiaryOptions: string[] = [];
+  categoryOptions: string[] = [];
+  countryOptions: string[] = [];
+  fundingOptions: string[] = [];
 
   constructor(
     private campaignService: CampaignService,
