@@ -68,7 +68,7 @@ nav ul li a {
     align-items: center;
     justify-content: space-between;
 
-    @media screen and (max-width: $screen-mobile-max) {
+    @media screen and (max-width: $screen-tablet-max) {
       flex-direction: column;
     }
   }
@@ -86,7 +86,7 @@ nav ul li a {
       margin-left: 0;
     }
 
-    @media screen and (max-width: $screen-mobile-max) {
+    @media screen and (max-width: $screen-tablet-max) {
       display: block;
       width: 100%;
       margin-left: 0;
@@ -115,7 +115,7 @@ nav ul li a {
   }
 }
 
-@media screen and (max-width: $screen-mobile-max) {
+@media screen and (max-width: $screen-tablet-max) {
   .row-top {
     background-size: auto 50px;
     padding-top: 80px;
