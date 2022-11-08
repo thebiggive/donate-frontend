@@ -119,12 +119,6 @@ export function app() {
     }
   });
 
-  server.get('/d/favicon.ico', (req: Request, res: Response) => {
-    res.sendFile(`${distFolder}/favicon.ico`, {
-      maxAge: '7 days', // Don't make the favicon immutable in case we want to update it
-    });
-  });
-
   server.get('/.well-known/apple-developer-merchantid-domain-association', (req: Request, res: Response) => {
     res.sendFile(`${distFolder}/assets/stripe-apple-developer-merchantid-domain-association`, {
       maxAge: '7 days',
