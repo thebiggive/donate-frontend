@@ -14,8 +14,7 @@ const Template = args => `
         <biggive-social-icon service="Instagram" url="https://www.instagram.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
       </div>
       <div class="nav-toggle"></div>
-      <nav class="nav nav-primary">
-        <ul>
+      <ul slot="nav-primary">
           <li><a href="#">Explore Campaigns</a></li>
           <li><a href="#">For Charities</a></li>
           <li><a href="#">For Funders</a></li>
@@ -31,8 +30,7 @@ const Template = args => `
           </li>
           <li><a href="#">About Us</a></li>
           <li><a href="#">Resources</a></li>
-        </ul>
-      </nav>
+      </ul>
 
       <ul slot="nav-secondary">
         <li><a href="#">Contact us</a></li>
