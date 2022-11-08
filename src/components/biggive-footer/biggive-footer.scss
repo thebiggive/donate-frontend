@@ -67,6 +67,10 @@ nav ul li a {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+
+    @media screen and (max-width: $screen-mobile-max) {
+      flex-direction: column;
+    }
   }
 
   .nav.nav-postscript {
@@ -84,8 +88,9 @@ nav ul li a {
 
     @media screen and (max-width: $screen-mobile-max) {
       display: block;
-      text-align: left;
+      width: 100%;
       margin-left: 0;
+      text-align: center;
     }
   }
 
