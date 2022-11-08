@@ -28,7 +28,7 @@ export class NavigationComponent implements OnInit {
   }
 
   /**
-   * Simply prevent browsers taking the "#" link literally. Top level items with a sub-menu
+   * Ensure browsers don't try to navigate to non-targets. Top level items with a sub-menu
    * work on hover using pure CSS only.
    */
   noNav(event: Event) {
