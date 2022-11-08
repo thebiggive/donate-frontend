@@ -7,11 +7,31 @@
   color: $colour-white;
 }
 
+nav {
+  width: calc(33.3% - 20px);
+  margin: 0;
+  padding: 0;
+  h5 {
+    @include heading-5();
+    border-bottom: 1px solid $colour-white;
+    padding-bottom: $spacer-2;
+    margin-bottom: $spacer-2;
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+    }
+  }
+}
+
 nav ul li a {
   color: $colour-white;
   text-decoration: none;
 }
-
 
 .row-top {
   background-image: url(assets/images/biggive-triangle-green.svg);
@@ -23,26 +43,7 @@ nav ul li a {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  nav {
-    width: calc(33.3% - 20px);
-    margin: 0;
-    padding: 0;
-    h5 {
-      @include heading-5();
-      border-bottom: 1px solid $colour-white;
-      padding-bottom: $spacer-2;
-      margin-bottom: $spacer-2;
-    }
-    ul {
-      margin: 0;
-      padding: 0;
-      li {
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
-      }
-    }
-  }
+
   .button-wrap {
     margin-top: $spacer-3;
     width: 100%;
@@ -56,7 +57,46 @@ nav ul li a {
   background-color: $colour-black;
   padding: $spacer-6 $spacer-6 $spacer-3 $spacer-6;
   border-top: 1px solid $colour-white;
-  text-align: center;
+
+  .fr-logo {
+    width: 135px;
+  }
+
+  .postscript-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+
+    @media screen and (max-width: $screen-tablet-max) {
+      flex-direction: column;
+    }
+  }
+
+  .nav.nav-postscript {
+    text-align: right;
+    flex-grow: 1;
+
+    @media screen and (max-width: $screen-tablet-max) {
+      text-align: center;
+    }
+  }
+
+  .nav-postscript li {
+    display: inline-block;
+    margin-left: 1rem;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    @media screen and (max-width: $screen-tablet-max) {
+      display: block;
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+
   .social-icon-wrap {
     border-top: 1px solid $colour-white;
     padding-top: $spacer-4;
@@ -65,16 +105,12 @@ nav ul li a {
     align-items: center;
     justify-content: center;
     margin-bottom: $spacer-4;
+
     .social-icon-item {
       margin: 0 $spacer-2;
     }
-    .button-wrap {
-      
-    }
   }
-
 }
-
 
 @media screen and (max-width: $screen-tablet-max) {
   .row-top {
@@ -82,22 +118,20 @@ nav ul li a {
   }
 }
 
-@media screen and (max-width: $screen-mobile-max) {
+@media screen and (max-width: $screen-tablet-max) {
+  nav {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: $spacer-4;
+  }
+
   .row-top {
     background-size: auto 50px;
     padding-top: 80px;
     padding-left: 15px;
-    nav {
-      width: 100%;
-      margin-right: 0;
-      margin-bottom:$spacer-4;
-    }
+
     .button-wrap * {
       width: 100% !important;
     }
   }
 }
-
-
-
-
