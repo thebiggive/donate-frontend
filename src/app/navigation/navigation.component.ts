@@ -26,4 +26,12 @@ export class NavigationComponent implements OnInit {
       filter((event: RouterEvent) => event instanceof NavigationStart),
     ).subscribe(() => this.opened = false);
   }
+
+  /**
+   * Simply prevent browsers taking the "#" link literally. Top level items with a sub-menu
+   * work on hover using pure CSS only.
+   */
+  noNav(event: Event) {
+    event.preventDefault();
+  }
 }
