@@ -15,6 +15,7 @@ import { FooterComponent } from '../footer/footer.component';
   ],
 })
 export class NavigationComponent implements OnInit {
+  // TODO we should probably close the new kind on nav events as we used to?
   opened = false;
 
   constructor(private router: Router) {
