@@ -1,4 +1,4 @@
-import { Component, Element, h } from '@stencil/core';
+import {Component, Element, getAssetPath, h} from '@stencil/core';
 
 @Component({
   tag: 'biggive-footer',
@@ -8,47 +8,27 @@ import { Component, Element, h } from '@stencil/core';
 export class BiggiveFooter {
   @Element() host: HTMLBiggiveFooterElement;
 
+  getMenuUlContents(slotName: string) {
+    const navItems = [];
+    const node = this.host.querySelector(`[slot="${slotName}"]`);
+    if (node != null) {
+      node.querySelectorAll('li').forEach(el => {
+        navItems.push(
+          <li>
+            <a href={el.firstElementChild.getAttribute('href')}>{el.innerText}</a>
+          </li>,
+        );
+      });
+    }
+
+    return navItems;
+  }
+
   render() {
-    var node = null;
-    var navPrimary = null;
-    var navSecondary = null;
-    var navTertiary = null;
-
-    node = this.host.querySelector('[slot="nav-primary"]');
-    if (node != null) {
-      navPrimary = [];
-      node.querySelectorAll('li').forEach(el => {
-        navPrimary.push(
-          <li>
-            <a href={el.firstElementChild.getAttribute('href')}>{el.innerText}</a>
-          </li>,
-        );
-      });
-    }
-
-    node = this.host.querySelector('[slot="nav-secondary"]');
-    if (node != null) {
-      navSecondary = [];
-      node.querySelectorAll('li').forEach(el => {
-        navSecondary.push(
-          <li>
-            <a href={el.firstElementChild.getAttribute('href')}>{el.innerText}</a>
-          </li>,
-        );
-      });
-    }
-
-    node = this.host.querySelector('[slot="nav-tertiary"]');
-    if (node != null) {
-      navTertiary = [];
-      node.querySelectorAll('li').forEach(el => {
-        navTertiary.push(
-          <li>
-            <a href={el.firstElementChild.getAttribute('href')}>{el.innerText}</a>
-          </li>,
-        );
-      });
-    }
+    const navPrimary = this.getMenuUlContents('nav-primary');
+    const navSecondary = this.getMenuUlContents('nav-secondary');
+    const navTertiary = this.getMenuUlContents('nav-tertiary');
+    const navPostscript = this.getMenuUlContents('nav-postscript');
 
     return (
       <footer class="footer">
@@ -75,13 +55,20 @@ export class BiggiveFooter {
           </nav>
 
           <div class="button-wrap">
-            <biggive-button colour-scheme="white" url="#" label="Donor login"></biggive-button>
             <biggive-button colour-scheme="white" url="#" label="For charities"></biggive-button>
             <biggive-button colour-scheme="white" url="#" label="For funders"></biggive-button>
           </div>
         </div>
 
         <div class="row row-bottom">
+          <div class="postscript-wrap">
+            <img class="fr-logo" src={getAssetPath('../assets/images/fundraising-regulator.png')} />
+
+            <nav class="nav nav-postscript">
+              <ul>{navPostscript}</ul>
+            </nav>
+          </div>
+
           <div class="social-icon-wrap">
             <slot name="social-icons"></slot>
           </div>
