@@ -185,34 +185,26 @@ export class BiggiveCampaignCardFilterGrid {
                 <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
                 <biggive-form-field-select placeholder="Category" id="categories" space-below="2">
                   {!this.categoryOptions
-                  ? undefined
-                  : this.categoryOptions.map(option => (
-                    <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                  ))}
+                    ? undefined
+                    : this.categoryOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
                 </biggive-form-field-select>
 
                 <biggive-form-field-select placeholder="Beneficiary" id="beneficiaries" space-below="2">
                   {!this.beneficiaryOptions
-                  ? undefined
-                  : this.beneficiaryOptions.map(option => (
-                    <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                  ))}
+                    ? undefined
+                    : this.beneficiaryOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
                 </biggive-form-field-select>
 
                 <biggive-form-field-select placeholder="Location" id="locations" space-below="2">
                   {!this.locationOptions
-                  ? undefined
-                  : this.locationOptions.map(option => (
-                    <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                  ))}
+                    ? undefined
+                    : this.locationOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
                 </biggive-form-field-select>
 
                 <biggive-form-field-select placeholder="Funding" id="funding" space-below="2">
                   {!this.fundingOptions
-                  ? undefined
-                  : this.fundingOptions.map(option => (
-                    <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                  ))}
+                    ? undefined
+                    : this.fundingOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
                 </biggive-form-field-select>
                 <div class="align-right">
                   <biggive-button label="Apply filters" onClick={() => this.handleApplyFilterButtonClick()} />
