@@ -41,11 +41,6 @@ export class BiggiveHeader {
     if (node != null) {
       this.host.shadowRoot.querySelector('nav.nav-secondary').appendChild(node);
     }
-
-    //node = this.host.querySelector('[slot="social-icons"]');
-    //if (node != null) {
-    //  this.host.shadowRoot.querySelector('div.social-icon-wrap').appendChild(node);
-    //}
   }
 
   render() {
