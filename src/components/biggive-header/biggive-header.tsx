@@ -29,44 +29,33 @@ export class BiggiveHeader {
     }
   }
 
-  render() {
+  componentDidRender() {
     var node = null;
-    var navPrimary = null;
-    var navSecondary = null;
 
     node = this.host.querySelector('[slot="nav-primary"]');
     if (node != null) {
-      navPrimary = [];
-      node.querySelectorAll('li').forEach(el => {
-        navPrimary.push(
-          <li>
-            <a href={el.firstElementChild.getAttribute('href')}>{el.innerText}</a>
-          </li>,
-        );
-      });
+      this.host.shadowRoot.querySelector('nav.nav-primary').appendChild(node);
     }
 
     node = this.host.querySelector('[slot="nav-secondary"]');
     if (node != null) {
-      navSecondary = [];
-      node.querySelectorAll('li').forEach(el => {
-        navSecondary.push(
-          <li>
-            <a href={el.firstElementChild.getAttribute('href')}>{el.innerText}</a>
-          </li>,
-        );
-      });
+      this.host.shadowRoot.querySelector('nav.nav-secondary').appendChild(node);
     }
 
+    //node = this.host.querySelector('[slot="social-icons"]');
+    //if (node != null) {
+    //  this.host.shadowRoot.querySelector('div.social-icon-wrap').appendChild(node);
+    //}
+  }
+
+  render() {
     return (
       <header class={'header space-below' + this.spaceBelow}>
         <div class="row row-top">
           <div class="social-icon-wrap">
             <slot name="social-icons"></slot>
           </div>
-          <nav class="nav nav-secondary">
-            <ul>{navSecondary}</ul>
-          </nav>
+          <nav class="nav nav-secondary"></nav>
         </div>
         <div class="row row-bottom">
           <div class="logo-wrap">
@@ -82,9 +71,7 @@ export class BiggiveHeader {
             </a>
           </div>
           <div class="nav-toggle" onClick={event => this.toggleNav(event)}></div>
-          <nav class="nav nav-primary" data-visible="false">
-            <ul>{navPrimary}</ul>
-          </nav>
+          <nav class="nav nav-primary" data-visible="false"></nav>
         </div>
       </header>
     );

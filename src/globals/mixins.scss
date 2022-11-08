@@ -459,6 +459,21 @@
 }
 
 
+@mixin corner-clip-small-bottom-left() {
+  clip-path:
+    polygon(
+      0% 0%,     /* top left */
+      0% 0%,     /* top left */
+      100% 0%,    /* top right */
+      100% 0,   /* top right */
+      100% 100%,  /* bottom right */
+      100% 100%,  /* bottom right */
+      15px 100%,   /* bottom left */
+      0 calc(100% - 15px)      /* bottom left */
+    );
+}
+
+
 @mixin corner-clip-small-top-right() {
   clip-path:
     polygon(

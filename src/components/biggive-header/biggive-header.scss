@@ -23,7 +23,7 @@
       margin: 0 $spacer-3 0 0;
       padding: 0 $spacer-3 0 0;
       display: inline-block;
-      font-size: 18x;
+      font-size: 18px;
       line-height: 20px;
       &:last-child {
         padding-right: 0;
@@ -33,9 +33,12 @@
         color: $colour-black;
         text-decoration: none;
         display: inline-block;
-        border-bottom: 1px solid transparent;
-        &:hover {
-          border-bottom: 1px solid $colour-black;
+        &.icon-green {
+          padding-left: 20px;
+          background-image: url(/assets/triangles-combined.svg);
+          background-repeat: no-repeat;
+          background-size: auto 10px;
+          background-position: left center;;
         }
       }
     }  
@@ -98,6 +101,49 @@
   }
 }
 
+
+@media screen and (min-width: 1051px) {
+
+.nav {
+  ul {
+    li {
+      position: relative;
+      a:hover {
+        color: $colour-primary;
+      }
+      ul {
+        display: none;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: $spacer-3 $spacer-5 $spacer-4 $spacer-5;
+        background-color: $colour-white;
+        @include corner-clip-small-bottom-left();
+        @include lower-shadow();
+        li {
+          display: block;
+          font-weight: normal;
+          padding: 0;
+          margin: $spacer-2 0 $spacer-2 0;
+          white-space: nowrap;
+          text-align: left;
+          font-weight: normal;
+          @include  font-size-small();
+        }
+      }
+      &:hover ul {
+        display: block;
+      }
+
+    }
+  }
+}
+
+
+
+}
+
+
 @media screen and (max-width: 1050px) {
   .row-top {
     display: none;
@@ -153,6 +199,18 @@
           border-bottom: 1px solid $colour-grey-light;
           padding-left: $spacer-4;
           padding-right: $spacer-4;
+          ul {
+            margin-top: $spacer-3;
+            display: none;
+            li {
+              font-weight: normal;
+              border-bottom: 0;
+              @include font-size-small();
+            }
+          }
+          &:hover ul {
+            display: block;  
+          }
         }
       }
     }
