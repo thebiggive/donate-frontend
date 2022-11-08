@@ -9,10 +9,7 @@ import { allChildComponentImports } from '../../allChildComponentImports';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { Campaign } from '../campaign.model';
 import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
-import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
-import { FiltersComponent } from '../filters/filters.component';
-import { HeroComponent } from '../hero/hero.component';
 import { PageMetaService } from '../page-meta.service';
 import { PromotedCampaignsComponent } from '../promoted-campaigns/promoted-campaigns.component';
 import { SearchService } from '../search.service';
@@ -27,10 +24,7 @@ import { CampaignGroupsService } from '../campaign-groups.service';
   imports: [
     ...allChildComponentImports,
     CampaignCardComponent,
-    CampaignSearchFormComponent,
-    FiltersComponent,
     FlexLayoutModule,
-    HeroComponent,
     InfiniteScrollModule,
     MatProgressSpinnerModule,
     PromotedCampaignsComponent,

@@ -14,10 +14,8 @@ import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { environment } from '../../environments/environment';
-import { FiltersComponent } from '../filters/filters.component';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
-import { HeroComponent } from '../hero/hero.component';
 import { NavigationService } from '../navigation.service';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { PageMetaService } from '../page-meta.service';
@@ -31,8 +29,6 @@ import { CampaignGroupsService } from '../campaign-groups.service';
   styleUrls: ['./meta-campaign.component.scss'],
   imports: [
     ...allChildComponentImports,
-    FiltersComponent,
-    HeroComponent,
     InfiniteScrollModule,
     MatProgressSpinnerModule,
     OptimisedImagePipe,
