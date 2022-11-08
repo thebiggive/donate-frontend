@@ -346,9 +346,9 @@ export namespace Components {
     }
     interface BiggiveCampaignCardFilterGrid {
         /**
-          * JSON array of beneficary key/values
+          * JSON array of beneficiary key/values
          */
-        "beneficaryOptions": string[];
+        "beneficiaryOptions": string[];
         /**
           * Defines the text on the search button
          */
@@ -357,10 +357,6 @@ export namespace Components {
           * JSON array of category key/values
          */
         "categoryOptions": string[];
-        "filterBeneficary": string;
-        "filterCategory": string;
-        "filterFunding": string;
-        "filterLocation": string;
         /**
           * JSON array of funding key/values
          */
@@ -377,8 +373,6 @@ export namespace Components {
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText": string;
-        "searchText": string;
-        "sortBy": string;
         /**
           * Space below component
          */
@@ -574,7 +568,7 @@ export namespace Components {
         /**
           * Full URL of a main hero image.
          */
-        "mainImage": string;
+        "mainImage": string|null;
         /**
           * Horizontal alignment of image
          */
@@ -1598,9 +1592,9 @@ declare namespace LocalJSX {
     }
     interface BiggiveCampaignCardFilterGrid {
         /**
-          * JSON array of beneficary key/values
+          * JSON array of beneficiary key/values
          */
-        "beneficaryOptions"?: string[];
+        "beneficiaryOptions"?: string[];
         /**
           * Defines the text on the search button
          */
@@ -1609,10 +1603,6 @@ declare namespace LocalJSX {
           * JSON array of category key/values
          */
         "categoryOptions"?: string[];
-        "filterBeneficary"?: string;
-        "filterCategory"?: string;
-        "filterFunding"?: string;
-        "filterLocation"?: string;
         /**
           * JSON array of funding key/values
          */
@@ -1626,15 +1616,20 @@ declare namespace LocalJSX {
          */
         "locationOptions"?: string[];
         /**
-          * This event `doChange` event is emitted and propogates to the parent component which handles it
+          * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it
          */
-        "onDoSearchAndFilterUpdate"?: (event: BiggiveCampaignCardFilterGridCustomEvent<object>) => void;
+        "onDoSearchAndFilterUpdate"?: (event: BiggiveCampaignCardFilterGridCustomEvent<{
+    searchText: string;
+    sortBy: string;
+    filterCategory: string;
+    filterBeneficiary: string;
+    filterLocation: string;
+    filterFunding: string;
+  }>) => void;
         /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText"?: string;
-        "searchText"?: string;
-        "sortBy"?: string;
         /**
           * Space below component
          */
@@ -1838,7 +1833,7 @@ declare namespace LocalJSX {
         /**
           * Full URL of a main hero image.
          */
-        "mainImage"?: string;
+        "mainImage"?: string|null;
         /**
           * Horizontal alignment of image
          */

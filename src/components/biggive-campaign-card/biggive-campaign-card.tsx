@@ -18,7 +18,7 @@ export class BiggiveCampaignCard {
   /**
    * Full URL of a banner image.
    */
-  @Prop() banner: string = '';
+  @Prop() banner: string = null;
 
   /**
    * Display name of the charity's specific time-bound fundraising campaign.
@@ -110,13 +110,13 @@ export class BiggiveCampaignCard {
     return (
       <div class={'container space-below-' + this.spaceBelow.toString()}>
         <div class="sleeve">
-          {this.campaignType.length > 0 ? (
+          {this.campaignType !== null ? (
             <div class="campaign-type">
               <span>{this.campaignType}</span>
             </div>
           ) : null}
 
-          {this.banner.length > 0 ? (
+          {this.banner !== null ? (
             <div class="image-wrap banner" style={{ 'background-image': 'url(' + this.banner + ')' }}>
               <img src={this.banner} class="banner" />
             </div>

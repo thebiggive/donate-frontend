@@ -1,6 +1,6 @@
 {
   "name": "@biggive/components",
-  "version": "1.0.97",
+  "version": "1.0.111",
   "description": "Big Give Components",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
@@ -33,18 +33,15 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@angular/cli": "^14.2.7",
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@fortawesome/free-brands-svg-icons": "^6.1.2",
     "@fortawesome/free-solid-svg-icons": "^6.1.2",
     "@fortawesome/pro-duotone-svg-icons": "^6.1.2",
     "@fortawesome/pro-regular-svg-icons": "^6.1.2",
     "@fortawesome/pro-solid-svg-icons": "^6.1.2",
-    "@stencil/core": "^2.13.0",
-    "ng-packagr": "^14.2.2"
+    "@stencil/core": "^2.13.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^14.2.7",
     "@babel/core": "^7.18.9",
     "@stencil/angular-output-target": "^0.4.0",
     "@stencil/eslint-plugin": "^0.4.0",
@@ -66,7 +63,9 @@
     "jest-cli": "^27.4.5",
     "lint-staged": "^13.0.3",
     "prettier": "2.7.1",
-    "puppeteer": "^15.4.0"
+    "puppeteer": "^15.4.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "license": "MIT"
 }
