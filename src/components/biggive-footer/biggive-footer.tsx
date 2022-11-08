@@ -1,4 +1,4 @@
-import {Component, Element, getAssetPath, h} from '@stencil/core';
+import { Component, Element, getAssetPath, h } from '@stencil/core';
 
 @Component({
   tag: 'biggive-footer',
