@@ -15,9 +15,7 @@ describe('biggive-header', () => {
               <div class="social-icon-wrap">
                 <slot name="social-icons"></slot>
               </div>
-              <nav class="nav nav-secondary">
-                <ul></ul>
-              </nav>
+              <nav class="nav nav-secondary"></nav>
             </div>
             <div class="row row-bottom">
               <div class="logo-wrap">
@@ -31,7 +29,7 @@ describe('biggive-header', () => {
                  </a>
               </div>
               <div class="nav-toggle"></div>
-              <nav class="nav nav-primary" data-visible="false"><ul></ul></nav>
+              <nav class="nav nav-primary" data-visible="false"></nav>
             </div>
           </header>
         </mock:shadow-root>
