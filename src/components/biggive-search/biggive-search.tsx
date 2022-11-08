@@ -67,16 +67,16 @@ export class BigGiveSearch {
                 type="text"
                 value={this.searchText}
                 placeholder={this.placeholderText}
-                onInput={event => this.handleSearchTextChanged(event)}
-                onKeyDown={event => this.handleEnterPressed(event)}
+                onInput={this.handleSearchTextChanged}
+                onKeyDown={this.handleEnterPressed}
               />
 
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon" id="x-icon" viewBox="0 0 512 512" onClick={() => this.clearSearchText()}>
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" id="x-icon" viewBox="0 0 512 512" onClick={this.clearSearchText}>
                 <path d={faX.icon[4].toString()} />
               </svg>
             </div>
 
-            <biggive-button label={this.buttonText} onClick={() => this.handleSearchButtonPressed()} />
+            <biggive-button label={this.buttonText} onClick={this.handleSearchButtonPressed} />
           </div>
           <div class="triangle triangle-after"></div>
         </div>

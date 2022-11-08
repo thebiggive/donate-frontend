@@ -8,28 +8,21 @@ import { Component, Element, getAssetPath, h } from '@stencil/core';
 export class BiggiveFooter {
   @Element() host: HTMLBiggiveFooterElement;
 
-  getMenuUlContents(slotName: string) {
-    const navItems = [];
-    const node = this.host.querySelector(`[slot="${slotName}"]`);
+  appendMenu(menuName: string) {
+    var node = this.host.querySelector(`[slot="${menuName}"]`);
     if (node != null) {
-      node.querySelectorAll('li').forEach(el => {
-        navItems.push(
-          <li>
-            <a href={el.firstElementChild.getAttribute('href')}>{el.innerText}</a>
-          </li>,
-        );
-      });
+      this.host.shadowRoot.querySelector(`nav.${menuName}`).appendChild(node);
     }
+  }
 
-    return navItems;
+  componentDidRender() {
+    this.appendMenu('nav-primary');
+    this.appendMenu('nav-secondary');
+    this.appendMenu('nav-tertiary');
+    this.appendMenu('nav-postscript');
   }
 
   render() {
-    const navPrimary = this.getMenuUlContents('nav-primary');
-    const navSecondary = this.getMenuUlContents('nav-secondary');
-    const navTertiary = this.getMenuUlContents('nav-tertiary');
-    const navPostscript = this.getMenuUlContents('nav-postscript');
-
     return (
       <footer class="footer">
         <div class="row row-top">
@@ -37,21 +30,18 @@ export class BiggiveFooter {
             <h5>
               <slot name="nav-primary-title"></slot>
             </h5>
-            <ul>{navPrimary}</ul>
           </nav>
 
           <nav class="nav nav-secondary">
             <h5>
               <slot name="nav-secondary-title"></slot>
             </h5>
-            <ul>{navSecondary}</ul>
           </nav>
 
           <nav class="nav nav-tertiary">
             <h5>
               <slot name="nav-tertiary-title"></slot>
             </h5>
-            <ul>{navTertiary}</ul>
           </nav>
 
           <div class="button-wrap">
@@ -64,9 +54,7 @@ export class BiggiveFooter {
           <div class="postscript-wrap">
             <img class="fr-logo" src={getAssetPath('../assets/images/fundraising-regulator.png')} />
 
-            <nav class="nav nav-postscript">
-              <ul>{navPostscript}</ul>
-            </nav>
+            <nav class="nav nav-postscript"></nav>
           </div>
 
           <div class="social-icon-wrap">

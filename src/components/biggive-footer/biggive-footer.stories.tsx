@@ -23,6 +23,10 @@ const Template = () => `
           <li><a href="#">Contact us</a></li>
           <li><a href="#">Charity login</a></li>
         </ul>
+        <ul slot="nav-postscript">
+          <li><a href="#">Terms and conditions</a></li>
+          <li><a href="#">Privacy policy</a></li>
+        </ul>
         <div slot="social-icons">
         <biggive-social-icon service="Facebook" url="https://www.facebook.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
         <biggive-social-icon service="Twitter" url="https://www.twitter.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
