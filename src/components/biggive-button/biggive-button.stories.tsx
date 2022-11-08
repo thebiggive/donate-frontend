@@ -39,10 +39,10 @@ export default {
 
 const Template = args => `
     <biggive-button
-      space-below=${args.spaceBelow}
+      space-below="${args.spaceBelow}"
       colour-scheme="${args.colourScheme}"
-      label=${args.label}
-      url=${args.url}
+      label="${args.label}"
+      url="${args.url}"
       full-width=${args.fullWidth}
       size=${args.size}
       rounded=${args.rounded}

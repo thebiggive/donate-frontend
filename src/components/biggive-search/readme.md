@@ -51,6 +51,19 @@ the parent component).
 | `doSearch` | This event `doSearch` event is emitted and propogates to the parent component which handles it | `CustomEvent<string>` |
 
 
+## Dependencies
+
+### Depends on
+
+- [biggive-button](../biggive-button)
+
+### Graph
+```mermaid
+graph TD;
+  biggive-search --> biggive-button
+  style biggive-search fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*
