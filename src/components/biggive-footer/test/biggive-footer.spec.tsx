@@ -30,13 +30,18 @@ describe('biggive-footer', () => {
 
 
           <div class="button-wrap">
-            <biggive-button colour-scheme="white" url="#" label="Donor login"></biggive-button>
-            <biggive-button colour-scheme="white" url="#" label="For charities"></biggive-button>
-            <biggive-button colour-scheme="white" url="#" label="For funders"></biggive-button>
+            <biggive-button colour-scheme="white" url="https://www.thebiggive.org.uk/s/charities" label="For charities"></biggive-button>
+            <biggive-button colour-scheme="white" url="https://www.thebiggive.org.uk/s/philanthropists" label="For funders"></biggive-button>
           </div>
         </div>
 
         <div class="row row-bottom">
+          <div class="postscript-wrap">
+            <img class="fr-logo" src="/assets/images/fundraising-regulator.png">
+            <nav class="nav nav-postscript">
+              <ul></ul>
+            </nav>
+          </div>
           <div class="social-icon-wrap">
             <slot name="social-icons"></slot>
           </div>
