@@ -31,7 +31,7 @@ describe('biggive-campaign-card-filter-grid', () => {
           <div class="sort-filter-wrap">
             <div class="sort-wrap">
              <biggive-form-field-select id="sort-by" placeholder="Sort by">
-               <biggive-form-field-select-option label="Most raised" value="mostRaised"></biggive-form-field-select-option>
+               <biggive-form-field-select-option label="Most raised" value="amountRaised"></biggive-form-field-select-option>
                <biggive-form-field-select-option label="Match funds remaining" value="matchFundsRemaining"></biggive-form-field-select-option>
               </biggive-form-field-select>
             </div>
