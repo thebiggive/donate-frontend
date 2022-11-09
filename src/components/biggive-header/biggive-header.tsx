@@ -31,14 +31,14 @@ export class BiggiveHeader {
 
   appendMenu(menuName: string) {
     var node = this.host.querySelector(`[slot="${menuName}"]`);
-    if (node != null) {
+    if (node !== null) {
       this.host.shadowRoot.querySelector(`nav.${menuName}`).appendChild(node);
     }
   }
 
   componentDidRender() {
     this.appendMenu('nav-primary');
-    this.appendMenu('nav-secondry');
+    this.appendMenu('nav-secondary');
   }
 
   render() {
