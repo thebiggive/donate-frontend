@@ -18,7 +18,7 @@ export class BiggiveHeader {
    */
   @Prop() logoUrl: string = '/';
 
-  toggleNav(event) {
+  private toggleNav = (event: any) => {
     var nav = this.host.shadowRoot.querySelector('.nav-primary');
     if (nav.getAttribute('data-visible') == 'true') {
       event.target.classList.remove('active');
@@ -27,7 +27,7 @@ export class BiggiveHeader {
       event.target.classList.add('active');
       nav.setAttribute('data-visible', 'true');
     }
-  }
+  };
 
   componentDidRender() {
     var node = null;
@@ -66,7 +66,7 @@ export class BiggiveHeader {
               </svg>
             </a>
           </div>
-          <div class="nav-toggle" onClick={event => this.toggleNav(event)}></div>
+          <div class="nav-toggle" onClick={this.toggleNav}></div>
           <nav class="nav nav-primary" data-visible="false"></nav>
         </div>
       </header>

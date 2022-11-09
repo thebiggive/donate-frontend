@@ -30,17 +30,17 @@ export class BiggiveFormFieldSelectOption {
    */
   @Prop() value: string = null;
 
-  optionSelectHandler(event) {
+  private optionSelected = (event: any) => {
     this.selectedValue = event.target.getAttribute('data-value');
     this.selectedLabel = event.target.innerText;
 
     var keyValuePair = { value: this.selectedValue, label: this.selectedLabel };
     this.doOptionSelect.emit(keyValuePair);
-  }
+  };
 
   render() {
     return (
-      <div class="option" data-value={this.value} onClick={event => this.optionSelectHandler(event)}>
+      <div class="option" data-value={this.value} onClick={this.optionSelected}>
         {this.label}
       </div>
     );

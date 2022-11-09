@@ -21,9 +21,9 @@ export class BigGiveSearch {
 
   @State() searchText: string = null;
 
-  private handleSearchTextChanged(event) {
+  private handleSearchTextChanged = (event: any) => {
     this.searchText = event.target.value;
-  }
+  };
 
   /**
    * Defines the text displayed as the placeholder in the input field
@@ -36,15 +36,15 @@ export class BigGiveSearch {
    */
   @Prop() buttonText: string;
 
-  private handleSearchButtonPressed() {
+  private handleSearchButtonPressed = () => {
     this.doSearch.emit(this.searchText);
-  }
+  };
 
-  private handleEnterPressed(ev: KeyboardEvent) {
+  private handleEnterPressed = (ev: KeyboardEvent) => {
     if (ev.key === 'Enter') {
       this.doSearch.emit(this.searchText);
     }
-  }
+  };
 
   clearSearchText = () => {
     this.searchText = '';
@@ -63,20 +63,14 @@ export class BigGiveSearch {
                 <path d={faMagnifyingGlass.icon[4].toString()} />
               </svg>
 
-              <input
-                type="text"
-                value={this.searchText}
-                placeholder={this.placeholderText}
-                onInput={event => this.handleSearchTextChanged(event)}
-                onKeyDown={event => this.handleEnterPressed(event)}
-              />
+              <input type="text" value={this.searchText} placeholder={this.placeholderText} onInput={this.handleSearchTextChanged} onKeyDown={this.handleEnterPressed} />
 
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon" id="x-icon" viewBox="0 0 512 512" onClick={() => this.clearSearchText()}>
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" id="x-icon" viewBox="0 0 512 512" onClick={this.clearSearchText}>
                 <path d={faX.icon[4].toString()} />
               </svg>
             </div>
 
-            <biggive-button label={this.buttonText} onClick={() => this.handleSearchButtonPressed()} />
+            <biggive-button label={this.buttonText} onClick={this.handleSearchButtonPressed} />
           </div>
           <div class="triangle triangle-after"></div>
         </div>
