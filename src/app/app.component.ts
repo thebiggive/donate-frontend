@@ -17,8 +17,6 @@ import { NavigationService } from './navigation.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  // public fontsLoaded = false;
-
   constructor(
     private analyticsService: AnalyticsService,
     private donationService: DonationService,
@@ -41,12 +39,6 @@ export class AppComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.analyticsService.init();
       this.getSiteControlService.init();
-
-      // this.fontsLoaded = false;
-      // globalThis.document.fonts.ready.then(() => this.fontsLoaded = true);
-    } else {
-      // Server renders shouldn't hide elements regardless of this.
-      // this.fontsLoaded = true;
     }
 
     // This service needs to be injected app-wide and this line is here, because
