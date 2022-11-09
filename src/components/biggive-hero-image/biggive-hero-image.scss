@@ -15,7 +15,7 @@
   &.colour-scheme-black { color: $colour-black; }
   .sleeve {
     @include flex-container-row();
-    max-width: $max-page-width;
+    max-width: $screen-desktop-max;
     margin-left: auto;
     margin-right: auto;
   }  
@@ -69,11 +69,6 @@
 
 }
 
-
-
-
-
-
 @media screen and (max-width: $screen-tablet-max) {
   .container {
     .sleeve {
@@ -91,5 +86,12 @@
   }
 }
 
-
-
+@media screen and (max-width: calc($screen-desktop-max + 25px)) and (min-width: $screen-tablet-max) {
+  .container {
+    .sleeve {
+      .content-wrap {
+        padding-left: $spacer-6;
+      }
+    }
+  }
+}
