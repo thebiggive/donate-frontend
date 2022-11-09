@@ -1,5 +1,6 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -58,7 +59,7 @@ import { getCurrencyMaxValidator } from '../validators/currency-max';
     TimeLeftPipe,
   ],
 })
-export class BuyCreditsComponent implements AfterContentInit, OnInit {
+export class BuyCreditsComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
   addressSuggestions: GiftAidAddressSuggestion[] = [];
   isLoggedIn: boolean = false;
@@ -93,19 +94,18 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     private campaignService: CampaignService,
     private donationService: DonationService,
     private identityService: IdentityService,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private postcodeService: PostcodeService,
-    ) { }
+  ) {}
 
   ngOnInit(): void {
-    const idAndJWT = this.identityService.getIdAndJWT();
-    if (idAndJWT !== undefined) {
-      if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
-        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+    if (isPlatformBrowser(this.platformId)) {
+      const idAndJWT = this.identityService.getIdAndJWT();
+      if (idAndJWT !== undefined) {
+        if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
+          this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+        }
       }
-    }
-
-    else {
-      this.showLoginDialog();
     }
 
     const formGroups: {
