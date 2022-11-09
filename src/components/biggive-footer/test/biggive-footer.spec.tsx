@@ -15,17 +15,14 @@ describe('biggive-footer', () => {
 
           <nav class="nav nav-primary">
             <h5><slot name="nav-primary-title"></slot></h5>
-            <ul></ul>
           </nav>
 
           <nav class="nav nav-secondary">
             <h5><slot name="nav-secondary-title"></slot></h5>
-            <ul></ul>
           </nav>
 
           <nav class="nav nav-tertiary">
             <h5><slot name="nav-tertiary-title"></slot></h5>
-            <ul></ul>
           </nav>
 
 
@@ -38,9 +35,7 @@ describe('biggive-footer', () => {
         <div class="row row-bottom">
           <div class="postscript-wrap">
             <img class="fr-logo" src="/assets/images/fundraising-regulator.png">
-            <nav class="nav nav-postscript">
-              <ul></ul>
-            </nav>
+            <nav class="nav nav-postscript"></nav>
           </div>
           <div class="social-icon-wrap">
             <slot name="social-icons"></slot>

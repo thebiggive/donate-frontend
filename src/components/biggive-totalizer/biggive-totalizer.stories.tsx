@@ -58,10 +58,28 @@ const Template = args => `
               primary-text-colour="${args.primaryTextColour}"
               secondary-colour="${args.secondaryColour}"
               secondary-text-colour="${args.secondaryTextColour}"
-              currency-code="${args.currencyCode}"
-              including-gift-aid="${args.includingGiftAid}"
-              total-match-funds="${args.totalMatchFunds}"
-              total-raised="${args.totalRaised}"
+              main-message="${args.mainMessage}">
+
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+
             </biggive-totalizer>
             `;
 
@@ -72,8 +90,5 @@ TotalizerComponent.args = {
   primaryTextColour: 'white',
   secondaryColour: 'secondary',
   secondaryTextColour: 'black',
-  currencyCode: 'GBP',
-  includingGiftAid: true,
-  totalMatchFunds: 1000,
-  totalRaised: 500,
+  mainMessage: '£500 raised inc. Gift Aid',
 };

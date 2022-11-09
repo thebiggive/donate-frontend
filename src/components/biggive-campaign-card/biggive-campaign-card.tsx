@@ -102,6 +102,7 @@ export class BiggiveCampaignCard {
       style: 'currency',
       currency: currencyCode,
       currencyDisplay: 'symbol',
+      minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
   }

@@ -839,13 +839,9 @@ export namespace Components {
     }
     interface BiggiveTotalizer {
         /**
-          * e.g. 'GBP'.
+          * Primary message
          */
-        "currencyCode": string;
-        /**
-          * Include GiftAid
-         */
-        "includingGiftAid": boolean;
+        "mainMessage": string;
         /**
           * Primary banner colour
          */
@@ -866,14 +862,16 @@ export namespace Components {
           * Space below component
          */
         "spaceBelow": number;
+    }
+    interface BiggiveTotalizerTickerItem {
         /**
-          * Total match funds.
+          * Figure
          */
-        "totalMatchFunds": number;
+        "figure": string;
         /**
-          * Total raised.
+          * Figure
          */
-        "totalRaised": number;
+        "label": string;
     }
     interface BiggiveVideo {
         /**
@@ -1195,6 +1193,12 @@ declare global {
         prototype: HTMLBiggiveTotalizerElement;
         new (): HTMLBiggiveTotalizerElement;
     };
+    interface HTMLBiggiveTotalizerTickerItemElement extends Components.BiggiveTotalizerTickerItem, HTMLStencilElement {
+    }
+    var HTMLBiggiveTotalizerTickerItemElement: {
+        prototype: HTMLBiggiveTotalizerTickerItemElement;
+        new (): HTMLBiggiveTotalizerTickerItemElement;
+    };
     interface HTMLBiggiveVideoElement extends Components.BiggiveVideo, HTMLStencilElement {
     }
     var HTMLBiggiveVideoElement: {
@@ -1247,6 +1251,7 @@ declare global {
         "biggive-tabbed-content": HTMLBiggiveTabbedContentElement;
         "biggive-text-input": HTMLBiggiveTextInputElement;
         "biggive-totalizer": HTMLBiggiveTotalizerElement;
+        "biggive-totalizer-ticker-item": HTMLBiggiveTotalizerTickerItemElement;
         "biggive-video": HTMLBiggiveVideoElement;
         "biggive-video-feature": HTMLBiggiveVideoFeatureElement;
     }
@@ -2107,13 +2112,9 @@ declare namespace LocalJSX {
     }
     interface BiggiveTotalizer {
         /**
-          * e.g. 'GBP'.
+          * Primary message
          */
-        "currencyCode"?: string;
-        /**
-          * Include GiftAid
-         */
-        "includingGiftAid"?: boolean;
+        "mainMessage"?: string;
         /**
           * Primary banner colour
          */
@@ -2134,14 +2135,16 @@ declare namespace LocalJSX {
           * Space below component
          */
         "spaceBelow"?: number;
+    }
+    interface BiggiveTotalizerTickerItem {
         /**
-          * Total match funds.
+          * Figure
          */
-        "totalMatchFunds"?: number;
+        "figure"?: string;
         /**
-          * Total raised.
+          * Figure
          */
-        "totalRaised"?: number;
+        "label"?: string;
     }
     interface BiggiveVideo {
         /**
@@ -2251,6 +2254,7 @@ declare namespace LocalJSX {
         "biggive-tabbed-content": BiggiveTabbedContent;
         "biggive-text-input": BiggiveTextInput;
         "biggive-totalizer": BiggiveTotalizer;
+        "biggive-totalizer-ticker-item": BiggiveTotalizerTickerItem;
         "biggive-video": BiggiveVideo;
         "biggive-video-feature": BiggiveVideoFeature;
     }
@@ -2298,6 +2302,7 @@ declare module "@stencil/core" {
             "biggive-tabbed-content": LocalJSX.BiggiveTabbedContent & JSXBase.HTMLAttributes<HTMLBiggiveTabbedContentElement>;
             "biggive-text-input": LocalJSX.BiggiveTextInput & JSXBase.HTMLAttributes<HTMLBiggiveTextInputElement>;
             "biggive-totalizer": LocalJSX.BiggiveTotalizer & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerElement>;
+            "biggive-totalizer-ticker-item": LocalJSX.BiggiveTotalizerTickerItem & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerTickerItemElement>;
             "biggive-video": LocalJSX.BiggiveVideo & JSXBase.HTMLAttributes<HTMLBiggiveVideoElement>;
             "biggive-video-feature": LocalJSX.BiggiveVideoFeature & JSXBase.HTMLAttributes<HTMLBiggiveVideoFeatureElement>;
         }

@@ -29,18 +29,16 @@ export class BiggiveHeader {
     }
   };
 
+  appendMenu(menuName: string) {
+    var node = this.host.querySelector(`[slot="${menuName}"]`);
+    if (node != null) {
+      this.host.shadowRoot.querySelector(`nav.${menuName}`).appendChild(node);
+    }
+  }
+
   componentDidRender() {
-    var node = null;
-
-    node = this.host.querySelector('[slot="nav-primary"]');
-    if (node != null) {
-      this.host.shadowRoot.querySelector('nav.nav-primary').appendChild(node);
-    }
-
-    node = this.host.querySelector('[slot="nav-secondary"]');
-    if (node != null) {
-      this.host.shadowRoot.querySelector('nav.nav-secondary').appendChild(node);
-    }
+    this.appendMenu('nav-primary');
+    this.appendMenu('nav-secondry');
   }
 
   render() {
