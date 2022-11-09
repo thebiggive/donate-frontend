@@ -40,9 +40,16 @@ export class BiggiveTotalizer {
     var nodes = this.host.querySelectorAll('biggive-totalizer-ticker-item');
     if (nodes.length > 0) {
       for (var prop in nodes) {
-        this.host.shadowRoot.querySelector('.ticker-wrap .sleeve').appendChild(nodes[prop].shadowRoot.querySelector('.ticker-item'));
+        if (nodes[prop].shadowRoot != null) {
+          this.host.shadowRoot.querySelector('.ticker-wrap .sleeve').appendChild(nodes[prop].shadowRoot.querySelector('.ticker-item'));
+        }
       }
     }
+    var tickerWidth = this.host.shadowRoot.querySelector('.ticker-wrap .sleeve').clientWidth;
+    var duration = tickerWidth / 50;
+    var node: HTMLElement = this.host.shadowRoot.querySelector('.ticker-wrap .sleeve');
+
+    node.style.animationDuration = Math.round(duration) + 's';
   }
 
   render() {
