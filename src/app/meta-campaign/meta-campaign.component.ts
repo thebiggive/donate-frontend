@@ -226,9 +226,10 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   formatAmount(amount: number) {
     //https://stackoverflow.com/questions/149055/how-to-format-numbers-as-currency-strings
-    const formatter = new Intl.NumberFormat('en-US', {
+    const formatter = new Intl.NumberFormat('en-GB', {
       style: 'currency',
       currency: 'GBP',
+      minimumFractionDigits: 0,
       maximumFractionDigits: 0, // (causes 2500.99 to be printed as £2,501)
     });
 
