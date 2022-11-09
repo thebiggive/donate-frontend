@@ -21,6 +21,7 @@ import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
 import { CampaignGroupsService } from '../campaign-groups.service';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 @Component({
   standalone: true,
@@ -75,6 +76,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     private state: TransferState,
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
     private scroller: ViewportScroller,
+    private timeLeftPipe: TimeLeftPipe,
   ) {
     route.params.pipe().subscribe(params => {
       this.campaignSlug = params.campaignSlug;
@@ -133,7 +135,21 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       'Match Funded'
     ]
 
-    this.tickerItems = [
+    if (this.campaignInFuture) {
+      this.tickerItems.push({
+        label: 'remaining to start',
+        figure: this.timeLeftPipe.transform(this.campaign.startDate),
+      });
+    }
+
+    else if (this.campaignOpen) {
+      this.tickerItems.push({
+        label: 'remaining till close',
+        figure: this.timeLeftPipe.transform(this.campaign.endDate),
+      });
+    }
+
+    this.tickerItems.push(...[
       {
         label: 'Total Raised',
         figure: this.formatAmount(this.campaign.amountRaised),
@@ -146,7 +162,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
         label: 'Match Funds Remaining',
         figure: this.formatAmount(this.campaign.matchFundsRemaining),
       },
-    ];
+    ]);
 
     if (this.campaign.campaignCount) {
       this.tickerItems.push(
