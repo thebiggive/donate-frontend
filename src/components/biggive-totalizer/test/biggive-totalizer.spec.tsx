@@ -13,20 +13,9 @@ describe('biggive-totalizer', () => {
           <div class="container space-below-0">
              <div class="sleeve">
                <div class="banner">
-                 <div class="background-colour-secondary text-colour-black total-raised-wrap">
-                   <span class="currency">
-                     –
-                   </span>
-                   raised
-                   <span>
-                     inc. Gift Aid
-                   </span>
-                 </div>
-                 <div class="background-colour-primary text-colour-white total-matched-funds-wrap">
-                   <span class="currency">
-                     –
-                   </span>
-                   total match funds
+                 <div class="background-colour-secondary main-message-wrap text-colour-black"></div>
+                 <div class="background-colour-primary text-colour-white ticker-wrap">
+                   <div class="sleeve"></div>
                  </div>
                </div>
              </div>

@@ -4,13 +4,25 @@
 }
 
 
+@keyframes ticker {
+  0% {
+    transform: translate3d(0, 0, 0);
+    visibility: visible;
+  }
+
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
 .container {
   position: absolute;
   left: 0;
   right: 0;
   z-index: 1;
-  .total-raised-wrap {
+  .main-message-wrap {
     position: absolute;
+    z-index: 1;
     padding: $spacer-2 $spacer-4;
     left: 0;
     top: 0;
@@ -18,12 +30,24 @@
     font-weight: 600;
     max-width: 33.3%;
   }
-  .total-matched-funds-wrap {
-    text-align: right;
-    padding: $spacer-2 $spacer-4 $spacer-2 50%;
+  .ticker-wrap {
+    padding: $spacer-2 0 $spacer-2 0;
+    min-height: 17px;
     @include font-size-small();
-    .currency {
-      font-weight: bold;
+    overflow: hidden;
+    position: relative;
+    .sleeve {
+      position: absolute;
+      left: 100%;
+      display: flex;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+      animation-name: ticker;
+      animation-duration: 30s;
+      .ticker-item {
+        white-space: nowrap;
+        padding: 0 $spacer-3;
+      }
     }
   }
 }
@@ -31,7 +55,7 @@
 @media screen and (max-width: $screen-mobile-max) {
 
   .container {
-    .total-raised-wrap {
+    .main-message-wrap {
       @include font-size-medium();
     }
   }
