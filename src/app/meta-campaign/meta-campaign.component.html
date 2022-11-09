@@ -7,8 +7,8 @@
     secondary-text-colour="black"
     currency-code="GBP"
     include-gift-aid="true"
-    [totalMatchFunds]="campaign.matchFundsTotal"
-    [totalRaised]="campaign.amountRaised">
+    [mainMessage]="formatAmount(campaign.amountRaised)  + ' raised inc. Gift aid'"
+    [tickerItems]="tickerItems">
   </biggive-totalizer>
 
   <biggive-hero-image

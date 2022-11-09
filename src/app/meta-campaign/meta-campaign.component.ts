@@ -21,6 +21,7 @@ import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
 import { CampaignGroupsService } from '../campaign-groups.service';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 @Component({
   standalone: true,
@@ -33,15 +34,22 @@ import { CampaignGroupsService } from '../campaign-groups.service';
     MatProgressSpinnerModule,
     OptimisedImagePipe,
   ],
+  providers: [
+    TimeLeftPipe
+  ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
   public campaign: Campaign;
+  public campaignInFuture: boolean; // Does not imply 0 raised, see HTML comment.
+  public campaignOpen: boolean;
   public children: CampaignSummary[] = [];
+  public durationInDays: number;
   public filterError = false;
   public fund?: Fund;
   public fundSlug: string;
   public hasMore = true;
   public loading = false; // Server render gets initial result set; set true when filters change.
+  public tickerItems: { label: string, figure: string }[] = [];
 
   beneficiaryOptions: string[] = [];
   categoryOptions: string[] = [];
@@ -71,6 +79,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     private state: TransferState,
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
     private scroller: ViewportScroller,
+    private timeLeftPipe: TimeLeftPipe,
   ) {
     route.params.pipe().subscribe(params => {
       this.campaignSlug = params.campaignSlug;
@@ -118,12 +127,54 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       });
     }
 
+    this.campaignInFuture = CampaignService.isInFuture(this.campaign);
+    this.campaignOpen = CampaignService.isOpenForDonations(this.campaign);
+    this.durationInDays = Math.floor((new Date(this.campaign.endDate).getTime() - new Date(this.campaign.startDate).getTime()) / 86400000);
+
     this.beneficiaryOptions = CampaignGroupsService.getBeneficiaryNames();
     this.categoryOptions = CampaignGroupsService.getCategoryNames();
     this.countryOptions = CampaignGroupsService.getCountries();
     this.fundingOptions = [
       'Match Funded'
     ]
+
+    if (this.campaignInFuture) {
+      this.tickerItems.push({
+        label: 'remaining to start',
+        figure: this.timeLeftPipe.transform(this.campaign.startDate),
+      });
+    }
+
+    else if (this.campaignOpen) {
+      this.tickerItems.push({
+        label: 'remaining till close',
+        figure: this.timeLeftPipe.transform(this.campaign.endDate),
+      });
+    }
+
+    this.tickerItems.push(...[
+      {
+        label: 'Total Raised',
+        figure: this.formatAmount(this.campaign.amountRaised),
+      },
+      {
+        label: 'Total Match Funds',
+        figure: this.formatAmount(this.campaign.matchFundsTotal),
+      },
+      {
+        label: 'Match Funds Remaining',
+        figure: this.formatAmount(this.campaign.matchFundsRemaining),
+      },
+    ]);
+
+    if (this.campaign.campaignCount) {
+      this.tickerItems.push(
+        {
+          label: 'Participating Campaigns',
+          figure: this.campaign.campaignCount.toString(),
+        }
+      )
+    }
   }
 
   ngAfterViewChecked() {
@@ -171,6 +222,17 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     }
 
     return (childCampaign.amountRaised / childCampaign.target) * 100;
+  }
+
+  formatAmount(amount: number) {
+    //https://stackoverflow.com/questions/149055/how-to-format-numbers-as-currency-strings
+    const formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'GBP',
+      maximumFractionDigits: 0, // (causes 2500.99 to be printed as £2,501)
+    });
+
+    return formatter.format(amount);
   }
 
   private loadMoreForCurrentSearch() {
