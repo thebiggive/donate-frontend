@@ -43,10 +43,10 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   public hasMore = true;
   public loading = false; // Server render gets initial result set; set true when filters change.
 
-  beneficiaryOptions: string[];
-  categoryOptions: string[];
-  countryOptions: string[];
-  fundingOptions: string[];
+  beneficiaryOptions: string[] = [];
+  categoryOptions: string[] = [];
+  countryOptions: string[] = [];
+  fundingOptions: string[] = [];
 
   private campaignId: string;
   private campaignSlug: string;

@@ -15,6 +15,7 @@ import { FooterComponent } from '../footer/footer.component';
   ],
 })
 export class NavigationComponent implements OnInit {
+  // TODO we should probably close the new kind on nav events as we used to?
   opened = false;
 
   constructor(private router: Router) {
@@ -24,5 +25,13 @@ export class NavigationComponent implements OnInit {
     this.router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationStart),
     ).subscribe(() => this.opened = false);
+  }
+
+  /**
+   * Ensure browsers don't try to navigate to non-targets. Top level items with a sub-menu
+   * work on hover using pure CSS only.
+   */
+  noNav(event: Event) {
+    event.preventDefault();
   }
 }
