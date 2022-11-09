@@ -21,9 +21,9 @@ export class BigGiveSearch {
 
   @State() searchText: string = null;
 
-  private handleSearchTextChanged(event) {
+  private handleSearchTextChanged = (event: any) => {
     this.searchText = event.target.value;
-  }
+  };
 
   /**
    * Defines the text displayed as the placeholder in the input field
@@ -36,15 +36,15 @@ export class BigGiveSearch {
    */
   @Prop() buttonText: string;
 
-  private handleSearchButtonPressed() {
+  private handleSearchButtonPressed = () => {
     this.doSearch.emit(this.searchText);
-  }
+  };
 
-  private handleEnterPressed(ev: KeyboardEvent) {
+  private handleEnterPressed = (ev: KeyboardEvent) => {
     if (ev.key === 'Enter') {
       this.doSearch.emit(this.searchText);
     }
-  }
+  };
 
   clearSearchText = () => {
     this.searchText = '';

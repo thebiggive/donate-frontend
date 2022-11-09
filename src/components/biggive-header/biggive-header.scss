@@ -41,7 +41,7 @@
           background-position: left center;;
         }
       }
-    }  
+    }
   }
 }
 
@@ -109,9 +109,16 @@
   ul {
     li {
       position: relative;
+
+      // Don't make menu section hover-only links show a pointer cursor.
+      a[href=""]:hover {
+        cursor: default;
+      }
+
       a:hover {
         color: $colour-primary;
       }
+
       ul {
         display: none;
         position: absolute;
@@ -210,10 +217,10 @@
             }
           }
           &:hover ul {
-            display: block;  
+            display: block;
           }
         }
       }
     }
-  } 
+  }
 }
