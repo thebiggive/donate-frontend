@@ -36,14 +36,7 @@ export class BiggiveTotalizer {
    */
   @Prop() mainMessage: string = null;
 
-  componentDidRender() {
-    var nodes = this.host.querySelectorAll('biggive-totalizer-ticker-item');
-    if (nodes.length > 0) {
-      for (var prop in nodes) {
-        this.host.shadowRoot.querySelector('.ticker-wrap .sleeve').appendChild(nodes[prop].shadowRoot.querySelector('.ticker-item'));
-      }
-    }
-  }
+  @Prop() tickerItems: { label: string; figure: string }[] = [];
 
   render() {
     return (
@@ -52,7 +45,11 @@ export class BiggiveTotalizer {
           <div class="banner">
             <div class={'main-message-wrap background-colour-' + this.secondaryColour + ' text-colour-' + this.secondaryTextColour}>{this.mainMessage}</div>
             <div class={'ticker-wrap background-colour-' + this.primaryColour + ' text-colour-' + this.primaryTextColour}>
-              <div class="sleeve"></div>
+              <div class="sleeve">
+                {this.tickerItems.length === 0
+                  ? undefined
+                  : this.tickerItems.map(tickerItem => <biggive-totalizer-ticker-item figure={tickerItem.figure} label={tickerItem.label}></biggive-totalizer-ticker-item>)}
+              </div>
             </div>
           </div>
         </div>
