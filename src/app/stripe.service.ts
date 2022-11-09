@@ -56,8 +56,8 @@ export class StripeService {
     if (this.stripe) {
       this.elements = this.stripe.elements({fonts: [
         {
-          family: 'Maven Pro',
-          src: `url('${environment.donateUriPrefix}/d/fonts/maven-pro-latin-400.woff2') format('woff2')`,
+          family: 'Euclid Triangle',
+          src: `url('${environment.donateUriPrefix}/d/EuclidTriangle-Regular.1d45abfd25720872.woff2') format('woff2')`,
           weight: '400',
         },
       ]});
@@ -191,7 +191,7 @@ export class StripeService {
       iconStyle: 'solid',
       style: {
         base: {
-          fontFamily: 'Maven Pro, sans-serif',
+          fontFamily: 'Euclid Triangle, sans-serif',
           fontSize: '14px',
         },
       },
