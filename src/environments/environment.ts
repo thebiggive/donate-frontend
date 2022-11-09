@@ -13,12 +13,12 @@ export const environment: Environment = {
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateGlobalUriPrefix: 'http://localhost:4200',
   donateUriPrefix: 'http://localhost:4200',
-  donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
+  donationsApiPrefix: 'http://localhost:30030/v1',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
   googleOptimizeId: null,
   // googleOptimizeId: 'OPT-NV3NHD3', // Bring back when we have an experiment to run
-  identityApiPrefix: 'https://identity-staging.thebiggivetest.org.uk/v1',
+  identityApiPrefix: 'http://localhost:30050/v1',
   identityEnabled: true,
   maximumDonationAmount: 25000,
   minimumCreditAmount: 500,
