@@ -34,6 +34,9 @@ import { TimeLeftPipe } from '../time-left.pipe';
     MatProgressSpinnerModule,
     OptimisedImagePipe,
   ],
+  providers: [
+    TimeLeftPipe
+  ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
   public campaign: Campaign;
