@@ -33,7 +33,6 @@
 - [biggive-button](../biggive-button)
 - [biggive-form-field-select](../biggive-form-field-select)
 - [biggive-form-field-select-option](../biggive-form-field-select-option)
-- [biggive-popup](../biggive-popup)
 
 ### Graph
 ```mermaid
@@ -41,7 +40,6 @@ graph TD;
   biggive-campaign-card-filter-grid --> biggive-button
   biggive-campaign-card-filter-grid --> biggive-form-field-select
   biggive-campaign-card-filter-grid --> biggive-form-field-select-option
-  biggive-campaign-card-filter-grid --> biggive-popup
   style biggive-campaign-card-filter-grid fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

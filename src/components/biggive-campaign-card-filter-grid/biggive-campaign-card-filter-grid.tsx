@@ -117,9 +117,9 @@ export class BiggiveCampaignCardFilterGrid {
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   };
 
-  private handleApplyFilterButtonClick = () => {
-    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  };
+  // private handleApplyFilterButtonClick = () => {
+  //   this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+  // };
 
   private handleSearchButtonPressed = () => {
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
@@ -135,9 +135,9 @@ export class BiggiveCampaignCardFilterGrid {
     }
   };
 
-  private handleFilterButtonClick = () => {
-    this.el.shadowRoot.getElementById('filter-popup').open();
-  };
+  // private handleFilterButtonClick = () => {
+  //   this.el.shadowRoot.getElementById('filter-popup').open();
+  // };
 
   render() {
     return (
@@ -170,7 +170,7 @@ export class BiggiveCampaignCardFilterGrid {
               </biggive-form-field-select>
             </div>
 
-            <div class="filter-wrap">
+            {/* <div class="filter-wrap">
               <biggive-button class="filter" onClick={this.handleFilterButtonClick} label="Filters"></biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
@@ -201,7 +201,7 @@ export class BiggiveCampaignCardFilterGrid {
                   <biggive-button label="Apply filters" onClick={this.handleApplyFilterButtonClick} />
                 </div>
               </biggive-popup>
-            </div>
+            </div> */}
           </div>
           <div class="campaign-grid">
             <slot name="campaign-grid"></slot>
