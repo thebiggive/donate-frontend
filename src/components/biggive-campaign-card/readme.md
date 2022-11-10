@@ -10,7 +10,6 @@ in a secondary column alongside more detail about the same campaign.
 
 | Property                     | Attribute                        | Description                                                             | Type     | Default           |
 | ---------------------------- | -------------------------------- | ----------------------------------------------------------------------- | -------- | ----------------- |
-| `banner`                     | `banner`                         | Full URL of a banner image.                                             | `string` | `null`            |
 | `campaignTitle`              | `campaign-title`                 | Display name of the charity's specific time-bound fundraising campaign. | `string` | `null`            |
 | `campaignType`               | `campaign-type`                  | e.g. "Match Funded".                                                    | `string` | `null`            |
 | `donateButtonColourScheme`   | `donate-button-colour-scheme`    | Donate button colour scheme                                             | `string` | `'primary'`       |
