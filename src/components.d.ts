@@ -342,29 +342,13 @@ export namespace Components {
     }
     interface BiggiveCampaignCardFilterGrid {
         /**
-          * JSON array of beneficiary key/values
-         */
-        "beneficiaryOptions": string[];
-        /**
           * Defines the text on the search button
          */
         "buttonText": string;
         /**
-          * JSON array of category key/values
-         */
-        "categoryOptions": string[];
-        /**
-          * JSON array of funding key/values
-         */
-        "fundingOptions": string[];
-        /**
           * Intro
          */
         "intro": string;
-        /**
-          * JSON array of location key/values
-         */
-        "locationOptions": string[];
         /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
@@ -934,10 +918,6 @@ export namespace Components {
          */
         "videoUrl": string;
     }
-}
-export interface BiggiveCampaignCardFilterGridCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLBiggiveCampaignCardFilterGridElement;
 }
 export interface BiggiveFormFieldSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1586,40 +1566,13 @@ declare namespace LocalJSX {
     }
     interface BiggiveCampaignCardFilterGrid {
         /**
-          * JSON array of beneficiary key/values
-         */
-        "beneficiaryOptions"?: string[];
-        /**
           * Defines the text on the search button
          */
         "buttonText"?: string;
         /**
-          * JSON array of category key/values
-         */
-        "categoryOptions"?: string[];
-        /**
-          * JSON array of funding key/values
-         */
-        "fundingOptions"?: string[];
-        /**
           * Intro
          */
         "intro"?: string;
-        /**
-          * JSON array of location key/values
-         */
-        "locationOptions"?: string[];
-        /**
-          * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it
-         */
-        "onDoSearchAndFilterUpdate"?: (event: BiggiveCampaignCardFilterGridCustomEvent<{
-    searchText: string;
-    sortBy: string;
-    filterCategory: string;
-    filterBeneficiary: string;
-    filterLocation: string;
-    filterFunding: string;
-  }>) => void;
         /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
