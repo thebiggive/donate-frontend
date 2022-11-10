@@ -276,6 +276,10 @@ export namespace Components {
     }
     interface BiggiveCampaignCard {
         /**
+          * Full URL of a banner image.
+         */
+        "banner": string;
+        /**
           * Display name of the charity's specific time-bound fundraising campaign.
          */
         "campaignTitle": string;
@@ -1495,6 +1499,10 @@ declare namespace LocalJSX {
         "teaserColour"?: string;
     }
     interface BiggiveCampaignCard {
+        /**
+          * Full URL of a banner image.
+         */
+        "banner"?: string;
         /**
           * Display name of the charity's specific time-bound fundraising campaign.
          */
