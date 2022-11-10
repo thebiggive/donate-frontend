@@ -31,19 +31,14 @@ export class BiggiveCampaignCard {
   @Prop() organisationName: string = null;
 
   /**
-   * e.g. 'GBP'.
-   */
-  @Prop() currencyCode: string;
-
-  /**
    * Label for the primary figure
    */
   @Prop() primaryFigureLabel: string = null;
 
   /**
-   * Amount for the primary figure
+   * Amount for the primary figure, formatted with currency symbol
    */
-  @Prop() primaryFigureAmount: number = null;
+  @Prop() primaryFigureAmount: string = null;
 
   /**
    * Label for the secondary figure
@@ -51,9 +46,9 @@ export class BiggiveCampaignCard {
   @Prop() secondaryFigureLabel: string = null;
 
   /**
-   * Amount for the secondary figure
+   * Amount for the secondary figure, formatted with currency symbol
    */
-  @Prop() secondaryFigureAmount: number = null;
+  @Prop() secondaryFigureAmount: string = null;
 
   /**
    * Progress bar percentage
@@ -90,23 +85,6 @@ export class BiggiveCampaignCard {
    */
   @Prop() moreInfoButtonColourScheme: string = 'clear-primary';
 
-  /**
-   * @returns Whole large currency units (e.g. pounds) formatted with symbol.
-   */
-  private formatCurrency(currencyCode: string, amount: number | null): string {
-    if (amount === null || isNaN(amount)) {
-      return '–';
-    }
-
-    return Intl.NumberFormat('en-GB', {
-      style: 'currency',
-      currency: currencyCode,
-      currencyDisplay: 'symbol',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
-  }
-
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow.toString()}>
@@ -133,11 +111,11 @@ export class BiggiveCampaignCard {
           <div class="meta-wrap">
             <div class="meta-item">
               <span class="label">{this.primaryFigureLabel}</span>
-              <span class="text">{this.formatCurrency(this.currencyCode, this.primaryFigureAmount)}</span>
+              <span class="text">{this.primaryFigureAmount}</span>
             </div>
             <div class="meta-item">
               <span class="label">{this.secondaryFigureLabel}</span>
-              <span class="text">{this.formatCurrency(this.currencyCode, this.secondaryFigureAmount)}</span>
+              <span class="text">{this.secondaryFigureAmount}</span>
             </div>
           </div>
           <div class="progress-bar-wrap">

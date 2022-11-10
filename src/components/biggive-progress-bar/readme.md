@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property       | Attribute       | Description           | Type     | Default     |
-| -------------- | --------------- | --------------------- | -------- | ----------- |
-| `colourScheme` | `colour-scheme` | Colour Scheme         | `string` | `'primary'` |
-| `counter`      | `counter`       | Text                  | `number` | `100`       |
-| `spaceBelow`   | `space-below`   | Space below component | `number` | `0`         |
+| Property       | Attribute       | Description                                                           | Type     | Default     |
+| -------------- | --------------- | --------------------------------------------------------------------- | -------- | ----------- |
+| `colourScheme` | `colour-scheme` | Colour Scheme                                                         | `string` | `'primary'` |
+| `counter`      | `counter`       | Percentage to show + use for CSS width; round before input if desired | `number` | `100`       |
+| `spaceBelow`   | `space-below`   | Space below component                                                 | `number` | `0`         |
 
 
 ## Dependencies
