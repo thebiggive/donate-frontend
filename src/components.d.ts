@@ -807,11 +807,11 @@ export namespace Components {
          */
         "backgroundColour": string;
         /**
-          * Background colour
+          * Icon colour
          */
         "iconColour": string;
         /**
-          * service
+          * Service name
          */
         "service": string;
         /**
@@ -2081,11 +2081,11 @@ declare namespace LocalJSX {
          */
         "backgroundColour"?: string;
         /**
-          * Background colour
+          * Icon colour
          */
         "iconColour"?: string;
         /**
-          * service
+          * Service name
          */
         "service"?: string;
         /**

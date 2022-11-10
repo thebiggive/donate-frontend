@@ -9,7 +9,7 @@ import { FontAwesomeIconsService } from '../../util/fontawesome-icons';
 })
 export class BiggiveSocialIcon {
   /**
-   * service
+   * Service name
    */
   @Prop() service: string = 'Twitter';
 
@@ -19,7 +19,7 @@ export class BiggiveSocialIcon {
   @Prop() backgroundColour: string = 'primary';
 
   /**
-   * Background colour
+   * Icon colour
    */
   @Prop() iconColour: string = 'white';
 
@@ -36,7 +36,7 @@ export class BiggiveSocialIcon {
   render() {
     return (
       <div class={'social-icon-item background-colour-' + this.backgroundColour}>
-        <a href={this.url} target="_blank">
+        <a href={this.url} aria-label={`Big Give on ${this.service}`} target="_blank">
           <svg
             width={this.getSocialIcon().icon[0]}
             height={this.getSocialIcon().icon[1]}
