@@ -59,8 +59,8 @@
       <strong>No more campaigns available</strong>
     </div>
 
-    <mat-spinner *ngIf="loading" color="primary" diameter="30"></mat-spinner>
-    
+    <mat-spinner *ngIf="loading" color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>
+
     <div *ngIf="filterError" tabindex="0">
       <p class="error" aria-live="assertive">
         Could not load the campaign. You might have followed a broken link or lost connectivity.<br />
