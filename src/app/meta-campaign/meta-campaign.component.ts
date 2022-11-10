@@ -3,7 +3,6 @@ import { AfterViewChecked, Component, HostListener, Inject, OnDestroy, OnInit, P
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { IconDefinition } from '@fortawesome/free-brands-svg-icons';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { StorageService } from 'ngx-webstorage-service';
 import { Subscription } from 'rxjs';
@@ -221,7 +220,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       return 100;
     }
 
-    return (childCampaign.amountRaised / childCampaign.target) * 100;
+    return Math.round((childCampaign.amountRaised / childCampaign.target) * 100);
   }
 
   formatAmount(amount: number) {

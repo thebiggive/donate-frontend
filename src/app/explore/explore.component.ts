@@ -126,7 +126,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
       return 100;
     }
 
-    return (childCampaign.amountRaised / childCampaign.target) * 100;
+    return Math.round((childCampaign.amountRaised / childCampaign.target) * 100);
   }
 
   private moreMightExist(): boolean {

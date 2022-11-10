@@ -4,8 +4,8 @@ import { ComponentsModule } from '@biggive/components-angular';
 
 export const allChildComponentImports = [
   CommonModule,
+  ComponentsModule,
   RouterLink,
   RouterLinkWithHref,
   RouterOutlet,
-  ComponentsModule,
 ]

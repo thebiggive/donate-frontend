@@ -28,15 +28,14 @@
             [banner]="campaign.imageUri"
             [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'" 
             [campaignTitle]="campaign.title"
-            [currencyCode]="campaign.currencyCode"
             [donateButtonUrl]="'/donate/' + campaign.id"
             [moreInfoButtonUrl]="'/campaign/' + campaign.id"
             [organisationName]="campaign.charity.name"
             primary-figure-label="Match Funds Remaining" 
-            [primaryFigureAmount]="campaign.matchFundsRemaining" 
+            [primaryFigureAmount]="campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : '1.0-0'" 
             [progressBarCounter]="getPercentageRaised(campaign)"
             secondary-figure-label="Total Funds Raised" 
-            [secondaryFigureAmount]="campaign.amountRaised">
+            [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : '1.0-0'">
           </biggive-campaign-card>
         </div>
       </biggive-grid>

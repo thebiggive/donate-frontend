@@ -5,7 +5,6 @@ import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ComponentsModule } from '@biggive/components-angular';
 import { RouterModule } from '@angular/router';
 import { RECAPTCHA_NONCE } from 'ng-recaptcha';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
@@ -30,7 +29,6 @@ import { TimeLeftPipe } from './time-left.pipe';
   imports: [    
     BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
-    ComponentsModule,
     HttpClientModule,
     NavigationComponent,
     RouterModule.forRoot(routes, {
