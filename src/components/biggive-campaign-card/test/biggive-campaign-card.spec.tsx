@@ -46,13 +46,6 @@ describe('biggive-campaign-card', () => {
                <span class="text">£1,000</span>
              </div>
            </div>
-           <div class="progress-bar-wrap">
-             <biggive-progress-bar colour-scheme="primary" counter="100"></biggive-progress-bar>
-           </div>
-           <div class="button-wrap">
-             <biggive-button colour-scheme="primary" full-width="true" label="Donate now"></biggive-button>
-             <biggive-button colour-scheme="clear-primary" full-width="true" label="Find out more"></biggive-button>
-           </div>
              </div>
            </div>
          </mock:shadow-root>

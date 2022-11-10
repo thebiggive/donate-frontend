@@ -118,13 +118,13 @@ export class BiggiveCampaignCard {
               <span class="text">{this.secondaryFigureAmount}</span>
             </div>
           </div>
-          <div class="progress-bar-wrap">
+          {/* <div class="progress-bar-wrap">
             <biggive-progress-bar counter={this.progressBarCounter} colour-scheme="primary"></biggive-progress-bar>
           </div>
           <div class="button-wrap">
             <biggive-button full-width="true" colour-scheme={this.donateButtonColourScheme} url={this.donateButtonUrl} label={this.donateButtonLabel}></biggive-button>
             <biggive-button full-width="true" colour-scheme={this.moreInfoButtonColourScheme} url={this.moreInfoButtonUrl} label={this.moreInfoButtonLabel}></biggive-button>
-          </div>
+          </div> */}
         </div>
       </div>
     );
