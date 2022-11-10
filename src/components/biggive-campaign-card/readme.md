@@ -28,6 +28,21 @@ in a secondary column alongside more detail about the same campaign.
 | `spaceBelow`                 | `space-below`                    | Space below component                                                   | `number` | `4`               |
 
 
+## Dependencies
+
+### Depends on
+
+- [biggive-progress-bar](../biggive-progress-bar)
+- [biggive-button](../biggive-button)
+
+### Graph
+```mermaid
+graph TD;
+  biggive-campaign-card --> biggive-progress-bar
+  biggive-campaign-card --> biggive-button
+  style biggive-campaign-card fill:#f9f,stroke:#333,stroke-width:4px
+```
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*
