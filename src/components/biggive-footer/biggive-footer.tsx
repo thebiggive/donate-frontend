@@ -52,7 +52,7 @@ export class BiggiveFooter {
 
         <div class="row row-bottom">
           <div class="postscript-wrap">
-            <img class="fr-logo" src={getAssetPath('../assets/images/fundraising-regulator.png')} />
+            <img class="fr-logo" src={getAssetPath('../assets/images/fundraising-regulator.png')} alt="Fundraising Regulator" />
 
             <nav class="nav nav-postscript"></nav>
           </div>
