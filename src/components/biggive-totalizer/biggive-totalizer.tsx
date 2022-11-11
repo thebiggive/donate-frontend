@@ -36,7 +36,21 @@ export class BiggiveTotalizer {
    */
   @Prop() mainMessage: string = null;
 
-  @Prop() tickerItems: { label: string; figure: string }[] = [];
+  componentDidRender() {
+    var nodes = this.host.querySelectorAll('biggive-totalizer-ticker-item');
+    if (nodes.length > 0) {
+      for (var prop in nodes) {
+        if (nodes[prop].shadowRoot != null) {
+          this.host.shadowRoot.querySelector('.ticker-wrap .sleeve').appendChild(nodes[prop].shadowRoot.querySelector('.ticker-item'));
+        }
+      }
+    }
+    var tickerWidth = this.host.shadowRoot.querySelector('.ticker-wrap .sleeve').clientWidth;
+    var duration = tickerWidth / 50;
+    var node: HTMLElement = this.host.shadowRoot.querySelector('.ticker-wrap .sleeve');
+
+    node.style.animationDuration = Math.round(duration) + 's';
+  }
 
   render() {
     return (
@@ -45,11 +59,7 @@ export class BiggiveTotalizer {
           <div class="banner">
             <div class={'main-message-wrap background-colour-' + this.secondaryColour + ' text-colour-' + this.secondaryTextColour}>{this.mainMessage}</div>
             <div class={'ticker-wrap background-colour-' + this.primaryColour + ' text-colour-' + this.primaryTextColour}>
-              <div class="sleeve">
-                {this.tickerItems.length === 0
-                  ? undefined
-                  : this.tickerItems.map(tickerItem => <biggive-totalizer-ticker-item figure={tickerItem.figure} label={tickerItem.label}></biggive-totalizer-ticker-item>)}
-              </div>
+              <div class="sleeve"></div>
             </div>
           </div>
         </div>
