@@ -183,7 +183,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   ngAfterViewChecked() {
-    if (this.shouldAutoScroll) {
+    if (isPlatformBrowser(this.platformId) && this.shouldAutoScroll) {
       // Keep updating scroll in this scenario, until the donor scrolls themselves and we turn off `shouldAutoScroll`.
       this.updateScroll(this.navigationService.getLastSingleCampaignId());
     }
