@@ -1,5 +1,5 @@
-import { Component, h /*, Element*/, Prop /*, Event, EventEmitter, Listen*/ } from '@stencil/core';
-// import { faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
+import { Component, h, Element, Prop, Event, EventEmitter, Listen } from '@stencil/core';
+import { faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
   tag: 'biggive-campaign-card-filter-grid',
@@ -7,33 +7,33 @@ import { Component, h /*, Element*/, Prop /*, Event, EventEmitter, Listen*/ } fr
   shadow: true,
 })
 export class BiggiveCampaignCardFilterGrid {
-  // @Element() el;
+  @Element() el;
 
-  // /**
-  //  * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent
-  //  * component which handles it
-  //  */
-  // @Event({
-  //   eventName: 'doSearchAndFilterUpdate',
-  //   composed: true,
-  //   cancelable: true,
-  //   bubbles: true,
-  // })
-  // doSearchAndFilterUpdate: EventEmitter<{
-  //   searchText: string;
-  //   sortBy: string;
-  //   filterCategory: string;
-  //   filterBeneficiary: string;
-  //   filterLocation: string;
-  //   filterFunding: string;
-  // }>;
+  /**
+   * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent
+   * component which handles it
+   */
+  @Event({
+    eventName: 'doSearchAndFilterUpdate',
+    composed: true,
+    cancelable: true,
+    bubbles: true,
+  })
+  doSearchAndFilterUpdate: EventEmitter<{
+    searchText: string;
+    sortBy: string;
+    filterCategory: string;
+    filterBeneficiary: string;
+    filterLocation: string;
+    filterFunding: string;
+  }>;
 
-  // searchText: string = null;
-  // sortBy: string = null;
-  // filterCategory: string = null;
-  // filterBeneficiary: string = null;
-  // filterLocation: string = null;
-  // filterFunding: string = null;
+  searchText: string = null;
+  sortBy: string = null;
+  filterCategory: string = null;
+  filterBeneficiary: string = null;
+  filterLocation: string = null;
+  filterFunding: string = null;
 
   /**
    * Space below component
@@ -56,84 +56,84 @@ export class BiggiveCampaignCardFilterGrid {
    */
   @Prop() buttonText: string = 'Search';
 
-  // /**
-  //  * JSON array of category key/values
-  //  */
-  // @Prop() categoryOptions: string[] = [];
+  /**
+   * JSON array of category key/values
+   */
+  @Prop() categoryOptions: string[] = [];
 
-  // /**
-  //  * JSON array of beneficiary key/values
-  //  */
-  // @Prop() beneficiaryOptions: string[] = [];
+  /**
+   * JSON array of beneficiary key/values
+   */
+  @Prop() beneficiaryOptions: string[] = [];
 
-  // /**
-  //  * JSON array of location key/values
-  //  */
-  // @Prop() locationOptions: string[] = [];
+  /**
+   * JSON array of location key/values
+   */
+  @Prop() locationOptions: string[] = [];
 
-  // /**
-  //  * JSON array of funding key/values
-  //  */
-  // @Prop() fundingOptions: string[] = [];
+  /**
+   * JSON array of funding key/values
+   */
+  @Prop() fundingOptions: string[] = [];
 
-  // private getSearchAndFilterObject(): {
-  //   searchText: string;
-  //   sortBy: string;
-  //   filterCategory: string;
-  //   filterBeneficiary: string;
-  //   filterLocation: string;
-  //   filterFunding: string;
-  // } {
-  //   const event: {
-  //     searchText: string;
-  //     sortBy: string;
-  //     filterCategory: string;
-  //     filterBeneficiary: string;
-  //     filterLocation: string;
-  //     filterFunding: string;
-  //   } = {
-  //     searchText: this.searchText,
-  //     sortBy: this.sortBy,
-  //     filterCategory: this.filterCategory,
-  //     filterBeneficiary: this.filterBeneficiary,
-  //     filterFunding: this.filterFunding,
-  //     filterLocation: this.filterLocation,
-  //   };
+  private getSearchAndFilterObject(): {
+    searchText: string;
+    sortBy: string;
+    filterCategory: string;
+    filterBeneficiary: string;
+    filterLocation: string;
+    filterFunding: string;
+  } {
+    const event: {
+      searchText: string;
+      sortBy: string;
+      filterCategory: string;
+      filterBeneficiary: string;
+      filterLocation: string;
+      filterFunding: string;
+    } = {
+      searchText: this.searchText,
+      sortBy: this.sortBy,
+      filterCategory: this.filterCategory,
+      filterBeneficiary: this.filterBeneficiary,
+      filterFunding: this.filterFunding,
+      filterLocation: this.filterLocation,
+    };
 
-  //   return event;
-  // }
+    return event;
+  }
 
-  // @Listen('doSelectChange')
-  // doOptionSelectCompletedHandler() {
-  //   this.sortBy = this.el.shadowRoot.getElementById('sort-by').selectedValue;
-  //   this.filterCategory = this.el.shadowRoot.getElementById('categories').selectedValue;
-  //   this.filterBeneficiary = this.el.shadowRoot.getElementById('beneficiaries').selectedValue;
-  //   this.filterLocation = this.el.shadowRoot.getElementById('locations').selectedValue;
-  //   this.filterFunding = this.el.shadowRoot.getElementById('funding').selectedValue;
-  // }
+  @Listen('doSelectChange')
+  doOptionSelectCompletedHandler() {
+    this.sortBy = this.el.shadowRoot.getElementById('sort-by').selectedValue;
+    this.filterCategory = this.el.shadowRoot.getElementById('categories').selectedValue;
+    this.filterBeneficiary = this.el.shadowRoot.getElementById('beneficiaries').selectedValue;
+    this.filterLocation = this.el.shadowRoot.getElementById('locations').selectedValue;
+    this.filterFunding = this.el.shadowRoot.getElementById('funding').selectedValue;
+  }
 
-  // private handleSortByChanged = (event: any) => {
-  //   this.sortBy = event.target.value;
-  //   this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  // };
+  private handleSortByChanged = (event: any) => {
+    this.sortBy = event.target.value;
+    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+  };
 
   // private handleApplyFilterButtonClick = () => {
   //   this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   // };
 
-  // private handleSearchButtonPressed = () => {
-  //   this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  // };
+  private handleSearchButtonPressed = () => {
+    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+  };
 
-  // private handleSearchTextChanged = (event: any) => {
-  //   this.searchText = event.target.value;
-  // };
+  private handleSearchTextChanged = (event: any) => {
+    this.searchText = event.target.value;
+  };
 
-  // private handleEnterPressed = (ev: KeyboardEvent) => {
-  //   if (ev.key === 'Enter') {
-  //     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  //   }
-  // };
+  private handleEnterPressed = (ev: KeyboardEvent) => {
+    if (ev.key === 'Enter') {
+      this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+    }
+  };
 
   // private handleFilterButtonClick = () => {
   //   this.el.shadowRoot.getElementById('filter-popup').open();
@@ -143,7 +143,7 @@ export class BiggiveCampaignCardFilterGrid {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
         <div class="sleeve">
-          {/* <div class="search-wrap">
+          <div class="search-wrap">
             <h4>{this.intro}</h4>
             <div class="field-wrap">
               <div class="input-wrap">
@@ -170,7 +170,7 @@ export class BiggiveCampaignCardFilterGrid {
               </biggive-form-field-select>
             </div>
 
-            <div class="filter-wrap">
+            {/* <div class="filter-wrap">
               <biggive-button class="filter" onClick={this.handleFilterButtonClick} label="Filters"></biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
@@ -201,8 +201,8 @@ export class BiggiveCampaignCardFilterGrid {
                   <biggive-button label="Apply filters" onClick={this.handleApplyFilterButtonClick} />
                 </div>
               </biggive-popup>
-            </div>
-          </div> */}
+            </div> */}
+          </div>
           <div class="campaign-grid">
             <slot name="campaign-grid"></slot>
           </div>
