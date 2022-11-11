@@ -49,6 +49,10 @@
       @include heading-1;
       margin: 0 0 $spacer-3 0;
       padding: 0;
+
+      @media (max-width: $screen-tablet-max) {
+        @include heading-2;
+      }
     }
     .teaser {
       margin: 0 0 $spacer-5 0;
