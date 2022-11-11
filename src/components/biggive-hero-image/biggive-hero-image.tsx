@@ -87,7 +87,7 @@ export class BiggiveHeroImage {
               <div class="logo image-wrap" style={{ 'background-image': 'url(' + this.logo + ')'}}>
                 <img src={this.logo} />
               </div>
-            ) : null}
+            ) : <div class="logo-space"></div>}
             <div class={'slug text-colour-'+this.slugColour}>{this.slug}</div>
             <h1 class={'main-title text-colour-'+this.mainTitleColour}>{this.mainTitle}</h1>
             <div class={'teaser text-colour-'+this.teaserColour}>{this.teaser}</div>

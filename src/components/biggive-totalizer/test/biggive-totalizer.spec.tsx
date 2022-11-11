@@ -15,7 +15,7 @@ describe('biggive-totalizer', () => {
                <div class="banner">
                  <div class="background-colour-secondary main-message-wrap text-colour-black"></div>
                  <div class="background-colour-primary text-colour-white ticker-wrap">
-                   <div class="sleeve"></div>
+                   <div class="sleeve" style="animation-duration: NaNs;"></div>
                  </div>
                </div>
              </div>

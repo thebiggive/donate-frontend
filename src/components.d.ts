@@ -838,7 +838,6 @@ export namespace Components {
           * Space below component
          */
         "spaceBelow": number;
-        "tickerItems": { label: string; figure: string }[];
     }
     interface BiggiveTotalizerTickerItem {
         /**
@@ -2073,7 +2072,6 @@ declare namespace LocalJSX {
           * Space below component
          */
         "spaceBelow"?: number;
-        "tickerItems"?: { label: string; figure: string }[];
     }
     interface BiggiveTotalizerTickerItem {
         /**
