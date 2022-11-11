@@ -1,31 +1,47 @@
-<mat-toolbar role="navigation" class="main-nav-toolbar">
-  <div class="logo__wrap">
-    <a routerLink="/" class="logo__link"><img class="logo" src="/assets/images/logo.png" alt="The Big Give"></a>
+<biggive-header>
+  <div slot="social-icons">
+    <biggive-social-icon class="nav-social" service="Facebook" url="https://www.facebook.com/theBigGive.org.uk" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+    <biggive-social-icon class="nav-social" service="Twitter" url="https://twitter.com/BigGive" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+    <biggive-social-icon class="nav-social" service="LinkedIn" url="https://uk.linkedin.com/company/big-give" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+    <biggive-social-icon class="nav-social" service="YouTube" url="https://www.youtube.com/channel/UC9_wH1aaTuZurJ-F9R8GDcA" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+    <biggive-social-icon class="nav-social" service="Instagram" url="https://www.instagram.com/thebiggiveorg" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
   </div>
-  <div class="main-nav">
-    <app-main-menu [listClass]="'bar'"></app-main-menu>
-  </div>
-  <div class="side-nav-button">
-    <button mat-icon-button (click)="sidenav.toggle()">
-      <mat-icon aria-hidden="false" aria-label="Menu">{{ !opened ? 'menu' : 'close' }}</mat-icon>
-    </button>
-  </div>
-</mat-toolbar>
-
-<mat-sidenav-container>
-  <mat-sidenav
-    #sidenav
-    role="navigation"
-    mode="over"
-    [(opened)]="opened"
-    [attr.aria-hidden]="!opened"
-    fixedInViewport="true"
-  >
-    <app-main-menu [listClass]="'tray'"></app-main-menu>
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-    <router-outlet></router-outlet>
-    <app-footer></app-footer>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  <div class="nav-toggle"></div>
+  <ul slot="nav-primary">
+    <li><a href="/explore">Explore Campaigns</a></li>
+    <li><a href="https://www.thebiggive.org.uk/s/charities">For Charities</a></li>
+    <li><a href="https://www.thebiggive.org.uk/s/philanthropists">For Funders</a></li>
+    <li>
+      <a (click)="noNav($event)">Match Funding</a>
+      <ul>
+        <li><a href="https://www.thebiggive.org.uk/s/christmas-challenge">Christmas Challenge</a></li>
+        <li><a href="https://www.thebiggive.org.uk/s/green-match-fund">Green Match Fund</a></li>
+        <li><a href="https://www.thebiggive.org.uk/s/champions-for-children">Champions for Children</a></li>
+        <li><a href="https://www.thebiggive.org.uk/s/women-and-girls-match-fund">Women and Girls Match Fund</a></li>
+        <li><a href="https://www.thebiggive.org.uk/s/run-your-own-campaign">Run your own campaign</a></li>
+      </ul>
+    </li>
+    <li>
+      <a (click)="noNav($event)">About Us</a>
+      <ul>
+        <li><a href="https://www.thebiggive.org.uk/s/about">Big Give</a></li>
+        <li><a href="https://www.thebiggive.org.uk/s/our-story">Our Story</a></li>
+        <li><a href="https://www.thebiggive.org.uk/s/team">Team</a></li>
+        <li><a href="https://www.thebiggive.org.uk/s/our-fees">Our Fees</a></li>
+      </ul>
+    </li>
+    <li>
+      <a (click)="noNav($event)">Resources</a>
+      <ul>
+        <li><a href="https://www.thebiggive.org.uk/s/blog">Blog</a></li>
+        <li><a href="https://www.thebiggive.org.uk/s/press">Press</a></li>
+      </ul>
+    </li>
+  </ul>
+  <ul slot="nav-secondary">
+    <li><a href="https://www.thebiggive.org.uk/s/contact-us">Contact us</a></li>
+    <li><a href="https://www.thebiggive.org.uk/charities/s/login/">Charity login</a></li>
+  </ul>
+</biggive-header>
+<router-outlet></router-outlet>
+<app-footer></app-footer>

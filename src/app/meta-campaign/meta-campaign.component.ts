@@ -1,5 +1,5 @@
-import { isPlatformBrowser, ViewportScroller } from '@angular/common';
-import { AfterViewChecked, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { CurrencyPipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
+import { AfterViewChecked, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -9,7 +9,8 @@ import { Subscription } from 'rxjs';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
-import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
+import { CampaignGroupsService } from '../campaign-groups.service';
+import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
@@ -17,10 +18,11 @@ import { environment } from '../../environments/environment';
 import { FiltersComponent } from '../filters/filters.component';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
-import { HeroComponent } from '../hero/hero.component';
 import { NavigationService } from '../navigation.service';
+import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 @Component({
   standalone: true,
@@ -29,21 +31,34 @@ import { SearchService } from '../search.service';
   styleUrls: ['./meta-campaign.component.scss'],
   imports: [
     ...allChildComponentImports,
-    CampaignCardComponent,
+    CampaignSearchFormComponent,
     FiltersComponent,
-    HeroComponent,
     InfiniteScrollModule,
     MatProgressSpinnerModule,
+    OptimisedImagePipe,
+  ],
+  providers: [
+    CurrencyPipe, // Not standlone
+    TimeLeftPipe, // Injected for TS use
   ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
   public campaign: Campaign;
+  public campaignInFuture: boolean; // Does not imply 0 raised, see HTML comment.
+  public campaignOpen: boolean;
   public children: CampaignSummary[] = [];
+  public durationInDays: number;
   public filterError = false;
   public fund?: Fund;
   public fundSlug: string;
   public hasMore = true;
   public loading = false; // Server render gets initial result set; set true when filters change.
+  public tickerItems: { label: string, figure: string }[] = [];
+
+  beneficiaryOptions: string[] = [];
+  categoryOptions: string[] = [];
+  countryOptions: string[] = [];
+  fundingOptions: string[] = [];
 
   private campaignId: string;
   private campaignSlug: string;
@@ -58,6 +73,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   constructor(
     private campaignService: CampaignService,
+    private currencyPipe: CurrencyPipe,
     private fundService: FundService,
     private navigationService: NavigationService,
     private pageMeta: PageMetaService,
@@ -68,11 +84,17 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     private state: TransferState,
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
     private scroller: ViewportScroller,
+    private timeLeftPipe: TimeLeftPipe,
   ) {
     route.params.pipe().subscribe(params => {
       this.campaignSlug = params.campaignSlug;
       this.fundSlug = params.fundSlug;
     });
+  }
+
+  @HostListener('doSearchAndFilterUpdate', ['$event'])
+  onDoSearchAndFilterUpdate(event: CustomEvent) {
+    this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
   }
 
   ngOnDestroy() {
@@ -109,10 +131,59 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
         this.fund = fund;
       });
     }
+
+    this.campaignInFuture = CampaignService.isInFuture(this.campaign);
+    this.campaignOpen = CampaignService.isOpenForDonations(this.campaign);
+    this.durationInDays = Math.floor((new Date(this.campaign.endDate).getTime() - new Date(this.campaign.startDate).getTime()) / 86400000);
+
+    this.beneficiaryOptions = CampaignGroupsService.getBeneficiaryNames();
+    this.categoryOptions = CampaignGroupsService.getCategoryNames();
+    this.countryOptions = CampaignGroupsService.getCountries();
+    this.fundingOptions = [
+      'Match Funded'
+    ]
+
+    if (this.campaignInFuture) {
+      this.tickerItems.push({
+        label: 'remaining to start',
+        figure: this.timeLeftPipe.transform(this.campaign.startDate),
+      });
+    }
+
+    else if (this.campaignOpen) {
+      this.tickerItems.push({
+        label: 'remaining',
+        figure: this.timeLeftPipe.transform(this.campaign.endDate),
+      });
+    }
+
+    this.tickerItems.push(...[
+      {
+        label: 'Total Raised',
+        figure: this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
+      },
+      {
+        label: 'Total Match Funds',
+        figure: this.currencyPipe.transform(this.campaign.matchFundsTotal, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
+      },
+      {
+        label: 'Match Funds Remaining',
+        figure: this.currencyPipe.transform(this.campaign.matchFundsRemaining, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
+      },
+    ]);
+
+    if (this.campaign.campaignCount) {
+      this.tickerItems.push(
+        {
+          label: 'Participating Campaigns',
+          figure: this.campaign.campaignCount.toString(),
+        }
+      )
+    }
   }
 
   ngAfterViewChecked() {
-    if (this.shouldAutoScroll) {
+    if (isPlatformBrowser(this.platformId) && this.shouldAutoScroll) {
       // Keep updating scroll in this scenario, until the donor scrolls themselves and we turn off `shouldAutoScroll`.
       this.updateScroll(this.navigationService.getLastSingleCampaignId());
     }
@@ -148,6 +219,14 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   getDefaultSort(): 'amountRaised' | 'matchFundsRemaining' {
     // Most Raised for completed Master Campaigns; Match Funds Remaining for others.
     return (this.campaign && new Date(this.campaign.endDate) < new Date()) ? 'amountRaised' : 'matchFundsRemaining';
+  }
+
+  getPercentageRaised(childCampaign: CampaignSummary) {
+    if (childCampaign.amountRaised >= childCampaign.target) {
+      return 100;
+    }
+
+    return Math.round((childCampaign.amountRaised / childCampaign.target) * 100);
   }
 
   private loadMoreForCurrentSearch() {
@@ -284,10 +363,10 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       // use a too-low Y position when lots of card were shown and we didn't have a delay, both with `scrollToAnchor()`
       // and manual calculation + `scrollToPosition()`.
       setTimeout(() => {
-        // Scroll to the anchor's `offsetTop` y-position, minus $toolbar-height.
+        // Scroll to the anchor's `offsetTop` y-position (currently not minus approx header height).
         const activeCard = document.getElementById(`campaign-${campaignId}`);
         if (activeCard) {
-          this.scroller.scrollToPosition([0, activeCard.offsetTop - 64]);
+          this.scroller.scrollToPosition([0, activeCard.offsetTop - 0]);
         }
       }, 1500);
     }

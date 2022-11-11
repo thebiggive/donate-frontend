@@ -20,7 +20,7 @@ export class PageMetaService {
     private title: Title,
   ) {}
 
-  setCommon(title: string, description: string, useGlobal: boolean, imageUri?: string) {
+  setCommon(title: string, description: string, useGlobal: boolean, imageUri: string|null) {
     const baseUri = useGlobal ? environment.donateGlobalUriPrefix : environment.donateUriPrefix;
     const canonicalUri = `${baseUri}${this.router.url}`;
     const links = this.dom.getElementsByTagName('link');

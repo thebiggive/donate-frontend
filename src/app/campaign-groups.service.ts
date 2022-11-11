@@ -84,6 +84,18 @@ export class CampaignGroupsService {
     ];
   }
 
+  static getBeneficiaryNames(): string[] {
+    let names: string[] = [];
+    const beneficiaries: {name: string, icon: IconDefinition}[] = this.getBeneficiaries();
+
+    for (let i = 0; i < beneficiaries.length; i++) {
+      const beneficiaryObj: {name: string, icon: IconDefinition} = beneficiaries[i];
+      names.push(beneficiaryObj.name);
+    }
+
+    return names;
+  }
+
   static getCategories(): Array<{name: string, icon: IconDefinition}> {
     return [
       {
@@ -163,6 +175,18 @@ export class CampaignGroupsService {
         icon: faPlus,
       },
     ];
+  }
+
+  static getCategoryNames(): string[] {
+    let names: string[] = [];
+    const categories: {name: string, icon: IconDefinition}[] = this.getCategories();
+
+    for (let i = 0; i < categories.length; i++) {
+      const categoryObj: {name: string, icon: IconDefinition} = categories[i];
+      names.push(categoryObj.name);
+    }
+
+    return names;
   }
 
   /**

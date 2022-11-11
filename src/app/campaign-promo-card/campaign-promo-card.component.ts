@@ -16,7 +16,7 @@ import { ImageService } from '../image.service';
 export class CampaignPromoCardComponent implements OnInit {
   @Input() campaign: Campaign;
   @Input() campaignUri: string;
-  bannerUri?: string;
+  bannerUri: string|null = null;
 
   constructor(private imageService: ImageService) {}
 

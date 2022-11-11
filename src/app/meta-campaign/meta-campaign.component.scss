@@ -1,9 +1,20 @@
 @use '@angular/material' as mat;
 @import '../../abstract';
 
-.c-grid {
-  @include campaign-grid;
-  margin-top: 1rem;
+app-campaign-search-form {
+  z-index: 200; // Must trump components for form to receive input.
+  position: absolute;
+  right: 50px;
+  top: 120px;
+
+  @media #{$breakpoint-md} {
+    top: 150px;
+  }
+
+  @media #{$breakpoint-lg} {
+    right: 50px;
+    top: 300px;
+  }
 }
 
 .error {

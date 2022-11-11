@@ -204,7 +204,13 @@
 
                 <mat-hint>
                   For your Gift Aid declaration to HMRC.
-                  <mat-spinner *ngIf="loadingAddressSuggestions" color="primary" diameter="15" class="address-loading-spinner"></mat-spinner>
+                  <mat-spinner
+                    *ngIf="loadingAddressSuggestions"
+                    aria-label="Loading possible addresses"
+                    color="primary"
+                    diameter="15"
+                    class="address-loading-spinner"
+                  ></mat-spinner>
                 </mat-hint>
               </mat-form-field>
               <div class="error" *ngIf="giftAidGroup.get('homeAddress')?.errors?.maxlength">Maximum 255 characters exceeded</div>
@@ -416,7 +422,7 @@
                     contact us</a>
                 if this message persists.
               </p>
-              <mat-spinner *ngIf="submitting" color="primary" diameter="30"></mat-spinner>
+              <mat-spinner *ngIf="submitting" color="primary" diameter="30" aria-label="Processing your donation"></mat-spinner>
 
               <p *ngIf="retrying" class="error" aria-live="polite">
                 It looks like our system is a bit busy, one moment please&hellip;

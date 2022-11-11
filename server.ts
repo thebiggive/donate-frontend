@@ -1,6 +1,7 @@
 import 'zone.js/node';
 
 import { enableProdMode } from '@angular/core';
+import { renderToString } from '@biggive/components/hydrate';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as compression from 'compression';
 import { createHash } from 'crypto';
@@ -13,8 +14,7 @@ import { join } from 'path';
 
 import { AnalyticsService } from './src/app/analytics.service';
 import { AppServerModule } from './src/main.server';
-import { COUNTRY_CODE } from './src/app/country-code.token';
-import { HOST } from './src/app/host.token';
+// import { COUNTRY_CODE } from './src/app/country-code.token';
 import { environment } from './src/environments/environment';
 import { GetSiteControlService } from './src/app/getsitecontrol.service';
 
@@ -119,12 +119,6 @@ export function app() {
     }
   });
 
-  server.get('/d/favicon.ico', (req: Request, res: Response) => {
-    res.sendFile(`${distFolder}/favicon.ico`, {
-      maxAge: '7 days', // Don't make the favicon immutable in case we want to update it
-    });
-  });
-
   server.get('/.well-known/apple-developer-merchantid-domain-association', (req: Request, res: Response) => {
     res.sendFile(`${distFolder}/assets/stripe-apple-developer-merchantid-domain-association`, {
       maxAge: '7 days',
@@ -146,11 +140,24 @@ export function app() {
     // Note that the file output as `index.html` is actually dynamic. See `index` config keys in `angular.json`.
     // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
     // this key to work around `fileReplacements` ending index support in Angular 8.
-    res.render(indexHtml, { req, providers: [
-      { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
-      // Required to set up `APP_BASE_HREF`. See `app.module.ts`.
-      { provide: HOST, useValue: req.header('Host') || undefined },
-    ]});
+    res.render(indexHtml, { req
+      //, providers: [
+      // Skip for now as this adds complexity and didn't actually seem to be working as of Aug '22 anyway. See DON-523.
+      // { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
+      //]
+  }, async (err: Error, html: string) => {
+      if (err) {
+        console.log(`Render error: ${err}`);
+        res.sendStatus(500);
+        return;
+      }
+
+      const hydratedDoc = await renderToString(html, {
+        prettyHtml: true, // Don't `removeScripts` like Ionic does: we need them to handover to browser JS runtime successfully!
+      });
+
+      res.send(hydratedDoc.html);
+    });
   });
 
   return server;

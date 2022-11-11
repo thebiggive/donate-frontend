@@ -27,7 +27,7 @@ import { TimeLeftPipe } from '../time-left.pipe';
 })
 export class CampaignDetailsCardComponent implements OnInit {
   @Input() campaign: Campaign;
-  bannerUri?: string;
+  bannerUri: string|null = null;
   percentRaised?: number;
 
   constructor(private imageService: ImageService) {}

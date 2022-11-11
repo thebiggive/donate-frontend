@@ -13,7 +13,7 @@
                     [stepControl]="amountsGroup"
                     label="Your Donation Credits"
                 >
-                    <mat-form-field  class="form-field b-center size-lg" hideRequiredMarker>
+                    <mat-form-field class="form-field b-center size-lg" hideRequiredMarker>
                         <mat-label>Credit amount ({{ currency }})</mat-label>
                         <input matInput placeholder="Enter amount in {{ currency }}" formControlName="creditAmount" required>
                     </mat-form-field>
@@ -129,7 +129,13 @@
 
                             <mat-hint>
                               For your Gift Aid declaration to HMRC.
-                              <mat-spinner *ngIf="loadingAddressSuggestions" color="primary" diameter="15" class="address-loading-spinner"></mat-spinner>
+                              <mat-spinner
+                                *ngIf="loadingAddressSuggestions"
+                                aria-label="Loading possible addresses"
+                                color="primary"
+                                diameter="15"
+                                class="address-loading-spinner"
+                            ></mat-spinner>
                             </mat-hint>
                         </mat-form-field>
                         
@@ -173,7 +179,7 @@
         </form>
 
         <div *ngIf="isLoading">
-            <mat-spinner [diameter]="40"></mat-spinner>
+            <mat-spinner [diameter]="40" aria-label="Loading your details"></mat-spinner>
         </div>
 
         <div *ngIf="!isLoggedIn && !isLoading">

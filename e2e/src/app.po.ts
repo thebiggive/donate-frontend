@@ -7,8 +7,4 @@ export class AppPage {
   navigateTo(path: string) {
     return browser.get(browser.baseUrl + path) as Promise<any>;
   }
-
-  getLogoAltText() {
-    return element(by.css('a.logo__link > img')).getAttribute('alt') as Promise<string>;
-  }
 }
