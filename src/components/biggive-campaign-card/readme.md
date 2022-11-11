@@ -13,7 +13,6 @@ in a secondary column alongside more detail about the same campaign.
 | `banner`                     | `banner`                         | Full URL of a banner image.                                             | `string` | `null`            |
 | `campaignTitle`              | `campaign-title`                 | Display name of the charity's specific time-bound fundraising campaign. | `string` | `null`            |
 | `campaignType`               | `campaign-type`                  | e.g. "Match Funded".                                                    | `string` | `null`            |
-| `currencyCode`               | `currency-code`                  | e.g. 'GBP'.                                                             | `string` | `undefined`       |
 | `donateButtonColourScheme`   | `donate-button-colour-scheme`    | Donate button colour scheme                                             | `string` | `'primary'`       |
 | `donateButtonLabel`          | `donate-button-label`            | Donate button label                                                     | `string` | `'Donate now'`    |
 | `donateButtonUrl`            | `donate-button-url`              | Donate button url                                                       | `string` | `null`            |
@@ -21,10 +20,10 @@ in a secondary column alongside more detail about the same campaign.
 | `moreInfoButtonLabel`        | `more-info-button-label`         | More information button label                                           | `string` | `'Find out more'` |
 | `moreInfoButtonUrl`          | `more-info-button-url`           | More information button url                                             | `string` | `null`            |
 | `organisationName`           | `organisation-name`              | Display name of the charity or non-profit.                              | `string` | `null`            |
-| `primaryFigureAmount`        | `primary-figure-amount`          | Amount for the primary figure                                           | `number` | `null`            |
+| `primaryFigureAmount`        | `primary-figure-amount`          | Amount for the primary figure, formatted with currency symbol           | `string` | `null`            |
 | `primaryFigureLabel`         | `primary-figure-label`           | Label for the primary figure                                            | `string` | `null`            |
 | `progressBarCounter`         | `progress-bar-counter`           | Progress bar percentage                                                 | `number` | `100`             |
-| `secondaryFigureAmount`      | `secondary-figure-amount`        | Amount for the secondary figure                                         | `number` | `null`            |
+| `secondaryFigureAmount`      | `secondary-figure-amount`        | Amount for the secondary figure, formatted with currency symbol         | `string` | `null`            |
 | `secondaryFigureLabel`       | `secondary-figure-label`         | Label for the secondary figure                                          | `string` | `null`            |
 | `spaceBelow`                 | `space-below`                    | Space below component                                                   | `number` | `4`               |
 

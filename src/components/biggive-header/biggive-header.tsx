@@ -18,7 +18,7 @@ export class BiggiveHeader {
    */
   @Prop() logoUrl: string = '/';
 
-  toggleNav(event) {
+  private toggleNav = (event: any) => {
     var nav = this.host.shadowRoot.querySelector('.nav-primary');
     if (nav.getAttribute('data-visible') == 'true') {
       event.target.classList.remove('active');
@@ -27,18 +27,18 @@ export class BiggiveHeader {
       event.target.classList.add('active');
       nav.setAttribute('data-visible', 'true');
     }
-  }
+  };
 
   appendMenu(menuName: string) {
     var node = this.host.querySelector(`[slot="${menuName}"]`);
-    if (node != null) {
+    if (node !== null) {
       this.host.shadowRoot.querySelector(`nav.${menuName}`).appendChild(node);
     }
   }
 
   componentDidRender() {
     this.appendMenu('nav-primary');
-    this.appendMenu('nav-secondry');
+    this.appendMenu('nav-secondary');
   }
 
   render() {

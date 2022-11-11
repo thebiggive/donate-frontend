@@ -82,7 +82,7 @@
 }
 
 @mixin section-container() {
-  max-width: $max-page-width;
+  max-width: $screen-desktop-max;
   padding-left: $spacer-3;
   padding-right: $spacer-3;
   margin-left: auto;

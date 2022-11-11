@@ -5,6 +5,7 @@
         url('EuclidTriangle-SemiBoldItalic.woff') format('woff');
     font-weight: 600;
     font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
@@ -14,6 +15,7 @@
         url('EuclidTriangle-Bold.woff') format('woff');
     font-weight: bold;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -23,6 +25,7 @@
         url('EuclidTriangle-MediumItalic.woff') format('woff');
     font-weight: 500;
     font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
@@ -32,6 +35,7 @@
         url('EuclidTriangle-Light.woff') format('woff');
     font-weight: 300;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -41,6 +45,7 @@
         url('EuclidTriangle-Regular.woff') format('woff');
     font-weight: normal;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -50,6 +55,7 @@
         url('EuclidTriangle-LightItalic.woff') format('woff');
     font-weight: 300;
     font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
@@ -59,6 +65,7 @@
         url('EuclidTriangle-Medium.woff') format('woff');
     font-weight: 500;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -68,6 +75,7 @@
         url('EuclidTriangle-Italic.woff') format('woff');
     font-weight: normal;
     font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
@@ -77,6 +85,7 @@
         url('EuclidTriangle-BoldItalic.woff') format('woff');
     font-weight: bold;
     font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
@@ -86,4 +95,5 @@
         url('EuclidTriangle-SemiBold.woff') format('woff');
     font-weight: 600;
     font-style: normal;
+    font-display: swap;
 }

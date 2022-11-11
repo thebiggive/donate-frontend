@@ -16,21 +16,17 @@ export class BiggiveProgressBar {
   @Prop() colourScheme: string = 'primary';
 
   /**
-   * Text
+   * Percentage to show + use for CSS width; round before input if desired
    */
   @Prop() counter: number = 100;
-
-  private getPercentage(): number {
-    return Math.round(this.counter);
-  }
 
   render() {
     return (
       <div class={'progress-bar progress-bar-' + this.colourScheme + ' space-below-' + this.spaceBelow}>
         <div class="slider">
-          <div class="progress" style={{ width: this.getPercentage() + '%' }}></div>
+          <div class="progress" style={{ width: `${this.counter}%` }}></div>
         </div>
-        <div class="counter">{this.getPercentage()}%</div>
+        <div class="counter">{this.counter}%</div>
       </div>
     );
   }

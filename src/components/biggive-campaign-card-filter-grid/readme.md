@@ -9,12 +9,12 @@
 
 | Property             | Attribute          | Description                                                                                     | Type       | Default                       |
 | -------------------- | ------------------ | ----------------------------------------------------------------------------------------------- | ---------- | ----------------------------- |
-| `beneficiaryOptions` | --                 | JSON array of beneficiary key/values                                                            | `string[]` | `null`                        |
+| `beneficiaryOptions` | --                 | JSON array of beneficiary key/values                                                            | `string[]` | `[]`                          |
 | `buttonText`         | `button-text`      | Defines the text on the search button                                                           | `string`   | `'Search'`                    |
-| `categoryOptions`    | --                 | JSON array of category key/values                                                               | `string[]` | `null`                        |
-| `fundingOptions`     | --                 | JSON array of funding key/values                                                                | `string[]` | `null`                        |
+| `categoryOptions`    | --                 | JSON array of category key/values                                                               | `string[]` | `[]`                          |
+| `fundingOptions`     | --                 | JSON array of funding key/values                                                                | `string[]` | `[]`                          |
 | `intro`              | `intro`            | Intro                                                                                           | `string`   | `'Find a charity or project'` |
-| `locationOptions`    | --                 | JSON array of location key/values                                                               | `string[]` | `null`                        |
+| `locationOptions`    | --                 | JSON array of location key/values                                                               | `string[]` | `[]`                          |
 | `placeholderText`    | `placeholder-text` | Defines the text displayed as the placeholder in the input field before the user types anything | `string`   | `'Search'`                    |
 | `spaceBelow`         | `space-below`      | Space below component                                                                           | `number`   | `0`                           |
 

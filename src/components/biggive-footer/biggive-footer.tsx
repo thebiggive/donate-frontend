@@ -10,8 +10,8 @@ export class BiggiveFooter {
 
   appendMenu(menuName: string) {
     var node = this.host.querySelector(`[slot="${menuName}"]`);
-    if (node != null) {
-      this.host.shadowRoot.querySelector(`nav.${menuName}`).appendChild(node);
+    if (node !== null) {
+      this.host.shadowRoot.querySelector(`.${menuName}`).appendChild(node);
     }
   }
 
@@ -52,7 +52,7 @@ export class BiggiveFooter {
 
         <div class="row row-bottom">
           <div class="postscript-wrap">
-            <img class="fr-logo" src={getAssetPath('../assets/images/fundraising-regulator.png')} />
+            <img class="fr-logo" src={getAssetPath('../assets/images/fundraising-regulator.png')} alt="Fundraising Regulator" />
 
             <nav class="nav nav-postscript"></nav>
           </div>

@@ -70,11 +70,13 @@ const Template = args => `
               <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
               <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
               <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
-              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
               <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
               <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
               <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
-              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+              <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
               <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
               <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
               <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
@@ -91,4 +93,14 @@ TotalizerComponent.args = {
   secondaryColour: 'secondary',
   secondaryTextColour: 'black',
   mainMessage: '£500 raised inc. Gift Aid',
+  tickerItems: [
+    {
+      label: 'Total Raised',
+      figure: '£1,000,000',
+    },
+    {
+      label: 'Match Funds Remaining',
+      figure: '£500,000',
+    },
+  ],
 };

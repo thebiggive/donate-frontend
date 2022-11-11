@@ -288,10 +288,6 @@ export namespace Components {
          */
         "campaignType": string;
         /**
-          * e.g. 'GBP'.
-         */
-        "currencyCode": string;
-        /**
           * Donate button colour scheme
          */
         "donateButtonColourScheme": string;
@@ -320,9 +316,9 @@ export namespace Components {
          */
         "organisationName": string;
         /**
-          * Amount for the primary figure
+          * Amount for the primary figure, formatted with currency symbol
          */
-        "primaryFigureAmount": number;
+        "primaryFigureAmount": string;
         /**
           * Label for the primary figure
          */
@@ -332,9 +328,9 @@ export namespace Components {
          */
         "progressBarCounter": number;
         /**
-          * Amount for the secondary figure
+          * Amount for the secondary figure, formatted with currency symbol
          */
-        "secondaryFigureAmount": number;
+        "secondaryFigureAmount": string;
         /**
           * Label for the secondary figure
          */
@@ -388,13 +384,9 @@ export namespace Components {
          */
         "campaignTitle": string;
         /**
-          * e.g. 'GBP'.
+          * Amount for the primary figure, formatted with currency symbol
          */
-        "currencyCode": string;
-        /**
-          * Amount for the primary figure
-         */
-        "primaryFigureAmount": number;
+        "primaryFigureAmount": string;
         /**
           * Label for the primary figure
          */
@@ -412,9 +404,9 @@ export namespace Components {
          */
         "progressBarCounter": number;
         /**
-          * Amount for the secondary figure
+          * Amount for the secondary figure, formatted with currency symbol
          */
-        "secondaryFigureAmount": number;
+        "secondaryFigureAmount": string;
         /**
           * Label for the secondary figure
          */
@@ -765,7 +757,7 @@ export namespace Components {
          */
         "colourScheme": string;
         /**
-          * Text
+          * Percentage to show + use for CSS width; round before input if desired
          */
         "counter": number;
         /**
@@ -807,11 +799,11 @@ export namespace Components {
          */
         "backgroundColour": string;
         /**
-          * Background colour
+          * Icon colour
          */
         "iconColour": string;
         /**
-          * service
+          * Service name
          */
         "service": string;
         /**
@@ -862,6 +854,7 @@ export namespace Components {
           * Space below component
          */
         "spaceBelow": number;
+        "tickerItems": { label: string; figure: string }[];
     }
     interface BiggiveTotalizerTickerItem {
         /**
@@ -1539,10 +1532,6 @@ declare namespace LocalJSX {
          */
         "campaignType"?: string;
         /**
-          * e.g. 'GBP'.
-         */
-        "currencyCode"?: string;
-        /**
           * Donate button colour scheme
          */
         "donateButtonColourScheme"?: string;
@@ -1571,9 +1560,9 @@ declare namespace LocalJSX {
          */
         "organisationName"?: string;
         /**
-          * Amount for the primary figure
+          * Amount for the primary figure, formatted with currency symbol
          */
-        "primaryFigureAmount"?: number;
+        "primaryFigureAmount"?: string;
         /**
           * Label for the primary figure
          */
@@ -1583,9 +1572,9 @@ declare namespace LocalJSX {
          */
         "progressBarCounter"?: number;
         /**
-          * Amount for the secondary figure
+          * Amount for the secondary figure, formatted with currency symbol
          */
-        "secondaryFigureAmount"?: number;
+        "secondaryFigureAmount"?: string;
         /**
           * Label for the secondary figure
          */
@@ -1650,13 +1639,9 @@ declare namespace LocalJSX {
          */
         "campaignTitle"?: string;
         /**
-          * e.g. 'GBP'.
+          * Amount for the primary figure, formatted with currency symbol
          */
-        "currencyCode"?: string;
-        /**
-          * Amount for the primary figure
-         */
-        "primaryFigureAmount"?: number;
+        "primaryFigureAmount"?: string;
         /**
           * Label for the primary figure
          */
@@ -1674,9 +1659,9 @@ declare namespace LocalJSX {
          */
         "progressBarCounter"?: number;
         /**
-          * Amount for the secondary figure
+          * Amount for the secondary figure, formatted with currency symbol
          */
-        "secondaryFigureAmount"?: number;
+        "secondaryFigureAmount"?: string;
         /**
           * Label for the secondary figure
          */
@@ -2034,7 +2019,7 @@ declare namespace LocalJSX {
          */
         "colourScheme"?: string;
         /**
-          * Text
+          * Percentage to show + use for CSS width; round before input if desired
          */
         "counter"?: number;
         /**
@@ -2080,11 +2065,11 @@ declare namespace LocalJSX {
          */
         "backgroundColour"?: string;
         /**
-          * Background colour
+          * Icon colour
          */
         "iconColour"?: string;
         /**
-          * service
+          * Service name
          */
         "service"?: string;
         /**
@@ -2135,6 +2120,7 @@ declare namespace LocalJSX {
           * Space below component
          */
         "spaceBelow"?: number;
+        "tickerItems"?: { label: string; figure: string }[];
     }
     interface BiggiveTotalizerTickerItem {
         /**

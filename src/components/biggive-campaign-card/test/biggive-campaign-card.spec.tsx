@@ -11,13 +11,16 @@ describe('biggive-campaign-card', () => {
       html: `<biggive-campaign-card
         campaign-type="Match Funded"
         days-remaining="10"
-        currency-code="GBP"
+        primary-figure-label="Primary label"
+        primary-figure-amount="£123"
+        secondary-figure-label="Secondary label"
+        secondary-figure-amount="£1,000"
         target="76543"
         space-below="4"
       ></biggive-campaign-card>`,
     });
     expect(page.root).toEqualHtml(`
-    <biggive-campaign-card campaign-type="Match Funded" currency-code="GBP" days-remaining="10" space-below="4" target="76543">
+    <biggive-campaign-card campaign-type="Match Funded"  days-remaining="10" primary-figure-label="Primary label" primary-figure-amount="£123" secondary-figure-label="Secondary label" secondary-figure-amount="£1,000" space-below="4" target="76543">
      <mock:shadow-root>
        <div class="container space-below-4">
              <div class="sleeve">
@@ -35,16 +38,12 @@ describe('biggive-campaign-card', () => {
            </div>
            <div class="meta-wrap">
              <div class="meta-item">
-               <span class="label"></span>
-               <span class="text">
-                 –
-               </span>
+               <span class="label">Primary label</span>
+               <span class="text">£123</span>
              </div>
              <div class="meta-item">
-               <span class="label"></span>
-               <span class="text">
-                 –
-               </span>
+               <span class="label">Secondary label</span>
+               <span class="text">£1,000</span>
              </div>
            </div>
            <div class="progress-bar-wrap">
