@@ -152,7 +152,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
     else if (this.campaignOpen) {
       this.tickerItems.push({
-        label: 'remaining till close',
+        label: 'remaining',
         figure: this.timeLeftPipe.transform(this.campaign.endDate),
       });
     }
