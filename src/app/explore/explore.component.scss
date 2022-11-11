@@ -1,55 +1,19 @@
 @use '@angular/material' as mat;
 @import '../../abstract';
 
-.explore-hero {
-  @media #{$breakpoint-lg} {
-    padding-top: 5rem;
-    padding-bottom: 2.5rem;
-  }
-}
-
-.explore-hero-flex__child {
-  padding-right: 15px; // Allow space so GetSiteControl right-floated widgets don't cover copy
+app-campaign-search-form {
+  position: absolute;
+  right: 50px;
+  top: 120px;
 
   @media #{$breakpoint-md} {
-    margin-right: 1rem;
-    &:last-child {
-      margin-left: 1rem;
-      margin-right: 0;
-    }
+    top: 150px;
   }
-  @media #{$breakpoint-lg} {
-    margin-right: 2rem;
-    &:last-child {
-      margin-left: 2rem;
-      margin-right: 0;
-    }
-  }
-  @media #{$breakpoint-xl} {
-    margin-right: 3rem;
-    &:last-child {
-      margin-left: 3rem;
-      margin-right: 0;
-    }
-  }
-}
 
-.c-explore-hero__heading {
-  margin-bottom: 0;
-  line-height: 1.2;
-  @media #{$breakpoint-md} {
-    font-size: 35px;
-  }
   @media #{$breakpoint-lg} {
-    font-size: 45px;
+    right: 50px;
+    top: 300px;
   }
-  @media #{$breakpoint-xl} {
-    font-size: 60px;
-  }
-}
-
-.c-grid {
-  @include campaign-grid;
 }
 
 .error {

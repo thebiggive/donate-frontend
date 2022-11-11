@@ -9,10 +9,12 @@ import { Subscription } from 'rxjs';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
+import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { environment } from '../../environments/environment';
+import { FiltersComponent } from '../filters/filters.component';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
 import { NavigationService } from '../navigation.service';
@@ -29,6 +31,8 @@ import { TimeLeftPipe } from '../time-left.pipe';
   styleUrls: ['./meta-campaign.component.scss'],
   imports: [
     ...allChildComponentImports,
+    CampaignSearchFormComponent,
+    FiltersComponent,
     InfiniteScrollModule,
     MatProgressSpinnerModule,
     OptimisedImagePipe,
