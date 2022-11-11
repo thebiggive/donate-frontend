@@ -1,4 +1,4 @@
-import { isPlatformBrowser, ViewportScroller } from '@angular/common';
+import { CurrencyPipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
 import { AfterViewChecked, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
+import { CampaignGroupsService } from '../campaign-groups.service';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
@@ -19,7 +20,6 @@ import { NavigationService } from '../navigation.service';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
-import { CampaignGroupsService } from '../campaign-groups.service';
 import { TimeLeftPipe } from '../time-left.pipe';
 
 @Component({
@@ -32,9 +32,10 @@ import { TimeLeftPipe } from '../time-left.pipe';
     InfiniteScrollModule,
     MatProgressSpinnerModule,
     OptimisedImagePipe,
+    TimeLeftPipe,
   ],
   providers: [
-    TimeLeftPipe
+    CurrencyPipe, // Not standlone
   ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
@@ -68,6 +69,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   constructor(
     private campaignService: CampaignService,
+    private currencyPipe: CurrencyPipe,
     private fundService: FundService,
     private navigationService: NavigationService,
     private pageMeta: PageMetaService,
@@ -154,15 +156,15 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.tickerItems.push(...[
       {
         label: 'Total Raised',
-        figure: this.formatAmount(this.campaign.amountRaised),
+        figure: this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
       },
       {
         label: 'Total Match Funds',
-        figure: this.formatAmount(this.campaign.matchFundsTotal),
+        figure: this.currencyPipe.transform(this.campaign.matchFundsTotal, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
       },
       {
         label: 'Match Funds Remaining',
-        figure: this.formatAmount(this.campaign.matchFundsRemaining),
+        figure: this.currencyPipe.transform(this.campaign.matchFundsRemaining, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
       },
     ]);
 
@@ -221,18 +223,6 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     }
 
     return Math.round((childCampaign.amountRaised / childCampaign.target) * 100);
-  }
-
-  formatAmount(amount: number) {
-    //https://stackoverflow.com/questions/149055/how-to-format-numbers-as-currency-strings
-    const formatter = new Intl.NumberFormat('en-GB', {
-      style: 'currency',
-      currency: 'GBP',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0, // (causes 2500.99 to be printed as £2,501)
-    });
-
-    return formatter.format(amount);
   }
 
   private loadMoreForCurrentSearch() {
