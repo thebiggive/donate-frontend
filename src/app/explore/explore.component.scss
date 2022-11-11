@@ -5,15 +5,15 @@ app-campaign-search-form {
   z-index: 200; // Must trump components for form to receive input.
   position: absolute;
   right: 50px;
-  top: 120px;
+  top: 50px;
 
   @media #{$breakpoint-md} {
-    top: 150px;
+    top: 120px;
   }
 
   @media #{$breakpoint-lg} {
     right: 50px;
-    top: 300px;
+    top: 250px;
   }
 }
 
