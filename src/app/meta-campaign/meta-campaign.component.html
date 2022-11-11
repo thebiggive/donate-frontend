@@ -33,14 +33,15 @@
       [getDefaultSort]="getDefaultSort"
     ></app-filters>
 
-    <biggive-grid *ngIf="children" column-count="3">
-      <div *ngFor="let campaign of children">
-        <div
-          infiniteScroll
-          (scrolled)="onScroll()"
-          [infiniteScrollDistance]="20"
-          [scrollWindow]="true"
-        ></div>
+    <biggive-grid
+      *ngIf="children"
+      column-count="3"
+      infiniteScroll
+      [infiniteScrollThrottle]="500"
+      (scrolled)="onScroll()"
+      [scrollWindow]="true"
+    >
+      <div *ngFor="let campaign of children">        
         <biggive-campaign-card
           [banner]="campaign.imageUri | optimisedImage:830 | async"
           [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'"
