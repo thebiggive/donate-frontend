@@ -1,0 +1,28 @@
+@import '../../abstract';
+
+.c-search {
+  max-width: 440px;
+  @include make-card;
+  color: $colour-black;
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+  @media #{$breakpoint-md} {
+    padding: 1.5rem;
+  }
+}
+
+.c-search__heading {
+  color: $colour-black;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+form {
+  max-width: 440px;
+}
+
+button {
+  box-shadow: none !important;
+}

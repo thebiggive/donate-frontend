@@ -1,0 +1,30 @@
+@import '../../abstract';
+
+.c-filters {
+  margin-top: -2rem;
+  position: relative;
+
+  &__groups {
+    display: flex;
+    max-width: $full-copy-max-width;
+    margin: 0 auto;
+  }
+
+  &__group {
+    &:first-child {
+      padding-right: 1rem;
+    }
+  }
+
+  &__filter-button {
+    margin-top: 4px;
+    height: 3.3rem;
+  }
+
+  &__reset {
+    display: flex;
+    width: 7rem;
+    margin: 0 auto 2rem auto;
+    justify-content: space-between;
+  }
+}
