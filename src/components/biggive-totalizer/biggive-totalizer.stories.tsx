@@ -36,9 +36,6 @@ export default {
         options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
       },
     },
-    currencyCode: {
-      name: 'Currency code',
-    },
     includingGiftAid: {
       name: 'Include Gift Aid',
     },

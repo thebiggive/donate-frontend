@@ -18,7 +18,7 @@
     max-width: $screen-desktop-max;
     margin-left: auto;
     margin-right: auto;
-  }  
+  }
   .content-wrap {
     width: 40%;
     position: relative;
@@ -58,7 +58,6 @@
       margin: 0 0 $spacer-5 0;
       padding: 0;
     }
-    
   }
 
   .graphic-wrap {
@@ -74,8 +73,6 @@
       }
     }
   }
-  
-
 }
 
 @media screen and (max-width: $screen-tablet-max) {
