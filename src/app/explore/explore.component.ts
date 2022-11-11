@@ -8,12 +8,13 @@ import { Subscription } from 'rxjs';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { Campaign } from '../campaign.model';
-import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
+import { CampaignGroupsService } from '../campaign-groups.service';
+import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
+import { FiltersComponent } from '../filters/filters.component';
 import { PageMetaService } from '../page-meta.service';
 import { PromotedCampaignsComponent } from '../promoted-campaigns/promoted-campaigns.component';
 import { SearchService } from '../search.service';
-import { CampaignGroupsService } from '../campaign-groups.service';
 
 /** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
@@ -23,7 +24,8 @@ import { CampaignGroupsService } from '../campaign-groups.service';
   styleUrls: ['./explore.component.scss'],
   imports: [
     ...allChildComponentImports,
-    CampaignCardComponent,
+    CampaignSearchFormComponent,
+    FiltersComponent,
     FlexLayoutModule,
     InfiniteScrollModule,
     MatProgressSpinnerModule,

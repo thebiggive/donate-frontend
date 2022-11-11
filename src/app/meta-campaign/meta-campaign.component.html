@@ -23,37 +23,40 @@
     main-image-align-horizontal="right"
   ></biggive-hero-image>
 
+  <app-campaign-search-form
+    *ngIf="campaign.campaignCount && campaign.campaignCount > 10"
+    [getDefaultSort]="getDefaultSort"
+  ></app-campaign-search-form>
+
   <biggive-page-section class="b-container">
-    <biggive-campaign-card-filter-grid
-      [beneficiaryOptions]="beneficiaryOptions"
-      [categoryOptions]="categoryOptions"
-      [locationOptions]="countryOptions"
-      [fundingOptions]="fundingOptions">
-      <biggive-grid slot="campaign-grid" column-count="3">
-        <div *ngFor="let campaign of children">
-          <div
-            infiniteScroll
-            (scrolled)="onScroll()"
-            [infiniteScrollDistance]="20"
-            [scrollWindow]="true"
-            [alwaysCallback]="true"
-          ></div>
-          <biggive-campaign-card
-            [banner]="campaign.imageUri | optimisedImage:830 | async"
-            [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'" 
-            [campaignTitle]="campaign.title"
-            [donateButtonUrl]="'/donate/' + campaign.id"
-            [moreInfoButtonUrl]="'/campaign/' + campaign.id"
-            [organisationName]="campaign.charity.name"
-            primary-figure-label="Match Funds Remaining" 
-            [primaryFigureAmount]="campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : '1.0-0'" 
-            [progressBarCounter]="getPercentageRaised(campaign)"
-            secondary-figure-label="Total Funds Raised" 
-            [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : '1.0-0'">
-          </biggive-campaign-card>
-        </div>
-      </biggive-grid>
-    </biggive-campaign-card-filter-grid>
+    <app-filters
+      *ngIf="campaign.campaignCount && campaign.campaignCount > 1"
+      [getDefaultSort]="getDefaultSort"
+    ></app-filters>
+
+    <biggive-grid *ngIf="children" column-count="3">
+      <div *ngFor="let campaign of children">
+        <div
+          infiniteScroll
+          (scrolled)="onScroll()"
+          [infiniteScrollDistance]="20"
+          [scrollWindow]="true"
+        ></div>
+        <biggive-campaign-card
+          [banner]="campaign.imageUri | optimisedImage:830 | async"
+          [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'"
+          [campaignTitle]="campaign.title"
+          [donateButtonUrl]="'/donate/' + campaign.id"
+          [moreInfoButtonUrl]="'/campaign/' + campaign.id"
+          [organisationName]="campaign.charity.name"
+          primary-figure-label="Match Funds Remaining"
+          [primaryFigureAmount]="campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : '1.0-0'"
+          [progressBarCounter]="getPercentageRaised(campaign)"
+          secondary-figure-label="Total Funds Raised"
+          [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : '1.0-0'">
+        </biggive-campaign-card>
+      </div>
+    </biggive-grid>
 
     <div *ngIf="!hasMore" class="t-align-center padding-top-s" >
       <strong>No more campaigns available</strong>

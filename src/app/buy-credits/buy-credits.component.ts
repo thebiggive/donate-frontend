@@ -1,6 +1,6 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -59,7 +59,7 @@ import { getCurrencyMaxValidator } from '../validators/currency-max';
     TimeLeftPipe,
   ],
 })
-export class BuyCreditsComponent implements OnInit {
+export class BuyCreditsComponent implements AfterContentInit, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
   addressSuggestions: GiftAidAddressSuggestion[] = [];
   isLoggedIn: boolean = false;
@@ -181,6 +181,10 @@ export class BuyCreditsComponent implements OnInit {
   }
 
   ngAfterContentInit() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const observable = this.giftAidGroup.get('homeAddress')?.valueChanges.pipe(
       startWith(''),
       // https://stackoverflow.com/a/51470735/2803757
