@@ -47,7 +47,7 @@
     }
     h1 {
       @include heading-1;
-      margin: 0 0 $spacer-3 0;
+      margin: 50px 0 $spacer-3 0; // Increased top from 0 to 50px for now to support absolute-overlaid search form.
       padding: 0;
 
       @media (max-width: $screen-tablet-max) {
