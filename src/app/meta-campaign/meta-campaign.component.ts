@@ -32,10 +32,10 @@ import { TimeLeftPipe } from '../time-left.pipe';
     InfiniteScrollModule,
     MatProgressSpinnerModule,
     OptimisedImagePipe,
-    TimeLeftPipe,
   ],
   providers: [
     CurrencyPipe, // Not standlone
+    TimeLeftPipe, // Injected for TS use
   ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
