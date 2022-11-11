@@ -7,9 +7,13 @@
     secondary-text-colour="black"
     include-gift-aid="true"
     [mainMessage]="(campaign.amountRaised  | currency: campaign.currencyCode : 'symbol' : '1.0-0') + ' raised inc. Gift aid'"
-    [tickerItems]="tickerItems">
+  >
+    <biggive-totalizer-ticker-item
+      *ngFor="let tickerItem of tickerItems"
+      [figure]="tickerItem.figure"
+      [label]="tickerItem.label"></biggive-totalizer-ticker-item>
   </biggive-totalizer>
-
+  
   <biggive-hero-image
     [mainTitle]="campaign.title"
     [mainImage]="campaign.bannerUri | optimisedImage:830 | async"
