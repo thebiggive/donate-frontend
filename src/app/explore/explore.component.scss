@@ -2,6 +2,7 @@
 @import '../../abstract';
 
 app-campaign-search-form {
+  z-index: 200; // Must trump components for form to receive input.
   position: absolute;
   right: 50px;
   top: 120px;
