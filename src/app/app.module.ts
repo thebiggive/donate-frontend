@@ -20,7 +20,6 @@ import { TBG_DONATE_STORAGE } from './donation.service';
 import { environment } from '../environments/environment';
 import { TBG_DONATE_ID_STORAGE } from './identity.service';
 import { NavigationComponent } from './navigation/navigation.component';
-import { TimeLeftPipe } from './time-left.pipe';
 
 @NgModule({
   declarations: [
@@ -43,7 +42,6 @@ import { TimeLeftPipe } from './time-left.pipe';
     CampaignPromoted2Resolver,
     CampaignResolver,
     CharityCampaignsResolver,
-    TimeLeftPipe,
     // In Universal / SSR mode, `APP_BASE_HREF` should vary according to the host reported
     // by the browser once client side JS takes over. This is necessary so we can successfully
     // serve the app on multiple live domains.

@@ -18,6 +18,7 @@ import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { MetaCampaignComponent } from './meta-campaign.component';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 
 describe('MetaCampaignComponent', () => {
@@ -93,6 +94,7 @@ describe('MetaCampaignComponent', () => {
         // Inject in-memory storage for tests, in place of local storage.
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         InMemoryStorageService,
+        TimeLeftPipe,
       ],
     })
     .compileComponents();
