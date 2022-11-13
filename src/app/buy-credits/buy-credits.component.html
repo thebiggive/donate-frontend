@@ -184,11 +184,20 @@
 
         <div *ngIf="!isLoggedIn && !isLoading">
             <p>You must be logged in to purchase donation credits.</p>
-            <button
-                mat-raised-button
-                color="primary"
-                (click)="showLoginDialog()"
-            >Log in</button>
+
+            <div class="auth-options">
+                <button
+                    mat-raised-button
+                    color="secondary"
+                    (click)="showRegisterDialog()"
+                >Register</button>
+
+                <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="showLoginDialog()"
+                >Log in</button>
+            </div>
         </div>
 
         <div *ngIf="isLoggedIn && isPurchaseComplete">

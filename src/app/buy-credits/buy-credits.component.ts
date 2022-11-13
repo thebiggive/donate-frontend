@@ -32,6 +32,7 @@ import { IdentityService } from '../identity.service';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { Person } from '../person.model';
 import { PostcodeService } from '../postcode.service';
+import { RegisterModalComponent } from '../register-modal/register-modal.component';
 import { TimeLeftPipe } from '../time-left.pipe';
 import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
@@ -260,6 +261,15 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
   showLoginDialog() {
     const loginDialog = this.dialog.open(LoginModalComponent);
     loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
+      if (data && data.id) {
+        this.loadAuthedPersonInfo(data.id, data.jwt);
+      }
+    });
+  }
+
+  showRegisterDialog() {
+    const registerDialog = this.dialog.open(RegisterModalComponent);
+    registerDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
       if (data && data.id) {
         this.loadAuthedPersonInfo(data.id, data.jwt);
       }

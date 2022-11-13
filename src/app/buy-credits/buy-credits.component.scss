@@ -14,6 +14,13 @@
     }
 }
 
+.auth-options {
+    display: flex;
+    justify-content: space-between;
+    max-width: 15rem;
+    margin-bottom: 2rem;
+}
+
 .mat-stepper-vertical {
     margin-top: 8px;
 }
