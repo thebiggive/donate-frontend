@@ -51,10 +51,36 @@
 
 
     <biggive-totalizer
-    total-raised="1500"
-    total-match-funds="10000"
-    >
-    </biggive-totalizer>
+    space-below="0"
+    primary-colour="primary"
+    primary-text-colour="white"
+    secondary-colour="secondary"
+    secondary-text-colour="black"
+    main-message="£X raised">
+
+    <div slot="ticker-items">
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£2000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="total raised"></biggive-totalizer-ticker-item>
+    </div>
+  </biggive-totalizer>
 
 
 
@@ -71,6 +97,38 @@
         button-label="Donate now"
       ></biggive-hero-image>
 
+
+
+
+    <biggive-page-section>
+
+      <div style="display: grid; grid-template-columns: 2fr 1fr; grid-column-gap: 20px;">
+        <biggive-branded-image
+          space-below="3"  
+          image-url="https://images-production.thebiggive.org.uk/0011r00002Hofk6AAB/CCampaign%20Banner/75340c02-cd36-41bc-8d38-548cda5be1f5.png"   
+          logo-url="https://images-production.thebiggive.org.uk/0011r00002Hofk6AAB/Charity%20Logo/db3298e4-ab2e-4da3-b4fc-66d5bf146f75.png"    
+          slug="Match Funded"
+          >
+        </biggive-branded-image>
+
+        <biggive-campaign-highlights
+          space-below="0"
+          currency-code="GBP"
+          primary-figure-label="Total raised"
+          primary-figure-amount="£1,000,000"
+          secondary-figure-label="Total remaining"
+          secondary-figure-amount="£1,000,000"
+          progress-bar-counter="100"
+          primary-stat-icon="AlarmClock"
+          primary-stat-text="31 days left"
+          secondary-stat-icon="Heart"
+          secondary-stat-text="4129 donations"
+        </biggive-campaign-highlights>
+
+      </div>
+
+      
+    </biggive-page-section>
 
 
 

@@ -11,9 +11,11 @@
     background-color: $colour-secondary;
     color: $colour-black;
     padding: $spacer-1 $spacer-3;
-    width: 50%;
+    width: 100%;
     margin: auto;
     transform: translateY(50%);
+    margin-top: -17px;
+    box-sizing: border-box;
   }
 
   img {
