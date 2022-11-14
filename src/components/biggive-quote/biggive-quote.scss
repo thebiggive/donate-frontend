@@ -2,7 +2,6 @@
   display: contents;
 }
 
-
 .container {
   @include all-round-shadow();
   @include standard-font();
@@ -20,5 +19,28 @@
     background-position: center top;
     background-size: auto 45px;
     background-repeat: no-repeat;
+  }
+
+  @media screen and (max-width: $screen-tablet-max) {
+    padding: $spacer-5;
+
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  @media screen and (max-width: $screen-mobile-max) {
+    padding: $spacer-4;
+    @include font-size-small();
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  @media screen and (max-width: $screen-mobile-small) {
+    padding: $spacer-3;
   }
 }
