@@ -349,9 +349,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
             figure: this.currencyPipe.transform(this.campaign.matchFundsRemaining, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
         },
       ]);
-    }
-
-    if (!campaignOpen) {
+    } else {
       tickerItems.push({
         label: 'days duration',
         figure: durationInDays.toString(),
