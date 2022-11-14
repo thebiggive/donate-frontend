@@ -51,7 +51,7 @@ document.addEventListener('doSearchAndFilterUpdate', $event => console.log($even
 export const CampaignCardFilterGridComponent = Template.bind({});
 CampaignCardFilterGridComponent.args = {
   categoryOptions: ['ABC', 'DEF'],
-  beneficiaryOptions: ['ABC', 'DEF'],
+  beneficiaryOptions: ['ABC', 'DEF', 'ABC', 'DEF', 'ABC', 'DEF', 'ABC', 'DEF', 'ABC', 'DEF', 'ABC', 'DEF', 'ABC', 'DEF'],
   locationOptions: ['ABC', 'DEF'],
   fundingOptions: ['ABC', 'DEF'],
 };
