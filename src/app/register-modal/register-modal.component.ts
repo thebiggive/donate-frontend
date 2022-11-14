@@ -9,7 +9,6 @@ import { allChildComponentImports } from '../../allChildComponentImports';
 import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
 
-
 @Component({
   standalone: true,
   selector: 'app-register-modal',
@@ -53,7 +52,7 @@ export class RegisterModalComponent implements OnInit {
         Validators.required,
         Validators.minLength(10),
       ]],
-    });    
+    });
   }
 
   captchaReturn(captchaResponse: string) {
@@ -85,6 +84,7 @@ export class RegisterModalComponent implements OnInit {
     this.registering = true;
 
     this.identityService.create({
+      captcha_code: captchaResponse,
       email_address: this.form.value.emailAddress,
       first_name: this.form.value.firstName,
       last_name: this.form.value.lastName,
