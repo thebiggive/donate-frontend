@@ -27,7 +27,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
-import { countries } from 'country-code-lookup';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
 import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
@@ -40,6 +39,7 @@ import { Campaign } from './../campaign.model';
 import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
 import { CampaignService } from '../campaign.service';
 import { CardIconsService } from '../card-icons.service';
+import { COUNTRIES } from '../countries';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { DonationService } from '../donation.service';
@@ -113,9 +113,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   recaptchaSiteKey = environment.recaptchaSiteKey;
 
-  // Sort by name, with locale support so Åland Islands doesn't come after 'Z..'.
-  // https://stackoverflow.com/a/39850483/2803757
-  countryOptions = countries.sort((cA, cB)  => cA.country.localeCompare(cB.country));
+  countryOptions = COUNTRIES;
 
   creditPenceToUse = 0; // Set non-zero if logged in and Customer has a credit balance to spend. Caps donation amount too in that case.
   currencySymbol: string;
