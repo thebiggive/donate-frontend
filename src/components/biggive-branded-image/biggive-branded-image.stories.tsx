@@ -1,6 +1,12 @@
 export default {
   title: 'Components/Content',
   argTypes: {
+    charityLocation: {
+      name: 'Charity Location',
+    },
+    charityName: {
+      name: 'Charity Name',
+    },
     spaceBelow: {
       name: 'Space below',
       control: {
@@ -22,6 +28,8 @@ export default {
 
 const Template = args => `
             <biggive-branded-image
+              charity-location="${args.charityLocation}"
+              charity-name="${args.charityName}"
               space-below="${args.spaceBelow}"  
               image-url="${args.imageUrl}"   
               logo-url="${args.logoUrl}"    
@@ -32,6 +40,8 @@ const Template = args => `
 
 export const BrandedImageComponent = Template.bind({});
 BrandedImageComponent.args = {
+  charityLocation: 'London',
+  charityName: 'The Big Give Trust',
   spaceBelow: 4,
   imageUrl: 'https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693',
   logoUrl: 'https://99designs-blog.imgix.net/blog/wp-content/uploads/2018/10/attachment_98611730-e1539290946446.png?auto=format&q=60&fit=max&w=930',
