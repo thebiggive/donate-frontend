@@ -9,7 +9,6 @@ import { allChildComponentImports } from '../../allChildComponentImports';
 import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
 
-
 @Component({
   standalone: true,
   selector: 'app-register-modal',
@@ -53,7 +52,7 @@ export class RegisterModalComponent implements OnInit {
         Validators.required,
         Validators.minLength(10),
       ]],
-    });    
+    });
   }
 
   captchaReturn(captchaResponse: string) {
@@ -75,16 +74,15 @@ export class RegisterModalComponent implements OnInit {
         this.registering = false;
       }, (error) => {
         this.captcha.reset();
-        this.registerError = 'Auto login: ' + error.error.error.description || 'Unknown error';
+        this.registerError = 'Auto login: ' + (error.error.description !== undefined ? error.error.description : error.message) || 'Unknown error';
         this.registering = false;
       });
 
       return;
     }
 
-    this.registering = true;
-
     this.identityService.create({
+      captcha_code: captchaResponse,
       email_address: this.form.value.emailAddress,
       first_name: this.form.value.firstName,
       last_name: this.form.value.lastName,
@@ -99,17 +97,18 @@ export class RegisterModalComponent implements OnInit {
         this.captcha.execute();
       }, (error) => {
         this.captcha.reset();
-        this.registerError = 'Update: ' + error.error.error.description || 'Unknown error';
+        this.registerError = 'Update: ' + (error.error.description !== undefined ? error.error.description : error.message) || 'Unknown error';
         this.registering = false;
       });
     }, (error) => {
       this.captcha.reset();
-      this.registerError = 'Create: ' + error.error.error.description || 'Unknown error';
+      this.registerError = 'Create: ' + (error.error.description !== undefined ? error.error.description : error.message) || 'Unknown error';
       this.registering = false;
     });
   }
 
   register() {
+    this.registering = true;
     this.captcha.reset();
     this.captcha.execute();
   }

@@ -356,6 +356,13 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     this.captchaCode = captchaResponse;
   }
 
+  logout() {
+    this.personId = undefined;
+    this.isLoggedIn = false;
+    this.creditForm.reset();
+    this.identityService.clearJWT();
+  }
+
   async stepChanged(event: StepperSelectionEvent)  {
     if (event.previouslySelectedStep.label === 'Your Donation Credits') {
       this.captcha.execute();
@@ -482,5 +489,4 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     }
     this.analyticsService.logError('credit_tip_donation_create_failed', errorMessage);
   }
-
 }
