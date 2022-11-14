@@ -81,8 +81,6 @@ export class RegisterModalComponent implements OnInit {
       return;
     }
 
-    this.registering = true;
-
     this.identityService.create({
       captcha_code: captchaResponse,
       email_address: this.form.value.emailAddress,
@@ -110,6 +108,7 @@ export class RegisterModalComponent implements OnInit {
   }
 
   register() {
+    this.registering = true;
     this.captcha.reset();
     this.captcha.execute();
   }
