@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faCircleCheck, faFilter, faFilterCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { FiltersSelectDialogComponent } from './filters-select-dialog.component';
@@ -26,15 +27,18 @@ export type FilterType = keyof typeof FilterEnum;
   styleUrls: ['./filters.component.scss'],
   imports: [
     ...allChildComponentImports,
+    FontAwesomeModule,
     MatButtonModule,
     MatDialogModule,
-    MatIconModule,
     MatOptionModule,
     MatSelectModule,
   ],
 })
 export class FiltersComponent {
   @Input() getDefaultSort: () => string;
+  faCircleCheck = faCircleCheck;
+  faFilter = faFilter;
+  faFilterCircleXmark = faFilterCircleXmark;
 
   constructor(public dialog: MatDialog, public search: SearchService) {}
 

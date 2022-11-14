@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,11 +8,10 @@ import { Subscription } from 'rxjs';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { Campaign } from '../campaign.model';
-import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
+import { CampaignGroupsService } from '../campaign-groups.service';
 import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
 import { FiltersComponent } from '../filters/filters.component';
-import { HeroComponent } from '../hero/hero.component';
 import { PageMetaService } from '../page-meta.service';
 import { PromotedCampaignsComponent } from '../promoted-campaigns/promoted-campaigns.component';
 import { SearchService } from '../search.service';
@@ -25,11 +24,9 @@ import { SearchService } from '../search.service';
   styleUrls: ['./explore.component.scss'],
   imports: [
     ...allChildComponentImports,
-    CampaignCardComponent,
     CampaignSearchFormComponent,
     FiltersComponent,
     FlexLayoutModule,
-    HeroComponent,
     InfiniteScrollModule,
     MatProgressSpinnerModule,
     PromotedCampaignsComponent,
@@ -46,6 +43,11 @@ export class ExploreComponent implements OnDestroy, OnInit {
   private offset = 0;
   private routeParamSubscription: Subscription;
   private searchServiceSubscription: Subscription;
+
+  beneficiaryOptions: string[] = [];
+  categoryOptions: string[] = [];
+  countryOptions: string[] = [];
+  fundingOptions: string[] = [];
 
   constructor(
     private campaignService: CampaignService,
@@ -78,6 +80,18 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
     this.searchService.reset(this.getDefaultSort(), true);
     this.loadQueryParamsAndRun();
+
+    this.beneficiaryOptions = CampaignGroupsService.getBeneficiaryNames();
+    this.categoryOptions = CampaignGroupsService.getCategoryNames();
+    this.countryOptions = CampaignGroupsService.getCountries();
+    this.fundingOptions = [
+      'Match Funded'
+    ]
+  }
+
+  @HostListener('doSearchAndFilterUpdate', ['$event'])
+  onDoSearchAndFilterUpdate(event: CustomEvent) {
+    this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
   }
 
   /**
@@ -114,7 +128,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
       return 100;
     }
 
-    return (childCampaign.amountRaised / childCampaign.target) * 100;
+    return Math.round((childCampaign.amountRaised / childCampaign.target) * 100);
   }
 
   private moreMightExist(): boolean {

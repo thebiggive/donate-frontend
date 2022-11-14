@@ -39,7 +39,7 @@ import { PageMetaService } from '../page-meta.service';
   ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
-  additionalImageUris: Array<string|undefined> = [];
+  additionalImageUris: Array<string|null> = [];
   campaign: Campaign;
   isPendingOrNotReady = false;
   campaignInFuture = false;

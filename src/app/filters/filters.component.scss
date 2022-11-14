@@ -1,7 +1,7 @@
 @import '../../abstract';
 
 .c-filters {
-  margin-top: 1rem;
+  margin-top: -2rem;
   position: relative;
 
   &__groups {
@@ -22,16 +22,9 @@
   }
 
   &__reset {
-    display: block;
-    width: 2.5rem;
-    height: 2.5rem;
-    margin: 0 auto 1.5rem auto;
-    background-image: url(/assets/images/clear-filters.png);
-    background-size: 40%;
-    background-repeat: no-repeat;
-    background-position: 0 50%;
-    padding: 0 0 0 3.5rem;
-    line-height: 1;
-    text-align: center;
+    display: flex;
+    width: 7rem;
+    margin: 0 auto 2rem auto;
+    justify-content: space-between;
   }
 }

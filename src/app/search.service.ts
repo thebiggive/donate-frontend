@@ -36,7 +36,43 @@ export class SearchService {
     };
   }
 
-  filter(filterName: string, value: string) {
+  doSearchAndFilterAndSort(customSearchEvent: {
+    searchText: string;
+    sortBy: string;
+    filterCategory: string;
+    filterBeneficiary: string;
+    filterLocation: string;
+    filterFunding: string;
+  }, defaultSort: string) {
+    let searchText = customSearchEvent.searchText;
+    if (!searchText) {
+      searchText = ''; // prevents error calling .length on 'undefined' in search.service.ts
+    }
+
+    const sortBy = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
+
+    this.search(searchText, sortBy);
+
+    if (customSearchEvent.filterBeneficiary) {
+      this.filter('beneficiary', customSearchEvent.filterBeneficiary);
+    }
+
+    if (customSearchEvent.filterCategory) {
+      this.filter('category', customSearchEvent.filterCategory);
+    }
+
+    if (customSearchEvent.filterLocation) {
+      this.filter('country', customSearchEvent.filterLocation);
+    }
+
+    if (customSearchEvent.filterFunding) {
+      this.filter('onlyMatching', customSearchEvent.filterFunding === 'Match Funded');
+    }
+
+    this.sort(sortBy);
+  }
+
+  filter(filterName: string, value: string|boolean) {
     this.nonDefaultsActive = true;
     this.selected[filterName] = value;
     this.changed.emit(true);

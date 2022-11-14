@@ -9,6 +9,9 @@ import { CampaignGroupsService } from '../campaign-groups.service';
 import { CampaignSummary } from '../campaign-summary.model';
 import { ImageService } from '../image.service';
 
+/**
+ * @deprecated Remove once Charity page is using the Stencil counterpart.
+ */
 @Component({
   standalone: true,
   selector: 'app-campaign-card',
@@ -25,7 +28,7 @@ import { ImageService } from '../image.service';
 export class CampaignCardComponent implements OnInit {
   @Input() campaign: CampaignSummary;
   @Input() inFundContext: boolean;
-  bannerUri?: string;
+  bannerUri: string|null = null;
   isFinished: boolean;
 
   constructor(private imageService: ImageService) {}

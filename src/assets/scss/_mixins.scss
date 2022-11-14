@@ -125,8 +125,8 @@
 
 @mixin make-donate-button {
   padding: 0.5rem 2rem;
-  background-color: $colour-teal-lighter;
-  color: $colour-teal-darkest;
+  background-color: $colour-primary;
+  color: $colour-primary-contrast;
   border-radius: 4px;
   font-size: 18px;
   box-shadow: none !important;
@@ -134,13 +134,13 @@
   &:hover,
   &:active,
   &:focus {
-    background-color: darken($colour-teal-lighter, 10%);
+    background-color: darken($colour-primary, 10%);
   }
 }
 
 @mixin make-back-button {
   @include b-rt-sm;
-  color: $colour-teal-dark;
+  color: $colour-primary;
   margin-bottom: 1rem;
   .mat-icon-button {
     font-weight: 400;
@@ -170,7 +170,7 @@
   top: -19px;
   left: -4px;
   background: $colour-highlight;
-  color: $colour-teal-darkest;
+  color: $colour-black;
   font-size: 12px;
   padding: 0.25rem 0.5rem;
 }

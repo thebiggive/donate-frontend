@@ -5,12 +5,13 @@ import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ComponentsModule } from '@biggive/components-angular';
 import { RouterModule } from '@angular/router';
+import { ComponentsModule } from '@biggive/components-angular';
 import { RECAPTCHA_NONCE } from 'ng-recaptcha';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
 import { AppComponent } from './app.component';
+
 import { routes } from './app-routing';
 import { CampaignListResolver } from './campaign-list.resolver';
 import { CampaignPromoted1Resolver } from './campaign-promoted-1.resolver';
@@ -19,19 +20,21 @@ import { CampaignResolver } from './campaign.resolver';
 import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import { TBG_DONATE_STORAGE } from './donation.service';
 import { environment } from '../environments/environment';
+import { FooterComponent } from './footer/footer.component';
 import { TBG_DONATE_ID_STORAGE } from './identity.service';
 import { NavigationComponent } from './navigation/navigation.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    FooterComponent,
+    NavigationComponent,
   ],
   imports: [    
     BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
     ComponentsModule,
     HttpClientModule,
-    NavigationComponent,
     RouterModule.forRoot(routes, {
       initialNavigation: 'enabledBlocking', // "This value is required for server-side rendering to work." https://angular.io/api/router/InitialNavigation
       onSameUrlNavigation: 'reload', // Allows Explore & home logo links to clear search filters in ExploreComponent

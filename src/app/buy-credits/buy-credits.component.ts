@@ -1,5 +1,6 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { AfterContentInit, Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -31,6 +32,7 @@ import { IdentityService } from '../identity.service';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { Person } from '../person.model';
 import { PostcodeService } from '../postcode.service';
+import { RegisterModalComponent } from '../register-modal/register-modal.component';
 import { TimeLeftPipe } from '../time-left.pipe';
 import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
@@ -93,19 +95,18 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     private campaignService: CampaignService,
     private donationService: DonationService,
     private identityService: IdentityService,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private postcodeService: PostcodeService,
-    ) { }
+  ) {}
 
   ngOnInit(): void {
-    const idAndJWT = this.identityService.getIdAndJWT();
-    if (idAndJWT !== undefined) {
-      if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
-        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+    if (isPlatformBrowser(this.platformId)) {
+      const idAndJWT = this.identityService.getIdAndJWT();
+      if (idAndJWT !== undefined) {
+        if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
+          this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+        }
       }
-    }
-
-    else {
-      this.showLoginDialog();
     }
 
     const formGroups: {
@@ -181,6 +182,10 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
   }
 
   ngAfterContentInit() {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const observable = this.giftAidGroup.get('homeAddress')?.valueChanges.pipe(
       startWith(''),
       // https://stackoverflow.com/a/51470735/2803757
@@ -256,6 +261,15 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
   showLoginDialog() {
     const loginDialog = this.dialog.open(LoginModalComponent);
     loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
+      if (data && data.id) {
+        this.loadAuthedPersonInfo(data.id, data.jwt);
+      }
+    });
+  }
+
+  showRegisterDialog() {
+    const registerDialog = this.dialog.open(RegisterModalComponent);
+    registerDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
       if (data && data.id) {
         this.loadAuthedPersonInfo(data.id, data.jwt);
       }
@@ -360,7 +374,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
       // Pre-fill rarely-changing form values from the Person.
       this.giftAidGroup.patchValue({
         homeAddress: person.home_address_line_1,
-        homeOutsideUK: person.home_country_code !== 'GB',
+        homeOutsideUK: person.home_country_code !== null && person.home_country_code !== 'GB',
         homePostcode: person.home_postcode,
       });
       

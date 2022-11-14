@@ -4,8 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
-import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
-import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
 import { PromotedCampaignsComponent } from '../promoted-campaigns/promoted-campaigns.component';
@@ -17,8 +15,6 @@ import { PromotedCampaignsComponent } from '../promoted-campaigns/promoted-campa
   styleUrls: ['./home.component.scss'],
   imports: [
     ...allChildComponentImports,
-    CampaignCardComponent,
-    CampaignSearchFormComponent,
     FlexLayoutModule,
     PromotedCampaignsComponent,
   ]
@@ -27,6 +23,9 @@ export class HomeComponent implements OnInit {
   campaigns: CampaignSummary[];
   promotedCampaign1: Campaign;
   promotedCampaign2: Campaign;
+  mainTitle = 'Matching Donations.\nMultiplying Impact.';
+  highlightCard1Title = 'Double your donation\nin the Christmas Challenge 2022';
+  highlightCard1Subtitle = 'Donate between\n29 Nov – 6 Dec';
 
   public constructor(private pageMeta: PageMetaService, private route: ActivatedRoute) {}
 

@@ -1,12 +1,14 @@
 <main>
   <biggive-hero-image
     colour-scheme="primary"
-    main-image="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/homepage-banner.jpg"
-    main-title="Multiplying Donations & Impact."
-    teaser="We run match funding campaigns to make an extraordinary difference to the world’s big challenges."
+    main-image="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/banner-home.jpg"
+    [mainTitle]="mainTitle"
+    teaser="Hi. We’re Big Give. We run match funding campaigns to make an extraordinary difference to the world’s big challenges."
     button-url="/explore"
     button-label="Donate now"
     button-colour-scheme="primary"
+    main-image-align-horizontal="right"
+    main-image-align-vertical="center"
   ></biggive-hero-image>
 
   <div class="b-container">
@@ -14,8 +16,8 @@
       space-below='4'
       icon-colour='red'
       background-image-url='https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/cc22-background.jpg'
-      main-title='Double your donation in Christmas Challenge 2022'
-      subtitle='Donate between 29 November 2022 noon - 6 December 2022 noon'
+      [mainTitle]="highlightCard1Title"
+      [subtitle]='highlightCard1Subtitle'
       button-url='/christmas-challenge-2022'
       button-label='Double my donation'
       button-colour-scheme='clear-primary'
@@ -30,11 +32,11 @@
     <div style="padding: 50px 0 40px 0;">
       <biggive-call-to-action
         default-text-colour="secondary"
-        main-title="£200,000,000"
-        subtitle="raised for 6987 charities since 2008"
+        main-title="£199,168,184"
+        subtitle="raised for 14,096 charities since 2008"
         subtitle-colour="white"
         secondary-button-label="Read about our impact"
-        secondary-button-url="https://www.thebiggive.org.uk/charities/s/about"
+        secondary-button-url="https://www.thebiggive.org.uk/s/our-story"
         secondary-button-colour-scheme="clear-white">
       </biggive-call-to-action>
     </div>
@@ -47,73 +49,60 @@
         heading-colour="primary"
         html-element="h2"
         size="3"
-        text="We're proud to support thousands of charities"
+        text="We're proud to support thousands of incredible charities"
         >
       </biggive-heading>
     </div>
   </biggive-page-section>
 
-  <biggive-page-section>
-    <!-- TODO: biggive-grid does NOT actually support 8 cols but it seems to work. Add native support later. -->
+  <!-- using section here not biggive-page-section, so we go full width -->
+  <section>
     <biggive-grid
-      column-count="8">
-      <img
-        src="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-1.jpg"
-        alt=""
+      column-count="6">
+      <biggive-image
+        image-url="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-1.png"
+        width="150"
       >
-      <img
-        src="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-2.jpg"
-        alt=""
+      </biggive-image>
+      <biggive-image
+        image-url="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-2.png"
+        width="150"
       >
-      <img
-        src="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-3.jpg"
-        alt=""
+      </biggive-image>
+      <biggive-image
+        image-url="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-3.png"
+        width="150"
       >
-      <img
-        src="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-4.jpg"
-        alt=""
+      </biggive-image>
+      <biggive-image
+        image-url="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-4.png"
+        width="150"
       >
-      <img
-        src="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-5.jpg"
-        alt=""
+      </biggive-image>
+      <biggive-image
+        image-url="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-5.png"
+        width="150"
       >
-      <img
-        src="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-6.jpg"
-        alt=""
+      </biggive-image>
+      <biggive-image
+        image-url="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-6.png"
+        width="150"
       >
-      <img
-        src="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-7.jpg"
-        alt=""
-      >
-      <img
-        src="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-8.jpg"
-        alt=""
-      >
-      <!-- <img
-        src="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-9.jpg"
-        alt=""
-      >
-      <img
-        src="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-10.jpg"
-        alt=""
-      >
-      <img
-        src="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-11.jpg"
-        alt=""
-      > -->
+      </biggive-image>
+
     </biggive-grid>
 
-    <div class="button-wrapper">
-      <div class="button">
+    <div class="flex-wrapper">
+      <div class="auto-margin">
         <biggive-button
           colour-scheme="primary"
           label="Join us today"
-          url="https://www.thebiggive.org.uk/charities/s/login/SelfRegister"
+          url="https://www.thebiggive.org.uk/s/charities"
           full-width="false">
         </biggive-button>
       </div>
     </div>
-  </biggive-page-section>
+  </section>
 
 
   <biggive-page-section
@@ -123,11 +112,11 @@
       <biggive-video-feature
         default-text-colour="white"
         video-url="https://www.youtube.com/embed/5RWDzzBg-go"
-        main-title="About us and the power of match funding"
+        main-title="About Big Give"
         main-title-colour="white"
-        teaser="At the heart of our charity is the idea of a 'Generosity Multiplier'. Simply put, we match donations to multiply generosity and create a lasting impact in the world."
+        teaser="Simply put, we’re a Generosity Multiplier.  Big Give helps people match donations, multiply impact and make a lasting difference in the world together."
         teaser-colour="white"
-        button-url="https://www.thebiggive.org.uk/charities/s/about"
+        button-url="https://www.thebiggive.org.uk/s/our-story"
         button-label="Learn more about us"
         button-colour-scheme="white"
         >
@@ -274,13 +263,15 @@
     <biggive-call-to-action
       default-text-colour="primary"
       main-title="Ready to get started? Explore our match funded campaigns."
-      main-title-size="1"
+      main-title-size="2"
       primary-button-label="Donate today"
       primary-button-url="/explore"
       primary-button-colour-scheme="primary"
       secondary-button-label="Learn more about us"
-      secondary-button-url="https://www.thebiggive.org.uk/charities/s/about"
-      secondary-button-colour-scheme="clear-primary">
+      secondary-button-url="https://www.thebiggive.org.uk/s/about"
+      secondary-button-colour-scheme="clear-primary"
+      space-above="6"
+      space-below="6">
     </biggive-call-to-action>
   </biggive-page-section>
 </main>

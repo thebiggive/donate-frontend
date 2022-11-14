@@ -1,4 +1,4 @@
-import { isPlatformBrowser, ViewportScroller } from '@angular/common';
+import { CurrencyPipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
 import { AfterViewChecked, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Campaign } from '../campaign.model';
-import { CampaignCardComponent } from '../campaign-card/campaign-card.component';
+import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
@@ -17,10 +17,11 @@ import { environment } from '../../environments/environment';
 import { FiltersComponent } from '../filters/filters.component';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
-import { HeroComponent } from '../hero/hero.component';
 import { NavigationService } from '../navigation.service';
+import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 @Component({
   standalone: true,
@@ -29,11 +30,15 @@ import { SearchService } from '../search.service';
   styleUrls: ['./meta-campaign.component.scss'],
   imports: [
     ...allChildComponentImports,
-    CampaignCardComponent,
+    CampaignSearchFormComponent,
     FiltersComponent,
-    HeroComponent,
     InfiniteScrollModule,
     MatProgressSpinnerModule,
+    OptimisedImagePipe,
+  ],
+  providers: [
+    CurrencyPipe, // Not standlone
+    TimeLeftPipe, // Injected for TS use
   ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
@@ -44,6 +49,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   public fundSlug: string;
   public hasMore = true;
   public loading = false; // Server render gets initial result set; set true when filters change.
+  public tickerItems: { label: string, figure: string }[] = [];
+  public tickerMainMessage: string;
 
   private campaignId: string;
   private campaignSlug: string;
@@ -58,6 +65,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   constructor(
     private campaignService: CampaignService,
+    private currencyPipe: CurrencyPipe,
     private fundService: FundService,
     private navigationService: NavigationService,
     private pageMeta: PageMetaService,
@@ -68,6 +76,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     private state: TransferState,
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
     private scroller: ViewportScroller,
+    private timeLeftPipe: TimeLeftPipe,
   ) {
     route.params.pipe().subscribe(params => {
       this.campaignSlug = params.campaignSlug;
@@ -75,9 +84,9 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     });
   }
 
-  @HostListener('doTextSearch')
-  onDoSearch(event: Event) {
-    console.log(event);
+  @HostListener('doSearchAndFilterUpdate', ['$event'])
+  onDoSearchAndFilterUpdate(event: CustomEvent) {
+    this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
   }
 
   ngOnDestroy() {
@@ -106,18 +115,22 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     if (this.fundSlug) {
       fundKey = makeStateKey<Fund>(`fund-${this.fundSlug}`);
       this.fund = this.state.get<Fund | undefined>(fundKey, undefined);
+      this.setFundSpecificTickerParams();
     }
 
     if (!this.fund && this.fundSlug) {
       this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
         this.state.set<Fund>(fundKey, fund);
         this.fund = fund;
+        this.setFundSpecificTickerParams();
       });
     }
+
+    this.setTickerParams();
   }
 
   ngAfterViewChecked() {
-    if (this.shouldAutoScroll) {
+    if (isPlatformBrowser(this.platformId) && this.shouldAutoScroll) {
       // Keep updating scroll in this scenario, until the donor scrolls themselves and we turn off `shouldAutoScroll`.
       this.updateScroll(this.navigationService.getLastSingleCampaignId());
     }
@@ -160,7 +173,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       return 100;
     }
 
-    return (childCampaign.amountRaised / childCampaign.target) * 100;
+    return Math.round((childCampaign.amountRaised / childCampaign.target) * 100);
   }
 
   private loadMoreForCurrentSearch() {
@@ -297,12 +310,81 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       // use a too-low Y position when lots of card were shown and we didn't have a delay, both with `scrollToAnchor()`
       // and manual calculation + `scrollToPosition()`.
       setTimeout(() => {
-        // Scroll to the anchor's `offsetTop` y-position, minus $toolbar-height.
+        // Scroll to the anchor's `offsetTop` y-position (currently not minus approx header height).
         const activeCard = document.getElementById(`campaign-${campaignId}`);
         if (activeCard) {
-          this.scroller.scrollToPosition([0, activeCard.offsetTop - 64]);
+          this.scroller.scrollToPosition([0, activeCard.offsetTop - 0]);
         }
       }, 1500);
     }
+  }
+
+  private setTickerParams() {
+    // Does not necessarily imply 0 raised. We occasionally open child campaigns before their parents, so it
+    // is possible for the parent `campaign` here to raise more than 0 before it formally opens.
+    const campaignInFuture = CampaignService.isInFuture(this.campaign);
+
+    const campaignOpen = CampaignService.isOpenForDonations(this.campaign);
+    const durationInDays = Math.floor((new Date(this.campaign.endDate).getTime() - new Date(this.campaign.startDate).getTime()) / 86400000);
+
+    if (!this.fund) {
+      if (this.campaign.amountRaised > 0 && !campaignInFuture) {
+        this.tickerMainMessage = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') +
+      ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
+      } else {
+        this.tickerMainMessage = 'Opens in ' + this.timeLeftPipe.transform(this.campaign.startDate);
+      }
+    }
+
+    const tickerItems = [];
+
+    if (campaignOpen) {
+      tickerItems.push(...[
+        {
+          label: 'remaining',
+          figure: this.timeLeftPipe.transform(this.campaign.endDate),
+        },
+        {
+            label: 'Match Funds Remaining',
+            figure: this.currencyPipe.transform(this.campaign.matchFundsRemaining, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
+        },
+      ]);
+    } else {
+      tickerItems.push({
+        label: 'days duration',
+        figure: durationInDays.toString(),
+      });
+    }
+
+    if (this.campaign.campaignCount && this.campaign.campaignCount > 1) {
+      tickerItems.push(
+        {
+          label: 'Participating Charities',
+          figure: this.campaign.campaignCount.toLocaleString(),
+        }
+      )
+    }
+
+    if (this.campaign.donationCount > 0) {
+      tickerItems.push(
+        {
+          label: 'Donations',
+          figure: this.campaign.donationCount.toLocaleString(),
+        }
+      )
+    }
+
+    tickerItems.push({
+      label: 'Total Match Funds',
+      figure: this.currencyPipe.transform(this.campaign.matchFundsTotal, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
+    });
+
+    // Just update the public property once.
+    this.tickerItems = tickerItems;
+  }
+
+  private setFundSpecificTickerParams() {
+    this.tickerMainMessage = this.currencyPipe.transform(this.fund?.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') +
+      ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
   }
 }

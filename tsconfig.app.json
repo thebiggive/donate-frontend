@@ -25,6 +25,7 @@
     "noFallthroughCasesInSwitch": true,
     "importHelpers": true,
     "strictNullChecks": true,
+    "target": "ES2016",
     "types": []
   },
   "files": [
