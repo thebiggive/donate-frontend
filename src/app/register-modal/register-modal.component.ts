@@ -75,7 +75,7 @@ export class RegisterModalComponent implements OnInit {
         this.registering = false;
       }, (error) => {
         this.captcha.reset();
-        this.registerError = 'Auto login: ' + error.error.error.description || 'Unknown error';
+        this.registerError = 'Auto login: ' + error.error.description || error.message || 'Unknown error';
         this.registering = false;
       });
 
@@ -99,12 +99,12 @@ export class RegisterModalComponent implements OnInit {
         this.captcha.execute();
       }, (error) => {
         this.captcha.reset();
-        this.registerError = 'Update: ' + error.error.error.description || 'Unknown error';
+        this.registerError = 'Update: ' + error.error.description || error.message || 'Unknown error';
         this.registering = false;
       });
     }, (error) => {
       this.captcha.reset();
-      this.registerError = 'Create: ' + error.error.error.description || 'Unknown error';
+      this.registerError = 'Create: ' + error.error.description || error.message || 'Unknown error';
       this.registering = false;
     });
   }
