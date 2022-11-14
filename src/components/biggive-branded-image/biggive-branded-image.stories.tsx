@@ -12,7 +12,7 @@ export default {
       name: 'Image URL',
     },
     logoUrl: {
-      name: 'Lofo URL',
+      name: 'Logo URL',
     },
     slug: {
       name: 'Slug',

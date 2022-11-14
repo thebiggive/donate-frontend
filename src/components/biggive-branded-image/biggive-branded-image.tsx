@@ -28,15 +28,17 @@ export class BiggiveBrandedImage {
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
-        <div class="slug">
-          <span>{this.slug}</span>
-        </div>
-        {this.imageUrl.length > 0 ? (
+        <div class="slug">{this.slug}</div>
+        {/* {this.imageUrl !== undefined ? <div class="image" style={{ 'background-image': "url('" + this.imageUrl + "')" }}></div> : null} */}
+        {this.imageUrl !== undefined ? (
           <div class="image-wrap">
             <img src={this.imageUrl} />
           </div>
         ) : null}
         {this.logoUrl.length > 0 ? <div class="logo-wrap" style={{ 'background-image': "url('" + this.logoUrl + "')" }}></div> : null}
+
+        <a href="">Charity Name</a>
+        <div>Location</div>
       </div>
     );
   }

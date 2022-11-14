@@ -8,20 +8,54 @@
   .slug {
     text-align: center;
     font-weight: bold;
-    span {
-      background-color: $colour-secondary;
-      color: $colour-black;
-      padding: $spacer-1 $spacer-3;
-    }
+    background-color: $colour-secondary;
+    color: $colour-black;
+    padding: $spacer-1 $spacer-3;
+    width: 50%;
+    margin: auto;
+    transform: translateY(50%);
   }
+
+  img {
+    width: 100%;
+  }
+
   .logo-wrap {
     border-radius: 50%;
-    width: 200px;
-    height: 200px;
+    width: 120px;
+    height: 120px;
     transform: translateY(-50%);
+    // -60px to offset the previous positioning of the logo, so charity name and location
+    // appear straight below it. + 10px for some spacing.
+    margin-bottom: calc(-60px + 10px);
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
     background-color: #FFFFFF;
+
+    @media screen and (max-width: $screen-tablet-max) {
+      width: 100px;
+      height: 100px;
+      margin-bottom: calc(-50px + 10px);
+    }
+
+    @media screen and (max-width: $screen-mobile-max) {
+      width: 80px;
+      height: 80px;
+      margin-bottom: calc(-40px + 10px);
+    }
+
+    @media screen and (max-width: $screen-mobile-small) {
+      width: 70px;
+      height: 70px;
+      margin-bottom: calc(-30px + 10px);
+    }
+  }
+
+  a {
+    color: $colour-primary;
+    display: block;
+    margin-bottom: 5px;
+    width: fit-content; // so link doesn't go full width
   }
 }
