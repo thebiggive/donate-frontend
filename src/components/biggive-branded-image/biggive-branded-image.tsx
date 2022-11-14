@@ -37,8 +37,10 @@ export class BiggiveBrandedImage {
         ) : null}
         {this.logoUrl.length > 0 ? <div class="logo-wrap" style={{ 'background-image': "url('" + this.logoUrl + "')" }}></div> : null}
 
-        <a href="">Charity Name</a>
-        <div>Location</div>
+        <a id="charityName" href="">
+          Charity Name
+        </a>
+        <div id="charityLocation">Location</div>
       </div>
     );
   }

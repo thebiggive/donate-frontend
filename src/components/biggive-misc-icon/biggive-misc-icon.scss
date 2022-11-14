@@ -3,5 +3,16 @@
 }
 
 .misc-icon-item {
-  @include icon-medium();
+  @include icon-large();
+
+  @media screen and (max-width: $screen-mobile-max) {
+    @include icon-medium();
+    display: grid;
+    // width: 100%;
+    margin: auto;
+
+    a {
+      margin: auto;
+    }
+  }
 }

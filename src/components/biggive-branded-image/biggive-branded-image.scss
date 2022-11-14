@@ -54,10 +54,26 @@
     }
   }
 
-  a {
+  #charityName {
     color: $colour-primary;
     display: block;
     margin-bottom: 5px;
     width: fit-content; // so link doesn't go full width
+  }
+
+  #charityName, #charityLocation {
+    font-size: 17px;
+    
+    @media screen and (max-width: $screen-tablet-max) {
+      font-size: 16px;
+    }
+
+    @media screen and (max-width: $screen-mobile-max) {
+      font-size: 15px;
+    }
+
+    @media screen and (max-width: $screen-mobile-small) {
+      font-size: 14px;
+    }
   }
 }
