@@ -94,6 +94,15 @@
         {{ campaign.charity.website }}
       </a> -->
 
+      
+      <biggive-branded-image
+        space-below="4"  
+        [imageUrl]="campaign.bannerUri"   
+        [logoUrl]="campaign.charity.logoUri"    
+        slug="Match Funded"
+        >
+      </biggive-branded-image>
+
       <biggive-formatted-text
         default-text-colour="black">
         <h1>{{ campaign.title }}</h1>
