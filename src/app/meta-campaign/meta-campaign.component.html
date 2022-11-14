@@ -41,8 +41,9 @@
       (scrolled)="onScroll()"
       [scrollWindow]="true"
     >
-      <div *ngFor="let campaign of children">        
+      <div *ngFor="let campaign of children">
         <biggive-campaign-card
+          id="campaign-{{campaign.id}}"
           [banner]="campaign.imageUri | optimisedImage:830 | async"
           [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'"
           [campaignTitle]="campaign.title"
