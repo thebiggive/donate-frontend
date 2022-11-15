@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, HostBinding, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import {
   Event,
   NavigationEnd,
@@ -17,6 +17,9 @@ import { NavigationService } from './navigation.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  @HostBinding('@.disabled')
+  public animationsDisabled = true;
+
   constructor(
     private analyticsService: AnalyticsService,
     private donationService: DonationService,
@@ -25,6 +28,8 @@ export class AppComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
   ) {
+    
+
     // https://www.amadousall.com/angular-routing-how-to-display-a-loading-indicator-when-navigating-between-routes/
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
