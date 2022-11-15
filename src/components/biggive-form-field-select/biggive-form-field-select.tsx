@@ -1,4 +1,4 @@
-import { Component, Prop, h, Event, EventEmitter, Listen } from '@stencil/core';
+import { Component, Prop, h, Event, Element, EventEmitter, Listen } from '@stencil/core';
 
 @Component({
   tag: 'biggive-form-field-select',
@@ -6,6 +6,7 @@ import { Component, Prop, h, Event, EventEmitter, Listen } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveFormFieldSelect {
+  @Element() el: HTMLBiggiveFormFieldSelectElement;
   /**
    * This event `doChange` event is emitted and propogates to the parent
    * component which handles it
@@ -37,10 +38,19 @@ export class BiggiveFormFieldSelect {
    */
   @Prop() placeholder: string = null;
 
+  toggleFocus(event) {
+    const dropdown: HTMLElement = event.target.parentElement.parentElement;
+    if (dropdown.classList.contains('active')) {
+      dropdown.classList.remove('active');
+    } else {
+      dropdown.classList.add('active');
+    }
+  }
+
   render() {
     return (
       <div class={'dropdown space-below-' + this.spaceBelow}>
-        <div class="sleeve">
+        <div class="sleeve" onClick={this.toggleFocus} onMouseLeave={this.toggleFocus}>
           <span class="placeholder">{this.selectedLabel == null ? this.placeholder : this.selectedLabel}</span>
         </div>
         <div class="options">
