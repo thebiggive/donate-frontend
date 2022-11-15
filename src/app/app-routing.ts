@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 
 import { CampaignListResolver } from './campaign-list.resolver';
-import { CampaignPromoted1Resolver } from './campaign-promoted-1.resolver';
-import { CampaignPromoted2Resolver } from './campaign-promoted-2.resolver';
 import { CampaignResolver } from './campaign.resolver';
 import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 
@@ -69,8 +67,6 @@ export const routes: Routes = [
     path: 'explore',
     resolve: {
       campaigns: CampaignListResolver,
-      promotedMetacampaign1: CampaignPromoted1Resolver,
-      promotedMetacampaign2: CampaignPromoted2Resolver,
     },
     loadChildren: () => import('./explore/explore.module')
       .then(c => c.ExploreModule),
@@ -85,11 +81,6 @@ export const routes: Routes = [
   },
   {
     path: '',
-    resolve: {
-      campaigns: CampaignListResolver,
-      promotedMetacampaign1: CampaignPromoted1Resolver,
-      promotedMetacampaign2: CampaignPromoted2Resolver,
-    },
     loadChildren: () => import('./home/home.module')
       .then(c => c.HomeModule),
   },
