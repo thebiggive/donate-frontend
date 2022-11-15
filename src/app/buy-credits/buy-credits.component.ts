@@ -62,9 +62,9 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
   maximumDonationAmount = environment.maximumDonationAmount;
   showAddressLookup: boolean = true;
   personId?: string;
-  sortCode: string;
-  accountNumber: string;
-  accountHolderName: string;
+  sortCode?: string;
+  accountNumber?: string;
+  accountHolderName?: string;
   recaptchaSiteKey = environment.recaptchaSiteKey;
   private captchaCode?: string;
   private initialTipSuggestedPercentage = 15;
@@ -340,7 +340,14 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
 
   logout() {
     this.personId = undefined;
+    this.isLoading = false;
     this.isLoggedIn = false;
+
+    this.accountHolderName = undefined;
+    this.accountNumber = undefined;
+    this.sortCode = undefined;
+
+    this.isPurchaseComplete = false;
     this.creditForm.reset();
     this.identityService.clearJWT();
   }
