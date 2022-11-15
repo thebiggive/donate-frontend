@@ -241,14 +241,14 @@
               "scripts": true,
               "styles": false
             },
-            "outputHashing": "all",
+            "outputHashing": "none",
             "sourceMap": {
               "scripts": true,
               "styles": false,
               "hidden": true,
               "vendor": true
             },
-            "namedChunks": true,
+            "namedChunks": false,
             "extractLicenses": true
           },
           "configurations": {
