@@ -246,10 +246,28 @@
   
           <mat-tab label="Impact &amp; reporting">
             <div class="c-impact">
-              <h3 class="c-impact__heading b-rh-2">Impact</h3>
+              <biggive-heading
+                space-above=6
+                space-below=0
+                colour="primary"
+                html-element="h3"
+                size="3"
+                align="left"
+                text="Impact"
+                >
+              </biggive-heading>
               <p class="c-impact__description">{{ campaign.impactSummary }}</p>
-  
-              <h3 class="c-impact__heading b-rh-2">Reporting</h3>
+
+              <biggive-heading
+                space-above=6
+                space-below=0
+                colour="primary"
+                html-element="h3"
+                size="3"
+                align="left"
+                text="Reporting"
+                >
+              </biggive-heading>
               <p class="c-impact__description">{{ campaign.impactReporting }}</p>
             </div>
           </mat-tab>
