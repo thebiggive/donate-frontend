@@ -759,6 +759,8 @@ export namespace Components {
     interface BiggivePopup {
         "open": () => Promise<void>;
     }
+    interface BiggivePopupStandalone {
+    }
     interface BiggiveProgressBar {
         /**
           * Colour Scheme
@@ -1145,6 +1147,12 @@ declare global {
         prototype: HTMLBiggivePopupElement;
         new (): HTMLBiggivePopupElement;
     };
+    interface HTMLBiggivePopupStandaloneElement extends Components.BiggivePopupStandalone, HTMLStencilElement {
+    }
+    var HTMLBiggivePopupStandaloneElement: {
+        prototype: HTMLBiggivePopupStandaloneElement;
+        new (): HTMLBiggivePopupStandaloneElement;
+    };
     interface HTMLBiggiveProgressBarElement extends Components.BiggiveProgressBar, HTMLStencilElement {
     }
     var HTMLBiggiveProgressBarElement: {
@@ -1243,6 +1251,7 @@ declare global {
         "biggive-page-columns": HTMLBiggivePageColumnsElement;
         "biggive-page-section": HTMLBiggivePageSectionElement;
         "biggive-popup": HTMLBiggivePopupElement;
+        "biggive-popup-standalone": HTMLBiggivePopupStandaloneElement;
         "biggive-progress-bar": HTMLBiggiveProgressBarElement;
         "biggive-quote": HTMLBiggiveQuoteElement;
         "biggive-search": HTMLBiggiveSearchElement;
@@ -2028,6 +2037,8 @@ declare namespace LocalJSX {
     }
     interface BiggivePopup {
     }
+    interface BiggivePopupStandalone {
+    }
     interface BiggiveProgressBar {
         /**
           * Colour Scheme
@@ -2246,6 +2257,7 @@ declare namespace LocalJSX {
         "biggive-page-columns": BiggivePageColumns;
         "biggive-page-section": BiggivePageSection;
         "biggive-popup": BiggivePopup;
+        "biggive-popup-standalone": BiggivePopupStandalone;
         "biggive-progress-bar": BiggiveProgressBar;
         "biggive-quote": BiggiveQuote;
         "biggive-search": BiggiveSearch;
@@ -2294,6 +2306,7 @@ declare module "@stencil/core" {
             "biggive-page-columns": LocalJSX.BiggivePageColumns & JSXBase.HTMLAttributes<HTMLBiggivePageColumnsElement>;
             "biggive-page-section": LocalJSX.BiggivePageSection & JSXBase.HTMLAttributes<HTMLBiggivePageSectionElement>;
             "biggive-popup": LocalJSX.BiggivePopup & JSXBase.HTMLAttributes<HTMLBiggivePopupElement>;
+            "biggive-popup-standalone": LocalJSX.BiggivePopupStandalone & JSXBase.HTMLAttributes<HTMLBiggivePopupStandaloneElement>;
             "biggive-progress-bar": LocalJSX.BiggiveProgressBar & JSXBase.HTMLAttributes<HTMLBiggiveProgressBarElement>;
             "biggive-quote": LocalJSX.BiggiveQuote & JSXBase.HTMLAttributes<HTMLBiggiveQuoteElement>;
             "biggive-search": LocalJSX.BiggiveSearch & JSXBase.HTMLAttributes<HTMLBiggiveSearchElement>;
