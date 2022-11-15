@@ -32,7 +32,6 @@ import { NavigationComponent } from './navigation/navigation.component';
     NavigationComponent,
   ],
   imports: [
-    BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
     ComponentsModule,
     HttpClientModule,
