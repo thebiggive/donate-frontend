@@ -12,7 +12,6 @@ import { allChildComponentImports } from '../../allChildComponentImports';
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { CampaignDetailsRoutingModule } from './campaign-details-routing.module';
 import { TimeLeftPipe } from '../time-left.pipe';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
@@ -27,7 +26,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
     MatIconModule,
     MatProgressSpinnerModule,
     MatTabsModule,
-    NoopAnimationsModule,
     TimeLeftPipe,
   ],
   declarations: [CampaignDetailsComponent],

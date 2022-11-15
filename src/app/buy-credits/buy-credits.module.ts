@@ -17,7 +17,6 @@ import { BuyCreditsComponent } from './buy-credits.component';
 import { BuyCreditsRoutingModule } from './buy-credits-routing.module';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { TimeLeftPipe } from '../time-left.pipe';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
@@ -34,7 +33,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
     MatRadioModule,
     MatSelectModule,
     MatStepperModule,
-    NoopAnimationsModule,
     ReactiveFormsModule,
     RecaptchaModule,
     TimeLeftPipe,
