@@ -10,10 +10,12 @@ import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {OptimisedImagePipe} from '../optimised-image.pipe';
 import { PromotedCampaignsComponent } from '../promoted-campaigns/promoted-campaigns.component';
+import { AsyncPipe } from '@angular/common';
 
 @NgModule({
   imports: [
     ...allChildComponentImports,
+    AsyncPipe,
     CampaignSearchFormComponent,
     ExploreRoutingModule,
     FiltersComponent,
@@ -23,6 +25,8 @@ import { PromotedCampaignsComponent } from '../promoted-campaigns/promoted-campa
     OptimisedImagePipe,
     PromotedCampaignsComponent,
   ],
-  declarations: [ExploreComponent],
+  declarations: [
+    ExploreComponent,
+  ],
 })
 export class ExploreModule {}
