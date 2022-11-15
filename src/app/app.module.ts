@@ -31,14 +31,14 @@ import { NavigationComponent } from './navigation/navigation.component';
     HomeComponent,
     NavigationComponent,
   ],
-  imports: [    
+  imports: [
     BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
     ComponentsModule,
     HttpClientModule,
     RouterModule.forRoot(routes, {
       initialNavigation: 'enabledBlocking', // "This value is required for server-side rendering to work." https://angular.io/api/router/InitialNavigation
-      onSameUrlNavigation: 'reload', // Allows Explore & home logo links to clear search filters in ExploreComponent
+      onSameUrlNavigation: 'ignore', // Allows Explore & home logo links to clear search filters in ExploreComponent – TODO change back to 'reload' after 15/11/22 DON-634 diagnostics.
       scrollPositionRestoration: 'enabled',
     }),
     RouterOutlet,
