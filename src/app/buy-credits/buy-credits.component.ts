@@ -341,6 +341,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
   logout() {
     this.personId = undefined;
     this.isLoggedIn = false;
+    this.isPurchaseComplete = false;
     this.creditForm.reset();
     this.identityService.clearJWT();
   }
