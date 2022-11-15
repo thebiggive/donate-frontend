@@ -241,18 +241,7 @@
             "outputPath": "dist/server",
             "main": "server.ts",
             "tsConfig": "tsconfig.server.json",
-            "optimization": {
-              "scripts": true
-            },
-            "outputHashing": "all",
-            "sourceMap": {
-              "scripts": true,
-              "styles": false,
-              "hidden": true,
-              "vendor": true
-            },
-            "namedChunks": true,
-            "extractLicenses": true
+            "optimization": false
           },
           "configurations": {
             "production": {
