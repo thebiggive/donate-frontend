@@ -37,6 +37,7 @@ import { NavigationComponent } from './navigation/navigation.component';
     ComponentsModule,
     HttpClientModule,
     RouterModule.forRoot(routes, {
+      enableTracing: true, // TODO remove this when DON-634 resolved.
       initialNavigation: 'enabledBlocking', // "This value is required for server-side rendering to work." https://angular.io/api/router/InitialNavigation
       onSameUrlNavigation: 'ignore', // Allows Explore & home logo links to clear search filters in ExploreComponent – TODO change back to 'reload' after 15/11/22 DON-634 diagnostics.
       scrollPositionRestoration: 'enabled',
