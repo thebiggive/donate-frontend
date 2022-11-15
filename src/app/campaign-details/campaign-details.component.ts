@@ -8,10 +8,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { AnalyticsService } from '../analytics.service';
 import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
+import { CampaignGroupsService } from '../campaign-groups.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { ImageService } from '../image.service';
@@ -30,6 +32,7 @@ import { TimeLeftPipe } from '../time-left.pipe';
     ...allChildComponentImports,
     CampaignDetailsCardComponent,
     CurrencyPipe,
+    FontAwesomeModule,
     FlexLayoutModule,
     MatButtonModule,
     MatCardModule,
@@ -105,6 +108,14 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
 
   getPercentageRaised(campaign: Campaign): number | undefined {
     return CampaignService.percentRaised(campaign);
+  }
+
+  getBeneficiaryIcon(beneficiary: string) {
+    return CampaignGroupsService.getBeneficiaryIcon(beneficiary);
+  }
+
+  getCategoryIcon(category: string) {
+    return CampaignGroupsService.getCategoryIcon(category);
   }
 
   private setSecondaryProps(campaign: Campaign) {

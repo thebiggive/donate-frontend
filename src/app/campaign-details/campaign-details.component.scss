@@ -94,9 +94,9 @@
 }
 
 .c-video {
-  width: 70%;
+  width: 100%;
   height: auto;
-  margin: 30px auto; // centres the video
+  // margin: 30px auto; // centres the video
 }
 
 .c-video__iframe {
@@ -138,5 +138,27 @@
   margin: 0;
   &:first-child {
     margin-top: 1rem;
+  }
+}
+
+.icons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.icon-wrapper {
+  display: flex;
+  padding: 10px;
+
+  svg {
+    margin-right: 5px;
+    color: $colour-primary;
+    width: 30px;
+    height: 30px;
+  }
+
+  .c-icon-title {
+    font-size: 1rem;
+    margin: auto;
   }
 }

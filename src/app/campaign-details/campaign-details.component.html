@@ -290,6 +290,37 @@
         secondary-stat-icon="Heart"
         [secondaryStatText]="campaign.donationCount === 1 ? '1 donation' : campaign.donationCount + ' donations' ">
       </biggive-campaign-highlights>
+
+      <div style="margin-bottom: 30px;">
+        <h5>Categories</h5>
+        <hr>
+        <div class="icons">
+          <li *ngFor="let category of campaign.categories" class="icon-wrapper">
+            <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
+            <span class="c-icon-title">{{ category }}</span>
+          </li>
+        </div>
+  
+        <h5>Beneficiaries</h5>
+        <hr>
+        <div class="icons">
+          <li *ngFor="let beneficiary of campaign.beneficiaries" class="icon-wrapper">
+            <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
+            <span class="c-icon-title">{{ beneficiary }}</span>
+          </li>
+        </div>
+      </div>
+
+      <biggive-button
+        space-above="5"
+        colour-scheme="primary"
+        label="Donate now"
+        [url]="'/donate/' + campaign.id"
+        full-width="true"
+        size="medium"
+        rounded="false">
+      </biggive-button>
+
     </div>
   </div>
 
