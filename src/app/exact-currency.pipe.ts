@@ -10,7 +10,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
   standalone: true,
   name: 'exactCurrency',
-  pure: false,
 })
 export class ExactCurrencyPipe implements PipeTransform {
   transform(value: any, currencyCode = 'GBP'): any {

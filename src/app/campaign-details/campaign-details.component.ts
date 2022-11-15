@@ -19,22 +19,9 @@ import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 
 @Component({
-  standalone: true,
   selector: 'app-campaign-details',
   templateUrl: './campaign-details.component.html',
   styleUrls: ['./campaign-details.component.scss'],
-  imports: [
-    ...allChildComponentImports,
-    CampaignDetailsCardComponent,
-    CurrencyPipe,
-    DatePipe,
-    FlexLayoutModule,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatTabsModule,
-  ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   additionalImageUris: Array<string|null> = [];

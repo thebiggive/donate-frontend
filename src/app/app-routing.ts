@@ -9,61 +9,61 @@ import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 export const routes: Routes = [
   {
     path: 'buy-credits',
-    loadComponent: () => import('./buy-credits/buy-credits.component')
-      .then(c => c.BuyCreditsComponent),
+    loadChildren: () => import('./buy-credits/buy-credits.module')
+      .then(c => c.BuyCreditsModule),
   },
   {
     path: 'campaign/:campaignId',
     resolve: {
       campaign: CampaignResolver,
     },
-    loadComponent: () => import('./campaign-details/campaign-details.component')
-      .then(c => c.CampaignDetailsComponent),
+    loadChildren: () => import('./campaign-details/campaign-details.module')
+      .then(c => c.CampaignDetailsModule),
   },
   {
     path: 'charity/:charityId',
     resolve: {
       campaigns: CharityCampaignsResolver,
     },
-    loadComponent: () => import('./charity/charity.component')
-      .then(c => c.CharityComponent),
+    loadChildren: () => import('./charity/charity.module')
+      .then(c => c.CharityModule),
   },
   {
     path: 'donate/:campaignId',
     resolve: {
       campaign: CampaignResolver,
     },
-    loadComponent: () => import('./donation-start/donation-start.component')
-      .then(c => c.DonationStartComponent),
+    loadChildren: () => import('./donation-start/donation-start.module')
+      .then(c => c.DonationStartModule),
   },
   {
     path: 'metacampaign/:campaignId',
     resolve: {
       campaign: CampaignResolver,
     },
-    loadComponent: () => import('./meta-campaign/meta-campaign.component')
-      .then(c => c.MetaCampaignComponent),
+    loadChildren: () => import('./meta-campaign/meta-campaign.module')
+      .then(c => c.MetaCampaignModule),
   },
   {
     path: 'metacampaign/:campaignId/:fundSlug',
     resolve: {
       campaign: CampaignResolver,
     },
-    loadComponent: () => import('./meta-campaign/meta-campaign.component')
-      .then(c => c.MetaCampaignComponent),
+    loadChildren: () => import('./meta-campaign/meta-campaign.module')
+      .then(c => c.MetaCampaignModule),
   },
   {
     path: 'thanks/:donationId',
-    loadComponent: () => import('./donation-complete/donation-complete.component')
-      .then(c => c.DonationCompleteComponent),
+    loadChildren: () => import('./donation-complete/donation-complete.module')
+      .then(c => c.DonationCompleteModule),
   },
   {
     path: ':campaignSlug/:fundSlug',
     resolve: {
       campaign: CampaignResolver,
     },
-    loadComponent: () => import('./meta-campaign/meta-campaign.component')
-      .then(c => c.MetaCampaignComponent),
+    loadChildren: () => import('./meta-campaign/meta-campaign.module')
+      .then(c => c.MetaCampaignModule),
   },
   {
     path: 'explore',
@@ -72,16 +72,16 @@ export const routes: Routes = [
       promotedMetacampaign1: CampaignPromoted1Resolver,
       promotedMetacampaign2: CampaignPromoted2Resolver,
     },
-    loadComponent: () => import('./explore/explore.component')
-      .then(c => c.ExploreComponent),
+    loadChildren: () => import('./explore/explore.module')
+      .then(c => c.ExploreModule),
   },
   {
     path: ':campaignSlug',
     resolve: {
       campaign: CampaignResolver,
     },
-    loadComponent: () => import('./meta-campaign/meta-campaign.component')
-      .then(c => c.MetaCampaignComponent),
+    loadChildren: () => import('./meta-campaign/meta-campaign.module')
+      .then(c => c.MetaCampaignModule),
   },
   {
     path: '',
@@ -90,8 +90,8 @@ export const routes: Routes = [
       promotedMetacampaign1: CampaignPromoted1Resolver,
       promotedMetacampaign2: CampaignPromoted2Resolver,
     },
-    loadComponent: () => import('./home/home.component')
-      .then(c => c.HomeComponent),
+    loadChildren: () => import('./home/home.module')
+      .then(c => c.HomeModule),
   },
   {
     path: '**',
