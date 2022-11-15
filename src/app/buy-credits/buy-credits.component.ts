@@ -38,27 +38,9 @@ import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
 
 @Component({
-  standalone: true,
   selector: 'app-buy-credits',
   templateUrl: './buy-credits.component.html',
   styleUrls: ['./buy-credits.component.scss'],
-  imports: [
-    ...allChildComponentImports,
-    ExactCurrencyPipe,
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatDialogModule,
-    MatInputModule,
-    MatOptionModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatStepperModule,
-    ReactiveFormsModule,
-    RecaptchaModule,
-    TimeLeftPipe,
-  ],
 })
 export class BuyCreditsComponent implements AfterContentInit, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;

@@ -9,8 +9,8 @@ import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 export const routes: Routes = [
   {
     path: 'buy-credits',
-    loadComponent: () => import('./buy-credits/buy-credits.component')
-      .then(c => c.BuyCreditsComponent),
+    loadChildren: () => import('./buy-credits/buy-credits.module')
+      .then(c => c.BuyCreditsModule),
   },
   {
     path: 'campaign/:campaignId',

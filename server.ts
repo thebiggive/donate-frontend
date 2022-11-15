@@ -160,7 +160,8 @@ export function app() {
       setAssetPath(`${environment.donateUriPrefix}/assets`);
 
       const hydratedDoc = await renderToString(html, {
-        prettyHtml: true, // Don't `removeScripts` like Ionic does: we need them to handover to browser JS runtime successfully!
+        // Don't `removeScripts` like Ionic does: we need them to handover to browser JS runtime successfully!
+        prettyHtml: true,
         removeHtmlComments: true,
       });
 
