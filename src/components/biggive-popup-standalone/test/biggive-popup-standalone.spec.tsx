@@ -12,9 +12,7 @@ describe('biggive-popup-standalone', () => {
         <mock:shadow-root>
           <div class="popup" data-visible="true">
             <div class="sleeve">
-              <div class="header">
-                <div class="close"></div>
-              </div>
+              <div class="header"></div>
               <div class="content">
                 <slot></slot>
               </div>
