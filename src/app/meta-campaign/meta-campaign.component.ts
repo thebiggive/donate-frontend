@@ -330,7 +330,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
           figure: this.timeLeftPipe.transform(this.campaign.endDate),
         },
         {
-            label: 'Match Funds Remaining',
+            label: 'match funds remaining',
             figure: this.currencyPipe.transform(this.campaign.matchFundsRemaining, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
         },
       ]);
@@ -344,7 +344,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     if (this.campaign.campaignCount && this.campaign.campaignCount > 1) {
       tickerItems.push(
         {
-          label: 'Participating Charities',
+          label: 'participating charities',
           figure: this.campaign.campaignCount.toLocaleString(),
         }
       )
@@ -353,14 +353,14 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     if (this.campaign.donationCount > 0) {
       tickerItems.push(
         {
-          label: 'Donations',
+          label: 'donations',
           figure: this.campaign.donationCount.toLocaleString(),
         }
       )
     }
 
     tickerItems.push({
-      label: 'Total Match Funds',
+      label: 'total match funds',
       figure: this.currencyPipe.transform(this.campaign.matchFundsTotal, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
     });
 
