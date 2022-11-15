@@ -7,8 +7,15 @@
     secondary-colour="secondary"
     secondary-text-colour="black"
     include-gift-aid="true"
-    [mainMessage]="tickerMainMessage"
-    [tickerItems]="tickerItems">
+    [mainMessage]="tickerMainMessage">
+      <div slot="ticker-items">  
+        <biggive-totalizer-ticker-item
+          *ngFor="let tickerItem of tickerItems"
+          [figure]="tickerItem.figure"
+          [label]="tickerItem.label">
+        </biggive-totalizer-ticker-item>
+      </div>
+
   </biggive-totalizer>
 
   <biggive-hero-image

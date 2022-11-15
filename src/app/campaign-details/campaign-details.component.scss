@@ -1,5 +1,20 @@
 @import '../../abstract';
 
+h1 {
+  @media #{$breakpoint-sm} {
+    font-size: 30px;
+    line-height: 30px;
+  }
+  @media #{$breakpoint-md} {
+    font-size: 40px;
+    line-height: 40px;
+  }
+  @media #{$breakpoint-lg} {
+    font-size: 50px;
+    line-height: 50px;
+  }
+}
+
 .b-back-button {
   @include make-back-button;
 }
@@ -64,13 +79,15 @@
 }
 
 .c-tabs {
-  @media #{$breakpoint-md} {
-    max-width: 50%;
-  }
-  @media #{$breakpoint-xl} {
-    max-width: 70%;
-  }
+  max-width: 100%;
   overflow-x: scroll;
+}
+
+.mat-tab-label {
+  .mat-tab-label-content {
+    color: $colour-primary;
+    font-size: large;
+  }
 }
 
 .c-quotes {
@@ -94,6 +111,7 @@
 .c-video {
   width: 100%;
   height: auto;
+  // margin: 30px auto; // centres the video
 }
 
 .c-video__iframe {
@@ -109,6 +127,7 @@
 
 .c-additional__images {
   margin: 1rem auto 0 auto;
+  width: 100%;
   max-width: 100%;
 }
 
@@ -134,5 +153,37 @@
   margin: 0;
   &:first-child {
     margin-top: 1rem;
+  }
+}
+
+.icons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.icon-wrapper {
+  display: flex;
+  padding: 10px;
+
+  svg {
+    margin-right: 5px;
+    color: $colour-primary;
+    width: 30px;
+    height: 30px;
+  }
+
+  .c-icon-title {
+    font-size: 1rem;
+    margin: auto;
+  }
+}
+
+@media screen  and (max-width: 960px){
+  // fix button at bottom of screen for tablets and phones
+  .donate-button-wrapper {
+    position: fixed;
+    bottom: 0;
+    z-index: 1;
+    width: 100%;
   }
 }

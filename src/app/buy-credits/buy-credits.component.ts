@@ -33,7 +33,6 @@ import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { Person } from '../person.model';
 import { PostcodeService } from '../postcode.service';
 import { RegisterModalComponent } from '../register-modal/register-modal.component';
-import { TimeLeftPipe } from '../time-left.pipe';
 import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
 

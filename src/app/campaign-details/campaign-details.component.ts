@@ -1,31 +1,34 @@
-import { CurrencyPipe, DatePipe, isPlatformBrowser, Location } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTabsModule } from '@angular/material/tabs';
+import { CurrencyPipe, isPlatformBrowser, Location } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { AnalyticsService } from '../analytics.service';
-import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
+import { CampaignGroupsService } from '../campaign-groups.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { ImageService } from '../image.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 @Component({
+  // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
+  encapsulation: ViewEncapsulation.None,
   selector: 'app-campaign-details',
   templateUrl: './campaign-details.component.html',
   styleUrls: ['./campaign-details.component.scss'],
+  providers: [
+    CurrencyPipe,
+    TimeLeftPipe,
+  ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   additionalImageUris: Array<string|null> = [];
   campaign: Campaign;
+  campaignOpen: boolean;
+  campaignRaised: string; // Formatted
+  campaignTarget: string; // Formatted
   isPendingOrNotReady = false;
   campaignInFuture = false;
   donateEnabled = true;
@@ -37,14 +40,16 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private analyticsService: AnalyticsService,
-    private pageMeta: PageMetaService,
+    private currencyPipe: CurrencyPipe,
     private imageService: ImageService,
     private location: Location,
     private navigationService: NavigationService,
+    private pageMeta: PageMetaService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
+    public timeLeftPipe: TimeLeftPipe,
   ) {
     route.queryParams.forEach((params: Params) => {
       if (params.fromFund) {
@@ -55,6 +60,10 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
+    this.campaignOpen = CampaignService.isOpenForDonations(this.campaign);
+    this.campaignTarget = this.currencyPipe.transform(this.campaign.target, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
+    this.campaignRaised = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
+
     this.setSecondaryProps(this.campaign);
   }
 
@@ -74,6 +83,23 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.router.navigateByUrl(url);
+  }
+
+  getStringDate(date: string) {
+    const theDate: Date = new Date(date);
+    return theDate.toDateString();
+  }
+
+  getPercentageRaised(campaign: Campaign): number | undefined {
+    return CampaignService.percentRaised(campaign);
+  }
+
+  getBeneficiaryIcon(beneficiary: string) {
+    return CampaignGroupsService.getBeneficiaryIcon(beneficiary);
+  }
+
+  getCategoryIcon(category: string) {
+    return CampaignGroupsService.getCategoryIcon(category);
   }
 
   private setSecondaryProps(campaign: Campaign) {

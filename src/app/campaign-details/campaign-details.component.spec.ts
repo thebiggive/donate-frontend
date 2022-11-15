@@ -1,3 +1,4 @@
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,6 +11,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Campaign } from '../campaign.model';
 import { CampaignDetailsComponent } from './campaign-details.component';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
@@ -18,6 +20,8 @@ describe('CampaignDetailsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
+        CommonModule,
+        CurrencyPipe,
         HttpClientTestingModule,
         MatButtonModule,
         MatIconModule,
@@ -26,6 +30,9 @@ describe('CampaignDetailsComponent', () => {
         MatTabsModule,
         NoopAnimationsModule,
         RouterTestingModule,
+      ],
+      providers: [
+        TimeLeftPipe,
       ],
     })
     .compileComponents();
