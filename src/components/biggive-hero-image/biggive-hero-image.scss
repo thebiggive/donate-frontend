@@ -75,13 +75,14 @@
   }
 }
 
-@media screen and (max-width: $screen-tablet-max) {
+@media screen and (max-width: $screen-desktop-max) {
   .container {
     .sleeve {
       flex-wrap: wrap;
       .content-wrap {
         width: 100%;
-        padding: 25vw $spacer-3 $spacer-3 $spacer-3;
+        padding: 18vw $spacer-3 $spacer-3 $spacer-3;
+        margin-bottom: 50px;
       }
       .graphic-wrap {
         margin-left: 0;

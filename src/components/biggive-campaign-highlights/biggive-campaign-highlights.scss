@@ -6,8 +6,10 @@
   @include standard-font();
   @include lower-shadow();
   background-color: $colour-white;
-  padding: $spacer-3;
+  padding: 25px;
   box-sizing: border-box;
+  height: fit-content;
+
   .campaign-title {
     position: absolute;
     top: 0;
@@ -41,12 +43,24 @@
     .meta-item {
       width: calc( 50% - $spacer-3 );
       .label {
-        @include font-size-x-small();
+        @include font-size-small();
         display: block;
       }
       .text {
         @include heading-3();
         display: block;
+
+        @media screen and (max-width: $screen-tablet-max) {
+          font-size: 23px;
+        }
+    
+        @media screen and (max-width: $screen-mobile-max) {
+          font-size: 21px;;
+        }
+    
+        @media screen and (max-width: $screen-mobile-small) {
+          font-size: 17px;
+        }
       }
       &:last-child {
         text-align: right;
@@ -64,15 +78,33 @@
   .stat-wrap {
     @include flex-container-row();
     .stat-item {
-      @include font-size-x-small();
+      @include font-size-medium();
+      font-weight: bold;
       width: calc( 50% - $spacer-3 );
       margin: auto 0 auto $spacer-3;
+
+      .label {
+        position: relative;
+        bottom: 7px;
+      }
+  
+      @media screen and (max-width: $screen-mobile-max) {
+        @include font-size-small();
+        margin: auto 0;
+        text-align: center;
+
+        .label {
+          bottom: 5px;
+        }
+      }
+
       svg {
         fill: $colour-tertiary;
       }
     } 
   }
+
+  @media screen and (max-width: $screen-mobile-max) {
+    padding: 15px; 
+  }
 }
-
-
-

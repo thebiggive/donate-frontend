@@ -146,6 +146,14 @@ export namespace Components {
     }
     interface BiggiveBrandedImage {
         /**
+          * Charity location
+         */
+        "charityLocation": string;
+        /**
+          * Charity name
+         */
+        "charityName": string;
+        /**
           * Full URL of a image.
          */
         "imageUrl": string;
@@ -1388,6 +1396,14 @@ declare namespace LocalJSX {
         "verticalPadding"?: number;
     }
     interface BiggiveBrandedImage {
+        /**
+          * Charity location
+         */
+        "charityLocation"?: string;
+        /**
+          * Charity name
+         */
+        "charityName"?: string;
         /**
           * Full URL of a image.
          */

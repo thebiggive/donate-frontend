@@ -37,19 +37,17 @@ export class BiggiveTotalizer {
   @Prop() mainMessage: string = null;
 
   componentDidRender() {
-    var nodes = this.host.querySelectorAll('biggive-totalizer-ticker-item');
-    if (nodes.length > 0) {
-      for (var prop in nodes) {
-        if (nodes[prop].shadowRoot != null) {
-          this.host.shadowRoot.querySelector('.ticker-wrap .sleeve').appendChild(nodes[prop].shadowRoot.querySelector('.ticker-item'));
-        }
-      }
-    }
-    var tickerWidth = this.host.shadowRoot.querySelector('.ticker-wrap .sleeve').clientWidth;
-    var duration = tickerWidth / 50;
-    var node: HTMLElement = this.host.shadowRoot.querySelector('.ticker-wrap .sleeve');
+    const tickerItemsInternalWrapper: HTMLDivElement = this.host.querySelector(`[slot="ticker-items"]`);
 
-    node.style.animationDuration = Math.round(duration) + 's';
+    if (tickerItemsInternalWrapper !== null && tickerItemsInternalWrapper !== undefined) {
+      tickerItemsInternalWrapper.style.display = 'inline-flex';
+      tickerItemsInternalWrapper.style.flex = 'none';
+    }
+
+    const tickerWidth = this.host.shadowRoot.querySelector('.ticker-wrap .sleeve').clientWidth;
+    const duration = tickerWidth / 50;
+    const sleeve: HTMLElement = this.host.shadowRoot.querySelector('.ticker-wrap .sleeve');
+    sleeve.style.animationDuration = Math.round(duration) + 's';
   }
 
   render() {
@@ -59,7 +57,9 @@ export class BiggiveTotalizer {
           <div class="banner">
             <div class={'main-message-wrap background-colour-' + this.secondaryColour + ' text-colour-' + this.secondaryTextColour}>{this.mainMessage}</div>
             <div class={'ticker-wrap background-colour-' + this.primaryColour + ' text-colour-' + this.primaryTextColour}>
-              <div class="sleeve"></div>
+              <div class="sleeve">
+                <slot name="ticker-items"></slot>
+              </div>
             </div>
           </div>
         </div>
