@@ -1,6 +1,6 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { BrowserModule } from '@angular/platform-browser';
@@ -68,6 +68,7 @@ import { NavigationComponent } from './navigation/navigation.component';
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: RECAPTCHA_NONCE, useValue: environment.recaptchaNonce },
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
 })
 export class AppModule { }
