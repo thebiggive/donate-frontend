@@ -8,6 +8,7 @@ import { allChildComponentImports } from '../../allChildComponentImports';
 import { DonationCompleteComponent } from './donation-complete.component';
 import {DonationCompleteRoutingModule} from './donation-complete-routing.module';
 import {ExactCurrencyPipe} from '../exact-currency.pipe';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import {ExactCurrencyPipe} from '../exact-currency.pipe';
     MatButtonModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    NoopAnimationsModule,
     RecaptchaModule,
   ],
   declarations: [DonationCompleteComponent],

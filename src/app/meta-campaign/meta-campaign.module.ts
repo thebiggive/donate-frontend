@@ -10,6 +10,7 @@ import {FiltersComponent} from '../filters/filters.component';
 import {MetaCampaignRoutingModule} from './meta-campaign-routing.module';
 import {OptimisedImagePipe} from '../optimised-image.pipe';
 import {TimeLeftPipe} from '../time-left.pipe';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import {TimeLeftPipe} from '../time-left.pipe';
     InfiniteScrollModule,
     MatProgressSpinnerModule,
     MetaCampaignRoutingModule,
+    NoopAnimationsModule,
     OptimisedImagePipe,
     TimeLeftPipe,
   ],

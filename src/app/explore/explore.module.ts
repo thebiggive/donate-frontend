@@ -10,6 +10,7 @@ import { ExploreComponent } from './explore.component';
 import {ExploreRoutingModule} from './explore-routing.module';
 import {FiltersComponent} from '../filters/filters.component';
 import {OptimisedImagePipe} from '../optimised-image.pipe';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import {OptimisedImagePipe} from '../optimised-image.pipe';
     FlexLayoutModule,
     InfiniteScrollModule,
     MatProgressSpinnerModule,
+    NoopAnimationsModule,
     OptimisedImagePipe,
   ],
   declarations: [

@@ -22,6 +22,7 @@ import { DonationStartComponent } from './donation-start.component';
 import {DonationStartRoutingModule} from './donation-start-routing.module';
 import {ExactCurrencyPipe} from '../exact-currency.pipe';
 import {TimeLeftPipe} from '../time-left.pipe';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   imports: [
@@ -43,6 +44,7 @@ import {TimeLeftPipe} from '../time-left.pipe';
     MatRadioModule,
     MatSelectModule,
     MatStepperModule,
+    NoopAnimationsModule,
     PercentPipe,
     ReactiveFormsModule,
     RecaptchaModule,
