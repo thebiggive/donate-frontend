@@ -1,5 +1,6 @@
 import 'zone.js/node';
 
+import { APP_BASE_HREF } from '@angular/common';
 import { enableProdMode } from '@angular/core';
 import { renderToString } from '@biggive/components/hydrate';
 import { setAssetPath } from '@biggive/components/dist/components';
@@ -137,15 +138,18 @@ export function app() {
   }));
 
   // All regular routes use the Universal engine
-  server.get('*', (req: Request, res: Response) => {
+  server.get('*', async (req: Request, res: Response) => {
     // Note that the file output as `index.html` is actually dynamic. See `index` config keys in `angular.json`.
     // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
     // this key to work around `fileReplacements` ending index support in Angular 8.
-    res.render(indexHtml, { req
-      //, providers: [
+    res.render(indexHtml, { req, providers: [
+      // Ensure we render with a supported base HREF, including behind an ALB and regardless of the
+      // base reported by CloudFront when talking to the origin. Demos use `req.baseUrl` and we should
+      // test this when time allows to see if it facilitates multiple base domains.
+      { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix, },
       // Skip for now as this adds complexity and didn't actually seem to be working as of Aug '22 anyway. See DON-523.
       // { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
-      //]
+      ],
   }, async (err: Error, html: string) => {
       if (err) {
         console.log(`Render error: ${err}`);
@@ -157,6 +161,7 @@ export function app() {
 
       const hydratedDoc = await renderToString(html, {
         prettyHtml: true, // Don't `removeScripts` like Ionic does: we need them to handover to browser JS runtime successfully!
+        removeHtmlComments: true,
       });
 
       console.log('server.ts: Sending hydrated doc for ' + req.path);
