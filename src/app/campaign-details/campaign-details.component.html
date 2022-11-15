@@ -111,6 +111,11 @@
         <p>{{ campaign.summary }}</p>
       </biggive-formatted-text>
 
+    <biggive-social-icon *ngIf="campaign.charity.facebook" service="Facebook" [url]="campaign.charity.facebook" background-colour="black" icon-colour="white"></biggive-social-icon>
+    <biggive-social-icon *ngIf="campaign.charity.twitter" service="Twitter" [url]="campaign.charity.twitter" background-colour="black" icon-colour="white"></biggive-social-icon>
+    <biggive-social-icon *ngIf="campaign.charity.linkedin" service="LinkedIn" [url]="campaign.charity.linkedin" background-colour="black" icon-colour="white"></biggive-social-icon>
+    <biggive-social-icon *ngIf="campaign.charity.instagram" service="Instagram" [url]="campaign.charity.instagram" background-colour="black" icon-colour="white"></biggive-social-icon>
+
       <div class="c-video" *ngIf="videoEmbedUrl">
         <iframe
           class="c-video__iframe b-w-100"
