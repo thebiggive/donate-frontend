@@ -11,6 +11,9 @@
     @include dropdown();
   }
   .options {
+    max-height: 200px;
+    overflow-x: hidden;
+    overflow-y: scroll;
     background-color: $colour-white;
     position: absolute;
     display: none;
@@ -21,8 +24,8 @@
     border-right: 1px solid $colour-primary;
     border-bottom: 1px solid $colour-primary;
   }
-  &:hover .options {
-    display: block;
+  &.active .options {
+      display: block;
   }
 }
 
