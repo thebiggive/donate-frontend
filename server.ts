@@ -165,8 +165,6 @@ export function app() {
         removeHtmlComments: true,
       });
 
-      console.log('server.ts: Sending hydrated doc for ' + req.path);
-
       res.send(hydratedDoc.html);
     });
   });
