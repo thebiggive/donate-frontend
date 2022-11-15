@@ -6,18 +6,16 @@ import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTabsModule} from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { CampaignDetailsRoutingModule } from './campaign-details-routing.module';
-import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TimeLeftPipe } from '../time-left.pipe';
 
 @NgModule({
   imports: [
     ...allChildComponentImports,
-    CampaignDetailsCardComponent,
     CampaignDetailsRoutingModule,
     CurrencyPipe,
     DatePipe,
@@ -30,8 +28,7 @@ import { TimeLeftPipe } from '../time-left.pipe';
     MatTabsModule,
   ],
   providers: [
-    CurrencyPipe,
-    TimeLeftPipe, // Injected for TS use
+    TimeLeftPipe,
   ],
   declarations: [CampaignDetailsComponent],
 })
