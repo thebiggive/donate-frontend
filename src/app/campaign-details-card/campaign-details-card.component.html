@@ -1,5 +1,5 @@
 <div class="c-card" *ngIf="campaign">
-  <!-- <div class="c-banner">
+  <div class="c-banner">
     <img
       class="c-banner__image b-w-100"
       *ngIf="bannerUri"
@@ -7,17 +7,17 @@
       alt=""
       role="presentation"
     >
-  </div> -->
+  </div>
 
-  <!-- <div *ngIf="campaign.isMatched">
+  <div *ngIf="campaign.isMatched">
     <span class="c-badge">
       <img src="/assets/images/icon-tick.png" height="9" alt="Check mark"> Match funded
     </span>
     <div class="c-contour"></div>
-  </div> -->
+  </div>
 
-  <!-- <div class="c-card-body"> -->
-    <!-- <div class="c-campaign-target" *ngIf="campaign.target > 0">
+  <div class="c-card-body">
+    <div class="c-campaign-target" *ngIf="campaign.target > 0">
       <h2 class="c-campaign-target__description b-grey b-light">Campaign target</h2>
       <p class="c-campaign-target__value b-bold">{{ campaign.target | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</p>
       <mat-progress-bar class="c-progress" [value]="percentRaised" *ngIf="campaign.amountRaised > 0"></mat-progress-bar>
@@ -41,24 +41,24 @@
         Championed by
         <span class="b-bold">{{campaign.championName}}</span>
       </a>
-    </p> -->
+    </p>
     <ul class="c-icon-list">
-      <!-- <h2 class="c-campaign-category__description b-grey b-light">Categories</h2> -->
+      <h2 class="c-campaign-category__description b-grey b-light">Categories</h2>
       <li *ngFor="let category of campaign.categories">
         <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
         <span class="c-icon-title">{{ category }}</span>
       </li>
     </ul>
     <ul class="c-icon-list">
-      <!-- <h2 class="c-campaign-beneficiary__description b-grey b-light">Helping</h2> -->
+      <h2 class="c-campaign-beneficiary__description b-grey b-light">Helping</h2>
       <li *ngFor="let beneficiary of campaign.beneficiaries">
         <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
         <span class="c-icon-title">{{ beneficiary }}</span>
       </li>
     </ul>
-    <!-- <div class="c-country">
+    <div class="c-country">
       <h2 class="c-campaign-country__description b-grey b-light">Location</h2>
       <p class="c-country__value">{{ locations() }}</p>
-    </div> -->
-  <!-- </div> -->
+    </div>
+  </div>
 </div>
