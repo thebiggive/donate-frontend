@@ -14,8 +14,6 @@ import { AppComponent } from './app.component';
 
 import { routes } from './app-routing';
 import { CampaignListResolver } from './campaign-list.resolver';
-import { CampaignPromoted1Resolver } from './campaign-promoted-1.resolver';
-import { CampaignPromoted2Resolver } from './campaign-promoted-2.resolver';
 import { CampaignResolver } from './campaign.resolver';
 import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import { TBG_DONATE_STORAGE } from './donation.service';
@@ -44,8 +42,6 @@ import { NavigationComponent } from './navigation/navigation.component';
   ],
   providers: [
     CampaignListResolver,
-    CampaignPromoted1Resolver,
-    CampaignPromoted2Resolver,
     CampaignResolver,
     CharityCampaignsResolver,
     // In Universal / SSR mode, `APP_BASE_HREF` should vary according to the host reported
