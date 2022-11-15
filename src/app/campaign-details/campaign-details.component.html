@@ -184,32 +184,64 @@
           <mat-tab *ngIf="campaign.updates.length > 0" label="Updates">
             <ul class="c-updates" *ngFor="let update of campaign.updates">
               <li>
-                <h4 class="b-semi-bold b-mb-0">{{ update.modifiedDate | date : 'longDate' }}</h4>
-                <p class="c-updates__description">{{ update.content }}</p>
+                <biggive-formatted-text>
+                  <h4 class="b-semi-bold b-mb-0">{{ update.modifiedDate | date : 'longDate' }}</h4>
+                  <p class="c-updates__description">{{ update.content }}</p>
+                </biggive-formatted-text>
               </li>
             </ul>
           </mat-tab>
   
           <mat-tab *ngIf="campaign.aims.length > 0" label="Aims">
-            <h3 class="c-details__heading b-rh-2">Campaign Aims</h3>
+            <biggive-heading
+              space-above=6
+              space-below=0
+              colour="primary"
+              html-element="h3"
+              size="3"
+              align="left"
+              text="Campaign Aims"
+              >
+            </biggive-heading>
+
             <ul class="c-aims" *ngFor="let aim of campaign.aims">
               <li class="b-rt-0">{{ aim }}</li>
             </ul>
           </mat-tab>
   
           <mat-tab *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" label="Where's the money going?">
-            <h3 class="c-details__heading b-rh-2">Campaign Budget</h3>
-            <ul class="c-budget" *ngFor="let detail of campaign.budgetDetails">
-              <li class="c-budget__item">
-                <span class="c-budget__value b-semi-bold">{{ detail.amount | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</span>
-                &ndash; {{ detail.description }}
-              </li>
-            </ul>
-  
-            <div class="c-alternative-funds" *ngIf="campaign.alternativeFundUse">
-              <h4 class="c-details__heading b-rh-2">Understanding The Target</h4>
-              <p class="c-alternative-funds__description">{{ campaign.alternativeFundUse }}</p>
-            </div>
+
+              <biggive-heading
+                space-above=6
+                space-below=0
+                colour="primary"
+                html-element="h3"
+                size="3"
+                align="left"
+                text="Campaign Budget"
+                >
+              </biggive-heading>
+
+              <ul class="c-budget" *ngFor="let detail of campaign.budgetDetails">
+                <li class="c-budget__item">
+                  <span class="c-budget__value b-semi-bold">{{ detail.amount | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</span>
+                  &ndash; {{ detail.description }}
+                </li>
+              </ul>
+    
+              <div class="c-alternative-funds" *ngIf="campaign.alternativeFundUse">
+                <biggive-heading
+                  space-above=6
+                  space-below=0
+                  colour="primary"
+                  html-element="h4"
+                  size="4"
+                  align="left"
+                  text="Understanding the Target"
+                  >
+                </biggive-heading>
+                <p class="c-alternative-funds__description">{{ campaign.alternativeFundUse }}</p>
+              </div>
           </mat-tab>
   
           <mat-tab label="Impact &amp; reporting">

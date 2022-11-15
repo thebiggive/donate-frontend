@@ -30,7 +30,6 @@ import { TimeLeftPipe } from '../time-left.pipe';
     ...allChildComponentImports,
     CampaignDetailsCardComponent,
     CurrencyPipe,
-    DatePipe,
     FlexLayoutModule,
     MatButtonModule,
     MatCardModule,
@@ -97,6 +96,11 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.router.navigateByUrl(url);
+  }
+
+  getStringDate(date: string) {
+    const theDate: Date = new Date(date);
+    return theDate.toDateString();
   }
 
   getPercentageRaised(campaign: Campaign): number | undefined {
