@@ -104,6 +104,7 @@
         <mat-tab label="Campaign overview">
           <div class="c-video" *ngIf="videoEmbedUrl">
             <iframe
+              loading="lazy"
               class="c-video__iframe b-w-100"
               [src]="videoEmbedUrl"
               frameborder="0"
