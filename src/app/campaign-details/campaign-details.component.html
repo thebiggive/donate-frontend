@@ -21,7 +21,7 @@
     </biggive-formatted-text>
   </div>
 
-  <div fxLayout="row" fxLayout.xs="column">
+  <div fxLayout="row" fxLayout.lt-md="column">
     <div class="b-primary-column">
       <biggive-branded-image
         space-below="4"
@@ -242,17 +242,17 @@
           </li>
         </div>
       </div>
-
-      <biggive-button
-        space-above="5"
-        colour-scheme="primary"
-        label="Donate now"
-        full-width="true"
-        size="medium"
-        rounded="false"
-        [routerLink]="'/donate/' + campaign.id">
-      </biggive-button>
-
+      <div class="donate-button-wrapper">
+        <biggive-button
+          space-above="5"
+          colour-scheme="primary"
+          label="Donate now"
+          full-width="true"
+          size="medium"
+          rounded="false"
+          [routerLink]="'/donate/' + campaign.id">
+        </biggive-button>
+      </div>
     </div>
   </div>
 
