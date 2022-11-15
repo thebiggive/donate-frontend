@@ -19,6 +19,7 @@ import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import { TBG_DONATE_STORAGE } from './donation.service';
 import { environment } from '../environments/environment';
 import { FooterComponent } from './footer/footer.component';
+import { HomeComponent } from './home/home.component';
 import { TBG_DONATE_ID_STORAGE } from './identity.service';
 import { NavigationComponent } from './navigation/navigation.component';
 
@@ -26,6 +27,7 @@ import { NavigationComponent } from './navigation/navigation.component';
   declarations: [
     AppComponent,
     FooterComponent,
+    HomeComponent,
     NavigationComponent,
   ],
   imports: [    
