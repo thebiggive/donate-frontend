@@ -24,26 +24,9 @@ import { TimeLeftPipe } from '../time-left.pipe';
 @Component({
   // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   selector: 'app-campaign-details',
   templateUrl: './campaign-details.component.html',
   styleUrls: ['./campaign-details.component.scss'],
-  imports: [
-    ...allChildComponentImports,
-    CampaignDetailsCardComponent,
-    CurrencyPipe,
-    FontAwesomeModule,
-    FlexLayoutModule,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatTabsModule,
-  ],
-  providers: [
-    CurrencyPipe,
-    TimeLeftPipe, // Injected for TS use
-  ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   additionalImageUris: Array<string|null> = [];

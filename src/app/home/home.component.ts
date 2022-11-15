@@ -9,15 +9,9 @@ import { PageMetaService } from '../page-meta.service';
 import { PromotedCampaignsComponent } from '../promoted-campaigns/promoted-campaigns.component';
 
 @Component({
-  standalone: true,
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  imports: [
-    ...allChildComponentImports,
-    FlexLayoutModule,
-    PromotedCampaignsComponent,
-  ]
 })
 export class HomeComponent implements OnInit {
   campaigns: CampaignSummary[];

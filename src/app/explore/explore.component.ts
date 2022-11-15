@@ -1,36 +1,19 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { Subscription } from 'rxjs';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { Campaign } from '../campaign.model';
 import { CampaignGroupsService } from '../campaign-groups.service';
-import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
-import { FiltersComponent } from '../filters/filters.component';
 import { PageMetaService } from '../page-meta.service';
-import { PromotedCampaignsComponent } from '../promoted-campaigns/promoted-campaigns.component';
 import { SearchService } from '../search.service';
 
 /** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
-  standalone: true,
   selector: 'app-explore',
   templateUrl: './explore.component.html',
   styleUrls: ['./explore.component.scss'],
-  imports: [
-    ...allChildComponentImports,
-    CampaignSearchFormComponent,
-    FiltersComponent,
-    FlexLayoutModule,
-    InfiniteScrollModule,
-    MatProgressSpinnerModule,
-    PromotedCampaignsComponent,
-  ],
 })
 export class ExploreComponent implements OnDestroy, OnInit {
   campaigns: CampaignSummary[];

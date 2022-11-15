@@ -24,18 +24,9 @@ import { SearchService } from '../search.service';
 import { TimeLeftPipe } from '../time-left.pipe';
 
 @Component({
-  standalone: true,
   selector: 'app-meta-campaign',
   templateUrl: './meta-campaign.component.html',
   styleUrls: ['./meta-campaign.component.scss'],
-  imports: [
-    ...allChildComponentImports,
-    CampaignSearchFormComponent,
-    FiltersComponent,
-    InfiniteScrollModule,
-    MatProgressSpinnerModule,
-    OptimisedImagePipe,
-  ],
   providers: [
     CurrencyPipe, // Not standlone
     TimeLeftPipe, // Injected for TS use

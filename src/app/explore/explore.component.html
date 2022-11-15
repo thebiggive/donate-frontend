@@ -3,7 +3,7 @@
     slug="Explore Campaigns"
     slug-colour="primary"
     main-title="The leading online match funding platform"
-    main-image="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/banner-explore.jpg"
+    main-image="/assets/images/banner-explore.jpg"
     colour-scheme="primary"
     main-image-align-horizontal="right"
     main-image-align-vertical="center"
@@ -28,7 +28,7 @@
     >
       <div *ngFor="let campaign of campaigns">
         <biggive-campaign-card
-          [banner]="campaign.imageUri"
+          [banner]="campaign.imageUri | optimisedImage:830 | async"
           [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'"
           [campaignTitle]="campaign.title"
           [donateButtonUrl]="'/donate/' + campaign.id"
