@@ -24,9 +24,9 @@
   <div fxLayout="row" fxLayout.xs="column">
     <div class="b-primary-column">
       <biggive-branded-image
-        space-below="4"  
-        [imageUrl]="campaign.bannerUri"   
-        [logoUrl]="campaign.charity.logoUri"    
+        space-below="4"
+        [imageUrl]="campaign.bannerUri"
+        [logoUrl]="campaign.charity.logoUri"
         slug="Match Funded"
         [charityName]="campaign.charity.name"
         [charityLocation]="campaign.countries.length ? campaign.countries[0] : null"
@@ -94,26 +94,26 @@
               </biggive-formatted-text>
 
             </div>
-  
+
             <div class="c-additional" *ngIf="additionalImageUris.length > 0">
               <img *ngFor="let uri of additionalImageUris" [src]="uri" class="c-additional__images">
             </div>
-  
+
             <ul class="c-quotes" *ngIf="campaign.quotes.length > 0">
               <li *ngFor="let quote of campaign.quotes">
 
 
                 <biggive-quote
-                  space-below="4"  
+                  space-below="4"
                   default-text-colour="black"
-                  [quote]="quote.quote"   
-                  [attribution]="quote.person"    
+                  [quote]="quote.quote"
+                  [attribution]="quote.person"
                   >
                 </biggive-quote>
               </li>
             </ul>
           </mat-tab>
-  
+
           <mat-tab *ngIf="campaign.updates.length > 0" label="Updates">
             <ul class="c-updates" *ngFor="let update of campaign.updates">
               <li>
@@ -124,7 +124,7 @@
               </li>
             </ul>
           </mat-tab>
-  
+
           <mat-tab *ngIf="campaign.aims.length > 0" label="Aims">
             <biggive-heading
               space-above=6
@@ -141,7 +141,7 @@
               <li class="b-rt-0">{{ aim }}</li>
             </ul>
           </mat-tab>
-  
+
           <mat-tab *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" label="Where's the money going?">
 
               <biggive-heading
@@ -161,7 +161,7 @@
                   &ndash; {{ detail.description }}
                 </li>
               </ul>
-    
+
               <div class="c-alternative-funds" *ngIf="campaign.alternativeFundUse">
                 <biggive-heading
                   space-above=6
@@ -176,7 +176,7 @@
                 <p class="c-alternative-funds__description">{{ campaign.alternativeFundUse }}</p>
               </div>
           </mat-tab>
-  
+
           <mat-tab label="Impact &amp; reporting">
             <div class="c-impact">
               <biggive-heading
@@ -212,11 +212,10 @@
     <div class="b-secondary-column">
       <biggive-campaign-highlights
         space-below=0
-        currency-code="GBP"
         primary-figure-label="Amount raised"
-        [primaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : '1.0-0'"
+        [primaryFigureAmount]="campaignRaised"
         secondary-figure-label="Campaign target"
-        [secondaryFigureAmount]="campaign.target | currency: campaign.currencyCode : 'symbol' : '1.0-0'"
+        [secondaryFigureAmount]="campaignTarget"
         [progressBarCounter]="getPercentageRaised(campaign)?.toFixed(0)"
         primary-stat-icon="AlarmClock"
         [primaryStatText]="campaignOpen ? (timeLeftPipe.transform(campaign.endDate)) : 'Opens soon'"
@@ -233,7 +232,7 @@
             <span class="c-icon-title">{{ category }}</span>
           </li>
         </div>
-  
+
         <h5>Beneficiaries</h5>
         <hr>
         <div class="icons">

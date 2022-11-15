@@ -1,18 +1,9 @@
-import { CurrencyPipe, DatePipe, isPlatformBrowser, Location } from '@angular/common';
+import { CurrencyPipe, isPlatformBrowser, Location } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTabsModule } from '@angular/material/tabs';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { AnalyticsService } from '../analytics.service';
-import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
 import { CampaignGroupsService } from '../campaign-groups.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
@@ -27,11 +18,17 @@ import { TimeLeftPipe } from '../time-left.pipe';
   selector: 'app-campaign-details',
   templateUrl: './campaign-details.component.html',
   styleUrls: ['./campaign-details.component.scss'],
+  providers: [
+    CurrencyPipe,
+    TimeLeftPipe,
+  ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   additionalImageUris: Array<string|null> = [];
   campaign: Campaign;
   campaignOpen: boolean;
+  campaignRaised: string; // Formatted
+  campaignTarget: string; // Formatted
   isPendingOrNotReady = false;
   campaignInFuture = false;
   donateEnabled = true;
@@ -43,10 +40,11 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private analyticsService: AnalyticsService,
-    private pageMeta: PageMetaService,
+    private currencyPipe: CurrencyPipe,
     private imageService: ImageService,
     private location: Location,
     private navigationService: NavigationService,
+    private pageMeta: PageMetaService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,
@@ -63,6 +61,9 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
     this.campaignOpen = CampaignService.isOpenForDonations(this.campaign);
+    this.campaignTarget = this.currencyPipe.transform(this.campaign.target, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
+    this.campaignRaised = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
+
     this.setSecondaryProps(this.campaign);
   }
 

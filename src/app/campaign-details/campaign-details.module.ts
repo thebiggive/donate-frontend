@@ -26,8 +26,6 @@ import { TimeLeftPipe } from '../time-left.pipe';
     MatIconModule,
     MatProgressSpinnerModule,
     MatTabsModule,
-  ],
-  providers: [
     TimeLeftPipe,
   ],
   declarations: [CampaignDetailsComponent],
