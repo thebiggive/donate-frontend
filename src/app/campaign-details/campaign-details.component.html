@@ -30,7 +30,7 @@
         slug="Match Funded"
         [charityName]="campaign.charity.name"
         [charityLocation]="campaign.countries.length ? campaign.countries[0] : null"
-        >
+      >
       </biggive-branded-image>
 
       <biggive-formatted-text
@@ -39,13 +39,14 @@
         <p>{{ campaign.summary }}</p>
       </biggive-formatted-text>
 
-    <biggive-social-icon *ngIf="campaign.charity.facebook" service="Facebook" [url]="campaign.charity.facebook" background-colour="black" icon-colour="white"></biggive-social-icon>
-    <biggive-social-icon *ngIf="campaign.charity.twitter" service="Twitter" [url]="campaign.charity.twitter" background-colour="black" icon-colour="white"></biggive-social-icon>
-    <biggive-social-icon *ngIf="campaign.charity.linkedin" service="LinkedIn" [url]="campaign.charity.linkedin" background-colour="black" icon-colour="white"></biggive-social-icon>
-    <biggive-social-icon *ngIf="campaign.charity.instagram" service="Instagram" [url]="campaign.charity.instagram" background-colour="black" icon-colour="white"></biggive-social-icon>
+      <biggive-social-icon *ngIf="campaign.charity.facebook" service="Facebook" [url]="campaign.charity.facebook" background-colour="black" icon-colour="white"></biggive-social-icon>
+      <biggive-social-icon *ngIf="campaign.charity.twitter" service="Twitter" [url]="campaign.charity.twitter" background-colour="black" icon-colour="white"></biggive-social-icon>
+      <biggive-social-icon *ngIf="campaign.charity.linkedin" service="LinkedIn" [url]="campaign.charity.linkedin" background-colour="black" icon-colour="white"></biggive-social-icon>
+      <biggive-social-icon *ngIf="campaign.charity.instagram" service="Instagram" [url]="campaign.charity.instagram" background-colour="black" icon-colour="white"></biggive-social-icon>
 
       <div class="c-video" *ngIf="videoEmbedUrl">
         <iframe
+          loading="lazy"
           class="c-video__iframe b-w-100"
           [src]="videoEmbedUrl"
           frameborder="0"
@@ -69,7 +70,7 @@
                 size="3"
                 align="left"
                 text="Situation"
-                >
+              >
               </biggive-heading>
 
               <biggive-formatted-text
@@ -85,7 +86,7 @@
                 size="3"
                 align="left"
                 text="Solution"
-                >
+              >
               </biggive-heading>
 
               <biggive-formatted-text
@@ -108,7 +109,7 @@
                   default-text-colour="black"
                   [quote]="quote.quote"
                   [attribution]="quote.person"
-                  >
+                >
                 </biggive-quote>
               </li>
             </ul>
@@ -134,7 +135,7 @@
               size="3"
               align="left"
               text="Campaign Aims"
-              >
+            >
             </biggive-heading>
 
             <ul class="c-aims" *ngFor="let aim of campaign.aims">
@@ -144,37 +145,37 @@
 
           <mat-tab *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" label="Where's the money going?">
 
+            <biggive-heading
+              space-above=6
+              space-below=0
+              colour="primary"
+              html-element="h3"
+              size="3"
+              align="left"
+              text="Campaign Budget"
+            >
+            </biggive-heading>
+
+            <ul class="c-budget" *ngFor="let detail of campaign.budgetDetails">
+              <li class="c-budget__item">
+                <span class="c-budget__value b-semi-bold">{{ detail.amount | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</span>
+                &ndash; {{ detail.description }}
+              </li>
+            </ul>
+
+            <div class="c-alternative-funds" *ngIf="campaign.alternativeFundUse">
               <biggive-heading
                 space-above=6
                 space-below=0
                 colour="primary"
-                html-element="h3"
-                size="3"
+                html-element="h4"
+                size="4"
                 align="left"
-                text="Campaign Budget"
-                >
+                text="Understanding the Target"
+              >
               </biggive-heading>
-
-              <ul class="c-budget" *ngFor="let detail of campaign.budgetDetails">
-                <li class="c-budget__item">
-                  <span class="c-budget__value b-semi-bold">{{ detail.amount | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</span>
-                  &ndash; {{ detail.description }}
-                </li>
-              </ul>
-
-              <div class="c-alternative-funds" *ngIf="campaign.alternativeFundUse">
-                <biggive-heading
-                  space-above=6
-                  space-below=0
-                  colour="primary"
-                  html-element="h4"
-                  size="4"
-                  align="left"
-                  text="Understanding the Target"
-                  >
-                </biggive-heading>
-                <p class="c-alternative-funds__description">{{ campaign.alternativeFundUse }}</p>
-              </div>
+              <p class="c-alternative-funds__description">{{ campaign.alternativeFundUse }}</p>
+            </div>
           </mat-tab>
 
           <mat-tab label="Impact &amp; reporting">
@@ -187,7 +188,7 @@
                 size="3"
                 align="left"
                 text="Impact"
-                >
+              >
               </biggive-heading>
               <p class="c-impact__description">{{ campaign.impactSummary }}</p>
 
@@ -199,7 +200,7 @@
                 size="3"
                 align="left"
                 text="Reporting"
-                >
+              >
               </biggive-heading>
               <p class="c-impact__description">{{ campaign.impactReporting }}</p>
             </div>
