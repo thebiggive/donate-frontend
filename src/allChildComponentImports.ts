@@ -7,5 +7,5 @@ export const allChildComponentImports = [
   ComponentsModule,
   RouterLink,
   RouterLinkWithHref,
-  RouterOutlet,
+
 ]

@@ -5,7 +5,7 @@ import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { ComponentsModule } from '@biggive/components-angular';
 import { RECAPTCHA_NONCE } from 'ng-recaptcha';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
@@ -40,6 +40,7 @@ import { NavigationComponent } from './navigation/navigation.component';
       onSameUrlNavigation: 'reload', // Allows Explore & home logo links to clear search filters in ExploreComponent
       scrollPositionRestoration: 'enabled',
     }),
+    RouterOutlet,
   ],
   providers: [
     CampaignListResolver,

@@ -1,6 +1,7 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'; // Used for some Angular Material components' touch support
 import { setAssetPath } from '@biggive/components/dist/components';
+
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
