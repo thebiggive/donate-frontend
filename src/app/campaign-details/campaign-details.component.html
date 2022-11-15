@@ -320,10 +320,10 @@
         space-above="5"
         colour-scheme="primary"
         label="Donate now"
-        [url]="'/donate/' + campaign.id"
         full-width="true"
         size="medium"
-        rounded="false">
+        rounded="false"
+        [routerLink]="'/donate/' + campaign.id">
       </biggive-button>
 
     </div>
