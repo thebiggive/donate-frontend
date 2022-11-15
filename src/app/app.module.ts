@@ -7,6 +7,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { ComponentsModule } from '@biggive/components-angular';
+import { TransferHttpCacheModule } from '@nguniversal/common';
 import { RECAPTCHA_NONCE } from 'ng-recaptcha';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
@@ -41,6 +42,7 @@ import { NavigationComponent } from './navigation/navigation.component';
       scrollPositionRestoration: 'enabled',
     }),
     RouterOutlet,
+    TransferHttpCacheModule,
   ],
   providers: [
     CampaignListResolver,
@@ -50,7 +52,7 @@ import { NavigationComponent } from './navigation/navigation.component';
     // by the browser once client side JS takes over. This is necessary so we can successfully
     // serve the app on multiple live domains.
     {
-      provide: APP_BASE_HREF, 
+      provide: APP_BASE_HREF,
       useFactory: () => {
         const globalDonateHost = (new URL(environment.donateGlobalUriPrefix)).host;
         const host = (typeof window === 'undefined' ? '' : window.location.host);
