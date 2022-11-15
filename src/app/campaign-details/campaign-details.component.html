@@ -100,6 +100,8 @@
         [imageUrl]="campaign.bannerUri"   
         [logoUrl]="campaign.charity.logoUri"    
         slug="Match Funded"
+        [charityName]="campaign.charity.name"
+        [charityLocation]="campaign.countries.length ? campaign.countries[0] : null"
         >
       </biggive-branded-image>
 
@@ -229,14 +231,14 @@
         space-below=0
         currency-code="GBP"
         primary-figure-label="Amount raised"
-        primary-figure-amount="1000"
+        [primaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : '1.0-0'"
         secondary-figure-label="Campaign target"
-        secondary-figure-amount="1000"
-        progress-bar-counter="100"
+        [secondaryFigureAmount]="campaign.target | currency: campaign.currencyCode : 'symbol' : '1.0-0'"
+        [progressBarCounter]="getPercentageRaised(campaign)"
         primary-stat-icon="AlarmClock"
-        primary-stat-text="31 days left"
+        [primaryStatText]="campaignOpen ? (timeLeftPipe.transform(campaign.endDate)) : 'Opens soon'"
         secondary-stat-icon="Heart"
-        secondary-stat-text="4129 donations">
+        [secondaryStatText]="campaign.donationCount + ' donations'">
       </biggive-campaign-highlights>
     </div>
   </div>
