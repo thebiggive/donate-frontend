@@ -2,6 +2,7 @@ import 'zone.js/node';
 
 import { enableProdMode } from '@angular/core';
 import { renderToString } from '@biggive/components/hydrate';
+import { setAssetPath } from '@biggive/components/dist/components';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as compression from 'compression';
 import { createHash } from 'crypto';
@@ -152,9 +153,13 @@ export function app() {
         return;
       }
 
+      setAssetPath(`${environment.donateUriPrefix}/assets`);
+
       const hydratedDoc = await renderToString(html, {
         prettyHtml: true, // Don't `removeScripts` like Ionic does: we need them to handover to browser JS runtime successfully!
       });
+
+      console.log('server.ts: Sending hydrated doc for ' + req.path);
 
       res.send(hydratedDoc.html);
     });
