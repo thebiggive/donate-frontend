@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import {
-  Event,
+  Event as RouterEvent,
   NavigationEnd,
   Router,
 } from '@angular/router';
@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
     private router: Router,
   ) {
     // https://www.amadousall.com/angular-routing-how-to-display-a-loading-indicator-when-navigating-between-routes/
-    this.router.events.subscribe((event: Event) => {
+    this.router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationEnd) {
         if (isPlatformBrowser(this.platformId)) {
           this.navigationService.saveNewUrl(event.urlAfterRedirects);
@@ -46,5 +46,13 @@ export class AppComponent implements OnInit {
     // always set up during the initial page load, regardless of whether the first
     // page the donor lands on makes wider use of DonationService or not.
     this.donationService.deriveDefaultCountry();
+  }
+
+  /**
+   * Ensure browsers don't try to navigate to non-targets. Top level items with a sub-menu
+   * work on hover using pure CSS only.
+   */
+  noNav(event: Event) {
+    event.preventDefault();
   }
 }
