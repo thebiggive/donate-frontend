@@ -17,6 +17,7 @@ import { CampaignService } from '../campaign.service';
 import { ImageService } from '../image.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 @Component({
   // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
@@ -37,10 +38,15 @@ import { PageMetaService } from '../page-meta.service';
     MatProgressSpinnerModule,
     MatTabsModule,
   ],
+  providers: [
+    CurrencyPipe,
+    TimeLeftPipe, // Injected for TS use
+  ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   additionalImageUris: Array<string|null> = [];
   campaign: Campaign;
+  campaignOpen: boolean;
   isPendingOrNotReady = false;
   campaignInFuture = false;
   donateEnabled = true;
@@ -60,6 +66,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
+    public timeLeftPipe: TimeLeftPipe,
   ) {
     route.queryParams.forEach((params: Params) => {
       if (params.fromFund) {
@@ -70,6 +77,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
+    this.campaignOpen = CampaignService.isOpenForDonations(this.campaign);
     this.setSecondaryProps(this.campaign);
   }
 
@@ -89,6 +97,10 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.router.navigateByUrl(url);
+  }
+
+  getPercentageRaised(campaign: Campaign): number | undefined {
+    return CampaignService.percentRaised(campaign);
   }
 
   private setSecondaryProps(campaign: Campaign) {
