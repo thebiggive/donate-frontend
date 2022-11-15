@@ -10,7 +10,7 @@ describe('biggive-popup-standalone', () => {
     expect(page.root).toEqualHtml(`
       <biggive-popup-standalone>
         <mock:shadow-root>
-          <div class="popup">
+          <div class="popup" data-visible="true">
             <div class="sleeve">
               <div class="header">
                 <div class="close"></div>
