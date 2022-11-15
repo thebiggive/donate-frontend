@@ -27,6 +27,8 @@ export class BiggiveFormFieldSelect {
     this.selectedValue = event.detail.value;
     this.selectedLabel = event.detail.label;
     this.doSelectChange.emit({ value: this.selectedValue, label: this.selectedLabel });
+    const dropdown: HTMLDivElement = this.el.shadowRoot.querySelector('.dropdown');
+    dropdown.classList.remove('active');
   }
 
   /**
