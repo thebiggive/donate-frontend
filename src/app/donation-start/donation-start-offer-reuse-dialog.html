@@ -1,17 +1,19 @@
-<h2 mat-dialog-title>Continue donation?</h2>
+<biggive-popup-standalone>
+  <h2 mat-dialog-title>Continue donation?</h2>
 
-<mat-dialog-content class="mat-typography">
-  <p>You have an existing incomplete donation to this campaign which you may continue.</p>
+  <mat-dialog-content class="mat-typography">
+    <p>You have an existing incomplete donation to this campaign which you may continue.</p>
 
-  <p>Donation amount: <strong>{{ data.donation.donationAmount | exactCurrency:data.donation.currencyCode }}</strong></p>
+    <p>Donation amount: <strong>{{ data.donation.donationAmount | exactCurrency:data.donation.currencyCode }}</strong></p>
 
-  <p *ngIf="data.donation.matchReservedAmount > 0">Match funds reserved: <strong>{{ data.donation.matchReservedAmount | exactCurrency:data.donation.currencyCode }}</strong></p>
-  <p *ngIf="data.donation.matchReservedAmount === 0">No match funds are reserved.</p>
+    <p *ngIf="data.donation.matchReservedAmount > 0">Match funds reserved: <strong>{{ data.donation.matchReservedAmount | exactCurrency:data.donation.currencyCode }}</strong></p>
+    <p *ngIf="data.donation.matchReservedAmount === 0">No match funds are reserved.</p>
 
-  <p>Please confirm if you would rather proceed, or cancel this and provide new donation details.</p>
-</mat-dialog-content>
+    <p>Please confirm if you would rather proceed, or cancel this and provide new donation details.</p>
+  </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-raised-button [mat-dialog-close]="false" color="primary">Cancel</button>
-  <button mat-raised-button [mat-dialog-close]="true" cdkFocusInitial color="accent">Proceed</button>
-</mat-dialog-actions>
+  <mat-dialog-actions align="end">
+    <button mat-raised-button [mat-dialog-close]="false" color="primary">Cancel</button>
+    <button mat-raised-button [mat-dialog-close]="true" cdkFocusInitial color="accent">Proceed</button>
+  </mat-dialog-actions>
+</biggive-popup-standalone>

@@ -21,8 +21,7 @@
     "e2e-ci": "webdriver-manager update && ng e2e --webdriver-update=false --protractor-config=e2e/protractor-ci.conf.js",
     "ci": "npm run lint && npm run test-ci && npm run e2e-ci && npm run build:staging",
     "dev:ssr": "ng run donate-frontend:serve-ssr",
-    "serve:ssr": "node dist/server/main.js",
-    "prerender": "ng run donate-frontend:prerender"
+    "serve:ssr": "node dist/server/main.js"
   },
   "dependencies": {
     "@angular/animations": "^14.1.0",
@@ -37,7 +36,7 @@
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/platform-server": "^14.1.0",
     "@angular/router": "^14.1.0",
-    "@biggive/components-angular": "^1.0.133",
+    "@biggive/components-angular": "^1.0.136",
     "@fortawesome/angular-fontawesome": "~0.11.1",
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
     "@fortawesome/free-brands-svg-icons": "^6.2.0",
