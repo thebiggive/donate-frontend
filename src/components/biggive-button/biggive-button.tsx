@@ -12,7 +12,7 @@ export class BiggiveButton {
     cancelable: true,
     bubbles: true,
   })
-  doButtonClick: EventEmitter<string>;
+  doButtonClick: EventEmitter<{ event: object; url: string }>;
 
   /**
    * Space below component
@@ -49,15 +49,21 @@ export class BiggiveButton {
    */
   @Prop() rounded: boolean = false;
 
-  handleButtonClick() {
-    this.doButtonClick.emit(this.url);
+  handleButtonClick(event) {
+    this.doButtonClick.emit({ event: event, url: event.target.parentElement.href });
   }
 
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
         <a href={this.url} class={'button button-' + this.colourScheme + ' full-width-' + this.fullWidth.toString() + ' size-' + this.size + ' rounded-' + this.rounded.toString()}>
-          <span onClick={this.handleButtonClick}>{this.label}</span>
+          <span
+            onClick={event => {
+              this.handleButtonClick(event);
+            }}
+          >
+            {this.label}
+          </span>
         </a>
       </div>
     );

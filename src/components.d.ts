@@ -1447,7 +1447,7 @@ declare namespace LocalJSX {
           * Text
          */
         "label"?: string;
-        "onDoButtonClick"?: (event: BiggiveButtonCustomEvent<string>) => void;
+        "onDoButtonClick"?: (event: BiggiveButtonCustomEvent<{ event: object; url: string }>) => void;
         /**
           * Rounded corners
          */
