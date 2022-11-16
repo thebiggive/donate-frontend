@@ -72,12 +72,6 @@ export class ExploreComponent implements OnDestroy, OnInit {
     this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
   }
 
-  @HostListener('doOptionSelect', ['$event'])
-  onDoOptionSelect(event: CustomEvent) {
-    console.log(JSON.stringify(event));
-    // this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
-  }
-
   /**
    * Default sort when not in relevance mode because there's a search term.
    */
