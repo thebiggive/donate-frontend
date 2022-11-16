@@ -174,6 +174,19 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     return Math.round((childCampaign.amountRaised / childCampaign.target) * 100);
   }
 
+  getSelectedLabel() {
+    switch(this.searchService.selected.sortField) {
+      case 'matchFundsRemaining':
+        return 'Match funds remaining';
+      case 'amountRaised':
+        return 'Most raised';
+      case 'Relevance':
+        return 'Relevance';
+      default:
+        return null;
+    }
+  }
+
   private loadMoreForCurrentSearch() {
     this.offset += CampaignService.perPage;
     this.loading = true;
