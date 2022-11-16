@@ -78,6 +78,15 @@ export class BiggiveCampaignCardFilterGrid {
    */
   @Prop() fundingOptions: string[] = [];
 
+  /**
+   * This helps us inject a pre-selected dropdown value from outside of this component.
+   * This is especially helpful for the Meta campaign and Explore pages, where searching
+   * by text whipes out previous sort options and re-uses Relevance, or where one of those
+   * two pages is loaded directly with URL parameters - in such a scenario the dropdown
+   * shows that it's pre-selected. DON-558.
+   */
+  @Prop() selectedLabel: 'Most raised' | 'Match funds remaining' | 'Relevance' = null;
+
   private getSearchAndFilterObject(): {
     searchText: string;
     sortBy: string;
@@ -175,9 +184,10 @@ export class BiggiveCampaignCardFilterGrid {
           </div>
           <div class="sort-filter-wrap">
             <div class="sort-wrap">
-              <biggive-form-field-select placeholder="Sort by" id="sort-by">
+              <biggive-form-field-select placeholder="Sort by" selectedLabel={this.selectedLabel} id="sort-by">
                 <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>
                 <biggive-form-field-select-option value="matchFundsRemaining" label="Match funds remaining"></biggive-form-field-select-option>
+                <biggive-form-field-select-option value="Relevance" label="Relevance"></biggive-form-field-select-option>
               </biggive-form-field-select>
             </div>
 
