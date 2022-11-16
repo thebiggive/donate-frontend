@@ -60,8 +60,12 @@ export class SearchService {
     this.selected.sortField = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
 
     if (this.selected.term !== previousSearchText) {
-      // When a search *new* term is entered, we always clear the previous sortField and re-sort by Relevance. DON-558.
-      // Override sort field with value 'Relevance':
+      if (blankSearchText) {
+        // Reset everything
+        this.reset(defaultSort, false);
+      }
+
+      // If search text changed and new search text is not blank, we want to re-sort by 'Relevance'. DON-558.
       this.selected.sortField = 'Relevance';
     }
 
