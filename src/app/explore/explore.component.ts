@@ -29,7 +29,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
   beneficiaryOptions: string[] = [];
   categoryOptions: string[] = [];
-  countryOptions: string[] = [];
+  locationOptions: string[] = [];
   fundingOptions: string[] = [];
 
   constructor(
@@ -66,7 +66,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
     this.beneficiaryOptions = CampaignGroupsService.getBeneficiaryNames();
     this.categoryOptions = CampaignGroupsService.getCategoryNames();
-    this.countryOptions = CampaignGroupsService.getCountries();
+    this.locationOptions = CampaignGroupsService.getCountries();
     this.fundingOptions = [
       'Match Funded'
     ]
@@ -75,6 +75,12 @@ export class ExploreComponent implements OnDestroy, OnInit {
   @HostListener('doSearchAndFilterUpdate', ['$event'])
   onDoSearchAndFilterUpdate(event: CustomEvent) {
     this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
+  }
+
+  @HostListener('doOptionSelect', ['$event'])
+  onDoOptionSelect(event: CustomEvent) {
+    console.log(JSON.stringify(event));
+    // this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
   }
 
   /**
