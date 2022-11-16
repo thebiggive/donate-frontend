@@ -33,7 +33,7 @@
       [beneficiaryOptions]="beneficiaryOptions"
       [locationOptions]="locationOptions"
       [fundingOptions]="fundingOptions"
-      [selectedLabel]="getSelectedLabel()">
+      [selectedLabel]="searchService.getSelectedSortLabel()">
       
       <biggive-grid
         slot="campaign-grid"
@@ -67,6 +67,12 @@
     </div>
 
     <mat-spinner *ngIf="loading" color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>
+
+    <div *ngIf="children.length === 0 && !loading">
+      <p class="error" aria-live="polite">
+        We can't find any campaigns matching this search but there are lots more to choose from.
+      </p>
+    </div>
 
     <div *ngIf="filterError" tabindex="0">
       <p class="error" aria-live="assertive">

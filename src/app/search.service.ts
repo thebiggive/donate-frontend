@@ -50,18 +50,35 @@ export class SearchService {
     this.selected.country = customSearchEvent.filterLocation ? customSearchEvent.filterLocation : '';
     this.selected.onlyMatching = (customSearchEvent.filterFunding === 'Match Funded');
 
-    if (customSearchEvent.searchText && customSearchEvent.searchText.trim() !== '') {
-      this.selected.term = customSearchEvent.searchText;
+    const blankSearchText = (
+      !customSearchEvent.searchText || customSearchEvent.searchText.trim() === ''
+    );
 
-      // When a search term is entered, we always clear the previous sortField and re-sort by Relevance. DON-558.
+    const previousSearchText = this.selected.term;
+    // this helps for comparing the new search text with the previous, because 'null' and 'undefined' are changed to ''
+    this.selected.term = blankSearchText ? '' : customSearchEvent.searchText;
+    this.selected.sortField = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
+
+    if (this.selected.term !== previousSearchText) {
+      // When a search *new* term is entered, we always clear the previous sortField and re-sort by Relevance. DON-558.
+      // Override sort field with value 'Relevance':
       this.selected.sortField = 'Relevance';
     }
 
-    else {
-      this.selected.sortField = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
-    }
-
     this.changed.emit(true);
+  }
+
+  getSelectedSortLabel() {
+    switch(this.selected.sortField) {
+      case 'matchFundsRemaining':
+        return 'Match funds remaining';
+      case 'amountRaised':
+        return 'Most raised';
+      case 'Relevance':
+        return 'Relevance';
+      default:
+        return null;
+    }
   }
 
   filter(filterName: string, value: string|boolean) {
