@@ -1,22 +1,6 @@
 @use '@angular/material' as mat;
 @import '../../abstract';
 
-app-campaign-search-form {
-  z-index: 200; // Must trump components for form to receive input.
-  position: absolute;
-  right: 50px;
-  top: 50px;
-
-  @media #{$breakpoint-md} {
-    top: 120px;
-  }
-
-  @media #{$breakpoint-lg} {
-    right: 50px;
-    top: 250px;
-  }
-}
-
 .error {
   color: mat.get-color-from-palette($donate-warn);
   max-width: $full-copy-max-width;

@@ -27,7 +27,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
   beneficiaryOptions: string[] = [];
   categoryOptions: string[] = [];
-  countryOptions: string[] = [];
+  locationOptions: string[] = [];
   fundingOptions: string[] = [];
 
   constructor(
@@ -61,7 +61,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
     this.beneficiaryOptions = CampaignGroupsService.getBeneficiaryNames();
     this.categoryOptions = CampaignGroupsService.getCategoryNames();
-    this.countryOptions = CampaignGroupsService.getCountries();
+    this.locationOptions = CampaignGroupsService.getCountries();
     this.fundingOptions = [
       'Match Funded'
     ]

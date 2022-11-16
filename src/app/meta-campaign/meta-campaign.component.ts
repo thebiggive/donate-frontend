@@ -16,6 +16,7 @@ import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
 import { TimeLeftPipe } from '../time-left.pipe';
+import { CampaignGroupsService } from '../campaign-groups.service';
 
 @Component({
   selector: 'app-meta-campaign',
@@ -47,6 +48,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v2`; // Key is per-domain/env
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
+
+  beneficiaryOptions: string[] = [];
+  categoryOptions: string[] = [];
+  locationOptions: string[] = [];
+  fundingOptions: string[] = [];
 
   constructor(
     private campaignService: CampaignService,
@@ -112,6 +118,13 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     }
 
     this.setTickerParams();
+
+    this.beneficiaryOptions = CampaignGroupsService.getBeneficiaryNames();
+    this.categoryOptions = CampaignGroupsService.getCategoryNames();
+    this.locationOptions = CampaignGroupsService.getCountries();
+    this.fundingOptions = [
+      'Match Funded'
+    ]
   }
 
   ngAfterViewChecked() {

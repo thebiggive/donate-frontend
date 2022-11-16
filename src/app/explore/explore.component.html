@@ -8,40 +8,41 @@
     main-image-align-horizontal="right"
     main-image-align-vertical="center"
   ></biggive-hero-image>
-
-  <app-campaign-search-form
-    [getDefaultSort]="getDefaultSort"
-  ></app-campaign-search-form>
-
   <biggive-page-section>
-    <app-filters
-      [getDefaultSort]="getDefaultSort"
-    ></app-filters>
 
-    <biggive-grid
-      *ngIf="campaigns"
-      column-count="3"
-      infiniteScroll
-      [infiniteScrollThrottle]="500"
-      (scrolled)="onScroll()"
-      [scrollWindow]="true"
-    >
-      <div *ngFor="let campaign of campaigns">
-        <biggive-campaign-card
-          [banner]="campaign.imageUri | optimisedImage:830 | async"
-          [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'"
-          [campaignTitle]="campaign.title"
-          [donateButtonUrl]="'/donate/' + campaign.id"
-          [moreInfoButtonUrl]="'/campaign/' + campaign.id"
-          [organisationName]="campaign.charity.name"
-          primary-figure-label="Match Funds Remaining"
-          [primaryFigureAmount]="campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : '1.0-0'"
-          [progressBarCounter]="getPercentageRaised(campaign)"
-          secondary-figure-label="Total Funds Raised"
-          [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : '1.0-0'">
-        </biggive-campaign-card>
-      </div>
-    </biggive-grid>
+    <biggive-campaign-card-filter-grid
+      [categoryOptions]="categoryOptions"
+      [beneficiaryOptions]="beneficiaryOptions"
+      [locationOptions]="locationOptions"
+      [fundingOptions]="fundingOptions"
+      [selectedLabel]="searchService.getSelectedSortLabel()">
+      
+      <biggive-grid
+        slot="campaign-grid"
+        column-count="3"
+        *ngIf="campaigns"
+        infiniteScroll
+        [infiniteScrollThrottle]="500"
+        (scrolled)="onScroll()"
+        [scrollWindow]="true"
+      >
+        <div *ngFor="let campaign of campaigns">
+          <biggive-campaign-card
+            [banner]="campaign.imageUri | optimisedImage:830 | async"
+            [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'"
+            [campaignTitle]="campaign.title"
+            [donateButtonUrl]="'/donate/' + campaign.id"
+            [moreInfoButtonUrl]="'/campaign/' + campaign.id"
+            [organisationName]="campaign.charity.name"
+            primary-figure-label="Match Funds Remaining"
+            [primaryFigureAmount]="campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : '1.0-0'"
+            [progressBarCounter]="getPercentageRaised(campaign)"
+            secondary-figure-label="Total Funds Raised"
+            [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : '1.0-0'">
+          </biggive-campaign-card>
+        </div>
+      </biggive-grid>
+    </biggive-campaign-card-filter-grid>
 
     <mat-spinner *ngIf="loading" color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>
 
