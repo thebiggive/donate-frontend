@@ -49,9 +49,18 @@ export class SearchService {
     this.selected.category = customSearchEvent.filterCategory ? customSearchEvent.filterCategory : '';
     this.selected.country = customSearchEvent.filterLocation ? customSearchEvent.filterLocation : '';
     this.selected.onlyMatching = (customSearchEvent.filterFunding === 'Match Funded');
-    this.selected.sortField = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
-    // add truthy check for searchText to prevent error when calling .length on 'undefined' in search.service.ts
-    this.selected.term = customSearchEvent.searchText ? customSearchEvent.searchText : '';
+
+    if (customSearchEvent.searchText && customSearchEvent.searchText.trim() !== '') {
+      this.selected.term = customSearchEvent.searchText;
+
+      // When a search term is entered, we always clear the previous sortField and re-sort by Relevance. DON-558.
+      this.selected.sortField = 'Relevance';
+    }
+
+    else {
+      this.selected.sortField = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
+    }
+
     this.changed.emit(true);
   }
 
