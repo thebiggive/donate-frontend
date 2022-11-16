@@ -27,14 +27,14 @@ import { TBG_DONATE_ID_STORAGE } from './identity.service';
     AppComponent,
     HomeComponent,
   ],
-  imports: [
+  imports: [    
     BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
     ComponentsModule,
     HttpClientModule,
     RouterModule.forRoot(routes, {
       initialNavigation: 'enabledBlocking', // "This value is required for server-side rendering to work." https://angular.io/api/router/InitialNavigation
-      onSameUrlNavigation: 'ignore', // Allows Explore & home logo links to clear search filters in ExploreComponent – TODO change back to 'reload' after 15/11/22 DON-634 diagnostics.
+      onSameUrlNavigation: 'reload', // Allows Explore & home logo links to clear search filters in ExploreComponent
       scrollPositionRestoration: 'enabled',
     }),
     RouterOutlet,
