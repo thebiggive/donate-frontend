@@ -3,7 +3,6 @@ import { Routes } from '@angular/router';
 import { CampaignListResolver } from './campaign-list.resolver';
 import { CampaignResolver } from './campaign.resolver';
 import { CharityCampaignsResolver } from './charity-campaigns.resolver';
-import { HomeComponent } from './home/home.component';
 
 export const routes: Routes = [
   {
@@ -81,12 +80,9 @@ export const routes: Routes = [
       .then(c => c.MetaCampaignModule),
   },
   {
-    // For slightly mysterious reasons, Home actually loaded Explore content first during our
-    // first pass at using lazy loading, Universal + Stencil components all together. This was
-    // the case both with pages in standalone components and a module per page. For now,
-    // Home is therefore eager loaded.
     path: '',
-    component: HomeComponent,
+    loadChildren: () => import('./home/home.module')
+      .then(c => c.HomeModule),
   },
   {
     path: '**',
