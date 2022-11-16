@@ -45,9 +45,9 @@ export class SearchService {
     filterFunding: string;
   }, defaultSort: string) {
     this.nonDefaultsActive = true;
-    this.selected.beneficiary = customSearchEvent.filterBeneficiary;
-    this.selected.category = customSearchEvent.filterCategory;
-    this.selected.country = customSearchEvent.filterLocation;
+    this.selected.beneficiary = customSearchEvent.filterBeneficiary ? customSearchEvent.filterBeneficiary : '';
+    this.selected.category = customSearchEvent.filterCategory ? customSearchEvent.filterCategory : '';
+    this.selected.country = customSearchEvent.filterLocation ? customSearchEvent.filterLocation : '';
     this.selected.onlyMatching = (customSearchEvent.filterFunding === 'Match Funded');
     this.selected.sortField = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
     // add truthy check for searchText to prevent error when calling .length on 'undefined' in search.service.ts
