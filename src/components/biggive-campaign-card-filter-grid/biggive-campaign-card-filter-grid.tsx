@@ -35,6 +35,8 @@ export class BiggiveCampaignCardFilterGrid {
   filterLocation: string = null;
   filterFunding: string = null;
 
+  sortByPlaceholderText = 'Sort by';
+
   /**
    * Space below component
    */
@@ -104,18 +106,27 @@ export class BiggiveCampaignCardFilterGrid {
   }
 
   @Listen('doSelectChange')
-  doOptionSelectCompletedHandler() {
+  doOptionSelectCompletedHandler(event) {
     this.sortBy = this.el.shadowRoot.getElementById('sort-by').selectedValue;
     this.filterCategory = this.el.shadowRoot.getElementById('categories').selectedValue;
     this.filterBeneficiary = this.el.shadowRoot.getElementById('beneficiaries').selectedValue;
     this.filterLocation = this.el.shadowRoot.getElementById('locations').selectedValue;
     this.filterFunding = this.el.shadowRoot.getElementById('funding').selectedValue;
-  }
 
-  private handleSortByChanged = (event: any) => {
-    this.sortBy = event.target.value;
-    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  };
+    // If this method was trigerred by the selection of a 'Sort by' dropdown option, then
+    // emit an event to search, but do NOT emit an event for example when filter options
+    // are selected, until the 'Apply filters' button is pressed which is handled separately
+    // by `handleApplyFilterButtonClick()`.
+    // Additional note -> we could, instead, do this:
+    // `<biggive-form-field-select placeholder="Sort by" id="sort-by" onDoSelectChange={this.someHandleMethod}>`
+    // but the problem with that is that `someHandleMethod` gets called first and then this
+    // method gets called, leading to two calls and more risk for error. DON-570.
+    if (event.detail.placeholder === this.sortByPlaceholderText) {
+      console.log('emitting event:');
+      console.log(this.getSearchAndFilterObject());
+      this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+    }
+  }
 
   private handleApplyFilterButtonClick = () => {
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
@@ -164,7 +175,7 @@ export class BiggiveCampaignCardFilterGrid {
           </div>
           <div class="sort-filter-wrap">
             <div class="sort-wrap">
-              <biggive-form-field-select placeholder="Sort by" id="sort-by" onDoSelectChange={this.handleSortByChanged}>
+              <biggive-form-field-select placeholder="Sort by" id="sort-by">
                 <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>
                 <biggive-form-field-select-option value="matchFundsRemaining" label="Match funds remaining"></biggive-form-field-select-option>
               </biggive-form-field-select>
