@@ -49,6 +49,10 @@ export class SearchService {
       searchText = ''; // prevents error calling .length on 'undefined' in search.service.ts
     }
 
+    const sortBy = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
+
+    this.search(searchText, sortBy);
+
     if (customSearchEvent.filterBeneficiary) {
       this.filter('beneficiary', customSearchEvent.filterBeneficiary);
     }
@@ -64,8 +68,6 @@ export class SearchService {
     if (customSearchEvent.filterFunding) {
       this.filter('onlyMatching', customSearchEvent.filterFunding === 'Match Funded');
     }
-
-    const sortBy = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
 
     this.sort(sortBy);
   }
