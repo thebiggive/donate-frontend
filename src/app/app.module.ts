@@ -38,6 +38,9 @@ import { TBG_DONATE_ID_STORAGE } from './identity.service';
     RouterOutlet,
     TransferHttpCacheModule,
   ],
+  exports: [
+    RouterModule,
+  ],
   providers: [
     CampaignListResolver,
     CampaignResolver,
