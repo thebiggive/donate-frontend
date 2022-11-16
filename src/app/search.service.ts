@@ -44,32 +44,15 @@ export class SearchService {
     filterLocation: string;
     filterFunding: string;
   }, defaultSort: string) {
-    let searchText = customSearchEvent.searchText;
-    if (!searchText) {
-      searchText = ''; // prevents error calling .length on 'undefined' in search.service.ts
-    }
-
-    const sortBy = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
-
-    this.search(searchText, sortBy);
-
-    if (customSearchEvent.filterBeneficiary) {
-      this.filter('beneficiary', customSearchEvent.filterBeneficiary);
-    }
-
-    if (customSearchEvent.filterCategory) {
-      this.filter('category', customSearchEvent.filterCategory);
-    }
-
-    if (customSearchEvent.filterLocation) {
-      this.filter('country', customSearchEvent.filterLocation);
-    }
-
-    if (customSearchEvent.filterFunding) {
-      this.filter('onlyMatching', customSearchEvent.filterFunding === 'Match Funded');
-    }
-
-    this.sort(sortBy);
+    this.nonDefaultsActive = true;
+    this.selected.beneficiary = customSearchEvent.filterBeneficiary;
+    this.selected.category = customSearchEvent.filterCategory;
+    this.selected.country = customSearchEvent.filterLocation;
+    this.selected.onlyMatching = (customSearchEvent.filterFunding === 'Match Funded');
+    this.selected.sortField = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
+    // add truthy check for searchText to prevent error when calling .length on 'undefined' in search.service.ts
+    this.selected.term = customSearchEvent.searchText ? customSearchEvent.searchText : '';
+    this.changed.emit(true);
   }
 
   filter(filterName: string, value: string|boolean) {
