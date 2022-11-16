@@ -1,4 +1,4 @@
-import { Component, Prop, h } from '@stencil/core';
+import { Component, Prop, Event, EventEmitter, h } from '@stencil/core';
 
 @Component({
   tag: 'biggive-button',
@@ -6,6 +6,14 @@ import { Component, Prop, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveButton {
+  @Event({
+    eventName: 'doButtonClick',
+    composed: true,
+    cancelable: true,
+    bubbles: true,
+  })
+  doButtonClick: EventEmitter<string>;
+
   /**
    * Space below component
    */
@@ -41,11 +49,15 @@ export class BiggiveButton {
    */
   @Prop() rounded: boolean = false;
 
+  handleButtonClick() {
+    this.doButtonClick.emit(this.url);
+  }
+
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
         <a href={this.url} class={'button button-' + this.colourScheme + ' full-width-' + this.fullWidth.toString() + ' size-' + this.size + ' rounded-' + this.rounded.toString()}>
-          {this.label}
+          <span onClick={this.handleButtonClick}>{this.label}</span>
         </a>
       </div>
     );
