@@ -56,6 +56,9 @@ export class BiggiveArticleCard {
    */
   @Prop() buttonUrl: string = null;
 
+
+
+  
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
