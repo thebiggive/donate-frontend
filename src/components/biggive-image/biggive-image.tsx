@@ -21,6 +21,12 @@ export class BiggiveImage {
    */
   @Prop() imageUrl: string = '';
 
+    /**
+   * Image alt text tag.
+   */
+     @Prop() imageAltText: string = '';
+
+
   /**
    * Image width
    */
@@ -56,7 +62,7 @@ export class BiggiveImage {
     return (
       <div class={'container space-above-' + this.spaceAbove + ' space-below-' + this.spaceBelow} style={{ width: this.getWidth(), height: this.getHeight() }}>
         <div class="image-wrap">
-          <img src={this.imageUrl} style={{ width: this.getWidth(), height: this.getHeight() }} />
+          <img src={this.imageUrl} style={{ width: this.getWidth(), height: this.getHeight() }} alt={this.imageAltText} title={this.imageAltText} />
         </div>
       </div>
     );

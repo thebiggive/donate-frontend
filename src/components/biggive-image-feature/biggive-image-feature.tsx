@@ -21,6 +21,11 @@ export class BiggiveImageFeature {
   @Prop() imageUrl: string = '';
 
   /**
+   * Image alt text tag.
+   */
+   @Prop() imageAltText: string = '';
+
+  /**
    * Slug
    */
   @Prop() slug: string = null;
@@ -80,7 +85,7 @@ export class BiggiveImageFeature {
           <div class="graphic-wrap">
             {this.imageUrl.length > 0 ? (
               <div class="image-wrap">
-                <img src={this.imageUrl} />
+                <img src={this.imageUrl} alt={this.imageAltText} title={this.imageAltText} />
               </div>
             ) : null}
           </div>
