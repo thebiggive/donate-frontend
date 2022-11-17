@@ -34,11 +34,17 @@
 
 .sort-filter-wrap {
   display: flex;
-  align-items: flex-end;
+  justify-content: flex-end;
   margin-bottom: $spacer-4;
   text-align: right;
+  #clearFilters {
+    margin: auto 0 auto auto;
+    &:hover {
+      cursor: pointer;
+    }
+  }
   .sort-wrap {
-    margin-left: auto;
+    margin-left: 15px;
   }
   .filter-wrap {
     margin-left: $spacer-3;
@@ -73,5 +79,30 @@
 
   > path {
     fill: $colour-primary;
+  }
+}
+
+@media screen and (max-width: $screen-tablet-max) {
+  .sort-filter-wrap {
+    flex-wrap: wrap-reverse;
+
+    #clearFilters {
+      flex: 1 0 100%;
+      padding-top: 10px;
+    }
+  }
+}
+
+@media screen and (max-width: $screen-mobile-medium) {
+  .sort-filter-wrap {
+    flex-wrap: wrap-reverse;
+
+    .sort-wrap {
+      padding-top: 10px;
+    }
+
+    .sort-wrap, .filter-wrap {
+      flex: 1 0 100%;
+    }
   }
 }

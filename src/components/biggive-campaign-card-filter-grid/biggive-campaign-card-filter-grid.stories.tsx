@@ -1,11 +1,26 @@
-//import { BiggiveCampaignCard } from 'biggive-campaign-card/biggive-campaign-card';
 export default {
   title: 'Components/Campaign Features',
-  //subcomponents: {BiggiveCampaignCard}
+  argTypes: {
+    categoryOptions: {
+      name: 'Category Options',
+    },
+    beneficiaryOptions: {
+      name: 'Beneficiary Options',
+    },
+    locationOptions: {
+      name: 'Location Options',
+    },
+    fundingOptions: {
+      name: 'Funding Options',
+    },
+    searchText: {
+      name: 'Search Text',
+    },
+  },
 };
 
 const Template = args => `
-      <biggive-campaign-card-filter-grid category-options="${args.categoryOptions}" beneficiary-options="${args.beneficiaryOptions}" location-options="${args.locationOptions}" funding-options="${args.fundingOptions}">
+      <biggive-campaign-card-filter-grid category-options="${args.categoryOptions}" beneficiary-options="${args.beneficiaryOptions}" location-options="${args.locationOptions}" funding-options="${args.fundingOptions}" search-text=${args.searchText}>
       <biggive-grid slot="campaign-grid" column-count="3">
         <biggive-campaign-card
           campaign-type="Match Funded"
@@ -47,11 +62,13 @@ const Template = args => `
       `;
 
 document.addEventListener('doSearchAndFilterUpdate', $event => console.log($event));
+document.addEventListener('doClearFilters', $event => console.log($event));
 
 export const CampaignCardFilterGridComponent = Template.bind({});
 CampaignCardFilterGridComponent.args = {
   categoryOptions: ['ABC', 'DEF'],
-  beneficiaryOptions: ['ABC', 'DEF', 'ABC', 'DEF', 'ABC', 'DEF', 'ABC', 'DEF', 'ABC', 'DEF', 'ABC', 'DEF', 'ABC', 'DEF'],
+  beneficiaryOptions: ['ABC', 'DEF'],
   locationOptions: ['ABC', 'DEF'],
   fundingOptions: ['ABC', 'DEF'],
+  searchText: '',
 };
