@@ -1,10 +1,9 @@
-import { CurrencyPipe, isPlatformBrowser, Location } from '@angular/common';
+import { isPlatformBrowser, Location } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { AnalyticsService } from '../analytics.service';
-import { CampaignGroupsService } from '../campaign-groups.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { ImageService } from '../image.service';
@@ -19,16 +18,12 @@ import { TimeLeftPipe } from '../time-left.pipe';
   templateUrl: './campaign-details.component.html',
   styleUrls: ['./campaign-details.component.scss'],
   providers: [
-    CurrencyPipe,
     TimeLeftPipe,
   ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   additionalImageUris: Array<string|null> = [];
   campaign: Campaign;
-  campaignOpen: boolean;
-  campaignRaised: string; // Formatted
-  campaignTarget: string; // Formatted
   isPendingOrNotReady = false;
   campaignInFuture = false;
   donateEnabled = true;
@@ -40,7 +35,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private analyticsService: AnalyticsService,
-    private currencyPipe: CurrencyPipe,
     private imageService: ImageService,
     private location: Location,
     private navigationService: NavigationService,
@@ -60,10 +54,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
-    this.campaignOpen = CampaignService.isOpenForDonations(this.campaign);
-    this.campaignTarget = this.currencyPipe.transform(this.campaign.target, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
-    this.campaignRaised = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
-
     this.setSecondaryProps(this.campaign);
   }
 
@@ -83,23 +73,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     }
 
     this.router.navigateByUrl(url);
-  }
-
-  getStringDate(date: string) {
-    const theDate: Date = new Date(date);
-    return theDate.toDateString();
-  }
-
-  getPercentageRaised(campaign: Campaign): number | undefined {
-    return CampaignService.percentRaised(campaign);
-  }
-
-  getBeneficiaryIcon(beneficiary: string) {
-    return CampaignGroupsService.getBeneficiaryIcon(beneficiary);
-  }
-
-  getCategoryIcon(category: string) {
-    return CampaignGroupsService.getCategoryIcon(category);
   }
 
   private setSecondaryProps(campaign: Campaign) {

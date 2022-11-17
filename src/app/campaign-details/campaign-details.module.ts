@@ -12,6 +12,7 @@ import { allChildComponentImports } from '../../allChildComponentImports';
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { CampaignDetailsRoutingModule } from './campaign-details-routing.module';
 import { TimeLeftPipe } from '../time-left.pipe';
+import { CampaignInfoComponent } from '../campaign-info/campaign-info.component';
 
 @NgModule({
   imports: [
@@ -28,6 +29,6 @@ import { TimeLeftPipe } from '../time-left.pipe';
     MatTabsModule,
     TimeLeftPipe,
   ],
-  declarations: [CampaignDetailsComponent],
+  declarations: [CampaignDetailsComponent, CampaignInfoComponent],
 })
 export class CampaignDetailsModule {}

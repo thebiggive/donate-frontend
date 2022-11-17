@@ -54,40 +54,7 @@
           rounded="false"
           [routerLink]="'/donate/' + campaign.id">
         </biggive-button>
-      
-        <!-- Todo: componentise this -->
-        <biggive-campaign-highlights
-          space-below=0
-          primary-figure-label="Amount raised"
-          [primaryFigureAmount]="campaignRaised"
-          secondary-figure-label="Campaign target"
-          [secondaryFigureAmount]="campaignTarget"
-          [progressBarCounter]="getPercentageRaised(campaign)?.toFixed(0)"
-          primary-stat-icon="AlarmClock"
-          [primaryStatText]="campaignOpen ? (timeLeftPipe.transform(campaign.endDate)) : 'Opens soon'"
-          secondary-stat-icon="Heart"
-          [secondaryStatText]="campaign.donationCount === 1 ? '1 donation' : campaign.donationCount + ' donations' ">
-        </biggive-campaign-highlights>
-
-        <div style="margin-bottom: 30px;">
-          <h5>Categories</h5>
-          <hr>
-          <div class="icons">
-            <li *ngFor="let category of campaign.categories" class="icon-wrapper">
-              <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
-              <span class="c-icon-title">{{ category }}</span>
-            </li>
-          </div>
-
-          <h5>Beneficiaries</h5>
-          <hr>
-          <div class="icons">
-            <li *ngFor="let beneficiary of campaign.beneficiaries" class="icon-wrapper">
-              <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
-              <span class="c-icon-title">{{ beneficiary }}</span>
-            </li>
-          </div>
-        </div>
+        <app-campaign-info [campaign]="campaign"></app-campaign-info>
       </div>
 
       <div class="c-video" *ngIf="videoEmbedUrl">
@@ -258,38 +225,7 @@
 
     <div class="b-secondary-column">
       <div id="campaign-highlights-beneficiaries-and-categories-desktop">
-        <biggive-campaign-highlights
-          space-below=0
-          primary-figure-label="Amount raised"
-          [primaryFigureAmount]="campaignRaised"
-          secondary-figure-label="Campaign target"
-          [secondaryFigureAmount]="campaignTarget"
-          [progressBarCounter]="getPercentageRaised(campaign)?.toFixed(0)"
-          primary-stat-icon="AlarmClock"
-          [primaryStatText]="campaignOpen ? (timeLeftPipe.transform(campaign.endDate)) : 'Opens soon'"
-          secondary-stat-icon="Heart"
-          [secondaryStatText]="campaign.donationCount === 1 ? '1 donation' : campaign.donationCount + ' donations' ">
-        </biggive-campaign-highlights>
-
-        <div style="margin-bottom: 30px;">
-          <h5>Categories</h5>
-          <hr>
-          <div class="icons">
-            <li *ngFor="let category of campaign.categories" class="icon-wrapper">
-              <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
-              <span class="c-icon-title">{{ category }}</span>
-            </li>
-          </div>
-
-          <h5>Beneficiaries</h5>
-          <hr>
-          <div class="icons">
-            <li *ngFor="let beneficiary of campaign.beneficiaries" class="icon-wrapper">
-              <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
-              <span class="c-icon-title">{{ beneficiary }}</span>
-            </li>
-          </div>
-        </div>
+        <app-campaign-info [campaign]="campaign"></app-campaign-info>
         <div class="donate-button-wrapper">
           <biggive-button
             space-above="5"
