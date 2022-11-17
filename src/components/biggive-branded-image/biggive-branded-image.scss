@@ -61,7 +61,7 @@
     width: fit-content; // so link doesn't go full width
   }
 
-  #charityName, #charityLocation {
+  #charityName, .charity-info {
     font-size: 17px;
     
     @media screen and (max-width: $screen-tablet-max) {

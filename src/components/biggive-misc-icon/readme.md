@@ -12,7 +12,7 @@
 | `backgroundColour` | `background-colour` | Background colour | `string` | `'primary'` |
 | `icon`             | `icon`              | Icon              | `string` | `null`      |
 | `iconColour`       | `icon-colour`       | Background colour | `string` | `'white'`   |
-| `url`              | `url`               | Url               | `string` | `'#'`       |
+| `url`              | `url`               | Url               | `string` | `undefined` |
 
 
 ## Dependencies

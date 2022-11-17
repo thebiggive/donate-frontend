@@ -14,8 +14,11 @@ describe('biggive-branded-image', () => {
             <div class="slug">
             </div>
             <div class="image-wrap"><img src=""></div>
-            <a id="charityName" href=""></a>
-            <div id="charityLocation"></div>
+            <a id="charityName" target="_blank"></a>
+            <div class="charity-info"></div>
+            <div class="charity-info">
+              Championed by:
+            </div>
           </div>
         </mock:shadow-root>
       </biggive-header-image>

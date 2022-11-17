@@ -61,7 +61,7 @@ export class BiggiveFormFieldSelect {
     return (
       <div class={'dropdown space-below-' + this.spaceBelow}>
         <div class="sleeve" onClick={this.toggleFocus} onMouseLeave={this.toggleFocus}>
-          <span class="placeholder">{this.selectedLabel === null ? this.placeholder : this.selectedLabel}</span>
+          <span class="placeholder">{this.selectedLabel === null || this.selectedLabel === undefined ? this.placeholder : this.selectedLabel}</span>
         </div>
         <div class="options">
           <slot></slot>

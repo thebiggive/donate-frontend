@@ -146,6 +146,10 @@ export namespace Components {
     }
     interface BiggiveBrandedImage {
         /**
+          * The name of the champion funder
+         */
+        "championName": string;
+        /**
           * Charity location
          */
         "charityLocation": string;
@@ -153,6 +157,10 @@ export namespace Components {
           * Charity name
          */
         "charityName": string;
+        /**
+          * Link to the charity's website
+         */
+        "charityUrl": string;
         /**
           * Full URL of a image.
          */
@@ -1410,6 +1418,10 @@ declare namespace LocalJSX {
     }
     interface BiggiveBrandedImage {
         /**
+          * The name of the champion funder
+         */
+        "championName"?: string;
+        /**
           * Charity location
          */
         "charityLocation"?: string;
@@ -1417,6 +1429,10 @@ declare namespace LocalJSX {
           * Charity name
          */
         "charityName"?: string;
+        /**
+          * Link to the charity's website
+         */
+        "charityUrl"?: string;
         /**
           * Full URL of a image.
          */

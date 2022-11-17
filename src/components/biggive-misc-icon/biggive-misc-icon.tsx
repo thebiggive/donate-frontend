@@ -26,7 +26,7 @@ export class BiggiveMiscIcon {
   /**
    * Url
    */
-  @Prop() url: string = '#';
+  @Prop() url: string = undefined;
 
   private getMiscIcon(): IconDefinition {
     var icon = FontAwesomeIconsService.getMiscIcon(this.icon);

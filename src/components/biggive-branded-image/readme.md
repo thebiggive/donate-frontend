@@ -7,14 +7,16 @@
 
 ## Properties
 
-| Property          | Attribute          | Description           | Type     | Default |
-| ----------------- | ------------------ | --------------------- | -------- | ------- |
-| `charityLocation` | `charity-location` | Charity location      | `string` | `null`  |
-| `charityName`     | `charity-name`     | Charity name          | `string` | `null`  |
-| `imageUrl`        | `image-url`        | Full URL of a image.  | `string` | `''`    |
-| `logoUrl`         | `logo-url`         | Full URL of the logo. | `string` | `''`    |
-| `slug`            | `slug`             | Slug                  | `string` | `null`  |
-| `spaceBelow`      | `space-below`      | Space below component | `number` | `0`     |
+| Property          | Attribute          | Description                     | Type     | Default |
+| ----------------- | ------------------ | ------------------------------- | -------- | ------- |
+| `championName`    | `champion-name`    | The name of the champion funder | `string` | `null`  |
+| `charityLocation` | `charity-location` | Charity location                | `string` | `null`  |
+| `charityName`     | `charity-name`     | Charity name                    | `string` | `null`  |
+| `charityUrl`      | `charity-url`      | Link to the charity's website   | `string` | `null`  |
+| `imageUrl`        | `image-url`        | Full URL of a image.            | `string` | `''`    |
+| `logoUrl`         | `logo-url`         | Full URL of the logo.           | `string` | `''`    |
+| `slug`            | `slug`             | Slug                            | `string` | `null`  |
+| `spaceBelow`      | `space-below`      | Space below component           | `number` | `0`     |
 
 
 ----------------------------------------------
