@@ -178,12 +178,17 @@ h1 {
   }
 }
 
-@media screen  and (max-width: 960px){
-  // fix button at bottom of screen for tablets and phones
-  .donate-button-wrapper {
-    position: fixed;
-    bottom: 0;
-    z-index: 1;
-    width: 100%;
+#campaign-highlights-beneficiaries-and-categories-mobile {
+  display: none;
+}
+
+@media screen and (max-width: 960px){
+  #campaign-highlights-beneficiaries-and-categories-desktop {
+    display: none;
+  }
+
+  #campaign-highlights-beneficiaries-and-categories-mobile {
+    display: block;
+    margin-top: 30px;
   }
 }
