@@ -21,11 +21,10 @@ export class BiggiveImage {
    */
   @Prop() imageUrl: string = '';
 
-    /**
+  /**
    * Image alt text tag.
    */
-     @Prop() imageAltText: string = '';
-
+  @Prop() imageAltText: string = '';
 
   /**
    * Image width

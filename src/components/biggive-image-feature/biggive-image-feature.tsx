@@ -23,7 +23,7 @@ export class BiggiveImageFeature {
   /**
    * Image alt text tag.
    */
-   @Prop() imageAltText: string = '';
+  @Prop() imageAltText: string = '';
 
   /**
    * Slug

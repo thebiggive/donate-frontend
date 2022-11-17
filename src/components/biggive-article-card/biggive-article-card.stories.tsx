@@ -41,6 +41,9 @@ export default {
     imageUrl: {
       name: 'Image URL',
     },
+    imageAltText: {
+      name: 'Image alt text',
+    },
     imageLabel: {
       name: 'Image Label',
     },
@@ -63,6 +66,7 @@ const Template = args => `
                 date="${args.date}"
                 main-title="${args.mainTitle}"
                 image-url="${args.imageUrl}"
+                image-alt-text="${args.imageAltText}"
                 image-label="${args.imageLabel}"
                 button-label="${args.buttonLabel}"
                 button-url="${args.buttonUrl}"
@@ -80,6 +84,7 @@ ArticleCardComponent.args = {
   date: 'September 2022',
   mainTitle: 'Sample main title',
   imageUrl: 'https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693',
+  imageAltText: 'Image description',
   imageLabel: 'By Joe Bloggs',
   buttonUrl: '#',
   buttonLabel: 'Click here',
