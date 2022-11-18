@@ -140,7 +140,7 @@ export class BiggiveCampaignCard {
           <div class="button-wrap">
             {this.isFutureCampaign || this.isPastCampaign ? (
               <div class="msg-wrapper">
-                <biggive-misc-icon background-colour="white" icon-colour="black" icon="Timer" url="#"></biggive-misc-icon>
+                <biggive-misc-icon background-colour="white" icon-colour="black" icon="Timer"></biggive-misc-icon>
                 {this.isFutureCampaign ? <p>Launches {this.datetime}</p> : <p>Closed {this.datetime}</p>}
               </div>
             ) : (
