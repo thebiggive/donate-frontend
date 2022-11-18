@@ -18,6 +18,9 @@ export default {
     imageUrl: {
       name: 'Image URL',
     },
+    imageAltText: {
+      name: 'Image alt text',
+    },
     width: {
       name: 'Width',
     },
@@ -42,6 +45,7 @@ const Template = args => `
                 height="${args.height}"
                 size-unit="${args.sizeUnit}"
                 image-url="${args.imageUrl}"
+                image-alt-text="${args.imageAltText}"
                 >
               </biggive-image>
               `;
@@ -51,6 +55,7 @@ ImageComponent.args = {
   spaceAbove: 4,
   spaceBelow: 4,
   imageUrl: 'https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693',
+  imageAltText: 'Image description',
   width: 0,
   height: 0,
   sizeUnit: null,

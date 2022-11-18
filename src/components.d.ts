@@ -28,6 +28,10 @@ export namespace Components {
          */
         "date": string;
         /**
+          * Image Alt Text
+         */
+        "imageAltText": string;
+        /**
           * Image Label
          */
         "imageLabel": string;
@@ -614,6 +618,10 @@ export namespace Components {
          */
         "logo": string;
         /**
+          * Logo alt text
+         */
+        "logoAltText": string;
+        /**
           * Full URL of a main hero image.
          */
         "mainImage": string|null;
@@ -670,6 +678,10 @@ export namespace Components {
          */
         "height": number;
         /**
+          * Image alt text tag.
+         */
+        "imageAltText": string;
+        /**
           * Full URL of a image.
          */
         "imageUrl": string;
@@ -707,6 +719,10 @@ export namespace Components {
           * Default text colour
          */
         "defaultTextColour": string;
+        /**
+          * Image alt text tag.
+         */
+        "imageAltText": string;
         /**
           * Full URL of a image.
          */
@@ -993,6 +1009,10 @@ export namespace Components {
          */
         "videoUrl": string;
     }
+}
+export interface BiggiveButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLBiggiveButtonElement;
 }
 export interface BiggiveCampaignCardFilterGridCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1338,6 +1358,10 @@ declare namespace LocalJSX {
          */
         "date"?: string;
         /**
+          * Image Alt Text
+         */
+        "imageAltText"?: string;
+        /**
           * Image Label
          */
         "imageLabel"?: string;
@@ -1497,6 +1521,7 @@ declare namespace LocalJSX {
           * Text
          */
         "label"?: string;
+        "onDoButtonClick"?: (event: BiggiveButtonCustomEvent<{ event: object; url: string }>) => void;
         /**
           * Rounded corners
          */
@@ -1947,6 +1972,10 @@ declare namespace LocalJSX {
          */
         "logo"?: string;
         /**
+          * Logo alt text
+         */
+        "logoAltText"?: string;
+        /**
           * Full URL of a main hero image.
          */
         "mainImage"?: string|null;
@@ -2003,6 +2032,10 @@ declare namespace LocalJSX {
          */
         "height"?: number;
         /**
+          * Image alt text tag.
+         */
+        "imageAltText"?: string;
+        /**
           * Full URL of a image.
          */
         "imageUrl"?: string;
@@ -2040,6 +2073,10 @@ declare namespace LocalJSX {
           * Default text colour
          */
         "defaultTextColour"?: string;
+        /**
+          * Image alt text tag.
+         */
+        "imageAltText"?: string;
         /**
           * Full URL of a image.
          */

@@ -16,8 +16,9 @@ const Template = args => `
       space-below="${args.spaceBelow}"
       colour-scheme="${args.colourScheme}"
       slug="${args.slug}"
-      slugColour="${args.slugColour}"
+      slug-colour="${args.slugColour}"
       logo="${args.logo}"
+      logo-alt-text="${args.logoAltText}"
       main-image="${args.mainImage}"
       main-image-align-horizontal="${args.mainImageAlignHorizontal}"
       main-image-align-vertical="${args.mainImageAlignVertical}"
@@ -38,6 +39,7 @@ HeroImageComponent.args = {
   slug: 'Test slug',
   slugColour: null,
   logo: 'https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693',
+  logoAltText: 'Logo description',
   mainImage: 'https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693',
   mainImageAlignHorizontal: 'center',
   mainImageAlignVertical: 'center',

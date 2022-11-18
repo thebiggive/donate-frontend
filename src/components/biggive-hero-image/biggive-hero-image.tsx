@@ -31,6 +31,11 @@ export class BiggiveHeroImage {
    */
    @Prop() logo: string = '';
 
+     /**
+   * Logo alt text
+   */
+      @Prop() logoAltText: string = '';
+
   /**
    * Full URL of a main hero image.
    */
@@ -85,7 +90,7 @@ export class BiggiveHeroImage {
           <div class="content-wrap">
             {this.logo.length > 0 ? (
               <div class="logo image-wrap" style={{ 'background-image': 'url(' + this.logo + ')'}}>
-                <img src={this.logo} />
+                <img src={this.logo} alt={this.logoAltText} title={this.logoAltText} />
               </div>
             ) : <div class="logo-space"></div>}
             <div class={'slug text-colour-'+this.slugColour}>{this.slug}</div>
@@ -98,7 +103,7 @@ export class BiggiveHeroImage {
           </div>
           <div class="graphic-wrap">
             {this.mainImage !== null ? (
-              <div class="image-wrap" style={{ 'background-image': 'url(' + this.mainImage + ')', 'background-position': this.mainImageAlignHorizontal + ' ' + this.mainImageAlignVertical }}>
+              <div class="image-wrap" role="presentation" style={{ 'background-image': 'url(' + this.mainImage + ')', 'background-position': this.mainImageAlignHorizontal + ' ' + this.mainImageAlignVertical }}>
               </div>
             ) : null}
           </div>

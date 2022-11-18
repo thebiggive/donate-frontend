@@ -113,7 +113,11 @@ export class BiggiveCampaignCard {
             </div>
           ) : null}
 
-          {this.banner !== null ? <div class="image-wrap banner" style={{ 'background-image': 'url(' + this.banner + ')' }}></div> : <div class="image-wrap banner"></div>}
+          {this.banner !== null ? (
+            <div class="image-wrap banner" role="presentation" style={{ 'background-image': 'url(' + this.banner + ')' }}></div>
+          ) : (
+            <div class="image-wrap banner"></div>
+          )}
 
           <div class="title-wrap">
             <h3>{this.campaignTitle}</h3>
