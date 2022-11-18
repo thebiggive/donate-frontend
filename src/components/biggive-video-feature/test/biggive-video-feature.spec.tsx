@@ -17,7 +17,11 @@ describe('biggive-video', () => {
                 <h2 class="text-colour- title"></h2>
                 <div class="teaser text-colour-"></div>
               </div>
-              <div class="graphic-wrap"></div>
+              <div class="graphic-wrap">
+                <div class="video-wrap">
+                  <video controls="" src=""></video>
+                </div>
+              </div>
             </div>
           </div>
         </mock:shadow-root>

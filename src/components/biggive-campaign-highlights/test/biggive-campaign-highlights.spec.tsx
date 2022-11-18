@@ -17,6 +17,9 @@ describe('biggive-campaign-highlights', () => {
         <mock:shadow-root>
           <div class="container space-below-0">
             <div class="sleeve">
+              <div class="banner image-wrap" style="background-image: url();">
+                <img class="banner" src="">
+              </div>
               <div class="meta-wrap">
                 <div class="meta-item">
                   <span class="label">Foo</span>

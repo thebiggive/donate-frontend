@@ -82,7 +82,9 @@ export class BiggiveVideoFeature {
               <biggive-button colour-scheme={this.buttonColourScheme} url={this.buttonUrl} label={this.buttonLabel}></biggive-button>
             ) : null}
           </div>
-          <div class="graphic-wrap">{this.videoUrl.length > 0 ? <div class="video-wrap" innerHTML={VideoService.getEmbedHtml(this.videoUrl)}></div> : null}</div>
+          <div class="graphic-wrap">
+            {this.videoUrl !== null && this.videoUrl !== undefined ? <div class="video-wrap" innerHTML={VideoService.getEmbedHtml(this.videoUrl)}></div> : null}
+          </div>
         </div>
       </div>
     );

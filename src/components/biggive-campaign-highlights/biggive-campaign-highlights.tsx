@@ -89,7 +89,7 @@ export class BiggiveCampaignHighlights {
             </div>
           ) : null}
 
-          {this.banner.length > 0 ? (
+          {this.banner !== null && this.banner !== undefined ? (
             <div class="image-wrap banner" style={{ 'background-image': 'url(' + this.banner + ')' }}>
               <img src={this.banner} class="banner" />
             </div>

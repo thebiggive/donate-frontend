@@ -88,7 +88,7 @@ export class BiggiveHeroImage {
       <div class={'container colour-scheme-' + this.colourScheme + ' space-below-' + this.spaceBelow}>
         <div class="sleeve">
           <div class="content-wrap">
-            {this.logo.length > 0 ? (
+            {this.logo !== undefined && this.logo !== null ? (
               <div class="logo image-wrap" style={{ 'background-image': 'url(' + this.logo + ')'}}>
                 <img src={this.logo} alt={this.logoAltText} title={this.logoAltText} />
               </div>

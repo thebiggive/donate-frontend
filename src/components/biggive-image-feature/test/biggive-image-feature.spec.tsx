@@ -17,7 +17,11 @@ describe('biggive-graphic', () => {
               <h2 class="text-colour- title"></h2>
               <div class="teaser text-colour-"></div>
             </div>
-            <div class="graphic-wrap"></div>
+            <div class="graphic-wrap">
+              <div class="image-wrap">
+                <img alt="" src="">
+              </div>
+            </div>
           </div>
         </div>
       </mock:shadow-root>

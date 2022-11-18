@@ -83,7 +83,7 @@ export class BiggiveImageFeature {
             ) : null}
           </div>
           <div class="graphic-wrap">
-            {this.imageUrl.length > 0 ? (
+            {this.imageUrl !== null && this.imageUrl !== undefined ? (
               <div class="image-wrap">
                 <img src={this.imageUrl} alt={this.imageAltText} />
               </div>
