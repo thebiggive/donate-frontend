@@ -14,6 +14,7 @@
 | `buttonLabel`           | `button-label`            | Button label                 | `string` | `null`       |
 | `buttonUrl`             | `button-url`              | Button URL                   | `string` | `null`       |
 | `date`                  | `date`                    | Date                         | `string` | `null`       |
+| `imageAltText`          | `image-alt-text`          | Image Alt Text               | `string` | `null`       |
 | `imageLabel`            | `image-label`             | Image Label                  | `string` | `null`       |
 | `imageUrl`              | `image-url`               | Image URL                    | `string` | `null`       |
 | `mainTitle`             | `main-title`              | Main title                   | `string` | `null`       |
