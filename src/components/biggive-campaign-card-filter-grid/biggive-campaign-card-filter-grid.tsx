@@ -106,7 +106,27 @@ export class BiggiveCampaignCardFilterGrid {
    * two pages is loaded directly with URL parameters - in such a scenario the dropdown
    * shows that it's pre-selected. DON-558.
    */
-  @Prop() selectedLabel: 'Most raised' | 'Match funds remaining' | 'Relevance' = null;
+  @Prop() selectedSortByOption: 'Most raised' | 'Match funds remaining' | 'Relevance' = null;
+
+  /**
+   * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
+   */
+  @Prop() selectedFilterCategory: string = null;
+
+  /**
+   * For injecting the chosen beneficiary to filter by, as per the comment above for `selectedSortByOption`.
+   */
+  @Prop() selectedFilterBeneficiary: string = null;
+
+  /**
+   * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
+   */
+  @Prop() selectedFilterLocation: string = null;
+
+  /**
+   * For injecting the chosen funding to filter by, as per the comment above for `selectedSortByOption`.
+   */
+  @Prop() selectedFilterFunding: string = null;
 
   private getSearchAndFilterObject(): {
     searchText: string;
@@ -214,7 +234,7 @@ export class BiggiveCampaignCardFilterGrid {
               Clear Filters
             </a>
             <div class="sort-wrap">
-              <biggive-form-field-select placeholder="Sort by" selectedLabel={this.selectedLabel} id="sort-by">
+              <biggive-form-field-select placeholder="Sort by" selectedLabel={this.selectedSortByOption} id="sort-by">
                 <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>
                 <biggive-form-field-select-option value="matchFundsRemaining" label="Match funds remaining"></biggive-form-field-select-option>
                 <biggive-form-field-select-option value="Relevance" label="Relevance"></biggive-form-field-select-option>
@@ -225,25 +245,25 @@ export class BiggiveCampaignCardFilterGrid {
               <biggive-button class="filter" onClick={this.handleFilterButtonClick} label="Filters" fullWidth={true}></biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
-                <biggive-form-field-select placeholder="Category" id="categories" space-below="2">
+                <biggive-form-field-select placeholder="Category" selectedLabel={this.selectedFilterCategory} id="categories" space-below="2">
                   {this.categoryOptions.length === 0
                     ? undefined
                     : this.categoryOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
                 </biggive-form-field-select>
 
-                <biggive-form-field-select placeholder="Beneficiary" id="beneficiaries" space-below="2">
+                <biggive-form-field-select placeholder="Beneficiary" selectedLabel={this.selectedFilterBeneficiary} id="beneficiaries" space-below="2">
                   {this.beneficiaryOptions.length === 0
                     ? undefined
                     : this.beneficiaryOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
                 </biggive-form-field-select>
 
-                <biggive-form-field-select placeholder="Location" id="locations" space-below="2">
+                <biggive-form-field-select placeholder="Location" selectedLabel={this.selectedFilterLocation} id="locations" space-below="2">
                   {this.locationOptions.length === 0
                     ? undefined
                     : this.locationOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
                 </biggive-form-field-select>
 
-                <biggive-form-field-select placeholder="Funding" id="funding" space-below="2">
+                <biggive-form-field-select placeholder="Funding" selectedLabel={this.selectedFilterFunding} id="funding" space-below="2">
                   {this.fundingOptions.length === 0
                     ? undefined
                     : this.fundingOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
