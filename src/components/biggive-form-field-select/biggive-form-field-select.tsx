@@ -6,7 +6,7 @@ import { Component, Prop, h, Event, Element, EventEmitter, Listen } from '@stenc
   shadow: true,
 })
 export class BiggiveFormFieldSelect {
-  @Element() el: HTMLBiggiveFormFieldSelectElement;
+  @Element() el: HTMLDivElement;
   /**
    * This event `doChange` event is emitted and propogates to the parent
    * component which handles it
@@ -26,9 +26,13 @@ export class BiggiveFormFieldSelect {
   doOptionSelectCompletedHandler(event) {
     this.selectedValue = event.detail.value;
     this.selectedLabel = event.detail.label;
-    this.doSelectChange.emit({ value: this.selectedValue, label: this.selectedLabel });
-    const dropdown: HTMLDivElement = this.el.shadowRoot.querySelector('.dropdown');
-    dropdown.classList.remove('active');
+    this.doSelectChange.emit({ value: this.selectedValue, label: this.selectedLabel, placeholder: this.placeholder });
+    if (this.el.shadowRoot !== null && this.el.shadowRoot !== undefined) {
+      const dropdown: HTMLDivElement = this.el.shadowRoot.querySelector('.dropdown');
+      if (dropdown !== null && dropdown !== undefined) {
+        dropdown.classList.remove('active');
+      }
+    }
   }
 
   /**
@@ -41,11 +45,15 @@ export class BiggiveFormFieldSelect {
   @Prop() placeholder: string = null;
 
   toggleFocus(event) {
-    const dropdown: HTMLElement = event.target.parentElement.parentElement;
-    if (dropdown.classList.contains('active')) {
-      dropdown.classList.remove('active');
-    } else {
-      dropdown.classList.add('active');
+    if (event.target) {
+      const dropdown: HTMLElement = event.target.parentElement.parentElement;
+      if (dropdown !== null && dropdown !== undefined) {
+        if (dropdown.classList.contains('active')) {
+          dropdown.classList.remove('active');
+        } else {
+          dropdown.classList.add('active');
+        }
+      }
     }
   }
 
@@ -53,7 +61,7 @@ export class BiggiveFormFieldSelect {
     return (
       <div class={'dropdown space-below-' + this.spaceBelow}>
         <div class="sleeve" onClick={this.toggleFocus} onMouseLeave={this.toggleFocus}>
-          <span class="placeholder">{this.selectedLabel == null ? this.placeholder : this.selectedLabel}</span>
+          <span class="placeholder">{this.selectedLabel === null || this.selectedLabel === undefined ? this.placeholder : this.selectedLabel}</span>
         </div>
         <div class="options">
           <slot></slot>

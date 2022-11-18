@@ -128,7 +128,7 @@
   a {
     display: block;
     position: relative;
-    padding: $spacer-1;
+    padding: 8px;
     box-sizing: border-box;
     height: 100%;
     svg {
@@ -143,9 +143,11 @@
 
 @mixin icon-medium() {
   @include icon-large();
-
   width: 30px;
   height: 30px;
+  a {
+    padding: 6px;
+  }
 }
 
 @mixin progress-bar {

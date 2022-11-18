@@ -50,7 +50,7 @@
       margin: 50px 0 $spacer-3 0; // Increased top from 0 to 50px for now to support absolute-overlaid search form.
       padding: 0;
 
-      @media (max-width: $screen-tablet-max) {
+      @media (max-width: $screen-desktop-max) {
         @include heading-2;
       }
     }
@@ -80,7 +80,7 @@
     .sleeve {
       flex-wrap: wrap;
       .content-wrap {
-        width: 100%;
+        width: 60%;
         padding: 18vw $spacer-3 $spacer-3 $spacer-3;
         margin-bottom: 50px;
       }
@@ -93,12 +93,33 @@
   }
 }
 
-@media screen and (max-width: calc($screen-desktop-max + 25px)) and (min-width: $screen-tablet-max) {
+
+@media screen and (max-width: $screen-tablet-max) {
   .container {
     .sleeve {
       .content-wrap {
-        padding-left: $spacer-6;
+        width: 80%;
       }
     }
   }
 }
+
+@media screen and (max-width: $screen-mobile-max) {
+  .container {
+    .sleeve {
+      .content-wrap {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// @media screen and (max-width: calc($screen-desktop-max + 25px)) and (min-width: $screen-tablet-max) {
+//   .container {
+//     .sleeve {
+//       .content-wrap {
+//         padding-left: $spacer-6;
+//       }
+//     }
+//   }
+// }

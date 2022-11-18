@@ -9,11 +9,16 @@ export class BiggivePopup {
   @Element() el;
 
   @Method()
-  async open() {
+  async openFromOutside() {
     this.el.shadowRoot.querySelector('.popup').setAttribute('data-visible', 'true');
   }
 
-  private close = (event: any) => {
+  @Method()
+  async closeFromOutside() {
+    this.el.shadowRoot.querySelector('.popup').setAttribute('data-visible', 'false');
+  }
+
+  private closeFromWithin = (event: any) => {
     if (event.target.classList.contains('popup') || event.target.classList.contains('close')) {
       this.el.shadowRoot.querySelector('.popup').setAttribute('data-visible', 'false');
     }
@@ -21,10 +26,10 @@ export class BiggivePopup {
 
   render() {
     return (
-      <div class="popup" onClick={this.close}>
+      <div class="popup" onClick={this.closeFromWithin}>
         <div class="sleeve">
           <div class="header">
-            <div class="close" onClick={this.close}></div>
+            <div class="close" onClick={this.closeFromWithin}></div>
           </div>
           <div class="content">
             <slot></slot>

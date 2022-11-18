@@ -101,7 +101,41 @@
       svg {
         fill: $colour-tertiary;
       }
-    } 
+    }
+  }
+
+  .championed-by {
+    text-align: left;
+    margin-left: 20px;
+    margin-top: 20px;
+    color: black;
+
+   font-size: 15px;
+
+    @media screen and (max-width: $screen-tablet-max) {
+      font-size: 14px;
+    }
+
+    @media screen and (max-width: $screen-mobile-max) {
+      text-align: center;
+      margin-left: 0;
+      margin-bottom: 10px;
+      font-size: 13px;;
+    }
+
+    @media screen and (max-width: $screen-mobile-small) {
+      font-size: 12px;
+    }
+
+    a {
+      text-decoration: none;
+      font-weight: bold;
+      color: $colour-primary;
+      @media screen and (max-width: $screen-mobile-small) {
+        // Show Champion Name on new line in smaller screens
+        display: block;
+      }
+    }
   }
 
   @media screen and (max-width: $screen-mobile-max) {

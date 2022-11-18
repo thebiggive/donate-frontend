@@ -1,4 +1,4 @@
-import { Component, h, Prop, State, Event, EventEmitter } from '@stencil/core';
+import { Component, h, Prop, Event, EventEmitter } from '@stencil/core';
 import { faMagnifyingGlass, faX } from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
@@ -19,7 +19,7 @@ export class BigGiveSearch {
   })
   doSearch: EventEmitter<string>;
 
-  @State() searchText: string = null;
+  @Prop() searchText: string = null;
 
   private handleSearchTextChanged = (event: any) => {
     this.searchText = event.target.value;

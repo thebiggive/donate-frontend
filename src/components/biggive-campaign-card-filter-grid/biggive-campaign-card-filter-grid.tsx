@@ -28,12 +28,25 @@ export class BiggiveCampaignCardFilterGrid {
     filterFunding: string;
   }>;
 
-  searchText: string = null;
+  /**
+   * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent
+   * component which handles it
+   */
+  @Event({
+    eventName: 'doClearFilters',
+    composed: true,
+    cancelable: true,
+    bubbles: true,
+  })
+  doClearFilters: EventEmitter<boolean>;
+
   sortBy: string = null;
   filterCategory: string = null;
   filterBeneficiary: string = null;
   filterLocation: string = null;
   filterFunding: string = null;
+
+  sortByPlaceholderText = 'Sort by';
 
   /**
    * Space below component
@@ -44,6 +57,16 @@ export class BiggiveCampaignCardFilterGrid {
    * Intro
    */
   @Prop() intro: string = 'Find a charity or project';
+
+  /**
+   * Optional search text prop. Useful for pre-populating the search field
+   * when the page is loaded with a search term already existing in the URL.
+   * This can happen when sharing links, or if a donor goes to a campaign page
+   * after searching, and then returns to the search results. In such a case,
+   * the search box text will clear, unless we use this prop to populate it on
+   * rendering. DON-652.
+   */
+  @Prop() searchText: string = null;
 
   /**
    * Defines the text displayed as the placeholder in the input field
@@ -76,6 +99,15 @@ export class BiggiveCampaignCardFilterGrid {
    */
   @Prop() fundingOptions: string[] = [];
 
+  /**
+   * This helps us inject a pre-selected dropdown value from outside of this component.
+   * This is especially helpful for the Meta campaign and Explore pages, where searching
+   * by text whipes out previous sort options and re-uses Relevance, or where one of those
+   * two pages is loaded directly with URL parameters - in such a scenario the dropdown
+   * shows that it's pre-selected. DON-558.
+   */
+  @Prop() selectedLabel: 'Most raised' | 'Match funds remaining' | 'Relevance' = null;
+
   private getSearchAndFilterObject(): {
     searchText: string;
     sortBy: string;
@@ -104,21 +136,32 @@ export class BiggiveCampaignCardFilterGrid {
   }
 
   @Listen('doSelectChange')
-  doOptionSelectCompletedHandler() {
+  doOptionSelectCompletedHandler(event) {
     this.sortBy = this.el.shadowRoot.getElementById('sort-by').selectedValue;
     this.filterCategory = this.el.shadowRoot.getElementById('categories').selectedValue;
     this.filterBeneficiary = this.el.shadowRoot.getElementById('beneficiaries').selectedValue;
     this.filterLocation = this.el.shadowRoot.getElementById('locations').selectedValue;
     this.filterFunding = this.el.shadowRoot.getElementById('funding').selectedValue;
-  }
 
-  private handleSortByChanged = (event: any) => {
-    this.sortBy = event.target.value;
-    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-  };
+    // If this method was trigerred by the selection of a 'Sort by' dropdown option, then
+    // emit an event to search, but do NOT emit an event for example when filter options
+    // are selected, until the 'Apply filters' button is pressed which is handled separately
+    // by `handleApplyFilterButtonClick()`.
+    // Additional note -> we could, instead, do this:
+    // `<biggive-form-field-select placeholder="Sort by" id="sort-by" onDoSelectChange={this.someHandleMethod}>`
+    // but the problem with that is that `someHandleMethod` gets called first and then this
+    // method gets called, leading to two calls and more risk for error. DON-570.
+    if (event.detail.placeholder === this.sortByPlaceholderText) {
+      console.log('emitting event:');
+      console.log(this.getSearchAndFilterObject());
+      this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+    }
+  }
 
   private handleApplyFilterButtonClick = () => {
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+    console.log(this.el.shadowRoot.getElementById('filter-popup'));
+    this.el.shadowRoot.getElementById('filter-popup').closeFromOutside();
   };
 
   private handleSearchButtonPressed = () => {
@@ -136,7 +179,11 @@ export class BiggiveCampaignCardFilterGrid {
   };
 
   private handleFilterButtonClick = () => {
-    this.el.shadowRoot.getElementById('filter-popup').open();
+    this.el.shadowRoot.getElementById('filter-popup').openFromOutside();
+  };
+
+  private handleClearFiltersClicked = () => {
+    this.doClearFilters.emit(true);
   };
 
   render() {
@@ -163,15 +210,19 @@ export class BiggiveCampaignCardFilterGrid {
             </div>
           </div>
           <div class="sort-filter-wrap">
+            <a onClick={this.handleClearFiltersClicked} id="clearFilters">
+              Clear Filters
+            </a>
             <div class="sort-wrap">
-              <biggive-form-field-select placeholder="Sort by" id="sort-by" onDoSelectChange={this.handleSortByChanged}>
+              <biggive-form-field-select placeholder="Sort by" selectedLabel={this.selectedLabel} id="sort-by">
                 <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>
                 <biggive-form-field-select-option value="matchFundsRemaining" label="Match funds remaining"></biggive-form-field-select-option>
+                <biggive-form-field-select-option value="Relevance" label="Relevance"></biggive-form-field-select-option>
               </biggive-form-field-select>
             </div>
 
             <div class="filter-wrap">
-              <biggive-button class="filter" onClick={this.handleFilterButtonClick} label="Filters"></biggive-button>
+              <biggive-button class="filter" onClick={this.handleFilterButtonClick} label="Filters" fullWidth={true}></biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
                 <biggive-form-field-select placeholder="Category" id="categories" space-below="2">

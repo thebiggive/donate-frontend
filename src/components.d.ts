@@ -158,6 +158,10 @@ export namespace Components {
          */
         "charityName": string;
         /**
+          * Link to the charity's website
+         */
+        "charityUrl": string;
+        /**
           * Full URL of a image.
          */
         "imageUrl": string;
@@ -382,6 +386,14 @@ export namespace Components {
          */
         "placeholderText": string;
         /**
+          * Optional search text prop. Useful for pre-populating the search field when the page is loaded with a search term already existing in the URL. This can happen when sharing links, or if a donor goes to a campaign page after searching, and then returns to the search results. In such a case, the search box text will clear, unless we use this prop to populate it on rendering. DON-652.
+         */
+        "searchText": string;
+        /**
+          * This helps us inject a pre-selected dropdown value from outside of this component. This is especially helpful for the Meta campaign and Explore pages, where searching by text whipes out previous sort options and re-uses Relevance, or where one of those two pages is loaded directly with URL parameters - in such a scenario the dropdown shows that it's pre-selected. DON-558.
+         */
+        "selectedLabel": 'Most raised' | 'Match funds remaining' | 'Relevance';
+        /**
           * Space below component
          */
         "spaceBelow": number;
@@ -395,6 +407,14 @@ export namespace Components {
           * Display name of the charity's specific time-bound fundraising campaign.
          */
         "campaignTitle": string;
+        /**
+          * Champion's name
+         */
+        "championName": string;
+        /**
+          * Link to all meta-campaigns funded by this champion. For example: /christmas-challenge-2022/the-reed-foundation-22 In other words, it follows the following format: '/' + campaign.parentRef + '/' + campaign.championRef
+         */
+        "championUrl": string;
         /**
           * Amount for the primary figure, formatted with currency symbol
          */
@@ -773,7 +793,8 @@ export namespace Components {
         "spaceBelow": number;
     }
     interface BiggivePopup {
-        "open": () => Promise<void>;
+        "closeFromOutside": () => Promise<void>;
+        "openFromOutside": () => Promise<void>;
     }
     interface BiggivePopupStandalone {
     }
@@ -818,6 +839,7 @@ export namespace Components {
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText": string;
+        "searchText": string;
     }
     interface BiggiveSocialIcon {
         /**
@@ -959,10 +981,6 @@ export namespace Components {
          */
         "videoUrl": string;
     }
-}
-export interface BiggiveButtonCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLBiggiveButtonElement;
 }
 export interface BiggiveCampaignCardFilterGridCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1438,6 +1456,10 @@ declare namespace LocalJSX {
          */
         "charityName"?: string;
         /**
+          * Link to the charity's website
+         */
+        "charityUrl"?: string;
+        /**
           * Full URL of a image.
          */
         "imageUrl"?: string;
@@ -1661,6 +1683,10 @@ declare namespace LocalJSX {
         /**
           * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it
          */
+        "onDoClearFilters"?: (event: BiggiveCampaignCardFilterGridCustomEvent<boolean>) => void;
+        /**
+          * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it
+         */
         "onDoSearchAndFilterUpdate"?: (event: BiggiveCampaignCardFilterGridCustomEvent<{
     searchText: string;
     sortBy: string;
@@ -1673,6 +1699,14 @@ declare namespace LocalJSX {
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText"?: string;
+        /**
+          * Optional search text prop. Useful for pre-populating the search field when the page is loaded with a search term already existing in the URL. This can happen when sharing links, or if a donor goes to a campaign page after searching, and then returns to the search results. In such a case, the search box text will clear, unless we use this prop to populate it on rendering. DON-652.
+         */
+        "searchText"?: string;
+        /**
+          * This helps us inject a pre-selected dropdown value from outside of this component. This is especially helpful for the Meta campaign and Explore pages, where searching by text whipes out previous sort options and re-uses Relevance, or where one of those two pages is loaded directly with URL parameters - in such a scenario the dropdown shows that it's pre-selected. DON-558.
+         */
+        "selectedLabel"?: 'Most raised' | 'Match funds remaining' | 'Relevance';
         /**
           * Space below component
          */
@@ -1687,6 +1721,14 @@ declare namespace LocalJSX {
           * Display name of the charity's specific time-bound fundraising campaign.
          */
         "campaignTitle"?: string;
+        /**
+          * Champion's name
+         */
+        "championName"?: string;
+        /**
+          * Link to all meta-campaigns funded by this champion. For example: /christmas-challenge-2022/the-reed-foundation-22 In other words, it follows the following format: '/' + campaign.parentRef + '/' + campaign.championRef
+         */
+        "championUrl"?: string;
         /**
           * Amount for the primary figure, formatted with currency symbol
          */
@@ -2121,6 +2163,7 @@ declare namespace LocalJSX {
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
         "placeholderText"?: string;
+        "searchText"?: string;
     }
     interface BiggiveSocialIcon {
         /**

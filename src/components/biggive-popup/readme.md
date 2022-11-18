@@ -7,7 +7,17 @@
 
 ## Methods
 
-### `open() => Promise<void>`
+### `closeFromOutside() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `openFromOutside() => Promise<void>`
 
 
 
