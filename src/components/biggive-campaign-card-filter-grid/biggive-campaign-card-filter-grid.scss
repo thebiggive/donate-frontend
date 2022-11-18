@@ -69,6 +69,11 @@
         }
       }
     }
+
+    #clearFilters {
+      position: absolute;
+      margin-top: 20px;
+    }
   }
 }
 
@@ -82,27 +87,29 @@
   }
 }
 
-@media screen and (max-width: $screen-tablet-max) {
+@media screen and (max-width: $screen-mobile-small) {
   .sort-filter-wrap {
-    flex-wrap: wrap-reverse;
-
-    #clearFilters {
-      flex: 1 0 100%;
-      padding-top: 10px;
+    .filter-wrap {
+      #clearFilters {
+        font-size: 15px;
+      }
     }
   }
 }
 
-@media screen and (max-width: $screen-mobile-medium) {
+@media screen and (max-width: $screen-mobile-x-small) {
   .sort-filter-wrap {
-    flex-wrap: wrap-reverse;
-
+    justify-content: space-between;
     .sort-wrap {
-      padding-top: 10px;
+      margin-left: 0px;
     }
+    .filter-wrap {
+      margin-left: 3px;
 
-    .sort-wrap, .filter-wrap {
-      flex: 1 0 100%;
+      #clearFilters {
+        margin-top: 0px;
+        max-width: 15px;
+      }
     }
   }
 }

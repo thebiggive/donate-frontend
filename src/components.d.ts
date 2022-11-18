@@ -390,9 +390,25 @@ export namespace Components {
          */
         "searchText": string;
         /**
+          * For injecting the chosen beneficiary to filter by, as per the comment above for `selectedSortByOption`.
+         */
+        "selectedFilterBeneficiary": string;
+        /**
+          * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
+         */
+        "selectedFilterCategory": string;
+        /**
+          * For injecting the chosen funding to filter by, as per the comment above for `selectedSortByOption`.
+         */
+        "selectedFilterFunding": string;
+        /**
+          * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
+         */
+        "selectedFilterLocation": string;
+        /**
           * This helps us inject a pre-selected dropdown value from outside of this component. This is especially helpful for the Meta campaign and Explore pages, where searching by text whipes out previous sort options and re-uses Relevance, or where one of those two pages is loaded directly with URL parameters - in such a scenario the dropdown shows that it's pre-selected. DON-558.
          */
-        "selectedLabel": 'Most raised' | 'Match funds remaining' | 'Relevance';
+        "selectedSortByOption": 'Most raised' | 'Match funds remaining' | 'Relevance';
         /**
           * Space below component
          */
@@ -1704,9 +1720,25 @@ declare namespace LocalJSX {
          */
         "searchText"?: string;
         /**
+          * For injecting the chosen beneficiary to filter by, as per the comment above for `selectedSortByOption`.
+         */
+        "selectedFilterBeneficiary"?: string;
+        /**
+          * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
+         */
+        "selectedFilterCategory"?: string;
+        /**
+          * For injecting the chosen funding to filter by, as per the comment above for `selectedSortByOption`.
+         */
+        "selectedFilterFunding"?: string;
+        /**
+          * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
+         */
+        "selectedFilterLocation"?: string;
+        /**
           * This helps us inject a pre-selected dropdown value from outside of this component. This is especially helpful for the Meta campaign and Explore pages, where searching by text whipes out previous sort options and re-uses Relevance, or where one of those two pages is loaded directly with URL parameters - in such a scenario the dropdown shows that it's pre-selected. DON-558.
          */
-        "selectedLabel"?: 'Most raised' | 'Match funds remaining' | 'Relevance';
+        "selectedSortByOption"?: 'Most raised' | 'Match funds remaining' | 'Relevance';
         /**
           * Space below component
          */
