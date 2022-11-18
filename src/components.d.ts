@@ -146,10 +146,6 @@ export namespace Components {
     }
     interface BiggiveBrandedImage {
         /**
-          * The name of the champion funder
-         */
-        "championName": string;
-        /**
           * Charity location
          */
         "charityLocation": string;
@@ -407,6 +403,14 @@ export namespace Components {
           * Display name of the charity's specific time-bound fundraising campaign.
          */
         "campaignTitle": string;
+        /**
+          * Champion's name
+         */
+        "championName": string;
+        /**
+          * Link to all meta-campaigns funded by this champion. For example: /christmas-challenge-2022/the-reed-foundation-22 In other words, it follows the following format: '/' + campaign.parentRef + '/' + campaign.championRef
+         */
+        "championUrl": string;
         /**
           * Amount for the primary figure, formatted with currency symbol
          */
@@ -1424,10 +1428,6 @@ declare namespace LocalJSX {
     }
     interface BiggiveBrandedImage {
         /**
-          * The name of the champion funder
-         */
-        "championName"?: string;
-        /**
           * Charity location
          */
         "charityLocation"?: string;
@@ -1700,6 +1700,14 @@ declare namespace LocalJSX {
           * Display name of the charity's specific time-bound fundraising campaign.
          */
         "campaignTitle"?: string;
+        /**
+          * Champion's name
+         */
+        "championName"?: string;
+        /**
+          * Link to all meta-campaigns funded by this champion. For example: /christmas-challenge-2022/the-reed-foundation-22 In other words, it follows the following format: '/' + campaign.parentRef + '/' + campaign.championRef
+         */
+        "championUrl"?: string;
         /**
           * Amount for the primary figure, formatted with currency symbol
          */

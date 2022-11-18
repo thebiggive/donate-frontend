@@ -40,11 +40,6 @@ export class BiggiveBrandedImage {
    */
   @Prop() charityUrl: string = null;
 
-  /**
-   * The name of the champion funder
-   */
-  @Prop() championName: string = null;
-
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
@@ -62,7 +57,6 @@ export class BiggiveBrandedImage {
           </a>
         ) : null}
         {this.charityLocation !== undefined && this.charityLocation !== null ? <div class="charity-info">{this.charityLocation}</div> : null}
-        {this.championName !== undefined && this.championName !== null ? <div class="charity-info">Championed by: {this.championName}</div> : null}
       </div>
     );
   }
