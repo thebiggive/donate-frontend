@@ -49,9 +49,9 @@ export class BiggiveButton {
    */
   @Prop() rounded: boolean = false;
 
-  handleButtonClick(event) {
+  private handleButtonClick = (event: any) => {
     this.doButtonClick.emit({ event: event, url: event.target.parentElement.href });
-  }
+  };
 
   render() {
     return (
