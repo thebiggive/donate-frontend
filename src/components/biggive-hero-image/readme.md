@@ -14,6 +14,7 @@ Provides a large format image-based header feature, typically used at the top of
 | `buttonUrl`                | `button-url`                  | Button Url                            | `string` | `null`      |
 | `colourScheme`             | `colour-scheme`               | Colour Scheme                         | `string` | `'primary'` |
 | `logo`                     | `logo`                        | Full URL of a logo image.             | `string` | `''`        |
+| `logoAltText`              | `logo-alt-text`               | Logo alt text                         | `string` | `''`        |
 | `mainImage`                | `main-image`                  | Full URL of a main hero image.        | `string` | `null`      |
 | `mainImageAlignHorizontal` | `main-image-align-horizontal` | Horizontal alignment of image         | `string` | `'center'`  |
 | `mainImageAlignVertical`   | `main-image-align-vertical`   | Vertical alignment of image           | `string` | `'center'`  |

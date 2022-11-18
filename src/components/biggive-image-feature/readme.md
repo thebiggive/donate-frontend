@@ -13,6 +13,7 @@
 | `buttonLabel`        | `button-label`         | Button Label             | `string` | `null`      |
 | `buttonUrl`          | `button-url`           | Button Url               | `string` | `null`      |
 | `defaultTextColour`  | `default-text-colour`  | Default text colour      | `string` | `'primary'` |
+| `imageAltText`       | `image-alt-text`       | Image alt text tag.      | `string` | `''`        |
 | `imageUrl`           | `image-url`            | Full URL of a image.     | `string` | `''`        |
 | `mainTitle`          | `main-title`           | Video title              | `string` | `null`      |
 | `mainTitleColour`    | `main-title-colour`    | Slug colour              | `string` | `''`        |

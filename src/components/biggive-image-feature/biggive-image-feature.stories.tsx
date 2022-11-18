@@ -18,6 +18,9 @@ export default {
     imageUrl: {
       name: 'Image URL',
     },
+    imageAltText: {
+      name: 'Image alt text',
+    },
     slug: {
       name: 'Slug',
     },
@@ -69,6 +72,7 @@ const Template = args => `
               space-below="${args.spaceBelow}"
               default-text-colour="${args.defaultTextColour}"
               image-url="${args.imageUrl}"
+              image-alt-text="${args.imageAltText}"
               slug="${args.slug}"
               slugColour="${args.slugColour}"
               mainTitle="${args.mainTitle}"
@@ -86,6 +90,7 @@ ImageFeatureComponent.args = {
   spaceBelow: 4,
   defaultTextColour: 'primary',
   imageUrl: 'https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693',
+  imageAltText: 'Image description',
   slug: 'Test slug',
   slugColour: null,
   mainTitle: 'Test title',

@@ -39,6 +39,10 @@ export class BiggiveArticleCard {
    */
   @Prop() imageUrl: string = null;
   /**
+   * Image Alt Text
+   */
+  @Prop() imageAltText: string = null;
+  /**
    * Image Label
    */
   @Prop() imageLabel: string = null;
@@ -65,7 +69,7 @@ export class BiggiveArticleCard {
             {this.imageUrl != '' ? (
               <div class="image-group">
                 <div class="image-wrap" style={{ 'background-image': "url('" + this.imageUrl + "')" }}>
-                  <img src={this.imageUrl} />
+                  <img src={this.imageUrl} alt={this.imageAltText} title={this.imageAltText} />
                 </div>
                 <div class="image-label">{this.imageLabel}</div>
               </div>
