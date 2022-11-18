@@ -14,6 +14,12 @@ export default {
     campaignTitle: {
       name: 'Camapign title',
     },
+    championName: {
+      name: 'Champion name',
+    },
+    championUrl: {
+      name: 'Champion url',
+    },
     currencyCode: {
       name: 'Currency code',
     },
@@ -60,6 +66,8 @@ const Template = args => `
           space-below=${args.spaceBelow}
           banner="${args.banner}"
           campaign-title="${args.campaignTitle}"
+          champion-name="${args.championName}"
+          champion-url="${args.championUrl}"
           currency-code="${args.currencyCode}"
           primary-figure-label=${args.primaryFigureLabel}
           primary-figure-amount=${args.primaryFigureAmount}
@@ -78,6 +86,8 @@ CampaignHighlightsComponent.args = {
   spaceBelow: 0,
   banner: 'https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693',
   campaignTitle: 'this is my sample title',
+  championName: 'The Champion Name',
+  championUrl: 'https://thebiggive.org.uk',
   currencyCode: 'GBP',
   primaryFigureLabel: 'Total raised',
   primaryFigureAmount: 1000,

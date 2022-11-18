@@ -66,6 +66,19 @@ export class BiggiveCampaignHighlights {
    */
   @Prop() secondaryStatText: string = null;
 
+  /**
+   * Champion's name
+   */
+  @Prop() championName: string = null;
+
+  /**
+   * Link to all meta-campaigns funded by this champion.
+   * For example: /christmas-challenge-2022/the-reed-foundation-22
+   * In other words, it follows the following format:
+   * '/' + campaign.parentRef + '/' + campaign.championRef
+   */
+  @Prop() championUrl: string = null;
+
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
@@ -109,6 +122,11 @@ export class BiggiveCampaignHighlights {
               </div>
             ) : null}
           </div>
+          {this.championName != null ? (
+            <div class="championed-by">
+              Championed by <a href={this.championUrl}>{this.championName}</a>
+            </div>
+          ) : null}
         </div>
       </div>
     );

@@ -40,29 +40,23 @@ export class BiggiveBrandedImage {
    */
   @Prop() charityUrl: string = null;
 
-  /**
-   * The name of the champion funder
-   */
-  @Prop() championName: string = null;
-
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
         <div class="slug">{this.slug}</div>
-        {this.imageUrl !== undefined ? (
+        {this.imageUrl !== undefined && this.imageUrl !== null ? (
           <div class="image-wrap">
             <img src={this.imageUrl} />
           </div>
         ) : null}
-        {this.logoUrl.length > 0 ? <div class="logo-wrap" style={{ 'background-image': "url('" + this.logoUrl + "')" }}></div> : null}
+        {this.logoUrl !== undefined && this.logoUrl !== null ? <div class="logo-wrap" style={{ 'background-image': "url('" + this.logoUrl + "')" }}></div> : null}
 
-        {this.charityName !== undefined ? (
+        {this.charityName !== undefined && this.charityName !== null ? (
           <a id="charityName" href={this.charityUrl} target="_blank">
             {this.charityName}
           </a>
         ) : null}
-        {this.charityLocation !== undefined ? <div class="charity-info">{this.charityLocation}</div> : null}
-        {this.championName !== undefined ? <div class="charity-info">Championed by: {this.championName}</div> : null}
+        {this.charityLocation !== undefined && this.charityLocation !== null ? <div class="charity-info">{this.charityLocation}</div> : null}
       </div>
     );
   }

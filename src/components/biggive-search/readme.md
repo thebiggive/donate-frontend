@@ -42,6 +42,7 @@ the parent component).
 | ----------------- | ------------------ | ----------------------------------------------------------------------------------------------- | -------- | ----------- |
 | `buttonText`      | `button-text`      | Defines the text on the search button                                                           | `string` | `undefined` |
 | `placeholderText` | `placeholder-text` | Defines the text displayed as the placeholder in the input field before the user types anything | `string` | `undefined` |
+| `searchText`      | `search-text`      |                                                                                                 | `string` | `null`      |
 
 
 ## Events

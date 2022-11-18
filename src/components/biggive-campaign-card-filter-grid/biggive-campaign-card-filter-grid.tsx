@@ -28,7 +28,18 @@ export class BiggiveCampaignCardFilterGrid {
     filterFunding: string;
   }>;
 
-  searchText: string = null;
+  /**
+   * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent
+   * component which handles it
+   */
+  @Event({
+    eventName: 'doClearFilters',
+    composed: true,
+    cancelable: true,
+    bubbles: true,
+  })
+  doClearFilters: EventEmitter<boolean>;
+
   sortBy: string = null;
   filterCategory: string = null;
   filterBeneficiary: string = null;
@@ -46,6 +57,16 @@ export class BiggiveCampaignCardFilterGrid {
    * Intro
    */
   @Prop() intro: string = 'Find a charity or project';
+
+  /**
+   * Optional search text prop. Useful for pre-populating the search field
+   * when the page is loaded with a search term already existing in the URL.
+   * This can happen when sharing links, or if a donor goes to a campaign page
+   * after searching, and then returns to the search results. In such a case,
+   * the search box text will clear, unless we use this prop to populate it on
+   * rendering. DON-652.
+   */
+  @Prop() searchText: string = null;
 
   /**
    * Defines the text displayed as the placeholder in the input field
@@ -139,6 +160,8 @@ export class BiggiveCampaignCardFilterGrid {
 
   private handleApplyFilterButtonClick = () => {
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+    console.log(this.el.shadowRoot.getElementById('filter-popup'));
+    this.el.shadowRoot.getElementById('filter-popup').closeFromOutside();
   };
 
   private handleSearchButtonPressed = () => {
@@ -156,7 +179,11 @@ export class BiggiveCampaignCardFilterGrid {
   };
 
   private handleFilterButtonClick = () => {
-    this.el.shadowRoot.getElementById('filter-popup').open();
+    this.el.shadowRoot.getElementById('filter-popup').openFromOutside();
+  };
+
+  private handleClearFiltersClicked = () => {
+    this.doClearFilters.emit(true);
   };
 
   render() {
@@ -183,6 +210,9 @@ export class BiggiveCampaignCardFilterGrid {
             </div>
           </div>
           <div class="sort-filter-wrap">
+            <a onClick={this.handleClearFiltersClicked} id="clearFilters">
+              Clear Filters
+            </a>
             <div class="sort-wrap">
               <biggive-form-field-select placeholder="Sort by" selectedLabel={this.selectedLabel} id="sort-by">
                 <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>
@@ -192,7 +222,7 @@ export class BiggiveCampaignCardFilterGrid {
             </div>
 
             <div class="filter-wrap">
-              <biggive-button class="filter" onClick={this.handleFilterButtonClick} label="Filters"></biggive-button>
+              <biggive-button class="filter" onClick={this.handleFilterButtonClick} label="Filters" fullWidth={true}></biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
                 <biggive-form-field-select placeholder="Category" id="categories" space-below="2">
