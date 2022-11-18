@@ -230,9 +230,6 @@ export class BiggiveCampaignCardFilterGrid {
             </div>
           </div>
           <div class="sort-filter-wrap">
-            <a onClick={this.handleClearFiltersClicked} id="clearFilters">
-              Clear Filters
-            </a>
             <div class="sort-wrap">
               <biggive-form-field-select placeholder="Sort by" selectedLabel={this.selectedSortByOption} id="sort-by">
                 <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>
@@ -268,6 +265,9 @@ export class BiggiveCampaignCardFilterGrid {
                     ? undefined
                     : this.fundingOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
                 </biggive-form-field-select>
+                <a onClick={this.handleClearFiltersClicked} id="clearFilters">
+                  Clear Filters
+                </a>
                 <div class="align-right">
                   <biggive-button label="Apply filters" onClick={this.handleApplyFilterButtonClick} />
                 </div>

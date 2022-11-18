@@ -27,9 +27,6 @@ describe('biggive-campaign-card-filter-grid', () => {
             </div>
           </div>
           <div class="sort-filter-wrap">
-            <a id="clearFilters">
-              Clear Filters
-            </a>
             <div class="sort-wrap">
              <biggive-form-field-select id="sort-by" placeholder="Sort by">
                <biggive-form-field-select-option label="Most raised" value="amountRaised"></biggive-form-field-select-option>
@@ -48,6 +45,9 @@ describe('biggive-campaign-card-filter-grid', () => {
                 <biggive-form-field-select id="beneficiaries" placeholder="Beneficiary" space-below="2"></biggive-form-field-select>
                 <biggive-form-field-select id="locations" placeholder="Location" space-below="2"></biggive-form-field-select>
                 <biggive-form-field-select id="funding" placeholder="Funding" space-below="2"></biggive-form-field-select>
+                <a id="clearFilters">
+                  Clear Filters
+                </a>
                 <div class="align-right">
                   <biggive-button label="Apply filters"></biggive-button>
                 </div>
