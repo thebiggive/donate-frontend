@@ -28,6 +28,7 @@ import {
 } from '@fortawesome/pro-solid-svg-icons';
 import { faUsers } from '@fortawesome/pro-duotone-svg-icons';
 import { faHeadSideMedical, faHomeHeart, faHeart, faAlarmClock } from '@fortawesome/pro-solid-svg-icons';
+import { faTimer } from '@fortawesome/pro-regular-svg-icons';
 
 export class FontAwesomeIconsService {
   static getBeneficiaries(): Array<{ name: string; icon: IconDefinition }> {
@@ -113,6 +114,10 @@ export class FontAwesomeIconsService {
       {
         name: 'Heart',
         icon: faHeart,
+      },
+      {
+        name: 'Timer',
+        icon: faTimer,
       },
     ];
   }

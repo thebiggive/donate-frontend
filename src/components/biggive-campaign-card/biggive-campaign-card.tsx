@@ -85,6 +85,24 @@ export class BiggiveCampaignCard {
    */
   @Prop() moreInfoButtonColourScheme: string = 'clear-primary';
 
+  /**
+   * Boolean flag telling the component if the campaign is in the future (not open yet).
+   */
+  @Prop() isFutureCampaign: boolean = false;
+
+  /**
+   * Boolean flag telling the component if the campaign is in the future (not open yet).
+   */
+  @Prop() isPastCampaign: boolean = false;
+
+  /**
+   * To be used alongside isFutureCampaign = true or isPastCampaign = true.
+   * If either is true, we render out: 'Launches: ' + datetime or 'Closed: ' + datetime.
+   * Preferred format: DD/MM/YYYY, HH:MM
+   * DON-661.
+   */
+  @Prop() datetime: string;
+
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow.toString()}>
@@ -116,7 +134,14 @@ export class BiggiveCampaignCard {
             <biggive-progress-bar counter={this.progressBarCounter} colour-scheme="primary"></biggive-progress-bar>
           </div>
           <div class="button-wrap">
-            <biggive-button full-width="true" colour-scheme={this.donateButtonColourScheme} url={this.donateButtonUrl} label={this.donateButtonLabel}></biggive-button>
+            {this.isFutureCampaign || this.isPastCampaign ? (
+              <div class="msg-wrapper">
+                <biggive-misc-icon background-colour="white" icon-colour="black" icon="Timer" url="#"></biggive-misc-icon>
+                {this.isFutureCampaign ? <p>Launches {this.datetime}</p> : <p>Closed {this.datetime}</p>}
+              </div>
+            ) : (
+              <biggive-button full-width="true" colour-scheme={this.donateButtonColourScheme} url={this.donateButtonUrl} label={this.donateButtonLabel}></biggive-button>
+            )}
             <biggive-button full-width="true" colour-scheme={this.moreInfoButtonColourScheme} url={this.moreInfoButtonUrl} label={this.moreInfoButtonLabel}></biggive-button>
           </div>
         </div>

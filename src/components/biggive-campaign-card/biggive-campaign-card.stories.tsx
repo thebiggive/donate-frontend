@@ -14,6 +14,17 @@ export default {
     currencyCode: {
       name: 'Currency code',
     },
+    isPastCampaign: {
+      name: 'Is Past Campaign',
+      options: [true, false],
+    },
+    isFutureCampaign: {
+      name: 'Is Future Campaign',
+      options: [true, false],
+    },
+    datetime: {
+      name: 'Date Time',
+    },
     primaryFigureLabel: {
       name: 'Primary figure label',
     },
@@ -73,6 +84,9 @@ const Template = args => `
         space-below=${args.spaceBelow}
         banner="${args.banner}"
         currency-code="${args.currencyCode}"
+        is-past-campaign="${args.isPastCampaign}"
+        is-future-campaign="${args.isFutureCampaign}"
+        datetime="${args.datetime}"
         primary-figure-label=${args.primaryFigureLabel}
         primary-figure-amount=${args.primaryFigureAmount}
         secondary-figure-label=${args.secondaryFigureLabel}
@@ -93,6 +107,9 @@ CampaignCardComponent.args = {
   spaceBelow: 0,
   banner: 'https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693',
   currencyCode: 'GBP',
+  isPastCampaign: false,
+  isFutureCampaign: false,
+  datetime: '29/11/2022, 12:00',
   primaryFigureLabel: 'Total raised',
   primaryFigureAmount: 1000,
   secondaryFigureLabel: 'Total remaining',
