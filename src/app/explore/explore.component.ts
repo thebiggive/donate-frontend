@@ -72,6 +72,11 @@ export class ExploreComponent implements OnDestroy, OnInit {
     this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
   }
 
+  @HostListener('doClearFilters', ['$event'])
+  onDoClearFilters(event: CustomEvent) {
+    this.searchService.resetFilters();
+  }
+
   /**
    * Default sort when not in relevance mode because there's a search term.
    */
