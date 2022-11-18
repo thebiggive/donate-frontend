@@ -15,8 +15,12 @@
       [beneficiaryOptions]="beneficiaryOptions"
       [locationOptions]="locationOptions"
       [fundingOptions]="fundingOptions"
-      [selectedLabel]="searchService.getSelectedSortLabel()"
-      [searchText]="searchService.selected.term">
+      [selectedSortByOption]="searchService.getSelectedSortLabel()"
+      [searchText]="searchService.selected.term"
+      [selectedFilterBeneficiary]="searchService.selected.beneficiary ? searchService.selected.beneficiary : null"
+      [selectedFilterCategory]="searchService.selected.category ? searchService.selected.category : null"
+      [selectedFilterLocation]="searchService.selected.country ? searchService.selected.country : null"
+      [selectedFilterFunding]="searchService.selected.onlyMatching ? 'Match Funded' : null">
       
       <biggive-grid
         slot="campaign-grid"

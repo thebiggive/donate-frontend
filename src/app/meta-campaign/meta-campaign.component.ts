@@ -80,6 +80,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
   }
 
+  @HostListener('doClearFilters', ['$event'])
+  onDoClearFilters(event: CustomEvent) {
+    this.searchService.resetFilters();
+  }
+
   ngOnDestroy() {
     if (this.routeChangeListener) {
       this.routeChangeListener.unsubscribe();
@@ -152,10 +157,6 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     if (this.children.length < safeNumberToLoad) {
       this.loadMoreForCurrentSearch();
     }
-  }
-
-  clear() {
-    this.searchService.reset(this.getDefaultSort(), false);
   }
 
   /**
