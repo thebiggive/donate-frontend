@@ -304,6 +304,10 @@ export namespace Components {
          */
         "campaignType": string;
         /**
+          * To be used alongside isFutureCampaign = true or isPastCampaign = true. If either is true, we render out: 'Launches: ' + datetime or 'Closed: ' + datetime. Preferred format: DD/MM/YYYY, HH:MM DON-661.
+         */
+        "datetime": string;
+        /**
           * Donate button colour scheme
          */
         "donateButtonColourScheme": string;
@@ -315,6 +319,14 @@ export namespace Components {
           * Donate button url
          */
         "donateButtonUrl": string;
+        /**
+          * Boolean flag telling the component if the campaign is in the future (not open yet).
+         */
+        "isFutureCampaign": boolean;
+        /**
+          * Boolean flag telling the component if the campaign is in the future (not open yet).
+         */
+        "isPastCampaign": boolean;
         /**
           * Donate button colour scheme
          */
@@ -1623,6 +1635,10 @@ declare namespace LocalJSX {
          */
         "campaignType"?: string;
         /**
+          * To be used alongside isFutureCampaign = true or isPastCampaign = true. If either is true, we render out: 'Launches: ' + datetime or 'Closed: ' + datetime. Preferred format: DD/MM/YYYY, HH:MM DON-661.
+         */
+        "datetime"?: string;
+        /**
           * Donate button colour scheme
          */
         "donateButtonColourScheme"?: string;
@@ -1634,6 +1650,14 @@ declare namespace LocalJSX {
           * Donate button url
          */
         "donateButtonUrl"?: string;
+        /**
+          * Boolean flag telling the component if the campaign is in the future (not open yet).
+         */
+        "isFutureCampaign"?: boolean;
+        /**
+          * Boolean flag telling the component if the campaign is in the future (not open yet).
+         */
+        "isPastCampaign"?: boolean;
         /**
           * Donate button colour scheme
          */
