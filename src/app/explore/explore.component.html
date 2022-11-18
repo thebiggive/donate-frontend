@@ -15,7 +15,8 @@
       [beneficiaryOptions]="beneficiaryOptions"
       [locationOptions]="locationOptions"
       [fundingOptions]="fundingOptions"
-      [selectedLabel]="searchService.getSelectedSortLabel()">
+      [selectedLabel]="searchService.getSelectedSortLabel()"
+      [searchText]="searchService.selected.term">
       
       <biggive-grid
         slot="campaign-grid"
