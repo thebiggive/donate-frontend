@@ -129,6 +129,7 @@
 
     a {
       text-decoration: none;
+      font-weight: bold;
       color: $colour-primary;
       @media screen and (max-width: $screen-mobile-small) {
         // Show Champion Name on new line in smaller screens
