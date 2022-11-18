@@ -57,13 +57,7 @@ export class BiggiveButton {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
         <a href={this.url} class={'button button-' + this.colourScheme + ' full-width-' + this.fullWidth.toString() + ' size-' + this.size + ' rounded-' + this.rounded.toString()}>
-          <span
-            onClick={event => {
-              this.handleButtonClick(event);
-            }}
-          >
-            {this.label}
-          </span>
+          <span onClick={this.handleButtonClick}>{this.label}</span>
         </a>
       </div>
     );

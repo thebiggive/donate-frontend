@@ -12,7 +12,7 @@ describe('biggive-button', () => {
         <mock:shadow-root>
           <div class="container space-below-1">
             <a class="button button-primary full-width-false rounded-false size-medium" href="https://www.google.com">
-              Donate now
+              <span>Donate now</span>
             </a>
           </div>
         </mock:shadow-root>

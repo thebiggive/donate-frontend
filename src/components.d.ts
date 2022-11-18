@@ -998,6 +998,10 @@ export namespace Components {
         "videoUrl": string;
     }
 }
+export interface BiggiveButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLBiggiveButtonElement;
+}
 export interface BiggiveCampaignCardFilterGridCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLBiggiveCampaignCardFilterGridElement;
