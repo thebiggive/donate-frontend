@@ -36,6 +36,12 @@ export class AppComponent implements OnInit {
     });
   }
 
+  /**
+   * Component library's `<biggive-button/>`, which is also part of composed components like
+   * `<biggive-campaign-card/>`, emits this custom event on click. This lets us swap in the
+   * smoother in-app Angular routing for internal links automatically, without complicating the
+   * input to the buttons.
+   */
   @HostListener('doButtonClick', ['$event']) onDoButtonClick(event: CustomEvent) {
     const url = event.detail.url;
 
