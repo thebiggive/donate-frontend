@@ -39,12 +39,16 @@ export class CampaignService {
     return (new Date(campaign.endDate) >= new Date());
   }
 
-  static isInFuture(campaign: Campaign): boolean {
+  static isInFuture(campaign: Campaign|CampaignSummary): boolean {
     if (campaign.status === 'Active' || campaign.status === 'Expired') {
       return false;
     }
 
     return (new Date(campaign.startDate) > new Date());
+  }
+
+  static isInPast(campaign: Campaign|CampaignSummary): boolean {
+    return ( campaign.status === 'Expired' || new Date(campaign.endDate) < new Date());
   }
 
   static percentRaised(campaign: (Campaign | CampaignSummary)): number | undefined {

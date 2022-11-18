@@ -77,6 +77,14 @@ export class ExploreComponent implements OnDestroy, OnInit {
     this.searchService.resetFilters();
   }
 
+  isInFuture(campaign: CampaignSummary) {
+    return CampaignService.isInFuture(campaign);
+  }
+
+  isInPast(campaign: CampaignSummary) {
+    return CampaignService.isInPast(campaign);
+  }
+
   /**
    * Default sort when not in relevance mode because there's a search term.
    */
@@ -121,6 +129,11 @@ export class ExploreComponent implements OnDestroy, OnInit {
     this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
       // Success
       this.campaigns = [...this.campaigns, ...campaignSummaries];
+
+      this.campaigns.forEach(c => {
+        console.log(c.endDate);
+        console.log(typeof(c.endDate));
+      });
       this.loading = false;
     }, () => {
       this.loading = false;

@@ -19,6 +19,7 @@
   </biggive-totalizer>
 
   <biggive-hero-image
+    [logo]="fund?.logoUri"
     [mainTitle]="campaign.title"
     [mainImage]="campaign.bannerUri | optimisedImage:2000 | async"
     [teaser]="campaign.summary"
@@ -61,7 +62,10 @@
             [primaryFigureAmount]="campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : '1.0-0'"
             [progressBarCounter]="getPercentageRaised(campaign)"
             secondary-figure-label="Total Funds Raised"
-            [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : '1.0-0'">
+            [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : '1.0-0'"
+            [isFutureCampaign]="isInFuture(campaign)"
+            [isPastCampaign]="isInPast(campaign)"
+            [datetime]="isInFuture(campaign) ? campaign.startDate : ( isInPast(campaign) ? campaign.endDate : null)">
           </biggive-campaign-card>
         </div>
       </biggive-grid>

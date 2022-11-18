@@ -171,6 +171,14 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     return CampaignService.percentRaised(childCampaign);
   }
 
+  isInFuture(campaign: CampaignSummary) {
+    return CampaignService.isInFuture(campaign);
+  }
+
+  isInPast(campaign: CampaignSummary) {
+    return CampaignService.isInPast(campaign);
+  }
+
   private loadMoreForCurrentSearch() {
     this.offset += CampaignService.perPage;
     this.loading = true;

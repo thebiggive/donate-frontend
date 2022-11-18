@@ -227,7 +227,7 @@
     <div class="b-secondary-column">
       <div id="campaign-highlights-beneficiaries-and-categories-desktop">
         <app-campaign-info [campaign]="campaign"></app-campaign-info>
-        <div class="donate-button-wrapper">
+        <div *ngIf="isOpenForDonations(); else notOpenForDonations" class="donate-button-wrapper">
           <biggive-button
             space-above="5"
             colour-scheme="primary"
@@ -238,6 +238,23 @@
             [routerLink]="'/donate/' + campaign.id">
           </biggive-button>
         </div>
+
+        <ng-template #notOpenForDonations>
+          <div *ngIf="isInFuture() else notInFuture" class="donations-not-open">
+            Campaign launches from {{ campaign.startDate | date : 'medium' }} till {{ campaign.endDate|  date : 'medium' }}
+          </div>
+
+          <ng-template #notInFuture>
+            
+            <div *ngIf="isInPast() else notInPast" class="donations-not-open">
+              Campaign ran from {{ campaign.startDate | date : 'medium' }} to {{ campaign.endDate|  date : 'medium' }}
+            </div>
+
+            <ng-template #notInPast class="donations-not-open">
+              Draft campaign, not open for donations.
+            </ng-template>
+          </ng-template>
+        </ng-template>
       </div>
     </div>
   </div>

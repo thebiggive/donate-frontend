@@ -64,6 +64,18 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+  isInFuture() {
+    return CampaignService.isInFuture(this.campaign);
+  }
+
+  isInPast() {
+    return CampaignService.isInPast(this.campaign);
+  }
+
+  isOpenForDonations() {
+    return CampaignService.isOpenForDonations(this.campaign);
+  }
+
   goBackToMetacampaign() {
     const url = `/${this.campaign.parentRef}`;
 
