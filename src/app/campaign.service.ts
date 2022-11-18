@@ -52,7 +52,11 @@ export class CampaignService {
       return undefined;
     }
 
-    return 100 * campaign.amountRaised / campaign.target;
+    if (campaign.amountRaised >= campaign.target) {
+      return 100;
+    }
+
+    return Math.round((campaign.amountRaised / campaign.target) * 100);
   }
 
   buildQuery(selected: SelectedType, offset: number, campaignId?: string, campaignSlug?: string, fundSlug?: string): {[key: string]: any} {

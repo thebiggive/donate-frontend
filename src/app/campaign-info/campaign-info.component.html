@@ -10,7 +10,9 @@
     primary-stat-icon="AlarmClock"
     [primaryStatText]="campaignOpen ? (timeLeftPipe.transform(campaign.endDate)) : 'Opens soon'"
     secondary-stat-icon="Heart"
-    [secondaryStatText]="campaign.donationCount === 1 ? '1 donation' : campaign.donationCount + ' donations' ">
+    [secondaryStatText]="campaign.donationCount === 1 ? '1 donation' : campaign.donationCount + ' donations' "
+    [championName]="campaign.championName"
+    [championUrl]="'/' + campaign.parentRef + '/' + campaign.championRef">
   </biggive-campaign-highlights>
 
   <div style="margin-bottom: 30px;">

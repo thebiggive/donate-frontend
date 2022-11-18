@@ -102,11 +102,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   getPercentageRaised(childCampaign: CampaignSummary) {
-    if (childCampaign.amountRaised >= childCampaign.target) {
-      return 100;
-    }
-
-    return Math.round((childCampaign.amountRaised / childCampaign.target) * 100);
+    return CampaignService.percentRaised(childCampaign);
   }
 
   private moreMightExist(): boolean {
