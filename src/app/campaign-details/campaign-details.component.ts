@@ -1,39 +1,25 @@
-import { CurrencyPipe, DatePipe, isPlatformBrowser, Location } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTabsModule } from '@angular/material/tabs';
+import { DatePipe, isPlatformBrowser, Location } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { AnalyticsService } from '../analytics.service';
-import { CampaignDetailsCardComponent } from '../campaign-details-card/campaign-details-card.component';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { ImageService } from '../image.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 @Component({
-  standalone: true,
+  // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
+  encapsulation: ViewEncapsulation.None,
   selector: 'app-campaign-details',
   templateUrl: './campaign-details.component.html',
   styleUrls: ['./campaign-details.component.scss'],
-  imports: [
-    ...allChildComponentImports,
-    CampaignDetailsCardComponent,
-    CurrencyPipe,
-    DatePipe,
-    FlexLayoutModule,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatTabsModule,
+  providers: [
+    TimeLeftPipe,
+    DatePipe
   ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
@@ -41,6 +27,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   campaign: Campaign;
   isPendingOrNotReady = false;
   campaignInFuture = false;
+  campaignInPast = false;
   donateEnabled = true;
   fromFund = false;
   percentRaised?: number;
@@ -50,14 +37,16 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private analyticsService: AnalyticsService,
-    private pageMeta: PageMetaService,
+    private datePipe: DatePipe,
     private imageService: ImageService,
     private location: Location,
     private navigationService: NavigationService,
+    private pageMeta: PageMetaService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
+    public timeLeftPipe: TimeLeftPipe,
   ) {
     route.queryParams.forEach((params: Params) => {
       if (params.fromFund) {
@@ -89,9 +78,14 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(url);
   }
 
+  getRelevantDateAsStr(campaign: Campaign) {
+    const date = CampaignService.getRelevantDate(campaign);
+    return date ? this.datePipe.transform(date, 'dd/MM/yyyy, hh:mm') : null;
+  }
+
   private setSecondaryProps(campaign: Campaign) {
     this.campaignInFuture = CampaignService.isInFuture(campaign);
-    this.donateEnabled = CampaignService.isOpenForDonations(campaign);
+    this.campaignInPast = CampaignService.isInPast(campaign);
     this.isPendingOrNotReady = CampaignService.isPendingOrNotReady(campaign);
 
     for (const originalUri of campaign.additionalImageUris) {

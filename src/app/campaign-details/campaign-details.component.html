@@ -1,179 +1,259 @@
 <main class="b-container">
   <div class="b-back-button">
-    <a *ngIf="campaign.parentRef && fromFund" mat-icon-button class="c-listing-button block" [routerLink]="'/' + campaign.parentRef + '/' + campaign.championRef">
-      <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
-      All {{ campaign.championName }} campaigns<br>
-    </a>
-    <a
-      class="c-listing-button"
-      *ngIf="campaign.parentRef"
-      mat-icon-button
-      (click)="goBackToMetacampaign()"
-    >
-      <mat-icon class="c-listing-icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
-      All participating campaigns
-    </a>
-    <a class="c-listing-button" *ngIf="!campaign.parentRef" mat-icon-button routerLink="/">
-      <mat-icon class="c-listing-icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
-      All campaigns
-    </a>
+    <biggive-formatted-text>
+      <a *ngIf="campaign.parentRef && fromFund" mat-icon-button [routerLink]="'/' + campaign.parentRef + '/' + campaign.championRef">
+        <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
+        All {{ campaign.championName }} campaigns<br>
+      </a>
+      <a
+        class=""
+        *ngIf="campaign.parentRef"
+        mat-icon-button
+        (click)="goBackToMetacampaign()"
+      >
+        <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
+        All participating campaigns
+      </a>
+      <a *ngIf="!campaign.parentRef" mat-icon-button routerLink="/">
+        <mat-icon class="" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
+        All campaigns
+      </a>
+    </biggive-formatted-text>
   </div>
 
-  <div fxLayout="row" fxLayout.xs="column">
+  <div fxLayout="row" fxLayout.lt-md="column">
     <div class="b-primary-column">
-      <div class="c-header">
-        <h2 class="c-header__charity-name b-rt-0 b-uppercase b-grey b-light">{{ campaign.charity.name }}</h2>
-        <h1 class="c-header__campaign-title b-rh-1 b-bold">{{ campaign.title }}</h1>
-        <p class="c-header__description b-rt-1">{{ campaign.summary }}</p>
+      <biggive-branded-image
+        space-below="4"
+        [imageUrl]="campaign.bannerUri"
+        [logoUrl]="campaign.charity.logoUri"
+        slug="Match Funded"
+        [charityName]="campaign.charity.name"
+        [charityUrl]="campaign.charity.website"
+        [charityLocation]="campaign.countries.length ? campaign.countries[0] : null"
+      >
+      </biggive-branded-image>
+
+      <biggive-formatted-text
+        default-text-colour="black">
+        <h1>{{ campaign.title }}</h1>
+        <p>{{ campaign.summary }}</p>
+      </biggive-formatted-text>
+
+      <biggive-social-icon *ngIf="campaign.charity.facebook" service="Facebook" [url]="campaign.charity.facebook" background-colour="black" icon-colour="white"></biggive-social-icon>
+      <biggive-social-icon *ngIf="campaign.charity.twitter" service="Twitter" [url]="campaign.charity.twitter" background-colour="black" icon-colour="white"></biggive-social-icon>
+      <biggive-social-icon *ngIf="campaign.charity.linkedin" service="LinkedIn" [url]="campaign.charity.linkedin" background-colour="black" icon-colour="white"></biggive-social-icon>
+      <biggive-social-icon *ngIf="campaign.charity.instagram" service="Instagram" [url]="campaign.charity.instagram" background-colour="black" icon-colour="white"></biggive-social-icon>
+
+      <div id="campaign-highlights-beneficiaries-and-categories-mobile">
+        <div class="button-wrapper">
+          <biggive-button
+            space-below="5"
+            colour-scheme="primary"
+            label="Donate now"
+            full-width="true"
+            size="medium"
+            rounded="false"
+            [url]="'/donate/' + campaign.id"
+            [isFutureCampaign]="campaignInFuture"
+            [isPastCampaign]="campaignInPast"
+            [datetime]="getRelevantDateAsStr(campaign)">
+          </biggive-button>
+        </div>
+        <app-campaign-info [campaign]="campaign"></app-campaign-info>
       </div>
 
-      <button
-        *ngIf="donateEnabled"
-        class="b-donate-button"
-        mat-raised-button
-        [routerLink]="'/donate/' + campaign.id"
-      >
-        Donate
-      </button>
+      <div class="c-video" *ngIf="videoEmbedUrl">
+        <iframe
+          loading="lazy"
+          class="c-video__iframe b-w-100"
+          [src]="videoEmbedUrl"
+          frameborder="0"
+          allow="encrypted-media"
+          webkitallowfullscreen="true"
+          mozallowfullscreen="true"
+          allowfullscreen="true"></iframe>
+      </div>
 
-      <mat-card *ngIf="!donateEnabled" class="c-not-open">
-        <mat-card-title *ngIf="isPendingOrNotReady">
-          <mat-icon aria-hidden="false" aria-label="Preview campaign">preview</mat-icon>
-          Campaign preview
-        </mat-card-title>
 
-        <mat-card-title *ngIf="campaignInFuture && !isPendingOrNotReady">
-          <mat-icon aria-hidden="false" aria-label="Future campaign">update</mat-icon>
-          Campaign opens soon!
-        </mat-card-title>
+      <div class="c-tabs">
+        <mat-tab-group class="c-tab-group" animationDuration="0ms" [color]="'tbg-primary'">
+          <mat-tab label="Campaign overview">
+            <div class="c-details">
 
-        <mat-card-title *ngIf="!campaignInFuture && !isPendingOrNotReady">
-          <mat-icon aria-hidden="false" aria-label="Past campaign">history</mat-icon>
-          Campaign has now closed
-        </mat-card-title>
+              <biggive-heading
+                space-above=6
+                space-below=0
+                colour="primary"
+                html-element="h3"
+                size="3"
+                align="left"
+                text="Situation"
+              >
+              </biggive-heading>
 
-        <mat-card-content *ngIf="!isPendingOrNotReady">
-          <p>
-            <span *ngIf="campaignInFuture">Donations open</span>
-            <span *ngIf="!campaignInFuture">It ran from</span>
-            {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}
-          </p>
-        </mat-card-content>
-      </mat-card>
+              <biggive-formatted-text
+                default-text-colour="black">
+                <p>{{ campaign.problem }}</p>
+              </biggive-formatted-text>
 
-      <p *ngIf="campaign.charity.regulatorRegion !== 'Exempt'">
-        Registered Charity in {{ campaign.charity.regulatorRegion }} ({{ campaign.charity.regulatorNumber }})
-      </p>
+              <biggive-heading
+                space-above=6
+                space-below=0
+                colour="primary"
+                html-element="h3"
+                size="3"
+                align="left"
+                text="Solution"
+              >
+              </biggive-heading>
 
-      <p class="c-social">
-        <a class="c-social__link" *ngIf="campaign.charity.facebook" [href]="campaign.charity.facebook"
-          target="_blank" title="Open {{ campaign.charity.name }}'s Facebook page in a new tab">
-          <img class="c-social__icon" src="/assets/images/icon-facebook.png" alt="Facebook">
-        </a>
+              <biggive-formatted-text
+                default-text-colour="black">
+                <p>{{ campaign.solution }}</p>
+              </biggive-formatted-text>
 
-        <a class="c-social__link" *ngIf="campaign.charity.twitter" [href]="campaign.charity.twitter"
-          target="_blank" title="Open {{ campaign.charity.name }}'s Twitter profile in a new tab">
-          <img class="c-social__icon" src="/assets/images/icon-twitter.png" alt="Twitter">
-        </a>
+            </div>
 
-        <a class="c-social__link" *ngIf="campaign.charity.instagram" [href]="campaign.charity.instagram"
-          target="_blank" title="Open {{ campaign.charity.name }}'s Instagram profile in a new tab">
-          <img class="c-social__icon" src="/assets/images/icon-instagram.png" alt="Instagram">
-        </a>
+            <div class="c-additional" *ngIf="additionalImageUris.length > 0">
+              <img *ngFor="let uri of additionalImageUris" [src]="uri" class="c-additional__images">
+            </div>
 
-        <a class="c-social__link" *ngIf="campaign.charity.linkedin" [href]="campaign.charity.linkedin"
-          target="_blank" title="Open {{ campaign.charity.name }}'s LinkedIn page in a new tab">
-          <img class="c-social__icon" src="/assets/images/icon-linkedin.png" alt="LinkedIn">
-        </a>
-      </p>
+            <ul class="c-quotes" *ngIf="campaign.quotes.length > 0">
+              <li *ngFor="let quote of campaign.quotes">
 
-      <a class="b-rt-0 b-bold b-db" *ngIf="campaign.charity.website" [href]="campaign.charity.website" target="_blank">
-        <mat-icon class="c-website__icon b-rt-0" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
-        {{ campaign.charity.website }}
-      </a>
+
+                <biggive-quote
+                  space-below="4"
+                  default-text-colour="black"
+                  [quote]="quote.quote"
+                  [attribution]="quote.person"
+                >
+                </biggive-quote>
+              </li>
+            </ul>
+          </mat-tab>
+
+          <mat-tab *ngIf="campaign.updates.length > 0" label="Updates">
+            <ul class="c-updates" *ngFor="let update of campaign.updates">
+              <li>
+                <biggive-formatted-text>
+                  <h4 class="b-semi-bold b-mb-0">{{ update.modifiedDate | date : 'longDate' }}</h4>
+                  <p class="c-updates__description">{{ update.content }}</p>
+                </biggive-formatted-text>
+              </li>
+            </ul>
+          </mat-tab>
+
+          <mat-tab *ngIf="campaign.aims.length > 0" label="Aims">
+            <biggive-heading
+              space-above=6
+              space-below=0
+              colour="primary"
+              html-element="h3"
+              size="3"
+              align="left"
+              text="Campaign Aims"
+            >
+            </biggive-heading>
+
+            <ul class="c-aims" *ngFor="let aim of campaign.aims">
+              <li class="b-rt-0">{{ aim }}</li>
+            </ul>
+          </mat-tab>
+
+          <mat-tab *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" label="Where's the money going?">
+
+            <biggive-heading
+              space-above=6
+              space-below=0
+              colour="primary"
+              html-element="h3"
+              size="3"
+              align="left"
+              text="Campaign Budget"
+            >
+            </biggive-heading>
+
+            <ul class="c-budget" *ngFor="let detail of campaign.budgetDetails">
+              <li class="c-budget__item">
+                <span class="c-budget__value b-semi-bold">{{ detail.amount | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</span>
+                &ndash; {{ detail.description }}
+              </li>
+            </ul>
+
+            <div class="c-alternative-funds" *ngIf="campaign.alternativeFundUse">
+              <biggive-heading
+                space-above=6
+                space-below=0
+                colour="primary"
+                html-element="h4"
+                size="4"
+                align="left"
+                text="Understanding the Target"
+              >
+              </biggive-heading>
+              <p class="c-alternative-funds__description">{{ campaign.alternativeFundUse }}</p>
+            </div>
+          </mat-tab>
+
+          <mat-tab label="Impact &amp; reporting">
+            <div class="c-impact">
+              <biggive-heading
+                space-above=6
+                space-below=0
+                colour="primary"
+                html-element="h3"
+                size="3"
+                align="left"
+                text="Impact"
+              >
+              </biggive-heading>
+              <p class="c-impact__description">{{ campaign.impactSummary }}</p>
+
+              <biggive-heading
+                space-above=6
+                space-below=0
+                colour="primary"
+                html-element="h3"
+                size="3"
+                align="left"
+                text="Reporting"
+              >
+              </biggive-heading>
+              <p class="c-impact__description">{{ campaign.impactReporting }}</p>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+
     </div>
 
     <div class="b-secondary-column">
-      <app-campaign-details-card [campaign]="campaign"></app-campaign-details-card>
+      <div id="campaign-highlights-beneficiaries-and-categories-desktop">
+        <app-campaign-info [campaign]="campaign"></app-campaign-info>
+
+        <div class="button-wrapper">
+          <biggive-button
+            space-above="5"
+            colour-scheme="primary"
+            label="Donate now"
+            full-width="true"
+            size="medium"
+            rounded="false"
+            [url]="'/donate/' + campaign.id"
+            [isFutureCampaign]="campaignInFuture"
+            [isPastCampaign]="campaignInPast"
+            [datetime]="getRelevantDateAsStr(campaign)"
+            >
+          </biggive-button>
+        </div>
+
+      </div>
     </div>
   </div>
 
   <div fxLayout="row">
-    <div class="c-tabs">
-      <mat-tab-group class="c-tab-group" animationDuration="0ms" color="primary">
-        <mat-tab label="Campaign overview">
-          <div class="c-video" *ngIf="videoEmbedUrl">
-            <iframe
-              class="c-video__iframe b-w-100"
-              [src]="videoEmbedUrl"
-              frameborder="0"
-              allow="encrypted-media"
-              webkitallowfullscreen="true"
-              mozallowfullscreen="true"
-              allowfullscreen="true"></iframe>
-          </div>
-
-          <div class="c-details">
-            <h3 class="c-details__heading b-rh-2">Situation</h3>
-            <p class="c-details__description">{{ campaign.problem }}</p>
-            <h3 class="c-details__heading b-rh-2">Solution</h3>
-            <p class="c-details__description">{{ campaign.solution }}</p>
-          </div>
-
-          <div class="c-additional" *ngIf="additionalImageUris.length > 0">
-            <img *ngFor="let uri of additionalImageUris" [src]="uri" class="c-additional__images">
-          </div>
-
-          <ul class="c-quotes" *ngIf="campaign.quotes.length > 0">
-            <li *ngFor="let quote of campaign.quotes">
-              <blockquote class="c-quotes__blockquote">{{ quote.quote }}</blockquote>
-              <h4 class="c-quotes__attribution b-semi-bold b-mb-0">&mdash; {{ quote.person }}</h4>
-            </li>
-          </ul>
-        </mat-tab>
-
-        <mat-tab *ngIf="campaign.updates.length > 0" label="Updates">
-          <ul class="c-updates" *ngFor="let update of campaign.updates">
-            <li>
-              <h4 class="b-semi-bold b-mb-0">{{ update.modifiedDate | date : 'longDate' }}</h4>
-              <p class="c-updates__description">{{ update.content }}</p>
-            </li>
-          </ul>
-        </mat-tab>
-
-        <mat-tab *ngIf="campaign.aims.length > 0" label="Aims">
-          <h3 class="c-details__heading b-rh-2">Campaign Aims</h3>
-          <ul class="c-aims" *ngFor="let aim of campaign.aims">
-            <li class="b-rt-0">{{ aim }}</li>
-          </ul>
-        </mat-tab>
-
-        <mat-tab *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" label="Where's the money going?">
-          <h3 class="c-details__heading b-rh-2">Campaign Budget</h3>
-          <ul class="c-budget" *ngFor="let detail of campaign.budgetDetails">
-            <li class="c-budget__item">
-              <span class="c-budget__value b-semi-bold">{{ detail.amount | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</span>
-              &ndash; {{ detail.description }}
-            </li>
-          </ul>
-
-          <div class="c-alternative-funds" *ngIf="campaign.alternativeFundUse">
-            <h4 class="c-details__heading b-rh-2">Understanding The Target</h4>
-            <p class="c-alternative-funds__description">{{ campaign.alternativeFundUse }}</p>
-          </div>
-        </mat-tab>
-
-        <mat-tab label="Impact &amp; reporting">
-          <div class="c-impact">
-            <h3 class="c-impact__heading b-rh-2">Impact</h3>
-            <p class="c-impact__description">{{ campaign.impactSummary }}</p>
-
-            <h3 class="c-impact__heading b-rh-2">Reporting</h3>
-            <p class="c-impact__description">{{ campaign.impactReporting }}</p>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-    </div>
   </div>
 
 </main>

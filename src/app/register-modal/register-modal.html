@@ -1,0 +1,51 @@
+<biggive-popup-standalone>
+  <h2 mat-dialog-title>Register</h2>
+  
+  <mat-dialog-content class="mat-typography">
+    <form [formGroup]="form">
+      <re-captcha
+        #captcha
+        size="invisible"
+        (resolved)="captchaReturn($event)"
+        siteKey="{{ recaptchaIdSiteKey }}"
+      ></re-captcha>
+
+      <mat-form-field class="b-w-100" color="primary">
+        <mat-label for="registerFirstName">First name</mat-label>
+        <input matInput type="text" id="registerFirstName" formControlName="firstName">
+      </mat-form-field>
+
+      <mat-form-field class="b-w-100" color="primary">
+        <mat-label for="registerLastName">Last name</mat-label>
+        <input matInput type="text" id="registerLastName" formControlName="lastName">
+      </mat-form-field>
+
+      <mat-form-field class="b-w-100" color="primary">
+        <mat-label for="registerEmailAddress">Email address</mat-label>
+        <input matInput type="email" id="registerEmailAddress" formControlName="emailAddress">
+      </mat-form-field>
+
+      <mat-form-field class="b-w-100" color="primary">
+        <mat-label for="registerPassword">Password</mat-label>
+        <input matInput type="password" id="registerPassword" formControlName="password">
+      </mat-form-field>
+
+      <p class="b-rt-0">You will be logged in for 8 days. Please log out on this page afterwards if using a shared computer.</p>
+
+      <p *ngIf="registerError" class="error" aria-live="assertive">
+        Registration error: {{ registerError }}
+      </p>
+    </form>
+  
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button
+      mat-raised-button
+      [disabled]="!form.valid || registering"
+      (click)="register()"
+      color="primary"
+    >Register</button>
+    <button mat-raised-button [mat-dialog-close]="false" cdkFocusInitial color="accent">Cancel</button>
+  </mat-dialog-actions>
+</biggive-popup-standalone>

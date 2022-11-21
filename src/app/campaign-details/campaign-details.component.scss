@@ -1,48 +1,26 @@
 @import '../../abstract';
 
+h1 {
+  @media #{$breakpoint-sm} {
+    font-size: 30px;
+    line-height: 30px;
+  }
+  @media #{$breakpoint-md} {
+    font-size: 40px;
+    line-height: 40px;
+  }
+  @media #{$breakpoint-lg} {
+    font-size: 50px;
+    line-height: 50px;
+  }
+}
+
 .b-back-button {
   @include make-back-button;
 }
 
-.b-donate-button {
-  @include make-donate-button;
-}
-
 .b-rt-0 {
   @include b-rt-0;
-}
-
-.b-rt-1 {
-  @include b-rt-1;
-}
-
-.c-not-open {
-  @include make-card;
-  margin-bottom: 1rem;
-}
-
-.c-listing-button.block {
-  display: block;
-  margin-bottom: 0;
-}
-
-.c-header__charity-name {
-  margin-top: 0.75rem;
-  margin-bottom: 0.5rem;
-  letter-spacing: 1px;
-}
-
-.c-header__campaign-title {
-  margin: 0 0 1rem;
-}
-
-.c-header__description {
-  margin-bottom: 2rem;
-}
-
-.c-website__icon {
-  vertical-align: sub;
-  margin: 0 0 1rem 0;
 }
 
 .c-social {
@@ -51,26 +29,20 @@
   min-height: 21px;
 }
 
-.c-social__link {
-  margin-right: 1rem;
-}
-
-.c-social__icon {
-  width: 21px;
-}
-
 .c-tab-group {
   margin-top: 2rem;
 }
 
 .c-tabs {
-  @media #{$breakpoint-md} {
-    max-width: 50%;
-  }
-  @media #{$breakpoint-xl} {
-    max-width: 70%;
-  }
+  max-width: 100%;
   overflow-x: scroll;
+}
+
+.mat-tab-label {
+  .mat-tab-label-content {
+    color: $colour-primary;
+    font-size: large;
+  }
 }
 
 .c-quotes {
@@ -94,6 +66,7 @@
 .c-video {
   width: 100%;
   height: auto;
+  // margin: 30px auto; // centres the video
 }
 
 .c-video__iframe {
@@ -109,6 +82,7 @@
 
 .c-additional__images {
   margin: 1rem auto 0 auto;
+  width: 100%;
   max-width: 100%;
 }
 
@@ -129,10 +103,43 @@
   font-weight: 700;
 }
 
-.c-details__heading,
-.c-impact__heading {
-  margin: 0;
-  &:first-child {
-    margin-top: 1rem;
+.icons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.icon-wrapper {
+  display: flex;
+  padding: 10px;
+
+  svg {
+    margin-right: 5px;
+    color: $colour-primary;
+    width: 30px;
+    height: 30px;
+  }
+
+  .c-icon-title {
+    font-size: 1rem;
+    margin: auto;
+  }
+}
+
+.button-wrapper {
+  background-color: white;
+}
+
+#campaign-highlights-beneficiaries-and-categories-mobile {
+  display: none;
+}
+
+@media screen and (max-width: 960px){
+  #campaign-highlights-beneficiaries-and-categories-desktop {
+    display: none;
+  }
+
+  #campaign-highlights-beneficiaries-and-categories-mobile {
+    display: block;
+    margin-top: 30px;
   }
 }

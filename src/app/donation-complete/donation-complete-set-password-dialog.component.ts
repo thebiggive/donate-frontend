@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -15,6 +16,7 @@ import { Person } from '../person.model';
   styleUrls: ['./donation-complete-set-password-dialog.component.scss'],
   imports: [
     ...allChildComponentImports,
+    MatButtonModule,
     MatDialogModule,
     MatIconModule,
     MatInputModule,

@@ -1,3 +1,5 @@
+
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -19,7 +21,7 @@ import { CampaignSummary } from '../campaign-summary.model';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { MetaCampaignComponent } from './meta-campaign.component';
 import { TimeLeftPipe } from '../time-left.pipe';
-
+import { OptimisedImagePipe } from '../optimised-image.pipe';
 
 describe('MetaCampaignComponent', () => {
   let component: MetaCampaignComponent;
@@ -67,7 +69,12 @@ describe('MetaCampaignComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        MetaCampaignComponent,
+      ],
       imports: [
+        AsyncPipe,
+        CommonModule,
         HttpClientTestingModule,
         InfiniteScrollModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
@@ -77,6 +84,7 @@ describe('MetaCampaignComponent', () => {
         MatProgressSpinnerModule,
         MatSelectModule,
         NoopAnimationsModule,
+        OptimisedImagePipe,
         ReactiveFormsModule,
         RouterTestingModule,
       ],
@@ -120,6 +128,7 @@ describe('MetaCampaignComponent', () => {
         true,
         400,
         new Date(),
+        'Active',
         1230,
         'Test Campaign!',
       ),

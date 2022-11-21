@@ -95,11 +95,13 @@
 
 @mixin make-primary-column {
   @media #{$breakpoint-md} {
-    width: calc(100% - 225px);
-    padding-right: 5%;
+    width: 100%;
   }
+
   @media #{$breakpoint-lg} {
-    width: calc(100% - 300px);
+    width: calc(100% - 400px);
+    padding-right: 20px;
+    box-sizing: border-box;
   }
 
   @media #{$breakpoint-xl} {
@@ -111,11 +113,11 @@
   margin-top: 2rem;
   @media #{$breakpoint-md} {
     margin-top: 0;
-    width: 225px;
+    width: 100%;
   }
   @media #{$breakpoint-lg} {
     margin-top: 0;
-    width: 300px;
+    width: 400px;
   }
   @media #{$breakpoint-xl} {
     margin-top: 0;

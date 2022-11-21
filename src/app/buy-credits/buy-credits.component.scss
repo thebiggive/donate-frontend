@@ -7,11 +7,18 @@
     margin: 0px;
     padding: 10px 2rem;
     display: flex;
-    flex-direction: row-reverse;
+    justify-content: flex-end;
 
     p {
-        margin: 0;
+        margin: 0 1rem 0 0;
     }
+}
+
+.auth-options {
+    display: flex;
+    justify-content: space-between;
+    max-width: 15rem;
+    margin-bottom: 2rem;
 }
 
 .mat-stepper-vertical {

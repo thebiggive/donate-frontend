@@ -9,6 +9,7 @@
 // Columns
 .b-primary-column {
   @include make-primary-column;
+  margin-bottom: 50px;
 }
 .b-secondary-column {
   @include make-secondary-column;

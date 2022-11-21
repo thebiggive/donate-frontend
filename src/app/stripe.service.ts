@@ -269,7 +269,7 @@ export class StripeService {
     let label = `Donation to ${donation.charityName}`;
 
     if (donation.tipAmount > 0) {
-      label = `${label} and the Big Give`;
+      label = `${label} and Big Give`;
     }
 
     if (donation.feeCoverAmount > 0) {
@@ -301,7 +301,7 @@ export class StripeService {
     if (donation.tipAmount > 0) {
       items.push({
         amount: 100 * donation.tipAmount,
-        label: 'Donation to the Big Give',
+        label: 'Donation to Big Give',
       });
     }
 

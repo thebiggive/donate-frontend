@@ -32,32 +32,14 @@ import { IdentityService } from '../identity.service';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { Person } from '../person.model';
 import { PostcodeService } from '../postcode.service';
-import { TimeLeftPipe } from '../time-left.pipe';
+import { RegisterModalComponent } from '../register-modal/register-modal.component';
 import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
 
 @Component({
-  standalone: true,
   selector: 'app-buy-credits',
   templateUrl: './buy-credits.component.html',
   styleUrls: ['./buy-credits.component.scss'],
-  imports: [
-    ...allChildComponentImports,
-    ExactCurrencyPipe,
-    MatAutocompleteModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatDialogModule,
-    MatInputModule,
-    MatOptionModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatStepperModule,
-    ReactiveFormsModule,
-    RecaptchaModule,
-    TimeLeftPipe,
-  ],
 })
 export class BuyCreditsComponent implements AfterContentInit, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
@@ -79,9 +61,9 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
   maximumDonationAmount = environment.maximumDonationAmount;
   showAddressLookup: boolean = true;
   personId?: string;
-  sortCode: string;
-  accountNumber: string;
-  accountHolderName: string;
+  sortCode?: string;
+  accountNumber?: string;
+  accountHolderName?: string;
   recaptchaSiteKey = environment.recaptchaSiteKey;
   private captchaCode?: string;
   private initialTipSuggestedPercentage = 15;
@@ -266,6 +248,15 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     });
   }
 
+  showRegisterDialog() {
+    const registerDialog = this.dialog.open(RegisterModalComponent);
+    registerDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
+      if (data && data.id) {
+        this.loadAuthedPersonInfo(data.id, data.jwt);
+      }
+    });
+  }
+
   customTip(): boolean {
     return this.amountsGroup.value.tipPercentage === 'Other';
   }
@@ -344,6 +335,20 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     }
 
     this.captchaCode = captchaResponse;
+  }
+
+  logout() {
+    this.personId = undefined;
+    this.isLoading = false;
+    this.isLoggedIn = false;
+
+    this.accountHolderName = undefined;
+    this.accountNumber = undefined;
+    this.sortCode = undefined;
+
+    this.isPurchaseComplete = false;
+    this.creditForm.reset();
+    this.identityService.clearJWT();
   }
 
   async stepChanged(event: StepperSelectionEvent)  {
@@ -472,5 +477,4 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     }
     this.analyticsService.logError('credit_tip_donation_create_failed', errorMessage);
   }
-
 }

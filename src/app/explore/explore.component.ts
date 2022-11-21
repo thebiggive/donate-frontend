@@ -1,42 +1,24 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router } from '@angular/router';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { Subscription } from 'rxjs';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { CampaignService, SearchQuery } from '../campaign.service';
-import { Campaign } from '../campaign.model';
 import { CampaignGroupsService } from '../campaign-groups.service';
-import { CampaignSearchFormComponent } from '../campaign-search-form/campaign-search-form.component';
 import { CampaignSummary } from '../campaign-summary.model';
-import { FiltersComponent } from '../filters/filters.component';
 import { PageMetaService } from '../page-meta.service';
-import { PromotedCampaignsComponent } from '../promoted-campaigns/promoted-campaigns.component';
 import { SearchService } from '../search.service';
+import { DatePipe } from '@angular/common';
 
 /** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
-  standalone: true,
   selector: 'app-explore',
   templateUrl: './explore.component.html',
   styleUrls: ['./explore.component.scss'],
-  imports: [
-    ...allChildComponentImports,
-    CampaignSearchFormComponent,
-    FiltersComponent,
-    FlexLayoutModule,
-    InfiniteScrollModule,
-    MatProgressSpinnerModule,
-    PromotedCampaignsComponent,
-  ],
+  providers: [DatePipe]
 })
 export class ExploreComponent implements OnDestroy, OnInit {
   campaigns: CampaignSummary[];
   loading = false; // Server render gets initial result set; set true when filters change.
-  promotedCampaign1?: Campaign;
-  promotedCampaign2?: Campaign;
   /** Whether any non-default search logic besides an order change has been applied. */
   searched = false;
 
@@ -46,11 +28,12 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
   beneficiaryOptions: string[] = [];
   categoryOptions: string[] = [];
-  countryOptions: string[] = [];
+  locationOptions: string[] = [];
   fundingOptions: string[] = [];
 
   constructor(
     private campaignService: CampaignService,
+    private datePipe: DatePipe,
     private route: ActivatedRoute,
     private router: Router,
     private pageMeta: PageMetaService,
@@ -68,12 +51,9 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.promotedCampaign1 = this.route.snapshot?.data?.promotedMetacampaign1;
-    this.promotedCampaign2 = this.route.snapshot?.data?.promotedMetacampaign2;
-
     this.pageMeta.setCommon(
-      'The Big Give',
-      'The Big Give &ndash; discover campaigns and donate',
+      'Big Give',
+      'Big Give – discover campaigns and donate',
       false,
       'https://images-production.thebiggive.org.uk/0011r00002IMRknAAH/CCampaign%20Banner/db3faeb1-d20d-4747-bb80-1ae9286336a3.jpg',
     );
@@ -83,7 +63,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
     this.beneficiaryOptions = CampaignGroupsService.getBeneficiaryNames();
     this.categoryOptions = CampaignGroupsService.getCategoryNames();
-    this.countryOptions = CampaignGroupsService.getCountries();
+    this.locationOptions = CampaignGroupsService.getCountries();
     this.fundingOptions = [
       'Match Funded'
     ]
@@ -93,6 +73,24 @@ export class ExploreComponent implements OnDestroy, OnInit {
   onDoSearchAndFilterUpdate(event: CustomEvent) {
     this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
   }
+
+  @HostListener('doClearFilters', ['$event'])
+  onDoClearFilters(event: CustomEvent) {
+    this.searchService.resetFilters();
+  }
+
+  isInFuture(campaign: CampaignSummary) {
+    return CampaignService.isInFuture(campaign);
+  }
+
+  isInPast(campaign: CampaignSummary) {
+    return CampaignService.isInPast(campaign);
+  }
+
+  getRelevantDateAsStr(campaign: CampaignSummary) {
+    const date = CampaignService.getRelevantDate(campaign);
+    return date ? this.datePipe.transform(date, 'dd/MM/yyyy, hh:mm') : null;
+  };
 
   /**
    * Default sort when not in relevance mode because there's a search term.
@@ -124,11 +122,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   getPercentageRaised(childCampaign: CampaignSummary) {
-    if (childCampaign.amountRaised >= childCampaign.target) {
-      return 100;
-    }
-
-    return Math.round((childCampaign.amountRaised / childCampaign.target) * 100);
+    return CampaignService.percentRaised(childCampaign);
   }
 
   private moreMightExist(): boolean {

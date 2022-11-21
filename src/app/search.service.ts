@@ -44,32 +44,45 @@ export class SearchService {
     filterLocation: string;
     filterFunding: string;
   }, defaultSort: string) {
-    let searchText = customSearchEvent.searchText;
-    if (!searchText) {
-      searchText = ''; // prevents error calling .length on 'undefined' in search.service.ts
+    this.nonDefaultsActive = true;
+    this.selected.beneficiary = customSearchEvent.filterBeneficiary ? customSearchEvent.filterBeneficiary : '';
+    this.selected.category = customSearchEvent.filterCategory ? customSearchEvent.filterCategory : '';
+    this.selected.country = customSearchEvent.filterLocation ? customSearchEvent.filterLocation : '';
+    this.selected.onlyMatching = (customSearchEvent.filterFunding === 'Match Funded');
+
+    const blankSearchText = (
+      !customSearchEvent.searchText || customSearchEvent.searchText.trim() === ''
+    );
+
+    const previousSearchText = this.selected.term;
+    // this helps for comparing the new search text with the previous, because 'null' and 'undefined' are changed to ''
+    this.selected.term = blankSearchText ? '' : customSearchEvent.searchText;
+    this.selected.sortField = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
+
+    if (this.selected.term !== previousSearchText) {
+      if (blankSearchText) {
+        // Reset everything
+        this.reset(defaultSort, false);
+      }
+
+      // If search text changed and new search text is not blank, we want to re-sort by 'Relevance'. DON-558.
+      this.selected.sortField = 'Relevance';
     }
 
-    const sortBy = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
+    this.changed.emit(true);
+  }
 
-    this.search(searchText, sortBy);
-
-    if (customSearchEvent.filterBeneficiary) {
-      this.filter('beneficiary', customSearchEvent.filterBeneficiary);
+  getSelectedSortLabel() {
+    switch(this.selected.sortField) {
+      case 'matchFundsRemaining':
+        return 'Match funds remaining';
+      case 'amountRaised':
+        return 'Most raised';
+      case 'Relevance':
+        return 'Relevance';
+      default:
+        return null;
     }
-
-    if (customSearchEvent.filterCategory) {
-      this.filter('category', customSearchEvent.filterCategory);
-    }
-
-    if (customSearchEvent.filterLocation) {
-      this.filter('country', customSearchEvent.filterLocation);
-    }
-
-    if (customSearchEvent.filterFunding) {
-      this.filter('onlyMatching', customSearchEvent.filterFunding === 'Match Funded');
-    }
-
-    this.sort(sortBy);
   }
 
   filter(filterName: string, value: string|boolean) {
@@ -131,6 +144,15 @@ export class SearchService {
     if (!skipChangeEvent) {
       this.changed.emit(true);
     }
+  }
+
+  resetFilters() {
+    const defaults = SearchService.selectedDefaults();
+    this.selected.category = defaults.category;
+    this.selected.beneficiary = defaults.beneficiary;
+    this.selected.country = defaults.country;
+    this.selected.onlyMatching = defaults.onlyMatching;
+    this.changed.emit(true);
   }
 
   search(term: string, defaultSort: string) {
