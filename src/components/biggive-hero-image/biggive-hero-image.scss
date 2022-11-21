@@ -36,7 +36,23 @@
       background-repeat: no-repeat;
       background-position: left center;
       img {
-        display: none;
+        width: 200px;
+        // usually logos have some padding, so let's shift the logo left a bit
+        position: relative;
+        left: -20px;
+
+        @media (max-width: $screen-desktop-max) {
+          top: 20px;
+          width: 180px;
+        }
+        @media (max-width: $screen-tablet-max) {
+          top: 40px;
+          width: 160px;
+        }
+        @media (max-width: $screen-mobile-max) {
+          top: 60px;
+          width: 140px;
+        } 
       }
     }
     .slug {
@@ -113,13 +129,3 @@
     }
   }
 }
-
-// @media screen and (max-width: calc($screen-desktop-max + 25px)) and (min-width: $screen-tablet-max) {
-//   .container {
-//     .sleeve {
-//       .content-wrap {
-//         padding-left: $spacer-6;
-//       }
-//     }
-//   }
-// }

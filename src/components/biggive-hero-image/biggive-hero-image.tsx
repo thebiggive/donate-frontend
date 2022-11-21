@@ -7,10 +7,11 @@ import { Component, Prop, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveHeroImage {
-        /**
+  /**
    * Space below component
    */
-         @Prop() spaceBelow: number = 0;
+  @Prop() spaceBelow: number = 0;
+
   /**
    * Colour Scheme
    */
@@ -31,10 +32,10 @@ export class BiggiveHeroImage {
    */
    @Prop() logo: string = '';
 
-     /**
+  /**
    * Logo alt text
    */
-      @Prop() logoAltText: string = '';
+    @Prop() logoAltText: string = '';
 
   /**
    * Full URL of a main hero image.
@@ -89,8 +90,8 @@ export class BiggiveHeroImage {
         <div class="sleeve">
           <div class="content-wrap">
             {this.logo !== undefined && this.logo !== null ? (
-              <div class="logo image-wrap" style={{ 'background-image': 'url(' + this.logo + ')'}}>
-                <img src={this.logo} alt={this.logoAltText} title={this.logoAltText} />
+              <div class="logo image-wrap">
+                <img src={this.logo} alt={this.logoAltText} title={this.logoAltText}/>
               </div>
             ) : <div class="logo-space"></div>}
             <div class={'slug text-colour-'+this.slugColour}>{this.slug}</div>

@@ -21,7 +21,7 @@ describe('biggive-hero-image', () => {
          <div class="colour-scheme-primary container space-below-0">
            <div class="sleeve">
              <div class="content-wrap">
-               <div class="image-wrap logo" style="background-image: url();">
+               <div class="image-wrap logo">
                 <img alt="" src="">
                </div>
                <div class="slug text-colour-null">
