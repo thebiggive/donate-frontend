@@ -54,7 +54,7 @@
             full-width="true"
             size="medium"
             rounded="false"
-            [routerLink]="'/donate/' + campaign.id"
+            [url]="'/donate/' + campaign.id"
             [isFutureCampaign]="campaignInFuture"
             [isPastCampaign]="campaignInPast"
             [datetime]="getRelevantDateAsStr(campaign)">
@@ -241,7 +241,7 @@
             full-width="true"
             size="medium"
             rounded="false"
-            [routerLink]="'/donate/' + campaign.id"
+            [url]="'/donate/' + campaign.id"
             [isFutureCampaign]="campaignInFuture"
             [isPastCampaign]="campaignInPast"
             [datetime]="getRelevantDateAsStr(campaign)"
