@@ -27,7 +27,6 @@ import {TimeLeftPipe} from '../time-left.pipe';
   imports: [
     ...allChildComponentImports,
     CampaignDetailsCardComponent,
-    DatePipe,
     DonationStartRoutingModule,
     ExactCurrencyPipe,
     FlexLayoutModule,
@@ -49,5 +48,8 @@ import {TimeLeftPipe} from '../time-left.pipe';
     TimeLeftPipe,
   ],
   declarations: [DonationStartComponent],
+  providers: [
+    DatePipe,
+  ]
 })
 export class DonationStartModule {}

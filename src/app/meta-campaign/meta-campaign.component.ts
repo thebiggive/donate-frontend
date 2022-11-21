@@ -26,6 +26,7 @@ import { CampaignGroupsService } from '../campaign-groups.service';
   providers: [
     CurrencyPipe, // Not standlone
     TimeLeftPipe, // Injected for TS use
+    DatePipe,
   ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {

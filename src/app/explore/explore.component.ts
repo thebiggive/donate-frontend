@@ -14,6 +14,7 @@ import { DatePipe } from '@angular/common';
   selector: 'app-explore',
   templateUrl: './explore.component.html',
   styleUrls: ['./explore.component.scss'],
+  providers: [DatePipe]
 })
 export class ExploreComponent implements OnDestroy, OnInit {
   campaigns: CampaignSummary[];

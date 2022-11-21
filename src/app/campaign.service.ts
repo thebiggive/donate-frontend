@@ -28,15 +28,17 @@ export class CampaignService {
       return false;
     }
 
-    if (campaign.status === 'Active' && new Date(campaign.endDate) >= new Date()) {
+    if (campaign.status === 'Active') {
       return true;
     }
 
-    if (new Date(campaign.startDate) > new Date()) {
+    const now = new Date();
+
+    if (new Date(campaign.startDate) > now) {
       return false;
     }
 
-    return (new Date(campaign.endDate) >= new Date());
+    return (new Date(campaign.endDate) >= now);
   }
 
   static isInFuture(campaign: Campaign|CampaignSummary): boolean {

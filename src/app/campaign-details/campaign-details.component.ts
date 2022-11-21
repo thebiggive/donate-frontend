@@ -19,6 +19,7 @@ import { TimeLeftPipe } from '../time-left.pipe';
   styleUrls: ['./campaign-details.component.scss'],
   providers: [
     TimeLeftPipe,
+    DatePipe
   ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
