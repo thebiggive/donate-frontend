@@ -136,11 +136,6 @@ export class ExploreComponent implements OnDestroy, OnInit {
     this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
       // Success
       this.campaigns = [...this.campaigns, ...campaignSummaries];
-
-      this.campaigns.forEach(c => {
-        console.log(c.endDate);
-        console.log(typeof(c.endDate));
-      });
       this.loading = false;
     }, () => {
       this.loading = false;

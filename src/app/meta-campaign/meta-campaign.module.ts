@@ -17,7 +17,6 @@ import {TimeLeftPipe} from '../time-left.pipe';
     AsyncPipe,
     CampaignSearchFormComponent,
     CurrencyPipe,
-    DatePipe,
     FiltersComponent,
     InfiniteScrollModule,
     MatProgressSpinnerModule,

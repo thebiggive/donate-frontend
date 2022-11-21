@@ -66,15 +66,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  // move to secondary props method
-  // isInFuture() {
-  //   return CampaignService.isInFuture(this.campaign);
-  // }
-
-  // isInPast() {
-  //   return CampaignService.isInPast(this.campaign);
-  // }
-
   goBackToMetacampaign() {
     const url = `/${this.campaign.parentRef}`;
 
