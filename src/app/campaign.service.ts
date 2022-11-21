@@ -28,7 +28,7 @@ export class CampaignService {
       return false;
     }
 
-    if (campaign.status === 'Active') {
+    if (campaign.status === 'Active' && new Date(campaign.endDate) >= new Date()) {
       return true;
     }
 
@@ -49,6 +49,20 @@ export class CampaignService {
 
   static isInPast(campaign: Campaign|CampaignSummary): boolean {
     return ( campaign.status === 'Expired' || new Date(campaign.endDate) < new Date());
+  }
+
+  static getRelevantDate(campaign: Campaign|CampaignSummary): Date|undefined {
+    let dateToUse;
+
+    if (this.isInFuture(campaign)) {
+      dateToUse = campaign.startDate;
+    }
+
+    else if (this.isInPast(campaign)) {
+      dateToUse = campaign.endDate;
+    }
+
+    return dateToUse;
   }
 
   static percentRaised(campaign: (Campaign | CampaignSummary)): number | undefined {

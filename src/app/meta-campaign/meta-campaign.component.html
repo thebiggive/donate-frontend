@@ -65,7 +65,7 @@
             [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : '1.0-0'"
             [isFutureCampaign]="isInFuture(campaign)"
             [isPastCampaign]="isInPast(campaign)"
-            [datetime]="isInFuture(campaign) ? campaign.startDate : ( isInPast(campaign) ? campaign.endDate : null)">
+            [datetime]="getRelevantDateAsStr(campaign)">
           </biggive-campaign-card>
         </div>
       </biggive-grid>

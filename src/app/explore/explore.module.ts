@@ -1,4 +1,4 @@
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
@@ -25,6 +25,9 @@ import {OptimisedImagePipe} from '../optimised-image.pipe';
   ],
   declarations: [
     ExploreComponent,
+  ],
+  providers: [
+    DatePipe,
   ],
 })
 export class ExploreModule {}

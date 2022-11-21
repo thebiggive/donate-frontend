@@ -8,6 +8,7 @@ import { CampaignGroupsService } from '../campaign-groups.service';
 import { CampaignSummary } from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
+import { DatePipe } from '@angular/common';
 
 /** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
@@ -32,6 +33,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
   constructor(
     private campaignService: CampaignService,
+    private datePipe: DatePipe,
     private route: ActivatedRoute,
     private router: Router,
     private pageMeta: PageMetaService,
@@ -84,6 +86,11 @@ export class ExploreComponent implements OnDestroy, OnInit {
   isInPast(campaign: CampaignSummary) {
     return CampaignService.isInPast(campaign);
   }
+
+  getRelevantDateAsStr(campaign: CampaignSummary) {
+    const date = CampaignService.getRelevantDate(campaign);
+    return date ? this.datePipe.transform(date, 'dd/MM/yyyy, hh:mm') : null;
+  };
 
   /**
    * Default sort when not in relevance mode because there's a search term.
