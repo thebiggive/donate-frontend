@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
+import { DatePipe } from '@angular/common'
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { environment } from '../../environments/environment';
 import { Fund } from '../fund.model';
@@ -25,6 +26,7 @@ import { CampaignGroupsService } from '../campaign-groups.service';
   providers: [
     CurrencyPipe, // Not standlone
     TimeLeftPipe, // Injected for TS use
+    DatePipe,
   ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
@@ -57,6 +59,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   constructor(
     private campaignService: CampaignService,
     private currencyPipe: CurrencyPipe,
+    private datePipe: DatePipe,
     private fundService: FundService,
     private navigationService: NavigationService,
     private pageMeta: PageMetaService,
@@ -169,6 +172,19 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   getPercentageRaised(childCampaign: CampaignSummary) {
     return CampaignService.percentRaised(childCampaign);
+  }
+
+  isInFuture(campaign: CampaignSummary) {
+    return CampaignService.isInFuture(campaign);
+  }
+
+  isInPast(campaign: CampaignSummary) {
+    return CampaignService.isInPast(campaign);
+  }
+
+  getRelevantDateAsStr(campaign: CampaignSummary) {
+    const date = CampaignService.getRelevantDate(campaign);
+    return date ? this.datePipe.transform(date, 'dd/MM/yyyy, hh:mm') : null;
   }
 
   private loadMoreForCurrentSearch() {

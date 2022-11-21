@@ -1,4 +1,4 @@
-import { APP_BASE_HREF } from '@angular/common';
+import { APP_BASE_HREF, DatePipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
@@ -45,6 +45,7 @@ import { TBG_DONATE_ID_STORAGE } from './identity.service';
     CampaignListResolver,
     CampaignResolver,
     CharityCampaignsResolver,
+    DatePipe,
     // In Universal / SSR mode, `APP_BASE_HREF` should vary according to the host reported
     // by the browser once client side JS takes over. This is necessary so we can successfully
     // serve the app on multiple live domains.

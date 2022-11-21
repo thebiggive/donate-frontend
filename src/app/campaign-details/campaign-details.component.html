@@ -46,15 +46,20 @@
       <biggive-social-icon *ngIf="campaign.charity.instagram" service="Instagram" [url]="campaign.charity.instagram" background-colour="black" icon-colour="white"></biggive-social-icon>
 
       <div id="campaign-highlights-beneficiaries-and-categories-mobile">
-        <biggive-button
-          space-below="5"
-          colour-scheme="primary"
-          label="Donate now"
-          full-width="true"
-          size="medium"
-          rounded="false"
-          [routerLink]="'/donate/' + campaign.id">
-        </biggive-button>
+        <div class="button-wrapper">
+          <biggive-button
+            space-below="5"
+            colour-scheme="primary"
+            label="Donate now"
+            full-width="true"
+            size="medium"
+            rounded="false"
+            [routerLink]="'/donate/' + campaign.id"
+            [isFutureCampaign]="campaignInFuture"
+            [isPastCampaign]="campaignInPast"
+            [datetime]="getRelevantDateAsStr(campaign)">
+          </biggive-button>
+        </div>
         <app-campaign-info [campaign]="campaign"></app-campaign-info>
       </div>
 
@@ -227,7 +232,8 @@
     <div class="b-secondary-column">
       <div id="campaign-highlights-beneficiaries-and-categories-desktop">
         <app-campaign-info [campaign]="campaign"></app-campaign-info>
-        <div class="donate-button-wrapper">
+
+        <div class="button-wrapper">
           <biggive-button
             space-above="5"
             colour-scheme="primary"
@@ -235,9 +241,14 @@
             full-width="true"
             size="medium"
             rounded="false"
-            [routerLink]="'/donate/' + campaign.id">
+            [routerLink]="'/donate/' + campaign.id"
+            [isFutureCampaign]="campaignInFuture"
+            [isPastCampaign]="campaignInPast"
+            [datetime]="getRelevantDateAsStr(campaign)"
+            >
           </biggive-button>
         </div>
+
       </div>
     </div>
   </div>

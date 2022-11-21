@@ -1,4 +1,4 @@
-import {AsyncPipe, CurrencyPipe} from '@angular/common';
+import {AsyncPipe, CurrencyPipe, DatePipe} from '@angular/common';
 import { NgModule } from '@angular/core';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
@@ -26,6 +26,9 @@ import {TimeLeftPipe} from '../time-left.pipe';
   ],
   declarations: [
     MetaCampaignComponent,
+  ],
+  providers: [
+    DatePipe,
   ],
 })
 export class MetaCampaignModule {}

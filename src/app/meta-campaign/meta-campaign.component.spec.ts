@@ -128,6 +128,7 @@ describe('MetaCampaignComponent', () => {
         true,
         400,
         new Date(),
+        'Active',
         1230,
         'Test Campaign!',
       ),

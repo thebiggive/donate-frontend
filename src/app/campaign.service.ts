@@ -32,19 +32,39 @@ export class CampaignService {
       return true;
     }
 
-    if (new Date(campaign.startDate) > new Date()) {
+    const now = new Date();
+
+    if (new Date(campaign.startDate) > now) {
       return false;
     }
 
-    return (new Date(campaign.endDate) >= new Date());
+    return (new Date(campaign.endDate) >= now);
   }
 
-  static isInFuture(campaign: Campaign): boolean {
+  static isInFuture(campaign: Campaign|CampaignSummary): boolean {
     if (campaign.status === 'Active' || campaign.status === 'Expired') {
       return false;
     }
 
     return (new Date(campaign.startDate) > new Date());
+  }
+
+  static isInPast(campaign: Campaign|CampaignSummary): boolean {
+    return ( campaign.status === 'Expired' || new Date(campaign.endDate) < new Date());
+  }
+
+  static getRelevantDate(campaign: Campaign|CampaignSummary): Date|undefined {
+    let dateToUse;
+
+    if (this.isInFuture(campaign)) {
+      dateToUse = campaign.startDate;
+    }
+
+    else if (this.isInPast(campaign)) {
+      dateToUse = campaign.endDate;
+    }
+
+    return dateToUse;
   }
 
   static percentRaised(campaign: (Campaign | CampaignSummary)): number | undefined {

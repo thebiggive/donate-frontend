@@ -1,4 +1,4 @@
-import { isPlatformBrowser, Location } from '@angular/common';
+import { DatePipe, isPlatformBrowser, Location } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -19,6 +19,7 @@ import { TimeLeftPipe } from '../time-left.pipe';
   styleUrls: ['./campaign-details.component.scss'],
   providers: [
     TimeLeftPipe,
+    DatePipe
   ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
@@ -26,6 +27,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   campaign: Campaign;
   isPendingOrNotReady = false;
   campaignInFuture = false;
+  campaignInPast = false;
   donateEnabled = true;
   fromFund = false;
   percentRaised?: number;
@@ -35,6 +37,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
     private analyticsService: AnalyticsService,
+    private datePipe: DatePipe,
     private imageService: ImageService,
     private location: Location,
     private navigationService: NavigationService,
@@ -75,9 +78,14 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(url);
   }
 
+  getRelevantDateAsStr(campaign: Campaign) {
+    const date = CampaignService.getRelevantDate(campaign);
+    return date ? this.datePipe.transform(date, 'dd/MM/yyyy, hh:mm') : null;
+  }
+
   private setSecondaryProps(campaign: Campaign) {
     this.campaignInFuture = CampaignService.isInFuture(campaign);
-    this.donateEnabled = CampaignService.isOpenForDonations(campaign);
+    this.campaignInPast = CampaignService.isInPast(campaign);
     this.isPendingOrNotReady = CampaignService.isPendingOrNotReady(campaign);
 
     for (const originalUri of campaign.additionalImageUris) {

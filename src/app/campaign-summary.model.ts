@@ -15,6 +15,7 @@ export class CampaignSummary {
     public isMatched: boolean,
     public matchFundsRemaining: number,
     public startDate: Date,
+    public status: string,
     public target: number,
     public title: string,
   ) {}

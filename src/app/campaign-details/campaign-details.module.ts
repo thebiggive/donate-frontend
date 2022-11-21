@@ -19,7 +19,6 @@ import { CampaignInfoComponent } from '../campaign-info/campaign-info.component'
     ...allChildComponentImports,
     CampaignDetailsRoutingModule,
     CurrencyPipe,
-    DatePipe,
     FontAwesomeModule,
     FlexLayoutModule,
     MatButtonModule,
@@ -30,5 +29,8 @@ import { CampaignInfoComponent } from '../campaign-info/campaign-info.component'
     TimeLeftPipe,
   ],
   declarations: [CampaignDetailsComponent, CampaignInfoComponent],
+  providers: [
+    DatePipe,
+  ],
 })
 export class CampaignDetailsModule {}
