@@ -15,6 +15,7 @@
 ```mermaid
 graph TD;
   biggive-footer --> biggive-button
+  biggive-button --> biggive-misc-icon
   style biggive-footer fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

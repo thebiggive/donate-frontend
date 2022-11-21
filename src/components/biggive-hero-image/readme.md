@@ -37,6 +37,7 @@ Provides a large format image-based header feature, typically used at the top of
 ```mermaid
 graph TD;
   biggive-hero-image --> biggive-button
+  biggive-button --> biggive-misc-icon
   style biggive-hero-image fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

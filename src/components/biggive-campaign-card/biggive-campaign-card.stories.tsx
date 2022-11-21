@@ -49,7 +49,6 @@ export default {
     progressBarCounter: {
       name: 'Progress bar counter',
     },
-
     donateButtonUrl: {
       name: 'Donate button url',
     },

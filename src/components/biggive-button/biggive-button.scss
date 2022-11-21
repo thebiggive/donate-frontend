@@ -12,12 +12,27 @@
     }
   }
 
+  .msg-wrapper {
+    display: flex;
+    justify-content: center;
 
+    biggive-misc-icon {
+      margin-top: auto;
+      margin-bottom: auto;
+
+      // @media screen and (max-width: $screen-mobile-max) {
+      //   position: relative;
+      //   left: 20px;
+      // }
+    }
+
+    p {
+      text-align: center;
+      // width: min-content;
+
+      @media screen and (max-width: $screen-desktop-max) {
+        font-size: 15px;
+      }
+    }
+  }
 }
-
-
-
-
-
-
-

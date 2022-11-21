@@ -14,7 +14,7 @@ export class BiggiveCampaignHighlights {
   /**
    * Full URL of a banner image.
    */
-  @Prop() banner: string = '';
+  @Prop() banner: string = null;
 
   /**
    * Display name of the charity's specific time-bound fundraising campaign.
