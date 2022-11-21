@@ -1,3 +1,4 @@
+import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -29,9 +30,8 @@ describe('AppComponent', () => {
         RecaptchaModule,
         RouterTestingModule,
       ],
-      declarations: [
-      ],
       providers: [
+        { provide: APP_BASE_HREF, useValue: 'http://some.test.localhost' },
         InMemoryStorageService,
         // Inject in-memory storage for tests, in place of local storage.
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },

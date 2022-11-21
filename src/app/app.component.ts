@@ -1,5 +1,5 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { APP_BASE_HREF, isPlatformBrowser } from '@angular/common';
+import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import {
   Event as RouterEvent,
   NavigationEnd,
@@ -19,6 +19,7 @@ import { NavigationService } from './navigation.service';
 export class AppComponent implements OnInit {
   constructor(
     private analyticsService: AnalyticsService,
+    @Inject(APP_BASE_HREF) private baseHref: string,
     private donationService: DonationService,
     private getSiteControlService: GetSiteControlService,
     private navigationService: NavigationService,
@@ -33,6 +34,21 @@ export class AppComponent implements OnInit {
         }
       }
     });
+  }
+
+  /**
+   * Component library's `<biggive-button/>`, which is also part of composed components like
+   * `<biggive-campaign-card/>`, emits this custom event on click. This lets us swap in the
+   * smoother in-app Angular routing for internal links automatically, without complicating the
+   * input to the buttons.
+   */
+  @HostListener('doButtonClick', ['$event']) onDoButtonClick(event: CustomEvent) {
+    const url = event.detail.url;
+
+    if (url.startsWith(this.baseHref)) {
+      event.detail.event.preventDefault();
+      this.router.navigateByUrl(url.replace(this.baseHref, ''));
+    } // Else fall back to normal link behaviour
   }
 
   ngOnInit() {

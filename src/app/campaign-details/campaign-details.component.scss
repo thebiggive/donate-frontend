@@ -19,59 +19,14 @@ h1 {
   @include make-back-button;
 }
 
-.b-donate-button {
-  @include make-donate-button;
-}
-
 .b-rt-0 {
   @include b-rt-0;
-}
-
-.b-rt-1 {
-  @include b-rt-1;
-}
-
-.c-not-open {
-  @include make-card;
-  margin-bottom: 1rem;
-}
-
-.c-listing-button.block {
-  display: block;
-  margin-bottom: 0;
-}
-
-.c-header__charity-name {
-  margin-top: 0.75rem;
-  margin-bottom: 0.5rem;
-  letter-spacing: 1px;
-}
-
-.c-header__campaign-title {
-  margin: 0 0 1rem;
-}
-
-.c-header__description {
-  margin-bottom: 2rem;
-}
-
-.c-website__icon {
-  vertical-align: sub;
-  margin: 0 0 1rem 0;
 }
 
 .c-social {
   // Ensure good clearance between the Donate button & website link, even when there's no
   // regulator info (exempt org) or social links.
   min-height: 21px;
-}
-
-.c-social__link {
-  margin-right: 1rem;
-}
-
-.c-social__icon {
-  width: 21px;
 }
 
 .c-tab-group {
@@ -146,14 +101,6 @@ h1 {
 .c-budget__amount,
 .c-updates__description {
   font-weight: 700;
-}
-
-.c-details__heading,
-.c-impact__heading {
-  margin: 0;
-  &:first-child {
-    margin-top: 1rem;
-  }
 }
 
 .icons {
