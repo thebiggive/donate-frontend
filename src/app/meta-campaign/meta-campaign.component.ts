@@ -420,18 +420,15 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   private setFundSpecificProps() {
-    this.tickerMainMessage = this.currencyPipe.transform(this.fund?.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') +
-      ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
+    this.title = this.fund?.name
+      ? `${this.campaign.title}: ${this.fund.name}`
+      : this.campaign.title;
 
-      this.title = this.fund?.name
-        ? `${this.campaign.title}: ${this.fund.name}`
-        : this.campaign.title;
-
-      this.pageMeta.setCommon(
-        this.title,
-        this.campaign.summary || 'A match funded campaign with the Big Give',
-        this.campaign.currencyCode !== 'GBP',
-        this.campaign.bannerUri,
-      );
+    this.pageMeta.setCommon(
+      this.title,
+      this.campaign.summary || 'A match funded campaign with the Big Give',
+      this.campaign.currencyCode !== 'GBP',
+      this.campaign.bannerUri,
+    );
   }
 }
