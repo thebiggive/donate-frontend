@@ -1,5 +1,5 @@
 import { Component, h, Element, Prop, Event, EventEmitter, Listen } from '@stencil/core';
-import { faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
+import { faMagnifyingGlass, faFilterSlash } from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
   tag: 'biggive-campaign-card-filter-grid',
@@ -202,7 +202,7 @@ export class BiggiveCampaignCardFilterGrid {
     this.el.shadowRoot.getElementById('filter-popup').openFromOutside();
   };
 
-  private handleClearFiltersClicked = () => {
+  private handleClearAll = () => {
     this.doClearFilters.emit(true);
   };
 
@@ -230,6 +230,12 @@ export class BiggiveCampaignCardFilterGrid {
             </div>
           </div>
           <div class="sort-filter-wrap">
+            <div class="clear-all">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-clear-all" viewBox="0 0 512 512">
+                <path d={faFilterSlash.icon[4].toString()} />
+              </svg>
+              <a onClick={this.handleClearAll}>Clear all</a>
+            </div>
             <div class="sort-wrap">
               <biggive-form-field-select placeholder="Sort by" selectedLabel={this.selectedSortByOption} id="sort-by">
                 <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>
@@ -239,7 +245,7 @@ export class BiggiveCampaignCardFilterGrid {
             </div>
 
             <div class="filter-wrap">
-              <biggive-button class="filter" onClick={this.handleFilterButtonClick} label="Filters" fullWidth={true}></biggive-button>
+              <biggive-button class="filter" onClick={this.handleFilterButtonClick} label="Filters" fullWidth={true} space-below="0"></biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
                 <biggive-form-field-select placeholder="Category" selectedLabel={this.selectedFilterCategory} id="categories" space-below="2">
@@ -265,9 +271,6 @@ export class BiggiveCampaignCardFilterGrid {
                     ? undefined
                     : this.fundingOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
                 </biggive-form-field-select>
-                <a onClick={this.handleClearFiltersClicked} id="clearFilters">
-                  Clear Filters
-                </a>
                 <div class="align-right">
                   <biggive-button label="Apply filters" onClick={this.handleApplyFilterButtonClick} />
                 </div>
