@@ -91,6 +91,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.searchService.resetFilters();
   }
 
+  @HostListener('doCardGeneralClick', ['$event'])
+  onDoCardGeneralClick(event: CustomEvent) {
+    this.router.navigateByUrl(event.detail.url);
+  }
+
   ngOnDestroy() {
     if (this.routeChangeListener) {
       this.routeChangeListener.unsubscribe();
