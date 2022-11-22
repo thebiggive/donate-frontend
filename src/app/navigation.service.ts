@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class NavigationService {
-  private lastSingleCampaignId?: string;
+  private lastScrollY = 0;
   private lastUrl?: string;
   private currentUrl?: string;
 
@@ -23,11 +23,11 @@ export class NavigationService {
     this.currentUrl = url;
   }
 
-  getLastSingleCampaignId(): string | undefined {
-    return this.lastSingleCampaignId;
+  getLastScrollY(): number {
+    return this.lastScrollY;
   }
 
-  saveLastSingleCampaignId(campaignId: string) {
-    this.lastSingleCampaignId = campaignId;
+  saveLastScrollY(scrollY: number): void {
+    this.lastScrollY = scrollY;
   }
 }

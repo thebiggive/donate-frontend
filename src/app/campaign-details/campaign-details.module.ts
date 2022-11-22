@@ -11,8 +11,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { CampaignDetailsRoutingModule } from './campaign-details-routing.module';
-import { TimeLeftPipe } from '../time-left.pipe';
 import { CampaignInfoComponent } from '../campaign-info/campaign-info.component';
+import { OptimisedImagePipe } from '../optimised-image.pipe';
+import { TimeLeftPipe } from '../time-left.pipe';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import { CampaignInfoComponent } from '../campaign-info/campaign-info.component'
     MatIconModule,
     MatProgressSpinnerModule,
     MatTabsModule,
+    OptimisedImagePipe,
     TimeLeftPipe,
   ],
   declarations: [CampaignDetailsComponent, CampaignInfoComponent],

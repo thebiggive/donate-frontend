@@ -1,7 +1,7 @@
 import { CurrencyPipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
 import { AfterViewChecked, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { StorageService } from 'ngx-webstorage-service';
 import { Subscription } from 'rxjs';
 
@@ -48,6 +48,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   private routeParamSubscription: Subscription;
   private searchServiceSubscription: Subscription;
   private shouldAutoScroll: boolean;
+  private smallestSignificantScrollPx = 100;
 
   private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v2`; // Key is per-domain/env
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
@@ -139,12 +140,20 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   ngAfterViewChecked() {
     if (isPlatformBrowser(this.platformId) && this.shouldAutoScroll) {
-      // Keep updating scroll in this scenario, until the donor scrolls themselves and we turn off `shouldAutoScroll`.
-      this.updateScroll(this.navigationService.getLastSingleCampaignId());
+      // Update scroll to previous position in this scenario, unless the donor scrolls in the first 1s themselves and we turn off `shouldAutoScroll`.
+      this.updateScroll(this.navigationService.getLastScrollY());
     }
   }
 
   onScroll() {
+    if (this.scroller.getScrollPosition()[1] < this.smallestSignificantScrollPx) {
+      // On return with internal app nav, automatic position seems to be [0,59]
+      // or so as of Nov '22. So we want only larger scrolls to be picked up as
+      // donor intervention and to turn off auto-scroll + trigger loading of
+      // additional campaigns.
+      return;
+    }
+
     this.shouldAutoScroll = false;
 
     if (this.moreMightExist()) {
@@ -250,7 +259,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       // campaigns still works after we reinstate the existing children.
       this.offset = recentChildrenData.offset;
 
-      if (this.navigationService.getLastSingleCampaignId()) {
+      if (this.navigationService.getLastScrollY() >= this.smallestSignificantScrollPx) {
         this.shouldAutoScroll = true;
       }
 
@@ -310,7 +319,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   private listenForRouteChanges() {
-    this.routeChangeListener = this.router.events.subscribe(event => {
+    this.routeChangeListener = this.router.events.subscribe(event => {    
+      if (event instanceof NavigationStart) {
+        this.navigationService.saveLastScrollY(this.scroller.getScrollPosition()[1]);
+      }
+
       if (event instanceof NavigationEnd && event.url === '/') {
         this.searchService.reset(this.getDefaultSort(), false);
         this.run();
@@ -318,18 +331,16 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     });
   }
 
-  private updateScroll(campaignId: string | undefined) {
-    if (isPlatformBrowser(this.platformId) && campaignId) {
+  private updateScroll(scrollY: number | undefined) {
+    if (isPlatformBrowser(this.platformId) && scrollY) {
       // We need to allow enough time for the card layout to be in place. Firefox & Chrome both seemed to consistently
-      // use a too-low Y position when lots of card were shown and we didn't have a delay, both with `scrollToAnchor()`
+      // use a too-low Y position when lots of cards were shown and we didn't have a delay, both with `scrollToAnchor()`
       // and manual calculation + `scrollToPosition()`.
       setTimeout(() => {
-        // Scroll to the anchor's `offsetTop` y-position (currently not minus approx header height).
-        const activeCard = document.getElementById(`campaign-${campaignId}`);
-        if (activeCard) {
-          this.scroller.scrollToPosition([0, activeCard.offsetTop - 0]);
+        if (this.shouldAutoScroll) {
+          this.scroller.scrollToPosition([0, scrollY]);
         }
-      }, 1500);
+      }, 1000);
     }
   }
 
