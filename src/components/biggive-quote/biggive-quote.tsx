@@ -1,5 +1,4 @@
 import { Component, Prop, h } from '@stencil/core';
-import { faQuoteLeft } from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
   tag: 'biggive-quote',
@@ -25,19 +24,15 @@ export class BiggiveQuote {
    */
   @Prop() attribution: string = '';
 
-  icon = faQuoteLeft;
-  iconSize = 50;
-
   render() {
     return (
       <div class={'container text-colour-' + this.defaultTextColour + ' space-below-' + this.spaceBelow}>
-        <svg width={this.iconSize} height={this.iconSize} xmlns="http://www.w3.org/2000/svg" class="fill-primary" viewBox={'0 0 ' + this.icon.icon[0] + ' ' + this.icon.icon[1]}>
-          <path d={this.icon.icon[4].toString()} />
+        <div class="image-wrap">
+        <svg width="34" height="24" viewBox="0 0 34 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16.1245 0L13.7167 24H0L11.0901 0H16.1245ZM34 0L31.5923 24H17.8755L28.9657 0H34Z" fill="#2C089B"/>
         </svg>
-
-        <div class="quote">"{this.quote}"</div>
-        <br></br>
-        <br></br>
+        </div>
+        <div class="quote">“{this.quote}”</div>
         <div class="attribution"> - {this.attribution}</div>
       </div>
     );
