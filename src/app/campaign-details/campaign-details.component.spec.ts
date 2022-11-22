@@ -11,6 +11,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { Campaign } from '../campaign.model';
 import { CampaignDetailsComponent } from './campaign-details.component';
+import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { TimeLeftPipe } from '../time-left.pipe';
 
 describe('CampaignDetailsComponent', () => {
@@ -19,6 +20,9 @@ describe('CampaignDetailsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [
+        CampaignDetailsComponent,
+      ],
       imports: [
         CommonModule,
         CurrencyPipe,
@@ -29,6 +33,7 @@ describe('CampaignDetailsComponent', () => {
         MatProgressSpinnerModule,
         MatTabsModule,
         NoopAnimationsModule,
+        OptimisedImagePipe,
         RouterTestingModule,
       ],
       providers: [
