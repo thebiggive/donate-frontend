@@ -79,6 +79,11 @@ export class ExploreComponent implements OnDestroy, OnInit {
     this.searchService.resetFilters();
   }
 
+  @HostListener('doCardGeneralClick', ['$event'])
+  onDoCardGeneralClick(event: CustomEvent) {
+    this.router.navigateByUrl(event.detail.url);
+  }
+
   isInFuture(campaign: CampaignSummary) {
     return CampaignService.isInFuture(campaign);
   }
