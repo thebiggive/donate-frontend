@@ -31,6 +31,13 @@ in a secondary column alongside more detail about the same campaign.
 | `spaceBelow`                 | `space-below`                    | Space below component                                                                                                                                                                                   | `number`  | `4`               |
 
 
+## Events
+
+| Event                | Description | Type                                           |
+| -------------------- | ----------- | ---------------------------------------------- |
+| `doCardGeneralClick` |             | `CustomEvent<{ event: object; url: string; }>` |
+
+
 ## Dependencies
 
 ### Depends on
