@@ -316,12 +316,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   private listenForRouteChanges() {
-    this.routeChangeListener = this.router.events.subscribe(event => {
-      // this.viewportScroller.scrollToPosition([0, 0]);
-      
-
+    this.routeChangeListener = this.router.events.subscribe(event => {    
       if (event instanceof NavigationStart) {
-        console.log('ROUTER NAV START EVENT', event);
         this.navigationService.saveLastScrollY(this.scroller.getScrollPosition()[1]);
       }
 
