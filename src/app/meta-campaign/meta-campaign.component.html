@@ -1,14 +1,14 @@
 <main>
 
   <biggive-totalizer
-    *ngIf="!fund && tickerItems.length > 0"
+    *ngIf="tickerMainMessage || tickerItems.length > 0"
     primary-colour="primary"
     primary-text-colour="white"
     secondary-colour="secondary"
     secondary-text-colour="black"
     include-gift-aid="true"
     [mainMessage]="tickerMainMessage">
-      <div slot="ticker-items">  
+      <div slot="ticker-items">
         <biggive-totalizer-ticker-item
           *ngFor="let tickerItem of tickerItems"
           [figure]="tickerItem.figure"
@@ -41,7 +41,7 @@
       [selectedFilterCategory]="searchService.selected.category ? searchService.selected.category : null"
       [selectedFilterLocation]="searchService.selected.country ? searchService.selected.country : null"
       [selectedFilterFunding]="searchService.selected.onlyMatching ? 'Match Funded' : null">
-      
+
       <biggive-grid
         slot="campaign-grid"
         column-count="3"

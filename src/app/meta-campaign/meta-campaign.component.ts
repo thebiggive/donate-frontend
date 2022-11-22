@@ -328,7 +328,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   private listenForRouteChanges() {
-    this.routeChangeListener = this.router.events.subscribe(event => {    
+    this.routeChangeListener = this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         this.navigationService.saveLastScrollY(this.scroller.getScrollPosition()[1]);
 
@@ -379,52 +379,57 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
     const tickerItems = [];
 
-    if (campaignOpen) {
-      tickerItems.push(...[
-        {
-          label: 'remaining',
-          figure: this.timeLeftPipe.transform(this.campaign.endDate),
-        },
-        {
+    if (!this.fundSlug) {
+      if (campaignOpen) {
+        tickerItems.push(...[
+          {
+            label: 'remaining',
+            figure: this.timeLeftPipe.transform(this.campaign.endDate),
+          },
+          {
             label: 'match funds remaining',
             figure: this.currencyPipe.transform(this.campaign.matchFundsRemaining, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
-        },
-      ]);
-    } else {
+          },
+        ]);
+      } else {
+        tickerItems.push({
+          label: 'days duration',
+          figure: durationInDays.toString(),
+        });
+      }
+
+      if (this.campaign.campaignCount && this.campaign.campaignCount > 1) {
+        tickerItems.push(
+          {
+            label: 'participating charities',
+            figure: this.campaign.campaignCount.toLocaleString(),
+          }
+        )
+      }
+
+      if (this.campaign.donationCount > 0) {
+        tickerItems.push(
+          {
+            label: 'donations',
+            figure: this.campaign.donationCount.toLocaleString(),
+          }
+        )
+      }
+
       tickerItems.push({
-        label: 'days duration',
-        figure: durationInDays.toString(),
+        label: 'total match funds',
+        figure: this.currencyPipe.transform(this.campaign.matchFundsTotal, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
       });
     }
-
-    if (this.campaign.campaignCount && this.campaign.campaignCount > 1) {
-      tickerItems.push(
-        {
-          label: 'participating charities',
-          figure: this.campaign.campaignCount.toLocaleString(),
-        }
-      )
-    }
-
-    if (this.campaign.donationCount > 0) {
-      tickerItems.push(
-        {
-          label: 'donations',
-          figure: this.campaign.donationCount.toLocaleString(),
-        }
-      )
-    }
-
-    tickerItems.push({
-      label: 'total match funds',
-      figure: this.currencyPipe.transform(this.campaign.matchFundsTotal, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
-    });
 
     // Just update the public property once.
     this.tickerItems = tickerItems;
   }
 
   private setFundSpecificProps() {
+    this.tickerMainMessage = this.currencyPipe.transform(this.fund?.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') +
+      ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
+
     this.title = this.fund?.name
       ? `${this.campaign.title}: ${this.fund.name}`
       : this.campaign.title;
