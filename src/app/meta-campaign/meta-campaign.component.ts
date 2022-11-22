@@ -88,7 +88,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   @HostListener('doClearFilters', ['$event'])
   onDoClearFilters(event: CustomEvent) {
-    this.searchService.resetFilters();
+    this.searchService.reset(this.getDefaultSort(), false);
+    this.setQueryParams();
   }
 
   @HostListener('doCardGeneralClick', ['$event'])
