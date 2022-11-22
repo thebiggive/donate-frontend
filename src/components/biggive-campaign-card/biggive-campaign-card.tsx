@@ -10,7 +10,7 @@ export class BiggiveCampaignCard {
     eventName: 'doCardGeneralClick',
     composed: true,
     cancelable: true,
-    bubbles: false,
+    bubbles: true,
   })
   doCardGeneralClick: EventEmitter<{ event: object; url: string }>;
 
