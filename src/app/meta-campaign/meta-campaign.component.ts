@@ -106,6 +106,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
     this.campaignId = this.campaign.id;
+    this.title = this.campaign.title;
 
     this.listenForRouteChanges();
 
@@ -266,10 +267,6 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   private setSecondaryPropsAndRun(campaign: Campaign) {
     this.searchService.reset(this.getDefaultSort(), true); // Needs `campaign` to determine sort order.
     this.loadQueryParamsAndRun();
-
-    if (!this.fund) {
-      this.title = campaign.title;
-    }
 
     this.pageMeta.setCommon(
       this.title,
