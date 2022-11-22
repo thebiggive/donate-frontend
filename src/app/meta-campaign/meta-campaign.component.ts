@@ -41,6 +41,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   public tickerMainMessage: string;
   public title: string; // Includes fund info if applicable.
 
+  private autoScrollTimer: any; // State update setTimeout reference, for client side scroll to previous position.
   private campaignId: string;
   private campaignSlug: string;
   private offset = 0;
@@ -259,6 +260,9 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       // campaigns still works after we reinstate the existing children.
       this.offset = recentChildrenData.offset;
 
+      // Auto scrolling without a significant extra wait only works when
+      // the child campaigns were quickly loaded from local state from
+      // a recent page view.
       if (this.navigationService.getLastScrollY() >= this.smallestSignificantScrollPx) {
         this.shouldAutoScroll = true;
       }
@@ -290,8 +294,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
    */
   private loadQueryParamsAndRun() {
     this.routeParamSubscription = this.route.queryParams.subscribe(params => {
-        this.searchService.loadQueryParams(params, this.getDefaultSort());
-        this.run();
+      this.searchService.loadQueryParams(params, this.getDefaultSort());
+      this.run();
     });
 
     this.searchServiceSubscription = this.searchService.changed.subscribe((interactive: boolean) => {
@@ -322,6 +326,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.routeChangeListener = this.router.events.subscribe(event => {    
       if (event instanceof NavigationStart) {
         this.navigationService.saveLastScrollY(this.scroller.getScrollPosition()[1]);
+
+        if (isPlatformBrowser(this.platformId) && this.autoScrollTimer) {
+          window.clearTimeout(this.autoScrollTimer);
+          this.autoScrollTimer = undefined;
+        }
       }
 
       if (event instanceof NavigationEnd && event.url === '/') {
@@ -332,13 +341,15 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   private updateScroll(scrollY: number | undefined) {
-    if (isPlatformBrowser(this.platformId) && scrollY) {
+    if (isPlatformBrowser(this.platformId) && scrollY && !this.autoScrollTimer) {
       // We need to allow enough time for the card layout to be in place. Firefox & Chrome both seemed to consistently
       // use a too-low Y position when lots of cards were shown and we didn't have a delay, both with `scrollToAnchor()`
       // and manual calculation + `scrollToPosition()`.
-      setTimeout(() => {
+
+      this.autoScrollTimer = setTimeout(() => {
         if (this.shouldAutoScroll) {
           this.scroller.scrollToPosition([0, scrollY]);
+          this.autoScrollTimer = undefined;
         }
       }, 1000);
     }
