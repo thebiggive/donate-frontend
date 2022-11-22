@@ -21,6 +21,7 @@ describe('biggive-basic-card', () => {
                 </div>
                 <h3 class="title"></h3>
                 <div class="subtitle"></div>
+                <div class="teaser"></div>
               </div>
             </div>
           </div>

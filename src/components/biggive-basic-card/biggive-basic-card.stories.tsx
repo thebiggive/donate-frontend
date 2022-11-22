@@ -45,6 +45,9 @@ export default {
     subtitle: {
       name: 'Subtitle',
     },
+    teaser: {
+      name: 'Teaser',
+    },
     buttonUrl: {
       name: 'Button URL',
     },
@@ -71,6 +74,7 @@ const Template = args => `
                 icon-colour="${args.iconColour}"
                 mainTitle="${args.mainTitle}"
                 subtitle="${args.subtitle}"
+                teaser="${args.teaser}"
                 buttonLabel="${args.buttonLabel}"
                 buttonUrl="${args.buttonUrl}"
                 buttonColourScheme="${args.buttonColourScheme}"
@@ -88,6 +92,7 @@ BasicCardComponent.args = {
   textColour: 'white',
   mainTitle: 'Sample main title',
   subtitle: 'Sample subtitle',
+  teaser: 'teaser',
   buttonUrl: '#',
   buttonLabel: 'Click here',
   buttonColourScheme: 'clear-primary',
