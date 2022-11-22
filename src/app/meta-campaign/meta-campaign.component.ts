@@ -39,6 +39,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   public loading = false; // Server render gets initial result set; set true when filters change.
   public tickerItems: { label: string, figure: string }[] = [];
   public tickerMainMessage: string;
+  public title: string; // Includes fund info if applicable.
 
   private campaignId: string;
   private campaignSlug: string;
@@ -114,14 +115,14 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     if (this.fundSlug) {
       fundKey = makeStateKey<Fund>(`fund-${this.fundSlug}`);
       this.fund = this.state.get<Fund | undefined>(fundKey, undefined);
-      this.setFundSpecificTickerParams();
+      this.setFundSpecificProps();
     }
 
     if (!this.fund && this.fundSlug) {
       this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
         this.state.set<Fund>(fundKey, fund);
         this.fund = fund;
-        this.setFundSpecificTickerParams();
+        this.setFundSpecificProps();
       });
     }
 
@@ -265,10 +266,15 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   private setSecondaryPropsAndRun(campaign: Campaign) {
     this.searchService.reset(this.getDefaultSort(), true); // Needs `campaign` to determine sort order.
     this.loadQueryParamsAndRun();
+
+    if (!this.fund) {
+      this.title = campaign.title;
+    }
+
     this.pageMeta.setCommon(
-      campaign.title,
+      this.title,
       campaign.summary || 'A match funded campaign with the Big Give',
-      this.campaign.currencyCode !== 'GBP',
+      campaign.currencyCode !== 'GBP',
       campaign.bannerUri,
     );
   }
@@ -394,8 +400,19 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.tickerItems = tickerItems;
   }
 
-  private setFundSpecificTickerParams() {
+  private setFundSpecificProps() {
     this.tickerMainMessage = this.currencyPipe.transform(this.fund?.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') +
       ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
+
+      this.title = this.fund?.name
+        ? `${this.campaign.title}: ${this.fund.name}`
+        : this.campaign.title;
+
+      this.pageMeta.setCommon(
+        this.title,
+        this.campaign.summary || 'A match funded campaign with the Big Give',
+        this.campaign.currencyCode !== 'GBP',
+        this.campaign.bannerUri,
+      );
   }
 }
