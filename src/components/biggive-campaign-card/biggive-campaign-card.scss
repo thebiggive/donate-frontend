@@ -6,6 +6,9 @@
   @include flex-container-column();
   @include standard-font();
   @include lower-shadow();
+
+  cursor: pointer; // Fallback click behaviour is to go to info URL.
+
   position: relative;
   height: 100%;
   background-color: $colour-white;

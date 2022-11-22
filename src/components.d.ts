@@ -1052,6 +1052,10 @@ export interface BiggiveButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLBiggiveButtonElement;
 }
+export interface BiggiveCampaignCardCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLBiggiveCampaignCardElement;
+}
 export interface BiggiveCampaignCardFilterGridCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLBiggiveCampaignCardFilterGridElement;
@@ -1749,6 +1753,7 @@ declare namespace LocalJSX {
           * More information button url
          */
         "moreInfoButtonUrl"?: string;
+        "onDoCardGeneralClick"?: (event: BiggiveCampaignCardCustomEvent<{ event: object; url: string }>) => void;
         /**
           * Display name of the charity or non-profit.
          */

@@ -68,6 +68,9 @@ export class BiggiveButton {
   @Prop() datetime: string;
 
   private handleButtonClick = (event: any) => {
+    // Don't also fire e.g. `<biggive-campaign-card>` click event.
+    event.stopPropagation();
+
     this.doButtonClick.emit({ event: event, url: event.target.parentElement.href });
   };
 
