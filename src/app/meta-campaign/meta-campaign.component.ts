@@ -288,7 +288,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
     this.pageMeta.setCommon(
       this.title,
-      campaign.summary || 'A match funded campaign with the Big Give',
+      campaign.summary || 'A match funded campaign with Big Give',
       campaign.currencyCode !== 'GBP',
       campaign.bannerUri,
     );
@@ -431,7 +431,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
     this.pageMeta.setCommon(
       this.title,
-      this.campaign.summary || 'A match funded campaign with the Big Give',
+      this.campaign.summary || 'A match funded campaign with Big Give',
       this.campaign.currencyCode !== 'GBP',
       this.campaign.bannerUri,
     );
