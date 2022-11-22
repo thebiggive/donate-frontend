@@ -100,6 +100,10 @@ export namespace Components {
          */
         "subtitle": string;
         /**
+          * Teaser
+         */
+        "teaser": string;
+        /**
           * Text colour
          */
         "textColour": string;
@@ -125,6 +129,24 @@ export namespace Components {
           * Url
          */
         "url": string;
+    }
+    interface BiggiveBiographyCard {
+        /**
+          * Job title
+         */
+        "fullName": string;
+        /**
+          * Full URL of the main image.
+         */
+        "imageUrl": string;
+        /**
+          * Job title
+         */
+        "jobTitle": string;
+        /**
+          * Space below component
+         */
+        "spaceBelow": number;
     }
     interface BiggiveBoxedContent {
         /**
@@ -760,6 +782,10 @@ export namespace Components {
          */
         "colourScheme": string;
         /**
+          * Width
+         */
+        "maxWidth": number;
+        /**
           * Section style bottom
          */
         "sectionStyleBottom": string;
@@ -1005,6 +1031,12 @@ declare global {
         prototype: HTMLBiggiveBeneficiaryIconElement;
         new (): HTMLBiggiveBeneficiaryIconElement;
     };
+    interface HTMLBiggiveBiographyCardElement extends Components.BiggiveBiographyCard, HTMLStencilElement {
+    }
+    var HTMLBiggiveBiographyCardElement: {
+        prototype: HTMLBiggiveBiographyCardElement;
+        new (): HTMLBiggiveBiographyCardElement;
+    };
     interface HTMLBiggiveBoxedContentElement extends Components.BiggiveBoxedContent, HTMLStencilElement {
     }
     var HTMLBiggiveBoxedContentElement: {
@@ -1244,6 +1276,7 @@ declare global {
         "biggive-back-to-top": HTMLBiggiveBackToTopElement;
         "biggive-basic-card": HTMLBiggiveBasicCardElement;
         "biggive-beneficiary-icon": HTMLBiggiveBeneficiaryIconElement;
+        "biggive-biography-card": HTMLBiggiveBiographyCardElement;
         "biggive-boxed-content": HTMLBiggiveBoxedContentElement;
         "biggive-branded-image": HTMLBiggiveBrandedImageElement;
         "biggive-button": HTMLBiggiveButtonElement;
@@ -1380,6 +1413,10 @@ declare namespace LocalJSX {
          */
         "subtitle"?: string;
         /**
+          * Teaser
+         */
+        "teaser"?: string;
+        /**
           * Text colour
          */
         "textColour"?: string;
@@ -1405,6 +1442,24 @@ declare namespace LocalJSX {
           * Url
          */
         "url"?: string;
+    }
+    interface BiggiveBiographyCard {
+        /**
+          * Job title
+         */
+        "fullName"?: string;
+        /**
+          * Full URL of the main image.
+         */
+        "imageUrl"?: string;
+        /**
+          * Job title
+         */
+        "jobTitle"?: string;
+        /**
+          * Space below component
+         */
+        "spaceBelow"?: number;
     }
     interface BiggiveBoxedContent {
         /**
@@ -2060,6 +2115,10 @@ declare namespace LocalJSX {
          */
         "colourScheme"?: string;
         /**
+          * Width
+         */
+        "maxWidth"?: number;
+        /**
           * Section style bottom
          */
         "sectionStyleBottom"?: string;
@@ -2267,6 +2326,7 @@ declare namespace LocalJSX {
         "biggive-back-to-top": BiggiveBackToTop;
         "biggive-basic-card": BiggiveBasicCard;
         "biggive-beneficiary-icon": BiggiveBeneficiaryIcon;
+        "biggive-biography-card": BiggiveBiographyCard;
         "biggive-boxed-content": BiggiveBoxedContent;
         "biggive-branded-image": BiggiveBrandedImage;
         "biggive-button": BiggiveButton;
@@ -2316,6 +2376,7 @@ declare module "@stencil/core" {
             "biggive-back-to-top": LocalJSX.BiggiveBackToTop & JSXBase.HTMLAttributes<HTMLBiggiveBackToTopElement>;
             "biggive-basic-card": LocalJSX.BiggiveBasicCard & JSXBase.HTMLAttributes<HTMLBiggiveBasicCardElement>;
             "biggive-beneficiary-icon": LocalJSX.BiggiveBeneficiaryIcon & JSXBase.HTMLAttributes<HTMLBiggiveBeneficiaryIconElement>;
+            "biggive-biography-card": LocalJSX.BiggiveBiographyCard & JSXBase.HTMLAttributes<HTMLBiggiveBiographyCardElement>;
             "biggive-boxed-content": LocalJSX.BiggiveBoxedContent & JSXBase.HTMLAttributes<HTMLBiggiveBoxedContentElement>;
             "biggive-branded-image": LocalJSX.BiggiveBrandedImage & JSXBase.HTMLAttributes<HTMLBiggiveBrandedImageElement>;
             "biggive-button": LocalJSX.BiggiveButton & JSXBase.HTMLAttributes<HTMLBiggiveButtonElement>;

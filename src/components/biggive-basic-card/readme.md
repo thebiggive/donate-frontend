@@ -19,6 +19,7 @@
 | `mainTitle`          | `main-title`           | Main title                        | `string` | `null`            |
 | `spaceBelow`         | `space-below`          | Space below component             | `number` | `0`               |
 | `subtitle`           | `subtitle`             | Subtitle title                    | `string` | `null`            |
+| `teaser`             | `teaser`               | Teaser                            | `string` | `null`            |
 | `textColour`         | `text-colour`          | Text colour                       | `string` | `'black'`         |
 
 

@@ -39,6 +39,11 @@ export class BiggiveBasicCard {
   @Prop() subtitle: string = null;
 
   /**
+   * Teaser
+   */
+  @Prop() teaser: string = null;
+
+  /**
    * Icon colour
    */
   @Prop() iconColour: string = 'primary';
@@ -74,6 +79,7 @@ export class BiggiveBasicCard {
             </div>
             <h3 class="title">{this.mainTitle}</h3>
             <div class="subtitle">{this.subtitle}</div>
+            <div class="teaser">{this.teaser}</div>
             {this.buttonLabel != null && this.buttonUrl != null ? (
               <div class="button-wrap">
                 <biggive-button colour-scheme={this.buttonColourScheme} url={this.buttonUrl} label={this.buttonLabel}></biggive-button>
