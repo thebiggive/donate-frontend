@@ -37,20 +37,25 @@
   justify-content: flex-end;
   margin-bottom: $spacer-4;
   text-align: right;
-  #clearFilters {
-    margin: auto 0 auto auto;
-    &:hover {
-      cursor: pointer;
+  .clear-all {
+    cursor: pointer;
+    vertical-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+    display: flex;
+    .sort-wrap {
+      margin-left: 15px;
     }
-  }
-  .sort-wrap {
-    margin-left: 15px;
-  }
-  .filter-wrap {
-    margin-left: $spacer-3;
-    .button.filter {
-      padding-left: 60px;
-      padding-right: 30px;
+
+    .filter-wrap {
+      margin-left: $spacer-3;
+
+      .button.filter {
+        padding-left: 60px;
+        padding-right: 30px;
+
       .filter-icon {
         content: '';
         display: block;
@@ -59,20 +64,17 @@
         top: 17px;
         width: 13px;
         height: 13px;
+
         svg {
           width: 100%;
           height: auto;
           vertical-align: top;
+
           &:hover {
             fill: $colour-primary;
           }
         }
       }
-    }
-
-    #clearFilters {
-      position: absolute;
-      margin-top: 20px;
     }
   }
 }
@@ -87,12 +89,18 @@
   }
 }
 
+.icon-clear-all {
+  > path {
+    fill: $colour-black;
+  }
+}
+
 @media screen and (max-width: $screen-mobile-small) {
   .sort-filter-wrap {
-    .filter-wrap {
-      #clearFilters {
-        font-size: 15px;
-      }
+    flex-direction: column-reverse;
+    .sort-wrap {
+      margin-top: 20px;
+      margin-bottom: 20px;
     }
   }
 }
@@ -105,11 +113,6 @@
     }
     .filter-wrap {
       margin-left: 3px;
-
-      #clearFilters {
-        margin-top: 0px;
-        max-width: 15px;
-      }
     }
   }
 }
