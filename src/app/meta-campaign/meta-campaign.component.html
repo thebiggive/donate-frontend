@@ -20,9 +20,10 @@
 
   <biggive-hero-image
     [logo]="fund?.logoUri"
-    [mainTitle]="campaign.title"
+    [logoAltText]="fund?.name"
+    [mainTitle]="title"
     [mainImage]="campaign.bannerUri | optimisedImage:2000 | async"
-    [teaser]="campaign.summary"
+    [teaser]="fund && fund.description ? fund.description : campaign.summary"
     colour-scheme="primary"
     main-image-align-horizontal="right"
   ></biggive-hero-image>
