@@ -34,7 +34,7 @@
         <div *ngFor="let campaign of campaigns">
           <biggive-campaign-card
             [banner]="campaign.imageUri | optimisedImage:830 | async"
-            [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'"
+            [campaignType]="campaign.isMatched ? 'Match Funded' : null"
             [campaignTitle]="campaign.title"
             [donateButtonUrl]="'/donate/' + campaign.id"
             [moreInfoButtonUrl]="'/campaign/' + campaign.id"
