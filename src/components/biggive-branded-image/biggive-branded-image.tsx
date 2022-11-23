@@ -43,7 +43,7 @@ export class BiggiveBrandedImage {
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
-        <div class="slug">{this.slug}</div>
+        {this.slug ? <div class="slug">{this.slug}</div> : null}
         {this.imageUrl !== undefined && this.imageUrl !== null ? (
           <div class="image-wrap">
             <img src={this.imageUrl} />
