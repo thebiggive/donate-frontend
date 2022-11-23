@@ -27,7 +27,7 @@
         space-below="4"
         [imageUrl]="campaign.bannerUri | optimisedImage:2000 | async"
         [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage:240 | async) : null"
-        slug="Match Funded"
+        [slug]="campaign.isMatched ? 'Match Funded' : null"
         [charityName]="campaign.charity.name"
         [charityUrl]="campaign.charity.website"
         [charityLocation]="campaign.countries.length ? campaign.countries[0] : null"
