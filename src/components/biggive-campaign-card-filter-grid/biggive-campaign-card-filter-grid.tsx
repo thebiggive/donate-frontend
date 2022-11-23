@@ -1,4 +1,4 @@
-import { Component, h, Element, Prop, Event, EventEmitter, Listen } from '@stencil/core';
+import { Component, h, Element, Prop, Event, EventEmitter, Listen, State } from '@stencil/core';
 import { faMagnifyingGlass, faFilterSlash } from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
@@ -47,6 +47,7 @@ export class BiggiveCampaignCardFilterGrid {
   filterFunding: string = null;
 
   sortByPlaceholderText = 'Sort by';
+  @State() filterButtonColourScheme = 'primary';
 
   /**
    * Space below component
@@ -179,9 +180,19 @@ export class BiggiveCampaignCardFilterGrid {
   }
 
   private handleApplyFilterButtonClick = () => {
-    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-    console.log(this.el.shadowRoot.getElementById('filter-popup'));
+    const searchAndFilterObj = this.getSearchAndFilterObject();
+    this.doSearchAndFilterUpdate.emit(searchAndFilterObj);
     this.el.shadowRoot.getElementById('filter-popup').closeFromOutside();
+
+    const anyFilterApplied: boolean =
+      searchAndFilterObj.filterBeneficiary !== undefined ||
+      searchAndFilterObj.filterCategory !== undefined ||
+      searchAndFilterObj.filterFunding !== undefined ||
+      searchAndFilterObj.filterLocation !== undefined;
+
+    if (anyFilterApplied) {
+      this.filterButtonColourScheme = 'secondary';
+    }
   };
 
   private handleSearchButtonPressed = () => {
@@ -203,6 +214,7 @@ export class BiggiveCampaignCardFilterGrid {
   };
 
   private handleClearAll = () => {
+    this.filterButtonColourScheme = 'primary';
     this.doClearFilters.emit(true);
   };
 
@@ -245,7 +257,14 @@ export class BiggiveCampaignCardFilterGrid {
             </div>
 
             <div class="filter-wrap">
-              <biggive-button class="filter" onClick={this.handleFilterButtonClick} label="Filters" fullWidth={true} space-below="0"></biggive-button>
+              <biggive-button
+                class="filter"
+                colourScheme={this.filterButtonColourScheme}
+                onClick={this.handleFilterButtonClick}
+                label="Filters"
+                fullWidth={true}
+                space-below="0"
+              ></biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
                 <biggive-form-field-select placeholder="Category" selectedLabel={this.selectedFilterCategory} id="categories" space-below="2">
