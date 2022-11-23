@@ -24,7 +24,7 @@
     position: relative;
     z-index: 1;
     white-space: pre-wrap; // helps render out \n
-    padding: $spacer-6 $spacer-6 $spacer-6 $spacer-0;
+    padding: $spacer-8 $spacer-6 $spacer-6 $spacer-0;
 
     .logo, .logo-space {
       height: 75px;
@@ -39,6 +39,9 @@
         width: 250px;
         position: relative;
 
+        @media (max-width: $screen-desktop-max) {
+          width: 210px;
+        }
         @media (max-width: $screen-tablet-max) {
           width: 200px;
         }
@@ -106,13 +109,24 @@
   .container {
     .sleeve {
       .content-wrap {
-        width: 80%;
+        width: 70%;
+        padding-top: $spacer-8;
       }
     }
   }
 }
 
 @media screen and (max-width: $screen-mobile-max) {
+  .container {
+    .sleeve {
+      .content-wrap {
+        width: 85%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $screen-mobile-small) {
   .container {
     .sleeve {
       .content-wrap {
