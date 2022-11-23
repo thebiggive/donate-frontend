@@ -1,5 +1,5 @@
-import { Component, h, Element, Prop, Event, EventEmitter, Listen, State } from '@stencil/core';
-import { faMagnifyingGlass, faFilterSlash } from '@fortawesome/pro-solid-svg-icons';
+import {Component, Element, Event, EventEmitter, h, Listen, Prop, State} from '@stencil/core';
+import {faFilterSlash, faMagnifyingGlass} from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
   tag: 'biggive-campaign-card-filter-grid',
@@ -47,7 +47,6 @@ export class BiggiveCampaignCardFilterGrid {
   filterFunding: string = null;
 
   sortByPlaceholderText = 'Sort by';
-  @State() filterButtonColourScheme = 'primary';
 
   /**
    * Space below component
@@ -99,6 +98,8 @@ export class BiggiveCampaignCardFilterGrid {
    * JSON array of funding key/values
    */
   @Prop() fundingOptions: string[] = [];
+
+  @Prop() filtersApplied: boolean;
 
   /**
    * This helps us inject a pre-selected dropdown value from outside of this component.
@@ -184,15 +185,11 @@ export class BiggiveCampaignCardFilterGrid {
     this.doSearchAndFilterUpdate.emit(searchAndFilterObj);
     this.el.shadowRoot.getElementById('filter-popup').closeFromOutside();
 
-    const anyFilterApplied: boolean =
-      searchAndFilterObj.filterBeneficiary !== undefined ||
-      searchAndFilterObj.filterCategory !== undefined ||
-      searchAndFilterObj.filterFunding !== undefined ||
-      searchAndFilterObj.filterLocation !== undefined;
-
-    if (anyFilterApplied) {
-      this.filterButtonColourScheme = 'secondary';
-    }
+    this.filtersApplied =
+      typeof searchAndFilterObj.filterBeneficiary === 'string' ||
+      typeof searchAndFilterObj.filterCategory === 'string' ||
+      typeof searchAndFilterObj.filterFunding === 'string' ||
+      typeof searchAndFilterObj.filterLocation === 'string';
   };
 
   private handleSearchButtonPressed = () => {
@@ -214,7 +211,6 @@ export class BiggiveCampaignCardFilterGrid {
   };
 
   private handleClearAll = () => {
-    this.filterButtonColourScheme = 'primary';
     this.doClearFilters.emit(true);
   };
 
@@ -259,7 +255,7 @@ export class BiggiveCampaignCardFilterGrid {
             <div class="filter-wrap">
               <biggive-button
                 class="filter"
-                colourScheme={this.filterButtonColourScheme}
+                colourScheme={this.filtersApplied ? 'secondary' : 'primary'}
                 onClick={this.handleFilterButtonClick}
                 label="Filters"
                 fullWidth={true}
