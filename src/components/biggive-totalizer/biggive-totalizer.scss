@@ -52,11 +52,11 @@
   }
 }
 
-@media screen and (max-width: $screen-mobile-max) {
+@media screen and (max-width: $screen-tablet-max) {
   .container {
     .main-message-wrap {
       @include font-size-medium();
-      padding: $spacer-1 $spacer-2;
+      padding: $spacer-2;
     }
   }
 }
