@@ -43,7 +43,7 @@ describe('biggive-campaign-card-filter-grid', () => {
               </biggive-form-field-select>
             </div>
             <div class="filter-wrap">
-              <biggive-button class="filter" colour-scheme="primary" fullwidth="" label="Filters" space-below="0">
+              <biggive-button class="filter" colourscheme="primary" fullwidth="" label="Filters" space-below="0">
               </biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="colour-primary space-above-0 space-below-3">
