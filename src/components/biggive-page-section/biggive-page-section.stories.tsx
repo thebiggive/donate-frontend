@@ -8,6 +8,13 @@ export default {
         options: [0, 1, 2, 3, 4, 5, 6],
       },
     },
+    maxWidth: {
+      name: 'Max width',
+      control: {
+        type: 'select',
+        options: [10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100],
+      },
+    },
     colourScheme: {
       name: 'Colour scheme',
       control: {
@@ -34,7 +41,8 @@ export default {
 
 const Template = args => `
         <biggive-page-section
-          space-below="${args.spaceBelow}"  
+          space-below="${args.spaceBelow}" 
+          max-width="${args.maxWidth}"  
           colour-scheme="${args.colourScheme}"    
           section-style-top="${args.sectionStyleTop}"
           section-style-bottom="${args.sectionStyleBottom}">
@@ -45,6 +53,7 @@ export const PageSectionComponent = Template.bind({});
 PageSectionComponent.args = {
   colourScheme: 'primary',
   spaceBelow: 4,
+  maxWidth: 100,
   sectionStyleTop: 'straight',
   sectionStyleBottom: 'straight',
 };

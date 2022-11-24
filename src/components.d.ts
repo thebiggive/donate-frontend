@@ -84,6 +84,18 @@ export namespace Components {
          */
         "cardColour": string;
         /**
+          * Clip bottom left corner
+         */
+        "clipBottomLeftCorner": boolean;
+        /**
+          * Clip top right corner
+         */
+        "clipTopRightCorner": boolean;
+        /**
+          * Icon
+         */
+        "icon": boolean;
+        /**
           * Icon colour
          */
         "iconColour": string;
@@ -99,6 +111,10 @@ export namespace Components {
           * Subtitle title
          */
         "subtitle": string;
+        /**
+          * Teaser
+         */
+        "teaser": string;
         /**
           * Text colour
          */
@@ -125,6 +141,24 @@ export namespace Components {
           * Url
          */
         "url": string;
+    }
+    interface BiggiveBiographyCard {
+        /**
+          * Job title
+         */
+        "fullName": string;
+        /**
+          * Full URL of the main image.
+         */
+        "imageUrl": string;
+        /**
+          * Job title
+         */
+        "jobTitle": string;
+        /**
+          * Space below component
+         */
+        "spaceBelow": number;
     }
     interface BiggiveBoxedContent {
         /**
@@ -180,6 +214,10 @@ export namespace Components {
     }
     interface BiggiveButton {
         /**
+          * Centered
+         */
+        "centered": boolean;
+        /**
           * Colour Scheme
          */
         "colourScheme": string;
@@ -203,6 +241,10 @@ export namespace Components {
           * Text
          */
         "label": string;
+        /**
+          * New Tab
+         */
+        "openInNewTab": boolean;
         /**
           * Rounded corners
          */
@@ -393,6 +435,7 @@ export namespace Components {
           * JSON array of category key/values
          */
         "categoryOptions": string[];
+        "filtersApplied": boolean;
         /**
           * JSON array of funding key/values
          */
@@ -550,6 +593,10 @@ export namespace Components {
          */
         "defaultTextColour": string;
         /**
+          * Width
+         */
+        "maxWidth": number;
+        /**
           * Space below component
          */
         "spaceBelow": number;
@@ -591,6 +638,14 @@ export namespace Components {
           * HTML element
          */
         "htmlElement": string;
+        /**
+          * Icon
+         */
+        "icon": boolean;
+        /**
+          * Icon colour
+         */
+        "iconColour": string;
         /**
           * Heading size
          */
@@ -820,6 +875,10 @@ export namespace Components {
          */
         "colourScheme": string;
         /**
+          * Width
+         */
+        "maxWidth": number;
+        /**
           * Section style bottom
          */
         "sectionStyleBottom": string;
@@ -1026,6 +1085,10 @@ export interface BiggiveButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLBiggiveButtonElement;
 }
+export interface BiggiveCampaignCardCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLBiggiveCampaignCardElement;
+}
 export interface BiggiveCampaignCardFilterGridCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLBiggiveCampaignCardFilterGridElement;
@@ -1066,6 +1129,12 @@ declare global {
     var HTMLBiggiveBeneficiaryIconElement: {
         prototype: HTMLBiggiveBeneficiaryIconElement;
         new (): HTMLBiggiveBeneficiaryIconElement;
+    };
+    interface HTMLBiggiveBiographyCardElement extends Components.BiggiveBiographyCard, HTMLStencilElement {
+    }
+    var HTMLBiggiveBiographyCardElement: {
+        prototype: HTMLBiggiveBiographyCardElement;
+        new (): HTMLBiggiveBiographyCardElement;
     };
     interface HTMLBiggiveBoxedContentElement extends Components.BiggiveBoxedContent, HTMLStencilElement {
     }
@@ -1306,6 +1375,7 @@ declare global {
         "biggive-back-to-top": HTMLBiggiveBackToTopElement;
         "biggive-basic-card": HTMLBiggiveBasicCardElement;
         "biggive-beneficiary-icon": HTMLBiggiveBeneficiaryIconElement;
+        "biggive-biography-card": HTMLBiggiveBiographyCardElement;
         "biggive-boxed-content": HTMLBiggiveBoxedContentElement;
         "biggive-branded-image": HTMLBiggiveBrandedImageElement;
         "biggive-button": HTMLBiggiveButtonElement;
@@ -1426,6 +1496,18 @@ declare namespace LocalJSX {
          */
         "cardColour"?: string;
         /**
+          * Clip bottom left corner
+         */
+        "clipBottomLeftCorner"?: boolean;
+        /**
+          * Clip top right corner
+         */
+        "clipTopRightCorner"?: boolean;
+        /**
+          * Icon
+         */
+        "icon"?: boolean;
+        /**
           * Icon colour
          */
         "iconColour"?: string;
@@ -1441,6 +1523,10 @@ declare namespace LocalJSX {
           * Subtitle title
          */
         "subtitle"?: string;
+        /**
+          * Teaser
+         */
+        "teaser"?: string;
         /**
           * Text colour
          */
@@ -1467,6 +1553,24 @@ declare namespace LocalJSX {
           * Url
          */
         "url"?: string;
+    }
+    interface BiggiveBiographyCard {
+        /**
+          * Job title
+         */
+        "fullName"?: string;
+        /**
+          * Full URL of the main image.
+         */
+        "imageUrl"?: string;
+        /**
+          * Job title
+         */
+        "jobTitle"?: string;
+        /**
+          * Space below component
+         */
+        "spaceBelow"?: number;
     }
     interface BiggiveBoxedContent {
         /**
@@ -1522,6 +1626,10 @@ declare namespace LocalJSX {
     }
     interface BiggiveButton {
         /**
+          * Centered
+         */
+        "centered"?: boolean;
+        /**
           * Colour Scheme
          */
         "colourScheme"?: string;
@@ -1546,6 +1654,10 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         "onDoButtonClick"?: (event: BiggiveButtonCustomEvent<{ event: object; url: string }>) => void;
+        /**
+          * New Tab
+         */
+        "openInNewTab"?: boolean;
         /**
           * Rounded corners
          */
@@ -1694,6 +1806,7 @@ declare namespace LocalJSX {
           * More information button url
          */
         "moreInfoButtonUrl"?: string;
+        "onDoCardGeneralClick"?: (event: BiggiveCampaignCardCustomEvent<{ event: object; url: string }>) => void;
         /**
           * Display name of the charity or non-profit.
          */
@@ -1736,6 +1849,7 @@ declare namespace LocalJSX {
           * JSON array of category key/values
          */
         "categoryOptions"?: string[];
+        "filtersApplied"?: boolean;
         /**
           * JSON array of funding key/values
          */
@@ -1916,6 +2030,10 @@ declare namespace LocalJSX {
          */
         "defaultTextColour"?: string;
         /**
+          * Width
+         */
+        "maxWidth"?: number;
+        /**
           * Space below component
          */
         "spaceBelow"?: number;
@@ -1957,6 +2075,14 @@ declare namespace LocalJSX {
           * HTML element
          */
         "htmlElement"?: string;
+        /**
+          * Icon
+         */
+        "icon"?: boolean;
+        /**
+          * Icon colour
+         */
+        "iconColour"?: string;
         /**
           * Heading size
          */
@@ -2186,6 +2312,10 @@ declare namespace LocalJSX {
          */
         "colourScheme"?: string;
         /**
+          * Width
+         */
+        "maxWidth"?: number;
+        /**
           * Section style bottom
          */
         "sectionStyleBottom"?: string;
@@ -2394,6 +2524,7 @@ declare namespace LocalJSX {
         "biggive-back-to-top": BiggiveBackToTop;
         "biggive-basic-card": BiggiveBasicCard;
         "biggive-beneficiary-icon": BiggiveBeneficiaryIcon;
+        "biggive-biography-card": BiggiveBiographyCard;
         "biggive-boxed-content": BiggiveBoxedContent;
         "biggive-branded-image": BiggiveBrandedImage;
         "biggive-button": BiggiveButton;
@@ -2443,6 +2574,7 @@ declare module "@stencil/core" {
             "biggive-back-to-top": LocalJSX.BiggiveBackToTop & JSXBase.HTMLAttributes<HTMLBiggiveBackToTopElement>;
             "biggive-basic-card": LocalJSX.BiggiveBasicCard & JSXBase.HTMLAttributes<HTMLBiggiveBasicCardElement>;
             "biggive-beneficiary-icon": LocalJSX.BiggiveBeneficiaryIcon & JSXBase.HTMLAttributes<HTMLBiggiveBeneficiaryIconElement>;
+            "biggive-biography-card": LocalJSX.BiggiveBiographyCard & JSXBase.HTMLAttributes<HTMLBiggiveBiographyCardElement>;
             "biggive-boxed-content": LocalJSX.BiggiveBoxedContent & JSXBase.HTMLAttributes<HTMLBiggiveBoxedContentElement>;
             "biggive-branded-image": LocalJSX.BiggiveBrandedImage & JSXBase.HTMLAttributes<HTMLBiggiveBrandedImageElement>;
             "biggive-button": LocalJSX.BiggiveButton & JSXBase.HTMLAttributes<HTMLBiggiveButtonElement>;

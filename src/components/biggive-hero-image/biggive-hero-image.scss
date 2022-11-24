@@ -24,34 +24,29 @@
     position: relative;
     z-index: 1;
     white-space: pre-wrap; // helps render out \n
-    padding: $spacer-10 $spacer-6 $spacer-6 $spacer-0;
+    padding: $spacer-8 $spacer-6 $spacer-6 $spacer-0;
 
     .logo, .logo-space {
       height: 75px;
     }
 
     .logo {
-      margin-bottom: $spacer-4;
       background-size: contain;
       background-repeat: no-repeat;
       background-position: left center;
+
       img {
-        width: 200px;
-        // usually logos have some padding, so let's shift the logo left a bit
+        width: 250px;
         position: relative;
-        left: -20px;
 
         @media (max-width: $screen-desktop-max) {
-          top: 20px;
-          width: 180px;
+          width: 210px;
         }
         @media (max-width: $screen-tablet-max) {
-          top: 40px;
-          width: 160px;
+          width: 200px;
         }
         @media (max-width: $screen-mobile-max) {
-          top: 60px;
-          width: 140px;
+          width: 180px;
         } 
       }
     }
@@ -63,7 +58,7 @@
     }
     h1 {
       @include heading-1;
-      margin: 50px 0 $spacer-3 0; // Increased top from 0 to 50px for now to support absolute-overlaid search form.
+      margin: 0 0 $spacer-3 0;
       padding: 0;
 
       @media (max-width: $screen-desktop-max) {
@@ -114,13 +109,24 @@
   .container {
     .sleeve {
       .content-wrap {
-        width: 80%;
+        width: 70%;
+        padding-top: $spacer-8;
       }
     }
   }
 }
 
 @media screen and (max-width: $screen-mobile-max) {
+  .container {
+    .sleeve {
+      .content-wrap {
+        width: 85%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $screen-mobile-small) {
   .container {
     .sleeve {
       .content-wrap {

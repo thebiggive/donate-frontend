@@ -7,6 +7,7 @@
   @include standard-font();
   overflow: hidden;
   position: relative;
+  text-align: center;
   .sleeve {
     @include section-container();
     padding: $spacer-4;
@@ -47,11 +48,34 @@
 
 .container .sleeve {
   position: relative;
+  text-align: left;
 }
+
+.container.max-width-10 .sleeve { @include max-width-10(); }
+.container.max-width-15 .sleeve { @include max-width-15(); }
+.container.max-width-20 .sleeve { @include max-width-20(); }
+.container.max-width-25 .sleeve { @include max-width-25(); }
+.container.max-width-30 .sleeve { @include max-width-30(); }
+.container.max-width-35 .sleeve { @include max-width-35(); }
+.container.max-width-40 .sleeve { @include max-width-40(); }
+.container.max-width-45 .sleeve { @include max-width-45(); }
+.container.max-width-50 .sleeve { @include max-width-50(); }
+.container.max-width-55 .sleeve { @include max-width-55(); }
+.container.max-width-60 .sleeve { @include max-width-60(); }
+.container.max-width-65 .sleeve { @include max-width-65(); }
+.container.max-width-70 .sleeve { @include max-width-70(); }
+.container.max-width-75 .sleeve { @include max-width-75(); }
+.container.max-width-80 .sleeve { @include max-width-80(); }
+.container.max-width-85 .sleeve { @include max-width-85(); }
+.container.max-width-90 .sleeve { @include max-width-90(); }
+.container.max-width-95 .sleeve { @include max-width-95(); }
+
+
 
 .container .sleeve:before {
   content: '';
   position: absolute;
+  z-index: -1;
   left: 50%;
   transform: translateX(-50%);
   width: 100vw;

@@ -26,11 +26,25 @@ export class BiggivePageSection {
    */
   @Prop() colourScheme: string = null;
 
+  /**
+   * Width
+   */
+  @Prop() maxWidth: number = 100;
+
   render() {
     return (
       <div
         class={
-          'container space-below-' + this.spaceBelow + ' background-color-' + this.colourScheme + ' style-top-' + this.sectionStyleTop + ' style-bottom-' + this.sectionStyleBottom
+          'container max-width-' +
+          this.maxWidth +
+          ' space-below-' +
+          this.spaceBelow +
+          ' background-color-' +
+          this.colourScheme +
+          ' style-top-' +
+          this.sectionStyleTop +
+          ' style-bottom-' +
+          this.sectionStyleBottom
         }
       >
         <div class="sleeve">

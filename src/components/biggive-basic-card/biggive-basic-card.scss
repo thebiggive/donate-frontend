@@ -9,11 +9,29 @@
   background-size: cover;
   background-position: center center;
   padding: $spacer-4;
+  height: 100%;
   white-space: pre-wrap; // helps render out \n
   .sleeve {
     padding: $spacer-4;
-    @include corner-clip-medium-bottom-left-top-right();
+    height: 100%;
+    box-sizing: border-box;
   }
+  &.clip-bottom-left-corner-false.clip-top-right-corner-true {
+    .sleeve {
+      @include corner-clip-medium-top-right();
+    }
+  }
+  &.clip-bottom-left-corner-true.clip-top-right-corner-false {
+    .sleeve {
+      @include corner-clip-medium-bottom-left();
+    }
+  }
+  &.clip-bottom-left-corner-true.clip-top-right-corner-true {
+    .sleeve {
+      @include corner-clip-medium-bottom-left-top-right();
+    }
+  }
+  
   .icon {
     svg {
       width: 50px;

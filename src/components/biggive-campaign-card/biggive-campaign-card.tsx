@@ -1,4 +1,4 @@
-import { Component, Prop, h } from '@stencil/core';
+import { Component, Event, EventEmitter, h, Prop } from '@stencil/core';
 
 @Component({
   tag: 'biggive-campaign-card',
@@ -6,6 +6,14 @@ import { Component, Prop, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveCampaignCard {
+  @Event({
+    eventName: 'doCardGeneralClick',
+    composed: true,
+    cancelable: true,
+    bubbles: true,
+  })
+  doCardGeneralClick: EventEmitter<{ event: object; url: string }>;
+
   /**
    * Space below component
    */
@@ -103,9 +111,13 @@ export class BiggiveCampaignCard {
    */
   @Prop() datetime: string;
 
+  private handleCardGeneralClick = (event: any) => {
+    this.doCardGeneralClick.emit({ event, url: this.moreInfoButtonUrl });
+  };
+
   render() {
     return (
-      <div class={'container space-below-' + this.spaceBelow.toString()}>
+      <div class={'container space-below-' + this.spaceBelow.toString()} onClick={this.handleCardGeneralClick}>
         <div class="sleeve">
           {this.campaignType !== null ? (
             <div class="campaign-type">
