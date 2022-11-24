@@ -22,7 +22,7 @@ export class BiggiveFormattedText {
 
   render() {
     return (
-      <div class={'container container max-width-' + this.maxWidth + ' text-colour-' + this.defaultTextColour + ' space-below-' + this.spaceBelow}>
+      <div class={'container max-width-' + this.maxWidth + ' text-colour-' + this.defaultTextColour + ' space-below-' + this.spaceBelow}>
         <slot></slot>
       </div>
     );
