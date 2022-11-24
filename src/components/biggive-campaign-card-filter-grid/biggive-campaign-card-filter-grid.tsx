@@ -1,5 +1,5 @@
-import {Component, Element, Event, EventEmitter, h, Listen, Prop, State} from '@stencil/core';
-import {faFilterSlash, faMagnifyingGlass} from '@fortawesome/pro-solid-svg-icons';
+import { Component, Element, Event, EventEmitter, h, Listen, Prop, State } from '@stencil/core';
+import { faFilterSlash, faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
   tag: 'biggive-campaign-card-filter-grid',
