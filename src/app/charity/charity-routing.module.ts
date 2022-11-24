@@ -6,6 +6,7 @@ import { CharityComponent } from './charity.component';
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
     component: CharityComponent,
   },
 ];
