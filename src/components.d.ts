@@ -439,6 +439,7 @@ export namespace Components {
           * JSON array of category key/values
          */
         "categoryOptions": string[];
+        "filtersApplied": boolean;
         /**
           * JSON array of funding key/values
          */
@@ -1856,6 +1857,7 @@ declare namespace LocalJSX {
           * JSON array of category key/values
          */
         "categoryOptions"?: string[];
+        "filtersApplied"?: boolean;
         /**
           * JSON array of funding key/values
          */

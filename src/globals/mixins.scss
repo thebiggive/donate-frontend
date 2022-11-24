@@ -485,11 +485,12 @@
 }
 
 @mixin button-secondary {
-  color: $colour-primary;
+  color: $colour-black;
   background-color: $colour-secondary;
   border-color: $colour-secondary;
   &:hover {
     background-color: $colour-white;
+    border-color: $colour-black;
   }
 }
 
