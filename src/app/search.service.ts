@@ -146,15 +146,6 @@ export class SearchService {
     }
   }
 
-  resetFilters() {
-    const defaults = SearchService.selectedDefaults();
-    this.selected.category = defaults.category;
-    this.selected.beneficiary = defaults.beneficiary;
-    this.selected.country = defaults.country;
-    this.selected.onlyMatching = defaults.onlyMatching;
-    this.changed.emit(true);
-  }
-
   search(term: string, defaultSort: string) {
     this.nonDefaultsActive = true;
     this.selected.term = term;
