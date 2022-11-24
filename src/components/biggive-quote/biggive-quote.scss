@@ -5,6 +5,7 @@
 .container {
   @include all-round-shadow();
   @include standard-font();
+  height: 100%;
   background-color: white;
   text-align: center;
   margin-left: auto;

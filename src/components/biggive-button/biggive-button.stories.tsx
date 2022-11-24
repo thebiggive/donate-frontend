@@ -32,6 +32,9 @@ export default {
     url: {
       name: 'Url',
     },
+    openInNewTab: {
+      name: 'Open in new tab',
+    },
     fullWidth: {
       name: 'Full width',
     },
@@ -45,6 +48,9 @@ export default {
     rounded: {
       name: 'Rounded',
     },
+    centered: {
+      name: 'Centered',
+    },
   },
 };
 
@@ -57,9 +63,11 @@ const Template = args => `
       datetime="${args.datetime}"
       label="${args.label}"
       url="${args.url}"
+      open-in-new-tab="${args.openInNewTab}"
       full-width=${args.fullWidth}
       size=${args.size}
       rounded=${args.rounded}
+      centered=${args.centered}
     </biggive-button>
     `;
 
@@ -72,7 +80,9 @@ ButtonComponent.args = {
   datetime: '29/11/2022, 12:00',
   label: 'Donate now',
   url: 'http://www.google.com',
+  openInNewTab: false,
   fullWidth: false,
   size: 'medium',
   rounded: false,
+  centered: false,
 };

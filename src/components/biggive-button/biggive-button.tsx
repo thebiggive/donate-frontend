@@ -35,6 +35,11 @@ export class BiggiveButton {
   @Prop() url: string = undefined;
 
   /**
+   * New Tab
+   */
+  @Prop() openInNewTab: boolean = false;
+
+  /**
    * Display full width
    */
   @Prop() fullWidth: boolean = false;
@@ -48,6 +53,16 @@ export class BiggiveButton {
    * Rounded corners
    */
   @Prop() rounded: boolean = false;
+
+  /**
+   * Shadow
+   */
+  @Prop() shadow: boolean = true;
+
+  /**
+   * Centered
+   */
+  @Prop() centered: boolean = false;
 
   /**
    * Boolean flag telling the component if the campaign is in the future (not open yet).
@@ -76,7 +91,7 @@ export class BiggiveButton {
 
   render() {
     return (
-      <div class={'container space-below-' + this.spaceBelow}>
+      <div class={'container space-below-' + this.spaceBelow + ' centered-' + this.centered}>
         {this.isFutureCampaign || this.isPastCampaign ? (
           <div class="msg-wrapper">
             <biggive-misc-icon background-colour="white" icon-colour="black" icon="Timer"></biggive-misc-icon>
@@ -85,7 +100,19 @@ export class BiggiveButton {
         ) : (
           <a
             href={this.url}
-            class={'button button-' + this.colourScheme + ' full-width-' + this.fullWidth.toString() + ' size-' + this.size + ' rounded-' + this.rounded.toString()}
+            target={this.openInNewTab ? '_blank' : '_self'}
+            class={
+              'button button-' +
+              this.colourScheme +
+              ' full-width-' +
+              this.fullWidth.toString() +
+              ' size-' +
+              this.size +
+              ' rounded-' +
+              this.rounded.toString() +
+              ' shadow-' +
+              this.shadow.toString()
+            }
           >
             <span onClick={this.handleButtonClick}>{this.label}</span>
           </a>

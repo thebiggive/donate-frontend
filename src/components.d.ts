@@ -84,6 +84,18 @@ export namespace Components {
          */
         "cardColour": string;
         /**
+          * Clip bottom left corner
+         */
+        "clipBottomLeftCorner": boolean;
+        /**
+          * Clip top right corner
+         */
+        "clipTopRightCorner": boolean;
+        /**
+          * Icon
+         */
+        "icon": boolean;
+        /**
           * Icon colour
          */
         "iconColour": string;
@@ -202,6 +214,10 @@ export namespace Components {
     }
     interface BiggiveButton {
         /**
+          * Centered
+         */
+        "centered": boolean;
+        /**
           * Colour Scheme
          */
         "colourScheme": string;
@@ -226,9 +242,17 @@ export namespace Components {
          */
         "label": string;
         /**
+          * New Tab
+         */
+        "openInNewTab": boolean;
+        /**
           * Rounded corners
          */
         "rounded": boolean;
+        /**
+          * Shadow
+         */
+        "shadow": boolean;
         /**
           * Size
          */
@@ -572,6 +596,10 @@ export namespace Components {
          */
         "defaultTextColour": string;
         /**
+          * Width
+         */
+        "maxWidth": number;
+        /**
           * Space below component
          */
         "spaceBelow": number;
@@ -613,6 +641,14 @@ export namespace Components {
           * HTML element
          */
         "htmlElement": string;
+        /**
+          * Icon
+         */
+        "icon": boolean;
+        /**
+          * Icon colour
+         */
+        "iconColour": string;
         /**
           * Heading size
          */
@@ -1463,6 +1499,18 @@ declare namespace LocalJSX {
          */
         "cardColour"?: string;
         /**
+          * Clip bottom left corner
+         */
+        "clipBottomLeftCorner"?: boolean;
+        /**
+          * Clip top right corner
+         */
+        "clipTopRightCorner"?: boolean;
+        /**
+          * Icon
+         */
+        "icon"?: boolean;
+        /**
           * Icon colour
          */
         "iconColour"?: string;
@@ -1581,6 +1629,10 @@ declare namespace LocalJSX {
     }
     interface BiggiveButton {
         /**
+          * Centered
+         */
+        "centered"?: boolean;
+        /**
           * Colour Scheme
          */
         "colourScheme"?: string;
@@ -1606,9 +1658,17 @@ declare namespace LocalJSX {
         "label"?: string;
         "onDoButtonClick"?: (event: BiggiveButtonCustomEvent<{ event: object; url: string }>) => void;
         /**
+          * New Tab
+         */
+        "openInNewTab"?: boolean;
+        /**
           * Rounded corners
          */
         "rounded"?: boolean;
+        /**
+          * Shadow
+         */
+        "shadow"?: boolean;
         /**
           * Size
          */
@@ -1976,6 +2036,10 @@ declare namespace LocalJSX {
          */
         "defaultTextColour"?: string;
         /**
+          * Width
+         */
+        "maxWidth"?: number;
+        /**
           * Space below component
          */
         "spaceBelow"?: number;
@@ -2017,6 +2081,14 @@ declare namespace LocalJSX {
           * HTML element
          */
         "htmlElement"?: string;
+        /**
+          * Icon
+         */
+        "icon"?: boolean;
+        /**
+          * Icon colour
+         */
+        "iconColour"?: string;
         /**
           * Heading size
          */
