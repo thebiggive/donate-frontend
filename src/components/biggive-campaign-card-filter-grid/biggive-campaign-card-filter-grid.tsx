@@ -211,8 +211,14 @@ export class BiggiveCampaignCardFilterGrid {
   };
 
   private handleClearAll = () => {
+    this.filtersApplied = false;
     this.doClearFilters.emit(true);
   };
+
+  componentWillRender() {
+    this.filtersApplied =
+      this.selectedFilterCategory !== null || this.selectedFilterBeneficiary !== null || this.selectedFilterFunding !== null || this.selectedFilterLocation !== null;
+  }
 
   render() {
     return (
