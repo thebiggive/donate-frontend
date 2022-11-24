@@ -15,9 +15,14 @@ export class BiggiveFormattedText {
    */
   @Prop() defaultTextColour: string = 'primary';
 
+  /**
+   * Width
+   */
+  @Prop() maxWidth: number = 100;
+
   render() {
     return (
-      <div class={'container text-colour-' + this.defaultTextColour + ' space-below-' + this.spaceBelow}>
+      <div class={'container max-width-' + this.maxWidth + ' text-colour-' + this.defaultTextColour + ' space-below-' + this.spaceBelow}>
         <slot></slot>
       </div>
     );

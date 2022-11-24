@@ -32,6 +32,9 @@ export default {
         options: ['primary', 'secondary', 'tertiary', 'white', 'black', 'transparent'],
       },
     },
+    icon: {
+      name: 'Icon',
+    },
     iconColour: {
       name: 'Icon colour',
       control: {
@@ -61,6 +64,12 @@ export default {
         options: ['primary', 'secondary', 'tertiary', 'white', 'black', 'clear-primary', 'clear-secondary', 'clear-tertiary', 'clear-white', 'clear-black'],
       },
     },
+    clipBottomLeftCorner: {
+      name: 'Clip bottom left corner',
+    },
+    clipTopRight: {
+      name: 'Clip top right corner',
+    },
   },
 };
 
@@ -71,13 +80,16 @@ const Template = args => `
                 background-image-url="${args.backgroundImageUrl}"
                 card-colour="${args.cardColour}"
                 text-colour="${args.textColour}"
+                icon="${args.icon}"
                 icon-colour="${args.iconColour}"
                 mainTitle="${args.mainTitle}"
                 subtitle="${args.subtitle}"
                 teaser="${args.teaser}"
-                buttonLabel="${args.buttonLabel}"
-                buttonUrl="${args.buttonUrl}"
-                buttonColourScheme="${args.buttonColourScheme}"
+                button-label="${args.buttonLabel}"
+                button-url="${args.buttonUrl}"
+                button-colour-ccheme="${args.buttonColourScheme}"
+                clip-bottom-left-corner="${args.clipBottomLeftCorner}"
+                clip-top-right-corner="${args.clipTopRightCorner}"
                 >
               </biggive-basic-card>
               `;
@@ -85,6 +97,7 @@ const Template = args => `
 export const BasicCardComponent = Template.bind({});
 BasicCardComponent.args = {
   spaceBelow: 4,
+  icon: true,
   iconColour: 'primary',
   backgroundColour: 'white',
   backgroundImageUrl: 'https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693',
@@ -96,4 +109,6 @@ BasicCardComponent.args = {
   buttonUrl: '#',
   buttonLabel: 'Click here',
   buttonColourScheme: 'clear-primary',
+  clipBottomLeftCorner: true,
+  clipTopRightCorner: true,
 };

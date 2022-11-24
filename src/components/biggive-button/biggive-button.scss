@@ -11,6 +11,9 @@
       display: block;
     }
   }
+  &.centered-true {
+    text-align: center;
+  }
 
   .msg-wrapper {
     display: flex;
