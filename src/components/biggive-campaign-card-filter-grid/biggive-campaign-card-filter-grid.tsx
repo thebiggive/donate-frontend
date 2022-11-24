@@ -1,5 +1,5 @@
-import { Component, h, Element, Prop, Event, EventEmitter, Listen } from '@stencil/core';
-import { faMagnifyingGlass, faFilterSlash } from '@fortawesome/pro-solid-svg-icons';
+import { Component, Element, Event, EventEmitter, h, Listen, Prop, State } from '@stencil/core';
+import { faFilterSlash, faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
   tag: 'biggive-campaign-card-filter-grid',
@@ -99,6 +99,8 @@ export class BiggiveCampaignCardFilterGrid {
    */
   @Prop() fundingOptions: string[] = [];
 
+  @Prop() filtersApplied: boolean;
+
   /**
    * This helps us inject a pre-selected dropdown value from outside of this component.
    * This is especially helpful for the Meta campaign and Explore pages, where searching
@@ -179,9 +181,15 @@ export class BiggiveCampaignCardFilterGrid {
   }
 
   private handleApplyFilterButtonClick = () => {
-    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-    console.log(this.el.shadowRoot.getElementById('filter-popup'));
+    const searchAndFilterObj = this.getSearchAndFilterObject();
+    this.doSearchAndFilterUpdate.emit(searchAndFilterObj);
     this.el.shadowRoot.getElementById('filter-popup').closeFromOutside();
+
+    this.filtersApplied =
+      typeof searchAndFilterObj.filterBeneficiary === 'string' ||
+      typeof searchAndFilterObj.filterCategory === 'string' ||
+      typeof searchAndFilterObj.filterFunding === 'string' ||
+      typeof searchAndFilterObj.filterLocation === 'string';
   };
 
   private handleSearchButtonPressed = () => {
@@ -245,7 +253,14 @@ export class BiggiveCampaignCardFilterGrid {
             </div>
 
             <div class="filter-wrap">
-              <biggive-button class="filter" onClick={this.handleFilterButtonClick} label="Filters" fullWidth={true} space-below="0"></biggive-button>
+              <biggive-button
+                class="filter"
+                colourScheme={this.filtersApplied ? 'secondary' : 'primary'}
+                onClick={this.handleFilterButtonClick}
+                label="Filters"
+                fullWidth={true}
+                space-below="0"
+              ></biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
                 <biggive-form-field-select placeholder="Category" selectedLabel={this.selectedFilterCategory} id="categories" space-below="2">

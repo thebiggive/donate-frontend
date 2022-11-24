@@ -51,6 +51,13 @@ export default {
         type: 'select',
       },
     },
+    filtersApplied: {
+      name: 'Filters applied',
+      options: [true, false],
+      control: {
+        type: 'select',
+      },
+    },
   },
 };
 
@@ -61,6 +68,7 @@ const Template = args => `
         location-options="${args.locationOptions}"
         funding-options="${args.fundingOptions}"
         search-text="${args.searchText}"
+        filters-applied="${args.filtersApplied}",
         selected-sort-by-option="${args.selectedSortByOption}"
         selected-filter-categeory="${args.selectedFilterCategory}"
         selected-filter-beneficiary="${args.selectedFilterBeneficiary}"
@@ -70,37 +78,37 @@ const Template = args => `
       <biggive-grid slot="campaign-grid" column-count="3">
         <biggive-campaign-card
           campaign-type="Match Funded"
-          campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community" 
+          campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community"
           organisation-name="Oxford Philharmonic Orchestra"
-          currency-code="GBP" 
-          primary-figure-label="Total Raised" 
-          primary-figure-amount="76543" 
-          secondary-figure-label="Total Raised" 
-          secondary-figure-amount="76543" 
+          currency-code="GBP"
+          primary-figure-label="Total Raised"
+          primary-figure-amount="76543"
+          secondary-figure-label="Total Raised"
+          secondary-figure-amount="76543"
           progress-bar-counter="75">
         </biggive-campaign-card>
-        <biggive-campaign-card 
+        <biggive-campaign-card
           data-filter-categories="[&quot;Healthcare&quot;]"
           data-filter-beneficiaries="[&quot;Children&quot;]"
-          campaign-type="Match Funded" 
-          campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community" 
+          campaign-type="Match Funded"
+          campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community"
           organisation-name="Oxford Philharmonic Orchestra"
-          currency-code="GBP" 
-          primary-figure-label="Total Raised" 
-          primary-figure-amount="76543" 
-          secondary-figure-label="Total Raised" 
+          currency-code="GBP"
+          primary-figure-label="Total Raised"
+          primary-figure-amount="76543"
+          secondary-figure-label="Total Raised"
           secondary-figure-amount="76543">
         </biggive-campaign-card>
-        <biggive-campaign-card 
+        <biggive-campaign-card
           data-filter-categories="[&quot;Healthcare&quot;]"
           data-filter-beneficiaries="[&quot;Children&quot;]"
-          campaign-type="Match Funded" 
-          campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community" 
+          campaign-type="Match Funded"
+          campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community"
           organisation-name="Oxford Philharmonic Orchestra"
-          currency-code="GBP" 
-          primary-figure-label="Total Raised" 
-          primary-figure-amount="76543" 
-          secondary-figure-label="Total Raised" 
+          currency-code="GBP"
+          primary-figure-label="Total Raised"
+          primary-figure-amount="76543"
+          secondary-figure-label="Total Raised"
           secondary-figure-amount="76543">
         </biggive-campaign-card>
       </biggive-grid>
@@ -122,4 +130,5 @@ CampaignCardFilterGridComponent.args = {
   selectedFilterBeneficiary: 'Beneficiary', // use the placeholder as the defaulted option
   selectedFilterLocation: 'Location', // use the placeholder as the defaulted option
   selectedFilterFunding: 'Funding', // use the placeholder as the defaulted option
+  filtersApplied: false,
 };
