@@ -49,7 +49,12 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   private routeParamSubscription: Subscription;
   private searchServiceSubscription: Subscription;
   private shouldAutoScroll: boolean;
-  private smallestSignificantScrollPx = 100;
+  // For some reason, macOS Safari on return with autoscroll enabled gave values like 192 for
+  // this, whereas Chrome had a smaller number (50-60 px?). We don't want to mistake auto
+  // behaviour for user scroll intervention on *any* platform because it breaks automatic
+  // scrolling back to the previous metacampaign position, so to be safe we use the highest
+  // scroll Y we've seen without intervention, plus a ~25% buffer.
+  private smallestSignificantScrollPx = 250;
 
   private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v2`; // Key is per-domain/env
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
