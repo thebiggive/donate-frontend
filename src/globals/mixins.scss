@@ -368,7 +368,7 @@
   border-radius: 5px;
   border: 1px solid $colour-black;
   background-color: $colour-black;
-  filter: drop-shadow(0px 8px 20px rgba(0, 0, 0, 0.22));
+  // filter: drop-shadow(0px 8px 20px rgba(0, 0, 0, 0.22));
   color: $colour-white;
   display: inline-block;
   text-decoration: none;
@@ -502,11 +502,11 @@
 }
 
 @mixin lower-shadow() {
-  filter: drop-shadow(-1px 3px 12px rgba(0,0,0,0.25));
+  // filter: drop-shadow(-1px 3px 12px rgba(0,0,0,0.25));
 }
 
 @mixin all-round-shadow() {
-  box-shadow: 0px 0px 30px rgb(0 0 0 / 20%);
+  // box-shadow: 0px 0px 30px rgb(0 0 0 / 20%);
 }
 
 // Shapes
