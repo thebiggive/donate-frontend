@@ -76,7 +76,8 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
   @HostListener('doClearFilters', ['$event'])
   onDoClearFilters(event: CustomEvent) {
-    this.searchService.resetFilters();
+    this.searchService.reset(this.getDefaultSort(), false);
+    this.setQueryParams();
   }
 
   @HostListener('doCardGeneralClick', ['$event'])
