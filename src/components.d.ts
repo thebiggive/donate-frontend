@@ -250,10 +250,6 @@ export namespace Components {
          */
         "rounded": boolean;
         /**
-          * Shadow
-         */
-        "shadow": boolean;
-        /**
           * Size
          */
         "size": string;
@@ -1666,10 +1662,6 @@ declare namespace LocalJSX {
           * Rounded corners
          */
         "rounded"?: boolean;
-        /**
-          * Shadow
-         */
-        "shadow"?: boolean;
         /**
           * Size
          */

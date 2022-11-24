@@ -55,11 +55,6 @@ export class BiggiveButton {
   @Prop() rounded: boolean = false;
 
   /**
-   * Shadow
-   */
-  @Prop() shadow: boolean = true;
-
-  /**
    * Centered
    */
   @Prop() centered: boolean = false;
@@ -98,18 +93,7 @@ export class BiggiveButton {
           <a
             href={this.url}
             target={this.openInNewTab ? '_blank' : '_self'}
-            class={
-              'button button-' +
-              this.colourScheme +
-              ' full-width-' +
-              this.fullWidth.toString() +
-              ' size-' +
-              this.size +
-              ' rounded-' +
-              this.rounded.toString() +
-              ' shadow-' +
-              this.shadow.toString()
-            }
+            class={'button button-' + this.colourScheme + ' full-width-' + this.fullWidth.toString() + ' size-' + this.size + ' rounded-' + this.rounded.toString()}
           >
             <span onClick={this.handleButtonClick}>{this.label}</span>
           </a>
