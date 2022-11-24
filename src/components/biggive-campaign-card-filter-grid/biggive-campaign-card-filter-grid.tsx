@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, h, Listen, Prop, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, h, Listen, Prop } from '@stencil/core';
 import { faFilterSlash, faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
