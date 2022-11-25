@@ -12,7 +12,7 @@ export default {
       name: 'Default text colour',
       control: {
         type: 'select',
-        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+        options: ['primary', 'secondary', 'tertiary', 'brand-1', 'brand-2', 'brand-3', 'brand-4', 'brand-5', 'brand-6', 'white', 'black'],
       },
     },
     imageUrl: {
@@ -28,7 +28,7 @@ export default {
       name: 'Slug colour',
       control: {
         type: 'select',
-        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+        options: ['primary', 'secondary', 'tertiary', 'brand-1', 'brand-2', 'brand-3', 'brand-4', 'brand-5', 'brand-6', 'white', 'black'],
       },
     },
     mainTitle: {
@@ -38,7 +38,7 @@ export default {
       name: 'Main title colour',
       control: {
         type: 'select',
-        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+        options: ['primary', 'secondary', 'tertiary', 'brand-1', 'brand-2', 'brand-3', 'brand-4', 'brand-5', 'brand-6', 'white', 'black'],
       },
     },
     teaser: {
@@ -48,7 +48,7 @@ export default {
       name: 'Teaser colour',
       control: {
         type: 'select',
-        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+        options: ['primary', 'secondary', 'tertiary', 'brand-1', 'brand-2', 'brand-3', 'brand-4', 'brand-5', 'brand-6', 'white', 'black'],
       },
     },
     buttonUrl: {
@@ -61,7 +61,24 @@ export default {
       name: 'Button colour scheme',
       control: {
         type: 'select',
-        options: ['primary', 'secondary', 'tertiary', 'white', 'black', 'clear-primary', 'clear-secondary', 'clear-tertiary', 'clear-white', 'clear-black'],
+        options: [
+          'primary',
+          'secondary',
+          'tertiary',
+          'brand-1',
+          'brand-2',
+          'brand-3',
+          'brand-4',
+          'brand-5',
+          'brand-6',
+          'white',
+          'black',
+          'clear-primary',
+          'clear-secondary',
+          'clear-tertiary',
+          'clear-white',
+          'clear-black',
+        ],
       },
     },
   },
