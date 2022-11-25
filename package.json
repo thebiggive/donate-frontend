@@ -36,7 +36,7 @@
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/platform-server": "^14.1.0",
     "@angular/router": "^14.1.0",
-    "@biggive/components-angular": "^1.0.146",
+    "@biggive/components-angular": "^1.0.153",
     "@fortawesome/angular-fontawesome": "~0.11.1",
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
     "@fortawesome/free-brands-svg-icons": "^6.2.0",

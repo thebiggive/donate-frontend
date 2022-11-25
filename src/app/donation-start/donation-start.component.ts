@@ -41,7 +41,6 @@ import { GiftAidAddress } from '../gift-aid-address.model';
 import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
 import { IdentityService } from '../identity.service';
 import { LoginModalComponent } from '../login-modal/login-modal.component';
-import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
 import { PostcodeService } from '../postcode.service';
@@ -152,7 +151,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
-    private navigationService: NavigationService,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -1056,8 +1054,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     if (this.campaign.championOptInStatement) {
       this.showChampionOptIn = true;
     }
-
-    this.navigationService.saveLastSingleCampaignId(this.campaignId);
   }
 
   private handleCampaignViewUpdates() {

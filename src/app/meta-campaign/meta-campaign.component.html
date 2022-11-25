@@ -1,14 +1,14 @@
 <main>
 
   <biggive-totalizer
-    *ngIf="tickerItems.length > 0"
+    *ngIf="tickerMainMessage || tickerItems.length > 0"
     primary-colour="primary"
     primary-text-colour="white"
     secondary-colour="secondary"
     secondary-text-colour="black"
     include-gift-aid="true"
     [mainMessage]="tickerMainMessage">
-      <div slot="ticker-items">  
+      <div slot="ticker-items">
         <biggive-totalizer-ticker-item
           *ngFor="let tickerItem of tickerItems"
           [figure]="tickerItem.figure"
@@ -20,9 +20,10 @@
 
   <biggive-hero-image
     [logo]="fund?.logoUri"
-    [mainTitle]="campaign.title"
+    [logoAltText]="fund?.name"
+    [mainTitle]="title"
     [mainImage]="campaign.bannerUri | optimisedImage:2000 | async"
-    [teaser]="campaign.summary"
+    [teaser]="fund && fund.description ? fund.description : campaign.summary"
     colour-scheme="primary"
     main-image-align-horizontal="right"
   ></biggive-hero-image>
@@ -40,7 +41,7 @@
       [selectedFilterCategory]="searchService.selected.category ? searchService.selected.category : null"
       [selectedFilterLocation]="searchService.selected.country ? searchService.selected.country : null"
       [selectedFilterFunding]="searchService.selected.onlyMatching ? 'Match Funded' : null">
-      
+
       <biggive-grid
         slot="campaign-grid"
         column-count="3"
@@ -52,8 +53,9 @@
       >
         <div *ngFor="let campaign of children">
           <biggive-campaign-card
+            id="campaign-{{campaign.id}}"
             [banner]="campaign.imageUri | optimisedImage:830 | async"
-            [campaignType]="campaign.isMatched ? 'Match Funded' : 'Unmatched'"
+            [campaignType]="campaign.isMatched ? 'Match Funded' : null"
             [campaignTitle]="campaign.title"
             [donateButtonUrl]="'/donate/' + campaign.id"
             [moreInfoButtonUrl]="'/campaign/' + campaign.id"

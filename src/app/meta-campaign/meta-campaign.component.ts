@@ -1,7 +1,7 @@
 import { CurrencyPipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
 import { AfterViewChecked, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { StorageService } from 'ngx-webstorage-service';
 import { Subscription } from 'rxjs';
 
@@ -39,7 +39,9 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   public loading = false; // Server render gets initial result set; set true when filters change.
   public tickerItems: { label: string, figure: string }[] = [];
   public tickerMainMessage: string;
+  public title: string; // Includes fund info if applicable.
 
+  private autoScrollTimer: any; // State update setTimeout reference, for client side scroll to previous position.
   private campaignId: string;
   private campaignSlug: string;
   private offset = 0;
@@ -47,6 +49,12 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   private routeParamSubscription: Subscription;
   private searchServiceSubscription: Subscription;
   private shouldAutoScroll: boolean;
+  // For some reason, macOS Safari on return with autoscroll enabled gave values like 192 for
+  // this, whereas Chrome had a smaller number (50-60 px?). We don't want to mistake auto
+  // behaviour for user scroll intervention on *any* platform because it breaks automatic
+  // scrolling back to the previous metacampaign position, so to be safe we use the highest
+  // scroll Y we've seen without intervention, plus a ~25% buffer.
+  private smallestSignificantScrollPx = 250;
 
   private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v2`; // Key is per-domain/env
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
@@ -85,7 +93,13 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   @HostListener('doClearFilters', ['$event'])
   onDoClearFilters(event: CustomEvent) {
-    this.searchService.resetFilters();
+    this.searchService.reset(this.getDefaultSort(), false);
+    this.setQueryParams();
+  }
+
+  @HostListener('doCardGeneralClick', ['$event'])
+  onDoCardGeneralClick(event: CustomEvent) {
+    this.router.navigateByUrl(event.detail.url);
   }
 
   ngOnDestroy() {
@@ -105,6 +119,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
     this.campaignId = this.campaign.id;
+    this.title = this.campaign.title;
 
     this.listenForRouteChanges();
 
@@ -114,14 +129,14 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     if (this.fundSlug) {
       fundKey = makeStateKey<Fund>(`fund-${this.fundSlug}`);
       this.fund = this.state.get<Fund | undefined>(fundKey, undefined);
-      this.setFundSpecificTickerParams();
+      this.setFundSpecificProps();
     }
 
     if (!this.fund && this.fundSlug) {
       this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
         this.state.set<Fund>(fundKey, fund);
         this.fund = fund;
-        this.setFundSpecificTickerParams();
+        this.setFundSpecificProps();
       });
     }
 
@@ -137,12 +152,20 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   ngAfterViewChecked() {
     if (isPlatformBrowser(this.platformId) && this.shouldAutoScroll) {
-      // Keep updating scroll in this scenario, until the donor scrolls themselves and we turn off `shouldAutoScroll`.
-      this.updateScroll(this.navigationService.getLastSingleCampaignId());
+      // Update scroll to previous position in this scenario, unless the donor scrolls in the first 1s themselves and we turn off `shouldAutoScroll`.
+      this.updateScroll(this.navigationService.getLastScrollY());
     }
   }
 
   onScroll() {
+    if (this.scroller.getScrollPosition()[1] < this.smallestSignificantScrollPx) {
+      // On return with internal app nav, automatic position seems to be [0,59]
+      // or so as of Nov '22. So we want only larger scrolls to be picked up as
+      // donor intervention and to turn off auto-scroll + trigger loading of
+      // additional campaigns.
+      return;
+    }
+
     this.shouldAutoScroll = false;
 
     if (this.moreMightExist()) {
@@ -248,7 +271,10 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       // campaigns still works after we reinstate the existing children.
       this.offset = recentChildrenData.offset;
 
-      if (this.navigationService.getLastSingleCampaignId()) {
+      // Auto scrolling without a significant extra wait only works when
+      // the child campaigns were quickly loaded from local state from
+      // a recent page view.
+      if (this.navigationService.getLastScrollY() >= this.smallestSignificantScrollPx) {
         this.shouldAutoScroll = true;
       }
 
@@ -265,10 +291,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   private setSecondaryPropsAndRun(campaign: Campaign) {
     this.searchService.reset(this.getDefaultSort(), true); // Needs `campaign` to determine sort order.
     this.loadQueryParamsAndRun();
+
     this.pageMeta.setCommon(
-      campaign.title,
-      campaign.summary || 'A match funded campaign with the Big Give',
-      this.campaign.currencyCode !== 'GBP',
+      this.title,
+      campaign.summary || 'A match funded campaign with Big Give',
+      campaign.currencyCode !== 'GBP',
       campaign.bannerUri,
     );
   }
@@ -278,8 +305,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
    */
   private loadQueryParamsAndRun() {
     this.routeParamSubscription = this.route.queryParams.subscribe(params => {
-        this.searchService.loadQueryParams(params, this.getDefaultSort());
-        this.run();
+      this.searchService.loadQueryParams(params, this.getDefaultSort());
+      this.run();
     });
 
     this.searchServiceSubscription = this.searchService.changed.subscribe((interactive: boolean) => {
@@ -308,6 +335,15 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   private listenForRouteChanges() {
     this.routeChangeListener = this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.navigationService.saveLastScrollY(this.scroller.getScrollPosition()[1]);
+
+        if (isPlatformBrowser(this.platformId) && this.autoScrollTimer) {
+          window.clearTimeout(this.autoScrollTimer);
+          this.autoScrollTimer = undefined;
+        }
+      }
+
       if (event instanceof NavigationEnd && event.url === '/') {
         this.searchService.reset(this.getDefaultSort(), false);
         this.run();
@@ -315,18 +351,18 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     });
   }
 
-  private updateScroll(campaignId: string | undefined) {
-    if (isPlatformBrowser(this.platformId) && campaignId) {
+  private updateScroll(scrollY: number | undefined) {
+    if (isPlatformBrowser(this.platformId) && scrollY && !this.autoScrollTimer) {
       // We need to allow enough time for the card layout to be in place. Firefox & Chrome both seemed to consistently
-      // use a too-low Y position when lots of card were shown and we didn't have a delay, both with `scrollToAnchor()`
+      // use a too-low Y position when lots of cards were shown and we didn't have a delay, both with `scrollToAnchor()`
       // and manual calculation + `scrollToPosition()`.
-      setTimeout(() => {
-        // Scroll to the anchor's `offsetTop` y-position (currently not minus approx header height).
-        const activeCard = document.getElementById(`campaign-${campaignId}`);
-        if (activeCard) {
-          this.scroller.scrollToPosition([0, activeCard.offsetTop - 0]);
+
+      this.autoScrollTimer = setTimeout(() => {
+        if (this.shouldAutoScroll) {
+          this.scroller.scrollToPosition([0, scrollY]);
+          this.autoScrollTimer = undefined;
         }
-      }, 1500);
+      }, 1000);
     }
   }
 
@@ -349,53 +385,66 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
     const tickerItems = [];
 
-    if (campaignOpen) {
-      tickerItems.push(...[
-        {
-          label: 'remaining',
-          figure: this.timeLeftPipe.transform(this.campaign.endDate),
-        },
-        {
+    if (!this.fundSlug) {
+      if (campaignOpen) {
+        tickerItems.push(...[
+          {
+            label: 'remaining',
+            figure: this.timeLeftPipe.transform(this.campaign.endDate),
+          },
+          {
             label: 'match funds remaining',
             figure: this.currencyPipe.transform(this.campaign.matchFundsRemaining, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
-        },
-      ]);
-    } else {
+          },
+        ]);
+      } else {
+        tickerItems.push({
+          label: 'days duration',
+          figure: durationInDays.toString(),
+        });
+      }
+
+      if (this.campaign.campaignCount && this.campaign.campaignCount > 1) {
+        tickerItems.push(
+          {
+            label: 'participating charities',
+            figure: this.campaign.campaignCount.toLocaleString(),
+          }
+        )
+      }
+
+      if (this.campaign.donationCount > 0) {
+        tickerItems.push(
+          {
+            label: 'donations',
+            figure: this.campaign.donationCount.toLocaleString(),
+          }
+        )
+      }
+
       tickerItems.push({
-        label: 'days duration',
-        figure: durationInDays.toString(),
+        label: 'total match funds',
+        figure: this.currencyPipe.transform(this.campaign.matchFundsTotal, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
       });
     }
-
-    if (this.campaign.campaignCount && this.campaign.campaignCount > 1) {
-      tickerItems.push(
-        {
-          label: 'participating charities',
-          figure: this.campaign.campaignCount.toLocaleString(),
-        }
-      )
-    }
-
-    if (this.campaign.donationCount > 0) {
-      tickerItems.push(
-        {
-          label: 'donations',
-          figure: this.campaign.donationCount.toLocaleString(),
-        }
-      )
-    }
-
-    tickerItems.push({
-      label: 'total match funds',
-      figure: this.currencyPipe.transform(this.campaign.matchFundsTotal, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
-    });
 
     // Just update the public property once.
     this.tickerItems = tickerItems;
   }
 
-  private setFundSpecificTickerParams() {
+  private setFundSpecificProps() {
     this.tickerMainMessage = this.currencyPipe.transform(this.fund?.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') +
       ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
+
+    this.title = this.fund?.name
+      ? `${this.campaign.title}: ${this.fund.name}`
+      : this.campaign.title;
+
+    this.pageMeta.setCommon(
+      this.title,
+      this.campaign.summary || 'A match funded campaign with Big Give',
+      this.campaign.currencyCode !== 'GBP',
+      this.campaign.bannerUri,
+    );
   }
 }

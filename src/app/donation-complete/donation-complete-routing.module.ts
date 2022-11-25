@@ -6,6 +6,7 @@ import { DonationCompleteComponent } from './donation-complete.component';
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
     component: DonationCompleteComponent,
   },
 ];

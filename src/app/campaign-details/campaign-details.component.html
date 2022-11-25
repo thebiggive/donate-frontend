@@ -25,9 +25,9 @@
     <div class="b-primary-column">
       <biggive-branded-image
         space-below="4"
-        [imageUrl]="campaign.bannerUri"
-        [logoUrl]="campaign.charity.logoUri"
-        slug="Match Funded"
+        [imageUrl]="campaign.bannerUri | optimisedImage:2000 | async"
+        [logoUrl]="campaign.charity.logoUri ? (campaign.charity.logoUri | optimisedImage:240 | async) : null"
+        [slug]="campaign.isMatched ? 'Match Funded' : null"
         [charityName]="campaign.charity.name"
         [charityUrl]="campaign.charity.website"
         [charityLocation]="campaign.countries.length ? campaign.countries[0] : null"
@@ -116,7 +116,11 @@
             </div>
 
             <div class="c-additional" *ngIf="additionalImageUris.length > 0">
-              <img *ngFor="let uri of additionalImageUris" [src]="uri" class="c-additional__images">
+              <img
+                *ngFor="let uri of additionalImageUris"
+                [src]="uri | optimisedImage:2000 | async"
+                class="c-additional__images"
+              >
             </div>
 
             <ul class="c-quotes" *ngIf="campaign.quotes.length > 0">

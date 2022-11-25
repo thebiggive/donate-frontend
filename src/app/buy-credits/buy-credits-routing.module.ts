@@ -6,6 +6,7 @@ import { BuyCreditsComponent } from './buy-credits.component';
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
     component: BuyCreditsComponent,
   },
 ];
