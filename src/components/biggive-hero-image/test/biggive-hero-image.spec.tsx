@@ -20,10 +20,10 @@ describe('biggive-hero-image', () => {
        <mock:shadow-root>
          <div class="colour-scheme-primary container space-below-0">
            <div class="sleeve">
-             <div class="image-wrap logo">
-               <img alt="" src="">
-             </div>
-             <div class="content-wrap content-wrap--with-logo">
+             <div class="content-wrap">
+               <div class="image-wrap logo">
+                <img alt="" src="">
+               </div>
                <div class="slug text-colour-null">
                  My Slug
                </div>
