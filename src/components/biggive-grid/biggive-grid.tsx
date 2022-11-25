@@ -23,7 +23,7 @@ export class BiggiveGrid {
 
   render() {
     return (
-      <div class={'grid column-count-' + this.columnCount + ' space-below-' + this.spaceBelow + (this.spaceBetween ? ' space-between' : null)}>
+      <div class={'grid column-count-' + this.columnCount + ' space-below-' + this.spaceBelow + (this.spaceBetween ? ' space-between' : '')}>
         <slot></slot>
       </div>
     );
