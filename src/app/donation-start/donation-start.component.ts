@@ -100,7 +100,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   loadingAddressSuggestions = false;
   personId?: string;
   personIsLoginReady = false;
-  privacyUrl = 'https://www.thebiggive.org.uk/s/privacy-policy';
+  privacyUrl = 'https://blog.thebiggive.org.uk/privacy';
   showAddressLookup: boolean;
   stripePaymentMethodReady = false;
   stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
@@ -108,7 +108,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   stripeFirstSavedMethod?: PaymentMethod;
   submitting = false;
   termsProvider = `Big Give's`;
-  termsUrl = 'https://www.thebiggive.org.uk/s/terms-and-conditions';
+  termsUrl = 'https://blog.thebiggive.org.uk/terms-and-conditions';
   // Track 'Next' clicks so we know when to show missing radio button error messages.
   triedToLeaveGiftAid = false;
   triedToLeaveMarketing = false;
