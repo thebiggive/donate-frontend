@@ -8,6 +8,10 @@
   flex-flow: row wrap;
 }
 
+.space-between {
+  justify-content: space-between;
+}
+
 .grid ::slotted([slot=grid-item]) {
   display: block;
 }

@@ -202,6 +202,19 @@ export class BiggiveCampaignCardFilterGrid {
     // Set the 'Filters' button back to the primary background colour
     this.filtersApplied = false;
 
+    // Clear all
+    this.searchText = null;
+    this.sortBy = null;
+    this.filterCategory = null;
+    this.filterBeneficiary = null;
+    this.filterLocation = null;
+    this.filterFunding = null;
+    this.selectedSortByOption = null;
+    this.selectedFilterBeneficiary = null;
+    this.selectedFilterCategory = null;
+    this.selectedFilterFunding = null;
+    this.selectedFilterLocation = null;
+
     // Emit the doSearchAndFilterUpdate event with null values. DON-654
     this.doSearchAndFilterUpdate.emit({
       searchText: null,
