@@ -610,6 +610,10 @@ export namespace Components {
           * Space below component
          */
         "spaceBelow": number;
+        /**
+          * Should have `justify-content: space-between`?
+         */
+        "spaceBetween": boolean;
     }
     interface BiggiveHeader {
         /**
@@ -1861,10 +1865,6 @@ declare namespace LocalJSX {
         /**
           * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it
          */
-        "onDoClearFilters"?: (event: BiggiveCampaignCardFilterGridCustomEvent<boolean>) => void;
-        /**
-          * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it
-         */
         "onDoSearchAndFilterUpdate"?: (event: BiggiveCampaignCardFilterGridCustomEvent<{
     searchText: string;
     sortBy: string;
@@ -2043,6 +2043,10 @@ declare namespace LocalJSX {
           * Space below component
          */
         "spaceBelow"?: number;
+        /**
+          * Should have `justify-content: space-between`?
+         */
+        "spaceBetween"?: boolean;
     }
     interface BiggiveHeader {
         /**

@@ -28,18 +28,6 @@ export class BiggiveCampaignCardFilterGrid {
     filterFunding: string;
   }>;
 
-  /**
-   * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent
-   * component which handles it
-   */
-  @Event({
-    eventName: 'doClearFilters',
-    composed: true,
-    cancelable: true,
-    bubbles: true,
-  })
-  doClearFilters: EventEmitter<boolean>;
-
   sortBy: string = null;
   filterCategory: string = null;
   filterBeneficiary: string = null;
@@ -211,14 +199,31 @@ export class BiggiveCampaignCardFilterGrid {
   };
 
   private handleClearAll = () => {
+    // Set the 'Filters' button back to the primary background colour
+    this.filtersApplied = false;
+
+    // Clear all
     this.searchText = null;
     this.sortBy = null;
     this.filterCategory = null;
     this.filterBeneficiary = null;
     this.filterLocation = null;
     this.filterFunding = null;
-    this.filtersApplied = false;
-    this.doClearFilters.emit(true);
+    this.selectedSortByOption = null;
+    this.selectedFilterBeneficiary = null;
+    this.selectedFilterCategory = null;
+    this.selectedFilterFunding = null;
+    this.selectedFilterLocation = null;
+
+    // Emit the doSearchAndFilterUpdate event with null values. DON-654
+    this.doSearchAndFilterUpdate.emit({
+      searchText: null,
+      sortBy: null,
+      filterCategory: null,
+      filterBeneficiary: null,
+      filterFunding: null,
+      filterLocation: null,
+    });
   };
 
   componentWillRender() {

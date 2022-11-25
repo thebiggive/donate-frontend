@@ -16,9 +16,14 @@ export class BiggiveGrid {
    */
   @Prop() columnCount: number = 3;
 
+  /**
+   * Should have `justify-content: space-between`?
+   */
+  @Prop() spaceBetween: boolean = false;
+
   render() {
     return (
-      <div class={'grid column-count-' + this.columnCount + ' space-below-' + this.spaceBelow}>
+      <div class={'grid column-count-' + this.columnCount + ' space-below-' + this.spaceBelow + (this.spaceBetween ? ' space-between' : '')}>
         <slot></slot>
       </div>
     );
