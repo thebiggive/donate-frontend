@@ -12,21 +12,21 @@ export default {
       name: 'Background colour',
       control: {
         type: 'select',
-        options: ['primary', 'secondary', 'tertiary', 'white', 'black', 'transparent'],
+        options: ['primary', 'secondary', 'tertiary', 'brand-1', 'brand-2', 'brand-3', 'brand-4', 'brand-5', 'brand-6', 'white', 'black', 'transparent'],
       },
     },
     backgroundColourHover: {
       name: 'Hover background colour',
       control: {
         type: 'select',
-        options: ['primary', 'secondary', 'tertiary', 'white', 'black', 'transparent'],
+        options: ['primary', 'secondary', 'tertiary', 'brand-1', 'brand-2', 'brand-3', 'brand-4', 'brand-5', 'brand-6', 'white', 'black', 'transparent'],
       },
     },
     textColour: {
       name: 'Text colour',
       control: {
         type: 'select',
-        options: ['primary', 'secondary', 'tertiary', 'white', 'black', 'transparent'],
+        options: ['primary', 'secondary', 'tertiary', 'brand-1', 'brand-2', 'brand-3', 'brand-4', 'brand-5', 'brand-6', 'white', 'black', 'transparent'],
       },
     },
     slug: {

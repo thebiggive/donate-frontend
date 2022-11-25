@@ -9,6 +9,24 @@ body {
     &.background-tertiary {
       background-color: $colour-primary;
     }
+    &.background-brand-1 {
+        background-color: $colour-brand-1;
+    }
+    &.background-brand-2 {
+        background-color: $colour-brand-1;
+    }
+    &.background-brand-3 {
+        background-color: $colour-brand-1;
+    }
+    &.background-brand-4 {
+        background-color: $colour-brand-1;
+    }
+    &.background-brand-5 {
+        background-color: $colour-brand-1;
+    }
+    &.background-brand-6 {
+        background-color: $colour-brand-1;
+    }
 }
 
 
@@ -56,6 +74,26 @@ a {
     color: $colour-tertiary;
 }
 
+.colour-brand-1 {
+    color: $colour-brand-1;
+}
+
+.colour-brand-2 {
+    color: $colour-brand-2;
+}
+.colour-brand-3 {
+    color: $colour-brand-3;
+}
+.colour-brand-4 {
+    color: $colour-brand-4;
+}
+.colour-brand-5 {
+    color: $colour-brand-5;
+}
+.colour-brand-6 {
+    color: $colour-brand-6;
+}
+
 .colour-white {
     color: $colour-white;
 }
@@ -80,6 +118,36 @@ a {
     color: $colour-tertiary;
 }
 
+.text-colour-hover-brand-1:hover,
+.text-colour-brand-1 {
+    color: $colour-brand-1;
+}
+
+.text-colour-hover-brand-2:hover,
+.text-colour-brand-2 {
+    color: $colour-brand-2;
+}
+
+.text-colour-hover-brand-3:hover,
+.text-colour-brand-3 {
+    color: $colour-brand-3;
+}
+
+.text-colour-hover-brand-4:hover,
+.text-colour-brand-4 {
+    color: $colour-brand-4;
+}
+
+.text-colour-hover-brand-5:hover,
+.text-colour-brand-5 {
+    color: $colour-brand-5;
+}
+
+.text-colour-hover-brand-6:hover,
+.text-colour-brand-6 {
+    color: $colour-brand-6;
+}
+
 .text-colour-hover-white:hover,
 .text-colour-white {
     color: $colour-white;
@@ -101,6 +169,30 @@ a {
 
 .fill-tertiary {
     fill: $colour-tertiary;
+}
+
+.fill-brand-1 {
+    fill: $colour-brand-1;
+}
+
+.fill-brand-2 {
+    fill: $colour-brand-2;
+}
+
+.fill-brand-3 {
+    fill: $colour-brand-3;
+}
+
+.fill-brand-4 {
+    fill: $colour-brand-4;
+}
+
+.fill-brand-5 {
+    fill: $colour-brand-5;
+}
+
+.fill-brand-6 {
+    fill: $colour-brand-6;
 }
 
 .fill-white {
@@ -128,6 +220,36 @@ a {
 .background-colour-hover-tertiary:hover,
 .background-colour-tertiary {
     background-color: $colour-tertiary;
+}
+
+.background-colour-hover-brand-1:hover,
+.background-colour-brand-1 {
+    background-color: $colour-brand-1;
+}
+
+.background-colour-hover-brand-2:hover,
+.background-colour-brand-2 {
+    background-color: $colour-brand-2;
+}
+
+.background-colour-hover-brand-3:hover,
+.background-colour-brand-3 {
+    background-color: $colour-brand-3;
+}
+
+.background-colour-hover-brand-4:hover,
+.background-colour-brand-4 {
+    background-color: $colour-brand-4;
+}
+
+.background-colour-hover-brand-5:hover,
+.background-colour-brand-5 {
+    background-color: $colour-brand-5;
+}
+
+.background-colour-hover-brand-6:hover,
+.background-colour-brand-6 {
+    background-color: $colour-brand-6;
 }
 
 .background-colour-hover-white:hover,
@@ -171,6 +293,30 @@ a {
 
 .button-tertiary {
     @include button-tertiary();
+}
+
+.button-brand-1 {
+    @include button-brand-1();
+}
+
+.button-brand-2 {
+    @include button-brand-2();
+}
+
+.button-brand-3 {
+    @include button-brand-3();
+}
+
+.button-brand-4 {
+    @include button-brand-4();
+}
+
+.button-brand-5 {
+    @include button-brand-5();
+}
+
+.button-brand-6 {
+    @include button-brand-6();
 }
 
 .button-white {
