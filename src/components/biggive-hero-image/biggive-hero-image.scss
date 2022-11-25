@@ -13,12 +13,32 @@
   &.colour-scheme-tertiary { color: $colour-tertiary; }
   &.colour-scheme-white { color: $colour-white; }
   &.colour-scheme-black { color: $colour-black; }
+
+  .logo {
+    position: absolute;
+    max-width: 100%;
+    top: 75px;
+
+    img {
+      height: 90px;
+      max-width: 100%;
+      width: auto;
+      position: relative;
+      z-index: 20;
+
+      @media screen and (min-width: $screen-mobile-max) {
+        height: 150px;
+      }
+    }
+  }
+
   .sleeve {
     @include flex-container-row();
     max-width: $screen-desktop-max;
     margin-left: auto;
     margin-right: auto;
   }
+
   .content-wrap {
     width: 40%;
     position: relative;
@@ -26,36 +46,20 @@
     white-space: pre-wrap; // helps render out \n
     padding: $spacer-8 $spacer-6 $spacer-6 $spacer-0;
 
-    .logo, .logo-space {
-      height: 75px;
-    }
+    &--with-logo {
+      margin-top: 60px; // Image height 90px minus 30px
 
-    .logo {
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: left center;
-
-      img {
-        width: 250px;
-        position: relative;
-
-        @media (max-width: $screen-desktop-max) {
-          width: 210px;
-        }
-        @media (max-width: $screen-tablet-max) {
-          width: 200px;
-        }
-        @media (max-width: $screen-mobile-max) {
-          width: 180px;
-        } 
+      @media screen and (min-width: $screen-mobile-max) {
+        margin-top: 120px; // Image height 150px minus 30px
       }
     }
+
     .slug {
       @include heading-4;
-      min-height: 24px; // Sort layout when there is no slug.
       margin: 0;
       padding: 0;
     }
+
     h1 {
       @include heading-1;
       margin: 0 0 $spacer-3 0;
@@ -120,7 +124,7 @@
   .container {
     .sleeve {
       .content-wrap {
-        width: 85%;
+        width: 80%;
       }
     }
   }

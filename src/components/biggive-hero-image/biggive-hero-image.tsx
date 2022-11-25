@@ -35,22 +35,22 @@ export class BiggiveHeroImage {
   /**
    * Logo alt text
    */
-    @Prop() logoAltText: string = '';
+  @Prop() logoAltText: string = '';
 
   /**
    * Full URL of a main hero image.
    */
   @Prop() mainImage: string|null = null;
 
-    /**
+  /**
    * Horizontal alignment of image
    */
-     @Prop() mainImageAlignHorizontal: string = 'center';
+  @Prop() mainImageAlignHorizontal: string = 'center';
 
-      /**
+  /**
    * Vertical alignment of image
    */
-       @Prop() mainImageAlignVertical: string = 'center';
+  @Prop() mainImageAlignVertical: string = 'center';
 
   /**
    * Hero image title, typically the page.
@@ -85,15 +85,18 @@ export class BiggiveHeroImage {
 
 
   render() {
+    const contentWrapClasses = 'content-wrap' + (this.logo === undefined ? '' : ' content-wrap--with-logo');
+
     return (
       <div class={'container colour-scheme-' + this.colourScheme + ' space-below-' + this.spaceBelow}>
         <div class="sleeve">
-          <div class="content-wrap">
-            {this.logo !== undefined && this.logo !== null ? (
+          {this.logo !== undefined && this.logo !== null ? (
               <div class="logo image-wrap">
-                <img src={this.logo} alt={this.logoAltText} title={this.logoAltText}/>
+                <img src={this.logo} alt={this.logoAltText} />
               </div>
-            ) : <div class="logo-space"></div>}
+            ) : null}
+
+          <div class={contentWrapClasses}>
             <div class={'slug text-colour-'+this.slugColour}>{this.slug}</div>
             <h1 class={'main-title text-colour-'+this.mainTitleColour}>{this.mainTitle}</h1>
             <div class={'teaser text-colour-'+this.teaserColour}>{this.teaser}</div>
