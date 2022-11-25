@@ -1861,10 +1861,6 @@ declare namespace LocalJSX {
         /**
           * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it
          */
-        "onDoClearFilters"?: (event: BiggiveCampaignCardFilterGridCustomEvent<boolean>) => void;
-        /**
-          * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it
-         */
         "onDoSearchAndFilterUpdate"?: (event: BiggiveCampaignCardFilterGridCustomEvent<{
     searchText: string;
     sortBy: string;

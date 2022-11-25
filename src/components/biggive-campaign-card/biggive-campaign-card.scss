@@ -6,6 +6,8 @@
   @include flex-container-column();
   @include standard-font();
   @include lower-shadow();
+  margin-right: 10px;
+  margin-left: 10px;
 
   cursor: pointer; // Fallback click behaviour is to go to info URL.
 
