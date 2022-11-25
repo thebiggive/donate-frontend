@@ -45,8 +45,8 @@ export class BiggiveFooter {
           </nav>
 
           <div class="button-wrap">
-            <biggive-button colour-scheme="white" url="https://www.thebiggive.org.uk/s/charities" label="For charities"></biggive-button>
-            <biggive-button colour-scheme="white" url="https://www.thebiggive.org.uk/s/philanthropists" label="For funders"></biggive-button>
+            <biggive-button colour-scheme="white" url="https://blog.thebiggive.org.uk/charities" label="For charities"></biggive-button>
+            <biggive-button colour-scheme="white" url="https://blog.thebiggive.org.uk/funders" label="For funders"></biggive-button>
           </div>
         </div>
 
