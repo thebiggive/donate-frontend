@@ -226,6 +226,12 @@
   &.colour-scheme-primary {background-color: $colour-primary; svg {fill: $colour-white;}}
   &.colour-scheme-secondary {background-color: $colour-secondary; svg {fill: $colour-black;}}
   &.colour-scheme-tertiary {background-color: $colour-tertiary; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-1 {background-color: $colour-brand-1; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-2 {background-color: $colour-brand-1; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-3 {background-color: $colour-brand-1; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-4 {background-color: $colour-brand-1; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-5 {background-color: $colour-brand-1; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-6 {background-color: $colour-brand-1; svg {fill: $colour-black;}}
   &.colour-scheme-white {background-color: $colour-white; svg {fill: $colour-black;}}
   &.colour-scheme-black {background-color: $colour-black; svg {fill: $colour-white;}}
   &:hover {
@@ -433,6 +439,84 @@
   }
 }
 
+@mixin button-clear-brand-1 {
+  color: $colour-brand-1;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-brand-2 {
+  color: $colour-brand-2;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-brand-3 {
+  color: $colour-brand-3;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-brand-4 {
+  color: $colour-brand-4;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-brand-5 {
+  color: $colour-brand-5;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-brand-6 {
+  color: $colour-brand-6;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
 @mixin button-clear-white {
   color: $colour-white;
   background-color: transparent;
@@ -491,6 +575,60 @@
   color: $colour-white;
   background-color: $colour-tertiary;
   border-color: $colour-tertiary;
+  &:hover {
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-brand-1 {
+  color: $colour-white;
+  background-color: $colour-brand-1;
+  border-color: $colour-brand-1;
+  &:hover {
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-brand-2 {
+  color: $colour-white;
+  background-color: $colour-brand-2;
+  border-color: $colour-brand-2;
+  &:hover {
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-brand-3 {
+  color: $colour-white;
+  background-color: $colour-brand-3;
+  border-color: $colour-brand-3;
+  &:hover {
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-brand-4 {
+  color: $colour-white;
+  background-color: $colour-brand-4;
+  border-color: $colour-brand-4;
+  &:hover {
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-brand-5 {
+  color: $colour-white;
+  background-color: $colour-brand-5;
+  border-color: $colour-brand-5;
+  &:hover {
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-brand-6 {
+  color: $colour-white;
+  background-color: $colour-brand-6;
+  border-color: $colour-brand-6;
   &:hover {
     background-color: $colour-white;
   }

@@ -103,9 +103,59 @@
 .container.background-color-tertiary:after,
 .container.background-color-tertiary .sleeve:before,
 .container.background-color-tertiary .sleeve {
-    background-color: $colour-tertiary;
+  background-color: $colour-tertiary;
   color: $colour-white;
 }
+
+.container.background-color-brand-1:before,
+.container.background-color-brand-1:after,
+.container.background-color-brand-1 .sleeve:before,
+.container.background-color-brand-1 .sleeve {
+  background-color: $colour-brand-1;
+  color: $colour-white;
+}
+
+.container.background-color-brand-2:before,
+.container.background-color-brand-2:after,
+.container.background-color-brand-2 .sleeve:before,
+.container.background-color-brand-2 .sleeve {
+  background-color: $colour-brand-2;
+  color: $colour-white;
+}
+
+.container.background-color-brand-3:before,
+.container.background-color-brand-3:after,
+.container.background-color-brand-3 .sleeve:before,
+.container.background-color-brand-3 .sleeve {
+  background-color: $colour-brand-3;
+  color: $colour-white;
+}
+
+.container.background-color-brand-4:before,
+.container.background-color-brand-4:after,
+.container.background-color-brand-4 .sleeve:before,
+.container.background-color-brand-4 .sleeve {
+  background-color: $colour-brand-4;
+  color: $colour-white;
+}
+
+.container.background-color-brand-5:before,
+.container.background-color-brand-5:after,
+.container.background-color-brand-5 .sleeve:before,
+.container.background-color-brand-5 .sleeve {
+  background-color: $colour-brand-5;
+  color: $colour-white;
+}
+
+.container.background-color-brand-6:before,
+.container.background-color-brand-6:after,
+.container.background-color-brand-6 .sleeve:before,
+.container.background-color-brand-6 .sleeve {
+  background-color: $colour-brand-6;
+  color: $colour-white;
+}
+
+
 
 .container.background-color-white:before,
 .container.background-color-white:after,
