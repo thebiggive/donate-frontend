@@ -28,12 +28,6 @@ export class BiggiveCampaignCardFilterGrid {
     filterFunding: string;
   }>;
 
-  sortBy: string = null;
-  filterCategory: string = null;
-  filterBeneficiary: string = null;
-  filterLocation: string = null;
-  filterFunding: string = null;
-
   sortByPlaceholderText = 'Sort by';
 
   /**
@@ -135,11 +129,11 @@ export class BiggiveCampaignCardFilterGrid {
       filterFunding: string;
     } = {
       searchText: this.searchText,
-      sortBy: this.sortBy,
-      filterCategory: this.filterCategory,
-      filterBeneficiary: this.filterBeneficiary,
-      filterFunding: this.filterFunding,
-      filterLocation: this.filterLocation,
+      sortBy: this.selectedSortByOption,
+      filterCategory: this.selectedFilterCategory,
+      filterBeneficiary: this.selectedFilterBeneficiary,
+      filterFunding: this.selectedFilterFunding,
+      filterLocation: this.selectedFilterLocation,
     };
 
     return event;
@@ -147,11 +141,11 @@ export class BiggiveCampaignCardFilterGrid {
 
   @Listen('doSelectChange')
   doOptionSelectCompletedHandler(event) {
-    this.sortBy = this.el.shadowRoot.getElementById('sort-by').selectedValue;
-    this.filterCategory = this.el.shadowRoot.getElementById('categories').selectedValue;
-    this.filterBeneficiary = this.el.shadowRoot.getElementById('beneficiaries').selectedValue;
-    this.filterLocation = this.el.shadowRoot.getElementById('locations').selectedValue;
-    this.filterFunding = this.el.shadowRoot.getElementById('funding').selectedValue;
+    this.selectedSortByOption = this.el.shadowRoot.getElementById('sort-by').selectedValue;
+    this.selectedFilterCategory = this.el.shadowRoot.getElementById('categories').selectedValue;
+    this.selectedFilterBeneficiary = this.el.shadowRoot.getElementById('beneficiaries').selectedValue;
+    this.selectedFilterLocation = this.el.shadowRoot.getElementById('locations').selectedValue;
+    this.selectedFilterFunding = this.el.shadowRoot.getElementById('funding').selectedValue;
 
     // If this method was trigerred by the selection of a 'Sort by' dropdown option, then
     // emit an event to search, but do NOT emit an event for example when filter options
@@ -204,11 +198,6 @@ export class BiggiveCampaignCardFilterGrid {
 
     // Clear all
     this.searchText = null;
-    this.sortBy = null;
-    this.filterCategory = null;
-    this.filterBeneficiary = null;
-    this.filterLocation = null;
-    this.filterFunding = null;
     this.selectedSortByOption = null;
     this.selectedFilterBeneficiary = null;
     this.selectedFilterCategory = null;
