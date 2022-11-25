@@ -610,6 +610,10 @@ export namespace Components {
           * Space below component
          */
         "spaceBelow": number;
+        /**
+          * Should have `justify-content: space-between`?
+         */
+        "spaceBetween": boolean;
     }
     interface BiggiveHeader {
         /**
@@ -2039,6 +2043,10 @@ declare namespace LocalJSX {
           * Space below component
          */
         "spaceBelow"?: number;
+        /**
+          * Should have `justify-content: space-between`?
+         */
+        "spaceBetween"?: boolean;
     }
     interface BiggiveHeader {
         /**
