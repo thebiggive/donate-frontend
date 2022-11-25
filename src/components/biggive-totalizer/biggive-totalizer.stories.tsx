@@ -12,28 +12,28 @@ export default {
       name: 'Primary colour',
       control: {
         type: 'select',
-        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+        options: ['primary', 'secondary', 'tertiary', 'brand-1', 'brand-2', 'brand-3', 'brand-4', 'brand-5', 'brand-6', 'white', 'black'],
       },
     },
     primaryTextColour: {
       name: 'Primary text colour',
       control: {
         type: 'select',
-        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+        options: ['primary', 'secondary', 'tertiary', 'brand-1', 'brand-2', 'brand-3', 'brand-4', 'brand-5', 'brand-6', 'white', 'black'],
       },
     },
     secondaryColour: {
       name: 'Secondary colour',
       control: {
         type: 'select',
-        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+        options: ['primary', 'secondary', 'tertiary', 'brand-1', 'brand-2', 'brand-3', 'brand-4', 'brand-5', 'brand-6', 'white', 'black'],
       },
     },
     secondaryTextColour: {
       name: 'Secondary text colour',
       control: {
         type: 'select',
-        options: ['primary', 'secondary', 'tertiary', 'white', 'black'],
+        options: ['primary', 'secondary', 'tertiary', 'brand-1', 'brand-2', 'brand-3', 'brand-4', 'brand-5', 'brand-6', 'white', 'black'],
       },
     },
     includingGiftAid: {
