@@ -6,6 +6,7 @@ import { ExploreComponent } from './explore.component';
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
     component: ExploreComponent,
   },
 ];

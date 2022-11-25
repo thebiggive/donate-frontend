@@ -6,12 +6,20 @@ import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 
 export const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    loadChildren: () => import('./home/home.module')
+      .then(c => c.HomeModule),
+  },
+  {
     path: 'buy-credits',
+    pathMatch: 'full',
     loadChildren: () => import('./buy-credits/buy-credits.module')
       .then(c => c.BuyCreditsModule),
   },
   {
     path: 'campaign/:campaignId',
+    pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
     },
@@ -20,6 +28,7 @@ export const routes: Routes = [
   },
   {
     path: 'charity/:charityId',
+    pathMatch: 'full',
     resolve: {
       campaigns: CharityCampaignsResolver,
     },
@@ -28,6 +37,7 @@ export const routes: Routes = [
   },
   {
     path: 'donate/:campaignId',
+    pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
     },
@@ -36,6 +46,7 @@ export const routes: Routes = [
   },
   {
     path: 'metacampaign/:campaignId',
+    pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
     },
@@ -44,6 +55,7 @@ export const routes: Routes = [
   },
   {
     path: 'metacampaign/:campaignId/:fundSlug',
+    pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
     },
@@ -52,11 +64,13 @@ export const routes: Routes = [
   },
   {
     path: 'thanks/:donationId',
+    pathMatch: 'full',
     loadChildren: () => import('./donation-complete/donation-complete.module')
       .then(c => c.DonationCompleteModule),
   },
   {
     path: ':campaignSlug/:fundSlug',
+    pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
     },
@@ -65,27 +79,23 @@ export const routes: Routes = [
   },
   {
     path: 'explore',
+    pathMatch: 'full',
     resolve: {
       campaigns: CampaignListResolver,
     },
     loadChildren: () => import('./explore/explore.module')
       .then(c => c.ExploreModule),
   },
+  // This is effectively our 404 handler because we support any string as meta-campaign
+  // slug. So check `CampaignResolver` for adjusting what happens if the slug doesn't
+  // match a campaign.
   {
     path: ':campaignSlug',
+    pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
     },
     loadChildren: () => import('./meta-campaign/meta-campaign.module')
       .then(c => c.MetaCampaignModule),
-  },
-  {
-    path: '',
-    loadChildren: () => import('./home/home.module')
-      .then(c => c.HomeModule),
-  },
-  {
-    path: '**',
-    redirectTo: '',
   },
 ];

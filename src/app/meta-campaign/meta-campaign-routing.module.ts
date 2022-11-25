@@ -6,6 +6,7 @@ import { MetaCampaignComponent } from './meta-campaign.component';
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
     component: MetaCampaignComponent,
   },
 ];

@@ -23,8 +23,8 @@ export class CampaignResolver implements Resolve<any> {
     if (campaignSlug && campaignSlug.match(new RegExp('[.]+'))) {
       console.log(`CampaignResolver skipping load attempt for junk slug: "${campaignSlug}"`);
       // Because it happens server side & before resolution, `replaceUrl` seems not to
-      // work, so just fall back to serving the Explore content on the requested path.
-      this.router.navigateByUrl('/explore');
+      // work, so just fall back to serving the Home content on the requested path.
+      this.router.navigateByUrl('/');
       return EMPTY;
     }
 
@@ -55,8 +55,8 @@ export class CampaignResolver implements Resolve<any> {
       .pipe(catchError(error => {
         console.log(`CampaignResolver load error: "${error.message}"`);
         // Because it happens server side & before resolution, `replaceUrl` seems not to
-        // work, so just fall back to serving the Explore content on the requested path.
-        this.router.navigateByUrl('/explore');
+        // work, so just fall back to serving the Home content on the requested path.
+        this.router.navigateByUrl('/');
         return EMPTY;
       }));
 
