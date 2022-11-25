@@ -436,7 +436,9 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.tickerMainMessage = this.currencyPipe.transform(this.fund?.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') +
       ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
 
-    this.title = this.fund?.name
+    // Show fund name if applicable *and* there's no fund logo. If there's a logo
+    // its content + alt text should do the equivalent job.
+    this.title = (!this.fund?.logoUri && this.fund?.name)
       ? `${this.campaign.title}: ${this.fund.name}`
       : this.campaign.title;
 

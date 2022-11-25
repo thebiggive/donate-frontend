@@ -66,19 +66,28 @@ export class ExploreComponent implements OnDestroy, OnInit {
     this.locationOptions = CampaignGroupsService.getCountries();
     this.fundingOptions = [
       'Match Funded'
-    ]
+    ];
   }
 
   @HostListener('doSearchAndFilterUpdate', ['$event'])
   onDoSearchAndFilterUpdate(event: CustomEvent) {
-    this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
+    const update = event.detail;
+    if (!update.searchText &&
+        !update.sortBy &&
+        !update.filterCategory &&
+        !update.filterBeneficiary &&
+        !update.filterFunding &&
+        !update.filterLocation) {
+          // clear filters
+          this.searchService.reset(this.getDefaultSort(), false);
+          this.setQueryParams();
+        }
+    
+    else {
+      this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
+    }
   }
 
-  @HostListener('doClearFilters', ['$event'])
-  onDoClearFilters(event: CustomEvent) {
-    this.searchService.reset(this.getDefaultSort(), false);
-    this.setQueryParams();
-  }
 
   @HostListener('doCardGeneralClick', ['$event'])
   onDoCardGeneralClick(event: CustomEvent) {

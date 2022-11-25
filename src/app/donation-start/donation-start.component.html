@@ -73,12 +73,12 @@
             </div>
 
             <mat-hint *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
-              We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://www.thebiggive.org.uk/s/about" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too). Please consider adding an optional tip.
+              We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://blog.thebiggive.org.uk/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too). Please consider adding an optional tip.
             </mat-hint>
 
             <div *ngIf="campaign.feePercentage && creditPenceToUse === 0">
               <mat-checkbox formControlName="coverFee" id="coverFee">
-                Cover the {{ campaign.feePercentage}}% <a href="https://www.thebiggive.org.uk/s/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> platform fee</a> for the &quot;{{ campaign.title }}&quot; campaign?
+                Cover the {{ campaign.feePercentage}}% <a href="https://blog.thebiggive.org.uk/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> platform fee</a> for the &quot;{{ campaign.title }}&quot; campaign?
               </mat-checkbox>
             </div>
 
