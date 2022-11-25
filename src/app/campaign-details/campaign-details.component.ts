@@ -6,7 +6,6 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
-import { ImageService } from '../image.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 import { TimeLeftPipe } from '../time-left.pipe';
@@ -23,7 +22,6 @@ import { TimeLeftPipe } from '../time-left.pipe';
   ],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
-  additionalImageUris: Array<string|null> = [];
   campaign: Campaign;
   isPendingOrNotReady = false;
   campaignInFuture = false;
@@ -38,7 +36,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private analyticsService: AnalyticsService,
     private datePipe: DatePipe,
-    private imageService: ImageService,
     private location: Location,
     private navigationService: NavigationService,
     private pageMeta: PageMetaService,
@@ -87,10 +84,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     this.campaignInFuture = CampaignService.isInFuture(campaign);
     this.campaignInPast = CampaignService.isInPast(campaign);
     this.isPendingOrNotReady = CampaignService.isPendingOrNotReady(campaign);
-
-    for (const originalUri of campaign.additionalImageUris) {
-      this.imageService.getImageUri(originalUri.uri, 850).subscribe(uri => this.additionalImageUris.push(uri));
-    }
 
     // If donations open within 24 hours, set a timer to update this page's state.
     if (!this.donateEnabled && isPlatformBrowser(this.platformId)) {
