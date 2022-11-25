@@ -115,10 +115,10 @@
 
             </div>
 
-            <div class="c-additional" *ngIf="additionalImageUris.length > 0">
+            <div class="c-additional" *ngIf="campaign.additionalImageUris.length > 0">
               <img
-                *ngFor="let uri of additionalImageUris"
-                [src]="uri | optimisedImage:2000 | async"
+                *ngFor="let image of campaign.additionalImageUris"
+                [src]="image.uri | optimisedImage:850 | async"
                 class="c-additional__images"
               >
             </div>
