@@ -6,32 +6,28 @@
   margin-bottom: $spacer-3;
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-between;  
 }
-
 
 .grid ::slotted([slot=grid-item]) {
   display: block;
 }
 
 .column-count-4 ::slotted(*) {
-  width: calc( 25% - (($spacer-4 * 3) / 4));
+  width: calc( 100% / 4 );
   @include flex-container-column();
 }
 
 .column-count-3 ::slotted(*) {
-  width: calc( 33.3% - (($spacer-4 * 2) / 3));
+  width: calc( 100% / 3 );
   @include flex-container-column();
 }
 
 .column-count-2 ::slotted(*) {
-  width: calc( 50% - (($spacer-4 * 1) / 2));
+  width: calc( 100% / 2 );
   @include flex-container-column();
 }
 
-
 @media screen and (max-width: $screen-tablet-max) {
-
   .column-count-2 ::slotted(*),
   .column-count-3 ::slotted(*),
   .column-count-4 ::slotted(*) {
@@ -40,11 +36,9 @@
 }
 
 @media screen and (max-width: $screen-mobile-max) {
-
   .column-count-2 ::slotted(*),
   .column-count-3 ::slotted(*),
   .column-count-4 ::slotted(*) {
     width: 100%;
   }
 }
-

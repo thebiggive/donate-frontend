@@ -16,14 +16,9 @@ export class BiggiveGrid {
    */
   @Prop() columnCount: number = 3;
 
-  /**
-   * Gap between columns, based on spacer CSS variable
-   */
-  @Prop() columnGap: number = 3;
-
   render() {
     return (
-      <div class={'grid column-count-' + this.columnCount + ' column-gap-' + this.columnGap + ' space-below-' + this.spaceBelow}>
+      <div class={'grid column-count-' + this.columnCount + ' space-below-' + this.spaceBelow}>
         <slot></slot>
       </div>
     );
