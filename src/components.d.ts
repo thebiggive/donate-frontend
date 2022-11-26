@@ -616,6 +616,7 @@ export namespace Components {
         "spaceBetween": boolean;
     }
     interface BiggiveHeader {
+        "closeMenuFromOutside": () => Promise<void>;
         /**
           * Logo hyperlink URL
          */
