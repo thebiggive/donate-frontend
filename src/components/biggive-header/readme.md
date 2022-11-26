@@ -13,6 +13,19 @@
 | `spaceBelow` | `space-below` | Space below component | `number` | `0`     |
 
 
+## Methods
+
+### `closeMenuFromOutside() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*
