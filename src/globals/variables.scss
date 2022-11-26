@@ -8,7 +8,7 @@ $screen-mobile-max: 576px;
 $screen-tablet-max: 768px;
 $screen-desktop-max: 1200px;
 
-$aspect-ratio-banners: 1152/352;
+$aspect-ratio-banners: percentage(352 / 1152);
 
 $colour-primary: #2C089B;
 $colour-secondary: #2AF135;
