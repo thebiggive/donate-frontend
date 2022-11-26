@@ -1,10 +1,13 @@
 import { APP_BASE_HREF, isPlatformBrowser } from '@angular/common';
-import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, Component, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import {
   Event as RouterEvent,
   NavigationEnd,
+  NavigationStart,
   Router,
 } from '@angular/router';
+import { BiggiveHeader } from '@biggive/components-angular';
+import { filter } from 'rxjs/operators';
 
 import { AnalyticsService } from './analytics.service';
 import { DonationService } from './donation.service';
@@ -16,7 +19,9 @@ import { NavigationService } from './navigation.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements AfterViewInit, OnInit {
+  @ViewChild(BiggiveHeader) header: BiggiveHeader;
+
   constructor(
     private analyticsService: AnalyticsService,
     @Inject(APP_BASE_HREF) private baseHref: string,
@@ -62,6 +67,13 @@ export class AppComponent implements OnInit {
     // always set up during the initial page load, regardless of whether the first
     // page the donor lands on makes wider use of DonationService or not.
     this.donationService.deriveDefaultCountry();
+  }
+
+  ngAfterViewInit() {
+    const headerEl = this.header;
+    this.router.events.pipe(
+      filter((event: RouterEvent) => event instanceof NavigationStart),
+    ).subscribe(() => headerEl.closeMenuFromOutside());
   }
 
   /**
