@@ -1,7 +1,7 @@
 {
   "name": "@biggive/components-angular",
   "description": "Angular-packaged components for @biggive apps",
-  "version": "1.0.171",
+  "version": "1.0.172",
   "peerDependencies": {
     "@angular/common": "^14.1.0",
     "@angular/core": "^14.1.0",
