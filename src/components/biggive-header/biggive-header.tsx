@@ -1,4 +1,4 @@
-import { Component, Prop, Element, h } from '@stencil/core';
+import { Component, Element, h, Method, Prop } from '@stencil/core';
 
 @Component({
   tag: 'biggive-header',
@@ -17,6 +17,11 @@ export class BiggiveHeader {
    * Logo hyperlink URL
    */
   @Prop() logoUrl: string = '/';
+
+  @Method()
+  async closeMenuFromOutside() {
+    this.host.shadowRoot.querySelector('.nav-primary').setAttribute('data-visible', 'false');
+  }
 
   private toggleNav = (event: any) => {
     var nav = this.host.shadowRoot.querySelector('.nav-primary');
