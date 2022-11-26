@@ -21,6 +21,7 @@ export class BiggiveHeader {
   @Method()
   async closeMenuFromOutside() {
     this.host.shadowRoot.querySelector('.nav-primary').setAttribute('data-visible', 'false');
+    this.host.shadowRoot.querySelector('.nav-toggle').classList.remove('active');
   }
 
   private toggleNav = (event: any) => {
