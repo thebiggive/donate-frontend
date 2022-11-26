@@ -37,9 +37,9 @@
   .banner {
     top: 0;
     margin-top: 2px;
-    padding-bottom: 33.3%;
+    padding-bottom: $aspect-ratio-banners;
     background-color: #F1F1F1;
-    background-size: cover;
+    background-size: contain;
     background-repeat: no-repeat;
     img {
       display: none;
