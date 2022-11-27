@@ -168,13 +168,13 @@
       height: 30px;
       position: relative;
       z-index: 101;
-      background-image: url('assets/images/menu.svg');
+      background-image: url(/assets/images/menu.svg);
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center center;
       cursor: pointer;
       &.active {
-        background-image: url('assets/images/cross.svg?1');
+        background-image: url(/assets/images/cross.svg?1);
         display: block;
         background-color: $colour-primary;
         background-size: 50% 50%;
