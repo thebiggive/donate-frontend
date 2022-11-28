@@ -55,6 +55,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   // scrolling back to the previous metacampaign position, so to be safe we use the highest
   // scroll Y we've seen without intervention, plus a ~25% buffer.
   private smallestSignificantScrollPx = 250;
+  private tickerUpdateTimer: any;
 
   private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v2`; // Key is per-domain/env
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
@@ -103,6 +104,10 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   ngOnDestroy() {
+    if (isPlatformBrowser(this.platformId) && this.tickerUpdateTimer) {
+      clearInterval(this.tickerUpdateTimer);
+    }
+
     if (this.routeChangeListener) {
       this.routeChangeListener.unsubscribe();
     }
@@ -430,6 +435,18 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
     // Just update the public property once.
     this.tickerItems = tickerItems;
+
+    if (this.tickerUpdateTimer) {
+      clearTimeout(this.tickerUpdateTimer);
+    }
+
+    // Load data just once, but refresh e.g. time left to launch summary once
+    // per second.
+    if (isPlatformBrowser(this.platformId)) {
+      this.tickerUpdateTimer = setTimeout(() => {
+        this.setTickerParams()
+      }, 1000);
+    }
   }
 
   private setFundSpecificProps() {
