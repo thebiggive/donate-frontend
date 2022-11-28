@@ -51,29 +51,22 @@ export default {
         type: 'select',
       },
     },
-    filtersApplied: {
-      name: 'Filters applied',
-      options: [true, false],
-      control: {
-        type: 'select',
-      },
-    },
   },
 };
 
 const Template = args => `
       <biggive-campaign-card-filter-grid
-        category-options="${args.categoryOptions}"
-        beneficiary-options="${args.beneficiaryOptions}"
-        location-options="${args.locationOptions}"
-        funding-options="${args.fundingOptions}"
+        category-options='${args.categoryOptions}'
+        beneficiary-options='${args.beneficiaryOptions}'
+        location-options='${args.locationOptions}'
+        funding-options='${args.fundingOptions}'
         search-text="${args.searchText}"
         filters-applied="${args.filtersApplied}",
-        selected-sort-by-option="${args.selectedSortByOption}"
-        selected-filter-categeory="${args.selectedFilterCategory}"
-        selected-filter-beneficiary="${args.selectedFilterBeneficiary}"
-        selected-filter-location="${args.selectedFilterLocation}"
-        selected-filter-funding="${args.selectedFilterFunding}"
+        ${args.selectedSortByOption ? 'selected-sort-by-option=' + args.selectedSortByOption : ''}
+        ${args.selectedFilterCategory ? 'selected-filter-category=' + args.selectedFilterCategory : ''}
+        ${args.selectedFilterBeneficiary ? 'selected-filter-beneficiary=' + args.selectedFilterBeneficiary : ''}
+        ${args.selectedFilterLocation ? 'selected-filter-location=' + args.selectedFilterLocation : ''}
+        ${args.selectedFilterFunding ? 'selected-filter-funding=' + args.selectedFilterFunding : ''}
         >
       <biggive-grid slot="campaign-grid" column-count="3">
         <biggive-campaign-card
@@ -115,19 +108,18 @@ const Template = args => `
       </biggive-campaign-card-filter-grid>
       `;
 
-document.addEventListener('doSearchAndFilterUpdate', $event => console.log($event));
+document.addEventListener('doSearchAndFilterUpdate', ($event: CustomEvent) => console.log($event.detail));
 
 export const CampaignCardFilterGridComponent = Template.bind({});
 CampaignCardFilterGridComponent.args = {
-  categoryOptions: ['ABC', 'DEF'],
-  beneficiaryOptions: ['ABC', 'DEF'],
-  locationOptions: ['ABC', 'DEF'],
-  fundingOptions: ['ABC', 'DEF'],
+  categoryOptions: JSON.stringify(['ABC', 'DEF']),
+  beneficiaryOptions: JSON.stringify(['ABC', 'DEF']),
+  locationOptions: JSON.stringify(['ABC', 'DEF']),
+  fundingOptions: JSON.stringify(['ABC', 'DEF']),
   searchText: '',
-  selectedSortByOption: 'Sort by', // use the placeholder as the defaulted option
-  selectedFilterCategory: 'Category', // use the placeholder as the defaulted option
-  selectedFilterBeneficiary: 'Beneficiary', // use the placeholder as the defaulted option
-  selectedFilterLocation: 'Location', // use the placeholder as the defaulted option
-  selectedFilterFunding: 'Funding', // use the placeholder as the defaulted option
-  filtersApplied: false,
+  selectedSortByOption: null,
+  selectedFilterCategory: null,
+  selectedFilterBeneficiary: null,
+  selectedFilterLocation: null,
+  selectedFilterFunding: null,
 };

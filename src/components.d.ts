@@ -424,30 +424,29 @@ export namespace Components {
     }
     interface BiggiveCampaignCardFilterGrid {
         /**
-          * JSON array of beneficiary key/values
+          * JSON array of beneficiary key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "beneficiaryOptions": string[];
+        "beneficiaryOptions": string | string[];
         /**
           * Defines the text on the search button
          */
         "buttonText": string;
         /**
-          * JSON array of category key/values
+          * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "categoryOptions": string[];
-        "filtersApplied": boolean;
+        "categoryOptions": string | string[];
         /**
-          * JSON array of funding key/values
+          * JSON array of funding key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "fundingOptions": string[];
+        "fundingOptions": string | string[];
         /**
           * Intro
          */
         "intro": string;
         /**
-          * JSON array of location key/values
+          * JSON array of location key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "locationOptions": string[];
+        "locationOptions": string | string[];
         /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
@@ -1839,30 +1838,29 @@ declare namespace LocalJSX {
     }
     interface BiggiveCampaignCardFilterGrid {
         /**
-          * JSON array of beneficiary key/values
+          * JSON array of beneficiary key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "beneficiaryOptions"?: string[];
+        "beneficiaryOptions"?: string | string[];
         /**
           * Defines the text on the search button
          */
         "buttonText"?: string;
         /**
-          * JSON array of category key/values
+          * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "categoryOptions"?: string[];
-        "filtersApplied"?: boolean;
+        "categoryOptions"?: string | string[];
         /**
-          * JSON array of funding key/values
+          * JSON array of funding key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "fundingOptions"?: string[];
+        "fundingOptions"?: string | string[];
         /**
           * Intro
          */
         "intro"?: string;
         /**
-          * JSON array of location key/values
+          * JSON array of location key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "locationOptions"?: string[];
+        "locationOptions"?: string | string[];
         /**
           * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it
          */

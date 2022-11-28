@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, h, Listen, Prop } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, h, Listen, Prop, State } from '@stencil/core';
 import { faFilterSlash, faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
@@ -29,6 +29,10 @@ export class BiggiveCampaignCardFilterGrid {
   }>;
 
   sortByPlaceholderText = 'Sort by';
+  beneficiariesPlaceHolderText = 'Beneficiary';
+  categoriesPlaceHolderText = 'Category';
+  locationsPlaceHolderText = 'Location';
+  fundingPlaceHolderText = 'Funding';
 
   /**
    * Space below component
@@ -62,26 +66,24 @@ export class BiggiveCampaignCardFilterGrid {
   @Prop() buttonText: string = 'Search';
 
   /**
-   * JSON array of category key/values
+   * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
    */
-  @Prop() categoryOptions: string[] = [];
+  @Prop() categoryOptions: string | string[] = [];
 
   /**
-   * JSON array of beneficiary key/values
+   * JSON array of beneficiary key/values, or takes a stringified equiavalent (for Storybook)
    */
-  @Prop() beneficiaryOptions: string[] = [];
+  @Prop() beneficiaryOptions: string | string[] = [];
 
   /**
-   * JSON array of location key/values
+   * JSON array of location key/values, or takes a stringified equiavalent (for Storybook)
    */
-  @Prop() locationOptions: string[] = [];
+  @Prop() locationOptions: string | string[] = [];
 
   /**
-   * JSON array of funding key/values
+   * JSON array of funding key/values, or takes a stringified equiavalent (for Storybook)
    */
-  @Prop() fundingOptions: string[] = [];
-
-  @Prop() filtersApplied: boolean;
+  @Prop() fundingOptions: string | string[] = [];
 
   /**
    * This helps us inject a pre-selected dropdown value from outside of this component.
@@ -112,6 +114,11 @@ export class BiggiveCampaignCardFilterGrid {
    */
   @Prop() selectedFilterFunding: string = null;
 
+  /**
+   * State variable - causes re-render on change
+   */
+  @State() filtersApplied: boolean;
+
   private getSearchAndFilterObject(): {
     searchText: string;
     sortBy: string;
@@ -141,12 +148,7 @@ export class BiggiveCampaignCardFilterGrid {
 
   @Listen('doSelectChange')
   doOptionSelectCompletedHandler(event) {
-    this.selectedSortByOption = this.el.shadowRoot.getElementById('sort-by').selectedValue;
-    this.selectedFilterCategory = this.el.shadowRoot.getElementById('categories').selectedValue;
-    this.selectedFilterBeneficiary = this.el.shadowRoot.getElementById('beneficiaries').selectedValue;
-    this.selectedFilterLocation = this.el.shadowRoot.getElementById('locations').selectedValue;
-    this.selectedFilterFunding = this.el.shadowRoot.getElementById('funding').selectedValue;
-
+    const nameOfUpdatedDropdown = event.detail.placeholder;
     // If this method was trigerred by the selection of a 'Sort by' dropdown option, then
     // emit an event to search, but do NOT emit an event for example when filter options
     // are selected, until the 'Apply filters' button is pressed which is handled separately
@@ -155,10 +157,23 @@ export class BiggiveCampaignCardFilterGrid {
     // `<biggive-form-field-select placeholder="Sort by" id="sort-by" onDoSelectChange={this.someHandleMethod}>`
     // but the problem with that is that `someHandleMethod` gets called first and then this
     // method gets called, leading to two calls and more risk for error. DON-570.
-    if (event.detail.placeholder === this.sortByPlaceholderText) {
-      console.log('emitting event:');
-      console.log(this.getSearchAndFilterObject());
-      this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+    switch (nameOfUpdatedDropdown) {
+      case this.sortByPlaceholderText:
+        this.selectedSortByOption = event.detail.value;
+        this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+        break;
+      case this.beneficiariesPlaceHolderText:
+        this.selectedFilterBeneficiary = event.detail.value;
+        break;
+      case this.categoriesPlaceHolderText:
+        this.selectedFilterCategory = event.detail.value;
+        break;
+      case this.fundingPlaceHolderText:
+        this.selectedFilterFunding = event.detail.value;
+        break;
+      case this.locationsPlaceHolderText:
+        this.selectedFilterLocation = event.detail.value;
+        break;
     }
   }
 
@@ -203,6 +218,12 @@ export class BiggiveCampaignCardFilterGrid {
     this.selectedFilterCategory = null;
     this.selectedFilterFunding = null;
     this.selectedFilterLocation = null;
+
+    // Clear <biggive-form-field-select> components' internal selectedValue and selectedLabel. DON-654.
+    ['sort-by', 'categories', 'beneficiaries', 'locations', 'funding'].forEach(id => {
+      this.el.shadowRoot.getElementById(id).selectedValue = null;
+      this.el.shadowRoot.getElementById(id).selectedLabel = null;
+    });
 
     // Emit the doSearchAndFilterUpdate event with null values. DON-654
     this.doSearchAndFilterUpdate.emit({
@@ -251,7 +272,7 @@ export class BiggiveCampaignCardFilterGrid {
               <a onClick={this.handleClearAll}>Clear all</a>
             </div>
             <div class="sort-wrap">
-              <biggive-form-field-select placeholder="Sort by" selectedLabel={this.selectedSortByOption} id="sort-by">
+              <biggive-form-field-select placeholder={this.sortByPlaceholderText} selectedLabel={this.selectedSortByOption} id="sort-by">
                 <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>
                 <biggive-form-field-select-option value="matchFundsRemaining" label="Match funds remaining"></biggive-form-field-select-option>
                 <biggive-form-field-select-option value="Relevance" label="Relevance"></biggive-form-field-select-option>
@@ -269,28 +290,36 @@ export class BiggiveCampaignCardFilterGrid {
               ></biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
-                <biggive-form-field-select placeholder="Category" selectedLabel={this.selectedFilterCategory} id="categories" space-below="2">
+                <biggive-form-field-select placeholder={this.categoriesPlaceHolderText} selectedLabel={this.selectedFilterCategory} id="categories" space-below="2">
                   {this.categoryOptions.length === 0
                     ? undefined
-                    : this.categoryOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
+                    : (Array.isArray(this.categoryOptions) ? this.categoryOptions : JSON.parse(this.categoryOptions)).map(option => (
+                        <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
+                      ))}
                 </biggive-form-field-select>
 
-                <biggive-form-field-select placeholder="Beneficiary" selectedLabel={this.selectedFilterBeneficiary} id="beneficiaries" space-below="2">
+                <biggive-form-field-select placeholder={this.beneficiariesPlaceHolderText} selectedLabel={this.selectedFilterBeneficiary} id="beneficiaries" space-below="2">
                   {this.beneficiaryOptions.length === 0
                     ? undefined
-                    : this.beneficiaryOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
+                    : (Array.isArray(this.beneficiaryOptions) ? this.beneficiaryOptions : JSON.parse(this.beneficiaryOptions)).map(option => (
+                        <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
+                      ))}
                 </biggive-form-field-select>
 
-                <biggive-form-field-select placeholder="Location" selectedLabel={this.selectedFilterLocation} id="locations" space-below="2">
+                <biggive-form-field-select placeholder={this.locationsPlaceHolderText} selectedLabel={this.selectedFilterLocation} id="locations" space-below="2">
                   {this.locationOptions.length === 0
                     ? undefined
-                    : this.locationOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
+                    : (Array.isArray(this.locationOptions) ? this.locationOptions : JSON.parse(this.locationOptions)).map(option => (
+                        <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
+                      ))}
                 </biggive-form-field-select>
 
-                <biggive-form-field-select placeholder="Funding" selectedLabel={this.selectedFilterFunding} id="funding" space-below="2">
+                <biggive-form-field-select placeholder={this.fundingPlaceHolderText} selectedLabel={this.selectedFilterFunding} id="funding" space-below="2">
                   {this.fundingOptions.length === 0
                     ? undefined
-                    : this.fundingOptions.map(option => <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>)}
+                    : (Array.isArray(this.fundingOptions) ? this.fundingOptions : JSON.parse(this.fundingOptions)).map(option => (
+                        <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
+                      ))}
                 </biggive-form-field-select>
                 <div class="align-right">
                   <biggive-button label="Apply filters" onClick={this.handleApplyFilterButtonClick} />
