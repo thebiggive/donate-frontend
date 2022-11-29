@@ -298,10 +298,6 @@ export class StripeService {
   }
 
   private getPaymentRequestButtonDisplayItems(donation: Donation): PaymentRequestItem[] | undefined {
-    if (!donation.tipAmount && !donation.feeCoverAmount) {
-      return undefined;
-    }
-
     const items = [
       {
         amount: 100 * donation.donationAmount,
