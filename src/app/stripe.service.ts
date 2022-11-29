@@ -331,6 +331,12 @@ export class StripeService {
             confirmResult.error.message ?? '[No message]',
           );
 
+          if (donation.donationId) {
+            // Ensure we don't try to re-use the same payment method, as with PRBs it seemingly gets "disconnected"
+            // from the Customer and retries fail.
+            this.paymentMethodIds.delete(donation.donationId);
+          }
+
           resolve(confirmResult);
           return;
         }
@@ -350,6 +356,9 @@ export class StripeService {
         this.analyticsService.logEvent(`${analyticsEventActionPrefix}requires_action`, confirmResult.paymentIntent.next_action?.type ?? '[Action unknown]');
         this.stripe?.confirmCardPayment(donation.clientSecret || '').then(confirmAgainResult => {
           if (confirmAgainResult.error) {
+            if (donation.donationId) {
+              this.paymentMethodIds.delete(donation.donationId); // As above
+            }
             this.analyticsService.logError(`${analyticsEventActionPrefix}further_action_error`, confirmAgainResult.error.message ?? '[No message]');
           }
 
