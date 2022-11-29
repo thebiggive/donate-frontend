@@ -31,6 +31,7 @@ export class StripeService {
   private lastCardCountry?: string;
   private paymentRequest: PaymentRequest;
   private stripe: Stripe | null;
+  private paymentMethodEvents: Map<string, PaymentRequestPaymentMethodEvent>;
   private paymentMethodIds: Map<string, string>; // Donation ID to payment method ID.
 
   constructor(
@@ -135,9 +136,19 @@ export class StripeService {
           };
         }
 
+        let thePaymentMethodEvent = this.paymentMethodEvents.get(donation.donationId);
+
         this.payWithMethod(donation, paymentMethod, !isPrb).then(result => {
+          if (thePaymentMethodEvent) {
+            thePaymentMethodEvent.complete(result.error ? 'fail' : 'success');
+          }
+
           resolve(result);
         }).catch(error => {
+          if (thePaymentMethodEvent) {
+            thePaymentMethodEvent.complete('fail');
+          }
+
           reject(error);
         });
       });
@@ -240,9 +251,9 @@ export class StripeService {
         return;
       }
 
+      this.paymentMethodEvents.set(donation.donationId, event);
       this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
 
-      event.complete('success');
       resultObserver.next(event.paymentMethod?.billing_details); // Let the page hide the card details & make 'Next' available.
     });
 
