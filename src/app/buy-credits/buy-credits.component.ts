@@ -388,6 +388,16 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
   }
 
   private createAndFinaliseTipDonation() {
+    // The donation amount to Big Give is whatever the user is 'tipping' in the Buy Credits form.
+    const donationAmount = this.calculatedTipAmount();
+
+    // If user fills Buy Credits form with a £0 tip to Big Give, then do NOT attempt to create
+    // the donation, because MatchBot will respond with an error as the minimum donation amount
+    // must be £1. DON-689.
+    if (donationAmount < 1) {
+      return;
+    }
+
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
@@ -397,7 +407,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
       creationRecaptchaCode: environment.identityEnabled ? undefined : this.captchaCode,
       currencyCode: this.campaign.currencyCode || 'GBP',
       // IMPORTANT: donationAmount set as the tip value
-      donationAmount: this.calculatedTipAmount(),
+      donationAmount: donationAmount,
       donationMatched: this.campaign.isMatched, // this should always be false
       feeCoverAmount: 0,
       giftAid: this.giftAidGroup.value.giftAid,
