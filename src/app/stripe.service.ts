@@ -292,9 +292,9 @@ export class StripeService {
       label,
       // In pence/cents, inc. tip
       amount:
-        (100 * donation.donationAmount) +
-        (100 * donation.tipAmount) +
-        (100 * donation.feeCoverAmount),
+        parseInt((100 * donation.donationAmount).toString(), 10) +
+        parseInt((100 * donation.tipAmount).toString(), 10) +
+        parseInt((100 * donation.feeCoverAmount).toString(), 10),
     };
   }
 
@@ -308,14 +308,14 @@ export class StripeService {
 
     if (donation.tipAmount > 0) {
       items.push({
-        amount: 100 * donation.tipAmount,
+        amount: parseInt((100 * donation.tipAmount).toString(), 10),
         label: 'Donation to Big Give',
       });
     }
 
     if (donation.feeCoverAmount > 0) {
       items.push({
-        amount: 100 * donation.feeCoverAmount,
+        amount: parseInt((100 * donation.feeCoverAmount).toString(), 10),
         label: 'Fee cover',
       });
     }
