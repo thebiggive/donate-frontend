@@ -456,12 +456,10 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       figure: this.currencyPipe.transform(this.fund?.totalAmount, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
     });
     if (CampaignService.isOpenForDonations(this.campaign)) {
-      tickerItems.push(...[
-        {
-          label: 'remaining',
-          figure: this.timeLeftPipe.transform(this.campaign.endDate),
-        },
-      ]);
+      tickerItems.push({
+        label: 'remaining',
+        figure: this.timeLeftPipe.transform(this.campaign.endDate),
+      });
     } else {
       tickerItems.push({
         label: 'days duration',
