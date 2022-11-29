@@ -46,6 +46,7 @@ export class StripeService {
 
     this.didInit = true;
 
+    this.paymentMethodEvents = new Map();
     this.paymentMethodIds = new Map();
 
     // Initialising through the ES Module like this is not required, but is made available by
