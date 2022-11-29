@@ -19,7 +19,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
+import { RecaptchaComponent } from 'ng-recaptcha';
 import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
 import { PaymentMethod, StripeCardElement, StripeElementChangeEvent, StripeError, StripePaymentRequestButtonElement } from '@stripe/stripe-js';
 import { EMPTY, Observer } from 'rxjs';
@@ -468,7 +468,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.donation.optInCharityEmail = this.marketingGroup.value.optInCharityEmail;
       this.donation.optInTbgEmail = this.marketingGroup.value.optInTbgEmail;
       this.donation.optInChampionEmail = this.marketingGroup.value.optInChampionEmail;
+
+      const lastTipAmount = this.donation.tipAmount;
       this.donation.tipAmount = this.sanitiseCurrency(this.amountsGroup.value.tipAmount);
+      if (lastTipAmount !== this.donation.tipAmount) {
+        this.preparePaymentRequestButton(this.donation, this.paymentGroup);
+      }
 
       if (this.donation.giftAid || this.donation.tipGiftAid) {
         this.donation.homePostcode = this.giftAidGroup.value.homeOutsideUK ? 'OVERSEAS' : this.giftAidGroup.value.homePostcode;
