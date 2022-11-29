@@ -392,9 +392,9 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     const donationAmount = this.calculatedTipAmount();
 
     // If user fills Buy Credits form with a £0 tip to Big Give, then do NOT attempt to create
-    // the donation, because MatchBot will respond with an error as the minimum donation amount
-    // must be £1. DON-689.
-    if (donationAmount < 1) {
+    // the donation, because MatchBot will respond with an error saying donationAmount is a
+    // required field. DON-689.
+    if (donationAmount <= 0) {
       return;
     }
 
