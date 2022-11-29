@@ -690,6 +690,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       }
       this.submitting = false;
 
+      // Reset PRB to make sure everything knows we need a new PaymentMethod.
+      // And go back to the payment step for the PRB to be clicked again, or card
+      // to be entered.
+      this.preparePaymentRequestButton(this.donation, this.paymentGroup)
+      this.jumpToStep('Payment details');
+      this.goToFirstVisibleError();
+
       return;
     }
 
