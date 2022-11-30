@@ -641,7 +641,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   async payWithStripe() {
-    if (!this.donation || !this.donation.clientSecret || !this.card) {
+    const methodIsReady = this.card || (this.stripeFirstSavedMethod && this.paymentGroup.value.useSavedCard);
+
+    if (!this.donation || !this.donation.clientSecret || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
       this.stripeResponseErrorCode = undefined;
       this.analyticsService.logError('stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
@@ -673,7 +675,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // Else settlement is via a new or saved card (including wallets / Payment Request Buttons).
     const result = this.paymentGroup.value.useSavedCard
         ? await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.stripeFirstSavedMethod as PaymentMethod)
-        : await this.stripeService.confirmPaymentWithNewCardOrPRB(this.donation, this.card);
+        : await this.stripeService.confirmPaymentWithNewCardOrPRB(this.donation, this.card as StripeCardElement);
 
     if (!result || result.error) {
       if (result) {
