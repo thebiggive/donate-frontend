@@ -1215,9 +1215,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.paymentRequestButton.clear();
     }
 
-    const paymentRequestResultObserver: Observer<PaymentMethod.BillingDetails | undefined> = {
-      next: (billingDetails?: PaymentMethod.BillingDetails) => {
-        if (billingDetails && donation) {
+    const paymentRequestResultObserver: Observer<{billingDetails: PaymentMethod.BillingDetails | undefined, walletName: string}> = {
+      next: (observed) => {
+        if (observed.billingDetails && donation) {
           this.analyticsService.logEvent(
             'stripe_prb_setup_success',
             `Stripe PRB success for donation ${donation.donationId} to campaign ${this.campaignId}`,
@@ -1225,8 +1225,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
           // Set form and `donation` billing fields from PRB card's data.
           paymentGroup.patchValue({
-            billingCountry: billingDetails.address?.country,
-            billingPostcode: billingDetails.address?.postal_code,
+            billingCountry: observed.billingDetails.address?.country,
+            billingPostcode: observed.billingDetails.address?.postal_code,
           });
 
           this.stripePaymentMethodReady = true;
@@ -1236,12 +1236,19 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
           return;
         }
+        // Else there was no Payment Method (or details), so the PRB failed.
 
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
         this.addStripeCardBillingValidators();
-        this.stripeError = 'Payment failed – please try again';
-        this.stripeResponseErrorCode = undefined;
+
+        // I *think* `payWithStripe()` also sets `this.stripeError` & `this.stripeResponseErrorCode`,
+        // but that this event's handling typically happens later. So we can take the opportunity to replace
+        // `stripeError` with a more specific, wallet-targeted explanation.
+        if (this.stripeResponseErrorCode === 'card_declined') {
+          const walletFriendlyName = observed.walletName === 'apple_pay' ? 'Apple Pay' : 'Google Pay';
+          this.stripeError = `Payment failed. Most errors like this are because the billing address doesn't match; this must align for security reasons. Please check your card's billing address in your ${walletFriendlyName} wallet matches your the address your bank has, then try again.`;
+        }
       },
       error: (err) => {
         this.stripePaymentMethodReady = false;
