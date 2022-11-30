@@ -894,7 +894,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       // Reset Stripe validators so the ValidateBillingPostCode custom validator
       // is removed, so billing postcode doesn't show as invalid after a change
       this.addStripeCardBillingValidators();
-      this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
     }
   }
 
@@ -1029,8 +1028,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     const stepper = this.elRef.nativeElement.querySelector('#stepper');
     const steps = stepper.getElementsByClassName('mat-step');
     const stepJustDone = steps[this.stepper.selectedIndex];
-    const firstElInStepWithAngularError = stepJustDone.querySelector('.ng-invalid[formControlName]');
-    if (firstElInStepWithAngularError) {
+
+    // We ought to update value + validity after any validation changes, which will hopefully fix incorrently trying to surface
+    // `.ng-invalid` elements anyway. But to be safe, we also now check that the input actually been interacted with and is
+    // currently visible to the donor.
+    const firstElInStepWithAngularError = stepJustDone.querySelector('.ng-invalid.ng-touched[formControlName]');
+    if (firstElInStepWithAngularError && !this.closeAncestorsHaveDisplayNone(firstElInStepWithAngularError)) {
       this.scrollTo(firstElInStepWithAngularError);
       return true;
     }
@@ -1462,6 +1465,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private addUKValidators(): void {
     this.giftAidGroup.controls.giftAid.setValidators([Validators.required]);
+    this.giftAidGroup.updateValueAndValidity();
   }
 
   private setConditionalValidators(): void {
@@ -1623,6 +1627,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private removeStripeCardBillingValidators() {
     this.paymentGroup.controls.billingCountry.setValidators([]);
     this.paymentGroup.controls.billingPostcode.setValidators([]);
+    this.paymentGroup.controls.billingCountry.updateValueAndValidity();
+    this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
   }
 
   private addStripeCardBillingValidators() {
@@ -1633,6 +1639,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       Validators.required,
       Validators.pattern('^[0-9a-zA-Z ]{2,8}$'),
     ]);
+    this.paymentGroup.controls.billingCountry.updateValueAndValidity();
+    this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
   }
 
   /**
@@ -1761,5 +1769,27 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.router.navigate(['thanks', donation.donationId], {
       replaceUrl: true,
     });
+  }
+
+  private closeAncestorsHaveDisplayNone(el: HTMLElement): boolean {
+    const levelsToCheck = 6; // Bug in `billiingPostcode` 30/11/22 had `display: none` 5 levels up from the input.
+    let levelsUp = 0;
+    let currentEl: HTMLElement | null = el;
+
+    while (levelsUp <= levelsToCheck) {
+      if (currentEl.style.display === 'none') {
+        return true;
+      }
+
+      currentEl = currentEl.parentElement;
+
+      if (!currentEl) {
+        return false;
+      }
+
+      levelsUp++;
+    }
+
+    return false;
   }
 }
