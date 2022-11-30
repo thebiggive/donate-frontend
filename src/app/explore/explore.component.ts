@@ -71,21 +71,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
   @HostListener('doSearchAndFilterUpdate', ['$event'])
   onDoSearchAndFilterUpdate(event: CustomEvent) {
-    const update = event.detail;
-    if (!update.searchText &&
-        !update.sortBy &&
-        !update.filterCategory &&
-        !update.filterBeneficiary &&
-        !update.filterFunding &&
-        !update.filterLocation) {
-          // clear filters
-          this.searchService.reset(this.getDefaultSort(), false);
-          this.setQueryParams();
-        }
-    
-    else {
-      this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
-    }
+    this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
   }
 
 

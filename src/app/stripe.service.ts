@@ -31,6 +31,7 @@ export class StripeService {
   private lastCardCountry?: string;
   private paymentRequest: PaymentRequest;
   private stripe: Stripe | null;
+  private paymentMethodEvents: Map<string, PaymentRequestPaymentMethodEvent>;
   private paymentMethodIds: Map<string, string>; // Donation ID to payment method ID.
 
   constructor(
@@ -45,6 +46,7 @@ export class StripeService {
 
     this.didInit = true;
 
+    this.paymentMethodEvents = new Map();
     this.paymentMethodIds = new Map();
 
     // Initialising through the ES Module like this is not required, but is made available by
@@ -135,9 +137,19 @@ export class StripeService {
           };
         }
 
+        let thePaymentMethodEvent = this.paymentMethodEvents.get(donation.donationId);
+
         this.payWithMethod(donation, paymentMethod, !isPrb).then(result => {
+          if (thePaymentMethodEvent) {
+            thePaymentMethodEvent.complete(result.error ? 'fail' : 'success');
+          }
+
           resolve(result);
         }).catch(error => {
+          if (thePaymentMethodEvent) {
+            thePaymentMethodEvent.complete('fail');
+          }
+
           reject(error);
         });
       });
@@ -240,9 +252,9 @@ export class StripeService {
         return;
       }
 
+      this.paymentMethodEvents.set(donation.donationId, event);
       this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
 
-      event.complete('success');
       resultObserver.next(event.paymentMethod?.billing_details); // Let the page hide the card details & make 'Next' available.
     });
 
@@ -280,17 +292,13 @@ export class StripeService {
       label,
       // In pence/cents, inc. tip
       amount:
-        (100 * donation.donationAmount) +
-        (100 * donation.tipAmount) +
-        (100 * donation.feeCoverAmount),
+        parseInt((100 * donation.donationAmount).toString(), 10) +
+        parseInt((100 * donation.tipAmount).toString(), 10) +
+        parseInt((100 * donation.feeCoverAmount).toString(), 10),
     };
   }
 
   private getPaymentRequestButtonDisplayItems(donation: Donation): PaymentRequestItem[] | undefined {
-    if (!donation.tipAmount && !donation.feeCoverAmount) {
-      return undefined;
-    }
-
     const items = [
       {
         amount: 100 * donation.donationAmount,
@@ -300,14 +308,14 @@ export class StripeService {
 
     if (donation.tipAmount > 0) {
       items.push({
-        amount: 100 * donation.tipAmount,
+        amount: parseInt((100 * donation.tipAmount).toString(), 10),
         label: 'Donation to Big Give',
       });
     }
 
     if (donation.feeCoverAmount > 0) {
       items.push({
-        amount: 100 * donation.feeCoverAmount,
+        amount: parseInt((100 * donation.feeCoverAmount).toString(), 10),
         label: 'Fee cover',
       });
     }
@@ -331,6 +339,12 @@ export class StripeService {
             confirmResult.error.message ?? '[No message]',
           );
 
+          if (donation.donationId) {
+            // Ensure we don't try to re-use the same payment method, as with PRBs it seemingly gets "disconnected"
+            // from the Customer and retries fail.
+            this.paymentMethodIds.delete(donation.donationId);
+          }
+
           resolve(confirmResult);
           return;
         }
@@ -350,6 +364,9 @@ export class StripeService {
         this.analyticsService.logEvent(`${analyticsEventActionPrefix}requires_action`, confirmResult.paymentIntent.next_action?.type ?? '[Action unknown]');
         this.stripe?.confirmCardPayment(donation.clientSecret || '').then(confirmAgainResult => {
           if (confirmAgainResult.error) {
+            if (donation.donationId) {
+              this.paymentMethodIds.delete(donation.donationId); // As above
+            }
             this.analyticsService.logError(`${analyticsEventActionPrefix}further_action_error`, confirmAgainResult.error.message ?? '[No message]');
           }
 

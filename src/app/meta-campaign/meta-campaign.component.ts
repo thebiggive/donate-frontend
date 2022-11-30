@@ -92,12 +92,6 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
   }
 
-  @HostListener('doClearFilters', ['$event'])
-  onDoClearFilters(event: CustomEvent) {
-    this.searchService.reset(this.getDefaultSort(), false);
-    this.setQueryParams();
-  }
-
   @HostListener('doCardGeneralClick', ['$event'])
   onDoCardGeneralClick(event: CustomEvent) {
     this.router.navigateByUrl(event.detail.url);
@@ -434,7 +428,9 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     }
 
     // Just update the public property once.
-    this.tickerItems = tickerItems;
+    if (!this.fundSlug) {
+      this.tickerItems = tickerItems;
+    }
 
     if (this.tickerUpdateTimer) {
       clearTimeout(this.tickerUpdateTimer);
@@ -442,7 +438,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
     // Load data just once, but refresh e.g. time left to launch summary once
     // per second.
-    if (isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId) && !this.fundSlug) {
       this.tickerUpdateTimer = setTimeout(() => {
         this.setTickerParams()
       }, 1000);
@@ -452,6 +448,25 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   private setFundSpecificProps() {
     this.tickerMainMessage = this.currencyPipe.transform(this.fund?.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') +
       ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
+
+    const durationInDays = Math.floor((new Date(this.campaign.endDate).getTime() - new Date(this.campaign.startDate).getTime()) / 86400000);
+    const tickerItems = [];
+    tickerItems.push({
+      label: 'total match funds',
+      figure: this.currencyPipe.transform(this.fund?.totalAmount, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
+    });
+    if (CampaignService.isOpenForDonations(this.campaign)) {
+      tickerItems.push({
+        label: 'remaining',
+        figure: this.timeLeftPipe.transform(this.campaign.endDate),
+      });
+    } else {
+      tickerItems.push({
+        label: 'days duration',
+        figure: durationInDays.toString(),
+      });
+    }
+    this.tickerItems = tickerItems;
 
     // Show fund name if applicable *and* there's no fund logo. If there's a logo
     // its content + alt text should do the equivalent job.
