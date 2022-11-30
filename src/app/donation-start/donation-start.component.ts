@@ -1247,7 +1247,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         // `stripeError` with a more specific, wallet-targeted explanation.
         if (this.stripeResponseErrorCode === 'card_declined') {
           const walletFriendlyName = observed.walletName === 'apple_pay' ? 'Apple Pay' : 'Google Pay';
-          this.stripeError = `Payment failed. Most errors like this are because the billing address doesn't match; this must align for security reasons. Please check your card's billing address in your ${walletFriendlyName} wallet matches your the address your bank has, then try again.`;
+          this.stripeError = `Payment failed. This is most likely because the billing address doesn't match; this must align for security reasons. Please check your card's billing address in your ${walletFriendlyName} wallet matches your the address your bank has, then try again.`;
         }
       },
       error: (err) => {
