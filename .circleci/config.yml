@@ -21,7 +21,11 @@ jobs:
 
     steps:
       - browser-tools/install-chrome:
-          chrome-version: 107.0.5304.121 # https://github.com/puppeteer/puppeteer/blob/main/versions.js
+          # Major version needs to match puppeteer's in https://github.com/puppeteer/puppeteer/blob/main/versions.js
+          # But the minor versions here are not guaranteed to exist in CircleCI. I've not found a reliable way to determine
+          # a compatible version yet. I got the 107 one by looking back at the orb's default behaviour up to 29 November
+          # 2022.
+          chrome-version: 107.0.5304.121
       - browser-tools/install-chromedriver
 
       - checkout
@@ -30,6 +34,7 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "package-lock.json" }}
 
+      - run: npm config set puppeteer_skip_chromium_download true
       - run: npm install --quiet
 
       - save_cache:
