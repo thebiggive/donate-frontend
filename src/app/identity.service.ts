@@ -19,6 +19,7 @@ export const TBG_DONATE_ID_STORAGE = new InjectionToken<StorageService>('TBG_DON
 export class IdentityService {
   private readonly loginPath = '/auth';
   private readonly peoplePath = '/people';
+  private readonly resetPasswordTokenPath = '/password-reset-token';
   // Key is per-domain/env. For now we simply store a single JWT (or none).
   private readonly storageKey = `${environment.identityApiPrefix}/v1/jwt`;
 
@@ -34,6 +35,13 @@ export class IdentityService {
       credentials,
     );
   }
+
+  getResetPasswordToken(email: string) {
+    return this.http.post<{ jwt: string}>(
+      `${environment.identityApiPrefix}${this.resetPasswordTokenPath}`,
+      {email_address: email},
+    );
+  };
 
   create(person: Person): Observable<Person> {
     return this.http.post<Person>(

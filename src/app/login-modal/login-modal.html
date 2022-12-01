@@ -1,41 +1,80 @@
 <biggive-popup-standalone>
-  <h2 mat-dialog-title>Log in</h2>
+  <re-captcha
+    #captcha
+    size="invisible"
+    (resolved)="captchaReturn($event)"
+    siteKey="{{ recaptchaIdSiteKey }}"
+  ></re-captcha>
 
-  <mat-dialog-content class="mat-typography">
-    <form [formGroup]="form">
-      <re-captcha
-        #captcha
-        size="invisible"
-        (resolved)="captchaReturn($event)"
-        siteKey="{{ recaptchaIdSiteKey }}"
-      ></re-captcha>
+  <div *ngIf="forgotPassword else logIn">
 
-      <mat-form-field class="b-w-100" color="primary">
-        <mat-label for="loginEmailAddress">Email address</mat-label>
-        <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress">
-      </mat-form-field>
+    <h2 mat-dialog-title>Reset Password</h2>
 
-      <mat-form-field class="b-w-100" color="primary">
-        <mat-label for="loginPassword">Password</mat-label>
-        <input matInput type="password" id="loginPassword" formControlName="password">
-      </mat-form-field>
+    <div *ngIf="!userAskedForResetLink">
+      <mat-dialog-content class="mat-typography">
+        <form [formGroup]="resetPasswordForm">
+          <mat-form-field class="b-w-100" color="primary">
+            <mat-label for="loginEmailAddress">Email address</mat-label>
+            <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress">
+          </mat-form-field>
+          <p class="b-rt-0">Please enter your email and click on the password reset link you receive.</p>
+        </form>
+      </mat-dialog-content>
 
-      <p class="b-rt-0">You will be logged in for 8 days. Please log out on this page afterwards if using a shared computer.</p>
+      <mat-dialog-actions align="end">
+        <button
+          id="reset-password-modal-submit"
+          mat-raised-button
+          [disabled]="!resetPasswordForm.valid || userAskedForResetLink"
+          (click)="sendPasswordResetLink()"
+          color="primary"
+        >Reset Password</button>
+        <button mat-raised-button mat-dialog-close cdkFocusInitial color="accent">Cancel</button>
+      </mat-dialog-actions>
+    </div>
 
-      <p *ngIf="loginError" class="error" aria-live="assertive">
-        Login error: {{ loginError }}
-      </p>
-    </form>
-  </mat-dialog-content>
+    <div *ngIf="userAskedForResetLink">
+      <p>Please check your email and click on the password reset link received.</p>
+      <mat-dialog-actions align="end">
+        <button mat-raised-button mat-dialog-close cdkFocusInitial color="primary">Ok</button>
+      </mat-dialog-actions>
+    </div>
+  </div>
 
-  <mat-dialog-actions align="end">
-    <button
-      id="login-modal-submit"
-      mat-raised-button
-      [disabled]="!form.valid || loggingIn"
-      (click)="login()"
-      color="primary"
-    >Log in</button>
-    <button mat-raised-button [mat-dialog-close]="false" cdkFocusInitial color="accent">Cancel</button>
-  </mat-dialog-actions>
+  <ng-template #logIn>
+    <h2 mat-dialog-title>Log in</h2>
+    <mat-dialog-content class="mat-typography">
+      <form [formGroup]="loginForm">
+        <mat-form-field class="b-w-100" color="primary">
+          <mat-label for="loginEmailAddress">Email address</mat-label>
+          <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress">
+        </mat-form-field>
+  
+        <mat-form-field class="b-w-100" color="primary">
+          <mat-label for="loginPassword">Password</mat-label>
+          <input matInput type="password" id="loginPassword" formControlName="password">
+        </mat-form-field>
+  
+        <p class="b-rt-0">You will be logged in for 8 days. Please log out on this page afterwards if using a shared computer.</p>
+  
+        <p *ngIf="loginError" class="error" aria-live="assertive">
+          Login error: {{ loginError }}
+        </p>
+      </form>
+    </mat-dialog-content>
+
+    <mat-dialog-actions style="justify-content: space-between;">
+      <a (click)="forgotPasswordClicked()">Forgot Password?</a>
+      <div>
+        <button
+          id="login-modal-submit"
+          mat-raised-button
+          [disabled]="!loginForm.valid || loggingIn"
+          (click)="login()"
+          color="primary"
+        >Log in</button>
+        <button mat-raised-button mat-dialog-close cdkFocusInitial color="accent">Cancel</button>
+      </div>
+    </mat-dialog-actions>
+  </ng-template>
 </biggive-popup-standalone>
