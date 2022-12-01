@@ -1307,7 +1307,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     if (this.psp === 'stripe') {
       this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
 
-      this.preparePaymentRequestButton(this.donation, this.paymentGroup);
+      if (this.creditPenceToUse > 0) {
+        this.stripePaymentMethodReady = true;
+      } else {
+        this.preparePaymentRequestButton(this.donation, this.paymentGroup);
+      }
     }
 
     // Amount reserved for matching is 'false-y', i.e. 0
