@@ -98,4 +98,10 @@ export const routes: Routes = [
     loadChildren: () => import('./meta-campaign/meta-campaign.module')
       .then(c => c.MetaCampaignModule),
   },
+  {
+    path: 'reset-password',
+    pathMatch: 'full',
+    loadChildren: () => import('./reset-password/reset-password.module')
+      .then(c => c.ResetPasswordModule),
+  },
 ];
