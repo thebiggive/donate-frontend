@@ -129,7 +129,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private initialTipSuggestedPercentage = 15;
 
-  private emailRegExp : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
+  // Validators.email regexp rejects most invalid emails but has a few edge-cases slip through.
+  // For example, it allows emails ending with numbers like hello@thebiggive.org.uk.123
+  // We needed tighter validation, so have adapted the Angular pattern iteratively including
+  // some simplification. We needed to loosen number cases again in Dec '22 because
+  // some addresses have a subdomain and also a *a1a*.com format main domain.
+  private emailRegExp : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[.a-zA-Z0-9-]{0,180}\.[a-zA-Z]{2,}$/;
   /**
    * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
    * input was valid (even if differently formatted). Loosely based on https://stackoverflow.com/a/10701634/2803757
