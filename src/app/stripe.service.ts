@@ -212,7 +212,7 @@ export class StripeService {
 
   getPaymentRequestButton(
     donation: Donation,
-    resultObserver: Observer<PaymentMethod.BillingDetails | undefined>,
+    resultObserver: Observer<{billingDetails: PaymentMethod.BillingDetails | undefined, walletName: string}>,
   ): StripePaymentRequestButtonElement | null {
     if (!this.elements || !this.stripe) {
       console.log('Stripe Elements not ready');
@@ -255,7 +255,11 @@ export class StripeService {
       this.paymentMethodEvents.set(donation.donationId, event);
       this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
 
-      resultObserver.next(event.paymentMethod?.billing_details); // Let the page hide the card details & make 'Next' available.
+      // On success, let the page hide the card details & make 'Next' available.
+      resultObserver.next({
+        billingDetails: event.paymentMethod?.billing_details,
+        walletName: event.walletName,
+      });
     });
 
     const existingElement = this.elements.getElement('paymentRequestButton');
