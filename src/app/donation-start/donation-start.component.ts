@@ -129,7 +129,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private initialTipSuggestedPercentage = 15;
 
-  private emailRegExp : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
+  // Validators.email regexp rejects most invalid emails but has a few edge-cases slip through.
+  // For example, it allows emails ending with numbers like hello@thebiggive.org.uk.123
+  // We needed tighter validation, so have adapted the Angular pattern iteratively including
+  // some simplification. We needed to loosen part of it in Dec '22 because subdomains
+  // weren't properly supported in the previous version.
+  private emailRegExp : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[.a-zA-Z0-9-]{0,180}\.[a-zA-Z]{2,}$/;
   /**
    * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
    * input was valid (even if differently formatted). Loosely based on https://stackoverflow.com/a/10701634/2803757
@@ -641,7 +646,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   async payWithStripe() {
-    if (!this.donation || !this.donation.clientSecret || !this.card) {
+    const methodIsReady = this.card || (this.stripeFirstSavedMethod && this.paymentGroup.value.useSavedCard);
+
+    if (!this.donation || !this.donation.clientSecret || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
       this.stripeResponseErrorCode = undefined;
       this.analyticsService.logError('stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
@@ -673,7 +680,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // Else settlement is via a new or saved card (including wallets / Payment Request Buttons).
     const result = this.paymentGroup.value.useSavedCard
         ? await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.stripeFirstSavedMethod as PaymentMethod)
-        : await this.stripeService.confirmPaymentWithNewCardOrPRB(this.donation, this.card);
+        : await this.stripeService.confirmPaymentWithNewCardOrPRB(this.donation, this.card as StripeCardElement);
 
     if (!result || result.error) {
       if (result) {
