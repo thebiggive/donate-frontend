@@ -134,7 +134,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   // We needed tighter validation, so have adapted the Angular pattern iteratively including
   // some simplification. We needed to loosen part of it in Dec '22 because subdomains
   // weren't properly supported in the previous version.
-  private emailRegExp : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+[.a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]*@(?:[a-zA-Z0-9-]{1,180}\.)+[a-zA-Z]{2,}$/;
+  private emailRegExp : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9-]{1,180}\.)+[a-zA-Z]{2,}$/;
   /**
    * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
    * input was valid (even if differently formatted). Loosely based on https://stackoverflow.com/a/10701634/2803757
