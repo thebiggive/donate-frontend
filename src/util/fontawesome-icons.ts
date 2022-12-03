@@ -207,27 +207,27 @@ export class FontAwesomeIconsService {
     const matchingItems = FontAwesomeIconsService.getBeneficiaries().filter(ii => ii.name === beneficiary);
 
     // For an unknown/invalid beneficiary, show 'other' symbol.
-    return matchingItems[0].icon || faPlus;
+    return matchingItems.length > 0 ? matchingItems[0].icon : faPlus;
   }
 
   static getMiscIcon(misc: string): IconDefinition {
     const matchingItems = FontAwesomeIconsService.getMisc().filter(ii => ii.name === misc);
 
     // For an unknown/invalid beneficiary, show 'other' symbol.
-    return matchingItems[0].icon || faPlus;
+    return matchingItems.length > 0 ? matchingItems[0].icon : faPlus;
   }
 
   static getSocialIcon(social: string): IconDefinition {
     const matchingItems = FontAwesomeIconsService.getSocials().filter(ii => ii.name === social);
 
     // For an unknown/invalid beneficiary, show 'other' symbol.
-    return matchingItems[0].icon || faPlus;
+    return matchingItems.length > 0 ? matchingItems[0].icon : faPlus;
   }
 
   static getCategoryIcon(category: string): IconDefinition {
     const matchingItems = FontAwesomeIconsService.getCategories().filter(ii => ii.name === category);
 
     // For an unknown/invalid category, show 'other' symbol.
-    return matchingItems[0]?.icon || faPlus;
+    return matchingItems.length > 0 ? matchingItems[0].icon : faPlus;
   }
 }
