@@ -240,6 +240,10 @@ export class StripeService {
     // in the event that we re-created the PRB, and not trying to call back to a stale
     // element.
     this.paymentRequest.on('paymentmethod', (event: PaymentRequestPaymentMethodEvent) => {
+      console.log('\n\n\n\n');
+      console.log('Logging event.paymentMethod inside StripeService.getPaymentRequestButton():');
+      console.log(JSON.stringify(event.paymentMethod, null, 2));
+      console.log('\n\n\n\n');
       // Update fee details before confirming payment
       this.setLastCardMetadata(
         event.paymentMethod?.card?.brand,
