@@ -143,6 +143,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private postcodeFormatHelpRegExp = new RegExp('^\\s*([A-Z]{1,2}\\d{1,2}[A-Z]?)\\s*(\\d[A-Z]{2})\\s*$');
   // Based on the simplified pattern suggestions in https://stackoverflow.com/a/51885364/2803757
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
+
+  // Intentionally looser to support most countries' formats.
+  private billingPostcodeRegExp = new RegExp('^[0-9a-zA-Z -]{2,8}$');
+
   private captchaCode?: string;
   private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
@@ -689,7 +693,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         if (this.isBillingPostcodePossiblyInvalid()) {
           this.paymentGroup.controls.billingPostcode.setValidators([
             Validators.required,
-            Validators.pattern('^[0-9a-zA-Z ]{2,8}$'),
+            Validators.pattern(this.billingPostcodeRegExp),
             ValidateBillingPostCode
           ]);
           this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
@@ -1655,7 +1659,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     ]);
     this.paymentGroup.controls.billingPostcode.setValidators([
       Validators.required,
-      Validators.pattern('^[0-9a-zA-Z ]{2,8}$'),
+      Validators.pattern(this.billingPostcodeRegExp),
     ]);
     this.paymentGroup.controls.billingCountry.updateValueAndValidity();
     this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
