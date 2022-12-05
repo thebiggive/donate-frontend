@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
 import { getPasswordValidator } from '../validators/validate-passwords-same';
 import { allChildComponentImports } from '../../allChildComponentImports';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -26,8 +27,9 @@ export class ResetPasswordComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
   passwordForm: FormGroup;
   savingNewPassword: false;
+  token: string;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
     this.passwordForm = this.formBuilder.group({
@@ -39,6 +41,15 @@ export class ResetPasswordComponent implements OnInit {
         Validators.required,
       ]],
     });
+
+    this.route.queryParams
+      .subscribe(params => {
+        this.token = params.token;
+        if (!this.token) {
+          this.router.navigate(['']);
+        }
+      }
+    );
   }
 
   get passwordField() {
