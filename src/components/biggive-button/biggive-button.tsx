@@ -59,24 +59,6 @@ export class BiggiveButton {
    */
   @Prop() centered: boolean = false;
 
-  /**
-   * Boolean flag telling the component if the campaign is in the future (not open yet).
-   */
-  @Prop() isFutureCampaign: boolean = false;
-
-  /**
-   * Boolean flag telling the component if the campaign is in the future (not open yet).
-   */
-  @Prop() isPastCampaign: boolean = false;
-
-  /**
-   * To be used alongside isFutureCampaign = true or isPastCampaign = true.
-   * If either is true, we render out: 'Launches: ' + datetime or 'Closed: ' + datetime.
-   * Preferred format: DD/MM/YYYY, HH:MM
-   * DON-661.
-   */
-  @Prop() datetime: string;
-
   private handleButtonClick = (event: any) => {
     this.doButtonClick.emit({ event: event, url: event.target.parentElement.href });
   };
@@ -84,20 +66,13 @@ export class BiggiveButton {
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow + ' centered-' + this.centered}>
-        {this.isFutureCampaign || this.isPastCampaign ? (
-          <div class="msg-wrapper">
-            <biggive-misc-icon background-colour="white" icon-colour="black" icon="Timer"></biggive-misc-icon>
-            {this.isFutureCampaign ? <p>Launches {this.datetime}</p> : <p>Closed {this.datetime}</p>}
-          </div>
-        ) : (
-          <a
-            href={this.url}
-            target={this.openInNewTab ? '_blank' : '_self'}
-            class={'button button-' + this.colourScheme + ' full-width-' + this.fullWidth.toString() + ' size-' + this.size + ' rounded-' + this.rounded.toString()}
-          >
-            <span onClick={this.handleButtonClick}>{this.label}</span>
-          </a>
-        )}
+        <a
+          href={this.url}
+          target={this.openInNewTab ? '_blank' : '_self'}
+          class={'button button-' + this.colourScheme + ' full-width-' + this.fullWidth.toString() + ' size-' + this.size + ' rounded-' + this.rounded.toString()}
+        >
+          <span onClick={this.handleButtonClick}>{this.label}</span>
+        </a>
       </div>
     );
   }
