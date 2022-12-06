@@ -26,7 +26,7 @@
           id="reset-password-modal-submit"
           mat-raised-button
           [disabled]="!resetPasswordForm.valid || userAskedForResetLink"
-          (click)="sendPasswordResetLink()"
+          (click)="resetPasswordClicked()"
           color="primary"
         >Reset Password</button>
         <button mat-raised-button mat-dialog-close cdkFocusInitial color="accent">Cancel</button>

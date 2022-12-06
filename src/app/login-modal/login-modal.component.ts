@@ -65,7 +65,7 @@ export class LoginModalComponent implements OnInit {
     });
   }
 
-  captchaReturn(captchaResponse: string) {
+  captchaReturn(captchaResponse: string): void {
     if (captchaResponse === null) {
       // We had a code but now don't, e.g. after expiry at 1 minute. In this case
       // the trigger wasn't a login click so do nothing. A repeat login attempt will
@@ -100,19 +100,19 @@ export class LoginModalComponent implements OnInit {
     }
   }
 
-  login() {
+  login(): void {
     this.loggingIn = true;
     this.captcha.reset();
     this.captcha.execute();
   }
 
-  sendPasswordResetLink() {
+  resetPasswordClicked(): void {
     this.userAskedForResetLink = true;
     this.captcha.reset();
     this.captcha.execute();
   }
 
-  forgotPasswordClicked() {
+  forgotPasswordClicked(): void {
     this.forgotPassword = true;
   }
 }
