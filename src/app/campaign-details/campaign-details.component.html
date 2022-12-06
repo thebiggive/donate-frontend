@@ -48,6 +48,7 @@
       <div id="campaign-highlights-beneficiaries-and-categories-mobile">
         <div class="button-wrapper">
           <biggive-button
+            *ngIf="donateEnabled"
             space-below="5"
             colour-scheme="primary"
             label="Donate now"
@@ -55,10 +56,7 @@
             size="medium"
             rounded="false"
             [url]="'/donate/' + campaign.id"
-            [isFutureCampaign]="campaignInFuture"
-            [isPastCampaign]="campaignInPast"
-            [datetime]="getRelevantDateAsStr(campaign)">
-          </biggive-button>
+          ></biggive-button>
         </div>
         <app-campaign-info [campaign]="campaign"></app-campaign-info>
       </div>
@@ -246,11 +244,7 @@
             size="medium"
             rounded="false"
             [url]="'/donate/' + campaign.id"
-            [isFutureCampaign]="campaignInFuture"
-            [isPastCampaign]="campaignInPast"
-            [datetime]="getRelevantDateAsStr(campaign)"
-            >
-          </biggive-button>
+          ></biggive-button>
         </div>
 
       </div>
