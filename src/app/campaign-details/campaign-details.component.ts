@@ -77,7 +77,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
 
   getRelevantDateAsStr(campaign: Campaign) {
     const date = CampaignService.getRelevantDate(campaign);
-    return date ? this.datePipe.transform(date, 'dd/MM/yyyy, hh:mm') : null;
+    return date ? this.datePipe.transform(date, 'dd/MM/yyyy, HH:mm') : null;
   }
 
   private setSecondaryProps(campaign: Campaign) {

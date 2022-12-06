@@ -7,7 +7,7 @@
       </a>
       <a
         class=""
-        *ngIf="campaign.parentRef"
+        *ngIf="campaign.parentRef && !fromFund"
         mat-icon-button
         (click)="goBackToMetacampaign()"
       >

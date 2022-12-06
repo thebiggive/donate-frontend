@@ -206,7 +206,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   getRelevantDateAsStr(campaign: CampaignSummary) {
     const date = CampaignService.getRelevantDate(campaign);
-    return date ? this.datePipe.transform(date, 'dd/MM/yyyy, hh:mm') : null;
+    return date ? this.datePipe.transform(date, 'dd/MM/yyyy, HH:mm') : null;
   }
 
   private loadMoreForCurrentSearch() {
