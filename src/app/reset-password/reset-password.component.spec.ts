@@ -31,18 +31,11 @@ describe('ResetPasswordComponent', () => {
       declarations: [
       ],
       imports: [
-        FlexLayoutModule,
         FormsModule,
         MatButtonModule,
-        MatCheckboxModule,
         MatDialogModule,
-        MatIconModule,
         MatInputModule,
-        MatRadioModule,
-        MatProgressBarModule,
         MatProgressSpinnerModule,
-        MatSelectModule,
-        MatStepperModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
         RecaptchaModule,
