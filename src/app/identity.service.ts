@@ -37,8 +37,8 @@ export class IdentityService {
     );
   }
 
-  getResetPasswordToken(email: string) {
-    return this.http.post<{ jwt: string}>(
+  getResetPasswordToken(email: string): Observable<[]> {
+    return this.http.post<[]>(
       `${environment.identityApiPrefix}${this.resetPasswordTokenPath}`,
       {email_address: email},
     );
