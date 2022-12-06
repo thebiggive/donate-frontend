@@ -20,6 +20,7 @@ export class IdentityService {
   private readonly loginPath = '/auth';
   private readonly peoplePath = '/people';
   private readonly resetPasswordTokenPath = '/password-reset-token';
+  private readonly resetPasswordPath = '/change-forgotten-password';
   // Key is per-domain/env. For now we simply store a single JWT (or none).
   private readonly storageKey = `${environment.identityApiPrefix}/v1/jwt`;
 
@@ -40,6 +41,16 @@ export class IdentityService {
     return this.http.post<{ jwt: string}>(
       `${environment.identityApiPrefix}${this.resetPasswordTokenPath}`,
       {email_address: email},
+    );
+  };
+
+  resetPassword(password: string, token: string) {
+    return this.http.post<{ jwt: string}>(
+      `${environment.identityApiPrefix}${this.resetPasswordPath}`,
+      {
+        new_password: password,
+        secret: token
+      },
     );
   };
 

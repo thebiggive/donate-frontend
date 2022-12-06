@@ -3,10 +3,12 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
 import { getPasswordValidator } from '../validators/validate-passwords-same';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IdentityService } from '../identity.service';
 
 @Component({
   standalone: true,
@@ -19,6 +21,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatButtonModule,
     MatDialogModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     RecaptchaModule,
   ],
@@ -26,10 +29,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ResetPasswordComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
   passwordForm: FormGroup;
-  savingNewPassword: false;
+  savingNewPassword: boolean = false;
+  saveSuccessful: boolean|undefined = undefined;
+  errorMessage: string;
   token: string;
 
-  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private identityService: IdentityService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
     this.passwordForm = this.formBuilder.group({
@@ -52,14 +62,6 @@ export class ResetPasswordComponent implements OnInit {
     );
   }
 
-  get passwordField() {
-    if (!this.passwordForm) {
-      return undefined;
-    }
-
-    return this.passwordForm.get('passwordField');
-  }
-
   get confirmPasswordField() {
     if (!this.passwordForm) {
       return undefined;
@@ -68,6 +70,17 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   saveNewPassword = () => {
+    this.savingNewPassword = true;
+    this.identityService.resetPassword(this.passwordForm.controls.password.value, this.token).subscribe(
+      (response) => {
+        this.savingNewPassword = false;
+        this.saveSuccessful = true;
+      },
+      (error) => {
+        this.savingNewPassword = false;
+        this.saveSuccessful = false;
+      }
+    )
   };
 
   onPasswordConfirmationFocus = () => {
