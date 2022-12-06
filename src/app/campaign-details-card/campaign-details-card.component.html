@@ -20,7 +20,12 @@
     <div class="c-campaign-target" *ngIf="campaign.target > 0">
       <h2 class="c-campaign-target__description b-grey b-light">Campaign target</h2>
       <p class="c-campaign-target__value b-bold">{{ campaign.target | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</p>
-      <mat-progress-bar class="c-progress" [value]="percentRaised" *ngIf="campaign.amountRaised > 0"></mat-progress-bar>
+      <mat-progress-bar
+        class="c-progress"
+        [value]="percentRaised"
+        [attr.aria-label]="percentRaised + '% of target raised'"
+        *ngIf="campaign.amountRaised > 0"
+      ></mat-progress-bar>
     </div>
     <div class="c-campaign-raised" *ngIf="campaign.amountRaised > 0">
       <h2 class="c-campaign-raised__description b-grey b-light">Amount raised</h2>
@@ -42,15 +47,15 @@
         <span class="b-bold">{{campaign.championName}}</span>
       </a>
     </p>
+    <h2 class="c-campaign-category__description b-grey b-light">Categories</h2>
     <ul class="c-icon-list">
-      <h2 class="c-campaign-category__description b-grey b-light">Categories</h2>
       <li *ngFor="let category of campaign.categories">
         <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
         <span class="c-icon-title">{{ category }}</span>
       </li>
     </ul>
+    <h2 class="c-campaign-beneficiary__description b-grey b-light">Helping</h2>
     <ul class="c-icon-list">
-      <h2 class="c-campaign-beneficiary__description b-grey b-light">Helping</h2>
       <li *ngFor="let beneficiary of campaign.beneficiaries">
         <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
         <span class="c-icon-title">{{ beneficiary }}</span>

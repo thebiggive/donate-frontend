@@ -129,7 +129,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private initialTipSuggestedPercentage = 15;
 
-  private emailRegExp : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z]{2,})+$/;
+  // Validators.email regexp rejects most invalid emails but has a few edge-cases slip through.
+  // For example, it allows emails ending with numbers like hello@thebiggive.org.uk.123
+  // We needed tighter validation, so have adapted the Angular pattern iteratively including
+  // some simplification. We needed to loosen part of it in Dec '22 because subdomains
+  // weren't properly supported in the previous version.
+  private emailRegExp : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9-]{1,180}\.)+[a-zA-Z]{2,}$/;
   /**
    * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
    * input was valid (even if differently formatted). Loosely based on https://stackoverflow.com/a/10701634/2803757
@@ -138,6 +143,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private postcodeFormatHelpRegExp = new RegExp('^\\s*([A-Z]{1,2}\\d{1,2}[A-Z]?)\\s*(\\d[A-Z]{2})\\s*$');
   // Based on the simplified pattern suggestions in https://stackoverflow.com/a/51885364/2803757
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
+
+  // Intentionally looser to support most countries' formats.
+  private billingPostcodeRegExp = new RegExp('^[0-9a-zA-Z -]{2,8}$');
+
   private captchaCode?: string;
   private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
@@ -641,7 +650,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   async payWithStripe() {
-    if (!this.donation || !this.donation.clientSecret || !this.card) {
+    const methodIsReady = this.card || (this.stripeFirstSavedMethod && this.paymentGroup.value.useSavedCard);
+
+    if (!this.donation || !this.donation.clientSecret || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
       this.stripeResponseErrorCode = undefined;
       this.analyticsService.logError('stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
@@ -673,7 +684,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // Else settlement is via a new or saved card (including wallets / Payment Request Buttons).
     const result = this.paymentGroup.value.useSavedCard
         ? await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.stripeFirstSavedMethod as PaymentMethod)
-        : await this.stripeService.confirmPaymentWithNewCardOrPRB(this.donation, this.card);
+        : await this.stripeService.confirmPaymentWithNewCardOrPRB(this.donation, this.card as StripeCardElement);
 
     if (!result || result.error) {
       if (result) {
@@ -682,7 +693,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         if (this.isBillingPostcodePossiblyInvalid()) {
           this.paymentGroup.controls.billingPostcode.setValidators([
             Validators.required,
-            Validators.pattern('^[0-9a-zA-Z ]{2,8}$'),
+            Validators.pattern(this.billingPostcodeRegExp),
             ValidateBillingPostCode
           ]);
           this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
@@ -894,7 +905,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       // Reset Stripe validators so the ValidateBillingPostCode custom validator
       // is removed, so billing postcode doesn't show as invalid after a change
       this.addStripeCardBillingValidators();
-      this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
     }
   }
 
@@ -1029,8 +1039,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     const stepper = this.elRef.nativeElement.querySelector('#stepper');
     const steps = stepper.getElementsByClassName('mat-step');
     const stepJustDone = steps[this.stepper.selectedIndex];
-    const firstElInStepWithAngularError = stepJustDone.querySelector('.ng-invalid[formControlName]');
-    if (firstElInStepWithAngularError) {
+
+    // We ought to update value + validity after any validation changes, which will hopefully fix incorrently trying to surface
+    // `.ng-invalid` elements anyway. But to be safe, we also now check that the input actually been interacted with and is
+    // currently visible to the donor.
+    const firstElInStepWithAngularError = stepJustDone.querySelector('.ng-invalid.ng-touched[formControlName]');
+    if (firstElInStepWithAngularError && !this.closeAncestorsHaveDisplayNone(firstElInStepWithAngularError)) {
       this.scrollTo(firstElInStepWithAngularError);
       return true;
     }
@@ -1212,9 +1226,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.paymentRequestButton.clear();
     }
 
-    const paymentRequestResultObserver: Observer<PaymentMethod.BillingDetails | undefined> = {
-      next: (billingDetails?: PaymentMethod.BillingDetails) => {
-        if (billingDetails && donation) {
+    const paymentRequestResultObserver: Observer<{billingDetails: PaymentMethod.BillingDetails | undefined, walletName: string}> = {
+      next: (observed) => {
+        if (observed.billingDetails && donation) {
           this.analyticsService.logEvent(
             'stripe_prb_setup_success',
             `Stripe PRB success for donation ${donation.donationId} to campaign ${this.campaignId}`,
@@ -1222,8 +1236,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
           // Set form and `donation` billing fields from PRB card's data.
           paymentGroup.patchValue({
-            billingCountry: billingDetails.address?.country,
-            billingPostcode: billingDetails.address?.postal_code,
+            billingCountry: observed.billingDetails.address?.country,
+            billingPostcode: observed.billingDetails.address?.postal_code,
           });
 
           this.stripePaymentMethodReady = true;
@@ -1233,12 +1247,19 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
           return;
         }
+        // Else there was no Payment Method (or details), so the PRB failed.
 
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
         this.addStripeCardBillingValidators();
-        this.stripeError = 'Payment failed – please try again';
-        this.stripeResponseErrorCode = undefined;
+
+        // I *think* `payWithStripe()` also sets `this.stripeError` & `this.stripeResponseErrorCode`,
+        // but that this event's handling typically happens later. So we can take the opportunity to replace
+        // `stripeError` with a more specific, wallet-targeted explanation.
+        if (this.stripeResponseErrorCode === 'card_declined') {
+          const walletFriendlyName = observed.walletName === 'apple_pay' ? 'Apple Pay' : 'Google Pay';
+          this.stripeError = `Payment failed. Please check your card's billing address in your ${walletFriendlyName} wallet matches your the address your bank has, then try again.`;
+        }
       },
       error: (err) => {
         this.stripePaymentMethodReady = false;
@@ -1302,7 +1323,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     if (this.psp === 'stripe') {
       this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
 
-      this.preparePaymentRequestButton(this.donation, this.paymentGroup);
+      if (this.creditPenceToUse > 0) {
+        this.stripePaymentMethodReady = true;
+      } else {
+        this.preparePaymentRequestButton(this.donation, this.paymentGroup);
+      }
     }
 
     // Amount reserved for matching is 'false-y', i.e. 0
@@ -1462,6 +1487,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private addUKValidators(): void {
     this.giftAidGroup.controls.giftAid.setValidators([Validators.required]);
+    this.giftAidGroup.updateValueAndValidity();
   }
 
   private setConditionalValidators(): void {
@@ -1623,6 +1649,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private removeStripeCardBillingValidators() {
     this.paymentGroup.controls.billingCountry.setValidators([]);
     this.paymentGroup.controls.billingPostcode.setValidators([]);
+    this.paymentGroup.controls.billingCountry.updateValueAndValidity();
+    this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
   }
 
   private addStripeCardBillingValidators() {
@@ -1631,8 +1659,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     ]);
     this.paymentGroup.controls.billingPostcode.setValidators([
       Validators.required,
-      Validators.pattern('^[0-9a-zA-Z ]{2,8}$'),
+      Validators.pattern(this.billingPostcodeRegExp),
     ]);
+    this.paymentGroup.controls.billingCountry.updateValueAndValidity();
+    this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
   }
 
   /**
@@ -1761,5 +1791,27 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.router.navigate(['thanks', donation.donationId], {
       replaceUrl: true,
     });
+  }
+
+  private closeAncestorsHaveDisplayNone(el: HTMLElement): boolean {
+    const levelsToCheck = 6; // Bug in `billiingPostcode` 30/11/22 had `display: none` 5 levels up from the input.
+    let levelsUp = 0;
+    let currentEl: HTMLElement | null = el;
+
+    while (levelsUp <= levelsToCheck) {
+      if (currentEl.style.display === 'none') {
+        return true;
+      }
+
+      currentEl = currentEl.parentElement;
+
+      if (!currentEl) {
+        return false;
+      }
+
+      levelsUp++;
+    }
+
+    return false;
   }
 }

@@ -90,7 +90,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
   getRelevantDateAsStr(campaign: CampaignSummary) {
     const date = CampaignService.getRelevantDate(campaign);
-    return date ? this.datePipe.transform(date, 'dd/MM/yyyy, hh:mm') : null;
+    return date ? this.datePipe.transform(date, 'dd/MM/yyyy, HH:mm') : null;
   };
 
   /**

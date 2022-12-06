@@ -7,7 +7,7 @@
       </a>
       <a
         class=""
-        *ngIf="campaign.parentRef"
+        *ngIf="campaign.parentRef && !fromFund"
         mat-icon-button
         (click)="goBackToMetacampaign()"
       >
@@ -30,7 +30,7 @@
         [slug]="campaign.isMatched ? 'Match Funded' : null"
         [charityName]="campaign.charity.name"
         [charityUrl]="campaign.charity.website"
-        [charityLocation]="campaign.countries.length ? campaign.countries[0] : null"
+        [charityLocation]="campaign.countries.length > 1 ? 'Multiple locations' : (campaign.countries[0] || null)"
       >
       </biggive-branded-image>
 
