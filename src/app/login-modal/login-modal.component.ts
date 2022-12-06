@@ -9,6 +9,7 @@ import { allChildComponentImports } from '../../allChildComponentImports';
 import { Credentials } from '../credentials.model';
 import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   standalone: true,
@@ -21,6 +22,7 @@ import { IdentityService } from '../identity.service';
     MatButtonModule,
     MatDialogModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     RecaptchaModule,
   ],
@@ -33,6 +35,7 @@ export class LoginModalComponent implements OnInit {
   loginError?: string;
   forgotPassword = false;
   resetPasswordForm: FormGroup;
+  resetPasswordSuccess: boolean|undefined = undefined;
   userAskedForResetLink = false;
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
 
@@ -90,21 +93,9 @@ export class LoginModalComponent implements OnInit {
 
     else if (this.userAskedForResetLink) {
       this.identityService.getResetPasswordToken(this.resetPasswordForm.value.emailAddress).subscribe((response) => {
-        // console.log(response);
-        // console.log(response.id);
-        // console.log(response.jwt);
-        // this.identityService.saveJWT(response.id, response.jwt);
-        // this.dialogRef.close(response);
-        // this.userAskedForResetLink = false;
+        this.resetPasswordSuccess = true;
       }, (error) => {
-        // Do NOT surface any error for security reasons. Let the user see the message to check their email for the
-        // password reset link, even if the email entered was invalid. This helps ensure we do not surface any
-        // information.
-
-        // this.captcha.reset();
-        // this.resetPasswordError = (error.error.description !== undefined ? error.error.description : error.message) || 'Unknown error';
-        // console.log(error);
-        // this.userAskedForResetLink = false;
+        this.resetPasswordSuccess = false;
       });
     }
   }
