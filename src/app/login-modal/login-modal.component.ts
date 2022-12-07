@@ -92,7 +92,7 @@ export class LoginModalComponent implements OnInit {
     }
 
     else if (this.userAskedForResetLink) {
-      this.identityService.getResetPasswordToken(this.resetPasswordForm.value.emailAddress).subscribe((response) => {
+      this.identityService.getResetPasswordToken(this.resetPasswordForm.value.emailAddress, captchaResponse).subscribe((response) => {
         this.resetPasswordSuccess = true;
       }, (error) => {
         this.resetPasswordSuccess = false;

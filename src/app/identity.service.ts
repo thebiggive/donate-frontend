@@ -37,10 +37,15 @@ export class IdentityService {
     );
   }
 
-  getResetPasswordToken(email: string): Observable<[]> {
+  getResetPasswordToken(email: string, captchaCode: string): Observable<[]> {
     return this.http.post<[]>(
       `${environment.identityApiPrefix}${this.resetPasswordTokenPath}`,
       {email_address: email},
+      {
+        headers: {
+          "x-captcha-code": captchaCode
+        }
+      }
     );
   };
 
