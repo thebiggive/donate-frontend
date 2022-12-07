@@ -222,21 +222,9 @@ export namespace Components {
          */
         "colourScheme": string;
         /**
-          * To be used alongside isFutureCampaign = true or isPastCampaign = true. If either is true, we render out: 'Launches: ' + datetime or 'Closed: ' + datetime. Preferred format: DD/MM/YYYY, HH:MM DON-661.
-         */
-        "datetime": string;
-        /**
           * Display full width
          */
         "fullWidth": boolean;
-        /**
-          * Boolean flag telling the component if the campaign is in the future (not open yet).
-         */
-        "isFutureCampaign": boolean;
-        /**
-          * Boolean flag telling the component if the campaign is in the future (not open yet).
-         */
-        "isPastCampaign": boolean;
         /**
           * Text
          */
@@ -1634,21 +1622,9 @@ declare namespace LocalJSX {
          */
         "colourScheme"?: string;
         /**
-          * To be used alongside isFutureCampaign = true or isPastCampaign = true. If either is true, we render out: 'Launches: ' + datetime or 'Closed: ' + datetime. Preferred format: DD/MM/YYYY, HH:MM DON-661.
-         */
-        "datetime"?: string;
-        /**
           * Display full width
          */
         "fullWidth"?: boolean;
-        /**
-          * Boolean flag telling the component if the campaign is in the future (not open yet).
-         */
-        "isFutureCampaign"?: boolean;
-        /**
-          * Boolean flag telling the component if the campaign is in the future (not open yet).
-         */
-        "isPastCampaign"?: boolean;
         /**
           * Text
          */

@@ -1,6 +1,5 @@
 :host {
-  display: contents;
-  
+  display: contents; 
 }
 
 .container {
@@ -13,23 +12,5 @@
   }
   &.centered-true {
     text-align: center;
-  }
-
-  .msg-wrapper {
-    display: flex;
-    justify-content: center;
-
-    biggive-misc-icon {
-      margin-top: auto;
-      margin-bottom: auto;
-    }
-
-    p {
-      text-align: center;
-
-      @media screen and (max-width: $screen-desktop-max) {
-        font-size: 15px;
-      }
-    }
   }
 }
