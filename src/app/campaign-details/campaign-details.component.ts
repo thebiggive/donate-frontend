@@ -75,15 +75,11 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(url);
   }
 
-  getRelevantDateAsStr(campaign: Campaign) {
-    const date = CampaignService.getRelevantDate(campaign);
-    return date ? this.datePipe.transform(date, 'dd/MM/yyyy, HH:mm') : null;
-  }
-
   private setSecondaryProps(campaign: Campaign) {
     this.campaignInFuture = CampaignService.isInFuture(campaign);
     this.campaignInPast = CampaignService.isInPast(campaign);
     this.isPendingOrNotReady = CampaignService.isPendingOrNotReady(campaign);
+    this.donateEnabled = CampaignService.isOpenForDonations(campaign);
 
     // If donations open within 24 hours, set a timer to update this page's state.
     if (!this.donateEnabled && isPlatformBrowser(this.platformId)) {
