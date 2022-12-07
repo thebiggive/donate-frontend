@@ -9,17 +9,50 @@
   ></biggive-hero-image>
 
   <div class="b-container">
-    <biggive-basic-card
-      space-below='4'
-      icon-colour='red'
-      background-image-url='/assets/images/card-background-cc.jpg'
-      [mainTitle]="highlightCard1Title"
-      [subtitle]='highlightCard1Subtitle'
-      button-url='/christmas-challenge-2022'
-      button-label='Double my donation'
-      button-colour-scheme='clear-primary'
-    >
-    </biggive-basic-card>
+
+    <biggive-grid
+      column-count="3">
+      <biggive-basic-card
+        space-below='4'
+        icon-colour='brand-3'
+        background-image-url='/assets/images/card-background-gmf.jpg'
+        main-title='Save the Date for the Green Match Fund'
+        subtitle='Applications open 9 Jan 2023'
+        button-url='https://blog.thebiggive.org.uk/green-match-fund/'
+        button-label='Read more'
+        button-colour-scheme='clear-primary'
+        class="basic-card-padding"
+      >
+      </biggive-basic-card>
+
+      <biggive-basic-card
+        space-below='4'
+        icon-colour='brand-5'
+        background-image-url='/assets/images/colour-orange.png'
+        main-title='Save the Date for Champions for Children'
+        subtitle='Applications open 12 Jan 2023'
+        button-url='https://blog.thebiggive.org.uk/champions-for-children/'
+        button-label='Read more'
+        button-colour-scheme='clear-primary'
+        class="basic-card-padding"
+      >
+      </biggive-basic-card>
+
+      <biggive-basic-card
+        space-below='4'
+        icon-colour='primary'
+        background-image-url='/assets/images/colour-blue.jpg'
+        main-title='One donation. Twice the impact.'
+        [subtitle]="'You donate.\nWe double it.'"
+        button-url='/explore'
+        button-label='Explore now'
+        button-colour-scheme='clear-primary'
+        class="basic-card-padding"
+      >
+      </biggive-basic-card>
+
+    </biggive-grid>
+
   </div>
 
   <biggive-page-section
