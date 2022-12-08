@@ -49,6 +49,13 @@ export class IdentityService {
     );
   };
 
+
+  checkTokenValid(token: string): Observable<object> {
+    return this.http.get(
+      `${environment.identityApiPrefix}${this.resetPasswordTokenPath}/${token}`,
+    );
+  }
+
   resetPassword(password: string, token: string) {
     return this.http.post<{ jwt: string}>(
       `${environment.identityApiPrefix}${this.resetPasswordPath}`,
