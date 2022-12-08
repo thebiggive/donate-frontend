@@ -33,7 +33,7 @@ export class ResetPasswordComponent implements OnInit {
   saveSuccessful: boolean|undefined = undefined;
   errorMessage: string;
   token: string;
-  tokenValid: boolean = true;
+  tokenValid: boolean|undefined = undefined;
 
   constructor(
     private formBuilder: FormBuilder,
