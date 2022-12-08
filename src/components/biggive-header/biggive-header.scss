@@ -99,6 +99,69 @@
   .nav-primary {
     font-weight: 700;
     margin: $spacer-1 0;
+    li.icon-colour-primary a {
+      background-image: url('/assets/images/biggive-double-triangle-primary.svg');
+      background-position: left center;
+      background-size: 20px auto;
+      background-repeat: no-repeat;
+      padding-left: 25px;
+    }
+    li.icon-colour-secondary a {
+      background-image: url('/assets/images/biggive-double-triangle-secondary.svg');
+      background-position: left center;
+      background-size: 20px auto;
+      background-repeat: no-repeat;
+      padding-left: 25px;
+    }
+    li.icon-colour-tertiary a {
+      background-image: url('/assets/images/biggive-double-triangle-tertiary.svg');
+      background-position: left center;
+      background-size: 20px auto;
+      background-repeat: no-repeat;
+      padding-left: 25px;
+    }
+    li.icon-colour-brand-1 a {
+      background-image: url('/assets/images/biggive-double-triangle-brand-1.svg');
+      background-position: left center;
+      background-size: 20px auto;
+      background-repeat: no-repeat;
+      padding-left: 25px;
+    }
+    li.icon-colour-brand-2 a {
+      background-image: url('/assets/images/biggive-double-triangle-brand-2.svg');
+      background-position: left center;
+      background-size: 20px auto;
+      background-repeat: no-repeat;
+      padding-left: 25px;
+    }
+    li.icon-colour-brand-3 a {
+      background-image: url('/assets/images/biggive-double-triangle-brand-3.svg');
+      background-position: left center;
+      background-size: 20px auto;
+      background-repeat: no-repeat;
+      padding-left: 25px;
+    }
+    li.icon-colour-brand-4 a {
+      background-image: url('/assets/images/biggive-double-triangle-brand-4.svg');
+      background-position: left center;
+      background-size: 20px auto;
+      background-repeat: no-repeat;
+      padding-left: 25px;
+    }
+    li.icon-colour-brand-5 a {
+      background-image: url('/assets/images/biggive-double-triangle-brand-5.svg');
+      background-position: left center;
+      background-size: 20px auto;
+      background-repeat: no-repeat;
+      padding-left: 25px;
+    }
+    li.icon-colour-brand-6 a {
+      background-image: url('/assets/images/biggive-double-triangle-brand-6.svg');
+      background-position: left center;
+      background-size: 20px auto;
+      background-repeat: no-repeat;
+      padding-left: 25px;
+    }
   }
 }
 
@@ -155,6 +218,35 @@
 @media screen and (max-width: 1050px) {
   .row-top {
     display: none;
+    &[data-visible=true] {
+      display: block;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column-reverse;
+      z-index: 100;
+      background-color: transparent;
+      .nav-secondary {
+        margin: 0;
+        li {
+          border: 0;
+          margin: 0 0 10px 0;
+          padding: 0;
+          width: 100%;
+          a {
+            @include button();
+            @include button-primary();
+            width: 100%;
+            box-sizing: border-box;
+          }
+        }
+      }
+    }
+    .social-icon-wrap {
+      margin: auto;
+    }
   }
   .row-bottom {
     padding: $spacer-3 $spacer-3;

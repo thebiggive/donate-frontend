@@ -22,16 +22,20 @@ export class BiggiveHeader {
   async closeMenuFromOutside() {
     this.host.shadowRoot.querySelector('.nav-primary').setAttribute('data-visible', 'false');
     this.host.shadowRoot.querySelector('.nav-toggle').classList.remove('active');
+    this.host.shadowRoot.querySelector('.row-top').setAttribute('data-visible', 'false');
   }
 
   private toggleNav = (event: any) => {
     var nav = this.host.shadowRoot.querySelector('.nav-primary');
+    var navFooter = this.host.shadowRoot.querySelector('.row-top');
     if (nav.getAttribute('data-visible') == 'true') {
       event.target.classList.remove('active');
       nav.setAttribute('data-visible', 'false');
+      navFooter.setAttribute('data-visible', 'false');
     } else {
       event.target.classList.add('active');
       nav.setAttribute('data-visible', 'true');
+      navFooter.setAttribute('data-visible', 'true');
     }
   };
 
