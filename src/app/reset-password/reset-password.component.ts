@@ -33,6 +33,7 @@ export class ResetPasswordComponent implements OnInit {
   saveSuccessful: boolean|undefined = undefined;
   errorMessage: string;
   token: string;
+  tokenValid: boolean = true;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -55,6 +56,14 @@ export class ResetPasswordComponent implements OnInit {
     this.route.queryParams
       .subscribe(params => {
         this.token = params.token;
+        this.identityService.checkTokenValid(this.token).subscribe(
+          (response: {valid: boolean}) => {
+            this.tokenValid = response.valid;
+          },
+          () => {
+            this.tokenValid = false;
+          }
+        );
         if (!this.token) {
           this.router.navigate(['']);
         }
