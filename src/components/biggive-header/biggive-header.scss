@@ -40,6 +40,41 @@
           background-size: auto 10px;
           background-position: left center;;
         }
+        &.icon-children {
+          padding-left: 20px;
+          background-image: url(/assets/images/triangles-combined-children.svg);
+          background-repeat: no-repeat;
+          background-size: auto 10px;
+          background-position: left center;;
+        }
+        &.icon-christmas {
+          padding-left: 20px;
+          background-image: url(/assets/images/triangles-combined-christmas-challenge.svg);
+          background-repeat: no-repeat;
+          background-size: auto 10px;
+          background-position: left center;;
+        }
+        &.icon-green-match {
+          padding-left: 20px;
+          background-image: url(/assets/images/triangles-combined-green-match.svg);
+          background-repeat: no-repeat;
+          background-size: auto 10px;
+          background-position: left center;;
+        }
+        &.icon-women-girls {
+          padding-left: 20px;
+          background-image: url(/assets/images/triangles-combined-women-girls.svg);
+          background-repeat: no-repeat;
+          background-size: auto 10px;
+          background-position: left center;;
+        }
+        &.icon-emergency {
+          padding-left: 20px;
+          background-image: url(/assets/images/triangles-combined-emergency.svg);
+          background-repeat: no-repeat;
+          background-size: auto 10px;
+          background-position: left center;;
+        }
       }
     }
   }
@@ -285,7 +320,7 @@
       left: 0;
       right: 0;
       margin: 0;
-      background-color: $colour-grey-extra-light;
+      background-color: $colour-grey-light;
       &[data-visible=true] {
         display: block;
       }
@@ -294,9 +329,9 @@
           width: 100%;
           box-sizing: border-box;
           text-align: center;
-          padding-bottom: $spacer-2;
+          padding-bottom: $spacer-3;
           margin-bottom: $spacer-2;
-          border-bottom: 1px solid $colour-grey-light;
+          border-bottom: 1px solid $colour-grey-extra-light;
           padding-left: $spacer-4;
           padding-right: $spacer-4;
           ul {
