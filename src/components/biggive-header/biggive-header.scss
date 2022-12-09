@@ -285,7 +285,7 @@
       left: 0;
       right: 0;
       margin: 0;
-      background-color: $colour-grey-extra-light;
+      background-color: $colour-grey-light;
       &[data-visible=true] {
         display: block;
       }
@@ -296,7 +296,7 @@
           text-align: center;
           padding-bottom: $spacer-2;
           margin-bottom: $spacer-2;
-          border-bottom: 1px solid $colour-grey-light;
+          border-bottom: 1px solid $colour-grey-extra-light;
           padding-left: $spacer-4;
           padding-right: $spacer-4;
           ul {
