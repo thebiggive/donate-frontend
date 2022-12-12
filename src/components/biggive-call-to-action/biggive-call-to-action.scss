@@ -30,3 +30,11 @@
   }
 }
 
+@media screen and (max-width: $screen-mobile-max) {
+  .content-wrap {
+    text-align: right
+  }
+  h2 {
+    padding: 40px 0;
+  }
+}
