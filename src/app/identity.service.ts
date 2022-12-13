@@ -19,6 +19,8 @@ export const TBG_DONATE_ID_STORAGE = new InjectionToken<StorageService>('TBG_DON
 export class IdentityService {
   private readonly loginPath = '/auth';
   private readonly peoplePath = '/people';
+  private readonly resetPasswordTokenPath = '/password-reset-token';
+  private readonly resetPasswordPath = '/change-forgotten-password';
   // Key is per-domain/env. For now we simply store a single JWT (or none).
   private readonly storageKey = `${environment.identityApiPrefix}/v1/jwt`;
 
@@ -34,6 +36,35 @@ export class IdentityService {
       credentials,
     );
   }
+
+  getResetPasswordToken(email: string, captchaCode: string): Observable<[]> {
+    return this.http.post<[]>(
+      `${environment.identityApiPrefix}${this.resetPasswordTokenPath}`,
+      {email_address: email},
+      {
+        headers: {
+          "x-captcha-code": captchaCode
+        }
+      }
+    );
+  };
+
+
+  checkTokenValid(token: string): Observable<object> {
+    return this.http.get(
+      `${environment.identityApiPrefix}${this.resetPasswordTokenPath}/${token}`,
+    );
+  }
+
+  resetPassword(password: string, token: string) {
+    return this.http.post<{ jwt: string}>(
+      `${environment.identityApiPrefix}${this.resetPasswordPath}`,
+      {
+        new_password: password,
+        secret: token
+      },
+    );
+  };
 
   create(person: Person): Observable<Person> {
     return this.http.post<Person>(

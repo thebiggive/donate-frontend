@@ -9,6 +9,7 @@ import { allChildComponentImports } from '../../allChildComponentImports';
 import { Credentials } from '../credentials.model';
 import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   standalone: true,
@@ -21,6 +22,7 @@ import { IdentityService } from '../identity.service';
     MatButtonModule,
     MatDialogModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     RecaptchaModule,
   ],
@@ -28,9 +30,13 @@ import { IdentityService } from '../identity.service';
 export class LoginModalComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
 
-  form: FormGroup;
-  loginError?: string;
+  loginForm: FormGroup;
   loggingIn = false;
+  loginError?: string;
+  forgotPassword = false;
+  resetPasswordForm: FormGroup;
+  resetPasswordSuccess: boolean|undefined = undefined;
+  userAskedForResetLink = false;
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
 
   constructor(
@@ -40,7 +46,7 @@ export class LoginModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.form = this.formBuilder.group({
+    this.loginForm = this.formBuilder.group({
       emailAddress: [null, [
         Validators.required,
         Validators.email,
@@ -50,9 +56,16 @@ export class LoginModalComponent implements OnInit {
         Validators.minLength(10),
       ]],
     });
+
+    this.resetPasswordForm = this.formBuilder.group({
+      emailAddress: [null, [
+        Validators.required,
+        Validators.email,
+      ]],
+    });
   }
 
-  captchaReturn(captchaResponse: string) {
+  captchaReturn(captchaResponse: string): void {
     if (captchaResponse === null) {
       // We had a code but now don't, e.g. after expiry at 1 minute. In this case
       // the trigger wasn't a login click so do nothing. A repeat login attempt will
@@ -60,27 +73,46 @@ export class LoginModalComponent implements OnInit {
       return;
     }
 
-    this.loggingIn = true;
+    if (this.loggingIn) {
+      const credentials: Credentials = {
+        captcha_code: captchaResponse,
+        email_address: this.loginForm.value.emailAddress,
+        raw_password: this.loginForm.value.password,
+      };
+  
+      this.identityService.login(credentials).subscribe((response: { id: string, jwt: string }) => {
+        this.identityService.saveJWT(response.id, response.jwt);
+        this.dialogRef.close(response);
+        this.loggingIn = false;
+      }, (error) => {
+        this.captcha.reset();
+        this.loginError = (error.error.description !== undefined ? error.error.description : error.message) || 'Unknown error';
+        this.loggingIn = false;
+      });
+    }
 
-    const credentials: Credentials = {
-      captcha_code: captchaResponse,
-      email_address: this.form.value.emailAddress,
-      raw_password: this.form.value.password,
-    };
-
-    this.identityService.login(credentials).subscribe((response: { id: string, jwt: string }) => {
-      this.identityService.saveJWT(response.id, response.jwt);
-      this.dialogRef.close(response);
-      this.loggingIn = false;
-    }, (error) => {
-      this.captcha.reset();
-      this.loginError = (error.error.description !== undefined ? error.error.description : error.message) || 'Unknown error';
-      this.loggingIn = false;
-    });
+    else if (this.userAskedForResetLink) {
+      this.identityService.getResetPasswordToken(this.resetPasswordForm.value.emailAddress, captchaResponse).subscribe((response) => {
+        this.resetPasswordSuccess = true;
+      }, (error) => {
+        this.resetPasswordSuccess = false;
+      });
+    }
   }
 
-  login() {
+  login(): void {
+    this.loggingIn = true;
     this.captcha.reset();
     this.captcha.execute();
+  }
+
+  resetPasswordClicked(): void {
+    this.userAskedForResetLink = true;
+    this.captcha.reset();
+    this.captcha.execute();
+  }
+
+  forgotPasswordClicked(): void {
+    this.forgotPassword = true;
   }
 }
