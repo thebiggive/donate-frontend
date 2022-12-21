@@ -8,6 +8,7 @@ import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
+import { EMAIL_REGEXP } from '../validators/patterns';
 
 @Component({
   standalone: true,
@@ -44,7 +45,7 @@ export class RegisterModalComponent implements OnInit {
     this.form = this.formBuilder.group({
       emailAddress: [null, [
         Validators.required,
-        Validators.email,
+        Validators.pattern(EMAIL_REGEXP),
       ]],
       firstName: [null, Validators.required],
       lastName: [null, Validators.required],

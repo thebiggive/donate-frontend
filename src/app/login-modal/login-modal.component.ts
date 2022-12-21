@@ -3,13 +3,14 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Credentials } from '../credentials.model';
 import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { EMAIL_REGEXP } from '../validators/patterns';
 
 @Component({
   standalone: true,
@@ -49,7 +50,7 @@ export class LoginModalComponent implements OnInit {
     this.loginForm = this.formBuilder.group({
       emailAddress: [null, [
         Validators.required,
-        Validators.email,
+        Validators.pattern(EMAIL_REGEXP),
       ]],
       password: [null, [
         Validators.required,
@@ -60,7 +61,7 @@ export class LoginModalComponent implements OnInit {
     this.resetPasswordForm = this.formBuilder.group({
       emailAddress: [null, [
         Validators.required,
-        Validators.email,
+        Validators.pattern(EMAIL_REGEXP),
       ]],
     });
   }
@@ -79,7 +80,7 @@ export class LoginModalComponent implements OnInit {
         email_address: this.loginForm.value.emailAddress,
         raw_password: this.loginForm.value.password,
       };
-  
+
       this.identityService.login(credentials).subscribe((response: { id: string, jwt: string }) => {
         this.identityService.saveJWT(response.id, response.jwt);
         this.dialogRef.close(response);
