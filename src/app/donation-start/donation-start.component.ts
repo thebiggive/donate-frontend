@@ -48,6 +48,7 @@ import { retryStrategy } from '../observable-retry';
 import { StripeService } from '../stripe.service';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
 import { getCurrencyMinValidator } from '../validators/currency-min';
+import { EMAIL_REGEXP } from '../validators/patterns';
 import { ValidateBillingPostCode } from '../validators/validate-billing-post-code';
 
 @Component({
@@ -129,12 +130,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private initialTipSuggestedPercentage = 15;
 
-  // Validators.email regexp rejects most invalid emails but has a few edge-cases slip through.
-  // For example, it allows emails ending with numbers like hello@thebiggive.org.uk.123
-  // We needed tighter validation, so have adapted the Angular pattern iteratively including
-  // some simplification. We needed to loosen part of it in Dec '22 because subdomains
-  // weren't properly supported in the previous version.
-  private emailRegExp : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9-]{1,180}\.)+[a-zA-Z]{2,}$/;
   /**
    * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
    * input was valid (even if differently formatted). Loosely based on https://stackoverflow.com/a/10701634/2803757
@@ -240,7 +235,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         emailAddress: [null, [
           Validators.required,
           // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
-          Validators.pattern(this.emailRegExp),
+          Validators.pattern(EMAIL_REGEXP),
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
         billingPostcode: [null],  // See setConditionalValidators().
