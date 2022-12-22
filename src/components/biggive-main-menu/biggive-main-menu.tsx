@@ -18,6 +18,13 @@ export class BiggiveMainMenu {
     mobileMenu.style.left = '-100%';
   };
 
+  appendMenu(menuName: string) {
+    var node = this.host.querySelector(`[slot="${menuName}"]`);
+    if (node !== null) {
+      this.host.shadowRoot.querySelector(`.${menuName}`).appendChild(node);
+    }
+  }
+
   componentDidRender() {
     // Sidebar submenu open close js code for mobile menu
     const subMenuArrows = this.host.shadowRoot.querySelectorAll('.sub-menu-arrow') as NodeListOf<HTMLElement>;
@@ -40,26 +47,18 @@ export class BiggiveMainMenu {
         subSubMenu.classList.toggle('display-sub-menu');
       };
     });
+
+    this.appendMenu('nav-secondary');
   }
 
   render() {
     return (
       <Host>
-        <div class="row-top">
+        <div class="row row-top">
           <div class="social-icon-wrap">
             <slot name="social-icons"></slot>
           </div>
-          <div class="nav nav-secondary">
-            {/* <slot name="nav-secondary"></slot> */}
-            <ul>
-              <li>
-                <a href="#">Contact us</a>
-              </li>
-              <li>
-                <a href="#">Charity login</a>
-              </li>
-            </ul>
-          </div>
+          <div class="nav-secondary"></div>
         </div>
         <nav>
           <div class="navbar">
