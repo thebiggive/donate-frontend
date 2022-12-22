@@ -23,7 +23,8 @@ export class BiggiveMainMenu {
     const subMenuArrows = this.host.shadowRoot.querySelectorAll('.sub-menu-arrow') as NodeListOf<HTMLElement>;
     subMenuArrows.forEach(subMenuArrow => {
       subMenuArrow.onclick = () => {
-        subMenuArrow.classList.toggle('transform-180');
+        subMenuArrow.classList.toggle('transform-90');
+        // subMenu is a sibling node
         const subMenu = subMenuArrow.parentNode.querySelector('.sub-menu');
         subMenu.classList.toggle('display-sub-menu');
       };
@@ -34,6 +35,7 @@ export class BiggiveMainMenu {
     subSubMenuArrows.forEach(subSubMenuArrow => {
       subSubMenuArrow.onclick = () => {
         subSubMenuArrow.classList.toggle('transform-90');
+        // two parents up, not one like above. subSubMenu is actually a sibling to the parent node
         const subSubMenu = subSubMenuArrow.parentNode.parentNode.querySelector('.sub-sub-menu');
         subSubMenu.classList.toggle('display-sub-menu');
       };

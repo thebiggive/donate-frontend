@@ -382,6 +382,19 @@ nav {
 						.sub-menu {
 							display: none;
 						}
+
+						// For mobile devices, remove the existing `transform: rotate(90deg)` property set on hover.
+						// Technically, it still works but the bad thing is that the `:hover` feature only turns off
+						// on mobile devices when you click off the sub-menu item. This means that when you open the
+						// submenu on a mobile device, the right caret rotates to point down, but when you click on
+						// it again to close it, it remains pointing down, and doesn't un-rotate 90deg. It only does
+						// so when you click completely off that menu item, like when you open another sub-menu. So,
+						// here I removed the `transform: rotate(90deg)` property set on hover for mobile sizes down.
+						// Instead, the rotation is now manually implemented in JavaScript click handlers - see
+						// `componentDidRender()`.
+						.sub-menu-arrow {
+							transform: unset;
+						}
 					}
 				}
 			}
