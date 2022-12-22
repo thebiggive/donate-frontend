@@ -24,23 +24,37 @@
 	transition: all 0.3s ease;
 }
 
-// a {
-// 	color: $colour-black;
-// 	text-decoration: none;
-// 	display: inline-block;
-// 	&.icon-green {
-// 	  padding-left: 20px;
-// 	  background-image: url(/assets/images/triangles-combined.svg);
-// 	  background-repeat: no-repeat;
-// 	  background-size: auto 10px;
-// 	  background-position: left center;;
-// 	}
-// }
-// body {
-// 	min-height: 100vh;
-// }
+a {
+	// target all classes prefixed with 'icon-' so we don't repeat code
+	&[class^='icon-'], &[class*='icon-'] {
+		padding-left: 20px;
+		background-repeat: no-repeat;
+		background-size: auto 10px;
+		background-position: left center;
+	}
+	&.icon-green {
+	  background-image: url(/assets/images/triangles-combined.svg);
+	}
+	&.icon-children {
+		background-image: url(/assets/images/triangles-combined-children.svg);
+	}
+	&.icon-christmas {
+		background-image: url(/assets/images/triangles-combined-christmas-challenge.svg);
+	}
+	&.icon-green-match {
+		background-image: url(/assets/images/triangles-combined-green-match.svg);
+	}
+	&.icon-women-girls {
+		background-image: url(/assets/images/triangles-combined-women-girls.svg);
+	}
+	&.icon-anchor-match {
+		background-image: url(/assets/images/triangles-combined-anchor.svg);
+	}
+	&.icon-emergency {
+		background-image: url(/assets/images/triangles-combined-emergency.svg);
+	}
+}
 nav {
-	// position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -89,17 +103,6 @@ nav {
 					font-size: 15px;
 					font-weight: 500;
 				}
-
-				// .arrow {
-				// 	height: 100%;
-				// 	// width: 22px;
-				//   margin-left: 5px;
-				// 	line-height: 70px;
-				// 	text-align: center;
-				// 	display: inline-block;
-				// 	color: black;
-				// 	transition: all 0.3s ease;
-				// }
 				.sub-menu {
 					position: absolute;
 					top: 70px;
@@ -123,42 +126,6 @@ nav {
 
 						.sub-sub-menu {
 							background-color: white;
-
-							a {
-								color: $colour-black;
-								text-decoration: none;
-								display: inline-block;
-
-								// target all classes prefixed with 'icon-' so we don't repeat code
-								&[class^='icon-'], &[class*='icon-'] {
-									padding-left: 20px;
-									background-repeat: no-repeat;
-									background-size: auto 10px;
-									background-position: left center;
-								}
-								&.icon-green {
-								  background-image: url(/assets/images/triangles-combined.svg);
-								}
-								&.icon-children {
-									background-image: url(/assets/images/triangles-combined-children.svg);
-								}
-								&.icon-christmas {
-									background-image: url(/assets/images/triangles-combined-christmas-challenge.svg);
-								}
-								&.icon-green-match {
-									background-image: url(/assets/images/triangles-combined-green-match.svg);
-								}
-								&.icon-women-girls {
-									background-image: url(/assets/images/triangles-combined-women-girls.svg);
-								}
-								&.icon-anchor-match {
-									background-image: url(/assets/images/triangles-combined-anchor.svg);
-								}
-								&.icon-emergency {
-									background-image: url(/assets/images/triangles-combined-emergency.svg);
-								}
-
-							}
 						}
 					}
 				}
