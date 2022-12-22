@@ -17,6 +17,29 @@ export class BiggiveMainMenu {
     const mobileMenu = this.host.shadowRoot.querySelector('.nav-links') as HTMLElement;
     mobileMenu.style.left = '-100%';
   };
+
+  componentDidRender() {
+    // Sidebar submenu open close js code for mobile menu
+    const subMenuArrows = this.host.shadowRoot.querySelectorAll('.sub-menu-arrow') as NodeListOf<HTMLElement>;
+    subMenuArrows.forEach(subMenuArrow => {
+      subMenuArrow.onclick = () => {
+        subMenuArrow.classList.toggle('transform-180');
+        const subMenu = subMenuArrow.parentNode.querySelector('.sub-menu');
+        subMenu.classList.toggle('display-sub-menu');
+      };
+    });
+
+    // Sidebar sub-sub-menu open close js code for mobile menu
+    const subSubMenuArrows = this.host.shadowRoot.querySelectorAll('.sub-sub-menu-arrow') as NodeListOf<HTMLElement>;
+    subSubMenuArrows.forEach(subSubMenuArrow => {
+      subSubMenuArrow.onclick = () => {
+        subSubMenuArrow.classList.toggle('transform-90');
+        const subSubMenu = subSubMenuArrow.parentNode.parentNode.querySelector('.sub-sub-menu');
+        subSubMenu.classList.toggle('display-sub-menu');
+      };
+    });
+  }
+
   render() {
     return (
       <Host>
