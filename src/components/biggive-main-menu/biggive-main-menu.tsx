@@ -18,10 +18,30 @@ export class BiggiveMainMenu {
     mobileMenu.style.left = '-100%';
   };
 
-  appendMenu(menuName: string) {
-    var node = this.host.querySelector(`[slot="${menuName}"]`);
+  /**
+   * Slots the 'nav-secondary' slot into the top right corner of the blue nav bar.
+   * Also slots the 'nav-secondary' into the normal menu items when in mobile mode.
+   * This is because the blue bar disappears in mobile mode, so we need the items
+   * init to still be seen, hence they're auto-added to the menu.
+   */
+  appendNavSecondaryLinks() {
+    // get the slotted 'nav-secondary' node
+    const node = this.host.querySelector(`[slot="nav-secondary"]`);
+
+    // we must make a deep clone of the node above, because each node is only
+    // injectable / slottable into one place, but we need to slot into two places.
+    const nodeClone = node.cloneNode(true) as HTMLElement;
+
     if (node !== null) {
-      this.host.shadowRoot.querySelector(`.${menuName}`).appendChild(node);
+      // add to blue bar
+      this.host.shadowRoot.querySelector('.nav-secondary').appendChild(node);
+
+      // add to main menu links, but only viewable in mobile mode. The css class
+      // hides them in desktop!
+      nodeClone.querySelectorAll('li').forEach(child => {
+        child.classList.add('mobile-only');
+        this.host.shadowRoot.querySelector('.links').appendChild(child);
+      });
     }
   }
 
@@ -48,7 +68,7 @@ export class BiggiveMainMenu {
       };
     });
 
-    this.appendMenu('nav-secondary');
+    this.appendNavSecondaryLinks();
   }
 
   render() {
@@ -234,12 +254,6 @@ export class BiggiveMainMenu {
                       <a href="#">Press</a>
                     </li>
                   </ul>
-                </li>
-                <li class="mobile-only">
-                  <a href="#">Contact Us</a>
-                </li>
-                <li class="mobile-only">
-                  <a href="#">Charity Login</a>
                 </li>
               </ul>
             </div>
