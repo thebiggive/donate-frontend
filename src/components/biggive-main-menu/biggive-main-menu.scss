@@ -8,14 +8,11 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	// font-family: 'Poppins', sans-serif;
-	// @include standard-font();
 	font-family: 'Euclid Triangle', sans-serif;
 }
 
 .arrow {
 	height: 10px;
-	// width: 22px;
 	margin-left: 5px;
 	line-height: 70px;
 	text-align: center;
@@ -136,12 +133,6 @@ nav {
 		.nav-links {
 			line-height: 70px;
 			height: 100%;
-
-			// .bx-x {
-			// 	&:before {
-			// 		content: "\ebe9";
-			// 	}
-			// }
 		}
 
 		.links {
@@ -154,6 +145,10 @@ nav {
 				justify-content: space-between;
 				list-style: none;
 				padding: 0 14px;
+
+				&.mobile-only {
+					display: none;
+				}
 
 				a {
 					height: 100%;
@@ -306,59 +301,67 @@ nav {
 }
 
 @media (max-width:968px) {
-	.navbar {
-		.bx-menu {
-			display: block;
-			font-size: 25px;
-			color: black;
-		}
-
-		.nav-links {
-			.sidebar-logo {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-
-				#mobileLogo {
-					width: 130px;
-				}
-
-				#x {
-					margin-right: 15px;
+	.row-top {
+		display: none;
+	}
+	nav {
+		.navbar {
+			.bx-menu {
+				display: block;
+				font-size: 25px;
+				color: black;
+			}
+	
+			.nav-links {
+				.sidebar-logo {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+	
+					#mobileLogo {
+						width: 130px;
+					}
+	
+					#x {
+						margin-right: 15px;
+					}
 				}
 			}
-		}
-
-		.links {
-			li {
-				.sub-menu {
-					.sub-sub-menu {
-						display: none;
-						position: relative;
-						left: 0;
-						display: none;
-
-						li {
-							display: flex;
-							align-items: center;
-							justify-content: space-between;
-						}
+	
+			.links {
+				li {
+					&.mobile-only {
+						display: block;
 					}
-
-					.more {
-						span {
-							display: flex;
-							align-items: center;
-						}
-					}
-				}
-
-				&:hover {
 					.sub-menu {
-						background-color: inherit !important;
-
 						.sub-sub-menu {
+							display: none;
+							position: relative;
+							left: 0;
+							display: none;
+	
+							li {
+								display: flex;
+								align-items: center;
+								justify-content: space-between;
+							}
+						}
+	
+						.more {
+							span {
+								display: flex;
+								align-items: center;
+							}
+						}
+					}
+	
+					&:hover {
+						.sub-menu {
 							background-color: inherit !important;
+	
+							.sub-sub-menu {
+								background-color: inherit !important;
+							}
 						}
 					}
 				}

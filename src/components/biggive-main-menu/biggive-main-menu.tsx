@@ -235,9 +235,12 @@ export class BiggiveMainMenu {
                     </li>
                   </ul>
                 </li>
-                {/* <li>
+                <li class="mobile-only">
+                  <a href="#">Contact Us</a>
+                </li>
+                <li class="mobile-only">
                   <a href="#">Charity Login</a>
-                </li> */}
+                </li>
               </ul>
             </div>
           </div>
