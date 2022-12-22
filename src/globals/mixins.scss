@@ -223,6 +223,7 @@
   text-align: center;
   transition: all ease-in-out 0.5s;
   display: inline-block;
+  margin-right: 10px;
   &.colour-scheme-primary {background-color: $colour-primary; svg {fill: $colour-white;}}
   &.colour-scheme-secondary {background-color: $colour-secondary; svg {fill: $colour-black;}}
   &.colour-scheme-tertiary {background-color: $colour-tertiary; svg {fill: $colour-black;}}
