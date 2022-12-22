@@ -19,13 +19,13 @@
 
 ### Used by
 
- - [biggive-button](../biggive-button)
+ - [biggive-campaign-card](../biggive-campaign-card)
  - [biggive-campaign-highlights](../biggive-campaign-highlights)
 
 ### Graph
 ```mermaid
 graph TD;
-  biggive-button --> biggive-misc-icon
+  biggive-campaign-card --> biggive-misc-icon
   biggive-campaign-highlights --> biggive-misc-icon
   style biggive-misc-icon fill:#f9f,stroke:#333,stroke-width:4px
 ```

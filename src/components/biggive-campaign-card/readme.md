@@ -43,14 +43,15 @@ in a secondary column alongside more detail about the same campaign.
 ### Depends on
 
 - [biggive-progress-bar](../biggive-progress-bar)
+- [biggive-misc-icon](../biggive-misc-icon)
 - [biggive-button](../biggive-button)
 
 ### Graph
 ```mermaid
 graph TD;
   biggive-campaign-card --> biggive-progress-bar
+  biggive-campaign-card --> biggive-misc-icon
   biggive-campaign-card --> biggive-button
-  biggive-button --> biggive-misc-icon
   style biggive-campaign-card fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

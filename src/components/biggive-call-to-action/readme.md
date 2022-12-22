@@ -41,7 +41,6 @@
 ```mermaid
 graph TD;
   biggive-call-to-action --> biggive-button
-  biggive-button --> biggive-misc-icon
   style biggive-call-to-action fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
