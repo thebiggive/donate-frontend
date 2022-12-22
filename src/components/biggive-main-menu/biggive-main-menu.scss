@@ -1,5 +1,5 @@
 :host {
-  display: block;
+	display: block;
 }
 
 /* Googlefont Poppins CDN Link */
@@ -9,19 +9,33 @@
 	padding: 0;
 	box-sizing: border-box;
 	// font-family: 'Poppins', sans-serif;
-  // @include standard-font();
-  font-family: 'Euclid Triangle', sans-serif;
+	// @include standard-font();
+	font-family: 'Euclid Triangle', sans-serif;
 }
+
 .arrow {
-  height: 10px;
-  // width: 22px;
-  margin-left: 5px;
-  line-height: 70px;
-  text-align: center;
-  display: inline-block;
-  color: black;
-  transition: all 0.3s ease;
+	height: 10px;
+	// width: 22px;
+	margin-left: 5px;
+	line-height: 70px;
+	text-align: center;
+	display: inline-block;
+	color: black;
+	transition: all 0.3s ease;
 }
+
+// a {
+// 	color: $colour-black;
+// 	text-decoration: none;
+// 	display: inline-block;
+// 	&.icon-green {
+// 	  padding-left: 20px;
+// 	  background-image: url(/assets/images/triangles-combined.svg);
+// 	  background-repeat: no-repeat;
+// 	  background-size: auto 10px;
+// 	  background-position: left center;;
+// 	}
+// }
 // body {
 // 	min-height: 100vh;
 // }
@@ -35,6 +49,7 @@ nav {
 	background: white;
 	z-index: 99;
 	box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
+
 	.navbar {
 		height: 100%;
 		width: 100%;
@@ -43,12 +58,15 @@ nav {
 		justify-content: space-between;
 		margin: auto;
 		padding: 0 50px;
+
 		.nav-links {
 			line-height: 70px;
 			height: 100%;
 		}
+
 		.links {
 			display: flex;
+
 			li {
 				position: relative;
 				display: flex;
@@ -56,6 +74,7 @@ nav {
 				justify-content: space-between;
 				list-style: none;
 				padding: 0 14px;
+
 				a {
 					height: 100%;
 					text-decoration: none;
@@ -64,10 +83,11 @@ nav {
 					font-size: 15px;
 					font-weight: 500;
 				}
+
 				// .arrow {
 				// 	height: 100%;
 				// 	// width: 22px;
-        //   margin-left: 5px;
+				//   margin-left: 5px;
 				// 	line-height: 70px;
 				// 	text-align: center;
 				// 	display: inline-block;
@@ -85,26 +105,67 @@ nav {
 					z-index: 2;
 					background-color: inherit;
 				}
+
 				&:hover {
-          .sub-menu-arrow {
-            transform: rotate(90deg);
-          }
+					.sub-menu-arrow {
+						transform: rotate(90deg);
+					}
+
 					.sub-menu {
 						display: block;
-            background-color: white;
-            .sub-sub-menu {
-              background-color: white;
-            }
+						background-color: white;
+
+						.sub-sub-menu {
+							background-color: white;
+
+							a {
+								color: $colour-black;
+								text-decoration: none;
+								display: inline-block;
+
+								// target all classes prefixed with 'icon-' so we don't repeat code
+								&[class^='icon-'], &[class*='icon-'] {
+									padding-left: 20px;
+									background-repeat: no-repeat;
+									background-size: auto 10px;
+									background-position: left center;
+								}
+								&.icon-green {
+								  background-image: url(/assets/images/triangles-combined.svg);
+								}
+								&.icon-children {
+									background-image: url(/assets/images/triangles-combined-children.svg);
+								}
+								&.icon-christmas {
+									background-image: url(/assets/images/triangles-combined-christmas-challenge.svg);
+								}
+								&.icon-green-match {
+									background-image: url(/assets/images/triangles-combined-green-match.svg);
+								}
+								&.icon-women-girls {
+									background-image: url(/assets/images/triangles-combined-women-girls.svg);
+								}
+								&.icon-anchor-match {
+									background-image: url(/assets/images/triangles-combined-anchor.svg);
+								}
+								&.icon-emergency {
+									background-image: url(/assets/images/triangles-combined-emergency.svg);
+								}
+
+							}
+						}
 					}
 				}
 			}
 		}
 	}
 }
+
 .navbar {
 	.logo {
 		min-width: 180px;
 		width: 180px;
+
 		a {
 			font-size: 30px;
 			color: black;
@@ -113,18 +174,21 @@ nav {
 			display: flex;
 		}
 	}
+
 	.links {
 		li {
 			.sub-menu {
 				li {
 					padding: 0 22px;
-					border-bottom: 1px solid rgba(255,255,255,0.1);
+					border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 				}
+
 				a {
 					color: black;
 					font-size: 15px;
 					font-weight: 500;
 				}
+
 				.sub-sub-menu {
 					position: absolute;
 					top: 0;
@@ -136,15 +200,18 @@ nav {
 			}
 		}
 	}
+
 	.nav-links {
 		.sidebar-logo {
 			display: none;
 		}
 	}
+
 	.bx-menu {
 		display: none;
 	}
 }
+
 .links {
 	li {
 		.sub-menu {
@@ -158,21 +225,26 @@ nav {
 		}
 	}
 }
+
 .display-sub-menu {
 	display: block !important;
 }
+
 .transform-90 {
 	transform: rotate(90deg) !important;
 }
+
 .transform-180 {
 	transform: rotate(180deg) !important;
 }
+
 @media (max-width: 1200px) {
 	.navbar {
 		.logo {
 			min-width: 120px;
 			width: 120px;
 		}
+
 		.links {
 			li {
 				.sub-menu {
@@ -183,11 +255,13 @@ nav {
 			}
 		}
 	}
+
 	nav {
 		.navbar {
 			.links {
 				li {
 					padding: 0 7px;
+
 					a {
 						font-size: 13px;
 					}
@@ -196,6 +270,7 @@ nav {
 		}
 	}
 }
+
 @media (max-width:968px) {
 	.navbar {
 		.bx-menu {
@@ -203,16 +278,19 @@ nav {
 			font-size: 25px;
 			color: black;
 		}
+
 		.nav-links {
 			.sidebar-logo {
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
+
 				svg {
 					width: 130px;
 				}
 			}
 		}
+
 		.links {
 			li {
 				.sub-menu {
@@ -221,12 +299,14 @@ nav {
 						position: relative;
 						left: 0;
 						display: none;
+
 						li {
 							display: flex;
 							align-items: center;
 							justify-content: space-between;
 						}
 					}
+
 					.more {
 						span {
 							display: flex;
@@ -237,6 +317,7 @@ nav {
 			}
 		}
 	}
+
 	nav {
 		.navbar {
 			.nav-links {
@@ -254,24 +335,30 @@ nav {
 				z-index: 1000;
 				overflow-y: scroll;
 			}
+
 			.links {
 				display: block;
 				margin-top: 20px;
+
 				li {
 					.arrow {
 						line-height: 40px;
 					}
+
 					display: block;
 					border-bottom: 1px solid #e6e6e6;
+
 					.sub-menu {
 						position: relative;
 						top: 0;
 						box-shadow: none;
 						display: none;
+
 						li {
 							border-bottom: none;
 						}
 					}
+
 					&:hover {
 						.sub-menu {
 							display: none;
@@ -281,12 +368,14 @@ nav {
 			}
 		}
 	}
+
 	.sidebar-logo {
 		i {
 			font-size: 25px;
 			color: black;
 		}
 	}
+
 	.links {
 		li {
 			.sub-menu {
@@ -300,9 +389,10 @@ nav {
 			}
 		}
 	}
+
 	@media(max-width:370px) {
-			nav .navbar .nav-links{
-        max-width: 100%;
-		  }
-  }
+		nav .navbar .nav-links {
+			max-width: 100%;
+		}
+	}
 }

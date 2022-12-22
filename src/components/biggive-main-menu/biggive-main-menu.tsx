@@ -77,19 +77,29 @@ export class BiggiveMainMenu {
                       </span>
                       <ul class="sub-sub-menu">
                         <li>
-                          <a href="#">Christmas Challenge</a>
+                          <a href="#" class="icon-green">
+                            Christmas Challenge
+                          </a>
                         </li>
                         <li>
-                          <a href="#">Champions for Children</a>
+                          <a href="#" class="icon-children">
+                            Champions for Children
+                          </a>
                         </li>
                         <li>
-                          <a href="#">Green Match Fund</a>
+                          <a href="#" class="icon-green-match">
+                            Green Match Fund
+                          </a>
                         </li>
                         <li>
-                          <a href="#">Women & Girls Match Fund</a>
+                          <a href="#" class="icon-women-girls">
+                            Women & Girls Match Fund
+                          </a>
                         </li>
                         <li>
-                          <a href="#">Emergency Match Fund</a>
+                          <a href="#" class="icon-emergency">
+                            Emergency Match Fund
+                          </a>
                         </li>
                       </ul>
                     </li>
