@@ -60,6 +60,10 @@ a {
 	}
 }
 
+.mobile-only {
+	display: none !important;
+}
+
 .row-top {
 	padding: $spacer-2 $spacer-4;
 	background-color: $colour-primary;
@@ -67,7 +71,6 @@ a {
 
 	.social-icon-wrap {
 		margin-right: $spacer-3;
-		
 	}
 
 	.nav-secondary {
@@ -145,10 +148,6 @@ nav {
 				justify-content: space-between;
 				list-style: none;
 				padding: 0 14px;
-
-				&.mobile-only {
-					display: none;
-				}
 
 				a {
 					height: 100%;
@@ -301,6 +300,9 @@ nav {
 }
 
 @media (max-width:968px) {
+	.mobile-only {
+		display: block !important;
+	}
 	.row-top {
 		display: none;
 	}
@@ -326,13 +328,14 @@ nav {
 						margin-right: 15px;
 					}
 				}
+
+				.mobile-social-icon-wrap {
+					margin-top: 20px;
+				}
 			}
 	
 			.links {
 				li {
-					&.mobile-only {
-						display: block;
-					}
 					.sub-menu {
 						.sub-sub-menu {
 							display: none;

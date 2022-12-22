@@ -45,6 +45,29 @@ export class BiggiveMainMenu {
     }
   }
 
+  appendSocialIcons() {
+    // get the slotted 'social-icons' node
+    const node = this.host.querySelector(`[slot="social-icons"]`);
+
+    // we must make a deep clone of the node above, because each node is only
+    // injectable / slottable into one place, but we need to slot into two places.
+    // const nodeClone = node.cloneNode(true) as HTMLElement;
+
+    if (node !== null) {
+      // add to blue bar in the top left
+      // this.host.shadowRoot.querySelector('.social-icon-wrap').appendChild(node);
+
+      // add to main menu links, but only viewable in mobile mode. The css class
+      // hides them in desktop!
+      node.classList.add('mobile-only');
+      this.host.shadowRoot.querySelector('.links').appendChild(node);
+      // nodeClone.querySelectorAll('li').forEach(child => {
+      //   child.classList.add('mobile-only');
+      //   this.host.shadowRoot.querySelector('.links').appendChild(child);
+      // });
+    }
+  }
+
   componentDidRender() {
     // Sidebar submenu open close js code for mobile menu
     const subMenuArrows = this.host.shadowRoot.querySelectorAll('.sub-menu-arrow') as NodeListOf<HTMLElement>;
@@ -69,6 +92,7 @@ export class BiggiveMainMenu {
     });
 
     this.appendNavSecondaryLinks();
+    // this.appendSocialIcons();
   }
 
   render() {
@@ -256,6 +280,9 @@ export class BiggiveMainMenu {
                   </ul>
                 </li>
               </ul>
+              <div class="mobile-social-icon-wrap mobile-only">
+                <slot name="mobile-social-icons"></slot>
+              </div>
             </div>
           </div>
         </nav>
