@@ -62,6 +62,12 @@ nav {
 		.nav-links {
 			line-height: 70px;
 			height: 100%;
+
+			// .bx-x {
+			// 	&:before {
+			// 		content: "\ebe9";
+			// 	}
+			// }
 		}
 
 		.links {
@@ -285,8 +291,12 @@ nav {
 				align-items: center;
 				justify-content: space-between;
 
-				svg {
+				#mobileLogo {
 					width: 130px;
+				}
+
+				#x {
+					margin-right: 15px;
 				}
 			}
 		}
