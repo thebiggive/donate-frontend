@@ -26,34 +26,94 @@
 
 a {
 	// target all classes prefixed with 'icon-' so we don't repeat code
-	&[class^='icon-'], &[class*='icon-'] {
+	&[class^='icon-'],
+	&[class*='icon-'] {
 		padding-left: 20px;
 		background-repeat: no-repeat;
 		background-size: auto 10px;
 		background-position: left center;
 	}
+
 	&.icon-green {
-	  background-image: url(/assets/images/triangles-combined.svg);
+		background-image: url(/assets/images/triangles-combined.svg);
 	}
+
 	&.icon-children {
 		background-image: url(/assets/images/triangles-combined-children.svg);
 	}
+
 	&.icon-christmas {
 		background-image: url(/assets/images/triangles-combined-christmas-challenge.svg);
 	}
+
 	&.icon-green-match {
 		background-image: url(/assets/images/triangles-combined-green-match.svg);
 	}
+
 	&.icon-women-girls {
 		background-image: url(/assets/images/triangles-combined-women-girls.svg);
 	}
+
 	&.icon-anchor-match {
 		background-image: url(/assets/images/triangles-combined-anchor.svg);
 	}
+
 	&.icon-emergency {
 		background-image: url(/assets/images/triangles-combined-emergency.svg);
 	}
 }
+
+.row-top {
+	padding: $spacer-2 $spacer-4;
+	background-color: $colour-primary;
+	display: flex;
+
+	.social-icon-wrap {
+		margin-right: $spacer-3;
+		
+	}
+
+	.nav-secondary {
+		margin-left: auto;
+		display: grid;
+
+		ul {
+			list-style: none;
+			display: inline-flex;
+			margin: auto;
+		}
+
+		li {
+			border-right: 1px solid $colour-white;
+			height: fit-content;
+			padding: 0 10px;
+
+			&:last-child {
+				border-right: 0;
+				padding-right: 0;
+			}
+
+			a {
+				color: $colour-white;
+				text-decoration: none;
+
+				&:hover {
+					border-bottom-color: $colour-white;
+					color: $colour-white;
+				}
+			}
+		}
+	}
+
+	.social-icon-wrap {
+		display: flex;
+
+		.social-icon-item {
+			margin-right: $spacer-3;
+		}
+	}
+}
+
 nav {
 	top: 0;
 	left: 0;
@@ -103,6 +163,7 @@ nav {
 					font-size: 15px;
 					font-weight: 500;
 				}
+
 				.sub-menu {
 					position: absolute;
 					top: 70px;
@@ -295,6 +356,7 @@ nav {
 				&:hover {
 					.sub-menu {
 						background-color: inherit !important;
+
 						.sub-sub-menu {
 							background-color: inherit !important;
 						}

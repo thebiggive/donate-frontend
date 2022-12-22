@@ -45,6 +45,22 @@ export class BiggiveMainMenu {
   render() {
     return (
       <Host>
+        <div class="row-top">
+          <div class="social-icon-wrap">
+            <slot name="social-icons"></slot>
+          </div>
+          <div class="nav nav-secondary">
+            {/* <slot name="nav-secondary"></slot> */}
+            <ul>
+              <li>
+                <a href="#">Contact us</a>
+              </li>
+              <li>
+                <a href="#">Charity login</a>
+              </li>
+            </ul>
+          </div>
+        </div>
         <nav>
           <div class="navbar">
             {/* <i class="bx bx-menu"></i> */}
@@ -90,12 +106,6 @@ export class BiggiveMainMenu {
               <ul class="links">
                 <li>
                   <a href="#">Explore Campaigns</a>
-                </li>
-                <li>
-                  <a href="#">For Charities</a>
-                </li>
-                <li>
-                  <a href="#">Funders</a>
                 </li>
                 <li>
                   <a href="#">Match Funding</a>
@@ -191,6 +201,12 @@ export class BiggiveMainMenu {
                   </ul>
                 </li>
                 <li>
+                  <a href="#">For Charities</a>
+                </li>
+                <li>
+                  <a href="#">For Funders</a>
+                </li>
+                <li>
                   <a href="#">Resources</a>
                   {/* <i class="bx bxs-chevron-down sub-menu-arrow arrow "></i> */}
                   <svg
@@ -220,9 +236,9 @@ export class BiggiveMainMenu {
                     </li>
                   </ul>
                 </li>
-                <li>
+                {/* <li>
                   <a href="#">Charity Login</a>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>
