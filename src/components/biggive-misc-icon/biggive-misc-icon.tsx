@@ -35,7 +35,7 @@ export class BiggiveMiscIcon {
 
   render() {
     return (
-      <div class={'misc-icon-item background-colour-' + this.backgroundColour}>
+      <div class={'misc-icon-item background-colour-' + this.backgroundColour + ' ' + (this.icon === 'CaretRight' ? 'misc-icon-caret' : null)}>
         <a href={this.url}>
           <svg
             width={this.getMiscIcon().icon[0]}

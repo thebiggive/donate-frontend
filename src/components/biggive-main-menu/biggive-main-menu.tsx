@@ -153,7 +153,7 @@ export class BiggiveMainMenu {
                 <li>
                   <a href="#">Match Funding</a>
                   {/* <i class="bx bxs-chevron-down sub-menu-arrow arrow  "></i> */}
-                  <svg
+                  {/* <svg
                     class="sub-menu-arrow arrow fill-black"
                     width="10"
                     height="10"
@@ -161,7 +161,9 @@ export class BiggiveMainMenu {
                     viewBox={'0 0 ' + faCaretRight.icon[0] + ' ' + faCaretRight.icon[1]}
                   >
                     <path d={faCaretRight.icon[4].toString()} />
-                  </svg>
+                  </svg> */}
+                  <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
+
                   <ul class="sub-menu">
                     <li>
                       <a href="#">Match Funding Explained</a>
@@ -170,7 +172,7 @@ export class BiggiveMainMenu {
                       <span>
                         <a href="#">Match Funding Opportunities</a>
                         {/* <i class="bx bxs-chevron-right arrow sub-sub-menu-arrow"></i> */}
-                        <svg
+                        {/* <svg
                           class="sub-sub-menu-arrow arrow fill-black"
                           width="10"
                           height="10"
@@ -178,7 +180,9 @@ export class BiggiveMainMenu {
                           viewBox={'0 0 ' + faCaretRight.icon[0] + ' ' + faCaretRight.icon[1]}
                         >
                           <path d={faCaretRight.icon[4].toString()} />
-                        </svg>
+                        </svg> */}
+                        {/* IMPORTANT: notice this one has a class sub-sub-menu, not sub-menu */}
+                        <biggive-misc-icon class="bx bxs-chevron-down sub-sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
                       </span>
                       <ul class="sub-sub-menu">
                         <li>
@@ -216,7 +220,7 @@ export class BiggiveMainMenu {
                 <li>
                   <a href="#">About us</a>
                   {/* <i class="bx bxs-chevron-down sub-menu-arrow arrow "></i> */}
-                  <svg
+                  {/* <svg
                     class="sub-menu-arrow arrow fill-black"
                     width="10"
                     height="10"
@@ -224,7 +228,8 @@ export class BiggiveMainMenu {
                     viewBox={'0 0 ' + faCaretRight.icon[0] + ' ' + faCaretRight.icon[1]}
                   >
                     <path d={faCaretRight.icon[4].toString()} />
-                  </svg>
+                  </svg> */}
+                  <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
                   <ul class="sub-menu">
                     <li>
                       <a href="#">Our Story</a>
@@ -252,7 +257,7 @@ export class BiggiveMainMenu {
                 <li>
                   <a href="#">Resources</a>
                   {/* <i class="bx bxs-chevron-down sub-menu-arrow arrow "></i> */}
-                  <svg
+                  {/* <svg
                     class="sub-menu-arrow arrow fill-black"
                     width="10"
                     height="10"
@@ -260,7 +265,8 @@ export class BiggiveMainMenu {
                     viewBox={'0 0 ' + faCaretRight.icon[0] + ' ' + faCaretRight.icon[1]}
                   >
                     <path d={faCaretRight.icon[4].toString()} />
-                  </svg>
+                  </svg> */}
+                  <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
                   <ul class="sub-menu">
                     <li>
                       <a href="#">Case Studies</a>
