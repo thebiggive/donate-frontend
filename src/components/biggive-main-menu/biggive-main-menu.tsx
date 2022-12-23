@@ -36,13 +36,13 @@ export class BiggiveMainMenu {
     // get the slotted 'nav-secondary' node
     const node = this.host.querySelector(`[slot="nav-secondary"]`);
 
-    // we must make a deep clone of the node above, because each node is only
-    // injectable / slottable into one place, but we need to slot into two places.
-    const nodeClone = node.cloneNode(true) as HTMLElement;
-
     if (node !== null) {
       // add to blue bar
       this.host.shadowRoot.querySelector('.nav-secondary').appendChild(node);
+
+      // we must make a deep clone of the node above, because each node is only
+      // injectable / slottable into one place, but we need to slot into two places.
+      const nodeClone = node.cloneNode(true) as HTMLElement;
 
       // add to main menu links, but only viewable in mobile mode. The css class
       // hides them in desktop!
