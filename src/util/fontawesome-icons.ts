@@ -2,6 +2,7 @@ import { faAccessibleIcon, IconDefinition, faFacebookF, faTwitter, faYoutube, fa
 import {
   faBaby,
   faBalanceScale,
+  faBars,
   faBlind,
   faBook,
   faCampground,
@@ -25,6 +26,7 @@ import {
   faUniversalAccess,
   faUserGraduate,
   faVenus,
+  faX,
 } from '@fortawesome/pro-solid-svg-icons';
 import { faUsers, faCaretRight } from '@fortawesome/pro-duotone-svg-icons';
 import { faHeadSideMedical, faHomeHeart, faHeart, faAlarmClock } from '@fortawesome/pro-solid-svg-icons';
@@ -122,6 +124,14 @@ export class FontAwesomeIconsService {
       {
         name: 'CaretRight',
         icon: faCaretRight,
+      },
+      {
+        name: 'MenuOpen',
+        icon: faBars,
+      },
+      {
+        name: 'MenuClose',
+        icon: faX,
       },
     ];
   }
