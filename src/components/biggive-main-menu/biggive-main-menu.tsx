@@ -1,4 +1,4 @@
-import { Component, Element, Host, h } from '@stencil/core';
+import { Component, Element, Host, h, Method } from '@stencil/core';
 
 @Component({
   tag: 'biggive-main-menu',
@@ -7,14 +7,22 @@ import { Component, Element, Host, h } from '@stencil/core';
 })
 export class BiggiveMainMenu {
   @Element() host: HTMLBiggiveHeaderElement;
+
   openMobileMenu = () => {
     const mobileMenu = this.host.shadowRoot.querySelector('.nav-links') as HTMLElement;
     mobileMenu.style.left = '0';
   };
+
   closeMobileMenu = () => {
     const mobileMenu = this.host.shadowRoot.querySelector('.nav-links') as HTMLElement;
     mobileMenu.style.left = '-100%';
   };
+
+  @Method()
+  async closeMobileMenuFromOutside() {
+    const mobileMenu = this.host.shadowRoot.querySelector('.nav-links') as HTMLElement;
+    mobileMenu.style.left = '-100%';
+  }
 
   appendPrimaryNavigationLinks() {
     // get the slotted 'nav-primary' node
@@ -89,7 +97,7 @@ export class BiggiveMainMenu {
           </div>
           <div class="nav-secondary"></div>
         </div>
-        <nav>
+        <nav role="navigation">
           <div class="navbar">
             <biggive-misc-icon class="bx bx-menu" background-colour="white" icon-colour="black" icon="MenuOpen" onClick={this.openMobileMenu}></biggive-misc-icon>
             <div class="logo">

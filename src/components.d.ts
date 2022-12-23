@@ -812,6 +812,7 @@ export namespace Components {
         "teaserColour": string;
     }
     interface BiggiveMainMenu {
+        "closeMobileMenuFromOutside": () => Promise<void>;
     }
     interface BiggiveMiscIcon {
         /**
