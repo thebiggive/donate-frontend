@@ -44,6 +44,15 @@
   }
 }
 
+.c-secondary-stats {
+  display: flex;
+  flex-direction: row;
+
+  > div {
+    width: 50%;
+  }
+}
+
 .c-campaign-target__description,
 .c-campaign-raised__description,
 .c-campaign-status__description,
