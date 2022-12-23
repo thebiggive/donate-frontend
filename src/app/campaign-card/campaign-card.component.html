@@ -22,8 +22,8 @@
   </div>
 
   <div class="c-body">
-    <div fxLayout="row" class="c-icon-lists">
-      <div fxFlex="50">
+    <div class="c-icon-lists">
+      <div>
         <p class="c-cards__description">Categories</p>
         <ul>
           <li *ngFor="let category of campaign.categories">
@@ -31,7 +31,7 @@
           </li>
         </ul>
       </div>
-      <div fxFlex="50">
+      <div>
         <p class="c-cards__description">Helping</p>
         <ul>
           <li *ngFor="let beneficiary of campaign.beneficiaries">
@@ -41,18 +41,18 @@
       </div>
     </div>
 
-    <div class="c-funds" fxLayout="row">
-      <div class="c-funds__matched" *ngIf="campaign.isMatched && !isFinished" fxFlex="50">
+    <div class="c-funds">
+      <div class="c-funds__matched" *ngIf="campaign.isMatched && !isFinished">
         <p class="c-cards__description">Match funds remaining</p>
         <h4 class="c-funds__amount">{{ campaign.matchFundsRemaining | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</h4>
       </div>
-      <div class="c-funds__total" *ngIf="campaign.amountRaised > 0" fxFlex="50">
+      <div class="c-funds__total" *ngIf="campaign.amountRaised > 0">
         <p class="c-cards__description">Total funds raised</p>
         <h4 class="c-funds__amount">{{ campaign.amountRaised | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</h4>
       </div>
     </div>
 
-    <div class="c-buttons" fxLayout="row">
+    <div class="c-buttons">
       <button
         mat-icon-button
         color="primary"

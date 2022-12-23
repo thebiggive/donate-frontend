@@ -79,6 +79,15 @@ input:disabled {
   margin-bottom: 1rem;
 }
 
+.c-form-container {
+  display: flex;
+  flex-direction: column;
+
+  @media #{$breakpoint-lg} {
+    flex-direction: row;
+  }
+}
+
 .c-timer {
   position: fixed;
   top: 47px;

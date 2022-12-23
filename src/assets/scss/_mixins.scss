@@ -99,8 +99,8 @@
   }
 
   @media #{$breakpoint-lg} {
-    width: calc(100% - 400px);
-    padding-right: 20px;
+    width: calc(100% - 380px);
+    padding-right: 2rem;
     box-sizing: border-box;
   }
 
@@ -117,7 +117,7 @@
   }
   @media #{$breakpoint-lg} {
     margin-top: 0;
-    width: 400px;
+    width: 380px;
   }
   @media #{$breakpoint-xl} {
     margin-top: 0;
