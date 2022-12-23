@@ -7,7 +7,7 @@
 
 ## Methods
 
-### `closeMobileMenu() => Promise<void>`
+### `closeMobileMenuFromOutside() => Promise<void>`
 
 
 

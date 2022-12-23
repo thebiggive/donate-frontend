@@ -9,15 +9,6 @@
 	font-family: 'Euclid Triangle', sans-serif;
 }
 
-.arrow {
-	margin-left: 5px;
-	line-height: 70px;
-	text-align: center;
-	display: inline-block;
-	color: black;
-	transition: all 0.3s ease;
-}
-
 a {
 	// target all classes prefixed with 'icon-' so we don't repeat code
 	&[class^='icon-'],
@@ -176,9 +167,29 @@ nav {
 						display: block;
 						background-color: white;
 
+						&.display-sub-menu {
+							display: block;
+						}
+
 						.sub-sub-menu {
 							background-color: white;
+
+							&.display-sub-menu {
+								display: block;
+							}
 						}
+					}
+				}
+
+				.arrow {
+					margin-left: 5px;
+					line-height: 70px;
+					text-align: center;
+					display: inline-block;
+					color: black;
+					transition: all 0.3s ease;
+					&.transform-90 {
+						transform: rotate(90deg);
 					}
 				}
 			}
@@ -251,18 +262,6 @@ nav {
 	}
 }
 
-.display-sub-menu {
-	display: block !important;
-}
-
-.transform-90 {
-	transform: rotate(90deg) !important;
-}
-
-.transform-180 {
-	transform: rotate(180deg) !important;
-}
-
 @media (max-width: 1200px) {
 	.navbar {
 		.logo {
@@ -329,43 +328,46 @@ nav {
 				.mobile-social-icon-wrap {
 					margin-top: 20px;
 				}
-			}
-	
-			.links {
-				li {
-					.sub-menu {
-						.sub-sub-menu {
-							display: none;
-							position: relative;
-							left: 0;
-							display: none;
-	
-							li {
-								display: flex;
-								align-items: center;
-								justify-content: space-between;
-							}
-						}
-	
-						.more {
-							span {
-								display: flex;
-								align-items: center;
-							}
-						}
-					}
-	
-					&:hover {
+
+				.links {
+					li {
 						.sub-menu {
-							background-color: inherit !important;
-	
 							.sub-sub-menu {
-								background-color: inherit !important;
+								display: none;
+								position: relative;
+								left: 0;
+								display: none;
+		
+								li {
+									display: flex;
+									align-items: center;
+									justify-content: space-between;
+								}
+							}
+		
+							.more {
+								span {
+									display: flex;
+									align-items: center;
+								}
+							}
+							
+							&:hover {
+								.sub-menu {
+									background-color: inherit;
+	
+									.sub-sub-menu {
+										background-color: inherit;
+									}
+								}
 							}
 						}
+	
 					}
 				}
 			}
+	
+
 		}
 	}
 
@@ -426,6 +428,11 @@ nav {
 						// `componentDidRender()`.
 						.sub-menu-arrow {
 							transform: unset;
+						}
+					}
+					.sub-menu-arrow {
+						&.transform-90 {
+							transform: rotate(90deg);
 						}
 					}
 				}
