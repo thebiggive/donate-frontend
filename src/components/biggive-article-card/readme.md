@@ -33,7 +33,6 @@
 ```mermaid
 graph TD;
   biggive-article-card --> biggive-button
-  biggive-button --> biggive-misc-icon
   style biggive-article-card fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

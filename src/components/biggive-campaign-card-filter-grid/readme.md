@@ -48,7 +48,6 @@ graph TD;
   biggive-campaign-card-filter-grid --> biggive-form-field-select
   biggive-campaign-card-filter-grid --> biggive-form-field-select-option
   biggive-campaign-card-filter-grid --> biggive-popup
-  biggive-button --> biggive-misc-icon
   style biggive-campaign-card-filter-grid fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
