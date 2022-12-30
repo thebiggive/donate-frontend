@@ -150,7 +150,7 @@ workflows:
             - jira/notify:
                 job_type: deployment
                 environment_type: production
-  deploy-staging-storybook:
+  deploy-storybook:
     jobs:
       # *Any* push to `main` deploys a new Storybook Staging preview.
       - deploy-staging-storybook:
