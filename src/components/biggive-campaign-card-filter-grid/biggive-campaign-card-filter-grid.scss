@@ -1,7 +1,8 @@
+@include spacers();
+
 :host {
   display: content;
 }
-
 
 .container {
   @include standard-font();
@@ -16,7 +17,9 @@
     }
     .field-wrap {
       @include flex-container-row();
+
       .input-wrap {
+        @include flex-container-row();
         padding-bottom: $spacer-1;
         border-bottom: 1px solid $colour-black;
         margin-right: $spacer-4;
@@ -79,7 +82,6 @@
   }
 }
 
-
 .icon {
   @include icon();
   margin: auto;
@@ -115,4 +117,16 @@
       margin-left: 3px;
     }
   }
+}
+
+.align-right {
+  text-align: right;
+}
+
+.input-text {
+    @include input-text();
+}
+
+.text-colour-primary {
+  color: $colour-primary;
 }

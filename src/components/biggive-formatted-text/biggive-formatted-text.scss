@@ -1,7 +1,9 @@
+@include spacers();
+@include text-colours();
+
 :host {
   display: block;
 }
-
 
 .container {
   @include standard-font();

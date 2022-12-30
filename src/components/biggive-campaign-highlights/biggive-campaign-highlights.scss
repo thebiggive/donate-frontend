@@ -1,3 +1,6 @@
+@include image-alignment();
+@include spacers();
+
 :host {
   display: contents;
 }
@@ -108,9 +111,9 @@
     text-align: left;
     margin-left: 20px;
     margin-top: 20px;
-    color: black;
+    color: $colour-black;
 
-   font-size: 15px;
+    font-size: 15px;
 
     @media screen and (max-width: $screen-tablet-max) {
       font-size: 14px;
@@ -120,7 +123,7 @@
       text-align: center;
       margin-left: 0;
       margin-bottom: 10px;
-      font-size: 13px;;
+      font-size: 13px;
     }
 
     @media screen and (max-width: $screen-mobile-small) {

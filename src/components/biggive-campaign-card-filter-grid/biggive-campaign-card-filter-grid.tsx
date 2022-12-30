@@ -289,7 +289,7 @@ export class BiggiveCampaignCardFilterGrid {
                 space-below="0"
               ></biggive-button>
               <biggive-popup id="filter-popup">
-                <h4 class="space-above-0 space-below-3 colour-primary">Filters</h4>
+                <h4 class="space-above-0 space-below-3 text-colour-primary">Filters</h4>
                 <biggive-form-field-select placeholder={this.categoriesPlaceHolderText} selectedLabel={this.selectedFilterCategory} id="categories" space-below="2">
                   {this.categoryOptions.length === 0
                     ? undefined

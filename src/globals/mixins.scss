@@ -724,7 +724,6 @@
   );
 }
 
-
 @mixin corner-clip-small-bottom-left() {
   clip-path:
     polygon(
@@ -794,5 +793,239 @@
       border-radius: 50%;
       cursor: pointer;
     }
+  }
+}
+
+@mixin video-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+
+  iframe, video { 
+    position: absolute;
+    border: 0;
+    display: block;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@mixin alignments {
+  .align-left {text-align: left;}
+  .align-right {text-align: right;}
+  .align-center {text-align: center;}
+  .align-justify {text-align: justify;}
+}
+
+@mixin backgrounds {
+  .background-colour-hover-primary:hover,
+  .background-colour-primary {
+      background-color: $colour-primary;
+  }
+
+  .background-colour-hover-secondary:hover,
+  .background-colour-secondary {
+      background-color: $colour-secondary;
+  }
+
+  .background-colour-hover-tertiary:hover,
+  .background-colour-tertiary {
+      background-color: $colour-tertiary;
+  }
+
+  .background-colour-hover-brand-1:hover,
+  .background-colour-brand-1 {
+      background-color: $colour-brand-1;
+  }
+
+  .background-colour-hover-brand-2:hover,
+  .background-colour-brand-2 {
+      background-color: $colour-brand-2;
+  }
+
+  .background-colour-hover-brand-3:hover,
+  .background-colour-brand-3 {
+      background-color: $colour-brand-3;
+  }
+
+  .background-colour-hover-brand-4:hover,
+  .background-colour-brand-4 {
+      background-color: $colour-brand-4;
+  }
+
+  .background-colour-hover-brand-5:hover,
+  .background-colour-brand-5 {
+      background-color: $colour-brand-5;
+  }
+
+  .background-colour-hover-brand-6:hover,
+  .background-colour-brand-6 {
+      background-color: $colour-brand-6;
+  }
+
+  .background-colour-hover-white:hover,
+  .background-colour-white {
+      background-color: $colour-white;
+  }
+
+  .background-colour-hover-black:hover,
+  .background-colour-black {
+      background-color: $colour-black;
+  }
+}
+
+@mixin fills {
+  .fill-primary {
+      fill: $colour-primary;
+  }
+
+  .fill-secondary {
+      fill: $colour-secondary;
+  }
+
+  .fill-tertiary {
+      fill: $colour-tertiary;
+  }
+
+  .fill-brand-1 {
+      fill: $colour-brand-1;
+  }
+
+  .fill-brand-2 {
+      fill: $colour-brand-2;
+  }
+
+  .fill-brand-3 {
+      fill: $colour-brand-3;
+  }
+
+  .fill-brand-4 {
+      fill: $colour-brand-4;
+  }
+
+  .fill-brand-5 {
+      fill: $colour-brand-5;
+  }
+
+  .fill-brand-6 {
+      fill: $colour-brand-6;
+  }
+
+  .fill-white {
+      fill: $colour-white;
+  }
+
+  .fill-black {
+      fill: $colour-black;
+  }
+
+  .fill-red {
+      fill: red;
+  }
+}
+
+@mixin headings {
+  h1, .heading-1 {
+    @include heading-1();
+  }
+
+  h2, .heading-2 {
+      @include heading-2();
+  }
+
+  h3, .heading-3 {
+      @include heading-3();
+  }
+
+  h4, .heading-4 {
+      @include heading-4();
+  }
+
+  h5, .heading-5 {
+      @include heading-5();
+  }
+}
+
+@mixin image-alignment {
+  .image-wrap img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@mixin spacers {
+  .space-above-0 { margin-top: 0; }
+  .space-above-1 { margin-top: $spacer-1; }
+  .space-above-2 { margin-top: $spacer-2; }
+  .space-above-3 { margin-top: $spacer-3; }
+  .space-above-4 { margin-top: $spacer-4; }
+  .space-above-5 { margin-top: $spacer-5; }
+  .space-above-6 { margin-top: $spacer-6; }
+  .space-below-0 { margin-bottom: 0; }
+  .space-below-1 { margin-bottom: $spacer-1; }
+  .space-below-2 { margin-bottom: $spacer-2; }
+  .space-below-3 { margin-bottom: $spacer-3; }
+  .space-below-4 { margin-bottom: $spacer-4; }
+  .space-below-5 { margin-bottom: $spacer-5; }
+  .space-below-6 { margin-bottom: $spacer-6; }
+}
+
+@mixin text-colours {
+  .text-colour-hover-primary:hover,
+  .text-colour-primary {
+      color: $colour-primary;
+  }
+
+  .text-colour-hover-secondary:hover,
+  .text-colour-secondary {
+      color: $colour-secondary;
+  }
+
+  .text-colour-hover-tertiary:hover,
+  .text-colour-tertiary {
+      color: $colour-tertiary;
+  }
+
+  .text-colour-hover-brand-1:hover,
+  .text-colour-brand-1 {
+      color: $colour-brand-1;
+  }
+
+  .text-colour-hover-brand-2:hover,
+  .text-colour-brand-2 {
+      color: $colour-brand-2;
+  }
+
+  .text-colour-hover-brand-3:hover,
+  .text-colour-brand-3 {
+      color: $colour-brand-3;
+  }
+
+  .text-colour-hover-brand-4:hover,
+  .text-colour-brand-4 {
+      color: $colour-brand-4;
+  }
+
+  .text-colour-hover-brand-5:hover,
+  .text-colour-brand-5 {
+      color: $colour-brand-5;
+  }
+
+  .text-colour-hover-brand-6:hover,
+  .text-colour-brand-6 {
+      color: $colour-brand-6;
+  }
+
+  .text-colour-hover-white:hover,
+  .text-colour-white {
+      color: $colour-white;
+  }
+
+  .text-colour-hover-black:hover,
+  .text-colour-black {
+      color: $colour-black;
   }
 }

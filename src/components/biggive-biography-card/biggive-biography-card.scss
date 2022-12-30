@@ -1,7 +1,9 @@
+@include image-alignment();
+@include spacers();
+
 :host {
   display: block;
 }
-
 
 .container {
   background-size: contain;

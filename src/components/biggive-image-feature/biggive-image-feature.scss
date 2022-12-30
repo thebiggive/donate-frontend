@@ -1,3 +1,6 @@
+@include image-alignment();
+@include text-colours();
+
 :host {
   display: contents;
 }

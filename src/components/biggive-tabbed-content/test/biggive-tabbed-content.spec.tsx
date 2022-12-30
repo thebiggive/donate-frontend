@@ -10,7 +10,7 @@ describe('biggive-tabbed-content', () => {
     expect(page.root).toEqualHtml(`
       <biggive-tabbed-content>
         <mock:shadow-root>
-          <div class="container default-text-colour-black space-below-0">
+          <div class="container space-below-0 text-colour-black">
             <slot></slot>
           </div>
         </mock:shadow-root>
