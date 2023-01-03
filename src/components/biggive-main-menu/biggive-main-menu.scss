@@ -189,10 +189,6 @@ nav {
 						}
 					}
 
-					.display-sub-menu {
-						display: block !important;
-					}
-
 					&:hover {
 						.sub-menu-arrow {
 							transform: rotate(90deg);
@@ -331,6 +327,10 @@ nav {
 
 						.arrow {
 							line-height: 40px;
+						}
+
+						.display-sub-menu {
+							display: block !important;
 						}
 
 						.sub-menu {
