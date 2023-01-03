@@ -16,7 +16,7 @@ describe('biggive-main-menu', () => {
             </div>
             <div class="nav-secondary"></div>
           </div>
-          <nav>
+          <nav role="navigation">
             <div class="navbar">
               <biggive-misc-icon class="bx bx-menu" background-colour="white" icon-colour="black" icon="MenuOpen"></biggive-misc-icon>
               <div class="logo">
