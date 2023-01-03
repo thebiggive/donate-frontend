@@ -3,7 +3,7 @@
 }
 
 .social-icon-item {
-  margin-right: 3px;
+  margin-right: 6px;
   @include icon-large();
 
   @media screen and (max-width: $screen-mobile-max) {
