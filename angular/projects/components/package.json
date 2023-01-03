@@ -3,8 +3,8 @@
   "description": "Angular-packaged components for @biggive apps",
   "version": "1.0.185",
   "peerDependencies": {
-    "@angular/common": "^14.1.0",
-    "@angular/core": "^14.1.0",
+    "@angular/common": "^14.1.0||^15.0.4",
+    "@angular/core": "^14.1.0||^15.0.4",
     "@biggive/components": "^1.0"
   },
   "dependencies": {
