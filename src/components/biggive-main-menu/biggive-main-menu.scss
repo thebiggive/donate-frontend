@@ -247,31 +247,24 @@ nav {
 }
 
 @media (max-width: 1200px) {
-	.navbar {
-		.logo {
-			min-width: 120px;
-			width: 120px;
-		}
-
-		.links {
-			li {
-				.sub-menu {
-					a {
-						font-size: 13px;
-					}
-				}
-			}
-		}
-	}
-
 	nav {
 		.navbar {
+			.logo {
+				min-width: 120px;
+				width: 120px;
+			}
 			.links {
 				li {
 					padding: 0 7px;
 
 					a {
 						font-size: 15px;
+					}
+
+					.sub-menu {
+						a {
+							font-size: 13px;
+						}
 					}
 				}
 			}
@@ -349,8 +342,6 @@ nav {
 					}
 				}
 			}
-	
-
 		}
 	}
 
