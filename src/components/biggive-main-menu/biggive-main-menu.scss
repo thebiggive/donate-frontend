@@ -317,8 +317,27 @@ nav {
 				}
 
 				.links {
+					display: block;
+					margin-top: 20px;
+
 					li {
+						display: block;
+						border-bottom: 1px solid #e6e6e6;
+
+						.arrow {
+							line-height: 40px;
+						}
+
 						.sub-menu {
+							position: relative;
+							top: 0;
+							box-shadow: none;
+							display: none;
+	
+							li {
+								border-bottom: none;
+							}
+
 							.sub-sub-menu {
 								display: none;
 								position: relative;
@@ -335,6 +354,12 @@ nav {
 								span {
 									display: flex;
 									align-items: center;
+								}
+
+								&:hover {
+									.sub-sub-menu {
+										display: none;
+									}
 								}
 							}
 						}
@@ -354,35 +379,7 @@ nav {
 			}
 
 			.links {
-				display: block;
-				margin-top: 20px;
-
 				li {
-					.arrow {
-						line-height: 40px;
-					}
-
-					display: block;
-					border-bottom: 1px solid #e6e6e6;
-
-					.sub-menu {
-						position: relative;
-						top: 0;
-						box-shadow: none;
-						display: none;
-
-						li {
-							border-bottom: none;
-						}
-						.more {
-							&:hover {
-								.sub-sub-menu {
-									display: none;
-								}
-							}
-						}
-					}
-
 					&:hover {
 						.sub-menu {
 							display: none;
