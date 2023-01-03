@@ -205,10 +205,6 @@ nav {
 
 						.sub-sub-menu {
 							background-color: white;
-
-							&.display-sub-menu {
-								display: block;
-							}
 						}
 					}
 				}
@@ -288,6 +284,20 @@ nav {
 			}
 	
 			.nav-links {
+				position: fixed;
+				top: 0;
+				left: -100%;
+				display: block;
+				max-width: 350px;
+				width: 100%;
+				background: rgb(245, 245, 245);
+				line-height: 40px;
+				padding: 20px;
+				box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+				transition: all 0.5s ease;
+				z-index: 1000;
+				overflow-y: scroll;
+				
 				.sidebar-logo {
 					display: flex;
 					align-items: center;
@@ -342,26 +352,6 @@ nav {
 					}
 				}
 			}
-		}
-	}
-
-	nav {
-		.navbar {
-			.nav-links {
-				position: fixed;
-				top: 0;
-				left: -100%;
-				display: block;
-				max-width: 350px;
-				width: 100%;
-				background: rgb(245, 245, 245);
-				line-height: 40px;
-				padding: 20px;
-				box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-				transition: all 0.5s ease;
-				z-index: 1000;
-				overflow-y: scroll;
-			}
 
 			.links {
 				display: block;
@@ -383,6 +373,13 @@ nav {
 
 						li {
 							border-bottom: none;
+						}
+						.more {
+							&:hover {
+								.sub-sub-menu {
+									display: none;
+								}
+							}
 						}
 					}
 
@@ -418,20 +415,6 @@ nav {
 		i {
 			font-size: 25px;
 			color: black;
-		}
-	}
-
-	.links {
-		li {
-			.sub-menu {
-				.more {
-					&:hover {
-						.sub-sub-menu {
-							display: none;
-						}
-					}
-				}
-			}
 		}
 	}
 
