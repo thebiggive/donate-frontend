@@ -172,13 +172,21 @@ nav {
 						font-weight: 500;
 					}
 	
-					.sub-sub-menu {
-						position: absolute;
-						top: 0;
-						left: 100%;
-						border-radius: 0 4px 4px 4px;
-						z-index: 1;
-						display: none;
+					.more {
+						.sub-sub-menu {
+							position: absolute;
+							top: 0;
+							left: 100%;
+							border-radius: 0 4px 4px 4px;
+							z-index: 1;
+							display: none;
+						}
+
+						&:hover {
+							.sub-sub-menu {
+								display: block;
+							}
+						}
 					}
 				}
 
@@ -234,20 +242,6 @@ nav {
 	
 		.bx-menu {
 			display: none;
-		}
-	}
-}
-
-.links {
-	li {
-		.sub-menu {
-			.more {
-				&:hover {
-					.sub-sub-menu {
-						display: block;
-					}
-				}
-			}
 		}
 	}
 }
