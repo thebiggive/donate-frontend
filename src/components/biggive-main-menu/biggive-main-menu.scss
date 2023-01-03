@@ -290,7 +290,7 @@ nav {
 				display: block;
 				max-width: 350px;
 				width: 100%;
-				background: rgb(245, 245, 245);
+				background: white;
 				line-height: 40px;
 				padding: 20px;
 				box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
@@ -309,6 +309,11 @@ nav {
 	
 					#x {
 						margin-right: 15px;
+					}
+
+					i {
+						font-size: 25px;
+						color: black;
 					}
 				}
 
@@ -401,13 +406,6 @@ nav {
 					}
 				}
 			}
-		}
-	}
-
-	.sidebar-logo {
-		i {
-			font-size: 25px;
-			color: black;
 		}
 	}
 

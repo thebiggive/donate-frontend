@@ -62,25 +62,27 @@ export class BiggiveMainMenu {
   }
 
   componentDidRender() {
-    // Sidebar submenu open close js code for mobile menu
-    const subMenuArrows = this.host.querySelectorAll('.sub-menu-arrow') as NodeListOf<HTMLElement>;
-    subMenuArrows.forEach(subMenuArrow => {
-      subMenuArrow.onclick = () => {
+    const subMenuElements = this.host.querySelectorAll('.sub-menu') as NodeListOf<HTMLElement>;
+    subMenuElements.forEach(subMenuElement => {
+      // the subMenuLink is a sibling element to the actual sub-menu
+      const subMenuLink = subMenuElement.parentElement.querySelector('a');
+
+      subMenuLink.onclick = () => {
+        const subMenuArrow = subMenuLink.querySelector('.sub-menu-arrow');
         subMenuArrow.classList.toggle('transform-90');
-        // subMenu is a sibling node
-        const subMenu = subMenuArrow.parentNode.querySelector('.sub-menu');
-        subMenu.classList.toggle('display-sub-menu');
+        subMenuElement.classList.toggle('display-sub-menu');
       };
     });
 
-    // Sidebar sub-sub-menu open close js code for mobile menu
-    const subSubMenuArrows = this.host.querySelectorAll('.sub-sub-menu-arrow') as NodeListOf<HTMLElement>;
-    subSubMenuArrows.forEach(subSubMenuArrow => {
-      subSubMenuArrow.onclick = () => {
-        subSubMenuArrow.classList.toggle('transform-90');
-        // two parents up, not one like above. subSubMenu is actually a sibling to the parent node
-        const subSubMenu = subSubMenuArrow.parentNode.parentNode.querySelector('.sub-sub-menu');
-        subSubMenu.classList.toggle('display-sub-menu');
+    const subSubMenuElements = this.host.querySelectorAll('.sub-sub-menu') as NodeListOf<HTMLElement>;
+    subSubMenuElements.forEach(subSubMenuElement => {
+      // the subSubMenuLink is a sibling element to the actual sub-sub-menu
+      const subSubMenuLink = subSubMenuElement.parentElement.querySelector('a');
+
+      subSubMenuLink.onclick = () => {
+        const subMenuArrow = subSubMenuLink.querySelector('.sub-sub-menu-arrow');
+        subMenuArrow.classList.toggle('transform-90');
+        subSubMenuElement.classList.toggle('display-sub-menu');
       };
     });
 
