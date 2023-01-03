@@ -128,96 +128,96 @@ nav {
 			.sidebar-logo {
 				display: none;
 			}
-		}
 
-		.links {
-			display: flex;
-
-			li {
-				position: relative;
+			.links {
 				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				list-style: none;
-				padding: 0 14px;
 
-				a {
-					height: 100%;
-					text-decoration: none;
-					white-space: nowrap;
-					color: black;
-					font-size: 17px;
-					font-weight: 500;
-				}
+				li {
+					position: relative;
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					list-style: none;
+					padding: 0 14px;
 
-				.sub-menu {
-					position: absolute;
-					top: 70px;
-					left: 0;
-					line-height: 40px;
-					box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-					border-radius: 0 0 4px 4px;
-					display: none;
-					z-index: 2;
-					background-color: inherit;
-
-					li {
-						padding: 0 22px;
-						border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-					}
-	
 					a {
+						height: 100%;
+						text-decoration: none;
+						white-space: nowrap;
 						color: black;
-						font-size: 15px;
+						font-size: 17px;
 						font-weight: 500;
-					}
-	
-					.more {
-						.sub-sub-menu {
-							position: absolute;
-							top: 0;
-							left: 100%;
-							border-radius: 0 4px 4px 4px;
-							z-index: 1;
-							display: none;
-						}
-
-						&:hover {
-							.sub-sub-menu {
-								display: block;
-							}
-						}
-					}
-				}
-
-				.display-sub-menu {
-					display: block !important;
-				}
-
-				&:hover {
-					.sub-menu-arrow {
-						transform: rotate(90deg);
 					}
 
 					.sub-menu {
-						display: block;
-						background-color: white;
+						position: absolute;
+						top: 70px;
+						left: 0;
+						line-height: 40px;
+						box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+						border-radius: 0 0 4px 4px;
+						display: none;
+						z-index: 2;
+						background-color: inherit;
 
-						.sub-sub-menu {
-							background-color: white;
+						li {
+							padding: 0 22px;
+							border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+						}
+		
+						a {
+							color: black;
+							font-size: 15px;
+							font-weight: 500;
+						}
+		
+						.more {
+							.sub-sub-menu {
+								position: absolute;
+								top: 0;
+								left: 100%;
+								border-radius: 0 4px 4px 4px;
+								z-index: 1;
+								display: none;
+							}
+
+							&:hover {
+								.sub-sub-menu {
+									display: block;
+								}
+							}
 						}
 					}
-				}
 
-				.arrow {
-					margin-left: 5px;
-					line-height: 70px;
-					text-align: center;
-					display: inline-block;
-					color: black;
-					transition: all 0.3s ease;
-					&.transform-90 {
-						transform: rotate(90deg);
+					.display-sub-menu {
+						display: block !important;
+					}
+
+					&:hover {
+						.sub-menu-arrow {
+							transform: rotate(90deg);
+						}
+
+						.sub-menu {
+							display: block;
+							background-color: white;
+
+							.sub-sub-menu {
+								background-color: white;
+							}
+						}
+					}
+
+					.arrow {
+						margin-left: 5px;
+						line-height: 70px;
+						text-align: center;
+						display: inline-block;
+						color: black;
+						transition: all 0.3s ease;
+						&.transform-90 {
+							transform: rotate(90deg);
+						}
 					}
 				}
 			}
@@ -356,6 +356,12 @@ nav {
 									align-items: center;
 								}
 
+								.sub-sub-menu {
+									&.display-sub-menu {
+										position: initial;
+									}
+								}
+
 								&:hover {
 									.sub-sub-menu {
 										display: none;
@@ -367,40 +373,30 @@ nav {
 						&:hover {
 							.sub-menu {
 								background-color: inherit;
+								display: none;
 
 								.sub-sub-menu {
 									background-color: inherit;
+									
+									// For mobile devices, remove the existing `transform: rotate(90deg)` property set on hover.
+									// Technically, it still works but the bad thing is that the `:hover` feature only turns off
+									// on mobile devices when you click off the sub-menu item. This means that when you open the
+									// submenu on a mobile device, the right caret rotates to point down, but when you click on
+									// it again to close it, it remains pointing down, and doesn't un-rotate 90deg. It only does
+									// so when you click completely off that menu item, like when you open another sub-menu. So,
+									// here I removed the `transform: rotate(90deg)` property set on hover for mobile sizes down.
+									// Instead, the rotation is now manually implemented in JavaScript click handlers - see
+									// `componentDidRender()`.
+									transform: unset;
 								}
 							}
-						}
-	
-					}
-				}
-			}
 
-			.links {
-				li {
-					&:hover {
-						.sub-menu {
-							display: none;
-						}
-
-						// For mobile devices, remove the existing `transform: rotate(90deg)` property set on hover.
-						// Technically, it still works but the bad thing is that the `:hover` feature only turns off
-						// on mobile devices when you click off the sub-menu item. This means that when you open the
-						// submenu on a mobile device, the right caret rotates to point down, but when you click on
-						// it again to close it, it remains pointing down, and doesn't un-rotate 90deg. It only does
-						// so when you click completely off that menu item, like when you open another sub-menu. So,
-						// here I removed the `transform: rotate(90deg)` property set on hover for mobile sizes down.
-						// Instead, the rotation is now manually implemented in JavaScript click handlers - see
-						// `componentDidRender()`.
-						.sub-menu-arrow {
-							transform: unset;
-						}
-					}
-					.sub-menu-arrow {
-						&.transform-90 {
-							transform: rotate(90deg);
+							.sub-menu-arrow {
+								transform: rotate(0deg);
+								&.transform-90 {
+									transform: rotate(90deg);
+								}
+							}
 						}
 					}
 				}
