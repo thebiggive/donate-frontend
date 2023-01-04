@@ -262,6 +262,10 @@ a {
     background-color: $colour-black;
 }
 
+.background-colour-transparent {
+    background-color: transparent;
+}
+
 .input-wrap {
     @include flex-container-row();    
 }

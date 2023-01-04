@@ -7,20 +7,17 @@
 
 ## Properties
 
-| Property           | Attribute            | Description                                                                                                                                                                                             | Type      | Default      |
-| ------------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------------ |
-| `centered`         | `centered`           | Centered                                                                                                                                                                                                | `boolean` | `false`      |
-| `colourScheme`     | `colour-scheme`      | Colour Scheme                                                                                                                                                                                           | `string`  | `'primary'`  |
-| `datetime`         | `datetime`           | To be used alongside isFutureCampaign = true or isPastCampaign = true. If either is true, we render out: 'Launches: ' + datetime or 'Closed: ' + datetime. Preferred format: DD/MM/YYYY, HH:MM DON-661. | `string`  | `undefined`  |
-| `fullWidth`        | `full-width`         | Display full width                                                                                                                                                                                      | `boolean` | `false`      |
-| `isFutureCampaign` | `is-future-campaign` | Boolean flag telling the component if the campaign is in the future (not open yet).                                                                                                                     | `boolean` | `false`      |
-| `isPastCampaign`   | `is-past-campaign`   | Boolean flag telling the component if the campaign is in the future (not open yet).                                                                                                                     | `boolean` | `false`      |
-| `label`            | `label`              | Text                                                                                                                                                                                                    | `string`  | `'Click me'` |
-| `openInNewTab`     | `open-in-new-tab`    | New Tab                                                                                                                                                                                                 | `boolean` | `false`      |
-| `rounded`          | `rounded`            | Rounded corners                                                                                                                                                                                         | `boolean` | `false`      |
-| `size`             | `size`               | Size                                                                                                                                                                                                    | `string`  | `'medium'`   |
-| `spaceBelow`       | `space-below`        | Space below component                                                                                                                                                                                   | `number`  | `1`          |
-| `url`              | `url`                | URL                                                                                                                                                                                                     | `string`  | `undefined`  |
+| Property       | Attribute         | Description           | Type      | Default      |
+| -------------- | ----------------- | --------------------- | --------- | ------------ |
+| `centered`     | `centered`        | Centered              | `boolean` | `false`      |
+| `colourScheme` | `colour-scheme`   | Colour Scheme         | `string`  | `'primary'`  |
+| `fullWidth`    | `full-width`      | Display full width    | `boolean` | `false`      |
+| `label`        | `label`           | Text                  | `string`  | `'Click me'` |
+| `openInNewTab` | `open-in-new-tab` | New Tab               | `boolean` | `false`      |
+| `rounded`      | `rounded`         | Rounded corners       | `boolean` | `false`      |
+| `size`         | `size`            | Size                  | `string`  | `'medium'`   |
+| `spaceBelow`   | `space-below`     | Space below component | `number`  | `1`          |
+| `url`          | `url`             | URL                   | `string`  | `undefined`  |
 
 
 ## Events
@@ -45,14 +42,9 @@
  - [biggive-search](../biggive-search)
  - [biggive-video-feature](../biggive-video-feature)
 
-### Depends on
-
-- [biggive-misc-icon](../biggive-misc-icon)
-
 ### Graph
 ```mermaid
 graph TD;
-  biggive-button --> biggive-misc-icon
   biggive-article-card --> biggive-button
   biggive-basic-card --> biggive-button
   biggive-call-to-action --> biggive-button

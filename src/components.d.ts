@@ -811,6 +811,9 @@ export namespace Components {
          */
         "teaserColour": string;
     }
+    interface BiggiveMainMenu {
+        "closeMobileMenuFromOutside": () => Promise<void>;
+    }
     interface BiggiveMiscIcon {
         /**
           * Background colour
@@ -1244,6 +1247,12 @@ declare global {
         prototype: HTMLBiggiveImageFeatureElement;
         new (): HTMLBiggiveImageFeatureElement;
     };
+    interface HTMLBiggiveMainMenuElement extends Components.BiggiveMainMenu, HTMLStencilElement {
+    }
+    var HTMLBiggiveMainMenuElement: {
+        prototype: HTMLBiggiveMainMenuElement;
+        new (): HTMLBiggiveMainMenuElement;
+    };
     interface HTMLBiggiveMiscIconElement extends Components.BiggiveMiscIcon, HTMLStencilElement {
     }
     var HTMLBiggiveMiscIconElement: {
@@ -1384,6 +1393,7 @@ declare global {
         "biggive-icon-group": HTMLBiggiveIconGroupElement;
         "biggive-image": HTMLBiggiveImageElement;
         "biggive-image-feature": HTMLBiggiveImageFeatureElement;
+        "biggive-main-menu": HTMLBiggiveMainMenuElement;
         "biggive-misc-icon": HTMLBiggiveMiscIconElement;
         "biggive-nav-group": HTMLBiggiveNavGroupElement;
         "biggive-nav-item": HTMLBiggiveNavItemElement;
@@ -2231,6 +2241,8 @@ declare namespace LocalJSX {
          */
         "teaserColour"?: string;
     }
+    interface BiggiveMainMenu {
+    }
     interface BiggiveMiscIcon {
         /**
           * Background colour
@@ -2516,6 +2528,7 @@ declare namespace LocalJSX {
         "biggive-icon-group": BiggiveIconGroup;
         "biggive-image": BiggiveImage;
         "biggive-image-feature": BiggiveImageFeature;
+        "biggive-main-menu": BiggiveMainMenu;
         "biggive-misc-icon": BiggiveMiscIcon;
         "biggive-nav-group": BiggiveNavGroup;
         "biggive-nav-item": BiggiveNavItem;
@@ -2566,6 +2579,7 @@ declare module "@stencil/core" {
             "biggive-icon-group": LocalJSX.BiggiveIconGroup & JSXBase.HTMLAttributes<HTMLBiggiveIconGroupElement>;
             "biggive-image": LocalJSX.BiggiveImage & JSXBase.HTMLAttributes<HTMLBiggiveImageElement>;
             "biggive-image-feature": LocalJSX.BiggiveImageFeature & JSXBase.HTMLAttributes<HTMLBiggiveImageFeatureElement>;
+            "biggive-main-menu": LocalJSX.BiggiveMainMenu & JSXBase.HTMLAttributes<HTMLBiggiveMainMenuElement>;
             "biggive-misc-icon": LocalJSX.BiggiveMiscIcon & JSXBase.HTMLAttributes<HTMLBiggiveMiscIconElement>;
             "biggive-nav-group": LocalJSX.BiggiveNavGroup & JSXBase.HTMLAttributes<HTMLBiggiveNavGroupElement>;
             "biggive-nav-item": LocalJSX.BiggiveNavItem & JSXBase.HTMLAttributes<HTMLBiggiveNavItemElement>;

@@ -62,7 +62,6 @@ the parent component).
 ```mermaid
 graph TD;
   biggive-search --> biggive-button
-  biggive-button --> biggive-misc-icon
   style biggive-search fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
