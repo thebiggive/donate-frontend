@@ -10,7 +10,6 @@
 }
 
 a {
-
   // target all classes prefixed with 'icon-' so we don't repeat code
   &[class^='icon-'],
   &[class*='icon-'] {
@@ -85,11 +84,6 @@ a {
       a {
         color: $colour-white;
         text-decoration: none;
-
-        &:hover {
-          border-bottom-color: $colour-white;
-          color: $colour-white;
-        }
       }
     }
   }
@@ -181,27 +175,6 @@ nav {
                 z-index: 1;
                 display: none;
               }
-
-              &:hover {
-                .sub-sub-menu {
-                  display: block;
-                }
-              }
-            }
-          }
-
-          &:hover {
-            .sub-menu-arrow {
-              transform: rotate(90deg);
-            }
-
-            .sub-menu {
-              display: block;
-              background-color: white;
-
-              .sub-sub-menu {
-                background-color: white;
-              }
             }
           }
 
@@ -240,6 +213,57 @@ nav {
   }
 }
 
+@media (hover: hover) {
+  /* when hover is supported */
+  .row-top {
+    .nav-secondary {
+      li {
+        a {
+          &:hover {
+            border-bottom-color: $colour-white;
+            color: $colour-white;
+          }
+        }
+      }
+    }
+  }
+
+  nav {
+    .navbar {
+      .nav-links {
+        .links {
+          li {
+            .sub-menu {
+              .more {
+                &:hover {
+                  .sub-sub-menu {
+                    display: block;
+                  }
+                }
+              }
+            }
+
+            &:hover {
+              .sub-menu-arrow {
+                transform: rotate(90deg);
+              }
+
+              .sub-menu {
+                display: block;
+                background-color: white;
+
+                .sub-sub-menu {
+                  background-color: white;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 @media (max-width: 1200px) {
   nav {
     .navbar {
@@ -269,7 +293,7 @@ nav {
   }
 }
 
-@media (max-width:968px) {
+@media (max-width: 968px) {
   .mobile-only {
     display: block !important;
   }
@@ -373,42 +397,6 @@ nav {
                     position: initial;
                   }
                 }
-
-                &:hover {
-                  .sub-sub-menu {
-                    display: none;
-                  }
-                }
-              }
-            }
-
-            &:hover {
-              .sub-menu {
-                background-color: inherit;
-                display: none;
-
-                .sub-sub-menu {
-                  background-color: inherit;
-
-                  // For mobile devices, remove the existing `transform: rotate(90deg)` property set on hover.
-                  // Technically, it still works but the bad thing is that the `:hover` feature only turns off
-                  // on mobile devices when you click off the sub-menu item. This means that when you open the
-                  // submenu on a mobile device, the right caret rotates to point down, but when you click on
-                  // it again to close it, it remains pointing down, and doesn't un-rotate 90deg. It only does
-                  // so when you click completely off that menu item, like when you open another sub-menu. So,
-                  // here I removed the `transform: rotate(90deg)` property set on hover for mobile sizes down.
-                  // Instead, the rotation is now manually implemented in JavaScript click handlers - see
-                  // `componentDidRender()`.
-                  transform: unset;
-                }
-              }
-
-              .sub-menu-arrow {
-                transform: rotate(0deg);
-
-                &.transform-90 {
-                  transform: rotate(90deg);
-                }
               }
             }
           }
@@ -417,7 +405,7 @@ nav {
     }
   }
 
-  @media(max-width:370px) {
+  @media (max-width: 370px) {
     nav .navbar .nav-links {
       max-width: 100%;
     }
