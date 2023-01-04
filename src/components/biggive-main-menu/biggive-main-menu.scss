@@ -248,17 +248,19 @@ nav {
         width: 120px;
       }
 
-      .links {
-        li {
-          padding: 0 7px;
+      .nav-links {
+        .links {
+          li {
+            padding: 0 7px;
 
-          a {
-            font-size: 15px;
-          }
-
-          .sub-menu {
             a {
-              font-size: 13px;
+              font-size: 15px;
+            }
+
+            .sub-menu {
+              a {
+                font-size: 13px;
+              }
             }
           }
         }

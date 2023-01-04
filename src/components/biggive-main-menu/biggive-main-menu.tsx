@@ -9,18 +9,18 @@ export class BiggiveMainMenu {
   @Element() host: HTMLBiggiveHeaderElement;
 
   openMobileMenu = () => {
-    const mobileMenu = this.host.shadowRoot.querySelector('.nav-links') as HTMLElement;
+    const mobileMenu = this.host.shadowRoot.querySelector<HTMLElement>('.nav-links');
     mobileMenu.style.left = '0';
   };
 
   closeMobileMenu = () => {
-    const mobileMenu = this.host.shadowRoot.querySelector('.nav-links') as HTMLElement;
+    const mobileMenu = this.host.shadowRoot.querySelector<HTMLElement>('.nav-links');
     mobileMenu.style.left = '-100%';
   };
 
   @Method()
   async closeMobileMenuFromOutside() {
-    const mobileMenu = this.host.shadowRoot.querySelector('.nav-links') as HTMLElement;
+    const mobileMenu = this.host.shadowRoot.querySelector<HTMLElement>('.nav-links');
     mobileMenu.style.left = '-100%';
   }
 
@@ -62,7 +62,7 @@ export class BiggiveMainMenu {
   }
 
   componentDidRender() {
-    const subMenuElements = this.host.querySelectorAll('.sub-menu') as NodeListOf<HTMLElement>;
+    const subMenuElements = this.host.querySelectorAll<HTMLElement>('.sub-menu');
     subMenuElements.forEach(subMenuElement => {
       // the subMenuLink is a sibling element to the actual sub-menu
       const subMenuLink = subMenuElement.parentElement.querySelector('a');
@@ -74,7 +74,7 @@ export class BiggiveMainMenu {
       };
     });
 
-    const subSubMenuElements = this.host.querySelectorAll('.sub-sub-menu') as NodeListOf<HTMLElement>;
+    const subSubMenuElements = this.host.querySelectorAll<HTMLElement>('.sub-sub-menu');
     subSubMenuElements.forEach(subSubMenuElement => {
       // the subSubMenuLink is a sibling element to the actual sub-sub-menu
       const subSubMenuLink = subSubMenuElement.parentElement.querySelector('a');
