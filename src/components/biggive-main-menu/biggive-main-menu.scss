@@ -180,7 +180,6 @@ nav {
 
           .arrow {
             margin-left: 5px;
-            line-height: 70px;
             text-align: center;
             display: inline-block;
             color: black;
@@ -330,8 +329,13 @@ nav {
           align-items: center;
           justify-content: space-between;
 
-          #mobileLogo {
-            width: 130px;
+          a {
+            display: contents;
+
+            #mobileLogo {
+              width: 130px;
+            }
+  
           }
 
           #x {
@@ -360,10 +364,6 @@ nav {
 				width: 100%;
 				display: block;
 			}
-
-            .arrow {
-              line-height: 40px;
-            }
 
             .display-sub-menu {
               display: block !important;
