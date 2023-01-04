@@ -23,6 +23,7 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noFallthroughCasesInSwitch": true,
+    "paths": { "@angular/*": [ "./node_modules/@angular/*" ] },
     "importHelpers": true,
     "strictNullChecks": true,
     "target": "ES2022",
