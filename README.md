@@ -22,6 +22,15 @@ To use `ng` commands directly, e.g. to generate new code scaffolding with the CL
 
     npm install -g @angular/cli
 
+## Developing with local copy of Big Give Components
+
+To develop this app and the components together, ensure they are in sibling directories `donate-frontend` and `components` on your dev machine, then
+from this directory run:
+  `npm run link-components`
+
+This will set up symlinks so that you can use your local copy of the components instead of the default behaviour which is to use the copy published to
+NPM. You may need to re-run after making changes in the component code.
+
 ## CI, e2e tests and Puppeteer
 
 * `main` branch deploys to Production.

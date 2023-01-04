@@ -21,7 +21,8 @@
     "e2e-ci": "webdriver-manager update --versions.chrome 107.0.5304.121 && ng e2e --webdriver-update=false --protractor-config=e2e/protractor-ci.conf.js",
     "ci": "npm run lint && npm run test-ci && npm run e2e-ci && npm run build:staging",
     "dev:ssr": "ng run donate-frontend:serve-ssr",
-    "serve:ssr": "node dist/server/main.js"
+    "serve:ssr": "node dist/server/main.js",
+    "link-components": "./link-components.sh"
   },
   "dependencies": {
     "@angular/animations": "^15.0.4",
