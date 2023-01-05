@@ -9,18 +9,18 @@ export class BiggiveMainMenu {
   @Element() host: HTMLBiggiveHeaderElement;
 
   openMobileMenu = () => {
-    const mobileMenu = this.host!.shadowRoot!.querySelector<HTMLElement>('.nav-links');
+    const mobileMenu = this.host.shadowRoot!.querySelector<HTMLElement>('.nav-links');
     mobileMenu!.style.left = '0';
   };
 
   closeMobileMenu = () => {
-    const mobileMenu = this.host!.shadowRoot!.querySelector<HTMLElement>('.nav-links');
+    const mobileMenu = this.host.shadowRoot!.querySelector<HTMLElement>('.nav-links');
     mobileMenu!.style.left = '-100%';
   };
 
   @Method()
   async closeMobileMenuFromOutside() {
-    const mobileMenu = this.host!.shadowRoot!.querySelector<HTMLElement>('.nav-links');
+    const mobileMenu = this.host.shadowRoot!.querySelector<HTMLElement>('.nav-links');
     mobileMenu!.style.left = '-100%';
   }
 
