@@ -22,7 +22,7 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "package-lock.json" }}
       - run: npm install
-      - run: npm run build && git diff-index --quiet HEAD -- || (git status && exit 1); # Checks that npm run didn't change any files. If it did changes must be commited.
+      - run: npm run build && git diff; git diff-index --quiet HEAD -- || (git status && exit 1); # Checks that npm run didn't change any files. If it did changes must be commited.
       - run: git diff-index --quiet HEAD --
       - save_cache:
           paths:
