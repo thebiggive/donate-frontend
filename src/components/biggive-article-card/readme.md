@@ -8,11 +8,11 @@
 ## Properties
 
 | Property                | Attribute                 | Description                  | Type     | Default      |
-| ----------------------- | ------------------------- | ---------------------------- | -------- |--------------|
+| ----------------------- | ------------------------- | ---------------------------- | -------- | ------------ |
 | `backgroundColour`      | `background-colour`       | Card background colour       | `string` | `'white'`    |
 | `backgroundColourHover` | `background-colour-hover` | Card background colour hover | `string` | `'tertiary'` |
 | `buttonLabel`           | `button-label`            | Button label                 | `string` | `undefined`  |
-| `buttonUrl`             | `button-url`              | Button URL                   | `string` | `null`       |
+| `buttonUrl`             | `button-url`              | Button URL                   | `string` | `undefined`  |
 | `date`                  | `date`                    | Date                         | `string` | `undefined`  |
 | `imageAltText`          | `image-alt-text`          | Image Alt Text               | `string` | `undefined`  |
 | `imageLabel`            | `image-label`             | Image Label                  | `string` | `undefined`  |
