@@ -29,7 +29,7 @@ describe('biggive-campaign-card', () => {
                    Match Funded
                  </span>
            </div>
-           <div class="banner image-wrap"></div>
+           <div class="banner image-wrap" role="presentation" style="background-image: url(undefined);"></div>
            <div class="title-wrap">
              <h3></h3>
              <div class="organisation-name">

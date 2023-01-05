@@ -11,12 +11,15 @@ describe('biggive-hero-image', () => {
       components: [BiggiveHeroImage],
       html: `<biggive-hero-image
         slug="My Slug"
+        slugColour="my-slug-colour"
+        mainTitleColour="my-main-title-colour"
+        teaserColour="my-teaser-colour"
         main-title="This is my title"
         teaser="this is the intro text which I want to add"
       ></biggive-hero-image>`,
     });
     expect(page.root).toEqualHtml(`
-     <biggive-hero-image slug="My Slug" main-title="This is my title" teaser="this is the intro text which I want to add">
+     <biggive-hero-image main-title="This is my title" maintitlecolour="my-main-title-colour" slug="My Slug" slugcolour="my-slug-colour" teaser="this is the intro text which I want to add" teasercolour="my-teaser-colour">
        <mock:shadow-root>
          <div class="colour-scheme-primary container space-below-0">
            <div class="sleeve">
@@ -24,13 +27,13 @@ describe('biggive-hero-image', () => {
                <div class="image-wrap logo">
                 <img alt="" src="">
                </div>
-               <div class="slug text-colour-null">
+               <div class="slug text-colour-undefined">
                  My Slug
                </div>
-               <h1 class="main-title text-colour-null">
+               <h1 class="main-title text-colour-undefined">
                  This is my title
                </h1>
-               <div class="teaser text-colour-null">
+               <div class="teaser text-colour-undefined">
                  this is the intro text which I want to add
                </div>
              </div>
