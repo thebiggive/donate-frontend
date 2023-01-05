@@ -14,32 +14,32 @@ export class BiggiveCampaignHighlights {
   /**
    * Full URL of a banner image.
    */
-  @Prop() banner: string = null;
+  @Prop() banner: string;
 
   /**
    * Display name of the charity's specific time-bound fundraising campaign.
    */
-  @Prop() campaignTitle: string = null;
+  @Prop() campaignTitle: string;
 
   /**
    * Label for the primary figure
    */
-  @Prop() primaryFigureLabel: string = null;
+  @Prop() primaryFigureLabel: string;
 
   /**
    * Amount for the primary figure, formatted with currency symbol
    */
-  @Prop() primaryFigureAmount: string = null;
+  @Prop() primaryFigureAmount: string;
 
   /**
    * Label for the secondary figure
    */
-  @Prop() secondaryFigureLabel: string = null;
+  @Prop() secondaryFigureLabel: string;
 
   /**
    * Amount for the secondary figure, formatted with currency symbol
    */
-  @Prop() secondaryFigureAmount: string = null;
+  @Prop() secondaryFigureAmount: string;
 
   /**
    * Progress bar percentage
@@ -49,27 +49,27 @@ export class BiggiveCampaignHighlights {
   /**
    * Primary stat icon
    */
-  @Prop() primaryStatIcon: string = null;
+  @Prop() primaryStatIcon: string;
 
   /**
    * Primary stat text
    */
-  @Prop() primaryStatText: string = null;
+  @Prop() primaryStatText: string;
 
   /**
    * Secondary stat icon
    */
-  @Prop() secondaryStatIcon: string = null;
+  @Prop() secondaryStatIcon: string;
 
   /**
    * Secondary stat text
    */
-  @Prop() secondaryStatText: string = null;
+  @Prop() secondaryStatText: string;
 
   /**
    * Champion's name
    */
-  @Prop() championName: string = null;
+  @Prop() championName: string;
 
   /**
    * Link to all meta-campaigns funded by this champion.
@@ -77,7 +77,7 @@ export class BiggiveCampaignHighlights {
    * In other words, it follows the following format:
    * '/' + campaign.parentRef + '/' + campaign.championRef
    */
-  @Prop() championUrl: string = null;
+  @Prop() championUrl: string;
 
   render() {
     return (

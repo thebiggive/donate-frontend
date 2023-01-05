@@ -20,12 +20,12 @@ export class BiggiveCategoryIcon {
   /**
    * Icon
    */
-  @Prop() icon: string = null;
+  @Prop() icon: string;
 
   /**
    * Label
    */
-  @Prop() label: string = null;
+  @Prop() label: string;
 
   /**
    * Url

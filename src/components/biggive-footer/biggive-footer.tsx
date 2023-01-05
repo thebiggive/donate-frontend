@@ -11,7 +11,7 @@ export class BiggiveFooter {
   appendMenu(menuName: string) {
     var node = this.host.querySelector(`[slot="${menuName}"]`);
     if (node !== null) {
-      this.host.shadowRoot.querySelector(`.${menuName}`).appendChild(node);
+      this.host!.shadowRoot!.querySelector(`.${menuName}`)!.appendChild(node);
     }
   }
 

@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type     | Default |
-| -------- | --------- | ----------- | -------- | ------- |
-| `figure` | `figure`  | Figure      | `string` | `null`  |
-| `label`  | `label`   | Figure      | `string` | `null`  |
+| Property | Attribute | Description | Type     | Default     |
+| -------- | --------- | ----------- | -------- | ----------- |
+| `figure` | `figure`  | Figure      | `string` | `undefined` |
+| `label`  | `label`   | Figure      | `string` | `undefined` |
 
 
 ----------------------------------------------

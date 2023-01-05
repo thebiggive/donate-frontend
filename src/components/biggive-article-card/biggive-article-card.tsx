@@ -25,36 +25,36 @@ export class BiggiveArticleCard {
   /**
    * Slug
    */
-  @Prop() slug: string = null;
+  @Prop() slug: string;
   /**
    * Date
    */
-  @Prop() date: string = null;
+  @Prop() date: string;
   /**
    * Main title
    */
-  @Prop() mainTitle: string = null;
+  @Prop() mainTitle: string;
   /**
    * Image URL
    */
-  @Prop() imageUrl: string = null;
+  @Prop() imageUrl: string;
   /**
    * Image Alt Text
    */
-  @Prop() imageAltText: string = null;
+  @Prop() imageAltText: string;
   /**
    * Image Label
    */
-  @Prop() imageLabel: string = null;
+  @Prop() imageLabel: string;
   /**
    * Button label
    */
-  @Prop() buttonLabel: string = null;
+  @Prop() buttonLabel: string;
 
   /**
    * Button URL
    */
-  @Prop() buttonUrl: string = null;
+  @Prop() buttonUrl: string;
 
   render() {
     return (

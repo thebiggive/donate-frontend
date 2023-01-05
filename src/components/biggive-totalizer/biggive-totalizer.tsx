@@ -34,9 +34,10 @@ export class BiggiveTotalizer {
   /**
    * Primary message
    */
-  @Prop() mainMessage: string = null;
+  @Prop() mainMessage: string;
 
   componentDidRender() {
+    // @ts-ignore
     const tickerItemsInternalWrapper: HTMLDivElement = this.host.querySelector(`[slot="ticker-items"]`);
 
     if (tickerItemsInternalWrapper !== null && tickerItemsInternalWrapper !== undefined) {
@@ -44,8 +45,10 @@ export class BiggiveTotalizer {
       tickerItemsInternalWrapper.style.flex = 'none';
     }
 
+    // @ts-ignore
     const tickerWidth = this.host.shadowRoot.querySelector('.ticker-wrap .sleeve').clientWidth;
     const duration = tickerWidth / 50;
+    // @ts-ignore
     const sleeve: HTMLElement = this.host.shadowRoot.querySelector('.ticker-wrap .sleeve');
     sleeve.style.animationDuration = Math.round(duration) + 's';
   }

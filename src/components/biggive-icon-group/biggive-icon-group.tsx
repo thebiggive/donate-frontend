@@ -14,7 +14,7 @@ export class BiggiveIconGroup {
   /**
    * Label
    */
-  @Prop() label: string = null;
+  @Prop() label: string;
 
   render() {
     return (

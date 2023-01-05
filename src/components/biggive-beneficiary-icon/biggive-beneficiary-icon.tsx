@@ -25,7 +25,7 @@ export class BiggiveBeneficiaryIcon {
   /**
    * Label
    */
-  @Prop() label: string = null;
+  @Prop() label: string;
 
   /**
    * Url

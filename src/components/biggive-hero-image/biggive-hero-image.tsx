@@ -20,12 +20,12 @@ export class BiggiveHeroImage {
   /**
    * Header slug
    */
-   @Prop() slug: string = null;
+   @Prop() slug: string;
 
   /**
    * Header slug colour
    */
-   @Prop() slugColour: string = null;
+   @Prop() slugColour: string;
 
   /**
    * Full URL of a logo image.
@@ -55,28 +55,28 @@ export class BiggiveHeroImage {
   /**
    * Hero image title, typically the page.
    */
-  @Prop() mainTitle: string = null;
+  @Prop() mainTitle: string;
   /**
    * Main title colour
    */
-   @Prop() mainTitleColour: string = null;
+   @Prop() mainTitleColour: string;
   /**
    * Introductory teaser text
    */
-  @Prop() teaser: string = null;
+  @Prop() teaser: string;
   /**
    * Teaser colour
    */
-   @Prop() teaserColour: string = null;
+   @Prop() teaserColour: string;
   /**
    * Button Url
    */
-   @Prop() buttonUrl: string = null;
+   @Prop() buttonUrl: string;
 
   /**
    * Button Label
    */
-   @Prop() buttonLabel: string = null;
+   @Prop() buttonLabel: string;
 
   /**
    * Button Colour Scheme

@@ -9,19 +9,19 @@ export class BiggiveMainMenu {
   @Element() host: HTMLBiggiveHeaderElement;
 
   openMobileMenu = () => {
-    const mobileMenu = this.host.shadowRoot.querySelector<HTMLElement>('.nav-links');
-    mobileMenu.style.left = '0';
+    const mobileMenu = this.host!.shadowRoot!.querySelector<HTMLElement>('.nav-links');
+    mobileMenu!.style.left = '0';
   };
 
   closeMobileMenu = () => {
-    const mobileMenu = this.host.shadowRoot.querySelector<HTMLElement>('.nav-links');
-    mobileMenu.style.left = '-100%';
+    const mobileMenu = this.host!.shadowRoot!.querySelector<HTMLElement>('.nav-links');
+    mobileMenu!.style.left = '-100%';
   };
 
   @Method()
   async closeMobileMenuFromOutside() {
-    const mobileMenu = this.host.shadowRoot.querySelector<HTMLElement>('.nav-links');
-    mobileMenu.style.left = '-100%';
+    const mobileMenu = this.host!.shadowRoot!.querySelector<HTMLElement>('.nav-links');
+    mobileMenu!.style.left = '-100%';
   }
 
   appendPrimaryNavigationLinks() {
@@ -30,7 +30,7 @@ export class BiggiveMainMenu {
 
     if (node !== null) {
       // Slot the menu
-      this.host.shadowRoot.querySelector('#nav-primary').appendChild(node);
+      this.host.shadowRoot!.querySelector('#nav-primary')!.appendChild(node);
     }
   }
 
@@ -46,7 +46,7 @@ export class BiggiveMainMenu {
 
     if (node !== null) {
       // add to blue bar
-      this.host.shadowRoot.querySelector('.nav-secondary').appendChild(node);
+      this.host.shadowRoot!.querySelector('.nav-secondary')!.appendChild(node);
 
       // we must make a deep clone of the node above, because each node is only
       // injectable / slottable into one place, but we need to slot into two places.
@@ -56,7 +56,7 @@ export class BiggiveMainMenu {
       // hides them in desktop!
       nodeClone.querySelectorAll('li').forEach(child => {
         child.classList.add('mobile-only');
-        this.host.shadowRoot.querySelector('.links').appendChild(child);
+        this.host!.shadowRoot!.querySelector('.links')!.appendChild(child);
       });
     }
   }
@@ -65,11 +65,11 @@ export class BiggiveMainMenu {
     const subMenuElements = this.host.querySelectorAll<HTMLElement>('.sub-menu');
     subMenuElements.forEach(subMenuElement => {
       // the subMenuLink is a sibling element to the actual sub-menu
-      const subMenuLink = subMenuElement.parentElement.querySelector('a');
+      const subMenuLink = subMenuElement.parentElement?.querySelector('a');
 
-      subMenuLink.onclick = () => {
-        const subMenuArrow = subMenuLink.querySelector('.sub-menu-arrow');
-        subMenuArrow.classList.toggle('transform-90');
+      subMenuLink!.onclick = () => {
+        const subMenuArrow = subMenuLink!.querySelector('.sub-menu-arrow');
+        subMenuArrow!.classList.toggle('transform-90');
         subMenuElement.classList.toggle('display-sub-menu');
       };
     });
@@ -77,11 +77,11 @@ export class BiggiveMainMenu {
     const subSubMenuElements = this.host.querySelectorAll<HTMLElement>('.sub-sub-menu');
     subSubMenuElements.forEach(subSubMenuElement => {
       // the subSubMenuLink is a sibling element to the actual sub-sub-menu
-      const subSubMenuLink = subSubMenuElement.parentElement.querySelector('a');
+      const subSubMenuLink = subSubMenuElement!.parentElement!.querySelector('a');
 
-      subSubMenuLink.onclick = () => {
-        const subMenuArrow = subSubMenuLink.querySelector('.sub-sub-menu-arrow');
-        subMenuArrow.classList.toggle('transform-90');
+      subSubMenuLink!.onclick = () => {
+        const subMenuArrow = subSubMenuLink!.querySelector('.sub-sub-menu-arrow');
+        subMenuArrow!.classList.toggle('transform-90');
         subSubMenuElement.classList.toggle('display-sub-menu');
       };
     });

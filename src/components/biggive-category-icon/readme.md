@@ -10,9 +10,9 @@
 | Property           | Attribute           | Description       | Type     | Default     |
 | ------------------ | ------------------- | ----------------- | -------- | ----------- |
 | `backgroundColour` | `background-colour` | Background colour | `string` | `'primary'` |
-| `icon`             | `icon`              | Icon              | `string` | `null`      |
+| `icon`             | `icon`              | Icon              | `string` | `undefined` |
 | `iconColour`       | `icon-colour`       | Background colour | `string` | `'white'`   |
-| `label`            | `label`             | Label             | `string` | `null`      |
+| `label`            | `label`             | Label             | `string` | `undefined` |
 | `url`              | `url`               | Url               | `string` | `'#'`       |
 
 

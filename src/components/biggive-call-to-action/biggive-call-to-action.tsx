@@ -30,7 +30,7 @@ export class BiggiveCallToAction {
   /**
    * Slug
    */
-  @Prop() slug: string = null;
+  @Prop() slug: string;
 
   /**
    * Main title colour
@@ -43,7 +43,7 @@ export class BiggiveCallToAction {
   /**
    * Main title
    */
-  @Prop() mainTitle: string = null;
+  @Prop() mainTitle: string;
 
   /**
    * Main title size
@@ -57,7 +57,7 @@ export class BiggiveCallToAction {
   /**
    * Subtitle
    */
-  @Prop() subtitle: string = null;
+  @Prop() subtitle: string;
 
   /**
    * Teaser colour
@@ -67,17 +67,17 @@ export class BiggiveCallToAction {
   /**
    * Teaser
    */
-  @Prop() teaser: string = null;
+  @Prop() teaser: string;
 
   /**
    * Primary button Url
    */
-  @Prop() primaryButtonUrl: string = null;
+  @Prop() primaryButtonUrl: string;
 
   /**
    * Primary button Label
    */
-  @Prop() primaryButtonLabel: string = null;
+  @Prop() primaryButtonLabel: string;
 
   /**
    * Primary button Colour Scheme
@@ -87,12 +87,12 @@ export class BiggiveCallToAction {
   /**
    * Secondary button Url
    */
-  @Prop() secondaryButtonUrl: string = null;
+  @Prop() secondaryButtonUrl: string;
 
   /**
    * Secondary button Label
    */
-  @Prop() secondaryButtonLabel: string = null;
+  @Prop() secondaryButtonLabel: string;
 
   /**
    * Secondary button Colour Scheme
