@@ -31,6 +31,9 @@ from this directory run:
 This will set up symlinks so that you can use your local copy of the components instead of the default behaviour which is to use the copy published to
 NPM. You may need to re-run after making changes in the component code.
 
+Note: make sure that you are checked out on the branch with your latest components updates before linking, to ensure that the changes are correctly shown
+in Angular post-linking.
+
 ## CI, e2e tests and Puppeteer
 
 * `main` branch deploys to Production.
