@@ -89,7 +89,7 @@ export class CampaignGroupsService {
     const beneficiaries: {name: string, icon: IconDefinition}[] = this.getBeneficiaries();
 
     for (let i = 0; i < beneficiaries.length; i++) {
-      const beneficiaryObj: {name: string, icon: IconDefinition} = beneficiaries[i];
+      const beneficiaryObj: {name: string, icon: IconDefinition} = beneficiaries[i]!;
       names.push(beneficiaryObj.name);
     }
 
@@ -182,7 +182,7 @@ export class CampaignGroupsService {
     const categories: {name: string, icon: IconDefinition}[] = this.getCategories();
 
     for (let i = 0; i < categories.length; i++) {
-      const categoryObj: {name: string, icon: IconDefinition} = categories[i];
+      const categoryObj: {name: string, icon: IconDefinition} = categories[i]!;
       names.push(categoryObj.name);
     }
 
@@ -442,7 +442,7 @@ export class CampaignGroupsService {
     );
 
     // For an unknown/invalid beneficiary, show 'other' symbol.
-    return matchingItems[0].icon || faPlus;
+    return matchingItems[0] && matchingItems[0].icon || faPlus;
   }
 
   static getCategoryIcon(category: string): IconDefinition {

@@ -6,7 +6,7 @@ import {
   NavigationStart,
   Router,
 } from '@angular/router';
-import { BiggiveHeader } from '@biggive/components-angular';
+import { BiggiveMainMenu } from '@biggive/components-angular';
 import { filter } from 'rxjs/operators';
 
 import { AnalyticsService } from './analytics.service';
@@ -19,7 +19,7 @@ import { NavigationService } from './navigation.service';
   templateUrl: './app.component.html',
 })
 export class AppComponent implements AfterViewInit, OnInit {
-  @ViewChild(BiggiveHeader) header: BiggiveHeader;
+  @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -72,7 +72,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     const headerEl = this.header;
     this.router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationStart),
-    ).subscribe(() => headerEl.closeMenuFromOutside());
+    ).subscribe(() => headerEl.closeMobileMenuFromOutside());
   }
 
   /**

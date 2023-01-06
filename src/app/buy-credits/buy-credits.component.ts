@@ -130,21 +130,21 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
     if (giftAidChecked) {
       this.isOptedIntoGiftAid = true;
-        this.giftAidGroup.controls.homePostcode.setValidators(
+        this.giftAidGroup.controls.homePostcode!.setValidators(
           this.getHomePostcodeValidatorsWhenClaimingGiftAid(this.giftAidGroup.value.homeOutsideUK),
         );
-        this.giftAidGroup.controls.homeAddress.setValidators([
+        this.giftAidGroup.controls.homeAddress!.setValidators([
           Validators.required,
           Validators.maxLength(255),
         ]);
       } else {
         this.isOptedIntoGiftAid = false;
-        this.giftAidGroup.controls.homePostcode.setValidators([]);
-        this.giftAidGroup.controls.homeAddress.setValidators([]);
+        this.giftAidGroup.controls.homePostcode!.setValidators([]);
+        this.giftAidGroup.controls.homeAddress!.setValidators([]);
       }
 
-      this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
-      this.giftAidGroup.controls.homeAddress.updateValueAndValidity();
+      this.giftAidGroup.controls.homePostcode!.updateValueAndValidity();
+      this.giftAidGroup.controls.homeAddress!.updateValueAndValidity();
     });
 
     // get the tips campaign data on page load
@@ -221,9 +221,9 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
       this.identityService.getFundingInstructions(idAndJWT?.id, idAndJWT.jwt).subscribe((response: FundingInstruction) => {
         this.isLoading = false;
         this.isPurchaseComplete = true;
-        this.accountNumber = response.bank_transfer.financial_addresses[0].sort_code.account_number;
-        this.sortCode = response.bank_transfer.financial_addresses[0].sort_code.sort_code;
-        this.accountHolderName = response.bank_transfer.financial_addresses[0].sort_code.account_holder_name;
+        this.accountNumber = response.bank_transfer.financial_addresses[0]!.sort_code.account_number;
+        this.sortCode = response.bank_transfer.financial_addresses[0]!.sort_code.sort_code;
+        this.accountHolderName = response.bank_transfer.financial_addresses[0]!.sort_code.account_holder_name;
       });
 
       this.createAndFinaliseTipDonation();
@@ -275,7 +275,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
       return undefined;
     }
 
-    return this.creditForm.controls.amounts.get('creditAmount');
+    return this.creditForm.controls.amounts!.get('creditAmount');
   }
 
   get customTipAmountField() {
@@ -283,7 +283,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
       return undefined;
     }
 
-    return this.creditForm.controls.amounts.get('customTipAmount');
+    return this.creditForm.controls.amounts!.get('customTipAmount');
   }
 
   get totalToTransfer(): number {

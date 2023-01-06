@@ -87,7 +87,7 @@ export class DonationService {
 
     // We have at least one existing donation that may be a candidate to re-try.
     // We'll take an arbitrary 'first' matching donation since presenting multiple to the donor would be too confusing.
-    return this.get(existingDonations[0].donation);
+    return this.get(existingDonations[0]!.donation);
   }
 
   /**
@@ -256,7 +256,7 @@ export class DonationService {
 
     return {
       headers: new HttpHeaders({
-        'X-Tbg-Auth': donationDataItems[0].jwt,
+        'X-Tbg-Auth': donationDataItems[0]!.jwt,
       }),
     };
   }

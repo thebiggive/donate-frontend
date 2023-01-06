@@ -26,6 +26,7 @@
     "paths": { "@angular/*": [ "./node_modules/@angular/*" ] },
     "importHelpers": true,
     "strictNullChecks": true,
+    "noUncheckedIndexedAccess": true,
     "target": "ES2022",
     "types": [],
     "useDefineForClassFields": false
