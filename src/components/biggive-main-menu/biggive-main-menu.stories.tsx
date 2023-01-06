@@ -38,7 +38,7 @@ const Template = () => `
                         </span>
                         <ul class="sub-sub-menu">
                             <li>
-                                <a href="#" class="icon-green">
+                                <a href="#" class="icon-christmas">
                                 Christmas Challenge
                                 </a>
                             </li>
