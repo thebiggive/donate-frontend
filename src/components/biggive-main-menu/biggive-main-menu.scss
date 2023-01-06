@@ -302,7 +302,9 @@ nav {
   }
 
   nav {
+    height: 60px;
     .navbar {
+      padding: 0px 25px;
       .bx-menu {
         display: block;
         font-size: 25px;
@@ -314,7 +316,7 @@ nav {
         top: 0;
         left: -100%;
         display: block;
-        max-width: 350px;
+        max-width: 450px;
         width: 100%;
         background: white;
         line-height: 40px;

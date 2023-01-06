@@ -18,7 +18,6 @@ describe('biggive-main-menu', () => {
           </div>
           <nav role="navigation">
             <div class="navbar">
-              <biggive-misc-icon class="bx bx-menu" background-colour="white" icon-colour="black" icon="MenuOpen"></biggive-misc-icon>
               <div class="logo">
                 <a href="#">
                   <svg version="1.1" x="0px" y="0px" viewBox="0 0 140.9 30">
@@ -27,6 +26,7 @@ describe('biggive-main-menu', () => {
                   </svg>
                 </a>
               </div>
+              <biggive-misc-icon class="bx bx-menu" background-colour="white" icon-colour="black" icon="MenuOpen"></biggive-misc-icon>
               <div class="nav-links">
                 <div class="sidebar-logo">
                   <a href="/">
