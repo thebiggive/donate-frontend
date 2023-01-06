@@ -48,6 +48,6 @@ export class CampaignDetailsCardComponent implements OnInit {
       return 'Multiple locations';
     }
 
-    return this.campaign.countries[0];
+    return this.campaign.countries[0]!;
   }
 }

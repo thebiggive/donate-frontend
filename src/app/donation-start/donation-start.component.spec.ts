@@ -272,13 +272,13 @@ describe('DonationStartComponent', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
-    expect(component.donationForm.controls.amounts.get('donationAmount')?.errors).toBeNull();
+    expect(component.donationForm.controls.amounts!.get('donationAmount')?.errors).toBeNull();
 
-    const optInCharityEmailErrors: any = component.donationForm.controls.marketing.get('optInCharityEmail')?.errors;
+    const optInCharityEmailErrors: any = component.donationForm.controls.marketing!.get('optInCharityEmail')?.errors;
     expect(Object.keys(optInCharityEmailErrors).length).toBe(1);
     expect(optInCharityEmailErrors.required).toBe(true);
 
-    const optInTbgEmailErrors: any = component.donationForm.controls.marketing.get('optInTbgEmail')?.errors;
+    const optInTbgEmailErrors: any = component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors;
     expect(Object.keys(optInTbgEmailErrors).length).toBe(1);
     expect(optInTbgEmailErrors.required).toBe(true);
   });
@@ -318,13 +318,13 @@ describe('DonationStartComponent', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
-    const donationAmountErrors: any = component.donationForm.controls.amounts.get('donationAmount')?.errors;
+    const donationAmountErrors: any = component.donationForm.controls.amounts!.get('donationAmount')?.errors;
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.required).toBe(true);
 
-    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing.get('optInCharityEmail')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing.get('optInTbgEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.marketing!.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have minimum amount error', () => {
@@ -362,13 +362,13 @@ describe('DonationStartComponent', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
-    const donationAmountErrors: any = component.donationForm.controls.amounts.get('donationAmount')?.errors;
+    const donationAmountErrors: any = component.donationForm.controls.amounts!.get('donationAmount')?.errors;
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.min).toBe(true);
 
-    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing.get('optInCharityEmail')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing.get('optInTbgEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.marketing!.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have maximum amount error', () => {
@@ -406,13 +406,13 @@ describe('DonationStartComponent', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
-    const donationAmountErrors: any = component.donationForm.controls.amounts.get('donationAmount')?.errors;
+    const donationAmountErrors: any = component.donationForm.controls.amounts!.get('donationAmount')?.errors;
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.max).toBe(true);
 
-    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing.get('optInCharityEmail')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing.get('optInTbgEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.marketing!.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have mis-formatted amount error', () => {
@@ -450,16 +450,16 @@ describe('DonationStartComponent', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
-    const donationAmountErrors: any = component.donationForm.controls.amounts.get('donationAmount')?.errors;
+    const donationAmountErrors: any = component.donationForm.controls.amounts!.get('donationAmount')?.errors;
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.pattern).toEqual({
       requiredPattern: '^[£$]?[0-9]+?(\\.00)?$',
       actualValue: '8765,21',
     });
 
-    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing.get('optInCharityEmail')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing.get('optInTbgEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.marketing!.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have missing country & postcode & Gift Aid errors in Stripe + UK mode', () => {
@@ -497,15 +497,15 @@ describe('DonationStartComponent', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
-    const billingCountryErrors: any = component.donationForm.controls.payment.get('billingPostcode')?.errors;
+    const billingCountryErrors: any = component.donationForm.controls.payment!.get('billingPostcode')?.errors;
     expect(Object.keys(billingCountryErrors).length).toBe(1);
     expect(billingCountryErrors.required).toBe(true);
 
-    const billingPostcodeErrors: any = component.donationForm.controls.payment.get('billingPostcode')?.errors;
+    const billingPostcodeErrors: any = component.donationForm.controls.payment!.get('billingPostcode')?.errors;
     expect(Object.keys(billingPostcodeErrors).length).toBe(1);
     expect(billingPostcodeErrors.required).toBe(true);
 
-    const giftAidErrors: any = component.donationForm.controls.giftAid.get('giftAid')?.errors;
+    const giftAidErrors: any = component.donationForm.controls.giftAid!.get('giftAid')?.errors;
     expect(Object.keys(giftAidErrors).length).toBe(1);
     expect(giftAidErrors.required).toBe(true);
   });
@@ -545,10 +545,10 @@ describe('DonationStartComponent', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
-    const emailAddressErrors: any = component.donationForm.controls.payment.get('emailAddress')?.errors;
+    const emailAddressErrors: any = component.donationForm.controls.payment!.get('emailAddress')?.errors;
     expect(Object.keys(emailAddressErrors).length).toBe(1);
     expect(emailAddressErrors.required).toBe(true);
 
-    expect(component.donationForm.controls.giftAid.get('giftAid')?.errors).toBeNull();
+    expect(component.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
   });
 });

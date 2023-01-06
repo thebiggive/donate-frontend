@@ -80,7 +80,7 @@ export class ResetPasswordComponent implements OnInit {
 
   saveNewPassword = () => {
     this.savingNewPassword = true;
-    this.identityService.resetPassword(this.passwordForm.controls.password.value, this.token).subscribe(
+    this.identityService.resetPassword(this.passwordForm.controls.password!.value, this.token).subscribe(
       (response) => {
         this.savingNewPassword = false;
         this.saveSuccessful = true;
@@ -96,7 +96,7 @@ export class ResetPasswordComponent implements OnInit {
     this.passwordForm.get('confirmPassword')?.setValidators([
       Validators.required,
       Validators.minLength(10),
-      getPasswordValidator(this.passwordForm.controls.password.value),
+      getPasswordValidator(this.passwordForm.controls.password!.value),
     ])
   }
 }
