@@ -21,7 +21,7 @@ export class CharityComponent implements OnInit {
     this.campaigns = this.route.snapshot.data.campaigns;
 
     this.pageMeta.setCommon(
-      this.campaigns.length > 0 ? `${this.campaigns[0].charity.name} Campaigns` : 'Campaigns Archive',
+      this.campaigns[0] ? `${this.campaigns[0].charity.name} Campaigns` : 'Campaigns Archive',
       'Archive of Big Give match funded campaigns',
       this.campaigns[0]?.currencyCode !== 'GBP',
       null,
