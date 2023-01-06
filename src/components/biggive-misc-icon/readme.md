@@ -10,7 +10,7 @@
 | Property           | Attribute           | Description       | Type     | Default     |
 | ------------------ | ------------------- | ----------------- | -------- | ----------- |
 | `backgroundColour` | `background-colour` | Background colour | `string` | `'primary'` |
-| `icon`             | `icon`              | Icon              | `string` | `null`      |
+| `icon`             | `icon`              | Icon              | `string` | `undefined` |
 | `iconColour`       | `icon-colour`       | Background colour | `string` | `'white'`   |
 | `url`              | `url`               | Url               | `string` | `undefined` |
 

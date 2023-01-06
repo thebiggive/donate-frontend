@@ -19,7 +19,7 @@ describe('biggive-article-card', () => {
                      <a></a>
                    </h3>
                    <div class="image-group">
-                     <div class="image-wrap" style="background-image: url('null');">
+                     <div class="image-wrap" style="background-image: url('undefined');">
                        <img>
                      </div>
                      <div class="image-label"></div>

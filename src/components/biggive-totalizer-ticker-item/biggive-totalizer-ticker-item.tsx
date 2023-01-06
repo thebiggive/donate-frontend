@@ -9,12 +9,12 @@ export class BiggiveTotalizerTickerItem {
   /**
    * Figure
    */
-  @Prop() figure: string = null;
+  @Prop() figure: string;
 
   /**
    * Figure
    */
-  @Prop() label: string = null;
+  @Prop() label: string;
 
   render() {
     return (

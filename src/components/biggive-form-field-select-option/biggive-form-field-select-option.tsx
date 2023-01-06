@@ -18,17 +18,17 @@ export class BiggiveFormFieldSelectOption {
   })
   doOptionSelect: EventEmitter<object>;
 
-  @State() selectedValue: string = null;
-  @State() selectedLabel: string = null;
+  @State() selectedValue: string | null;
+  @State() selectedLabel: string | null;
 
   /**
    * Label
    */
-  @Prop() label: string = null;
+  @Prop() label: string;
   /**
    * Value
    */
-  @Prop() value: string = null;
+  @Prop() value: string;
 
   private optionSelected = (event: any) => {
     this.selectedValue = event.target.getAttribute('data-value');

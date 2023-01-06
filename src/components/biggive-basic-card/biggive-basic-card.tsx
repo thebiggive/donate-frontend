@@ -31,17 +31,17 @@ export class BiggiveBasicCard {
   /**
    * Main title
    */
-  @Prop() mainTitle: string = null;
+  @Prop() mainTitle: string;
 
   /**
    * Subtitle title
    */
-  @Prop() subtitle: string = null;
+  @Prop() subtitle: string;
 
   /**
    * Teaser
    */
-  @Prop() teaser: string = null;
+  @Prop() teaser: string;
   /**
    * Icon
    */
@@ -54,12 +54,12 @@ export class BiggiveBasicCard {
   /**
    * Button label
    */
-  @Prop() buttonLabel: string = null;
+  @Prop() buttonLabel: string;
 
   /**
    * Button URL
    */
-  @Prop() buttonUrl: string = null;
+  @Prop() buttonUrl: string;
 
   /**
    * Button Colour Scheme

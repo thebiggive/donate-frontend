@@ -21,12 +21,12 @@ export class BiggiveMiscIcon {
   /**
    * Icon
    */
-  @Prop() icon: string = null;
+  @Prop() icon: string;
 
   /**
    * Url
    */
-  @Prop() url: string = undefined;
+  @Prop() url: string;
 
   private getMiscIcon(): IconDefinition {
     var icon = FontAwesomeIconsService.getMiscIcon(this.icon);

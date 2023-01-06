@@ -32,7 +32,7 @@ export class BiggiveButton {
   /**
    * URL
    */
-  @Prop() url: string = undefined;
+  @Prop() url: string;
 
   /**
    * New Tab

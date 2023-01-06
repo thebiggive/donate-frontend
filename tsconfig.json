@@ -15,7 +15,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "jsx": "react",
-    "jsxFactory": "h"
+    "jsxFactory": "h",
+    "noUncheckedIndexedAccess": true,
+    "strictNullChecks": true,
   },
   "include": [
     "src"

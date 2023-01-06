@@ -442,27 +442,27 @@ export namespace Components {
         /**
           * Optional search text prop. Useful for pre-populating the search field when the page is loaded with a search term already existing in the URL. This can happen when sharing links, or if a donor goes to a campaign page after searching, and then returns to the search results. In such a case, the search box text will clear, unless we use this prop to populate it on rendering. DON-652.
          */
-        "searchText": string;
+        "searchText": string | null;
         /**
           * For injecting the chosen beneficiary to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterBeneficiary": string;
+        "selectedFilterBeneficiary": string | null;
         /**
           * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterCategory": string;
+        "selectedFilterCategory": string | null;
         /**
           * For injecting the chosen funding to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterFunding": string;
+        "selectedFilterFunding": string | null;
         /**
           * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterLocation": string;
+        "selectedFilterLocation": string | null;
         /**
           * This helps us inject a pre-selected dropdown value from outside of this component. This is especially helpful for the Meta campaign and Explore pages, where searching by text whipes out previous sort options and re-uses Relevance, or where one of those two pages is loaded directly with URL parameters - in such a scenario the dropdown shows that it's pre-selected. DON-558.
          */
-        "selectedSortByOption": 'Most raised' | 'Match funds remaining' | 'Relevance';
+        "selectedSortByOption": 'Most raised' | 'Match funds remaining' | 'Relevance' | null;
         /**
           * Space below component
          */
@@ -557,8 +557,8 @@ export namespace Components {
           * Placeholder
          */
         "placeholder": string;
-        "selectedLabel": string;
-        "selectedValue": string;
+        "selectedLabel": string | null;
+        "selectedValue": string | null;
         /**
           * Space below component
          */
@@ -1851,12 +1851,12 @@ declare namespace LocalJSX {
           * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it
          */
         "onDoSearchAndFilterUpdate"?: (event: BiggiveCampaignCardFilterGridCustomEvent<{
-    searchText: string;
-    sortBy: string;
-    filterCategory: string;
-    filterBeneficiary: string;
-    filterLocation: string;
-    filterFunding: string;
+    searchText: string | null;
+    sortBy: string | null;
+    filterCategory: string | null;
+    filterBeneficiary: string | null;
+    filterLocation: string | null;
+    filterFunding: string | null;
   }>) => void;
         /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
@@ -1865,27 +1865,27 @@ declare namespace LocalJSX {
         /**
           * Optional search text prop. Useful for pre-populating the search field when the page is loaded with a search term already existing in the URL. This can happen when sharing links, or if a donor goes to a campaign page after searching, and then returns to the search results. In such a case, the search box text will clear, unless we use this prop to populate it on rendering. DON-652.
          */
-        "searchText"?: string;
+        "searchText"?: string | null;
         /**
           * For injecting the chosen beneficiary to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterBeneficiary"?: string;
+        "selectedFilterBeneficiary"?: string | null;
         /**
           * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterCategory"?: string;
+        "selectedFilterCategory"?: string | null;
         /**
           * For injecting the chosen funding to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterFunding"?: string;
+        "selectedFilterFunding"?: string | null;
         /**
           * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterLocation"?: string;
+        "selectedFilterLocation"?: string | null;
         /**
           * This helps us inject a pre-selected dropdown value from outside of this component. This is especially helpful for the Meta campaign and Explore pages, where searching by text whipes out previous sort options and re-uses Relevance, or where one of those two pages is loaded directly with URL parameters - in such a scenario the dropdown shows that it's pre-selected. DON-558.
          */
-        "selectedSortByOption"?: 'Most raised' | 'Match funds remaining' | 'Relevance';
+        "selectedSortByOption"?: 'Most raised' | 'Match funds remaining' | 'Relevance' | null;
         /**
           * Space below component
          */
@@ -1984,8 +1984,8 @@ declare namespace LocalJSX {
           * Placeholder
          */
         "placeholder"?: string;
-        "selectedLabel"?: string;
-        "selectedValue"?: string;
+        "selectedLabel"?: string | null;
+        "selectedValue"?: string | null;
         /**
           * Space below component
          */

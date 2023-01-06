@@ -9,15 +9,15 @@ export class BiggiveNavItem {
   /**
    * URL
    */
-  @Prop() url: string = null;
+  @Prop() url: string;
   /**
    * Label
    */
-  @Prop() label: string = null;
+  @Prop() label: string;
   /**
    * URL
    */
-  @Prop() iconColour: string = null;
+  @Prop() iconColour: string;
 
   render() {
     return (

@@ -20,12 +20,12 @@ export class BiggiveCampaignCardFilterGrid {
     bubbles: true,
   })
   doSearchAndFilterUpdate: EventEmitter<{
-    searchText: string;
-    sortBy: string;
-    filterCategory: string;
-    filterBeneficiary: string;
-    filterLocation: string;
-    filterFunding: string;
+    searchText: string | null;
+    sortBy: string | null;
+    filterCategory: string | null;
+    filterBeneficiary: string | null;
+    filterLocation: string | null;
+    filterFunding: string | null;
   }>;
 
   sortByPlaceholderText = 'Sort by';
@@ -52,7 +52,7 @@ export class BiggiveCampaignCardFilterGrid {
    * the search box text will clear, unless we use this prop to populate it on
    * rendering. DON-652.
    */
-  @Prop() searchText: string = null;
+  @Prop() searchText: string | null = null;
 
   /**
    * Defines the text displayed as the placeholder in the input field
@@ -92,27 +92,27 @@ export class BiggiveCampaignCardFilterGrid {
    * two pages is loaded directly with URL parameters - in such a scenario the dropdown
    * shows that it's pre-selected. DON-558.
    */
-  @Prop() selectedSortByOption: 'Most raised' | 'Match funds remaining' | 'Relevance' = null;
+  @Prop() selectedSortByOption: 'Most raised' | 'Match funds remaining' | 'Relevance' | null = null;
 
   /**
    * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
    */
-  @Prop() selectedFilterCategory: string = null;
+  @Prop() selectedFilterCategory: string | null = null;
 
   /**
    * For injecting the chosen beneficiary to filter by, as per the comment above for `selectedSortByOption`.
    */
-  @Prop() selectedFilterBeneficiary: string = null;
+  @Prop() selectedFilterBeneficiary: string | null = null;
 
   /**
    * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
    */
-  @Prop() selectedFilterLocation: string = null;
+  @Prop() selectedFilterLocation: string | null = null;
 
   /**
    * For injecting the chosen funding to filter by, as per the comment above for `selectedSortByOption`.
    */
-  @Prop() selectedFilterFunding: string = null;
+  @Prop() selectedFilterFunding: string | null = null;
 
   /**
    * State variable - causes re-render on change
@@ -128,12 +128,12 @@ export class BiggiveCampaignCardFilterGrid {
     filterFunding: string;
   } {
     const event: {
-      searchText: string;
-      sortBy: string;
-      filterCategory: string;
-      filterBeneficiary: string;
-      filterLocation: string;
-      filterFunding: string;
+      searchText: string | null;
+      sortBy: string | null;
+      filterCategory: string | null;
+      filterBeneficiary: string | null;
+      filterLocation: string | null;
+      filterFunding: string | null;
     } = {
       searchText: this.searchText,
       sortBy: this.selectedSortByOption,
@@ -143,6 +143,7 @@ export class BiggiveCampaignCardFilterGrid {
       filterLocation: this.selectedFilterLocation,
     };
 
+    // @ts-ignore
     return event;
   }
 
@@ -254,7 +255,7 @@ export class BiggiveCampaignCardFilterGrid {
                 </svg>
                 <input
                   type="text"
-                  value={this.searchText}
+                  value={this.searchText ?? ''}
                   class="input-text"
                   placeholder={this.placeholderText}
                   onInput={this.handleSearchTextChanged}

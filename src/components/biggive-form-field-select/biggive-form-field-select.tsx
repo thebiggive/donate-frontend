@@ -19,8 +19,8 @@ export class BiggiveFormFieldSelect {
   })
   doSelectChange: EventEmitter<object>;
 
-  @Prop() selectedValue: string = null;
-  @Prop() selectedLabel: string = null;
+  @Prop() selectedValue: string | null;
+  @Prop() selectedLabel: string | null;
 
   @Listen('doOptionSelect')
   doOptionSelectCompletedHandler(event) {
@@ -28,7 +28,7 @@ export class BiggiveFormFieldSelect {
     this.selectedLabel = event.detail.label;
     this.doSelectChange.emit({ value: this.selectedValue, label: this.selectedLabel, placeholder: this.placeholder });
     if (this.el.shadowRoot !== null && this.el.shadowRoot !== undefined) {
-      const dropdown: HTMLDivElement = this.el.shadowRoot.querySelector('.dropdown');
+      const dropdown = this.el.shadowRoot.querySelector('.dropdown');
       if (dropdown !== null && dropdown !== undefined) {
         dropdown.classList.remove('active');
       }
@@ -42,7 +42,7 @@ export class BiggiveFormFieldSelect {
   /**
    * Placeholder
    */
-  @Prop() placeholder: string = null;
+  @Prop() placeholder: string;
 
   toggleFocus(event) {
     if (event.target) {
