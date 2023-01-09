@@ -91,6 +91,7 @@ export namespace Components {
           * Clip top right corner
          */
         "clipTopRightCorner": boolean;
+        "headingLevel": 1 | 2 | 3 | 4 | 5 | 6;
         /**
           * Icon
          */
@@ -549,6 +550,7 @@ export namespace Components {
         "url": string;
     }
     interface BiggiveFooter {
+        "headingLevel": 1 | 2 | 3 | 4 | 5 | 6;
     }
     interface BiggiveForm {
     }
@@ -1501,6 +1503,7 @@ declare namespace LocalJSX {
           * Clip top right corner
          */
         "clipTopRightCorner"?: boolean;
+        "headingLevel"?: 1 | 2 | 3 | 4 | 5 | 6;
         /**
           * Icon
          */
@@ -1972,6 +1975,7 @@ declare namespace LocalJSX {
         "url"?: string;
     }
     interface BiggiveFooter {
+        "headingLevel"?: 1 | 2 | 3 | 4 | 5 | 6;
     }
     interface BiggiveForm {
     }

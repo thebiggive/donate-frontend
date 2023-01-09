@@ -11,7 +11,7 @@ nav {
   width: calc(33.3% - 20px);
   margin: 0;
   padding: 0;
-  h5 {
+  .heading {
     @include heading-5();
     border-bottom: 1px solid $colour-white;
     padding-bottom: $spacer-2;
