@@ -12,7 +12,7 @@
 
     <biggive-grid
       column-count="3">
-      <biggive-basic-card *ngIf="greenMatchApplicationsOpen"
+      <biggive-basic-card
         space-below='4'
         heading-level = 2
         icon-colour='brand-3'
@@ -24,20 +24,8 @@
         button-colour-scheme='clear-primary'
         class="basic-card-padding">
       </biggive-basic-card>
-      <biggive-basic-card *ngIf="! greenMatchApplicationsOpen"
-        space-below='4'
-        icon-colour='brand-3'
-        heading-level = 2
-        background-image-url='/assets/images/card-background-gmf.jpg'
-        main-title='Save the Date for Green Match Fund'
-        subtitle='Applications open 9 Jan 2023'
-        button-url='https://blog.thebiggive.org.uk/green-match-fund/'
-        button-label='Read more'
-        button-colour-scheme='clear-primary'
-        class="basic-card-padding">
-      </biggive-basic-card>
 
-      <biggive-basic-card *ngIf="championsForChildrenApplicationsOpen"
+      <biggive-basic-card
         space-below='4'
         icon-colour='brand-5'
         heading-level = 2
@@ -46,18 +34,6 @@
         subtitle='Deadline is 24 February 2023'
         button-url='https://www.thebiggive.org.uk/charities/s/login/'
         button-label='Apply Now'
-        button-colour-scheme='clear-primary'
-        class="basic-card-padding">
-      </biggive-basic-card>
-      <biggive-basic-card *ngIf="! championsForChildrenApplicationsOpen"
-        space-below='4'
-        icon-colour='brand-5'
-        heading-level = 2
-        background-image-url='/assets/images/colour-orange.png'
-        main-title='Save the Date for Champions for Children'
-        subtitle='Applications open 9 Jan 2023'
-        button-url='https://blog.thebiggive.org.uk/champions-for-children/'
-        button-label='Read more'
         button-colour-scheme='clear-primary'
         class="basic-card-padding">
       </biggive-basic-card>
