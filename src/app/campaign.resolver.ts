@@ -5,12 +5,14 @@ import { EMPTY, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { Campaign } from './campaign.model';
-import { CampaignService } from './campaign.service';
+import {CampaignService, SearchQuery} from './campaign.service';
+import {SearchService} from "./search.service";
 
 @Injectable()
 export class CampaignResolver implements Resolve<any> {
   constructor(
     public campaignService: CampaignService,
+    public searchService: SearchService,
     private router: Router,
     private state: TransferState,
   ) {}
@@ -18,6 +20,7 @@ export class CampaignResolver implements Resolve<any> {
   resolve(route: ActivatedRouteSnapshot): Observable<Campaign> {
     const campaignId = route.paramMap.get('campaignId');
     const campaignSlug = route.paramMap.get('campaignSlug');
+    const fundSlug = route.paramMap.get('fundSlug');
 
     // No . expected in slugs, and these are typically part of opportunistic junk requests.
     if (campaignSlug && campaignSlug.match(new RegExp('[.]+'))) {
@@ -33,6 +36,16 @@ export class CampaignResolver implements Resolve<any> {
         campaignId,
         (identifier: string) => this.campaignService.getOneById(identifier),
       );
+    }
+
+    if (campaignSlug && fundSlug) {
+      const query = this.campaignService.buildQuery(this.searchService.selected, 0, campaignId ?? undefined, campaignSlug, fundSlug);
+      const searchResult = this.campaignService.search(query as SearchQuery).subscribe(
+        () => {},
+        () => {
+          this.router.navigateByUrl(`/${campaignSlug}/`);
+        }
+      )
     }
 
     return this.loadWithStateCache(
