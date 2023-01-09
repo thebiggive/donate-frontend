@@ -108,7 +108,8 @@ export class SearchService {
   }
 
   hasTermFilterApplied(): boolean {
-    return (this.getQueryParams().term?.length > 0);
+    const term = this.getQueryParams().term || '';
+    return (term.length > 0);
   }
 
   /**

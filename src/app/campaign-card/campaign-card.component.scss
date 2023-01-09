@@ -62,6 +62,14 @@ ul {
 }
 
 .c-icon-lists {
+  display: flex;
+  flex-direction: row;
+  padding: 0 2rem;
+
+  > div {
+    width: 50%;
+  }
+
   ul {
     padding: 0;
 
@@ -74,12 +82,17 @@ ul {
       }
     }
   }
-  padding: 0 2rem;
 }
 
 .c-funds {
+  display: flex;
+  flex-direction: row;
   padding: 1rem 2rem;
   color: $colour-grey;
+
+  > div {
+    width: 50%;
+  }
 }
 
 .c-cards__description {
@@ -109,12 +122,13 @@ ul {
 }
 
 .c-buttons {
-  margin-top: auto;
-  padding: 1rem 2rem;
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-
+  margin-top: auto;
+  padding: 1rem 2rem;
+  
   &__past {
     margin-top: 6px;
   }

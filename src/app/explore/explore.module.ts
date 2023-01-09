@@ -1,6 +1,5 @@
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
-import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 
@@ -14,7 +13,6 @@ import {OptimisedImagePipe} from '../optimised-image.pipe';
     ...allChildComponentImports,
     AsyncPipe,
     ExploreRoutingModule,
-    FlexLayoutModule,
     InfiniteScrollModule,
     MatProgressSpinnerModule,
     OptimisedImagePipe,

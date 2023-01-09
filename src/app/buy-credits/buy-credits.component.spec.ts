@@ -1,6 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -30,7 +29,6 @@ describe('BuyCreditsComponent', () => {
       declarations: [
       ],
       imports: [
-        FlexLayoutModule,
         FormsModule,
         MatButtonModule,
         MatCheckboxModule,

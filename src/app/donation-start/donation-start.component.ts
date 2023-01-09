@@ -48,6 +48,7 @@ import { retryStrategy } from '../observable-retry';
 import { StripeService } from '../stripe.service';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
 import { getCurrencyMinValidator } from '../validators/currency-min';
+import { EMAIL_REGEXP } from '../validators/patterns';
 import { ValidateBillingPostCode } from '../validators/validate-billing-post-code';
 
 @Component({
@@ -129,12 +130,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private initialTipSuggestedPercentage = 15;
 
-  // Validators.email regexp rejects most invalid emails but has a few edge-cases slip through.
-  // For example, it allows emails ending with numbers like hello@thebiggive.org.uk.123
-  // We needed tighter validation, so have adapted the Angular pattern iteratively including
-  // some simplification. We needed to loosen part of it in Dec '22 because subdomains
-  // weren't properly supported in the previous version.
-  private emailRegExp : RegExp = /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9-]{1,180}\.)+[a-zA-Z]{2,}$/;
   /**
    * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
    * input was valid (even if differently formatted). Loosely based on https://stackoverflow.com/a/10701634/2803757
@@ -240,7 +235,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         emailAddress: [null, [
           Validators.required,
           // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
-          Validators.pattern(this.emailRegExp),
+          Validators.pattern(EMAIL_REGEXP),
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
         billingPostcode: [null],  // See setConditionalValidators().
@@ -544,7 +539,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // Re-evaluate stripe card billing validators after being set above.
     // This should remove old errors after card details change, e.g. it
     // should remove an invalid post-code error in such a scenario.
-    this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
+    this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
 
     this.stripePaymentMethodReady = state.complete;
     if (state.error) {
@@ -691,12 +686,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         this.stripeError = this.getStripeFriendlyError(result.error, 'confirm');
         this.stripeResponseErrorCode = result.error.code;
         if (this.isBillingPostcodePossiblyInvalid()) {
-          this.paymentGroup.controls.billingPostcode.setValidators([
+          this.paymentGroup.controls.billingPostcode!.setValidators([
             Validators.required,
             Validators.pattern(this.billingPostcodeRegExp),
             ValidateBillingPostCode
           ]);
-          this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
+          this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
         }
       }
       this.submitting = false;
@@ -738,7 +733,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       return undefined;
     }
 
-    return this.donationForm.controls.amounts.get('donationAmount');
+    return this.donationForm.controls.amounts!.get('donationAmount');
   }
 
   get tipAmountField() {
@@ -746,7 +741,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       return undefined;
     }
 
-    return this.donationForm.controls.amounts.get('tipAmount');
+    return this.donationForm.controls.amounts!.get('tipAmount');
   }
 
   /**
@@ -929,9 +924,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
       this.personIsLoginReady = true;
 
-      if (environment.creditDonationsEnabled && person.cash_balance && person.cash_balance[this.campaign.currencyCode.toLowerCase()] > 0) {
+      if (environment.creditDonationsEnabled && person.cash_balance && person.cash_balance[this.campaign.currencyCode.toLowerCase()]! > 0) {
         this.creditPenceToUse = parseInt(
-          person.cash_balance[this.campaign.currencyCode.toLowerCase()].toString() as string,
+          person.cash_balance[this.campaign.currencyCode.toLowerCase()]!.toString() as string,
           10
         );
         this.stripePaymentMethodReady = true;
@@ -1014,7 +1009,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private jumpToStep(stepLabel: string) {
     this.stepper.steps
       .filter(step => step.label === stepLabel)
-      [0]
+      [0]!
       .select();
 
     this.cd.detectChanges();
@@ -1486,7 +1481,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   private addUKValidators(): void {
-    this.giftAidGroup.controls.giftAid.setValidators([Validators.required]);
+    this.giftAidGroup.controls.giftAid!.setValidators([Validators.required]);
     this.giftAidGroup.updateValueAndValidity();
   }
 
@@ -1525,7 +1520,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       // field changes and don't have a cover fee checkbox. We don't ask for a
       // tip on donation when using a donor's credit balance.
       if (this.creditPenceToUse === 0) {
-        this.amountsGroup.controls.tipAmount.setValidators([
+        this.amountsGroup.controls.tipAmount!.setValidators([
           Validators.required,
           Validators.pattern('^[£$]?[0-9]+?(\\.[0-9]{2})?$'),
           getCurrencyMaxValidator(),
@@ -1533,7 +1528,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       }
 
       // Reduce the maximum to the credit balance if using donor credit and it's below the global max.
-      this.amountsGroup.controls.donationAmount.setValidators([
+      this.amountsGroup.controls.donationAmount!.setValidators([
         Validators.required,
         getCurrencyMinValidator(1), // min donation is £1
         getCurrencyMaxValidator(this.creditPenceToUse === 0 ? undefined : this.creditPenceToUse / 100),
@@ -1580,10 +1575,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     this.giftAidGroup.get('homeOutsideUK')?.valueChanges.subscribe(homeOutsideUK => {
-      this.giftAidGroup.controls.homePostcode.setValidators(
+      this.giftAidGroup.controls.homePostcode!.setValidators(
         this.getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK),
       );
-      this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
+      this.giftAidGroup.controls.homePostcode!.updateValueAndValidity();
     });
 
     this.giftAidGroup.get('homePostcode')?.valueChanges.subscribe(homePostcode => {
@@ -1612,20 +1607,20 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
     this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
       if (giftAidChecked) {
-        this.giftAidGroup.controls.homePostcode.setValidators(
+        this.giftAidGroup.controls.homePostcode!.setValidators(
           this.getHomePostcodeValidatorsWhenClaimingGiftAid(this.giftAidGroup.value.homeOutsideUK),
         );
-        this.giftAidGroup.controls.homeAddress.setValidators([
+        this.giftAidGroup.controls.homeAddress!.setValidators([
           Validators.required,
           Validators.maxLength(255),
         ]);
       } else {
-        this.giftAidGroup.controls.homePostcode.setValidators([]);
-        this.giftAidGroup.controls.homeAddress.setValidators([]);
+        this.giftAidGroup.controls.homePostcode!.setValidators([]);
+        this.giftAidGroup.controls.homeAddress!.setValidators([]);
       }
 
-      this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
-      this.giftAidGroup.controls.homeAddress.updateValueAndValidity();
+      this.giftAidGroup.controls.homePostcode!.updateValueAndValidity();
+      this.giftAidGroup.controls.homeAddress!.updateValueAndValidity();
     });
 
     if (this.creditPenceToUse > 0) {
@@ -1647,22 +1642,22 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   private removeStripeCardBillingValidators() {
-    this.paymentGroup.controls.billingCountry.setValidators([]);
-    this.paymentGroup.controls.billingPostcode.setValidators([]);
-    this.paymentGroup.controls.billingCountry.updateValueAndValidity();
-    this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
+    this.paymentGroup.controls.billingCountry!.setValidators([]);
+    this.paymentGroup.controls.billingPostcode!.setValidators([]);
+    this.paymentGroup.controls.billingCountry!.updateValueAndValidity();
+    this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
   }
 
   private addStripeCardBillingValidators() {
-    this.paymentGroup.controls.billingCountry.setValidators([
+    this.paymentGroup.controls.billingCountry!.setValidators([
       Validators.required,
     ]);
-    this.paymentGroup.controls.billingPostcode.setValidators([
+    this.paymentGroup.controls.billingPostcode!.setValidators([
       Validators.required,
       Validators.pattern(this.billingPostcodeRegExp),
     ]);
-    this.paymentGroup.controls.billingCountry.updateValueAndValidity();
-    this.paymentGroup.controls.billingPostcode.updateValueAndValidity();
+    this.paymentGroup.controls.billingCountry!.updateValueAndValidity();
+    this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
   }
 
   /**
@@ -1779,7 +1774,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private setChampionOptInValidity() {
     if (this.showChampionOptIn) {
-      this.marketingGroup.controls.optInChampionEmail.setValidators([
+      this.marketingGroup.controls.optInChampionEmail!.setValidators([
         Validators.required,
       ]);
     }

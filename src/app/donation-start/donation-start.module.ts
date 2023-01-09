@@ -1,6 +1,5 @@
 import {DatePipe, PercentPipe} from '@angular/common';
 import { NgModule } from '@angular/core';
-import {FlexLayoutModule} from '@angular/flex-layout';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
@@ -29,7 +28,6 @@ import {TimeLeftPipe} from '../time-left.pipe';
     CampaignDetailsCardComponent,
     DonationStartRoutingModule,
     ExactCurrencyPipe,
-    FlexLayoutModule,
     FontAwesomeModule,
     MatAutocompleteModule,
     MatButtonModule,

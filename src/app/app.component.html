@@ -1,4 +1,4 @@
-<biggive-header>
+<biggive-main-menu>
   <div slot="social-icons">
     <biggive-social-icon service="Facebook" url="https://www.facebook.com/theBigGive.org.uk" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
     <biggive-social-icon service="Twitter" url="https://twitter.com/BigGive" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
@@ -6,43 +6,123 @@
     <biggive-social-icon service="YouTube" url="https://www.youtube.com/channel/UC9_wH1aaTuZurJ-F9R8GDcA" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
     <biggive-social-icon service="Instagram" url="https://www.instagram.com/thebiggiveorg" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
   </div>
-  <div class="nav-toggle"></div>
-  <ul slot="nav-primary">
-    <li><a routerLink="/explore">Explore Campaigns</a></li>
-    <li><a href="https://blog.thebiggive.org.uk/charities">For Charities</a></li>
-    <li><a href="https://blog.thebiggive.org.uk/funders">For Funders</a></li>
+  <div slot="mobile-social-icons">
+    <biggive-social-icon service="Facebook" url="https://www.facebook.com/theBigGive.org.uk" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+    <biggive-social-icon service="Twitter" url="https://twitter.com/BigGive" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+    <biggive-social-icon service="LinkedIn" url="https://uk.linkedin.com/company/big-give" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+    <biggive-social-icon service="YouTube" url="https://www.youtube.com/channel/UC9_wH1aaTuZurJ-F9R8GDcA" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+    <biggive-social-icon service="Instagram" url="https://www.instagram.com/thebiggiveorg" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+  </div>
+  <ul class="links" slot="nav-primary">
     <li>
-      <a (click)="noNav($event)">Match Funding</a>
-      <ul>
-        <li><a href="https://blog.thebiggive.org.uk/match-funding-explained">Match Funding Explained</a></li>
-        <li><a class="icon-christmas" href="https://blog.thebiggive.org.uk/christmas-challenge">Christmas Challenge</a></li>
-        <li><a class="icon-green-match" href="https://blog.thebiggive.org.uk/green-match-fund">Green Match Fund</a></li>
-        <li><a class="icon-children" href="https://blog.thebiggive.org.uk/champions-for-children">Champions for Children</a></li>
-        <li><a class="icon-women-girls" href="https://blog.thebiggive.org.uk/women-girls-match-fund">Women and Girls Match Fund</a></li>
-        <li><a href="https://blog.thebiggive.org.uk/run-your-own-campaign/">Run your own campaign</a></li>
+      <a routerLink="/explore">Explore Campaigns</a>
+    </li>
+    <li>
+      <a (click)="noNav($event)">
+        Match Funding
+        <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
+      </a>
+
+      <ul class="sub-menu">
+        <li>
+          <a href="https://blog.thebiggive.org.uk/match-funding-explained">Match Funding Explained</a>
+        </li>
+        <li>
+          <a href="https://blog.thebiggive.org.uk/impact">Match Funding Impact</a>
+        </li>
+        <li class="more">
+          <a (click)="noNav($event)">
+            Match Funding Opportunities
+            <!-- IMPORTANT: notice this one has a class sub-sub-menu, not sub-menu -->
+            <biggive-misc-icon class="bx bxs-chevron-down sub-sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon> 
+          </a>
+          <ul class="sub-sub-menu">
+            <li>
+              <a href="https://blog.thebiggive.org.uk/christmas-challenge" class="icon-christmas">
+                Christmas Challenge
+              </a>
+            </li>
+            <li>
+              <a href="https://blog.thebiggive.org.uk/champions-for-children" class="icon-children">
+                Champions for Children
+              </a>
+            </li>
+            <li>
+              <a href="https://blog.thebiggive.org.uk/green-match-fund" class="icon-green-match">
+                Green Match Fund
+              </a>
+            </li>
+            <li>
+              <a href="https://blog.thebiggive.org.uk/women-girls-match-fund" class="icon-women-girls">
+                Women & Girls Match Fund
+              </a>
+            </li>
+            <li>
+              <a href="https://blog.thebiggive.org.uk/anchor-match-fund/" class="icon-anchor-match">
+                Anchor Match Fund
+              </a>
+            </li>
+            <li>
+              <a href="https://blog.thebiggive.org.uk/emergency-campaigns/" class="icon-emergency">
+                Emergency Match Fund
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="https://blog.thebiggive.org.uk/run-your-own-campaign/">Run your match funding campaign</a>
+        </li>
       </ul>
     </li>
     <li>
-      <a (click)="noNav($event)">About Us</a>
-      <ul>
-        <li><a href="https://blog.thebiggive.org.uk/our-people">Our People</a></li>
-        <li><a href="https://blog.thebiggive.org.uk/our-story">Our Story</a></li>
-        <li><a href="https://blog.thebiggive.org.uk/our-fees">Our Fees</a></li>
+      <a (click)="noNav($event)">
+        About us
+        <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
+      </a>
+      <ul class="sub-menu">
+        <li>
+          <a href="https://blog.thebiggive.org.uk/our-people">Our People</a>
+        </li>
+        <li>
+          <a href="https://blog.thebiggive.org.uk/our-story">Our Story</a>
+        </li>
+        <li>
+          <a href="https://blog.thebiggive.org.uk/our-community">Our Community</a>
+        </li>
+        <li>
+          <a href="https://blog.thebiggive.org.uk/our-fees">Our Fees</a>
+        </li>
+        <li>
+          <a href="https://blog.thebiggive.org.uk/faqs">FAQs</a>
+        </li>
       </ul>
     </li>
     <li>
-      <a (click)="noNav($event)">Resources</a>
-      <ul>
-        <li><a href="https://blog.thebiggive.org.uk/blog">Blog</a></li>
-        <li><a href="https://blog.thebiggive.org.uk/press">Press</a></li>
+      <a href="https://blog.thebiggive.org.uk/charities">For Charities</a>
+    </li>
+    <li>
+      <a href="https://blog.thebiggive.org.uk/funders">For Funders</a>
+    </li>
+    <li>
+      <a (click)="noNav($event)">
+        Resources
+        <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
+      </a>
+      <ul class="sub-menu">
+        <li>
+          <a href="https://blog.thebiggive.org.uk/blog">Blog</a>
+        </li>
+        <li>
+          <a href="https://blog.thebiggive.org.uk/press">Press</a>
+        </li>
       </ul>
     </li>
   </ul>
   <ul slot="nav-secondary">
     <li><a href="https://www.thebiggive.org.uk/s/contact-us">Contact us</a></li>
-    <li><a href="https://www.thebiggive.org.uk/charities/s/login/">Charity login</a></li>
+    <li><a href="https://www.thebiggive.org.uk/charities/s/login">Charity login</a></li>
   </ul>
-</biggive-header>
+</biggive-main-menu>
 
 <router-outlet></router-outlet>
 

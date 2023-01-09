@@ -23,10 +23,13 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noFallthroughCasesInSwitch": true,
+    "paths": { "@angular/*": [ "./node_modules/@angular/*" ] },
     "importHelpers": true,
     "strictNullChecks": true,
-    "target": "ES2016",
-    "types": []
+    "noUncheckedIndexedAccess": true,
+    "target": "ES2022",
+    "types": [],
+    "useDefineForClassFields": false
   },
   "files": [
     "src/main.ts",

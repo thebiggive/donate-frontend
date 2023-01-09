@@ -2,28 +2,19 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { isPlatformBrowser } from '@angular/common';
 import { AfterContentInit, Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatOptionModule } from '@angular/material/core';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { MatStepperModule } from '@angular/material/stepper';
-import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSelectChange } from '@angular/material/select';
+import { RecaptchaComponent } from 'ng-recaptcha';
 import { EMPTY } from 'rxjs';
 import { startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { DonationService } from '../donation.service';
 import { Donation } from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
-import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { environment } from 'src/environments/environment';
 import { FundingInstruction } from '../fundingInstruction.model';
 import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
@@ -139,21 +130,21 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
     if (giftAidChecked) {
       this.isOptedIntoGiftAid = true;
-        this.giftAidGroup.controls.homePostcode.setValidators(
+        this.giftAidGroup.controls.homePostcode!.setValidators(
           this.getHomePostcodeValidatorsWhenClaimingGiftAid(this.giftAidGroup.value.homeOutsideUK),
         );
-        this.giftAidGroup.controls.homeAddress.setValidators([
+        this.giftAidGroup.controls.homeAddress!.setValidators([
           Validators.required,
           Validators.maxLength(255),
         ]);
       } else {
         this.isOptedIntoGiftAid = false;
-        this.giftAidGroup.controls.homePostcode.setValidators([]);
-        this.giftAidGroup.controls.homeAddress.setValidators([]);
+        this.giftAidGroup.controls.homePostcode!.setValidators([]);
+        this.giftAidGroup.controls.homeAddress!.setValidators([]);
       }
 
-      this.giftAidGroup.controls.homePostcode.updateValueAndValidity();
-      this.giftAidGroup.controls.homeAddress.updateValueAndValidity();
+      this.giftAidGroup.controls.homePostcode!.updateValueAndValidity();
+      this.giftAidGroup.controls.homeAddress!.updateValueAndValidity();
     });
 
     // get the tips campaign data on page load
@@ -230,9 +221,9 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
       this.identityService.getFundingInstructions(idAndJWT?.id, idAndJWT.jwt).subscribe((response: FundingInstruction) => {
         this.isLoading = false;
         this.isPurchaseComplete = true;
-        this.accountNumber = response.bank_transfer.financial_addresses[0].sort_code.account_number;
-        this.sortCode = response.bank_transfer.financial_addresses[0].sort_code.sort_code;
-        this.accountHolderName = response.bank_transfer.financial_addresses[0].sort_code.account_holder_name;
+        this.accountNumber = response.bank_transfer.financial_addresses[0]!.sort_code.account_number;
+        this.sortCode = response.bank_transfer.financial_addresses[0]!.sort_code.sort_code;
+        this.accountHolderName = response.bank_transfer.financial_addresses[0]!.sort_code.account_holder_name;
       });
 
       this.createAndFinaliseTipDonation();
@@ -284,7 +275,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
       return undefined;
     }
 
-    return this.creditForm.controls.amounts.get('creditAmount');
+    return this.creditForm.controls.amounts!.get('creditAmount');
   }
 
   get customTipAmountField() {
@@ -292,7 +283,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
       return undefined;
     }
 
-    return this.creditForm.controls.amounts.get('customTipAmount');
+    return this.creditForm.controls.amounts!.get('customTipAmount');
   }
 
   get totalToTransfer(): number {
@@ -372,7 +363,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
         homeOutsideUK: person.home_country_code !== null && person.home_country_code !== 'GB',
         homePostcode: person.home_postcode,
       });
-      
+
     });
   }
 

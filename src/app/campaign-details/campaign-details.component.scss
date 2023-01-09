@@ -23,6 +23,15 @@ h1 {
   @include b-rt-0;
 }
 
+.c-details-container {
+  display: flex;
+  flex-direction: column;
+
+  @media #{$breakpoint-lg} {
+    flex-direction: row;
+  }
+}
+
 .c-social {
   // Ensure good clearance between the Donate button & website link, even when there's no
   // regulator info (exempt org) or social links.
