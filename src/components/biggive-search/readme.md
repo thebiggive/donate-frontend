@@ -36,6 +36,9 @@ the parent component).
 <!-- Auto Generated Below -->
 
 
+> **[DEPRECATED]** (?) I don't think Donate is using this. Unless there is a WordPress use case,
+should we delete it rather than maintaining?
+
 ## Properties
 
 | Property          | Attribute          | Description                                                                                     | Type     | Default     |
