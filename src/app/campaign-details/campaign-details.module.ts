@@ -1,10 +1,10 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-card';
 import {MatIconModule} from '@angular/material/icon';
-import {MatTabsModule} from '@angular/material/tabs';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatLegacyTabsModule as MatTabsModule} from '@angular/material/legacy-tabs';
+import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { allChildComponentImports } from '../../allChildComponentImports';

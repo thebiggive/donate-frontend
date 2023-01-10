@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatLegacyProgressBarModule as MatProgressBarModule } from '@angular/material/legacy-progress-bar';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
