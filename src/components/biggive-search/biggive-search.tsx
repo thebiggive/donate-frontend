@@ -23,7 +23,7 @@ export class BigGiveSearch {
   })
   doSearch: EventEmitter<string>;
 
-  @Prop() searchText: string = null;
+  @Prop() searchText: string;
 
   private handleSearchTextChanged = (event: any) => {
     this.searchText = event.target.value;

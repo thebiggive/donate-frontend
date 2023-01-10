@@ -21,42 +21,42 @@ export class BiggiveCampaignCard {
   /**
    * e.g. "Match Funded".
    */
-  @Prop() campaignType: string = null;
+  @Prop() campaignType: string;
 
   /**
    * Full URL of a banner image.
    */
-  @Prop() banner: string = null;
+  @Prop() banner: string;
 
   /**
    * Display name of the charity's specific time-bound fundraising campaign.
    */
-  @Prop() campaignTitle: string = null;
+  @Prop() campaignTitle: string;
 
   /**
    * Display name of the charity or non-profit.
    */
-  @Prop() organisationName: string = null;
+  @Prop() organisationName: string;
 
   /**
    * Label for the primary figure
    */
-  @Prop() primaryFigureLabel: string = null;
+  @Prop() primaryFigureLabel: string;
 
   /**
    * Amount for the primary figure, formatted with currency symbol
    */
-  @Prop() primaryFigureAmount: string = null;
+  @Prop() primaryFigureAmount: string;
 
   /**
    * Label for the secondary figure
    */
-  @Prop() secondaryFigureLabel: string = null;
+  @Prop() secondaryFigureLabel: string;
 
   /**
    * Amount for the secondary figure, formatted with currency symbol
    */
-  @Prop() secondaryFigureAmount: string = null;
+  @Prop() secondaryFigureAmount: string;
 
   /**
    * Progress bar percentage
@@ -71,7 +71,7 @@ export class BiggiveCampaignCard {
   /**
    * Donate button url
    */
-  @Prop() donateButtonUrl: string = null;
+  @Prop() donateButtonUrl: string;
 
   /**
    * Donate button colour scheme
@@ -86,7 +86,7 @@ export class BiggiveCampaignCard {
   /**
    * More information button url
    */
-  @Prop() moreInfoButtonUrl: string = null;
+  @Prop() moreInfoButtonUrl: string;
 
   /**
    * Donate button colour scheme

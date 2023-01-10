@@ -91,6 +91,7 @@ export namespace Components {
           * Clip top right corner
          */
         "clipTopRightCorner": boolean;
+        "headingLevel": 1 | 2 | 3 | 4 | 5 | 6;
         /**
           * Icon
          */
@@ -442,27 +443,27 @@ export namespace Components {
         /**
           * Optional search text prop. Useful for pre-populating the search field when the page is loaded with a search term already existing in the URL. This can happen when sharing links, or if a donor goes to a campaign page after searching, and then returns to the search results. In such a case, the search box text will clear, unless we use this prop to populate it on rendering. DON-652.
          */
-        "searchText": string;
+        "searchText": string | null;
         /**
           * For injecting the chosen beneficiary to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterBeneficiary": string;
+        "selectedFilterBeneficiary": string | null;
         /**
           * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterCategory": string;
+        "selectedFilterCategory": string | null;
         /**
           * For injecting the chosen funding to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterFunding": string;
+        "selectedFilterFunding": string | null;
         /**
           * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterLocation": string;
+        "selectedFilterLocation": string | null;
         /**
           * This helps us inject a pre-selected dropdown value from outside of this component. This is especially helpful for the Meta campaign and Explore pages, where searching by text whipes out previous sort options and re-uses Relevance, or where one of those two pages is loaded directly with URL parameters - in such a scenario the dropdown shows that it's pre-selected. DON-558.
          */
-        "selectedSortByOption": 'Most raised' | 'Match funds remaining' | 'Relevance';
+        "selectedSortByOption": 'Most raised' | 'Match funds remaining' | 'Relevance' | null;
         /**
           * Space below component
          */
@@ -549,6 +550,7 @@ export namespace Components {
         "url": string;
     }
     interface BiggiveFooter {
+        "headingLevel": 1 | 2 | 3 | 4 | 5 | 6;
     }
     interface BiggiveForm {
     }
@@ -557,8 +559,8 @@ export namespace Components {
           * Placeholder
          */
         "placeholder": string;
-        "selectedLabel": string;
-        "selectedValue": string;
+        "selectedLabel": string | null;
+        "selectedValue": string | null;
         /**
           * Space below component
          */
@@ -810,6 +812,9 @@ export namespace Components {
           * Teaser colour
          */
         "teaserColour": string;
+    }
+    interface BiggiveMainMenu {
+        "closeMobileMenuFromOutside": () => Promise<void>;
     }
     interface BiggiveMiscIcon {
         /**
@@ -1244,6 +1249,12 @@ declare global {
         prototype: HTMLBiggiveImageFeatureElement;
         new (): HTMLBiggiveImageFeatureElement;
     };
+    interface HTMLBiggiveMainMenuElement extends Components.BiggiveMainMenu, HTMLStencilElement {
+    }
+    var HTMLBiggiveMainMenuElement: {
+        prototype: HTMLBiggiveMainMenuElement;
+        new (): HTMLBiggiveMainMenuElement;
+    };
     interface HTMLBiggiveMiscIconElement extends Components.BiggiveMiscIcon, HTMLStencilElement {
     }
     var HTMLBiggiveMiscIconElement: {
@@ -1384,6 +1395,7 @@ declare global {
         "biggive-icon-group": HTMLBiggiveIconGroupElement;
         "biggive-image": HTMLBiggiveImageElement;
         "biggive-image-feature": HTMLBiggiveImageFeatureElement;
+        "biggive-main-menu": HTMLBiggiveMainMenuElement;
         "biggive-misc-icon": HTMLBiggiveMiscIconElement;
         "biggive-nav-group": HTMLBiggiveNavGroupElement;
         "biggive-nav-item": HTMLBiggiveNavItemElement;
@@ -1491,6 +1503,7 @@ declare namespace LocalJSX {
           * Clip top right corner
          */
         "clipTopRightCorner"?: boolean;
+        "headingLevel"?: 1 | 2 | 3 | 4 | 5 | 6;
         /**
           * Icon
          */
@@ -1841,12 +1854,12 @@ declare namespace LocalJSX {
           * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it
          */
         "onDoSearchAndFilterUpdate"?: (event: BiggiveCampaignCardFilterGridCustomEvent<{
-    searchText: string;
-    sortBy: string;
-    filterCategory: string;
-    filterBeneficiary: string;
-    filterLocation: string;
-    filterFunding: string;
+    searchText: string | null;
+    sortBy: string | null;
+    filterCategory: string | null;
+    filterBeneficiary: string | null;
+    filterLocation: string | null;
+    filterFunding: string | null;
   }>) => void;
         /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
@@ -1855,27 +1868,27 @@ declare namespace LocalJSX {
         /**
           * Optional search text prop. Useful for pre-populating the search field when the page is loaded with a search term already existing in the URL. This can happen when sharing links, or if a donor goes to a campaign page after searching, and then returns to the search results. In such a case, the search box text will clear, unless we use this prop to populate it on rendering. DON-652.
          */
-        "searchText"?: string;
+        "searchText"?: string | null;
         /**
           * For injecting the chosen beneficiary to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterBeneficiary"?: string;
+        "selectedFilterBeneficiary"?: string | null;
         /**
           * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterCategory"?: string;
+        "selectedFilterCategory"?: string | null;
         /**
           * For injecting the chosen funding to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterFunding"?: string;
+        "selectedFilterFunding"?: string | null;
         /**
           * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
          */
-        "selectedFilterLocation"?: string;
+        "selectedFilterLocation"?: string | null;
         /**
           * This helps us inject a pre-selected dropdown value from outside of this component. This is especially helpful for the Meta campaign and Explore pages, where searching by text whipes out previous sort options and re-uses Relevance, or where one of those two pages is loaded directly with URL parameters - in such a scenario the dropdown shows that it's pre-selected. DON-558.
          */
-        "selectedSortByOption"?: 'Most raised' | 'Match funds remaining' | 'Relevance';
+        "selectedSortByOption"?: 'Most raised' | 'Match funds remaining' | 'Relevance' | null;
         /**
           * Space below component
          */
@@ -1962,6 +1975,7 @@ declare namespace LocalJSX {
         "url"?: string;
     }
     interface BiggiveFooter {
+        "headingLevel"?: 1 | 2 | 3 | 4 | 5 | 6;
     }
     interface BiggiveForm {
     }
@@ -1974,8 +1988,8 @@ declare namespace LocalJSX {
           * Placeholder
          */
         "placeholder"?: string;
-        "selectedLabel"?: string;
-        "selectedValue"?: string;
+        "selectedLabel"?: string | null;
+        "selectedValue"?: string | null;
         /**
           * Space below component
          */
@@ -2230,6 +2244,8 @@ declare namespace LocalJSX {
           * Teaser colour
          */
         "teaserColour"?: string;
+    }
+    interface BiggiveMainMenu {
     }
     interface BiggiveMiscIcon {
         /**
@@ -2516,6 +2532,7 @@ declare namespace LocalJSX {
         "biggive-icon-group": BiggiveIconGroup;
         "biggive-image": BiggiveImage;
         "biggive-image-feature": BiggiveImageFeature;
+        "biggive-main-menu": BiggiveMainMenu;
         "biggive-misc-icon": BiggiveMiscIcon;
         "biggive-nav-group": BiggiveNavGroup;
         "biggive-nav-item": BiggiveNavItem;
@@ -2566,6 +2583,7 @@ declare module "@stencil/core" {
             "biggive-icon-group": LocalJSX.BiggiveIconGroup & JSXBase.HTMLAttributes<HTMLBiggiveIconGroupElement>;
             "biggive-image": LocalJSX.BiggiveImage & JSXBase.HTMLAttributes<HTMLBiggiveImageElement>;
             "biggive-image-feature": LocalJSX.BiggiveImageFeature & JSXBase.HTMLAttributes<HTMLBiggiveImageFeatureElement>;
+            "biggive-main-menu": LocalJSX.BiggiveMainMenu & JSXBase.HTMLAttributes<HTMLBiggiveMainMenuElement>;
             "biggive-misc-icon": LocalJSX.BiggiveMiscIcon & JSXBase.HTMLAttributes<HTMLBiggiveMiscIconElement>;
             "biggive-nav-group": LocalJSX.BiggiveNavGroup & JSXBase.HTMLAttributes<HTMLBiggiveNavGroupElement>;
             "biggive-nav-item": LocalJSX.BiggiveNavItem & JSXBase.HTMLAttributes<HTMLBiggiveNavItemElement>;

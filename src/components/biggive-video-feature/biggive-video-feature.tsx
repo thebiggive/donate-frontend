@@ -28,7 +28,7 @@ export class BiggiveVideoFeature {
   /**
    * Slug
    */
-  @Prop() slug: string = null;
+  @Prop() slug: string;
 
   /**
    * Slug colour
@@ -38,7 +38,7 @@ export class BiggiveVideoFeature {
   /**
    * Video title
    */
-  @Prop() mainTitle: string = null;
+  @Prop() mainTitle: string;
 
   /**
    * Slug colour
@@ -48,7 +48,7 @@ export class BiggiveVideoFeature {
   /**
    * Introductory teaser text
    */
-  @Prop() teaser: string = null;
+  @Prop() teaser: string;
 
   /**
    * Teaser colour
@@ -58,12 +58,12 @@ export class BiggiveVideoFeature {
   /**
    * Button Url
    */
-  @Prop() buttonUrl: string = null;
+  @Prop() buttonUrl: string;
 
   /**
    * Button Label
    */
-  @Prop() buttonLabel: string = null;
+  @Prop() buttonLabel: string;
 
   /**
    * Button Colour Scheme

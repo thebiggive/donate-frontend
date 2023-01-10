@@ -1,4 +1,4 @@
-import { Component, Element, getAssetPath, h } from '@stencil/core';
+import { Component, Element, getAssetPath, h, Prop } from '@stencil/core';
 
 @Component({
   tag: 'biggive-footer',
@@ -8,10 +8,12 @@ import { Component, Element, getAssetPath, h } from '@stencil/core';
 export class BiggiveFooter {
   @Element() host: HTMLBiggiveFooterElement;
 
+  @Prop() headingLevel: 1 | 2 | 3 | 4 | 5 | 6 = 5;
+
   appendMenu(menuName: string) {
     var node = this.host.querySelector(`[slot="${menuName}"]`);
     if (node !== null) {
-      this.host.shadowRoot.querySelector(`.${menuName}`).appendChild(node);
+      this.host!.shadowRoot!.querySelector(`.${menuName}`)!.appendChild(node);
     }
   }
 
@@ -23,25 +25,27 @@ export class BiggiveFooter {
   }
 
   render() {
+    const HeadingTag = `h${this.headingLevel}`;
+
     return (
       <footer class="footer">
         <div class="row row-top">
           <nav class="nav nav-primary">
-            <h5>
+            <HeadingTag class="heading">
               <slot name="nav-primary-title"></slot>
-            </h5>
+            </HeadingTag>
           </nav>
 
           <nav class="nav nav-secondary">
-            <h5>
+            <HeadingTag class="heading">
               <slot name="nav-secondary-title"></slot>
-            </h5>
+            </HeadingTag>
           </nav>
 
           <nav class="nav nav-tertiary">
-            <h5>
+            <HeadingTag class="heading">
               <slot name="nav-tertiary-title"></slot>
-            </h5>
+            </HeadingTag>
           </nav>
 
           <div class="button-wrap">

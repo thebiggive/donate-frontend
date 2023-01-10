@@ -36,14 +36,15 @@
       @include corner-clip-medium-bottom-left-top-right();
     }
   }
-  
+
   .icon {
     svg {
       width: 50px;
       height: auto;
     }
   }
-  h3 {
+  .title {
+    // these have to be the heading level passed in based on order of headings, but in terms of design we want it look like H3.
     @include heading-3();
     margin-bottom: $spacer-3;
   }

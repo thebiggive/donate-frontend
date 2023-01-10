@@ -9,7 +9,7 @@
 
 | Property             | Attribute              | Description           | Type     | Default      |
 | -------------------- | ---------------------- | --------------------- | -------- | ------------ |
-| `colourScheme`       | `colour-scheme`        | Colour scheme         | `string` | `null`       |
+| `colourScheme`       | `colour-scheme`        | Colour scheme         | `string` | `undefined`  |
 | `maxWidth`           | `max-width`            | Width                 | `number` | `100`        |
 | `sectionStyleBottom` | `section-style-bottom` | Section style bottom  | `string` | `'straight'` |
 | `sectionStyleTop`    | `section-style-top`    | Section style top     | `string` | `'straight'` |

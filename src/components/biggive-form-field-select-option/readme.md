@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property | Attribute | Description | Type     | Default |
-| -------- | --------- | ----------- | -------- | ------- |
-| `label`  | `label`   | Label       | `string` | `null`  |
-| `value`  | `value`   | Value       | `string` | `null`  |
+| Property | Attribute | Description | Type     | Default     |
+| -------- | --------- | ----------- | -------- | ----------- |
+| `label`  | `label`   | Label       | `string` | `undefined` |
+| `value`  | `value`   | Value       | `string` | `undefined` |
 
 
 ## Events

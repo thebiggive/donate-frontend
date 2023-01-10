@@ -23,22 +23,22 @@ export class BiggiveBrandedImage {
   /**
    * Slug
    */
-  @Prop() slug: string = null;
+  @Prop() slug: string;
 
   /**
    * Charity name
    */
-  @Prop() charityName: string = null;
+  @Prop() charityName: string;
 
   /**
    * Charity location
    */
-  @Prop() charityLocation: string = null;
+  @Prop() charityLocation: string;
 
   /**
    * Link to the charity's website
    */
-  @Prop() charityUrl: string = null;
+  @Prop() charityUrl: string;
 
   render() {
     return (

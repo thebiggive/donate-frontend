@@ -7,10 +7,10 @@
 
 ## Properties
 
-| Property     | Attribute     | Description           | Type     | Default |
-| ------------ | ------------- | --------------------- | -------- | ------- |
-| `label`      | `label`       | Label                 | `string` | `null`  |
-| `spaceBelow` | `space-below` | Space below component | `number` | `0`     |
+| Property     | Attribute     | Description           | Type     | Default     |
+| ------------ | ------------- | --------------------- | -------- | ----------- |
+| `label`      | `label`       | Label                 | `string` | `undefined` |
+| `spaceBelow` | `space-below` | Space below component | `number` | `0`         |
 
 
 ----------------------------------------------

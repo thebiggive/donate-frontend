@@ -24,7 +24,7 @@ export class BiggivePageSection {
   /**
    * Colour scheme
    */
-  @Prop() colourScheme: string = null;
+  @Prop() colourScheme: string;
 
   /**
    * Width

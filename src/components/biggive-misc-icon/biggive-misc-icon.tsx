@@ -21,12 +21,12 @@ export class BiggiveMiscIcon {
   /**
    * Icon
    */
-  @Prop() icon: string = null;
+  @Prop() icon: string;
 
   /**
    * Url
    */
-  @Prop() url: string = undefined;
+  @Prop() url: string;
 
   private getMiscIcon(): IconDefinition {
     var icon = FontAwesomeIconsService.getMiscIcon(this.icon);
@@ -35,7 +35,8 @@ export class BiggiveMiscIcon {
 
   render() {
     return (
-      <div class={'misc-icon-item background-colour-' + this.backgroundColour}>
+      // Note: the icon name prop is set as a css class too for any styling specific to certain icons
+      <div class={'misc-icon-item background-colour-' + this.backgroundColour + ' ' + this.icon}>
         <a href={this.url}>
           <svg
             width={this.getMiscIcon().icon[0]}

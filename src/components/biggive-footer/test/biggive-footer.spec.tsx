@@ -14,15 +14,15 @@ describe('biggive-footer', () => {
         <div class="row row-top">
 
           <nav class="nav nav-primary">
-            <h5><slot name="nav-primary-title"></slot></h5>
+            <h5 class="heading"><slot name="nav-primary-title"></slot></h5>
           </nav>
 
           <nav class="nav nav-secondary">
-            <h5><slot name="nav-secondary-title"></slot></h5>
+            <h5 class="heading"><slot name="nav-secondary-title"></slot></h5>
           </nav>
 
           <nav class="nav nav-tertiary">
-            <h5><slot name="nav-tertiary-title"></slot></h5>
+            <h5 class="heading"><slot name="nav-tertiary-title"></slot></h5>
           </nav>
 
 

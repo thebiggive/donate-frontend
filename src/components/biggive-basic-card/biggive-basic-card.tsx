@@ -31,17 +31,17 @@ export class BiggiveBasicCard {
   /**
    * Main title
    */
-  @Prop() mainTitle: string = null;
+  @Prop() mainTitle: string;
 
   /**
    * Subtitle title
    */
-  @Prop() subtitle: string = null;
+  @Prop() subtitle: string;
 
   /**
    * Teaser
    */
-  @Prop() teaser: string = null;
+  @Prop() teaser: string;
   /**
    * Icon
    */
@@ -54,12 +54,12 @@ export class BiggiveBasicCard {
   /**
    * Button label
    */
-  @Prop() buttonLabel: string = null;
+  @Prop() buttonLabel: string;
 
   /**
    * Button URL
    */
-  @Prop() buttonUrl: string = null;
+  @Prop() buttonUrl: string;
 
   /**
    * Button Colour Scheme
@@ -76,7 +76,11 @@ export class BiggiveBasicCard {
    */
   @Prop() clipTopRightCorner: boolean = true;
 
+  @Prop() headingLevel: 1 | 2 | 3 | 4 | 5 | 6 = 3;
+
   render() {
+    const HeadingTag = `h${this.headingLevel}`;
+
     return (
       <div
         class={
@@ -101,7 +105,7 @@ export class BiggiveBasicCard {
                 </svg>
               </div>
             ) : null}
-            <h3 class="title">{this.mainTitle}</h3>
+            <HeadingTag class="title">{this.mainTitle}</HeadingTag>
             <div class="subtitle">{this.subtitle}</div>
             <div class="teaser">{this.teaser}</div>
             {this.buttonLabel != null && this.buttonUrl != null && this.buttonUrl != '' ? (

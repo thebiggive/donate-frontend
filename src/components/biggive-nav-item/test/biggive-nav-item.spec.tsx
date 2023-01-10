@@ -10,7 +10,7 @@ describe('biggive-nav-item', () => {
     expect(page.root).toEqualHtml(`
       <biggive-nav-item>
         <mock:shadow-root>
-          <li class="icon-null">
+          <li class="icon-undefined">
             <a></a>
             <slot></slot>
           </li>

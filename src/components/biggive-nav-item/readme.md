@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property     | Attribute     | Description | Type     | Default |
-| ------------ | ------------- | ----------- | -------- | ------- |
-| `iconColour` | `icon-colour` | URL         | `string` | `null`  |
-| `label`      | `label`       | Label       | `string` | `null`  |
-| `url`        | `url`         | URL         | `string` | `null`  |
+| Property     | Attribute     | Description | Type     | Default     |
+| ------------ | ------------- | ----------- | -------- | ----------- |
+| `iconColour` | `icon-colour` | URL         | `string` | `undefined` |
+| `label`      | `label`       | Label       | `string` | `undefined` |
+| `url`        | `url`         | URL         | `string` | `undefined` |
 
 
 ----------------------------------------------
