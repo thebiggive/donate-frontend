@@ -5,39 +5,51 @@
   display: none;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
 .mat-tab-label {
   opacity: 1 !important;
   color: $colour-black !important;
 }
 
 // See also .c-progress { ... } in campaign-details-card.component.scss.
+/* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version.*/
+/* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version.*/
 mat-progress-bar {
+  /* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version.*/
   .mat-progress-bar-background {
     display: none !important;
   }
+  /* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version.*/
   .mat-progress-bar-fill::after {
     background: $colour-black;
   }
+  /* TODO(mdc-migration): The following rule targets internal classes of progress-bar that may no longer apply for the MDC version.*/
   .mat-progress-bar-buffer {
     background: $colour-primary;
     opacity: 0.24;
   }
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
+/* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
 mat-checkbox {
+  /* TODO(mdc-migration): The following rule targets internal classes of checkbox that may no longer apply for the MDC version.*/
   .mat-checkbox-label {
     white-space: normal;
   }
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.*/
+/* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.*/
 mat-radio-button {
   margin-bottom: 1rem;
+  /* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.*/
   .mat-radio-label {
     white-space: initial;
   }
 }
 
-button.mat-icon-button {
+button.mat-mdc-icon-button {
   // Work around Safari layout issue where text following buttons was cut off.
   // Observed in 'back' links next to `keyboard_arrow_left` icons.
   width: auto;
@@ -51,35 +63,42 @@ app-campaign-card {
   width: 100%;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 .mat-form-field-appearance-outline .mat-form-field-outline {
   color: mat.get-color-from-palette($donate-primary);
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 .mat-form-field-appearance-outline .mat-form-field-infix {
   padding: 0.3em 0 0.7em 0;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 .mat-form-field-prefix, .mat-form-field-suffix {
   padding-right: 1rem;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 .donation-input .mat-form-field-appearance-legacy .mat-form-field-infix {
   border: 2px mat.get-color-from-palette($donate-primary) solid;
   border-radius: 10px; // Fixed px, so fields with different font sizes have aligned round corners.
   margin-bottom: 0.5rem; // Gap between custom border style and active input underline.
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 .donation-input-main .mat-form-field-appearance-legacy .mat-form-field-infix {
   padding: 0.7em 0;
 }
 
 // Seems to be needed for the inputs' floating labels to not hug/slightly overlap
 // the field. Angular Material default is equivalent but with 0.9375em.
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 .donation-input .mat-form-field-label-wrapper {
   top: -2.5rem;
   padding-top: 2.5rem;
 }
 
+/* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
 .donation-input .mat-form-field-appearance-legacy .mat-form-field-underline {
   height: 0 !important;
 }
