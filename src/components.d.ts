@@ -951,7 +951,7 @@ export namespace Components {
          */
         "url": string;
         /**
-          * Wide?
+          * Used in the social icons in the biggive-footer, which are more spaced out than others across the site. COM-43.
          */
         "wide": boolean;
     }
@@ -2388,7 +2388,7 @@ declare namespace LocalJSX {
          */
         "url"?: string;
         /**
-          * Wide?
+          * Used in the social icons in the biggive-footer, which are more spaced out than others across the site. COM-43.
          */
         "wide"?: boolean;
     }
