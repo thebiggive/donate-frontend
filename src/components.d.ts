@@ -950,6 +950,10 @@ export namespace Components {
           * Url
          */
         "url": string;
+        /**
+          * Wide?
+         */
+        "wide": boolean;
     }
     interface BiggiveTab {
         /**
@@ -2383,6 +2387,10 @@ declare namespace LocalJSX {
           * Url
          */
         "url"?: string;
+        /**
+          * Wide?
+         */
+        "wide"?: boolean;
     }
     interface BiggiveTab {
         /**

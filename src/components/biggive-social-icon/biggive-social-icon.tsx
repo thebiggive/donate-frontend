@@ -24,6 +24,11 @@ export class BiggiveSocialIcon {
   @Prop() iconColour: string = 'white';
 
   /**
+   * Wide?
+   */
+  @Prop() wide: boolean = false;
+
+  /**
    * Url
    */
   @Prop() url: string = '#';
@@ -35,7 +40,7 @@ export class BiggiveSocialIcon {
 
   render() {
     return (
-      <div class={'social-icon-item background-colour-' + this.backgroundColour}>
+      <div class={'social-icon-item background-colour-' + this.backgroundColour + (this.wide ? ' wide' : '')}>
         <a href={this.url} aria-label={`Big Give on ${this.service}`} target="_blank">
           <svg
             width={this.getSocialIcon().icon[0]}
