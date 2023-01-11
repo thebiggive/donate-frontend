@@ -1,5 +1,14 @@
+@include backgrounds();
+@include image-alignment();
+@include spacers();
+@include text-colours();
+
 :host {
   display: contents;
+}
+
+.align-right {
+  text-align: right;
 }
 
 .container {

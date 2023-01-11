@@ -18,7 +18,7 @@ export class BiggiveTabbedContent {
 
   render() {
     return (
-      <div class={'container space-below-' + this.spaceBelow + ' default-text-colour-' + this.defaultTextColour}>
+      <div class={'container space-below-' + this.spaceBelow + ' text-colour-' + this.defaultTextColour}>
         <slot></slot>
       </div>
     );

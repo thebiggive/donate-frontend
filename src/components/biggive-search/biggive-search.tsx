@@ -1,6 +1,10 @@
 import { Component, h, Prop, Event, EventEmitter } from '@stencil/core';
 import { faMagnifyingGlass, faX } from '@fortawesome/pro-solid-svg-icons';
 
+/**
+ * @deprecated (?) I don't think Donate is using this. Unless there is a WordPress use case,
+ * should we delete it rather than maintaining?
+ */
 @Component({
   tag: 'biggive-search',
   styleUrl: 'biggive-search.scss',
