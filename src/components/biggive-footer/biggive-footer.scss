@@ -24,6 +24,7 @@ nav {
       margin: 0;
       padding: 0;
       list-style-type: none;
+      margin-top: 15px;
     }
   }
 }
@@ -31,6 +32,42 @@ nav {
 nav ul li a {
   color: $colour-white;
   text-decoration: none;
+  // target all classes prefixed with 'icon-' so we don't repeat code
+  &[class^='icon-'],
+  &[class*='icon-'] {
+    padding-left: 20px;
+    background-repeat: no-repeat;
+    background-size: auto 10px;
+    background-position: left center;
+  }
+
+  &.icon-green {
+    background-image: url(/assets/images/triangles-combined-green-match-white.svg);
+  }
+
+  &.icon-children {
+    background-image: url(/assets/images/triangles-combined-children-white.svg);
+  }
+
+  &.icon-christmas {
+    background-image: url(/assets/images/triangles-combined-christmas-challenge-white.svg);
+  }
+
+  &.icon-green-match {
+    background-image: url(/assets/images/triangles-combined-green-match-white.svg);
+  }
+
+  &.icon-women-girls {
+    background-image: url(/assets/images/triangles-combined-women-girls-white.svg);
+  }
+
+  &.icon-anchor-match {
+    background-image: url(/assets/images/triangles-combined-anchor-white.svg);
+  }
+
+  &.icon-emergency {
+    background-image: url(/assets/images/triangles-combined-emergency-white.svg);
+  }
 }
 
 .row-top {
@@ -45,7 +82,7 @@ nav ul li a {
   justify-content: space-between;
 
   .button-wrap {
-    margin-top: $spacer-3;
+    margin-top: $spacer-6;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -53,7 +90,7 @@ nav ul li a {
   }
 }
 
-.row-bottom {
+footer .row-bottom {
   background-color: $colour-black;
   padding: $spacer-6 $spacer-6 $spacer-3 $spacer-6;
   border-top: 1px solid $colour-white;
@@ -109,6 +146,10 @@ nav ul li a {
     .social-icon-item {
       margin: 0 $spacer-2;
     }
+  }
+
+  p {
+    text-align: center;
   }
 }
 

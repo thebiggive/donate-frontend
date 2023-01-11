@@ -954,6 +954,10 @@ export namespace Components {
           * Url
          */
         "url": string;
+        /**
+          * Used in the social icons in the biggive-footer, which are more spaced out than others across the site. COM-43.
+         */
+        "wide": boolean;
     }
     interface BiggiveTab {
         /**
@@ -2395,6 +2399,10 @@ declare namespace LocalJSX {
           * Url
          */
         "url"?: string;
+        /**
+          * Used in the social icons in the biggive-footer, which are more spaced out than others across the site. COM-43.
+         */
+        "wide"?: boolean;
     }
     interface BiggiveTab {
         /**
