@@ -24,7 +24,8 @@ export class BiggiveSocialIcon {
   @Prop() iconColour: string = 'white';
 
   /**
-   * Wide?
+   * Used in the social icons in the biggive-footer, which are more spaced out
+   * than others across the site. COM-43.
    */
   @Prop() wide: boolean = false;
 
