@@ -243,7 +243,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
       this.storage.set(this.recentChildrenKey, recentChildrenData);
     }, () => {
-      this.filterError = true; // Error, e.g. slug not known
+      this.filterError = true; // Error, should only be thrown if the callout SF API returns an error
       this.loading = false;
     });
   }
