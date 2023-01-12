@@ -1,3 +1,7 @@
+@include alignments();
+@include headings();
+@include spacers();
+
 :host {
   display: contents;
 }
@@ -10,4 +14,3 @@
   .heading-colour-white { color: $colour-white; }
   .heading-colour-black { color: $colour-black; }
 }
-

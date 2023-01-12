@@ -1,3 +1,6 @@
+@include image-alignment();
+@include spacers();
+
 :host {
   display: contents;
 }

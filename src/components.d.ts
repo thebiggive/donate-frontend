@@ -922,6 +922,10 @@ export namespace Components {
          */
         "spaceBelow": number;
     }
+    /**
+     * @deprecated (?) I don't think Donate is using this. Unless there is a WordPress use case,
+     * should we delete it rather than maintaining?
+     */
     interface BiggiveSearch {
         /**
           * Defines the text on the search button
@@ -1319,6 +1323,10 @@ declare global {
         prototype: HTMLBiggiveQuoteElement;
         new (): HTMLBiggiveQuoteElement;
     };
+    /**
+     * @deprecated (?) I don't think Donate is using this. Unless there is a WordPress use case,
+     * should we delete it rather than maintaining?
+     */
     interface HTMLBiggiveSearchElement extends Components.BiggiveSearch, HTMLStencilElement {
     }
     var HTMLBiggiveSearchElement: {
@@ -2355,6 +2363,10 @@ declare namespace LocalJSX {
          */
         "spaceBelow"?: number;
     }
+    /**
+     * @deprecated (?) I don't think Donate is using this. Unless there is a WordPress use case,
+     * should we delete it rather than maintaining?
+     */
     interface BiggiveSearch {
         /**
           * Defines the text on the search button
@@ -2602,6 +2614,10 @@ declare module "@stencil/core" {
             "biggive-popup-standalone": LocalJSX.BiggivePopupStandalone & JSXBase.HTMLAttributes<HTMLBiggivePopupStandaloneElement>;
             "biggive-progress-bar": LocalJSX.BiggiveProgressBar & JSXBase.HTMLAttributes<HTMLBiggiveProgressBarElement>;
             "biggive-quote": LocalJSX.BiggiveQuote & JSXBase.HTMLAttributes<HTMLBiggiveQuoteElement>;
+            /**
+             * @deprecated (?) I don't think Donate is using this. Unless there is a WordPress use case,
+             * should we delete it rather than maintaining?
+             */
             "biggive-search": LocalJSX.BiggiveSearch & JSXBase.HTMLAttributes<HTMLBiggiveSearchElement>;
             "biggive-social-icon": LocalJSX.BiggiveSocialIcon & JSXBase.HTMLAttributes<HTMLBiggiveSocialIconElement>;
             "biggive-tab": LocalJSX.BiggiveTab & JSXBase.HTMLAttributes<HTMLBiggiveTabElement>;

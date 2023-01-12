@@ -1,5 +1,11 @@
+@include spacers();
+
 :host {
   display: contents;
+}
+
+.video-wrap {
+  @include video-wrap();
 }
 
 .container {
