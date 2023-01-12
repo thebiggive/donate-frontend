@@ -48,9 +48,12 @@ h1 {
 }
 
 .mat-tab-label {
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin-right: 40px;
   .mat-tab-label-content {
     color: $colour-primary;
-    font-size: large;
+    font-size: medium;
   }
 }
 
