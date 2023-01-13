@@ -72,10 +72,9 @@ export class CampaignService {
       return undefined;
     }
 
-    if (campaign.amountRaised >= campaign.target) {
-      return 100;
-    }
-
+    // `percentRaised` can return more than 100% in the case where campaigns have exceeded
+    // their targets. <biggive-progress-bar> component ensures the bar doesn't overflow.
+    // See DON-650.
     return Math.round((campaign.amountRaised / campaign.target) * 100);
   }
 
