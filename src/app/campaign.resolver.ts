@@ -43,7 +43,7 @@ export class CampaignResolver implements Resolve<any> {
       const searchResult = this.campaignService.search(query as SearchQuery).subscribe(
         () => {},
         () => {
-          this.router.navigateByUrl(`/${campaignSlug}/`);
+          this.router.navigateByUrl(`/${campaignSlug}`);
         }
       )
     }
