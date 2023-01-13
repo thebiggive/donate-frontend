@@ -24,7 +24,7 @@ export class BiggiveProgressBar {
     return (
       <div class={'progress-bar progress-bar-' + this.colourScheme + ' space-below-' + this.spaceBelow}>
         <div class="slider">
-          <div class="progress" style={{ width: `${this.counter}%` }}></div>
+          <div class="progress" style={{ width: `${this.counter >= 100 ? 100 : this.counter}%` }}></div>
         </div>
         <div class="counter">{this.counter}%</div>
       </div>
