@@ -1,3 +1,6 @@
+
+<div *ngIf="complete" id="banner-thank-you"></div>
+
 <main class="c-donate-complete">
   <mat-spinner class="c-donate-complete__mat-spinner" *ngIf="!complete && !noAccess && !timedOut" color="primary" diameter="30" aria-label="Loading donation details"></mat-spinner>
 
@@ -14,7 +17,97 @@
   </p>
 
   <div *ngIf="complete">
-    <h2 class="c-thank-you">
+
+    <div class="thank-you">
+      <h2>Thank you!</h2>
+
+      <p class="thank-you-text">Your generous donation has<br/>been made successfully</p>
+
+      <div id="save-my-details-cta">
+
+        <div class="button-wrapper">
+          <biggive-button
+            space-below="0"
+            colour-scheme="white"
+            is-past-campaign="false"
+            is-future-campaign="false"
+            label="Save my details"
+            url="http://www.google.com"
+            open-in-new-tab="false"
+            full-width="false"
+            size="medium"
+            rounded="false"
+            centered="false">
+          </biggive-button>
+        </div>
+        <p>This helps you to make doubling your donation easier.</p>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="donation-summary">
+      <p><strong>Hi Ali,<br/>Your donation summary</strong></p>
+      <p>Your donation of <strong class="figure">£100</strong> has been made. That's worth <strong class="figure">£200</strong> to Big Give!</p>
+
+      <br/>
+      <!-- <p><strong>A message from the charity:</strong></p> -->
+      <p><i>"Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+        Odit harum, possimus dolores placeat sunt modi ipsum, temporibus,
+        velit cupiditate maxime alias quisquam assumenda enim a minima excepturi culpa eveniet.
+      </i></p>
+    </div>
+
+    <hr>
+
+    <div class="receipt">
+      <p><strong>Your Receipt</strong></p>
+      <p>1 Jan 2023</p>
+      <br>
+
+      <table>
+        <tr>
+          <td>Your donation</td>
+          <td>£100</td>
+        </tr>
+        <tr>
+          <td>Matched Amount</td>
+          <td>£100</td>
+        </tr>
+        <tr>
+          <td>Gift Aid Amount</td>
+          <td>£25</td>
+        </tr>
+        <tr>
+          <td>Tip Amount</td>
+          <td>£10</td>
+        </tr>
+        <tr class="receives">
+          <td>Charity Receives</td>
+          <td>£225</td>
+        </tr>
+        <tr class="total">
+          <td><strong>Total amount you have been charged</strong></td>
+          <td><strong>£110</strong></td>
+        </tr>
+      </table>
+    </div>
+
+    <hr>
+
+    <div class="socials">
+      <p>Boost your impact by sharing on social media</p>
+      <div class="social-icons-wrapper">
+        <biggive-social-icon service="Facebook" url="https://www.facebook.com/sharer/sharer.php?u={{ shareUrl }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
+        <biggive-social-icon service="Twitter" url="https://twitter.com/share?url={{ shareUrl }}&text={{ prefilledText }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
+        <biggive-social-icon service="LinkedIn" url="https://www.linkedin.com/cws/share?url={{ shareUrl }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
+        <!-- <biggive-social-icon service="Whatsapp" url="https://api.whatsapp.com/send?text={{ prefilledText }}%0A%0A{{ shareUrl }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon> -->
+      </div>
+
+      <a href="">Back to campaign page</a>
+    </div>
+
+    <!-- <h2 class="c-thank-you">
       <span class="c-thank-you__content">Thank you!</span>
     </h2>
 
@@ -35,7 +128,6 @@
         ></biggive-heading>
 
         <div *ngIf="offerToSetPassword">
-          <!-- Activated only after password set succeeds, in order to facilitate an auto-login (when donor requests to stay logged in) -->
           <re-captcha
             #captcha
             size="invisible"
@@ -117,12 +209,11 @@
 
       <button class="c-button b-w-100 b-center" mat-button>
         <div *ngIf="campaign">
-          <!-- For now, this assumes parent / meta-campaigns all have slugs set. -->
           <p class="b-rt-1 b-m-0" *ngIf="campaign.parentRef"><a [routerLink]="'/' + campaign.parentRef">Explore other campaigns</a></p>
           <p class="b-rt-1 b-m-0" *ngIf="!campaign.parentRef"><a routerLink="/explore">Explore other campaigns</a></p>
         </div>
         <a routerLink="/"><img class="c-button__image" src="/assets/images/logo.png" alt="The Big Give" width="200"></a>
       </button>
-    </div>
+    </div> -->
   </div>
 </main>

@@ -133,6 +133,123 @@
   padding-right: 1rem;
 }
 
+#banner-thank-you {
+  background-image: url(../../assets/images/banner-thank-you.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: none;
+  height: 250px;
+  width: 100%;
+}
+
+hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 80%;
+  margin: 60px auto;
+}
+
+.thank-you {
+  background-color: $colour-primary;
+  padding: 20px 0;
+  position: relative;
+  top: -125px;
+  width: 80%;
+  margin: auto auto -125px auto;
+
+  h2 {
+    color: $colour-secondary;
+    text-align: center;
+    font-size: 4rem;
+  }
+
+  p {
+    color: white;
+    text-align: center;
+  }
+
+  .thank-you-text {
+    font-size: 2rem;
+    font-weight: 500;
+  }
+
+  #save-my-details-cta {
+    margin-top: 60px;
+    display: grid;
+
+    .button-wrapper {
+      margin: auto;
+    }
+    p {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.donation-summary {
+  text-align: center;
+  width: 80%;
+  margin: auto;
+
+  p {
+    font-size: 1.4rem;
+    strong {
+      &.figure {
+        color: $colour-primary;
+      }
+    }
+  }
+}
+
+.receipt {
+  width: 60%;
+  margin: auto;
+
+  table {
+    width: 100%;
+    border-spacing: 0 1em;
+    tr {
+      td {
+        font-size: 1.4rem;
+      }
+    }
+  }
+  hr {
+    margin: 0;
+    width: 100%;
+  }
+  .receives {
+    td {
+      background-color: $colour-highlight;
+      padding: 5px;
+    }
+  }
+  .total {
+    color: $colour-primary;
+  }
+}
+
+.socials {
+  display: grid;
+  margin-bottom: 50px;
+  p {
+    text-align: center;
+    margin: 0;
+    font-size: 1.4rem;
+  }
+
+  .social-icons-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  a {
+    margin: auto;
+    font-size: 1.4rem;
+  }
+}
+
 @media screen and (min-width: 500px) {
   #whatsapp { 
     display: none;

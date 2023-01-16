@@ -26,7 +26,7 @@ export class DonationCompleteComponent {
 
   campaign: Campaign;
   cardChargedAmount: number;
-  complete = false;
+  complete = true;
   donation: Donation;
   giftAidAmount: number;
   loggedIn = false;
