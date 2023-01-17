@@ -1,136 +1,11 @@
 @import '../../abstract';
 
-.b-center {
-  text-align: center;
-}
-
-.b-rt-sm {
-  @include b-rt-sm;
-}
-
-.b-rt-0 {
-  @include b-rt-0;
-}
-
-.b-rt-1 {
-  @include b-rt-1;
-}
-
 .c-donate-complete {
   @include make-container;
 }
 
 .c-donate-complete__mat-spinner {
-  margin: 3rem auto 0;
-}
-
-.c-thank-you {
-  text-align: center;
-  margin-top: 3rem;
-  margin-bottom: 0;
-  @include size-xl;
-  font-weight: 500;
-}
-
-.c-thank-you__content {
-  background-color: $colour-black;
-  padding: 1rem 2rem;
-  color: $colour-black-contrast;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  margin: 0 auto;
-  display: inline-block;
-  @include b-rt-2;
-  @media#{$breakpoint-lg} {
-    padding: 1.5rem 10rem;
-  }
-}
-
-.c-card {
-  @include make-card($box-shadow-hard);
-  padding: 1rem;
-}
-
-.c-main {
-  margin: 1rem;
-  margin-top: 0;
-  @media #{$breakpoint-md} {
-    margin: 0 30px;
-  }
-  @media #{$breakpoint-lg} {
-    margin: 0 60px;
-    padding-top: 2rem;
-  }
-  @media #{$breakpoint-xl} {
-    margin: 0 75px;
-  }
-}
-
-.c-receipt {
-  border-top: 1px solid $colour-grey-light;
-  border-bottom: 1px solid $colour-grey-light;
-  margin: 3rem 0;
-  padding-bottom: 3rem;
-}
-
-.c-receipt__heading {
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-}
-
-.c-receipt__list {
-  clear: both;
-  display: table;
-  padding: 0;
-  margin-bottom: 0;
-}
-
-.c-receipt__item {
-  float: left;
-  width: 50%;
-  clear: left;
-  &--highlighted {
-    float: right;
-  }
-}
-
-.c-receipt__title,
-.c-tip__description {
-  margin-bottom: 0;
-  margin-top: 0.75rem;
-}
-
-.c-misc {
-  border-top: 1px solid $colour-grey-light;
-  margin-top: 2rem;
-  padding-top: 1rem;
-}
-
-.c-button {
-  background-color: $colour-background;
-  color: $colour-primary;
-  padding: 1rem 0;
-  &:hover {
-    text-decoration: underline;
-  }
-  @media #{$breakpoint-lg} {
-    padding: 2rem 0;
-  }
-}
-
-.c-button__image {
-  width: 80px;
-  @media #{$breakpoint-md} {
-    width: 100px;
-  }
-  @media #{$breakpoint-lg} {
-    width: 120px;
-    margin-top: 1rem;
-  }
-}
-
-.c-social-image {
-  padding-right: 1rem;
+  margin: 3rem auto;
 }
 
 #banner-thank-you {
@@ -143,10 +18,13 @@
 }
 
 hr {
-  margin-top: 20px;
-  margin-bottom: 20px;
   width: 80%;
-  margin: 60px auto;
+  @media #{$breakpoint-sm} {
+    margin: 40px auto;
+  }
+  @media #{$breakpoint-lg} {
+    margin: 60px auto;
+  }
 }
 
 .thank-you {
@@ -178,6 +56,10 @@ hr {
   p {
     color: white;
     text-align: center;
+
+    &.error {
+      color: $colour-secondary;
+    }
   }
 
   .thank-you-text {
@@ -239,6 +121,7 @@ hr {
   margin: auto;
 
   p {
+    margin: 0;
     @media #{$breakpoint-sm} {
       font-size: 1rem;
     }
@@ -330,18 +213,4 @@ hr {
       font-size: 1.4rem;
     }
   }
-}
-
-@media screen and (min-width: 500px) {
-  #whatsapp { 
-    display: none;
-  }
-}
-
-.id-info {
-  @include make-card($box-shadow-hard);
-
-  text-align: center;
-  margin-top: 1rem;
-  padding: 0.25rem 1rem 1rem 1rem;
 }
