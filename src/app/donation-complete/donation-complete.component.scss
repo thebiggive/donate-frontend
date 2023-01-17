@@ -160,7 +160,19 @@ hr {
   h2 {
     color: $colour-secondary;
     text-align: center;
-    font-size: 4rem;
+
+    @media #{$breakpoint-sm} {
+      font-size: 2rem;
+    }
+    @media #{$breakpoint-md} {
+      font-size: 2.5rem;
+    }
+    @media #{$breakpoint-lg} {
+      font-size: 3rem;
+    }
+    @media #{$breakpoint-xl} {
+      font-size: 4rem;
+    }
   }
 
   p {
@@ -169,19 +181,54 @@ hr {
   }
 
   .thank-you-text {
-    font-size: 2rem;
     font-weight: 500;
+    @media #{$breakpoint-sm} {
+      font-size: 1rem;
+    }
+    @media #{$breakpoint-md} {
+      font-size: 1.2rem;
+    }
+    @media #{$breakpoint-lg} {
+      font-size: 1.5rem;
+    }
+    @media #{$breakpoint-xl} {
+      font-size: 2rem;
+    }
   }
 
   #save-my-details-cta {
-    margin-top: 60px;
     display: grid;
+
+    @media #{$breakpoint-sm} {
+      margin-top: 30px;
+    }
+    @media #{$breakpoint-md} {
+      margin-top: 40px;
+    }
+    @media #{$breakpoint-lg} {
+      margin-top: 50px;
+    }
+    @media #{$breakpoint-xl} {
+      margin-top: 60px;
+    }
 
     .button-wrapper {
       margin: auto;
     }
     p {
-      font-size: 1.5rem;
+      padding: 0 20px;
+      @media #{$breakpoint-sm} {
+        font-size: 1rem;
+      }
+      @media #{$breakpoint-md} {
+        font-size: 1.2rem;
+      }
+      @media #{$breakpoint-lg} {
+        font-size: 1.5rem;
+      }
+      @media #{$breakpoint-xl} {
+        font-size: 2rem;
+      }
     }
   }
 }
@@ -192,7 +239,18 @@ hr {
   margin: auto;
 
   p {
-    font-size: 1.4rem;
+    @media #{$breakpoint-sm} {
+      font-size: 1rem;
+    }
+    @media #{$breakpoint-md} {
+      font-size: 1.1rem;
+    }
+    @media #{$breakpoint-lg} {
+      font-size: 1.2rem;
+    }
+    @media #{$breakpoint-xl} {
+      font-size: 1.5rem;
+    }
     strong {
       &.figure {
         color: $colour-primary;
@@ -210,7 +268,18 @@ hr {
     border-spacing: 0 1em;
     tr {
       td {
-        font-size: 1.4rem;
+        @media #{$breakpoint-sm} {
+          font-size: 1rem;
+        }
+        @media #{$breakpoint-md} {
+          font-size: 1.1rem;
+        }
+        @media #{$breakpoint-lg} {
+          font-size: 1.2rem;
+        }
+        @media #{$breakpoint-xl} {
+          font-size: 1.4rem;
+        }
       }
     }
   }
@@ -235,7 +304,6 @@ hr {
   p {
     text-align: center;
     margin: 0;
-    font-size: 1.4rem;
   }
 
   .social-icons-wrapper {
@@ -246,7 +314,21 @@ hr {
 
   a {
     margin: auto;
-    font-size: 1.4rem;
+  }
+
+  a, p {
+    @media #{$breakpoint-sm} {
+      font-size: 1rem;
+    }
+    @media #{$breakpoint-md} {
+      font-size: 1.1rem;
+    }
+    @media #{$breakpoint-lg} {
+      font-size: 1.2rem;
+    }
+    @media #{$breakpoint-xl} {
+      font-size: 1.4rem;
+    }
   }
 }
 
