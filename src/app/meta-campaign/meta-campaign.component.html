@@ -86,6 +86,7 @@
     </div>
 
     <div *ngIf="filterError" tabindex="0">
+      <!--  We want this error to happen as part of route resolving.    -->
       <p class="error" aria-live="assertive">
         Could not load the campaign. You might have followed a broken link or lost connectivity.<br />
         Not to worry, you can
