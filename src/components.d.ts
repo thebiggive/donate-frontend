@@ -604,6 +604,10 @@ export namespace Components {
          */
         "spaceBetween": boolean;
     }
+    /**
+     * @deprecated 
+     * @see BiggiveMainMenu
+     */
     interface BiggiveHeader {
         "closeMenuFromOutside": () => Promise<void>;
         /**
@@ -815,6 +819,7 @@ export namespace Components {
     }
     interface BiggiveMainMenu {
         "closeMobileMenuFromOutside": () => Promise<void>;
+        "logoUrl": string;
     }
     interface BiggiveMiscIcon {
         /**
@@ -1221,6 +1226,10 @@ declare global {
         prototype: HTMLBiggiveGridElement;
         new (): HTMLBiggiveGridElement;
     };
+    /**
+     * @deprecated 
+     * @see BiggiveMainMenu
+     */
     interface HTMLBiggiveHeaderElement extends Components.BiggiveHeader, HTMLStencilElement {
     }
     var HTMLBiggiveHeaderElement: {
@@ -2049,6 +2058,10 @@ declare namespace LocalJSX {
          */
         "spaceBetween"?: boolean;
     }
+    /**
+     * @deprecated 
+     * @see BiggiveMainMenu
+     */
     interface BiggiveHeader {
         /**
           * Logo hyperlink URL
@@ -2258,6 +2271,7 @@ declare namespace LocalJSX {
         "teaserColour"?: string;
     }
     interface BiggiveMainMenu {
+        "logoUrl"?: string;
     }
     interface BiggiveMiscIcon {
         /**
@@ -2597,6 +2611,10 @@ declare module "@stencil/core" {
             "biggive-form-field-select-option": LocalJSX.BiggiveFormFieldSelectOption & JSXBase.HTMLAttributes<HTMLBiggiveFormFieldSelectOptionElement>;
             "biggive-formatted-text": LocalJSX.BiggiveFormattedText & JSXBase.HTMLAttributes<HTMLBiggiveFormattedTextElement>;
             "biggive-grid": LocalJSX.BiggiveGrid & JSXBase.HTMLAttributes<HTMLBiggiveGridElement>;
+            /**
+             * @deprecated 
+             * @see BiggiveMainMenu
+             */
             "biggive-header": LocalJSX.BiggiveHeader & JSXBase.HTMLAttributes<HTMLBiggiveHeaderElement>;
             "biggive-heading": LocalJSX.BiggiveHeading & JSXBase.HTMLAttributes<HTMLBiggiveHeadingElement>;
             "biggive-hero-image": LocalJSX.BiggiveHeroImage & JSXBase.HTMLAttributes<HTMLBiggiveHeroImageElement>;

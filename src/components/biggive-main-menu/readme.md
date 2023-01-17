@@ -5,6 +5,13 @@
 <!-- Auto Generated Below -->
 
 
+## Properties
+
+| Property  | Attribute  | Description | Type     | Default |
+| --------- | ---------- | ----------- | -------- | ------- |
+| `logoUrl` | `logo-url` |             | `string` | `'/'`   |
+
+
 ## Methods
 
 ### `closeMobileMenuFromOutside() => Promise<void>`
