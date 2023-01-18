@@ -5,6 +5,8 @@
 <!-- Auto Generated Below -->
 
 
+> **[DEPRECATED]** 
+
 ## Properties
 
 | Property     | Attribute     | Description           | Type     | Default |

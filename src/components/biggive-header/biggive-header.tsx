@@ -1,5 +1,9 @@
 import { Component, Element, h, Method, Prop } from '@stencil/core';
 
+/**
+ * @deprecated
+ * @see BiggiveMainMenu
+ */
 @Component({
   tag: 'biggive-header',
   styleUrl: 'biggive-header.scss',
