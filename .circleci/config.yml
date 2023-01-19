@@ -90,7 +90,39 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=3600"
+  publish_auto_versioning:
+    publish:
+      <<: *defaults
+      steps:
+        - checkout
+        - restore_cache:
+            keys:
+              - v1-dependencies-{{ checksum "package-lock.json" }}
+        - run: npm install
+        - save_cache:
+            paths:
+              - node_modules
+            key: v1-dependencies-{{ checksum "package-lock.json" }}
+        - run: npm run build
+        - run: ./scripts/create-version.sh
+        - run:
+            name: Authenticate with registry
+            command: echo "//registry.npmjs.org/:_authToken=$NPM_PUBLISH_AUTH_TOKEN" > ~/components/.npmrc
+#        - run:
+#            name: Publish core components to npm
+#            command: npm publish --access=public
+#        - run: cd angular && npm install
+#        - run:
+#            name: Build Angular components
+#            command: cd angular && npm run build
+#        - run:
+#            name: Authenticate with registry in Angular components output directory
+#            command: echo "//registry.npmjs.org/:_authToken=$NPM_PUBLISH_AUTH_TOKEN" > ~/components/angular/dist/components/.npmrc
+#        - run:
+#            name: Publish Angular components to npm
+#            command: cd angular/dist/components && npm publish --access=public
 
+    <<: *defaults
   # Publishes `@biggive/components` *and* `@biggive/components-angular` (building both on the fly).
   publish:
     <<: *defaults
@@ -134,6 +166,16 @@ workflows:
             - jira/notify:
                 job_type: build
                 environment_type: development
+  publish_auto_versioning:
+    jobs:
+      - publish_auto_versioning:
+          filters:
+            branches:
+              only: COM-14-auto-versioning
+          context:
+            - docker-hub-creds
+            - jira
+            - npm-publish
   publish:
     jobs:
       - publish:
