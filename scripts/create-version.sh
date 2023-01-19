@@ -15,4 +15,3 @@ npm version --no-git-tag-version $VERSION_NUMBER
 cd angular
 npm version --no-git-tag-version $VERSION_NUMBER
 
-git diff
