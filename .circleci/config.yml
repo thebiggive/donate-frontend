@@ -164,9 +164,9 @@ workflows:
             - jira/notify:
                 job_type: build
                 environment_type: development
-  publish_auto_versioning:
-    jobs:
       - publish_auto_versioning:
+          requires:
+            - build
           filters:
             branches:
               only: COM-14-auto-versioning
