@@ -15,7 +15,7 @@ import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
-import { common } from 'src/environments/common';
+import { minPasswordLength } from 'src/environments/common';
 
 @Component({
   selector: 'app-donation-complete',
@@ -65,7 +65,7 @@ export class DonationCompleteComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.minPasswordLength = common.minPasswordLength;
+    this.minPasswordLength = minPasswordLength;
   }
 
   /**

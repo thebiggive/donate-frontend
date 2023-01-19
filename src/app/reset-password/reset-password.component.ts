@@ -9,7 +9,7 @@ import { getPasswordValidator } from '../validators/validate-passwords-same';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IdentityService } from '../identity.service';
-import { common } from 'src/environments/common';
+import { minPasswordLength } from 'src/environments/common';
 
 @Component({
   standalone: true,
@@ -72,7 +72,7 @@ export class ResetPasswordComponent implements OnInit {
       }
     );
 
-    this.minPasswordLength = common.minPasswordLength;
+    this.minPasswordLength = minPasswordLength;
   }
 
   get confirmPasswordField() {

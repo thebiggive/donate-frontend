@@ -5,7 +5,7 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { common } from 'src/environments/common';
+import { minPasswordLength } from 'src/environments/common';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Person } from '../person.model';
@@ -45,7 +45,7 @@ export class DonationCompleteSetPasswordDialogComponent implements OnInit {
       ]],
       stayLoggedIn: [false],
     });
-    this.minPasswordLength = common.minPasswordLength;
+    this.minPasswordLength = minPasswordLength;
   }
 
   set() {
