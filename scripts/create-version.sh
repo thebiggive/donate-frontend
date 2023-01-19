@@ -12,5 +12,5 @@ VERSION_NUMBER=`date +%Y.%m.%d.%H.%M.%S`
 echo $VERSION_NUMBER
 
 npm version --no-git-tag-version $VERSION_NUMBER
-cd projects/components
+cd angular/projects/components
 npm version --no-git-tag-version $VERSION_NUMBER
