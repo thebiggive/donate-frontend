@@ -102,9 +102,9 @@
       <p >Boost your impact by sharing on social media</p>
       <div class="social-icons-wrapper">
         <biggive-social-icon service="Facebook" url="https://www.facebook.com/sharer/sharer.php?u={{ shareUrl }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
-        <biggive-social-icon service="Twitter" url="https://twitter.com/share?url={{ shareUrl }}&text={{ prefilledText }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
+        <biggive-social-icon service="Twitter" url="https://twitter.com/share?url={{ shareUrl }}&text={{ encodedPrefilledText }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
         <biggive-social-icon service="LinkedIn" url="https://www.linkedin.com/cws/share?url={{ shareUrl }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
-        <biggive-social-icon service="Whatsapp" url="https://api.whatsapp.com/send?text={{ prefilledText }}%0A%0A{{ shareUrl }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
+        <biggive-social-icon service="Whatsapp" url="https://api.whatsapp.com/send?text={{ encodedPrefilledText }}%0A%0A{{ shareUrl }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
       </div>
 
       <a [routerLink]="'/campaign/' + campaign.id">Back to campaign page</a>

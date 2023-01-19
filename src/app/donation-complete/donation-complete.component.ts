@@ -34,7 +34,7 @@ export class DonationCompleteComponent implements OnInit {
   minPasswordLength: number;
   noAccess = false;
   offerToSetPassword = false;
-  prefilledText: string;
+  encodedPrefilledText: string;
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   registerError?: string;
   registrationComplete = false;
@@ -254,6 +254,6 @@ export class DonationCompleteComponent implements OnInit {
       ? environment.donateUriPrefix
       : environment.donateGlobalUriPrefix;
     this.shareUrl = `${prefix}/campaign/${campaign.id}`;
-    this.prefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
+    this.encodedPrefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
   }
 }
