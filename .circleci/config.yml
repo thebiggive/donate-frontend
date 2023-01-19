@@ -91,7 +91,6 @@ jobs:
             --acl public-read \
             --cache-control "max-age=3600"
   publish_auto_versioning:
-    publish:
       <<: *defaults
       steps:
         - checkout
@@ -122,7 +121,6 @@ jobs:
 #            name: Publish Angular components to npm
 #            command: cd angular/dist/components && npm publish --access=public
 
-    <<: *defaults
   # Publishes `@biggive/components` *and* `@biggive/components-angular` (building both on the fly).
   publish:
     <<: *defaults
