@@ -165,8 +165,6 @@ workflows:
                 job_type: build
                 environment_type: development
   publish_auto_versioning:
-    depends:
-      - build
     jobs:
       - publish_auto_versioning:
           filters:
