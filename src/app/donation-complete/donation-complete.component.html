@@ -47,14 +47,14 @@
       </p>
 
       <p *ngIf="registerError" class="error" aria-live="assertive">
-        Your password could not be set. Please ensure you chose one with at least 10 characters.
+        Your password could not be set. Please ensure you chose one with at least {{ this.minPasswordLength }} characters.
       </p>
     </div>
 
     <hr>
 
     <div class="donation-summary">
-      <p><strong>Hi Ali,<br/>Your donation summary</strong></p>
+      <p><strong>Hi {{ donation.firstName }},<br/>Your donation summary</strong></p>
       <p>Your donation of <strong class="figure">{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</strong> has been made. That's worth <strong class="figure">{{ totalValue | exactCurrency:donation.currencyCode }}</strong> to {{ donation.charityName }}!</p>
 
       <br/>

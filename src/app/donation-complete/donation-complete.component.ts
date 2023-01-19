@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { RecaptchaComponent } from 'ng-recaptcha';
@@ -15,13 +15,14 @@ import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
+import { common } from 'src/environments/common';
 
 @Component({
   selector: 'app-donation-complete',
   templateUrl: './donation-complete.component.html',
   styleUrls: ['./donation-complete.component.scss'],
 })
-export class DonationCompleteComponent {
+export class DonationCompleteComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
 
   campaign: Campaign;
@@ -30,6 +31,7 @@ export class DonationCompleteComponent {
   donation: Donation;
   giftAidAmount: number;
   loggedIn = false;
+  minPasswordLength: number;
   noAccess = false;
   offerToSetPassword = false;
   prefilledText: string;
@@ -60,6 +62,10 @@ export class DonationCompleteComponent {
       this.donationId = params.donationId;
       this.checkDonation();
     });
+  }
+
+  ngOnInit() {
+    this.minPasswordLength = common.minPasswordLength;
   }
 
   /**

@@ -5,6 +5,7 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { common } from 'src/environments/common';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Person } from '../person.model';
@@ -26,6 +27,7 @@ import { Person } from '../person.model';
 })
 export class DonationCompleteSetPasswordDialogComponent implements OnInit {
   form: FormGroup;
+  minPasswordLength: number;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
@@ -43,6 +45,7 @@ export class DonationCompleteSetPasswordDialogComponent implements OnInit {
       ]],
       stayLoggedIn: [false],
     });
+    this.minPasswordLength = common.minPasswordLength;
   }
 
   set() {
