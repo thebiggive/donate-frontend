@@ -90,7 +90,6 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=3600"
-
   # Publishes `@biggive/components` *and* `@biggive/components-angular` (building both on the fly).
   publish:
     <<: *defaults
@@ -104,6 +103,7 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package-lock.json" }}
+      - run: ./scripts/create-version.sh
       - run: npm run build
       - run:
           name: Authenticate with registry
@@ -138,10 +138,10 @@ workflows:
     jobs:
       - publish:
           filters:
-            tags:
-              only: /^v.*/
             branches:
-              ignore: /.*/
+              only:
+                - main
+                - COM-14-auto-versioning
           context:
             - docker-hub-creds
             - jira
@@ -166,14 +166,12 @@ workflows:
             - jira/notify:
                 job_type: deployment
                 environment_type: staging
-      # *Tag* pushes to `main` (the same conditions for a new version `npm` publish)
-      # deploy a new Storybook Production build.
+      # Pushes to `main`deploy a new Storybook Production build.
       - deploy-production-storybook:
           filters:
-            tags:
-              only: /^v.*/
             branches:
-              ignore: /.*/
+              only:
+                - main
           context:
             - docker-hub-creds
             - ecs-deploys # Includes S3 stuff used by Donate frontend.
