@@ -60,19 +60,27 @@
       <br/>
       <p *ngIf="campaign?.thankYouMessage" id="charity-thank-you">{{ campaign.thankYouMessage }}</p>
 
-      <p *ngIf="donationIsLarge" id="big-give-thank-you">
-        <br />
-        We are so grateful for your support. As you have donated so generously, you might be interested in finding out
-        more about becoming a match-funder.
+    </div>
+
+    <div style="margin-top: 3rem;">
+    <biggive-page-section *ngIf="donationIsLarge" colourScheme="primary" >
+      <div style="text-align: center;" >
+        <p class="thank-you-large-donation-text">
+      We are so grateful for your support. As you have donated so generously, you might be interested in finding out
+          more about becoming a match-funder.
+      </p>
+
+      <p class="thank-you-large-donation-text">
+        Our match funding partners are our Champions and make everything we do possible.
       </p>
 
       <div *ngIf="donationIsLarge" id="join-community-cta" class="button-wrapper">
         <biggive-button
           space-below="0"
-          colour-scheme="primary"
+          colour-scheme="white"
           is-past-campaign="false"
           is-future-campaign="false"
-          label="Our match funding partners are our Champions and make everything we do possible. Find out more about joining our community."
+          label="Find out more"
           open-in-new-tab="true"
           full-width="false"
           size="large"
@@ -81,10 +89,10 @@
           url="https://blog.thebiggive.org.uk/funders/">
         </biggive-button>
       </div>
-
+      </div>
+    </biggive-page-section>
     </div>
-
-    <hr>
+  <hr>
 
     <div class="receipt">
       <p><strong>Your Receipt</strong></p>
