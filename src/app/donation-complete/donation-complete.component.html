@@ -63,8 +63,11 @@
     </div>
 
     <div style="margin-top: 3rem;">
-    <biggive-page-section *ngIf="donationIsLarge" colourScheme="primary" >
-      <div style="text-align: center;" >
+    </div>
+  </div>
+</main>
+<biggive-page-section *ngIf="donationIsLarge" colourScheme="primary">
+      <div style="text-align: center">
         <p class="thank-you-large-donation-text">
       We are so grateful for your support. As you have donated so generously, you might be interested in finding out
           more about becoming a match-funder.
@@ -91,8 +94,11 @@
       </div>
       </div>
     </biggive-page-section>
+<main>
+  <div>
+    <div>
     </div>
-  <hr>
+  <hr *ngIf="!donationIsLarge">
 
     <div class="receipt">
       <p><strong>Your Receipt</strong></p>
