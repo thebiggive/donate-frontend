@@ -9,6 +9,7 @@ set -x
 
 # Generate a version number such as v202301201056.0.0
 # Publishing will fail and have to be manually retried if this script is used twice in the same minute.
+# Making the major part of the version number change every minute means we technically comply with semver, but we never formally guarantee the absence of BC breaks.
 VERSION_NUMBER=`date +%Y%m%d%H%M.0.0`
 
 echo $VERSION_NUMBER
