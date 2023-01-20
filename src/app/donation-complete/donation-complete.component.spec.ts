@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -9,9 +9,11 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
-import { TBG_DONATE_STORAGE } from '../donation.service';
+import {DonationService, TBG_DONATE_STORAGE} from '../donation.service';
 import { DonationCompleteComponent } from './donation-complete.component';
-import { TBG_DONATE_ID_STORAGE } from '../identity.service';
+import {IdentityService, TBG_DONATE_ID_STORAGE} from '../identity.service';
+import {CampaignService} from "../campaign.service";
+import {PageMetaService} from "../page-meta.service";
 
 describe('DonationCompleteComponent', () => {
   let analyticsService: AnalyticsService;
@@ -62,4 +64,19 @@ describe('DonationCompleteComponent', () => {
     // and log that error to GA.
     expect(analyticsService.logError).toHaveBeenCalled();
   });
+
+  it('Considers donations of £5k or more large', () => {
+    const component = new DonationCompleteComponent(
+      TestBed.inject(AnalyticsService),
+      TestBed.inject(CampaignService),
+      TestBed.inject(MatDialog),
+      TestBed.inject(DonationService),
+      TestBed.inject(IdentityService),
+      TestBed.inject(PageMetaService),
+      TestBed.inject(ActivatedRoute)
+      );
+
+    expect(1).toBeGreaterThanOrEqual(5);
+  });
+
 });
