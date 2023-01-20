@@ -97,8 +97,8 @@
 <main>
   <div>
     <div>
-    </div>
   <hr *ngIf="!donationIsLarge">
+    </div>
 
     <div class="receipt">
       <p><strong>Your Receipt</strong></p>
@@ -131,9 +131,10 @@
           <td><strong>{{ cardChargedAmount | exactCurrency:donation.currencyCode }}</strong></td>
         </tr>
       </table>
-    </div>
 
-    <hr>
+      <hr style="width: 80%">
+
+    </div>
 
     <div class="socials">
       <p >Boost your impact by sharing on social media</p>
