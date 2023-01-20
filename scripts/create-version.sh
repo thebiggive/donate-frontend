@@ -16,3 +16,8 @@ echo $VERSION_NUMBER
 npm version --no-git-tag-version $VERSION_NUMBER
 cd angular/projects/components
 npm version --no-git-tag-version $VERSION_NUMBER
+
+echo "New version number is $VERSION_NUMBER. Packages will be published to:"
+echo
+echo "https://www.npmjs.com/package/@biggive/components-angular/v/$VERSION_NUMBER"
+echo "https://www.npmjs.com/package/@biggive/components/v/$VERSION_NUMBER"

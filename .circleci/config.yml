@@ -166,14 +166,12 @@ workflows:
             - jira/notify:
                 job_type: deployment
                 environment_type: staging
-      # *Tag* pushes to `main` (the same conditions for a new version `npm` publish)
-      # deploy a new Storybook Production build.
+      # Pushes to `main`deploy a new Storybook Production build.
       - deploy-production-storybook:
           filters:
-            tags:
-              only: /^v.*/
             branches:
-              ignore: /.*/
+              only:
+                - main
           context:
             - docker-hub-creds
             - ecs-deploys # Includes S3 stuff used by Donate frontend.
