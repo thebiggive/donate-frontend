@@ -93,12 +93,11 @@
         </biggive-button>
       </div>
       </div>
-    </biggive-page-section>
-<main>
+</biggive-page-section>
+<main class="c-donate-complete">
   <div>
     <div>
   <hr *ngIf="!donationIsLarge">
-    </div>
 
     <div class="receipt">
       <p><strong>Your Receipt</strong></p>
@@ -131,6 +130,8 @@
           <td><strong>{{ cardChargedAmount | exactCurrency:donation.currencyCode }}</strong></td>
         </tr>
       </table>
+
+    </div>
 
       <hr style="width: 80%">
 
