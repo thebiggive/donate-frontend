@@ -73,7 +73,7 @@
   </div>
 </main>
 <biggive-page-section *ngIf="donationIsLarge" colourScheme="primary">
-  <div style="text-align: center">
+  <div style="text-align: center; width: 80%; margin: auto">
     <p class="thank-you-large-donation-text">
       We are so grateful for your support. As you have donated so generously, you might be interested in finding out
       more about becoming a match-funder.
@@ -83,7 +83,7 @@
       Our match funding partners are our Champions and make everything we do possible.
     </p>
 
-    <div *ngIf="donationIsLarge" id="join-community-cta" class="button-wrapper">
+    <div id="join-community-cta" class="button-wrapper" style="float: right">
       <biggive-button
         space-below="0"
         colour-scheme="clear-white"
@@ -98,13 +98,14 @@
         url="https://blog.thebiggive.org.uk/funders/">
       </biggive-button>
     </div>
+    <div style="clear: both;"></div>
   </div>
 </biggive-page-section>
 <main class="c-donate-complete">
   <div>
     <div>
       <hr *ngIf="!donationIsLarge">
-
+      <div *ngIf="donationIsLarge" style="min-height: 40px;"></div>
       <div class="receipt">
         <p><strong>Your Receipt</strong></p>
         <p>{{donation.createdTime | date: 'medium'}}</p>
