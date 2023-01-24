@@ -36,6 +36,7 @@
             size="medium"
             rounded="false"
             centered="false"
+            button-id="save-details-button"
             (click)="openSetPasswordDialog()">
           </biggive-button>
         </div>
@@ -69,7 +70,7 @@
       <br>
 
       <table>
-        <tr>
+        <tr class="donationAmount">
           <td>Your donation</td>
           <td>{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</td>
         </tr>
