@@ -7,17 +7,18 @@
 
 ## Properties
 
-| Property       | Attribute         | Description           | Type      | Default      |
-| -------------- | ----------------- | --------------------- | --------- | ------------ |
-| `centered`     | `centered`        | Centered              | `boolean` | `false`      |
-| `colourScheme` | `colour-scheme`   | Colour Scheme         | `string`  | `'primary'`  |
-| `fullWidth`    | `full-width`      | Display full width    | `boolean` | `false`      |
-| `label`        | `label`           | Text                  | `string`  | `'Click me'` |
-| `openInNewTab` | `open-in-new-tab` | New Tab               | `boolean` | `false`      |
-| `rounded`      | `rounded`         | Rounded corners       | `boolean` | `false`      |
-| `size`         | `size`            | Size                  | `string`  | `'medium'`   |
-| `spaceBelow`   | `space-below`     | Space below component | `number`  | `1`          |
-| `url`          | `url`             | URL                   | `string`  | `undefined`  |
+| Property       | Attribute         | Description           | Type                  | Default      |
+| -------------- | ----------------- | --------------------- | --------------------- | ------------ |
+| `buttonId`     | `button-id`       |                       | `string \| undefined` | `undefined`  |
+| `centered`     | `centered`        | Centered              | `boolean`             | `false`      |
+| `colourScheme` | `colour-scheme`   | Colour Scheme         | `string`              | `'primary'`  |
+| `fullWidth`    | `full-width`      | Display full width    | `boolean`             | `false`      |
+| `label`        | `label`           | Text                  | `string`              | `'Click me'` |
+| `openInNewTab` | `open-in-new-tab` | New Tab               | `boolean`             | `false`      |
+| `rounded`      | `rounded`         | Rounded corners       | `boolean`             | `false`      |
+| `size`         | `size`            | Size                  | `string`              | `'medium'`   |
+| `spaceBelow`   | `space-below`     | Space below component | `number`              | `1`          |
+| `url`          | `url`             | URL                   | `string`              | `undefined`  |
 
 
 ## Events
