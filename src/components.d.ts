@@ -214,6 +214,7 @@ export namespace Components {
         "spaceBelow": number;
     }
     interface BiggiveButton {
+        "buttonId": undefined | string;
         /**
           * Centered
          */
@@ -1647,6 +1648,7 @@ declare namespace LocalJSX {
         "spaceBelow"?: number;
     }
     interface BiggiveButton {
+        "buttonId"?: undefined | string;
         /**
           * Centered
          */
