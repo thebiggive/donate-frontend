@@ -59,6 +59,8 @@ export class BiggiveButton {
    */
   @Prop() centered: boolean = false;
 
+  @Prop() buttonId: undefined | string = undefined;
+
   private handleButtonClick = (event: any) => {
     this.doButtonClick.emit({ event: event, url: event.target.parentElement.href });
   };
@@ -69,6 +71,7 @@ export class BiggiveButton {
         <a
           href={this.url}
           target={this.openInNewTab ? '_blank' : '_self'}
+          id={this.buttonId}
           class={'button button-' + this.colourScheme + ' full-width-' + this.fullWidth.toString() + ' size-' + this.size + ' rounded-' + this.rounded.toString()}
         >
           <span onClick={this.handleButtonClick}>{this.label}</span>
