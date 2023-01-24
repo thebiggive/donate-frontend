@@ -25,12 +25,13 @@
 
       <div id="save-my-details-cta" *ngIf="!registrationComplete" >
         <div class="button-wrapper">
+          <!-- Spaces for expanding button are a bit of an ugly hack, but maybe worthwhile as lonng as we have no other buttons that need expanding-->
           <biggive-button
             space-below="0"
             colour-scheme="white"
             is-past-campaign="false"
             is-future-campaign="false"
-            label="Save my details"
+            label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Save my details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
             open-in-new-tab="false"
             full-width="false"
             size="medium"
