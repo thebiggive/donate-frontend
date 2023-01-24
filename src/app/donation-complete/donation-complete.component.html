@@ -58,7 +58,6 @@
       <p><strong>Hi {{ donation.firstName }},<br/>Your donation summary</strong></p>
       <p>Your donation of <strong class="figure">{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</strong> has been made. That's worth <strong class="figure">{{ totalValue | exactCurrency:donation.currencyCode }}</strong> to {{ donation.charityName }}!</p>
 
-      <br/>
       <p *ngIf="campaign?.thankYouMessage">{{ campaign.thankYouMessage }}</p>
     </div>
 
