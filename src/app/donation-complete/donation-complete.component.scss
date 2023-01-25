@@ -30,13 +30,14 @@ hr {
 
 .thank-you {
   background-color: $colour-primary;
-  padding: 20px 0;
+  padding: 75px 0;
   position: relative;
   top: -125px;
   width: 80%;
   margin: auto auto -125px auto;
 
   h2 {
+    margin-top: 0;
     color: $colour-secondary;
     text-align: center;
 
@@ -80,6 +81,7 @@ hr {
   }
 
   #save-my-details-cta {
+    padding-bottom: 0;
     display: grid;
 
     @media #{$breakpoint-sm} {
@@ -100,6 +102,7 @@ hr {
     }
     p {
       padding: 0 20px;
+      margin-bottom: 0;
       @media #{$breakpoint-sm} {
         font-size: 1rem;
       }
@@ -119,10 +122,10 @@ hr {
 .donation-summary {
   text-align: center;
   width: 80%;
-  margin: auto;
+  margin: 8rem auto;
 
   p {
-    margin: 1rem 0;
+    margin: 2rem 0;
     @media #{$breakpoint-sm} {
       font-size: 1rem;
     }

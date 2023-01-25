@@ -31,7 +31,7 @@
             colour-scheme="white"
             is-past-campaign="false"
             is-future-campaign="false"
-            label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Save my details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+            label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Save my details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
             open-in-new-tab="false"
             full-width="false"
             size="medium"
@@ -56,7 +56,8 @@
     <hr>
 
     <div class="donation-summary">
-      <p><strong>Hi {{ donation.firstName }},<br/>Your donation summary</strong></p>
+      <p><strong>Hi {{ donation.firstName }}</strong></p>
+      <p><strong>Your donation summary</strong></p>
       <p>Your donation of <strong class="figure">{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</strong> has been made. That's worth <strong class="figure">{{ totalValue | exactCurrency:donation.currencyCode }}</strong> to {{ donation.charityName }}!</p>
 
       <p *ngIf="campaign?.thankYouMessage">{{ campaign.thankYouMessage }}</p>
@@ -85,6 +86,9 @@
         <tr *ngIf="donation.tipAmount > 0">
           <td>Tip Amount</td>
           <td>{{ donation.tipAmount | exactCurrency:donation.currencyCode }}</td>
+        </tr>
+        <tr>
+          <td colspan="2"><hr></td>
         </tr>
         <tr class="receives">
           <td>Charity Receives</td>
