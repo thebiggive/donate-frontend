@@ -122,10 +122,10 @@ hr {
 .donation-summary {
   text-align: center;
   width: 80%;
-  margin: auto;
+  margin: 8rem auto;
 
   p {
-    margin: 1rem 0;
+    margin: 2rem 0;
     @media #{$breakpoint-sm} {
       font-size: 1rem;
     }
