@@ -86,6 +86,9 @@
           <td>Tip Amount</td>
           <td>{{ donation.tipAmount | exactCurrency:donation.currencyCode }}</td>
         </tr>
+        <tr>
+          <td colspan="2"><hr></td>
+        </tr>
         <tr class="receives">
           <td>Charity Receives</td>
           <td>{{ totalValue | exactCurrency:donation.currencyCode }}</td>
