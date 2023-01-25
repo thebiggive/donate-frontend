@@ -25,17 +25,19 @@ hr {
   @media #{$breakpoint-lg} {
     margin: 60px auto;
   }
+  color: #868686;
 }
 
 .thank-you {
   background-color: $colour-primary;
-  padding: 20px 0;
+  padding: 75px 0;
   position: relative;
   top: -125px;
   width: 80%;
   margin: auto auto -125px auto;
 
   h2 {
+    margin-top: 0;
     color: $colour-secondary;
     text-align: center;
 
@@ -79,6 +81,7 @@ hr {
   }
 
   #save-my-details-cta {
+    padding-bottom: 0;
     display: grid;
 
     @media #{$breakpoint-sm} {
@@ -99,17 +102,18 @@ hr {
     }
     p {
       padding: 0 20px;
+      margin-bottom: 0;
       @media #{$breakpoint-sm} {
         font-size: 1rem;
       }
       @media #{$breakpoint-md} {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
       }
       @media #{$breakpoint-lg} {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
       }
       @media #{$breakpoint-xl} {
-        font-size: 2rem;
+        font-size: 1.5rem;
       }
     }
   }
@@ -135,10 +139,10 @@ hr {
 .donation-summary {
   text-align: center;
   width: 80%;
-  margin: auto;
+  margin: 8rem auto;
 
   p {
-    margin: 0;
+    margin: 2rem 0;
     @media #{$breakpoint-sm} {
       font-size: 1rem;
     }
@@ -210,7 +214,10 @@ hr {
   .social-icons-wrapper {
     display: flex;
     justify-content: center;
-    margin: 20px 0;
+    margin-top: 20px;
+    margin-right: 0;
+    margin-left: 0;
+    margin-bottom: 40px;
   }
 
   a {
