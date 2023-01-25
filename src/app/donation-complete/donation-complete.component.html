@@ -67,8 +67,6 @@
       <p *ngIf="campaign?.thankYouMessage" id="charity-thank-you">{{ campaign.thankYouMessage }}</p>
     </div>
 
-  </div>
-</main>
 <biggive-page-section *ngIf="donationIsLarge" colourScheme="primary">
   <div style="text-align: center; width: 80%; margin: auto">
     <p class="thank-you-large-donation-text">
@@ -83,6 +81,7 @@
     <div id="join-community-cta" class="button-wrapper" style="float: right">
       <biggive-button
         space-below="0"
+        primary-full-bleed="true"
         colour-scheme="clear-white"
         is-past-campaign="false"
         is-future-campaign="false"
@@ -98,8 +97,6 @@
     <div style="clear: both;"></div>
   </div>
 </biggive-page-section>
-<main class="c-donate-complete">
-  <div>
     <div>
       <hr *ngIf="!donationIsLarge">
       <div *ngIf="donationIsLarge" style="min-height: 40px;"></div>
