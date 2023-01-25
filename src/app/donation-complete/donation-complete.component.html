@@ -25,17 +25,19 @@
 
       <div id="save-my-details-cta" *ngIf="!registrationComplete" >
         <div class="button-wrapper">
+          <!-- Spaces for expanding button are a bit of an ugly hack, but maybe worthwhile as lonng as we have no other buttons that need expanding-->
           <biggive-button
             space-below="0"
             colour-scheme="white"
             is-past-campaign="false"
             is-future-campaign="false"
-            label="Save my details"
+            label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Save my details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
             open-in-new-tab="false"
             full-width="false"
             size="medium"
             rounded="false"
             centered="false"
+            button-id="save-details-button"
             (click)="openSetPasswordDialog()">
           </biggive-button>
         </div>
@@ -57,7 +59,6 @@
       <p><strong>Hi {{ donation.firstName }},<br/>Your donation summary</strong></p>
       <p>Your donation of <strong class="figure">{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</strong> has been made. That's worth <strong class="figure">{{ totalValue | exactCurrency:donation.currencyCode }}</strong> to {{ donation.charityName }}!</p>
 
-      <br/>
       <p *ngIf="campaign?.thankYouMessage">{{ campaign.thankYouMessage }}</p>
     </div>
 
@@ -69,7 +70,7 @@
       <br>
 
       <table>
-        <tr>
+        <tr class="donationAmount">
           <td>Your donation</td>
           <td>{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</td>
         </tr>
@@ -102,8 +103,11 @@
       <p >Boost your impact by sharing on social media</p>
       <div class="social-icons-wrapper">
         <biggive-social-icon service="Facebook" url="https://www.facebook.com/sharer/sharer.php?u={{ shareUrl }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
+        <span style="width: 10px"></span>
         <biggive-social-icon service="Twitter" url="https://twitter.com/share?url={{ shareUrl }}&text={{ encodedPrefilledText }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
+        <span style="width: 10px"></span>
         <biggive-social-icon service="LinkedIn" url="https://www.linkedin.com/cws/share?url={{ shareUrl }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
+        <span style="width: 10px"></span>
         <biggive-social-icon service="Whatsapp" url="https://api.whatsapp.com/send?text={{ encodedPrefilledText }}%0A%0A{{ shareUrl }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
       </div>
 
