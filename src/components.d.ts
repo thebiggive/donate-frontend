@@ -877,6 +877,10 @@ export namespace Components {
          */
         "maxWidth": number;
         /**
+          * Bleeds the primary brand colour to the left and right edge of the viewport, even if used within a containing block element.
+         */
+        "primaryFullBleed": boolean;
+        /**
           * Section style bottom
          */
         "sectionStyleBottom": string;
@@ -2328,6 +2332,10 @@ declare namespace LocalJSX {
           * Width
          */
         "maxWidth"?: number;
+        /**
+          * Bleeds the primary brand colour to the left and right edge of the viewport, even if used within a containing block element.
+         */
+        "primaryFullBleed"?: boolean;
         /**
           * Section style bottom
          */
