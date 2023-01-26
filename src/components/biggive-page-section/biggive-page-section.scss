@@ -15,6 +15,12 @@
   }
 }
 
+.container.full-bleed {
+  // from https://stackoverflow.com/questions/22083157/extend-background-color-of-header-beyond-container-with-css
+  box-shadow: 0 0 0 100vmax $colour-primary;
+  clip-path: inset(0 -100vmax);
+}
+
 .container.style-top-crop-right:before {
   content: '';
   display: block;

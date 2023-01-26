@@ -31,6 +31,11 @@ export class BiggivePageSection {
    */
   @Prop() maxWidth: number = 100;
 
+  /**
+   * Bleeds the primary brand colour to the left and right edge of the viewport, even if used within a containing block element.
+   */
+  @Prop() primaryFullBleed: boolean = false;
+
   render() {
     return (
       <div
@@ -44,7 +49,8 @@ export class BiggivePageSection {
           ' style-top-' +
           this.sectionStyleTop +
           ' style-bottom-' +
-          this.sectionStyleBottom
+          this.sectionStyleBottom +
+          (this.primaryFullBleed ? ' full-bleed' : '')
         }
       >
         <div class="sleeve">
