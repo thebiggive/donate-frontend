@@ -544,8 +544,8 @@
   background-color: $colour-white;
   border-color: $colour-white;
   &:hover {
-    color: $colour-white;
-    background-color: $colour-primary;
+    color: $colour-black;
+    background-color: $colour-brand-3;
   }
 }
 
@@ -798,7 +798,7 @@
   position: relative;
   padding-bottom: 56.25%;
 
-  iframe, video { 
+  iframe, video {
     position: absolute;
     border: 0;
     display: block;
