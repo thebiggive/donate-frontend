@@ -149,11 +149,17 @@ renders in the deployed environment, where these work due to:
 npm add_user
 ```
 
-### Publish
+### Versions and publishing
 
-Continuous Integration will automatically publish `main` to npm when you push a `v*` tag.
+Continuous Integration will now create a new version, build and publish it to npm
+on *every* commit to `main`. Version numbers are generated such that every release
+is a new "major" release, so dependent packages must use version `"*"` to automatically
+receive new versions on `npm update`.
 
-Versioning is manual currently. To prepare a release for publishing:
+#### Manual updates
+
+It is no longer expected to manually update versions, but if the automatic process
+is ever broken, the steps used before Jan '23 were:
 
 * Update the root `package.json`'s `version` field.
 * `npm install` to update `package-lock.json` to match.
@@ -161,7 +167,7 @@ Versioning is manual currently. To prepare a release for publishing:
 * `git tag v0.0.1` (replace with your new version)
 * `git push --tags`
 
-You can also do it manually if necessary:
+You can also do the npm publish manually if necessary:
 
 ```bash
 npm publish --access=public
