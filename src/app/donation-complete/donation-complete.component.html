@@ -93,12 +93,12 @@
         url="https://blog.thebiggive.org.uk/funders/">
       </biggive-button>
     </div>
-    <div style="clear: both;"></div>
+    <div class="clearfix"></div>
   </div>
 </biggive-page-section>
     <div>
       <hr *ngIf="!donationIsLarge">
-      <div *ngIf="donationIsLarge" style="min-height: 40px;"></div>
+      <div class="large-donation-spacer" *ngIf="donationIsLarge"></div>
       <div class="receipt">
         <p><strong>Your Receipt</strong></p>
         <p>{{donation.createdTime | date: 'medium'}}</p>
@@ -136,18 +136,18 @@
 
       </div>
 
-      <hr style="width: 80%">
+      <hr class="shorter">
 
     </div>
 
     <div class="socials">
       <p>Boost your impact by sharing on social media</p>
       <div class="social-icons-wrapper">
-        <span style="width: 30px"></span>
+        <span class="separator"></span>
         <biggive-social-icon service="Facebook" url="https://www.facebook.com/sharer/sharer.php?u={{ shareUrl }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
-        <span style="width: 30px"></span>
+        <span class="separator"></span>
         <biggive-social-icon service="Twitter" url="https://twitter.com/share?url={{ shareUrl }}&text={{ encodedPrefilledText }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
-        <span style="width: 30px"></span>
+        <span class="separator"></span>
         <biggive-social-icon service="LinkedIn" url="https://www.linkedin.com/cws/share?url={{ shareUrl }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
       </div>
 

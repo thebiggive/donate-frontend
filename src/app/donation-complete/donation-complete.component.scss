@@ -163,6 +163,18 @@ hr {
   }
 }
 
+hr.shorter {
+  width: 80%;
+}
+
+div.large-donation-spacer {
+  min-height: 40px;
+}
+
+div.clearfix {
+  clear: both;
+}
+
 .receipt {
   width: 60%;
   margin: auto;
@@ -218,6 +230,10 @@ hr {
     margin-right: 0;
     margin-left: 0;
     margin-bottom: 40px;
+
+    span.separator {
+      width: 30px
+    }
   }
 
   a {
