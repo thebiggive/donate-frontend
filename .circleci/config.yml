@@ -141,7 +141,6 @@ workflows:
             branches:
               only:
                 - main
-                - COM-14-auto-versioning
           context:
             - docker-hub-creds
             - jira
