@@ -151,7 +151,7 @@ npm add_user
 
 ### Versions and publishing
 
-Continuous Integration will now create a new version, build and publish it to npm
+CircleCI will now create a new version, build and publish it to npm
 on *every* commit to `main`. Version numbers are generated such that every release
 is a new "major" release, so dependent packages must use version `"*"` to automatically
 receive new versions on `npm update`.
