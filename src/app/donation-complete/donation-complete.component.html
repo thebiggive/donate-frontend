@@ -59,7 +59,7 @@
       <p><strong>Your donation summary</strong></p>
       <p>Your donation of <strong class="figure">{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</strong> has been made. That's worth <strong class="figure">{{ totalValue | exactCurrency:donation.currencyCode }}</strong> to {{ donation.charityName }}!</p>
 
-      <p *ngIf="campaign?.thankYouMessage">{{ campaign.thankYouMessage }}</p>
+      <p *ngIf="campaign?.thankYouMessage">{{ campaign?.thankYouMessage }}</p>
     </div>
 
     <hr>
@@ -113,7 +113,7 @@
         <biggive-social-icon service="LinkedIn" url="https://www.linkedin.com/cws/share?url={{ shareUrl }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
       </div>
 
-      <a [routerLink]="'/campaign/' + campaign.id">Back to campaign page</a>
+      <a [routerLink]="'/campaign/' + campaign?.id">Back to campaign page</a>
     </div>
   </div>
 </main>

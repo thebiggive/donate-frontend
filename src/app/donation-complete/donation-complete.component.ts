@@ -25,7 +25,7 @@ import { minPasswordLength } from 'src/environments/common';
 export class DonationCompleteComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
 
-  campaign: Campaign;
+  campaign?: Campaign;
   cardChargedAmount: number;
   complete = false;
   donation: Donation;
