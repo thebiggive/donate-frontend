@@ -702,7 +702,7 @@ export namespace Components {
         /**
           * Main title colour
          */
-        "mainTitleColour": string;
+        "mainTitleColour"?: string;
         /**
           * Header slug
          */
@@ -722,7 +722,7 @@ export namespace Components {
         /**
           * Teaser colour
          */
-        "teaserColour": string;
+        "teaserColour"?: string;
     }
     interface BiggiveIconGroup {
         /**

@@ -59,7 +59,7 @@ export class BiggiveHeroImage {
   /**
    * Main title colour
    */
-   @Prop() mainTitleColour: string;
+   @Prop() mainTitleColour?: string;
   /**
    * Introductory teaser text
    */
@@ -67,7 +67,7 @@ export class BiggiveHeroImage {
   /**
    * Teaser colour
    */
-   @Prop() teaserColour: string;
+   @Prop() teaserColour?: string;
   /**
    * Button Url
    */
@@ -85,6 +85,9 @@ export class BiggiveHeroImage {
 
 
   render() {
+    const mainTitleClasses = 'main-title ' + (typeof this.mainTitleColour === 'string' && this.mainTitleColour.length > 0 ? `text-colour-${this.mainTitleColour}` : '');
+    const teaserClasses = 'teaser ' + (typeof this.teaserColour === 'string' && this.teaserColour.length > 0 ? `text-colour-${this.teaserColour}` : '');
+
     return (
       <div class={'container colour-scheme-' + this.colourScheme + ' space-below-' + this.spaceBelow}>
         <div class="sleeve">
@@ -95,8 +98,8 @@ export class BiggiveHeroImage {
               </div>
             ) : <div class="logo-space"></div>}
             <div class={'slug text-colour-'+this.slugColour}>{this.slug}</div>
-            <h1 class={'main-title text-colour-'+this.mainTitleColour}>{this.mainTitle}</h1>
-            <div class={'teaser text-colour-'+this.teaserColour}>{this.teaser}</div>
+            <h1 class={mainTitleClasses}>{this.mainTitle}</h1>
+            <div class={teaserClasses}>{this.teaser}</div>
             {this.buttonLabel != null && this.buttonUrl != null
               ? <biggive-button colour-scheme={this.buttonColourScheme} url={this.buttonUrl} label={this.buttonLabel}></biggive-button>
               : null

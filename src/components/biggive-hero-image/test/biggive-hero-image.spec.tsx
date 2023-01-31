@@ -30,10 +30,10 @@ describe('biggive-hero-image', () => {
                <div class="slug text-colour-undefined">
                  My Slug
                </div>
-               <h1 class="main-title text-colour-undefined">
+               <h1 class="main-title">
                  This is my title
                </h1>
-               <div class="teaser text-colour-undefined">
+               <div class="teaser">
                  this is the intro text which I want to add
                </div>
              </div>
