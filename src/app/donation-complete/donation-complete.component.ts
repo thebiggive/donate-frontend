@@ -25,7 +25,7 @@ import { minPasswordLength } from 'src/environments/common';
 export class DonationCompleteComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
 
-  campaign: Campaign;
+  campaign?: Campaign;
   cardChargedAmount: number;
   complete = false;
   donation: Donation;
@@ -208,7 +208,7 @@ export class DonationCompleteComponent implements OnInit {
       this.setSocialShares(campaign);
     });
 
-    if (donation /*&& this.donationService.isComplete(donation)*/) {
+    if (donation && this.donationService.isComplete(donation)) {
       this.analyticsService.logEvent('thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
 
       this.cardChargedAmount = donation.donationAmount + donation.feeCoverAmount + donation.tipAmount;
@@ -229,7 +229,7 @@ export class DonationCompleteComponent implements OnInit {
       return;
     }
 
-    // this.analyticsService.logError('thank_you_timed_out_pre_complete', `Donation to campaign ${donation.projectId}`);
+    this.analyticsService.logError('thank_you_timed_out_pre_complete', `Donation to campaign ${donation.projectId}`);
     this.timedOut = true;
   }
 
