@@ -79,7 +79,8 @@ describe('DonationCompleteComponent', () => {
       paymentMethodType: 'card',
       projectId: "",
       psp: "stripe",
-      tipAmount: 0
+      tipAmount: 0,
+      status: "Paid"
     };
   }
 
