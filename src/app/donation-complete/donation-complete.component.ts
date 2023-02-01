@@ -37,6 +37,7 @@ export class DonationCompleteComponent implements OnInit {
   encodedPrefilledText: string;
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   registerError?: string;
+  duplicateEmailAddressWithPassword: boolean = false;
   registrationComplete = false;
   shareUrl: string;
   timedOut = false;
@@ -158,6 +159,10 @@ export class DonationCompleteComponent implements OnInit {
           }
         },
         (error: HttpErrorResponse) => {
+          if (error.error?.error?.type === "DUPLICATE_EMAIL_ADDRESS_WITH_PASSWORD") {
+            this.duplicateEmailAddressWithPassword = true;
+          }
+
           this.registerError = error.message;
           this.analyticsService.logError('person_password_set_failed', `${error.status}: ${error.message}`, 'identity_error');
         },

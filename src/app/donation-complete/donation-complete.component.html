@@ -47,7 +47,12 @@
         <strong>You are now registered<span *ngIf="loggedIn"> and logged in</span>.</strong> You can now donate faster using your chosen email address and password.
       </p>
 
-      <p *ngIf="registerError" class="error" aria-live="assertive">
+      <p *ngIf="duplicateEmailAddressWithPassword" class="error" aria-live="assertive">
+        Your password could not be set. There is already a password set for your email address.
+      </p>
+
+      <p *ngIf="registerError && ! duplicateEmailAddressWithPassword" class="error" aria-live="assertive">
+          <!-- We assume the error must be a password error. Ideally identity service would tell us explicitly.-->
         Your password could not be set. Please ensure you chose one with at least {{ this.minPasswordLength }} characters.
       </p>
     </div>
