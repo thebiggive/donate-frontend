@@ -6,5 +6,4 @@ export const allChildComponentImports = [
   CommonModule,
   ComponentsModule,
   RouterLink,
-  RouterLink,
 ]

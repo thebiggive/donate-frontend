@@ -25,7 +25,6 @@
 
       <div id="save-my-details-cta" *ngIf="!registrationComplete">
         <div class="button-wrapper">
-          <!-- Spaces for expanding button are a bit of an ugly hack, but maybe worthwhile as lonng as we have no other buttons that need expanding-->
           <biggive-button
             space-below="0"
             colour-scheme="white"
@@ -33,7 +32,7 @@
             is-future-campaign="false"
             label="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Save my details&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
             open-in-new-tab="false"
-            full-width="false"
+            full-width="true"
             size="medium"
             rounded="false"
             centered="false"
@@ -64,7 +63,7 @@
 
 
       <br/>
-      <p *ngIf="campaign?.thankYouMessage" id="charity-thank-you">{{ campaign.thankYouMessage }}</p>
+      <p *ngIf="campaign?.thankYouMessage" id="charity-thank-you">>{{ campaign?.thankYouMessage }}</p>
     </div>
 
 <biggive-page-section *ngIf="donationIsLarge" colourScheme="primary" primaryFullBleed="true">
@@ -151,7 +150,7 @@
         <biggive-social-icon service="LinkedIn" url="https://www.linkedin.com/cws/share?url={{ shareUrl }}" background-colour="tertiary" icon-colour="black" wide="true"></biggive-social-icon>
       </div>
 
-      <a [routerLink]="'/campaign/' + campaign.id">Back to campaign page</a>
+      <a [routerLink]="'/campaign/' + campaign?.id">Back to campaign page</a>
     </div>
   </div>
 </main>
