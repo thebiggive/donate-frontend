@@ -16,7 +16,7 @@ describe('biggive-main-menu', () => {
             </div>
             <div class="nav-secondary"></div>
           </div>
-          <nav role="navigation">
+          <nav role="navigation" title="Main Menu">
             <div class="navbar">
               <div class="logo">
                 <a href="/" aria-label="Home">
