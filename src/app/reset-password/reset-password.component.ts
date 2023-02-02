@@ -9,6 +9,7 @@ import { getPasswordValidator } from '../validators/validate-passwords-same';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IdentityService } from '../identity.service';
+import { minPasswordLength } from 'src/environments/common';
 
 @Component({
   standalone: true,
@@ -28,6 +29,7 @@ import { IdentityService } from '../identity.service';
 })
 export class ResetPasswordComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
+  minPasswordLength: number;
   passwordForm: FormGroup;
   savingNewPassword: boolean = false;
   saveSuccessful: boolean|undefined = undefined;
@@ -69,6 +71,8 @@ export class ResetPasswordComponent implements OnInit {
         }
       }
     );
+
+    this.minPasswordLength = minPasswordLength;
   }
 
   get confirmPasswordField() {

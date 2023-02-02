@@ -16,7 +16,7 @@
       </div>
 
       <div *ngIf="canLogin" class="id-info">
-        <h4>You can donate faster if you've already made an account with us this year.</h4>
+        <p><strong>You can donate faster if you've already made an account with us since November 2022.</strong></p>
         <p><button mat-raised-button (click)="login()">Log in</button></p>
       </div>
 
@@ -171,7 +171,7 @@
                 <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
                   Find out more about Gift Aid</a>.
             </p>
-            <mat-radio-group tabindex="0" aria-labelledby="giftAid-label" formControlName="giftAid">
+            <mat-radio-group tabindex="0" formControlName="giftAid">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I want to Gift Aid my donation to {{ campaign.charity.name }} and any additional gift I make to the Big Give, including any donations made in the past 4 years or in the future</mat-radio-button>
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed</mat-radio-button>
 

@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { RecaptchaComponent } from 'ng-recaptcha';
@@ -15,24 +15,26 @@ import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
+import { minPasswordLength } from 'src/environments/common';
 
 @Component({
   selector: 'app-donation-complete',
   templateUrl: './donation-complete.component.html',
   styleUrls: ['./donation-complete.component.scss'],
 })
-export class DonationCompleteComponent {
+export class DonationCompleteComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
 
-  campaign: Campaign;
+  campaign?: Campaign;
   cardChargedAmount: number;
   complete = false;
   donation: Donation;
   giftAidAmount: number;
   loggedIn = false;
+  minPasswordLength: number;
   noAccess = false;
   offerToSetPassword = false;
-  prefilledText: string;
+  encodedPrefilledText: string;
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   registerError?: string;
   registrationComplete = false;
@@ -60,6 +62,10 @@ export class DonationCompleteComponent {
       this.donationId = params.donationId;
       this.checkDonation();
     });
+  }
+
+  ngOnInit() {
+    this.minPasswordLength = minPasswordLength;
   }
 
   /**
@@ -248,6 +254,6 @@ export class DonationCompleteComponent {
       ? environment.donateUriPrefix
       : environment.donateGlobalUriPrefix;
     this.shareUrl = `${prefix}/campaign/${campaign.id}`;
-    this.prefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
+    this.encodedPrefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
   }
 }
