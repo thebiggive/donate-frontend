@@ -31,7 +31,7 @@
     text-align: center;
     font-weight: bold;
     span {
-      background-color: $colour-secondary;
+      background-color: $colour-secondary-green;
       color: $colour-black;
       padding: $spacer-1 $spacer-3;
       display: inline-block;
@@ -56,7 +56,7 @@
   }
   .organisation-name {
     margin-bottom: $spacer-4;
-    color: $colour-primary;
+    color: $colour-primary-blue;
   }
   .meta-wrap {
     @include flex-container-row();
@@ -75,7 +75,7 @@
       &:last-child {
         text-align: right;
         .text {
-          color: $colour-primary;
+          color: $colour-primary-blue;
         }
       }
     }

@@ -8,9 +8,9 @@
 
 .container {
   @include standard-font();
-  .heading-colour-primary { color: $colour-primary; }
-  .heading-colour-secondary { color: $colour-secondary; }
-  .heading-colour-tertiary { color: $colour-tertiary; }
+  .heading-colour-primary { color: $colour-primary-blue; }
+  .heading-colour-secondary { color: $colour-secondary-green; }
+  .heading-colour-tertiary { color: $colour-tertiary-coral; }
   .heading-colour-white { color: $colour-white; }
   .heading-colour-black { color: $colour-black; }
 }

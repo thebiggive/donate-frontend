@@ -12,9 +12,9 @@
       width: 0;
       height: 0;
       position: absolute;
-      border-right: 50px solid  transparent; 
+      border-right: 50px solid  transparent;
       border-left: 50px solid  transparent;
-      border-bottom: 86.60254px solid $colour-secondary;
+      border-bottom: 86.60254px solid $colour-secondary-green;
     }
 
     .triangle-before {
@@ -35,7 +35,7 @@
       @include standard-font();
       padding: 1.5rem;
       box-sizing: border-box;
-    
+
       h2 {
         width: 100%;
         font-weight: 500;
@@ -43,29 +43,29 @@
         margin-bottom: 0px;
         font-size: 1.2rem;
       }
-    
+
       .search-box {
         display: flex;
         padding: 10px 10px 5px 10px;
         margin-top: 1rem;
         margin-bottom: 1.25rem;
         border-bottom: 1px solid black;
-    
+
         .icon {
           @include icon();
           margin: auto;
 
           > path {
-            fill: $colour-primary;
+            fill: $colour-primary-blue;
           }
         }
-    
+
         #x-icon {
           &:hover {
             cursor: pointer;
           }
         }
-      
+
         input {
           @include standard-font();
           width: 100%;
@@ -73,28 +73,28 @@
           border: none;
           border-radius: 3px;
           font-size: 1.1rem;
-      
+
           &::placeholder {
             color: rgb(150, 150, 150);
           }
-      
+
           &:focus {
             outline: none;
           }
         }
       }
-    
+
       button {
         @include standard-font();
         width: 100%;
         padding: 0.75rem;
         box-sizing: border-box;
-        background-color: $colour-primary;
+        background-color: $colour-primary-blue;
         color: white;
         border: none;
         border-radius: 5px;
         font-size: 1rem;
-    
+
         &:hover {
           cursor: pointer;
           background-color: navy;

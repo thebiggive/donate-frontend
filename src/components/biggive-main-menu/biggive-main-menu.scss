@@ -54,7 +54,7 @@ a {
 
 .row-top {
   padding: $spacer-2 $spacer-4;
-  background-color: $colour-primary;
+  background-color: $colour-primary-blue;
   display: flex;
 
   .social-icon-wrap {
@@ -337,7 +337,7 @@ nav {
             #mobileLogo {
               width: 130px;
             }
-  
+
           }
 
           #x {
@@ -361,7 +361,7 @@ nav {
           li {
             display: block;
             border-bottom: 1px solid #e6e6e6;
-			
+
             a {
               width: 100%;
               display: block;
