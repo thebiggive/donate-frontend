@@ -60,7 +60,8 @@ hr {
     text-align: center;
 
     &.error {
-      color: $colour-secondary;
+      color: $colour-black;
+      background: $colour-secondary;
     }
   }
 
