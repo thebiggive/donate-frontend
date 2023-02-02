@@ -8,6 +8,7 @@ import { allChildComponentImports } from '../../allChildComponentImports';
 import { DonationCompleteComponent } from './donation-complete.component';
 import {DonationCompleteRoutingModule} from './donation-complete-routing.module';
 import {ExactCurrencyPipe} from '../exact-currency.pipe';
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import {ExactCurrencyPipe} from '../exact-currency.pipe';
     MatDialogModule,
     MatProgressSpinnerModule,
     RecaptchaModule,
+    FontAwesomeModule,
   ],
   declarations: [DonationCompleteComponent],
 })
