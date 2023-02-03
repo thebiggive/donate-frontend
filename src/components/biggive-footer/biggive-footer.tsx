@@ -30,20 +30,20 @@ export class BiggiveFooter {
     return (
       <footer class="footer">
         <div class="row row-top">
-          <nav class="nav nav-primary">
-            <HeadingTag class="heading">
+          <nav class="nav nav-primary" aria-labelledby="footer-primary-heading">
+            <HeadingTag class="heading" id="footer-primary-heading">
               <slot name="nav-primary-title"></slot>
             </HeadingTag>
           </nav>
 
-          <nav class="nav nav-secondary">
-            <HeadingTag class="heading">
+          <nav class="nav nav-secondary" aria-labelledby="footer-secondary-heading-heading">
+            <HeadingTag class="heading" id="footer-secondary-heading">
               <slot name="nav-secondary-title"></slot>
             </HeadingTag>
           </nav>
 
-          <nav class="nav nav-tertiary">
-            <HeadingTag class="heading">
+          <nav class="nav nav-tertiary" aria-labelledby="footer-tertiary-heading">
+            <HeadingTag class="heading" id="footer-tertiary-heading">
               <slot name="nav-tertiary-title"></slot>
             </HeadingTag>
           </nav>
@@ -58,7 +58,7 @@ export class BiggiveFooter {
           <div class="postscript-wrap">
             <img class="fr-logo" src={getAssetPath('../assets/images/fundraising-regulator.png')} alt="Fundraising Regulator" />
 
-            <nav class="nav nav-postscript"></nav>
+            <nav class="nav nav-postscript" aria-label="Legal"></nav>
           </div>
 
           <div class="social-icon-wrap">

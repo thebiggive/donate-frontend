@@ -13,16 +13,16 @@ describe('biggive-footer', () => {
         <footer class="footer">
         <div class="row row-top">
 
-          <nav class="nav nav-primary">
-            <h5 class="heading"><slot name="nav-primary-title"></slot></h5>
+          <nav class="nav nav-primary" aria-labelledby="footer-primary-heading">
+            <h5 class="heading" id="footer-primary-heading"><slot name="nav-primary-title"></slot></h5>
           </nav>
 
-          <nav class="nav nav-secondary">
-            <h5 class="heading"><slot name="nav-secondary-title"></slot></h5>
+          <nav class="nav nav-secondary" aria-labelledby="footer-secondary-heading-heading">
+            <h5 class="heading" id="footer-secondary-heading"><slot name="nav-secondary-title"></slot></h5>
           </nav>
 
-          <nav class="nav nav-tertiary">
-            <h5 class="heading"><slot name="nav-tertiary-title"></slot></h5>
+          <nav class="nav nav-tertiary" aria-labelledby="footer-tertiary-heading">
+            <h5 class="heading" id="footer-tertiary-heading"><slot name="nav-tertiary-title"></slot></h5>
           </nav>
 
 
@@ -35,7 +35,7 @@ describe('biggive-footer', () => {
         <div class="row row-bottom">
           <div class="postscript-wrap">
             <img class="fr-logo" src="/assets/images/fundraising-regulator.png" alt="Fundraising Regulator">
-            <nav class="nav nav-postscript"></nav>
+            <nav class="nav nav-postscript" aria-label="Legal"></nav>
           </div>
           <div class="social-icon-wrap">
             <slot name="social-icons"></slot>
