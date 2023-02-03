@@ -16,6 +16,7 @@ import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
 import { minPasswordLength } from 'src/environments/common';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-donation-complete',
@@ -37,6 +38,7 @@ export class DonationCompleteComponent implements OnInit {
   encodedPrefilledText: string;
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   registerError?: string;
+  duplicateEmailAddressWithPassword: boolean = false;
   registrationComplete = false;
   shareUrl: string;
   timedOut = false;
@@ -49,6 +51,8 @@ export class DonationCompleteComponent implements OnInit {
   private person?: Person;
   private retryInterval = 2; // In seconds
   private tries = 0;
+
+  faExclamationTriangle = faExclamationTriangle;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -159,6 +163,10 @@ export class DonationCompleteComponent implements OnInit {
           }
         },
         (error: HttpErrorResponse) => {
+          if (error.error?.error?.type === "DUPLICATE_EMAIL_ADDRESS_WITH_PASSWORD") {
+            this.duplicateEmailAddressWithPassword = true;
+          }
+
           this.registerError = error.message;
           this.analyticsService.logError('person_password_set_failed', `${error.status}: ${error.message}`, 'identity_error');
         },

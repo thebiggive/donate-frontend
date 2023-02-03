@@ -60,7 +60,9 @@ hr {
     text-align: center;
 
     &.error {
-      color: $colour-secondary;
+      fa-icon {
+        color: $colour-secondary;
+      }
     }
   }
 
