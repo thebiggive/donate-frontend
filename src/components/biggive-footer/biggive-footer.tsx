@@ -10,14 +10,6 @@ export class BiggiveFooter {
 
   @Prop() headingLevel: 1 | 2 | 3 | 4 | 5 | 6 = 5;
 
-  @Prop() primaryNavTitle: string | undefined;
-
-  @Prop() secondaryNavTitle: string | undefined;
-
-  @Prop() tertiaryNavTitle: string | undefined;
-
-  @Prop() postscriptNavTitle: string | undefined;
-
   appendMenu(menuName: string) {
     var node = this.host.querySelector(`[slot="${menuName}"]`);
     if (node !== null) {
@@ -38,20 +30,20 @@ export class BiggiveFooter {
     return (
       <footer class="footer">
         <div class="row row-top">
-          <nav class="nav nav-primary" title={this.primaryNavTitle}>
-            <HeadingTag class="heading">
+          <nav class="nav nav-primary" aria-labelledby="footer-primary-heading">
+            <HeadingTag class="heading" id="footer-primary-heading">
               <slot name="nav-primary-title"></slot>
             </HeadingTag>
           </nav>
 
-          <nav class="nav nav-secondary" title={this.secondaryNavTitle}>
-            <HeadingTag class="heading">
+          <nav class="nav nav-secondary" aria-labelledby="footer-secondary-heading-heading">
+            <HeadingTag class="heading" id="footer-secondary-heading">
               <slot name="nav-secondary-title"></slot>
             </HeadingTag>
           </nav>
 
-          <nav class="nav nav-tertiary" title={this.tertiaryNavTitle}>
-            <HeadingTag class="heading">
+          <nav class="nav nav-tertiary" aria-labelledby="footer-tertiary-heading">
+            <HeadingTag class="heading" id="footer-tertiary-heading">
               <slot name="nav-tertiary-title"></slot>
             </HeadingTag>
           </nav>
@@ -66,7 +58,7 @@ export class BiggiveFooter {
           <div class="postscript-wrap">
             <img class="fr-logo" src={getAssetPath('../assets/images/fundraising-regulator.png')} alt="Fundraising Regulator" />
 
-            <nav class="nav nav-postscript" title={this.postscriptNavTitle}></nav>
+            <nav class="nav nav-postscript" aria-label="Postscript"></nav>
           </div>
 
           <div class="social-icon-wrap">
