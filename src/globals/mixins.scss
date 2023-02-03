@@ -224,15 +224,15 @@
   transition: all ease-in-out 0.5s;
   display: inline-block;
   margin-right: 10px;
-  &.colour-scheme-primary {background-color: $colour-primary; svg {fill: $colour-white;}}
-  &.colour-scheme-secondary {background-color: $colour-secondary; svg {fill: $colour-black;}}
-  &.colour-scheme-tertiary {background-color: $colour-tertiary; svg {fill: $colour-black;}}
-  &.colour-scheme-brand-1 {background-color: $colour-brand-1; svg {fill: $colour-black;}}
-  &.colour-scheme-brand-2 {background-color: $colour-brand-2; svg {fill: $colour-black;}}
-  &.colour-scheme-brand-3 {background-color: $colour-brand-3; svg {fill: $colour-black;}}
-  &.colour-scheme-brand-4 {background-color: $colour-brand-4; svg {fill: $colour-black;}}
-  &.colour-scheme-brand-5 {background-color: $colour-brand-5; svg {fill: $colour-black;}}
-  &.colour-scheme-brand-6 {background-color: $colour-brand-6; svg {fill: $colour-black;}}
+  &.colour-scheme-primary {background-color: $colour-primary-blue; svg {fill: $colour-white;}}
+  &.colour-scheme-secondary {background-color: $colour-secondary-green; svg {fill: $colour-black;}}
+  &.colour-scheme-tertiary {background-color: $colour-tertiary-coral; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-1 {background-color: $colour-brand-red; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-2 {background-color: $colour-brand-purple; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-3 {background-color: $colour-brand-green; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-4 {background-color: $colour-brand-yellow; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-5 {background-color: $colour-brand-orange; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-6 {background-color: $colour-brand-grey; svg {fill: $colour-black;}}
   &.colour-scheme-white {background-color: $colour-white; svg {fill: $colour-black;}}
   &.colour-scheme-black {background-color: $colour-black; svg {fill: $colour-white;}}
   &:hover {
@@ -293,22 +293,22 @@
 @mixin progress-bar-primary {
   .slider {
     .progress {
-      background-color: $colour-primary;
+      background-color: $colour-primary-blue;
     }
   }
   .counter {
-    color: $colour-primary;
+    color: $colour-primary-blue;
   }
 }
 
 @mixin progress-bar-secondary {
   .slider {
     .progress {
-      background-color: $colour-secondary;
+      background-color: $colour-secondary-green;
     }
   }
   .counter {
-    color: $colour-secondary;
+    color: $colour-secondary-green;
   }
 }
 
@@ -330,11 +330,11 @@
   @include font-size-medium();
   padding: 1px;
   position: relative;
-  background-color: $colour-primary;
+  background-color: $colour-primary-blue;
   @include corner-clip-small-top-right();
   span.placeholder {
     background-color: $colour-white;
-    color: $colour-primary;
+    color: $colour-primary-blue;
     display: block;
     position: relative;
     padding: 10px 80px 10px 10px;
@@ -399,7 +399,7 @@
 }
 
 @mixin button-clear-primary {
-  color: $colour-primary;
+  color: $colour-primary-blue;
   background-color: transparent;
   text-decoration: underline;
   border: 0;
@@ -412,7 +412,7 @@
 }
 
 @mixin button-clear-secondary {
-  color: $colour-secondary;
+  color: $colour-secondary-green;
   background-color: transparent;
   text-decoration: underline;
   border: 0;
@@ -425,7 +425,7 @@
 }
 
 @mixin button-clear-tertiary {
-  color: $colour-tertiary;
+  color: $colour-tertiary-coral;
   background-color: transparent;
   text-decoration: underline;
   border: 0;
@@ -438,7 +438,7 @@
 }
 
 @mixin button-clear-brand-1 {
-  color: $colour-brand-1;
+  color: $colour-brand-red;
   background-color: transparent;
   text-decoration: underline;
   border: 0;
@@ -451,7 +451,7 @@
 }
 
 @mixin button-clear-brand-2 {
-  color: $colour-brand-2;
+  color: $colour-brand-purple;
   background-color: transparent;
   text-decoration: underline;
   border: 0;
@@ -464,7 +464,7 @@
 }
 
 @mixin button-clear-brand-3 {
-  color: $colour-brand-3;
+  color: $colour-brand-green;
   background-color: transparent;
   text-decoration: underline;
   border: 0;
@@ -477,7 +477,7 @@
 }
 
 @mixin button-clear-brand-4 {
-  color: $colour-brand-4;
+  color: $colour-brand-yellow;
   background-color: transparent;
   text-decoration: underline;
   border: 0;
@@ -490,7 +490,7 @@
 }
 
 @mixin button-clear-brand-5 {
-  color: $colour-brand-5;
+  color: $colour-brand-orange;
   background-color: transparent;
   text-decoration: underline;
   border: 0;
@@ -503,7 +503,7 @@
 }
 
 @mixin button-clear-brand-6 {
-  color: $colour-brand-6;
+  color: $colour-brand-grey;
   background-color: transparent;
   text-decoration: underline;
   border: 0;
@@ -531,21 +531,21 @@
 
 @mixin button-primary {
   color: $colour-white;
-  background-color: $colour-primary;
-  border-color: $colour-primary;
+  background-color: $colour-primary-blue;
+  border-color: $colour-primary-blue;
   &:hover {
-    color: $colour-primary;
+    color: $colour-primary-blue;
     background-color: $colour-white;
   }
 }
 
 @mixin button-white {
-  color: $colour-primary;
+  color: $colour-primary-blue;
   background-color: $colour-white;
   border-color: $colour-white;
   &:hover {
     color: $colour-black;
-    background-color: $colour-secondary;
+    background-color: $colour-secondary-green;
   }
 }
 
@@ -561,8 +561,8 @@
 
 @mixin button-secondary {
   color: $colour-black;
-  background-color: $colour-secondary;
-  border-color: $colour-secondary;
+  background-color: $colour-secondary-green;
+  border-color: $colour-secondary-green;
   &:hover {
     background-color: $colour-white;
     border-color: $colour-black;
@@ -571,8 +571,8 @@
 
 @mixin button-tertiary {
   color: $colour-white;
-  background-color: $colour-tertiary;
-  border-color: $colour-tertiary;
+  background-color: $colour-tertiary-coral;
+  border-color: $colour-tertiary-coral;
   &:hover {
     background-color: $colour-white;
   }
@@ -580,8 +580,8 @@
 
 @mixin button-brand-1 {
   color: $colour-white;
-  background-color: $colour-brand-1;
-  border-color: $colour-brand-1;
+  background-color: $colour-brand-red;
+  border-color: $colour-brand-red;
   &:hover {
     background-color: $colour-white;
   }
@@ -589,8 +589,8 @@
 
 @mixin button-brand-2 {
   color: $colour-white;
-  background-color: $colour-brand-2;
-  border-color: $colour-brand-2;
+  background-color: $colour-brand-purple;
+  border-color: $colour-brand-purple;
   &:hover {
     background-color: $colour-white;
   }
@@ -598,8 +598,8 @@
 
 @mixin button-brand-3 {
   color: $colour-white;
-  background-color: $colour-brand-3;
-  border-color: $colour-brand-3;
+  background-color: $colour-brand-green;
+  border-color: $colour-brand-green;
   &:hover {
     background-color: $colour-white;
   }
@@ -607,8 +607,8 @@
 
 @mixin button-brand-4 {
   color: $colour-white;
-  background-color: $colour-brand-4;
-  border-color: $colour-brand-4;
+  background-color: $colour-brand-yellow;
+  border-color: $colour-brand-yellow;
   &:hover {
     background-color: $colour-black;
   }
@@ -616,8 +616,8 @@
 
 @mixin button-brand-5 {
   color: $colour-white;
-  background-color: $colour-brand-5;
-  border-color: $colour-brand-5;
+  background-color: $colour-brand-orange;
+  border-color: $colour-brand-orange;
   &:hover {
     background-color: $colour-white;
   }
@@ -625,8 +625,8 @@
 
 @mixin button-brand-6 {
   color: $colour-white;
-  background-color: $colour-brand-6;
-  border-color: $colour-brand-6;
+  background-color: $colour-brand-grey;
+  border-color: $colour-brand-grey;
   &:hover {
     background-color: $colour-black;
   }
@@ -647,7 +647,7 @@
   height: 0;
   border-style: inset;
   border-width: $height $width 0 $width;
-  border-color: $colour-secondary transparent transparent transparent;
+  border-color: $colour-secondary-green transparent transparent transparent;
   float: left;
   transform: rotate(360deg);
 
@@ -660,7 +660,7 @@
     width: $width;
     height: $width;
     margin: 0;
-    color: $colour-primary;
+    color: $colour-primary-blue;
     font-size: $text-size;
   }
 }
@@ -783,7 +783,7 @@
       position: absolute;
       top: $spacer-2;
       right: $spacer-2;
-      background-color: $colour-primary;
+      background-color: $colour-primary-blue;
       background-image: url(/assets/images/cross.svg?1);
       background-size: 50% 50%;
       background-position: center center;
@@ -821,47 +821,47 @@
 @mixin backgrounds {
   .background-colour-hover-primary:hover,
   .background-colour-primary {
-      background-color: $colour-primary;
+      background-color: $colour-primary-blue;
   }
 
   .background-colour-hover-secondary:hover,
   .background-colour-secondary {
-      background-color: $colour-secondary;
+      background-color: $colour-secondary-green;
   }
 
   .background-colour-hover-tertiary:hover,
   .background-colour-tertiary {
-      background-color: $colour-tertiary;
+      background-color: $colour-tertiary-coral;
   }
 
   .background-colour-hover-brand-1:hover,
   .background-colour-brand-1 {
-      background-color: $colour-brand-1;
+      background-color: $colour-brand-red;
   }
 
   .background-colour-hover-brand-2:hover,
   .background-colour-brand-2 {
-      background-color: $colour-brand-2;
+      background-color: $colour-brand-purple;
   }
 
   .background-colour-hover-brand-3:hover,
   .background-colour-brand-3 {
-      background-color: $colour-brand-3;
+      background-color: $colour-brand-green;
   }
 
   .background-colour-hover-brand-4:hover,
   .background-colour-brand-4 {
-      background-color: $colour-brand-4;
+      background-color: $colour-brand-yellow;
   }
 
   .background-colour-hover-brand-5:hover,
   .background-colour-brand-5 {
-      background-color: $colour-brand-5;
+      background-color: $colour-brand-orange;
   }
 
   .background-colour-hover-brand-6:hover,
   .background-colour-brand-6 {
-      background-color: $colour-brand-6;
+      background-color: $colour-brand-grey;
   }
 
   .background-colour-hover-white:hover,
@@ -877,39 +877,39 @@
 
 @mixin fills {
   .fill-primary {
-      fill: $colour-primary;
+      fill: $colour-primary-blue;
   }
 
   .fill-secondary {
-      fill: $colour-secondary;
+      fill: $colour-secondary-green;
   }
 
   .fill-tertiary {
-      fill: $colour-tertiary;
+      fill: $colour-tertiary-coral;
   }
 
   .fill-brand-1 {
-      fill: $colour-brand-1;
+      fill: $colour-brand-red;
   }
 
   .fill-brand-2 {
-      fill: $colour-brand-2;
+      fill: $colour-brand-purple;
   }
 
   .fill-brand-3 {
-      fill: $colour-brand-3;
+      fill: $colour-brand-green;
   }
 
   .fill-brand-4 {
-      fill: $colour-brand-4;
+      fill: $colour-brand-yellow;
   }
 
   .fill-brand-5 {
-      fill: $colour-brand-5;
+      fill: $colour-brand-orange;
   }
 
   .fill-brand-6 {
-      fill: $colour-brand-6;
+      fill: $colour-brand-grey;
   }
 
   .fill-white {
@@ -974,47 +974,47 @@
 @mixin text-colours {
   .text-colour-hover-primary:hover,
   .text-colour-primary {
-      color: $colour-primary;
+      color: $colour-primary-blue;
   }
 
   .text-colour-hover-secondary:hover,
   .text-colour-secondary {
-      color: $colour-secondary;
+      color: $colour-secondary-green;
   }
 
   .text-colour-hover-tertiary:hover,
   .text-colour-tertiary {
-      color: $colour-tertiary;
+      color: $colour-tertiary-coral;
   }
 
   .text-colour-hover-brand-1:hover,
   .text-colour-brand-1 {
-      color: $colour-brand-1;
+      color: $colour-brand-red;
   }
 
   .text-colour-hover-brand-2:hover,
   .text-colour-brand-2 {
-      color: $colour-brand-2;
+      color: $colour-brand-purple;
   }
 
   .text-colour-hover-brand-3:hover,
   .text-colour-brand-3 {
-      color: $colour-brand-3;
+      color: $colour-brand-green;
   }
 
   .text-colour-hover-brand-4:hover,
   .text-colour-brand-4 {
-      color: $colour-brand-4;
+      color: $colour-brand-yellow;
   }
 
   .text-colour-hover-brand-5:hover,
   .text-colour-brand-5 {
-      color: $colour-brand-5;
+      color: $colour-brand-orange;
   }
 
   .text-colour-hover-brand-6:hover,
   .text-colour-brand-6 {
-      color: $colour-brand-6;
+      color: $colour-brand-grey;
   }
 
   .text-colour-hover-white:hover,

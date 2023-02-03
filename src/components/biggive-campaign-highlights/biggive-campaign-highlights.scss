@@ -21,7 +21,7 @@
     text-align: center;
     font-weight: bold;
     span {
-      background-color: $colour-secondary;
+      background-color: $colour-secondary-green;
       color: $colour-black;
       padding: $spacer-1 $spacer-3;
       display: inline-block;
@@ -56,11 +56,11 @@
         @media screen and (max-width: $screen-tablet-max) {
           font-size: 23px;
         }
-    
+
         @media screen and (max-width: $screen-mobile-max) {
           font-size: 21px;;
         }
-    
+
         @media screen and (max-width: $screen-mobile-small) {
           font-size: 17px;
         }
@@ -68,7 +68,7 @@
       &:last-child {
         text-align: right;
         .text {
-          color: $colour-primary;
+          color: $colour-primary-blue;
         }
       }
     }
@@ -90,7 +90,7 @@
         position: relative;
         bottom: 7px;
       }
-  
+
       @media screen and (max-width: $screen-mobile-max) {
         @include font-size-small();
         margin: auto 0;
@@ -102,7 +102,7 @@
       }
 
       svg {
-        fill: $colour-tertiary;
+        fill: $colour-tertiary-coral;
       }
     }
   }
@@ -133,7 +133,7 @@
     a {
       text-decoration: none;
       font-weight: bold;
-      color: $colour-primary;
+      color: $colour-primary-blue;
       @media screen and (max-width: $screen-mobile-small) {
         // Show Champion Name on new line in smaller screens
         display: block;
@@ -142,6 +142,6 @@
   }
 
   @media screen and (max-width: $screen-mobile-max) {
-    padding: 15px; 
+    padding: 15px;
   }
 }

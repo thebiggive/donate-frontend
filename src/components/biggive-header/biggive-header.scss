@@ -90,7 +90,7 @@
 
 .row-top {
   padding: $spacer-2 $spacer-4;
-  background-color: $colour-primary;
+  background-color: $colour-primary-blue;
   display: flex;
   .social-icon-wrap {
     margin-right: $spacer-3;
@@ -222,7 +222,7 @@
       }
 
       a:hover {
-        color: $colour-primary;
+        color: $colour-primary-blue;
       }
 
       ul {
@@ -311,7 +311,7 @@
       &.active {
         background-image: url(/assets/images/cross.svg?1);
         display: block;
-        background-color: $colour-primary;
+        background-color: $colour-primary-blue;
         background-size: 50% 50%;
         width: 30px;
         height: 30px;

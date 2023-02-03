@@ -74,7 +74,7 @@
           vertical-align: top;
 
           &:hover {
-            fill: $colour-primary;
+            fill: $colour-primary-blue;
           }
         }
       }
@@ -87,7 +87,7 @@
   margin: auto;
 
   > path {
-    fill: $colour-primary;
+    fill: $colour-primary-blue;
   }
 }
 
@@ -128,5 +128,5 @@
 }
 
 .text-colour-primary {
-  color: $colour-primary;
+  color: $colour-primary-blue;
 }

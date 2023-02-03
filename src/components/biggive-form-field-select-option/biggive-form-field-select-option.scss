@@ -7,7 +7,7 @@
   @include standard-font();
   padding: 2px $spacer-2;
   &:hover {
-    background-color: $colour-primary;
+    background-color: $colour-primary-blue;
     color: $colour-white;
     cursor: pointer;
   }
