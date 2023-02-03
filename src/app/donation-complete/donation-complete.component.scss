@@ -121,6 +121,23 @@ hr {
   }
 }
 
+.thank-you-large-donation-text {
+    line-height: 1.2em;
+    padding: 0 0;
+    @media #{$breakpoint-sm} {
+      font-size: 1rem;
+    }
+    @media #{$breakpoint-md} {
+      font-size: 1.2rem;
+    }
+    @media #{$breakpoint-lg} {
+      font-size: 1.5rem;
+    }
+    @media #{$breakpoint-xl} {
+      font-size: 2rem;
+  }
+}
+
 .donation-summary {
   text-align: center;
   width: 80%;
@@ -146,6 +163,18 @@ hr {
       }
     }
   }
+}
+
+hr.shorter {
+  width: 80%;
+}
+
+div.large-donation-spacer {
+  min-height: 40px;
+}
+
+div.clearfix {
+  clear: both;
 }
 
 .receipt {
@@ -203,6 +232,10 @@ hr {
     margin-right: 0;
     margin-left: 0;
     margin-bottom: 40px;
+
+    span.separator {
+      width: 30px
+    }
   }
 
   a {
@@ -223,4 +256,15 @@ hr {
       font-size: 1.4rem;
     }
   }
+}
+
+#join-community-cta {
+  margin-top: 1rem;
+  float: right;
+}
+
+#thank-you-large-donation-wrapper {
+  text-align: center;
+  width: 80%;
+  margin: auto
 }
