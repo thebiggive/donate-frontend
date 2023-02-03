@@ -552,10 +552,6 @@ export namespace Components {
     }
     interface BiggiveFooter {
         "headingLevel": 1 | 2 | 3 | 4 | 5 | 6;
-        "postscriptNavTitle": string | undefined;
-        "primaryNavTitle": string | undefined;
-        "secondaryNavTitle": string | undefined;
-        "tertiaryNavTitle": string | undefined;
     }
     interface BiggiveForm {
     }
@@ -2007,10 +2003,6 @@ declare namespace LocalJSX {
     }
     interface BiggiveFooter {
         "headingLevel"?: 1 | 2 | 3 | 4 | 5 | 6;
-        "postscriptNavTitle"?: string | undefined;
-        "primaryNavTitle"?: string | undefined;
-        "secondaryNavTitle"?: string | undefined;
-        "tertiaryNavTitle"?: string | undefined;
     }
     interface BiggiveForm {
     }
