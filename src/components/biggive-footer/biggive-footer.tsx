@@ -58,7 +58,7 @@ export class BiggiveFooter {
           <div class="postscript-wrap">
             <img class="fr-logo" src={getAssetPath('../assets/images/fundraising-regulator.png')} alt="Fundraising Regulator" />
 
-            <nav class="nav nav-postscript" aria-label="Postscript"></nav>
+            <nav class="nav nav-postscript" aria-label="Legal"></nav>
           </div>
 
           <div class="social-icon-wrap">
