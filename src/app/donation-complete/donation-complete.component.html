@@ -48,15 +48,9 @@
         using your chosen email address and password.
       </p>
 
-      <p *ngIf="duplicateEmailAddressWithPassword" class="error" aria-live="assertive">
+      <p *ngIf="registerError" class="error" aria-live="assertive">
         <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Your password could not be set. There is already a password set for your email address.
-      </p>
-
-      <p *ngIf="registerError && ! duplicateEmailAddressWithPassword" class="error" aria-live="assertive">
-          <!-- We assume the error must be a password error. Ideally identity service would tell us explicitly.-->
-        <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-        Your password could not be set. Please ensure you chose one with at least {{ this.minPasswordLength }} characters.
+        {{ registerErrorDescription }}
       </p>
     </div>
 

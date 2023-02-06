@@ -38,7 +38,7 @@ export class DonationCompleteComponent implements OnInit {
   encodedPrefilledText: string;
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   registerError?: string;
-  duplicateEmailAddressWithPassword: boolean = false;
+  registerErrorDescription?: string = undefined;
   registrationComplete = false;
   shareUrl: string;
   timedOut = false;
@@ -164,7 +164,9 @@ export class DonationCompleteComponent implements OnInit {
         },
         (error: HttpErrorResponse) => {
           if (error.error?.error?.type === "DUPLICATE_EMAIL_ADDRESS_WITH_PASSWORD") {
-            this.duplicateEmailAddressWithPassword = true;
+            this.registerErrorDescription = "Your password could not be set. There is already a password set for your email address.";
+          } else {
+            this.registerErrorDescription = error.error?.error?.description
           }
 
           this.registerError = error.message;

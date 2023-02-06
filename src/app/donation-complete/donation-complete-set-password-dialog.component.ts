@@ -41,7 +41,7 @@ export class DonationCompleteSetPasswordDialogComponent implements OnInit {
     this.form = this.formBuilder.group({
       password: [null, [
         Validators.required,
-        Validators.minLength(10),
+        Validators.minLength(minPasswordLength),
       ]],
       stayLoggedIn: [false],
     });
