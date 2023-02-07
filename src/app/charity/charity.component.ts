@@ -23,7 +23,6 @@ export class CharityComponent implements OnInit {
     this.pageMeta.setCommon(
       this.campaigns[0] ? `${this.campaigns[0].charity.name} Campaigns` : 'Campaigns Archive',
       'Archive of Big Give match funded campaigns',
-      this.campaigns[0]?.currencyCode !== 'GBP',
       null,
     );
   }

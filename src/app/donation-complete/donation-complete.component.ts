@@ -211,7 +211,6 @@ export class DonationCompleteComponent implements OnInit {
       this.pageMeta.setCommon(
         `${campaign.charity.name}`,
         `Thanks for donating to the "${campaign.title}" campaign`,
-        campaign.currencyCode !== 'GBP',
         campaign.bannerUri,
       );
       this.setSocialShares(campaign);
@@ -260,9 +259,7 @@ export class DonationCompleteComponent implements OnInit {
   }
 
   private setSocialShares(campaign: Campaign) {
-    const prefix = campaign.currencyCode === 'GBP'
-      ? environment.donateUriPrefix
-      : environment.donateGlobalUriPrefix;
+    const prefix = environment.donateGlobalUriPrefix;
     this.shareUrl = `${prefix}/campaign/${campaign.id}`;
     this.encodedPrefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
   }

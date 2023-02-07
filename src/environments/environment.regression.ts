@@ -38,7 +38,6 @@ export const environment: Environment = {
   recaptchaSiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
   recaptchaIdentitySiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
   reservationMinutes: 30,
-  thanksUriPrefix: 'https://donate-regression.thebiggivetest.org.uk/thanks/',
 };
 
 /*
