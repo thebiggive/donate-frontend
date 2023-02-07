@@ -9,7 +9,7 @@ if (environment.productionLike) {
   enableProdMode();
 }
 
-setAssetPath(`${environment.donateUriPrefix}/assets`);
+setAssetPath(`${environment.donateGlobalUriPrefix}/assets`);
 
 globalThis.document.addEventListener('DOMContentLoaded', () => {
   platformBrowserDynamic().bootstrapModule(AppModule)

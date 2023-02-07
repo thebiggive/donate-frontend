@@ -144,9 +144,9 @@ export function app() {
     // this key to work around `fileReplacements` ending index support in Angular 8.
     res.render(indexHtml, { req, providers: [
       // Ensure we render with a supported base HREF, including behind an ALB and regardless of the
-      // base reported by CloudFront when talking to the origin. Demos use `req.baseUrl` and we should
-      // test this when time allows to see if it facilitates multiple base domains.
-      { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix, },
+      // base reported by CloudFront when talking to the origin.
+      // (From later 2023 we should no longer need to maintain support for parallel base domains.)
+      { provide: APP_BASE_HREF, useValue: environment.donateGlobalUriPrefix, },
       // Skip for now as this adds complexity and didn't actually seem to be working as of Aug '22 anyway. See DON-523.
       // { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
       ],
@@ -157,7 +157,7 @@ export function app() {
         return;
       }
 
-      setAssetPath(`${environment.donateUriPrefix}/assets`);
+      setAssetPath(`${environment.donateGlobalUriPrefix}/assets`);
 
       const hydratedDoc = await renderToString(html, {
         // Don't `removeScripts` like Ionic does: we need them to handover to browser JS runtime successfully!
