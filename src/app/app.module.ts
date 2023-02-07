@@ -52,12 +52,12 @@ import { TBG_DONATE_ID_STORAGE } from './identity.service';
     {
       provide: APP_BASE_HREF,
       useFactory: () => {
-        const globalDonateHost = (new URL(environment.donateGlobalUriPrefix)).host;
+        const ukDonateHost = (new URL(environment.donateUriPrefix)).host;
         const host = (typeof window === 'undefined' ? '' : window.location.host);
 
-        return host === globalDonateHost
-          ? environment.donateGlobalUriPrefix
-          : environment.donateUriPrefix;
+        return host === ukDonateHost
+          ? environment.donateUriPrefix
+          : environment.donateGlobalUriPrefix;
       },
     },
     { provide: TBG_DONATE_ID_STORAGE, useExisting: LOCAL_STORAGE },
