@@ -1096,7 +1096,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.pageMeta.setCommon(
       `Donate to ${this.campaign.charity.name}`,
       `Donate to the "${this.campaign.title}" campaign`,
-      this.campaign.currencyCode !== 'GBP',
       this.campaign.bannerUri,
     );
   }

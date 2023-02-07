@@ -105,7 +105,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     this.pageMeta.setCommon(
       campaign.title,
       summaryStart,
-      campaign.currencyCode !== 'GBP',
       campaign.bannerUri,
     );
 
