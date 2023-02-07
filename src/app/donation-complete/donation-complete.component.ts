@@ -43,6 +43,7 @@ export class DonationCompleteComponent implements OnInit {
   shareUrl: string;
   timedOut = false;
   totalValue: number;
+  donationIsLarge: boolean = false;
 
   private donationId: string;
   private maxTries = 5;
@@ -222,6 +223,7 @@ export class DonationCompleteComponent implements OnInit {
       this.cardChargedAmount = donation.donationAmount + donation.feeCoverAmount + donation.tipAmount;
       this.giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;
       this.totalValue = donation.donationAmount + this.giftAidAmount + donation.matchedAmount;
+      this.donationIsLarge = donation.currencyCode === 'GBP' && donation.donationAmount >= 5_000;
       this.complete = true;
 
       // Re-save the donation with its new status so we don't offer to resume it if the donor
