@@ -66,7 +66,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       // donations are currently not working on the new domain. No-one should be visiting that domain yet, but
       // in case they do we redirect them to the old domain for now:
 
-      window.location.href = "https://biggive.org.uk/" + window.location.pathname;
+      window.location.href = "https://donate.thebiggive.org.uk/" + window.location.pathname;
     }
   }
 
