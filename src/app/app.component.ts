@@ -1,18 +1,13 @@
-import { APP_BASE_HREF, isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, Component, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
-import {
-  Event as RouterEvent,
-  NavigationEnd,
-  NavigationStart,
-  Router,
-} from '@angular/router';
-import { BiggiveMainMenu } from '@biggive/components-angular';
-import { filter } from 'rxjs/operators';
+import {APP_BASE_HREF, isPlatformBrowser} from '@angular/common';
+import {AfterViewInit, Component, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
+import {BiggiveMainMenu} from '@biggive/components-angular';
+import {filter} from 'rxjs/operators';
 
-import { AnalyticsService } from './analytics.service';
-import { DonationService } from './donation.service';
-import { GetSiteControlService } from './getsitecontrol.service';
-import { NavigationService } from './navigation.service';
+import {AnalyticsService} from './analytics.service';
+import {DonationService} from './donation.service';
+import {GetSiteControlService} from './getsitecontrol.service';
+import {NavigationService} from './navigation.service';
 
 @Component({
   selector: 'app-root',
@@ -66,6 +61,13 @@ export class AppComponent implements AfterViewInit, OnInit {
     // always set up during the initial page load, regardless of whether the first
     // page the donor lands on makes wider use of DonationService or not.
     this.donationService.deriveDefaultCountry();
+
+    if (window.location.host === 'donate.biggive.org') {
+      // donations are currently not working on the new domain. No-one should be visiting that domain yet, but
+      // in case they do we redirect them to the old domain for now:
+
+      window.location.href = "https://biggive.org.uk/" + window.location.pathname;
+    }
   }
 
   ngAfterViewInit() {
