@@ -41,8 +41,16 @@ export const routes: Routes = [
     resolve: {
       campaign: CampaignResolver,
     },
-    loadChildren: () => import('./donation-start/donation-start.module')
-      .then(c => c.DonationStartModule),
+    loadChildren: () => {
+      const useNewDonationDesign = new URL(window.location.href).searchParams.has('2023-design');
+
+      const donationStartModule = useNewDonationDesign ?
+        import('./donation-start-2023-design/donation-start-2023-design.module') :
+        import('./donation-start/donation-start.module');
+
+      return donationStartModule
+        .then(c => c.DonationStartModule);
+    },
   },
   {
     path: 'metacampaign/:campaignId',
