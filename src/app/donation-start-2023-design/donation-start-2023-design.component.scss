@@ -1,6 +1,10 @@
 @use '@angular/material' as mat;
 @import '../../abstract';
 
+.mat-stepper-vertical {
+  background: none;
+}
+
 input:disabled {
   cursor: not-allowed; // Visual help on desktop when e.g. address lookup has frozen postcode field.
 }
@@ -113,6 +117,7 @@ input:disabled {
 }
 
 .c-donate-form {
+  box-shadow: $box-shadow-soft;
   margin: 2rem auto;
   h2 {
     margin-top: 1rem;
@@ -280,8 +285,8 @@ a {
 }
 
 .id-info {
-  @include make-card($box-shadow-hard);
-
+  border-radius: 4px;
+  box-shadow: $box-shadow-soft;
   text-align: center;
   margin-top: 1rem;
   padding: 0.25rem 1rem 1rem 1rem;
