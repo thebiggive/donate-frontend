@@ -5,6 +5,77 @@
   background: none;
 }
 
+.mat-select {
+  // copied from biggive-form-field-select.scss
+  position: relative;
+  text-align: left;
+  .sleeve {
+
+    padding: 1px;
+    position: relative;
+    background-color: $colour-primary;
+    clip-path:
+      polygon(
+          0% 0%,     /* top left */
+          0% 0%,     /* top left */
+          calc(100% - 15px) 0%,    /* top right */
+          100% 15px,   /* top right */
+          100% 100%,  /* bottom right */
+          100% 100%,  /* bottom right */
+          0 100%,   /* bottom left */
+          0 100%      /* bottom left */
+      );
+      span.placeholder {
+      background-color: white;
+      color: $colour-primary;
+      display: block;
+      position: relative;
+      padding: 10px 80px 10px 10px;
+      cursor: pointer;
+      clip-path:
+        polygon(
+            0% 0%,     /* top left */
+            0% 0%,     /* top left */
+            calc(100% - 14px) 0%,    /* top right */
+            100% 14px,   /* top right */
+            100% 100%,  /* bottom right */
+            100% 100%,  /* bottom right */
+            0 100%,   /* bottom left */
+            0 100%      /* bottom left */
+        );
+      &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        right: 20px;
+        top: 18px;
+        width: 10px;
+        height: 10px;
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSI3IiB2aWV3Qm94PSIwIDAgOSA3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNNS4yMzcxNiA2LjYyNDkzQzQuOTAzMjMgNy4xMjUwMiA0LjA5NyA3LjEyNTAyIDMuNzYzMDggNi42MjQ5M0wwLjEyMzg2OCAxLjE3MDYzQy0wLjIxOTk0IDAuNjU1NDU5IDAuMTkyNjMgMS44MzcxZS0wNyAwLjg2MDkwOCAyLjQyMTMyZS0wN0w4LjEzOTMzIDguNzg0MzJlLTA3QzguODA3MTggOS4zNjgxN2UtMDcgOS4yMTk3NSAwLjY1NTQ1OSA4Ljg3NjM3IDEuMTcwNjNMNS4yMzcxNiA2LjYyNDkzWiIgZmlsbD0iIzJDMDg5QiIvPgo8L3N2Zz4K');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+      }
+    }
+  }
+  .options {
+    max-height: 200px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: white;
+    position: absolute;
+    display: none;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    border-left: 1px solid $colour-primary;
+    border-right: 1px solid $colour-primary;
+    border-bottom: 1px solid $colour-primary;
+  }
+  &.active .options {
+    display: block;
+  }}
+
 input:disabled {
   cursor: not-allowed; // Visual help on desktop when e.g. address lookup has frozen postcode field.
 }

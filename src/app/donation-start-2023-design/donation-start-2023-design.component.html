@@ -83,8 +83,22 @@
             </div>
 
             <div *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
-              <mat-form-field appearance="outline">
+
                 <mat-label for="tipPercentage">Donation to the Big Give Trust</mat-label>
+
+
+<!--              This way sort of looks OK but I'm not sure how to get the selected number to take effect and make -->
+<!--              DonationStartComponent.tipAmount be re-computed. Another option is to keep the mat-select but style it to look-->
+<!--              like the biggive-form-field-select -->
+<!--                <biggive-form-field-select id="tipPercentage" placeholder="12.5%" (change)="tipPercentageChange()">-->
+<!--                  <biggive-form-field-select-option label="7.5%" value="7.5"/>-->
+<!--                  <biggive-form-field-select-option label="10%" value="10.0" />-->
+<!--                  <biggive-form-field-select-option label="12.5%" value="12.5"/>-->
+<!--                  <biggive-form-field-select-option label="15%" value="15" />-->
+<!--                  <biggive-form-field-select-option label="Other" value="'other'" />-->
+<!--                </biggive-form-field-select>-->
+
+              <mat-form-field appearance="outline">
                 <mat-select formControlName="tipPercentage" id="tipPercentage" (selectionChange)="tipPercentageChange()">
                   <mat-option [value]="7.5">7.5%</mat-option>
                   <mat-option [value]="10">10%</mat-option>
