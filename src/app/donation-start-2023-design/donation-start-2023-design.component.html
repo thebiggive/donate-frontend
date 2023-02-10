@@ -72,32 +72,28 @@
               <div *ngIf="donationAmountField?.errors?.required">Please enter how much you would like to donate.</div>
             </div>
 
-            <mat-hint *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
-              We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://blog.thebiggive.org.uk/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too). Please consider adding an optional tip.
-            </mat-hint>
+            <hr>
+            <h3>Tip the Big Give</h3>
+            <p>
+              Big Give has a 0% platform fee. That means we're able to continue offering our services thanks to donors
+              who leave an optional tip amount here:
+            </p>
 
-            <div *ngIf="campaign.feePercentage && creditPenceToUse === 0">
-              <mat-checkbox formControlName="coverFee" id="coverFee">
-                Cover the {{ campaign.feePercentage}}% <a href="https://blog.thebiggive.org.uk/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> platform fee</a> for the &quot;{{ campaign.title }}&quot; campaign?
-              </mat-checkbox>
-            </div>
+            <mat-label for="tipPercentage">Donation to the Big Give Trust</mat-label>
+
+            <!--              This way sort of looks OK but I'm not sure how to get the selected number to take effect and make -->
+            <!--              DonationStartComponent.tipAmount be re-computed. Another option is to keep the mat-select but style it to look-->
+            <!--              like the biggive-form-field-select -->
+            <!-- @todo-DON-610 make the on change function work to update the form -->
+            <biggive-form-field-select id="tipPercentage" placeholder="12.5%" (change)="tipPercentageChange()">
+              <biggive-form-field-select-option label="7.5%" value="7.5"/>
+              <biggive-form-field-select-option label="10%" value="10.0" />
+              <biggive-form-field-select-option label="12.5%" value="12.5"/>
+              <biggive-form-field-select-option label="15%" value="15" />
+              <biggive-form-field-select-option label="Other" value="'other'" />
+            </biggive-form-field-select>
 
             <div *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
-
-                <mat-label for="tipPercentage">Donation to the Big Give Trust</mat-label>
-
-
-<!--              This way sort of looks OK but I'm not sure how to get the selected number to take effect and make -->
-<!--              DonationStartComponent.tipAmount be re-computed. Another option is to keep the mat-select but style it to look-->
-<!--              like the biggive-form-field-select -->
-              <!-- @todo-DON-610 make the on change function work to update the form + stop drop down being hidden by next step. -->
-                <biggive-form-field-select id="tipPercentage" placeholder="12.5%" (change)="tipPercentageChange()">
-                  <biggive-form-field-select-option label="7.5%" value="7.5"/>
-                  <biggive-form-field-select-option label="10%" value="10.0" />
-                  <biggive-form-field-select-option label="12.5%" value="12.5"/>
-                  <biggive-form-field-select-option label="15%" value="15" />
-                  <biggive-form-field-select-option label="Other" value="'other'" />
-                </biggive-form-field-select>
 
               <div *ngIf="customTip()" class="donation-input donation-input-tip">
                 <p id="custom-tip-status" class="b-grey b-rt-sm donation-input-tip__status-help" aria-live="assertive">You've selected to give {{ tipAmount() | exactCurrency:campaign.currencyCode }} to the Big Give Trust. You can edit the amount in the next field.</p>
@@ -127,9 +123,40 @@
 
               <mat-hint *ngIf="customTip() && donationAmount && donationAmount > 0">
                 {{ (tipAmount() > 0 && tipAmount() / donationAmount < 0.001) ? 'Less than 0.1%' : (tipAmount() / donationAmount) | percent:'1.0-1' }}
-              of main donation
+                of main donation
               </mat-hint>
             </div>
+
+
+            <h3>How does Big Give use tips?</h3>
+            <p *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
+              Big Give is a registered charity (1136547). We don't charge charities for using our platform; we rely on
+              the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding
+              campaigns.
+            </p>
+
+            <p>Your tips will be going to:</p>
+
+            <ul>
+              <li> Supporting our website ad team, allowing charities to double their donations to good causes.
+
+              <li> Providing match funds in our Anchor Match Fund. Through thips, charities will receive funding to
+              launch their own match funded campaign on Big Give.
+
+            </ul>
+
+            <p>
+              Thank you for your generosity! Your tips ensure that we can continue to support charities and causes that
+              are important to you.
+            </p>
+
+            <div *ngIf="campaign.feePercentage && creditPenceToUse === 0">
+              <mat-checkbox formControlName="coverFee" id="coverFee">
+                Cover the {{ campaign.feePercentage}}% <a href="https://blog.thebiggive.org.uk/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> platform fee</a> for the &quot;{{ campaign.title }}&quot; campaign?
+              </mat-checkbox>
+            </div>
+
+
 
             <p class="error" *ngIf="donationCreateError" aria-live="assertive">
               Sorry, we can't register your donation right now. Please try again in a moment
