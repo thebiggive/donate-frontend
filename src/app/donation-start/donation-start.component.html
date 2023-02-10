@@ -481,7 +481,9 @@
     </div>
 
     <div class="b-secondary-column">
-      <app-campaign-details-card [campaign]="campaign"></app-campaign-details-card>
+      <div id="campaign-highlights-beneficiaries-and-categories-mobile">
+        <app-campaign-info [campaign]="campaign"></app-campaign-info>
+      </div>
     </div>
 
     <p *ngIf="reservationExpiryTime()" class="c-timer">

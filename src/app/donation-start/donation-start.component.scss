@@ -1,6 +1,25 @@
 @use '@angular/material' as mat;
 @import '../../abstract';
 
+.icon-wrapper {
+  // Copied from campaign-details.component.scss. but doesn't seem to be having any effect @todo Fix and DRY up
+  display: flex;
+  padding: 10px;
+
+  svg {
+    margin-right: 5px;
+    color: $colour-primary;
+    width: 20px;
+    height: 20px;
+  }
+
+  .c-icon-title {
+    font-size: 0.8rem;
+    margin: auto;
+  }
+}
+
+
 input:disabled {
   cursor: not-allowed; // Visual help on desktop when e.g. address lookup has frozen postcode field.
 }
