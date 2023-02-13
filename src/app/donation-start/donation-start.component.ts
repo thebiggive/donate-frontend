@@ -209,6 +209,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       }
     }
 
+    // This block of code is copied from campaign-info.component. Apologies for duplication.
     this.campaignTarget = this.currencyPipe.transform(this.campaign.target, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
     this.campaignRaised = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
     this.campaignFinished = CampaignService.isInPast(this.campaign);
@@ -1831,6 +1832,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     return false;
   }
 
+  // Three functions below copied from campaign-info.component. Apologies for duplication.
   getBeneficiaryIcon(beneficiary: string) {
     return CampaignGroupsService.getBeneficiaryIcon(beneficiary);
   }
