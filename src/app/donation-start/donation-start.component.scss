@@ -1,7 +1,6 @@
 @use '@angular/material' as mat;
 @import '../../abstract';
 
-
 input:disabled {
   cursor: not-allowed; // Visual help on desktop when e.g. address lookup has frozen postcode field.
 }
@@ -288,6 +287,9 @@ a {
   padding: 0.25rem 1rem 1rem 1rem;
 }
 
+// code below copied from src/app/campaign-details/campaign-details.component.scss
+// I'm not keen on the copy & paste but I struggled to get it to work in a more elegant way.
+
 .icons {
   display: flex;
   flex-wrap: wrap;
@@ -297,6 +299,8 @@ a {
   display: flex;
   padding: 10px;
 
+  // in campaign-details.component.scss the selector here is `svg` rather than `fa-icon`, but that doesn't seem to work
+  // here.
   fa-icon {
     margin-right: 5px;
     color: $colour-primary; // #2C089BFF
