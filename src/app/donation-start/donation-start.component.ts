@@ -1,5 +1,5 @@
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { getCurrencySymbol, isPlatformBrowser } from '@angular/common';
+import {CurrencyPipe, DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
   AfterContentChecked,
@@ -51,11 +51,16 @@ import { getCurrencyMinValidator } from '../validators/currency-min';
 import { EMAIL_REGEXP } from '../validators/patterns';
 import { ValidateBillingPostCode } from '../validators/validate-billing-post-code';
 import {CampaignGroupsService} from "../campaign-groups.service";
+import {TimeLeftPipe} from "../time-left.pipe";
 
 @Component({
   selector: 'app-donation-start',
   templateUrl: './donation-start.component.html',
   styleUrls: ['./donation-start.component.scss'],
+  providers: [
+    CurrencyPipe,
+    TimeLeftPipe,
+  ]
 })
 export class DonationStartComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
@@ -114,6 +119,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   // Track 'Next' clicks so we know when to show missing radio button error messages.
   triedToLeaveGiftAid = false;
   triedToLeaveMarketing = false;
+  campaignFinished: boolean;
+  campaignOpen: boolean;
 
   private campaignId: string;
 
@@ -146,6 +153,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private captchaCode?: string;
   private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
+  campaignRaised: string; // Formatted
+  campaignTarget: string; // Formatted
+
+
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -162,6 +173,10 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     private route: ActivatedRoute,
     private router: Router,
     private stripeService: StripeService,
+    private currencyPipe: CurrencyPipe,
+    public datePipe: DatePipe,
+    public timeLeftPipe: TimeLeftPipe,
+
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
   }
@@ -193,6 +208,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         }
       }
     }
+
+    this.campaignTarget = this.currencyPipe.transform(this.campaign.target, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
+    this.campaignRaised = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
+    this.campaignFinished = CampaignService.isInPast(this.campaign);
+    this.campaignOpen = CampaignService.isOpenForDonations(this.campaign);
+
 
     const formGroups: {
       amounts: FormGroup,   // Matching reservation happens at the end of this group.
@@ -1816,5 +1837,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   getCategoryIcon(category: string) {
     return CampaignGroupsService.getCategoryIcon(category);
+  }
+
+  getPercentageRaised(campaign: Campaign): number | undefined {
+    return CampaignService.percentRaised(campaign);
   }
 }
