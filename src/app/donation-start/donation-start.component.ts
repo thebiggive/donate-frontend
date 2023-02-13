@@ -50,6 +50,7 @@ import { getCurrencyMaxValidator } from '../validators/currency-max';
 import { getCurrencyMinValidator } from '../validators/currency-min';
 import { EMAIL_REGEXP } from '../validators/patterns';
 import { ValidateBillingPostCode } from '../validators/validate-billing-post-code';
+import {CampaignGroupsService} from "../campaign-groups.service";
 
 @Component({
   selector: 'app-donation-start',
@@ -1807,5 +1808,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     return false;
+  }
+
+  getBeneficiaryIcon(beneficiary: string) {
+    return CampaignGroupsService.getBeneficiaryIcon(beneficiary);
+  }
+
+  getCategoryIcon(category: string) {
+    return CampaignGroupsService.getCategoryIcon(category);
   }
 }

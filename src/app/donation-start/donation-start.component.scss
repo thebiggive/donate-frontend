@@ -1,24 +1,6 @@
 @use '@angular/material' as mat;
 @import '../../abstract';
 
-.icon-wrapper {
-  // Copied from campaign-details.component.scss. but doesn't seem to be having any effect @todo Fix and DRY up
-  display: flex;
-  padding: 10px;
-
-  svg {
-    margin-right: 5px;
-    color: $colour-primary;
-    width: 20px;
-    height: 20px;
-  }
-
-  .c-icon-title {
-    font-size: 0.8rem;
-    margin: auto;
-  }
-}
-
 
 input:disabled {
   cursor: not-allowed; // Visual help on desktop when e.g. address lookup has frozen postcode field.
@@ -304,4 +286,43 @@ a {
   text-align: center;
   margin-top: 1rem;
   padding: 0.25rem 1rem 1rem 1rem;
+}
+
+.icons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.icon-wrapper {
+  display: flex;
+  padding: 10px;
+
+  fa-icon {
+    margin-right: 5px;
+    color: $colour-primary; // #2C089BFF
+    width: 20px;
+    height: 20px;
+  }
+
+  .c-icon-title {
+    font-size: 0.8rem;
+    margin: auto;
+  }
+}
+
+
+#campaign-highlights-beneficiaries-and-categories-mobile {
+  display: none;
+}
+
+
+@media screen and (max-width: 960px){
+  #campaign-highlights-beneficiaries-and-categories-desktop {
+    display: none;
+  }
+
+  #campaign-highlights-beneficiaries-and-categories-mobile {
+    display: block;
+    margin-top: 30px;
+  }
 }
