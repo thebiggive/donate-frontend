@@ -15,22 +15,22 @@ import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { TimeLeftPipe } from '../time-left.pipe';
 
 @NgModule({
-  imports: [
-    ...allChildComponentImports,
-    CampaignDetailsRoutingModule,
-    CurrencyPipe,
-    FontAwesomeModule,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatTabsModule,
-    OptimisedImagePipe,
-    TimeLeftPipe,
-  ],
-  declarations: [CampaignDetailsComponent, CampaignInfoComponent],
-  providers: [
-    DatePipe,
-  ],
+    imports: [
+        ...allChildComponentImports,
+        CampaignDetailsRoutingModule,
+        CurrencyPipe,
+        FontAwesomeModule,
+        MatButtonModule,
+        MatCardModule,
+        MatIconModule,
+        MatProgressSpinnerModule,
+        MatTabsModule,
+        OptimisedImagePipe,
+        TimeLeftPipe,
+    ],
+    declarations: [CampaignDetailsComponent, CampaignInfoComponent],
+    providers: [
+        DatePipe,
+    ],
 })
 export class CampaignDetailsModule {}
