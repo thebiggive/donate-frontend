@@ -32,8 +32,5 @@ import { TimeLeftPipe } from '../time-left.pipe';
     providers: [
         DatePipe,
     ],
-    exports: [
-        CampaignInfoComponent
-    ]
 })
 export class CampaignDetailsModule {}
