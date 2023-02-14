@@ -488,6 +488,17 @@
              sizes of icons
              -->
         <div>
+
+          <div class="c-banner">
+            <img
+              class="c-banner__image b-w-100"
+              *ngIf="bannerUri"
+              [src]="bannerUri"
+              alt=""
+              role="presentation"
+            >
+          </div>
+
           <biggive-campaign-highlights
             space-below=0
             primary-figure-label="Amount raised"

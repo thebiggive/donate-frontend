@@ -52,6 +52,7 @@ import { EMAIL_REGEXP } from '../validators/patterns';
 import { ValidateBillingPostCode } from '../validators/validate-billing-post-code';
 import {CampaignGroupsService} from "../campaign-groups.service";
 import {TimeLeftPipe} from "../time-left.pipe";
+import {ImageService} from "../image.service";
 
 @Component({
   selector: 'app-donation-start',
@@ -121,6 +122,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   triedToLeaveMarketing = false;
   campaignFinished: boolean;
   campaignOpen: boolean;
+  bannerUri: string | null;
 
   private campaignId: string;
 
@@ -167,6 +169,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
+    private imageService: ImageService,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -208,6 +211,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         }
       }
     }
+
+    this.imageService.getImageUri(this.campaign.bannerUri, 830).subscribe(uri => this.bannerUri = uri);
 
     // This block of code is copied from campaign-info.component. Apologies for duplication.
     this.campaignTarget = this.currencyPipe.transform(this.campaign.target, this.campaign.currencyCode, 'symbol', '1.0-0') as string;

@@ -1,6 +1,14 @@
 @use '@angular/material' as mat;
 @import '../../abstract';
 
+* {
+  //outline: 1px dotted red;
+}
+
+div .c-banner {
+  background-color: white;
+}
+
 input:disabled {
   cursor: not-allowed; // Visual help on desktop when e.g. address lookup has frozen postcode field.
 }
