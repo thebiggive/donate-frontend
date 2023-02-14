@@ -614,6 +614,15 @@
   }
 }
 
+@mixin button-brand-mhf-turquoise {
+  color: $colour-white;
+  background-color: $colour-brand-mhf-turquoise;
+  border-color: $colour-brand-mhf-turquoise;
+  &:hover {
+    background-color: $colour-black;
+  }
+}
+
 @mixin button-brand-5 {
   color: $colour-white;
   background-color: $colour-brand-orange;
@@ -910,6 +919,10 @@
 
   .fill-brand-6 {
       fill: $colour-brand-grey;
+  }
+
+  .fill-brand-mhf-turquoise {
+    fill: $colour-brand-mhf-turquoise;
   }
 
   .fill-white {

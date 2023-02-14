@@ -56,6 +56,10 @@
     @include button-brand-4();
 }
 
+.button-brand-mhf-turquoise {
+  @include button-brand-mhf-turquoise();
+}
+
 .button-brand-5 {
     @include button-brand-5();
 }
