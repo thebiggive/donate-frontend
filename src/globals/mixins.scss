@@ -227,11 +227,11 @@
   &.colour-scheme-primary {background-color: $colour-primary-blue; svg {fill: $colour-white;}}
   &.colour-scheme-secondary {background-color: $colour-secondary-green; svg {fill: $colour-black;}}
   &.colour-scheme-tertiary {background-color: $colour-tertiary-coral; svg {fill: $colour-black;}}
-  &.colour-scheme-brand-1 {background-color: $colour-brand-red; svg {fill: $colour-black;}}
-  &.colour-scheme-brand-2 {background-color: $colour-brand-purple; svg {fill: $colour-black;}}
-  &.colour-scheme-brand-3 {background-color: $colour-brand-green; svg {fill: $colour-black;}}
-  &.colour-scheme-brand-4 {background-color: $colour-brand-yellow; svg {fill: $colour-black;}}
-  &.colour-scheme-brand-5 {background-color: $colour-brand-orange; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-1 {background-color: $colour-brand-cc-red; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-2 {background-color: $colour-brand-wgmf-purple; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-3 {background-color: $colour-brand-gmf-green; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-4 {background-color: $colour-brand-emf-yellow; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-5 {background-color: $colour-brand-c4c-orange; svg {fill: $colour-black;}}
   &.colour-scheme-brand-6 {background-color: $colour-brand-grey; svg {fill: $colour-black;}}
   &.colour-scheme-white {background-color: $colour-white; svg {fill: $colour-black;}}
   &.colour-scheme-black {background-color: $colour-black; svg {fill: $colour-white;}}
@@ -438,7 +438,7 @@
 }
 
 @mixin button-clear-brand-1 {
-  color: $colour-brand-red;
+  color: $colour-brand-cc-red;
   background-color: transparent;
   text-decoration: underline;
   border: 0;
@@ -451,7 +451,7 @@
 }
 
 @mixin button-clear-brand-2 {
-  color: $colour-brand-purple;
+  color: $colour-brand-wgmf-purple;
   background-color: transparent;
   text-decoration: underline;
   border: 0;
@@ -464,7 +464,7 @@
 }
 
 @mixin button-clear-brand-3 {
-  color: $colour-brand-green;
+  color: $colour-brand-gmf-green;
   background-color: transparent;
   text-decoration: underline;
   border: 0;
@@ -477,7 +477,7 @@
 }
 
 @mixin button-clear-brand-4 {
-  color: $colour-brand-yellow;
+  color: $colour-brand-emf-yellow;
   background-color: transparent;
   text-decoration: underline;
   border: 0;
@@ -490,7 +490,7 @@
 }
 
 @mixin button-clear-brand-5 {
-  color: $colour-brand-orange;
+  color: $colour-brand-c4c-orange;
   background-color: transparent;
   text-decoration: underline;
   border: 0;
@@ -580,8 +580,8 @@
 
 @mixin button-brand-1 {
   color: $colour-white;
-  background-color: $colour-brand-red;
-  border-color: $colour-brand-red;
+  background-color: $colour-brand-cc-red;
+  border-color: $colour-brand-cc-red;
   &:hover {
     background-color: $colour-white;
   }
@@ -589,8 +589,8 @@
 
 @mixin button-brand-2 {
   color: $colour-white;
-  background-color: $colour-brand-purple;
-  border-color: $colour-brand-purple;
+  background-color: $colour-brand-wgmf-purple;
+  border-color: $colour-brand-wgmf-purple;
   &:hover {
     background-color: $colour-white;
   }
@@ -598,8 +598,8 @@
 
 @mixin button-brand-3 {
   color: $colour-white;
-  background-color: $colour-brand-green;
-  border-color: $colour-brand-green;
+  background-color: $colour-brand-gmf-green;
+  border-color: $colour-brand-gmf-green;
   &:hover {
     background-color: $colour-white;
   }
@@ -607,8 +607,8 @@
 
 @mixin button-brand-4 {
   color: $colour-white;
-  background-color: $colour-brand-yellow;
-  border-color: $colour-brand-yellow;
+  background-color: $colour-brand-emf-yellow;
+  border-color: $colour-brand-emf-yellow;
   &:hover {
     background-color: $colour-black;
   }
@@ -625,8 +625,8 @@
 
 @mixin button-brand-5 {
   color: $colour-white;
-  background-color: $colour-brand-orange;
-  border-color: $colour-brand-orange;
+  background-color: $colour-brand-c4c-orange;
+  border-color: $colour-brand-c4c-orange;
   &:hover {
     background-color: $colour-white;
   }
@@ -845,27 +845,27 @@
 
   .background-colour-hover-brand-1:hover,
   .background-colour-brand-1 {
-      background-color: $colour-brand-red;
+      background-color: $colour-brand-cc-red;
   }
 
   .background-colour-hover-brand-2:hover,
   .background-colour-brand-2 {
-      background-color: $colour-brand-purple;
+      background-color: $colour-brand-wgmf-purple;
   }
 
   .background-colour-hover-brand-3:hover,
   .background-colour-brand-3 {
-      background-color: $colour-brand-green;
+      background-color: $colour-brand-gmf-green;
   }
 
   .background-colour-hover-brand-4:hover,
   .background-colour-brand-4 {
-      background-color: $colour-brand-yellow;
+      background-color: $colour-brand-emf-yellow;
   }
 
   .background-colour-hover-brand-5:hover,
   .background-colour-brand-5 {
-      background-color: $colour-brand-orange;
+      background-color: $colour-brand-c4c-orange;
   }
 
   .background-colour-hover-brand-6:hover,
@@ -898,23 +898,23 @@
   }
 
   .fill-brand-1 {
-      fill: $colour-brand-red;
+      fill: $colour-brand-cc-red;
   }
 
   .fill-brand-2 {
-      fill: $colour-brand-purple;
+      fill: $colour-brand-wgmf-purple;
   }
 
   .fill-brand-3 {
-      fill: $colour-brand-green;
+      fill: $colour-brand-gmf-green;
   }
 
   .fill-brand-4 {
-      fill: $colour-brand-yellow;
+      fill: $colour-brand-emf-yellow;
   }
 
   .fill-brand-5 {
-      fill: $colour-brand-orange;
+      fill: $colour-brand-c4c-orange;
   }
 
   .fill-brand-6 {
@@ -1002,27 +1002,27 @@
 
   .text-colour-hover-brand-1:hover,
   .text-colour-brand-1 {
-      color: $colour-brand-red;
+      color: $colour-brand-cc-red;
   }
 
   .text-colour-hover-brand-2:hover,
   .text-colour-brand-2 {
-      color: $colour-brand-purple;
+      color: $colour-brand-wgmf-purple;
   }
 
   .text-colour-hover-brand-3:hover,
   .text-colour-brand-3 {
-      color: $colour-brand-green;
+      color: $colour-brand-gmf-green;
   }
 
   .text-colour-hover-brand-4:hover,
   .text-colour-brand-4 {
-      color: $colour-brand-yellow;
+      color: $colour-brand-emf-yellow;
   }
 
   .text-colour-hover-brand-5:hover,
   .text-colour-brand-5 {
-      color: $colour-brand-orange;
+      color: $colour-brand-c4c-orange;
   }
 
   .text-colour-hover-brand-6:hover,
