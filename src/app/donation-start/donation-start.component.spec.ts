@@ -22,25 +22,8 @@ import { Campaign } from '../campaign.model';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { DonationStartComponent } from './donation-start.component';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
-import {CampaignDetailsComponent} from "../campaign-details/campaign-details.component";
-import {CommonModule, CurrencyPipe, DatePipe} from "@angular/common";
-import {MatTabsModule} from "@angular/material/tabs";
-import {OptimisedImagePipe} from "../optimised-image.pipe";
-import {TimeLeftPipe} from "../time-left.pipe";
 
 describe('DonationStartComponent', () => {
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-      ],
-      providers: [
-        TimeLeftPipe,
-        DatePipe
-      ],
-    })
-      .compileComponents();
-  }));
-
   (window as any).gtag = (...args: any[]) => args;
 
   let component: DonationStartComponent;

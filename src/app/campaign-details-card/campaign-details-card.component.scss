@@ -1,0 +1,87 @@
+@import '../../abstract';
+
+.c-card {
+  @include make-card($box-shadow-hard);
+}
+
+// See also mat-progress-bar { ... } in _overwrite-mat.scss.
+.c-progress {
+  height: 5px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.c-icon-list {
+  list-style-type: none;
+  padding: 0;
+
+  @include icon-bullet;
+}
+
+.c-icon-title {
+  font-size: 0.8rem;
+}
+
+.c-banner__image {
+  height: auto;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.c-badge {
+  @include make-match-badge;
+}
+
+.c-contour {
+  @include make-badge-contour;
+}
+
+.c-card-body {
+  padding: 15px;
+  margin-top: -20px;
+  @media #{$breakpoint-xl} {
+    padding: 15px 30px;
+  }
+}
+
+.c-secondary-stats {
+  display: flex;
+  flex-direction: row;
+
+  > div {
+    width: 50%;
+  }
+}
+
+.c-campaign-target__description,
+.c-campaign-raised__description,
+.c-campaign-status__description,
+.c-campaign-country__description,
+.c-campaign-category__description,
+.c-campaign-beneficiary__description,
+.c-campaign-donations__description {
+  @include size-md;
+  line-height: 20px;
+  margin: 1rem 0 0.25rem;
+}
+
+.c-campaign-target__value,
+.c-campaign-raised__value,
+.c-campaign-status__value,
+.c-campaign-donations__value {
+  @include size-xl;
+  margin-top: 0;
+  color: $colour-primary;
+}
+
+.c-championed-by, .c-country__value {
+  color: $colour-primary;
+  margin-top: 0;
+  a {
+    text-decoration: none;
+  }
+}
+
+.c-country {
+  margin-top: 1.5rem;
+}

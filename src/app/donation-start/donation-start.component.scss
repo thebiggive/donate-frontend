@@ -286,36 +286,3 @@ a {
   margin-top: 1rem;
   padding: 0.25rem 1rem 1rem 1rem;
 }
-
-// code below copied from src/app/campaign-details/campaign-details.component.scss
-// I'm not keen on the copy & paste but I struggled to get it to work in a more elegant way.
-
-.icons {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.icon-wrapper {
-  display: flex;
-  padding: 10px;
-
-  // in campaign-details.component.scss the selector here is `svg` rather than `fa-icon`, but that doesn't seem to work
-  // here.
-  fa-icon {
-    margin-right: 5px;
-    color: $colour-primary; // #2C089BFF
-    svg {
-      width: 20px;
-      height: 20px;
-    }
-  }
-
-  .c-icon-title {
-    font-size: 0.8rem;
-    margin: auto;
-  }
-}
-
-h5 {
-  font-size: 1rem;
-}

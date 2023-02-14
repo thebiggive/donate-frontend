@@ -16,15 +16,16 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {RecaptchaModule} from 'ng-recaptcha';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
+import {CampaignDetailsCardComponent} from '../campaign-details-card/campaign-details-card.component';
 import { DonationStartComponent } from './donation-start.component';
 import {DonationStartRoutingModule} from './donation-start-routing.module';
 import {ExactCurrencyPipe} from '../exact-currency.pipe';
 import {TimeLeftPipe} from '../time-left.pipe';
-import {CampaignDetailsModule} from "../campaign-details/campaign-details.module";
 
 @NgModule({
   imports: [
     ...allChildComponentImports,
+    CampaignDetailsCardComponent,
     DonationStartRoutingModule,
     ExactCurrencyPipe,
     FontAwesomeModule,
@@ -43,7 +44,6 @@ import {CampaignDetailsModule} from "../campaign-details/campaign-details.module
     ReactiveFormsModule,
     RecaptchaModule,
     TimeLeftPipe,
-    CampaignDetailsModule,
   ],
   declarations: [DonationStartComponent],
   providers: [
