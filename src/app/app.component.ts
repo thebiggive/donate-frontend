@@ -8,6 +8,8 @@ import {AnalyticsService} from './analytics.service';
 import {DonationService} from './donation.service';
 import {GetSiteControlService} from './getsitecontrol.service';
 import {NavigationService} from './navigation.service';
+import {Person} from "./person.model";
+import {IdentityService} from "./identity.service";
 
 @Component({
   selector: 'app-root',
@@ -16,8 +18,11 @@ import {NavigationService} from './navigation.service';
 export class AppComponent implements AfterViewInit, OnInit {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
 
+  public isLoggedIn: boolean = false;
+
   constructor(
     private analyticsService: AnalyticsService,
+    private identityService: IdentityService,
     @Inject(APP_BASE_HREF) private baseHref: string,
     private donationService: DonationService,
     private getSiteControlService: GetSiteControlService,
@@ -68,6 +73,10 @@ export class AppComponent implements AfterViewInit, OnInit {
 
       window.location.host = "donate.thebiggive.org.uk";
     }
+
+    this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
+      this.isLoggedIn = !! person;
+    });
   }
 
   ngAfterViewInit() {
