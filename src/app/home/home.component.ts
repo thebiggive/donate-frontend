@@ -27,13 +27,15 @@ export class HomeComponent implements OnInit {
     const viewingTime = new Date();
 
     const mhfOpening = new Date("2023-02-20T00:00:00.000+00:00");
+    const mnfClosing = new Date("2023-03-26T23:59:00.000+00:00");
+    const cfcClosing = new Date("2023-02-27T00:00:00.000+00:00");
 
     this.showMNFNowOpen =
       viewingTime >= mhfOpening &&
-      viewingTime < new Date("2023-03-26T23:59:00.000+00:00");
+      viewingTime < mnfClosing;
 
     this.showGreenMatchFund = viewingTime < mhfOpening;
-    this.showExplore = viewingTime >= mhfOpening;
-    this.showChampionsForChildren = viewingTime < new Date("2023-02-26T23:59:00.000+00:00");
+    this.showExplore = viewingTime >= cfcClosing;
+    this.showChampionsForChildren = viewingTime < cfcClosing;
   }
 }
