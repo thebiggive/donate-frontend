@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import { PageMetaService } from '../page-meta.service';
+import {PageMetaService} from '../page-meta.service';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +10,6 @@ import { PageMetaService } from '../page-meta.service';
 export class HomeComponent implements OnInit {
   mainTitle = 'Matching Donations.\nMultiplying Impact.';
 
-  showMHFSaveTheDate: boolean;
   showMNFNowOpen: boolean;
   showGreenMatchFund: boolean;
   showChampionsForChildren: boolean;
@@ -27,10 +26,14 @@ export class HomeComponent implements OnInit {
 
     const viewingTime = new Date();
 
-    this.showMHFSaveTheDate = viewingTime < new Date("2023-02-19T23:59:00.000+00:00");
-    this.showMNFNowOpen = ! this.showMHFSaveTheDate && viewingTime < new Date("2023-03-26T23:59:00.000+00:00");
-    this.showGreenMatchFund = viewingTime < new Date("2023-02-19T23:59:00.000+00:00");
+    const mhfOpening = new Date("2023-02-20T00:00:00.000+00:00");
+
+    this.showMNFNowOpen =
+      viewingTime >= mhfOpening &&
+      viewingTime < new Date("2023-03-26T23:59:00.000+00:00");
+
+    this.showGreenMatchFund = viewingTime < mhfOpening;
+    this.showExplore = viewingTime >= mhfOpening;
     this.showChampionsForChildren = viewingTime < new Date("2023-02-26T23:59:00.000+00:00");
-    this.showExplore = viewingTime >= new Date("2023-02-19T23:59:00.000+00:00");
   }
 }
