@@ -10,6 +10,7 @@ import {GetSiteControlService} from './getsitecontrol.service';
 import {NavigationService} from './navigation.service';
 import {Person} from "./person.model";
 import {IdentityService} from "./identity.service";
+import {flags} from "./featureFlags"
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
 
   public isLoggedIn: boolean = false;
+  public flags: { profilePageEnabled: boolean };
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -73,6 +75,8 @@ export class AppComponent implements AfterViewInit, OnInit {
 
       window.location.host = "donate.thebiggive.org.uk";
     }
+
+    this.flags = flags;
 
     this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
       this.isLoggedIn = !! person;

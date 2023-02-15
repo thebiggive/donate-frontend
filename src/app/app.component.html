@@ -119,7 +119,7 @@
     </li>
   </ul>
   <ul slot="nav-secondary">
-    <li *ngIf="isLoggedIn"><a href="https://www.thebiggive.org.uk/s/contact-us">My Account</a></li>
+    <li *ngIf="isLoggedIn && flags.profilePageEnabled"><a href="https://www.thebiggive.org.uk/s/contact-us">My Account</a></li>
     <li><a href="https://www.thebiggive.org.uk/s/contact-us">Contact us</a></li>
     <li><a href="https://www.thebiggive.org.uk/charities/s/login">Charity login</a></li>
   </ul>
