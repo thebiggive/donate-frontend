@@ -79,7 +79,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.flags = flags;
 
     this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
-      this.isLoggedIn = !! person;
+      this.isLoggedIn = !! person && !! person.has_password;
     });
   }
 

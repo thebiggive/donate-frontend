@@ -81,6 +81,11 @@ export class IdentityService {
     );
   }
 
+  /** Returns an observable of a person if logged in, or of null.
+   *  Note that the person may not have a password - if not they should
+   *  probably not be treated as fully logged-in, although we could offer
+   *  them the opportunity to set a password.
+   */
   getLoggedInPerson(): Observable<null|Person> {
     const jwt = this.getIdAndJWT();
 
