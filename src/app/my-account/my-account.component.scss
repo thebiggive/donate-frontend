@@ -1,6 +1,19 @@
+@use '@angular/material' as mat;
+@import '../../abstract';
+
+.id-info {
+  // copied from donation-start.component.css @todo consider de-duplicating code.
+  @include make-card($box-shadow-hard);
+
+  text-align: center;
+  margin-top: 1rem;
+  padding: 0.25rem 1rem 1rem 1rem;
+}
+
 table.personal-details {
   td {
     padding-bottom: 15px;
     padding-right: 20px;
   }
 }
+

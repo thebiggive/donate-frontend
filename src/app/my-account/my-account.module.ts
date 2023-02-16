@@ -7,16 +7,18 @@ import { allChildComponentImports } from '../../allChildComponentImports';
 import {OptimisedImagePipe} from '../optimised-image.pipe';
 import {MyAccountRoutingModule} from "./my-account-routing.module";
 import {MyAccountComponent} from "./my-account.component";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
-  imports: [
-    ...allChildComponentImports,
-    AsyncPipe,
-    MyAccountRoutingModule,
-    InfiniteScrollModule,
-    MatProgressSpinnerModule,
-    OptimisedImagePipe,
-  ],
+    imports: [
+        ...allChildComponentImports,
+        AsyncPipe,
+        MyAccountRoutingModule,
+        InfiniteScrollModule,
+        MatProgressSpinnerModule,
+        OptimisedImagePipe,
+        MatButtonModule,
+    ],
   declarations: [
     MyAccountComponent,
   ],

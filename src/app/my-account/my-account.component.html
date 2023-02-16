@@ -1,35 +1,48 @@
-<main>
-  <biggive-page-section>
-    <biggive-heading
-      space-above=0
-      space-below=3
-      colour="black"
-      html-element="h1"
-      size="1"
-      align="left"
-      text="My Account"
-    ></biggive-heading>
-      <table *ngIf="person" class="personal-details">
-      <!--
-      Not sure why Typescript doesn't allow me to concatenate like this.
-      <h2>{{person.first_name + person.last_name}}</h2>
-      -->
-      <tr>
-        <td>Name</td>
-        <td>{{person.first_name}} {{person.last_name}}</td>
-      </tr>
-      <tr>
-        <td>Email</td>
-        <td>{{person.email_address}}</td>
-      </tr>
+<main class="b-container">
+  <div class="c-form-container">
+    <div class="b-primary-column">
+      <biggive-page-section>
+        <biggive-heading
+          space-above=0
+          space-below=3
+          colour="black"
+          html-element="h1"
+          size="1"
+          align="left"
+          text="My Account"
+        ></biggive-heading>
 
-        <tr *ngIf="person.home_address_line_1">
-          <td>Address</td>
-          <td>{{person.home_address_line_1}}
-            <br />
-          {{person.home_postcode}}
-          </td>
-        </tr>
-      </table>
-  </biggive-page-section>
+        <div *ngIf="person" class="id-info">
+          <p>Logged in as <strong>{{ person.email_address }}</strong></p>
+          <p>
+            <button mat-raised-button (click)="logout()">Log out</button>
+          </p>
+        </div>
+      </biggive-page-section>
+      <biggive-page-section>
+        <table *ngIf="person" class="personal-details">
+          <!--
+          Not sure why Typescript doesn't allow me to concatenate like this.
+          <h2>{{person.first_name + person.last_name}}</h2>
+          -->
+          <tr>
+            <td>Name</td>
+            <td>{{person.first_name}} {{person.last_name}}</td>
+          </tr>
+          <tr>
+            <td>Email</td>
+            <td>{{person.email_address}}</td>
+          </tr>
+
+          <tr *ngIf="person.home_address_line_1">
+            <td>Address</td>
+            <td>{{person.home_address_line_1}}
+              <br/>
+              {{person.home_postcode}}
+            </td>
+          </tr>
+        </table>
+      </biggive-page-section>
+    </div>
+  </div>
 </main>

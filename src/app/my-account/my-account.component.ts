@@ -37,4 +37,9 @@ export class MyAccountComponent implements OnInit {
       }
     });
   }
+
+  logout() {
+    this.identityService.clearJWT();
+    this.router.navigate(['']);
+  }
 }
