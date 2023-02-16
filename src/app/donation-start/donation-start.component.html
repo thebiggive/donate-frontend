@@ -489,6 +489,11 @@
              -->
         <div>
 
+          <div *ngIf="campaign.isMatched" class="match-funded-badge-wrapper">
+            <div class="match-funded-badge">
+              Match funded
+            </div>
+          </div>
           <div class="c-banner">
             <img
               class="c-banner__image b-w-100"

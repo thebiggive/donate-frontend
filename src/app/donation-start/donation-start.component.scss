@@ -323,3 +323,21 @@ a {
 h5 {
   font-size: 1rem;
 }
+
+div.match-funded-badge {
+  width: 15em;
+  height: 2em;
+  text-align: center;
+  background-color: $colour-highlight;
+  font-weight: bold;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  top: -1em;
+}
+
+div.match-funded-badge-wrapper {
+  position: relative;
+}
