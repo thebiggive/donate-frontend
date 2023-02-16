@@ -3,8 +3,9 @@ import { Routes } from '@angular/router';
 import { CampaignListResolver } from './campaign-list.resolver';
 import { CampaignResolver } from './campaign.resolver';
 import { CharityCampaignsResolver } from './charity-campaigns.resolver';
+import { flags } from "./featureFlags";
 
-export const routes: Routes = [
+const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
@@ -105,3 +106,14 @@ export const routes: Routes = [
       .then(c => c.MetaCampaignModule),
   },
 ];
+
+if (flags.profilePageEnabled) {
+  routes.unshift({
+    path: 'my-account',
+    pathMatch: 'full',
+    loadChildren: () => import('./my-account/my-account.module')
+      .then(c => c.MyAccountModule),
+  });
+}
+
+export {routes};

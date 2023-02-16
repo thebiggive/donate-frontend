@@ -1,0 +1,19 @@
+<main>
+  <biggive-page-section>
+    <h1>My Account</h1>
+    <div *ngIf="person">
+      <!--
+      Not sure why Typescript doesn't allow me to concatenate like this.
+      <h2>{{person.first_name + person.last_name}}</h2>
+      -->
+      <h2>{{person.first_name}} {{person.last_name}}</h2>
+      <p>Email: <strong>{{person.email_address}}</strong></p>
+    </div>
+
+    <div *ngIf="person.home_address_line_1">
+      <h2>Home Address</h2>
+      {{person.home_address_line_1}}
+      {{person.home_postcode}}
+    </div>
+  </biggive-page-section>
+</main>
