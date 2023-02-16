@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import { StorageService } from 'ngx-webstorage-service';
-import { Observable } from 'rxjs';
+import {Observable, of} from 'rxjs';
 
 import { AnalyticsService } from './analytics.service';
 import { Credentials } from './credentials.model';
@@ -81,6 +81,16 @@ export class IdentityService {
     );
   }
 
+  getLoggedInPerson(): Observable<null|Person> {
+    const jwt = this.getIdAndJWT();
+
+    if (! jwt) {
+      return of(null);
+    }
+
+    return this.get(jwt.id, jwt.jwt);
+  }
+
   update(person: Person): Observable<Person> {
     return this.http.put<Person>(
       `${environment.identityApiPrefix}${this.peoplePath}/${person.id}`,
@@ -88,7 +98,7 @@ export class IdentityService {
       this.getAuthHttpOptions(person),
     );
   }
-  
+
   clearJWT() {
     this.storage.remove(this.storageKey);
   }

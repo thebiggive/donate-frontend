@@ -14,6 +14,7 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { AppComponent } from './app.component';
 import { TBG_DONATE_STORAGE } from './donation.service';
+import { TBG_DONATE_ID_STORAGE } from './identity.service'
 
 describe('AppComponent', () => {
   beforeEach(waitForAsync(() => {
@@ -35,6 +36,7 @@ describe('AppComponent', () => {
         InMemoryStorageService,
         // Inject in-memory storage for tests, in place of local storage.
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
+        { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
       ],
     }).compileComponents();
   }));

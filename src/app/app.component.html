@@ -119,6 +119,9 @@
     </li>
   </ul>
   <ul slot="nav-secondary">
+    <li *ngIf="isLoggedIn && flags.profilePageEnabled">
+      <a routerLink="/my-account">My Account</a>
+    </li>
     <li><a href="https://www.thebiggive.org.uk/s/contact-us">Contact us</a></li>
     <li><a href="https://www.thebiggive.org.uk/charities/s/login">Charity login</a></li>
   </ul>
