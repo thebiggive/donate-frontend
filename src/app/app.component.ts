@@ -80,6 +80,9 @@ export class AppComponent implements AfterViewInit, OnInit {
 
     this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
       this.isLoggedIn = !! person && !! person.has_password;
+      this.identityService.onJWTModified(() => {
+        this.ngOnInit()
+      });
     });
   }
 
