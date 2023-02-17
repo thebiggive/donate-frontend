@@ -94,6 +94,6 @@ describe('MyAccountComponent', () => {
   });
 
   it('should show payment card number and brand', () => {
-    expect(element.textContent).toContain("AcmeCard **** **** **** 1234")
+    expect(element.textContent).toContain("ACMECARD Card Ending: 1234  Expiry Date: 05/2030")
   });
 });

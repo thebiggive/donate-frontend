@@ -59,13 +59,6 @@ export class MyAccountComponent implements OnInit {
       );
   }
 
-  displayPaymentCard(card: PaymentMethod.Card): string
-  {
-    // we guess that the Primary account number might have ahd 16 digits. This isn't guarnateed to be correct
-    // but maybe good enough to make clear that we're displaying the last 4.
-    return card.brand + " **** **** **** " + card.last4
-  }
-
   logout() {
     this.identityService.clearJWT();
     this.router.navigate(['']);
