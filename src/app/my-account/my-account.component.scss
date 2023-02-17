@@ -10,10 +10,11 @@
   padding: 0.25rem 1rem 1rem 1rem;
 }
 
-table.personal-details {
+table#personal-details, table#paymentMethods {
   td {
     padding-bottom: 15px;
-    padding-right: 20px;
+    padding-right: 60px;
+    min-width: 100px;
   }
 }
 

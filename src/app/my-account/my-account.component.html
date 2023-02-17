@@ -20,7 +20,8 @@
         </div>
       </biggive-page-section>
       <biggive-page-section>
-        <table *ngIf="person" class="personal-details">
+        <h2>Your Details</h2>
+        <table *ngIf="person" id="personal-details">
           <!--
           Not sure why Typescript doesn't allow me to concatenate like this.
           <h2>{{person.first_name + person.last_name}}</h2>
@@ -45,19 +46,21 @@
       </biggive-page-section>
 
       <biggive-page-section>
-        <h2>Saved Payment Methods</h2>
+        <h2>Your Payment Methods</h2>
 
         <div *ngIf="paymentMethods === undefined">
           <mat-spinner [diameter]="40" aria-label="Loading payment methods"></mat-spinner>
         </div>
 
-        <div *ngIf="paymentMethods !== undefined && paymentMethods.length > 0">
-          <div *ngFor="let method of paymentMethods">
-            <div *ngIf="method.card !== undefined">
-              {{displayPaymentCard(method.card)}}
-            </div>
-          </div>
-        </div>
+        <table id="paymentMethods" *ngIf="paymentMethods !== undefined && paymentMethods.length > 0">
+          <tr *ngFor="let method of paymentMethods">
+            <td>{{(method.card?.brand || method.type).toUpperCase()}}</td>
+            <td *ngIf="method.card !== undefined">
+              Card Ending: {{method.card.last4}} <br />
+              Expiry Date: {{method.card.exp_month.toString().padStart(2, "0")}}/{{method.card.exp_year}}
+            </td>
+          </tr>
+        </table>
 
         <div *ngIf="paymentMethods !== undefined && paymentMethods.length === 0">
           No saved payment methods
