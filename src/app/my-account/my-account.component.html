@@ -43,6 +43,26 @@
           </tr>
         </table>
       </biggive-page-section>
+
+      <biggive-page-section>
+        <h2>Saved Payment Methods</h2>
+
+        <div *ngIf="paymentMethods === undefined">
+          <mat-spinner [diameter]="40" aria-label="Loading payment methods"></mat-spinner>
+        </div>
+
+        <div *ngIf="paymentMethods !== undefined && paymentMethods.length > 0">
+          <div *ngFor="let method of paymentMethods">
+            <div *ngIf="method.card !== undefined">
+              {{displayPaymentCard(method.card)}}
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="paymentMethods !== undefined && paymentMethods.length === 0">
+          No saved payment methods
+        </div>
+      </biggive-page-section>
     </div>
   </div>
 </main>
