@@ -24,6 +24,8 @@ export class IdentityService {
   // Key is per-domain/env. For now we simply store a single JWT (or none).
   private readonly storageKey = `${environment.identityApiPrefix}/v1/jwt`;
 
+  private jwtModifiedCallbacks: Array<() => void> = [];
+
   constructor(
     private analyticsService: AnalyticsService,
     private http: HttpClient,
@@ -81,6 +83,11 @@ export class IdentityService {
     );
   }
 
+  /** Returns an observable of a person if logged in, or of null.
+   *  Note that the person may not have a password - if not they should
+   *  probably not be treated as fully logged-in, although we could offer
+   *  them the opportunity to set a password.
+   */
   getLoggedInPerson(): Observable<null|Person> {
     const jwt = this.getIdAndJWT();
 
@@ -101,6 +108,7 @@ export class IdentityService {
 
   clearJWT() {
     this.storage.remove(this.storageKey);
+    this.executeJwtCallBacks();
   }
 
   getIdAndJWT(): { id: string, jwt: string } | undefined {
@@ -136,6 +144,21 @@ export class IdentityService {
 
   saveJWT(id: string, jwt: string) {
     this.storage.set(this.storageKey, { id, jwt });
+    this.executeJwtCallBacks();
+  }
+
+
+  private executeJwtCallBacks() {
+    this.jwtModifiedCallbacks.forEach(callback => callback());
+  }
+
+  /**
+   * Runs the given callback any time a JWT is stored, removed or modified.
+   *
+   * I'm sure this is not idiomatic angular, but it's working.
+   */
+  onJWTModified(callback: () => void) {
+    this.jwtModifiedCallbacks.push(callback);
   }
 
   getFundingInstructions(id: string, jwt: string): Observable<FundingInstruction> {

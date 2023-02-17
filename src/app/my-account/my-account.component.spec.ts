@@ -56,6 +56,6 @@ describe('MyAccountComponent', () => {
 
   it('should show donor name and email', () => {
     expect(element.textContent).toContain("Generous Donor")
-    expect(element.textContent).toContain("Email: donor@example.com")
+    expect(element.textContent).toContain("donor@example.com")
   });
 });
