@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {PaymentMethod, Source} from "@stripe/stripe-js";
 import {DonationService} from "../donation.service";
 import {flags, flagsForEnvironment} from "../featureFlags";
+import {environment as ProductionEnvironment} from "../../environments/environment.production";
 
 @Component({
   selector: 'app-my-account',
@@ -20,7 +21,7 @@ export class MyAccountComponent implements OnInit {
   public paymentMethods: PaymentMethod[]|undefined = undefined;
 
   public isHiddenByFlag: boolean = flags.profilePageEnabled &&
-    !flagsForEnvironment({production: true}).profilePageEnabled;
+    !flagsForEnvironment(ProductionEnvironment).profilePageEnabled;
 
   constructor(
     private pageMeta: PageMetaService,
