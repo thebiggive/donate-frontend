@@ -66,8 +66,15 @@ export class MyAccountComponent implements OnInit {
   }
 
   deleteMethod(method: PaymentMethod) {
-    this.donationService.deleteStripePaymentMethod(this.person, method, this.jwtAsString()).
-    subscribe(this.loadPaymentMethods)
+    this.paymentMethods = undefined;
+
+    this.donationService.deleteStripePaymentMethod(this.person, method, this.jwtAsString()).subscribe(
+      this.loadPaymentMethods.bind(this),
+      error => {
+        this.loadPaymentMethods.bind(this)()
+        alert(error.error.error)
+      }
+    )
   }
 
   private jwtAsString() {
