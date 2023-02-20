@@ -40,7 +40,7 @@
       <h2>Your Payment Methods</h2>
 
       <div *ngIf="paymentMethods === undefined">
-        <mat-spinner [diameter]="40" aria-label="Loading payment methods"></mat-spinner>
+        <mat-spinner color="accent" [diameter]="40" aria-label="Loading payment methods"></mat-spinner>
       </div>
 
       <table id="paymentMethods" *ngIf="paymentMethods !== undefined && paymentMethods.length > 0">
