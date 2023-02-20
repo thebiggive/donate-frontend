@@ -1,4 +1,10 @@
 import {environment} from "../environments/environment";
-export const flags = {
-  profilePageEnabled: !environment.production && !environment.productionLike
-};
+import {Environment} from "../environments/environment.interface";
+
+export const flagsForEnvironment = (environment: Environment) => {
+  return {
+    profilePageEnabled: !environment.production
+  };
+}
+
+export const flags = flagsForEnvironment(environment);

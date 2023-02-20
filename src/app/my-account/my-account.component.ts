@@ -4,6 +4,9 @@ import { DatePipe } from '@angular/common';
 import {IdentityService} from "../identity.service";
 import {Person} from "../person.model";
 import {Router} from "@angular/router";
+import {PaymentMethod, Source} from "@stripe/stripe-js";
+import {DonationService} from "../donation.service";
+import {flags, flagsForEnvironment} from "../featureFlags";
 
 @Component({
   selector: 'app-my-account',
@@ -14,9 +17,15 @@ import {Router} from "@angular/router";
 export class MyAccountComponent implements OnInit {
   public person: Person;
 
+  public paymentMethods: PaymentMethod[]|undefined = undefined;
+
+  public isHiddenByFlag: boolean = flags.profilePageEnabled &&
+    !flagsForEnvironment({production: true}).profilePageEnabled;
+
   constructor(
     private pageMeta: PageMetaService,
     private identityService: IdentityService,
+    private donationService: DonationService,
     private router: Router,
   ) {
     this.identityService = identityService;
@@ -34,7 +43,24 @@ export class MyAccountComponent implements OnInit {
         this.router.navigate(['']);
       } else {
         this.person = person;
+        this.loadPaymentMethods();
       }
     });
+  }
+
+  loadPaymentMethods() {
+    // not so keen on the component using the donation service and the identity service together like this
+    // would rather call one service and have it do everything for us. Not sure what service would be best to put
+    // this code in.
+    this.donationService.getPaymentMethods(this.person.id, this.identityService.getJWT() as string)
+      .subscribe((response: { data: PaymentMethod[] }) => {
+          this.paymentMethods = response.data;
+        }
+      );
+  }
+
+  logout() {
+    this.identityService.clearJWT();
+    this.router.navigate(['']);
   }
 }
