@@ -1,20 +1,52 @@
 @use '@angular/material' as mat;
 @import '../../abstract';
 
-.id-info {
-  // copied from donation-start.component.css @todo consider de-duplicating code.
-  @include make-card($box-shadow-hard);
+#banner {
+  background-image: url(../../assets/images/banner-my-account.jpg);
+  background-size: cover;
+  background-position: center;
+  height: 250px;
+  width: 100%;
+}
 
+h1 {
+  color: $colour-secondary;
+}
+
+main {
+  @include make-container;
+}
+
+div.my-account {
+  box-sizing: border-box;
+  color: white;
+  background-color: $colour-primary;
+
+  @media #{$breakpoint-lg} {
+    padding-top: 0;
+    padding-right: 100px;
+    padding-left: 100px;
+    padding-bottom: 20px;
+    position: relative;
+    top: -125px;
+    width: 80%;
+    margin: auto;
+  }
+}
+
+#logout {
   text-align: center;
-  margin-top: 1rem;
-  padding: 0.25rem 1rem 1rem 1rem;
+  margin: auto;
 }
 
 table#personal-details, table#paymentMethods {
   td {
     padding-bottom: 15px;
-    padding-right: 60px;
-    min-width: 100px;
+    padding-right: 20px;
+    @media #{$breakpoint-lg} {
+      padding-right: 60px;
+      min-width: 100px;
+    }
   }
 }
 

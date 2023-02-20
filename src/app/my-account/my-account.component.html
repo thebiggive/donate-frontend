@@ -1,74 +1,70 @@
-<main class="b-container">
-  <div class="c-form-container">
-    <div class="b-primary-column">
-      <biggive-page-section>
-        <biggive-heading
-          space-above=0
-          space-below=3
-          colour="black"
-          html-element="h1"
-          size="1"
-          align="left"
-          text="My Account"
-        ></biggive-heading>
+<div id="banner"></div>
+<main class="c-my-account">
+  <div class="my-account">
+    <biggive-page-section>
+      <biggive-heading
+        space-above=0
+        space-below=1
+        colour="tertiary"
+        html-element="h1"
+        size="1"
+        align="center"
+        text="Your Account"
+      ></biggive-heading>
+      <h2>Your Details</h2>
+      <table *ngIf="person" id="personal-details">
+        <!--
+        Not sure why Typescript doesn't allow me to concatenate like this.
+        <h2>{{person.first_name + person.last_name}}</h2>
+        -->
+        <tr>
+          <td>Name</td>
+          <td>{{person.first_name}} {{person.last_name}}</td>
+        </tr>
+        <tr>
+          <td>Email</td>
+          <td>{{person.email_address}}</td>
+        </tr>
 
-        <div *ngIf="person" class="id-info">
-          <p>Logged in as <strong>{{ person.email_address }}</strong></p>
-          <p>
-            <button mat-raised-button (click)="logout()">Log out</button>
-          </p>
-        </div>
-      </biggive-page-section>
-      <biggive-page-section>
-        <h2>Your Details</h2>
-        <table *ngIf="person" id="personal-details">
-          <!--
-          Not sure why Typescript doesn't allow me to concatenate like this.
-          <h2>{{person.first_name + person.last_name}}</h2>
-          -->
-          <tr>
-            <td>Name</td>
-            <td>{{person.first_name}} {{person.last_name}}</td>
-          </tr>
-          <tr>
-            <td>Email</td>
-            <td>{{person.email_address}}</td>
-          </tr>
+        <tr *ngIf="person.home_address_line_1">
+          <td>Address</td>
+          <td>{{person.home_address_line_1}}
+            <br/>
+            {{person.home_postcode}}
+          </td>
+        </tr>
+      </table>
+    </biggive-page-section>
 
-          <tr *ngIf="person.home_address_line_1">
-            <td>Address</td>
-            <td>{{person.home_address_line_1}}
-              <br/>
-              {{person.home_postcode}}
-            </td>
-          </tr>
-        </table>
-      </biggive-page-section>
+    <biggive-page-section>
+      <h2>Your Payment Methods</h2>
 
-      <biggive-page-section>
-        <h2>Your Payment Methods</h2>
+      <div *ngIf="paymentMethods === undefined">
+        <mat-spinner [diameter]="40" aria-label="Loading payment methods"></mat-spinner>
+      </div>
 
-        <div *ngIf="paymentMethods === undefined">
-          <mat-spinner [diameter]="40" aria-label="Loading payment methods"></mat-spinner>
-        </div>
+      <table id="paymentMethods" *ngIf="paymentMethods !== undefined && paymentMethods.length > 0">
+        <tr *ngFor="let method of paymentMethods">
+          <td>{{(method.card?.brand || method.type).toUpperCase()}}</td>
+          <td *ngIf="method.card !== undefined">
+            Card Ending: {{method.card.last4}} <br/>
+            Expiry Date: {{method.card.exp_month.toString().padStart(2, "0")}}/{{method.card.exp_year}}
+          </td>
+        </tr>
+      </table>
 
-        <table id="paymentMethods" *ngIf="paymentMethods !== undefined && paymentMethods.length > 0">
-          <tr *ngFor="let method of paymentMethods">
-            <td>{{(method.card?.brand || method.type).toUpperCase()}}</td>
-            <td *ngIf="method.card !== undefined">
-              Card Ending: {{method.card.last4}} <br />
-              Expiry Date: {{method.card.exp_month.toString().padStart(2, "0")}}/{{method.card.exp_year}}
-            </td>
-          </tr>
-        </table>
+      <div *ngIf="paymentMethods !== undefined && paymentMethods.length === 0">
+        No saved payment methods
+      </div>
+    </biggive-page-section>
 
-        <div *ngIf="paymentMethods !== undefined && paymentMethods.length === 0">
-          No saved payment methods
-        </div>
-      </biggive-page-section>
+    <div id="logout">
+      <button mat-raised-button (click)="logout()">Log out</button>
     </div>
-  </div>
-  <div *ngIf="isHiddenByFlag" style="outline: dashed green 2px; margin: 10px;">
-    This page is shown in this environment to enable review &amp; iteration, but is hidden in production by a feature flag.
+
+    <div *ngIf="isHiddenByFlag" style="outline: dashed green 2px; margin: 10px;">
+      This page is shown in this environment to enable review &amp; iteration, but is hidden in production by a feature
+      flag.
+    </div>
   </div>
 </main>
