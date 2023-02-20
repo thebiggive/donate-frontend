@@ -5,8 +5,11 @@
   background-image: url(../../assets/images/banner-my-account.jpg);
   background-size: cover;
   background-position: center;
-  height: 250px;
   width: 100%;
+  height: 100px;
+  @media #{$breakpoint-lg} {
+    height: 250px;
+  }
 }
 
 h1 {
