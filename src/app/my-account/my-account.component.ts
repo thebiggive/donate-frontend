@@ -52,7 +52,7 @@ export class MyAccountComponent implements OnInit {
     // not so keen on the component using the donation service and the identity service together like this
     // would rather call one service and have it do everything for us. Not sure what service would be best to put
     // this code in.
-    this.donationService.getPaymentMethods(this.person.id, this.identityService.getJWT() as string)
+    this.donationService.getPaymentMethods(this.person.id, this.jwtAsString())
       .subscribe((response: { data: PaymentMethod[] }) => {
           this.paymentMethods = response.data;
         }
@@ -62,5 +62,14 @@ export class MyAccountComponent implements OnInit {
   logout() {
     this.identityService.clearJWT();
     this.router.navigate(['']);
+  }
+
+  deleteMethod(method: PaymentMethod) {
+    this.donationService.deleteStripePaymentMethod(this.person, method, this.jwtAsString()).
+    subscribe(this.loadPaymentMethods)
+  }
+
+  private jwtAsString() {
+    return this.identityService.getJWT() as string;
   }
 }

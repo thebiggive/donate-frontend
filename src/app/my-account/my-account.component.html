@@ -46,9 +46,14 @@
       <table id="paymentMethods" *ngIf="paymentMethods !== undefined && paymentMethods.length > 0">
         <tr *ngFor="let method of paymentMethods">
           <td>{{(method.card?.brand || method.type).toUpperCase()}}</td>
-          <td *ngIf="method.card !== undefined">
+          <td>
+            <div *ngIf="method.card !== undefined">
             Card Ending: {{method.card.last4}} <br/>
             Expiry Date: {{method.card.exp_month.toString().padStart(2, "0")}}/{{method.card.exp_year}}
+            </div>
+          </td>
+          <td>
+            <button mat-raised-button (click)="deleteMethod(method)">Delete</button>
           </td>
         </tr>
       </table>
