@@ -327,8 +327,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     this.showAddressLookup =
       this.psp === 'stripe' &&
-      !! environment.postcodeLookupKey &&
-      !! environment.postcodeLookupUri;
+      environment.postcodeLookupKey &&
+      environment.postcodeLookupUri;
 
     if (!this.showAddressLookup) {
       return;
