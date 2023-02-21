@@ -7,7 +7,6 @@ import {Router} from "@angular/router";
 import {PaymentMethod, Source} from "@stripe/stripe-js";
 import {DonationService} from "../donation.service";
 import {flags, flagsForEnvironment} from "../featureFlags";
-import {environment as ProductionEnvironment} from "../../environments/environment.production";
 
 @Component({
   selector: 'app-my-account',
@@ -21,7 +20,7 @@ export class MyAccountComponent implements OnInit {
   public paymentMethods: PaymentMethod[]|undefined = undefined;
 
   public isHiddenByFlag: boolean = flags.profilePageEnabled &&
-    !flagsForEnvironment(ProductionEnvironment).profilePageEnabled;
+    !flagsForEnvironment({production: true}).profilePageEnabled;
 
   constructor(
     private pageMeta: PageMetaService,
@@ -53,7 +52,7 @@ export class MyAccountComponent implements OnInit {
     // not so keen on the component using the donation service and the identity service together like this
     // would rather call one service and have it do everything for us. Not sure what service would be best to put
     // this code in.
-    this.donationService.getPaymentMethods(this.person.id, this.jwtAsString())
+    this.donationService.getPaymentMethods(this.person.id, this.identityService.getJWT() as string)
       .subscribe((response: { data: PaymentMethod[] }) => {
           this.paymentMethods = response.data;
         }
@@ -63,21 +62,5 @@ export class MyAccountComponent implements OnInit {
   logout() {
     this.identityService.clearJWT();
     this.router.navigate(['']);
-  }
-
-  deleteMethod(method: PaymentMethod) {
-    this.paymentMethods = undefined;
-
-    this.donationService.deleteStripePaymentMethod(this.person, method, this.jwtAsString()).subscribe(
-      this.loadPaymentMethods.bind(this),
-      error => {
-        this.loadPaymentMethods.bind(this)()
-        alert(error.error.error)
-      }
-    )
-  }
-
-  private jwtAsString() {
-    return this.identityService.getJWT() as string;
   }
 }
