@@ -1,0 +1,113 @@
+@include backgrounds();
+@include fills();
+
+:host {
+  display: contents;
+  @include standard-font();
+}
+
+
+.container {
+
+
+  $colour-primary-blue: #2C089B;
+$colour-secondary-green: #2AF135;
+$colour-tertiary-coral: #FF7272;
+
+$colour-brand-mhf-turquoise: #62CFC9; // Mental Health Fund
+$colour-brand-cc-red: #B30510; // Christmas Challenge
+$colour-brand-wgmf-purple: #6E0887; // Women and Girls Match Fund
+$colour-brand-gmf-green: #50B400; // Green Match Fund
+$colour-brand-emf-yellow: #FFE500; // Emergency Match Fund
+$colour-brand-c4c-orange: #F07D00; // Champions for Children
+$colour-brand-grey: #CBC8C8;
+
+  &.header-text-colour-primary thead { color: $colour-primary-blue; }
+  &.header-text-colour-secondary thead { color: $colour-secondary-green; }
+  &.header-text-colour-tertiary thead { color: $colour-tertiary-coral; }
+  &.header-text-colour-brand-1 thead { color: $colour-brand-mhf-turquoise; }
+  &.header-text-colour-brand-2 thead { color: $colour-brand-wgmf-purple; }
+  &.header-text-colour-brand-3 thead { color: $colour-brand-gmf-green; }
+  &.header-text-colour-brand-4 thead { color: $colour-brand-emf-yellow; }
+  &.header-text-colour-brand-5 thead { color: $colour-brand-c4c-orange; }
+  &.header-text-colour-brand-6 thead { color: $colour-brand-grey; }
+  &.header-text-colour-white thead { color: $colour-white; }
+  &.header-text-colour-black thead { color: $colour-black; }
+  &.header-text-colour-grey-light thead { color: $colour-grey-light; }
+  &.header-text-colour-grey-dark thead { color: $colour-grey-dark; }
+
+  &.header-background-colour-primary thead { background-color: $colour-primary-blue; }
+  &.header-background-colour-secondary thead { background-color: $colour-secondary-green; }
+  &.header-background-colour-tertiary thead { background-color: $colour-tertiary-coral; }
+  &.header-background-colour-brand-1 thead { background-color: $colour-brand-mhf-turquoise; }
+  &.header-background-colour-brand-2 thead { background-color: $colour-brand-wgmf-purple; }
+  &.header-background-colour-brand-3 thead { background-color: $colour-brand-gmf-green; }
+  &.header-background-colour-brand-4 thead { background-color: $colour-brand-emf-yellow; }
+  &.header-background-colour-brand-5 thead { background-color: $colour-brand-c4c-orange; }
+  &.header-background-colour-brand-6 thead { background-color: $colour-brand-grey; }
+  &.header-background-colour-white thead { background-color: $colour-white; }
+  &.header-background-colour-black thead { background-color: $colour-black; }
+  &.header-background-colour-grey-light thead { background-color: $colour-grey-light; }
+  &.header-background-colour-grey-dark thead { background-color: $colour-grey-dark; }
+
+  &.body-text-colour-primary tbody { color: $colour-primary-blue; }
+  &.body-text-colour-secondary tbody { color: $colour-secondary-green; }
+  &.body-text-colour-tertiary tbody { color: $colour-tertiary-coral; }
+  &.body-text-colour-brand-1 tbody { color: $colour-brand-mhf-turquoise; }
+  &.body-text-colour-brand-2 tbody { color: $colour-brand-wgmf-purple; }
+  &.body-text-colour-brand-3 tbody { color: $colour-brand-gmf-green; }
+  &.body-text-colour-brand-4 tbody { color: $colour-brand-emf-yellow; }
+  &.body-text-colour-brand-5 tbody { color: $colour-brand-c4c-orange; }
+  &.body-text-colour-brand-6 tbody { color: $colour-brand-grey; }
+  &.body-text-colour-white tbody { color: $colour-white; }
+  &.body-text-colour-black tbody { color: $colour-black; }
+  &.body-text-colour-grey-light tbody { color: $colour-grey-light; }
+  &.body-text-colour-grey-dark tbody { color: $colour-grey-dark; }
+
+  &.body-background-colour-primary tbody { background-color: $colour-primary-blue; }
+  &.body-background-colour-secondary tbody { background-color: $colour-secondary-green; }
+  &.body-background-colour-tertiary tbody { background-color: $colour-tertiary-coral; }
+  &.body-background-colour-brand-1 tbody { background-color: $colour-brand-mhf-turquoise; }
+  &.body-background-colour-brand-2 tbody { background-color: $colour-brand-wgmf-purple; }
+  &.body-background-colour-brand-3 tbody { background-color: $colour-brand-gmf-green; }
+  &.body-background-colour-brand-4 tbody { background-color: $colour-brand-emf-yellow; }
+  &.body-background-colour-brand-5 tbody { background-color: $colour-brand-c4c-orange; }
+  &.body-background-colour-brand-6 tbody { background-color: $colour-brand-grey; }
+  &.body-background-colour-white tbody { background-color: $colour-white; }
+  &.body-background-colour-black tbody { background-color: $colour-black; }
+  &.body-background-colour-grey-light tbody { background-color: $colour-grey-light; }
+  &.body-background-colour-grey-dark tbody { background-color: $colour-grey-dark; }
+
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 0;
+
+    td,th {
+      padding: 10px 20px;
+      border: 0;
+      font-size: inherit;
+    }
+
+    thead {
+      filter: drop-shadow(-1px 3px 12px rgba(0,0,0,0.15));
+
+      td,th {
+        font-weight: bold;
+        
+      }
+    }
+
+    tbody {
+      tr.odd {
+        background-color: rgba(255,255,255,0.3);
+      }
+      
+      td,th {
+        font-size: 80%;
+      }
+    }
+
+  }
+}
