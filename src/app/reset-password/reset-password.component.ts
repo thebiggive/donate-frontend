@@ -33,7 +33,7 @@ export class ResetPasswordComponent implements OnInit {
   passwordForm: FormGroup;
   savingNewPassword: boolean = false;
   saveSuccessful: boolean|undefined = undefined;
-  errorMessage: string;
+  errorMessage: string | undefined;
   token: string;
   tokenValid: boolean|undefined = undefined;
 
@@ -92,6 +92,7 @@ export class ResetPasswordComponent implements OnInit {
       (error) => {
         this.savingNewPassword = false;
         this.saveSuccessful = false;
+        this.errorMessage = error.error?.error?.description;
       }
     )
   };
