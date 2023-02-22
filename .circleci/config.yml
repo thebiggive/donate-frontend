@@ -211,11 +211,10 @@ workflows:
           region: AWS_REGION
           tag: 'staging,staging-${CIRCLE_SHA1}'
       - hold:
-          name: hold - please check chunk filenames match between previous production-static and push-iamge jobs
+          name: hold # please check chunk filenames match between previous production-static and push-iamge jobs
           type: approval
           requires:
-            - hold
-            - deploy-production-static
+            - deploy-staging-static
             - aws-ecr/build-and-push-image
       - aws-ecs/deploy-service-update:
           context:
@@ -223,7 +222,7 @@ workflows:
             - jira
             - slack
           requires:
-            - hold
+            - hold # please check chunk filenames match between previous production-static and push-iamge jobs
             - aws-ecr/build-and-push-image
           aws-region: AWS_REGION
           family: 'tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
@@ -272,7 +271,7 @@ workflows:
           region: AWS_REGION
           tag: 'production,production-${CIRCLE_SHA1}'
       - hold:
-          name: hold - please check chunk filenames match between previous production-static and push-iamge jobs
+          name: hold # please check chunk filenames match between previous production-static and push-iamge jobs
           type: approval
           requires:
             - deploy-production-static
@@ -283,7 +282,7 @@ workflows:
             - jira
             - slack
           requires:
-            - hold
+            - hold # please check chunk filenames match between previous production-static and push-iamge jobs
             - aws-ecr/build-and-push-image
           aws-region: AWS_REGION
           family: 'tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
