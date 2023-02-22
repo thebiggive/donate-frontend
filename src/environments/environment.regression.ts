@@ -18,7 +18,6 @@ export const environment: Environment = {
   donationsApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',
-  googleOptimizeId: null,
   identityApiPrefix: 'https://identity-regression.thebiggivetest.org.uk/v1',
   identityEnabled: true,
   maximumDonationAmount: 25000,

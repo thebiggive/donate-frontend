@@ -81,7 +81,8 @@ describe('MyAccountComponent', () => {
     fixture = TestBed.createComponent(MyAccountComponent);
     component = fixture.componentInstance;
 
-    element = fixture.nativeElement.querySelector('main');
+    // I would like to select a more specific element like h2 instead of *, but that isn't working for me.
+    element = fixture.nativeElement.querySelector('*');
 
     fixture.detectChanges();
     component.ngOnInit();

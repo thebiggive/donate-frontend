@@ -11,7 +11,6 @@ import { COUNTRY_CODE } from './country-code.token';
 import { Donation } from './donation.model';
 import { DonationCreatedResponse } from './donation-created-response.model';
 import { environment } from '../environments/environment';
-import {Person} from "./person.model";
 
 export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
 
@@ -293,19 +292,5 @@ export class DonationService {
    */
   private getDonationCouplets(): Array<{ donation: Donation, jwt: string }> {
     return this.storage.get(this.storageKey) || [];
-  }
-
-  deleteStripePaymentMethod(person: Person, method: PaymentMethod, jwt: string) {
-    const paymentMethodId: string = method.id;
-    const personId = person.id;
-
-    if (! personId) {
-      throw new Error('Undefined person ID');
-    }
-
-    return this.http.delete<{ data: PaymentMethod[] }>(
-      `${environment.donationsApiPrefix}/people/${personId}/payment_methods/${paymentMethodId}`,
-      this.getPersonAuthHttpOptions(jwt),
-    );
   }
 }
