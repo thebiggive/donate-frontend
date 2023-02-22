@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  aws-ecr: circleci/aws-ecr@7.3.0
+  aws-ecr: circleci/aws-ecr@8.2.1
   aws-ecs: circleci/aws-ecs@2.2.1
   aws-s3: circleci/aws-s3@3.0.0
   browser-tools: circleci/browser-tools@1.4.0
@@ -210,12 +210,19 @@ workflows:
           repo: '${AWS_ECR_REPO_NAME}'
           region: AWS_REGION
           tag: 'staging,staging-${CIRCLE_SHA1}'
+      - hold:
+          name: hold # please check chunk filenames match between previous production-static and push-iamge jobs
+          type: approval
+          requires:
+            - deploy-staging-static
+            - aws-ecr/build-and-push-image
       - aws-ecs/deploy-service-update:
           context:
             - ecs-deploys
             - jira
             - slack
           requires:
+            - hold # please check chunk filenames match between previous production-static and push-iamge jobs
             - aws-ecr/build-and-push-image
           aws-region: AWS_REGION
           family: 'tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
@@ -263,12 +270,19 @@ workflows:
           repo: '${AWS_ECR_REPO_NAME}'
           region: AWS_REGION
           tag: 'production,production-${CIRCLE_SHA1}'
+      - hold:
+          name: hold # please check chunk filenames match between previous production-static and push-iamge jobs
+          type: approval
+          requires:
+            - deploy-production-static
+            - aws-ecr/build-and-push-image
       - aws-ecs/deploy-service-update:
           context:
             - ecs-deploys
             - jira
             - slack
           requires:
+            - hold # please check chunk filenames match between previous production-static and push-iamge jobs
             - aws-ecr/build-and-push-image
           aws-region: AWS_REGION
           family: 'tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
