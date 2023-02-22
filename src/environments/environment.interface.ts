@@ -1,4 +1,7 @@
+export type EnvironmentID ='development'|'regression'|'staging'|'production';
+
 export interface Environment {
+  environmentId: EnvironmentID,
   production: boolean,
   productionLike: boolean,
   redirectHomepageToChirstmasChallenge: boolean,

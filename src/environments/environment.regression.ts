@@ -7,6 +7,7 @@
 import { Environment } from './environment.interface';
 
 export const environment: Environment = {
+  environmentId: "regression",
   production: false,
   productionLike: true,
   redirectHomepageToChirstmasChallenge: false,
