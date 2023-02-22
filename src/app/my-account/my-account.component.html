@@ -66,5 +66,11 @@
     <div id="logout">
       <button mat-raised-button (click)="logout()">Log out</button>
     </div>
+
+    <div *ngIf="isHiddenByFlag" style="outline: dashed green 2px; margin: 10px;">
+      This page is shown in this environment to enable review &amp; iteration, but is hidden in production by a feature
+      flag.
+    </div>
+
   </div>
 </main>
