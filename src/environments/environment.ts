@@ -5,6 +5,7 @@
 import { Environment } from './environment.interface';
 
 export const environment: Environment = {
+  environmentId: "development",
   production: false,
   productionLike: false,
   redirectHomepageToChirstmasChallenge: false,
