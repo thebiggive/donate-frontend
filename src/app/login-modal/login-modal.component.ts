@@ -87,7 +87,8 @@ export class LoginModalComponent implements OnInit {
         this.loggingIn = false;
       }, (error) => {
         this.captcha.reset();
-        this.loginError = (error.error.description !== undefined ? error.error.description : error.message) || 'Unknown error';
+        const errorDescription = error.error.error.description;
+        this.loginError = errorDescription || error.message || 'Unknown error';
         this.loggingIn = false;
       });
     }
