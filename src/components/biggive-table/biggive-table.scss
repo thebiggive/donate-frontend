@@ -9,19 +9,6 @@
 
 .container {
 
-
-  $colour-primary-blue: #2C089B;
-$colour-secondary-green: #2AF135;
-$colour-tertiary-coral: #FF7272;
-
-$colour-brand-mhf-turquoise: #62CFC9; // Mental Health Fund
-$colour-brand-cc-red: #B30510; // Christmas Challenge
-$colour-brand-wgmf-purple: #6E0887; // Women and Girls Match Fund
-$colour-brand-gmf-green: #50B400; // Green Match Fund
-$colour-brand-emf-yellow: #FFE500; // Emergency Match Fund
-$colour-brand-c4c-orange: #F07D00; // Champions for Children
-$colour-brand-grey: #CBC8C8;
-
   &.header-text-colour-primary thead { color: $colour-primary-blue; }
   &.header-text-colour-secondary thead { color: $colour-secondary-green; }
   &.header-text-colour-tertiary thead { color: $colour-tertiary-coral; }

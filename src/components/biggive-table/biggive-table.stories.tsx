@@ -68,8 +68,8 @@ const Template = args => `
               </biggive-table>
               `;
 
-export const TotalizerComponent = Template.bind({});
-TotalizerComponent.args = {
+export const TableComponent = Template.bind({});
+TableComponent.args = {
   spaceBelow: 4,
   headerTextColour: 'white',
   headerBackgroundColour: 'primary',

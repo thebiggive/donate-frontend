@@ -986,25 +986,10 @@ export namespace Components {
         "spaceBelow": number;
     }
     interface BiggiveTable {
-        /**
-          * Body background colour
-         */
-        "bodyBackgroundColour": string;
-        /**
-          * Body text colour
-         */
-        "bodyTextColour": string;
-        /**
-          * Header background colour
-         */
-        "headerBackgroundColour": string;
-        /**
-          * Header text colour
-         */
-        "headerTextColour": string;
-        /**
-          * Space below component
-         */
+        "bodyBackgroundColour": String;
+        "bodyTextColour": String;
+        "headerBackgroundColour": String;
+        "headerTextColour": String;
         "spaceBelow": number;
     }
     interface BiggiveTextInput {
@@ -2474,25 +2459,10 @@ declare namespace LocalJSX {
         "spaceBelow"?: number;
     }
     interface BiggiveTable {
-        /**
-          * Body background colour
-         */
-        "bodyBackgroundColour"?: string;
-        /**
-          * Body text colour
-         */
-        "bodyTextColour"?: string;
-        /**
-          * Header background colour
-         */
-        "headerBackgroundColour"?: string;
-        /**
-          * Header text colour
-         */
-        "headerTextColour"?: string;
-        /**
-          * Space below component
-         */
+        "bodyBackgroundColour"?: String;
+        "bodyTextColour"?: String;
+        "headerBackgroundColour"?: String;
+        "headerTextColour"?: String;
         "spaceBelow"?: number;
     }
     interface BiggiveTextInput {

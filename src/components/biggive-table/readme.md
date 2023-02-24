@@ -7,13 +7,13 @@
 
 ## Properties
 
-| Property                 | Attribute                  | Description              | Type     | Default        |
-| ------------------------ | -------------------------- | ------------------------ | -------- | -------------- |
-| `bodyBackgroundColour`   | `body-background-colour`   | Body background colour   | `string` | `'grey-light'` |
-| `bodyTextColour`         | `body-text-colour`         | Body text colour         | `string` | `'black'`      |
-| `headerBackgroundColour` | `header-background-colour` | Header background colour | `string` | `'white'`      |
-| `headerTextColour`       | `header-text-colour`       | Header text colour       | `string` | `'primary'`    |
-| `spaceBelow`             | `space-below`              | Space below component    | `number` | `0`            |
+| Property                 | Attribute     | Description | Type     | Default        |
+| ------------------------ | ------------- | ----------- | -------- | -------------- |
+| `bodyBackgroundColour`   | --            |             | `String` | `'grey-light'` |
+| `bodyTextColour`         | --            |             | `String` | `'black'`      |
+| `headerBackgroundColour` | --            |             | `String` | `'white'`      |
+| `headerTextColour`       | --            |             | `String` | `'primary'`    |
+| `spaceBelow`             | `space-below` |             | `number` | `0`            |
 
 
 ----------------------------------------------

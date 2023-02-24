@@ -1,4 +1,5 @@
 import { Component, Prop, h } from '@stencil/core';
+import { ColourPaletteService } from '../../util/colour-palette';
 
 @Component({
   tag: 'biggive-table',
@@ -6,30 +7,18 @@ import { Component, Prop, h } from '@stencil/core';
   shadow: false,
 })
 export class BiggiveTable {
-  /**
-   * Space below component
-   */
+
+ 
+
   @Prop() spaceBelow: number = 0;
 
-  /**
-   * Header text colour
-   */
-  @Prop() headerTextColour: string = 'primary';
+  @Prop() headerTextColour: String = 'primary';
 
-  /**
-   * Header background colour
-   */
-  @Prop() headerBackgroundColour: string = 'white';
+  @Prop() headerBackgroundColour: String = 'white';
 
-  /**
-   * Body text colour
-   */
-  @Prop() bodyTextColour: string = 'black';
+  @Prop() bodyTextColour: String = 'black';
 
-  /**
-   * Body background colour
-   */
-  @Prop() bodyBackgroundColour: string = 'grey-light';
+  @Prop() bodyBackgroundColour: String = 'grey-light';
 
   render() {
     return (
