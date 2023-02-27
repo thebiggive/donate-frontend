@@ -13,6 +13,7 @@ you don't need to work with FontAwesome and don't have a Pro key.
 To run the app locally:
 
 * clone it from GitHub
+* `export FONTAWESOME_NPM_AUTH_TOKEN=<token id>`
 * `npm install`
 * `npm run start`
 

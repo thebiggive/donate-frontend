@@ -57,8 +57,6 @@
           <input matInput type="password" id="loginPassword" formControlName="password">
         </mat-form-field>
   
-        <p class="b-rt-0">You will be logged in for 8 days. Please log out on this page afterwards if using a shared computer.</p>
-  
         <p *ngIf="loginError" class="error" aria-live="assertive">
           Login error: {{ loginError }}
         </p>
