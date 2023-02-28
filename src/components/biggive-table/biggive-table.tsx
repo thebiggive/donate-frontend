@@ -12,7 +12,7 @@ export class BiggiveTable {
   @Prop() spaceBelow: number = 0;
 
   @Prop() headerTextColour:
-      'primary'
+    | 'primary'
     | 'secondary'
     | 'tertiary'
     | 'brand-1'
@@ -27,7 +27,7 @@ export class BiggiveTable {
     | 'grey-dark' = 'primary';
 
   @Prop() headerBackgroundColour:
-      'primary'
+    | 'primary'
     | 'secondary'
     | 'tertiary'
     | 'brand-1'
@@ -42,7 +42,7 @@ export class BiggiveTable {
     | 'grey-dark' = 'white';
 
   @Prop() bodyTextColour:
-      'primary'
+    | 'primary'
     | 'secondary'
     | 'tertiary'
     | 'brand-1'
@@ -57,7 +57,7 @@ export class BiggiveTable {
     | 'grey-dark' = 'black';
 
   @Prop() bodyBackgroundColour:
-      'primary'
+    | 'primary'
     | 'secondary'
     | 'tertiary'
     | 'brand-1'
