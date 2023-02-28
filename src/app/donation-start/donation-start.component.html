@@ -24,7 +24,11 @@
         <p>Logged in as <strong>{{ paymentGroup.value.emailAddress }}</strong></p>
         <p>We'll pre-fill some fields with your saved details, but you can change them if you need to.</p>
         <p *ngIf="creditPenceToUse > 0">Your credit balance will be used and the donation value capped at {{ creditPenceToUse / 100 | exactCurrency:campaign.currencyCode }}</p>
-        <p><button mat-raised-button (click)="logout()">Log out</button></p>
+        <p>
+        <p>
+          <button *ngIf="profilePageEnabled" id="my-account-link" mat-raised-button routerLink="/my-account">My Account</button>
+          <button mat-raised-button (click)="logout()">Log out</button>
+        </p>
       </div>
 
       <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
