@@ -986,7 +986,7 @@ export namespace Components {
         "spaceBelow": number;
     }
     interface BiggiveTable {
-        "bodyBackgroundColour": 'primary'
+        "bodyBackgroundColour": | 'primary'
     | 'secondary'
     | 'tertiary'
     | 'brand-1'
@@ -999,7 +999,7 @@ export namespace Components {
     | 'white'
     | 'grey-light'
     | 'grey-dark';
-        "bodyTextColour": 'primary'
+        "bodyTextColour": | 'primary'
     | 'secondary'
     | 'tertiary'
     | 'brand-1'
@@ -1012,7 +1012,7 @@ export namespace Components {
     | 'white'
     | 'grey-light'
     | 'grey-dark';
-        "headerBackgroundColour": 'primary'
+        "headerBackgroundColour": | 'primary'
     | 'secondary'
     | 'tertiary'
     | 'brand-1'
@@ -1025,7 +1025,7 @@ export namespace Components {
     | 'white'
     | 'grey-light'
     | 'grey-dark';
-        "headerTextColour": 'primary'
+        "headerTextColour": | 'primary'
     | 'secondary'
     | 'tertiary'
     | 'brand-1'
@@ -2507,7 +2507,7 @@ declare namespace LocalJSX {
         "spaceBelow"?: number;
     }
     interface BiggiveTable {
-        "bodyBackgroundColour"?: 'primary'
+        "bodyBackgroundColour"?: | 'primary'
     | 'secondary'
     | 'tertiary'
     | 'brand-1'
@@ -2520,7 +2520,7 @@ declare namespace LocalJSX {
     | 'white'
     | 'grey-light'
     | 'grey-dark';
-        "bodyTextColour"?: 'primary'
+        "bodyTextColour"?: | 'primary'
     | 'secondary'
     | 'tertiary'
     | 'brand-1'
@@ -2533,7 +2533,7 @@ declare namespace LocalJSX {
     | 'white'
     | 'grey-light'
     | 'grey-dark';
-        "headerBackgroundColour"?: 'primary'
+        "headerBackgroundColour"?: | 'primary'
     | 'secondary'
     | 'tertiary'
     | 'brand-1'
@@ -2546,7 +2546,7 @@ declare namespace LocalJSX {
     | 'white'
     | 'grey-light'
     | 'grey-dark';
-        "headerTextColour"?: 'primary'
+        "headerTextColour"?: | 'primary'
     | 'secondary'
     | 'tertiary'
     | 'brand-1'
