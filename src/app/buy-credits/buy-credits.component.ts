@@ -26,6 +26,7 @@ import { PostcodeService } from '../postcode.service';
 import { RegisterModalComponent } from '../register-modal/register-modal.component';
 import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
+import {flags} from "../featureFlags";
 
 @Component({
   selector: 'app-buy-credits',
@@ -34,6 +35,7 @@ import { getCurrencyMaxValidator } from '../validators/currency-max';
 })
 export class BuyCreditsComponent implements AfterContentInit, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
+  profilePageEnabled: boolean = flags.profilePageEnabled;
   addressSuggestions: GiftAidAddressSuggestion[] = [];
   isLoggedIn: boolean = false;
   isLoading: boolean = false;
