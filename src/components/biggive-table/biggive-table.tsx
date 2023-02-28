@@ -1,5 +1,5 @@
 import { Component, Prop, h } from '@stencil/core';
-import { ColourPaletteService } from '../../util/colour-palette';
+//import { ColourPaletteService } from '../../util/colour-palette';
 
 @Component({
   tag: 'biggive-table',
@@ -7,18 +7,69 @@ import { ColourPaletteService } from '../../util/colour-palette';
   shadow: false,
 })
 export class BiggiveTable {
-
- 
+  //allColours = ColourPaletteService['allColours'];
 
   @Prop() spaceBelow: number = 0;
 
-  @Prop() headerTextColour: String = 'primary';
+  @Prop() headerTextColour:
+      'primary'
+    | 'secondary'
+    | 'tertiary'
+    | 'brand-1'
+    | 'brand-2'
+    | 'brand-3'
+    | 'brand-4'
+    | 'brand-5'
+    | 'brand-6'
+    | 'black'
+    | 'white'
+    | 'grey-light'
+    | 'grey-dark' = 'primary';
 
-  @Prop() headerBackgroundColour: String = 'white';
+  @Prop() headerBackgroundColour:
+      'primary'
+    | 'secondary'
+    | 'tertiary'
+    | 'brand-1'
+    | 'brand-2'
+    | 'brand-3'
+    | 'brand-4'
+    | 'brand-5'
+    | 'brand-6'
+    | 'black'
+    | 'white'
+    | 'grey-light'
+    | 'grey-dark' = 'white';
 
-  @Prop() bodyTextColour: String = 'black';
+  @Prop() bodyTextColour:
+      'primary'
+    | 'secondary'
+    | 'tertiary'
+    | 'brand-1'
+    | 'brand-2'
+    | 'brand-3'
+    | 'brand-4'
+    | 'brand-5'
+    | 'brand-6'
+    | 'black'
+    | 'white'
+    | 'grey-light'
+    | 'grey-dark' = 'black';
 
-  @Prop() bodyBackgroundColour: String = 'grey-light';
+  @Prop() bodyBackgroundColour:
+      'primary'
+    | 'secondary'
+    | 'tertiary'
+    | 'brand-1'
+    | 'brand-2'
+    | 'brand-3'
+    | 'brand-4'
+    | 'brand-5'
+    | 'brand-6'
+    | 'black'
+    | 'white'
+    | 'grey-light'
+    | 'grey-dark' = 'grey-light';
 
   render() {
     return (
