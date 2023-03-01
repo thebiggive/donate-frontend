@@ -150,6 +150,23 @@ The ECS app we deploy runs on Express with `@nguniversal/express-engine`, the ty
 Universal apps. There are a few configuration tweaks and middleware additions for our use case,
 which all live in [`server.ts`](./server.ts).
 
+#### Writing safe polymorphic code
+
+Because TypeScript runs in both server and client contexts, we need to be very careful with JavaScript
+globals to avoid server-side render crashes and glitchier or broken page loads for search engines.
+
+See [Angular docs](https://angular.io/guide/universal#working-around-the-browser-apis) for
+general guidance on this.
+
+In the few cases where we need to work with these browser APIs, we should check carefully that either:
+* the use case can be invoked only by in-browser explicit visitor interaction, e.g. some
+  infinite scroll `more()` calls make this assumption; or
+* the entrypoint to code is explicitly limited with `isPlatformBrowser(this.platformId)`. See `AppComponent`
+  or search for this snippet to see how the token injection and DI is done.
+
+Finally, you can confirm your code runs OK on the server by checking CloudWatch logs for
+errors in the ECS app's logs.
+
 ## Using Angular
 
 ### Development server
