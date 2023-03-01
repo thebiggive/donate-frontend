@@ -61,6 +61,13 @@ export class AppComponent implements AfterViewInit, OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.analyticsService.init();
       this.getSiteControlService.init();
+
+      if (window.location.host === 'donate.biggive.org') {
+        // donations are currently not working on the new domain. No-one should be visiting that domain yet, but
+        // in case they do we redirect them to the old domain for now:
+  
+        window.location.host = "donate.thebiggive.org.uk";
+      }
     }
 
     // This service needs to be injected app-wide and this line is here, because
@@ -68,13 +75,6 @@ export class AppComponent implements AfterViewInit, OnInit {
     // always set up during the initial page load, regardless of whether the first
     // page the donor lands on makes wider use of DonationService or not.
     this.donationService.deriveDefaultCountry();
-
-    if (window.location.host === 'donate.biggive.org') {
-      // donations are currently not working on the new domain. No-one should be visiting that domain yet, but
-      // in case they do we redirect them to the old domain for now:
-
-      window.location.host = "donate.thebiggive.org.uk";
-    }
 
     this.flags = flags;
 
