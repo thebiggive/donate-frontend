@@ -5,6 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { brandColours } from "./globals/brand-colours";
 export namespace Components {
     interface BiggiveArticleCard {
         /**
@@ -986,58 +987,10 @@ export namespace Components {
         "spaceBelow": number;
     }
     interface BiggiveTable {
-        "bodyBackgroundColour": | 'primary'
-    | 'secondary'
-    | 'tertiary'
-    | 'brand-1'
-    | 'brand-2'
-    | 'brand-3'
-    | 'brand-4'
-    | 'brand-5'
-    | 'brand-6'
-    | 'black'
-    | 'white'
-    | 'grey-light'
-    | 'grey-dark';
-        "bodyTextColour": | 'primary'
-    | 'secondary'
-    | 'tertiary'
-    | 'brand-1'
-    | 'brand-2'
-    | 'brand-3'
-    | 'brand-4'
-    | 'brand-5'
-    | 'brand-6'
-    | 'black'
-    | 'white'
-    | 'grey-light'
-    | 'grey-dark';
-        "headerBackgroundColour": | 'primary'
-    | 'secondary'
-    | 'tertiary'
-    | 'brand-1'
-    | 'brand-2'
-    | 'brand-3'
-    | 'brand-4'
-    | 'brand-5'
-    | 'brand-6'
-    | 'black'
-    | 'white'
-    | 'grey-light'
-    | 'grey-dark';
-        "headerTextColour": | 'primary'
-    | 'secondary'
-    | 'tertiary'
-    | 'brand-1'
-    | 'brand-2'
-    | 'brand-3'
-    | 'brand-4'
-    | 'brand-5'
-    | 'brand-6'
-    | 'black'
-    | 'white'
-    | 'grey-light'
-    | 'grey-dark';
+        "bodyBackgroundColour": brandColours;
+        "bodyTextColour": brandColours;
+        "headerBackgroundColour": brandColours;
+        "headerTextColour": brandColours;
         "spaceBelow": number;
     }
     interface BiggiveTextInput {
@@ -2507,58 +2460,10 @@ declare namespace LocalJSX {
         "spaceBelow"?: number;
     }
     interface BiggiveTable {
-        "bodyBackgroundColour"?: | 'primary'
-    | 'secondary'
-    | 'tertiary'
-    | 'brand-1'
-    | 'brand-2'
-    | 'brand-3'
-    | 'brand-4'
-    | 'brand-5'
-    | 'brand-6'
-    | 'black'
-    | 'white'
-    | 'grey-light'
-    | 'grey-dark';
-        "bodyTextColour"?: | 'primary'
-    | 'secondary'
-    | 'tertiary'
-    | 'brand-1'
-    | 'brand-2'
-    | 'brand-3'
-    | 'brand-4'
-    | 'brand-5'
-    | 'brand-6'
-    | 'black'
-    | 'white'
-    | 'grey-light'
-    | 'grey-dark';
-        "headerBackgroundColour"?: | 'primary'
-    | 'secondary'
-    | 'tertiary'
-    | 'brand-1'
-    | 'brand-2'
-    | 'brand-3'
-    | 'brand-4'
-    | 'brand-5'
-    | 'brand-6'
-    | 'black'
-    | 'white'
-    | 'grey-light'
-    | 'grey-dark';
-        "headerTextColour"?: | 'primary'
-    | 'secondary'
-    | 'tertiary'
-    | 'brand-1'
-    | 'brand-2'
-    | 'brand-3'
-    | 'brand-4'
-    | 'brand-5'
-    | 'brand-6'
-    | 'black'
-    | 'white'
-    | 'grey-light'
-    | 'grey-dark';
+        "bodyBackgroundColour"?: brandColours;
+        "bodyTextColour"?: brandColours;
+        "headerBackgroundColour"?: brandColours;
+        "headerTextColour"?: brandColours;
         "spaceBelow"?: number;
     }
     interface BiggiveTextInput {
