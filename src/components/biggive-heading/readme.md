@@ -7,17 +7,17 @@
 
 ## Properties
 
-| Property      | Attribute      | Description           | Type      | Default     |
-| ------------- | -------------- | --------------------- | --------- | ----------- |
-| `align`       | `align`        | Text alignment        | `string`  | `'left'`    |
-| `colour`      | `colour`       | Colour Scheme         | `string`  | `'primary'` |
-| `htmlElement` | `html-element` | HTML element          | `string`  | `'h1'`      |
-| `icon`        | `icon`         | Icon                  | `boolean` | `false`     |
-| `iconColour`  | `icon-colour`  | Icon colour           | `string`  | `'primary'` |
-| `size`        | `size`         | Heading size          | `number`  | `1`         |
-| `spaceAbove`  | `space-above`  | Space above component | `number`  | `0`         |
-| `spaceBelow`  | `space-below`  | Space below component | `number`  | `0`         |
-| `text`        | `text`         | Heading text          | `string`  | `''`        |
+| Property      | Attribute      | Description | Type                                                                                                                                                                        | Default     |
+| ------------- | -------------- | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `align`       | `align`        |             | `string`                                                                                                                                                                    | `'left'`    |
+| `colour`      | `colour`       |             | `"black" \| "brand-1" \| "brand-2" \| "brand-3" \| "brand-4" \| "brand-5" \| "brand-6" \| "grey-dark" \| "grey-light" \| "primary" \| "secondary" \| "tertiary" \| "white"` | `'primary'` |
+| `htmlElement` | `html-element` |             | `"h1" \| "h2" \| "h3" \| "h4" \| "h5" \| "h6"`                                                                                                                              | `'h1'`      |
+| `icon`        | `icon`         |             | `boolean`                                                                                                                                                                   | `false`     |
+| `iconColour`  | `icon-colour`  |             | `"black" \| "brand-1" \| "brand-2" \| "brand-3" \| "brand-4" \| "brand-5" \| "brand-6" \| "grey-dark" \| "grey-light" \| "primary" \| "secondary" \| "tertiary" \| "white"` | `'primary'` |
+| `size`        | `size`         |             | `number`                                                                                                                                                                    | `1`         |
+| `spaceAbove`  | `space-above`  |             | `1 \| 2 \| 3 \| 4 \| 5 \| 6`                                                                                                                                                | `2`         |
+| `spaceBelow`  | `space-below`  |             | `1 \| 2 \| 3 \| 4 \| 5 \| 6`                                                                                                                                                | `4`         |
+| `text`        | `text`         |             | `string`                                                                                                                                                                    | `''`        |
 
 
 ----------------------------------------------

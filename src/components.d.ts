@@ -5,7 +5,9 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { spacingOption } from "./globals/spacing-option";
 import { brandColour } from "./globals/brand-colour";
+import { headingTag } from "./globals/heading-tag";
 export namespace Components {
     interface BiggiveArticleCard {
         /**
@@ -622,41 +624,14 @@ export namespace Components {
         "spaceBelow": number;
     }
     interface BiggiveHeading {
-        /**
-          * Text alignment
-         */
         "align": string;
-        /**
-          * Colour Scheme
-         */
-        "colour": string;
-        /**
-          * HTML element
-         */
-        "htmlElement": string;
-        /**
-          * Icon
-         */
+        "colour": brandColour;
+        "htmlElement": headingTag;
         "icon": boolean;
-        /**
-          * Icon colour
-         */
-        "iconColour": string;
-        /**
-          * Heading size
-         */
+        "iconColour": brandColour;
         "size": number;
-        /**
-          * Space above component
-         */
-        "spaceAbove": number;
-        /**
-          * Space below component
-         */
-        "spaceBelow": number;
-        /**
-          * Heading text
-         */
+        "spaceAbove": spacingOption;
+        "spaceBelow": spacingOption;
         "text": string;
     }
     interface BiggiveHeroImage {
@@ -2094,41 +2069,14 @@ declare namespace LocalJSX {
         "spaceBelow"?: number;
     }
     interface BiggiveHeading {
-        /**
-          * Text alignment
-         */
         "align"?: string;
-        /**
-          * Colour Scheme
-         */
-        "colour"?: string;
-        /**
-          * HTML element
-         */
-        "htmlElement"?: string;
-        /**
-          * Icon
-         */
+        "colour"?: brandColour;
+        "htmlElement"?: headingTag;
         "icon"?: boolean;
-        /**
-          * Icon colour
-         */
-        "iconColour"?: string;
-        /**
-          * Heading size
-         */
+        "iconColour"?: brandColour;
         "size"?: number;
-        /**
-          * Space above component
-         */
-        "spaceAbove"?: number;
-        /**
-          * Space below component
-         */
-        "spaceBelow"?: number;
-        /**
-          * Heading text
-         */
+        "spaceAbove"?: spacingOption;
+        "spaceBelow"?: spacingOption;
         "text"?: string;
     }
     interface BiggiveHeroImage {

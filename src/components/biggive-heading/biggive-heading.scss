@@ -8,9 +8,22 @@
 
 .container {
   @include standard-font();
-  .heading-colour-primary { color: $colour-primary-blue; }
-  .heading-colour-secondary { color: $colour-secondary-green; }
-  .heading-colour-tertiary { color: $colour-tertiary-coral; }
-  .heading-colour-white { color: $colour-white; }
-  .heading-colour-black { color: $colour-black; }
+  @each $key, $colour in $brandColours {
+    .heading-colour-#{$key} { color: $colour; }
+  }
+  display: flex;
+
+  h1,h2,h3,h4,h5 {
+    margin: 0;
+    padding: 0;
+    svg {
+      height: 0.7em;
+      margin-right: 0.2em;
+    }
+  }
+
+  @each $key, $colour in $brandColours {
+    .icon-colour-#{$key} svg path { fill: $colour; }
+  }
+
 }
