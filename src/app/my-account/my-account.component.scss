@@ -19,12 +19,14 @@ h1 {
 
 main {
   @include make-container;
+  margin: 0 0;
 }
 
 div.my-account {
   box-sizing: border-box;
   color: white;
   background-color: $colour-primary;
+  width: 100%;
 
   @media #{$breakpoint-lg} {
     padding-top: 0;
