@@ -2,12 +2,13 @@
 @import '../../abstract';
 
 #banner {
-  background-image: url(../../assets/images/banner-my-account.jpg);
-  background-size: cover;
-  background-position: center;
-  width: 100%;
-  height: 100px;
+  display: none;
   @media #{$breakpoint-lg} {
+    display: block;
+    background-image: url(../../assets/images/banner-my-account.jpg);
+    background-size: cover;
+    background-position: center;
+    width: 100%;
     height: 250px;
   }
 }
