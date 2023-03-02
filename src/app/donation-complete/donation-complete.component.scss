@@ -126,9 +126,12 @@ hr {
     }
   }
 
-  p.error fa-icon {
+  p.error {
+    max-width: 80%;
+    margin: auto;
+    fa-icon {
     color: $colour-highlight;
-  }
+  }}
 }
 
 .thank-you-large-donation-text {
