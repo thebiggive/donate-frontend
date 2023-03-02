@@ -5,7 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { brandColours } from "./globals/brand-colours";
+import { brandColour } from "./globals/brand-colour";
 export namespace Components {
     interface BiggiveArticleCard {
         /**
@@ -987,10 +987,10 @@ export namespace Components {
         "spaceBelow": number;
     }
     interface BiggiveTable {
-        "bodyBackgroundColour": brandColours;
-        "bodyTextColour": brandColours;
-        "headerBackgroundColour": brandColours;
-        "headerTextColour": brandColours;
+        "bodyBackgroundColour": brandColour;
+        "bodyTextColour": brandColour;
+        "headerBackgroundColour": brandColour;
+        "headerTextColour": brandColour;
         "spaceBelow": number;
     }
     interface BiggiveTextInput {
@@ -2460,10 +2460,10 @@ declare namespace LocalJSX {
         "spaceBelow"?: number;
     }
     interface BiggiveTable {
-        "bodyBackgroundColour"?: brandColours;
-        "bodyTextColour"?: brandColours;
-        "headerBackgroundColour"?: brandColours;
-        "headerTextColour"?: brandColours;
+        "bodyBackgroundColour"?: brandColour;
+        "bodyTextColour"?: brandColour;
+        "headerBackgroundColour"?: brandColour;
+        "headerTextColour"?: brandColour;
         "spaceBelow"?: number;
     }
     interface BiggiveTextInput {

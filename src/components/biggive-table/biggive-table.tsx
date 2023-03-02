@@ -1,5 +1,5 @@
 import { Component, Prop, h } from '@stencil/core';
-import { brandColours } from '../../globals/brand-colours';
+import { brandColour } from '../../globals/brand-colour';
 
 @Component({
   tag: 'biggive-table',
@@ -9,13 +9,13 @@ import { brandColours } from '../../globals/brand-colours';
 export class BiggiveTable {
   @Prop() spaceBelow: number = 0;
 
-  @Prop() headerTextColour: brandColours = 'primary';
+  @Prop() headerTextColour: brandColour = 'primary';
 
-  @Prop() headerBackgroundColour: brandColours = 'white';
+  @Prop() headerBackgroundColour: brandColour = 'white';
 
-  @Prop() bodyTextColour: brandColours = 'black';
+  @Prop() bodyTextColour: brandColour = 'black';
 
-  @Prop() bodyBackgroundColour: brandColours = 'grey-light';
+  @Prop() bodyBackgroundColour: brandColour = 'grey-light';
 
   render() {
     return (

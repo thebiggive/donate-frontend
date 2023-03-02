@@ -1,4 +1,4 @@
-export type brandColours =
+export type brandColour =
   | 'primary'
   | 'secondary'
   | 'tertiary'

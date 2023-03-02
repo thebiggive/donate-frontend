@@ -45,7 +45,7 @@ const Template = args => `
                 header-text-colour="${args.headerTextColour}"
                 header-background-colour="${args.headerBackgroundColour}"
                 body-text-colour="${args.bodyTextColour}"
-                body-background-colour="${args.bodyBackgroundColour}"
+                body-background-colour="${args.bodyBackgroundColour}"/>
   
                 <table>
                     <thead>
