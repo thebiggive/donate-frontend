@@ -47,6 +47,9 @@
         <strong>You are now registered<span *ngIf="loggedIn"> and logged in</span>.</strong> You can now donate faster
         using your chosen email address and password.
       </p>
+      <p *ngIf="registrationComplete && profilePageEnabled">
+        <a routerLink="/my-account">My Account</a>
+      </p>
 
       <p *ngIf="registerError" class="error" aria-live="assertive">
         <fa-icon [icon]="faExclamationTriangle"></fa-icon>

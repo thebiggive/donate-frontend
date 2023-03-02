@@ -17,6 +17,7 @@ import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
 import { minPasswordLength } from 'src/environments/common';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import {flags} from "../featureFlags";
 
 @Component({
   selector: 'app-donation-complete',
@@ -44,6 +45,7 @@ export class DonationCompleteComponent implements OnInit {
   timedOut = false;
   totalValue: number;
   donationIsLarge: boolean = false;
+  profilePageEnabled: boolean = flags.profilePageEnabled;
 
   private donationId: string;
   private maxTries = 5;
