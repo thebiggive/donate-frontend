@@ -45,15 +45,28 @@
 
       <table id="paymentMethods" *ngIf="paymentMethods !== undefined && paymentMethods.length > 0">
         <tr *ngFor="let method of paymentMethods">
-          <td>{{(method.card?.brand || method.type).toUpperCase()}}</td>
+
+          <!-- We have the card brand twice in the DOM for display in mobile & desktop in different positions. Only one
+          is visible at any time
+          -->
+          <td class="cardBrand">{{(method.card?.brand || method.type).toUpperCase()}}</td>
           <td>
+            <div class="cardBrand">{{(method.card?.brand || method.type).toUpperCase()}}</div>
             <div *ngIf="method.card !== undefined">
             Card Ending: {{method.card.last4}} <br/>
             Expiry Date: {{method.card.exp_month.toString().padStart(2, "0")}}/{{method.card.exp_year}}
             </div>
           </td>
           <td>
-            <button mat-raised-button (click)="deleteMethod(method)">Delete</button>
+            <biggive-button
+              space-above="5"
+              colour-scheme="white"
+              label="Delete"
+              full-width="false"
+              size="medium"
+              rounded="false"
+              (click)="deleteMethod(method)"
+              />
           </td>
         </tr>
       </table>
@@ -64,7 +77,15 @@
     </biggive-page-section>
 
     <div id="logout">
-      <button mat-raised-button (click)="logout()">Log out</button>
+      <biggive-button
+        space-above="5"
+        colour-scheme="white"
+        label="Log out"
+        full-width="true"
+        size="medium"
+        rounded="false"
+        (click)="logout()"
+      />
     </div>
 
     <div *ngIf="isHiddenByFlag" style="outline: dashed green 2px; margin: 10px;">
