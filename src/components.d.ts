@@ -5,6 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { brandColour } from "./globals/brand-colour";
 export namespace Components {
     interface BiggiveArticleCard {
         /**
@@ -985,6 +986,13 @@ export namespace Components {
          */
         "spaceBelow": number;
     }
+    interface BiggiveTable {
+        "bodyBackgroundColour": brandColour;
+        "bodyTextColour": brandColour;
+        "headerBackgroundColour": brandColour;
+        "headerTextColour": brandColour;
+        "spaceBelow": number;
+    }
     interface BiggiveTextInput {
     }
     interface BiggiveTotalizer {
@@ -1365,6 +1373,12 @@ declare global {
         prototype: HTMLBiggiveTabbedContentElement;
         new (): HTMLBiggiveTabbedContentElement;
     };
+    interface HTMLBiggiveTableElement extends Components.BiggiveTable, HTMLStencilElement {
+    }
+    var HTMLBiggiveTableElement: {
+        prototype: HTMLBiggiveTableElement;
+        new (): HTMLBiggiveTableElement;
+    };
     interface HTMLBiggiveTextInputElement extends Components.BiggiveTextInput, HTMLStencilElement {
     }
     var HTMLBiggiveTextInputElement: {
@@ -1436,6 +1450,7 @@ declare global {
         "biggive-social-icon": HTMLBiggiveSocialIconElement;
         "biggive-tab": HTMLBiggiveTabElement;
         "biggive-tabbed-content": HTMLBiggiveTabbedContentElement;
+        "biggive-table": HTMLBiggiveTableElement;
         "biggive-text-input": HTMLBiggiveTextInputElement;
         "biggive-totalizer": HTMLBiggiveTotalizerElement;
         "biggive-totalizer-ticker-item": HTMLBiggiveTotalizerTickerItemElement;
@@ -2444,6 +2459,13 @@ declare namespace LocalJSX {
          */
         "spaceBelow"?: number;
     }
+    interface BiggiveTable {
+        "bodyBackgroundColour"?: brandColour;
+        "bodyTextColour"?: brandColour;
+        "headerBackgroundColour"?: brandColour;
+        "headerTextColour"?: brandColour;
+        "spaceBelow"?: number;
+    }
     interface BiggiveTextInput {
     }
     interface BiggiveTotalizer {
@@ -2591,6 +2613,7 @@ declare namespace LocalJSX {
         "biggive-social-icon": BiggiveSocialIcon;
         "biggive-tab": BiggiveTab;
         "biggive-tabbed-content": BiggiveTabbedContent;
+        "biggive-table": BiggiveTable;
         "biggive-text-input": BiggiveTextInput;
         "biggive-totalizer": BiggiveTotalizer;
         "biggive-totalizer-ticker-item": BiggiveTotalizerTickerItem;
@@ -2650,6 +2673,7 @@ declare module "@stencil/core" {
             "biggive-social-icon": LocalJSX.BiggiveSocialIcon & JSXBase.HTMLAttributes<HTMLBiggiveSocialIconElement>;
             "biggive-tab": LocalJSX.BiggiveTab & JSXBase.HTMLAttributes<HTMLBiggiveTabElement>;
             "biggive-tabbed-content": LocalJSX.BiggiveTabbedContent & JSXBase.HTMLAttributes<HTMLBiggiveTabbedContentElement>;
+            "biggive-table": LocalJSX.BiggiveTable & JSXBase.HTMLAttributes<HTMLBiggiveTableElement>;
             "biggive-text-input": LocalJSX.BiggiveTextInput & JSXBase.HTMLAttributes<HTMLBiggiveTextInputElement>;
             "biggive-totalizer": LocalJSX.BiggiveTotalizer & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerElement>;
             "biggive-totalizer-ticker-item": LocalJSX.BiggiveTotalizerTickerItem & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerTickerItemElement>;
