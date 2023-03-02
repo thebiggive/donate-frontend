@@ -3,7 +3,7 @@ import {EnvironmentID} from "../environments/environment.interface";
 
 export const flagsForEnvironment = (environmentId: EnvironmentID) => {
   return {
-    profilePageEnabled: environmentId !== 'production'
+    profilePageEnabled: true
   };
 }
 
