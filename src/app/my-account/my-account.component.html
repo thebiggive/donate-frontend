@@ -58,7 +58,15 @@
             </div>
           </td>
           <td>
-            <button mat-raised-button (click)="deleteMethod(method)">Delete</button>
+            <biggive-button
+              space-above="5"
+              colour-scheme="white"
+              label="Delete"
+              full-width="false"
+              size="medium"
+              rounded="false"
+              (click)="deleteMethod(method)"
+              />
           </td>
         </tr>
       </table>
@@ -69,7 +77,15 @@
     </biggive-page-section>
 
     <div id="logout">
-      <button mat-raised-button (click)="logout()">Log out</button>
+      <biggive-button
+        space-above="5"
+        colour-scheme="white"
+        label="Log out"
+        full-width="true"
+        size="medium"
+        rounded="false"
+        (click)="logout()"
+      />
     </div>
 
     <div *ngIf="isHiddenByFlag" style="outline: dashed green 2px; margin: 10px;">

@@ -41,6 +41,7 @@ div.my-account {
 }
 
 #logout {
+  width: 80%;
   text-align: center;
   margin: auto;
 }
@@ -50,14 +51,14 @@ table#personal-details, table#paymentMethods {
   td {
     padding-bottom: 15px;
     @media #{$breakpoint-lg} {
-      min-width: 100px;
+      min-width: 150px;
     }
   }
 
   td.cardBrand {
     display: none;
     @media #{$breakpoint-lg} {
-      display: block;
+      display: table-cell;
     }
   }
   div.cardBrand {
@@ -66,5 +67,9 @@ table#personal-details, table#paymentMethods {
       display: none;
     }
   }
+}
+
+table#paymentMethods td:last-child {
+  text-align: right;
 }
 
