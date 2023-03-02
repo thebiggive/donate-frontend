@@ -125,6 +125,10 @@ hr {
       }
     }
   }
+
+  p.error fa-icon {
+    color: $colour-highlight;
+  }
 }
 
 .thank-you-large-donation-text {
