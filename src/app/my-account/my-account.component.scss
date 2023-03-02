@@ -53,5 +53,18 @@ table#personal-details, table#paymentMethods {
       min-width: 100px;
     }
   }
+
+  td.cardBrand {
+    display: none;
+    @media #{$breakpoint-lg} {
+      display: block;
+    }
+  }
+  div.cardBrand {
+    font-weight: bold;
+    @media #{$breakpoint-lg} {
+      display: none;
+    }
+  }
 }
 

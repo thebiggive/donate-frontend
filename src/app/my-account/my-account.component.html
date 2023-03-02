@@ -45,8 +45,13 @@
 
       <table id="paymentMethods" *ngIf="paymentMethods !== undefined && paymentMethods.length > 0">
         <tr *ngFor="let method of paymentMethods">
-          <td>{{(method.card?.brand || method.type).toUpperCase()}}</td>
+
+          <!-- We have the card brand twice in the DOM for display in mobile & desktop in different positions. Only one
+          is visible at any time
+          -->
+          <td class="cardBrand">{{(method.card?.brand || method.type).toUpperCase()}}</td>
           <td>
+            <div class="cardBrand">{{(method.card?.brand || method.type).toUpperCase()}}</div>
             <div *ngIf="method.card !== undefined">
             Card Ending: {{method.card.last4}} <br/>
             Expiry Date: {{method.card.exp_month.toString().padStart(2, "0")}}/{{method.card.exp_year}}
