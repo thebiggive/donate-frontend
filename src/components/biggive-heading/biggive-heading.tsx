@@ -1,6 +1,7 @@
 import { Component, Prop, h } from '@stencil/core';
 import { brandColour } from '../../globals/brand-colour';
 import { headingTag } from '../../globals/heading-tag';
+import { headingSize } from '../../globals/heading-size';
 import { spacingOption } from '../../globals/spacing-option';
 
 @Component({
@@ -17,7 +18,7 @@ export class BiggiveHeading {
 
   @Prop() htmlElement: headingTag = 'h1';
 
-  @Prop() size: number = 1;
+  @Prop() size: headingSize = 1;
 
   @Prop() align: string = 'left';
 
