@@ -15,11 +15,20 @@
   background-position: center center;
   padding: $spacer-4;
   height: 100%;
-  white-space: pre-wrap; // helps render out \n
+  white-space: pre-wrap;
+  a,
+  a:hover {
+    text-decoration: none;
+  }
   .sleeve {
     padding: $spacer-4;
     height: 100%;
     box-sizing: border-box;
+    transition: all 1s ease-in-out;
+  }
+  &.add-animation-true:hover .sleeve {
+    margin: -30px;
+    padding: 60px;
   }
   &.clip-bottom-left-corner-false.clip-top-right-corner-true {
     .sleeve {

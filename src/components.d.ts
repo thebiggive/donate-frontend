@@ -63,67 +63,23 @@ export namespace Components {
     interface BiggiveBackToTop {
     }
     interface BiggiveBasicCard {
-        /**
-          * Background colour.
-         */
-        "backgroundColour": string;
-        /**
-          * Full URL of the background image.
-         */
+        "addAnimation": boolean;
+        "backgroundColour": brandColour;
         "backgroundImageUrl": string;
-        /**
-          * Button Colour Scheme
-         */
         "buttonColourScheme": string;
-        /**
-          * Button label
-         */
         "buttonLabel": string;
-        /**
-          * Button URL
-         */
         "buttonUrl": string;
-        /**
-          * Card colour
-         */
-        "cardColour": string;
-        /**
-          * Clip bottom left corner
-         */
+        "cardColour": brandColour;
         "clipBottomLeftCorner": boolean;
-        /**
-          * Clip top right corner
-         */
         "clipTopRightCorner": boolean;
         "headingLevel": 1 | 2 | 3 | 4 | 5 | 6;
-        /**
-          * Icon
-         */
         "icon": boolean;
-        /**
-          * Icon colour
-         */
-        "iconColour": string;
-        /**
-          * Main title
-         */
+        "iconColour": brandColour;
         "mainTitle": string;
-        /**
-          * Space below component
-         */
-        "spaceBelow": number;
-        /**
-          * Subtitle title
-         */
+        "spaceBelow": spacingOption;
         "subtitle": string;
-        /**
-          * Teaser
-         */
         "teaser": string;
-        /**
-          * Text colour
-         */
-        "textColour": string;
+        "textColour": brandColour;
     }
     interface BiggiveBeneficiaryIcon {
         /**
@@ -1488,67 +1444,23 @@ declare namespace LocalJSX {
     interface BiggiveBackToTop {
     }
     interface BiggiveBasicCard {
-        /**
-          * Background colour.
-         */
-        "backgroundColour"?: string;
-        /**
-          * Full URL of the background image.
-         */
+        "addAnimation"?: boolean;
+        "backgroundColour"?: brandColour;
         "backgroundImageUrl"?: string;
-        /**
-          * Button Colour Scheme
-         */
         "buttonColourScheme"?: string;
-        /**
-          * Button label
-         */
         "buttonLabel"?: string;
-        /**
-          * Button URL
-         */
         "buttonUrl"?: string;
-        /**
-          * Card colour
-         */
-        "cardColour"?: string;
-        /**
-          * Clip bottom left corner
-         */
+        "cardColour"?: brandColour;
         "clipBottomLeftCorner"?: boolean;
-        /**
-          * Clip top right corner
-         */
         "clipTopRightCorner"?: boolean;
         "headingLevel"?: 1 | 2 | 3 | 4 | 5 | 6;
-        /**
-          * Icon
-         */
         "icon"?: boolean;
-        /**
-          * Icon colour
-         */
-        "iconColour"?: string;
-        /**
-          * Main title
-         */
+        "iconColour"?: brandColour;
         "mainTitle"?: string;
-        /**
-          * Space below component
-         */
-        "spaceBelow"?: number;
-        /**
-          * Subtitle title
-         */
+        "spaceBelow"?: spacingOption;
         "subtitle"?: string;
-        /**
-          * Teaser
-         */
         "teaser"?: string;
-        /**
-          * Text colour
-         */
-        "textColour"?: string;
+        "textColour"?: brandColour;
     }
     interface BiggiveBeneficiaryIcon {
         /**

@@ -9,6 +9,7 @@
 
 | Property               | Attribute                 | Description                       | Type                         | Default           |
 | ---------------------- | ------------------------- | --------------------------------- | ---------------------------- | ----------------- |
+| `addAnimation`         | `add-animation`           |                                   | `boolean`                    | `false`           |
 | `backgroundColour`     | `background-colour`       | Background colour.                | `string`                     | `'primary'`       |
 | `backgroundImageUrl`   | `background-image-url`    | Full URL of the background image. | `string`                     | `''`              |
 | `buttonColourScheme`   | `button-colour-scheme`    | Button Colour Scheme              | `string`                     | `'clear-primary'` |
