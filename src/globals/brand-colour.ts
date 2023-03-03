@@ -16,5 +16,7 @@ export type brandColour =
   | 'brand-6' // mhf-turquoise
   | 'white'
   | 'black'
+  | 'grey-extra-light'
   | 'grey-light'
+  | 'grey-medium'
   | 'grey-dark';
