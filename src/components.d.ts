@@ -8,6 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { spacingOption } from "./globals/spacing-option";
 import { brandColour } from "./globals/brand-colour";
 import { headingTag } from "./globals/heading-tag";
+import { headingSize } from "./globals/heading-size";
 export namespace Components {
     interface BiggiveArticleCard {
         /**
@@ -629,7 +630,7 @@ export namespace Components {
         "htmlElement": headingTag;
         "icon": boolean;
         "iconColour": brandColour;
-        "size": number;
+        "size": headingSize;
         "spaceAbove": spacingOption;
         "spaceBelow": spacingOption;
         "text": string;
@@ -2074,7 +2075,7 @@ declare namespace LocalJSX {
         "htmlElement"?: headingTag;
         "icon"?: boolean;
         "iconColour"?: brandColour;
-        "size"?: number;
+        "size"?: headingSize;
         "spaceAbove"?: spacingOption;
         "spaceBelow"?: spacingOption;
         "text"?: string;
