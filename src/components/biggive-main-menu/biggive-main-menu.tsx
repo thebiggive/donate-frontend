@@ -63,9 +63,16 @@ export class BiggiveMainMenu {
     }
   }
 
-  componentDidRender() {
+  setHeaderSize() {
     document.body.style.paddingTop = this.host.offsetHeight + 'px';
+  }
+
+  componentDidRender() {
     this.host.classList.add('fixed');
+    window.addEventListener('resize', () => {
+      this.setHeaderSize();
+    });
+    this.setHeaderSize();
 
     const subMenuElements = this.host.querySelectorAll<HTMLElement>('.sub-menu');
     subMenuElements.forEach(subMenuElement => {
