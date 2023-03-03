@@ -7,25 +7,25 @@
 
 ## Properties
 
-| Property               | Attribute                 | Description                       | Type                         | Default           |
-| ---------------------- | ------------------------- | --------------------------------- | ---------------------------- | ----------------- |
-| `addAnimation`         | `add-animation`           |                                   | `boolean`                    | `false`           |
-| `backgroundColour`     | `background-colour`       | Background colour.                | `string`                     | `'primary'`       |
-| `backgroundImageUrl`   | `background-image-url`    | Full URL of the background image. | `string`                     | `''`              |
-| `buttonColourScheme`   | `button-colour-scheme`    | Button Colour Scheme              | `string`                     | `'clear-primary'` |
-| `buttonLabel`          | `button-label`            | Button label                      | `string`                     | `undefined`       |
-| `buttonUrl`            | `button-url`              | Button URL                        | `string`                     | `undefined`       |
-| `cardColour`           | `card-colour`             | Card colour                       | `string`                     | `'white'`         |
-| `clipBottomLeftCorner` | `clip-bottom-left-corner` | Clip bottom left corner           | `boolean`                    | `true`            |
-| `clipTopRightCorner`   | `clip-top-right-corner`   | Clip top right corner             | `boolean`                    | `true`            |
-| `headingLevel`         | `heading-level`           |                                   | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | `3`               |
-| `icon`                 | `icon`                    | Icon                              | `boolean`                    | `true`            |
-| `iconColour`           | `icon-colour`             | Icon colour                       | `string`                     | `'primary'`       |
-| `mainTitle`            | `main-title`              | Main title                        | `string`                     | `undefined`       |
-| `spaceBelow`           | `space-below`             | Space below component             | `number`                     | `0`               |
-| `subtitle`             | `subtitle`                | Subtitle title                    | `string`                     | `undefined`       |
-| `teaser`               | `teaser`                  | Teaser                            | `string`                     | `undefined`       |
-| `textColour`           | `text-colour`             | Text colour                       | `string`                     | `'black'`         |
+| Property               | Attribute                 | Description | Type                                                                                                                                                                                                               | Default           |
+| ---------------------- | ------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
+| `addAnimation`         | `add-animation`           |             | `boolean`                                                                                                                                                                                                          | `false`           |
+| `backgroundColour`     | `background-colour`       |             | `"black" \| "brand-1" \| "brand-2" \| "brand-3" \| "brand-4" \| "brand-5" \| "brand-6" \| "grey-dark" \| "grey-extra-light" \| "grey-light" \| "grey-medium" \| "primary" \| "secondary" \| "tertiary" \| "white"` | `'primary'`       |
+| `backgroundImageUrl`   | `background-image-url`    |             | `string`                                                                                                                                                                                                           | `''`              |
+| `buttonColourScheme`   | `button-colour-scheme`    |             | `string`                                                                                                                                                                                                           | `'clear-primary'` |
+| `buttonLabel`          | `button-label`            |             | `string`                                                                                                                                                                                                           | `undefined`       |
+| `buttonUrl`            | `button-url`              |             | `string`                                                                                                                                                                                                           | `undefined`       |
+| `cardColour`           | `card-colour`             |             | `"black" \| "brand-1" \| "brand-2" \| "brand-3" \| "brand-4" \| "brand-5" \| "brand-6" \| "grey-dark" \| "grey-extra-light" \| "grey-light" \| "grey-medium" \| "primary" \| "secondary" \| "tertiary" \| "white"` | `'white'`         |
+| `clipBottomLeftCorner` | `clip-bottom-left-corner` |             | `boolean`                                                                                                                                                                                                          | `true`            |
+| `clipTopRightCorner`   | `clip-top-right-corner`   |             | `boolean`                                                                                                                                                                                                          | `true`            |
+| `headingLevel`         | `heading-level`           |             | `1 \| 2 \| 3 \| 4 \| 5 \| 6`                                                                                                                                                                                       | `3`               |
+| `icon`                 | `icon`                    |             | `boolean`                                                                                                                                                                                                          | `true`            |
+| `iconColour`           | `icon-colour`             |             | `"black" \| "brand-1" \| "brand-2" \| "brand-3" \| "brand-4" \| "brand-5" \| "brand-6" \| "grey-dark" \| "grey-extra-light" \| "grey-light" \| "grey-medium" \| "primary" \| "secondary" \| "tertiary" \| "white"` | `'primary'`       |
+| `mainTitle`            | `main-title`              |             | `string`                                                                                                                                                                                                           | `undefined`       |
+| `spaceBelow`           | `space-below`             |             | `0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6`                                                                                                                                                                                  | `0`               |
+| `subtitle`             | `subtitle`                |             | `string`                                                                                                                                                                                                           | `undefined`       |
+| `teaser`               | `teaser`                  |             | `string`                                                                                                                                                                                                           | `undefined`       |
+| `textColour`           | `text-colour`             |             | `"black" \| "brand-1" \| "brand-2" \| "brand-3" \| "brand-4" \| "brand-5" \| "brand-6" \| "grey-dark" \| "grey-extra-light" \| "grey-light" \| "grey-medium" \| "primary" \| "secondary" \| "tertiary" \| "white"` | `'black'`         |
 
 
 ## Dependencies
