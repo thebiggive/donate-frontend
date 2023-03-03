@@ -31,6 +31,9 @@ $colour-grey-light: #E8E8E8;
 $colour-grey-medium: #8A8A8A;
 $colour-grey-dark: #4A4A4A;
 
+/**
+ * @see brandColour in src/globals/brand-colour.ts . This and that should be updated together.
+ */
 $brandColours: (
     "primary": $colour-primary-blue,
     "secondary": $colour-secondary-green,
