@@ -57,6 +57,7 @@
       <p *ngIf="registerError" class="error" aria-live="assertive">
         <fa-icon [icon]="faExclamationTriangle"></fa-icon>
         {{ registerErrorDescription }}
+        <span [innerHtml]="registerErrorDescriptionHtml"></span>
       </p>
     </div>
 

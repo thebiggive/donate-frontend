@@ -130,8 +130,14 @@ hr {
     max-width: 80%;
     margin: auto;
     fa-icon {
-    color: $colour-highlight;
-  }}
+      color: $colour-highlight;
+    }
+    a {
+      // this color style doesn't seem to have any affect - not sure why not. For now I've set the color
+      // as an inline style in the HTML sent from the Identity server. Not ideal.
+      color: inherit;
+    }
+  }
 }
 
 .thank-you-large-donation-text {
