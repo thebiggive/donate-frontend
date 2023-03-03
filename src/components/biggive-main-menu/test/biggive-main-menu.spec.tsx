@@ -8,7 +8,7 @@ describe('biggive-main-menu', () => {
       html: `<biggive-main-menu></biggive-main-menu>`,
     });
     expect(page.root).toEqualHtml(`
-      <biggive-main-menu>
+      <biggive-main-menu class="fixed">
         <mock:shadow-root>
           <div class="row row-top">
             <div class="social-icon-wrap">

@@ -64,6 +64,9 @@ export class BiggiveMainMenu {
   }
 
   componentDidRender() {
+    document.body.style.paddingTop = this.host.offsetHeight + 'px';
+    this.host.classList.add('fixed');
+
     const subMenuElements = this.host.querySelectorAll<HTMLElement>('.sub-menu');
     subMenuElements.forEach(subMenuElement => {
       // the subMenuLink is a sibling element to the actual sub-menu
