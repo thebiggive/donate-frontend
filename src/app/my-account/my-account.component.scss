@@ -44,6 +44,9 @@ div.my-account {
   width: 80%;
   text-align: center;
   margin: auto;
+  @media #{$breakpoint-lg} {
+    max-width: 10em;
+  }
 }
 
 table#personal-details, table#paymentMethods {
