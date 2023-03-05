@@ -11,10 +11,7 @@ describe('biggive-tab', () => {
       <biggive-tab>
         <mock:shadow-root>
           <div class="container">
-            <div class="title"></div>
-            <div class="content">
-              <slot></slot>
-             </div>
+             <slot></slot>
            </div>
         </mock:shadow-root>
       </biggive-tab>

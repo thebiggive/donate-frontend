@@ -1,5 +1,6 @@
 import { Component, Prop, h } from '@stencil/core';
 import { brandColour } from '../../globals/brand-colour';
+import { spacingOption } from '../../globals/spacing-option';
 
 @Component({
   tag: 'biggive-table',
@@ -7,7 +8,7 @@ import { brandColour } from '../../globals/brand-colour';
   shadow: false,
 })
 export class BiggiveTable {
-  @Prop() spaceBelow: number = 0;
+  @Prop() spaceBelow: spacingOption = 0;
 
   @Prop() headerTextColour: brandColour = 'primary';
 

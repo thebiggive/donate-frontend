@@ -488,6 +488,8 @@ export namespace Components {
          */
         "spaceBelow": number;
     }
+    interface BiggiveCarousel {
+    }
     interface BiggiveCategoryIcon {
         /**
           * Background colour
@@ -907,27 +909,23 @@ export namespace Components {
         "wide": boolean;
     }
     interface BiggiveTab {
-        /**
-          * Title
-         */
         "tabTitle": string;
     }
     interface BiggiveTabbedContent {
-        /**
-          * Default text colour
-         */
-        "defaultTextColour": string;
-        /**
-          * Space below component
-         */
-        "spaceBelow": number;
+        "buttonBackgroundColour": brandColour;
+        "buttonIconColour": brandColour;
+        "navigationHighlightColour": brandColour;
+        "selectedNavigationHighlightColour": brandColour;
+        "selectedTextColour": brandColour;
+        "spaceBelow": spacingOption;
+        "textColour": brandColour;
     }
     interface BiggiveTable {
         "bodyBackgroundColour": brandColour;
         "bodyTextColour": brandColour;
         "headerBackgroundColour": brandColour;
         "headerTextColour": brandColour;
-        "spaceBelow": number;
+        "spaceBelow": spacingOption;
     }
     interface BiggiveTextInput {
     }
@@ -1140,6 +1138,12 @@ declare global {
     var HTMLBiggiveCampaignHighlightsElement: {
         prototype: HTMLBiggiveCampaignHighlightsElement;
         new (): HTMLBiggiveCampaignHighlightsElement;
+    };
+    interface HTMLBiggiveCarouselElement extends Components.BiggiveCarousel, HTMLStencilElement {
+    }
+    var HTMLBiggiveCarouselElement: {
+        prototype: HTMLBiggiveCarouselElement;
+        new (): HTMLBiggiveCarouselElement;
     };
     interface HTMLBiggiveCategoryIconElement extends Components.BiggiveCategoryIcon, HTMLStencilElement {
     }
@@ -1372,6 +1376,7 @@ declare global {
         "biggive-campaign-card": HTMLBiggiveCampaignCardElement;
         "biggive-campaign-card-filter-grid": HTMLBiggiveCampaignCardFilterGridElement;
         "biggive-campaign-highlights": HTMLBiggiveCampaignHighlightsElement;
+        "biggive-carousel": HTMLBiggiveCarouselElement;
         "biggive-category-icon": HTMLBiggiveCategoryIconElement;
         "biggive-footer": HTMLBiggiveFooterElement;
         "biggive-form": HTMLBiggiveFormElement;
@@ -1901,6 +1906,8 @@ declare namespace LocalJSX {
          */
         "spaceBelow"?: number;
     }
+    interface BiggiveCarousel {
+    }
     interface BiggiveCategoryIcon {
         /**
           * Background colour
@@ -2328,27 +2335,23 @@ declare namespace LocalJSX {
         "wide"?: boolean;
     }
     interface BiggiveTab {
-        /**
-          * Title
-         */
         "tabTitle"?: string;
     }
     interface BiggiveTabbedContent {
-        /**
-          * Default text colour
-         */
-        "defaultTextColour"?: string;
-        /**
-          * Space below component
-         */
-        "spaceBelow"?: number;
+        "buttonBackgroundColour"?: brandColour;
+        "buttonIconColour"?: brandColour;
+        "navigationHighlightColour"?: brandColour;
+        "selectedNavigationHighlightColour"?: brandColour;
+        "selectedTextColour"?: brandColour;
+        "spaceBelow"?: spacingOption;
+        "textColour"?: brandColour;
     }
     interface BiggiveTable {
         "bodyBackgroundColour"?: brandColour;
         "bodyTextColour"?: brandColour;
         "headerBackgroundColour"?: brandColour;
         "headerTextColour"?: brandColour;
-        "spaceBelow"?: number;
+        "spaceBelow"?: spacingOption;
     }
     interface BiggiveTextInput {
     }
@@ -2477,6 +2480,7 @@ declare namespace LocalJSX {
         "biggive-campaign-card": BiggiveCampaignCard;
         "biggive-campaign-card-filter-grid": BiggiveCampaignCardFilterGrid;
         "biggive-campaign-highlights": BiggiveCampaignHighlights;
+        "biggive-carousel": BiggiveCarousel;
         "biggive-category-icon": BiggiveCategoryIcon;
         "biggive-footer": BiggiveFooter;
         "biggive-form": BiggiveForm;
@@ -2530,6 +2534,7 @@ declare module "@stencil/core" {
             "biggive-campaign-card": LocalJSX.BiggiveCampaignCard & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardElement>;
             "biggive-campaign-card-filter-grid": LocalJSX.BiggiveCampaignCardFilterGrid & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardFilterGridElement>;
             "biggive-campaign-highlights": LocalJSX.BiggiveCampaignHighlights & JSXBase.HTMLAttributes<HTMLBiggiveCampaignHighlightsElement>;
+            "biggive-carousel": LocalJSX.BiggiveCarousel & JSXBase.HTMLAttributes<HTMLBiggiveCarouselElement>;
             "biggive-category-icon": LocalJSX.BiggiveCategoryIcon & JSXBase.HTMLAttributes<HTMLBiggiveCategoryIconElement>;
             "biggive-footer": LocalJSX.BiggiveFooter & JSXBase.HTMLAttributes<HTMLBiggiveFooterElement>;
             "biggive-form": LocalJSX.BiggiveForm & JSXBase.HTMLAttributes<HTMLBiggiveFormElement>;
