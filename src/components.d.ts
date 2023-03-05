@@ -595,7 +595,7 @@ export namespace Components {
         /**
           * Button Colour Scheme
          */
-        "buttonColourScheme": string;
+        "buttonColourScheme": brandColour;
         /**
           * Button Label
          */
@@ -607,7 +607,7 @@ export namespace Components {
         /**
           * Colour Scheme
          */
-        "colourScheme": string;
+        "colourScheme": brandColour;
         /**
           * Full URL of a logo image.
          */
@@ -616,6 +616,10 @@ export namespace Components {
           * Logo alt text
          */
         "logoAltText": string;
+        /**
+          * Logo container height.
+         */
+        "logoHeight": string;
         /**
           * Full URL of a main hero image.
          */
@@ -635,7 +639,7 @@ export namespace Components {
         /**
           * Main title colour
          */
-        "mainTitleColour"?: string;
+        "mainTitleColour"?: brandColour;
         /**
           * Header slug
          */
@@ -643,11 +647,11 @@ export namespace Components {
         /**
           * Header slug colour
          */
-        "slugColour": string;
+        "slugColour": brandColour;
         /**
           * Space below component
          */
-        "spaceBelow": number;
+        "spaceBelow": spacingOption;
         /**
           * Introductory teaser text
          */
@@ -655,7 +659,7 @@ export namespace Components {
         /**
           * Teaser colour
          */
-        "teaserColour"?: string;
+        "teaserColour"?: brandColour;
     }
     interface BiggiveIconGroup {
         /**
@@ -926,6 +930,14 @@ export namespace Components {
         "spaceBelow": number;
     }
     interface BiggiveTextInput {
+    }
+    interface BiggiveTippingSlider {
+        "colourScheme": brandColour;
+        "donationAmount": number;
+        "donationCurrency": string;
+        "percentageEnd": number;
+        "percentageStart": number;
+        "spaceBelow": spacingOption;
     }
     interface BiggiveTotalizer {
         /**
@@ -1317,6 +1329,12 @@ declare global {
         prototype: HTMLBiggiveTextInputElement;
         new (): HTMLBiggiveTextInputElement;
     };
+    interface HTMLBiggiveTippingSliderElement extends Components.BiggiveTippingSlider, HTMLStencilElement {
+    }
+    var HTMLBiggiveTippingSliderElement: {
+        prototype: HTMLBiggiveTippingSliderElement;
+        new (): HTMLBiggiveTippingSliderElement;
+    };
     interface HTMLBiggiveTotalizerElement extends Components.BiggiveTotalizer, HTMLStencilElement {
     }
     var HTMLBiggiveTotalizerElement: {
@@ -1384,6 +1402,7 @@ declare global {
         "biggive-tabbed-content": HTMLBiggiveTabbedContentElement;
         "biggive-table": HTMLBiggiveTableElement;
         "biggive-text-input": HTMLBiggiveTextInputElement;
+        "biggive-tipping-slider": HTMLBiggiveTippingSliderElement;
         "biggive-totalizer": HTMLBiggiveTotalizerElement;
         "biggive-totalizer-ticker-item": HTMLBiggiveTotalizerTickerItemElement;
         "biggive-video": HTMLBiggiveVideoElement;
@@ -1996,7 +2015,7 @@ declare namespace LocalJSX {
         /**
           * Button Colour Scheme
          */
-        "buttonColourScheme"?: string;
+        "buttonColourScheme"?: brandColour;
         /**
           * Button Label
          */
@@ -2008,7 +2027,7 @@ declare namespace LocalJSX {
         /**
           * Colour Scheme
          */
-        "colourScheme"?: string;
+        "colourScheme"?: brandColour;
         /**
           * Full URL of a logo image.
          */
@@ -2017,6 +2036,10 @@ declare namespace LocalJSX {
           * Logo alt text
          */
         "logoAltText"?: string;
+        /**
+          * Logo container height.
+         */
+        "logoHeight"?: string;
         /**
           * Full URL of a main hero image.
          */
@@ -2036,7 +2059,7 @@ declare namespace LocalJSX {
         /**
           * Main title colour
          */
-        "mainTitleColour"?: string;
+        "mainTitleColour"?: brandColour;
         /**
           * Header slug
          */
@@ -2044,11 +2067,11 @@ declare namespace LocalJSX {
         /**
           * Header slug colour
          */
-        "slugColour"?: string;
+        "slugColour"?: brandColour;
         /**
           * Space below component
          */
-        "spaceBelow"?: number;
+        "spaceBelow"?: spacingOption;
         /**
           * Introductory teaser text
          */
@@ -2056,7 +2079,7 @@ declare namespace LocalJSX {
         /**
           * Teaser colour
          */
-        "teaserColour"?: string;
+        "teaserColour"?: brandColour;
     }
     interface BiggiveIconGroup {
         /**
@@ -2329,6 +2352,14 @@ declare namespace LocalJSX {
     }
     interface BiggiveTextInput {
     }
+    interface BiggiveTippingSlider {
+        "colourScheme"?: brandColour;
+        "donationAmount"?: number;
+        "donationCurrency"?: string;
+        "percentageEnd"?: number;
+        "percentageStart"?: number;
+        "spaceBelow"?: spacingOption;
+    }
     interface BiggiveTotalizer {
         /**
           * Primary message
@@ -2476,6 +2507,7 @@ declare namespace LocalJSX {
         "biggive-tabbed-content": BiggiveTabbedContent;
         "biggive-table": BiggiveTable;
         "biggive-text-input": BiggiveTextInput;
+        "biggive-tipping-slider": BiggiveTippingSlider;
         "biggive-totalizer": BiggiveTotalizer;
         "biggive-totalizer-ticker-item": BiggiveTotalizerTickerItem;
         "biggive-video": BiggiveVideo;
@@ -2536,6 +2568,7 @@ declare module "@stencil/core" {
             "biggive-tabbed-content": LocalJSX.BiggiveTabbedContent & JSXBase.HTMLAttributes<HTMLBiggiveTabbedContentElement>;
             "biggive-table": LocalJSX.BiggiveTable & JSXBase.HTMLAttributes<HTMLBiggiveTableElement>;
             "biggive-text-input": LocalJSX.BiggiveTextInput & JSXBase.HTMLAttributes<HTMLBiggiveTextInputElement>;
+            "biggive-tipping-slider": LocalJSX.BiggiveTippingSlider & JSXBase.HTMLAttributes<HTMLBiggiveTippingSliderElement>;
             "biggive-totalizer": LocalJSX.BiggiveTotalizer & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerElement>;
             "biggive-totalizer-ticker-item": LocalJSX.BiggiveTotalizerTickerItem & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerTickerItemElement>;
             "biggive-video": LocalJSX.BiggiveVideo & JSXBase.HTMLAttributes<HTMLBiggiveVideoElement>;
