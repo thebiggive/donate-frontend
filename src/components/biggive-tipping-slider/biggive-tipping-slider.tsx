@@ -73,6 +73,18 @@ export class BiggiveTippingSlider {
     });
   }
 
+  resetSlider = () => {
+    var handle = this.host.shadowRoot?.querySelector<HTMLElement>('.handle');
+    var percentageWrap = handle?.querySelector('.percentage-value');
+    var donationWrap = handle?.querySelector('.donation-value');
+
+    if (handle && percentageWrap && donationWrap) {
+      handle.style.marginLeft = '0px';
+      percentageWrap.innerHTML = '0';
+      donationWrap.innerHTML = '0';
+    }
+  };
+
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
@@ -95,7 +107,9 @@ export class BiggiveTippingSlider {
           <div class="label-end">{this.percentageEnd}%</div>
         </div>
         <div class="reset">
-          <span class="button">Back to default</span>
+          <span class="button" onClick={this.resetSlider}>
+            Back to default
+          </span>
         </div>
       </div>
     );
