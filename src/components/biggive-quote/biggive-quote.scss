@@ -29,6 +29,11 @@
     margin-bottom: $spacer-4;
   }
 
+  @each $key, $colour in $brandColours {
+    &.quote-icon-colour-#{$key} .image-wrap path { fill: $colour; }
+  }
+
+
   @media screen and (max-width: $screen-tablet-max) {
     padding: $spacer-5;
     svg {

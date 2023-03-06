@@ -10,6 +10,14 @@ import { brandColour } from "./globals/brand-colour";
 import { headingTag } from "./globals/heading-tag";
 import { headingSize } from "./globals/heading-size";
 export namespace Components {
+    interface BiggiveAccordion {
+        "headingColour": brandColour;
+        "spaceBelow": spacingOption;
+        "textColour": brandColour;
+    }
+    interface BiggiveAccordionEntry {
+        "heading": string;
+    }
     interface BiggiveArticleCard {
         /**
           * Card background colour
@@ -63,67 +71,23 @@ export namespace Components {
     interface BiggiveBackToTop {
     }
     interface BiggiveBasicCard {
-        /**
-          * Background colour.
-         */
-        "backgroundColour": string;
-        /**
-          * Full URL of the background image.
-         */
+        "addAnimation": boolean;
+        "backgroundColour": brandColour;
         "backgroundImageUrl": string;
-        /**
-          * Button Colour Scheme
-         */
         "buttonColourScheme": string;
-        /**
-          * Button label
-         */
         "buttonLabel": string;
-        /**
-          * Button URL
-         */
         "buttonUrl": string;
-        /**
-          * Card colour
-         */
-        "cardColour": string;
-        /**
-          * Clip bottom left corner
-         */
+        "cardColour": brandColour;
         "clipBottomLeftCorner": boolean;
-        /**
-          * Clip top right corner
-         */
         "clipTopRightCorner": boolean;
         "headingLevel": 1 | 2 | 3 | 4 | 5 | 6;
-        /**
-          * Icon
-         */
         "icon": boolean;
-        /**
-          * Icon colour
-         */
-        "iconColour": string;
-        /**
-          * Main title
-         */
+        "iconColour": brandColour;
         "mainTitle": string;
-        /**
-          * Space below component
-         */
-        "spaceBelow": number;
-        /**
-          * Subtitle title
-         */
+        "spaceBelow": spacingOption;
         "subtitle": string;
-        /**
-          * Teaser
-         */
         "teaser": string;
-        /**
-          * Text colour
-         */
-        "textColour": string;
+        "textColour": brandColour;
     }
     interface BiggiveBeneficiaryIcon {
         /**
@@ -532,6 +496,12 @@ export namespace Components {
          */
         "spaceBelow": number;
     }
+    interface BiggiveCarousel {
+        "buttonBackgroundColour": brandColour;
+        "buttonIconColour": brandColour;
+        "columnCount": number;
+        "spaceBelow": spacingOption;
+    }
     interface BiggiveCategoryIcon {
         /**
           * Background colour
@@ -639,7 +609,7 @@ export namespace Components {
         /**
           * Button Colour Scheme
          */
-        "buttonColourScheme": string;
+        "buttonColourScheme": brandColour;
         /**
           * Button Label
          */
@@ -651,7 +621,7 @@ export namespace Components {
         /**
           * Colour Scheme
          */
-        "colourScheme": string;
+        "colourScheme": brandColour;
         /**
           * Full URL of a logo image.
          */
@@ -660,6 +630,10 @@ export namespace Components {
           * Logo alt text
          */
         "logoAltText": string;
+        /**
+          * Logo container height selection. Numbers are not measurements.
+         */
+        "logoHeight": 1|2|3|4|5|6|7|8|9|10;
         /**
           * Full URL of a main hero image.
          */
@@ -679,7 +653,7 @@ export namespace Components {
         /**
           * Main title colour
          */
-        "mainTitleColour"?: string;
+        "mainTitleColour"?: brandColour;
         /**
           * Header slug
          */
@@ -687,11 +661,11 @@ export namespace Components {
         /**
           * Header slug colour
          */
-        "slugColour": string;
+        "slugColour": brandColour;
         /**
           * Space below component
          */
-        "spaceBelow": number;
+        "spaceBelow": spacingOption;
         /**
           * Introductory teaser text
          */
@@ -699,7 +673,7 @@ export namespace Components {
         /**
           * Teaser colour
          */
-        "teaserColour"?: string;
+        "teaserColour"?: brandColour;
     }
     interface BiggiveIconGroup {
         /**
@@ -892,22 +866,11 @@ export namespace Components {
         "spaceBelow": number;
     }
     interface BiggiveQuote {
-        /**
-          * Attribution text
-         */
         "attribution": string;
-        /**
-          * Default text colour
-         */
-        "defaultTextColour": string;
-        /**
-          * Quote text
-         */
+        "defaultTextColour": brandColour;
         "quote": string;
-        /**
-          * Space below component
-         */
-        "spaceBelow": number;
+        "quoteIconColour": brandColour;
+        "spaceBelow": spacingOption;
     }
     /**
      * @deprecated (?) I don't think Donate is using this. Unless there is a WordPress use case,
@@ -947,29 +910,54 @@ export namespace Components {
         "wide": boolean;
     }
     interface BiggiveTab {
-        /**
-          * Title
-         */
         "tabTitle": string;
     }
     interface BiggiveTabbedContent {
-        /**
-          * Default text colour
-         */
-        "defaultTextColour": string;
-        /**
-          * Space below component
-         */
-        "spaceBelow": number;
+        "buttonBackgroundColour": brandColour;
+        "buttonIconColour": brandColour;
+        "navigationHighlightColour": brandColour;
+        "selectedNavigationHighlightColour": brandColour;
+        "selectedTextColour": brandColour;
+        "spaceBelow": spacingOption;
+        "textColour": brandColour;
     }
     interface BiggiveTable {
         "bodyBackgroundColour": brandColour;
         "bodyTextColour": brandColour;
         "headerBackgroundColour": brandColour;
         "headerTextColour": brandColour;
-        "spaceBelow": number;
+        "spaceBelow": spacingOption;
     }
     interface BiggiveTextInput {
+    }
+    interface BiggiveTimeline {
+        "buttonBackgroundColour": brandColour;
+        "buttonIconColour": brandColour;
+        "entryBackgroundColour": brandColour;
+        "entryDateColour": brandColour;
+        "entryHighlightColour": brandColour;
+        "entryTextColour": brandColour;
+        "entryTitleColour": brandColour;
+        "navigationHighlightColour": brandColour;
+        "selectedNavigationHighlightColour": brandColour;
+        "selectedTextColour": brandColour;
+        "spaceBelow": spacingOption;
+        "textColour": brandColour;
+    }
+    interface BiggiveTimelineEntry {
+        /**
+          * Should be in the format 'YYYY-mm-dd', for example '2023-01-01'
+         */
+        "date": string;
+        "heading": string;
+    }
+    interface BiggiveTippingSlider {
+        "colourScheme": brandColour;
+        "donationAmount": number;
+        "donationCurrency": '£';
+        "percentageEnd": number;
+        "percentageStart": number;
+        "spaceBelow": spacingOption;
     }
     interface BiggiveTotalizer {
         /**
@@ -1101,6 +1089,18 @@ export interface BiggiveSearchCustomEvent<T> extends CustomEvent<T> {
     target: HTMLBiggiveSearchElement;
 }
 declare global {
+    interface HTMLBiggiveAccordionElement extends Components.BiggiveAccordion, HTMLStencilElement {
+    }
+    var HTMLBiggiveAccordionElement: {
+        prototype: HTMLBiggiveAccordionElement;
+        new (): HTMLBiggiveAccordionElement;
+    };
+    interface HTMLBiggiveAccordionEntryElement extends Components.BiggiveAccordionEntry, HTMLStencilElement {
+    }
+    var HTMLBiggiveAccordionEntryElement: {
+        prototype: HTMLBiggiveAccordionEntryElement;
+        new (): HTMLBiggiveAccordionEntryElement;
+    };
     interface HTMLBiggiveArticleCardElement extends Components.BiggiveArticleCard, HTMLStencilElement {
     }
     var HTMLBiggiveArticleCardElement: {
@@ -1172,6 +1172,12 @@ declare global {
     var HTMLBiggiveCampaignHighlightsElement: {
         prototype: HTMLBiggiveCampaignHighlightsElement;
         new (): HTMLBiggiveCampaignHighlightsElement;
+    };
+    interface HTMLBiggiveCarouselElement extends Components.BiggiveCarousel, HTMLStencilElement {
+    }
+    var HTMLBiggiveCarouselElement: {
+        prototype: HTMLBiggiveCarouselElement;
+        new (): HTMLBiggiveCarouselElement;
     };
     interface HTMLBiggiveCategoryIconElement extends Components.BiggiveCategoryIcon, HTMLStencilElement {
     }
@@ -1361,6 +1367,24 @@ declare global {
         prototype: HTMLBiggiveTextInputElement;
         new (): HTMLBiggiveTextInputElement;
     };
+    interface HTMLBiggiveTimelineElement extends Components.BiggiveTimeline, HTMLStencilElement {
+    }
+    var HTMLBiggiveTimelineElement: {
+        prototype: HTMLBiggiveTimelineElement;
+        new (): HTMLBiggiveTimelineElement;
+    };
+    interface HTMLBiggiveTimelineEntryElement extends Components.BiggiveTimelineEntry, HTMLStencilElement {
+    }
+    var HTMLBiggiveTimelineEntryElement: {
+        prototype: HTMLBiggiveTimelineEntryElement;
+        new (): HTMLBiggiveTimelineEntryElement;
+    };
+    interface HTMLBiggiveTippingSliderElement extends Components.BiggiveTippingSlider, HTMLStencilElement {
+    }
+    var HTMLBiggiveTippingSliderElement: {
+        prototype: HTMLBiggiveTippingSliderElement;
+        new (): HTMLBiggiveTippingSliderElement;
+    };
     interface HTMLBiggiveTotalizerElement extends Components.BiggiveTotalizer, HTMLStencilElement {
     }
     var HTMLBiggiveTotalizerElement: {
@@ -1386,6 +1410,8 @@ declare global {
         new (): HTMLBiggiveVideoFeatureElement;
     };
     interface HTMLElementTagNameMap {
+        "biggive-accordion": HTMLBiggiveAccordionElement;
+        "biggive-accordion-entry": HTMLBiggiveAccordionEntryElement;
         "biggive-article-card": HTMLBiggiveArticleCardElement;
         "biggive-back-to-top": HTMLBiggiveBackToTopElement;
         "biggive-basic-card": HTMLBiggiveBasicCardElement;
@@ -1398,6 +1424,7 @@ declare global {
         "biggive-campaign-card": HTMLBiggiveCampaignCardElement;
         "biggive-campaign-card-filter-grid": HTMLBiggiveCampaignCardFilterGridElement;
         "biggive-campaign-highlights": HTMLBiggiveCampaignHighlightsElement;
+        "biggive-carousel": HTMLBiggiveCarouselElement;
         "biggive-category-icon": HTMLBiggiveCategoryIconElement;
         "biggive-footer": HTMLBiggiveFooterElement;
         "biggive-form": HTMLBiggiveFormElement;
@@ -1428,6 +1455,9 @@ declare global {
         "biggive-tabbed-content": HTMLBiggiveTabbedContentElement;
         "biggive-table": HTMLBiggiveTableElement;
         "biggive-text-input": HTMLBiggiveTextInputElement;
+        "biggive-timeline": HTMLBiggiveTimelineElement;
+        "biggive-timeline-entry": HTMLBiggiveTimelineEntryElement;
+        "biggive-tipping-slider": HTMLBiggiveTippingSliderElement;
         "biggive-totalizer": HTMLBiggiveTotalizerElement;
         "biggive-totalizer-ticker-item": HTMLBiggiveTotalizerTickerItemElement;
         "biggive-video": HTMLBiggiveVideoElement;
@@ -1435,6 +1465,14 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface BiggiveAccordion {
+        "headingColour"?: brandColour;
+        "spaceBelow"?: spacingOption;
+        "textColour"?: brandColour;
+    }
+    interface BiggiveAccordionEntry {
+        "heading"?: string;
+    }
     interface BiggiveArticleCard {
         /**
           * Card background colour
@@ -1488,67 +1526,23 @@ declare namespace LocalJSX {
     interface BiggiveBackToTop {
     }
     interface BiggiveBasicCard {
-        /**
-          * Background colour.
-         */
-        "backgroundColour"?: string;
-        /**
-          * Full URL of the background image.
-         */
+        "addAnimation"?: boolean;
+        "backgroundColour"?: brandColour;
         "backgroundImageUrl"?: string;
-        /**
-          * Button Colour Scheme
-         */
         "buttonColourScheme"?: string;
-        /**
-          * Button label
-         */
         "buttonLabel"?: string;
-        /**
-          * Button URL
-         */
         "buttonUrl"?: string;
-        /**
-          * Card colour
-         */
-        "cardColour"?: string;
-        /**
-          * Clip bottom left corner
-         */
+        "cardColour"?: brandColour;
         "clipBottomLeftCorner"?: boolean;
-        /**
-          * Clip top right corner
-         */
         "clipTopRightCorner"?: boolean;
         "headingLevel"?: 1 | 2 | 3 | 4 | 5 | 6;
-        /**
-          * Icon
-         */
         "icon"?: boolean;
-        /**
-          * Icon colour
-         */
-        "iconColour"?: string;
-        /**
-          * Main title
-         */
+        "iconColour"?: brandColour;
         "mainTitle"?: string;
-        /**
-          * Space below component
-         */
-        "spaceBelow"?: number;
-        /**
-          * Subtitle title
-         */
+        "spaceBelow"?: spacingOption;
         "subtitle"?: string;
-        /**
-          * Teaser
-         */
         "teaser"?: string;
-        /**
-          * Text colour
-         */
-        "textColour"?: string;
+        "textColour"?: brandColour;
     }
     interface BiggiveBeneficiaryIcon {
         /**
@@ -1970,6 +1964,12 @@ declare namespace LocalJSX {
          */
         "spaceBelow"?: number;
     }
+    interface BiggiveCarousel {
+        "buttonBackgroundColour"?: brandColour;
+        "buttonIconColour"?: brandColour;
+        "columnCount"?: number;
+        "spaceBelow"?: spacingOption;
+    }
     interface BiggiveCategoryIcon {
         /**
           * Background colour
@@ -2084,7 +2084,7 @@ declare namespace LocalJSX {
         /**
           * Button Colour Scheme
          */
-        "buttonColourScheme"?: string;
+        "buttonColourScheme"?: brandColour;
         /**
           * Button Label
          */
@@ -2096,7 +2096,7 @@ declare namespace LocalJSX {
         /**
           * Colour Scheme
          */
-        "colourScheme"?: string;
+        "colourScheme"?: brandColour;
         /**
           * Full URL of a logo image.
          */
@@ -2105,6 +2105,10 @@ declare namespace LocalJSX {
           * Logo alt text
          */
         "logoAltText"?: string;
+        /**
+          * Logo container height selection. Numbers are not measurements.
+         */
+        "logoHeight"?: 1|2|3|4|5|6|7|8|9|10;
         /**
           * Full URL of a main hero image.
          */
@@ -2124,7 +2128,7 @@ declare namespace LocalJSX {
         /**
           * Main title colour
          */
-        "mainTitleColour"?: string;
+        "mainTitleColour"?: brandColour;
         /**
           * Header slug
          */
@@ -2132,11 +2136,11 @@ declare namespace LocalJSX {
         /**
           * Header slug colour
          */
-        "slugColour"?: string;
+        "slugColour"?: brandColour;
         /**
           * Space below component
          */
-        "spaceBelow"?: number;
+        "spaceBelow"?: spacingOption;
         /**
           * Introductory teaser text
          */
@@ -2144,7 +2148,7 @@ declare namespace LocalJSX {
         /**
           * Teaser colour
          */
-        "teaserColour"?: string;
+        "teaserColour"?: brandColour;
     }
     interface BiggiveIconGroup {
         /**
@@ -2334,22 +2338,11 @@ declare namespace LocalJSX {
         "spaceBelow"?: number;
     }
     interface BiggiveQuote {
-        /**
-          * Attribution text
-         */
         "attribution"?: string;
-        /**
-          * Default text colour
-         */
-        "defaultTextColour"?: string;
-        /**
-          * Quote text
-         */
+        "defaultTextColour"?: brandColour;
         "quote"?: string;
-        /**
-          * Space below component
-         */
-        "spaceBelow"?: number;
+        "quoteIconColour"?: brandColour;
+        "spaceBelow"?: spacingOption;
     }
     /**
      * @deprecated (?) I don't think Donate is using this. Unless there is a WordPress use case,
@@ -2393,29 +2386,54 @@ declare namespace LocalJSX {
         "wide"?: boolean;
     }
     interface BiggiveTab {
-        /**
-          * Title
-         */
         "tabTitle"?: string;
     }
     interface BiggiveTabbedContent {
-        /**
-          * Default text colour
-         */
-        "defaultTextColour"?: string;
-        /**
-          * Space below component
-         */
-        "spaceBelow"?: number;
+        "buttonBackgroundColour"?: brandColour;
+        "buttonIconColour"?: brandColour;
+        "navigationHighlightColour"?: brandColour;
+        "selectedNavigationHighlightColour"?: brandColour;
+        "selectedTextColour"?: brandColour;
+        "spaceBelow"?: spacingOption;
+        "textColour"?: brandColour;
     }
     interface BiggiveTable {
         "bodyBackgroundColour"?: brandColour;
         "bodyTextColour"?: brandColour;
         "headerBackgroundColour"?: brandColour;
         "headerTextColour"?: brandColour;
-        "spaceBelow"?: number;
+        "spaceBelow"?: spacingOption;
     }
     interface BiggiveTextInput {
+    }
+    interface BiggiveTimeline {
+        "buttonBackgroundColour"?: brandColour;
+        "buttonIconColour"?: brandColour;
+        "entryBackgroundColour"?: brandColour;
+        "entryDateColour"?: brandColour;
+        "entryHighlightColour"?: brandColour;
+        "entryTextColour"?: brandColour;
+        "entryTitleColour"?: brandColour;
+        "navigationHighlightColour"?: brandColour;
+        "selectedNavigationHighlightColour"?: brandColour;
+        "selectedTextColour"?: brandColour;
+        "spaceBelow"?: spacingOption;
+        "textColour"?: brandColour;
+    }
+    interface BiggiveTimelineEntry {
+        /**
+          * Should be in the format 'YYYY-mm-dd', for example '2023-01-01'
+         */
+        "date"?: string;
+        "heading"?: string;
+    }
+    interface BiggiveTippingSlider {
+        "colourScheme"?: brandColour;
+        "donationAmount"?: number;
+        "donationCurrency"?: '£';
+        "percentageEnd"?: number;
+        "percentageStart"?: number;
+        "spaceBelow"?: spacingOption;
     }
     interface BiggiveTotalizer {
         /**
@@ -2522,6 +2540,8 @@ declare namespace LocalJSX {
         "videoUrl"?: string;
     }
     interface IntrinsicElements {
+        "biggive-accordion": BiggiveAccordion;
+        "biggive-accordion-entry": BiggiveAccordionEntry;
         "biggive-article-card": BiggiveArticleCard;
         "biggive-back-to-top": BiggiveBackToTop;
         "biggive-basic-card": BiggiveBasicCard;
@@ -2534,6 +2554,7 @@ declare namespace LocalJSX {
         "biggive-campaign-card": BiggiveCampaignCard;
         "biggive-campaign-card-filter-grid": BiggiveCampaignCardFilterGrid;
         "biggive-campaign-highlights": BiggiveCampaignHighlights;
+        "biggive-carousel": BiggiveCarousel;
         "biggive-category-icon": BiggiveCategoryIcon;
         "biggive-footer": BiggiveFooter;
         "biggive-form": BiggiveForm;
@@ -2564,6 +2585,9 @@ declare namespace LocalJSX {
         "biggive-tabbed-content": BiggiveTabbedContent;
         "biggive-table": BiggiveTable;
         "biggive-text-input": BiggiveTextInput;
+        "biggive-timeline": BiggiveTimeline;
+        "biggive-timeline-entry": BiggiveTimelineEntry;
+        "biggive-tipping-slider": BiggiveTippingSlider;
         "biggive-totalizer": BiggiveTotalizer;
         "biggive-totalizer-ticker-item": BiggiveTotalizerTickerItem;
         "biggive-video": BiggiveVideo;
@@ -2574,6 +2598,8 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "biggive-accordion": LocalJSX.BiggiveAccordion & JSXBase.HTMLAttributes<HTMLBiggiveAccordionElement>;
+            "biggive-accordion-entry": LocalJSX.BiggiveAccordionEntry & JSXBase.HTMLAttributes<HTMLBiggiveAccordionEntryElement>;
             "biggive-article-card": LocalJSX.BiggiveArticleCard & JSXBase.HTMLAttributes<HTMLBiggiveArticleCardElement>;
             "biggive-back-to-top": LocalJSX.BiggiveBackToTop & JSXBase.HTMLAttributes<HTMLBiggiveBackToTopElement>;
             "biggive-basic-card": LocalJSX.BiggiveBasicCard & JSXBase.HTMLAttributes<HTMLBiggiveBasicCardElement>;
@@ -2586,6 +2612,7 @@ declare module "@stencil/core" {
             "biggive-campaign-card": LocalJSX.BiggiveCampaignCard & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardElement>;
             "biggive-campaign-card-filter-grid": LocalJSX.BiggiveCampaignCardFilterGrid & JSXBase.HTMLAttributes<HTMLBiggiveCampaignCardFilterGridElement>;
             "biggive-campaign-highlights": LocalJSX.BiggiveCampaignHighlights & JSXBase.HTMLAttributes<HTMLBiggiveCampaignHighlightsElement>;
+            "biggive-carousel": LocalJSX.BiggiveCarousel & JSXBase.HTMLAttributes<HTMLBiggiveCarouselElement>;
             "biggive-category-icon": LocalJSX.BiggiveCategoryIcon & JSXBase.HTMLAttributes<HTMLBiggiveCategoryIconElement>;
             "biggive-footer": LocalJSX.BiggiveFooter & JSXBase.HTMLAttributes<HTMLBiggiveFooterElement>;
             "biggive-form": LocalJSX.BiggiveForm & JSXBase.HTMLAttributes<HTMLBiggiveFormElement>;
@@ -2624,6 +2651,9 @@ declare module "@stencil/core" {
             "biggive-tabbed-content": LocalJSX.BiggiveTabbedContent & JSXBase.HTMLAttributes<HTMLBiggiveTabbedContentElement>;
             "biggive-table": LocalJSX.BiggiveTable & JSXBase.HTMLAttributes<HTMLBiggiveTableElement>;
             "biggive-text-input": LocalJSX.BiggiveTextInput & JSXBase.HTMLAttributes<HTMLBiggiveTextInputElement>;
+            "biggive-timeline": LocalJSX.BiggiveTimeline & JSXBase.HTMLAttributes<HTMLBiggiveTimelineElement>;
+            "biggive-timeline-entry": LocalJSX.BiggiveTimelineEntry & JSXBase.HTMLAttributes<HTMLBiggiveTimelineEntryElement>;
+            "biggive-tipping-slider": LocalJSX.BiggiveTippingSlider & JSXBase.HTMLAttributes<HTMLBiggiveTippingSliderElement>;
             "biggive-totalizer": LocalJSX.BiggiveTotalizer & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerElement>;
             "biggive-totalizer-ticker-item": LocalJSX.BiggiveTotalizerTickerItem & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerTickerItemElement>;
             "biggive-video": LocalJSX.BiggiveVideo & JSXBase.HTMLAttributes<HTMLBiggiveVideoElement>;

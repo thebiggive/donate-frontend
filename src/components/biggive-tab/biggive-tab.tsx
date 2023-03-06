@@ -6,18 +6,12 @@ import { Component, Prop, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveTab {
-  /**
-   * Title
-   */
   @Prop() tabTitle: string = '';
 
   render() {
     return (
       <div class="container">
-        <div class="title">{this.tabTitle}</div>
-        <div class="content">
-          <slot></slot>
-        </div>
+        <slot></slot>
       </div>
     );
   }

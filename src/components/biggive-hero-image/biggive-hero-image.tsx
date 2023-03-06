@@ -1,5 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { Component, Prop, h } from '@stencil/core';
+import { brandColour } from '../../globals/brand-colour';
+import { spacingOption } from '../../globals/spacing-option';
+
 
 @Component({
   tag: 'biggive-hero-image',
@@ -10,12 +13,12 @@ export class BiggiveHeroImage {
   /**
    * Space below component
    */
-  @Prop() spaceBelow: number = 0;
+  @Prop() spaceBelow: spacingOption = 0;
 
   /**
    * Colour Scheme
    */
-   @Prop() colourScheme: string = 'primary';
+   @Prop() colourScheme: brandColour = 'primary';
 
   /**
    * Header slug
@@ -25,12 +28,17 @@ export class BiggiveHeroImage {
   /**
    * Header slug colour
    */
-   @Prop() slugColour: string;
+   @Prop() slugColour: brandColour;
 
   /**
    * Full URL of a logo image.
    */
    @Prop() logo: string = '';
+
+   /**
+   * Logo container height selection. Numbers are not measurements.
+   */
+   @Prop() logoHeight: 1|2|3|4|5|6|7|8|9|10 = 3;
 
   /**
    * Logo alt text
@@ -40,17 +48,17 @@ export class BiggiveHeroImage {
   /**
    * Full URL of a main hero image.
    */
-  @Prop() mainImage: string|null = null;
+    @Prop() mainImage: string|null = null;
 
-    /**
+  /**
    * Horizontal alignment of image
    */
-     @Prop() mainImageAlignHorizontal: string = 'center';
+    @Prop() mainImageAlignHorizontal: string = 'center';
 
       /**
    * Vertical alignment of image
    */
-       @Prop() mainImageAlignVertical: string = 'center';
+    @Prop() mainImageAlignVertical: string = 'center';
 
   /**
    * Hero image title, typically the page.
@@ -59,7 +67,7 @@ export class BiggiveHeroImage {
   /**
    * Main title colour
    */
-   @Prop() mainTitleColour?: string;
+   @Prop() mainTitleColour?: brandColour;
   /**
    * Introductory teaser text
    */
@@ -67,7 +75,7 @@ export class BiggiveHeroImage {
   /**
    * Teaser colour
    */
-   @Prop() teaserColour?: string;
+   @Prop() teaserColour?: brandColour;
   /**
    * Button Url
    */
@@ -81,7 +89,7 @@ export class BiggiveHeroImage {
   /**
    * Button Colour Scheme
    */
-  @Prop() buttonColourScheme: string = 'primary';
+  @Prop() buttonColourScheme: brandColour = 'primary';
 
 
   render() {
@@ -93,10 +101,10 @@ export class BiggiveHeroImage {
         <div class="sleeve">
           <div class="content-wrap">
             {this.logo !== undefined && this.logo !== null ? (
-              <div class="logo image-wrap">
+              <div class={'logo image-wrap logo-height-'+this.logoHeight}>
                 <img src={this.logo} alt={this.logoAltText} title={this.logoAltText}/>
               </div>
-            ) : <div class="logo-space"></div>}
+            ) : <div class={'logo-space logo-height-'+this.logoHeight}></div>}
             <div class={'slug text-colour-'+this.slugColour}>{this.slug}</div>
             <h1 class={mainTitleClasses}>{this.mainTitle}</h1>
             <div class={teaserClasses}>{this.teaser}</div>

@@ -9,7 +9,7 @@
 
 | Property   | Attribute   | Description | Type     | Default |
 | ---------- | ----------- | ----------- | -------- | ------- |
-| `tabTitle` | `tab-title` | Title       | `string` | `''`    |
+| `tabTitle` | `tab-title` |             | `string` | `''`    |
 
 
 ----------------------------------------------
