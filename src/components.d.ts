@@ -930,6 +930,24 @@ export namespace Components {
     }
     interface BiggiveTextInput {
     }
+    interface BiggiveTimeline {
+        "buttonBackgroundColour": brandColour;
+        "buttonIconColour": brandColour;
+        "entryBackgroundColour": brandColour;
+        "entryDateColour": brandColour;
+        "entryHighlightColour": brandColour;
+        "entryTextColour": brandColour;
+        "entryTitleColour": brandColour;
+        "navigationHighlightColour": brandColour;
+        "selectedNavigationHighlightColour": brandColour;
+        "selectedTextColour": brandColour;
+        "spaceBelow": spacingOption;
+        "textColour": brandColour;
+    }
+    interface BiggiveTimelineEntry {
+        "entryDate": string;
+        "entryTitle": string;
+    }
     interface BiggiveTippingSlider {
         "colourScheme": brandColour;
         "donationAmount": number;
@@ -1346,6 +1364,18 @@ declare global {
         prototype: HTMLBiggiveTextInputElement;
         new (): HTMLBiggiveTextInputElement;
     };
+    interface HTMLBiggiveTimelineElement extends Components.BiggiveTimeline, HTMLStencilElement {
+    }
+    var HTMLBiggiveTimelineElement: {
+        prototype: HTMLBiggiveTimelineElement;
+        new (): HTMLBiggiveTimelineElement;
+    };
+    interface HTMLBiggiveTimelineEntryElement extends Components.BiggiveTimelineEntry, HTMLStencilElement {
+    }
+    var HTMLBiggiveTimelineEntryElement: {
+        prototype: HTMLBiggiveTimelineEntryElement;
+        new (): HTMLBiggiveTimelineEntryElement;
+    };
     interface HTMLBiggiveTippingSliderElement extends Components.BiggiveTippingSlider, HTMLStencilElement {
     }
     var HTMLBiggiveTippingSliderElement: {
@@ -1422,6 +1452,8 @@ declare global {
         "biggive-tabbed-content": HTMLBiggiveTabbedContentElement;
         "biggive-table": HTMLBiggiveTableElement;
         "biggive-text-input": HTMLBiggiveTextInputElement;
+        "biggive-timeline": HTMLBiggiveTimelineElement;
+        "biggive-timeline-entry": HTMLBiggiveTimelineEntryElement;
         "biggive-tipping-slider": HTMLBiggiveTippingSliderElement;
         "biggive-totalizer": HTMLBiggiveTotalizerElement;
         "biggive-totalizer-ticker-item": HTMLBiggiveTotalizerTickerItemElement;
@@ -2371,6 +2403,24 @@ declare namespace LocalJSX {
     }
     interface BiggiveTextInput {
     }
+    interface BiggiveTimeline {
+        "buttonBackgroundColour"?: brandColour;
+        "buttonIconColour"?: brandColour;
+        "entryBackgroundColour"?: brandColour;
+        "entryDateColour"?: brandColour;
+        "entryHighlightColour"?: brandColour;
+        "entryTextColour"?: brandColour;
+        "entryTitleColour"?: brandColour;
+        "navigationHighlightColour"?: brandColour;
+        "selectedNavigationHighlightColour"?: brandColour;
+        "selectedTextColour"?: brandColour;
+        "spaceBelow"?: spacingOption;
+        "textColour"?: brandColour;
+    }
+    interface BiggiveTimelineEntry {
+        "entryDate"?: string;
+        "entryTitle"?: string;
+    }
     interface BiggiveTippingSlider {
         "colourScheme"?: brandColour;
         "donationAmount"?: number;
@@ -2529,6 +2579,8 @@ declare namespace LocalJSX {
         "biggive-tabbed-content": BiggiveTabbedContent;
         "biggive-table": BiggiveTable;
         "biggive-text-input": BiggiveTextInput;
+        "biggive-timeline": BiggiveTimeline;
+        "biggive-timeline-entry": BiggiveTimelineEntry;
         "biggive-tipping-slider": BiggiveTippingSlider;
         "biggive-totalizer": BiggiveTotalizer;
         "biggive-totalizer-ticker-item": BiggiveTotalizerTickerItem;
@@ -2593,6 +2645,8 @@ declare module "@stencil/core" {
             "biggive-tabbed-content": LocalJSX.BiggiveTabbedContent & JSXBase.HTMLAttributes<HTMLBiggiveTabbedContentElement>;
             "biggive-table": LocalJSX.BiggiveTable & JSXBase.HTMLAttributes<HTMLBiggiveTableElement>;
             "biggive-text-input": LocalJSX.BiggiveTextInput & JSXBase.HTMLAttributes<HTMLBiggiveTextInputElement>;
+            "biggive-timeline": LocalJSX.BiggiveTimeline & JSXBase.HTMLAttributes<HTMLBiggiveTimelineElement>;
+            "biggive-timeline-entry": LocalJSX.BiggiveTimelineEntry & JSXBase.HTMLAttributes<HTMLBiggiveTimelineEntryElement>;
             "biggive-tipping-slider": LocalJSX.BiggiveTippingSlider & JSXBase.HTMLAttributes<HTMLBiggiveTippingSliderElement>;
             "biggive-totalizer": LocalJSX.BiggiveTotalizer & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerElement>;
             "biggive-totalizer-ticker-item": LocalJSX.BiggiveTotalizerTickerItem & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerTickerItemElement>;
