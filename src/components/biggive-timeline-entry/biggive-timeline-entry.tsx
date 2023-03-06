@@ -8,6 +8,8 @@ import { Component, Prop } from '@stencil/core';
 export class BiggiveTimelineEntry {
   @Prop() entryDate: string;
 
+  @Prop() entryYear: string;
+
   @Prop() entryTitle: string;
 
   render() {

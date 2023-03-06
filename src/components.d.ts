@@ -633,7 +633,7 @@ export namespace Components {
         /**
           * Logo container height.
          */
-        "logoHeight": string;
+        "logoHeight": number;
         /**
           * Full URL of a main hero image.
          */
@@ -947,6 +947,7 @@ export namespace Components {
     interface BiggiveTimelineEntry {
         "entryDate": string;
         "entryTitle": string;
+        "entryYear": string;
     }
     interface BiggiveTippingSlider {
         "colourScheme": brandColour;
@@ -2105,7 +2106,7 @@ declare namespace LocalJSX {
         /**
           * Logo container height.
          */
-        "logoHeight"?: string;
+        "logoHeight"?: number;
         /**
           * Full URL of a main hero image.
          */
@@ -2420,6 +2421,7 @@ declare namespace LocalJSX {
     interface BiggiveTimelineEntry {
         "entryDate"?: string;
         "entryTitle"?: string;
+        "entryYear"?: string;
     }
     interface BiggiveTippingSlider {
         "colourScheme"?: brandColour;

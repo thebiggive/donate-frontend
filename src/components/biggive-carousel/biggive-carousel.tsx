@@ -20,36 +20,36 @@ export class BiggiveCarousel {
 
   currentTab = 0;
   itemCount = 0;
-  itemWidth = 0;
-  max = 0;
+  itemWidthPx = 0;
   min = 0;
-  sleeve;
+  sleeve: HTMLElement;
 
   componentDidRender() {
-    this.sleeve = this.host.shadowRoot?.querySelector<HTMLElement>('.sleeve');
+    this.sleeve = this.host.shadowRoot?.querySelector<HTMLElement>('.sleeve')!;
     let children: Array<any> = Array.from(this.host.children);
 
     this.itemCount = children.length;
 
-    if (children.length > 0 && this.sleeve) {
-      this.itemWidth = children[0].offsetWidth;
-      this.sleeve.style.width = this.itemWidth * children.length + 'px';
+    if (children.length > 0) {
+      // Item widths are set in CSS so we know they will all be the same.
+      this.itemWidthPx = children[0].offsetWidth;
+      this.sleeve.style.width = this.itemWidthPx * children.length + 'px';
 
       children.forEach(function (el) {
         el.style.width = 'calc( 100% / ' + children.length + ' )';
       });
     }
 
-    this.max = 0;
-    this.min = 0 - (children.length - this.columnCount) * this.itemWidth;
+    this.min = 0 - (children.length - this.columnCount) * this.itemWidthPx;
   }
 
+  /*
+   * Animates a transition to show the i'th element in the carousel, counting from zero. Does nothing if i out of range.
+   */
   showTab(i: number) {
-    let pos = 0 - this.itemWidth * (this.currentTab + i);
+    let pos = 0 - this.itemWidthPx * (this.currentTab + i);
 
-    console.log(pos);
-
-    if (pos >= this.min && pos <= this.max) {
+    if (pos >= this.min && pos <= 0) {
       this.sleeve.style.transitionDuration = '0.3s';
       this.sleeve.style.transitionTimingFunction = 'ease-out';
       this.sleeve.style.transform = 'translate3d(' + pos + 'px, 0, 0)';

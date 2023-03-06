@@ -25,26 +25,26 @@ export class BiggiveTabbedContent {
   @Prop() buttonIconColour: brandColour = 'primary';
 
   currentTab = 0;
-  children: Array<any> = [];
+  children: Array<HTMLBiggiveTabElement> = [];
 
   componentWillLoad() {
-    this.children = Array.from(this.host.children);
+    let children = this.children;
+    Array.from(this.host.children).forEach(function (el: HTMLBiggiveTabElement) {
+      children.push(el);
+    });
   }
 
   componentDidRender() {
     this.showTab(0);
   }
 
+  /*
+   * Shows the i'th tab, counting from zero. Does nothing if i out of range.
+   */
   showTab(i: number) {
-    let tabs = this.host.shadowRoot?.querySelectorAll('.navigation ul li');
+    const tabs = this.host.shadowRoot?.querySelectorAll('.navigation ul li')!;
 
-    if (tabs) {
-      if (i < 0) {
-        i = 0;
-      } else if (i > tabs?.length - 1) {
-        i = tabs?.length - 1;
-      }
-
+    if (tabs && i >= 0 && i <= tabs?.length - 1) {
       this.currentTab = i;
       let j = 0;
       tabs?.forEach(function (tab) {

@@ -16,10 +16,13 @@ export class BiggiveAccordion {
 
   @Prop() headingColour: brandColour = 'primary';
 
-  children: Array<any> = [];
+  children: Array<HTMLBiggiveAccordionEntryElement> = [];
 
   componentWillLoad() {
-    this.children = Array.from(this.host.children);
+    let children = this.children;
+    Array.from(this.host.children).forEach(function (el: HTMLBiggiveAccordionEntryElement) {
+      children.push(el);
+    });
   }
 
   expandHandler(e) {

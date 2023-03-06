@@ -38,7 +38,7 @@ export class BiggiveHeroImage {
   /**
    * Logo container height.
    */
-    @Prop() logoHeight: string = 'medium';
+    @Prop() logoHeight: number = 3;
 
   /**
    * Logo alt text

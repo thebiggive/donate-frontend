@@ -35,11 +35,14 @@ export class BiggiveTimeline {
   @Prop() entryTextColour: brandColour = 'black';
 
   currentTab = 0;
-  tabs: Array<any> = [];
-  children: Array<any> = [];
+  tabs: Array<string> = [];
+  children: Array<HTMLBiggiveTimelineEntryElement> = [];
 
   componentWillLoad() {
-    this.children = Array.from(this.host.children);
+    let children = this.children;
+    Array.from(this.host.children).forEach(function (el: HTMLBiggiveTimelineEntryElement) {
+      children.push(el);
+    });
 
     let tabs = this.tabs;
 
@@ -50,25 +53,20 @@ export class BiggiveTimeline {
         tabs.push(year);
       }
     });
-
-    this.tabs = tabs;
   }
 
   componentDidRender() {
     this.showTab(0);
   }
 
+  /*
+   * Shows the i'th element in the timeline, counting from zero. Does nothing if i out of range.
+   */
   showTab(i: number) {
-    let tabs = this.host.shadowRoot?.querySelectorAll<HTMLElement>('.navigation ul li');
-    let entries = this.host.shadowRoot?.querySelectorAll<HTMLElement>('.entry');
+    const tabs = this.host.shadowRoot?.querySelectorAll<HTMLElement>('.navigation ul li')!;
+    const entries = this.host.shadowRoot?.querySelectorAll<HTMLElement>('.entry')!;
 
-    if (tabs) {
-      if (i < 0) {
-        i = 0;
-      } else if (i > tabs?.length - 1) {
-        i = tabs?.length - 1;
-      }
-
+    if (i >= 0 && i <= tabs?.length - 1) {
       this.currentTab = i;
       let currentTabYear = tabs[i]?.innerHTML;
       let j = 0;
@@ -81,9 +79,7 @@ export class BiggiveTimeline {
         j++;
       });
 
-      entries?.forEach(function (entry) {
-        console.log(entry.getAttribute('data-year') + ' : ' + currentTabYear);
-
+      entries.forEach(function (entry) {
         entry.style.display = entry.getAttribute('data-year') == currentTabYear ? 'block' : 'none';
       });
     }
