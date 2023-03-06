@@ -44,24 +44,22 @@ export class BiggiveCarousel {
   }
 
   /*
-   * Animates a transition to show the NEXT or PREVIOUS element in the carousel, counting from zero. Does nothing if i out of range.
+   * Animates a transition to show the NEXT or PREVIOUS element in the carousel.
+   * Does nothing if there is no next or previous element.
    */
   showTab(direction: 'NEXT' | 'PREV') {
-    let i = 0;
-    if (direction == 'PREV') {
-      i = -1;
-    } else {
-      i = 1;
+    const newTab = this.currentTab + (direction === 'PREV' ? -1 : 1);
+
+    if (newTab < 0 || newTab > this.itemCount - 1) {
+      return;
     }
 
-    let pos = 0 - this.itemWidthPx * (this.currentTab + i);
+    const pos = 0 - this.itemWidthPx * newTab;
 
-    if (pos >= this.min && pos <= 0) {
-      this.sleeve.style.transitionDuration = '0.3s';
-      this.sleeve.style.transitionTimingFunction = 'ease-out';
-      this.sleeve.style.transform = 'translate3d(' + pos + 'px, 0, 0)';
-      this.currentTab += i;
-    }
+    this.sleeve.style.transitionDuration = '0.3s';
+    this.sleeve.style.transitionTimingFunction = 'ease-out';
+    this.sleeve.style.transform = 'translate3d(' + pos + 'px, 0, 0)';
+    this.currentTab = newTab;
   }
 
   clickPrevHandler() {
