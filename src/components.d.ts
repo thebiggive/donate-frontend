@@ -112,14 +112,22 @@ export namespace Components {
         "url": string;
     }
     interface BiggiveBiographyCard {
-        "circle": boolean;
+        /**
+          * Job title
+         */
         "fullName": string;
+        /**
+          * Full URL of the main image.
+         */
         "imageUrl": string;
+        /**
+          * Job title
+         */
         "jobTitle": string;
-        "ratio": Array<number>;
-        "spaceBelow": spacingOption;
-        "textColour": brandColour;
-        "url": string;
+        /**
+          * Space below component
+         */
+        "spaceBelow": number;
     }
     interface BiggiveBoxedContent {
         /**
@@ -1559,14 +1567,22 @@ declare namespace LocalJSX {
         "url"?: string;
     }
     interface BiggiveBiographyCard {
-        "circle"?: boolean;
+        /**
+          * Job title
+         */
         "fullName"?: string;
+        /**
+          * Full URL of the main image.
+         */
         "imageUrl"?: string;
+        /**
+          * Job title
+         */
         "jobTitle"?: string;
-        "ratio"?: Array<number>;
-        "spaceBelow"?: spacingOption;
-        "textColour"?: brandColour;
-        "url"?: string;
+        /**
+          * Space below component
+         */
+        "spaceBelow"?: number;
     }
     interface BiggiveBoxedContent {
         /**
