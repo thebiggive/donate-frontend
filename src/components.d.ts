@@ -10,6 +10,14 @@ import { brandColour } from "./globals/brand-colour";
 import { headingTag } from "./globals/heading-tag";
 import { headingSize } from "./globals/heading-size";
 export namespace Components {
+    interface BiggiveAccordion {
+        "headingColour": brandColour;
+        "spaceBelow": spacingOption;
+        "textColour": brandColour;
+    }
+    interface BiggiveAccordionEntry {
+        "entryHeading": string;
+    }
     interface BiggiveArticleCard {
         /**
           * Card background colour
@@ -1060,6 +1068,18 @@ export interface BiggiveSearchCustomEvent<T> extends CustomEvent<T> {
     target: HTMLBiggiveSearchElement;
 }
 declare global {
+    interface HTMLBiggiveAccordionElement extends Components.BiggiveAccordion, HTMLStencilElement {
+    }
+    var HTMLBiggiveAccordionElement: {
+        prototype: HTMLBiggiveAccordionElement;
+        new (): HTMLBiggiveAccordionElement;
+    };
+    interface HTMLBiggiveAccordionEntryElement extends Components.BiggiveAccordionEntry, HTMLStencilElement {
+    }
+    var HTMLBiggiveAccordionEntryElement: {
+        prototype: HTMLBiggiveAccordionEntryElement;
+        new (): HTMLBiggiveAccordionEntryElement;
+    };
     interface HTMLBiggiveArticleCardElement extends Components.BiggiveArticleCard, HTMLStencilElement {
     }
     var HTMLBiggiveArticleCardElement: {
@@ -1357,6 +1377,8 @@ declare global {
         new (): HTMLBiggiveVideoFeatureElement;
     };
     interface HTMLElementTagNameMap {
+        "biggive-accordion": HTMLBiggiveAccordionElement;
+        "biggive-accordion-entry": HTMLBiggiveAccordionEntryElement;
         "biggive-article-card": HTMLBiggiveArticleCardElement;
         "biggive-back-to-top": HTMLBiggiveBackToTopElement;
         "biggive-basic-card": HTMLBiggiveBasicCardElement;
@@ -1408,6 +1430,14 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    interface BiggiveAccordion {
+        "headingColour"?: brandColour;
+        "spaceBelow"?: spacingOption;
+        "textColour"?: brandColour;
+    }
+    interface BiggiveAccordionEntry {
+        "entryHeading"?: string;
+    }
     interface BiggiveArticleCard {
         /**
           * Card background colour
@@ -2454,6 +2484,8 @@ declare namespace LocalJSX {
         "videoUrl"?: string;
     }
     interface IntrinsicElements {
+        "biggive-accordion": BiggiveAccordion;
+        "biggive-accordion-entry": BiggiveAccordionEntry;
         "biggive-article-card": BiggiveArticleCard;
         "biggive-back-to-top": BiggiveBackToTop;
         "biggive-basic-card": BiggiveBasicCard;
@@ -2508,6 +2540,8 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            "biggive-accordion": LocalJSX.BiggiveAccordion & JSXBase.HTMLAttributes<HTMLBiggiveAccordionElement>;
+            "biggive-accordion-entry": LocalJSX.BiggiveAccordionEntry & JSXBase.HTMLAttributes<HTMLBiggiveAccordionEntryElement>;
             "biggive-article-card": LocalJSX.BiggiveArticleCard & JSXBase.HTMLAttributes<HTMLBiggiveArticleCardElement>;
             "biggive-back-to-top": LocalJSX.BiggiveBackToTop & JSXBase.HTMLAttributes<HTMLBiggiveBackToTopElement>;
             "biggive-basic-card": LocalJSX.BiggiveBasicCard & JSXBase.HTMLAttributes<HTMLBiggiveBasicCardElement>;

@@ -8,9 +8,8 @@ import { spacingOption } from '../../globals/spacing-option';
   shadow: true,
 })
 export class BiggiveQuote {
-
   @Prop() spaceBelow: spacingOption = 0;
-  
+
   @Prop() defaultTextColour: brandColour = 'black';
 
   @Prop() quote: string = '';
