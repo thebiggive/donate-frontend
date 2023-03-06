@@ -44,9 +44,9 @@ export class BiggiveCarousel {
   }
 
   /*
-   * Animates a transition to show the next (1) or previous (-1) element in the carousel, counting from zero. Does nothing if i out of range.
+   * Animates a transition to show the NEXT or PREVIOUS element in the carousel, counting from zero. Does nothing if i out of range.
    */
-  showTab(direction: string) {
+  showTab(direction: 'NEXT' | 'PREV') {
     let i = 0;
     if (direction == 'PREV') {
       i = -1;
