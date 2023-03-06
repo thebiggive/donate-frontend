@@ -950,7 +950,6 @@ export namespace Components {
          */
         "date": string;
         "heading": string;
-        "tab": string;
     }
     interface BiggiveTippingSlider {
         "colourScheme": brandColour;
@@ -2427,7 +2426,6 @@ declare namespace LocalJSX {
          */
         "date"?: string;
         "heading"?: string;
-        "tab"?: string;
     }
     interface BiggiveTippingSlider {
         "colourScheme"?: brandColour;

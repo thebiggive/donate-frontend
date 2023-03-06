@@ -11,8 +11,6 @@ export class BiggiveTimelineEntry {
    */
   @Prop() date: string;
 
-  @Prop() tab: string;
-
   @Prop() heading: string;
 
   render() {
