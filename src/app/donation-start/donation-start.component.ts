@@ -53,6 +53,7 @@ import { ValidateBillingPostCode } from '../validators/validate-billing-post-cod
 import {CampaignGroupsService} from "../campaign-groups.service";
 import {TimeLeftPipe} from "../time-left.pipe";
 import {ImageService} from "../image.service";
+import {flags} from "../featureFlags";
 
 @Component({
   selector: 'app-donation-start',
@@ -69,6 +70,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
+
+  profilePageEnabled: boolean = flags.profilePageEnabled;
   card: StripeCardElement | null;
   cardHandler = this.onStripeCardChange.bind(this);
   paymentRequestButton: StripePaymentRequestButtonElement | null;

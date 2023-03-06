@@ -17,6 +17,8 @@ import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
 import { minPasswordLength } from 'src/environments/common';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import {flags} from "../featureFlags";
+import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-donation-complete',
@@ -39,11 +41,13 @@ export class DonationCompleteComponent implements OnInit {
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   registerError?: string;
   registerErrorDescription?: string = undefined;
+  registerErrorDescriptionHtml?: SafeHtml = undefined;
   registrationComplete = false;
   shareUrl: string;
   timedOut = false;
   totalValue: number;
   donationIsLarge: boolean = false;
+  profilePageEnabled: boolean = flags.profilePageEnabled;
 
   private donationId: string;
   private maxTries = 5;
@@ -62,6 +66,7 @@ export class DonationCompleteComponent implements OnInit {
     private identityService: IdentityService,
     private pageMeta: PageMetaService,
     private route: ActivatedRoute,
+    private sanitizer: DomSanitizer,
   ) {
     route.params.pipe().subscribe(params => {
       this.donationId = params.donationId;
@@ -163,8 +168,12 @@ export class DonationCompleteComponent implements OnInit {
           }
         },
         (error: HttpErrorResponse) => {
+          const htmlErrorDescription = error.error?.error?.htmlDescription;
           if (error.error?.error?.type === "DUPLICATE_EMAIL_ADDRESS_WITH_PASSWORD") {
             this.registerErrorDescription = "Your password could not be set. There is already a password set for your email address.";
+          } else if (htmlErrorDescription) {
+            // we bypass security because we trust the Identity server.
+            this.registerErrorDescriptionHtml = this.sanitizer.bypassSecurityTrustHtml(htmlErrorDescription)
           } else {
             this.registerErrorDescription = error.error?.error?.description
           }

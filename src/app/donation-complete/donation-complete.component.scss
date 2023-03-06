@@ -64,6 +64,11 @@ hr {
         color: $colour-secondary;
       }
     }
+
+    a {
+      // if we didn't specify a colour this would be blue-on-blue and invisible.
+      color: $colour-secondary;
+    }
   }
 
   .thank-you-text {
@@ -82,7 +87,11 @@ hr {
     }
   }
 
-  #save-my-details-cta {
+  .button-wrapper {
+    margin: auto;
+  }
+
+  .cta {
     padding-bottom: 0;
     display: grid;
 
@@ -99,9 +108,6 @@ hr {
       margin-top: 60px;
     }
 
-    .button-wrapper {
-      margin: auto;
-    }
     p {
       padding: 0 20px;
       margin-bottom: 0;
@@ -117,6 +123,19 @@ hr {
       @media #{$breakpoint-xl} {
         font-size: 1.5rem;
       }
+    }
+  }
+
+  p.error {
+    max-width: 80%;
+    margin: auto;
+    fa-icon {
+      color: $colour-highlight;
+    }
+    a {
+      // this color style doesn't seem to have any affect - not sure why not. For now I've set the color
+      // as an inline style in the HTML sent from the Identity server. Not ideal.
+      color: inherit;
     }
   }
 }
