@@ -44,9 +44,16 @@ export class BiggiveCarousel {
   }
 
   /*
-   * Animates a transition to show the i'th element in the carousel, counting from zero. Does nothing if i out of range.
+   * Animates a transition to show the next (1) or previous (-1) element in the carousel, counting from zero. Does nothing if i out of range.
    */
-  showTab(i: number) {
+  showTab(direction: string) {
+    let i = 0;
+    if (direction == 'PREV') {
+      i = -1;
+    } else {
+      i = 1;
+    }
+
     let pos = 0 - this.itemWidthPx * (this.currentTab + i);
 
     if (pos >= this.min && pos <= 0) {
@@ -58,11 +65,11 @@ export class BiggiveCarousel {
   }
 
   clickPrevHandler() {
-    this.showTab(-1);
+    this.showTab('PREV');
   }
 
   clickNextHandler() {
-    this.showTab(1);
+    this.showTab('NEXT');
   }
 
   render() {

@@ -41,7 +41,7 @@ export class BiggiveTabbedContent {
   showTab(i: number) {
     const tabs = this.host.shadowRoot?.querySelectorAll('.navigation ul li')!;
 
-    if (tabs && i >= 0 && i <= tabs?.length - 1) {
+    if (i >= 0 && i <= tabs?.length - 1) {
       this.currentTab = i;
       let j = 0;
       tabs?.forEach(function (tab) {
