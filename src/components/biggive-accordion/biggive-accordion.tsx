@@ -19,10 +19,7 @@ export class BiggiveAccordion {
   children: Array<HTMLBiggiveAccordionEntryElement> = [];
 
   componentWillLoad() {
-    let children = this.children;
-    Array.from(this.host.children).forEach(function (el: HTMLBiggiveAccordionEntryElement) {
-      children.push(el);
-    });
+    this.children = Array.from(this.host.children) as Array<HTMLBiggiveAccordionEntryElement>;
   }
 
   expandHandler(e) {

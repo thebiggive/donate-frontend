@@ -11,6 +11,7 @@
 | ------------ | ------------- | ----------- | -------- | ----------- |
 | `entryDate`  | `entry-date`  |             | `string` | `undefined` |
 | `entryTitle` | `entry-title` |             | `string` | `undefined` |
+| `entryYear`  | `entry-year`  |             | `string` | `undefined` |
 
 
 ----------------------------------------------

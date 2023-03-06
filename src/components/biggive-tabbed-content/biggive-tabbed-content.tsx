@@ -28,10 +28,7 @@ export class BiggiveTabbedContent {
   children: Array<HTMLBiggiveTabElement> = [];
 
   componentWillLoad() {
-    let children = this.children;
-    Array.from(this.host.children).forEach(function (el: HTMLBiggiveTabElement) {
-      children.push(el);
-    });
+    this.children = Array.from(this.host.children) as Array<HTMLBiggiveTabElement>;
   }
 
   componentDidRender() {

@@ -39,10 +39,7 @@ export class BiggiveTimeline {
   children: Array<HTMLBiggiveTimelineEntryElement> = [];
 
   componentWillLoad() {
-    let children = this.children;
-    Array.from(this.host.children).forEach(function (el: HTMLBiggiveTimelineEntryElement) {
-      children.push(el);
-    });
+    this.children = Array.from(this.host.children) as Array<HTMLBiggiveTimelineEntryElement>;
 
     let tabs = this.tabs;
 
