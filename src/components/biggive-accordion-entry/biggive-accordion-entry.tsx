@@ -8,7 +8,7 @@ import { Component, Prop, Element } from '@stencil/core';
 export class BiggiveAccordionEntry {
   @Element() host: HTMLBiggiveAccordionEntryElement;
 
-  @Prop() entryHeading: string = '';
+  @Prop() heading: string = '';
 
   render() {
     return null;

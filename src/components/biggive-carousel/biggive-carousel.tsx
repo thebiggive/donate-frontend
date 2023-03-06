@@ -21,7 +21,6 @@ export class BiggiveCarousel {
   currentTab = 0;
   itemCount = 0;
   itemWidthPx = 0;
-  min = 0;
   sleeve: HTMLElement;
 
   componentDidRender() {
@@ -39,8 +38,6 @@ export class BiggiveCarousel {
         el.style.width = 'calc( 100% / ' + children.length + ' )';
       });
     }
-
-    this.min = 0 - (children.length - this.columnCount) * this.itemWidthPx;
   }
 
   /*

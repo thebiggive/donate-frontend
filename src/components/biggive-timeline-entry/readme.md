@@ -7,11 +7,11 @@
 
 ## Properties
 
-| Property     | Attribute     | Description | Type     | Default     |
-| ------------ | ------------- | ----------- | -------- | ----------- |
-| `entryDate`  | `entry-date`  |             | `string` | `undefined` |
-| `entryTitle` | `entry-title` |             | `string` | `undefined` |
-| `entryYear`  | `entry-year`  |             | `string` | `undefined` |
+| Property  | Attribute | Description                                                    | Type     | Default     |
+| --------- | --------- | -------------------------------------------------------------- | -------- | ----------- |
+| `date`    | `date`    | Should be in the format 'YYYY-mm-dd', for example '2023-01-01' | `string` | `undefined` |
+| `heading` | `heading` |                                                                | `string` | `undefined` |
+| `tab`     | `tab`     |                                                                | `string` | `undefined` |
 
 
 ----------------------------------------------

@@ -16,7 +16,7 @@ export namespace Components {
         "textColour": brandColour;
     }
     interface BiggiveAccordionEntry {
-        "entryHeading": string;
+        "heading": string;
     }
     interface BiggiveArticleCard {
         /**
@@ -945,14 +945,17 @@ export namespace Components {
         "textColour": brandColour;
     }
     interface BiggiveTimelineEntry {
-        "entryDate": string;
-        "entryTitle": string;
-        "entryYear": string;
+        /**
+          * Should be in the format 'YYYY-mm-dd', for example '2023-01-01'
+         */
+        "date": string;
+        "heading": string;
+        "tab": string;
     }
     interface BiggiveTippingSlider {
         "colourScheme": brandColour;
         "donationAmount": number;
-        "donationCurrency": string;
+        "donationCurrency": '£';
         "percentageEnd": number;
         "percentageStart": number;
         "spaceBelow": spacingOption;
@@ -1469,7 +1472,7 @@ declare namespace LocalJSX {
         "textColour"?: brandColour;
     }
     interface BiggiveAccordionEntry {
-        "entryHeading"?: string;
+        "heading"?: string;
     }
     interface BiggiveArticleCard {
         /**
@@ -2419,14 +2422,17 @@ declare namespace LocalJSX {
         "textColour"?: brandColour;
     }
     interface BiggiveTimelineEntry {
-        "entryDate"?: string;
-        "entryTitle"?: string;
-        "entryYear"?: string;
+        /**
+          * Should be in the format 'YYYY-mm-dd', for example '2023-01-01'
+         */
+        "date"?: string;
+        "heading"?: string;
+        "tab"?: string;
     }
     interface BiggiveTippingSlider {
         "colourScheme"?: brandColour;
         "donationAmount"?: number;
-        "donationCurrency"?: string;
+        "donationCurrency"?: '£';
         "percentageEnd"?: number;
         "percentageStart"?: number;
         "spaceBelow"?: spacingOption;

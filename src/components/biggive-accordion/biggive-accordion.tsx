@@ -22,9 +22,10 @@ export class BiggiveAccordion {
     this.children = Array.from(this.host.children) as Array<HTMLBiggiveAccordionEntryElement>;
   }
 
-  expandHandler(e) {
-    let entry = e.target.closest('.entry');
-    let arrow = entry.querySelector('.arrow');
+  toggleSection(e: MouseEvent) {
+    const target = (e.target as Element)!;
+    const entry = target.closest('.entry')!;
+    const arrow = entry.querySelector('.arrow')!;
 
     if (entry.classList.contains('expanded')) {
       entry.classList.remove('expanded');
@@ -41,8 +42,8 @@ export class BiggiveAccordion {
         <div class="sleeve">
           {this.children.map(entry => (
             <div class="entry">
-              <h3 class="heading" onClick={event => this.expandHandler(event)} title="Expand section">
-                {entry.entryHeading}
+              <h3 class="heading" onClick={event => this.toggleSection(event)} title="Expand section">
+                {entry.heading}
                 <span class="arrow">
                   <svg width="15" height="9" viewBox="0 0 15 9" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M14.1074 0.999859L7.55357 7.55371L0.999718 0.99986" stroke="black" stroke-width="2" />

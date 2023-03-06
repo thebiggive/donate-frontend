@@ -6,11 +6,14 @@ import { Component, Prop } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveTimelineEntry {
-  @Prop() entryDate: string;
+  /**
+   * Should be in the format 'YYYY-mm-dd', for example '2023-01-01'
+   */
+  @Prop() date: string;
 
-  @Prop() entryYear: string;
+  @Prop() tab: string;
 
-  @Prop() entryTitle: string;
+  @Prop() heading: string;
 
   render() {
     return null;

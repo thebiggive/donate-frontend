@@ -7,9 +7,9 @@
 
 ## Properties
 
-| Property       | Attribute       | Description | Type     | Default |
-| -------------- | --------------- | ----------- | -------- | ------- |
-| `entryHeading` | `entry-heading` |             | `string` | `''`    |
+| Property  | Attribute | Description | Type     | Default |
+| --------- | --------- | ----------- | -------- | ------- |
+| `heading` | `heading` |             | `string` | `''`    |
 
 
 ----------------------------------------------

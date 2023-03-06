@@ -108,15 +108,15 @@ const Template = args => `
                         entry-title-colour="${args.entryTitleColour}"
                         entry-content-colour="${args.entryContentColour}"
                         >
-                          <biggive-timeline-entry entry-title="Heading 1" entry-date="2023-01-01">
+                          <biggive-timeline-entry heading="Heading 1" date="2023-01-01">
                           <p>1 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
                           <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
                           </biggive-timeline-entry>
-                          <biggive-timeline-entry entry-title="Heading 2" entry-date="2023-01-01">
+                          <biggive-timeline-entry heading="Heading 2" date="2023-01-01">
                           <p>1 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
                           <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
                           </biggive-timeline-entry>
-                          <biggive-timeline-entry entry-title="Heading 3" entry-date="2022-01-01">
+                          <biggive-timeline-entry heading="Heading 3" date="2022-01-01">
                           <p>1 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
                           <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
                           </biggive-timeline-entry>

@@ -61,9 +61,10 @@ export class BiggiveTabbedContent {
     }
   }
 
-  clickTabHandler(e) {
+  clickTabHandler(e: MouseEvent) {
     let i = 0;
-    for (let el of e.target.parentElement.children) {
+    const parent = (e.target as Element).parentElement!;
+    for (let el of Array.from(parent.children)) {
       if (el == e.target) {
         this.showTab(i);
         return;

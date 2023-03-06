@@ -20,33 +20,35 @@ export class BiggiveTippingSlider {
 
   @Prop() donationAmount: number;
 
-  @Prop() donationCurrency: string = '£';
+  @Prop() donationCurrency: '£';
 
   componentDidRender() {
     var isMoving = false;
-    var handle = this.host.shadowRoot?.querySelector<HTMLElement>('.handle');
-    var bar = this.host.shadowRoot?.querySelector<HTMLElement>('.bar');
-    var percentageWrap = handle?.querySelector('.percentage-value');
-    var donationWrap = handle?.querySelector('.donation-value');
+    const handle = this.host.shadowRoot?.querySelector<HTMLElement>('.handle')!;
+    const bar = this.host.shadowRoot?.querySelector<HTMLElement>('.bar')!;
+    const percentageWrap = handle?.querySelector('.percentage-value')!;
+    const donationWrap = handle?.querySelector('.donation-value')!;
 
-    var move = e => {
-      if (isMoving && bar && handle && percentageWrap && donationWrap) {
-        var min = 0;
-        var max = bar.offsetWidth - handle.offsetWidth;
-        var pageX = e.type == 'touchstart' || e.type == 'touchmove' ? e.touches[0].pageX : e.pageX;
-        var mousePos = pageX - bar?.offsetLeft - handle?.offsetWidth / 2;
-        var position = mousePos > max ? max : mousePos < min ? min : mousePos;
-        var percentage = (position / max) * this.percentageEnd;
-        var donation = Math.round(this.donationAmount * (percentage / 100));
+    var move = (e: MouseEvent | TouchEvent) => {
+      if (isMoving) {
+        const max = bar.offsetWidth - handle.offsetWidth;
+        const pageX = e instanceof TouchEvent ? e.touches[0]?.pageX : e.pageX;
 
-        percentageWrap.innerHTML = Math.round(percentage).toString();
-        donationWrap.innerHTML = Math.round(donation).toString();
+        if (typeof pageX != 'undefined') {
+          const mousePos = pageX - bar.offsetLeft - handle.offsetWidth / 2;
+          const position = mousePos > max ? max : mousePos < 0 ? 0 : mousePos;
+          const percentage = (position / max) * this.percentageEnd;
+          const donation = Math.round(this.donationAmount * (percentage / 100));
 
-        handle.style.marginLeft = position + 'px';
+          percentageWrap.innerHTML = Math.round(percentage).toString();
+          donationWrap.innerHTML = Math.round(donation).toString();
+
+          handle.style.marginLeft = position + 'px';
+        }
       }
     };
 
-    bar?.addEventListener('mousedown', function (e) {
+    bar.addEventListener('mousedown', function (e) {
       isMoving = true;
       move(e);
     });
@@ -59,12 +61,12 @@ export class BiggiveTippingSlider {
       move(e);
     });
 
-    bar?.addEventListener('touchstart', function (e) {
+    bar.addEventListener('touchstart', function (e) {
       isMoving = true;
       move(e);
     });
 
-    bar?.addEventListener('touchend', function () {
+    bar.addEventListener('touchend', function () {
       isMoving = false;
     });
 
@@ -74,15 +76,13 @@ export class BiggiveTippingSlider {
   }
 
   resetSlider = () => {
-    var handle = this.host.shadowRoot?.querySelector<HTMLElement>('.handle');
-    var percentageWrap = handle?.querySelector('.percentage-value');
-    var donationWrap = handle?.querySelector('.donation-value');
+    const handle = this.host.shadowRoot?.querySelector<HTMLElement>('.handle')!;
+    const percentageWrap = handle?.querySelector('.percentage-value')!;
+    const donationWrap = handle?.querySelector('.donation-value')!;
 
-    if (handle && percentageWrap && donationWrap) {
-      handle.style.marginLeft = '0px';
-      percentageWrap.innerHTML = '0';
-      donationWrap.innerHTML = '0';
-    }
+    handle.style.marginLeft = '0px';
+    percentageWrap.innerHTML = '0';
+    donationWrap.innerHTML = '0';
   };
 
   render() {

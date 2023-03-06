@@ -35,19 +35,18 @@ export class BiggiveTimeline {
   @Prop() entryTextColour: brandColour = 'black';
 
   currentTab = 0;
-  tabs: Array<string> = [];
+  tabHeadings: Array<string> = [];
   children: Array<HTMLBiggiveTimelineEntryElement> = [];
 
   componentWillLoad() {
     this.children = Array.from(this.host.children) as Array<HTMLBiggiveTimelineEntryElement>;
 
-    let tabs = this.tabs;
+    let tabHeadings = this.tabHeadings;
 
     this.children.forEach(function (entry) {
-      let year = entry.entryDate.substring(0, 4);
-      entry.entryYear = year;
-      if (!tabs.includes(year)) {
-        tabs.push(year);
+      let tab = entry.date.substring(0, 4);
+      if (!tabHeadings.includes(tab)) {
+        tabHeadings.push(tab);
       }
     });
   }
@@ -65,7 +64,7 @@ export class BiggiveTimeline {
 
     if (i >= 0 && i <= tabs?.length - 1) {
       this.currentTab = i;
-      let currentTabYear = tabs[i]?.innerHTML;
+      let currentTabTitle = tabs[i]?.innerHTML;
       let j = 0;
       tabs?.forEach(function (tab) {
         if (i == j) {
@@ -77,7 +76,7 @@ export class BiggiveTimeline {
       });
 
       entries.forEach(function (entry) {
-        entry.style.display = entry.getAttribute('data-year') == currentTabYear ? 'block' : 'none';
+        entry.style.display = entry.getAttribute('data-date')?.substring(0, 4) == currentTabTitle ? 'block' : 'none';
       });
     }
   }
@@ -138,7 +137,7 @@ export class BiggiveTimeline {
             </svg>
           </div>
           <ul>
-            {this.tabs.map(tab => (
+            {this.tabHeadings.map(tab => (
               <li onClick={event => this.clickTabHandler(event)}>{tab}</li>
             ))}
           </ul>
@@ -150,9 +149,9 @@ export class BiggiveTimeline {
         </div>
         <div class="entry-wrap">
           {this.children.map(entry => (
-            <div class="entry" data-year={entry.entryYear}>
-              <div class="date">{entry.entryDate}</div>
-              <h4 class="title">{entry.entryTitle}</h4>
+            <div class="entry" data-date={entry.date}>
+              <div class="date">{entry.date}</div>
+              <h4 class="title">{entry.heading}</h4>
               <div class="content" innerHTML={entry.innerHTML}></div>
             </div>
           ))}
