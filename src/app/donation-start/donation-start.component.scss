@@ -299,24 +299,43 @@ a {
   flex-wrap: wrap;
 }
 
+// .icon-wrapper {
+//   display: flex;
+//   padding: 10px;
+
+//   // in campaign-details.component.scss the selector here is `svg` rather than `fa-icon`, but that doesn't seem to work
+//   // here.
+//   fa-icon {
+//     margin-right: 5px;
+//     color: $colour-primary; // #2C089BFF
+//     svg {
+//       width: 20px;
+//       height: 20px;
+//     }
+//   }
+
+//   .c-icon-title {
+//     font-size: 0.8rem;
+//     margin: auto;
+//   }
+// }
 .icon-wrapper {
   display: flex;
   padding: 10px;
 
-  // in campaign-details.component.scss the selector here is `svg` rather than `fa-icon`, but that doesn't seem to work
-  // here.
-  fa-icon {
+  svg {
     margin-right: 5px;
-    color: $colour-primary; // #2C089BFF
-    svg {
-      width: 20px;
-      height: 20px;
-    }
+    color: $colour-primary;
+    width: 40px;
+    height: 40px;
   }
 
   .c-icon-title {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     margin: auto;
+    width: min-content;
+    padding-left: 10px;
+    line-height: 20px;
   }
 }
 
