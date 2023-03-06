@@ -80,6 +80,5 @@ TabbedContentComponent.args = {
   navigationHighlightColour: 'grey-medium',
   selectedNavigationHighlightColour: 'primary',
   buttonBackgroundColour: 'white',
-  buttonIconColour: 'primary'
-
+  buttonIconColour: 'primary',
 };

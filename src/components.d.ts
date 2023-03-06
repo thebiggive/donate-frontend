@@ -489,6 +489,10 @@ export namespace Components {
         "spaceBelow": number;
     }
     interface BiggiveCarousel {
+        "buttonBackgroundColour": brandColour;
+        "buttonIconColour": brandColour;
+        "columnCount": number;
+        "spaceBelow": spacingOption;
     }
     interface BiggiveCategoryIcon {
         /**
@@ -854,22 +858,11 @@ export namespace Components {
         "spaceBelow": number;
     }
     interface BiggiveQuote {
-        /**
-          * Attribution text
-         */
         "attribution": string;
-        /**
-          * Default text colour
-         */
-        "defaultTextColour": string;
-        /**
-          * Quote text
-         */
+        "defaultTextColour": brandColour;
         "quote": string;
-        /**
-          * Space below component
-         */
-        "spaceBelow": number;
+        "quoteIconColour": brandColour;
+        "spaceBelow": spacingOption;
     }
     /**
      * @deprecated (?) I don't think Donate is using this. Unless there is a WordPress use case,
@@ -1907,6 +1900,10 @@ declare namespace LocalJSX {
         "spaceBelow"?: number;
     }
     interface BiggiveCarousel {
+        "buttonBackgroundColour"?: brandColour;
+        "buttonIconColour"?: brandColour;
+        "columnCount"?: number;
+        "spaceBelow"?: spacingOption;
     }
     interface BiggiveCategoryIcon {
         /**
@@ -2276,22 +2273,11 @@ declare namespace LocalJSX {
         "spaceBelow"?: number;
     }
     interface BiggiveQuote {
-        /**
-          * Attribution text
-         */
         "attribution"?: string;
-        /**
-          * Default text colour
-         */
-        "defaultTextColour"?: string;
-        /**
-          * Quote text
-         */
+        "defaultTextColour"?: brandColour;
         "quote"?: string;
-        /**
-          * Space below component
-         */
-        "spaceBelow"?: number;
+        "quoteIconColour"?: brandColour;
+        "spaceBelow"?: spacingOption;
     }
     /**
      * @deprecated (?) I don't think Donate is using this. Unless there is a WordPress use case,
