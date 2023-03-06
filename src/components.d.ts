@@ -631,9 +631,9 @@ export namespace Components {
          */
         "logoAltText": string;
         /**
-          * Logo container height.
+          * Logo container height selection. Numbers are not measurements.
          */
-        "logoHeight": number;
+        "logoHeight": 1|2|3|4|5|6|7|8|9|10;
         /**
           * Full URL of a main hero image.
          */
@@ -2104,9 +2104,9 @@ declare namespace LocalJSX {
          */
         "logoAltText"?: string;
         /**
-          * Logo container height.
+          * Logo container height selection. Numbers are not measurements.
          */
-        "logoHeight"?: number;
+        "logoHeight"?: 1|2|3|4|5|6|7|8|9|10;
         /**
           * Full URL of a main hero image.
          */
