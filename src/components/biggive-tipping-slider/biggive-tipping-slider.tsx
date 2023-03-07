@@ -32,9 +32,14 @@ export class BiggiveTippingSlider {
     var move = (e: MouseEvent | TouchEvent) => {
       if (isMoving) {
         const max = bar.offsetWidth - handle.offsetWidth;
-        const pageX = e instanceof TouchEvent ? e.touches[0]?.pageX : e.pageX;
+        let pageX;
+        if (window.TouchEvent && e instanceof TouchEvent) {
+          pageX = e.touches[0]?.pageX;
+        } else if (window.MouseEvent && e instanceof MouseEvent) {
+          pageX = e.pageX;
+        }
 
-        if (typeof pageX != 'undefined') {
+        if (pageX) {
           const mousePos = pageX - bar.offsetLeft - handle.offsetWidth / 2;
           const position = mousePos > max ? max : mousePos < 0 ? 0 : mousePos;
           const percentage = (position / max) * this.percentageEnd;
