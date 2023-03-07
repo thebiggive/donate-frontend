@@ -19,14 +19,12 @@ export class BiggiveSheet {
   @Prop() textColour: brandColour = 'white';
 
   openSheet(hash: string) {
-
     if (hash != '' && hash == '#' + this.sheetId) {
       this.host.shadowRoot?.querySelector('.container')?.classList.add('active');
     }
   }
 
   componentWillLoad() {
-
     this.openSheet(window.location.hash);
 
     window.onhashchange = () => {
