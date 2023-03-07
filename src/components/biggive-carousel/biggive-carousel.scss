@@ -15,6 +15,8 @@
     .sleeve {
       display: flex;
       flex-flow: row wrap;
+      justify-content: space-between;
+      min-width: 100%;
     }
   }
 
@@ -53,26 +55,31 @@
 
 }
 
+.column-count-5 ::slotted(*) {
+  width: calc( (100% / 5) - (( $spacer-4 * 4 ) / 5 ) );
+  @include flex-container-column();
+}
 
 .column-count-4 ::slotted(*) {
-  width: calc( 100% / 4 );
+  width: calc( (100% / 4) - (( $spacer-4 * 3 ) / 4 ) );
   @include flex-container-column();
 }
 
 .column-count-3 ::slotted(*) {
-  width: calc( 100% / 3 );
+  width: calc( (100% / 3) - (( $spacer-4 * 2 ) / 3 ) );
   @include flex-container-column();
 }
 
 .column-count-2 ::slotted(*) {
-  width: calc( 100% / 2 );
+  width: calc( (100% / 2) - (( $spacer-4 * 1 ) / 2 ) );
   @include flex-container-column();
 }
 
 @media screen and (max-width: $screen-tablet-max) {
   .column-count-2 ::slotted(*),
   .column-count-3 ::slotted(*),
-  .column-count-4 ::slotted(*) {
+  .column-count-4 ::slotted(*),
+  .column-count-5 ::slotted(*) {
     width: calc( 50% - (($spacer-4 * 1) / 2));
   }
 }
@@ -80,7 +87,8 @@
 @media screen and (max-width: $screen-mobile-max) {
   .column-count-2 ::slotted(*),
   .column-count-3 ::slotted(*),
-  .column-count-4 ::slotted(*) {
+  .column-count-4 ::slotted(*),
+  .column-count-5 ::slotted(*) {
     width: 100%;
   }
 }

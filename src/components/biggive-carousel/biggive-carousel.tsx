@@ -12,7 +12,7 @@ export class BiggiveCarousel {
 
   @Prop() spaceBelow: spacingOption = 4;
 
-  @Prop() columnCount: number = 3;
+  @Prop() columnCount: 1 | 2 | 3 | 4 | 5 = 3;
 
   @Prop() buttonBackgroundColour: brandColour = 'white';
 
@@ -32,10 +32,13 @@ export class BiggiveCarousel {
     if (children.length > 0) {
       // Item widths are set in CSS so we know they will all be the same.
       this.itemWidthPx = children[0].offsetWidth;
-      this.sleeve.style.width = this.itemWidthPx * children.length + 'px';
+
+      const columnGapPx = 30;
+
+      this.sleeve.style.width = (this.itemWidthPx + columnGapPx) * children.length - columnGapPx + 'px';
 
       children.forEach(function (el) {
-        el.style.width = 'calc( 100% / ' + children.length + ' )';
+        el.style.width = 'calc( 100% / ' + children.length + ' - (( ' + columnGapPx + 'px * ' + (children.length - 1) + ' ) / ' + children.length + ' ) )';
       });
     }
   }

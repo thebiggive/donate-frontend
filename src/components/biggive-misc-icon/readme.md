@@ -21,6 +21,7 @@
 
  - [biggive-campaign-card](../biggive-campaign-card)
  - [biggive-campaign-highlights](../biggive-campaign-highlights)
+ - [biggive-icon-button](../biggive-icon-button)
  - [biggive-main-menu](../biggive-main-menu)
 
 ### Graph
@@ -28,6 +29,7 @@
 graph TD;
   biggive-campaign-card --> biggive-misc-icon
   biggive-campaign-highlights --> biggive-misc-icon
+  biggive-icon-button --> biggive-misc-icon
   biggive-main-menu --> biggive-misc-icon
   style biggive-misc-icon fill:#f9f,stroke:#333,stroke-width:4px
 ```

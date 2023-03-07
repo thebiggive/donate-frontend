@@ -10,7 +10,7 @@ describe('biggive-biography-card', () => {
     expect(page.root).toEqualHtml(`
       <biggive-biography-card>
         <mock:shadow-root>
-          <div class="container space-below-0">
+          <div class="background-colour-white container space-below-0 text-align-left text-colour-black">
             <h3 class="full-name"></h3>
             <div class="job-title"></div>
           </div>

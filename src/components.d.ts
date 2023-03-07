@@ -19,54 +19,28 @@ export namespace Components {
         "heading": string;
     }
     interface BiggiveArticleCard {
-        /**
-          * Card background colour
-         */
-        "backgroundColour": string;
-        /**
-          * Card background colour hover
-         */
-        "backgroundColourHover": string;
-        /**
-          * Button label
-         */
+        "backgroundColour": brandColour;
+        "backgroundImageUrl": string;
+        "buttonColour": brandColour;
         "buttonLabel": string;
-        /**
-          * Button URL
-         */
         "buttonUrl": string;
-        /**
-          * Date
-         */
+        "clipBottomLeftCorner": boolean;
+        "clipTopRightCorner": boolean;
         "date": string;
-        /**
-          * Image Alt Text
-         */
-        "imageAltText": string;
-        /**
-          * Image Label
-         */
-        "imageLabel": string;
-        /**
-          * Image URL
-         */
-        "imageUrl": string;
-        /**
-          * Main title
-         */
+        "dateColour": brandColour;
+        "image1AltText": string;
+        "image1Label": string;
+        "image1Url": string;
+        "image2AltText": string;
+        "image2Label": string;
+        "image2Url": string;
+        "imageLabelColour": brandColour;
         "mainTitle": string;
-        /**
-          * Slug
-         */
+        "mainTitleColour": brandColour;
         "slug": string;
-        /**
-          * Space below component
-         */
-        "spaceBelow": number;
-        /**
-          * Text colour
-         */
-        "textColour": string;
+        "slugColour": brandColour;
+        "spaceBelow": spacingOption;
+        "textColour": brandColour;
     }
     interface BiggiveBackToTop {
     }
@@ -112,22 +86,17 @@ export namespace Components {
         "url": string;
     }
     interface BiggiveBiographyCard {
-        /**
-          * Job title
-         */
+        "backgroundColour": brandColour;
+        "circle": boolean;
         "fullName": string;
-        /**
-          * Full URL of the main image.
-         */
+        "imageStyle": 'cover' | 'contain';
         "imageUrl": string;
-        /**
-          * Job title
-         */
         "jobTitle": string;
-        /**
-          * Space below component
-         */
-        "spaceBelow": number;
+        "ratio": '[1,1]' | '[1,1.5]' | '[1,2]';
+        "spaceBelow": spacingOption;
+        "textAlign": 'center' | 'left' | 'right';
+        "textColour": brandColour;
+        "url": string;
     }
     interface BiggiveBoxedContent {
         /**
@@ -499,7 +468,7 @@ export namespace Components {
     interface BiggiveCarousel {
         "buttonBackgroundColour": brandColour;
         "buttonIconColour": brandColour;
-        "columnCount": number;
+        "columnCount": 1 | 2 | 3 | 4 | 5;
         "spaceBelow": spacingOption;
     }
     interface BiggiveCategoryIcon {
@@ -675,6 +644,24 @@ export namespace Components {
          */
         "teaserColour"?: brandColour;
     }
+    interface BiggiveIconButton {
+        "arrow": boolean;
+        "arrowColour": brandColour;
+        "backgroundColour": brandColour;
+        "backgroundPadding": spacingOption;
+        "buttonId": undefined | string;
+        "centered": boolean;
+        "circle": boolean;
+        "icon": string;
+        "openInNewTab": boolean;
+        "rounded": boolean;
+        "shadow": boolean;
+        "size": 'small' | 'medium' | 'large' | 'x-large' | 'xx-large';
+        "spaceBelow": spacingOption;
+        "text": string;
+        "textColour": brandColour;
+        "url": string;
+    }
     interface BiggiveIconGroup {
         /**
           * Label
@@ -714,6 +701,25 @@ export namespace Components {
           * Image width
          */
         "width": number;
+    }
+    interface BiggiveImageButton {
+        "arrow": boolean;
+        "arrowColour": brandColour;
+        "backgroundColour": brandColour;
+        "backgroundPadding": spacingOption;
+        "buttonId": undefined | string;
+        "centered": boolean;
+        "circle": boolean;
+        "imageStyle": string;
+        "imageUrl": string;
+        "openInNewTab": boolean;
+        "rounded": boolean;
+        "shadow": boolean;
+        "size": 'small' | 'medium' | 'large' | 'x-large' | 'xx-large';
+        "spaceBelow": spacingOption;
+        "text": string;
+        "textColour": brandColour;
+        "url": string;
     }
     interface BiggiveImageFeature {
         /**
@@ -886,6 +892,14 @@ export namespace Components {
          */
         "placeholderText": string;
         "searchText": string;
+    }
+    interface BiggiveSheet {
+        "backgroundColour": brandColour;
+        /**
+          * A string ID (no spaces) unique within the page context, used to trigger the opening of the sheet from an anchor hash.
+         */
+        "sheetId": string;
+        "textColour": brandColour;
     }
     interface BiggiveSocialIcon {
         /**
@@ -1084,6 +1098,14 @@ export interface BiggiveFormFieldSelectOptionCustomEvent<T> extends CustomEvent<
     detail: T;
     target: HTMLBiggiveFormFieldSelectOptionElement;
 }
+export interface BiggiveIconButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLBiggiveIconButtonElement;
+}
+export interface BiggiveImageButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLBiggiveImageButtonElement;
+}
 export interface BiggiveSearchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLBiggiveSearchElement;
@@ -1243,6 +1265,12 @@ declare global {
         prototype: HTMLBiggiveHeroImageElement;
         new (): HTMLBiggiveHeroImageElement;
     };
+    interface HTMLBiggiveIconButtonElement extends Components.BiggiveIconButton, HTMLStencilElement {
+    }
+    var HTMLBiggiveIconButtonElement: {
+        prototype: HTMLBiggiveIconButtonElement;
+        new (): HTMLBiggiveIconButtonElement;
+    };
     interface HTMLBiggiveIconGroupElement extends Components.BiggiveIconGroup, HTMLStencilElement {
     }
     var HTMLBiggiveIconGroupElement: {
@@ -1254,6 +1282,12 @@ declare global {
     var HTMLBiggiveImageElement: {
         prototype: HTMLBiggiveImageElement;
         new (): HTMLBiggiveImageElement;
+    };
+    interface HTMLBiggiveImageButtonElement extends Components.BiggiveImageButton, HTMLStencilElement {
+    }
+    var HTMLBiggiveImageButtonElement: {
+        prototype: HTMLBiggiveImageButtonElement;
+        new (): HTMLBiggiveImageButtonElement;
     };
     interface HTMLBiggiveImageFeatureElement extends Components.BiggiveImageFeature, HTMLStencilElement {
     }
@@ -1336,6 +1370,12 @@ declare global {
     var HTMLBiggiveSearchElement: {
         prototype: HTMLBiggiveSearchElement;
         new (): HTMLBiggiveSearchElement;
+    };
+    interface HTMLBiggiveSheetElement extends Components.BiggiveSheet, HTMLStencilElement {
+    }
+    var HTMLBiggiveSheetElement: {
+        prototype: HTMLBiggiveSheetElement;
+        new (): HTMLBiggiveSheetElement;
     };
     interface HTMLBiggiveSocialIconElement extends Components.BiggiveSocialIcon, HTMLStencilElement {
     }
@@ -1435,8 +1475,10 @@ declare global {
         "biggive-header": HTMLBiggiveHeaderElement;
         "biggive-heading": HTMLBiggiveHeadingElement;
         "biggive-hero-image": HTMLBiggiveHeroImageElement;
+        "biggive-icon-button": HTMLBiggiveIconButtonElement;
         "biggive-icon-group": HTMLBiggiveIconGroupElement;
         "biggive-image": HTMLBiggiveImageElement;
+        "biggive-image-button": HTMLBiggiveImageButtonElement;
         "biggive-image-feature": HTMLBiggiveImageFeatureElement;
         "biggive-main-menu": HTMLBiggiveMainMenuElement;
         "biggive-misc-icon": HTMLBiggiveMiscIconElement;
@@ -1450,6 +1492,7 @@ declare global {
         "biggive-progress-bar": HTMLBiggiveProgressBarElement;
         "biggive-quote": HTMLBiggiveQuoteElement;
         "biggive-search": HTMLBiggiveSearchElement;
+        "biggive-sheet": HTMLBiggiveSheetElement;
         "biggive-social-icon": HTMLBiggiveSocialIconElement;
         "biggive-tab": HTMLBiggiveTabElement;
         "biggive-tabbed-content": HTMLBiggiveTabbedContentElement;
@@ -1474,54 +1517,28 @@ declare namespace LocalJSX {
         "heading"?: string;
     }
     interface BiggiveArticleCard {
-        /**
-          * Card background colour
-         */
-        "backgroundColour"?: string;
-        /**
-          * Card background colour hover
-         */
-        "backgroundColourHover"?: string;
-        /**
-          * Button label
-         */
+        "backgroundColour"?: brandColour;
+        "backgroundImageUrl"?: string;
+        "buttonColour"?: brandColour;
         "buttonLabel"?: string;
-        /**
-          * Button URL
-         */
         "buttonUrl"?: string;
-        /**
-          * Date
-         */
+        "clipBottomLeftCorner"?: boolean;
+        "clipTopRightCorner"?: boolean;
         "date"?: string;
-        /**
-          * Image Alt Text
-         */
-        "imageAltText"?: string;
-        /**
-          * Image Label
-         */
-        "imageLabel"?: string;
-        /**
-          * Image URL
-         */
-        "imageUrl"?: string;
-        /**
-          * Main title
-         */
+        "dateColour"?: brandColour;
+        "image1AltText"?: string;
+        "image1Label"?: string;
+        "image1Url"?: string;
+        "image2AltText"?: string;
+        "image2Label"?: string;
+        "image2Url"?: string;
+        "imageLabelColour"?: brandColour;
         "mainTitle"?: string;
-        /**
-          * Slug
-         */
+        "mainTitleColour"?: brandColour;
         "slug"?: string;
-        /**
-          * Space below component
-         */
-        "spaceBelow"?: number;
-        /**
-          * Text colour
-         */
-        "textColour"?: string;
+        "slugColour"?: brandColour;
+        "spaceBelow"?: spacingOption;
+        "textColour"?: brandColour;
     }
     interface BiggiveBackToTop {
     }
@@ -1567,22 +1584,17 @@ declare namespace LocalJSX {
         "url"?: string;
     }
     interface BiggiveBiographyCard {
-        /**
-          * Job title
-         */
+        "backgroundColour"?: brandColour;
+        "circle"?: boolean;
         "fullName"?: string;
-        /**
-          * Full URL of the main image.
-         */
+        "imageStyle"?: 'cover' | 'contain';
         "imageUrl"?: string;
-        /**
-          * Job title
-         */
         "jobTitle"?: string;
-        /**
-          * Space below component
-         */
-        "spaceBelow"?: number;
+        "ratio"?: '[1,1]' | '[1,1.5]' | '[1,2]';
+        "spaceBelow"?: spacingOption;
+        "textAlign"?: 'center' | 'left' | 'right';
+        "textColour"?: brandColour;
+        "url"?: string;
     }
     interface BiggiveBoxedContent {
         /**
@@ -1967,7 +1979,7 @@ declare namespace LocalJSX {
     interface BiggiveCarousel {
         "buttonBackgroundColour"?: brandColour;
         "buttonIconColour"?: brandColour;
-        "columnCount"?: number;
+        "columnCount"?: 1 | 2 | 3 | 4 | 5;
         "spaceBelow"?: spacingOption;
     }
     interface BiggiveCategoryIcon {
@@ -2150,6 +2162,25 @@ declare namespace LocalJSX {
          */
         "teaserColour"?: brandColour;
     }
+    interface BiggiveIconButton {
+        "arrow"?: boolean;
+        "arrowColour"?: brandColour;
+        "backgroundColour"?: brandColour;
+        "backgroundPadding"?: spacingOption;
+        "buttonId"?: undefined | string;
+        "centered"?: boolean;
+        "circle"?: boolean;
+        "icon"?: string;
+        "onDoButtonClick"?: (event: BiggiveIconButtonCustomEvent<{ event: object; url: string }>) => void;
+        "openInNewTab"?: boolean;
+        "rounded"?: boolean;
+        "shadow"?: boolean;
+        "size"?: 'small' | 'medium' | 'large' | 'x-large' | 'xx-large';
+        "spaceBelow"?: spacingOption;
+        "text"?: string;
+        "textColour"?: brandColour;
+        "url"?: string;
+    }
     interface BiggiveIconGroup {
         /**
           * Label
@@ -2189,6 +2220,26 @@ declare namespace LocalJSX {
           * Image width
          */
         "width"?: number;
+    }
+    interface BiggiveImageButton {
+        "arrow"?: boolean;
+        "arrowColour"?: brandColour;
+        "backgroundColour"?: brandColour;
+        "backgroundPadding"?: spacingOption;
+        "buttonId"?: undefined | string;
+        "centered"?: boolean;
+        "circle"?: boolean;
+        "imageStyle"?: string;
+        "imageUrl"?: string;
+        "onDoButtonClick"?: (event: BiggiveImageButtonCustomEvent<{ event: object; url: string }>) => void;
+        "openInNewTab"?: boolean;
+        "rounded"?: boolean;
+        "shadow"?: boolean;
+        "size"?: 'small' | 'medium' | 'large' | 'x-large' | 'xx-large';
+        "spaceBelow"?: spacingOption;
+        "text"?: string;
+        "textColour"?: brandColour;
+        "url"?: string;
     }
     interface BiggiveImageFeature {
         /**
@@ -2362,6 +2413,14 @@ declare namespace LocalJSX {
          */
         "placeholderText"?: string;
         "searchText"?: string;
+    }
+    interface BiggiveSheet {
+        "backgroundColour"?: brandColour;
+        /**
+          * A string ID (no spaces) unique within the page context, used to trigger the opening of the sheet from an anchor hash.
+         */
+        "sheetId"?: string;
+        "textColour"?: brandColour;
     }
     interface BiggiveSocialIcon {
         /**
@@ -2565,8 +2624,10 @@ declare namespace LocalJSX {
         "biggive-header": BiggiveHeader;
         "biggive-heading": BiggiveHeading;
         "biggive-hero-image": BiggiveHeroImage;
+        "biggive-icon-button": BiggiveIconButton;
         "biggive-icon-group": BiggiveIconGroup;
         "biggive-image": BiggiveImage;
+        "biggive-image-button": BiggiveImageButton;
         "biggive-image-feature": BiggiveImageFeature;
         "biggive-main-menu": BiggiveMainMenu;
         "biggive-misc-icon": BiggiveMiscIcon;
@@ -2580,6 +2641,7 @@ declare namespace LocalJSX {
         "biggive-progress-bar": BiggiveProgressBar;
         "biggive-quote": BiggiveQuote;
         "biggive-search": BiggiveSearch;
+        "biggive-sheet": BiggiveSheet;
         "biggive-social-icon": BiggiveSocialIcon;
         "biggive-tab": BiggiveTab;
         "biggive-tabbed-content": BiggiveTabbedContent;
@@ -2627,8 +2689,10 @@ declare module "@stencil/core" {
             "biggive-header": LocalJSX.BiggiveHeader & JSXBase.HTMLAttributes<HTMLBiggiveHeaderElement>;
             "biggive-heading": LocalJSX.BiggiveHeading & JSXBase.HTMLAttributes<HTMLBiggiveHeadingElement>;
             "biggive-hero-image": LocalJSX.BiggiveHeroImage & JSXBase.HTMLAttributes<HTMLBiggiveHeroImageElement>;
+            "biggive-icon-button": LocalJSX.BiggiveIconButton & JSXBase.HTMLAttributes<HTMLBiggiveIconButtonElement>;
             "biggive-icon-group": LocalJSX.BiggiveIconGroup & JSXBase.HTMLAttributes<HTMLBiggiveIconGroupElement>;
             "biggive-image": LocalJSX.BiggiveImage & JSXBase.HTMLAttributes<HTMLBiggiveImageElement>;
+            "biggive-image-button": LocalJSX.BiggiveImageButton & JSXBase.HTMLAttributes<HTMLBiggiveImageButtonElement>;
             "biggive-image-feature": LocalJSX.BiggiveImageFeature & JSXBase.HTMLAttributes<HTMLBiggiveImageFeatureElement>;
             "biggive-main-menu": LocalJSX.BiggiveMainMenu & JSXBase.HTMLAttributes<HTMLBiggiveMainMenuElement>;
             "biggive-misc-icon": LocalJSX.BiggiveMiscIcon & JSXBase.HTMLAttributes<HTMLBiggiveMiscIconElement>;
@@ -2646,6 +2710,7 @@ declare module "@stencil/core" {
              * should we delete it rather than maintaining?
              */
             "biggive-search": LocalJSX.BiggiveSearch & JSXBase.HTMLAttributes<HTMLBiggiveSearchElement>;
+            "biggive-sheet": LocalJSX.BiggiveSheet & JSXBase.HTMLAttributes<HTMLBiggiveSheetElement>;
             "biggive-social-icon": LocalJSX.BiggiveSocialIcon & JSXBase.HTMLAttributes<HTMLBiggiveSocialIconElement>;
             "biggive-tab": LocalJSX.BiggiveTab & JSXBase.HTMLAttributes<HTMLBiggiveTabElement>;
             "biggive-tabbed-content": LocalJSX.BiggiveTabbedContent & JSXBase.HTMLAttributes<HTMLBiggiveTabbedContentElement>;

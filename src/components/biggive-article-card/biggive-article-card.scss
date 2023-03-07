@@ -12,17 +12,22 @@
 }
 
 .container {
+  height: 100%;
+  width: 100%;
   @include standard-font();
   position: relative;
   text-align: left;
-  padding: $spacer-4;
   @include lower-shadow();
   .sleeve {
-    padding:  $spacer-4 $spacer-4 0 $spacer-4;
-    @include corner-clip-medium-bottom-left();
-  }
-  .slug {
-    margin-bottom: $spacer-1;
+    height: 100%;
+    box-sizing: border-box;
+    background-size: cover;
+    padding:  $spacer-4 $spacer-4 $spacer-2 $spacer-4;
+    .content-wrap {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
   }
   .date {
     @include font-size-small();
@@ -30,28 +35,48 @@
   }
   h3 {
     @include heading-4();
-    margin-bottom: $spacer-3;
+    padding-bottom: $spacer-3;
+    margin-bottom: auto;
     a,
     a:hover {
       text-decoration: none;
     }
   }
   .image-group {
+    display: flex;
     margin-bottom: $spacer-3;
-    .image-wrap {
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      background-size: cover;
-      background-position: center center;
-      margin-bottom: $spacer-1;
-      img {
-        display: none;
+    .image-container {
+      margin-right: 15px;
+      .image-wrap {
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        background-size: cover;
+        background-position: center center;
+        margin-bottom: $spacer-1;
+        img {
+          display: none;
+        }
       }
     }
     .image-label {
       @include font-size-small();
     }
+  }
+
+
+  .clip-bottom-left-corner-false.clip-top-right-corner-true {
+    
+      @include corner-clip-medium-top-right();
+    
+  }
+  .clip-bottom-left-corner-true.clip-top-right-corner-false {
+      @include corner-clip-medium-bottom-left();
+  }
+    
+  .clip-bottom-left-corner-true.clip-top-right-corner-true {
+      @include corner-clip-medium-bottom-left-top-right();
+    
   }
 
 }
