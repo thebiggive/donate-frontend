@@ -24,7 +24,7 @@ export class BiggiveBiographyCard {
 
   @Prop() textAlign: 'center' | 'left' | 'right' = 'left';
 
-  @Prop() ratio: '[1,1]' | '[1,1.5]' | '[1,2]' = '[1,1.5]';
+  @Prop() ratio: '1,1' | '1,1.5' | '1,2' = '1,1.5';
 
   @Prop() circle: boolean = false;
 

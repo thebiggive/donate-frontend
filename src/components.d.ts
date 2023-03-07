@@ -92,7 +92,7 @@ export namespace Components {
         "imageStyle": 'cover' | 'contain';
         "imageUrl": string;
         "jobTitle": string;
-        "ratio": '[1,1]' | '[1,1.5]' | '[1,2]';
+        "ratio": '1,1' | '1,1.5' | '1,2';
         "spaceBelow": spacingOption;
         "textAlign": 'center' | 'left' | 'right';
         "textColour": brandColour;
@@ -1590,7 +1590,7 @@ declare namespace LocalJSX {
         "imageStyle"?: 'cover' | 'contain';
         "imageUrl"?: string;
         "jobTitle"?: string;
-        "ratio"?: '[1,1]' | '[1,1.5]' | '[1,2]';
+        "ratio"?: '1,1' | '1,1.5' | '1,2';
         "spaceBelow"?: spacingOption;
         "textAlign"?: 'center' | 'left' | 'right';
         "textColour"?: brandColour;

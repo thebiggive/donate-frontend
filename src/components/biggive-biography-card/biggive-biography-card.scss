@@ -68,13 +68,13 @@
       overflow: hidden;
       border-radius: 50%;
     }
-    &[data-ratio="[1,1]"] {
+    &[data-ratio="1,1"] {
       padding-bottom: 100%;
     }
-    &[data-ratio="[1,1.5]"] {
+    &[data-ratio="1,1.5"] {
       padding-bottom: 150%;
     }
-    &[data-ratio="[1,2]"] {
+    &[data-ratio="1,2"] {
       padding-bottom: 200%;
     }
 
