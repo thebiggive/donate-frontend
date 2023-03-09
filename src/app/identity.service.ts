@@ -107,8 +107,10 @@ export class IdentityService {
   }
 
   clearJWT() {
+    console.log("will clear JWT");
     this.storage.remove(this.storageKey);
     this.executeJwtCallBacks();
+    console.log("done cleared JWT");
   }
 
   getIdAndJWT(): { id: string, jwt: string } | undefined {

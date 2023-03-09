@@ -39,6 +39,14 @@
             button-id="save-details-button"
             (click)="openSetPasswordDialog()">
           </biggive-button>
+
+          <re-captcha
+            #captcha
+            size="invisible"
+            (resolved)="loginCaptchaReturn($event)"
+            siteKey="{{ recaptchaIdSiteKey }}"
+          ></re-captcha>
+
         </div>
         <p>This helps you to make doubling your donation easier.</p>
       </div>

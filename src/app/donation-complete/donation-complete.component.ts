@@ -26,7 +26,7 @@ import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
   styleUrls: ['./donation-complete.component.scss'],
 })
 export class DonationCompleteComponent implements OnInit {
-  @ViewChild('captcha') captcha: RecaptchaComponent;
+  @ViewChild('captcha') captcha: RecaptchaComponent | undefined;
 
   campaign?: Campaign;
   cardChargedAmount: number;
@@ -159,9 +159,12 @@ export class DonationCompleteComponent implements OnInit {
           this.registrationComplete = true;
           this.analyticsService.logEvent('person_password_set', 'Account password creation complete', 'identity');
 
-          // We should only auto-login (and therefore execute the captcha) if the donor requested a persistent session.
           if (stayLoggedIn) {
-            this.captcha.execute(); // Leads to loginCaptchaReturn() assuming the captcha succeeds.
+            if (! this.captcha) {
+              console.error("Missing captcha component");
+              throw new Error("Missing captcha component");
+            }
+            this.captcha.execute();
           } else {
             // Otherwise we should remove even the temporary ID token.
             this.identityService.clearJWT();
