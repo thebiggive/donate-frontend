@@ -1,14 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatInputModule } from '@angular/material/input';
-import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import {MatInputModule} from '@angular/material/input';
+import {RecaptchaComponent, RecaptchaModule} from 'ng-recaptcha';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
-import { environment } from '../../environments/environment';
-import { IdentityService } from '../identity.service';
-import { EMAIL_REGEXP } from '../validators/patterns';
+import {allChildComponentImports} from '../../allChildComponentImports';
+import {environment} from '../../environments/environment';
+import {IdentityService} from '../identity.service';
+import {EMAIL_REGEXP} from '../validators/patterns';
+import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 
 @Component({
   standalone: true,
@@ -31,6 +32,7 @@ export class RegisterModalComponent implements OnInit {
   form: FormGroup;
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   registerError?: string;
+  registerErrorHtml?: SafeHtml;
   registering = false;
 
   private readyToLogIn = false;
@@ -39,6 +41,7 @@ export class RegisterModalComponent implements OnInit {
     private dialogRef: MatDialogRef<RegisterModalComponent>,
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
+    private sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit() {
@@ -82,6 +85,16 @@ export class RegisterModalComponent implements OnInit {
       return;
     }
 
+    const extractErrorMessage = (error: {error: {error: {description?: string, htmlDescription?: string}}, message?: string }) => {
+      const errorInfo = error.error.error;
+      if (errorInfo.htmlDescription) {
+        // this HTML can only have come back from our identity server, which we consider trustworthy.
+        this.registerErrorHtml = this.sanitizer.bypassSecurityTrustHtml(errorInfo.htmlDescription)
+      } else {
+        this.registerError = errorInfo.description || error.message || 'Unknown error';
+      }
+    }
+
     this.identityService.create({
       captcha_code: captchaResponse,
       email_address: this.form.value.emailAddress,
@@ -98,12 +111,12 @@ export class RegisterModalComponent implements OnInit {
         this.captcha.execute();
       }, (error) => {
         this.captcha.reset();
-        this.registerError = 'Update: ' + (error.error.description !== undefined ? error.error.description : error.message) || 'Unknown error';
+        extractErrorMessage(error);
         this.registering = false;
       });
     }, (error) => {
       this.captcha.reset();
-      this.registerError = 'Create: ' + (error.error.description !== undefined ? error.error.description : error.message) || 'Unknown error';
+      extractErrorMessage(error);
       this.registering = false;
     });
   }
