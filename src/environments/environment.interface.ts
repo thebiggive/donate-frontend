@@ -1,5 +1,7 @@
 export type EnvironmentID ='development'|'regression'|'staging'|'production';
 
+// see also src/app/featureFlags.ts
+
 export interface Environment {
   environmentId: EnvironmentID,
   production: boolean,

@@ -73,6 +73,11 @@ Environment Variables configured in the CircleCI interface for this app are:
 * `CIRCLE_TOKEN` - set up within CircleCI itself and used to retrieve build & deploy metadata to report back to Jira.
 * `SLACK_WEBHOOK` - destination URI to report deploys to Slack.
 
+### Feature Flag(s)
+
+We have currently one, but in future possible more or less feature flags used to separate code deployment from feature release. 
+See [featureFlags.ts](./src/app/featureFlags.ts).
+
 ## Salesforce API requirements
 
 For each sandbox, you need to ensure a Site is created for both `/campaigns` and `/funds`

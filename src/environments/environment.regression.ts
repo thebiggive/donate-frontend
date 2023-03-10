@@ -4,6 +4,8 @@
 
 // The `regression` environment targets RegTest1 and is intended exclusively for automated regression testing.
 
+// see also src/app/featureFlags.ts
+
 import { Environment } from './environment.interface';
 
 export const environment: Environment = {

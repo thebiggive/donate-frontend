@@ -2,6 +2,8 @@
 // `ng build --prod` replaces `environment.ts` with `environment.production.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+// see also src/app/featureFlags.ts
+
 import { Environment } from './environment.interface';
 
 export const environment: Environment = {
