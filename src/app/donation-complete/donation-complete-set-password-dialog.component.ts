@@ -51,7 +51,7 @@ export class DonationCompleteSetPasswordDialogComponent implements OnInit {
   set() {
     this.dialogRef.close({
       password: this.form.value.password,
-      stayLoggedIn: this.form.value.stayLoggedIn,
+      stayLoggedIn: [false], // logging in at this point was not working. See PR 972.
     });
   }
 }
