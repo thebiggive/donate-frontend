@@ -1,6 +1,8 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.production.ts` unless a `--configuration` is also provided.
 // The list of file replacements can be found in `angular.json`.
+//
+// see also src/app/featureFlags.ts
 
 import { Environment } from './environment.interface';
 
