@@ -48,7 +48,7 @@
         using your chosen email address and password.
       </p>
 
-      <div class="cta" *ngIf="registrationComplete && profilePageEnabled">
+      <div class="cta" *ngIf="registrationComplete && loggedIn && profilePageEnabled">
         <div class="button-wrapper">
           <biggive-button colour-scheme="white" label="My Account" [url]="'/my-account'"/>
         </div>
