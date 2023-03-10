@@ -13,6 +13,12 @@
   }
 }
 
+.heading-wrapper {
+  margin: auto;
+  width: fit-content;
+}
+
+
 h1 {
   color: $colour-secondary;
 }
@@ -56,16 +62,20 @@ table#personal-details, table#paymentMethods {
     @media #{$breakpoint-lg} {
       min-width: 150px;
     }
+    vertical-align: bottom;
   }
 
-  td.cardBrand {
+  td.cardExpiry {
     display: none;
     @media #{$breakpoint-lg} {
       display: table-cell;
     }
   }
+
   div.cardBrand {
     font-weight: bold;
+  }
+  div.cardExpiry {
     @media #{$breakpoint-lg} {
       display: none;
     }
