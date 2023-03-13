@@ -295,32 +295,11 @@ a {
 // I'm not keen on the copy & paste but I struggled to get it to work in a more elegant way.
 
 .icons {
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: column;
-
-  // align icon text column on small devices
-  .icon-wrapper:first-child span {
-    padding-left: 0;
-  }
-
-  @media#{$breakpoint-md} {
-    flex-direction: row;
-
-    .icon-wrapper:first-child span {
-      padding-left: 10px;
-    }
-
-    .icon-wrapper:first-child {
-      padding-left: 0;
-    }
-  }
+  @include format-icon-container;
 }
 
 .icon-wrapper {
-  display: flex;
-  padding: 20px;
-  align-items: center;
+  @include format-icon-list-item;
 
   // in campaign-details.component.scss the selector here is `svg` rather than `fa-icon`, but that doesn't seem to work
   // here.
@@ -331,11 +310,7 @@ a {
   }
 
   .c-icon-title {
-    font-size: 0.9rem;
-    margin: auto;
-    width: min-content;
-    padding-left: 10px;
-    line-height: 20px;
+    @include format-icon-title;
   }
 }
 
