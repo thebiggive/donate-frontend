@@ -22,7 +22,7 @@
       <li *ngFor="let category of campaign.categories" class="icon-wrapper">
         <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
         <span class="c-icon-title">
-          {{ category.replace('/', '\u200B/') }}
+          {{ category.split('/').join('/\u200B') }}
         </span>
       </li>
     </div>
@@ -32,7 +32,7 @@
     <div class="icons">
       <li *ngFor="let beneficiary of campaign.beneficiaries" class="icon-wrapper">
         <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
-        <span class="c-icon-title">{{ beneficiary.replace('/', '\u200B/') }}</span>
+        <span class="c-icon-title">{{ beneficiary.split('/').join('/\u200B') }}</span>
       </li>
     </div>
   </div>

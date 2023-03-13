@@ -296,38 +296,38 @@ a {
 
 .icons {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex-direction: column;
+
+  // align icon text column on small devices
+  .icon-wrapper:first-child span {
+    padding-left: 0;
+  }
+
+  @media#{$breakpoint-md} {
+    flex-direction: row;
+
+    .icon-wrapper:first-child span {
+      padding-left: 10px;
+    }
+
+    .icon-wrapper:first-child {
+      padding-left: 0;
+    }
+  }
 }
 
-// .icon-wrapper {
-//   display: flex;
-//   padding: 10px;
-
-//   // in campaign-details.component.scss the selector here is `svg` rather than `fa-icon`, but that doesn't seem to work
-//   // here.
-//   fa-icon {
-//     margin-right: 5px;
-//     color: $colour-primary; // #2C089BFF
-//     svg {
-//       width: 20px;
-//       height: 20px;
-//     }
-//   }
-
-//   .c-icon-title {
-//     font-size: 0.8rem;
-//     margin: auto;
-//   }
-// }
 .icon-wrapper {
   display: flex;
-  padding: 10px;
+  padding: 20px;
+  align-items: center;
 
-  svg {
+  // in campaign-details.component.scss the selector here is `svg` rather than `fa-icon`, but that doesn't seem to work
+  // here.
+  fa-icon.ng-fa-icon {
     margin-right: 5px;
-    color: $colour-primary;
-    width: 40px;
-    height: 40px;
+    color: $colour-primary; // #2C089BFF
+    font-size: 40px;
   }
 
   .c-icon-title {
