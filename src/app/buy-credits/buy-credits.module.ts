@@ -10,7 +10,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
-import { RecaptchaModule } from 'ng-recaptcha';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { BuyCreditsComponent } from './buy-credits.component';
@@ -34,7 +33,6 @@ import { TimeLeftPipe } from '../time-left.pipe';
     MatSelectModule,
     MatStepperModule,
     ReactiveFormsModule,
-    RecaptchaModule,
     TimeLeftPipe,
   ],
   declarations: [BuyCreditsComponent],
