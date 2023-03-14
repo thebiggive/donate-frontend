@@ -295,28 +295,22 @@ a {
 // I'm not keen on the copy & paste but I struggled to get it to work in a more elegant way.
 
 .icons {
-  display: flex;
-  flex-wrap: wrap;
+  @include format-icon-container;
 }
 
 .icon-wrapper {
-  display: flex;
-  padding: 10px;
+  @include format-icon-list-item;
 
   // in campaign-details.component.scss the selector here is `svg` rather than `fa-icon`, but that doesn't seem to work
   // here.
-  fa-icon {
+  fa-icon.ng-fa-icon {
     margin-right: 5px;
     color: $colour-primary; // #2C089BFF
-    svg {
-      width: 20px;
-      height: 20px;
-    }
+    font-size: 40px;
   }
 
   .c-icon-title {
-    font-size: 0.8rem;
-    margin: auto;
+    @include format-icon-title;
   }
 }
 

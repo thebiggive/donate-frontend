@@ -127,25 +127,22 @@ h1 {
 }
 
 .icons {
-  display: flex;
-  flex-wrap: wrap;
+  @include format-icon-container;
 }
 
 .icon-wrapper {
-  display: flex;
-  padding: 10px;
+  @include format-icon-list-item;
 
   svg {
     margin-right: 5px;
     color: $colour-primary;
-    width: 20px;
-    height: 20px;
+    font-size: 40px;
+  }
+  
+  .c-icon-title {
+    @include format-icon-title;
   }
 
-  .c-icon-title {
-    font-size: 0.8rem;
-    margin: auto;
-  }
 }
 
 .button-wrapper {
