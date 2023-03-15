@@ -29,11 +29,10 @@ export namespace Components {
         "date": string;
         "dateColour": brandColour;
         "image1AltText": string;
-        "image1Label": string;
         "image1Url": string;
         "image2AltText": string;
-        "image2Label": string;
         "image2Url": string;
+        "imageLabel": string;
         "imageLabelColour": brandColour;
         "mainTitle": string;
         "mainTitleColour": brandColour;
@@ -1527,11 +1526,10 @@ declare namespace LocalJSX {
         "date"?: string;
         "dateColour"?: brandColour;
         "image1AltText"?: string;
-        "image1Label"?: string;
         "image1Url"?: string;
         "image2AltText"?: string;
-        "image2Label"?: string;
         "image2Url"?: string;
+        "imageLabel"?: string;
         "imageLabelColour"?: brandColour;
         "mainTitle"?: string;
         "mainTitleColour"?: brandColour;

@@ -22,15 +22,18 @@
     height: 100%;
     box-sizing: border-box;
     background-size: cover;
-    padding:  $spacer-4 $spacer-4 $spacer-2 $spacer-4;
+    padding:  $spacer-3 $spacer-3 $spacer-2 $spacer-3;
     .content-wrap {
       height: 100%;
       display: flex;
       flex-direction: column;
     }
   }
-  .date {
+  .slug {
     @include font-size-small();
+  }
+  .date {
+    @include font-size-x-small();
     margin-bottom: $spacer-3;
   }
   h3 {
@@ -59,9 +62,9 @@
         }
       }
     }
-    .image-label {
-      @include font-size-small();
-    }
+  }
+  .image-label {
+    @include font-size-x-small();
   }
 
 

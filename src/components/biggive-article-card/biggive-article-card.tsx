@@ -32,13 +32,11 @@ export class BiggiveArticleCard {
 
   @Prop() image1AltText: string;
 
-  @Prop() image1Label: string;
-
   @Prop() image2Url: string;
 
   @Prop() image2AltText: string;
 
-  @Prop() image2Label: string;
+  @Prop() imageLabel: string;
 
   @Prop() imageLabelColour: brandColour = 'black';
 
@@ -91,7 +89,6 @@ export class BiggiveArticleCard {
                     <div class="image-wrap" style={{ 'background-image': "url('" + this.image1Url + "')" }}>
                       <img src={this.image1Url} alt={this.image1AltText} title={this.image1AltText} />
                     </div>
-                    <div class="image-label">{this.image1Label}</div>
                   </div>
                 ) : null}
 
@@ -100,11 +97,12 @@ export class BiggiveArticleCard {
                     <div class="image-wrap" style={{ 'background-image': "url('" + this.image2Url + "')" }}>
                       <img src={this.image2Url} alt={this.image2AltText} title={this.image2AltText} />
                     </div>
-                    <div class="image-label">{this.image2Label}</div>
                   </div>
                 ) : null}
               </div>
             ) : null}
+
+            {this.imageLabel != '' ? <div class="image-label">{this.imageLabel}</div> : null}
 
             {this.buttonLabel != null && this.buttonUrl != null ? (
               <div class="button-wrap align-right">
