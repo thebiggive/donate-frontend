@@ -1,4 +1,5 @@
 import { Component, Prop, h } from '@stencil/core';
+import { spacingOption } from '../../globals/spacing-option';
 
 @Component({
   tag: 'biggive-grid',
@@ -6,24 +7,21 @@ import { Component, Prop, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveGrid {
-  /**
-   * Space below component
-   */
+
   @Prop() spaceBelow: number = 4;
 
-  /**
-   * Number of columns in grid
-   */
   @Prop() columnCount: number = 3;
 
   /**
-   * Should have `justify-content: space-between`?
+   * Deprecated - should use columGap Instead
    */
   @Prop() spaceBetween: boolean = false;
 
+  @Prop() columnGap: spacingOption = 0;
+
   render() {
     return (
-      <div class={'grid column-count-' + this.columnCount + ' space-below-' + this.spaceBelow + (this.spaceBetween ? ' space-between' : '')}>
+      <div class={'grid column-count-' + this.columnCount + ' space-below-' + this.spaceBelow + ' column-gap-' + this.columnGap + (this.spaceBetween ? ' space-between' : '')}>
         <slot></slot>
       </div>
     );

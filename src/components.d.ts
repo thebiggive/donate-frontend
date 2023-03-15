@@ -543,16 +543,11 @@ export namespace Components {
         "url": string;
     }
     interface BiggiveGrid {
-        /**
-          * Number of columns in grid
-         */
         "columnCount": number;
-        /**
-          * Space below component
-         */
+        "columnGap": spacingOption;
         "spaceBelow": number;
         /**
-          * Should have `justify-content: space-between`?
+          * Deprecated - should use columGap Instead
          */
         "spaceBetween": boolean;
     }
@@ -2078,16 +2073,11 @@ declare namespace LocalJSX {
         "url"?: string;
     }
     interface BiggiveGrid {
-        /**
-          * Number of columns in grid
-         */
         "columnCount"?: number;
-        /**
-          * Space below component
-         */
+        "columnGap"?: spacingOption;
         "spaceBelow"?: number;
         /**
-          * Should have `justify-content: space-between`?
+          * Deprecated - should use columGap Instead
          */
         "spaceBetween"?: boolean;
     }

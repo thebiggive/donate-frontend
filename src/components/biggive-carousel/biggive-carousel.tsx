@@ -8,7 +8,6 @@ import { spacingOption } from '../../globals/spacing-option';
   shadow: true,
 })
 export class BiggiveCarousel {
-  
   @Element() host: HTMLBiggiveCarouselElement;
 
   @Prop() spaceBelow: spacingOption = 4;
@@ -51,8 +50,6 @@ export class BiggiveCarousel {
    */
   showTab(direction: 'NEXT' | 'PREV') {
     const newTab = this.currentTab + (direction === 'PREV' ? -1 : 1);
-
-//alert(newTab + '\n' + this.itemCount + '\n' + this.columnCount);
 
     if (newTab < 0 || newTab > this.itemCount - this.columnCount) {
       return;
