@@ -10,6 +10,8 @@ import { spacingOption } from '../../globals/spacing-option';
 export class BiggiveBiographyCard {
   @Prop() spaceBelow: spacingOption = 0;
 
+  @Prop() borderWidth: spacingOption = 0;
+
   @Prop() imageUrl: string = '';
 
   @Prop() imageStyle: 'cover' | 'contain' = 'cover';
@@ -28,29 +30,42 @@ export class BiggiveBiographyCard {
 
   @Prop() circle: boolean = false;
 
+  @Prop() rounded: boolean = false;
+
   @Prop() url: string = '';
 
   render() {
     if (this.url != '') {
       return (
-        <div
-          class={'container space-below-' + this.spaceBelow + ' text-colour-' + this.textColour + ' background-colour-' + this.backgroundColour + ' text-align-' + this.textAlign}
-        >
+        <div class={'container space-below-' + this.spaceBelow + ' text-colour-' + this.textColour + ' text-align-' + this.textAlign}>
           <a href={this.url}>
-            {this.imageUrl != '' ? (
-              <div
-                data-ratio={this.ratio}
-                class={'image-wrap image-style-' + this.imageStyle + ' circle-' + this.circle.toString()}
-                style={{ 'background-image': "url('" + this.imageUrl + "')" }}
-              >
-                <img src={this.imageUrl} alt={this.fullName} title={this.fullName} />
-                <div class="circle">
-                  <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M11 11v-11h1v11h11v1h-11v11h-1v-11h-11v-1h11z" />
-                  </svg>
+            <div
+              class={
+                'sleeve circle-' +
+                this.circle.toString() +
+                ' border-colour-' +
+                this.backgroundColour +
+                ' background-colour-' +
+                this.backgroundColour +
+                ' border-width-' +
+                this.borderWidth
+              }
+            >
+              {this.imageUrl != '' ? (
+                <div
+                  data-ratio={this.ratio}
+                  class={'image-wrap image-style-' + this.imageStyle + ' rounded-' + this.rounded.toString()}
+                  style={{ 'background-image': "url('" + this.imageUrl + "')" }}
+                >
+                  <img src={this.imageUrl} alt={this.fullName} title={this.fullName} />
+                  <div class="circle">
+                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M11 11v-11h1v11h11v1h-11v11h-1v-11h-11v-1h11z" />
+                    </svg>
+                  </div>
                 </div>
-              </div>
-            ) : null}
+              ) : null}
+            </div>
             <h3 class="full-name">{this.fullName}</h3>
             <div class="job-title">{this.jobTitle}</div>
           </a>
@@ -58,18 +73,29 @@ export class BiggiveBiographyCard {
       );
     } else {
       return (
-        <div
-          class={'container space-below-' + this.spaceBelow + ' text-colour-' + this.textColour + ' background-colour-' + this.backgroundColour + ' text-align-' + this.textAlign}
-        >
-          {this.imageUrl != '' ? (
-            <div
-              data-ratio={this.ratio}
-              class={'image-wrap image-style-' + this.imageStyle + ' circle-' + this.circle.toString()}
-              style={{ 'background-image': "url('" + this.imageUrl + "')" }}
-            >
-              <img src={this.imageUrl} alt={this.fullName} title={this.fullName} />
-            </div>
-          ) : null}
+        <div class={'container space-below-' + this.spaceBelow + ' text-colour-' + this.textColour + ' text-align-' + this.textAlign}>
+          <div
+            class={
+              'sleeve circle-' +
+              this.circle.toString() +
+              ' border-colour-' +
+              this.backgroundColour +
+              ' background-colour-' +
+              this.backgroundColour +
+              ' border-width-' +
+              this.borderWidth
+            }
+          >
+            {this.imageUrl != '' ? (
+              <div
+                data-ratio={this.ratio}
+                class={'image-wrap image-style-' + this.imageStyle + ' rounded-' + this.rounded.toString()}
+                style={{ 'background-image': "url('" + this.imageUrl + "')" }}
+              >
+                <img src={this.imageUrl} alt={this.fullName} title={this.fullName} />
+              </div>
+            ) : null}
+          </div>
           <h3 class="full-name">{this.fullName}</h3>
           <div class="job-title">{this.jobTitle}</div>
         </div>

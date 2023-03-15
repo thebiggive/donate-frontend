@@ -86,12 +86,14 @@ export namespace Components {
     }
     interface BiggiveBiographyCard {
         "backgroundColour": brandColour;
+        "borderWidth": spacingOption;
         "circle": boolean;
         "fullName": string;
         "imageStyle": 'cover' | 'contain';
         "imageUrl": string;
         "jobTitle": string;
         "ratio": '1,1' | '1,1.5' | '1,2';
+        "rounded": boolean;
         "spaceBelow": spacingOption;
         "textAlign": 'center' | 'left' | 'right';
         "textColour": brandColour;
@@ -1598,12 +1600,14 @@ declare namespace LocalJSX {
     }
     interface BiggiveBiographyCard {
         "backgroundColour"?: brandColour;
+        "borderWidth"?: spacingOption;
         "circle"?: boolean;
         "fullName"?: string;
         "imageStyle"?: 'cover' | 'contain';
         "imageUrl"?: string;
         "jobTitle"?: string;
         "ratio"?: '1,1' | '1,1.5' | '1,2';
+        "rounded"?: boolean;
         "spaceBelow"?: spacingOption;
         "textAlign"?: 'center' | 'left' | 'right';
         "textColour"?: brandColour;

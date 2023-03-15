@@ -54,7 +54,7 @@ export class BiggiveCarousel {
       return;
     }
 
-    const pos = 0 - this.itemWidthPx * newTab;
+    const pos = 0 - (this.itemWidthPx + this.columnGapPx) * newTab;
 
     this.sleeve.style.transitionDuration = '0.3s';
     this.sleeve.style.transitionTimingFunction = 'ease-out';
