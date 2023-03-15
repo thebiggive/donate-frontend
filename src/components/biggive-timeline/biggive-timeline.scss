@@ -66,11 +66,6 @@
       margin-bottom: $spacer-3;
       border-left: 15px solid transparent;
       padding: 15px 40px 15px 40px;
-      .date {
-        @include font-size-small();
-        font-weight: bold;
-        margin: 0 0 5px 0;
-      }
       .title {
         font-weight: bold;
         margin: 0 0 5px 0;

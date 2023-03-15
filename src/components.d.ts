@@ -533,6 +533,13 @@ export namespace Components {
          */
         "spaceBelow": number;
     }
+    interface BiggiveGenericIcon {
+        "backgroundColour": brandColour;
+        "icon": string;
+        "iconColour": brandColour;
+        "iconGroup": 'beneficiary' | 'misc' | 'social' | 'category';
+        "url": string;
+    }
     interface BiggiveGrid {
         /**
           * Number of columns in grid
@@ -652,6 +659,7 @@ export namespace Components {
         "centered": boolean;
         "circle": boolean;
         "icon": string;
+        "iconGroup": 'beneficiary' | 'misc' | 'social' | 'category';
         "openInNewTab": boolean;
         "rounded": boolean;
         "shadow": boolean;
@@ -1236,6 +1244,12 @@ declare global {
         prototype: HTMLBiggiveFormattedTextElement;
         new (): HTMLBiggiveFormattedTextElement;
     };
+    interface HTMLBiggiveGenericIconElement extends Components.BiggiveGenericIcon, HTMLStencilElement {
+    }
+    var HTMLBiggiveGenericIconElement: {
+        prototype: HTMLBiggiveGenericIconElement;
+        new (): HTMLBiggiveGenericIconElement;
+    };
     interface HTMLBiggiveGridElement extends Components.BiggiveGrid, HTMLStencilElement {
     }
     var HTMLBiggiveGridElement: {
@@ -1470,6 +1484,7 @@ declare global {
         "biggive-form-field-select": HTMLBiggiveFormFieldSelectElement;
         "biggive-form-field-select-option": HTMLBiggiveFormFieldSelectOptionElement;
         "biggive-formatted-text": HTMLBiggiveFormattedTextElement;
+        "biggive-generic-icon": HTMLBiggiveGenericIconElement;
         "biggive-grid": HTMLBiggiveGridElement;
         "biggive-header": HTMLBiggiveHeaderElement;
         "biggive-heading": HTMLBiggiveHeadingElement;
@@ -2051,6 +2066,13 @@ declare namespace LocalJSX {
          */
         "spaceBelow"?: number;
     }
+    interface BiggiveGenericIcon {
+        "backgroundColour"?: brandColour;
+        "icon"?: string;
+        "iconColour"?: brandColour;
+        "iconGroup"?: 'beneficiary' | 'misc' | 'social' | 'category';
+        "url"?: string;
+    }
     interface BiggiveGrid {
         /**
           * Number of columns in grid
@@ -2169,6 +2191,7 @@ declare namespace LocalJSX {
         "centered"?: boolean;
         "circle"?: boolean;
         "icon"?: string;
+        "iconGroup"?: 'beneficiary' | 'misc' | 'social' | 'category';
         "onDoButtonClick"?: (event: BiggiveIconButtonCustomEvent<{ event: object; url: string }>) => void;
         "openInNewTab"?: boolean;
         "rounded"?: boolean;
@@ -2618,6 +2641,7 @@ declare namespace LocalJSX {
         "biggive-form-field-select": BiggiveFormFieldSelect;
         "biggive-form-field-select-option": BiggiveFormFieldSelectOption;
         "biggive-formatted-text": BiggiveFormattedText;
+        "biggive-generic-icon": BiggiveGenericIcon;
         "biggive-grid": BiggiveGrid;
         "biggive-header": BiggiveHeader;
         "biggive-heading": BiggiveHeading;
@@ -2679,6 +2703,7 @@ declare module "@stencil/core" {
             "biggive-form-field-select": LocalJSX.BiggiveFormFieldSelect & JSXBase.HTMLAttributes<HTMLBiggiveFormFieldSelectElement>;
             "biggive-form-field-select-option": LocalJSX.BiggiveFormFieldSelectOption & JSXBase.HTMLAttributes<HTMLBiggiveFormFieldSelectOptionElement>;
             "biggive-formatted-text": LocalJSX.BiggiveFormattedText & JSXBase.HTMLAttributes<HTMLBiggiveFormattedTextElement>;
+            "biggive-generic-icon": LocalJSX.BiggiveGenericIcon & JSXBase.HTMLAttributes<HTMLBiggiveGenericIconElement>;
             "biggive-grid": LocalJSX.BiggiveGrid & JSXBase.HTMLAttributes<HTMLBiggiveGridElement>;
             /**
              * @deprecated 

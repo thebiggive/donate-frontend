@@ -150,7 +150,6 @@ export class BiggiveTimeline {
         <div class="entry-wrap">
           {this.children.map(entry => (
             <div class="entry" data-date={entry.date}>
-              <div class="date">{entry.date}</div>
               <h4 class="title">{entry.heading}</h4>
               <div class="content" innerHTML={entry.innerHTML}></div>
             </div>

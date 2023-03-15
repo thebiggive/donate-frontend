@@ -26,6 +26,8 @@ export class BiggiveIconButton {
 
   @Prop() textColour: brandColour = 'black';
 
+  @Prop() iconGroup: 'beneficiary' | 'misc' | 'social' | 'category';
+
   @Prop() icon: string;
 
   @Prop() url: string;
@@ -73,7 +75,7 @@ export class BiggiveIconButton {
         <a href={this.url} target={this.openInNewTab ? '_blank' : '_self'} id={this.buttonId}>
           <div class="sleeve" onClick={this.handleButtonClick}>
             <div class={'icon-wrap ' + ' size-' + this.size + ' circle-' + this.circle.toString()}>
-              <biggive-misc-icon icon={this.icon}></biggive-misc-icon>
+              <biggive-generic-icon iconGroup={this.iconGroup} icon={this.icon}></biggive-generic-icon>
             </div>
 
             {this.text != '' ? <div class={'text-wrap text-colour-' + this.textColour + ' text-padding-' + this.backgroundPadding}>{this.text}</div> : null}

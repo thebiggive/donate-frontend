@@ -25,11 +25,13 @@ export class BiggiveSheet {
   }
 
   componentWillLoad() {
-    this.openSheet(window.location.hash);
-
     window.onhashchange = () => {
       this.openSheet(window.location.hash);
     };
+  }
+
+  componentDidRender() {
+    this.openSheet(window.location.hash);
   }
 
   closeSheet() {

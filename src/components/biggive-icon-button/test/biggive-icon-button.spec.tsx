@@ -14,7 +14,7 @@ describe('biggive-icon-button', () => {
            <a target="_self">
              <div class="sleeve">
                <div class="circle-false icon-wrap size-medium">
-                 <biggive-misc-icon></biggive-misc-icon>
+                 <biggive-generic-icon></biggive-generic-icon>
                </div>
                <div class="text-colour-black text-padding-0 text-wrap"></div>
              </div>
