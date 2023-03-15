@@ -13,7 +13,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { RecaptchaModule } from 'ng-recaptcha';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
@@ -42,7 +41,6 @@ describe('BuyCreditsComponent', () => {
         MatStepperModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-        RecaptchaModule,
         RouterTestingModule.withRoutes([
           {
             path: 'buy-credits',
