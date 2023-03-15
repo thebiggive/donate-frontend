@@ -206,37 +206,29 @@
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
-
-  // align icon text column on small devices
-  .icon-wrapper:last-child:not(:first-child) span {
-    padding-left: 20px;
-  }
+  overflow: hidden;
 
   @media#{$breakpoint-md} {
     flex-direction: row;
-
-    .icon-wrapper:last-child span {
-      padding-left: 10px;
-    }
-
-    .icon-wrapper:first-child {
-      padding-left: 0;
-    }
   }
 }
 
 
 @mixin format-icon-list-item {
   display: flex;
-  padding: 20px;
+  padding: 20px 30px;
   align-items: center;
+  width: 33%;
+  @media#{$breakpoint-md} {
+    padding-left: 0;
+  }
 }
 
 @mixin format-icon-title {
     font-size: 0.9rem;
     margin: auto;
-    width: min-content;
-    padding-left: 10px;
+    width: 65%;
+    padding-left: 10%;
     line-height: 20px;
 }
 
