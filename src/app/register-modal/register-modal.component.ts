@@ -59,6 +59,11 @@ export class RegisterModalComponent implements OnInit {
     });
   }
 
+  captchaError() {
+    this.registerError = 'Captcha error – please try again';
+    this.registering = false;
+  }
+
   captchaReturn(captchaResponse: string) {
     if (captchaResponse === null) {
       // We had a code but now don't, e.g. after expiry at 1 minute. In this case

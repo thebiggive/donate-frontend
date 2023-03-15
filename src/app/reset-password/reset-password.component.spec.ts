@@ -7,7 +7,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { RecaptchaModule } from 'ng-recaptcha';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
@@ -31,7 +30,6 @@ describe('ResetPasswordComponent', () => {
         MatProgressSpinnerModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-        RecaptchaModule,
         RouterTestingModule.withRoutes([
           {
             path: 'reset-password',
