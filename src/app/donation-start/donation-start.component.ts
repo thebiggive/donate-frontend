@@ -85,6 +85,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   campaignOpenOnLoad: boolean;
 
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
+  recaptchaSiteKey = environment.recaptchaSiteKey;
 
   countryOptions = COUNTRIES;
 
@@ -154,6 +155,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   // Intentionally looser to support most countries' formats.
   private billingPostcodeRegExp = new RegExp('^[0-9a-zA-Z -]{2,8}$');
 
+  private captchaCode?: string;
   private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
   campaignRaised: string; // Formatted
@@ -204,10 +206,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.campaign = this.route.snapshot.data.campaign;
     this.setCampaignBasedVars();
 
-    const idAndJWT = this.identityService.getIdAndJWT();
-    if (idAndJWT !== undefined) {
-      if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
-        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+    if (environment.identityEnabled) {
+      const idAndJWT = this.identityService.getIdAndJWT();
+      if (idAndJWT !== undefined) {
+        if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
+          this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+        }
       }
     }
 
@@ -621,9 +625,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   async submit() {
     if (!this.donation || this.donationForm.invalid) {
-      this.stripeError = 'Missing donation information – please refresh and try again, or email hello@thebiggive.org.uk if this problem persists';
-      this.stripeResponseErrorCode = undefined;
-      this.analyticsService.logError('submit_missing_donation_basics', 'Donation not set or form invalid');
       return;
     }
 
@@ -755,7 +756,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   get canLogin() {
-    return !this.personId;
+    return environment.identityEnabled && !this.personId;
   }
 
   get donationAmountField() {
@@ -788,12 +789,19 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     return this.donationAmount + this.tipAmount() + this.feeCoverAmount();
   }
 
-  captchaIdentityError() {
-    // Not passing event as it will "most often (if not always) be empty". https://github.com/DethAriel/ng-recaptcha#events
-    this.analyticsService.logError('person_captcha_failed', 'reCAPTCHA hit errored() callback', 'identity_error');
-    this.creatingDonation = false;
-    this.donationCreateError = true;
-    this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
+  captchaDonationReturn(captchaResponse: string) {
+    if (captchaResponse === null) {
+      // Ensure no other callback tries to use the old captcha code, and will re-execute
+      // the catcha to get a new one as needed instead.
+      this.captchaCode = undefined;
+      return;
+    }
+
+    this.captchaCode = captchaResponse;
+
+    if (!this.donation) {
+      this.createDonationAndMaybePerson();
+    }
   }
 
   captchaIdentityReturn(captchaResponse: string) {
@@ -1128,18 +1136,23 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       return;
     }
 
-    if (!this.idCaptchaCode) {
+    if (!this.captchaCode && !this.idCaptchaCode) {
       // We need a captcha code before we can *really* proceed. By doing this here we ensure
       // this happens consistently regardless of whether donors click Next or a subsequent stepper
       // heading, while only configuring it in one place.
       //
-      // captchaIdentityReturn() is called on resolution of a valid captcha and calls this fn again. We
-      // don't get stuck in this logic branch because `this.idCaptchaCode` is non-empty then.
+      // captcha**Return() are called on resolution of a valid captcha and call this fn again. We
+      // don't get stuck in this logic branch because `this.captchaCode` (or ID equiv) is non-empty then.
       // As well as happening the first time the donor leaves step 1, we expect to do this again and get
       // a new code any time a previously used one was cleared in `clearDonation()`.
 
-      this.idCaptcha.reset();
-      this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
+      if (this.personId || !environment.identityEnabled) {
+        this.captcha.reset();
+        this.captcha.execute(); // Prepare for a non-Person-linked donation which needs a Donation captcha.
+      } else {
+        this.idCaptcha.reset();
+        this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
+      }
 
       return;
     }
@@ -1152,12 +1165,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.creatingDonation = true;
     this.donationCreateError = false;
 
-    // Donations are now made on behalf of a Person, and we use an ID captcha to validate that we're
-    // dealing with a real person at that stage.
     const donation: Donation = {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
       countryCode: this.paymentGroup?.value.billingCountry || 'GB',
+      // Captcha is set on Person (only) if we are making a Person + using the resulting
+      // token to authenticate the donation create.
+      creationRecaptchaCode: environment.identityEnabled ? undefined : this.captchaCode,
       currencyCode: this.campaign.currencyCode || 'GBP',
       donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
       donationMatched: this.campaign.isMatched,
@@ -1170,12 +1184,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       tipAmount: this.sanitiseCurrency(this.amountsGroup.value.tipAmount),
     };
 
-    if (this.personId) {
+    if (environment.identityEnabled && this.personId) {
       donation.pspCustomerId = this.identityService.getPspId();
     }
 
-    // Person already set up on page load.
-    if (this.personId) {
+    // Person already set up on page load, or not applicable.
+    if (this.personId || !environment.identityEnabled) {
       this.createDonation(donation);
     } else {
       const person: Person = {};
@@ -1215,7 +1229,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   private newDonationError(response: any) {
-    console.log('new donation error:', response);
     let errorMessage: string;
     if (response.message) {
       errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.message}`;
@@ -1296,7 +1309,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   private newDonationSuccess(response: DonationCreatedResponse) {
-    console.log('new donation success:', response);
     this.creatingDonation = false;
 
     const createResponseMissingData = (
@@ -1440,8 +1452,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     this.cancelExpiryWarning();
 
-    // Ensure we get a new code on donation setup if person ID somehow gets cleared. Sending a code we
-    // already verified again will fail and block creating a new person without a page refresh.
+    // Ensure we get a new code on donation setup. Sending one we already verified
+    // again will fail and block creating a new donation without a page refresh.
+    this.captchaCode = undefined;
     this.idCaptchaCode = undefined;
 
     this.creatingDonation = false;

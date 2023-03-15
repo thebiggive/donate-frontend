@@ -22,6 +22,7 @@ export const environment: Environment = {
   googleOptimizeId: null,
   // googleOptimizeId: 'OPT-NV3NHD3', // Bring back when we have an experiment to run
   identityApiPrefix: 'http://localhost:30050/v1',
+  identityEnabled: true,
   maximumDonationAmount: 25000,
   minimumCreditAmount: 500,
   maximumCreditAmount: 25000,
@@ -37,6 +38,7 @@ export const environment: Environment = {
   // https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
   recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
   // https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do
+  recaptchaSiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
   recaptchaIdentitySiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
   reservationMinutes: 30,
 };

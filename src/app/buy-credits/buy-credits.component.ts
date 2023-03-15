@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
+import { RecaptchaComponent } from 'ng-recaptcha';
 import { EMPTY } from 'rxjs';
 import { startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
@@ -33,6 +34,7 @@ import {flags} from "../featureFlags";
   styleUrls: ['./buy-credits.component.scss'],
 })
 export class BuyCreditsComponent implements AfterContentInit, OnInit {
+  @ViewChild('captcha') captcha: RecaptchaComponent;
   profilePageEnabled: boolean = flags.profilePageEnabled;
   addressSuggestions: GiftAidAddressSuggestion[] = [];
   isLoggedIn: boolean = false;
@@ -55,6 +57,8 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
   sortCode?: string;
   accountNumber?: string;
   accountHolderName?: string;
+  recaptchaSiteKey = environment.recaptchaSiteKey;
+  private captchaCode?: string;
   private initialTipSuggestedPercentage = 15;
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
 
@@ -315,6 +319,17 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     return (creditAmount * (tipPercentage / 100));
   }
 
+  captchaDonationReturn(captchaResponse: string) {
+    if (captchaResponse === null) {
+      // Ensure no other callback tries to use the old captcha code, and will re-execute
+      // the catcha to get a new one as needed instead.
+      this.captchaCode = undefined;
+      return;
+    }
+
+    this.captchaCode = captchaResponse;
+  }
+
   logout() {
     this.personId = undefined;
     this.isLoading = false;
@@ -327,6 +342,12 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     this.isPurchaseComplete = false;
     this.creditForm.reset();
     this.identityService.clearJWT();
+  }
+
+  async stepChanged(event: StepperSelectionEvent)  {
+    if (event.previouslySelectedStep.label === 'Your Donation Credits') {
+      this.captcha.execute();
+    }
   }
 
   private loadAuthedPersonInfo(id: string, jwt: string) {
@@ -374,6 +395,9 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
       countryCode: 'GB', // hard coded to GB only for now
+      // Captcha is set on Person (only) if we are making a Person + using the resulting
+      // token to authenticate the donation create.
+      creationRecaptchaCode: environment.identityEnabled ? undefined : this.captchaCode,
       currencyCode: this.campaign.currencyCode || 'GBP',
       // IMPORTANT: donationAmount set as the tip value
       donationAmount: donationAmount,
@@ -404,7 +428,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
       donation.homeBuildingNumber = undefined;
     }
 
-    if (this.personId) {
+    if (environment.identityEnabled && this.personId) {
       donation.pspCustomerId = this.identityService.getPspId();
     }
 

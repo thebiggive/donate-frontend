@@ -191,7 +191,7 @@ export class DonationCompleteComponent implements OnInit {
       return;
     }
 
-    if (!this.patchedCorePersonInfo) {
+    if (environment.identityEnabled && !this.patchedCorePersonInfo) {
       const idAndJWT = this.identityService.getIdAndJWT();
       if (idAndJWT) {
         let person = this.buildPersonFromDonation(donation);
