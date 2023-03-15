@@ -66,11 +66,6 @@ export class LoginModalComponent implements OnInit {
     });
   }
 
-  captchaError() {
-    this.loginError = 'Captcha error – please try again';
-    this.loggingIn = false;
-  }
-
   captchaReturn(captchaResponse: string): void {
     if (captchaResponse === null) {
       // We had a code but now don't, e.g. after expiry at 1 minute. In this case

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
 import { getPasswordValidator } from '../validators/validate-passwords-same';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,9 +24,11 @@ import { minPasswordLength } from 'src/environments/common';
     MatInputModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
+    RecaptchaModule,
   ],
 })
 export class ResetPasswordComponent implements OnInit {
+  @ViewChild('captcha') captcha: RecaptchaComponent;
   minPasswordLength: number;
   passwordForm: FormGroup;
   savingNewPassword: boolean = false;

@@ -139,11 +139,16 @@
             </p>
 
             <re-captcha
+              #captcha
+              size="invisible"
+              (resolved)="captchaDonationReturn($event)"
+              siteKey="{{ recaptchaSiteKey }}"
+            ></re-captcha>
+
+            <re-captcha
               #idCaptcha
               size="invisible"
-              errorMode="handled"
               (resolved)="captchaIdentityReturn($event)"
-              (errored)="captchaIdentityError()"
               siteKey="{{ recaptchaIdSiteKey }}"
             ></re-captcha>
 
