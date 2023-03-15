@@ -8,6 +8,7 @@ import { spacingOption } from '../../globals/spacing-option';
   shadow: true,
 })
 export class BiggiveCarousel {
+  
   @Element() host: HTMLBiggiveCarouselElement;
 
   @Prop() spaceBelow: spacingOption = 4;
@@ -21,6 +22,7 @@ export class BiggiveCarousel {
   currentTab = 0;
   itemCount = 0;
   itemWidthPx = 0;
+  columnGapPx = 0;
   sleeve: HTMLElement;
 
   componentDidRender() {
@@ -33,13 +35,13 @@ export class BiggiveCarousel {
       // Item widths are set in CSS so we know they will all be the same.
       this.itemWidthPx = children[0].offsetWidth;
 
-      const columnGapPx = 30;
+      this.columnGapPx = 30;
 
-      this.sleeve.style.width = (this.itemWidthPx + columnGapPx) * children.length - columnGapPx + 'px';
+      this.sleeve.style.width = (this.itemWidthPx + this.columnGapPx) * children.length - this.columnGapPx + 'px';
 
       children.forEach(function (el) {
-        el.style.width = 'calc( 100% / ' + children.length + ' - (( ' + columnGapPx + 'px * ' + (children.length - 1) + ' ) / ' + children.length + ' ) )';
-      });
+        el.style.width = 'calc( 100% / ' + children.length + ' - (( ' + this.columnGapPx + 'px * ' + (children.length - 1) + ' ) / ' + children.length + ' ) )';
+      }, this);
     }
   }
 
@@ -50,7 +52,9 @@ export class BiggiveCarousel {
   showTab(direction: 'NEXT' | 'PREV') {
     const newTab = this.currentTab + (direction === 'PREV' ? -1 : 1);
 
-    if (newTab < 0 || newTab > this.itemCount - 1) {
+//alert(newTab + '\n' + this.itemCount + '\n' + this.columnCount);
+
+    if (newTab < 0 || newTab > this.itemCount - this.columnCount) {
       return;
     }
 
