@@ -170,7 +170,20 @@ export class BiggiveMainMenu {
             ></biggive-social-icon>
             <biggive-social-icon service="Instagram" url="https://www.instagram.com/biggiveorg" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
           </div>
-          <div class="nav-secondary"></div>
+          <div class="nav-secondary">
+            <ul>
+              {/*
+                @todo refactor to remove duplicate code in same file.
+                @todo include "My account" link conditionally for logged in users only
+              */}
+              <li>
+                <a href="https://www.thebiggive.org.uk/s/contact-us">Contact us</a>
+              </li>
+              <li>
+                <a href="https://www.thebiggive.org.uk/charities/s/login">Charity login</a>
+              </li>
+            </ul>
+          </div>
         </div>
         <nav role="navigation" aria-label="Main Menu">
           <div class="navbar">
@@ -312,6 +325,14 @@ export class BiggiveMainMenu {
                         <a href="https://blog.thebiggive.org.uk/press">Press</a>
                       </li>
                     </ul>
+                  </li>
+                </ul>
+                <ul class="mobile-only">
+                  <li>
+                    <a href="https://www.thebiggive.org.uk/s/contact-us">Contact us</a>
+                  </li>
+                  <li>
+                    <a href="https://www.thebiggive.org.uk/charities/s/login">Charity login</a>
                   </li>
                 </ul>
               </div>
