@@ -104,8 +104,10 @@ export class BiggiveMainMenu {
       };
     });
 
-    this.appendPrimaryNavigationLinks();
-    this.appendNavSecondaryLinks();
+    if (!this.usePresetMenuContent) {
+      this.appendPrimaryNavigationLinks();
+      this.appendNavSecondaryLinks();
+    }
   }
 
   render() {
@@ -152,7 +154,11 @@ export class BiggiveMainMenu {
       <Host>
         <div class="row row-top">
           <div class="social-icon-wrap">
-            <slot name="social-icons"></slot>
+            <biggive-social-icon service="Facebook" url="https://www.facebook.com/BigGive.org" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+            <biggive-social-icon service="Twitter" url="https://twitter.com/BigGive" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+            <biggive-social-icon service="LinkedIn" url="https://uk.linkedin.com/company/big-give" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+            <biggive-social-icon service="YouTube" url="https://www.youtube.com/channel/UC9_wH1aaTuZurJ-F9R8GDcA" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+            <biggive-social-icon service="Instagram" url="https://www.instagram.com/biggiveorg" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
           </div>
           <div class="nav-secondary"></div>
         </div>
@@ -179,7 +185,11 @@ export class BiggiveMainMenu {
               </div>
               <div id="nav-primary"></div>
               <div class="mobile-social-icon-wrap mobile-only">
-                <slot name="mobile-social-icons"></slot>
+                <biggive-social-icon service="Facebook" url="https://www.facebook.com/BigGive.org" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+                <biggive-social-icon service="Twitter" url="https://twitter.com/BigGive" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+                <biggive-social-icon service="LinkedIn" url="https://uk.linkedin.com/company/big-give" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+                <biggive-social-icon service="YouTube" url="https://www.youtube.com/channel/UC9_wH1aaTuZurJ-F9R8GDcA" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+                <biggive-social-icon service="Instagram" url="https://www.instagram.com/biggiveorg" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
               </div>
             </div>
           </div>

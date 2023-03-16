@@ -31,11 +31,13 @@ Type: `Promise<void>`
 ### Depends on
 
 - [biggive-misc-icon](../biggive-misc-icon)
+- [biggive-social-icon](../biggive-social-icon)
 
 ### Graph
 ```mermaid
 graph TD;
   biggive-main-menu --> biggive-misc-icon
+  biggive-main-menu --> biggive-social-icon
   style biggive-main-menu fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
