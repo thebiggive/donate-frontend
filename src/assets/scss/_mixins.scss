@@ -208,27 +208,27 @@
   flex-direction: column;
   overflow: hidden;
 
-  @media#{$breakpoint-md} {
+  @media#{$breakpoint-lg} {
     flex-direction: row;
+    :nth-child(1) {
+      padding-left: 0;
+    }
   }
 }
 
 
 @mixin format-icon-list-item {
   display: flex;
-  padding: 20px 30px;
+  padding: 10px 10px;
   align-items: center;
-  width: 33%;
-  @media#{$breakpoint-md} {
-    padding-left: 0;
-  }
+  min-width: 33%; // works when there are 3 icons in each row
+  max-width: 33%; // works when there are less than 3 items in a row
 }
 
 @mixin format-icon-title {
     font-size: 0.9rem;
     margin: auto;
-    width: 65%;
-    padding-left: 10%;
+    width: 90%;
     line-height: 20px;
 }
 

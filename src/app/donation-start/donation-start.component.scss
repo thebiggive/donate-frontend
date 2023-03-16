@@ -304,10 +304,9 @@ a {
   // in campaign-details.component.scss the selector here is `svg` rather than `fa-icon`, but that doesn't seem to work
   // here.
   fa-icon.ng-fa-icon {
-    margin-right: 5px;
     color: $colour-primary; // #2C089BFF
     font-size: 40px;
-    min-width: 3rem;
+    min-width: 5rem;
   }
 
   .c-icon-title {
