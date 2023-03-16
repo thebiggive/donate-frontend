@@ -7,7 +7,6 @@ import { spacingOption } from '../../globals/spacing-option';
   shadow: true,
 })
 export class BiggiveGrid {
-
   @Prop() spaceBelow: number = 4;
 
   @Prop() columnCount: number = 3;

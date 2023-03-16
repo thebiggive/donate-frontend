@@ -1,4 +1,4 @@
-# biggive-carousel
+# biggive-filtered-carousel
 
 
 
@@ -17,15 +17,15 @@
 
 ## Dependencies
 
-### Used by
+### Depends on
 
- - [biggive-filtered-carousel](../biggive-filtered-carousel)
+- [biggive-carousel](../biggive-carousel)
 
 ### Graph
 ```mermaid
 graph TD;
   biggive-filtered-carousel --> biggive-carousel
-  style biggive-carousel fill:#f9f,stroke:#333,stroke-width:4px
+  style biggive-filtered-carousel fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------

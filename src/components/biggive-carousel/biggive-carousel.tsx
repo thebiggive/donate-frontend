@@ -26,21 +26,27 @@ export class BiggiveCarousel {
 
   componentDidRender() {
     this.sleeve = this.host.shadowRoot?.querySelector<HTMLElement>('.sleeve')!;
-    let children: Array<any> = Array.from(this.host.children);
+
+    let children = new Array<HTMLElement>();
+    Array.from(this.host.children).forEach(item => {
+      if (!item.classList.contains('hidden')) {
+        children.push(item as HTMLElement);
+      }
+    });
 
     this.itemCount = children.length;
 
     if (children.length > 0) {
-      // Item widths are set in CSS so we know they will all be the same.
-      this.itemWidthPx = children[0].offsetWidth;
-
       this.columnGapPx = 30;
 
-      this.sleeve.style.width = (this.itemWidthPx + this.columnGapPx) * children.length - this.columnGapPx + 'px';
+      this.itemWidthPx = (this.sleeve.parentElement?.offsetWidth! - (this.columnCount - 1) * this.columnGapPx) / this.columnCount;
 
-      children.forEach(function (el) {
-        el.style.width = 'calc( 100% / ' + children.length + ' - (( ' + this.columnGapPx + 'px * ' + (children.length - 1) + ' ) / ' + children.length + ' ) )';
-      }, this);
+      this.sleeve.style.width = (this.itemWidthPx + this.columnGapPx) * children.length + 'px';
+
+      children.forEach(el => {
+        el.style.width = this.itemWidthPx + 'px';
+        el.style.marginRight = this.columnGapPx + 'px';
+      });
     }
   }
 

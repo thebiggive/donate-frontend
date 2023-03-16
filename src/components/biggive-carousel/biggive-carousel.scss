@@ -15,7 +15,6 @@
     .sleeve {
       display: flex;
       flex-flow: row wrap;
-      justify-content: space-between;
       min-width: 100%;
     }
   }
@@ -53,6 +52,10 @@
     }
   }
 
+}
+
+.container ::slotted(.hidden) {
+  display: none;
 }
 
 .column-count-5 ::slotted(*) {

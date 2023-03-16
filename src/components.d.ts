@@ -494,6 +494,12 @@ export namespace Components {
          */
         "url": string;
     }
+    interface BiggiveFilteredCarousel {
+        "buttonBackgroundColour": brandColour;
+        "buttonIconColour": brandColour;
+        "columnCount": 1 | 2 | 3 | 4 | 5;
+        "spaceBelow": spacingOption;
+    }
     interface BiggiveFooter {
         "headingLevel": 1 | 2 | 3 | 4 | 5 | 6;
     }
@@ -1211,6 +1217,12 @@ declare global {
         prototype: HTMLBiggiveCategoryIconElement;
         new (): HTMLBiggiveCategoryIconElement;
     };
+    interface HTMLBiggiveFilteredCarouselElement extends Components.BiggiveFilteredCarousel, HTMLStencilElement {
+    }
+    var HTMLBiggiveFilteredCarouselElement: {
+        prototype: HTMLBiggiveFilteredCarouselElement;
+        new (): HTMLBiggiveFilteredCarouselElement;
+    };
     interface HTMLBiggiveFooterElement extends Components.BiggiveFooter, HTMLStencilElement {
     }
     var HTMLBiggiveFooterElement: {
@@ -1476,6 +1488,7 @@ declare global {
         "biggive-campaign-highlights": HTMLBiggiveCampaignHighlightsElement;
         "biggive-carousel": HTMLBiggiveCarouselElement;
         "biggive-category-icon": HTMLBiggiveCategoryIconElement;
+        "biggive-filtered-carousel": HTMLBiggiveFilteredCarouselElement;
         "biggive-footer": HTMLBiggiveFooterElement;
         "biggive-form": HTMLBiggiveFormElement;
         "biggive-form-field-select": HTMLBiggiveFormFieldSelectElement;
@@ -2015,6 +2028,12 @@ declare namespace LocalJSX {
           * Url
          */
         "url"?: string;
+    }
+    interface BiggiveFilteredCarousel {
+        "buttonBackgroundColour"?: brandColour;
+        "buttonIconColour"?: brandColour;
+        "columnCount"?: 1 | 2 | 3 | 4 | 5;
+        "spaceBelow"?: spacingOption;
     }
     interface BiggiveFooter {
         "headingLevel"?: 1 | 2 | 3 | 4 | 5 | 6;
@@ -2630,6 +2649,7 @@ declare namespace LocalJSX {
         "biggive-campaign-highlights": BiggiveCampaignHighlights;
         "biggive-carousel": BiggiveCarousel;
         "biggive-category-icon": BiggiveCategoryIcon;
+        "biggive-filtered-carousel": BiggiveFilteredCarousel;
         "biggive-footer": BiggiveFooter;
         "biggive-form": BiggiveForm;
         "biggive-form-field-select": BiggiveFormFieldSelect;
@@ -2692,6 +2712,7 @@ declare module "@stencil/core" {
             "biggive-campaign-highlights": LocalJSX.BiggiveCampaignHighlights & JSXBase.HTMLAttributes<HTMLBiggiveCampaignHighlightsElement>;
             "biggive-carousel": LocalJSX.BiggiveCarousel & JSXBase.HTMLAttributes<HTMLBiggiveCarouselElement>;
             "biggive-category-icon": LocalJSX.BiggiveCategoryIcon & JSXBase.HTMLAttributes<HTMLBiggiveCategoryIconElement>;
+            "biggive-filtered-carousel": LocalJSX.BiggiveFilteredCarousel & JSXBase.HTMLAttributes<HTMLBiggiveFilteredCarouselElement>;
             "biggive-footer": LocalJSX.BiggiveFooter & JSXBase.HTMLAttributes<HTMLBiggiveFooterElement>;
             "biggive-form": LocalJSX.BiggiveForm & JSXBase.HTMLAttributes<HTMLBiggiveFormElement>;
             "biggive-form-field-select": LocalJSX.BiggiveFormFieldSelect & JSXBase.HTMLAttributes<HTMLBiggiveFormFieldSelectElement>;
