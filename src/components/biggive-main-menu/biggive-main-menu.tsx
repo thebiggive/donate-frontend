@@ -150,6 +150,11 @@ export class BiggiveMainMenu {
       </Host>
     );
 
+    /**
+     * @todo restore click handlers deleted after copying below from donate-fronted/src/app/app.component.html
+     * @todo take prop passed in for base domain or environment (e.g. dev|staging|regression|production ) so we can
+     *       output appropriate nav links to stay in same envirionment.
+     */
     const presetContentMenu = () => (
       <Host>
         <div class="row row-top">
@@ -157,7 +162,12 @@ export class BiggiveMainMenu {
             <biggive-social-icon service="Facebook" url="https://www.facebook.com/BigGive.org" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
             <biggive-social-icon service="Twitter" url="https://twitter.com/BigGive" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
             <biggive-social-icon service="LinkedIn" url="https://uk.linkedin.com/company/big-give" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
-            <biggive-social-icon service="YouTube" url="https://www.youtube.com/channel/UC9_wH1aaTuZurJ-F9R8GDcA" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+            <biggive-social-icon
+              service="YouTube"
+              url="https://www.youtube.com/channel/UC9_wH1aaTuZurJ-F9R8GDcA"
+              background-colour="tertiary"
+              icon-colour="black"
+            ></biggive-social-icon>
             <biggive-social-icon service="Instagram" url="https://www.instagram.com/biggiveorg" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
           </div>
           <div class="nav-secondary"></div>
@@ -183,12 +193,138 @@ export class BiggiveMainMenu {
                 </a>
                 <biggive-misc-icon class="bx bx-x" background-colour="transparent" icon-colour="black" icon="MenuClose" onClick={this.closeMobileMenu}></biggive-misc-icon>
               </div>
-              <div id="nav-primary"></div>
+              <div id="nav-primary">
+                <ul class="links" slot="nav-primary">
+                  <li>
+                    <a href="https://donate.thebiggive.org.uk/explore">Explore Campaigns</a>
+                  </li>
+                  <li>
+                    <a href="https://blog.thebiggive.org.uk/charities">For Charities</a>
+                  </li>
+                  <li>
+                    <a href="https://blog.thebiggive.org.uk/funders">For Funders</a>
+                  </li>
+                  <li>
+                    <a>
+                      Match Funding
+                      <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
+                    </a>
+                    <ul class="sub-menu">
+                      <li>
+                        <a href="https://blog.thebiggive.org.uk/match-funding-explained">Match Funding Explained</a>
+                      </li>
+                      <li>
+                        <a href="https://blog.thebiggive.org.uk/impact">Match Funding Impact</a>
+                      </li>
+                      <li class="more">
+                        <a>
+                          Match Funding Opportunities
+                          {/* IMPORTANT: notice this one has a class sub-sub-menu, not sub-menu  */}
+                          <biggive-misc-icon
+                            class="bx bxs-chevron-down sub-sub-menu-arrow arrow"
+                            background-colour="white"
+                            icon-colour="black"
+                            icon="CaretRight"
+                          ></biggive-misc-icon>
+                        </a>
+                        <ul class="sub-sub-menu">
+                          <li>
+                            <a href="https://blog.thebiggive.org.uk/christmas-challenge" class="icon-christmas">
+                              Christmas Challenge
+                            </a>
+                          </li>
+                          <li>
+                            <a href="https://blog.thebiggive.org.uk/champions-for-children" class="icon-children">
+                              Champions for Children
+                            </a>
+                          </li>
+                          <li>
+                            <a href="https://blog.thebiggive.org.uk/green-match-fund" class="icon-green-match">
+                              Green Match Fund
+                            </a>
+                          </li>
+                          <li>
+                            <a href="https://blog.thebiggive.org.uk/women-girls-match-fund" class="icon-women-girls">
+                              Women & Girls Match Fund
+                            </a>
+                          </li>
+                          <li>
+                            <a href="https://blog.thebiggive.org.uk/mental-health-match-fund/" class="icon-mental-health">
+                              Mental Health Match Fund
+                            </a>
+                          </li>
+                          <li>
+                            <a href="https://blog.thebiggive.org.uk/anchor-match-fund/" class="icon-anchor-match">
+                              Anchor Match Fund
+                            </a>
+                          </li>
+                          <li>
+                            <a href="https://blog.thebiggive.org.uk/emergency-campaigns/" class="icon-emergency">
+                              Emergency Match Fund
+                            </a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <a href="https://blog.thebiggive.org.uk/run-your-own-campaign/">Run your match funding campaign</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a>
+                      About Us
+                      <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
+                    </a>
+                    <ul class="sub-menu">
+                      <li>
+                        <a href="https://blog.thebiggive.org.uk/our-people">Our People</a>
+                      </li>
+                      <li>
+                        <a href="https://blog.thebiggive.org.uk/our-story">Our Story</a>
+                      </li>
+                      <li>
+                        <a href="https://blog.thebiggive.org.uk/our-community">Our Community</a>
+                      </li>
+                      <li>
+                        <a href="https://blog.thebiggive.org.uk/our-fees">Our Fees</a>
+                      </li>
+                      <li>
+                        <a href="https://blog.thebiggive.org.uk/faqs">FAQs</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a>
+                      Resources
+                      <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
+                    </a>
+                    <ul class="sub-menu">
+                      <li>
+                        <a href="https://blog.thebiggive.org.uk/case-studies">Case Studies</a>
+                      </li>
+                      <li>
+                        <a href="https://blog.thebiggive.org.uk/blog">Blog</a>
+                      </li>
+                      <li>
+                        <a href="https://blog.thebiggive.org.uk/reports-insights">Reports &amp; Insights</a>
+                      </li>
+                      <li>
+                        <a href="https://blog.thebiggive.org.uk/press">Press</a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
               <div class="mobile-social-icon-wrap mobile-only">
                 <biggive-social-icon service="Facebook" url="https://www.facebook.com/BigGive.org" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
                 <biggive-social-icon service="Twitter" url="https://twitter.com/BigGive" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
                 <biggive-social-icon service="LinkedIn" url="https://uk.linkedin.com/company/big-give" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
-                <biggive-social-icon service="YouTube" url="https://www.youtube.com/channel/UC9_wH1aaTuZurJ-F9R8GDcA" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
+                <biggive-social-icon
+                  service="YouTube"
+                  url="https://www.youtube.com/channel/UC9_wH1aaTuZurJ-F9R8GDcA"
+                  background-colour="tertiary"
+                  icon-colour="black"
+                ></biggive-social-icon>
                 <biggive-social-icon service="Instagram" url="https://www.instagram.com/biggiveorg" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
               </div>
             </div>
