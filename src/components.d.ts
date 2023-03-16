@@ -772,6 +772,10 @@ export namespace Components {
     interface BiggiveMainMenu {
         "closeMobileMenuFromOutside": () => Promise<void>;
         "logoUrl": string;
+        /**
+          * If true, content passed in via slots will be ignored, and this will just render a hard-coded menu that's the same everywhere. When BG2-2286 is done this will be permantly true and the prop will be deleted.
+         */
+        "usePresetMenuContent": boolean;
     }
     interface BiggiveMiscIcon {
         /**
@@ -2246,6 +2250,10 @@ declare namespace LocalJSX {
     }
     interface BiggiveMainMenu {
         "logoUrl"?: string;
+        /**
+          * If true, content passed in via slots will be ignored, and this will just render a hard-coded menu that's the same everywhere. When BG2-2286 is done this will be permantly true and the prop will be deleted.
+         */
+        "usePresetMenuContent"?: boolean;
     }
     interface BiggiveMiscIcon {
         /**
