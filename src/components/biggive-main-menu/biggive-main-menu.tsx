@@ -280,7 +280,7 @@ export class BiggiveMainMenu {
                             </li>
                             <li>
                               <a href={this.blogUrlPrefix + 'women-girls-match-fund'} class="icon-women-girls">
-                                Women & Girls Match Fund
+                                Women &amp; Girls Match Fund
                               </a>
                             </li>
                             <li>
