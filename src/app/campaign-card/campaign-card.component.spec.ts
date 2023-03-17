@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -19,7 +18,6 @@ describe('CampaignCardComponent', () => {
         FontAwesomeModule,
         MatButtonModule,
         MatIconModule,
-        MatProgressBarModule,
         MatSelectModule,
         RouterTestingModule,
       ],

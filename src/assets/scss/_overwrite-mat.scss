@@ -10,20 +10,6 @@
   color: $colour-black !important;
 }
 
-// See also .c-progress { ... } in campaign-details-card.component.scss.
-mat-progress-bar {
-  .mat-progress-bar-background {
-    display: none !important;
-  }
-  .mat-progress-bar-fill::after {
-    background: $colour-black;
-  }
-  .mat-progress-bar-buffer {
-    background: $colour-primary;
-    opacity: 0.24;
-  }
-}
-
 mat-checkbox {
   .mat-checkbox-label {
     white-space: normal;
