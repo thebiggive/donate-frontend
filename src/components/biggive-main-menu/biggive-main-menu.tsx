@@ -12,6 +12,9 @@ export class BiggiveMainMenu {
   // take them as props
   @Prop() blogUrlPrefix: string | undefined;
 
+  /**
+   * E.g. "https://donate.thebiggive.org.uk" for production (currently)
+   */
   @Prop() donateUrlPrefix: string | undefined;
 
   @Prop() experienceUrlPrefix: string | undefined;
@@ -168,17 +171,21 @@ export class BiggiveMainMenu {
     );
 
     const presetContentMenu = () => {
-      if (!this.blogUrlPrefix || !this.blogUrlPrefix.endsWith('/')) {
-        throw new Error('Blog URL prefix must be set and end with /');
+      if (!this.blogUrlPrefix || !this.blogUrlPrefix.startsWith('http')) {
+        throw new Error('Blog URL prefix must be set and start with http');
       }
 
-      if (!this.donateUrlPrefix || !this.donateUrlPrefix.endsWith('/')) {
-        throw new Error('Donate URL prefix must be set and end with /');
+      if (!this.donateUrlPrefix || !this.donateUrlPrefix.startsWith('http')) {
+        throw new Error('Donate URL prefix must set and start with http');
       }
 
-      if (!this.experienceUrlPrefix || !this.experienceUrlPrefix.endsWith('/')) {
-        throw new Error('Experience URL prefix must be set and end with /');
+      if (!this.experienceUrlPrefix || !this.experienceUrlPrefix.startsWith('http')) {
+        throw new Error('Experience URL prefix must be set set and start with http');
       }
+
+      const blogUrl = (relativeUrl: string) => this.blogUrlPrefix + '/' + relativeUrl;
+      const donateUrl = (relativeUrl: string) => this.donateUrlPrefix + '/' + relativeUrl;
+      const experienceUrl = (relativeUrl: string) => this.experienceUrlPrefix + '/' + relativeUrl;
 
       const secondaryNavLinks = (
         <ul>
@@ -188,10 +195,10 @@ export class BiggiveMainMenu {
             </li>
           )}
           <li>
-            <a href={this.experienceUrlPrefix + 's/contact-us'}>Contact us</a>
+            <a href={experienceUrl('s/contact-us')}>Contact us</a>
           </li>
           <li>
-            <a href={this.experienceUrlPrefix + 'charities/s/login'}>Charity login</a>
+            <a href={experienceUrl('charities/s/login')}>Charity login</a>
           </li>
         </ul>
       );
@@ -237,13 +244,13 @@ export class BiggiveMainMenu {
                 <div id="nav-primary">
                   <ul class="links" slot="nav-primary">
                     <li>
-                      <a href={this.donateUrlPrefix + 'explore'}>Explore Campaigns</a>
+                      <a href={donateUrl('explore')}>Explore Campaigns</a>
                     </li>
                     <li>
-                      <a href={this.blogUrlPrefix + 'charities'}>For Charities</a>
+                      <a href={blogUrl('charities')}>For Charities</a>
                     </li>
                     <li>
-                      <a href={this.blogUrlPrefix + 'funders'}>For Funders</a>
+                      <a href={blogUrl('funders')}>For Funders</a>
                     </li>
                     <li>
                       <a onClick={this.noNav}>
@@ -252,10 +259,10 @@ export class BiggiveMainMenu {
                       </a>
                       <ul class="sub-menu">
                         <li>
-                          <a href={this.blogUrlPrefix + 'match-funding-explained'}>Match Funding Explained</a>
+                          <a href={blogUrl('match-funding-explained')}>Match Funding Explained</a>
                         </li>
                         <li>
-                          <a href={this.blogUrlPrefix + 'impact'}>Match Funding Impact</a>
+                          <a href={blogUrl('impact')}>Match Funding Impact</a>
                         </li>
                         <li class="more">
                           <a onClick={this.noNav}>
@@ -270,44 +277,44 @@ export class BiggiveMainMenu {
                           </a>
                           <ul class="sub-sub-menu">
                             <li>
-                              <a href={this.blogUrlPrefix + 'christmas-challenge'} class="icon-christmas">
+                              <a href={blogUrl('christmas-challenge')} class="icon-christmas">
                                 Christmas Challenge
                               </a>
                             </li>
                             <li>
-                              <a href={this.blogUrlPrefix + 'champions-for-children'} class="icon-children">
+                              <a href={blogUrl('champions-for-children')} class="icon-children">
                                 Champions for Children
                               </a>
                             </li>
                             <li>
-                              <a href={this.blogUrlPrefix + 'green-match-fund'} class="icon-green-match">
+                              <a href={blogUrl('green-match-fund')} class="icon-green-match">
                                 Green Match Fund
                               </a>
                             </li>
                             <li>
-                              <a href={this.blogUrlPrefix + 'women-girls-match-fund'} class="icon-women-girls">
+                              <a href={blogUrl('women-girls-match-fund')} class="icon-women-girls">
                                 Women &amp; Girls Match Fund
                               </a>
                             </li>
                             <li>
-                              <a href={this.blogUrlPrefix + 'mental-health-match-fund/'} class="icon-mental-health">
+                              <a href={blogUrl('mental-health-match-fund/')} class="icon-mental-health">
                                 Mental Health Match Fund
                               </a>
                             </li>
                             <li>
-                              <a href={this.blogUrlPrefix + 'anchor-match-fund/'} class="icon-anchor-match">
+                              <a href={blogUrl('anchor-match-fund/')} class="icon-anchor-match">
                                 Anchor Match Fund
                               </a>
                             </li>
                             <li>
-                              <a href={this.blogUrlPrefix + 'emergency-campaigns/'} class="icon-emergency">
+                              <a href={blogUrl('emergency-campaigns/')} class="icon-emergency">
                                 Emergency Match Fund
                               </a>
                             </li>
                           </ul>
                         </li>
                         <li>
-                          <a href={this.blogUrlPrefix + 'run-your-own-campaign/'}>Run your match funding campaign</a>
+                          <a href={blogUrl('run-your-own-campaign/)')}>Run your match funding campaign</a>
                         </li>
                       </ul>
                     </li>
@@ -318,19 +325,19 @@ export class BiggiveMainMenu {
                       </a>
                       <ul class="sub-menu">
                         <li>
-                          <a href={this.blogUrlPrefix + 'our-people'}>Our People</a>
+                          <a href={blogUrl('our-people')}>Our People</a>
                         </li>
                         <li>
-                          <a href={this.blogUrlPrefix + 'our-story'}>Our Story</a>
+                          <a href={blogUrl('our-story')}>Our Story</a>
                         </li>
                         <li>
-                          <a href={this.blogUrlPrefix + 'our-community'}>Our Community</a>
+                          <a href={blogUrl('our-community')}>Our Community</a>
                         </li>
                         <li>
-                          <a href={this.blogUrlPrefix + 'our-fees'}>Our Fees</a>
+                          <a href={blogUrl('our-fees')}>Our Fees</a>
                         </li>
                         <li>
-                          <a href={this.blogUrlPrefix + 'faqs'}>FAQs</a>
+                          <a href={blogUrl('faqs')}>FAQs</a>
                         </li>
                       </ul>
                     </li>
@@ -341,16 +348,16 @@ export class BiggiveMainMenu {
                       </a>
                       <ul class="sub-menu">
                         <li>
-                          <a href={this.blogUrlPrefix + 'case-studies'}>Case Studies</a>
+                          <a href={blogUrl('case-studies')}>Case Studies</a>
                         </li>
                         <li>
-                          <a href={this.blogUrlPrefix + 'blog'}>Blog</a>
+                          <a href={blogUrl('blog')}>Blog</a>
                         </li>
                         <li>
-                          <a href={this.blogUrlPrefix + 'reports-insights'}>Reports &amp; Insights</a>
+                          <a href={blogUrl('reports-insights')}>Reports &amp; Insights</a>
                         </li>
                         <li>
-                          <a href={this.blogUrlPrefix + 'press'}>Press</a>
+                          <a href={blogUrl('press')}>Press</a>
                         </li>
                       </ul>
                     </li>
