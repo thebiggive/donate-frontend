@@ -36,7 +36,8 @@ export default {
     donationCurrency: {
       name: 'Donation Currency',
       control: {
-        type: 'string',
+        type: 'select',
+        options: ['GBP', 'USD'],
       },
     },
   },
@@ -48,17 +49,17 @@ const Template = args => `
                 colour-scheme="${args.colourScheme}"
                 percentage-start="${args.percentageStart}"
                 percentage-end="${args.percentageEnd}"
-                donation-amount="${args.donationAmount}"/>
-                donation-currency="${args.donationCurrency}"/>
-              </biggive-tipping-slider>
+                donation-amount="${args.donationAmount}"
+                donation-currency="${args.donationCurrency}"
+              ></biggive-tipping-slider>
               `;
 
 export const TippingSliderComponent = Template.bind({});
 TippingSliderComponent.args = {
   spaceBelow: 4,
   colourScheme: 'primary',
-  percentageStart: '0',
-  percentageEnd: '30',
-  donationAmount: '200',
-  donationCurrency: '£',
+  percentageStart: 0,
+  percentageEnd: 30,
+  donationAmount: 200,
+  donationCurrency: 'GBP',
 };
