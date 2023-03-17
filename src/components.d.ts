@@ -954,7 +954,10 @@ export namespace Components {
     interface BiggiveTippingSlider {
         "colourScheme": brandColour;
         "donationAmount": number;
-        "donationCurrency": '£';
+        /**
+          * ISO-4217 currency code (e.g. GBP, USD)
+         */
+        "donationCurrency": string;
         "percentageEnd": number;
         "percentageStart": number;
         "spaceBelow": spacingOption;
@@ -2430,7 +2433,10 @@ declare namespace LocalJSX {
     interface BiggiveTippingSlider {
         "colourScheme"?: brandColour;
         "donationAmount"?: number;
-        "donationCurrency"?: '£';
+        /**
+          * ISO-4217 currency code (e.g. GBP, USD)
+         */
+        "donationCurrency": string;
         "percentageEnd"?: number;
         "percentageStart"?: number;
         "spaceBelow"?: spacingOption;
