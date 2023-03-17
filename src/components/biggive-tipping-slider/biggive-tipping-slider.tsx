@@ -25,6 +25,13 @@ export class BiggiveTippingSlider {
    */
   @Prop() donationCurrency!: 'GBP' | 'USD';
 
+  format(currencyCode: 'GBP' | 'USD', amount: number) {
+    return Intl.NumberFormat('en-GB', {
+      style: 'currency',
+      currency: currencyCode,
+    }).format(amount);
+  }
+
   componentDidRender() {
     var isMoving = false;
     const handle = this.host.shadowRoot?.querySelector<HTMLElement>('.handle')!;
@@ -44,7 +51,7 @@ export class BiggiveTippingSlider {
           const donation = Math.round(this.donationAmount * (percentage / 100));
 
           percentageWrap.innerHTML = Math.round(percentage).toString();
-          donationWrap.innerHTML = Math.round(donation).toString();
+          donationWrap.innerHTML = this.format(this.donationCurrency, donation);
 
           handle.style.marginLeft = position + 'px';
         }
@@ -89,12 +96,7 @@ export class BiggiveTippingSlider {
   };
 
   render() {
-    const currencySymbol = Intl.NumberFormat('en-GB', {
-      style: 'currency',
-      currency: this.donationCurrency,
-    })
-      .format(0)
-      .replace(/[0\.]/g, '');
+    const currencyFormatted = this.format(this.donationCurrency, 0);
 
     return (
       <div class={'container space-below-' + this.spaceBelow}>
@@ -102,8 +104,7 @@ export class BiggiveTippingSlider {
           <div class="handle" id="handle">
             <div class="tooltip">
               <span class="donation">
-                {currencySymbol}
-                <span class="donation-value">0</span>
+                <span class="donation-value">{currencyFormatted}</span>
               </span>
               &nbsp;
               <span class="percentage">

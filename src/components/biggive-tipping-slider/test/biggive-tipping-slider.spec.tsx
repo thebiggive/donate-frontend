@@ -15,9 +15,8 @@ describe('biggive-tipping-slider', () => {
               <div class="handle" id="handle">
                 <div class="tooltip">
                   <span class="donation">
-                    £
                     <span class="donation-value">
-                      0
+                      £0.00
                     </span>
                   </span>
                   <span class="percentage">
