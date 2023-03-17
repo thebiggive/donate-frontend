@@ -141,16 +141,21 @@
 }
 
 @mixin make-back-button {
-  @include b-rt-sm;
+  display: inline-block;
+  text-align: left;
   color: $colour-primary;
   margin-bottom: 1rem;
+
   .mat-mdc-icon-button {
+    width: 100%;
     font-weight: 400;
   }
+
   .mat-icon {
     font-size: 1rem;
-    line-height: 23px;
     width: 1rem;
+    line-height: 2.2rem;
+    vertical-align: sub;
   }
 }
 

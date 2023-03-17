@@ -10,7 +10,7 @@ mat-spinner {
 }
 
 .mdc-button__label {
-  font-size: 14px;
+  @include b-rt-sm;
 }
 
 .mdc-form-field {
