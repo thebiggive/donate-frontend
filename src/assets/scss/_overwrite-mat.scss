@@ -27,34 +27,28 @@ mat-spinner {
   margin-top: 16px;
 }
 
-.mdc-text-field--filled {
-  .mat-mdc-form-field-flex {
-    color: mat.get-color-from-palette($donate-primary);
-  }
-
-  .mat-mdc-form-field-infix {
-    padding: 0.3em 0 0.7em 0;
-  }
-}
-
 .mat-mdc-form-field-icon-prefix {
   padding-right: 1rem !important;
 }
 
-.donation-input .mat-mdc-text-field-wrapper {
-  border: 2px mat.get-color-from-palette($donate-primary) solid;
-  border-radius: 10px; // Fixed px, so fields with different font sizes have aligned round corners.
-  margin-bottom: 0.5rem; // Gap between custom border style and active input underline.
-}
+.donation-input {
+  .mat-mdc-text-field-wrapper {
+    border: 2px mat.get-color-from-palette($donate-primary) solid;
+    border-radius: 10px; // Fixed px, so fields with different font sizes have aligned round corners.
+    margin-bottom: 0.5rem; // Gap between custom border style and active input underline.
+  }
 
-.mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
-  padding-top: 14px !important;
-}
+  .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
+    top: 22px;
+  }
 
-.donation-input-main .mat-mdc-form-field-infix {
-  padding: 0.7em 0;
-}
+  .mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
+    padding-top: 14px;
+  }
 
-.mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
-  top: 22px !important;
+  &.donation-input-main {
+    .mat-mdc-form-field-infix {
+      padding: 0.7em 0;
+    }
+  }
 }
