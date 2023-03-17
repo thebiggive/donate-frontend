@@ -93,7 +93,7 @@ jobs:
 
 workflows:
   version: 2
-  build:
+  build-and-maybe-publish:
     jobs:
       - build:
           context:
@@ -103,10 +103,8 @@ workflows:
             - jira/notify:
                 job_type: build
                 environment_type: development
-  # Pushes to `main` publish new package versions, then deploy a
-  # new Storybook Production build.
-  publish-and-deploy-storybook:
-    jobs:
+      # Pushes to `main` publish new package versions, then deploy a
+      # new Storybook Production build.
       - publish:
           requires:
             - build
