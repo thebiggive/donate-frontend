@@ -135,8 +135,8 @@ workflows:
                 job_type: build
                 environment_type: development
       - publish:
-          depends:
-            build
+          requires:
+            - build
           filters:
             branches:
               only:
@@ -151,8 +151,8 @@ workflows:
                 environment_type: production
       # *Any* push to `main` deploys a new Storybook Staging preview.
       - deploy-staging-storybook:
-          depends:
-            build
+          requires:
+            - build
           filters:
             branches:
               only:
@@ -167,8 +167,8 @@ workflows:
                 environment_type: staging
       # Pushes to `main`deploy a new Storybook Production build.
       - deploy-production-storybook:
-          depends:
-            build
+          requires:
+            - build
           filters:
             branches:
               only:
