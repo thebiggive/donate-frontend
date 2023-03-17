@@ -54,3 +54,12 @@ button[mat-button] {
 button#my-account-link {
   margin-right: 1em;
 }
+
+.homeOutsideUK-wrapper {
+  text-align: right;
+  margin-top: 3rem;
+
+  @media #{$breakpoint-md} {
+    margin-top: inherit;
+  }
+}

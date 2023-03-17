@@ -70,7 +70,7 @@ input:disabled {
   }
 }
 
-.mat-mdc-checkbox, .mat-mdc-form-field {
+.mat-mdc-form-field {
   width: 100%;
 }
 
@@ -286,6 +286,11 @@ a {
 
 .homeOutsideUK-wrapper {
   text-align: right;
+  margin-top: 3rem;
+
+  @media #{$breakpoint-md} {
+    margin-top: inherit;
+  }
 }
 
 .id-info {
