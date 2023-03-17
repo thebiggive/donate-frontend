@@ -23,7 +23,7 @@ export class BiggiveTippingSlider {
   /**
    * ISO-4217 currency code (e.g. GBP, USD)
    */
-  @Prop() donationCurrency!: string;
+  @Prop() donationCurrency!: 'GBP' | 'USD';
 
   componentDidRender() {
     var isMoving = false;
