@@ -48,10 +48,3 @@ mat-spinner {
 .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
   top: 22px !important;
 }
-
-// Seems to be needed for the inputs' floating labels to not hug/slightly overlap
-// the field. Angular Material default is equivalent but with 0.9375em.
-.donation-input .mat-form-field-label-wrapper {
-  top: -2.5rem;
-  padding-top: 2.5rem;
-}
