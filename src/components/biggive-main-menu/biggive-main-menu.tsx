@@ -14,6 +14,8 @@ export class BiggiveMainMenu {
 
   @Prop() donateUrlPrefix: string | undefined;
 
+  @Prop() experienceUrlPrefix: string | undefined;
+
   /**
    * Whether the current user is logged in (i.e. is assumed to have a valid JWT). They get links to some
    * extra content if they are.
@@ -174,6 +176,10 @@ export class BiggiveMainMenu {
         throw new Error('Donate URL prefix must be set and end with /');
       }
 
+      if (!this.experienceUrlPrefix || !this.experienceUrlPrefix.endsWith('/')) {
+        throw new Error('Experience URL prefix must be set and end with /');
+      }
+
       const secondaryNavLinks = (
         <ul>
           {this.isLoggedIn && (
@@ -182,10 +188,10 @@ export class BiggiveMainMenu {
             </li>
           )}
           <li>
-            <a href={'https://www.thebiggive.org.uk/s/contact-us'}>Contact us</a>
+            <a href={this.experienceUrlPrefix + 's/contact-us'}>Contact us</a>
           </li>
           <li>
-            <a href={'https://www.thebiggive.org.uk/charities/s/login'}>Charity login</a>
+            <a href={this.experienceUrlPrefix + 'charities/s/login'}>Charity login</a>
           </li>
         </ul>
       );

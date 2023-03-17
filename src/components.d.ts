@@ -773,6 +773,7 @@ export namespace Components {
         "blogUrlPrefix": string | undefined;
         "closeMobileMenuFromOutside": () => Promise<void>;
         "donateUrlPrefix": string | undefined;
+        "experienceUrlPrefix": string | undefined;
         /**
           * Whether the current user is logged in (i.e. is assumed to have a valid JWT). They get links to some extra content if they are.
          */
@@ -2260,6 +2261,7 @@ declare namespace LocalJSX {
     interface BiggiveMainMenu {
         "blogUrlPrefix"?: string | undefined;
         "donateUrlPrefix"?: string | undefined;
+        "experienceUrlPrefix"?: string | undefined;
         /**
           * Whether the current user is logged in (i.e. is assumed to have a valid JWT). They get links to some extra content if they are.
          */
