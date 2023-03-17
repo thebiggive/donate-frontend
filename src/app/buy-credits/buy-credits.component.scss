@@ -25,10 +25,6 @@
     margin-top: 8px;
 }
 
-.mat-mdc-form-field {
-    margin-top: 16px;
-}
-
 button[mat-button] {
     background-color: mat.get-color-from-palette($donate-primary);
     color: white;
@@ -47,22 +43,6 @@ button[mat-button] {
     color: mat.get-color-from-palette($donate-warn);
     font-size: 1rem; // slightly smaller text
     margin: 0;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.*/
-/* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.*/
-mat-radio-group {
-    display: flex;
-    justify-content: space-between;
-    /* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.*/
-    mat-radio-button {
-        width: 50%;
-        padding: 30px;
-        box-shadow: $box-shadow-super-soft;
-        margin: 20px;
-        border-radius: 10px;
-        font-size: 1.2rem;
-    }
 }
 
 #addressWrapper {

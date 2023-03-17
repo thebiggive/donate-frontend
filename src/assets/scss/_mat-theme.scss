@@ -79,7 +79,6 @@ $app-typography: mat.define-typography-config(
 
 @include mat.autocomplete-theme($donate-theme);
 @include mat.button-theme($donate-theme);
-@include mat.fab-theme($donate-theme);
 @include mat.icon-button-theme($donate-theme);
 @include mat.checkbox-theme($donate-theme);
 @include mat.dialog-theme($donate-theme);

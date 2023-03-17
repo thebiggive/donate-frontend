@@ -14,28 +14,16 @@ mat-checkbox {
   }
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.*/
-/* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.*/
-mat-radio-button {
-  margin-bottom: 1rem;
-  /* TODO(mdc-migration): The following rule targets internal classes of radio that may no longer apply for the MDC version.*/
-  .mat-radio-label {
-    white-space: initial;
-  }
-}
-
-button.mat-mdc-icon-button {
-  // Work around Safari layout issue where text following buttons was cut off.
-  // Observed in 'back' links next to `keyboard_arrow_left` icons.
-  width: auto;
-}
-
 mat-spinner {
   margin: 2rem auto;
 }
 
 app-campaign-card {
   width: 100%;
+}
+
+.mdc-form-field {
+  margin-top: 16px;
 }
 
 /* TODO(mdc-migration): The following rule targets internal classes of form-field that may no longer apply for the MDC version.*/
