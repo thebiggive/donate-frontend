@@ -3,7 +3,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -29,7 +28,6 @@ describe('CampaignDetailsComponent', () => {
         HttpClientTestingModule,
         MatButtonModule,
         MatIconModule,
-        MatProgressBarModule,
         MatProgressSpinnerModule,
         MatTabsModule,
         NoopAnimationsModule,
