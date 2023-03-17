@@ -108,6 +108,8 @@ workflows:
   publish-and-deploy-storybook:
     jobs:
       - publish:
+          requires:
+            - build
           filters:
             branches:
               only:
@@ -122,7 +124,12 @@ workflows:
                 environment_type: production
       - deploy-production-storybook:
           requires:
+            - build
             - publish
+          filters:
+            branches:
+              only:
+                - main
           context:
             - docker-hub-creds
             - ecs-deploys # Includes S3 stuff used by Donate frontend.
