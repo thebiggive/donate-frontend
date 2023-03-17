@@ -41,6 +41,9 @@ export class BiggiveMainMenu {
       this.host.shadowRoot!.querySelector('#nav-primary')!.appendChild(node);
     }
   }
+  noNav(event: Event) {
+    event.preventDefault();
+  }
 
   /**
    * Slots the 'nav-secondary' slot into the top right corner of the blue nav bar.
@@ -151,7 +154,6 @@ export class BiggiveMainMenu {
     );
 
     /**
-     * @todo restore click handlers deleted after copying below from donate-fronted/src/app/app.component.html
      * @todo take prop passed in for base domain or environment (e.g. dev|staging|regression|production ) so we can
      *       output appropriate nav links to stay in same envirionment.
      */
@@ -220,7 +222,7 @@ export class BiggiveMainMenu {
                       <a href="https://blog.thebiggive.org.uk/funders">For Funders</a>
                     </li>
                     <li>
-                      <a>
+                      <a onClick={this.noNav}>
                         Match Funding
                         <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
                       </a>
@@ -232,7 +234,7 @@ export class BiggiveMainMenu {
                           <a href="https://blog.thebiggive.org.uk/impact">Match Funding Impact</a>
                         </li>
                         <li class="more">
-                          <a>
+                          <a onClick={this.noNav}>
                             Match Funding Opportunities
                             {/* IMPORTANT: notice this one has a class sub-sub-menu, not sub-menu  */}
                             <biggive-misc-icon
@@ -286,7 +288,7 @@ export class BiggiveMainMenu {
                       </ul>
                     </li>
                     <li>
-                      <a>
+                      <a onClick={this.noNav}>
                         About Us
                         <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
                       </a>
@@ -309,7 +311,7 @@ export class BiggiveMainMenu {
                       </ul>
                     </li>
                     <li>
-                      <a>
+                      <a onClick={this.noNav}>
                         Resources
                         <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
                       </a>
