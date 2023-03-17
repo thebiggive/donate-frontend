@@ -45,22 +45,20 @@ $donate-theme: mat.define-light-theme($donate-primary, $donate-accent, $donate-w
 
 // Adapting Angular Material to override font, including on inputs.
 // https://stackoverflow.com/a/49541553/2803757
-$app-typography: mat.define-legacy-typography-config(
+$app-typography: mat.define-typography-config(
   $font-family:   '"Euclid Triangle", sans-serif',
-  $display-4:     mat.define-typography-level(112px, 112px, 300),
-  $display-3:     mat.define-typography-level(56px, 56px, 400),
-  $display-2:     mat.define-typography-level(45px, 48px, 400),
-  $display-1:     mat.define-typography-level(34px, 40px, 400),
-  $headline:      mat.define-typography-level(24px, 32px, 400),
-  $title:         mat.define-typography-level(20px, 32px, 500),
-  $subheading-2:  mat.define-typography-level(16px, 28px, 400),
-  $subheading-1:  mat.define-typography-level(15px, 24px, 400),
-  $body-2:        mat.define-typography-level(14px, 24px, 500),
-  $body-1:        mat.define-typography-level(14px, 20px, 400),
+  $headline-1:     mat.define-typography-level(112px, 112px, 300),
+  $headline-2:     mat.define-typography-level(56px, 56px, 400),
+  $headline-3:     mat.define-typography-level(45px, 48px, 400),
+  $headline-4:     mat.define-typography-level(34px, 40px, 400),
+  $headline-5:      mat.define-typography-level(24px, 32px, 400),
+  $headline-6:         mat.define-typography-level(20px, 32px, 500),
+  $subtitle-1:  mat.define-typography-level(16px, 28px, 400),
+  $body-1:  mat.define-typography-level(15px, 24px, 400),
+  $subtitle-2:        mat.define-typography-level(14px, 24px, 500),
+  $body-2:        mat.define-typography-level(14px, 20px, 400),
   $caption:       mat.define-typography-level(12px, 20px, 400),
   $button:        mat.define-typography-level(14px, 14px, 500),
-    // Line-height must be unit-less fraction of the font-size.
-  $input:         mat.define-typography-level(16px, 1.25, 400)
 );
 
 // TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
@@ -71,21 +69,23 @@ $app-typography: mat.define-legacy-typography-config(
 //  If you don't need the default component typographies but still want the hierarchy styles,
 //  you can delete this line and instead use:
 //    `@include mat.legacy-typography-hierarchy($app-typography);`
-@include mat.all-legacy-component-typographies($app-typography);
-@include mat.legacy-core();
+@include mat.all-component-typographies($app-typography);
+@include mat.core();
 
 // Include styles only for core + the components we use. SSR currently preloads the lot so it's important to keep
 // this as light (for page weight) as we can.
 // See https://github.com/angular/components/blob/master/guides/theming.md#theming-only-certain-components
-@include mat.legacy-core-theme($donate-theme);
+@include mat.core-theme($donate-theme);
 
-@include mat.legacy-autocomplete-theme($donate-theme);
-@include mat.legacy-button-theme($donate-theme);
-@include mat.legacy-checkbox-theme($donate-theme);
-@include mat.legacy-dialog-theme($donate-theme);
-@include mat.legacy-form-field-theme($donate-theme);
-@include mat.legacy-progress-spinner-theme($donate-theme);
-@include mat.legacy-radio-theme($donate-theme);
-@include mat.legacy-select-theme($donate-theme);
+@include mat.autocomplete-theme($donate-theme);
+@include mat.button-theme($donate-theme);
+@include mat.fab-theme($donate-theme);
+@include mat.icon-button-theme($donate-theme);
+@include mat.checkbox-theme($donate-theme);
+@include mat.dialog-theme($donate-theme);
+@include mat.form-field-theme($donate-theme);
+@include mat.progress-spinner-theme($donate-theme);
+@include mat.radio-theme($donate-theme);
+@include mat.select-theme($donate-theme);
 @include mat.stepper-theme($donate-theme);
-@include mat.legacy-tabs-theme($donate-theme);
+@include mat.tabs-theme($donate-theme);
