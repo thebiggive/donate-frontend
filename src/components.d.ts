@@ -773,6 +773,10 @@ export namespace Components {
         "blogUrlPrefix": string | undefined;
         "closeMobileMenuFromOutside": () => Promise<void>;
         "donateUrlPrefix": string | undefined;
+        /**
+          * Whether the current user is logged in (i.e. is assumed to have a valid JWT). They get links to some extra content if they are.
+         */
+        "isLoggedIn": boolean;
         "logoUrl": string;
         /**
           * If true, content passed in via slots will be ignored, and this will just render a hard-coded menu that's the same everywhere. When BG2-2286 is done this will be permantly true and the prop will be deleted.
@@ -2256,6 +2260,10 @@ declare namespace LocalJSX {
     interface BiggiveMainMenu {
         "blogUrlPrefix"?: string | undefined;
         "donateUrlPrefix"?: string | undefined;
+        /**
+          * Whether the current user is logged in (i.e. is assumed to have a valid JWT). They get links to some extra content if they are.
+         */
+        "isLoggedIn"?: boolean;
         "logoUrl"?: string;
         /**
           * If true, content passed in via slots will be ignored, and this will just render a hard-coded menu that's the same everywhere. When BG2-2286 is done this will be permantly true and the prop will be deleted.

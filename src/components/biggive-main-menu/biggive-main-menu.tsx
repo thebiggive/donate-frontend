@@ -14,6 +14,12 @@ export class BiggiveMainMenu {
 
   @Prop() donateUrlPrefix: string | undefined;
 
+  /**
+   * Whether the current user is logged in (i.e. is assumed to have a valid JWT). They get links to some
+   * extra content if they are.
+   */
+  @Prop() isLoggedIn = false;
+
   @Prop() logoUrl: string = '/';
 
   /**
@@ -170,9 +176,11 @@ export class BiggiveMainMenu {
 
       const secondaryNavLinks = (
         <ul>
-          {/*
-        @todo include "My account" link conditionally for logged in users only
-      */}
+          {this.isLoggedIn && (
+            <li>
+              <a href={this.donateUrlPrefix + 'my-account'}>My Account</a>
+            </li>
+          )}
           <li>
             <a href={'https://www.thebiggive.org.uk/s/contact-us'}>Contact us</a>
           </li>
