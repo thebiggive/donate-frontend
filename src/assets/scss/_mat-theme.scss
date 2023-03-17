@@ -40,9 +40,6 @@ $donate-primary: mat.define-palette($tbg-primary);
 $donate-accent: mat.define-palette($tbg-secondary);
 $donate-warn: mat.define-palette($tbg-error-red);
 
-// Create the theme object (a Sass map containing all of the palettes).
-$donate-theme: mat.define-light-theme($donate-primary, $donate-accent, $donate-warn);
-
 // Adapting Angular Material to override font, including on inputs.
 // https://stackoverflow.com/a/49541553/2803757
 $app-typography: mat.define-typography-config(
@@ -61,15 +58,17 @@ $app-typography: mat.define-typography-config(
   $button:        mat.define-typography-level(14px, 14px, 500),
 );
 
-// TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
-//  The following line adds:
-//    1. Default typography styles for all components
-//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
-//  If you specify typography styles for the components you use elsewhere, you should delete this line.
-//  If you don't need the default component typographies but still want the hierarchy styles,
-//  you can delete this line and instead use:
-//    `@include mat.legacy-typography-hierarchy($app-typography);`
-@include mat.all-component-typographies($app-typography);
+// Create the theme object (a Sass map containing all of the palettes).
+$donate-theme: mat.define-light-theme((
+  color: (
+    primary: $donate-primary,
+    accent: $donate-accent,
+    warn:  $donate-warn,
+  ),
+  typography: $app-typography,
+  density: 0,
+));
+
 @include mat.core();
 
 // Include styles only for core + the components we use. SSR currently preloads the lot so it's important to keep
