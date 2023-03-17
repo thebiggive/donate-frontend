@@ -42,7 +42,15 @@ export class BiggiveTippingSlider {
     var move = (e: MouseEvent | TouchEvent) => {
       if (isMoving) {
         const max = bar.offsetWidth - handle.offsetWidth;
-        const pageX = window.TouchEvent && e instanceof TouchEvent ? e.touches[0]?.pageX : (e as MouseEvent).pageX;
+        let pageX: number | undefined;
+
+        if (window.TouchEvent && e instanceof TouchEvent) {
+          pageX = e.touches[0]?.pageX;
+        } else {
+          // we Know e is a MouseEvent because all platforms that supports TouchEvent would also have
+          // a truthy window.TouchEvent - see https://stackoverflow.com/a/32882849/2803757
+          pageX = (e as MouseEvent).pageX;
+        }
 
         if (typeof pageX != 'undefined') {
           const mousePos = pageX - bar.offsetLeft - handle.offsetWidth / 2;
