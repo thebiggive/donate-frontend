@@ -1,6 +1,6 @@
 import {AsyncPipe, CurrencyPipe, DatePipe} from '@angular/common';
 import { NgModule } from '@angular/core';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatLegacyProgressSpinnerModule as MatProgressSpinnerModule} from '@angular/material/legacy-progress-spinner';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 
 import { allChildComponentImports } from '../../allChildComponentImports';

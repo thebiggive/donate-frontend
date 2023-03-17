@@ -45,7 +45,7 @@ $donate-theme: mat.define-light-theme($donate-primary, $donate-accent, $donate-w
 
 // Adapting Angular Material to override font, including on inputs.
 // https://stackoverflow.com/a/49541553/2803757
-$app-typography: mat.define-typography-config(
+$app-typography: mat.define-legacy-typography-config(
   $font-family:   '"Euclid Triangle", sans-serif',
   $display-4:     mat.define-typography-level(112px, 112px, 300),
   $display-3:     mat.define-typography-level(56px, 56px, 400),
@@ -63,20 +63,29 @@ $app-typography: mat.define-typography-config(
   $input:         mat.define-typography-level(16px, 1.25, 400)
 );
 
-@include mat.core($app-typography);
+// TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
+//  The following line adds:
+//    1. Default typography styles for all components
+//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
+//  If you specify typography styles for the components you use elsewhere, you should delete this line.
+//  If you don't need the default component typographies but still want the hierarchy styles,
+//  you can delete this line and instead use:
+//    `@include mat.legacy-typography-hierarchy($app-typography);`
+@include mat.all-legacy-component-typographies($app-typography);
+@include mat.legacy-core();
 
 // Include styles only for core + the components we use. SSR currently preloads the lot so it's important to keep
 // this as light (for page weight) as we can.
 // See https://github.com/angular/components/blob/master/guides/theming.md#theming-only-certain-components
-@include mat.core-theme($donate-theme);
+@include mat.legacy-core-theme($donate-theme);
 
-@include mat.autocomplete-theme($donate-theme);
-@include mat.button-theme($donate-theme);
-@include mat.checkbox-theme($donate-theme);
-@include mat.dialog-theme($donate-theme);
-@include mat.form-field-theme($donate-theme);
-@include mat.progress-spinner-theme($donate-theme);
-@include mat.radio-theme($donate-theme);
-@include mat.select-theme($donate-theme);
+@include mat.legacy-autocomplete-theme($donate-theme);
+@include mat.legacy-button-theme($donate-theme);
+@include mat.legacy-checkbox-theme($donate-theme);
+@include mat.legacy-dialog-theme($donate-theme);
+@include mat.legacy-form-field-theme($donate-theme);
+@include mat.legacy-progress-spinner-theme($donate-theme);
+@include mat.legacy-radio-theme($donate-theme);
+@include mat.legacy-select-theme($donate-theme);
 @include mat.stepper-theme($donate-theme);
-@include mat.tabs-theme($donate-theme);
+@include mat.legacy-tabs-theme($donate-theme);
