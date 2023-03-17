@@ -47,33 +47,6 @@ h1 {
   overflow-x: scroll;
 }
 
-/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-.mat-tab-label {
-  min-width: 0 !important;
-  padding: 0 !important;
-  margin-right: 40px;
-  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-  .mat-tab-label-content {
-    color: $colour-primary;
-    font-size: medium;
-  }
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-.mat-tab-label-active .mat-tab-label-content {
-  text-decoration: underline;
-}
-
-/* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
-.mat-tab-header-pagination-controls-enabled .mat-tab-header-pagination {
-  height: 30px;
-  width: 30px;
-  border-radius: 30px;
-  margin: auto;
-  box-shadow: 0px 3px 10px -4px rgb(204 192 204);
-}
-
 .c-quotes {
   list-style: none;
   margin: 2rem 0 0 0;
