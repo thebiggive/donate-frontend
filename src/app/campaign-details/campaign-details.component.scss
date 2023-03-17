@@ -134,9 +134,9 @@ h1 {
   @include format-icon-list-item;
 
   svg {
-    margin-right: 5px;
     color: $colour-primary;
     font-size: 40px;
+    min-width: 4rem;
   }
   
   .c-icon-title {
