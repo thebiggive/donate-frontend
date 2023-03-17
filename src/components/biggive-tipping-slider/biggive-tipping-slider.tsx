@@ -35,7 +35,7 @@ export class BiggiveTippingSlider {
     var move = (e: MouseEvent | TouchEvent) => {
       if (isMoving) {
         const max = bar.offsetWidth - handle.offsetWidth;
-        const pageX = (window.TouchEvent && e instanceof TouchEvent) ? e.touches[0]?.pageX : (e as MouseEvent).pageX;
+        const pageX = window.TouchEvent && e instanceof TouchEvent ? e.touches[0]?.pageX : (e as MouseEvent).pageX;
 
         if (typeof pageX != 'undefined') {
           const mousePos = pageX - bar.offsetLeft - handle.offsetWidth / 2;
@@ -102,7 +102,8 @@ export class BiggiveTippingSlider {
           <div class="handle" id="handle">
             <div class="tooltip">
               <span class="donation">
-                {currencySymbol}<span class="donation-value">0</span>
+                {currencySymbol}
+                <span class="donation-value">0</span>
               </span>
               &nbsp;
               <span class="percentage">
