@@ -1,71 +1,54 @@
 // Write all class styling inside elements where possible
 @use '@angular/material' as mat;
 
+// Allow room for dynamically sized header, when needed to avoid obscuring content.
+// Apply globally for now, as it's not clear if we have a finalised long-term layout
+// strategy. If something like this is going to be permenant, we should probably port
+// it to a mixin and give the relevant <main>s utility classes.
+main {
+  @media #{$breakpoint-lg} {
+    padding-top: 40px;
+  }
+}
+
 .mat-ripple {
   display: none;
-}
-
-.mat-tab-label {
-  opacity: 1 !important;
-  color: $colour-black !important;
-}
-
-mat-checkbox {
-  .mat-checkbox-label {
-    white-space: normal;
-  }
-}
-
-mat-radio-button {
-  margin-bottom: 1rem;
-  .mat-radio-label {
-    white-space: initial;
-  }
-}
-
-button.mat-icon-button {
-  // Work around Safari layout issue where text following buttons was cut off.
-  // Observed in 'back' links next to `keyboard_arrow_left` icons.
-  width: auto;
 }
 
 mat-spinner {
   margin: 2rem auto;
 }
 
-app-campaign-card {
-  width: 100%;
+.mdc-button__label {
+  @include b-rt-sm;
 }
 
-.mat-form-field-appearance-outline .mat-form-field-outline {
-  color: mat.get-color-from-palette($donate-primary);
+.mdc-form-field {
+  margin-top: 16px;
 }
 
-.mat-form-field-appearance-outline .mat-form-field-infix {
-  padding: 0.3em 0 0.7em 0;
+.mat-mdc-form-field-icon-prefix {
+  padding-right: 1rem !important;
 }
 
-.mat-form-field-prefix, .mat-form-field-suffix {
-  padding-right: 1rem;
-}
+.donation-input {
+  .mat-mdc-text-field-wrapper {
+    border: 2px mat.get-color-from-palette($donate-primary) solid;
+    border-radius: 10px; // Fixed px, so fields with different font sizes have aligned round corners.
+    margin-bottom: 0.5rem; // Gap between custom border style and active input underline.
+  }
 
-.donation-input .mat-form-field-appearance-legacy .mat-form-field-infix {
-  border: 2px mat.get-color-from-palette($donate-primary) solid;
-  border-radius: 10px; // Fixed px, so fields with different font sizes have aligned round corners.
-  margin-bottom: 0.5rem; // Gap between custom border style and active input underline.
-}
+  .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
+    top: 22px;
+  }
 
-.donation-input-main .mat-form-field-appearance-legacy .mat-form-field-infix {
-  padding: 0.7em 0;
-}
+  .mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
+    padding-top: 14px;
+  }
 
-// Seems to be needed for the inputs' floating labels to not hug/slightly overlap
-// the field. Angular Material default is equivalent but with 0.9375em.
-.donation-input .mat-form-field-label-wrapper {
-  top: -2.5rem;
-  padding-top: 2.5rem;
-}
-
-.donation-input .mat-form-field-appearance-legacy .mat-form-field-underline {
-  height: 0 !important;
+  &.donation-input-main {
+    .mat-mdc-form-field-infix {
+      padding: 0.7em 0;
+    }
+  }
 }

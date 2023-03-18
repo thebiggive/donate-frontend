@@ -44,28 +44,7 @@ input:disabled {
   @include b-rt-1;
 }
 
-// See https://github.com/angular/components/issues/5227#issuecomment-480672986
-// for context of the problem solved for longer `mat-hint`s here.
-:host ::ng-deep .c-donate-form .mat-form-field {
-  .mat-form-field-wrapper {
-      padding-bottom: 0;
-      .mat-form-field-underline {
-          position: initial !important;
-          display: block;
-          margin-top: -1px;
-      }
-      .mat-form-field-subscript-wrapper,
-      .mat-form-field-ripple {
-          position: initial !important;
-          display: table;
-      }
-      .mat-form-field-subscript-wrapper {
-          min-height: calc(1em + 1px);
-      }
-  }
-}
-
-.mat-checkbox, .mat-form-field {
+.mat-mdc-form-field {
   width: 100%;
 }
 
@@ -162,7 +141,6 @@ input:disabled {
   .floating-label {
     white-space: initial; // make text run onto next line instead of overflowing parent div.
     font-size: 16px; // Even larger input fields need small placeholders to fit long charity names.
-    margin-top: 1.5rem;
 
     @media only screen and (max-width: 650px) {
       display: none;
@@ -201,7 +179,7 @@ input:disabled {
   }
 
   .floating-label {
-    margin-top: 2rem;
+    margin-top: 0.4rem;
   }
 
   .form-field {
@@ -251,7 +229,7 @@ a {
   }
 }
 
-.mat-hint {
+.mat-mdc-form-field-hint {
   display: block;
   width: 100%;
 
@@ -281,6 +259,11 @@ a {
 
 .homeOutsideUK-wrapper {
   text-align: right;
+  margin-top: 3rem;
+
+  @media #{$breakpoint-md} {
+    margin-top: inherit;
+  }
 }
 
 .id-info {

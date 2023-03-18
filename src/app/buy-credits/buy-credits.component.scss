@@ -25,10 +25,6 @@
     margin-top: 8px;
 }
 
-.mat-form-field {
-    margin-top: 16px;
-}
-
 button[mat-button] {
     background-color: mat.get-color-from-palette($donate-primary);
     color: white;
@@ -49,19 +45,6 @@ button[mat-button] {
     margin: 0;
 }
 
-mat-radio-group {
-    display: flex;
-    justify-content: space-between;
-    mat-radio-button {
-        width: 50%;
-        padding: 30px;
-        box-shadow: $box-shadow-super-soft;
-        margin: 20px;
-        border-radius: 10px;
-        font-size: 1.2rem;
-    }
-}
-
 #addressWrapper {
     display: inline-grid;
     width: 50%;
@@ -70,4 +53,13 @@ mat-radio-group {
 
 button#my-account-link {
   margin-right: 1em;
+}
+
+.homeOutsideUK-wrapper {
+  text-align: right;
+  margin-top: 3rem;
+
+  @media #{$breakpoint-md} {
+    margin-top: inherit;
+  }
 }
