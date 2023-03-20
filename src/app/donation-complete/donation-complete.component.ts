@@ -53,7 +53,7 @@ export class DonationCompleteComponent implements OnInit {
   private maxTries = 5;
   private patchedCorePersonInfo = false;
   private person?: Person;
-  private retryInterval = 2; // In seconds
+  private retryBaseInterval = 2; // In seconds
   private tries = 0;
 
   faExclamationTriangle = faExclamationTriangle;
@@ -243,9 +243,14 @@ export class DonationCompleteComponent implements OnInit {
       return;
     }
 
-    if (this.tries < this.maxTries) {
+    if (this.tries <= this.maxTries) {
       // Use an anonymous function so `this` context works inside the callback.
-      setTimeout(() => this.checkDonation(), this.retryInterval * 1000);
+
+      setTimeout(
+        () => this.checkDonation(),
+        // Exponential back-off from e.g. 2s to 32s.
+        (this.retryBaseInterval * 1000) ** this.tries,
+      );
       return;
     }
 
