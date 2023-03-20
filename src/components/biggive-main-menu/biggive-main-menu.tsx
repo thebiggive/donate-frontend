@@ -195,10 +195,10 @@ export class BiggiveMainMenu {
             </li>
           )}
           <li>
-            <a href={experienceUrl('s/contact-us')}>Contact us</a>
+            <a href={experienceUrl('s/contact-us')}>Contact Us</a>
           </li>
           <li>
-            <a href={experienceUrl('charities/s/login')}>Charity login</a>
+            <a href={experienceUrl('charities/s/login')}>Charity Login</a>
           </li>
         </ul>
       );
