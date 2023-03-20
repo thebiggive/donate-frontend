@@ -89,13 +89,13 @@ export class IdentityService {
    *  them the opportunity to set a password.
    */
   getLoggedInPerson(): Observable<null|Person> {
-    const jwt = this.getIdAndJWT();
+    const idAndJWT = this.getIdAndJWT();
 
-    if (! jwt) {
+    if (!idAndJWT || !this.isTokenForFinalisedUser(idAndJWT.jwt)) {
       return of(null);
     }
 
-    return this.get(jwt.id, jwt.jwt);
+    return this.get(idAndJWT.id, idAndJWT.jwt);
   }
 
   update(person: Person): Observable<Person> {

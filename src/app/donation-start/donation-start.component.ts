@@ -1215,7 +1215,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   private newDonationError(response: any) {
-    console.log('new donation error:', response);
     let errorMessage: string;
     if (response.message) {
       errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.message}`;
@@ -1296,7 +1295,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   private newDonationSuccess(response: DonationCreatedResponse) {
-    console.log('new donation success:', response);
     this.creatingDonation = false;
 
     const createResponseMissingData = (
