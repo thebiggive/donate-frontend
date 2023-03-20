@@ -23,7 +23,10 @@ export class AppComponent implements AfterViewInit, OnInit {
   public isLoggedIn: boolean = false;
   public flags: { profilePageEnabled: boolean };
 
-  public donateUriPrefix = environment.donateUriPrefix;
+  public readonly donateUriPrefix = environment.donateUriPrefix;
+  public readonly blogUriPrefix = environment.blogUriPrefix
+
+  public readonly experienceUriPrefix = environment.experienceUriPrefix;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -68,7 +71,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       if (window.location.host === 'donate.biggive.org') {
         // donations are currently not working on the new domain. No-one should be visiting that domain yet, but
         // in case they do we redirect them to the old domain for now:
-  
+
         window.location.host = "donate.thebiggive.org.uk";
       }
     }
