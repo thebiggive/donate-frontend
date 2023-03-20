@@ -11,6 +11,7 @@ import {NavigationService} from './navigation.service';
 import {Person} from "./person.model";
 import {IdentityService} from "./identity.service";
 import {flags} from "./featureFlags"
+import {environment} from "../environments/environment";
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,8 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   public isLoggedIn: boolean = false;
   public flags: { profilePageEnabled: boolean };
+
+  public donateUriPrefix = environment.donateUriPrefix;
 
   constructor(
     private analyticsService: AnalyticsService,
