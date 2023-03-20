@@ -28,6 +28,8 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   public readonly experienceUriPrefix = environment.experienceUriPrefix;
 
+  public isDataLoaded = false;
+
   constructor(
     private analyticsService: AnalyticsService,
     private identityService: IdentityService,
@@ -86,6 +88,9 @@ export class AppComponent implements AfterViewInit, OnInit {
 
     this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
       this.isLoggedIn = !! person && !! person.has_password;
+
+      this.isDataLoaded = true;
+
       this.identityService.onJWTModified(() => {
         this.ngOnInit()
       });
