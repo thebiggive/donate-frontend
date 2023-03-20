@@ -191,7 +191,7 @@ export class BiggiveMainMenu {
         <ul>
           {this.isLoggedIn && (
             <li>
-              <a href={this.donateUrlPrefix + 'my-account'}>My Account</a>
+              <a href={donateUrl('my-account')}>My Account</a>
             </li>
           )}
           <li>
