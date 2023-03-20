@@ -50,10 +50,10 @@ export class DonationCompleteComponent implements OnInit {
   profilePageEnabled: boolean = flags.profilePageEnabled;
 
   private donationId: string;
-  private maxTries = 5;
+  private readonly maxTries = 5;
   private patchedCorePersonInfo = false;
   private person?: Person;
-  private retryBaseInterval = 2; // In seconds
+  private readonly retryBaseIntervalSeconds = 2;
   private tries = 0;
 
   faExclamationTriangle = faExclamationTriangle;
@@ -249,7 +249,7 @@ export class DonationCompleteComponent implements OnInit {
       setTimeout(
         () => this.checkDonation(),
         // Exponential back-off from e.g. 2s to 32s.
-        (this.retryBaseInterval * 1000) ** this.tries,
+        (this.retryBaseIntervalSeconds * 1000) ** this.tries,
       );
       return;
     }
