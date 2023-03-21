@@ -62,11 +62,11 @@ export class AppComponent implements AfterViewInit, OnInit {
       this.analyticsService.init();
       this.getSiteControlService.init();
 
-      if (window.location.host === 'donate.biggive.org') {
-        // donations are currently not working on the new domain. No-one should be visiting that domain yet, but
-        // in case they do we redirect them to the old domain for now:
-  
-        window.location.host = "donate.thebiggive.org.uk";
+      // Temporarily client-side redirect the previous non-global domain to the new one.
+      // Once most inbound links are updated, we can probably replace the app redirect
+      // with an infrastructure-level one a la parked domains.
+      if (window.location.host === 'donate.thebiggive.org.uk') {
+        window.location.host = 'donate.biggive.org';
       }
     }
 
