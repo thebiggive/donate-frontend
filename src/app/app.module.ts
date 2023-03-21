@@ -46,19 +46,9 @@ import { TBG_DONATE_ID_STORAGE } from './identity.service';
     CampaignResolver,
     CharityCampaignsResolver,
     DatePipe,
-    // In Universal / SSR mode, `APP_BASE_HREF` should vary according to the host reported
-    // by the browser once client side JS takes over. This is necessary so we can successfully
-    // serve the app on multiple live domains.
     {
       provide: APP_BASE_HREF,
-      useFactory: () => {
-        const ukDonateHost = (new URL(environment.donateUriPrefix)).host;
-        const host = (typeof window === 'undefined' ? '' : window.location.host);
-
-        return host === ukDonateHost
-          ? environment.donateUriPrefix
-          : environment.donateGlobalUriPrefix;
-      },
+      useValue: environment.donateGlobalUriPrefix,
     },
     { provide: TBG_DONATE_ID_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
