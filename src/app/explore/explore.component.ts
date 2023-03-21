@@ -103,7 +103,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
    * If we've filled the viewport plus a reasonable buffer, trigger a search with an increased offset.
    */
   more() {
-    const cardsPerRow = (window.innerWidth < 600 ? 1 : (window.innerWidth < 960 ? 2 : 3));
+    const cardsPerRow = (window.innerWidth < 600 ? 1 : (window.innerWidth < 968 ? 2 : 3));
     const safeNumberOfRows = 2 + (500 + window.scrollY) / 450; // Allow 500px for top stuff; 450px per card row; 2 spare rows
     const safeNumberToLoad = cardsPerRow * safeNumberOfRows;
     if (this.campaigns.length < safeNumberToLoad) {

@@ -141,16 +141,21 @@
 }
 
 @mixin make-back-button {
-  @include b-rt-sm;
+  display: inline-block;
+  text-align: left;
   color: $colour-primary;
   margin-bottom: 1rem;
-  .mat-icon-button {
+
+  .mat-mdc-icon-button {
+    width: 100%;
     font-weight: 400;
   }
+
   .mat-icon {
     font-size: 1rem;
-    line-height: 23px;
     width: 1rem;
+    line-height: 2.2rem;
+    vertical-align: sub;
   }
 }
 
@@ -201,3 +206,54 @@
     row-gap: 30px;
   }
 }
+
+@mixin format-icon-container {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  overflow: hidden;
+
+  @media#{$breakpoint-lg} {
+    flex-direction: row;
+    :nth-child(1) {
+      padding-left: 0;
+    }
+  }
+}
+
+
+@mixin format-icon-list-item {
+  display: flex;
+  padding: 10px 10px;
+  align-items: center;
+  min-width: 28%;
+  padding-left: 20px;
+
+  @media#{$breakpoint-sm} {
+    max-width: 28%;
+  }
+  @media#{$breakpoint-md} {
+    padding-left: 0px;
+  }
+  @media#{$breakpoint-lg} {
+    padding-left: 20px;
+  }
+}
+
+@mixin format-icon-title {
+    font-size: 0.9rem;
+    margin: auto;
+    width: 90%;
+    line-height: 20px;
+    display: block;
+    word-wrap: break-word;
+    padding-left: 20px;
+
+    @media#{$breakpoint-lg} {
+      padding-left: 5px;
+    }
+    @media#{$breakpoint-xl} {
+      padding-left: 10px;
+    }
+}
+

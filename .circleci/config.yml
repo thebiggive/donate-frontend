@@ -1,11 +1,10 @@
 version: 2.1
 
 orbs:
-  aws-ecr: circleci/aws-ecr@8.2.1
-  aws-ecs: circleci/aws-ecs@2.2.1
+  aws-ecr: circleci/aws-ecr@8.1.3
+  aws-ecs: circleci/aws-ecs@3.2.0
   aws-s3: circleci/aws-s3@3.0.0
-  browser-tools: circleci/browser-tools@1.4.0
-  docker: circleci/docker@2.1.2
+  browser-tools: circleci/browser-tools@1.4.1
   jira: circleci/jira@1.3.1
   slack: circleci/slack@4.12.1
 
@@ -184,7 +183,7 @@ workflows:
             - aws-ecr/build-and-push-image
           aws-region: AWS_REGION
           family: 'tbg-regression-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
-          cluster-name: 'tbg-regression-${AWS_REGION}'
+          cluster: 'tbg-regression-${AWS_REGION}'
           container-image-name-updates: 'container=donate,tag=regression-${CIRCLE_SHA1}'
           post-steps:
             - slack/notify:
@@ -219,7 +218,7 @@ workflows:
             - aws-ecr/build-and-push-image
           aws-region: AWS_REGION
           family: 'tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
-          cluster-name: 'tbg-staging-${AWS_REGION}'
+          cluster: 'tbg-staging-${AWS_REGION}'
           container-image-name-updates: 'container=donate,tag=staging-${CIRCLE_SHA1}'
           post-steps:
             - jira/notify:
@@ -263,23 +262,16 @@ workflows:
           repo: '${AWS_ECR_REPO_NAME}'
           region: '${AWS_REGION}'
           tag: 'production,production-${CIRCLE_SHA1}'
-      - hold:
-          name: hold # please check chunk filenames match between previous production-static and push-iamge jobs
-          type: approval
-          requires:
-            - deploy-production-static
-            - aws-ecr/build-and-push-image
       - aws-ecs/deploy-service-update:
           context:
             - ecs-deploys
             - jira
             - slack
           requires:
-            - hold # please check chunk filenames match between previous production-static and push-iamge jobs
             - aws-ecr/build-and-push-image
           aws-region: AWS_REGION
           family: 'tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
-          cluster-name: 'tbg-production-${AWS_REGION}'
+          cluster: 'tbg-production-${AWS_REGION}'
           container-image-name-updates: "container=donate,tag=production-${CIRCLE_SHA1}"
           post-steps:
             - jira/notify:

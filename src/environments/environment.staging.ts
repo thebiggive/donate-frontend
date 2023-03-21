@@ -1,6 +1,8 @@
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.production.ts` unless a `--configuration` is also provided.
 // The list of file replacements can be found in `angular.json`.
+//
+// see also src/app/featureFlags.ts
 
 import { Environment } from './environment.interface';
 
@@ -12,7 +14,7 @@ export const environment: Environment = {
   creditTipsCampaign: 'a056900002LDXWgAAP',
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
-  donateGlobalUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
+  donateGlobalUriPrefix: 'https://donate-staging.thebiggive.global',
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
@@ -20,7 +22,6 @@ export const environment: Environment = {
   googleOptimizeId: null,
   //googleOptimizeId: 'OPT-NV3NHD3', // Bring back when we have an experiment to run
   identityApiPrefix: 'https://identity-staging.thebiggivetest.org.uk/v1',
-  identityEnabled: true,
   maximumDonationAmount: 25000,
   minimumCreditAmount: 500,
   maximumCreditAmount: 25000,
@@ -35,7 +36,6 @@ export const environment: Environment = {
   },
   // https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
   recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
-  recaptchaSiteKey: '6LfJPAceAAAAAPnbqSG-lMNCiawYsTrT_daIW6sq',
   recaptchaIdentitySiteKey: '6LfisFAgAAAAAOPEarzMPQ2gln_0Q-RENbD3bHzd',
   reservationMinutes: 30,
 };

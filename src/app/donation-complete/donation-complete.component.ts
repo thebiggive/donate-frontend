@@ -50,10 +50,10 @@ export class DonationCompleteComponent implements OnInit {
   profilePageEnabled: boolean = flags.profilePageEnabled;
 
   private donationId: string;
-  private maxTries = 5;
+  private readonly maxTries = 5;
   private patchedCorePersonInfo = false;
   private person?: Person;
-  private retryInterval = 2; // In seconds
+  private readonly retryBaseIntervalSeconds = 2;
   private tries = 0;
 
   faExclamationTriangle = faExclamationTriangle;
@@ -191,7 +191,7 @@ export class DonationCompleteComponent implements OnInit {
       return;
     }
 
-    if (environment.identityEnabled && !this.patchedCorePersonInfo) {
+    if (!this.patchedCorePersonInfo) {
       const idAndJWT = this.identityService.getIdAndJWT();
       if (idAndJWT) {
         let person = this.buildPersonFromDonation(donation);
@@ -243,9 +243,14 @@ export class DonationCompleteComponent implements OnInit {
       return;
     }
 
-    if (this.tries < this.maxTries) {
+    if (this.tries <= this.maxTries) {
       // Use an anonymous function so `this` context works inside the callback.
-      setTimeout(() => this.checkDonation(), this.retryInterval * 1000);
+
+      setTimeout(
+        () => this.checkDonation(),
+        // Exponential back-off from e.g. 2s to 32s.
+        (this.retryBaseIntervalSeconds * 1000) ** this.tries,
+      );
       return;
     }
 

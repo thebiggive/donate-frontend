@@ -1,5 +1,5 @@
 import { Environment } from './environment.interface';
-
+// // see also src/app/featureFlags.ts
 export const environment: Environment = {
   environmentId: "production",
   production: true,
@@ -16,7 +16,6 @@ export const environment: Environment = {
   googleOptimizeId: null,
   // googleOptimizeId: 'OPT-W78W6BT', // Bring back when we have an experiment to run
   identityApiPrefix: 'https://identity-production.thebiggive.org.uk/v1',
-  identityEnabled: true,
   maximumDonationAmount: 25000,
   minimumCreditAmount: 500,
   maximumCreditAmount: 25000,
@@ -31,7 +30,6 @@ export const environment: Environment = {
   },
   // https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
   recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
-  recaptchaSiteKey: '6LfmOwceAAAAAAYciCtwF6ZPQHJdvJZ5cqYqm1kk',
   recaptchaIdentitySiteKey: '6Lc9uFAgAAAAADPHW12p_oJ3QxcNA3xglajo5hl2',
   reservationMinutes: 30,
 };

@@ -139,16 +139,11 @@
             </p>
 
             <re-captcha
-              #captcha
-              size="invisible"
-              (resolved)="captchaDonationReturn($event)"
-              siteKey="{{ recaptchaSiteKey }}"
-            ></re-captcha>
-
-            <re-captcha
               #idCaptcha
               size="invisible"
+              errorMode="handled"
               (resolved)="captchaIdentityReturn($event)"
+              (errored)="captchaIdentityError()"
               siteKey="{{ recaptchaIdSiteKey }}"
             ></re-captcha>
 
@@ -444,6 +439,7 @@
                 type="submit"
                 class="c-donate-button b-donate-button b-w-100 b-rt-1"
                 mat-raised-button
+                color="primary"
                 [disabled]="submitting || donationForm.invalid"
               >
                 Donate
@@ -529,7 +525,10 @@
             <div class="icons">
               <li *ngFor="let category of campaign.categories" class="icon-wrapper">
                 <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
-                <span class="c-icon-title">{{ category }}</span>
+                <span class="c-icon-title">
+                  <!-- add zero width space to allow line break -->
+                  {{ category.split('/').join('/\u200B') }}
+                </span>
               </li>
             </div>
 
@@ -538,7 +537,10 @@
             <div class="icons">
               <li *ngFor="let beneficiary of campaign.beneficiaries" class="icon-wrapper">
                 <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
-                <span class="c-icon-title">{{ beneficiary }}</span>
+                <span class="c-icon-title">
+                  <!-- add zero width space to allow line break -->
+                  {{ beneficiary.split('/').join('/\u200B') }}
+                </span>
               </li>
             </div>
           </div>

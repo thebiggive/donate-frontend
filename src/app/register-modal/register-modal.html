@@ -6,7 +6,9 @@
       <re-captcha
         #captcha
         size="invisible"
+        errorMode="handled"
         (resolved)="captchaReturn($event)"
+        (errored)="captchaError()"
         siteKey="{{ recaptchaIdSiteKey }}"
       ></re-captcha>
 
@@ -33,8 +35,14 @@
       <p *ngIf="registerError" class="error" aria-live="assertive">
         Registration error: {{ registerError }}
       </p>
+
+      <p *ngIf="registerErrorHtml" class="error" aria-live="assertive">
+        Registration error: <span [innerHtml]="registerErrorHtml"></span>
+      </p>
+
+
     </form>
-  
+
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">

@@ -1,17 +1,11 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatSelectModule } from '@angular/material/select';
-import { RouterTestingModule } from '@angular/router/testing';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {MyAccountComponent} from "./my-account.component";
 import {HttpClientModule} from "@angular/common/http";
 import {IdentityService, TBG_DONATE_ID_STORAGE} from '../identity.service';
 import {InMemoryStorageService} from "ngx-webstorage-service";
 import {DonationService, TBG_DONATE_STORAGE} from "../donation.service";
 import {of} from "rxjs";
-import {Component, NO_ERRORS_SCHEMA} from "@angular/core";
+import {NO_ERRORS_SCHEMA} from "@angular/core";
 import {PaymentMethod} from "@stripe/stripe-js";
 
 describe('MyAccountComponent', () => {

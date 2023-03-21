@@ -8,7 +8,7 @@
         <h3 class="b-rh-1 b-bold">Purchase Donation Credits</h3>
 
         <form *ngIf="isLoggedIn && !isLoading && !isPurchaseComplete" [formGroup]="creditForm">
-            <mat-stepper orientation="vertical" [linear]="true" #stepper (selectionChange)="stepChanged($event)">
+            <mat-stepper orientation="vertical" [linear]="true" #stepper>
                 <mat-step
                     [completed]="false"
                     formGroupName="amounts"
@@ -75,13 +75,6 @@
                         <li>Providing match funds in our Anchor Match Fund. Through tips, charities will receive funding to launch their own match-funded campaign on Big Give.</li>
                     </ul>
                     <p>Thank you for your generosity! Your tip ensures that we can continue to support charities and causes that are important to you.</p>
-
-                    <re-captcha
-                        #captcha
-                        size="invisible"
-                        (resolved)="captchaDonationReturn($event)"
-                        siteKey="{{ recaptchaSiteKey }}"
-                    ></re-captcha>
 
                     <div>
                         <button mat-button matStepperNext>Next</button>

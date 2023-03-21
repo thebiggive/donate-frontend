@@ -2,6 +2,7 @@
 <main class="c-my-account">
   <div class="my-account">
     <biggive-page-section>
+      <div class="heading-wrapper">
       <biggive-heading
         space-above=0
         space-below=1
@@ -11,6 +12,7 @@
         align="center"
         text="Your Account"
       ></biggive-heading>
+      </div>
       <h2>Your Details</h2>
       <table *ngIf="person" id="personal-details">
         <!--
@@ -49,14 +51,22 @@
           <!-- We have the card brand twice in the DOM for display in mobile & desktop in different positions. Only one
           is visible at any time
           -->
-          <td class="cardBrand">{{(method.card?.brand || method.type).toUpperCase()}}</td>
-          <td>
+          <td class="cardBrand">
             <div class="cardBrand">{{(method.card?.brand || method.type).toUpperCase()}}</div>
             <div *ngIf="method.card !== undefined">
-            Card Ending: {{method.card.last4}} <br/>
+              Card Ending: {{method.card.last4}}
+            </div>
+            <div class="cardExpiry" *ngIf="method.card !== undefined">
+              Expiry Date: {{method.card.exp_month.toString().padStart(2, "0")}}/{{method.card.exp_year}}
+            </div>
+          </td>
+
+          <td class="cardExpiry">
+            <div *ngIf="method.card !== undefined">
             Expiry Date: {{method.card.exp_month.toString().padStart(2, "0")}}/{{method.card.exp_year}}
             </div>
           </td>
+
           <td>
             <biggive-button
               space-above="5"
@@ -69,6 +79,7 @@
               />
           </td>
         </tr>
+
       </table>
 
       <div *ngIf="paymentMethods !== undefined && paymentMethods.length === 0">

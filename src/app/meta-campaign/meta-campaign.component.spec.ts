@@ -6,7 +6,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -80,7 +79,6 @@ describe('MetaCampaignComponent', () => {
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatIconModule,
         MatInputModule,
-        MatProgressBarModule,
         MatProgressSpinnerModule,
         MatSelectModule,
         NoopAnimationsModule,
