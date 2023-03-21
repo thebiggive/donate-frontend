@@ -6,7 +6,6 @@ export interface Environment {
   environmentId: EnvironmentID,
   production: boolean,
   productionLike: boolean,
-  redirectHomepageToChirstmasChallenge: boolean,
   creditTipsCampaign: string,
   apiUriPrefix: string
   creditDonationsEnabled: boolean

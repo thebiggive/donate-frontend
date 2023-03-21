@@ -4,7 +4,6 @@ export const environment: Environment = {
   environmentId: "production",
   production: true,
   productionLike: true,
-  redirectHomepageToChirstmasChallenge: false,
   creditTipsCampaign: 'a056900002LDXWgAAP',
   apiUriPrefix: 'https://sf-api-production.thebiggive.org.uk',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
