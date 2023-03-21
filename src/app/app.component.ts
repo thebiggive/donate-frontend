@@ -11,6 +11,7 @@ import {NavigationService} from './navigation.service';
 import {Person} from "./person.model";
 import {IdentityService} from "./identity.service";
 import {flags} from "./featureFlags"
+import {environment} from "../environments/environment";
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,13 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   public isLoggedIn: boolean = false;
   public flags: { profilePageEnabled: boolean };
+
+  public readonly donateUriPrefix = environment.donateUriPrefix;
+  public readonly blogUriPrefix = environment.blogUriPrefix
+
+  public readonly experienceUriPrefix = environment.experienceUriPrefix;
+
+  public isDataLoaded = false;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -65,7 +73,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       if (window.location.host === 'donate.biggive.org') {
         // donations are currently not working on the new domain. No-one should be visiting that domain yet, but
         // in case they do we redirect them to the old domain for now:
-  
+
         window.location.host = "donate.thebiggive.org.uk";
       }
     }
@@ -80,6 +88,9 @@ export class AppComponent implements AfterViewInit, OnInit {
 
     this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
       this.isLoggedIn = !! person && !! person.has_password;
+
+      this.isDataLoaded = true;
+
       this.identityService.onJWTModified(() => {
         this.ngOnInit()
       });

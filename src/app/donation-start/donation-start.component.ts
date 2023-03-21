@@ -403,6 +403,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
       if (data && data.id) {
         this.loadAuthedPersonInfo(data.id, data.jwt);
+        location.reload(); // ensures correct menu is displayed
       }
     });
   }
@@ -416,6 +417,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.donationForm.reset();
     this.identityService.clearJWT();
     this.idCaptcha.reset();
+
+    location.reload();
   }
 
   summariseAddressSuggestion(suggestion: GiftAidAddressSuggestion | string | undefined): string {
