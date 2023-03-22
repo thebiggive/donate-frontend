@@ -20,7 +20,17 @@ export class BiggiveTippingSlider {
 
   @Prop() donationAmount: number;
 
-  @Prop() donationCurrency: '£';
+  /**
+   * ISO-4217 currency code (e.g. GBP, USD)
+   */
+  @Prop() donationCurrency!: 'GBP' | 'USD';
+
+  format(currencyCode: 'GBP' | 'USD', amount: number) {
+    return Intl.NumberFormat('en-GB', {
+      style: 'currency',
+      currency: currencyCode,
+    }).format(amount);
+  }
 
   componentDidRender() {
     var isMoving = false;
@@ -32,11 +42,14 @@ export class BiggiveTippingSlider {
     var move = (e: MouseEvent | TouchEvent) => {
       if (isMoving) {
         const max = bar.offsetWidth - handle.offsetWidth;
-        let pageX;
+        let pageX: number | undefined;
+
         if (window.TouchEvent && e instanceof TouchEvent) {
           pageX = e.touches[0]?.pageX;
-        } else if (window.MouseEvent && e instanceof MouseEvent) {
-          pageX = e.pageX;
+        } else {
+          // we Know e is a MouseEvent because all platforms that supports TouchEvent would also have
+          // a truthy window.TouchEvent - see https://stackoverflow.com/a/32882849/2803757
+          pageX = (e as MouseEvent).pageX;
         }
 
         if (pageX) {
@@ -46,7 +59,7 @@ export class BiggiveTippingSlider {
           const donation = Math.round(this.donationAmount * (percentage / 100));
 
           percentageWrap.innerHTML = Math.round(percentage).toString();
-          donationWrap.innerHTML = Math.round(donation).toString();
+          donationWrap.innerHTML = this.format(this.donationCurrency, donation);
 
           handle.style.marginLeft = position + 'px';
         }
@@ -91,14 +104,15 @@ export class BiggiveTippingSlider {
   };
 
   render() {
+    const currencyFormatted = this.format(this.donationCurrency, 0);
+
     return (
       <div class={'container space-below-' + this.spaceBelow}>
         <div class="bar">
           <div class="handle" id="handle">
             <div class="tooltip">
               <span class="donation">
-                {this.donationCurrency}
-                <span class="donation-value">0</span>
+                <span class="donation-value">{currencyFormatted}</span>
               </span>
               &nbsp;
               <span class="percentage">

@@ -5,10 +5,10 @@ describe('biggive-tipping-slider', () => {
   it('renders', async () => {
     const page = await newSpecPage({
       components: [BiggiveTippingSlider],
-      html: `<biggive-tipping-slider></biggive-tipping-slider>`,
+      html: `<biggive-tipping-slider donation-currency="GBP"></biggive-tipping-slider>`,
     });
     expect(page.root).toEqualHtml(`
-      <biggive-tipping-slider>
+      <biggive-tipping-slider donation-currency="GBP">
         <mock:shadow-root>
           <div class="container space-below-0">
             <div class="bar">
@@ -16,7 +16,7 @@ describe('biggive-tipping-slider', () => {
                 <div class="tooltip">
                   <span class="donation">
                     <span class="donation-value">
-                      0
+                      £0.00
                     </span>
                   </span>
                   <span class="percentage">

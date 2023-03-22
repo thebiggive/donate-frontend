@@ -7,6 +7,6 @@ describe('biggive-search', () => {
       components: [BigGiveSearch],
       html: `<biggive-search></biggive-search>`,
     });
-    expect(page.root?.shadowRoot).not.toBe(null);
+    expect(page.root!.shadowRoot).not.toBe(null);
   });
 });

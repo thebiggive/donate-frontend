@@ -18,132 +18,14 @@
     </style>
   </head>
   <body>
-    <biggive-main-menu>
-      <div slot="social-icons">
-        <biggive-social-icon service="Facebook" url="https://www.facebook.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
-        <biggive-social-icon service="Twitter" url="https://www.twitter.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
-        <biggive-social-icon service="LinkedIn" url="https://www.linkedin.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
-        <biggive-social-icon service="YouTube" url="https://www.youtube.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
-        <biggive-social-icon service="Instagram" url="https://www.instagram.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
-      </div>
-      <div slot="mobile-social-icons">
-        <biggive-social-icon service="Facebook" url="https://www.facebook.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
-        <biggive-social-icon service="Twitter" url="https://www.twitter.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
-        <biggive-social-icon service="LinkedIn" url="https://www.linkedin.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
-        <biggive-social-icon service="YouTube" url="https://www.youtube.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
-        <biggive-social-icon service="Instagram" url="https://www.instagram.com" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
-      </div>
-      <ul class="links" slot="nav-primary">
-        <li>
-          <a href="#">Explore Campaigns</a>
-        </li>
-        <li>
-          <a href="#">
-            Match Funding
-            <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
-          </a>
 
-          <ul class="sub-menu">
-            <li>
-              <a href="#">Match Funding Explained</a>
-            </li>
-            <li class="more">
-              <a href="#">
-                Match Funding Opportunities
-                <!-- IMPORTANT: notice this one has a class sub-sub-menu, not sub-menu -->
-                <biggive-misc-icon class="bx bxs-chevron-down sub-sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon> 
-              </a>
-              <ul class="sub-sub-menu">
-                <li>
-                  <a href="#" class="icon-christmas">
-                    Christmas Challenge
-                  </a>
-                </li>
-                <li>
-                  <a href="#" class="icon-children">
-                    Champions for Children
-                  </a>
-                </li>
-                <li>
-                  <a href="#" class="icon-green-match">
-                    Green Match Fund
-                  </a>
-                </li>
-                <li>
-                  <a href="#" class="icon-women-girls">
-                    Women & Girls Match Fund
-                  </a>
-                </li>
-                <li>
-                  <a href="#" class="icon-emergency">
-                    Emergency Match Fund
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a href="#">Run your match funding campaign</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#">
-            About us
-            <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
-          </a>
-          <ul class="sub-menu">
-            <li>
-              <a href="#">Our Story</a>
-            </li>
-            <li>
-              <a href="#">Our People</a>
-            </li>
-            <li>
-              <a href="#">Our Community</a>
-            </li>
-            <li>
-              <a href="#">Our Fees</a>
-            </li>
-            <li>
-              <a href="#">FAQs</a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="#">For Charities</a>
-        </li>
-        <li>
-          <a href="#">For Funders</a>
-        </li>
-        <li>
-          <a href="#">
-            Resources
-            <biggive-misc-icon class="bx bxs-chevron-down sub-menu-arrow arrow" background-colour="white" icon-colour="black" icon="CaretRight"></biggive-misc-icon>
-          </a>
-          <ul class="sub-menu">
-            <li>
-              <a href="#">Case Studies</a>
-            </li>
-            <li>
-              <a href="#">Webinars</a>
-            </li>
-            <li>
-              <a href="#">Blog</a>
-            </li>
-            <li>
-              <a href="#">Reports & Insights</a>
-            </li>
-            <li>
-              <a href="#">Press</a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <ul slot="nav-secondary">
-        <li><a href="#">Contact us</a></li>
-        <li><a href="#">Charity login</a></li>
-      </ul>
-    </biggive-main-menu>
+  <biggive-main-menu
+    use-preset-menu-content="true"
+    donate-url-prefix="http://localhost:4200"
+    blog-url-prefix="http://localhost:30003"
+    experience-url-prefix="https://www.thebiggive.org.uk"
+    is-logged-in="false"
+  ></biggive-main-menu>
 
     <biggive-totalizer
     space-below="0"
@@ -402,7 +284,7 @@
 
       
       <biggive-timeline space-below="6" entry-background-colour="grey-extra-light" entry-text-colour="tertiary">
-      
+
         <biggive-timeline-entry date="2022-01-01" heading="Heading 1">
           <p>This is the content</p>
         </biggive-timeline-entry>
@@ -412,67 +294,6 @@
         </biggive-timeline-entry>
 
         <biggive-timeline-entry date="2023-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-      
-        <biggive-timeline-entry date="2024-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-
-        <biggive-timeline-entry date="2025-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-
-        <biggive-timeline-entry date="2026-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-
-        <biggive-timeline-entry date="2027-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-
-        <biggive-timeline-entry date="2028-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-
-        <biggive-timeline-entry date="2029-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-
-        <biggive-timeline-entry date="2030-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-
-        <biggive-timeline-entry date="2031-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-
-        <biggive-timeline-entry date="2032-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-
-        <biggive-timeline-entry date="2033-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-
-        <biggive-timeline-entry date="2034-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-
-        <biggive-timeline-entry date="2035-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-
-        <biggive-timeline-entry date="2036-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-
-
-        <biggive-timeline-entry date="2037-01-01" heading="Heading 3">
-          <p>This is the content</p>
-        </biggive-timeline-entry>
-
-        <biggive-timeline-entry date="2038-01-01" heading="Heading 3">
           <p>This is the content</p>
         </biggive-timeline-entry>
 
@@ -943,7 +764,7 @@
           <p>2 Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
           <p>Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
         </biggive-tab>
-        
+
         <biggive-tab tab-title="GHI">
           <p>3 Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
           <p>Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
@@ -967,7 +788,7 @@
 
 
 
-      <biggive-tipping-slider percentage-start="0" percentage-end="30" donation-amount="200" donation-currency="£"></biggive-tipping-slider>
+      <biggive-tipping-slider percentage-start="0" percentage-end="30" donation-amount="200" donation-currency="GBP"></biggive-tipping-slider>
 
       <biggive-branded-image
         space-below="3"

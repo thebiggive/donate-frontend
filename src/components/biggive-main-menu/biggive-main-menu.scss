@@ -1,5 +1,13 @@
 :host {
-  display: block;
+  display: block !important;
+}
+
+:host(.fixed) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
 }
 
 * {
@@ -62,7 +70,7 @@ a {
   display: flex;
 
   .social-icon-wrap {
-    margin-right: $spacer-3;
+    margin-right: $spacer-2;
   }
 
   .nav-secondary {
@@ -96,7 +104,7 @@ a {
     display: flex;
 
     .social-icon-item {
-      margin-right: $spacer-3;
+      margin-right: $spacer-2;
     }
   }
 }
@@ -296,7 +304,7 @@ nav {
   }
 }
 
-@media (max-width: 968px) {
+@media (max-width: $screen-large) {
   .mobile-only {
     display: block !important;
   }
