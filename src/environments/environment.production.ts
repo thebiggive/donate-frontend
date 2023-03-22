@@ -11,7 +11,7 @@ export const environment: Environment = {
   donateGlobalUriPrefix: 'https://donate.biggive.org',
   donateUriPrefix: 'https://donate.thebiggive.org.uk',
   experienceUriPrefix: 'https://www.thebiggive.org.uk',
-  blogUriPrefix: 'https://blog.thebiggive.org.uk',
+  blogUriPrefix: 'https://biggive.org',
   donationsApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-1',
