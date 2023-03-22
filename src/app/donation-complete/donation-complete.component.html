@@ -1,3 +1,4 @@
+<div *ngIf="isDataLoaded">
 <div *ngIf="complete" id="banner-thank-you"></div>
 
 <main class="c-donate-complete">
@@ -160,4 +161,11 @@
       <a [routerLink]="'/campaign/' + campaign?.id">Back to campaign page</a>
     </div>
   </div>
+  <re-captcha
+    #captcha
+    size="invisible"
+    (resolved)="loginCaptchaReturn($event)"
+    siteKey="{{ recaptchaIdSiteKey }}"
+  ></re-captcha>
 </main>
+</div>

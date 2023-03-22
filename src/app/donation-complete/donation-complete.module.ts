@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {RecaptchaModule} from 'ng-recaptcha';
+import {RecaptchaComponent, RecaptchaModule} from 'ng-recaptcha';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { DonationCompleteComponent } from './donation-complete.component';
@@ -22,5 +22,6 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
     FontAwesomeModule,
   ],
   declarations: [DonationCompleteComponent],
+  providers: [RecaptchaComponent]
 })
 export class DonationCompleteModule {}
