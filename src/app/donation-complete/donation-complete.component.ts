@@ -249,7 +249,7 @@ export class DonationCompleteComponent implements OnInit {
       setTimeout(
         () => this.checkDonation(),
         // Exponential back-off from e.g. 2s to 32s.
-        (this.retryBaseIntervalSeconds * 1000) ** this.tries,
+        (this.retryBaseIntervalSeconds * 1000) * 2 ** this.tries,
       );
       return;
     }
