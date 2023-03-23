@@ -12,7 +12,7 @@ export class BiggiveCarousel {
 
   @Prop() spaceBelow: spacingOption = 4;
 
-  @Prop() columnCount: number = 3;
+  @Prop() columnCount: 1 | 2 | 3 | 4 | 5 = 3;
 
   @Prop() buttonBackgroundColour: brandColour = 'white';
 
@@ -21,21 +21,31 @@ export class BiggiveCarousel {
   currentTab = 0;
   itemCount = 0;
   itemWidthPx = 0;
+  columnGapPx = 0;
   sleeve: HTMLElement;
 
   componentDidRender() {
     this.sleeve = this.host.shadowRoot?.querySelector<HTMLElement>('.sleeve')!;
-    let children: Array<any> = Array.from(this.host.children);
+
+    let children = new Array<HTMLElement>();
+    Array.from(this.host.children).forEach(item => {
+      if (!item.classList.contains('hidden')) {
+        children.push(item as HTMLElement);
+      }
+    });
 
     this.itemCount = children.length;
 
     if (children.length > 0) {
-      // Item widths are set in CSS so we know they will all be the same.
-      this.itemWidthPx = children[0].offsetWidth;
-      this.sleeve.style.width = this.itemWidthPx * children.length + 'px';
+      this.columnGapPx = 30;
 
-      children.forEach(function (el) {
-        el.style.width = 'calc( 100% / ' + children.length + ' )';
+      this.itemWidthPx = (this.sleeve.parentElement?.offsetWidth! - (this.columnCount - 1) * this.columnGapPx) / this.columnCount;
+
+      this.sleeve.style.width = (this.itemWidthPx + this.columnGapPx) * children.length + 'px';
+
+      children.forEach(el => {
+        el.style.width = this.itemWidthPx + 'px';
+        el.style.marginRight = this.columnGapPx + 'px';
       });
     }
   }
@@ -47,11 +57,11 @@ export class BiggiveCarousel {
   showTab(direction: 'NEXT' | 'PREV') {
     const newTab = this.currentTab + (direction === 'PREV' ? -1 : 1);
 
-    if (newTab < 0 || newTab > this.itemCount - 1) {
+    if (newTab < 0 || newTab > this.itemCount - this.columnCount) {
       return;
     }
 
-    const pos = 0 - this.itemWidthPx * newTab;
+    const pos = 0 - (this.itemWidthPx + this.columnGapPx) * newTab;
 
     this.sleeve.style.transitionDuration = '0.3s';
     this.sleeve.style.transitionTimingFunction = 'ease-out';

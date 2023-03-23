@@ -1,4 +1,6 @@
 import { Component, Prop, h } from '@stencil/core';
+import { brandColour } from '../../globals/brand-colour';
+import { spacingOption } from '../../globals/spacing-option';
 
 @Component({
   tag: 'biggive-article-card',
@@ -6,78 +8,105 @@ import { Component, Prop, h } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveArticleCard {
-  /**
-   * Space below component
-   */
-  @Prop() spaceBelow: number = 0;
-  /**
-   * Card background colour
-   */
-  @Prop() backgroundColour: string = 'white';
-  /**
-   * Card background colour hover
-   */
-  @Prop() backgroundColourHover: string = 'tertiary';
-  /**
-   * Text colour
-   */
-  @Prop() textColour: string = 'black';
-  /**
-   * Slug
-   */
+  @Prop() spaceBelow: spacingOption = 0;
+
+  @Prop() backgroundColour: brandColour = 'white';
+
+  @Prop() backgroundImageUrl: string = '';
+
+  @Prop() textColour: brandColour = 'black';
+
   @Prop() slug: string;
-  /**
-   * Date
-   */
+
+  @Prop() slugColour: brandColour = 'black';
+
   @Prop() date: string;
-  /**
-   * Main title
-   */
+
+  @Prop() dateColour: brandColour = 'black';
+
   @Prop() mainTitle: string;
-  /**
-   * Image URL
-   */
-  @Prop() imageUrl: string;
-  /**
-   * Image Alt Text
-   */
-  @Prop() imageAltText: string;
-  /**
-   * Image Label
-   */
+
+  @Prop() mainTitleColour: brandColour = 'black';
+
+  @Prop() image1Url: string;
+
+  @Prop() image1AltText: string;
+
+  @Prop() image2Url: string;
+
+  @Prop() image2AltText: string;
+
   @Prop() imageLabel: string;
-  /**
-   * Button label
-   */
+
+  @Prop() imageLabelColour: brandColour = 'black';
+
   @Prop() buttonLabel: string;
 
-  /**
-   * Button URL
-   */
   @Prop() buttonUrl: string;
+
+  @Prop() buttonColour: brandColour = 'black';
+
+  @Prop() clipBottomLeftCorner: boolean = true;
+
+  @Prop() clipTopRightCorner: boolean = true;
 
   render() {
     return (
       <div class={'container space-below-' + this.spaceBelow}>
-        <div class={'sleeve background-colour-' + this.backgroundColour + ' background-colour-hover-' + this.backgroundColourHover + ' text-colour-' + this.textColour}>
+        <div
+          class={
+            'sleeve background-colour-' +
+            this.backgroundColour +
+            ' text-colour-' +
+            this.textColour +
+            ' slug-colour-' +
+            this.slugColour +
+            ' date-colour-' +
+            this.dateColour +
+            ' main-title-colour-' +
+            this.mainTitleColour +
+            ' image-label-colour-' +
+            this.imageLabelColour +
+            ' button-colour' +
+            this.buttonColour +
+            ' clip-bottom-left-corner-' +
+            this.clipBottomLeftCorner +
+            ' clip-top-right-corner-' +
+            this.clipTopRightCorner
+          }
+          style={{ 'background-image': "url('" + this.backgroundImageUrl + "')" }}
+        >
           <div class="content-wrap">
             {this.slug != '' ? <div class="slug text-colour-primary">{this.slug}</div> : null}
             {this.date != '' ? <div class="date">{this.date}</div> : null}
             <h3 class="title">
               <a href={this.buttonUrl}>{this.mainTitle}</a>
             </h3>
-            {this.imageUrl != '' ? (
+            {this.image1Url != '' || this.image2Url != '' ? (
               <div class="image-group">
-                <div class="image-wrap" style={{ 'background-image': "url('" + this.imageUrl + "')" }}>
-                  <img src={this.imageUrl} alt={this.imageAltText} title={this.imageAltText} />
-                </div>
-                <div class="image-label">{this.imageLabel}</div>
+                {this.image1Url != '' ? (
+                  <div class="image-container">
+                    <div class="image-wrap" style={{ 'background-image': "url('" + this.image1Url + "')" }}>
+                      <img src={this.image1Url} alt={this.image1AltText} title={this.image1AltText} />
+                    </div>
+                  </div>
+                ) : null}
+
+                {this.image2Url != '' ? (
+                  <div class="image-container">
+                    <div class="image-wrap" style={{ 'background-image': "url('" + this.image2Url + "')" }}>
+                      <img src={this.image2Url} alt={this.image2AltText} title={this.image2AltText} />
+                    </div>
+                  </div>
+                ) : null}
               </div>
             ) : null}
 
+            {this.imageLabel != '' ? <div class="image-label">{this.imageLabel}</div> : null}
+
             {this.buttonLabel != null && this.buttonUrl != null ? (
               <div class="button-wrap align-right">
-                <biggive-button colour-scheme={'clear-primary'} url={this.buttonUrl} label={this.buttonLabel}></biggive-button>
+                <biggive-button colour-scheme={'clear-' + this.buttonColour} url={this.buttonUrl} label={this.buttonLabel}></biggive-button>
               </div>
             ) : null}
           </div>

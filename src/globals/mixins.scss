@@ -716,42 +716,42 @@
 }
 
 @mixin button-grey-extra-light {
-  color: $colour-grey-extra-light;
-  background-color: $colour-black;
-  border-color: $colour-black;
+  color: $colour-black;
+  background-color: $colour-grey-extra-light;
+  border-color: $colour-grey-extra-light;
   &:hover {
-    color: $colour-black;
-    background-color: $colour-grey-extra-light;
+    color: $colour-grey-extra-light;
+    background-color: $colour-black;
   }
 }
 
 @mixin button-grey-light {
-  color: $colour-grey-light;
-  background-color: $colour-black;
-  border-color: $colour-black;
+  color: $colour-black;
+  background-color: $colour-grey-light;
+  border-color: $colour-grey-light;
   &:hover {
-    color: $colour-black;
-    background-color: $colour-grey-light;
+    color: $colour-grey-light;
+    background-color: $colour-black;
   }
 }
 
 @mixin button-grey-medium {
-  color: $colour-grey-medium;
-  background-color: $colour-black;
-  border-color: $colour-black;
+  color: $colour-white;
+  background-color: $colour-grey-medium;
+  border-color: $colour-grey-medium;
   &:hover {
-    color: $colour-black;
-    background-color: $colour-grey-medium;
+    color: $colour-grey-medium;
+    background-color: $colour-white;
   }
 }
 
 @mixin button-grey-dark {
-  color: $colour-grey-dark;
-  background-color: $colour-white;
-  border-color: $colour-white;
+  color: $colour-white;
+  background-color: $colour-grey-dark;
+  border-color: $colour-grey-dark;
   &:hover {
-    color: $colour-white;
-    background-color: $colour-grey-dark;
+    color: $colour-grey-dark;
+    background-color: $colour-white;
   }
 }
 
@@ -986,7 +986,7 @@
 
   .background-colour-hover-brand-6:hover,
   .background-colour-brand-6 {
-      background-color: $colour-brand-grey;
+      background-color: $colour-brand-mhf-turquoise;
   }
 
   .background-colour-hover-white:hover,

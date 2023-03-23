@@ -76,6 +76,22 @@
     @include button-black();
 }
 
+.button-grey-extra-light {
+    @include button-grey-extra-light();
+}
+
+.button-grey-light {
+    @include button-grey-light();
+}
+
+.button-grey-medium {
+    @include button-grey-medium();
+}
+
+.button-grey-dark {
+    @include button-grey-dark();
+}
+
 .button-clear-primary {
     @include button-clear-primary();
 }
@@ -115,6 +131,26 @@
 .button-clear-white {
    @include button-clear-white();
 }
+
+.button-clear-black {
+    @include button-clear-black();
+ }
+
+ .button-clear-grey-extra-light {
+    @include button-clear-grey-extra-light();
+ }
+ .button-clear-grey-light {
+    @include button-clear-grey-light();
+ }
+
+ .button-clear-grey-medium {
+    @include button-clear-grey-medium();
+ }
+
+ .button-clear-grey-dark {
+    @include button-clear-grey-dark();
+ }
+
 
 .button-rounded {
     @include button-rounded();

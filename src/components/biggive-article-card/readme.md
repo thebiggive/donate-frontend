@@ -7,20 +7,29 @@
 
 ## Properties
 
-| Property                | Attribute                 | Description                  | Type     | Default      |
-| ----------------------- | ------------------------- | ---------------------------- | -------- | ------------ |
-| `backgroundColour`      | `background-colour`       | Card background colour       | `string` | `'white'`    |
-| `backgroundColourHover` | `background-colour-hover` | Card background colour hover | `string` | `'tertiary'` |
-| `buttonLabel`           | `button-label`            | Button label                 | `string` | `undefined`  |
-| `buttonUrl`             | `button-url`              | Button URL                   | `string` | `undefined`  |
-| `date`                  | `date`                    | Date                         | `string` | `undefined`  |
-| `imageAltText`          | `image-alt-text`          | Image Alt Text               | `string` | `undefined`  |
-| `imageLabel`            | `image-label`             | Image Label                  | `string` | `undefined`  |
-| `imageUrl`              | `image-url`               | Image URL                    | `string` | `undefined`  |
-| `mainTitle`             | `main-title`              | Main title                   | `string` | `undefined`  |
-| `slug`                  | `slug`                    | Slug                         | `string` | `undefined`  |
-| `spaceBelow`            | `space-below`             | Space below component        | `number` | `0`          |
-| `textColour`            | `text-colour`             | Text colour                  | `string` | `'black'`    |
+| Property               | Attribute                 | Description | Type                                                                                                                                                                                                               | Default     |
+| ---------------------- | ------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- |
+| `backgroundColour`     | `background-colour`       |             | `"black" \| "brand-1" \| "brand-2" \| "brand-3" \| "brand-4" \| "brand-5" \| "brand-6" \| "grey-dark" \| "grey-extra-light" \| "grey-light" \| "grey-medium" \| "primary" \| "secondary" \| "tertiary" \| "white"` | `'white'`   |
+| `backgroundImageUrl`   | `background-image-url`    |             | `string`                                                                                                                                                                                                           | `''`        |
+| `buttonColour`         | `button-colour`           |             | `"black" \| "brand-1" \| "brand-2" \| "brand-3" \| "brand-4" \| "brand-5" \| "brand-6" \| "grey-dark" \| "grey-extra-light" \| "grey-light" \| "grey-medium" \| "primary" \| "secondary" \| "tertiary" \| "white"` | `'black'`   |
+| `buttonLabel`          | `button-label`            |             | `string`                                                                                                                                                                                                           | `undefined` |
+| `buttonUrl`            | `button-url`              |             | `string`                                                                                                                                                                                                           | `undefined` |
+| `clipBottomLeftCorner` | `clip-bottom-left-corner` |             | `boolean`                                                                                                                                                                                                          | `true`      |
+| `clipTopRightCorner`   | `clip-top-right-corner`   |             | `boolean`                                                                                                                                                                                                          | `true`      |
+| `date`                 | `date`                    |             | `string`                                                                                                                                                                                                           | `undefined` |
+| `dateColour`           | `date-colour`             |             | `"black" \| "brand-1" \| "brand-2" \| "brand-3" \| "brand-4" \| "brand-5" \| "brand-6" \| "grey-dark" \| "grey-extra-light" \| "grey-light" \| "grey-medium" \| "primary" \| "secondary" \| "tertiary" \| "white"` | `'black'`   |
+| `image1AltText`        | `image-1-alt-text`        |             | `string`                                                                                                                                                                                                           | `undefined` |
+| `image1Url`            | `image-1-url`             |             | `string`                                                                                                                                                                                                           | `undefined` |
+| `image2AltText`        | `image-2-alt-text`        |             | `string`                                                                                                                                                                                                           | `undefined` |
+| `image2Url`            | `image-2-url`             |             | `string`                                                                                                                                                                                                           | `undefined` |
+| `imageLabel`           | `image-label`             |             | `string`                                                                                                                                                                                                           | `undefined` |
+| `imageLabelColour`     | `image-label-colour`      |             | `"black" \| "brand-1" \| "brand-2" \| "brand-3" \| "brand-4" \| "brand-5" \| "brand-6" \| "grey-dark" \| "grey-extra-light" \| "grey-light" \| "grey-medium" \| "primary" \| "secondary" \| "tertiary" \| "white"` | `'black'`   |
+| `mainTitle`            | `main-title`              |             | `string`                                                                                                                                                                                                           | `undefined` |
+| `mainTitleColour`      | `main-title-colour`       |             | `"black" \| "brand-1" \| "brand-2" \| "brand-3" \| "brand-4" \| "brand-5" \| "brand-6" \| "grey-dark" \| "grey-extra-light" \| "grey-light" \| "grey-medium" \| "primary" \| "secondary" \| "tertiary" \| "white"` | `'black'`   |
+| `slug`                 | `slug`                    |             | `string`                                                                                                                                                                                                           | `undefined` |
+| `slugColour`           | `slug-colour`             |             | `"black" \| "brand-1" \| "brand-2" \| "brand-3" \| "brand-4" \| "brand-5" \| "brand-6" \| "grey-dark" \| "grey-extra-light" \| "grey-light" \| "grey-medium" \| "primary" \| "secondary" \| "tertiary" \| "white"` | `'black'`   |
+| `spaceBelow`           | `space-below`             |             | `0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6`                                                                                                                                                                                  | `0`         |
+| `textColour`           | `text-colour`             |             | `"black" \| "brand-1" \| "brand-2" \| "brand-3" \| "brand-4" \| "brand-5" \| "brand-6" \| "grey-dark" \| "grey-extra-light" \| "grey-light" \| "grey-medium" \| "primary" \| "secondary" \| "tertiary" \| "white"` | `'black'`   |
 
 
 ## Dependencies

@@ -10,7 +10,7 @@ describe('biggive-grid', () => {
     expect(page.root).toEqualHtml(`
       <biggive-grid column-count=3 column-gap=3>
         <mock:shadow-root>
-          <div class="column-count-3 grid space-below-4">
+        <div class="column-count-3 column-gap-3 grid space-below-4">
             <slot></slot>
           </div>
         </mock:shadow-root>
