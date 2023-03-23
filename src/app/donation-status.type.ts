@@ -1,3 +1,7 @@
+/**
+ * For details of status semantics see PHP enum MatchBot\Domain\DonationStatus at
+ * https://github.com/thebiggive/matchbot/blob/main/src/Domain/DonationStatus.php
+ */
 enum DonationStatusEnum {
   'Cancelled',
   'Chargedback',
