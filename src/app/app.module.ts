@@ -46,11 +46,10 @@ import { TBG_DONATE_ID_STORAGE } from './identity.service';
     CampaignResolver,
     CharityCampaignsResolver,
     DatePipe,
-    // In Universal / SSR mode, `APP_BASE_HREF` should vary according to the host reported
-    // by the browser once client side JS takes over. This is necessary so we can successfully
-    // serve the app on multiple live domains.
     {
       provide: APP_BASE_HREF,
+      // TODO swap in simpler value as soon as donate.biggive.org has been tested live (DON-726).
+      // useValue: environment.donateGlobalUriPrefix,
       useFactory: () => {
         const ukDonateHost = (new URL(environment.donateUriPrefix)).host;
         const host = (typeof window === 'undefined' ? '' : window.location.host);
