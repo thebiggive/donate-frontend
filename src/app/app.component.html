@@ -1,5 +1,4 @@
-<div *ngIf="isDataLoaded">
-  <biggive-main-menu
+  <biggive-main-menu *ngIf="isDataLoaded"
     [usePresetMenuContent]="true"
     [donateUrlPrefix]="donateUriPrefix"
     [blogUrlPrefix]="blogUriPrefix"
@@ -48,4 +47,3 @@
       <biggive-social-icon service="Instagram" url="https://www.instagram.com/biggiveorg" background-colour="tertiary" icon-colour="black"></biggive-social-icon>
     </div>
   </biggive-footer>
-</div>
