@@ -57,7 +57,7 @@ export class DonationCompleteComponent implements OnInit {
   private tries = 0;
 
   faExclamationTriangle = faExclamationTriangle;
-
+  isDataLoaded = false;
   constructor(
     private analyticsService: AnalyticsService,
     private campaignService: CampaignService,
@@ -76,6 +76,12 @@ export class DonationCompleteComponent implements OnInit {
 
   ngOnInit() {
     this.minPasswordLength = minPasswordLength;
+
+    this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
+      this.loggedIn = !!person && !!person.has_password;
+
+      this.isDataLoaded = true;
+    });
   }
 
   /**
@@ -137,7 +143,7 @@ export class DonationCompleteComponent implements OnInit {
         // set up yet.
         console.log('Upgraded local token to a long-lived one with more permissions');
         this.identityService.saveJWT(this.person?.id as string, response.jwt);
-        this.loggedIn = true;
+        location.reload();
       },
       (error: HttpErrorResponse) => {
         this.analyticsService.logError('login_failed', `${error.status}: ${error.message}`, 'identity_error');
@@ -249,7 +255,7 @@ export class DonationCompleteComponent implements OnInit {
       setTimeout(
         () => this.checkDonation(),
         // Exponential back-off from e.g. 2s to 32s.
-        (this.retryBaseIntervalSeconds * 1000) ** this.tries,
+        (this.retryBaseIntervalSeconds * 1000) * 2 ** this.tries,
       );
       return;
     }

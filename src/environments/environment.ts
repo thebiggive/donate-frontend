@@ -15,6 +15,8 @@ export const environment: Environment = {
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateGlobalUriPrefix: 'http://localhost:4200',
   donateUriPrefix: 'http://localhost:4200',
+  blogUriPrefix: 'http://localhost:30003',
+  experienceUriPrefix: 'https://thebiggive--full.sandbox.my.site.com',
   donationsApiPrefix: 'http://localhost:30030/v1',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-3',

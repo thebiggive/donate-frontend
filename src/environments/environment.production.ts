@@ -9,6 +9,8 @@ export const environment: Environment = {
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateGlobalUriPrefix: 'https://donate.biggive.org',
   donateUriPrefix: 'https://donate.thebiggive.org.uk',
+  experienceUriPrefix: 'https://www.thebiggive.org.uk',
+  blogUriPrefix: 'https://biggive.org',
   donationsApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',
   getSiteControlId: '97792',
   googleAnalyticsId: 'UA-2979952-1',
