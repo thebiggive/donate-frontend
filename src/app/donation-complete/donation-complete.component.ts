@@ -255,13 +255,17 @@ export class DonationCompleteComponent implements OnInit {
       setTimeout(
         () => this.checkDonation(),
         // Exponential back-off from e.g. 2s to 32s.
-        (this.retryBaseIntervalSeconds * 1000) * 2 ** this.tries,
+        this.calculateExponentialBackoffMs(this.tries)
       );
       return;
     }
 
     this.analyticsService.logError('thank_you_timed_out_pre_complete', `Donation to campaign ${donation.projectId}`);
     this.timedOut = true;
+  }
+
+  calculateExponentialBackoffMs(tries: number) {
+    return (this.retryBaseIntervalSeconds * 1000) * 2 ** tries;
   }
 
   private buildPersonFromDonation(donation: Donation): Person {
