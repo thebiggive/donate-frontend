@@ -16,6 +16,7 @@
       display: flex;
       flex-flow: row wrap;
       min-width: 100%;
+      overflow: hidden;
     }
   }
 
@@ -39,15 +40,23 @@
       border-radius: 50%;
       cursor: pointer;
       text-align: center;
+      svg {
+        width: 15px;
+        height: 15px;
+        position: relative;
+        top: 2.5px;
+      }
       &.prev {
         left: 0;
+        svg {
+          left: -3px;
+        }
       }
       &.next {
         right: 0;
-      }
-      svg {
-        width: 10px;
-        height: 10px;
+        svg {
+          left: -1px;
+        }
       }
     }
   }

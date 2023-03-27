@@ -29,6 +29,7 @@
   &.add-animation-true:hover .sleeve {
     margin: -30px;
     padding: 60px;
+    height: calc(100% + 60px);
   }
   &.clip-bottom-left-corner-false.clip-top-right-corner-true {
     .sleeve {

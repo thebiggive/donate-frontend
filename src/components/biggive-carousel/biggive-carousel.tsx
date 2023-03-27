@@ -1,4 +1,4 @@
-import { Component, Prop, Element, h } from '@stencil/core';
+import { Component, Method, State, Prop, Element, h } from '@stencil/core';
 import { brandColour } from '../../globals/brand-colour';
 import { spacingOption } from '../../globals/spacing-option';
 
@@ -9,6 +9,8 @@ import { spacingOption } from '../../globals/spacing-option';
 })
 export class BiggiveCarousel {
   @Element() host: HTMLBiggiveCarouselElement;
+
+  @State() versions: [];
 
   @Prop() spaceBelow: spacingOption = 4;
 
@@ -26,7 +28,11 @@ export class BiggiveCarousel {
 
   componentDidRender() {
     this.sleeve = this.host.shadowRoot?.querySelector<HTMLElement>('.sleeve')!;
+    this.setCarousel();
+  }
 
+  @Method()
+  async setCarousel() {
     let children = new Array<HTMLElement>();
     Array.from(this.host.children).forEach(item => {
       if (!item.classList.contains('hidden')) {
@@ -42,6 +48,8 @@ export class BiggiveCarousel {
       this.itemWidthPx = (this.sleeve.parentElement?.offsetWidth! - (this.columnCount - 1) * this.columnGapPx) / this.columnCount;
 
       this.sleeve.style.width = (this.itemWidthPx + this.columnGapPx) * children.length + 'px';
+      this.sleeve.style.height = this.sleeve.style.height;
+      this.sleeve.style.transform = 'translate3d(0px, 0, 0)';
 
       children.forEach(el => {
         el.style.width = this.itemWidthPx + 'px';

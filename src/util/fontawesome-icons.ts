@@ -27,6 +27,8 @@ import {
   faUserGraduate,
   faVenus,
   faX,
+  faFilter,
+  faFilterSlash,
 } from '@fortawesome/pro-solid-svg-icons';
 import { faUsers, faCaretRight } from '@fortawesome/pro-duotone-svg-icons';
 import { faHeadSideMedical, faHomeHeart, faHeart, faAlarmClock } from '@fortawesome/pro-solid-svg-icons';
@@ -136,6 +138,14 @@ export class FontAwesomeIconsService {
       {
         name: 'MenuClose',
         icon: faX,
+      },
+      {
+        name: 'Filter',
+        icon: faFilter,
+      },
+      {
+        name: 'FilterSlash',
+        icon: faFilterSlash,
       },
     ];
   }

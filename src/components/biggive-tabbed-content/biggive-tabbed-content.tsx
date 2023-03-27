@@ -35,6 +35,20 @@ export class BiggiveTabbedContent {
 
   componentDidRender() {
     this.showTab(0);
+
+    this.scrollContextTab = this.host.shadowRoot?.querySelector('.navigation .sleeve ul li')!;
+
+    const sleeveElement: HTMLElement = this.host.shadowRoot?.querySelector('.navigation .sleeve')!;
+
+    if (sleeveElement.scrollWidth > sleeveElement.offsetWidth) {
+      this.host.shadowRoot?.querySelectorAll('.navigation .button').forEach(function (button: HTMLElement) {
+        button.style.display = 'block';
+      });
+    } else {
+      this.host.shadowRoot?.querySelectorAll('.navigation .button').forEach(function (button: HTMLElement) {
+        button.style.display = 'none';
+      });
+    }
   }
 
   /*

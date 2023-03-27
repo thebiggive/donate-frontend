@@ -39,7 +39,6 @@ export namespace Components {
         "slug": string;
         "slugColour": brandColour;
         "spaceBelow": spacingOption;
-        "textColour": brandColour;
     }
     interface BiggiveBackToTop {
     }
@@ -470,6 +469,7 @@ export namespace Components {
         "buttonBackgroundColour": brandColour;
         "buttonIconColour": brandColour;
         "columnCount": 1 | 2 | 3 | 4 | 5;
+        "setCarousel": () => Promise<void>;
         "spaceBelow": spacingOption;
     }
     interface BiggiveCategoryIcon {
@@ -510,6 +510,7 @@ export namespace Components {
           * Placeholder
          */
         "placeholder": string;
+        "selectStyle": 'bordered' | 'underlined';
         "selectedLabel": string | null;
         "selectedValue": string | null;
         /**
@@ -1578,7 +1579,6 @@ declare namespace LocalJSX {
         "slug"?: string;
         "slugColour"?: brandColour;
         "spaceBelow"?: spacingOption;
-        "textColour"?: brandColour;
     }
     interface BiggiveBackToTop {
     }
@@ -2066,6 +2066,7 @@ declare namespace LocalJSX {
           * Placeholder
          */
         "placeholder"?: string;
+        "selectStyle"?: 'bordered' | 'underlined';
         "selectedLabel"?: string | null;
         "selectedValue"?: string | null;
         /**
