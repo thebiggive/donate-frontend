@@ -363,6 +363,3 @@ export class BiggiveCampaignCardFilterGrid {
     );
   }
 }
-function button(value: unknown, index: number, array: unknown[]): void {
-  throw new Error('Function not implemented.');
-}
