@@ -11,34 +11,19 @@
   <div class="b-container">
 
     <biggive-grid column-count="3">
-      <biggive-basic-card
-        space-below='4'
-        icon-colour='brand-4'
-        heading-level='2'
-        background-image-url='/assets/images/emergency-card.png'
-        main-title='Turkey-Syria Earthquake Appeal'
-        [subtitle]="'Double the impact of your donation'"
-        button-url='/turkey-syria-earthquake-appeal'
-        button-label='Donate now'
-        button-colour-scheme='clear-primary'
-        class="basic-card-padding"
-      >
+      <biggive-basic-card *ngFor="let card of highlightCards"
+                          [spaceBelow]='4'
+                          [headingLevel]="2"
+                          [buttonColourScheme]="'clear-primary'"
+                          [class]="'basic-card-padding'"
 
-      </biggive-basic-card>
-
-      <biggive-basic-card
-        space-below='4'
-        icon-colour='primary'
-        heading-level='2'
-        background-image-url='/assets/images/blue-texture.jpg'
-        main-title='One donation. Twice the impact.'
-        [subtitle]="'You donate.\nWe double it.'"
-        button-url='/explore'
-        button-label='Explore now'
-        button-colour-scheme='clear-primary'
-        class="basic-card-padding"
-      >
-      </biggive-basic-card>
+                          [iconColour]="card.iconColor"
+                          [backgroundImageUrl]="card.backgroundImageUrl.toString()"
+                          [mainTitle]="card.headerText"
+                          [subtitle]="card.bodyText"
+                          [buttonLabel]="card.button.text"
+                          [buttonUrl]="card.button.href.toString()"
+      />
     </biggive-grid>
 
   </div>
