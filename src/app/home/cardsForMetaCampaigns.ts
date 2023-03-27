@@ -34,22 +34,28 @@ const campaignToCard = function (metaCampaign: MetaCampaign, donateUriPrefix: st
  */
 export const cardsForMetaCampaigns = function (metacampaigns: readonly MetaCampaign[], donateUriPrefix: string): readonly HighlightCard[]
 {
-  const exploreCard: HighlightCard = {
-    headerText: 'One donation. Twice the impact.',
-    bodyText: "You donate.\nWe double it.",
-    iconColor: "primary",
-    backgroundImageUrl: new URL('/assets/images/blue-texture.jpg', donateUriPrefix),
-    button: {
-      text: "Explore now",
-      href: new URL('/explore', donateUriPrefix),
-    }
-  };
-
   const metaCampaignCards = metacampaigns.map((m) => campaignToCard(m, donateUriPrefix));
+
+  let anyExploreCard: readonly HighlightCard[];
+
+  if (metacampaigns.length < 5) {
+    anyExploreCard = [{
+      headerText: 'One donation. Twice the impact.',
+      bodyText: "You donate.\nWe double it.",
+      iconColor: "primary",
+      backgroundImageUrl: new URL('/assets/images/blue-texture.jpg', donateUriPrefix),
+      button: {
+        text: "Explore now",
+        href: new URL('/explore', donateUriPrefix),
+      }
+    }];
+  } else {
+    anyExploreCard = [];
+  }
 
   return [
     ...metaCampaignCards,
-    exploreCard,
+    ...anyExploreCard,
   ];
 }
 
