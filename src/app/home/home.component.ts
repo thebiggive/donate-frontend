@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
 import {PageMetaService} from '../page-meta.service';
-import {highlightCard} from "./hilightCard";
+import {HighlightCard} from "./HilightCard";
 import {environment} from "../../environments/environment";
 
 @Component({
@@ -12,7 +12,7 @@ import {environment} from "../../environments/environment";
 export class HomeComponent implements OnInit {
   mainTitle = 'Matching Donations.\nMultiplying Impact.';
 
-  highlightCards: readonly highlightCard[];
+  highlightCards: readonly HighlightCard[];
 
   public constructor(private pageMeta: PageMetaService) {}
 

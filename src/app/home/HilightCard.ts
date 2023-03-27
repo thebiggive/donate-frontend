@@ -1,4 +1,4 @@
-export type highlightCard = {
+export type HighlightCard = {
   backgroundImageUrl: URL,
   iconColor: 'primary' | 'brand-4',
   headerText: string,
