@@ -10,7 +10,7 @@
 
   <div class="b-container">
 
-    <biggive-grid column-count="3" *ngIf="!loading">
+    <biggive-grid [columnCount]="highlightCards.length <= 1 ? 1 : 3" *ngIf="!loading">
       <biggive-basic-card *ngFor="let card of highlightCards"
                           [spaceBelow]='4'
                           [headingLevel]="2"
