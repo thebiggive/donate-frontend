@@ -37,18 +37,7 @@ describe('cardsForMetaCampaigns', () => {
 
     const cards = cardsForMetaCampaigns(metaCampaigns, 'https://example.com')
 
-    expect(cards).toEqual([
-      {
-        headerText: 'One donation. Twice the impact.',
-        bodyText: "You donate.\nWe double it.",
-        iconColor: "primary",
-        backgroundImageUrl: new URL('/assets/images/blue-texture.jpg', 'https://example.com'),
-        button: {
-          text: "Explore now",
-          href: new URL('/explore', 'https://example.com'),
-        }
-      },
-    ]);
+    expect(cards).toEqual([exploreCard]);
   });
 
   it('Shows emergency and explore when there is only emergency metacampaign', () => {
@@ -56,27 +45,7 @@ describe('cardsForMetaCampaigns', () => {
 
     const cards = cardsForMetaCampaigns(metaCampaigns, 'https://example.com')
 
-    expect(cards).toEqual([
-      {
-        headerText: 'Emergency Campaign Name',
-        bodyText: "Double the impact of your donation",
-        iconColor: "brand-4",
-        backgroundImageUrl: new URL('/assets/images/emergency-card.png', 'https://example.com'),
-        button: {
-          text: "Donate now",
-          href: new URL('/slug-of-the-emergency', 'https://example.com'),
-        }
-      },
-      exploreCard,
-    ]);
-  });
-
-  it('Shows 5 emergencies with nothing else', () => {
-    const metaCampaigns: readonly MetaCampaign[] = Array(5).fill(emergencyMetaCampaign);
-
-    const cards = cardsForMetaCampaigns(metaCampaigns, 'https://example.com')
-
-    expect(cards).toEqual(Array(5).fill(emergencyCard));
+    expect(cards).toEqual([emergencyCard, exploreCard]);
   });
 
   it('Shows 4 emergencies with explore card', () => {
@@ -87,4 +56,11 @@ describe('cardsForMetaCampaigns', () => {
     expect(cards).toEqual([...Array(4).fill(emergencyCard), exploreCard]);
   });
 
+  it('Shows 5 emergencies with nothing else', () => {
+    const metaCampaigns: readonly MetaCampaign[] = Array(5).fill(emergencyMetaCampaign);
+
+    const cards = cardsForMetaCampaigns(metaCampaigns, 'https://example.com')
+
+    expect(cards).toEqual(Array(5).fill(emergencyCard));
+  });
 });
