@@ -2,6 +2,7 @@ import { Component, Prop, Element, h } from '@stencil/core';
 import { brandColour } from '../../globals/brand-colour';
 import { spacingOption } from '../../globals/spacing-option';
 
+
 @Component({
   tag: 'biggive-filtered-carousel',
   styleUrl: 'biggive-filtered-carousel.scss',
