@@ -22,20 +22,20 @@ export class HomeComponent implements OnInit {
         headerText: 'Turkey-Syria Earthquake Appeal',
         bodyText: "Double the impact of your donation",
         iconColor: "brand-4",
-        backgroundImageUrl: new URL('/assets/images/emergency-card.png', environment.donateUriPrefix),
+        backgroundImageUrl: new URL('/assets/images/emergency-card.png', environment.donateGlobalUriPrefix),
         button: {
           text: "Donate now",
-          href: new URL('/turkey-syria-earthquake-appeal', environment.donateUriPrefix),
+          href: new URL('/turkey-syria-earthquake-appeal', environment.donateGlobalUriPrefix),
         }
       },
       {
         headerText: 'One donation. Twice the impact.',
         bodyText: "You donate.\nWe double it.",
         iconColor: "primary",
-        backgroundImageUrl: new URL('/assets/images/blue-texture.jpg', environment.donateUriPrefix),
+        backgroundImageUrl: new URL('/assets/images/blue-texture.jpg', environment.donateGlobalUriPrefix),
         button: {
           text: "Explore now",
-          href: new URL('/explore', environment.donateUriPrefix),
+          href: new URL('/explore', environment.donateGlobalUriPrefix),
         }
       },
     ];

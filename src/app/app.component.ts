@@ -23,7 +23,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   public isLoggedIn: boolean = false;
   public flags: { profilePageEnabled: boolean };
 
-  public readonly donateUriPrefix = environment.donateUriPrefix;
+  public readonly donateUriPrefix = environment.donateGlobalUriPrefix;
   public readonly blogUriPrefix = environment.blogUriPrefix
 
   public readonly experienceUriPrefix = environment.experienceUriPrefix;
