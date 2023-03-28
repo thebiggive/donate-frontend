@@ -113,4 +113,11 @@ describe('DonationCompleteComponent', () => {
 
     expect(component.donationIsLarge).toBeFalse();
   });
+
+  it('Calculates backoff time in ms', () => {
+    expect(component.calculateExponentialBackoffMs(0)).toEqual(2_000);
+    expect(component.calculateExponentialBackoffMs(1)).toEqual(4_000);
+    expect(component.calculateExponentialBackoffMs(2)).toEqual(8_000);
+    expect(component.calculateExponentialBackoffMs(3)).toEqual(16_000);
+  });
 });

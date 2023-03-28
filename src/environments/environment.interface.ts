@@ -6,12 +6,19 @@ export interface Environment {
   environmentId: EnvironmentID,
   production: boolean,
   productionLike: boolean,
-  redirectHomepageToChirstmasChallenge: boolean,
   creditTipsCampaign: string,
   apiUriPrefix: string
   creditDonationsEnabled: boolean
   donateGlobalUriPrefix: string,
+
+  /** Prefix for pages served by this Angular application */
   donateUriPrefix: string,
+
+  /** Prefix for pages served by WordPress */
+  blogUriPrefix: string,
+
+  /** Prefix for pages served by the SF Experience Cloud */
+  experienceUriPrefix: string
   donationsApiPrefix: string,
   getSiteControlId: string,
   googleAnalyticsId: string,

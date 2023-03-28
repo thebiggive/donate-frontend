@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { minPasswordLength } from 'src/environments/common';
 
+import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Person } from '../person.model';
 
@@ -23,6 +24,7 @@ import { Person } from '../person.model';
     MatInputModule,
     MatRadioModule,
     ReactiveFormsModule,
+    RecaptchaModule,
   ]
 })
 export class DonationCompleteSetPasswordDialogComponent implements OnInit {
@@ -51,7 +53,7 @@ export class DonationCompleteSetPasswordDialogComponent implements OnInit {
   set() {
     this.dialogRef.close({
       password: this.form.value.password,
-      stayLoggedIn: [false], // logging in at this point was not working. See PR 972.
+      stayLoggedIn: this.form.value.stayLoggedIn,
     });
   }
 }

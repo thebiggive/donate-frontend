@@ -11,74 +11,19 @@
   <div class="b-container">
 
     <biggive-grid column-count="3">
-      <biggive-basic-card
-        space-below='4'
-        icon-colour='brand-4'
-        heading-level='2'
-        background-image-url='/assets/images/emergency-card.png'
-        main-title='Turkey-Syria Earthquake Appeal'
-        [subtitle]="'Double the impact of your donation'"
-        button-url='/turkey-syria-earthquake-appeal'
-        button-label='Donate now'
-        button-colour-scheme='clear-primary'
-        class="basic-card-padding"
-      >
+      <biggive-basic-card *ngFor="let card of highlightCards"
+                          [spaceBelow]='4'
+                          [headingLevel]="2"
+                          [buttonColourScheme]="'clear-primary'"
+                          [class]="'basic-card-padding'"
 
-      </biggive-basic-card>
-
-      <biggive-basic-card *ngIf="showMNFNowOpen"
-        space-below='4'
-        icon-colour='brand-mhf-turquoise'
-        heading-level='2'
-        background-image-url='/assets/images/turquoise-texture.jpg'
-        main-title='Applications for Mental Health Fund now open!'
-        [subtitle]="'Deadline is 24 March 2023'"
-        button-url='https://blog.thebiggive.org.uk/mental-health-match-fund/'
-        button-label='Apply now'
-        button-colour-scheme='clear-primary'
-        class="basic-card-padding"
-      >
-      </biggive-basic-card>
-
-      <biggive-basic-card *ngIf="showGreenMatchFund"
-        space-below='4'
-        heading-level=2
-        icon-colour='brand-3'
-        background-image-url='/assets/images/card-background-gmf.jpg'
-        main-title='Applications for Green Match Fund now open!'
-        subtitle='Deadline is 17 February 2023'
-        button-url='https://blog.thebiggive.org.uk/green-match-fund'
-        button-label='Apply Now'
-        button-colour-scheme='clear-primary'
-        class="basic-card-padding">
-      </biggive-basic-card>
-
-      <biggive-basic-card *ngIf="showChampionsForChildren"
-        space-below='4'
-        icon-colour='brand-5'
-        heading-level=2
-        background-image-url='/assets/images/colour-orange.png'
-        main-title='Applications for Champions for Children now open!'
-        subtitle='Deadline is 24 February 2023'
-        button-url='https://blog.thebiggive.org.uk/champions-for-children'
-        button-label='Apply Now'
-        button-colour-scheme='clear-primary'
-        class="basic-card-padding">
-      </biggive-basic-card>
-
-      <biggive-basic-card *ngIf="showExplore"
-        space-below='4'
-        icon-colour='primary'
-        heading-level='2'
-        background-image-url='/assets/images/blue-texture.jpg'
-        main-title='One donation. Twice the impact.'
-        [subtitle]="'You donate.\nWe double it.'"
-        button-url='/explore'
-        button-label='Explore now'
-        button-colour-scheme='clear-primary'
-        class="basic-card-padding"
-      >
-      </biggive-basic-card>
+                          [iconColour]="card.iconColor"
+                          [backgroundImageUrl]="card.backgroundImageUrl.toString()"
+                          [mainTitle]="card.headerText"
+                          [subtitle]="card.bodyText"
+                          [buttonLabel]="card.button.text"
+                          [buttonUrl]="card.button.href.toString()"
+      />
     </biggive-grid>
 
   </div>
@@ -94,7 +39,7 @@
         subtitle="raised for over 15,000 charity projects since 2008"
         subtitle-colour="white"
         secondary-button-label="Read about our impact"
-        secondary-button-url="https://blog.thebiggive.org.uk/impact"
+        secondary-button-url="https://biggive.org/impact"
         secondary-button-colour-scheme="clear-white">
       </biggive-call-to-action>
     </div>
@@ -162,7 +107,7 @@
         <biggive-button
           colour-scheme="primary"
           label="Join us today"
-          url="https://blog.thebiggive.org.uk/charities"
+          url="https://biggive.org/charities"
           full-width="false">
         </biggive-button>
       </div>
@@ -181,7 +126,7 @@
         main-title-colour="white"
         teaser="Simply put, we’re a Generosity Multiplier.  Big Give helps people match donations, multiply impact and make a lasting difference in the world together."
         teaser-colour="white"
-        button-url="https://blog.thebiggive.org.uk/our-story"
+        button-url="https://biggive.org/our-story"
         button-label="Learn more about us"
         button-colour-scheme="white"
         >
@@ -209,7 +154,7 @@
           url="#"
           full-width="false"
           size="small"
-          rounded="true"
+          rounded="false"
           >
         </biggive-button>
 
@@ -220,7 +165,7 @@
           url="#"
           full-width="false"
           size="small"
-          rounded="true"
+          rounded="false"
           >
         </biggive-button>
 
@@ -231,7 +176,7 @@
           url="#"
           full-width="false"
           size="small"
-          rounded="true"
+          rounded="false"
           >
         </biggive-button>
 
@@ -242,7 +187,7 @@
           url="#"
           full-width="false"
           size="small"
-          rounded="true"
+          rounded="false"
           >
         </biggive-button>
 
@@ -253,7 +198,7 @@
           url="#"
           full-width="false"
           size="small"
-          rounded="true"
+          rounded="false"
           >
         </biggive-button>
       </div>
@@ -333,7 +278,7 @@
       primary-button-url="/explore"
       primary-button-colour-scheme="primary"
       secondary-button-label="Learn more about us"
-      secondary-button-url="https://blog.thebiggive.org.uk/our-story"
+      secondary-button-url="https://biggive.org/our-story"
       secondary-button-colour-scheme="clear-primary"
       space-above="6"
       space-below="6">
