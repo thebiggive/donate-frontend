@@ -11,13 +11,9 @@ export class BiggiveCarousel {
   @Element() host: HTMLBiggiveCarouselElement;
 
   @State() versions: [];
-
   @Prop() spaceBelow: spacingOption = 4;
-
   @Prop() columnCount: 1 | 2 | 3 | 4 | 5 = 3;
-
   @Prop() buttonBackgroundColour: brandColour = 'white';
-
   @Prop() buttonIconColour: brandColour = 'primary';
 
   currentTab = 0;
@@ -32,7 +28,7 @@ export class BiggiveCarousel {
   }
 
   @Method()
-  async setCarousel() {
+  public async setCarousel() {
     let children = new Array<HTMLElement>();
     Array.from(this.host.children).forEach(item => {
       if (!item.classList.contains('hidden')) {
