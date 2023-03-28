@@ -21,7 +21,7 @@ export class BiggiveFilteredCarousel {
   children: Array<HTMLElement>;
 
   componentDidLoad() {
-    const carousel = this.host.shadowRoot?.querySelector('biggive-carousel')!;
+    const carousel: HTMLBiggiveCarouselElement = this.host.shadowRoot?.querySelector('biggive-carousel')!;
     const filterWrap = this.host.shadowRoot?.querySelector('.filters')!;
 
     this.children = new Array<HTMLElement>();
