@@ -17,7 +17,7 @@
 
 ## Methods
 
-### `setCarousel() => Promise<void>`
+### `resizeToFitContent() => Promise<void>`
 
 
 

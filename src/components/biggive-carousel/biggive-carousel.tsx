@@ -24,11 +24,11 @@ export class BiggiveCarousel {
 
   componentDidRender() {
     this.sleeve = this.host.shadowRoot?.querySelector<HTMLElement>('.sleeve')!;
-    this.setCarousel();
+    this.resizeToFitContent();
   }
 
   @Method()
-  public async setCarousel() {
+  public async resizeToFitContent() {
     let children = new Array<HTMLElement>();
     Array.from(this.host.children).forEach(item => {
       if (!item.classList.contains('hidden')) {

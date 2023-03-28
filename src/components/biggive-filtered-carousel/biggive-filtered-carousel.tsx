@@ -74,7 +74,7 @@ export class BiggiveFilteredCarousel {
           }
         });
 
-        carousel.setCarousel();
+        carousel.resizeToFitContent();
       });
 
       filterWrap.appendChild(button);
@@ -94,12 +94,17 @@ export class BiggiveFilteredCarousel {
         item.classList.remove('hidden');
       });
 
-      carousel.setCarousel();
+      carousel.resizeToFitContent();
     });
 
     filterWrap.appendChild(clear);
 
-    carousel.setCarousel();
+    /*
+    Check added to confirm that carousel variable is set with a valid carousel. Ommiting this check fails the npm test - although works fine at runtime in browser.
+    */
+    if (typeof carousel.resizeToFitContent  === 'function') {
+      carousel.resizeToFitContent();
+    }
   }
 
   render() {

@@ -469,7 +469,7 @@ export namespace Components {
         "buttonBackgroundColour": brandColour;
         "buttonIconColour": brandColour;
         "columnCount": 1 | 2 | 3 | 4 | 5;
-        "setCarousel": () => Promise<void>;
+        "resizeToFitContent": () => Promise<void>;
         "spaceBelow": spacingOption;
     }
     interface BiggiveCategoryIcon {
