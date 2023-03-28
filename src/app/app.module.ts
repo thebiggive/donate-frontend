@@ -48,16 +48,7 @@ import { TBG_DONATE_ID_STORAGE } from './identity.service';
     DatePipe,
     {
       provide: APP_BASE_HREF,
-      // TODO swap in simpler value as soon as donate.biggive.org has been tested live (DON-726).
-      // useValue: environment.donateGlobalUriPrefix,
-      useFactory: () => {
-        const ukDonateHost = (new URL(environment.donateUriPrefix)).host;
-        const host = (typeof window === 'undefined' ? '' : window.location.host);
-
-        return host === ukDonateHost
-          ? environment.donateUriPrefix
-          : environment.donateGlobalUriPrefix;
-      },
+      useValue: environment.donateGlobalUriPrefix,
     },
     { provide: TBG_DONATE_ID_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },

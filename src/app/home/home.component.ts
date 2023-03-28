@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.campaignService.fetchAllMetaCampaigns().subscribe(metaCampaigns => {
-        this.highlightCards = cardsForMetaCampaigns(metaCampaigns, environment.donateUriPrefix);
+        this.highlightCards = cardsForMetaCampaigns(metaCampaigns, environment.donateGlobalUriPrefix);
         this.loading = false;
       }, () => {
         this.loading = false;
