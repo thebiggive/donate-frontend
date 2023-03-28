@@ -624,9 +624,17 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   async submit() {
     if (!this.donation || this.donationForm.invalid) {
-      this.stripeError = 'Missing donation information – please refresh and try again, or email hello@thebiggive.org.uk if this problem persists';
+      let errorCodeDetail = '[code B1]'; // Form invalid.
+      if (!this.donation) {
+        errorCodeDetail = '[code A1]'; // Donation property absent.
+      }
+
+      this.stripeError = `Missing donation information – please refresh and try again, or email hello@thebiggive.org.uk quoting ${errorCodeDetail} if this problem persists`;
       this.stripeResponseErrorCode = undefined;
-      this.analyticsService.logError('submit_missing_donation_basics', 'Donation not set or form invalid');
+      this.analyticsService.logError(
+        'submit_missing_donation_basics',
+        `Donation not set or form invalid ${errorCodeDetail}`,
+      );
       return;
     }
 
