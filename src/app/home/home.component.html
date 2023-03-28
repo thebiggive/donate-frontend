@@ -9,7 +9,6 @@
   ></biggive-hero-image>
 
   <div class="b-container">
-    <biggive-grid
     <biggive-grid [columnCount]="highlightCards.length" *ngIf="!loading">
       <biggive-basic-card *ngFor="let card of highlightCards"
                           [spaceBelow]='4'
