@@ -2,6 +2,10 @@
   max-width: 1000px;
   padding-top: 3rem;
   margin-bottom: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .auto-margin {
@@ -15,9 +19,4 @@
 .basic-card-padding {
   padding: 0 10px;
   box-sizing: border-box;
-}
-
-div.b-container.single-entry {
-  // @todo work out why this isn't working to center the cards when we only display one.
-  margin: auto;
 }

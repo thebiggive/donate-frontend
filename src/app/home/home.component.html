@@ -8,10 +8,7 @@
     main-image-align-vertical="center"
   ></biggive-hero-image>
 
-  <div
-    class="b-container"
-    [ngClass]="highlightCards.length === 1 ? ['single-entry'] : []"
-  >
+  <div class="b-container">
     <biggive-grid
       [columnCount]="highlightCards.length <= 1 ? 1 : 3"
       *ngIf="!loading"
