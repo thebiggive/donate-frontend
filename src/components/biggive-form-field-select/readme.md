@@ -7,12 +7,13 @@
 
 ## Properties
 
-| Property        | Attribute        | Description           | Type             | Default     |
-| --------------- | ---------------- | --------------------- | ---------------- | ----------- |
-| `placeholder`   | `placeholder`    | Placeholder           | `string`         | `undefined` |
-| `selectedLabel` | `selected-label` |                       | `null \| string` | `undefined` |
-| `selectedValue` | `selected-value` |                       | `null \| string` | `undefined` |
-| `spaceBelow`    | `space-below`    | Space below component | `number`         | `0`         |
+| Property        | Attribute        | Description           | Type                         | Default      |
+| --------------- | ---------------- | --------------------- | ---------------------------- | ------------ |
+| `placeholder`   | `placeholder`    | Placeholder           | `string`                     | `undefined`  |
+| `selectStyle`   | `select-style`   |                       | `"bordered" \| "underlined"` | `'bordered'` |
+| `selectedLabel` | `selected-label` |                       | `null \| string`             | `undefined`  |
+| `selectedValue` | `selected-value` |                       | `null \| string`             | `undefined`  |
+| `spaceBelow`    | `space-below`    | Space below component | `number`                     | `0`          |
 
 
 ## Events
