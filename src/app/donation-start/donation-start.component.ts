@@ -629,7 +629,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         errorCodeDetail = '[code A1]'; // Donation property absent.
       }
 
-      this.stripeError = `Missing donation information ${errorCodeDetail} – please refresh and try again, or email hello@thebiggive.org.uk if this problem persists`;
+      this.stripeError = `Missing donation information – please refresh and try again, or email hello@thebiggive.org.uk quoting ${errorCodeDetail} if this problem persists`;
       this.stripeResponseErrorCode = undefined;
       this.analyticsService.logError(
         'submit_missing_donation_basics',
