@@ -1,5 +1,6 @@
 /**
  * Represents a metacampaign as it exists in Salesforce.
+ * As discussed with @NoelLH we may be likely to delete this class and use Campaign instead.
  */
 export class MetaCampaign {
   constructor(
