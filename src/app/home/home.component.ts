@@ -3,6 +3,8 @@ import {Component, OnInit} from '@angular/core';
 import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "./HilightCard";
 import {environment} from "../../environments/environment";
+import {CampaignService, SearchQuery} from "../campaign.service";
+import {cardsForMetaCampaigns} from "./cardsForMetaCampaigns";
 
 @Component({
   selector: 'app-home',
@@ -13,32 +15,21 @@ export class HomeComponent implements OnInit {
   mainTitle = 'Matching Donations.\nMultiplying Impact.';
 
   highlightCards: readonly HighlightCard[];
+  loading: boolean = true;
 
-  public constructor(private pageMeta: PageMetaService) {}
+  public constructor(
+    private pageMeta: PageMetaService,
+    private campaignService: CampaignService,
+  ) {}
 
   ngOnInit() {
-    this.highlightCards = [
-      {
-        headerText: 'Turkey-Syria Earthquake Appeal',
-        bodyText: "Double the impact of your donation",
-        iconColor: "brand-4",
-        backgroundImageUrl: new URL('/assets/images/emergency-card.png', environment.donateGlobalUriPrefix),
-        button: {
-          text: "Donate now",
-          href: new URL('/turkey-syria-earthquake-appeal', environment.donateGlobalUriPrefix),
-        }
+    this.campaignService.fetchAllMetaCampaigns().subscribe(metaCampaigns => {
+        this.highlightCards = cardsForMetaCampaigns(metaCampaigns, environment.donateGlobalUriPrefix);
+        this.loading = false;
+      }, () => {
+        this.loading = false;
       },
-      {
-        headerText: 'One donation. Twice the impact.',
-        bodyText: "You donate.\nWe double it.",
-        iconColor: "primary",
-        backgroundImageUrl: new URL('/assets/images/blue-texture.jpg', environment.donateGlobalUriPrefix),
-        button: {
-          text: "Explore now",
-          href: new URL('/explore', environment.donateGlobalUriPrefix),
-        }
-      },
-    ];
+    );
 
     this.pageMeta.setCommon(
       'Big Give',
