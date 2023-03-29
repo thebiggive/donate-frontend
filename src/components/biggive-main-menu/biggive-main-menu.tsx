@@ -297,8 +297,8 @@ export class BiggiveMainMenu {
                               </a>
                             </li>
                             <li>
-                              <a href={blogUrl('mental-health-match-fund/')} class="icon-mental-health">
-                                Mental Health Match Fund
+                              <a href={blogUrl('kind2mind/')} class="icon-mental-health">
+                                Kind²Mind
                               </a>
                             </li>
                             <li>
