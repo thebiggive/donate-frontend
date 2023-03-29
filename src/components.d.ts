@@ -502,6 +502,7 @@ export namespace Components {
     }
     interface BiggiveFooter {
         "headingLevel": 1 | 2 | 3 | 4 | 5 | 6;
+        "usePresetFooter": boolean;
     }
     interface BiggiveForm {
     }
@@ -2054,6 +2055,7 @@ declare namespace LocalJSX {
     }
     interface BiggiveFooter {
         "headingLevel"?: 1 | 2 | 3 | 4 | 5 | 6;
+        "usePresetFooter"?: boolean;
     }
     interface BiggiveForm {
     }
