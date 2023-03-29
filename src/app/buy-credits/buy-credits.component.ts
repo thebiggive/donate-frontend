@@ -33,7 +33,6 @@ import {flags} from "../featureFlags";
   styleUrls: ['./buy-credits.component.scss'],
 })
 export class BuyCreditsComponent implements AfterContentInit, OnInit {
-  profilePageEnabled: boolean = flags.profilePageEnabled;
   addressSuggestions: GiftAidAddressSuggestion[] = [];
   isLoggedIn: boolean = false;
   isLoading: boolean = false;

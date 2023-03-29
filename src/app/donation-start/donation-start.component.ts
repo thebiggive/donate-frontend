@@ -71,7 +71,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
 
-  profilePageEnabled: boolean = flags.profilePageEnabled;
   card: StripeCardElement | null;
   cardHandler = this.onStripeCardChange.bind(this);
   paymentRequestButton: StripePaymentRequestButtonElement | null;

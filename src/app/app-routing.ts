@@ -93,6 +93,12 @@ const routes: Routes = [
     loadChildren: () => import('./explore/explore.module')
       .then(c => c.ExploreModule),
   },
+  {
+    path: 'my-account',
+    pathMatch: 'full',
+    loadChildren: () => import('./my-account/my-account.module')
+      .then(c => c.MyAccountModule),
+  },
   // This is effectively our 404 handler because we support any string as meta-campaign
   // slug. So check `CampaignResolver` for adjusting what happens if the slug doesn't
   // match a campaign.
@@ -106,14 +112,5 @@ const routes: Routes = [
       .then(c => c.MetaCampaignModule),
   },
 ];
-
-if (flags.profilePageEnabled) {
-  routes.unshift({
-    path: 'my-account',
-    pathMatch: 'full',
-    loadChildren: () => import('./my-account/my-account.module')
-      .then(c => c.MyAccountModule),
-  });
-}
 
 export {routes};
