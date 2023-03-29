@@ -187,12 +187,6 @@ export class CampaignService {
    */
   fetchAllMetaCampaigns(): Observable<readonly MetaCampaign[]> {
     return of([
-      new MetaCampaign(
-        'Turkey-Syria Earthquake Appeal',
-        true,
-        'turkey-syria-earthquake-appeal',
-        'brand-4'
-      )
     ]);
   }
 }
