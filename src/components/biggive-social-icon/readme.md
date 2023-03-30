@@ -20,11 +20,13 @@
 
 ### Used by
 
+ - [biggive-footer](../biggive-footer)
  - [biggive-main-menu](../biggive-main-menu)
 
 ### Graph
 ```mermaid
 graph TD;
+  biggive-footer --> biggive-social-icon
   biggive-main-menu --> biggive-social-icon
   style biggive-social-icon fill:#f9f,stroke:#333,stroke-width:4px
 ```
