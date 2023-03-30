@@ -501,6 +501,11 @@ export namespace Components {
         "spaceBelow": spacingOption;
     }
     interface BiggiveFooter {
+        /**
+          * URL prefixes vary by environment, and components library is not best placed to know what they are, so we take them as props
+         */
+        "blogUrlPrefix": string | undefined;
+        "experienceUrlPrefix": string | undefined;
         "headingLevel": 1 | 2 | 3 | 4 | 5 | 6;
         /**
           * Conditionally render footer menu: hard-coded (preset) when set to true, dynamic (slot-based) when set to false
@@ -2057,6 +2062,11 @@ declare namespace LocalJSX {
         "spaceBelow"?: spacingOption;
     }
     interface BiggiveFooter {
+        /**
+          * URL prefixes vary by environment, and components library is not best placed to know what they are, so we take them as props
+         */
+        "blogUrlPrefix"?: string | undefined;
+        "experienceUrlPrefix"?: string | undefined;
         "headingLevel"?: 1 | 2 | 3 | 4 | 5 | 6;
         /**
           * Conditionally render footer menu: hard-coded (preset) when set to true, dynamic (slot-based) when set to false

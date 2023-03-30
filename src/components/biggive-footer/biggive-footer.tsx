@@ -1,4 +1,5 @@
 import { Component, Element, getAssetPath, h, Prop } from '@stencil/core';
+import { blogUrl, experienceUrl } from '../../util/helper-methods';
 
 @Component({
   tag: 'biggive-footer',
@@ -9,6 +10,13 @@ export class BiggiveFooter {
   @Element() host: HTMLBiggiveFooterElement;
 
   @Prop() headingLevel: 1 | 2 | 3 | 4 | 5 | 6 = 5;
+
+  /**
+   * URL prefixes vary by environment, and components library is not best placed to know what they are, so we
+   * take them as props
+   */
+  @Prop() blogUrlPrefix: string | undefined;
+  @Prop() experienceUrlPrefix: string | undefined;
 
   /**
    * Conditionally render footer menu:
@@ -57,8 +65,8 @@ export class BiggiveFooter {
             </nav>
 
             <div class="button-wrap">
-              <biggive-button colour-scheme="white" url="https://blog.thebiggive.org.uk/charities" label="For charities"></biggive-button>
-              <biggive-button colour-scheme="white" url="https://blog.thebiggive.org.uk/funders" label="For funders"></biggive-button>
+              <biggive-button colour-scheme="white" url={blogUrl(this.blogUrlPrefix, 'charities')} label="For charities"></biggive-button>
+              <biggive-button colour-scheme="white" url={blogUrl(this.blogUrlPrefix, 'funders')} label="For funders"></biggive-button>
             </div>
           </div>
 
@@ -88,37 +96,37 @@ export class BiggiveFooter {
               </HeadingTag>
               <ul slot="nav-primary">
                 <li>
-                  <a href="https://biggive.org/christmas-challenge" class="icon-christmas">
+                  <a href={blogUrl(this.blogUrlPrefix, 'christmas-challenge')} class="icon-christmas">
                     Christmas Challenge
                   </a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/green-match-fund" class="icon-green">
+                  <a href={blogUrl(this.blogUrlPrefix, 'green-match-fund')} class="icon-green">
                     Green Match Fund
                   </a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/champions-for-children" class="icon-children">
+                  <a href={blogUrl(this.blogUrlPrefix, 'champions-for-children')} class="icon-children">
                     Champions for Children
                   </a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/women-girls-match-fund" class="icon-women-girls">
+                  <a href={blogUrl(this.blogUrlPrefix, 'women-girls-match-fund')} class="icon-women-girls">
                     Women and Girls Match Fund
                   </a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/kind2mind/" class="icon-mental-health">
+                  <a href={blogUrl(this.blogUrlPrefix, 'kind2mind/')} class="icon-mental-health">
                     Kind²Mind
                   </a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/emergency-campaigns/" class="icon-emergency">
+                  <a href={blogUrl(this.blogUrlPrefix, 'emergency-campaigns/')} class="icon-emergency">
                     Emergency Match Fund
                   </a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/run-your-own-campaign/">Run your own campaign</a>
+                  <a href={blogUrl(this.blogUrlPrefix, 'run-your-own-campaign/)')}>Run your own campaign</a>
                 </li>
               </ul>
             </nav>
@@ -129,16 +137,16 @@ export class BiggiveFooter {
               </HeadingTag>
               <ul slot="nav-secondary">
                 <li>
-                  <a href="https://biggive.org/case-studies">Case Studies</a>
+                  <a href={blogUrl(this.blogUrlPrefix, 'case-studies')}>Case Studies</a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/blog">Blog</a>
+                  <a href={blogUrl(this.blogUrlPrefix, 'blog')}>Blog</a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/reports-insights">Reports &amp; Insights</a>
+                  <a href={blogUrl(this.blogUrlPrefix, 'reports-insights')}>Reports &amp; Insights</a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/press">Press</a>
+                  <a href={blogUrl(this.blogUrlPrefix, 'press')}>Press</a>
                 </li>
               </ul>
             </nav>
@@ -149,38 +157,38 @@ export class BiggiveFooter {
               </HeadingTag>
               <ul slot="nav-tertiary">
                 <li>
-                  <a href="https://www.thebiggive.org.uk/s/contact-us">Contact us</a>
+                  <a href={experienceUrl(this.experienceUrlPrefix, 's/contact-us')}>Contact us</a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/our-story">Our Story</a>
+                  <a href={blogUrl(this.blogUrlPrefix, 'our-story')}>Our Story</a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/our-people">Our People</a>
+                  <a href={blogUrl(this.blogUrlPrefix, 'our-people')}>Our People</a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/our-fees">Our Fees</a>
+                  <a href={blogUrl(this.blogUrlPrefix, 'our-fees')}>Our Fees</a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/careers/">Careers</a>
+                  <a href={blogUrl(this.blogUrlPrefix, 'careers')}>Careers</a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/faqs">FAQs</a>
+                  <a href={blogUrl(this.blogUrlPrefix, 'faqs')}>FAQs</a>
                 </li>
               </ul>
 
               <ul slot="nav-postscript">
                 <li>
-                  <a href="https://biggive.org/terms-and-conditions">Terms and Conditions</a>
+                  <a href={blogUrl(this.blogUrlPrefix, 'terms-and-conditions')}>Terms and Conditions</a>
                 </li>
                 <li>
-                  <a href="https://biggive.org/privacy">Privacy Policy</a>
+                  <a href={blogUrl(this.blogUrlPrefix, 'privacy')}>Privacy Policy</a>
                 </li>
               </ul>
             </nav>
 
             <div class="button-wrap">
-              <biggive-button colour-scheme="white" url="https://blog.thebiggive.org.uk/charities" label="For charities"></biggive-button>
-              <biggive-button colour-scheme="white" url="https://blog.thebiggive.org.uk/funders" label="For funders"></biggive-button>
+              <biggive-button colour-scheme="white" url={blogUrl(this.blogUrlPrefix, 'charities')} label="For charities"></biggive-button>
+              <biggive-button colour-scheme="white" url={blogUrl(this.blogUrlPrefix, 'funders')} label="For funders"></biggive-button>
             </div>
           </div>
 
