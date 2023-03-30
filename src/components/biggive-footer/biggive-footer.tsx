@@ -10,6 +10,10 @@ export class BiggiveFooter {
 
   @Prop() headingLevel: 1 | 2 | 3 | 4 | 5 | 6 = 5;
 
+    /**
+   * Conditionally render footer menu:
+   * hard-coded (preset) when set to true, dynamic (slot-based) when set to false
+   */
   @Prop() usePresetFooter = false;
 
   appendMenu(menuName: string) {
@@ -20,10 +24,12 @@ export class BiggiveFooter {
   }
 
   componentDidRender() {
-    this.appendMenu('nav-primary');
-    this.appendMenu('nav-secondary');
-    this.appendMenu('nav-tertiary');
-    this.appendMenu('nav-postscript');
+    if (!this.usePresetFooter) {
+      this.appendMenu('nav-primary');
+      this.appendMenu('nav-secondary');
+      this.appendMenu('nav-tertiary');
+      this.appendMenu('nav-postscript');
+    }
   }
 
   render() {

@@ -7,9 +7,10 @@
 
 ## Properties
 
-| Property       | Attribute       | Description | Type                         | Default |
-| -------------- | --------------- | ----------- | ---------------------------- | ------- |
-| `headingLevel` | `heading-level` |             | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | `5`     |
+| Property          | Attribute           | Description                                                                                                    | Type                         | Default |
+| ----------------- | ------------------- | -------------------------------------------------------------------------------------------------------------- | ---------------------------- | ------- |
+| `headingLevel`    | `heading-level`     |                                                                                                                | `1 \| 2 \| 3 \| 4 \| 5 \| 6` | `5`     |
+| `usePresetFooter` | `use-preset-footer` | Conditionally render footer menu: hard-coded (preset) when set to true, dynamic (slot-based) when set to false | `boolean`                    | `false` |
 
 
 ## Dependencies
@@ -17,11 +18,13 @@
 ### Depends on
 
 - [biggive-button](../biggive-button)
+- [biggive-social-icon](../biggive-social-icon)
 
 ### Graph
 ```mermaid
 graph TD;
   biggive-footer --> biggive-button
+  biggive-footer --> biggive-social-icon
   style biggive-footer fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

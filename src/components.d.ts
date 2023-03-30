@@ -502,6 +502,9 @@ export namespace Components {
     }
     interface BiggiveFooter {
         "headingLevel": 1 | 2 | 3 | 4 | 5 | 6;
+        /**
+          * Conditionally render footer menu: hard-coded (preset) when set to true, dynamic (slot-based) when set to false
+         */
         "usePresetFooter": boolean;
     }
     interface BiggiveForm {
@@ -2055,6 +2058,9 @@ declare namespace LocalJSX {
     }
     interface BiggiveFooter {
         "headingLevel"?: 1 | 2 | 3 | 4 | 5 | 6;
+        /**
+          * Conditionally render footer menu: hard-coded (preset) when set to true, dynamic (slot-based) when set to false
+         */
         "usePresetFooter"?: boolean;
     }
     interface BiggiveForm {
