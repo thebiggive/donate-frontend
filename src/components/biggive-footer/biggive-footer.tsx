@@ -1,5 +1,5 @@
 import { Component, Element, getAssetPath, h, Prop } from '@stencil/core';
-import { blogUrl, experienceUrl } from '../../util/helper-methods';
+import { makeURL } from '../../util/helper-methods';
 
 @Component({
   tag: 'biggive-footer',
@@ -96,37 +96,37 @@ export class BiggiveFooter {
               </HeadingTag>
               <ul slot="nav-primary">
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'christmas-challenge')} class="icon-christmas">
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'christmas-challenge')} class="icon-christmas">
                     Christmas Challenge
                   </a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'green-match-fund')} class="icon-green">
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'green-match-fund')} class="icon-green">
                     Green Match Fund
                   </a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'champions-for-children')} class="icon-children">
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'champions-for-children')} class="icon-children">
                     Champions for Children
                   </a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'women-girls-match-fund')} class="icon-women-girls">
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'women-girls-match-fund')} class="icon-women-girls">
                     Women and Girls Match Fund
                   </a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'kind2mind/')} class="icon-mental-health">
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'kind2mind/')} class="icon-mental-health">
                     Kind²Mind
                   </a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'emergency-campaigns/')} class="icon-emergency">
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'emergency-campaigns/')} class="icon-emergency">
                     Emergency Match Fund
                   </a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'run-your-own-campaign/)')}>Run your own campaign</a>
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'run-your-own-campaign/)')}>Run your own campaign</a>
                 </li>
               </ul>
             </nav>
@@ -137,16 +137,16 @@ export class BiggiveFooter {
               </HeadingTag>
               <ul slot="nav-secondary">
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'case-studies')}>Case Studies</a>
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'case-studies')}>Case Studies</a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'blog')}>Blog</a>
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'blog')}>Blog</a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'reports-insights')}>Reports &amp; Insights</a>
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'reports-insights')}>Reports &amp; Insights</a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'press')}>Press</a>
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'press')}>Press</a>
                 </li>
               </ul>
             </nav>
@@ -157,38 +157,38 @@ export class BiggiveFooter {
               </HeadingTag>
               <ul slot="nav-tertiary">
                 <li>
-                  <a href={experienceUrl(this.experienceUrlPrefix, 's/contact-us')}>Contact us</a>
+                  <a href={makeURL('Experience', this.experienceUrlPrefix, 's/contact-us')}>Contact us</a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'our-story')}>Our Story</a>
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'our-story')}>Our Story</a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'our-people')}>Our People</a>
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'our-people')}>Our People</a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'our-fees')}>Our Fees</a>
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'our-fees')}>Our Fees</a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'careers')}>Careers</a>
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'careers')}>Careers</a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'faqs')}>FAQs</a>
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'faqs')}>FAQs</a>
                 </li>
               </ul>
 
               <ul slot="nav-postscript">
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'terms-and-conditions')}>Terms and Conditions</a>
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'terms-and-conditions')}>Terms and Conditions</a>
                 </li>
                 <li>
-                  <a href={blogUrl(this.blogUrlPrefix, 'privacy')}>Privacy Policy</a>
+                  <a href={makeURL('Blog', this.blogUrlPrefix, 'privacy')}>Privacy Policy</a>
                 </li>
               </ul>
             </nav>
 
             <div class="button-wrap">
-              <biggive-button colour-scheme="white" url={blogUrl(this.blogUrlPrefix, 'charities')} label="For charities"></biggive-button>
-              <biggive-button colour-scheme="white" url={blogUrl(this.blogUrlPrefix, 'funders')} label="For funders"></biggive-button>
+              <biggive-button colour-scheme="white" url={makeURL('Blog', this.blogUrlPrefix, 'charities')} label="For charities"></biggive-button>
+              <biggive-button colour-scheme="white" url={makeURL('Blog', this.blogUrlPrefix, 'funders')} label="For funders"></biggive-button>
             </div>
           </div>
 
