@@ -34,7 +34,7 @@ describe('cardsForMetaCampaigns', () => {
 
   const wgfCard: HighlightCard = {
     headerText: 'Applications for Women and Girls Match Fund now open!',
-    backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.png', 'https://example.com'),
+    backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', 'https://example.com'),
     iconColor: 'brand-2',
     bodyText: 'Deadline is 23 June 2023',
     button: {

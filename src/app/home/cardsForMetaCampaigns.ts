@@ -57,7 +57,7 @@ export const cardsForMetaCampaigns = function (metacampaigns: readonly MetaCampa
     ...metaCampaignCards,
     {
       headerText: 'Applications for Women and Girls Match Fund now open!',
-      backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.png', donateUriPrefix),
+      backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', donateUriPrefix),
       iconColor: 'brand-2',
       bodyText: 'Deadline is 23 June 2023',
       button: {
