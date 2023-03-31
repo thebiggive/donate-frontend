@@ -175,15 +175,6 @@ export class BiggiveFooter {
                   <a href={makeURL('Blog', this.blogUrlPrefix, 'faqs')}>FAQs</a>
                 </li>
               </ul>
-
-              <ul slot="nav-postscript">
-                <li>
-                  <a href={makeURL('Blog', this.blogUrlPrefix, 'terms-and-conditions')}>Terms and Conditions</a>
-                </li>
-                <li>
-                  <a href={makeURL('Blog', this.blogUrlPrefix, 'privacy')}>Privacy Policy</a>
-                </li>
-              </ul>
             </nav>
 
             <div class="button-wrap">
@@ -196,7 +187,16 @@ export class BiggiveFooter {
             <div class="postscript-wrap">
               <img class="fr-logo" src={getAssetPath('../assets/images/fundraising-regulator.png')} alt="Fundraising Regulator" />
 
-              <nav class="nav nav-postscript" aria-label="Legal"></nav>
+              <nav class="nav nav-postscript" aria-label="Legal">
+                <ul slot="nav-postscript">
+                  <li>
+                    <a href={makeURL('Blog', this.blogUrlPrefix, 'terms-and-conditions')}>Terms and Conditions</a>
+                  </li>
+                  <li>
+                    <a href={makeURL('Blog', this.blogUrlPrefix, 'privacy')}>Privacy Policy</a>
+                  </li>
+                </ul>
+              </nav>
             </div>
 
             <div class="social-icon-wrap">
