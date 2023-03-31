@@ -50,7 +50,7 @@ describe('cardsForMetaCampaigns', () => {
     bodyText: '20th - 27th April 2023',
     button: {
       text: 'Save the date!',
-      href: new URL('/green-match-fund', "https://blog.com")
+      href: new URL('/green-match-fund-2023', "https://example.com")
     }
   };
 

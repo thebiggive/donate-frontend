@@ -72,7 +72,7 @@ export const cardsForMetaCampaigns = function (metacampaigns: readonly MetaCampa
       bodyText: '20th - 27th April 2023',
       button: {
         text: 'Save the date!',
-        href: new URL('/green-match-fund', blogUriPrefix)
+        href: new URL('/green-match-fund-2023', donateUriPrefix)
       }
     },
     ...anyExploreCard,
