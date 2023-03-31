@@ -10,7 +10,6 @@ import {GetSiteControlService} from './getsitecontrol.service';
 import {NavigationService} from './navigation.service';
 import {Person} from "./person.model";
 import {IdentityService} from "./identity.service";
-import {flags} from "./featureFlags"
 import {environment} from "../environments/environment";
 
 @Component({
@@ -21,7 +20,6 @@ export class AppComponent implements AfterViewInit, OnInit {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
 
   public isLoggedIn: boolean = false;
-  public flags: { profilePageEnabled: boolean };
 
   public readonly donateUriPrefix = environment.donateGlobalUriPrefix;
   public readonly blogUriPrefix = environment.blogUriPrefix
@@ -83,8 +81,6 @@ export class AppComponent implements AfterViewInit, OnInit {
     // always set up during the initial page load, regardless of whether the first
     // page the donor lands on makes wider use of DonationService or not.
     this.donationService.deriveDefaultCountry();
-
-    this.flags = flags;
 
     this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
       this.isLoggedIn = !! person && !! person.has_password;
