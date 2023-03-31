@@ -25,6 +25,9 @@ mat-spinner {
 
 .mdc-form-field {
   margin-top: 16px;
+  // Fields can remain inline-flex, but we want e.g. comms options to be full width
+  // and stack vertically, even if they'd fit side by side on desktop.
+  width: 100%;
 }
 
 .mat-mdc-form-field-icon-prefix {

@@ -1352,16 +1352,25 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       }
     }
 
-    // Amount reserved for matching is 'false-y', i.e. 0
-    if (response.donation.donationMatched && !response.donation.matchReservedAmount) {
-      this.promptToContinueWithNoMatchingLeft(response.donation);
-      return;
-    }
+    if (
+      environment.environmentId !== "regression" ||
+      (new URLSearchParams(window.location.search)).has('include-continue-prompt')
+    ) {
+      // Prompting to continue confuses the regression test automation, so we skip the prompt in the regression
+      // test environment at least for the time being. See JIRA REG-33 . When regression tests think they know how to
+      // deal with the prompts they can send the include-continue-prompt query string.
 
-    // Amount reserved for matching is > 0 but less than the full donation
-    if (response.donation.donationMatched && response.donation.matchReservedAmount < response.donation.donationAmount) {
-      this.promptToContinueWithPartialMatching(response.donation);
-      return;
+      // Amount reserved for matching is 'false-y', i.e. 0
+      if (response.donation.donationMatched && !response.donation.matchReservedAmount) {
+        this.promptToContinueWithNoMatchingLeft(response.donation);
+        return;
+      }
+
+      // Amount reserved for matching is > 0 but less than the full donation
+      if (response.donation.donationMatched && response.donation.matchReservedAmount < response.donation.donationAmount) {
+        this.promptToContinueWithPartialMatching(response.donation);
+        return;
+      }
     }
 
     this.scheduleMatchingExpiryWarning(this.donation);

@@ -32,7 +32,7 @@ const campaignToCard = function (metaCampaign: MetaCampaign, donateUriPrefix: st
  * There is an open question about whether this logic should live here, or in SF, or somewhere else - for now it seems
  * to make sense to put it here since we have limited SF development capacity.
  */
-export const cardsForMetaCampaigns = function (metacampaigns: readonly MetaCampaign[], donateUriPrefix: string): readonly HighlightCard[]
+export const cardsForMetaCampaigns = function (metacampaigns: readonly MetaCampaign[], donateUriPrefix: string, blogUriPrefix: string): readonly HighlightCard[]
 {
   const metaCampaignCards = metacampaigns.map((m) => campaignToCard(m, donateUriPrefix));
 
@@ -55,6 +55,26 @@ export const cardsForMetaCampaigns = function (metacampaigns: readonly MetaCampa
 
   return [
     ...metaCampaignCards,
+    {
+      headerText: 'Applications for Women and Girls Match Fund now open!',
+      backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', donateUriPrefix),
+      iconColor: 'brand-2',
+      bodyText: 'Deadline is 23 June 2023',
+      button: {
+        text: 'Apply now',
+        href: new URL('/women-girls-match-fund', blogUriPrefix)
+      }
+    },
+    {
+      headerText: 'Save the date for Green Match Fund',
+      backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
+      iconColor: 'brand-3',
+      bodyText: '20th - 27th April 2023',
+      button: {
+        text: 'Save the date!',
+        href: new URL('/green-match-fund-2023', donateUriPrefix)
+      }
+    },
     ...anyExploreCard,
   ];
 }
