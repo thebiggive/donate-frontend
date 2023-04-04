@@ -20,6 +20,8 @@ export class MetaPixelService {
 
     const scriptInitMetaPixel = document.createElement('script');
     scriptInitMetaPixel.setAttribute('nonce', 'OT22mYwcUVPp');
+    // Default script is tweaked to turn off Automatic Configuration for better privacy.
+    // https://www.eff.org/pages/online-privacy-nonprofits#advertising
     scriptInitMetaPixel.innerHTML = `
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -30,7 +32,8 @@ export class MetaPixelService {
       s.parentNode.insertBefore(t,s)}(window,document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
 
-      fbq('init', '` + environment.metaPixelId + `');
+      fbq('set', 'autoConfig', false, '${environment.metaPixelId}');
+      fbq('init', '${environment.metaPixelId}');
     `;
     document.head.appendChild(scriptInitMetaPixel);
   }
