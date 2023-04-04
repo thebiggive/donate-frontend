@@ -19,6 +19,7 @@ export class MetaPixelService {
     this.listenForRouteChanges();
 
     const scriptInitMetaPixel = document.createElement('script');
+    scriptInitMetaPixel.setAttribute('nonce', 'OT22mYwcUVPp');
     scriptInitMetaPixel.innerHTML = `
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
