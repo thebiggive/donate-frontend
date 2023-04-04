@@ -1818,7 +1818,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private exitPostDonationSuccess(donation: Donation) {
     this.analyticsService.logCheckoutDone(this.campaign, donation);
-    this.metaPixelService.trackConversion(donation.donationAmount);
+    this.metaPixelService.trackConversion(donation);
 
     this.cancelExpiryWarning();
     this.router.navigate(['thanks', donation.donationId], {

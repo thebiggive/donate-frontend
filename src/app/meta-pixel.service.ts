@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 import { environment } from '../environments/environment';
+import { Donation } from './donation.model';
 
 declare const fbq: ((action: string, eventOrId: string, params?: object) => void) | undefined;
 
@@ -38,12 +39,15 @@ export class MetaPixelService {
     document.head.appendChild(scriptInitMetaPixel);
   }
 
-  trackConversion(amount: number) {
+  trackConversion(donation: Donation) {
     if (!fbq) {
       return; // Skip the call gracefully if loading fails or 3rd party JS is blocked.
     }
 
-    fbq('track', 'Donate', {value: amount, currency: 'GBP'});
+    fbq('track', 'Donate', {
+      value: donation.donationAmount,
+      currency: donation.currencyCode,
+    });
   }
 
   private listenForRouteChanges() {
