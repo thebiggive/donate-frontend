@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 
 import { environment } from '../environments/environment';
 
-declare const fbq: (action: string, eventOrId: string, params?: object) => void;
+declare const fbq: ((action: string, eventOrId: string, params?: object) => void) | undefined;
 
 @Injectable({
   providedIn: 'root',
