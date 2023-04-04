@@ -46,6 +46,7 @@ export function app() {
           apiHost,
           donationsApiHost,
           identityApiHost,
+          'www.facebook.com', // Required for Meta Pixel in some browsers. https://josephpinder.com/blog/facebook-pixel-is-slowing-down-your-website-and-how-to-fix-it-securely
           'api.getAddress.io',
           '*.getsitecontrol.com',
           'fonts.googleapis.com',
@@ -77,6 +78,7 @@ export function app() {
           donateHost,
           `'unsafe-eval'`,
           `'unsafe-inline'`,
+          `'nonce-OT22mYwcUVPp' *.facebook.net`, // Meta Pixel. https://josephpinder.com/blog/facebook-pixel-is-slowing-down-your-website-and-how-to-fix-it-securely
           `'nonce-${environment.recaptchaNonce}'`,
           `'sha256-wNvBKHC/AcXH+tcTOtnmNx/Ag5exRdBFD8iL9UUQ8es='`, // Unsupported browser inline script.
           `'sha256-${createHash('sha256').update(AnalyticsService.getConfigureContent()).digest('base64')}'`,

@@ -25,6 +25,7 @@ export const environment: Environment = {
   googleOptimizeId: null,
   identityApiPrefix: 'https://identity-regression.thebiggivetest.org.uk/v1',
   maximumDonationAmount: 25_000,
+  metaPixelId: null, // Set to a string to enable init of Meta Pixel.
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',

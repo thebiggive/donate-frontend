@@ -23,9 +23,9 @@ export interface Environment {
   getSiteControlId: string,
   googleAnalyticsId: string,
   googleOptimizeId: string | null
-  // googleOptimizeId: 'OPT-NV3NHD3', // Bring back when we have an experiment to run
   identityApiPrefix: string
   maximumDonationAmount: number,
+  metaPixelId: string | null,
   minimumCreditAmount: number,
   maximumCreditAmount: number,
   postcodeLookupKey: string,

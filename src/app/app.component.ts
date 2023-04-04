@@ -7,6 +7,7 @@ import {filter} from 'rxjs/operators';
 import {AnalyticsService} from './analytics.service';
 import {DonationService} from './donation.service';
 import {GetSiteControlService} from './getsitecontrol.service';
+import {MetaPixelService} from './meta-pixel.service';
 import {NavigationService} from './navigation.service';
 import {Person} from "./person.model";
 import {IdentityService} from "./identity.service";
@@ -34,6 +35,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     @Inject(APP_BASE_HREF) private baseHref: string,
     private donationService: DonationService,
     private getSiteControlService: GetSiteControlService,
+    private metaPixelService: MetaPixelService,
     private navigationService: NavigationService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
@@ -67,6 +69,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.analyticsService.init();
       this.getSiteControlService.init();
+      this.metaPixelService.init();
 
       // Temporarily client-side redirect the previous non-global domain to the new one.
       // Once most inbound links are updated, we can probably replace the app redirect
