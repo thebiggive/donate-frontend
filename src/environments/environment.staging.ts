@@ -23,9 +23,9 @@ export const environment: Environment = {
   googleOptimizeId: null,
   //googleOptimizeId: 'OPT-NV3NHD3', // Bring back when we have an experiment to run
   identityApiPrefix: 'https://identity-staging.thebiggivetest.org.uk/v1',
-  maximumDonationAmount: 25000,
+  maximumDonationAmount: 25_000,
   minimumCreditAmount: 500,
-  maximumCreditAmount: 25000,
+  maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
   postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.
   psps: {
