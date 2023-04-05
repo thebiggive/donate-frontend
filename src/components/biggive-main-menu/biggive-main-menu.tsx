@@ -101,7 +101,11 @@ export class BiggiveMainMenu {
     });
     this.setHeaderSize();
 
-    const subMenuElements = this.host.querySelectorAll<HTMLElement>('.sub-menu');
+    const subMenuElements = this.host.shadowRoot!.querySelectorAll<HTMLElement>('.sub-menu');
+    if (subMenuElements.length === 0) {
+      console.error('Missing subMenuElements');
+    }
+
     subMenuElements.forEach(subMenuElement => {
       // the subMenuLink is a sibling element to the actual sub-menu
       const subMenuLink = subMenuElement.parentElement?.querySelector('a');
@@ -113,7 +117,12 @@ export class BiggiveMainMenu {
       };
     });
 
-    const subSubMenuElements = this.host.querySelectorAll<HTMLElement>('.sub-sub-menu');
+    const subSubMenuElements = this.host.shadowRoot!.querySelectorAll<HTMLElement>('.sub-sub-menu');
+
+    if (subSubMenuElements.length === 0) {
+      console.error('Missing subSubMenuElements');
+    }
+
     subSubMenuElements.forEach(subSubMenuElement => {
       // the subSubMenuLink is a sibling element to the actual sub-sub-menu
       const subSubMenuLink = subSubMenuElement!.parentElement!.querySelector('a');
