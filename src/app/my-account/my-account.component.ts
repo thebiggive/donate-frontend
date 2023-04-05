@@ -7,6 +7,9 @@ import {Router} from "@angular/router";
 import {PaymentMethod, Source} from "@stripe/stripe-js";
 import {DonationService} from "../donation.service";
 import {flags, flagsForEnvironment} from "../featureFlags";
+import {LoginModalComponent} from "../login-modal/login-modal.component";
+import {UpdateCardModalComponent} from "../update-card-modal/update-card-modal.component";
+import {MatDialog} from "@angular/material/dialog";
 @Component({
   selector: 'app-my-account',
   templateUrl: './my-account.component.html',
@@ -20,7 +23,7 @@ export class MyAccountComponent implements OnInit {
 
   constructor(
     private pageMeta: PageMetaService,
-
+    public dialog: MatDialog,
     private identityService: IdentityService,
     private donationService: DonationService,
     private router: Router,
@@ -79,5 +82,12 @@ export class MyAccountComponent implements OnInit {
 
   alert(notBuilt: string) {
     alert(notBuilt);
+  }
+
+  updateCard() {
+    const updateCardDialog = this.dialog.open(UpdateCardModalComponent);
+    updateCardDialog.afterClosed().subscribe((data: any) => {
+      alert(JSON.stringify(data));
+    })
   }
 }

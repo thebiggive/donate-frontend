@@ -7,6 +7,7 @@ import {DonationService, TBG_DONATE_STORAGE} from "../donation.service";
 import {of} from "rxjs";
 import {NO_ERRORS_SCHEMA} from "@angular/core";
 import {PaymentMethod} from "@stripe/stripe-js";
+import {MatDialogModule} from "@angular/material/dialog";
 
 describe('MyAccountComponent', () => {
   let component: MyAccountComponent;
@@ -21,6 +22,7 @@ describe('MyAccountComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
+        MatDialogModule,
         HttpClientModule,
       ],
       providers: [
