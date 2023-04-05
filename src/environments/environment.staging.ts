@@ -24,7 +24,7 @@ export const environment: Environment = {
   //googleOptimizeId: 'OPT-NV3NHD3', // Bring back when we have an experiment to run
   identityApiPrefix: 'https://identity-staging.thebiggivetest.org.uk/v1',
   maximumDonationAmount: 25_000,
-  metaPixelId: '2597099813878541', // Old Staging pixel for testing.
+  metaPixelId: '971382557569125',
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
