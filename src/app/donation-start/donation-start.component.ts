@@ -967,8 +967,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         this.stripePaymentMethodReady = true;
         this.setConditionalValidators();
       }
+      this.prefillRarelyChangingFormValuesFromPerson(person);
+      this.loadFirstSavedStripeCardIfAny(person, id, jwt);
+    });
+  }
 
-      // Pre-fill rarely-changing form values from the Person.
+  // Pre-fill rarely-changing form values from the Person.
+  prefillRarelyChangingFormValuesFromPerson(person: Person) {
       this.giftAidGroup.patchValue({
         homeAddress: person.home_address_line_1,
         homeOutsideUK: person.home_country_code !== null && person.home_country_code !== 'GB',
@@ -980,18 +985,19 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         lastName: person.last_name,
         emailAddress: person.email_address,
       });
+  }
 
-      // Load first saved Stripe card, if there are any.
+  // Load first saved Stripe card, if there are any.
+  loadFirstSavedStripeCardIfAny(person: Person, id: string, jwt: string) {
       this.donationService.getPaymentMethods(id, jwt).subscribe((response: { data: PaymentMethod[] }) => {
         if (response.data.length > 0) {
           this.stripePaymentMethodReady = true;
           this.stripeFirstSavedMethod = response.data[0];
-
           this.updateFormWithSavedCard();
         }
       });
-    });
   }
+
 
   private updateFormWithSavedCard() {
     const billingDetails = this.stripeFirstSavedMethod?.billing_details as PaymentMethod.BillingDetails;
