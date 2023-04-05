@@ -25,7 +25,7 @@ export interface Environment {
   googleOptimizeId: string | null
   identityApiPrefix: string
   maximumDonationAmount: number,
-  metaPixelId: string | null,
+  metaPixelId: string | null, // Set null to turn off init of Meta Pixel.
   minimumCreditAmount: number,
   maximumCreditAmount: number,
   postcodeLookupKey: string,
