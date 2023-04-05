@@ -7,10 +7,10 @@ import {filter} from 'rxjs/operators';
 import {AnalyticsService} from './analytics.service';
 import {DonationService} from './donation.service';
 import {GetSiteControlService} from './getsitecontrol.service';
+import {MetaPixelService} from './meta-pixel.service';
 import {NavigationService} from './navigation.service';
 import {Person} from "./person.model";
 import {IdentityService} from "./identity.service";
-import {flags} from "./featureFlags"
 import {environment} from "../environments/environment";
 
 @Component({
@@ -21,7 +21,6 @@ export class AppComponent implements AfterViewInit, OnInit {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
 
   public isLoggedIn: boolean = false;
-  public flags: { profilePageEnabled: boolean };
 
   public readonly donateUriPrefix = environment.donateGlobalUriPrefix;
   public readonly blogUriPrefix = environment.blogUriPrefix
@@ -36,6 +35,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     @Inject(APP_BASE_HREF) private baseHref: string,
     private donationService: DonationService,
     private getSiteControlService: GetSiteControlService,
+    private metaPixelService: MetaPixelService,
     private navigationService: NavigationService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
@@ -69,6 +69,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.analyticsService.init();
       this.getSiteControlService.init();
+      this.metaPixelService.init();
 
       // Temporarily client-side redirect the previous non-global domain to the new one.
       // Once most inbound links are updated, we can probably replace the app redirect
@@ -83,8 +84,6 @@ export class AppComponent implements AfterViewInit, OnInit {
     // always set up during the initial page load, regardless of whether the first
     // page the donor lands on makes wider use of DonationService or not.
     this.donationService.deriveDefaultCountry();
-
-    this.flags = flags;
 
     this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
       this.isLoggedIn = !! person && !! person.has_password;

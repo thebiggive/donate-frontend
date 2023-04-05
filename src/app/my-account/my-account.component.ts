@@ -18,8 +18,6 @@ export class MyAccountComponent implements OnInit {
 
   public paymentMethods: PaymentMethod[]|undefined = undefined;
 
-  public isHiddenByFlag: boolean = flags.profilePageEnabled && !flagsForEnvironment('production').profilePageEnabled;
-
   constructor(
     private pageMeta: PageMetaService,
 

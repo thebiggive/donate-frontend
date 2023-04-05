@@ -17,9 +17,10 @@ export const environment: Environment = {
   googleOptimizeId: null,
   // googleOptimizeId: 'OPT-W78W6BT', // Bring back when we have an experiment to run
   identityApiPrefix: 'https://identity-production.thebiggive.org.uk/v1',
-  maximumDonationAmount: 25000,
+  maximumDonationAmount: 25_000,
+  metaPixelId: '1696575857422204',
   minimumCreditAmount: 500,
-  maximumCreditAmount: 25000,
+  maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
   postcodeLookupUri: 'https://api.getAddress.io', // Full API base URI exc. trailing slash; undefined to switch off lookups.
   psps: {

@@ -26,7 +26,7 @@
         <p *ngIf="creditPenceToUse > 0">Your credit balance will be used and the donation value capped at {{ creditPenceToUse / 100 | exactCurrency:campaign.currencyCode }}</p>
         <p>
         <p>
-          <button *ngIf="profilePageEnabled" id="my-account-link" mat-raised-button routerLink="/my-account">My Account</button>
+          <button id="my-account-link" mat-raised-button routerLink="/my-account">My Account</button>
           <button mat-raised-button (click)="logout()">Log out</button>
         </p>
       </div>
