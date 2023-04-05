@@ -17,6 +17,7 @@ import {RecaptchaModule} from 'ng-recaptcha';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { DonationStartComponent } from './donation-start.component';
+import { DonationStartLoginComponent } from './donation-start-login/donation-start-login.component';
 import {DonationStartRoutingModule} from './donation-start-routing.module';
 import {ExactCurrencyPipe} from '../exact-currency.pipe';
 import {TimeLeftPipe} from '../time-left.pipe';
@@ -45,7 +46,10 @@ import {CampaignDetailsModule} from "../campaign-details/campaign-details.module
     TimeLeftPipe,
     CampaignDetailsModule,
   ],
-  declarations: [DonationStartComponent],
+  declarations: [
+    DonationStartComponent,
+    DonationStartLoginComponent
+  ],
   providers: [
     DatePipe,
   ]

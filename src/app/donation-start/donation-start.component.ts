@@ -8,6 +8,7 @@ import {
   Component,
   ElementRef,
   Inject,
+  Input,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
@@ -40,7 +41,6 @@ import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { GiftAidAddress } from '../gift-aid-address.model';
 import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
 import { IdentityService } from '../identity.service';
-import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { MetaPixelService } from '../meta-pixel.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
@@ -159,7 +159,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   campaignRaised: string; // Formatted
   campaignTarget: string; // Formatted
 
-
+  @Input() email: string;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -399,15 +399,15 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.stepHeaderEventsSet = true;
   }
 
-  login() {
-    const loginDialog = this.dialog.open(LoginModalComponent);
-    loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
-      if (data && data.id) {
-        this.loadAuthedPersonInfo(data.id, data.jwt);
-        location.reload(); // ensures correct menu is displayed
-      }
-    });
-  }
+  // login() {
+  //   const loginDialog = this.dialog.open(LoginModalComponent);
+  //   loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
+  //     if (data && data.id) {
+  //       this.loadAuthedPersonInfo(data.id, data.jwt);
+  //       location.reload(); // ensures correct menu is displayed
+  //     }
+  //   });
+  // }
 
   logout() {
     this.creditPenceToUse = 0;
@@ -954,7 +954,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
   }
 
-  private loadAuthedPersonInfo(id: string, jwt: string) {
+  loadAuthedPersonInfo(id: string, jwt: string) {
     this.identityService.get(id, jwt).subscribe((person: Person) => {
       this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
       this.personIsLoginReady = true;
