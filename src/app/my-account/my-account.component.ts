@@ -76,4 +76,8 @@ export class MyAccountComponent implements OnInit {
   private jwtAsString() {
     return this.identityService.getJWT() as string;
   }
+
+  alert(notBuilt: string) {
+    alert(notBuilt);
+  }
 }

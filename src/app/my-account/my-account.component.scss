@@ -65,6 +65,10 @@ table#personal-details, table#paymentMethods {
     vertical-align: bottom;
   }
 
+  td.delete {
+    text-align: right;
+  }
+
   td.cardExpiry {
     display: none;
     @media #{$breakpoint-lg} {
