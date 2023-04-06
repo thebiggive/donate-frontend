@@ -49,21 +49,23 @@
             >
           </mat-form-field>
 
-        <mat-form-field color="primary">
-          <mat-label for="billingAddress">Billing Address</mat-label>
+        <mat-form-field *ngIf="billingDetails.address">
+          <mat-label for="billingCountry">Billing country</mat-label>
+          <mat-select formControlName="billingCountry" id="billingCountry" [(value)]="billingDetails.address.country">
+            <mat-option
+              *ngFor="let country of countryOptions"
+              [value]="country.iso2"
 
-          <!--
-          @todo Prefil with old billing address if possible, work out what format we should present the address in.
-                Probably replace with multiple form fields for the individual properties of the address.
-          -->
-          <textarea
-            matInput
-            title="Billing Address"
-            [value]=""
-            id="Billing Address"
-            formControlName="expiryDate"
-          >
-          </textarea>
+            >
+              {{ country.country }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label for="billingPostcode">Billing postcode</mat-label>
+            <!--  @todo consider adding onBillingPostCodeChanged below like in donation start-->
+          <input formControlName="billingPostcode" id="billingPostcode" matInput>
         </mat-form-field>
 
       </form>
