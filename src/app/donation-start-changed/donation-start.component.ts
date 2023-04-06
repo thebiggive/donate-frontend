@@ -11,10 +11,11 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  Output,
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-//import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,7 +24,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RecaptchaComponent } from 'ng-recaptcha';
 import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
 import { PaymentMethod, StripeCardElement, StripeElementChangeEvent, StripeError, StripePaymentRequestButtonElement } from '@stripe/stripe-js';
-import { EMPTY, Observer, Subject } from 'rxjs';
+import { EMPTY, Observer } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from '../campaign.model';
@@ -41,7 +42,7 @@ import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { GiftAidAddress } from '../gift-aid-address.model';
 import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
 import { IdentityService } from '../identity.service';
-import { MetaPixelService } from '../meta-pixel.service';
+import { LoginModalComponent } from '../login-modal/login-modal.component';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
 import { PostcodeService } from '../postcode.service';
@@ -55,7 +56,6 @@ import {CampaignGroupsService} from "../campaign-groups.service";
 import {TimeLeftPipe} from "../time-left.pipe";
 import {ImageService} from "../image.service";
 import {flags} from "../featureFlags";
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-donation-start',
@@ -66,72 +66,51 @@ import { FormGroup } from '@angular/forms';
     TimeLeftPipe,
   ]
 })
-export class DonationStartComponent implements 
-  //AfterContentChecked, 
-  //AfterContentInit, 
-  //OnDestroy, 
-  OnInit {
-  // @ViewChild('captcha') captcha: RecaptchaComponent;
-  @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
-  // @ViewChild('cardInfo') cardInfo: ElementRef;
-  // @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
-  // @ViewChild('stepper') private stepper: MatStepper;
+export class DonationStartComponent implements OnInit {
 
-  // card: StripeCardElement | null;
-  // cardHandler = this.onStripeCardChange.bind(this);
-  // paymentRequestButton: StripePaymentRequestButtonElement | null;
+  @Input() idCaptcha: RecaptchaComponent;
+  @Input() paymentRequestButtonEl: ElementRef;
 
-  // requestButtonShown = false;
+  //profilePageEnabled: boolean = flags.profilePageEnabled;
   showChampionOptIn = false;
-
+  
+  @Input() donation?: Donation;
   campaign: Campaign;
-  donation?: Donation;
 
   campaignOpenOnLoad: boolean;
 
-  //recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
-
-  // countryOptions = COUNTRIES;
-
-  creditPenceToUse = 0; // Set non-zero if logged in and Customer has a credit balance to spend. Caps donation amount too in that case.
+  @Input() creditPenceToUse: number; // Set non-zero if logged in and Customer has a credit balance to spend. Caps donation amount too in that case.
   currencySymbol: string;
+  loggingOut = false;
 
-  donationForm: FormGroup;
-  // amountsGroup: FormGroup;
-  // giftAidGroup: FormGroup;
-  // paymentGroup: FormGroup;
-  // marketingGroup: FormGroup;
-
-  //maximumDonationAmount: number;
   noPsps = false;
   psp: 'stripe';
-  //retrying = false;
-  //skipPRBs: boolean;
-  // addressSuggestions: GiftAidAddressSuggestion[] = [];
-  // donationCreateError = false;
-  // donationUpdateError = false;
-  /** setTimeout reference (timer ID) if applicable. */
-  // expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
-  //loadingAddressSuggestions = false;
+  skipPRBs: boolean;
+
+  donationUpdateError = false;
+
+
   personId?: string;
   personIsLoginReady = false;
-  // privacyUrl = 'https://biggive.org/privacy';
-  // showAddressLookup: boolean;
-  stripePaymentMethodReady = false;
+ // privacyUrl = 'https://biggive.org/privacy';
+  //showAddressLookup: boolean;
+ @Input() stripePaymentMethodReady: boolean;
   // stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
-  // stripeError?: string;
-  stripeFirstSavedMethod?: PaymentMethod;
-  // submitting = false;
-  // termsProvider = `Big Give's`;
-  // termsUrl = 'https://biggive.org/terms-and-conditions';
+  //stripeError?: string;
+  resetStripePaymentMethod: boolean = false;
+  //submitting = false;
+ // termsProvider = `Big Give's`;
+  termsUrl = 'https://biggive.org/terms-and-conditions';
   // Track 'Next' clicks so we know when to show missing radio button error messages.
-  // triedToLeaveGiftAid = false;
-  // triedToLeaveMarketing = false;
+ // triedToLeaveGiftAid = false;
+  //triedToLeaveMarketing = false;
   campaignFinished: boolean;
   campaignOpen: boolean;
   bannerUri: string | null;
+  person: Person;
 
   campaignId: string;
+ @Input() email: string;
 
   /**
    * Tracks internally whether (Person +) Donation setup is in flight. This is important to prevent duplicates, because multiple
@@ -141,8 +120,8 @@ export class DonationStartComponent implements
   // private creatingDonation = false;
 
   // private defaultCountryCode: string;
-  // private previousDonation?: Donation;
-  // private stepHeaderEventsSet = false;
+  //private previousDonation?: Donation;
+ // private stepHeaderEventsSet = false;
   // private tipPercentageChanged = false;
 
   // private initialTipSuggestedPercentage = 15;
@@ -152,69 +131,74 @@ export class DonationStartComponent implements
    * input was valid (even if differently formatted). Loosely based on https://stackoverflow.com/a/10701634/2803757
    * with an additional tweak to allow (and trim) surrounding spaces.
    */
-  //private postcodeFormatHelpRegExp = new RegExp('^\\s*([A-Z]{1,2}\\d{1,2}[A-Z]?)\\s*(\\d[A-Z]{2})\\s*$');
+  private postcodeFormatHelpRegExp = new RegExp('^\\s*([A-Z]{1,2}\\d{1,2}[A-Z]?)\\s*(\\d[A-Z]{2})\\s*$');
   // Based on the simplified pattern suggestions in https://stackoverflow.com/a/51885364/2803757
-  //private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
+  // private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
 
   // Intentionally looser to support most countries' formats.
-  //private billingPostcodeRegExp = new RegExp('^[0-9a-zA-Z -]{2,8}$');
+  // private billingPostcodeRegExp = new RegExp('^[0-9a-zA-Z -]{2,8}$');
 
   // private idCaptchaCode?: string;
   // private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
   campaignRaised: string; // Formatted
   campaignTarget: string; // Formatted
-  @Input() email: string;
-  person: Person;
-  eventsSubject: Subject<{person: Person, id: string , jwt: string}> = new Subject<{person: Person, id: string , jwt: string}>();
 
-  emitEventToChild(person: Person, id: string , jwt: string) {
-    this.eventsSubject.next({person, id , jwt});
-  }
+
 
   constructor(
-    // private analyticsService: AnalyticsService,
-    // public cardIconsService: CardIconsService,
-    // private cd: ChangeDetectorRef,
-    // public dialog: MatDialog,
-    //private donationService: DonationService,
-    // @Inject(ElementRef) private elRef: ElementRef,
-    //private formBuilder: FormBuilder,
+    public analyticsService: AnalyticsService,
+   // public cardIconsService: CardIconsService,
+    private cd: ChangeDetectorRef,
+    public dialog: MatDialog,
+    private donationService: DonationService,
+    @Inject(ElementRef) private elRef: ElementRef,
+    private formBuilder: FormBuilder,
+    private identityService: IdentityService,
     private imageService: ImageService,
-    public identityService: IdentityService, //send as input to child
-    //private metaPixelService: MetaPixelService,
-    //private pageMeta: PageMetaService,
-    // private postcodeService: PostcodeService,
-    // @Inject(PLATFORM_ID) private platformId: Object,
+    public pageMeta: PageMetaService,
+    private postcodeService: PostcodeService,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
-    //private router: Router,
+    // private router: Router,
     //private stripeService: StripeService,
     private currencyPipe: CurrencyPipe,
     public datePipe: DatePipe,
     public timeLeftPipe: TimeLeftPipe,
 
   ) {
-    //this.defaultCountryCode = this.donationService.getDefaultCounty();
+    // this.defaultCountryCode = this.donationService.getDefaultCounty();
   }
 
-  //ngOnDestroy() {
-    // if (this.donation) {
-    //   this.clearDonation(this.donation, false);
-    // }
+  // ngOnDestroy() {
+  //   if (this.donation) {
+  //     this.clearDonation(this.donation, false);
+  //   }
 
-    // if (this.card) {
-    //   this.card.off('change');
-    //   this.card.destroy();
-    // }
- // }
+  //   if (this.card) {
+  //     this.card.off('change');
+  //     this.card.destroy();
+  //   }
+  // }
 
   ngOnInit() {
     // if (isPlatformBrowser(this.platformId)) {
     //   this.stripeService.init();
     // }
 
+    // this.campaign = this.route.snapshot.data.campaign;
+    // this.setCampaignBasedVars();
+
+    // const idAndJWT = this.identityService.getIdAndJWT();
+    // if (idAndJWT !== undefined) {
+    //   if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
+    //     this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+    //   }
+    // }
+
+
     this.campaign = this.route.snapshot.data.campaign;
     this.setCampaignBasedVars();
-    // console.log(this.identityService);
+
     // const idAndJWT = this.identityService.getIdAndJWT();
     // if (idAndJWT !== undefined) {
     //   if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
@@ -369,53 +353,58 @@ export class DonationStartComponent implements
   //   });
   // }
 
-  // ngAfterContentChecked() {
-  //   // Because the Stepper header elements are built by Angular from the `mat-step` elements,
-  //   // there is no nice 'Angular way' to listen for click events on them, which we need to do
-  //   // to clearly surface errors by scrolling to them when donors click Step headings to navigate
-  //   // rather than Next buttons. So to handle this appropriately we need to listen for clicks
-  //   // via the native elements.
+  loadAuthedPersonInfo(id: string, jwt: string) {
+    this.identityService.get(id, jwt).subscribe((person: Person) => {
+      console.log('getting person from identityService');
+      console.log('person', person);
+      this.person = person;
+      // this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
+      // this.personIsLoginReady = true;
 
-  //   // We set this up here as a one-shot thing but in a lifecycle hook because `campaign` is not
-  //   // guaranteed set on initial load, and the view is also not guaranteed to update with a
-  //   // rendered #stepper by the time we are the end of `handleCampaign()` or similar.
+      // if (environment.creditDonationsEnabled && person.cash_balance && person.cash_balance[this.campaign.currencyCode.toLowerCase()]! > 0) {
+      //   this.creditPenceToUse = parseInt(
+      //     person.cash_balance[this.campaign.currencyCode.toLowerCase()]!.toString() as string,
+      //     10
+      //   );
+      //   this.stripePaymentMethodReady = true;
+      //   this.setConditionalValidators();
+      // }
 
-  //   const stepper = this.elRef.nativeElement.querySelector('#stepper');
+      // // Pre-fill rarely-changing form values from the Person.
+      // this.giftAidGroup.patchValue({
+      //   homeAddress: person.home_address_line_1,
+      //   homeOutsideUK: person.home_country_code !== null && person.home_country_code !== 'GB',
+      //   homePostcode: person.home_postcode,
+      // });
 
-  //   // Can't do it, already did it, or server-side and so can't add DOM-based event listeners.
-  //   if (!this.stepper || this.stepHeaderEventsSet || !isPlatformBrowser(this.platformId)) {
-  //     return;
-  //   }
+      // this.paymentGroup.patchValue({
+      //   firstName: person.first_name,
+      //   lastName: person.last_name,
+      //   emailAddress: person.email_address,
+      // });
 
-  //   const stepperHeaders = stepper.getElementsByClassName('mat-step-header');
-  //   for (const stepperHeader of stepperHeaders) {
-  //     stepperHeader.addEventListener('click', (clickEvent: any) => {
-  //       if (clickEvent.target.innerText.includes('Your details') && this.stepper.selected?.label === 'Gift Aid') {
-  //         this.triedToLeaveGiftAid = true;
-  //       }
+      // // Load first saved Stripe card, if there are any.
+      // this.donationService.getPaymentMethods(id, jwt).subscribe((response: { data: PaymentMethod[] }) => {
+      //   if (response.data.length > 0) {
+      //     this.stripePaymentMethodReady = true;
+      //     this.stripeFirstSavedMethod = response.data[0];
 
-  //       if (clickEvent.target.innerText.includes('Confirm') && this.stepper.selected?.label === 'Your details') {
-  //         this.triedToLeaveMarketing = true;
-  //       }
+      //     this.updateFormWithSavedCard();
+      //   }
+      // });
+    });
+  }
 
-  //       if (this.psp === 'stripe' && clickEvent.target.innerText.includes('Receive updates') && !this.stripePaymentMethodReady) {
-  //         this.jumpToStep('Payment details');
-  //       }
 
-  //       this.goToFirstVisibleError();
-  //     });
-  //   }
 
-  //   this.stepHeaderEventsSet = true;
-  // }
-
-  logout() {
+  logout = () => {
     this.creditPenceToUse = 0;
     this.personId = undefined;
     this.personIsLoginReady = false;
-    this.stripeFirstSavedMethod = undefined;
+    this.resetStripePaymentMethod = true;
+    //this.stripeFirstSavedMethod = undefined;
     this.stripePaymentMethodReady = false;
-    this.donationForm.reset();
+    this.loggingOut = true; 
     this.identityService.clearJWT();
     this.idCaptcha.reset();
 
@@ -625,17 +614,9 @@ export class DonationStartComponent implements
 
   // async submit() {
   //   if (!this.donation || this.donationForm.invalid) {
-  //     let errorCodeDetail = '[code B1]'; // Form invalid.
-  //     if (!this.donation) {
-  //       errorCodeDetail = '[code A1]'; // Donation property absent.
-  //     }
-
-  //     this.stripeError = `Missing donation information – please refresh and try again, or email hello@thebiggive.org.uk quoting ${errorCodeDetail} if this problem persists`;
+  //     this.stripeError = 'Missing donation information – please refresh and try again, or email hello@thebiggive.org.uk if this problem persists';
   //     this.stripeResponseErrorCode = undefined;
-  //     this.analyticsService.logError(
-  //       'submit_missing_donation_basics',
-  //       `Donation not set or form invalid ${errorCodeDetail}`,
-  //     );
+  //     this.analyticsService.logError('submit_missing_donation_basics', 'Donation not set or form invalid');
   //     return;
   //   }
 
@@ -834,7 +815,7 @@ export class DonationStartComponent implements
   //   return this.donation.matchReservedAmount;
   // }
 
-  // feeCoverAmount(): number {
+  // feeCoverAmount = (): number => {
   //   return this.sanitiseCurrency(this.amountsGroup.value.feeCoverAmount);
   // }
 
@@ -865,11 +846,11 @@ export class DonationStartComponent implements
   //   return Number((amount || '0').replace('£', '').replace('$', ''));
   // }
 
-  // scrollTo(el: Element): void {
-  //   if (el) {
-  //      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  //   }
-  // }
+  // // scrollTo(el: Element): void {
+  // //   if (el) {
+  // //      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // //   }
+  // // }
 
   // /**
   //  * Percentage selection changed by donor, as opposed to programatically.
@@ -954,15 +935,44 @@ export class DonationStartComponent implements
   //   }
   // }
 
-  loadAuthedPersonInfo(id: string, jwt: string) {
-    this.identityService.get(id, jwt).subscribe((person: Person) => {
-      this.person =  person;
-      this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
-      this.personIsLoginReady = true;
-      this.emitEventToChild(person, id, jwt);
-    });
-  }
+  // loadAuthedPersonInfo(id: string, jwt: string) {
+  //   this.identityService.get(id, jwt).subscribe((person: Person) => {
+  //     this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
+  //     this.personIsLoginReady = true;
 
+  //     if (environment.creditDonationsEnabled && person.cash_balance && person.cash_balance[this.campaign.currencyCode.toLowerCase()]! > 0) {
+  //       this.creditPenceToUse = parseInt(
+  //         person.cash_balance[this.campaign.currencyCode.toLowerCase()]!.toString() as string,
+  //         10
+  //       );
+  //       this.stripePaymentMethodReady = true;
+  //       this.setConditionalValidators();
+  //     }
+
+  //     // Pre-fill rarely-changing form values from the Person.
+  //     this.giftAidGroup.patchValue({
+  //       homeAddress: person.home_address_line_1,
+  //       homeOutsideUK: person.home_country_code !== null && person.home_country_code !== 'GB',
+  //       homePostcode: person.home_postcode,
+  //     });
+
+  //     this.paymentGroup.patchValue({
+  //       firstName: person.first_name,
+  //       lastName: person.last_name,
+  //       emailAddress: person.email_address,
+  //     });
+
+  //     // Load first saved Stripe card, if there are any.
+  //     this.donationService.getPaymentMethods(id, jwt).subscribe((response: { data: PaymentMethod[] }) => {
+  //       if (response.data.length > 0) {
+  //         this.stripePaymentMethodReady = true;
+  //         this.stripeFirstSavedMethod = response.data[0];
+
+  //         this.updateFormWithSavedCard();
+  //       }
+  //     });
+  //   });
+  // }
 
   // private updateFormWithSavedCard() {
   //   const billingDetails = this.stripeFirstSavedMethod?.billing_details as PaymentMethod.BillingDetails;
@@ -975,10 +985,10 @@ export class DonationStartComponent implements
   //   this.stripePaymentMethodReady = true;
   // }
 
-  // /**
-  //  * @param error
-  //  * @param context 'method_setup', 'card_change' or 'confirm'.
-  //  */
+  /**
+   * @param error
+   * @param context 'method_setup', 'card_change' or 'confirm'.
+   */
   // private getStripeFriendlyError(error: StripeError, context: string): string {
   //   let prefix = '';
   //   switch (context) {
@@ -1012,7 +1022,7 @@ export class DonationStartComponent implements
   //   return this.stripeResponseErrorCode === 'card_declined';
   // }
 
-  // private jumpToStep(stepLabel: string) {
+  // jumpToStep(stepLabel: string) {
   //   this.stepper.steps
   //     .filter(step => step.label === stepLabel)
   //     [0]!
@@ -1036,7 +1046,8 @@ export class DonationStartComponent implements
   /**
    * @returns whether any errors were found in the visible viewport.
    */
-  // private goToFirstVisibleError(): boolean {
+  // goToFirstVisibleError = (): boolean => {
+  //   console.log(this.stepper);
   //   const stepper = this.elRef.nativeElement.querySelector('#stepper');
   //   const steps = stepper.getElementsByClassName('mat-step');
   //   const stepJustDone = steps[this.stepper.selectedIndex];
@@ -1324,25 +1335,16 @@ export class DonationStartComponent implements
   //     }
   //   }
 
-  //   if (
-  //     environment.environmentId !== "regression" ||
-  //     (new URLSearchParams(window.location.search)).has('include-continue-prompt')
-  //   ) {
-  //     // Prompting to continue confuses the regression test automation, so we skip the prompt in the regression
-  //     // test environment at least for the time being. See JIRA REG-33 . When regression tests think they know how to
-  //     // deal with the prompts they can send the include-continue-prompt query string.
+  //   // Amount reserved for matching is 'false-y', i.e. 0
+  //   if (response.donation.donationMatched && !response.donation.matchReservedAmount) {
+  //     this.promptToContinueWithNoMatchingLeft(response.donation);
+  //     return;
+  //   }
 
-  //     // Amount reserved for matching is 'false-y', i.e. 0
-  //     if (response.donation.donationMatched && !response.donation.matchReservedAmount) {
-  //       this.promptToContinueWithNoMatchingLeft(response.donation);
-  //       return;
-  //     }
-
-  //     // Amount reserved for matching is > 0 but less than the full donation
-  //     if (response.donation.donationMatched && response.donation.matchReservedAmount < response.donation.donationAmount) {
-  //       this.promptToContinueWithPartialMatching(response.donation);
-  //       return;
-  //     }
+  //   // Amount reserved for matching is > 0 but less than the full donation
+  //   if (response.donation.donationMatched && response.donation.matchReservedAmount < response.donation.donationAmount) {
+  //     this.promptToContinueWithPartialMatching(response.donation);
+  //     return;
   //   }
 
   //   this.scheduleMatchingExpiryWarning(this.donation);
@@ -1423,7 +1425,7 @@ export class DonationStartComponent implements
   //   }
   // }
 
-  // private clearDonation(donation: Donation, clearAllRecord: boolean) {
+  // clearDonation(donation: Donation, clearAllRecord: boolean) {
   //   if (clearAllRecord) { // i.e. don't keep donation around for /thanks/... or reuse.
   //     this.donationService.removeLocalDonation(donation);
   //   }
@@ -1469,10 +1471,10 @@ export class DonationStartComponent implements
   //   );
   // }
 
-  // /**
-  //  * @param donation *Response* Donation object, with `matchReservedAmount` returned
-  //  *                    by the Donations API.
-  //  */
+  /**
+   * @param donation *Response* Donation object, with `matchReservedAmount` returned
+   *                    by the Donations API.
+   */
   // private promptToContinueWithPartialMatching(donation: Donation) {
   //   this.analyticsService.logEvent('alerted_partial_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
   //   const formattedReservedAmount = (new ExactCurrencyPipe()).transform(donation.matchReservedAmount, donation.currencyCode);
@@ -1667,11 +1669,11 @@ export class DonationStartComponent implements
   //   this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
   // }
 
-  // /**
-  //  * @param percentage  e.g. from select field or a custom fee model campaign fee level.
-  //  * @param donationAmount  Sanitised, e.g. via get() helper `donationAmount`.
-  //  * @returns Tip or fee cover amount as a decimal string, as if input directly into a form field.
-  //  */
+  /**
+   * @param percentage  e.g. from select field or a custom fee model campaign fee level.
+   * @param donationAmount  Sanitised, e.g. via get() helper `donationAmount`.
+   * @returns Tip or fee cover amount as a decimal string, as if input directly into a form field.
+   */
   // private getTipOrFeeAmount(percentage: number, donationAmount?: number): string {
   //   if (this.creditPenceToUse > 0) {
   //     return '0'; // No tips on donation credit settlements.
@@ -1789,8 +1791,6 @@ export class DonationStartComponent implements
 
   // private exitPostDonationSuccess(donation: Donation) {
   //   this.analyticsService.logCheckoutDone(this.campaign, donation);
-  //   this.metaPixelService.trackConversion(donation);
-
   //   this.cancelExpiryWarning();
   //   this.router.navigate(['thanks', donation.donationId], {
   //     replaceUrl: true,

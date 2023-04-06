@@ -15,7 +15,7 @@
         <h1 class="b-rh-2 b-bold">{{ campaign.title }}</h1>
       </div>
 
-      <app-donation-start-login
+      <app-donation-start-login 
         [logout]="logout"
         [personId]="personId"
         [personIsLoginReady]="personIsLoginReady"
@@ -28,27 +28,28 @@
 
       <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 
-      <app-donation-start-form *ngIf="campaignOpenOnLoad"
-        [authedPersonEvents]="eventsSubject.asObservable()"
-        [identityService]="identityService"
-        [person]="person"
-        [personIsLoginReady]="personIsLoginReady"
-        [campaignId]="campaignId"
-        [campaign]="campaign"
-        [campaignOpenOnLoad]="campaignOpenOnLoad"
-        [currencySymbol]="currencySymbol"
-        [showChampionOptIn]="showChampionOptIn"
-        [psp]="psp"
-        [loadAuthedPersonInfo]="loadAuthedPersonInfo"
-        [noPsps]="noPsps"
+      <p>Campaign open {{ campaignOpenOnLoad }}</p>
 
+      <app-donation-start-form *ngIf="campaignOpenOnLoad"
+      [person]="person"
+      [personIsLoginReady]="personIsLoginReady"
+      [pageMeta]="pageMeta"
+      [loggingOut]="loggingOut"
+      [loadAuthedPersonInfo]="loadAuthedPersonInfo"      
+      [analyticsService]="analyticsService"
+      [analyticsService]="analyticsService"
+      [campaignId]="campaignId"
+      [campaign]="campaign"
+      [campaignOpenOnLoad]="campaignOpenOnLoad"
+      [currencySymbol]="currencySymbol"
+      [showChampionOptIn]="showChampionOptIn"
+      [psp]="psp"
+      [noPsps]="noPsps"
+      [resetStripePaymentMethod]="resetStripePaymentMethod"
       ></app-donation-start-form>
-      <!-- [resetStripePaymentMethod]="resetStripePaymentMethod" -->
-      <!-- [analyticsService]="analyticsService" -->
-      <!-- [loggingOut]="loggingOut" -->
-      <!-- [pageMeta]="pageMeta" -->
 
     </div>
+    <!-- [next]="next" -->
 
     <div class="b-secondary-column">
       <div id="campaign-highlights-beneficiaries-and-categories">
@@ -99,7 +100,7 @@
                   <!-- add zero width space to allow line break -->
                   {{ category.split('/').join('/\u200B') }}
                 </span>
-              </li>
+              </li>getCategoryIcon(category)
             </div>
 
             <h5>Beneficiaries</h5>

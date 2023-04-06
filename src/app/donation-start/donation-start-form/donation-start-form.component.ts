@@ -72,7 +72,7 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
     @Input() donationForm: FormGroup;
     amountsGroup: FormGroup;
     giftAidGroup: FormGroup;
-    paymentGroup: FormGroup;
+    paymentGroup: FormGroup; // TODO: paymentGroup is undefined on first render, defined after first reload
     marketingGroup: FormGroup;
 
     card: StripeCardElement | null;
@@ -645,7 +645,7 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
             this.clearDonation(donation, true);
 
             // Go back to 1st step to encourage donor to try again
-            this.captcha.reset();
+
             this.captcha.reset();
             this.stepper.reset();
             this.amountsGroup.patchValue({ tipPercentage: this.initialTipSuggestedPercentage });

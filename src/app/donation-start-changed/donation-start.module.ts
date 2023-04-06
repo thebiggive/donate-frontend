@@ -16,13 +16,13 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {RecaptchaModule} from 'ng-recaptcha';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
-import { DonationStartLoginComponent } from './donation-start-login/donation-start-login.component';
+import { DonationStartComponent } from './donation-start.component';
 import {DonationStartRoutingModule} from './donation-start-routing.module';
 import {ExactCurrencyPipe} from '../exact-currency.pipe';
 import {TimeLeftPipe} from '../time-left.pipe';
 import {CampaignDetailsModule} from "../campaign-details/campaign-details.module";
-import { DonationStartComponent } from './donation-start.component';
-import { DonationStartFormComponent } from './donation-start-form/donation-start-form.component';
+import {DonationStartLoginComponent} from './donation-start-login/donation-start-login.component';
+import {DonationStartFormComponent} from './donation-start-form/donation-start-form.component';
 
 @NgModule({
   imports: [
@@ -54,6 +54,9 @@ import { DonationStartFormComponent } from './donation-start-form/donation-start
   ],
   providers: [
     DatePipe,
+  ],
+  exports: [
+    ReactiveFormsModule
   ]
 })
 export class DonationStartModule {}

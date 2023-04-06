@@ -1,4 +1,5 @@
 
+<p>Donation Start Form Works!</p>
 <main>
   <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm">
     <mat-vertical-stepper
@@ -106,7 +107,7 @@
         </p>
 
         <re-captcha
-          #captcha
+          #idCaptcha
           size="invisible"
           errorMode="handled"
           (resolved)="captchaIdentityReturn($event)"
