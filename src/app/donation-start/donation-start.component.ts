@@ -116,6 +116,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
   stripeError?: string;
   stripeFirstSavedMethod?: PaymentMethod;
+  stripeSavedMethods: PaymentMethod[] = [];
+  selectedSavedMethod: PaymentMethod | undefined;
   submitting = false;
   termsProvider = `Big Give's`;
   termsUrl = 'https://biggive.org/terms-and-conditions';
@@ -906,16 +908,22 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
   }
 
-  onUseSavedCardChange(event: MatCheckboxChange) {
+  onUseSavedCardChange(event: MatCheckboxChange, paymentMethod: PaymentMethod) {
     // For now, we assume unticking happens before card entry, so we can just set the validity flag to false.
     // Ideally, we would later track `card`'s validity separately so that going back up the page, ticking this
     // then unticking it leaves the card box valid without having to modify it. But this is rare and
     // work-around-able, so for now it's not worth the refactoring time.
     this.stripePaymentMethodReady = event.checked;
 
+    const checked = event.checked;
+
+    console.log({ checked });
+
     if (event.checked) {
+      this.selectedSavedMethod = paymentMethod;
       this.updateFormWithSavedCard();
     } else {
+      this.selectedSavedMethod = undefined;
       this.prepareCardInput();
     }
   }
@@ -939,6 +947,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   private prepareCardInput() {
+    console.log("in prepare card input");
+    // @todo work out why we don't actually get to see an input.
     if (this.cardInfo.nativeElement.children.length > 0) {
       // Card input was already ready.
       return;
@@ -985,8 +995,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.donationService.getPaymentMethods(id, jwt).subscribe((response: { data: PaymentMethod[] }) => {
         if (response.data.length > 0) {
           this.stripePaymentMethodReady = true;
+          this.stripeSavedMethods = response.data;
           this.stripeFirstSavedMethod = response.data[0];
-
+          this.selectedSavedMethod = response.data[0];
           this.updateFormWithSavedCard();
         }
       });
