@@ -7,6 +7,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import {Card, PaymentMethod} from "@stripe/stripe-js";
+import {COUNTRIES} from "../countries";
+import {MatOption, MatOptionModule} from "@angular/material/core";
+import {MatSelectModule} from "@angular/material/select";
 
 
 @Component({
@@ -20,6 +23,8 @@ import {Card, PaymentMethod} from "@stripe/stripe-js";
     MatButtonModule,
     MatDialogModule,
     MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
   ],
@@ -29,6 +34,11 @@ export class UpdateCardModalComponent implements OnInit {
 
   card: PaymentMethod.Card;
   formattedCardExpiry: string;
+  billingDetails: PaymentMethod.BillingDetails;
+
+  countryOptions = COUNTRIES;
+  countryCode: string | undefined;
+  postalCode: string | undefined;
 
   constructor(
     private dialogRef: MatDialogRef<UpdateCardModalComponent>,
@@ -37,13 +47,25 @@ export class UpdateCardModalComponent implements OnInit {
 
   ngOnInit() {
     this.updateCardForm = this.formBuilder.group({
-      // add form fields
+      billingCountry: [this.countryCode],
+      expiryDate: [this.formattedCardExpiry, [Validators.required]],
+      postalCode: [this.postalCode],
     });
   }
 
-  setCard(card: PaymentMethod.Card) {
+  setPaymentMethod(paymentMethod: PaymentMethod) {
+    if (! paymentMethod.card) {
+      throw new Error("Payment method does not have card");
+    }
+
+    const card = paymentMethod.card;
     this.card = card;
+    this.billingDetails = paymentMethod.billing_details;
+    this.countryCode = paymentMethod.billing_details.address?.country || undefined;
+    this.postalCode = paymentMethod.billing_details.address?.postal_code || undefined
 
     this.formattedCardExpiry = card.exp_month.toString().padStart(2, "0") +  "/" + (card.exp_year % 100).toString()
+
+    console.log("Country: " + this.billingDetails.address!.country)
   }
 }
