@@ -98,10 +98,46 @@
 .row-top {
   padding: $spacer-2 $spacer-4;
   background-color: $colour-primary-blue;
-  display: flex;
-  .social-icon-wrap {
-    margin-right: $spacer-3;
+  display: none;
+
+  &[data-visible=true] {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column-reverse;
+    z-index: 100;
+    background-color: transparent;
+    .nav-secondary {
+      margin: 0;
+      li {
+        border: 0;
+        margin: 0 0 10px 0;
+        padding: 0;
+        width: 100%;
+        a {
+          @include button();
+          @include button-primary();
+          width: 100%;
+          box-sizing: border-box;
+        }
+      }
+    }
   }
+
+  .social-icon-wrap {
+    display: flex;
+    min-height: $icon-size-large; // Avoid broken content padding offset, due to menu height changing after component load.
+    margin: auto;
+    margin-right: $spacer-3;
+
+    .social-icon-item {
+      margin-right: $spacer-3;
+    }
+  }
+
   .nav-secondary {
     margin-left: auto;
     ul li {
@@ -118,37 +154,58 @@
       }
     }
   }
-  .social-icon-wrap {
-    display: flex;
-    .social-icon-item {
-      margin-right: $spacer-3;
-    }
-  }
 }
 
 .row-bottom {
-  padding: $spacer-3 $spacer-4;
+  display: flex;
   background-color: $colour-white;
-  display: flex;;
+  padding: $spacer-3 $spacer-3;
+
   .logo-wrap {
-    width: 200px;
-    margin-right: auto;
+    height: 30px;
+  }
+
+  .nav-toggle {
+    display: block;
+    margin-left: auto;
+    width: 45px;
+    height: 30px;
     position: relative;
     z-index: 101;
-    a {
+    background-image: url(/assets/images/menu.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    cursor: pointer;
+    &.active {
+      background-image: url(/assets/images/cross.svg?1);
       display: block;
-      svg {
-        height: 100%;
-        width: auto;
-      }
+      background-color: $colour-primary-blue;
+      background-size: 50% 50%;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
     }
   }
-  .nav-toggle {
-    display: none;
-  }
+
   .nav-primary {
+    display: none;
+    position: fixed;
     font-weight: 700;
     margin: $spacer-1 0;
+    z-index: 99;
+    top: 0;
+    height: 100vh;
+    padding-top: 100px;
+    left: 0;
+    right: 0;
+    margin: 0;
+    background-color: $colour-grey-light;
+
+    &[data-visible=true] {
+      display: block;
+    }
+
     li.icon-colour-primary a {
       background-image: url('/assets/images/biggive-double-triangle-primary.svg');
       background-position: left center;
@@ -212,155 +269,85 @@
       background-repeat: no-repeat;
       padding-left: 25px;
     }
-  }
-}
 
-
-@media screen and (min-width: 1051px) {
-
-.nav {
-  ul {
-    li {
-      position: relative;
-
-      // Don't make menu section hover-only links show a pointer cursor.
-      a[href=""]:hover {
-        cursor: default;
-      }
-
-      a:hover {
-        color: $colour-primary-blue;
-      }
-
-      ul {
-        display: none;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: $spacer-3 $spacer-5 $spacer-4 $spacer-5;
-        background-color: $colour-white;
-        @include corner-clip-small-bottom-left();
-        @include lower-shadow();
-        li {
+    ul {
+      li {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+        padding-bottom: $spacer-3;
+        margin-bottom: $spacer-2;
+        border-bottom: 1px solid $colour-grey-extra-light;
+        padding-left: $spacer-4;
+        padding-right: $spacer-4;
+        ul {
+          margin-top: $spacer-3;
+          display: none;
+          li {
+            font-weight: normal;
+            border-bottom: 0;
+            @include font-size-small();
+          }
+        }
+        &:hover ul {
           display: block;
-          font-weight: normal;
-          padding: 0;
-          margin: $spacer-2 0 $spacer-2 0;
-          white-space: nowrap;
-          text-align: left;
-          font-weight: normal;
-          @include  font-size-small();
         }
       }
-      &:hover ul {
-        display: block;
-      }
+    }
+  }
 
+  .logo-wrap {
+    width: 200px;
+    margin-right: auto;
+    position: relative;
+    z-index: 101;
+    a {
+      display: block;
+      svg {
+        height: 100%;
+        width: auto;
+      }
     }
   }
 }
 
+@media screen and (min-width: 1050px) {
+  .nav {
+    ul {
+      li {
+        position: relative;
 
-
-}
-
-
-@media screen and (max-width: 1050px) {
-  .row-top {
-    display: none;
-    &[data-visible=true] {
-      display: block;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      flex-direction: column-reverse;
-      z-index: 100;
-      background-color: transparent;
-      .nav-secondary {
-        margin: 0;
-        li {
-          border: 0;
-          margin: 0 0 10px 0;
-          padding: 0;
-          width: 100%;
-          a {
-            @include button();
-            @include button-primary();
-            width: 100%;
-            box-sizing: border-box;
-          }
+        // Don't make menu section hover-only links show a pointer cursor.
+        a[href=""]:hover {
+          cursor: default;
         }
-      }
-    }
-    .social-icon-wrap {
-      margin: auto;
-    }
-  }
-  .row-bottom {
-    padding: $spacer-3 $spacer-3;
-    .logo-wrap {
-      height: 30px;
-    }
-    .nav-toggle {
-      display: block;
-      margin-left: auto;
-      width: 45px;
-      height: 30px;
-      position: relative;
-      z-index: 101;
-      background-image: url(/assets/images/menu.svg);
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center center;
-      cursor: pointer;
-      &.active {
-        background-image: url(/assets/images/cross.svg?1);
-        display: block;
-        background-color: $colour-primary-blue;
-        background-size: 50% 50%;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-      }
-    }
-    .nav-primary {
-      display: none;
-      position: fixed;
-      z-index: 99;
-      top: 0;
-      height: 100vh;
-      padding-top: 100px;
-      left: 0;
-      right: 0;
-      margin: 0;
-      background-color: $colour-grey-light;
-      &[data-visible=true] {
-        display: block;
-      }
-      ul {
-        li {
-          width: 100%;
-          box-sizing: border-box;
-          text-align: center;
-          padding-bottom: $spacer-3;
-          margin-bottom: $spacer-2;
-          border-bottom: 1px solid $colour-grey-extra-light;
-          padding-left: $spacer-4;
-          padding-right: $spacer-4;
-          ul {
-            margin-top: $spacer-3;
-            display: none;
-            li {
-              font-weight: normal;
-              border-bottom: 0;
-              @include font-size-small();
-            }
-          }
-          &:hover ul {
+
+        a:hover {
+          color: $colour-primary-blue;
+        }
+
+        ul {
+          display: none;
+          position: absolute;
+          left: 50%;
+          transform: translateX(-50%);
+          padding: $spacer-3 $spacer-5 $spacer-4 $spacer-5;
+          background-color: $colour-white;
+          @include corner-clip-small-bottom-left();
+          @include lower-shadow();
+          li {
             display: block;
+            font-weight: normal;
+            padding: 0;
+            margin: $spacer-2 0 $spacer-2 0;
+            white-space: nowrap;
+            text-align: left;
+            font-weight: normal;
+            @include  font-size-small();
           }
+        }
+        &:hover ul {
+          display: block;
         }
       }
     }
