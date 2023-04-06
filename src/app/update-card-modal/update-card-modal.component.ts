@@ -7,6 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
+import {Card, PaymentMethod} from "@stripe/stripe-js";
 
 
 @Component({
@@ -30,6 +31,9 @@ export class UpdateCardModalComponent implements OnInit {
 
   updateCardForm: FormGroup;
 
+  card: PaymentMethod.Card;
+  formattedCardExpiry: string;
+
   constructor(
     private dialogRef: MatDialogRef<UpdateCardModalComponent>,
     private formBuilder: FormBuilder,
@@ -39,5 +43,11 @@ export class UpdateCardModalComponent implements OnInit {
     this.updateCardForm = this.formBuilder.group({
       // add form fields
     });
+  }
+
+  setCard(card: PaymentMethod.Card) {
+    this.card = card;
+
+    this.formattedCardExpiry = card.exp_month.toString().padStart(2, "0") +  "/" + (card.exp_year % 100).toString()
   }
 }

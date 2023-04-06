@@ -67,7 +67,9 @@
             </div>
           </td>
 
-          <td class="delete">
+          <td class="update"
+            *ngIf="method.card !== undefined && environment.environmentId === 'development'"
+          >
             <biggive-button
               space-above="5"
               colour-scheme="white"
@@ -75,10 +77,11 @@
               full-width="false"
               size="medium"
               rounded="false"
-              (click)="updateCard()"
+              (click)="updateCard(method.card)"
             />
           </td>
-          <td>
+
+          <td class="delete">
             <biggive-button
               space-above="5"
               colour-scheme="white"
