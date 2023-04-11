@@ -1,6 +1,6 @@
 import { MetaCampaign } from "../metaCampaign.model";
 import {cardsForMetaCampaigns} from "./cardsForMetaCampaigns";
-import {HighlightCard} from "./HilightCard";
+import {HighlightCard} from "./HighlightCard";
 
 describe('cardsForMetaCampaigns', () => {
   const emergencyCard: HighlightCard = {

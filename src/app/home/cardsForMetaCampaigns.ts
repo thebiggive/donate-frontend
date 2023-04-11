@@ -1,5 +1,5 @@
 import {MetaCampaign} from "../metaCampaign.model";
-import {HighlightCard} from "./HilightCard";
+import {HighlightCard} from "./HighlightCard";
 
 const campaignToCard = function (metaCampaign: MetaCampaign, donateUriPrefix: string): HighlightCard
 {
