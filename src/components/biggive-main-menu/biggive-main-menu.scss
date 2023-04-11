@@ -68,10 +68,7 @@ a {
   padding: $spacer-2 $spacer-4;
   background-color: $colour-primary-blue;
   display: flex;
-  max-height:
-    $icon-size-large +
-    2 * $spacer-2 +
-    $nav-height-desktop;
+  max-height: $icon-size-large + 2 * $spacer-2;
 
   .social-icon-wrap {
     display: flex;
