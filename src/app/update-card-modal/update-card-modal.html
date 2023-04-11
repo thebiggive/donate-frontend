@@ -8,7 +8,7 @@
   <mat-dialog-content class="mat-typography">
       <form [formGroup]="updateCardForm">
         <mat-form-field color="primary">
-          <mat-label for="expiryDate">Brand</mat-label>
+          <mat-label for="brand">Brand</mat-label>
           <input
             [disabled]=true
             width="5"
@@ -17,12 +17,12 @@
             title="Brand"
             [value]="card.brand.toUpperCase()"
             id="brand"
-            formControlName="last4"
+            formControlName="brand"
           >
         </mat-form-field>
 
         <mat-form-field color="primary">
-          <mat-label for="expiryDate">Last Four Digits</mat-label>
+          <mat-label for="last4">Last Four Digits</mat-label>
           <input
             [disabled]=true
             width="5"
