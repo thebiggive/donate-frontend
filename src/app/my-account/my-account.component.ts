@@ -84,10 +84,10 @@ export class MyAccountComponent implements OnInit {
     return this.identityService.getJWT() as string;
   }
 
-  updateCard(paymentMethod: PaymentMethod) {
+  updateCard(card: PaymentMethod.Card, billingDetails: PaymentMethod.BillingDetails) {
     const updateCardDialog = this.dialog.open(UpdateCardModalComponent);
     console.log(this.paymentMethods);
-    updateCardDialog.componentInstance.setPaymentMethod(paymentMethod);
+    updateCardDialog.componentInstance.setPaymentMethod(card, billingDetails);
     updateCardDialog.afterClosed().subscribe((data: unknown) => {
       console.log(updateCardDialog.componentInstance.form.value);
       // todo - send card update to backend and update view.

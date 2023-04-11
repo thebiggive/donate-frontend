@@ -53,16 +53,11 @@ export class UpdateCardModalComponent implements OnInit {
     });
   }
 
-  setPaymentMethod(paymentMethod: PaymentMethod) {
-    if (! paymentMethod.card) {
-      throw new Error("Payment method does not have card");
-    }
-
-    const card = paymentMethod.card;
+  setPaymentMethod(card: PaymentMethod.Card, billingDetails: PaymentMethod.BillingDetails) {
     this.card = card;
-    this.billingDetails = paymentMethod.billing_details;
-    this.countryCode = paymentMethod.billing_details.address?.country || undefined;
-    this.postalCode = paymentMethod.billing_details.address?.postal_code || undefined
+    this.billingDetails = billingDetails
+    this.countryCode = billingDetails.address?.country || undefined;
+    this.postalCode = billingDetails.address?.postal_code || undefined
 
     this.formattedCardExpiry = card.exp_month.toString().padStart(2, "0") +  "/" + (card.exp_year % 100).toString()
 
