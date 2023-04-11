@@ -77,7 +77,7 @@
           </td>
 
           <td class="update"
-            *ngIf="method.card !== undefined && environment.environmentId === 'development'"
+            *ngIf="method.card !== undefined && environment.environmentId !== 'production'"
           >
             <biggive-button
               space-above="5"
