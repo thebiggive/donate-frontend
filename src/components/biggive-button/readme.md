@@ -40,7 +40,6 @@
  - [biggive-footer](../biggive-footer)
  - [biggive-hero-image](../biggive-hero-image)
  - [biggive-image-feature](../biggive-image-feature)
- - [biggive-search](../biggive-search)
  - [biggive-video-feature](../biggive-video-feature)
 
 ### Graph
@@ -54,7 +53,6 @@ graph TD;
   biggive-footer --> biggive-button
   biggive-hero-image --> biggive-button
   biggive-image-feature --> biggive-button
-  biggive-search --> biggive-button
   biggive-video-feature --> biggive-button
   style biggive-button fill:#f9f,stroke:#333,stroke-width:4px
 ```

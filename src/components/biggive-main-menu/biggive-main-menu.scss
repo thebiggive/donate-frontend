@@ -70,7 +70,13 @@ a {
   display: flex;
 
   .social-icon-wrap {
+    display: flex;
+    min-height: $icon-size-large; // Avoid broken content padding offset, due to menu height changing after component load.
     margin-right: $spacer-2;
+
+    .social-icon-item {
+      margin-right: $spacer-2;
+    }    
   }
 
   .nav-secondary {
@@ -97,14 +103,6 @@ a {
         color: $colour-white;
         text-decoration: none;
       }
-    }
-  }
-
-  .social-icon-wrap {
-    display: flex;
-
-    .social-icon-item {
-      margin-right: $spacer-2;
     }
   }
 }

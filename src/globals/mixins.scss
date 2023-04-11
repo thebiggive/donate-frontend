@@ -217,8 +217,8 @@
 }
 
 @mixin icon-large() {
-  width: 40px;
-  height: 40px;
+  width: $icon-size-large;
+  height: $icon-size-large;
   border-radius: 50%;
   text-align: center;
   transition: all ease-in-out 0.5s;
