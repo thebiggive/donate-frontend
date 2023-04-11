@@ -6,7 +6,7 @@
     <h2 mat-dialog-title>Update Payment Card </h2>
 
   <mat-dialog-content class="mat-typography">
-      <form [formGroup]="updateCardForm">
+      <form [formGroup]="form">
         <mat-form-field color="primary">
           <mat-label for="brand">Brand</mat-label>
           <input
@@ -79,7 +79,7 @@
 
   <mat-dialog-actions align="end">
     <button
-      [disabled]="!updateCardForm.valid"
+      [disabled]="!form.valid"
       mat-raised-button
       mat-dialog-close="true"
       color="accent"

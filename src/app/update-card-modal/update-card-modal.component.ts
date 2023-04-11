@@ -30,7 +30,7 @@ import {MatSelectModule} from "@angular/material/select";
   ],
 })
 export class UpdateCardModalComponent implements OnInit {
-  updateCardForm: FormGroup;
+  form: FormGroup;
 
   card: PaymentMethod.Card;
   formattedCardExpiry: string;
@@ -46,7 +46,7 @@ export class UpdateCardModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.updateCardForm = this.formBuilder.group({
+    this.form = this.formBuilder.group({
       billingCountry: [this.countryCode],
       expiryDate: [this.formattedCardExpiry, [Validators.required]],
       postalCode: [this.postalCode],

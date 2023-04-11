@@ -89,7 +89,7 @@ export class MyAccountComponent implements OnInit {
     console.log(this.paymentMethods);
     updateCardDialog.componentInstance.setPaymentMethod(paymentMethod);
     updateCardDialog.afterClosed().subscribe((data: unknown) => {
-      console.log(updateCardDialog.componentInstance.updateCardForm.value);
+      console.log(updateCardDialog.componentInstance.form.value);
       // todo - send card update to backend and update view.
     })
   }
