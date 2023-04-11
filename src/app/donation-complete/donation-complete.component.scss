@@ -1,10 +1,6 @@
 @import '../../abstract';
 
-.c-donate-complete {
-  @include make-container;
-}
-
-.c-donate-complete__mat-spinner {
+mat-spinner.complete-spinner {
   margin: 3rem auto;
 }
 
