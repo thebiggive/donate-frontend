@@ -90,3 +90,10 @@ table#paymentMethods td:last-child {
   text-align: right;
 }
 
+.update-success {
+  color: $colour-highlight;
+}
+
+.error {
+  color: $colour-secondary;
+}

@@ -41,6 +41,15 @@
     <biggive-page-section>
       <h2>Your Payment Methods</h2>
 
+      <p *ngIf="registerErrorDescription" class="error" aria-live="assertive">
+        <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+        {{ registerErrorDescription }}
+      </p>
+
+      <p *ngIf="registerSucessMessage" class="update-success" aria-live="assertive">
+        {{ registerSucessMessage }}
+      </p>
+
       <div *ngIf="paymentMethods === undefined">
         <mat-spinner color="accent" [diameter]="40" aria-label="Loading payment methods"></mat-spinner>
       </div>
@@ -77,7 +86,7 @@
               full-width="false"
               size="medium"
               rounded="false"
-              (click)="updateCard(method.card, method.billing_details)"
+              (click)="updateCard(method.id, method.card, method.billing_details)"
             />
           </td>
 

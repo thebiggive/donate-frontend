@@ -313,4 +313,37 @@ export class DonationService {
       this.getPersonAuthHttpOptions(jwt),
     );
   }
+  updatePaymentMethod(
+    person: Person,
+    jwt: string,
+    paymentMethodId: string,
+    updatedMethodDetails: {
+      countryCode: string;
+      postalCode: string;
+      expiry: {month: number; year: number}
+    }) {
+
+
+    const url = `${environment.donationsApiPrefix}/people/${person.id}/payment_methods/${paymentMethodId}/billing_details`;
+
+    console.log("Will update payment method")
+    console.log({ url })
+    console.log({ updatedMethodDetails })
+
+    return this.http.put<{ data: PaymentMethod[] }>(
+      url,
+      {
+        card: {
+          exp_month: updatedMethodDetails.expiry.month,
+          exp_year: updatedMethodDetails.expiry.year,
+        },
+        billing_details: {
+          address: {
+          country: updatedMethodDetails.countryCode,
+          postal_code: updatedMethodDetails.postalCode
+        }}
+      },
+      {headers: this.getPersonAuthHttpOptions(jwt).headers}
+    );
+  }
 }
