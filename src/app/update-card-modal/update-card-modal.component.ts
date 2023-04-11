@@ -4,7 +4,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import {Card, PaymentMethod} from "@stripe/stripe-js";
@@ -23,12 +22,9 @@ import {Card, PaymentMethod} from "@stripe/stripe-js";
     MatInputModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
-    RecaptchaModule,
   ],
 })
 export class UpdateCardModalComponent implements OnInit {
-  @ViewChild('captcha') captcha: RecaptchaComponent;
-
   updateCardForm: FormGroup;
 
   card: PaymentMethod.Card;
