@@ -34,7 +34,7 @@ export class UpdateCardModalComponent implements OnInit {
 
   card: PaymentMethod.Card;
   formattedCardExpiry: string;
-  countryOptions = COUNTRIES;
+  readonly COUNTRIES = COUNTRIES;
   countryCode: string | undefined;
   postalCode: string | undefined;
 

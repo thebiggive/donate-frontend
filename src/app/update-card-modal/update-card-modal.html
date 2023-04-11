@@ -55,7 +55,7 @@
             formControlName="billingCountry"
           >
             <mat-option
-              *ngFor="let country of countryOptions"
+              *ngFor="let country of COUNTRIES"
               [value]="country.iso2"
             >
               {{ country.country }}
