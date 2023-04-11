@@ -323,12 +323,7 @@ export class DonationService {
       expiry: {month: number; year: number}
     }) {
 
-
     const url = `${environment.donationsApiPrefix}/people/${person.id}/payment_methods/${paymentMethodId}/billing_details`;
-
-    console.log("Will update payment method")
-    console.log({ url })
-    console.log({ updatedMethodDetails })
 
     return this.http.put<{ data: PaymentMethod[] }>(
       url,

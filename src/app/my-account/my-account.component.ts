@@ -88,7 +88,6 @@ export class MyAccountComponent implements OnInit {
 
   updateCard(methodId: string, card: PaymentMethod.Card, billingDetails: PaymentMethod.BillingDetails) {
     const updateCardDialog = this.dialog.open(UpdateCardModalComponent);
-    console.log(this.paymentMethods);
     updateCardDialog.componentInstance.setPaymentMethod(card, billingDetails);
     updateCardDialog.afterClosed().subscribe((data: unknown) => {
       if (data === "null") {
@@ -115,7 +114,6 @@ export class MyAccountComponent implements OnInit {
           this.loadPaymentMethods()
         },
         error: (resp: HttpErrorResponse)  => {
-          console.log({ resp })
           this.registerSucessMessage = undefined;
           this.registerErrorDescription = resp.error.error ?
             `Could not update card ending ${card.last4}. ${resp.error.error}` :
