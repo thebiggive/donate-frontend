@@ -6,9 +6,9 @@
 // strategy. If something like this is going to be permenant, we should probably port
 // it to a mixin and give the relevant <main>s utility classes.
 main {
-  @media #{$breakpoint-lg} {
-    padding-top: 40px;
-  }
+  position: relative;
+  top: 0;
+  margin-top: 10px;
 }
 
 .mat-ripple {
