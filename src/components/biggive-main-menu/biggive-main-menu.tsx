@@ -91,7 +91,11 @@ export class BiggiveMainMenu {
   }
 
   setHeaderSize() {
-    document.body.style.paddingTop = this.host.offsetHeight + 'px';
+    // Some resize edge cases lead Firefox, and maybe others, to go haywire and get a host offset
+    // height of millions of pixels, presumably due to a layout logic loop. So for as long as we use
+    // this body padding workaround, we need a safe maximum value, currently 130px, beyond which
+    // we will never further displace the main content.
+    document.body.style.paddingTop = Math.min(130, this.host.offsetHeight).toString() + 'px';
   }
 
   componentDidRender() {
