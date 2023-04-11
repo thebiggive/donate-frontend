@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -42,6 +42,11 @@ export class UpdateCardModalComponent implements OnInit {
     private dialogRef: MatDialogRef<UpdateCardModalComponent>,
     private formBuilder: FormBuilder,
   ) {}
+
+  @HostListener('window:keyup.Enter', ['$event'])
+  onDialogClick(event: KeyboardEvent): void {
+    this.dialogRef.close(true);
+  }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
