@@ -4,9 +4,14 @@ import { DatePipe } from '@angular/common';
 import {IdentityService} from "../identity.service";
 import {Person} from "../person.model";
 import {Router} from "@angular/router";
-import {PaymentMethod, Source} from "@stripe/stripe-js";
+import {Card, PaymentMethod, Source} from "@stripe/stripe-js";
 import {DonationService} from "../donation.service";
 import {flags, flagsForEnvironment} from "../featureFlags";
+import {LoginModalComponent} from "../login-modal/login-modal.component";
+import {UpdateCardModalComponent} from "../update-card-modal/update-card-modal.component";
+import {MatDialog} from "@angular/material/dialog";
+import {Environment} from "@angular/cli/lib/config/workspace-schema";
+import {environment} from "../../environments/environment";
 @Component({
   selector: 'app-my-account',
   templateUrl: './my-account.component.html',
@@ -18,9 +23,11 @@ export class MyAccountComponent implements OnInit {
 
   public paymentMethods: PaymentMethod[]|undefined = undefined;
 
+  protected readonly environment = environment;
+
   constructor(
     private pageMeta: PageMetaService,
-
+    public dialog: MatDialog,
     private identityService: IdentityService,
     private donationService: DonationService,
     private router: Router,
@@ -76,4 +83,14 @@ export class MyAccountComponent implements OnInit {
   private jwtAsString() {
     return this.identityService.getJWT() as string;
   }
+
+  updateCard(card: PaymentMethod.Card) {
+    const updateCardDialog = this.dialog.open(UpdateCardModalComponent);
+    console.log(this.paymentMethods);
+    updateCardDialog.componentInstance.setCard(card);
+    updateCardDialog.afterClosed().subscribe((data: unknown) => {
+      // todo - send card update to backend and update view.
+    })
+  }
+
 }
