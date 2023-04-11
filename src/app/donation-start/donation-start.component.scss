@@ -9,7 +9,7 @@ input:disabled {
   cursor: not-allowed; // Visual help on desktop when e.g. address lookup has frozen postcode field.
 }
 
-.b-back-button {
+.c-form-container {
   @include make-back-button;
 }
 
@@ -42,6 +42,10 @@ input:disabled {
 
 .b-rt-1 {
   @include b-rt-1;
+}
+
+.b-back-button {
+  @include make-back-button;
 }
 
 .mat-mdc-form-field {

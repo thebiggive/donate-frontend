@@ -40,79 +40,74 @@ import { COUNTRIES } from '../../countries';
 import { PaymentMethod, StripeCardElement, StripeElementChangeEvent, StripeError, StripePaymentRequestButtonElement } from '@stripe/stripe-js';
 
 
-
-
-
 @Component({
   selector: 'app-donation-start-form',
   templateUrl: './donation-start-form.component.html',
   styleUrls: ['./donation-start-form.component.scss']
 })
+
 export class DonationStartFormComponent implements OnInit, AfterContentInit, AfterContentChecked, OnDestroy {
 
-    @Input() showChampionOptIn: boolean; //!
-    @Input() identityService: IdentityService;
-    @Input() noPsps = false;
-    @Input() psp: 'stripe';
-    @Input() campaign: Campaign;
-    @Input() campaignOpenOnLoad: boolean;
-    @Input() campaignId: string;
-    @Input() personIsLoginReady: boolean //!
-    @Input() loadAuthedPersonInfo: (id: string, jwt: string) => void;
-    @Input() stripePaymentMethodReady: boolean;
+    // HTML elements
     @ViewChild('captcha') captcha: RecaptchaComponent;
     @ViewChild('cardInfo') cardInfo: ElementRef;
     @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
     @ViewChild('stepper') private stepper: MatStepper;
 
-    @Input() personId: string | undefined;
-    @Input()person: Person;
+    // Props from the parent
     @Input() donation?: Donation;
+    @Input() campaign: Campaign;
+    @Input() campaignId: string;
+    @Input() campaignOpenOnLoad: boolean;
+    @Input() identityService: IdentityService;
+    @Input() person: Person;
+    @Input() personId: string | undefined;
+    @Input() personIsLoginReady: boolean //!
+    @Input() loadAuthedPersonInfo: (id: string, jwt: string) => void;
+    @Input() showChampionOptIn: boolean; //!
+    @Input() stripeFirstSavedMethod?: PaymentMethod;
+    @Input() stripePaymentMethodReady: boolean;
+    @Input() psp: 'stripe';
+    @Input() noPsps = false;
+    @Input() creditPenceToUse = 0; // Set non-zero if logged in and Customer has a credit balance to spend. Caps donation amount too in that case.
+    @Input() currencySymbol: string;
 
+    // FORM
     @Input() donationForm: FormGroup;
+
     amountsGroup: FormGroup;
     giftAidGroup: FormGroup;
-    paymentGroup: FormGroup; // TODO: paymentGroup is undefined on first render, defined after first reload
+    paymentGroup: FormGroup;
     marketingGroup: FormGroup;
+    submitting = false;
+    retrying = false;
+
+
+    // DONATION
+    maximumDonationAmount: number;
+    donationUpdateError = false;
+    donationCreateError = false;
 
     card: StripeCardElement | null;
     cardHandler = this.onStripeCardChange.bind(this);
+    skipPRBs: boolean;
+    stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
+    stripeError?: string;
+    expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
     paymentRequestButton: StripePaymentRequestButtonElement | null;
+
+    showAddressLookup: boolean;
+    addressSuggestions: GiftAidAddressSuggestion[] = [];
+    loadingAddressSuggestions = false;
+    countryOptions = COUNTRIES;
 
     requestButtonShown = false;
 
     recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
 
-    countryOptions = COUNTRIES;
-
-    @Input() creditPenceToUse = 0; // Set non-zero if logged in and Customer has a credit balance to spend. Caps donation amount too in that case.
-    @Input() currencySymbol: string;
-
-    maximumDonationAmount: number;
-    skipPRBs: boolean;
-
-    retrying = false;
-
-    addressSuggestions: GiftAidAddressSuggestion[] = [];
-    donationCreateError = false;
-    donationUpdateError = false;
-
-    expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
-
-    loadingAddressSuggestions = false;
-
     privacyUrl = 'https://biggive.org/privacy';
-    showAddressLookup: boolean;
-
-    stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
-
-    stripeError?: string;
-
-    @Input() stripeFirstSavedMethod?: PaymentMethod;
-
-    submitting = false;
-    termsProvider = `Big Give's`;
     termsUrl = 'https://biggive.org/terms-and-conditions';
+    termsProvider = `Big Give's`;
 
   /**
    * Tracks internally whether (Person +) Donation setup is in flight. This is important to prevent duplicates, because multiple
