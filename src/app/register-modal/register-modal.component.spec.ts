@@ -15,8 +15,10 @@ describe('RegisterModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [],
+      declarations: [
+      ],
       imports: [
+        RegisterModalComponent,
         FormsModule,
         HttpClientTestingModule,
         MatButtonModule,

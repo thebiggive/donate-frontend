@@ -23,6 +23,7 @@ describe('ResetPasswordComponent', () => {
       declarations: [
       ],
       imports: [
+        ResetPasswordComponent,
         FormsModule,
         MatButtonModule,
         MatDialogModule,

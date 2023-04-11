@@ -25,6 +25,7 @@ describe('BuyCreditsComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
+        BuyCreditsComponent,
       ],
       imports: [
         FormsModule,

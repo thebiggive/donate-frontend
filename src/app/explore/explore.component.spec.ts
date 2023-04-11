@@ -22,6 +22,7 @@ describe('ExploreComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
+        ExploreComponent,
       ],
       imports: [
         AsyncPipe,

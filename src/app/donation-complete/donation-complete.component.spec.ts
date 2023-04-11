@@ -21,7 +21,9 @@ describe('DonationCompleteComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [],
+      declarations: [
+        DonationCompleteComponent,
+      ],
       imports: [
         HttpClientTestingModule,
         MatButtonModule,
