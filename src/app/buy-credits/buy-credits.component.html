@@ -1,11 +1,10 @@
-<main class="b-container">
+<main>
     <div *ngIf="isLoggedIn" id="loggedInHeader">
         <p>Logged in as {{ userFullName }}</p>
       <button id="my-account-link" mat-raised-button routerLink="/my-account">My Account</button>
       <button mat-raised-button (click)="logout()">Log out</button>
     </div>
-
-    <div>
+    <div class="b-container">
         <h3 class="b-rh-1 b-bold">Purchase Donation Credits</h3>
 
         <form *ngIf="isLoggedIn && !isLoading && !isPurchaseComplete" [formGroup]="creditForm">

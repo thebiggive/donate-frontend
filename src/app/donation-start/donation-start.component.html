@@ -495,12 +495,10 @@
             </div>
           </div>
           <div class="c-banner">
-            <!-- TODO we need better tuned and/or code-driven width + height. Or a way to `fill` while keeping it contained -->
             <img
               class="c-banner__image b-w-100"
               *ngIf="bannerUri"
-              [ngSrc]="bannerUri"
-              width="830"
+              [src]="bannerUri"
               alt=""
               role="presentation"
             >

@@ -1,9 +1,9 @@
-<main class="b-container">
+<main>
   <div class="c-header">
     <h1 *ngIf="campaigns[0]" class="b-rh-1 b-bold">{{ campaigns[0].charity.name }} Campaigns</h1>
   </div>
 
-  <div>
+  <div class="b-container">
     <div *ngIf="campaigns.length === 0">
       <p class="error" aria-live="polite">
         None yet! <a tabindex="0" routerLink="/">Find campaigns here</a>.

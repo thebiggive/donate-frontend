@@ -1,4 +1,4 @@
-<main class="b-container">
+<main>
   <biggive-hero-image
     colour-scheme="primary"
     main-image="/assets/images/banner-general.jpg"
@@ -8,7 +8,7 @@
     main-image-align-vertical="center"
   ></biggive-hero-image>
 
-  <div>
+  <div class="b-container">
     <biggive-grid [columnCount]="highlightCards.length" *ngIf="!loading">
       <biggive-basic-card *ngFor="let card of highlightCards"
                           [spaceBelow]='4'

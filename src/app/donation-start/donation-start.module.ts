@@ -1,4 +1,4 @@
-import {DatePipe, NgOptimizedImage, PercentPipe} from '@angular/common';
+import {DatePipe, PercentPipe} from '@angular/common';
 import { NgModule } from '@angular/core';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
@@ -20,30 +20,31 @@ import { DonationStartComponent } from './donation-start.component';
 import {DonationStartRoutingModule} from './donation-start-routing.module';
 import {ExactCurrencyPipe} from '../exact-currency.pipe';
 import {TimeLeftPipe} from '../time-left.pipe';
+import {CampaignDetailsModule} from "../campaign-details/campaign-details.module";
 
 @NgModule({
-    imports: [
-        ...allChildComponentImports,
-        DonationStartRoutingModule,
-        ExactCurrencyPipe,
-        FontAwesomeModule,
-        MatAutocompleteModule,
-        MatButtonModule,
-        MatCheckboxModule,
-        MatDialogModule,
-        MatIconModule,
-        MatInputModule,
-        MatOptionModule,
-        MatProgressSpinnerModule,
-        MatRadioModule,
-        MatSelectModule,
-        MatStepperModule,
-        NgOptimizedImage,
-        PercentPipe,
-        ReactiveFormsModule,
-        RecaptchaModule,
-        TimeLeftPipe,
-    ],
+  imports: [
+    ...allChildComponentImports,
+    DonationStartRoutingModule,
+    ExactCurrencyPipe,
+    FontAwesomeModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatIconModule,
+    MatInputModule,
+    MatOptionModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatStepperModule,
+    PercentPipe,
+    ReactiveFormsModule,
+    RecaptchaModule,
+    TimeLeftPipe,
+    CampaignDetailsModule,
+  ],
   declarations: [DonationStartComponent],
   providers: [
     DatePipe,
