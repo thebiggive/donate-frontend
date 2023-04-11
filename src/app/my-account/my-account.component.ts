@@ -91,6 +91,10 @@ export class MyAccountComponent implements OnInit {
     console.log(this.paymentMethods);
     updateCardDialog.componentInstance.setPaymentMethod(card, billingDetails);
     updateCardDialog.afterClosed().subscribe((data: unknown) => {
+      if (data === "null") {
+        return;
+      }
+
       const formValue = updateCardDialog.componentInstance.form.value;
 
       const paymentMethodsBeforeUpdate = this.paymentMethods;
