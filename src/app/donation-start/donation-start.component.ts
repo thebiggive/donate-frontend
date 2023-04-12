@@ -128,6 +128,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   campaignOpen: boolean;
   bannerUri: string | null;
 
+  useSavedCard: Boolean = false;
+
   private campaignId: string;
 
   /**
@@ -913,13 +915,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // Ideally, we would later track `card`'s validity separately so that going back up the page, ticking this
     // then unticking it leaves the card box valid without having to modify it. But this is rare and
     // work-around-able, so for now it's not worth the refactoring time.
-    this.stripePaymentMethodReady = event.checked;
-
     const checked = event.checked;
+    this.useSavedCard = checked;
+
+    this.stripePaymentMethodReady = checked;
 
     console.log({ checked });
-
-    if (event.checked) {
+    if (checked) {
       this.selectedSavedMethod = paymentMethod;
       this.updateFormWithSavedCard();
     } else {
@@ -996,6 +998,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         if (response.data.length > 0) {
           this.stripePaymentMethodReady = true;
           this.stripeSavedMethods = response.data;
+          this.useSavedCard = this.stripeSavedMethods.length > 0;
           this.stripeFirstSavedMethod = response.data[0];
           this.selectedSavedMethod = response.data[0];
           this.updateFormWithSavedCard();
@@ -1009,7 +1012,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.paymentGroup.patchValue({
       billingCountry: billingDetails.address?.country,
       billingPostcode: billingDetails.address?.postal_code,
-      useSavedCard: true,
     });
 
     this.stripePaymentMethodReady = true;
