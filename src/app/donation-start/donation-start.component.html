@@ -311,7 +311,7 @@
             <!-- We need the ElementRef to always be available for Stripe.js mounting as there are
             a few dynamic ways the input can become or cease to be relevant. So just CSS-hide the
             element when not needed, and always mount it. -->
-            <div [style.display]="!stripePRBMethodReady && !useSavedCard && creditPenceToUse === 0 ? 'block' : 'none'">
+            <div [style.display]="!stripePRBMethodReady && !selectedSavedMethod && creditPenceToUse === 0 ? 'block' : 'none'">
               <div class="sr-combo-inputs-row">
                 <mat-label for="card-info">Card</mat-label>
                 <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>

@@ -126,8 +126,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   campaignFinished: boolean;
   campaignOpen: boolean;
   bannerUri: string | null;
-
-  useSavedCard: Boolean = false;
   showAllPaymentMethods: boolean = false;
 
   private campaignId: string;
@@ -271,7 +269,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
         billingPostcode: [null],  // See setConditionalValidators().
-        useSavedCard: [false],
       }),
       // T&Cs agreement is implicit through submitting the form.
     };
@@ -915,7 +912,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // then unticking it leaves the card box valid without having to modify it. But this is rare and
     // work-around-able, so for now it's not worth the refactoring time.
     const checked = event.checked;
-    this.useSavedCard = checked;
 
     this.stripePaymentMethodReady = checked;
 
@@ -994,7 +990,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         if (response.data.length > 0) {
           this.stripePaymentMethodReady = true;
           this.stripeSavedMethods = response.data;
-          this.useSavedCard = this.stripeSavedMethods.length > 0;
           this.selectedSavedMethod = response.data[0];
           this.updateFormWithSavedCard();
         }
@@ -1798,9 +1793,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
             if (this.paymentGroup) {
               this.paymentGroup.patchValue({
                 billingCountry: this.defaultCountryCode,
-                useSavedCard: false,
               });
             }
+            this.selectedSavedMethod = this.stripeSavedMethods.length > 0 ? this.stripeSavedMethods[0] : undefined;
 
             if (this.personId) {
               this.loadAuthedPersonInfo(this.personId, this.identityService.getJWT() as string);
