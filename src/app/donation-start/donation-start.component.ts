@@ -920,7 +920,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     this.stripePaymentMethodReady = checked;
 
-    console.log({ checked });
     if (checked) {
       this.selectedSavedMethod = paymentMethod;
       this.updateFormWithSavedCard();
@@ -949,8 +948,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   private prepareCardInput() {
-    console.log("in prepare card input");
-    // @todo work out why we don't actually get to see an input.
     if (this.cardInfo.nativeElement.children.length > 0) {
       // Card input was already ready.
       return;
