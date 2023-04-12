@@ -17,15 +17,15 @@ import { RecaptchaModule } from 'ng-recaptcha';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
-import { Campaign } from '../../campaign.model';
-import { TBG_DONATE_STORAGE } from '../../donation.service';
+import { Campaign } from '../campaign.model';
+import { TBG_DONATE_STORAGE } from '../donation.service';
 import { DonationStartFormComponent } from './donation-start-form.component';
-import { TBG_DONATE_ID_STORAGE } from '../../identity.service';
-import {CampaignDetailsComponent} from "../../campaign-details/campaign-details.component";
+import { TBG_DONATE_ID_STORAGE } from '../identity.service';
+import {CampaignDetailsComponent} from "../campaign-details/campaign-details.component";
 import {CommonModule, CurrencyPipe, DatePipe} from "@angular/common";
 import {MatTabsModule} from "@angular/material/tabs";
-import {OptimisedImagePipe} from "../../optimised-image.pipe";
-import {TimeLeftPipe} from "../../time-left.pipe";
+import {OptimisedImagePipe} from "../optimised-image.pipe";
+import {TimeLeftPipe} from "../time-left.pipe";
 
 describe('DonationStartFormComponent', () => {
   beforeEach(waitForAsync(() => {

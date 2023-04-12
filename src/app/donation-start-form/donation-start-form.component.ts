@@ -2,10 +2,10 @@ import { AfterContentChecked, AfterContentInit, ChangeDetectorRef, Component, El
 import { Observable, Observer, Subscription, EMPTY, Subject } from "rxjs";
 import { Person } from "src/app/person.model";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DonationService } from '../../donation.service';
-import { getCurrencyMaxValidator } from '../../validators/currency-max';
-import { getCurrencyMinValidator } from '../../validators/currency-min';
-import { EMAIL_REGEXP } from '../../validators/patterns';
+import { DonationService } from '../donation.service';
+import { getCurrencyMaxValidator } from '../validators/currency-max';
+import { getCurrencyMinValidator } from '../validators/currency-min';
+import { EMAIL_REGEXP } from '../validators/patterns';
 import { Donation } from "src/app/donation.model";
 import { RecaptchaComponent } from "ng-recaptcha";
 import { MatStepper } from "@angular/material/stepper";
@@ -23,20 +23,20 @@ import { Campaign } from "src/app/campaign.model";
 import { HttpErrorResponse } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { ExactCurrencyPipe } from '../../exact-currency.pipe';
-import { DonationStartMatchConfirmDialogComponent } from "../donation-start-match-confirm-dialog.component";
-import { DonationStartOfferReuseDialogComponent } from "../donation-start-offer-reuse-dialog.component";
+import { ExactCurrencyPipe } from '../exact-currency.pipe';
+import { DonationStartMatchConfirmDialogComponent} from "../donation-start/donation-start-match-confirm-dialog.component";
+import { DonationStartOfferReuseDialogComponent } from "../donation-start/donation-start-offer-reuse-dialog.component";
 import { DonationCreatedResponse } from "src/app/donation-created-response.model";
-import { DonationStartMatchingExpiredDialogComponent } from "../donation-start-matching-expired-dialog.component";
+import { DonationStartMatchingExpiredDialogComponent } from "../donation-start/donation-start-matching-expired-dialog.component";
 import { ValidateBillingPostCode } from "src/app/validators/validate-billing-post-code";
-import { retryStrategy } from '../../observable-retry';
+import { retryStrategy } from '../observable-retry';
 import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
-import { GiftAidAddress } from '../../gift-aid-address.model';
+import { GiftAidAddress } from '../gift-aid-address.model';
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
-import { GiftAidAddressSuggestion } from '../../gift-aid-address-suggestion.model';
-import { CampaignService } from '../../campaign.service';
-import { COUNTRIES } from '../../countries';
+import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
+import { CampaignService } from '../campaign.service';
+import { COUNTRIES } from '../countries';
 import { PaymentMethod, StripeCardElement, StripeElementChangeEvent, StripeError, StripePaymentRequestButtonElement } from '@stripe/stripe-js';
 
 
@@ -132,7 +132,7 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
    * with an additional tweak to allow (and trim) surrounding spaces.
    */
   private postcodeFormatHelpRegExp = new RegExp('^\\s*([A-Z]{1,2}\\d{1,2}[A-Z]?)\\s*(\\d[A-Z]{2})\\s*$');
-  
+
   // Based on the simplified pattern suggestions in https://stackoverflow.com/a/51885364/2803757
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
 
@@ -359,7 +359,7 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
     this.stepHeaderEventsSet = true;
   }
 
-  
+
   ngOnDestroy() {
     this.eventsSubscription.unsubscribe();
 
@@ -1353,7 +1353,7 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
     });
     continueDialog.afterClosed().subscribe(this.getDialogResponseFn(donation));
   }
-  
+
   private exitPostDonationSuccess(donation: Donation) {
     this.analyticsService.logCheckoutDone(this.campaign, donation);
     this.metaPixelService.trackConversion(donation);
@@ -1612,33 +1612,33 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
         case 'confirm':
           prefix = 'Payment processing failed: ';
       }
-  
+
       let friendlyError = error.message;
-  
+
       let customMessage = false;
       if (error.code === 'card_declined' && error.decline_code === 'generic_decline') {
         // Probably a custom Radar rule -> relatively likely to be an incorrect postcode.
         friendlyError = `The payment was declined. Please ensure details provided (including postcode) match your card. Contact your bank or hello@thebiggive.org.uk if the problem persists.`;
         customMessage = true;
       }
-  
+
       if (customMessage && context === 'confirm') {
         prefix = ''; // Don't show extra context info in the most common `context`, when showing our already-long custom copy.
       }
-  
+
       return `${prefix}${friendlyError}`;
     }
-  
+
     private isBillingPostcodePossiblyInvalid() {
       return this.stripeResponseErrorCode === 'card_declined';
     }
-  
+
     private jumpToStep(stepLabel: string) {
       this.stepper.steps
         .filter(step => step.label === stepLabel)
         [0]!
         .select();
-  
+
       this.cd.detectChanges();
     }
 

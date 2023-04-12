@@ -22,12 +22,14 @@ import {ExactCurrencyPipe} from '../exact-currency.pipe';
 import {TimeLeftPipe} from '../time-left.pipe';
 import {CampaignDetailsModule} from "../campaign-details/campaign-details.module";
 import { DonationStartComponent } from './donation-start.component';
-import { DonationStartFormComponent } from './donation-start-form/donation-start-form.component';
+import { DonationStartFormComponent } from '../donation-start-form/donation-start-form.component';
+import {DonationStartFormModule} from "../donation-start-form/donation-start-form.module";
 
 @NgModule({
   imports: [
     ...allChildComponentImports,
     DonationStartRoutingModule,
+    DonationStartFormModule,
     ExactCurrencyPipe,
     FontAwesomeModule,
     MatAutocompleteModule,
