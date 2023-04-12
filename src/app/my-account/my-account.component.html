@@ -57,9 +57,6 @@
       <table id="paymentMethods" *ngIf="paymentMethods !== undefined && paymentMethods.length > 0">
         <tr *ngFor="let method of paymentMethods">
 
-          <!-- We have the card brand twice in the DOM for display in mobile & desktop in different positions. Only one
-          is visible at any time
-          -->
           <td class="cardBrand">
             <div class="cardBrand">{{(method.card?.brand || method.type).toUpperCase()}}</div>
             <div *ngIf="method.card !== undefined">
@@ -76,7 +73,7 @@
             </div>
           </td>
 
-          <td class="update"
+          <td class="cardUpdateButton"
             *ngIf="method.card !== undefined && environment.environmentId !== 'production'"
           >
             <biggive-button
@@ -90,7 +87,7 @@
             />
           </td>
 
-          <td class="delete">
+          <td class="cardDeleteButton">
             <biggive-button
               space-above="5"
               colour-scheme="white"
