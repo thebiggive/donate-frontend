@@ -1,12 +1,16 @@
 @use '@angular/material' as mat;
 @import '../../../abstract';
 
-// div .c-banner {
-//   background-color: white;
-// }
+div .c-banner {
+  background-color: white;
+}
 
 input:disabled {
   cursor: not-allowed; // Visual help on desktop when e.g. address lookup has frozen postcode field.
+}
+
+.c-form-container {
+  @include make-back-button;
 }
 
 .b-center {
@@ -40,6 +44,10 @@ input:disabled {
   @include b-rt-1;
 }
 
+.b-back-button {
+  @include make-back-button;
+}
+
 .mat-mdc-form-field {
   width: 100%;
 }
@@ -58,38 +66,38 @@ input:disabled {
   margin-bottom: 1rem;
 }
 
-// .c-form-container {
-//   display: flex;
-//   flex-direction: column;
+.c-form-container {
+  display: flex;
+  flex-direction: column;
 
-//   @media #{$breakpoint-lg} {
-//     flex-direction: row;
-//   }
-// }
+  @media #{$breakpoint-lg} {
+    flex-direction: row;
+  }
+}
 
-// .c-timer {
-//   position: fixed;
-//   top: 47px;
-//   left: 0;
-//   width: 100%;
-//   background: $colour-highlight;
-//   color: $colour-black;
-//   padding: 0.5rem;
-//   display: block;
-//   text-align: center;
-// }
+.c-timer {
+  position: fixed;
+  top: 47px;
+  left: 0;
+  width: 100%;
+  background: $colour-highlight;
+  color: $colour-black;
+  padding: 0.5rem;
+  display: block;
+  text-align: center;
+}
 
-// .c-header {
-//   h1, h3 {
-//     margin-top: 0.25rem;
-//   }
+.c-header {
+  h1, h3 {
+    margin-top: 0.25rem;
+  }
 
-//   &__to {
-//     @include size-md;
-//     margin: 0;
-//     margin-top: 0.25rem;
-//   }
-// }
+  &__to {
+    @include size-md;
+    margin: 0;
+    margin-top: 0.25rem;
+  }
+}
 
 .c-donate-form {
   margin: 2rem auto;
@@ -273,47 +281,47 @@ a {
 // code below copied from src/app/campaign-details/campaign-details.component.scss
 // I'm not keen on the copy & paste but I struggled to get it to work in a more elegant way.
 
-// .icons {
-//   @include format-icon-container;
-// }
+.icons {
+  @include format-icon-container;
+}
 
-// .icon-wrapper {
-//   @include format-icon-list-item;
+.icon-wrapper {
+  @include format-icon-list-item;
 
-//   // in campaign-details.component.scss the selector here is `svg` rather than `fa-icon`, but that doesn't seem to work
-//   // here.
-//   fa-icon.ng-fa-icon {
-//     color: $colour-primary; // #2C089BFF
-//     font-size: 40px;
-//     min-width: 4rem;
-//   }
+  // in campaign-details.component.scss the selector here is `svg` rather than `fa-icon`, but that doesn't seem to work
+  // here.
+  fa-icon.ng-fa-icon {
+    color: $colour-primary; // #2C089BFF
+    font-size: 40px;
+    min-width: 4rem;
+  }
 
-//   .c-icon-title {
-//     @include format-icon-title;
-//   }
-// }
+  .c-icon-title {
+    @include format-icon-title;
+  }
+}
 
 h5 {
   font-size: 1rem;
 }
 
-// div.match-funded-badge {
-//   width: 15em;
-//   height: 2em;
-//   text-align: center;
-//   background-color: $colour-highlight;
-//   font-weight: bold;
-//   position: absolute;
-//   margin-left: auto;
-//   margin-right: auto;
-//   left: 0;
-//   right: 0;
-//   top: -1em;
-// }
+div.match-funded-badge {
+  width: 15em;
+  height: 2em;
+  text-align: center;
+  background-color: $colour-highlight;
+  font-weight: bold;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  top: -1em;
+}
 
-// div.match-funded-badge-wrapper {
-//   position: relative;
-// }
+div.match-funded-badge-wrapper {
+  position: relative;
+}
 
 button#my-account-link {
   margin-right: 1em;

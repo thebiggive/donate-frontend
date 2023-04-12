@@ -4,7 +4,7 @@
 
 .id-info {
     @include make-card($box-shadow-hard);
-
+    color: black;
     text-align: center;
     margin-top: 1rem;
     padding: 0.25rem 1rem 1rem 1rem;
