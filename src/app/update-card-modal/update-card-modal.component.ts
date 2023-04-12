@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -7,6 +7,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import {Card, PaymentMethod} from "@stripe/stripe-js";
+import {COUNTRIES} from "../countries";
+import {MatOption, MatOptionModule} from "@angular/material/core";
+import {MatSelectModule} from "@angular/material/select";
 
 
 @Component({
@@ -20,29 +23,43 @@ import {Card, PaymentMethod} from "@stripe/stripe-js";
     MatButtonModule,
     MatDialogModule,
     MatInputModule,
+    MatOptionModule,
+    MatSelectModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
   ],
 })
 export class UpdateCardModalComponent implements OnInit {
-  updateCardForm: FormGroup;
+  form: FormGroup;
 
   card: PaymentMethod.Card;
   formattedCardExpiry: string;
+  readonly COUNTRIES = COUNTRIES;
+  countryCode: string | undefined;
+  postalCode: string | undefined;
 
   constructor(
     private dialogRef: MatDialogRef<UpdateCardModalComponent>,
     private formBuilder: FormBuilder,
   ) {}
 
+  @HostListener('window:keyup.Enter', ['$event'])
+  onDialogClick(event: KeyboardEvent): void {
+    this.dialogRef.close(true);
+  }
+
   ngOnInit() {
-    this.updateCardForm = this.formBuilder.group({
-      // add form fields
+    this.form = this.formBuilder.group({
+      billingCountry: [this.countryCode],
+      expiryDate: [this.formattedCardExpiry, [Validators.required]],
+      postalCode: [this.postalCode],
     });
   }
 
-  setCard(card: PaymentMethod.Card) {
+  setPaymentMethod(card: PaymentMethod.Card, billingDetails: PaymentMethod.BillingDetails) {
     this.card = card;
+    this.countryCode = billingDetails.address?.country || undefined;
+    this.postalCode = billingDetails.address?.postal_code || undefined
 
     this.formattedCardExpiry = card.exp_month.toString().padStart(2, "0") +  "/" + (card.exp_year % 100).toString()
   }

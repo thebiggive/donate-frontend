@@ -3,38 +3,10 @@
   *ngIf="card" above shouldn't be needed - we don't load the modal at all without a card, but it makes the `it('should create'`
   test pass. Would be good to remove.
  -->
-    <h2 mat-dialog-title>Update Payment Card </h2>
+    <h2 mat-dialog-title>Update {{card.brand.toUpperCase()}} ending {{card.last4}} </h2>
 
   <mat-dialog-content class="mat-typography">
-      <form [formGroup]="updateCardForm">
-        <mat-form-field color="primary">
-          <mat-label for="brand">Brand</mat-label>
-          <input
-            [disabled]=true
-            width="5"
-            matInput
-            type="text"
-            title="Brand"
-            [value]="card.brand.toUpperCase()"
-            id="brand"
-            formControlName="brand"
-          >
-        </mat-form-field>
-
-        <mat-form-field color="primary">
-          <mat-label for="last4">Last Four Digits</mat-label>
-          <input
-            [disabled]=true
-            width="5"
-            matInput
-            type="text"
-            title="Last four digits of long number"
-            [value]="card.last4"
-            id="last4"
-            formControlName="last4"
-          >
-        </mat-form-field>
-
+      <form [formGroup]="form">
           <mat-form-field color="primary">
             <mat-label for="expiryDate">Expiry (MM/YY) </mat-label>
             <input
@@ -43,37 +15,50 @@
               type="text"
               title="Expiry date as month and year, e.g. 12/23"
               pattern="[0-9]{2}/[0-9]{2}"
-              [value]="formattedCardExpiry"
               id="expiryDate"
               formControlName="expiryDate"
             >
           </mat-form-field>
 
-        <mat-form-field color="primary">
-          <mat-label for="billingAddress">Billing Address</mat-label>
-
-          <!--
-          @todo Prefil with old billing address if possible, work out what format we should present the address in.
-                Probably replace with multiple form fields for the individual properties of the address.
-          -->
-          <textarea
-            matInput
-            title="Billing Address"
-            [value]=""
-            id="billingAddress"
-            formControlName="billingAddress"
+        <div>
+        <mat-form-field>
+          <mat-label for="billingCountry">Billing country</mat-label>
+          <mat-select
+            id="billingCountry-orig"
+            formControlName="billingCountry"
           >
-          </textarea>
+            <mat-option
+              *ngFor="let country of COUNTRIES"
+              [value]="country.iso2"
+            >
+              {{ country.country }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
 
+
+        <mat-form-field>
+        <mat-label for="postalCode">Postal Code</mat-label>
+        <input
+          width="5"
+          matInput
+          type="text"
+          title="Postal Code / Zip Code"
+          id="postalCode"
+          formControlName="postalCode"
+        >
+        </mat-form-field>
+        </div>
       </form>
     </mat-dialog-content>
 
   <mat-dialog-actions align="end">
     <button
+      [disabled]="!form.valid"
       mat-raised-button
       mat-dialog-close="true"
       color="accent"
+      type="submit"
     >
       OK
     </button>
