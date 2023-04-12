@@ -26,6 +26,7 @@ export class MyAccountComponent implements OnInit {
   protected readonly environment = environment;
   registerErrorDescription: string | undefined;
   registerSucessMessage: string | undefined;
+  protected readonly faExclamationTriangle = faExclamationTriangle;
 
   constructor(
     private pageMeta: PageMetaService,
@@ -139,7 +140,4 @@ export class MyAccountComponent implements OnInit {
 
     return {year, month}
   }
-
-  protected readonly faExclamationTriangle = faExclamationTriangle;
-  protected readonly faInfo = faInfo;
 }

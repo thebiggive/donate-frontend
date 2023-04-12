@@ -65,8 +65,22 @@ table#personal-details, table#paymentMethods {
     vertical-align: bottom;
   }
 
-  td.update {
+  td.cardUpdateButton {
     text-align: right;
+  }
+
+  td.cardUpdateButton, td.cardDeleteButton {
+    display: flex;
+    @media #{$breakpoint-xl} {
+      display: table-cell;
+    }
+  }
+
+  td.cardUpdateButton {
+    padding-bottom: 0;
+    @media #{$breakpoint-xl} {
+      padding-bottom: 15px;
+    }
   }
 
   td.cardExpiry {
