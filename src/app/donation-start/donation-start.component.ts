@@ -115,7 +115,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   stripePaymentMethodReady = false;
   stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
   stripeError?: string;
-  stripeFirstSavedMethod?: PaymentMethod;
   stripeSavedMethods: PaymentMethod[] = [];
   selectedSavedMethod: PaymentMethod | undefined;
   submitting = false;
@@ -417,7 +416,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.creditPenceToUse = 0;
     this.personId = undefined;
     this.personIsLoginReady = false;
-    this.stripeFirstSavedMethod = undefined;
     this.stripePaymentMethodReady = false;
     this.donationForm.reset();
     this.identityService.clearJWT();
@@ -691,7 +689,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   async payWithStripe() {
-    const methodIsReady = this.card || (this.stripeFirstSavedMethod && this.paymentGroup.value.useSavedCard);
+    const methodIsReady = this.card || this.selectedSavedMethod;
 
     if (!this.donation || !this.donation.clientSecret || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
@@ -724,7 +722,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     // Else settlement is via a new or saved card (including wallets / Payment Request Buttons).
     const result = this.paymentGroup.value.useSavedCard
-        ? await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.stripeFirstSavedMethod as PaymentMethod)
+        ? await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.selectedSavedMethod as PaymentMethod)
         : await this.stripeService.confirmPaymentWithNewCardOrPRB(this.donation, this.card as StripeCardElement);
 
     if (!result || result.error) {
@@ -996,7 +994,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
           this.stripePaymentMethodReady = true;
           this.stripeSavedMethods = response.data;
           this.useSavedCard = this.stripeSavedMethods.length > 0;
-          this.stripeFirstSavedMethod = response.data[0];
           this.selectedSavedMethod = response.data[0];
           this.updateFormWithSavedCard();
         }
@@ -1005,7 +1002,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   private updateFormWithSavedCard() {
-    const billingDetails = this.stripeFirstSavedMethod?.billing_details as PaymentMethod.BillingDetails;
+    const billingDetails = this.selectedSavedMethod?.billing_details as PaymentMethod.BillingDetails;
     this.paymentGroup.patchValue({
       billingCountry: billingDetails.address?.country,
       billingPostcode: billingDetails.address?.postal_code,

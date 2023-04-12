@@ -277,7 +277,7 @@
 
             <div
               class="payment-method-options"
-              *ngIf="creditPenceToUse === 0 && stripeFirstSavedMethod?.card"
+              *ngIf="creditPenceToUse === 0 && stripeSavedMethods.length > 0"
             >
               <div
                 *ngFor="let method of stripeSavedMethods"
