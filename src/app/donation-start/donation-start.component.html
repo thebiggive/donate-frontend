@@ -280,9 +280,11 @@
               *ngIf="creditPenceToUse === 0 && stripeSavedMethods.length > 0"
             >
               <div
-                *ngFor="let method of stripeSavedMethods"
+                *ngFor="let method of stripeSavedMethods; let i=index"
+                [hidden]="i > 0 && !showAllPaymentMethods"
               >
                 <mat-checkbox
+
                   [checked]="method === selectedSavedMethod"
                   id="useSavedCard"
                   (change)="onUseSavedCardChange($event, method)"
@@ -293,7 +295,16 @@
                     [icon]="cardIconsService.getCardIcon(method.card?.brand)"
                   ></fa-icon>
                   Use saved card ending {{ method.card?.last4 }}.
+
                 </mat-checkbox>
+                <br />
+                <a
+                  (click)="this.showAllPaymentMethods = true"
+                  [hidden]="this.showAllPaymentMethods || stripeSavedMethods.length <= 1"
+                >
+                  (or pick another)
+                </a>
+
               </div>
             </div>
 

@@ -128,6 +128,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   bannerUri: string | null;
 
   useSavedCard: Boolean = false;
+  showAllPaymentMethods: boolean = false;
 
   private campaignId: string;
 
