@@ -141,5 +141,4 @@ export class MyAccountComponent implements OnInit {
   }
 
   protected readonly faExclamationTriangle = faExclamationTriangle;
-  protected readonly faInfo = faInfo;
 }
