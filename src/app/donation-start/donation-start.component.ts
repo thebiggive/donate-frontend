@@ -954,21 +954,19 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
   }
 
-  private loadAuthedPersonInfo(id: string, jwt: string) {
-    this.identityService.get(id, jwt).subscribe((person: Person) => {
-      this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
-      this.personIsLoginReady = true;
+  loadAuthedPersonInfo(id: string, jwt: string) {
+    if(this.identityService) {
+      this.identityService.get(id, jwt).subscribe((person: Person) => {
+        this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
+        this.personIsLoginReady = true;
+        this.prefillRarelyChangingFormValuesFromPerson(person);
+        this.loadFirstSavedStripeCardIfAny(id, jwt);
+      });
+    }
+  }
 
-      if (environment.creditDonationsEnabled && person.cash_balance && person.cash_balance[this.campaign.currencyCode.toLowerCase()]! > 0) {
-        this.creditPenceToUse = parseInt(
-          person.cash_balance[this.campaign.currencyCode.toLowerCase()]!.toString() as string,
-          10
-        );
-        this.stripePaymentMethodReady = true;
-        this.setConditionalValidators();
-      }
-
-      // Pre-fill rarely-changing form values from the Person.
+    // Pre-fill rarely-changing form values from the Person.
+    prefillRarelyChangingFormValuesFromPerson(person: Person) {
       this.giftAidGroup.patchValue({
         homeAddress: person.home_address_line_1,
         homeOutsideUK: person.home_country_code !== null && person.home_country_code !== 'GB',
@@ -980,18 +978,18 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         lastName: person.last_name,
         emailAddress: person.email_address,
       });
+    }
 
-      // Load first saved Stripe card, if there are any.
+    // Load first saved Stripe card, if there are any.
+    loadFirstSavedStripeCardIfAny(id: string, jwt: string) {
       this.donationService.getPaymentMethods(id, jwt).subscribe((response: { data: PaymentMethod[] }) => {
         if (response.data.length > 0) {
           this.stripePaymentMethodReady = true;
           this.stripeFirstSavedMethod = response.data[0];
-
           this.updateFormWithSavedCard();
         }
       });
-    });
-  }
+    }
 
   private updateFormWithSavedCard() {
     const billingDetails = this.stripeFirstSavedMethod?.billing_details as PaymentMethod.BillingDetails;
