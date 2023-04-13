@@ -917,7 +917,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
     if (checked) {
       this.selectedSavedMethod = paymentMethod;
-      this.updateFormWithSavedCard();
+      this.updateFormWithBillingDetails(this.selectedSavedMethod);
     } else {
       this.selectedSavedMethod = undefined;
       this.prepareCardInput();
@@ -990,15 +990,20 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         if (response.data.length > 0) {
           this.stripePaymentMethodReady = true;
           this.stripeSavedMethods = response.data;
-          this.selectedSavedMethod = response.data[0];
-          this.updateFormWithSavedCard();
+
+          // not null assertion is justified because we know the data length is > 0. Seems TS isn't smart enough to
+          // notice that.
+          const firstPaymentMethod = response.data[0]!;
+
+          this.selectedSavedMethod = firstPaymentMethod;
+          this.updateFormWithBillingDetails(firstPaymentMethod);
         }
       });
     });
   }
 
-  private updateFormWithSavedCard() {
-    const billingDetails = this.selectedSavedMethod?.billing_details as PaymentMethod.BillingDetails;
+  private updateFormWithBillingDetails(paymentMethod: PaymentMethod) {
+    const billingDetails = paymentMethod.billing_details;
     this.paymentGroup.patchValue({
       billingCountry: billingDetails.address?.country,
       billingPostcode: billingDetails.address?.postal_code,
