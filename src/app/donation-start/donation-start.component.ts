@@ -161,7 +161,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
   campaignRaised: string; // Formatted
   campaignTarget: string; // Formatted
-  private stepChangedBlockedByCaptcha = false;
 
 
   constructor(
@@ -816,10 +815,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.idCaptchaCode = undefined;
       return;
     }
-    if (this.stepChangedBlockedByCaptcha) {
-      this.stepper.next();
-      this.stepChangedBlockedByCaptcha = false;
-    }
 
     this.idCaptchaCode = captchaResponse;
     if (!this.donation) {
@@ -903,14 +898,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.stepper.next();
       return;
     }
-
-    const promptingForCaptcha = this.promptForCaptcha();
-
-    if (promptingForCaptcha) {
-      this.stepChangedBlockedByCaptcha = true;
-      return;
-    }
-
 
     // For all other errors, attempting to proceed should just help the donor find
     // the error on the page if there is one.
@@ -1158,8 +1145,19 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       return;
     }
 
-    const promptingForCaptcha = this.promptForCaptcha();
-    if (promptingForCaptcha) {
+    if (!this.idCaptchaCode) {
+      // We need a captcha code before we can *really* proceed. By doing this here we ensure
+      // this happens consistently regardless of whether donors click Next or a subsequent stepper
+      // heading, while only configuring it in one place.
+      //
+      // captchaIdentityReturn() is called on resolution of a valid captcha and calls this fn again. We
+      // don't get stuck in this logic branch because `this.idCaptchaCode` is non-empty then.
+      // As well as happening the first time the donor leaves step 1, we expect to do this again and get
+      // a new code any time a previously used one was cleared in `clearDonation()`.
+
+      this.idCaptcha.reset();
+      this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
+
       return;
     }
 
@@ -1216,21 +1214,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         }
       )
     }
-  }
-
-  /**
-   * @return boolean True if prompting, false if there is no need to prompt as we already have captcha code.
-   * @private
-   */
-  private promptForCaptcha() {
-    if (this.idCaptchaCode) {
-      return false;
-    }
-
-    this.idCaptcha.reset();
-    this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
-
-    return true;
   }
 
   /**
