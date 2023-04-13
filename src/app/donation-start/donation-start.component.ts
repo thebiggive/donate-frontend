@@ -980,7 +980,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       });
     }
 
-    // Load first saved Stripe card, if there are any.
     loadFirstSavedStripeCardIfAny(id: string, jwt: string) {
       this.donationService.getPaymentMethods(id, jwt).subscribe((response: { data: PaymentMethod[] }) => {
         if (response.data.length > 0) {
