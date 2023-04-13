@@ -277,14 +277,6 @@ a {
   }
 }
 
-.id-info {
-  @include make-card($box-shadow-hard);
-
-  text-align: center;
-  margin-top: 1rem;
-  padding: 0.25rem 1rem 1rem 1rem;
-}
-
 // code below copied from src/app/campaign-details/campaign-details.component.scss
 // I'm not keen on the copy & paste but I struggled to get it to work in a more elegant way.
 
@@ -328,8 +320,4 @@ div.match-funded-badge {
 
 div.match-funded-badge-wrapper {
   position: relative;
-}
-
-button#my-account-link {
-  margin-right: 1em;
 }
