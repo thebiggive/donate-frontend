@@ -275,25 +275,43 @@
               <p id="useCreditsMessage" class="b-center">Your credit balance will be applied against this donation. No further funds will be taken.</p>
             </div>
 
-            <div *ngIf="creditPenceToUse === 0 && stripeFirstSavedMethod?.card">
-              <mat-checkbox
-                formControlName="useSavedCard"
-                id="useSavedCard"
-                (change)="onUseSavedCardChange($event)"
+            <div
+              class="payment-method-options"
+              *ngIf="creditPenceToUse === 0 && stripeSavedMethods.length > 0"
+            >
+              <div
+                *ngFor="let method of stripeSavedMethods; let i=index"
+                [hidden]="i > 0 && !showAllPaymentMethods"
               >
-                <fa-icon
-                  *ngIf="cardIconsService.hasCardIcon(stripeFirstSavedMethod?.card?.brand)"
-                  [title]="stripeFirstSavedMethod?.card?.brand"
-                  [icon]="cardIconsService.getCardIcon(stripeFirstSavedMethod?.card?.brand)"
-                ></fa-icon>
-                Use saved card ending {{ stripeFirstSavedMethod?.card?.last4 }}.
-              </mat-checkbox>
+                <mat-checkbox
+
+                  [checked]="method === selectedSavedMethod"
+                  id="useSavedCard"
+                  (change)="onUseSavedCardChange($event, method)"
+                >
+                  <fa-icon
+                    *ngIf="cardIconsService.hasCardIcon(method.card?.brand)"
+                    [title]="method.card?.brand"
+                    [icon]="cardIconsService.getCardIcon(method.card?.brand)"
+                  ></fa-icon>
+                  Use saved card ending {{ method.card?.last4 }}.
+
+                </mat-checkbox>
+                <br />
+                <a
+                  (click)="this.showAllPaymentMethods = true"
+                  [hidden]="this.showAllPaymentMethods || stripeSavedMethods.length <= 1"
+                >
+                  (or pick another)
+                </a>
+
+              </div>
             </div>
 
             <!-- We need the ElementRef to always be available for Stripe.js mounting as there are
             a few dynamic ways the input can become or cease to be relevant. So just CSS-hide the
             element when not needed, and always mount it. -->
-            <div [style.display]="!stripePRBMethodReady && !paymentGroup.value.useSavedCard && creditPenceToUse === 0 ? 'block' : 'none'">
+            <div [style.display]="!stripePRBMethodReady && !selectedSavedMethod && creditPenceToUse === 0 ? 'block' : 'none'">
               <div class="sr-combo-inputs-row">
                 <mat-label for="card-info">Card</mat-label>
                 <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>

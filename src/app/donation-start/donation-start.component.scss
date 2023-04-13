@@ -48,6 +48,17 @@ input:disabled {
   width: 100%;
 }
 
+.payment-method-options {
+  .mdc-form-field {
+    background: green;
+    margin-top: 0;
+  }
+
+  mat-checkbox {
+    margin-top: 0;
+  }
+}
+
 .mat-primary {
   margin-top: 1rem;
 }
