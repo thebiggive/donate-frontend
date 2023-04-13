@@ -47,8 +47,6 @@ export class DonationCompleteComponent implements OnInit {
   timedOut = false;
   totalValue: number;
   donationIsLarge: boolean = false;
-  profilePageEnabled: boolean = flags.profilePageEnabled;
-
   private donationId: string;
   private readonly maxTries = 5;
   private patchedCorePersonInfo = false;

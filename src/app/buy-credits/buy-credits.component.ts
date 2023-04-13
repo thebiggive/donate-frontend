@@ -1,7 +1,6 @@
-import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { isPlatformBrowser } from '@angular/common';
-import { AfterContentInit, Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AfterContentInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
@@ -33,7 +32,6 @@ import {flags} from "../featureFlags";
   styleUrls: ['./buy-credits.component.scss'],
 })
 export class BuyCreditsComponent implements AfterContentInit, OnInit {
-  profilePageEnabled: boolean = flags.profilePageEnabled;
   addressSuggestions: GiftAidAddressSuggestion[] = [];
   isLoggedIn: boolean = false;
   isLoading: boolean = false;

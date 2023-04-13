@@ -1,5 +1,5 @@
 <div id="banner"></div>
-<main class="c-my-account">
+<main>
   <div class="my-account">
     <biggive-page-section>
       <div class="heading-wrapper">
@@ -41,6 +41,15 @@
     <biggive-page-section>
       <h2>Your Payment Methods</h2>
 
+      <p *ngIf="registerErrorDescription" class="error" aria-live="assertive">
+        <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+        {{ registerErrorDescription }}
+      </p>
+
+      <p *ngIf="registerSucessMessage" class="update-success" aria-live="assertive">
+        {{ registerSucessMessage }}
+      </p>
+
       <div *ngIf="paymentMethods === undefined">
         <mat-spinner color="accent" [diameter]="40" aria-label="Loading payment methods"></mat-spinner>
       </div>
@@ -48,9 +57,6 @@
       <table id="paymentMethods" *ngIf="paymentMethods !== undefined && paymentMethods.length > 0">
         <tr *ngFor="let method of paymentMethods">
 
-          <!-- We have the card brand twice in the DOM for display in mobile & desktop in different positions. Only one
-          is visible at any time
-          -->
           <td class="cardBrand">
             <div class="cardBrand">{{(method.card?.brand || method.type).toUpperCase()}}</div>
             <div *ngIf="method.card !== undefined">
@@ -67,7 +73,21 @@
             </div>
           </td>
 
-          <td>
+          <td class="cardUpdateButton"
+            *ngIf="method.card !== undefined && environment.environmentId !== 'production'"
+          >
+            <biggive-button
+              space-above="5"
+              colour-scheme="white"
+              label="Edit"
+              full-width="false"
+              size="medium"
+              rounded="false"
+              (click)="updateCard(method.id, method.card, method.billing_details)"
+            />
+          </td>
+
+          <td class="cardDeleteButton">
             <biggive-button
               space-above="5"
               colour-scheme="white"
@@ -97,11 +117,6 @@
         rounded="false"
         (click)="logout()"
       />
-    </div>
-
-    <div *ngIf="isHiddenByFlag" style="outline: dashed green 2px; margin: 10px;">
-      This page is shown in this environment to enable review &amp; iteration, but is hidden in production by a feature
-      flag.
     </div>
 
   </div>

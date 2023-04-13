@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
 import {PageMetaService} from '../page-meta.service';
-import {HighlightCard} from "./HilightCard";
+import {HighlightCard} from "./HighlightCard";
 import {environment} from "../../environments/environment";
 import {CampaignService, SearchQuery} from "../campaign.service";
 import {cardsForMetaCampaigns} from "./cardsForMetaCampaigns";
@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.campaignService.fetchAllMetaCampaigns().subscribe(metaCampaigns => {
-        this.highlightCards = cardsForMetaCampaigns(metaCampaigns, environment.donateGlobalUriPrefix);
+        this.highlightCards = cardsForMetaCampaigns(metaCampaigns, environment.donateGlobalUriPrefix, environment.blogUriPrefix);
         this.loading = false;
       }, () => {
         this.loading = false;

@@ -188,8 +188,13 @@ export class DonationService {
   }
 
   get(donation: Donation): Observable<Donation> {
+    // Without use of the cacheBuster the browser seems to be caching the result and not sending
+    // another get request to poll the donation status to show when we have collected payment.
+    // Not sure why we should need it. Returns timestamp e.g. 1680260722
+    const cacheBuster = Math.floor(new Date().getTime() / 1000);
+
     return this.http.get<Donation>(
-      `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}`,
+      `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}?cb=${cacheBuster}`,
       this.getAuthHttpOptions(donation),
     );
   }
@@ -306,6 +311,34 @@ export class DonationService {
     return this.http.delete<{ data: PaymentMethod[] }>(
       `${environment.donationsApiPrefix}/people/${personId}/payment_methods/${paymentMethodId}`,
       this.getPersonAuthHttpOptions(jwt),
+    );
+  }
+  updatePaymentMethod(
+    person: Person,
+    jwt: string,
+    paymentMethodId: string,
+    updatedMethodDetails: {
+      countryCode: string;
+      postalCode: string;
+      expiry: {month: number; year: number}
+    }) {
+
+    const url = `${environment.donationsApiPrefix}/people/${person.id}/payment_methods/${paymentMethodId}/billing_details`;
+
+    return this.http.put<{ data: PaymentMethod[] }>(
+      url,
+      {
+        card: {
+          exp_month: updatedMethodDetails.expiry.month,
+          exp_year: updatedMethodDetails.expiry.year,
+        },
+        billing_details: {
+          address: {
+          country: updatedMethodDetails.countryCode,
+          postal_code: updatedMethodDetails.postalCode
+        }}
+      },
+      {headers: this.getPersonAuthHttpOptions(jwt).headers}
     );
   }
 }

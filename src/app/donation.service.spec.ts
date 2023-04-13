@@ -186,7 +186,7 @@ describe('DonationService', () => {
       // After it finds a local match, getProbablyResumableDonation() will hit the server for the latest copy via
       // `DonationService.get()`.
       const mockGet = httpMock.expectOne(
-        `${environment.donationsApiPrefix}/donations/${inputDonation.donationId}`,
+        (request) => request.url.startsWith(`${environment.donationsApiPrefix}/donations/${inputDonation.donationId}`)
       );
       expect(mockGet.request.method).toBe('GET');
       expect(mockGet.cancelled).toBeFalsy();
