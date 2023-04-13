@@ -8,6 +8,7 @@ import {
   Component,
   ElementRef,
   Inject,
+  Input,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
@@ -22,7 +23,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RecaptchaComponent } from 'ng-recaptcha';
 import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
 import { PaymentMethod, StripeCardElement, StripeElementChangeEvent, StripeError, StripePaymentRequestButtonElement } from '@stripe/stripe-js';
-import { EMPTY, Observer } from 'rxjs';
+import { EMPTY, Observer, Subject } from 'rxjs';
 
 import { AnalyticsService } from '../analytics.service';
 import { Campaign } from '../campaign.model';
@@ -158,7 +159,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
   campaignRaised: string; // Formatted
   campaignTarget: string; // Formatted
-
 
 
   constructor(
@@ -409,7 +409,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     });
   }
 
-  logout() {
+  logout = () => {
     this.creditPenceToUse = 0;
     this.personId = undefined;
     this.personIsLoginReady = false;
