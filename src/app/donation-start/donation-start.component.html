@@ -29,6 +29,7 @@
       <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 
       <app-donation-start-form *ngIf="campaignOpenOnLoad"
+      [idCaptcha]="idCaptcha"
       [authedPersonEvents]="eventsSubject.asObservable()"
       [identityService]="identityService"
       [person]="person"
@@ -147,15 +148,6 @@
                   contact us</a>
               if this message persists.
             </p>
-
-            <re-captcha
-              #idCaptcha
-              size="invisible"
-              errorMode="handled"
-              (resolved)="captchaIdentityReturn($event)"
-              (errored)="captchaIdentityError()"
-              siteKey="{{ recaptchaIdSiteKey }}"
-            ></re-captcha>
 
             <div>
               <button
@@ -581,4 +573,12 @@
       <span class="b-rt-1 b-bold">{{ reservationExpiryTime() | timeLeft }}</span>
     </p>
   </div>
+  <re-captcha
+    #idCaptcha
+    size="invisible"
+    errorMode="handled"
+    (resolved)="captchaIdentityReturn($event)"
+    (errored)="captchaIdentityError()"
+    siteKey="{{ recaptchaIdSiteKey }}"
+  ></re-captcha>
 </main>
