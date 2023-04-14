@@ -162,6 +162,8 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   campaignRaised: string; // Formatted
   campaignTarget: string; // Formatted
 
+  @Input() email: string;
+
   person: Person;
   eventsSubject: Subject<{person: Person, id: string , jwt: string}> = new Subject<{person: Person, id: string , jwt: string}>();
 
