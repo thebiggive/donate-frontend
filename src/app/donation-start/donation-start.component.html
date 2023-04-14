@@ -28,7 +28,22 @@
 
       <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 
-      <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaignOpenOnLoad">
+      <app-donation-start-form *ngIf="campaignOpenOnLoad"
+      [authedPersonEvents]="eventsSubject.asObservable()"
+      [identityService]="identityService"
+      [person]="person"
+      [personIsLoginReady]="personIsLoginReady"
+      [campaignId]="campaignId"
+      [campaign]="campaign"
+      [campaignOpenOnLoad]="campaignOpenOnLoad"
+      [currencySymbol]="currencySymbol"
+      [showChampionOptIn]="showChampionOptIn"
+      [psp]="psp"
+      [loadAuthedPersonInfo]="loadAuthedPersonInfo"
+      [noPsps]="noPsps"
+    ></app-donation-start-form>
+
+      <!-- <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaignOpenOnLoad">
         <mat-vertical-stepper
           id="stepper"
           linear
@@ -306,7 +321,7 @@
             <!-- We need the ElementRef to always be available for Stripe.js mounting as there are
             a few dynamic ways the input can become or cease to be relevant. So just CSS-hide the
             element when not needed, and always mount it. -->
-            <div [style.display]="!stripePRBMethodReady && !selectedSavedMethod && creditPenceToUse === 0 ? 'block' : 'none'">
+            <!--<div [style.display]="!stripePRBMethodReady && !selectedSavedMethod && creditPenceToUse === 0 ? 'block' : 'none'">
               <div class="sr-combo-inputs-row">
                 <mat-label for="card-info">Card</mat-label>
                 <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
@@ -471,7 +486,7 @@
               </div>
 
               <!-- Matching or Gift Aid reiteration -->
-              <ul class="c-donation-receipt b-grey">
+              <!--<ul class="c-donation-receipt b-grey">
                 <li *ngIf="giftAidAmount() > 0">
                   <mat-icon aria-hidden="true">check</mat-icon>
                   You have told us you would like to claim Gift Aid
@@ -490,7 +505,7 @@
             </div>
           </mat-step>
         </mat-vertical-stepper>
-      </form>
+      </form> -->
     </div>
 
     <div class="b-secondary-column">

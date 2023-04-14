@@ -129,7 +129,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   bannerUri: string | null;
   showAllPaymentMethods: boolean = false;
 
-  private campaignId: string;
+  protected campaignId: string;
 
   /**
    * Tracks internally whether (Person +) Donation setup is in flight. This is important to prevent duplicates, because multiple
@@ -177,7 +177,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     private donationService: DonationService,
     @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
-    private identityService: IdentityService,
+    protected identityService: IdentityService,
     private imageService: ImageService,
     private metaPixelService: MetaPixelService,
     private pageMeta: PageMetaService,
