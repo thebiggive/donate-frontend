@@ -141,8 +141,6 @@ export function app() {
 
   // All regular routes use the Universal engine
   server.get('*', async (req: Request, res: Response) => {
-    console.log(`Country debug: server.ts received CloudFront header: ${req.header('CloudFront-Viewer-Country')}`);
-
     // Note that the file output as `index.html` is actually dynamic. See `index` config keys in `angular.json`.
     // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
     // this key to work around `fileReplacements` ending index support in Angular 8.
