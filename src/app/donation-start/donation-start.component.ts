@@ -1227,6 +1227,11 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       return false;
     }
 
+    if (this.donation) {
+      // No need for a captcha if the donation is already created.
+      return false;
+    }
+
     this.idCaptcha.reset();
     this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
 
