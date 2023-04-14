@@ -162,6 +162,12 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   campaignRaised: string; // Formatted
   campaignTarget: string; // Formatted
 
+  person: Person;
+  eventsSubject: Subject<{person: Person, id: string , jwt: string}> = new Subject<{person: Person, id: string , jwt: string}>();
+
+  emitEventToChild(person: Person, id: string , jwt: string) {
+    this.eventsSubject.next({person, id , jwt});
+  }
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -400,15 +406,15 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.stepHeaderEventsSet = true;
   }
 
-  login() {
-    const loginDialog = this.dialog.open(LoginModalComponent);
-    loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
-      if (data && data.id) {
-        this.loadAuthedPersonInfo(data.id, data.jwt);
-        location.reload(); // ensures correct menu is displayed
-      }
-    });
-  }
+  // login() {
+  //   const loginDialog = this.dialog.open(LoginModalComponent);
+  //   loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
+  //     if (data && data.id) {
+  //       this.loadAuthedPersonInfo(data.id, data.jwt);
+  //       location.reload(); // ensures correct menu is displayed
+  //     }
+  //   });
+  // }
 
   logout = () => {
     this.creditPenceToUse = 0;
@@ -963,41 +969,42 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.identityService.get(id, jwt).subscribe((person: Person) => {
         this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
         this.personIsLoginReady = true;
-        this.prefillRarelyChangingFormValuesFromPerson(person);
-        this.loadFirstSavedStripeCardIfAny(id, jwt);
+        //this.prefillRarelyChangingFormValuesFromPerson(person);
+        //this.loadFirstSavedStripeCardIfAny(id, jwt);
+        this.emitEventToChild(person, id, jwt);
       });
     }
   }
 
-    prefillRarelyChangingFormValuesFromPerson(person: Person) {
-      this.giftAidGroup.patchValue({
-        homeAddress: person.home_address_line_1,
-        homeOutsideUK: person.home_country_code !== null && person.home_country_code !== 'GB',
-        homePostcode: person.home_postcode,
-      });
+    // prefillRarelyChangingFormValuesFromPerson(person: Person) {
+    //   this.giftAidGroup.patchValue({
+    //     homeAddress: person.home_address_line_1,
+    //     homeOutsideUK: person.home_country_code !== null && person.home_country_code !== 'GB',
+    //     homePostcode: person.home_postcode,
+    //   });
 
-      this.paymentGroup.patchValue({
-        firstName: person.first_name,
-        lastName: person.last_name,
-        emailAddress: person.email_address,
-      });
-    }
+    //   this.paymentGroup.patchValue({
+    //     firstName: person.first_name,
+    //     lastName: person.last_name,
+    //     emailAddress: person.email_address,
+    //   });
+    // }
 
-    loadFirstSavedStripeCardIfAny(id: string, jwt: string) {
-      this.donationService.getPaymentMethods(id, jwt).subscribe((response: { data: PaymentMethod[] }) => {
-        if (response.data.length > 0) {
-          this.stripePaymentMethodReady = true;
-          this.stripeSavedMethods = response.data;
+    // loadFirstSavedStripeCardIfAny(id: string, jwt: string) {
+    //   this.donationService.getPaymentMethods(id, jwt).subscribe((response: { data: PaymentMethod[] }) => {
+    //     if (response.data.length > 0) {
+    //       this.stripePaymentMethodReady = true;
+    //       this.stripeSavedMethods = response.data;
 
-          // not null assertion is justified because we know the data length is > 0. Seems TS isn't smart enough to
-          // notice that.
-          const firstPaymentMethod = response.data[0]!;
+    //       // not null assertion is justified because we know the data length is > 0. Seems TS isn't smart enough to
+    //       // notice that.
+    //       const firstPaymentMethod = response.data[0]!;
 
-          this.selectedSavedMethod = firstPaymentMethod;
-          this.updateFormWithBillingDetails(firstPaymentMethod);
-        }
-      });
-    }
+    //       this.selectedSavedMethod = firstPaymentMethod;
+    //       this.updateFormWithBillingDetails(firstPaymentMethod);
+    //     }
+    //   });
+    // }
 
   private updateFormWithBillingDetails(paymentMethod: PaymentMethod) {
     const billingDetails = paymentMethod.billing_details;
