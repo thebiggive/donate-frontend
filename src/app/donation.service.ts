@@ -39,15 +39,20 @@ export class DonationService {
     const defaultCountryKey = makeStateKey<string>(`default-country-code`);
     if (isPlatformServer(this.platformId)) {
       if (!this.defaultCountryCode) {
+        console.log('Country debug: DonationService in server mode had NO injected country, so using GB');
         this.defaultCountryCode = 'GB';
+      } else {
+        console.log(`Country debug: DonationService in server mode had injected country – using: $${this.defaultCountryCode}`);
       }
       this.state.set(defaultCountryKey, this.defaultCountryCode);
     } else {
+      console.log(`Country debug: DonationService in browser mode loaded country from state: ${this.state.get(defaultCountryKey, 'GB')}`);
       this.defaultCountryCode = this.state.get(defaultCountryKey, 'GB');
     }
   }
 
   getDefaultCounty(): string {
+    console.log(`Country debug: DonationService::getDefaultCounty() returning: ${this.defaultCountryCode}`);
     return this.defaultCountryCode;
   }
 
