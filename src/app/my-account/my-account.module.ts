@@ -8,6 +8,8 @@ import {OptimisedImagePipe} from '../optimised-image.pipe';
 import {MyAccountRoutingModule} from "./my-account-routing.module";
 import {MyAccountComponent} from "./my-account.component";
 import {MatButtonModule} from "@angular/material/button";
+import {MatDialogModule} from "@angular/material/dialog";
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 @NgModule({
     imports: [
@@ -18,6 +20,8 @@ import {MatButtonModule} from "@angular/material/button";
         MatProgressSpinnerModule,
         OptimisedImagePipe,
         MatButtonModule,
+        MatDialogModule,
+        FontAwesomeModule,
     ],
   declarations: [
     MyAccountComponent,

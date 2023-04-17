@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { minPasswordLength } from 'src/environments/common';
 
-import { RecaptchaComponent, RecaptchaModule } from 'ng-recaptcha';
+import { RecaptchaModule } from 'ng-recaptcha';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Person } from '../person.model';
 

@@ -15,21 +15,16 @@
         <h1 class="b-rh-2 b-bold">{{ campaign.title }}</h1>
       </div>
 
-      <div *ngIf="canLogin" class="id-info">
-        <p><strong>You can donate faster if you've already made an account with us since November 2022.</strong></p>
-        <p><button mat-raised-button (click)="login()">Log in</button></p>
-      </div>
-
-      <div *ngIf="personId && personIsLoginReady" class="id-info">
-        <p>Logged in as <strong>{{ paymentGroup.value.emailAddress }}</strong></p>
-        <p>We'll pre-fill some fields with your saved details, but you can change them if you need to.</p>
-        <p *ngIf="creditPenceToUse > 0">Your credit balance will be used and the donation value capped at {{ creditPenceToUse / 100 | exactCurrency:campaign.currencyCode }}</p>
-        <p>
-        <p>
-          <button id="my-account-link" mat-raised-button routerLink="/my-account">My Account</button>
-          <button mat-raised-button (click)="logout()">Log out</button>
-        </p>
-      </div>
+      <app-donation-start-login
+      [logout]="logout"
+      [personId]="personId"
+      [email]="paymentGroup.value.emailAddress"
+      [personIsLoginReady]="personIsLoginReady"
+      [loadAuthedPersonInfo]="loadAuthedPersonInfo"
+      [creditPenceToUse]="creditPenceToUse"
+      [campaign]="campaign"
+      [canLogin]="canLogin">
+    </app-donation-start-login>
 
       <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 
@@ -275,25 +270,43 @@
               <p id="useCreditsMessage" class="b-center">Your credit balance will be applied against this donation. No further funds will be taken.</p>
             </div>
 
-            <div *ngIf="creditPenceToUse === 0 && stripeFirstSavedMethod?.card">
-              <mat-checkbox
-                formControlName="useSavedCard"
-                id="useSavedCard"
-                (change)="onUseSavedCardChange($event)"
+            <div
+              class="payment-method-options"
+              *ngIf="creditPenceToUse === 0 && stripeSavedMethods.length > 0"
+            >
+              <div
+                *ngFor="let method of stripeSavedMethods; let i=index"
+                [hidden]="i > 0 && !showAllPaymentMethods"
               >
-                <fa-icon
-                  *ngIf="cardIconsService.hasCardIcon(stripeFirstSavedMethod?.card?.brand)"
-                  [title]="stripeFirstSavedMethod?.card?.brand"
-                  [icon]="cardIconsService.getCardIcon(stripeFirstSavedMethod?.card?.brand)"
-                ></fa-icon>
-                Use saved card ending {{ stripeFirstSavedMethod?.card?.last4 }}.
-              </mat-checkbox>
+                <mat-checkbox
+
+                  [checked]="method === selectedSavedMethod"
+                  id="useSavedCard"
+                  (change)="onUseSavedCardChange($event, method)"
+                >
+                  <fa-icon
+                    *ngIf="cardIconsService.hasCardIcon(method.card?.brand)"
+                    [title]="method.card?.brand"
+                    [icon]="cardIconsService.getCardIcon(method.card?.brand)"
+                  ></fa-icon>
+                  Use saved card ending {{ method.card?.last4 }}.
+
+                </mat-checkbox>
+                <br />
+                <a
+                  (click)="this.showAllPaymentMethods = true"
+                  [hidden]="this.showAllPaymentMethods || stripeSavedMethods.length <= 1"
+                >
+                  (or pick another)
+                </a>
+
+              </div>
             </div>
 
             <!-- We need the ElementRef to always be available for Stripe.js mounting as there are
             a few dynamic ways the input can become or cease to be relevant. So just CSS-hide the
             element when not needed, and always mount it. -->
-            <div [style.display]="!stripePRBMethodReady && !paymentGroup.value.useSavedCard && creditPenceToUse === 0 ? 'block' : 'none'">
+            <div [style.display]="!stripePRBMethodReady && !selectedSavedMethod && creditPenceToUse === 0 ? 'block' : 'none'">
               <div class="sr-combo-inputs-row">
                 <mat-label for="card-info">Card</mat-label>
                 <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>

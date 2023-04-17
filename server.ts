@@ -16,7 +16,7 @@ import { join } from 'path';
 
 import { AnalyticsService } from './src/app/analytics.service';
 import { AppServerModule } from './src/main.server';
-// import { COUNTRY_CODE } from './src/app/country-code.token';
+import { COUNTRY_CODE } from './src/app/country-code.token';
 import { environment } from './src/environments/environment';
 import { GetSiteControlService } from './src/app/getsitecontrol.service';
 
@@ -149,9 +149,8 @@ export function app() {
       // base reported by CloudFront when talking to the origin.
       // (From later 2023 we should no longer need to maintain support for parallel base domains.)
       { provide: APP_BASE_HREF, useValue: environment.donateGlobalUriPrefix, },
-      // Skip for now as this adds complexity and didn't actually seem to be working as of Aug '22 anyway. See DON-523.
-      // { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
-      ],
+      { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
+    ],
   }, async (err: Error, html: string) => {
       if (err) {
         console.log(`Render error: ${err}`);

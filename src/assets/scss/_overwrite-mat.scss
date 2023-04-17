@@ -1,16 +1,6 @@
 // Write all class styling inside elements where possible
 @use '@angular/material' as mat;
 
-// Allow room for dynamically sized header, when needed to avoid obscuring content.
-// Apply globally for now, as it's not clear if we have a finalised long-term layout
-// strategy. If something like this is going to be permenant, we should probably port
-// it to a mixin and give the relevant <main>s utility classes.
-main {
-  @media #{$breakpoint-lg} {
-    padding-top: 40px;
-  }
-}
-
 .mat-ripple {
   display: none;
 }
