@@ -1158,7 +1158,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       return;
     }
 
-    const promptingForCaptcha = this.promptForCaptcha();
+    const promptingForCaptcha = !this.idCaptchaCode && this.promptForCaptcha();
     if (promptingForCaptcha) {
       return;
     }
