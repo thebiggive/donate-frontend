@@ -810,6 +810,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   captchaIdentityReturn(captchaResponse: string) {
+    console.trace();
     console.log('inside captchaIdentityReturn');
     console.log({ captchaResponse });
     if (captchaResponse === null) {
@@ -1225,6 +1226,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
    * @private
    */
   private promptForCaptcha() {
+    console.trace();
     console.log('inside promptForCaptcha():')
     console.log({idCaptchaCode: this.idCaptchaCode});
 
