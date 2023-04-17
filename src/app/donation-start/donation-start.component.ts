@@ -810,9 +810,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   captchaIdentityReturn(captchaResponse: string) {
-    console.trace();
-    console.log('inside captchaIdentityReturn');
-    console.log({ captchaResponse });
     if (captchaResponse === null) {
       // Ensure no other callback tries to use the old captcha code, and will re-execute
       // the catcha to get a new one as needed instead.
@@ -1226,21 +1223,16 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
    * @private
    */
   private promptForCaptcha() {
-    console.trace();
-    console.log('inside promptForCaptcha():')
-    console.log({idCaptchaCode: this.idCaptchaCode});
 
     if (this.idCaptchaCode) {
       return false;
     }
 
     if (this.donation) {
-      console.log("Donation already present");
       // No need for a captcha if the donation is already created.
       return false;
     }
 
-    console.log("Will reset & execute captcha...");
     this.idCaptcha.reset();
     this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
 
