@@ -65,7 +65,7 @@ export const cardsForMetaCampaigns = function (
         headerText: 'Double your donation in the Green Match Fund',
         backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
         iconColor: 'brand-3',
-        bodyText: 'Donate between 20/04/23 - 27/04/23',
+        bodyText: 'Donate from 20 April to 27 April 2023',
         button: {
           text: 'Donate now',
           href: new URL('/green-match-fund-2023', donateUriPrefix)
