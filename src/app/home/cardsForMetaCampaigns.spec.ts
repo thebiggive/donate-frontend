@@ -44,12 +44,12 @@ describe('cardsForMetaCampaigns', () => {
   };
 
   const gmfCard: HighlightCard = {
-    headerText: 'Save the date for Green Match Fund',
+    headerText: 'Double your donation in the Green Match Fund',
     backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', 'https://donate.example.com'),
     iconColor: 'brand-3',
-    bodyText: '20th - 27th April 2023',
+    bodyText: 'Donate between 20/04/23 - 27/04/23',
     button: {
-      text: 'Save the date!',
+      text: 'Donate now',
       href: new URL('/green-match-fund-2023', "https://donate.example.com")
     }
   };
@@ -59,7 +59,7 @@ describe('cardsForMetaCampaigns', () => {
 
     const cards = cardsForMetaCampaigns(metaCampaigns, 'https://donate.example.com', 'https://blog.com')
 
-    expect(cards).toEqual([wgfCard, gmfCard, exploreCard]);
+    expect(cards).toEqual([gmfCard, wgfCard, exploreCard]);
   });
 
   it('Shows emergency and explore when there is only emergency metacampaign', () => {
@@ -67,7 +67,7 @@ describe('cardsForMetaCampaigns', () => {
 
     const cards = cardsForMetaCampaigns(metaCampaigns, 'https://donate.example.com', 'https://blog.com')
 
-    expect(cards).toEqual([emergencyCard, wgfCard, gmfCard, exploreCard]);
+    expect(cards).toEqual([emergencyCard, gmfCard,  wgfCard,exploreCard]);
   });
 
   it('Shows 4 emergencies with explore card', () => {
@@ -75,7 +75,7 @@ describe('cardsForMetaCampaigns', () => {
 
     const cards = cardsForMetaCampaigns(metaCampaigns, 'https://donate.example.com', 'https://blog.com')
 
-    expect(cards).toEqual([...Array(4).fill(emergencyCard), wgfCard, gmfCard, exploreCard]);
+    expect(cards).toEqual([...Array(4).fill(emergencyCard), gmfCard, wgfCard, exploreCard]);
   });
 
   it('Shows 5 emergencies with no explore card', () => {
@@ -83,6 +83,6 @@ describe('cardsForMetaCampaigns', () => {
 
     const cards = cardsForMetaCampaigns(metaCampaigns, 'https://donate.example.com', 'https://blog.com')
 
-    expect(cards).toEqual([...Array(5).fill(emergencyCard), wgfCard, gmfCard]);
+    expect(cards).toEqual([...Array(5).fill(emergencyCard), gmfCard, wgfCard]);
   });
 });
