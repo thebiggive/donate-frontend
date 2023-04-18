@@ -56,6 +56,16 @@ export const cardsForMetaCampaigns = function (metacampaigns: readonly MetaCampa
   return [
     ...metaCampaignCards,
     {
+      headerText: 'Double your donation in the Green Match Fund',
+      backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
+      iconColor: 'brand-3',
+      bodyText: 'Donate between 20/04/23 - 27/04/23',
+      button: {
+        text: 'Donate now!',
+        href: new URL('/green-match-fund-2023', donateUriPrefix)
+      }
+    },
+    {
       headerText: 'Applications for Women and Girls Match Fund now open!',
       backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', donateUriPrefix),
       iconColor: 'brand-2',
@@ -63,16 +73,6 @@ export const cardsForMetaCampaigns = function (metacampaigns: readonly MetaCampa
       button: {
         text: 'Apply now',
         href: new URL('/women-girls-match-fund', blogUriPrefix)
-      }
-    },
-    {
-      headerText: 'Save the date for Green Match Fund',
-      backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
-      iconColor: 'brand-3',
-      bodyText: '20th - 27th April 2023',
-      button: {
-        text: 'Save the date!',
-        href: new URL('/green-match-fund-2023', donateUriPrefix)
       }
     },
     ...anyExploreCard,
