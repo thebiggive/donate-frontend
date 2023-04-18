@@ -972,6 +972,15 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   loadAuthedPersonInfo(id: string, jwt: string) {
+    if (!this.identityService) {
+      // This feels like an anti-pattern, but currently seems to be required. Since the "contained"
+      // login component is passed this public fn and could call it any time, it is not safe to assume
+      // that this page has its normal service dependencies. The current behaviour post-login seems to
+      // be that this is called as a no-op once, but then there's a reload during which it works?
+      console.log('No ID service');
+      return;
+    }
+
     this.identityService.get(id, jwt).subscribe((person: Person) => {
       this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
       this.personIsLoginReady = true;
