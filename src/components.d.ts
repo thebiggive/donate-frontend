@@ -501,7 +501,16 @@ export namespace Components {
         "spaceBelow": spacingOption;
     }
     interface BiggiveFooter {
+        /**
+          * URL prefixes vary by environment, and components library is not best placed to know what they are, so we take them as props
+         */
+        "blogUrlPrefix": string | undefined;
+        "experienceUrlPrefix": string | undefined;
         "headingLevel": 1 | 2 | 3 | 4 | 5 | 6;
+        /**
+          * Conditionally render footer menu: hard-coded (preset) when set to true, dynamic (slot-based) when set to false
+         */
+        "usePresetFooter": boolean;
     }
     interface BiggiveForm {
     }
@@ -557,21 +566,6 @@ export namespace Components {
           * Deprecated - should use columGap Instead
          */
         "spaceBetween": boolean;
-    }
-    /**
-     * @deprecated 
-     * @see BiggiveMainMenu
-     */
-    interface BiggiveHeader {
-        "closeMenuFromOutside": () => Promise<void>;
-        /**
-          * Logo hyperlink URL
-         */
-        "logoUrl": string;
-        /**
-          * Space below component
-         */
-        "spaceBelow": number;
     }
     interface BiggiveHeading {
         "align": string;
@@ -903,21 +897,6 @@ export namespace Components {
         "quoteIconColour": brandColour;
         "spaceBelow": spacingOption;
     }
-    /**
-     * @deprecated (?) I don't think Donate is using this. Unless there is a WordPress use case,
-     * should we delete it rather than maintaining?
-     */
-    interface BiggiveSearch {
-        /**
-          * Defines the text on the search button
-         */
-        "buttonText": string;
-        /**
-          * Defines the text displayed as the placeholder in the input field before the user types anything
-         */
-        "placeholderText": string;
-        "searchText": string;
-    }
     interface BiggiveSheet {
         "backgroundColour": brandColour;
         /**
@@ -1134,10 +1113,6 @@ export interface BiggiveImageButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLBiggiveImageButtonElement;
 }
-export interface BiggiveSearchCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLBiggiveSearchElement;
-}
 declare global {
     interface HTMLBiggiveAccordionElement extends Components.BiggiveAccordion, HTMLStencilElement {
     }
@@ -1283,16 +1258,6 @@ declare global {
         prototype: HTMLBiggiveGridElement;
         new (): HTMLBiggiveGridElement;
     };
-    /**
-     * @deprecated 
-     * @see BiggiveMainMenu
-     */
-    interface HTMLBiggiveHeaderElement extends Components.BiggiveHeader, HTMLStencilElement {
-    }
-    var HTMLBiggiveHeaderElement: {
-        prototype: HTMLBiggiveHeaderElement;
-        new (): HTMLBiggiveHeaderElement;
-    };
     interface HTMLBiggiveHeadingElement extends Components.BiggiveHeading, HTMLStencilElement {
     }
     var HTMLBiggiveHeadingElement: {
@@ -1401,16 +1366,6 @@ declare global {
         prototype: HTMLBiggiveQuoteElement;
         new (): HTMLBiggiveQuoteElement;
     };
-    /**
-     * @deprecated (?) I don't think Donate is using this. Unless there is a WordPress use case,
-     * should we delete it rather than maintaining?
-     */
-    interface HTMLBiggiveSearchElement extends Components.BiggiveSearch, HTMLStencilElement {
-    }
-    var HTMLBiggiveSearchElement: {
-        prototype: HTMLBiggiveSearchElement;
-        new (): HTMLBiggiveSearchElement;
-    };
     interface HTMLBiggiveSheetElement extends Components.BiggiveSheet, HTMLStencilElement {
     }
     var HTMLBiggiveSheetElement: {
@@ -1514,7 +1469,6 @@ declare global {
         "biggive-formatted-text": HTMLBiggiveFormattedTextElement;
         "biggive-generic-icon": HTMLBiggiveGenericIconElement;
         "biggive-grid": HTMLBiggiveGridElement;
-        "biggive-header": HTMLBiggiveHeaderElement;
         "biggive-heading": HTMLBiggiveHeadingElement;
         "biggive-hero-image": HTMLBiggiveHeroImageElement;
         "biggive-icon-button": HTMLBiggiveIconButtonElement;
@@ -1533,7 +1487,6 @@ declare global {
         "biggive-popup-standalone": HTMLBiggivePopupStandaloneElement;
         "biggive-progress-bar": HTMLBiggiveProgressBarElement;
         "biggive-quote": HTMLBiggiveQuoteElement;
-        "biggive-search": HTMLBiggiveSearchElement;
         "biggive-sheet": HTMLBiggiveSheetElement;
         "biggive-social-icon": HTMLBiggiveSocialIconElement;
         "biggive-tab": HTMLBiggiveTabElement;
@@ -2053,7 +2006,16 @@ declare namespace LocalJSX {
         "spaceBelow"?: spacingOption;
     }
     interface BiggiveFooter {
+        /**
+          * URL prefixes vary by environment, and components library is not best placed to know what they are, so we take them as props
+         */
+        "blogUrlPrefix"?: string | undefined;
+        "experienceUrlPrefix"?: string | undefined;
         "headingLevel"?: 1 | 2 | 3 | 4 | 5 | 6;
+        /**
+          * Conditionally render footer menu: hard-coded (preset) when set to true, dynamic (slot-based) when set to false
+         */
+        "usePresetFooter"?: boolean;
     }
     interface BiggiveForm {
     }
@@ -2117,20 +2079,6 @@ declare namespace LocalJSX {
           * Deprecated - should use columGap Instead
          */
         "spaceBetween"?: boolean;
-    }
-    /**
-     * @deprecated 
-     * @see BiggiveMainMenu
-     */
-    interface BiggiveHeader {
-        /**
-          * Logo hyperlink URL
-         */
-        "logoUrl"?: string;
-        /**
-          * Space below component
-         */
-        "spaceBelow"?: number;
     }
     interface BiggiveHeading {
         "align"?: string;
@@ -2461,25 +2409,6 @@ declare namespace LocalJSX {
         "quoteIconColour"?: brandColour;
         "spaceBelow"?: spacingOption;
     }
-    /**
-     * @deprecated (?) I don't think Donate is using this. Unless there is a WordPress use case,
-     * should we delete it rather than maintaining?
-     */
-    interface BiggiveSearch {
-        /**
-          * Defines the text on the search button
-         */
-        "buttonText"?: string;
-        /**
-          * This event `doSearch` event is emitted and propogates to the parent component which handles it
-         */
-        "onDoSearch"?: (event: BiggiveSearchCustomEvent<string>) => void;
-        /**
-          * Defines the text displayed as the placeholder in the input field before the user types anything
-         */
-        "placeholderText"?: string;
-        "searchText"?: string;
-    }
     interface BiggiveSheet {
         "backgroundColour"?: brandColour;
         /**
@@ -2692,7 +2621,6 @@ declare namespace LocalJSX {
         "biggive-formatted-text": BiggiveFormattedText;
         "biggive-generic-icon": BiggiveGenericIcon;
         "biggive-grid": BiggiveGrid;
-        "biggive-header": BiggiveHeader;
         "biggive-heading": BiggiveHeading;
         "biggive-hero-image": BiggiveHeroImage;
         "biggive-icon-button": BiggiveIconButton;
@@ -2711,7 +2639,6 @@ declare namespace LocalJSX {
         "biggive-popup-standalone": BiggivePopupStandalone;
         "biggive-progress-bar": BiggiveProgressBar;
         "biggive-quote": BiggiveQuote;
-        "biggive-search": BiggiveSearch;
         "biggive-sheet": BiggiveSheet;
         "biggive-social-icon": BiggiveSocialIcon;
         "biggive-tab": BiggiveTab;
@@ -2755,11 +2682,6 @@ declare module "@stencil/core" {
             "biggive-formatted-text": LocalJSX.BiggiveFormattedText & JSXBase.HTMLAttributes<HTMLBiggiveFormattedTextElement>;
             "biggive-generic-icon": LocalJSX.BiggiveGenericIcon & JSXBase.HTMLAttributes<HTMLBiggiveGenericIconElement>;
             "biggive-grid": LocalJSX.BiggiveGrid & JSXBase.HTMLAttributes<HTMLBiggiveGridElement>;
-            /**
-             * @deprecated 
-             * @see BiggiveMainMenu
-             */
-            "biggive-header": LocalJSX.BiggiveHeader & JSXBase.HTMLAttributes<HTMLBiggiveHeaderElement>;
             "biggive-heading": LocalJSX.BiggiveHeading & JSXBase.HTMLAttributes<HTMLBiggiveHeadingElement>;
             "biggive-hero-image": LocalJSX.BiggiveHeroImage & JSXBase.HTMLAttributes<HTMLBiggiveHeroImageElement>;
             "biggive-icon-button": LocalJSX.BiggiveIconButton & JSXBase.HTMLAttributes<HTMLBiggiveIconButtonElement>;
@@ -2778,11 +2700,6 @@ declare module "@stencil/core" {
             "biggive-popup-standalone": LocalJSX.BiggivePopupStandalone & JSXBase.HTMLAttributes<HTMLBiggivePopupStandaloneElement>;
             "biggive-progress-bar": LocalJSX.BiggiveProgressBar & JSXBase.HTMLAttributes<HTMLBiggiveProgressBarElement>;
             "biggive-quote": LocalJSX.BiggiveQuote & JSXBase.HTMLAttributes<HTMLBiggiveQuoteElement>;
-            /**
-             * @deprecated (?) I don't think Donate is using this. Unless there is a WordPress use case,
-             * should we delete it rather than maintaining?
-             */
-            "biggive-search": LocalJSX.BiggiveSearch & JSXBase.HTMLAttributes<HTMLBiggiveSearchElement>;
             "biggive-sheet": LocalJSX.BiggiveSheet & JSXBase.HTMLAttributes<HTMLBiggiveSheetElement>;
             "biggive-social-icon": LocalJSX.BiggiveSocialIcon & JSXBase.HTMLAttributes<HTMLBiggiveSocialIconElement>;
             "biggive-tab": LocalJSX.BiggiveTab & JSXBase.HTMLAttributes<HTMLBiggiveTabElement>;

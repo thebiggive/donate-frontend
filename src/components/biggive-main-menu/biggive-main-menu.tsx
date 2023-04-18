@@ -1,4 +1,5 @@
 import { Component, Element, h, Host, Method, Prop } from '@stencil/core';
+import { makeURL } from '../../util/helper-methods';
 
 @Component({
   tag: 'biggive-main-menu',
@@ -90,7 +91,11 @@ export class BiggiveMainMenu {
   }
 
   setHeaderSize() {
-    document.body.style.paddingTop = this.host.offsetHeight + 'px';
+    // Some resize edge cases lead Firefox, and maybe others, to go haywire and get a host offset
+    // height of millions of pixels, presumably due to a layout logic loop. So for as long as we use
+    // this body padding workaround, we need a safe maximum value, currently 130px, beyond which
+    // we will never further displace the main content.
+    document.body.style.paddingTop = Math.min(130, this.host.offsetHeight).toString() + 'px';
   }
 
   componentDidRender() {
@@ -100,7 +105,11 @@ export class BiggiveMainMenu {
     });
     this.setHeaderSize();
 
-    const subMenuElements = this.host.querySelectorAll<HTMLElement>('.sub-menu');
+    const subMenuElements = this.host.shadowRoot!.querySelectorAll<HTMLElement>('.sub-menu');
+    if (subMenuElements.length === 0) {
+      console.error('Missing subMenuElements');
+    }
+
     subMenuElements.forEach(subMenuElement => {
       // the subMenuLink is a sibling element to the actual sub-menu
       const subMenuLink = subMenuElement.parentElement?.querySelector('a');
@@ -112,7 +121,12 @@ export class BiggiveMainMenu {
       };
     });
 
-    const subSubMenuElements = this.host.querySelectorAll<HTMLElement>('.sub-sub-menu');
+    const subSubMenuElements = this.host.shadowRoot!.querySelectorAll<HTMLElement>('.sub-sub-menu');
+
+    if (subSubMenuElements.length === 0) {
+      console.error('Missing subSubMenuElements');
+    }
+
     subSubMenuElements.forEach(subSubMenuElement => {
       // the subSubMenuLink is a sibling element to the actual sub-sub-menu
       const subSubMenuLink = subSubMenuElement!.parentElement!.querySelector('a');
@@ -171,34 +185,18 @@ export class BiggiveMainMenu {
     );
 
     const presetContentMenu = () => {
-      if (!this.blogUrlPrefix || !this.blogUrlPrefix.startsWith('http')) {
-        throw new Error('Blog URL prefix must be set and start with http');
-      }
-
-      if (!this.donateUrlPrefix || !this.donateUrlPrefix.startsWith('http')) {
-        throw new Error('Donate URL prefix must set and start with http');
-      }
-
-      if (!this.experienceUrlPrefix || !this.experienceUrlPrefix.startsWith('http')) {
-        throw new Error('Experience URL prefix must be set set and start with http');
-      }
-
-      const blogUrl = (relativeUrl: string) => this.blogUrlPrefix + '/' + relativeUrl;
-      const donateUrl = (relativeUrl: string) => this.donateUrlPrefix + '/' + relativeUrl;
-      const experienceUrl = (relativeUrl: string) => this.experienceUrlPrefix + '/' + relativeUrl;
-
       const secondaryNavLinks = (
         <ul>
           {this.isLoggedIn && (
             <li>
-              <a href={donateUrl('my-account')}>My Account</a>
+              <a href={makeURL('Donate', this.donateUrlPrefix, 'my-account')}>My Account</a>
             </li>
           )}
           <li>
-            <a href={experienceUrl('s/contact-us')}>Contact Us</a>
+            <a href={makeURL('Experience', this.experienceUrlPrefix, 's/contact-us')}>Contact Us</a>
           </li>
           <li>
-            <a href={experienceUrl('charities/s/login')}>Charity Login</a>
+            <a href={makeURL('Experience', this.experienceUrlPrefix, 'charities/s/login')}>Charity Login</a>
           </li>
         </ul>
       );
@@ -244,13 +242,13 @@ export class BiggiveMainMenu {
                 <div id="nav-primary">
                   <ul class="links" slot="nav-primary">
                     <li>
-                      <a href={donateUrl('explore')}>Explore Campaigns</a>
+                      <a href={makeURL('Donate', this.donateUrlPrefix, 'explore')}>Explore Campaigns</a>
                     </li>
                     <li>
-                      <a href={blogUrl('charities')}>For Charities</a>
+                      <a href={makeURL('Blog', this.blogUrlPrefix, 'charities')}>For Charities</a>
                     </li>
                     <li>
-                      <a href={blogUrl('funders')}>For Funders</a>
+                      <a href={makeURL('Blog', this.blogUrlPrefix, 'funders')}>For Funders</a>
                     </li>
                     <li>
                       <a onClick={this.noNav}>
@@ -259,10 +257,10 @@ export class BiggiveMainMenu {
                       </a>
                       <ul class="sub-menu">
                         <li>
-                          <a href={blogUrl('match-funding-explained')}>Match Funding Explained</a>
+                          <a href={makeURL('Blog', this.blogUrlPrefix, 'match-funding-explained')}>Match Funding Explained</a>
                         </li>
                         <li>
-                          <a href={blogUrl('impact')}>Match Funding Impact</a>
+                          <a href={makeURL('Blog', this.blogUrlPrefix, 'impact')}>Match Funding Impact</a>
                         </li>
                         <li class="more">
                           <a onClick={this.noNav}>
@@ -277,44 +275,44 @@ export class BiggiveMainMenu {
                           </a>
                           <ul class="sub-sub-menu">
                             <li>
-                              <a href={blogUrl('christmas-challenge')} class="icon-christmas">
+                              <a href={makeURL('Blog', this.blogUrlPrefix, 'christmas-challenge')} class="icon-christmas">
                                 Christmas Challenge
                               </a>
                             </li>
                             <li>
-                              <a href={blogUrl('champions-for-children')} class="icon-children">
+                              <a href={makeURL('Blog', this.blogUrlPrefix, 'champions-for-children')} class="icon-children">
                                 Champions for Children
                               </a>
                             </li>
                             <li>
-                              <a href={blogUrl('green-match-fund')} class="icon-green-match">
+                              <a href={makeURL('Blog', this.blogUrlPrefix, 'green-match-fund')} class="icon-green-match">
                                 Green Match Fund
                               </a>
                             </li>
                             <li>
-                              <a href={blogUrl('women-girls-match-fund')} class="icon-women-girls">
+                              <a href={makeURL('Blog', this.blogUrlPrefix, 'women-girls-match-fund')} class="icon-women-girls">
                                 Women &amp; Girls Match Fund
                               </a>
                             </li>
                             <li>
-                              <a href={blogUrl('mental-health-match-fund/')} class="icon-mental-health">
-                                Mental Health Match Fund
+                              <a href={makeURL('Blog', this.blogUrlPrefix, 'kind2mind/')} class="icon-mental-health">
+                                Kind²Mind
                               </a>
                             </li>
                             <li>
-                              <a href={blogUrl('anchor-match-fund/')} class="icon-anchor-match">
+                              <a href={makeURL('Blog', this.blogUrlPrefix, 'anchor-match-fund/')} class="icon-anchor-match">
                                 Anchor Match Fund
                               </a>
                             </li>
                             <li>
-                              <a href={blogUrl('emergency-campaigns/')} class="icon-emergency">
+                              <a href={makeURL('Blog', this.blogUrlPrefix, 'emergency-campaigns/')} class="icon-emergency">
                                 Emergency Match Fund
                               </a>
                             </li>
                           </ul>
                         </li>
                         <li>
-                          <a href={blogUrl('run-your-own-campaign/)')}>Run your match funding campaign</a>
+                          <a href={makeURL('Blog', this.blogUrlPrefix, 'run-your-own-campaign/)')}>Run your match funding campaign</a>
                         </li>
                       </ul>
                     </li>
@@ -325,19 +323,19 @@ export class BiggiveMainMenu {
                       </a>
                       <ul class="sub-menu">
                         <li>
-                          <a href={blogUrl('our-people')}>Our People</a>
+                          <a href={makeURL('Blog', this.blogUrlPrefix, 'our-people')}>Our People</a>
                         </li>
                         <li>
-                          <a href={blogUrl('our-story')}>Our Story</a>
+                          <a href={makeURL('Blog', this.blogUrlPrefix, 'our-story')}>Our Story</a>
                         </li>
                         <li>
-                          <a href={blogUrl('our-community')}>Our Community</a>
+                          <a href={makeURL('Blog', this.blogUrlPrefix, 'our-community')}>Our Community</a>
                         </li>
                         <li>
-                          <a href={blogUrl('our-fees')}>Our Fees</a>
+                          <a href={makeURL('Blog', this.blogUrlPrefix, 'our-fees')}>Our Fees</a>
                         </li>
                         <li>
-                          <a href={blogUrl('faqs')}>FAQs</a>
+                          <a href={makeURL('Blog', this.blogUrlPrefix, 'faqs')}>FAQs</a>
                         </li>
                       </ul>
                     </li>
@@ -348,16 +346,16 @@ export class BiggiveMainMenu {
                       </a>
                       <ul class="sub-menu">
                         <li>
-                          <a href={blogUrl('case-studies')}>Case Studies</a>
+                          <a href={makeURL('Blog', this.blogUrlPrefix, 'case-studies')}>Case Studies</a>
                         </li>
                         <li>
-                          <a href={blogUrl('blog')}>Blog</a>
+                          <a href={makeURL('Blog', this.blogUrlPrefix, 'blog')}>Blog</a>
                         </li>
                         <li>
-                          <a href={blogUrl('reports-insights')}>Reports &amp; Insights</a>
+                          <a href={makeURL('Blog', this.blogUrlPrefix, 'reports-insights')}>Reports &amp; Insights</a>
                         </li>
                         <li>
-                          <a href={blogUrl('press')}>Press</a>
+                          <a href={makeURL('Blog', this.blogUrlPrefix, 'press')}>Press</a>
                         </li>
                       </ul>
                     </li>

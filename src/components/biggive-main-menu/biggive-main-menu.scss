@@ -68,9 +68,16 @@ a {
   padding: $spacer-2 $spacer-4;
   background-color: $colour-primary-blue;
   display: flex;
+  max-height: $icon-size-large + 2 * $spacer-2;
 
   .social-icon-wrap {
+    display: flex;
+    min-height: $icon-size-large; // Avoid broken content padding offset, due to menu height changing after component load.
     margin-right: $spacer-2;
+
+    .social-icon-item {
+      margin-right: $spacer-2;
+    }    
   }
 
   .nav-secondary {
@@ -99,14 +106,6 @@ a {
       }
     }
   }
-
-  .social-icon-wrap {
-    display: flex;
-
-    .social-icon-item {
-      margin-right: $spacer-2;
-    }
-  }
 }
 
 nav {
@@ -114,7 +113,7 @@ nav {
   left: 0;
   width: 100%;
   height: 100%;
-  height: 70px;
+  height: $nav-height-desktop;
   background: white;
   z-index: 99;
   box-shadow: 0 1px 2px rgb(0 0 0 / 20%);
@@ -129,7 +128,7 @@ nav {
     padding: 0 50px;
 
     .nav-links {
-      line-height: 70px;
+      line-height: $nav-height-desktop;
       height: 100%;
 
       .sidebar-logo {
@@ -158,7 +157,7 @@ nav {
 
           .sub-menu {
             position: absolute;
-            top: 70px;
+            top: $nav-height-desktop;
             left: 0;
             line-height: 40px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
