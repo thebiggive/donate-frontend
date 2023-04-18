@@ -23,7 +23,7 @@
   "scripts": {
     "build": "stencil build --docs",
     "start": "stencil build --dev --watch --serve",
-    "lint": "eslint src/**/*{.ts,.tsx}",
+    "lint": "eslint --max-warnings=0 src/**/*{.ts,.tsx}",
     "lint:fix": "eslint --fix src/**/*{.ts,.tsx}",
     "test": "stencil test --spec --e2e",
     "test.watch": "stencil test --spec --e2e --watchAll",
