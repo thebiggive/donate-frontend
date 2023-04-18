@@ -23,6 +23,7 @@ export const environment: Environment = {
   googleOptimizeId: null,
   // googleOptimizeId: 'OPT-NV3NHD3', // Bring back when we have an experiment to run
   identityApiPrefix: 'http://localhost:30050/v1',
+  matomoSiteId: 4,
   maximumDonationAmount: 25_000,
   metaPixelId: '971382557569125',
   minimumCreditAmount: 500,

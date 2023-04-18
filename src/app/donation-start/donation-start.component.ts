@@ -55,7 +55,7 @@ import { ValidateBillingPostCode } from '../validators/validate-billing-post-cod
 import {CampaignGroupsService} from "../campaign-groups.service";
 import {TimeLeftPipe} from "../time-left.pipe";
 import {ImageService} from "../image.service";
-import {flags} from "../featureFlags";
+import { MatomoTracker } from 'ngx-matomo';
 
 @Component({
   selector: 'app-donation-start',
@@ -174,6 +174,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
     private imageService: ImageService,
+    private matomoTracker: MatomoTracker,
     private metaPixelService: MetaPixelService,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
@@ -1860,6 +1861,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private exitPostDonationSuccess(donation: Donation) {
     this.analyticsService.logCheckoutDone(this.campaign, donation);
     this.metaPixelService.trackConversion(donation);
+    this.trackConversionWithMatomo(donation);
 
     this.cancelExpiryWarning();
     this.router.navigate(['thanks', donation.donationId], {
@@ -1887,6 +1889,44 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     return false;
+  }
+
+  private trackConversionWithMatomo(donation: Donation) {
+    if (!donation?.donationId) {
+      return;
+    }
+
+    this.matomoTracker.addEcommerceItem(
+      `campaign-${this.campaignId}`,
+      `Donation to ${this.campaign.charity.name} for ${this.campaign.title}`,
+      undefined, // Not using product categories
+      donation.donationAmount,
+    );
+
+    if (donation.tipAmount > 0) {
+      this.matomoTracker.addEcommerceItem(
+        'tip',
+        'Big Give tip',
+        undefined, // Not using product categories
+        donation.tipAmount,
+      );
+    }
+
+    if (donation.feeCoverAmount > 0) {
+      this.matomoTracker.addEcommerceItem(
+        'fee-cover',
+        'Big Give platform fee cover',
+        undefined, // Not using product categories
+        donation.feeCoverAmount,
+      );
+    }
+
+    // "Tracks an Ecommerce order, including any eCommerce item previously added to the order."
+    this.matomoTracker.trackEcommerceOrder(
+      donation.donationId,
+      donation.donationAmount + donation.tipAmount + donation.feeCoverAmount,
+      donation.donationAmount,
+    );
   }
 
   // Three functions below copied from campaign-info.component. Apologies for duplication.

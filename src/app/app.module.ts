@@ -9,6 +9,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { ComponentsModule } from '@biggive/components-angular';
 import { TransferHttpCacheModule } from '@nguniversal/common';
 import { RECAPTCHA_NONCE } from 'ng-recaptcha';
+import { MatomoModule } from 'ngx-matomo';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
 import { AppComponent } from './app.component';
@@ -21,6 +22,14 @@ import { TBG_DONATE_STORAGE } from './donation.service';
 import { environment } from '../environments/environment';
 import { TBG_DONATE_ID_STORAGE } from './identity.service';
 
+const matomoBaseUri = 'https://biggive.matomo.cloud';
+const matomoTrackers = environment.matomoSiteId ? [
+  {
+    trackerUrl: `${matomoBaseUri}/matomo.php`,
+    siteId: environment.matomoSiteId,
+  },
+] : [];
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +39,13 @@ import { TBG_DONATE_ID_STORAGE } from './identity.service';
     BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
     ComponentsModule,
     HttpClientModule,
+    MatomoModule.forRoot({
+      scriptUrl: `${matomoBaseUri}/matomo.js`,
+      trackers: matomoTrackers,
+      routeTracking: {
+        enable: true,
+      }
+    }),
     RouterModule.forRoot(routes, {
       initialNavigation: 'enabledBlocking', // "This value is required for server-side rendering to work." https://angular.io/api/router/InitialNavigation
       onSameUrlNavigation: 'reload', // Allows Explore & home logo links to clear search filters in ExploreComponent
