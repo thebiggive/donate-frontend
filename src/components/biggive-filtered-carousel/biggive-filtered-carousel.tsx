@@ -101,6 +101,7 @@ export class BiggiveFilteredCarousel {
 
     /*
     Check added to confirm that carousel variable is set with a valid carousel. Ommiting this check fails the npm test - although works fine at runtime in browser.
+    @todo Pass a null fn in the test so it passes without this workaround?
     */
     if (typeof carousel.resizeToFitContent === 'function') {
       carousel.resizeToFitContent();
