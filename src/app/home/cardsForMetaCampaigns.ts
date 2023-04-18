@@ -61,7 +61,7 @@ export const cardsForMetaCampaigns = function (metacampaigns: readonly MetaCampa
       iconColor: 'brand-3',
       bodyText: 'Donate between 20/04/23 - 27/04/23',
       button: {
-        text: 'Donate now!',
+        text: 'Donate now',
         href: new URL('/green-match-fund-2023', donateUriPrefix)
       }
     },
