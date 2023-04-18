@@ -102,7 +102,7 @@ export class BiggiveFilteredCarousel {
     /*
     Check added to confirm that carousel variable is set with a valid carousel. Ommiting this check fails the npm test - although works fine at runtime in browser.
     */
-    if (typeof carousel.resizeToFitContent  === 'function') {
+    if (typeof carousel.resizeToFitContent === 'function') {
       carousel.resizeToFitContent();
     }
   }
