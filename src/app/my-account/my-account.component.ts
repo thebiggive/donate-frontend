@@ -8,7 +8,6 @@ import {PaymentMethod} from "@stripe/stripe-js";
 import {DonationService} from "../donation.service";
 import {UpdateCardModalComponent} from "../update-card-modal/update-card-modal.component";
 import {MatDialog} from "@angular/material/dialog";
-import {environment} from "../../environments/environment";
 import {faExclamationTriangle, faInfo} from "@fortawesome/free-solid-svg-icons";
 import {HttpErrorResponse} from "@angular/common/http";
 
@@ -22,8 +21,6 @@ export class MyAccountComponent implements OnInit {
   public person: Person;
 
   public paymentMethods: PaymentMethod[]|undefined = undefined;
-
-  protected readonly environment = environment;
   registerErrorDescription: string | undefined;
   registerSucessMessage: string | undefined;
   protected readonly faExclamationTriangle = faExclamationTriangle;
