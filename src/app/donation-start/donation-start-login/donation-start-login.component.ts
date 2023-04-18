@@ -34,8 +34,4 @@ export class DonationStartLoginComponent {
       }
     });
   }
-
-  onLogout = () => {
-    this.logout();
-  }
 }
