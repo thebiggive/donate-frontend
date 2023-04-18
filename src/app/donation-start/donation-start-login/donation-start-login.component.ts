@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { RecaptchaComponent } from 'ng-recaptcha';
 import { Campaign } from 'src/app/campaign.model';
 import { LoginModalComponent } from '../../login-modal/login-modal.component';
 
@@ -18,6 +19,7 @@ export class DonationStartLoginComponent {
   @Input() personId: string | undefined;
   @Input() personIsLoginReady: boolean;
   @Input() canLogin: boolean;
+//  @Input() idCaptcha: RecaptchaComponent;
 
   constructor(
     public dialog: MatDialog,
@@ -31,5 +33,9 @@ export class DonationStartLoginComponent {
         location.reload(); // ensures correct menu is displayed
       }
     });
+  }
+
+  onLogout = () => {
+    this.logout();
   }
 }

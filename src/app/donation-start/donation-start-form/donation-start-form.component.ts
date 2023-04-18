@@ -38,7 +38,7 @@ import { GiftAidAddressSuggestion } from '../../gift-aid-address-suggestion.mode
 import { CampaignService } from '../../campaign.service';
 import { COUNTRIES } from '../../countries';
 import { PaymentMethod, StripeCardElement, StripeElementChangeEvent, StripeError, StripePaymentRequestButtonElement } from '@stripe/stripe-js';
-
+import { DonationStartService } from "../donation-start.service";
 
 @Component({
   selector: 'app-donation-start-form',
@@ -49,13 +49,12 @@ import { PaymentMethod, StripeCardElement, StripeElementChangeEvent, StripeError
 export class DonationStartFormComponent implements OnInit, AfterContentInit, AfterContentChecked, OnDestroy {
 
     // HTML elements
-    // @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
     @ViewChild('cardInfo') cardInfo: ElementRef;
     @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
     @ViewChild('stepper') private stepper: MatStepper;
+    @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
 
     // Props from the parent
-    @Input() idCaptcha: RecaptchaComponent;
     @Input() donation?: Donation;
     @Input() campaign: Campaign;
     @Input() campaignId: string;
@@ -63,10 +62,10 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
     @Input() identityService: IdentityService;
     @Input() person: Person;
     @Input() personId: string | undefined;
-    @Input() personIsLoginReady: boolean //!
+    @Input() personIsLoginReady: boolean
     @Input() loadAuthedPersonInfo: (id: string, jwt: string) => void;
-    @Input() showChampionOptIn: boolean; //!
-    @Input() stripeFirstSavedMethod?: PaymentMethod;
+    @Input() showChampionOptIn: boolean;
+
     @Input() stripePaymentMethodReady: boolean;
     @Input() psp: 'stripe';
     @Input() noPsps = false;
@@ -74,7 +73,7 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
     @Input() currencySymbol: string;
 
     // FORM
-    @Input() donationForm: FormGroup;
+    donationForm: FormGroup;
 
     amountsGroup: FormGroup;
     giftAidGroup: FormGroup;
@@ -143,6 +142,11 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
   private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
 
+  stripeSavedMethods: PaymentMethod[] = [];
+  selectedSavedMethod: PaymentMethod | undefined;
+  showAllPaymentMethods: boolean = false;
+  private stepChangedBlockedByCaptcha = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private donationService: DonationService,
@@ -157,16 +161,33 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
     private stripeService: StripeService,
+    private donationStartService: DonationStartService
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
   }
 
   // Subscribe to Person object each time new authed person is loaded
-  private eventsSubscription: Subscription;
-  @Input() authedPersonEvents: Observable<{person: Person, id: string, jwt: string}>;
+  private personEventSubscription: Subscription;
+  @Input() authedPersonEvent: Observable<{person: Person, id: string, jwt: string}>;
+
+  /**
+   * Emit captcha object so that it can be reset on logout
+   * captchaEventSubject: Subject<RecaptchaComponent> = new Subject<RecaptchaComponent>();
+   */
+  emitCaptchaEventToParent() {
+    this.donationStartService.captchaEventSubject.next(this.idCaptcha);
+  }
+
+  /**
+   * Emit donationForm to parent, so that it can be reset on logout
+   * donationFormEventSubject: Subject<FormGroup> = new Subject<FormGroup>();
+   */
+  emitdonationFormToParent() {
+    this.donationStartService.donationFormEventSubject.next(this.donationForm);
+  }
 
   ngOnInit() {
-    this.eventsSubscription = this.authedPersonEvents.subscribe((data: {person: Person, id: string, jwt: string}) => {
+    this.personEventSubscription = this.authedPersonEvent.subscribe((data: {person: Person, id: string, jwt: string}) => {
       const {person, id, jwt } = data;
       this.onAuthedPersonLoaded(person, id, jwt);
     });
@@ -228,12 +249,12 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
         billingPostcode: [null],  // See setConditionalValidators().
-        useSavedCard: [false],
       }),
       // T&Cs agreement is implicit through submitting the form.
     };
 
     this.donationForm = this.formBuilder.group(formGroups);
+    this.emitdonationFormToParent();
 
     // Current strict type checks mean we need to do this for the compiler to be happy that
     // the groups are not null.
@@ -358,11 +379,12 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
     }
 
     this.stepHeaderEventsSet = true;
+    this.emitCaptchaEventToParent();
   }
 
   
   ngOnDestroy() {
-    this.eventsSubscription.unsubscribe();
+    this.personEventSubscription.unsubscribe();
 
     if (this.donation) {
       this.clearDonation(this.donation, false);
@@ -374,7 +396,6 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
     }
   }
 
-  // Pre-fill rarely-changing form values from the Person.
   prefillRarelyChangingFormValuesFromPerson(person: Person) {
     this.giftAidGroup.patchValue({
       homeAddress: person.home_address_line_1,
@@ -389,13 +410,17 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
     });
   }
 
-  // Load first saved Stripe card, if there are any.
   loadFirstSavedStripeCardIfAny(id: string, jwt: string) {
     this.donationService.getPaymentMethods(id, jwt).subscribe((response: { data: PaymentMethod[] }) => {
       if (response.data.length > 0) {
         this.stripePaymentMethodReady = true;
-        this.stripeFirstSavedMethod = response.data[0];
-        this.updateFormWithSavedCard();
+      this.stripeSavedMethods = response.data;
+
+      // not null assertion is justified because we know the data length is > 0. Seems TS isn't smart enough to
+      // notice that.
+      const firstPaymentMethod = response.data[0]!;
+      this.selectedSavedMethod = firstPaymentMethod;
+      this.updateFormWithBillingDetails(firstPaymentMethod);
       }
     });
   }
@@ -649,9 +674,11 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
             if (this.paymentGroup) {
               this.paymentGroup.patchValue({
                 billingCountry: this.defaultCountryCode,
-                useSavedCard: false,
+              //  useSavedCard: false,
               });
             }
+            this.selectedSavedMethod = this.stripeSavedMethods.length > 0 ? this.stripeSavedMethods[0] : undefined;
+
 
             if (this.personId) {
               this.loadAuthedPersonInfo(this.personId, this.identityService.getJWT() as string);
@@ -1007,7 +1034,8 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
   }
 
   async payWithStripe() {
-    const methodIsReady = this.card || (this.stripeFirstSavedMethod && this.paymentGroup.value.useSavedCard);
+    //const methodIsReady = this.card || (this.stripeFirstSavedMethod && this.paymentGroup.value.useSavedCard);
+    const methodIsReady = this.card || this.selectedSavedMethod;
 
     if (!this.donation || !this.donation.clientSecret || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
@@ -1039,8 +1067,10 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
     }
 
     // Else settlement is via a new or saved card (including wallets / Payment Request Buttons).
-    const result = this.paymentGroup.value.useSavedCard
-        ? await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.stripeFirstSavedMethod as PaymentMethod)
+    // const result = this.paymentGroup.value.useSavedCard
+    //   ? await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.stripeFirstSavedMethod as PaymentMethod)
+    const result = this.selectedSavedMethod
+    ? await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.selectedSavedMethod)
         : await this.stripeService.confirmPaymentWithNewCardOrPRB(this.donation, this.card as StripeCardElement);
 
     if (!result || result.error) {
@@ -1086,12 +1116,14 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
     this.submitting = false;
   }
 
-  private updateFormWithSavedCard() {
-    const billingDetails = this.stripeFirstSavedMethod?.billing_details as PaymentMethod.BillingDetails;
+  // private updateFormWithSavedCard() {
+  //   const billingDetails = this.stripeFirstSavedMethod?.billing_details as PaymentMethod.BillingDetails;
+  private updateFormWithBillingDetails(paymentMethod: PaymentMethod) {
+    const billingDetails = paymentMethod.billing_details;
     this.paymentGroup.patchValue({
       billingCountry: billingDetails.address?.country,
       billingPostcode: billingDetails.address?.postal_code,
-      useSavedCard: true,
+    //  useSavedCard: true,
     });
 
     this.stripePaymentMethodReady = true;
@@ -1433,6 +1465,11 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
       return;
     }
 
+    if (this.stepChangedBlockedByCaptcha) {
+      this.stepper.next();
+      this.stepChangedBlockedByCaptcha = false;
+    }
+
     this.idCaptchaCode = captchaResponse;
     if (!this.donation) {
       this.createDonationAndMaybePerson();
@@ -1466,6 +1503,14 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
   expectedTotalAmount(): number {
     return this.donationAmount + this.giftAidAmount() + this.expectedMatchAmount();
   }
+
+  // reservationExpiryTime(): Date | undefined {
+  //   if (!this.donation?.createdTime || !this.donation.matchReservedAmount) {
+  //     return undefined;
+  //   }
+
+  //   return new Date(environment.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
+  // }
 
   /**
    * @returns Amount without any £/$s
@@ -1508,6 +1553,15 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
       return;
     }
 
+    const promptingForCaptcha = this.promptForCaptcha();
+
+    if (promptingForCaptcha) {
+      this.stepChangedBlockedByCaptcha = true;
+      return;
+    }
+
+
+
     // For all other errors, attempting to proceed should just help the donor find
     // the error on the page if there is one.
     if (!this.goToFirstVisibleError()) {
@@ -1515,16 +1569,21 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
     }
   }
 
-  onUseSavedCardChange(event: MatCheckboxChange) {
+  // onUseSavedCardChange(event: MatCheckboxChange) {
+    onUseSavedCardChange(event: MatCheckboxChange, paymentMethod: PaymentMethod) {
     // For now, we assume unticking happens before card entry, so we can just set the validity flag to false.
     // Ideally, we would later track `card`'s validity separately so that going back up the page, ticking this
     // then unticking it leaves the card box valid without having to modify it. But this is rare and
     // work-around-able, so for now it's not worth the refactoring time.
     this.stripePaymentMethodReady = event.checked;
 
-    if (event.checked) {
-      this.updateFormWithSavedCard();
+    const checked = event.checked;
+    this.stripePaymentMethodReady = checked;
+    if (checked) {
+      this.selectedSavedMethod = paymentMethod;
+      this.updateFormWithBillingDetails(this.selectedSavedMethod);
     } else {
+      this.selectedSavedMethod = undefined;
       this.prepareCardInput();
     }
   }
@@ -1674,19 +1733,21 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
       return;
     }
 
-    if (!this.idCaptchaCode) {
-      // We need a captcha code before we can *really* proceed. By doing this here we ensure
-      // this happens consistently regardless of whether donors click Next or a subsequent stepper
-      // heading, while only configuring it in one place.
-      //
-      // captchaIdentityReturn() is called on resolution of a valid captcha and calls this fn again. We
-      // don't get stuck in this logic branch because `this.idCaptchaCode` is non-empty then.
-      // As well as happening the first time the donor leaves step 1, we expect to do this again and get
-      // a new code any time a previously used one was cleared in `clearDonation()`.
+    // if (!this.idCaptchaCode) {
+    //   // We need a captcha code before we can *really* proceed. By doing this here we ensure
+    //   // this happens consistently regardless of whether donors click Next or a subsequent stepper
+    //   // heading, while only configuring it in one place.
+    //   //
+    //   // captchaIdentityReturn() is called on resolution of a valid captcha and calls this fn again. We
+    //   // don't get stuck in this logic branch because `this.idCaptchaCode` is non-empty then.
+    //   // As well as happening the first time the donor leaves step 1, we expect to do this again and get
+    //   // a new code any time a previously used one was cleared in `clearDonation()`.
 
-      this.idCaptcha.reset();
-      this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
+    //   this.idCaptcha.reset();
+    //   this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
 
+    if (! this.idCaptchaCode) {
+      // we don't have a captcha code yet, not ready to create the donation.
       return;
     }
 
@@ -1744,6 +1805,28 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
       )
     }
   }
+
+  /**
+   * @return boolean True if prompting, false if there is no need to prompt as we already have captcha code.
+   * @private
+   */
+    private promptForCaptcha() {
+
+      if (this.idCaptchaCode) {
+        return false;
+      }
+  
+      if (this.donation) {
+        // No need for a captcha if the donation is already created.
+        return false;
+      }
+  
+      this.idCaptcha.reset();
+      this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
+  
+      return true;
+    }
+  
 
   /**
    * Creates a Donation itself. Both success and error callbacks should unconditionally set `creatingDonation` false.

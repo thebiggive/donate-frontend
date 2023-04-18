@@ -23,6 +23,7 @@ import {TimeLeftPipe} from '../time-left.pipe';
 import {CampaignDetailsModule} from "../campaign-details/campaign-details.module";
 import { DonationStartLoginComponent } from "./donation-start-login/donation-start-login.component";
 import { DonationStartFormComponent } from "./donation-start-form/donation-start-form.component";
+import { DonationStartService } from "./donation-start.service"
 
 @NgModule({
   imports: [
@@ -50,6 +51,7 @@ import { DonationStartFormComponent } from "./donation-start-form/donation-start
   declarations: [DonationStartComponent, DonationStartLoginComponent, DonationStartFormComponent],
   providers: [
     DatePipe,
+    DonationStartService
   ]
 })
 export class DonationStartModule {}
