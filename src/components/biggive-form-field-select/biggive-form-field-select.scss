@@ -8,8 +8,15 @@
   @include standard-font();
   position: relative;
   text-align: left;
-  .sleeve {
-    @include dropdown();
+  &.select-style-bordered {
+    .sleeve {
+      @include dropdown();
+    }
+  }
+  &.select-style-underlined {
+    .sleeve {
+      @include dropdown-underlined();
+    }
   }
   .options {
     max-height: 200px;

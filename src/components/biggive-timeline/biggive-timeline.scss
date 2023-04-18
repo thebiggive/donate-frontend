@@ -40,17 +40,17 @@
       }
     }
     .sleeve {
-      border-bottom: 1px solid $colour-grey-light;
       overflow-x: hidden;
       ul {
         margin: 0;
         padding: 0;
         list-style-type: none;
         display: flex;
+        border-bottom: 1px solid $colour-grey-light;
         li {
           flex-grow: 1;
           padding: 10px 20px;
-          margin: 0;
+          margin: 0 0 -1px 0;
           width: calc(33.3% - 20px);
           border-bottom: 3px solid transparent;
           text-align: center;
@@ -87,7 +87,7 @@
   @each $key, $colour in $brandColours {
     &.text-colour-#{$key} .navigation li { color: $colour; }
     &.navigation-highlight-colour-#{$key} .navigation ul {border-color: $colour; }
-    &.selected-text-colour-#{$key} .navigation li.selected { color: $colour; border-color: $colour; }
+    &.selected-text-colour-#{$key} .navigation li.selected { color: $colour; }
     &.selected-navigation-highlight-colour-#{$key} .navigation li.selected { border-color: $colour; }
     &.button-background-colour-#{$key} .navigation .button { background-color: $colour; }
     &.button-icon-colour-#{$key} .navigation .button svg path { stroke: $colour; }

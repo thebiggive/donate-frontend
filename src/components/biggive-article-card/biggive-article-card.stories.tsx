@@ -22,13 +22,6 @@ export default {
         options: ['primary', 'secondary', 'tertiary', 'brand-1', 'brand-2', 'brand-3', 'brand-4', 'brand-5', 'brand-6', 'white', 'black', 'transparent'],
       },
     },
-    textColour: {
-      name: 'Text colour',
-      control: {
-        type: 'select',
-        options: ['primary', 'secondary', 'tertiary', 'brand-1', 'brand-2', 'brand-3', 'brand-4', 'brand-5', 'brand-6', 'white', 'black', 'transparent'],
-      },
-    },
     slug: {
       name: 'Slug',
     },
@@ -61,7 +54,6 @@ const Template = args => `
                 space-below="${args.spaceBelow}"
                 background-colour="${args.backgroundColour}"
                 background-colour-hover="${args.backgroundColourHover}"
-                text-colour="${args.textColour}"
                 slug="${args.slug}"
                 date="${args.date}"
                 main-title="${args.mainTitle}"
@@ -79,7 +71,6 @@ ArticleCardComponent.args = {
   spaceBelow: 4,
   backgroundColour: 'white',
   backgroundColourHover: 'tertiary',
-  textColour: 'black',
   slug: '• Blog Post   • Mental Health',
   date: 'September 2022',
   mainTitle: 'Sample main title',

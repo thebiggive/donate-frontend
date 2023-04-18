@@ -1,5 +1,5 @@
 import { Component, Element, Event, EventEmitter, h, Listen, Prop, State } from '@stencil/core';
-import { faFilterSlash, faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
+import { faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
   tag: 'biggive-campaign-card-filter-grid',
@@ -183,6 +183,34 @@ export class BiggiveCampaignCardFilterGrid {
     this.doSearchAndFilterUpdate.emit(searchAndFilterObj);
     this.el.shadowRoot.getElementById('filter-popup').closeFromOutside();
 
+    const selectedFilters = this.el.shadowRoot.querySelector('.selected-filters');
+
+    selectedFilters.querySelectorAll('.button').forEach(button => {
+      button.remove();
+    });
+
+    let filters = {
+      beneficiaries: searchAndFilterObj.filterBeneficiary,
+      categories: searchAndFilterObj.filterCategory,
+      funding: searchAndFilterObj.filterFunding,
+      locations: searchAndFilterObj.filterLocation,
+    };
+
+    for (var id in filters) {
+      if (typeof filters[id] === 'string') {
+        let button = document.createElement('span');
+        button.classList.add('button');
+        button.dataset.id = id;
+        button.innerText = filters[id];
+        selectedFilters.appendChild(button);
+        button.addEventListener('click', () => {
+          button.remove();
+          this.el.shadowRoot.getElementById(button.dataset.id).selectedValue = null;
+          this.el.shadowRoot.getElementById(button.dataset.id).selectedLabel = null;
+        });
+      }
+    }
+
     this.filtersApplied =
       typeof searchAndFilterObj.filterBeneficiary === 'string' ||
       typeof searchAndFilterObj.filterCategory === 'string' ||
@@ -226,6 +254,12 @@ export class BiggiveCampaignCardFilterGrid {
       this.el.shadowRoot.getElementById(id).selectedLabel = null;
     });
 
+    const selectedFilters = this.el.shadowRoot.querySelector('.selected-filters');
+
+    selectedFilters.querySelectorAll('.button').forEach(button => {
+      button.remove();
+    });
+
     // Emit the doSearchAndFilterUpdate event with null values. DON-654
     this.doSearchAndFilterUpdate.emit({
       searchText: null,
@@ -266,29 +300,8 @@ export class BiggiveCampaignCardFilterGrid {
             </div>
           </div>
           <div class="sort-filter-wrap">
-            <div class="clear-all">
-              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-clear-all" viewBox="0 0 512 512">
-                <path d={faFilterSlash.icon[4].toString()} />
-              </svg>
-              <a onClick={this.handleClearAll}>Clear all</a>
-            </div>
-            <div class="sort-wrap">
-              <biggive-form-field-select placeholder={this.sortByPlaceholderText} selectedLabel={this.selectedSortByOption} id="sort-by">
-                <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>
-                <biggive-form-field-select-option value="matchFundsRemaining" label="Match funds remaining"></biggive-form-field-select-option>
-                <biggive-form-field-select-option value="Relevance" label="Relevance"></biggive-form-field-select-option>
-              </biggive-form-field-select>
-            </div>
-
             <div class="filter-wrap">
-              <biggive-button
-                class="filter"
-                colourScheme={this.filtersApplied ? 'secondary' : 'primary'}
-                onClick={this.handleFilterButtonClick}
-                label="Filters"
-                fullWidth={true}
-                space-below="0"
-              ></biggive-button>
+              <biggive-button class="filter" colourScheme="primary" onClick={this.handleFilterButtonClick} label="Filter" fullWidth={true} space-below="0"></biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="space-above-0 space-below-3 text-colour-primary">Filters</h4>
                 <biggive-form-field-select placeholder={this.categoriesPlaceHolderText} selectedLabel={this.selectedFilterCategory} id="categories" space-below="2">
@@ -326,6 +339,20 @@ export class BiggiveCampaignCardFilterGrid {
                   <biggive-button label="Apply filters" onClick={this.handleApplyFilterButtonClick} />
                 </div>
               </biggive-popup>
+            </div>
+
+            <div class="sort-wrap">
+              <biggive-form-field-select select-style="underlined" placeholder={this.sortByPlaceholderText} selectedLabel={this.selectedSortByOption} id="sort-by">
+                <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>
+                <biggive-form-field-select-option value="matchFundsRemaining" label="Match funds remaining"></biggive-form-field-select-option>
+                <biggive-form-field-select-option value="Relevance" label="Relevance"></biggive-form-field-select-option>
+              </biggive-form-field-select>
+            </div>
+          </div>
+          <div class="selected-filter-wrap">
+            <div class="selected-filters"></div>
+            <div class="clear-all">
+              <a onClick={this.handleClearAll}>Clear all</a>
             </div>
           </div>
           <div class="campaign-grid">

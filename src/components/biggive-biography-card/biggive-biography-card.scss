@@ -121,6 +121,9 @@
         padding: 6.5px;
         box-sizing: border-box;
         svg {
+          position: relative;
+          display: inline-block;
+          top: -1px;
           height: 15px;
           width: 15px;
         }
