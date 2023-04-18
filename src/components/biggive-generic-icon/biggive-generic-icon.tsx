@@ -19,34 +19,36 @@ export class BiggiveGenericIcon {
 
   @Prop() url: string;
 
-  private getIcon(): IconDefinition {
-    let icon;
+  private getIconDefinition(): IconDefinition | undefined {
+    let iconDefinition;
     if (this.iconGroup == 'beneficiary') {
-      icon = FontAwesomeIconsService.getBeneficiaryIcon(this.icon);
+      iconDefinition = FontAwesomeIconsService.getBeneficiaryIcon(this.icon);
     } else if (this.iconGroup == 'misc') {
-      icon = FontAwesomeIconsService.getMiscIcon(this.icon);
+      iconDefinition = FontAwesomeIconsService.getMiscIcon(this.icon);
     } else if (this.iconGroup == 'social') {
-      icon = FontAwesomeIconsService.getSocialIcon(this.icon);
+      iconDefinition = FontAwesomeIconsService.getSocialIcon(this.icon);
     } else if (this.iconGroup == 'category') {
-      icon = FontAwesomeIconsService.getCategoryIcon(this.icon);
+      iconDefinition = FontAwesomeIconsService.getCategoryIcon(this.icon);
     }
-    return icon;
+    return iconDefinition;
   }
 
   render() {
+    const iconDefinition = this.getIconDefinition();
+
     return (
       // Note: the icon name prop is set as a css class too for any styling specific to certain icons
       <div class={'generic-icon-item background-colour-' + this.backgroundColour + ' ' + this.icon}>
         <a href={this.url}>
-          {this.getIcon() ? (
+          {iconDefinition ? (
             <svg
-              width={this.getIcon().icon[0]}
-              height={this.getIcon().icon[1]}
+              width={iconDefinition.icon[0]}
+              height={iconDefinition.icon[1]}
               xmlns="http://www.w3.org/2000/svg"
               class={'fill-' + this.iconColour}
-              viewBox={'0 0 ' + this.getIcon().icon[0] + ' ' + this.getIcon().icon[1]}
+              viewBox={'0 0 ' + iconDefinition.icon[0] + ' ' + iconDefinition.icon[1]}
             >
-              <path d={this.getIcon().icon[4].toString()} />
+              <path d={iconDefinition.icon[4].toString()} />
             </svg>
           ) : null}
         </a>
