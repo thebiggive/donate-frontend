@@ -113,6 +113,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   personIsLoginReady = false;
   privacyUrl = 'https://biggive.org/privacy';
   showAddressLookup: boolean;
+
+  // Kind of a subset of `stripePaymentMethodReady`, which tracks just the Card Stripe.js element based
+  // on the `complete` property of the callback event. Doesn't cover PRBs, saved cards, or donation credit.
+  // Maintains its value and is NOT reset when settlement method changes to one of those, since it might
+  // change back.
+  stripeManualCardInputValid = false;
+
   stripePaymentMethodReady = false;
   stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
   stripeError?: string;
@@ -573,7 +580,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // should remove an invalid post-code error in such a scenario.
     this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
 
-    this.stripePaymentMethodReady = state.complete;
+    this.stripeManualCardInputValid = this.stripePaymentMethodReady = state.complete;
     if (state.error) {
       this.stripeError = this.getStripeFriendlyError(state.error, 'card_change');
       this.stripeResponseErrorCode = state.error.code;
@@ -926,7 +933,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // work-around-able, so for now it's not worth the refactoring time.
     const checked = event.checked;
 
-    this.stripePaymentMethodReady = checked;
+    this.stripePaymentMethodReady = checked || this.stripeManualCardInputValid;
 
     if (checked) {
       this.selectedSavedMethod = paymentMethod;
@@ -1525,6 +1532,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.retrying = false;
     this.submitting = false;
 
+    this.stripeManualCardInputValid = false;
     if (this.card) {
       this.card.clear();
     }
