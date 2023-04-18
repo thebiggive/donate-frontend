@@ -61,7 +61,7 @@ idea to add a one line description of its purpose to the readme before the gener
 
 [Read more in Stencil's docs.](https://stenciljs.com/docs/output-targets)
 
-Main targets are:
+Primary targets are:
 
 * `angularOutputTarget()` – used in [Donate frontend](https://github.com/thebiggive/donate-frontend).
 * `dist-custom-elements` – the docs don't make this terribly clear but with our current configuration,
@@ -139,9 +139,9 @@ We've followed [this guide](https://ionicframework.com/blog/how-to-use-storybook
 provide sample usage of key components: a living style guide.
 
 CI automatically publishes the Storybook preview:
-* to [its Staging site](https://components-staging.thebiggivetest.org.uk) on *any* push to `main`; and
-* to [its Production site](https://components-production.thebiggive.org.uk) on *tagged* pushes
-  (typically also on `main`) – intended for tested, new versions which are also to be npm published.
+
+* to [Staging](https://components-staging.thebiggivetest.org.uk) from `develop`; and
+* to [Production](https://components-production.thebiggive.org.uk) from `main` – which also npm publishes a new major version automatically.
 
 For now, the local `npm run storybook` won't load static image assets or fonts. We've prioritised realistic
 renders in the deployed environment, where these work due to:
@@ -149,11 +149,6 @@ renders in the deployed environment, where these work due to:
 * Storybook having a custom [`preview-head.html`](./.storybook/preview-head.html).
 
 ## Publish to NPM
-
-### Connect to NPM
-```bash
-npm add_user
-```
 
 ### Versions and publishing
 
@@ -175,9 +170,14 @@ is ever broken, the steps used before Jan '23 were:
 
 You can also do the npm publish manually if necessary:
 
+First, connect to npm if you have never done so before: `npm add_user`.
+
+Then:
+
 ```bash
 npm publish --access=public
 ```
+
 The name of the NPM package and version number can be updated in the root package.json file. It's currently set to (@biggive/components, 0.0.1)
 
 More information about publishing and distribution is available at https://stenciljs.com/docs/distribution

@@ -29,6 +29,37 @@ jobs:
       - run: npm run lint
       - run: npm run test
 
+  deploy-staging-storybook:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+      - run: npm install --quiet
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+      - run:
+          name: Build components
+          command: npm run build
+      - run:
+          name: Build Storybook
+          command: npm run build-storybook
+      - aws-s3/sync:
+          from: src/assets
+          to: 's3://tbg-staging-component-library/assets'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=3600"
+      - aws-s3/sync:
+          from: storybook-static
+          to: 's3://tbg-staging-component-library'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=3600"
+
   deploy-production-storybook:
     <<: *defaults
     steps:
@@ -59,6 +90,7 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=3600"
+
   # Publishes `@biggive/components` *and* `@biggive/components-angular` (building both on the fly).
   publish:
     <<: *defaults
@@ -92,7 +124,6 @@ jobs:
           command: cd angular/dist/components && npm publish --access=public
 
 workflows:
-  version: 2
   build-and-maybe-publish:
     jobs:
       - build:
@@ -103,8 +134,28 @@ workflows:
             - jira/notify:
                 job_type: build
                 environment_type: development
-      # Pushes to `main` publish new package versions, then deploy a
-      # new Storybook Production build.
+      
+      # Pushes to `develop` deploy a new Storybook Staging build.
+      - deploy-staging-storybook:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - develop
+          context:
+            - docker-hub-creds
+            - ecs-deploys # Includes S3 stuff used by Donate frontend.
+            - jira
+          post-steps:
+            - jira/notify:
+                job_type: deployment
+                environment_type: staging
+
+      # Pushes to `main` publish new package versions to npm, then deploy a
+      # new Storybook Production build. The latter doesn't use the former directly,
+      # but we still don't want to erroneously update the Production component library
+      # if the npm publish failed and apps can't use the new version.
       - publish:
           requires:
             - build
@@ -120,6 +171,7 @@ workflows:
             - jira/notify:
                 job_type: deployment
                 environment_type: production
+
       - deploy-production-storybook:
           requires:
             - build
