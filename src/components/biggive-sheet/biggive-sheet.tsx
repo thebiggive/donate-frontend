@@ -45,7 +45,7 @@ export class BiggiveSheet {
         <div class="background"></div>
         <div class={'popup background-colour-' + this.backgroundColour + ' text-colour-' + this.textColour}>
           <div class="header">
-            <div class="back-link" onClick={() => this.closeSheet()}>
+            <div class="back-link" onClick={this.closeSheet}>
               <span class={'svg-wrap colour-' + this.textColour}>
                 <svg width="33" height="16" viewBox="0 0 33 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -57,7 +57,7 @@ export class BiggiveSheet {
               Back
             </div>
 
-            <div class="close-link" onClick={() => this.closeSheet()}>
+            <div class="close-link" onClick={this.closeSheet}>
               <span class="svg-wrap">
                 <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M11 11v-11h1v11h11v1h-11v11h-1v-11h-11v-1h11z" />
