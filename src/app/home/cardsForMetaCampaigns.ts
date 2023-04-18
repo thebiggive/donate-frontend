@@ -32,7 +32,12 @@ const campaignToCard = function (metaCampaign: MetaCampaign, donateUriPrefix: st
  * There is an open question about whether this logic should live here, or in SF, or somewhere else - for now it seems
  * to make sense to put it here since we have limited SF development capacity.
  */
-export const cardsForMetaCampaigns = function (metacampaigns: readonly MetaCampaign[], donateUriPrefix: string, blogUriPrefix: string): readonly HighlightCard[]
+export const cardsForMetaCampaigns = function (
+  viewingDate: Date,
+  metacampaigns: readonly MetaCampaign[],
+  donateUriPrefix: string,
+  blogUriPrefix: string
+): readonly HighlightCard[]
 {
   const metaCampaignCards = metacampaigns.map((m) => campaignToCard(m, donateUriPrefix));
 
@@ -51,6 +56,33 @@ export const cardsForMetaCampaigns = function (metacampaigns: readonly MetaCampa
     }];
   } else {
     anyExploreCard = [];
+  }
+
+  if (viewingDate >= new Date("2022-04-20T12:00:00+01:00")) {
+    return [
+      ...metaCampaignCards,
+      {
+        headerText: 'Double your donation in the Green Match Fund',
+        backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
+        iconColor: 'brand-3',
+        bodyText: 'Donate from 20 April to 27 April 2023',
+        button: {
+          text: 'Donate now',
+          href: new URL('/green-match-fund-2023', donateUriPrefix)
+        }
+      },
+      {
+        headerText: 'Applications for Women and Girls Match Fund now open!',
+        backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', donateUriPrefix),
+        iconColor: 'brand-2',
+        bodyText: 'Deadline is 23 June 2023',
+        button: {
+          text: 'Apply now',
+          href: new URL('/women-girls-match-fund', blogUriPrefix)
+        }
+      },
+      ...anyExploreCard,
+    ];
   }
 
   return [
