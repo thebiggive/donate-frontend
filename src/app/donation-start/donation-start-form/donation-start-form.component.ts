@@ -109,6 +109,7 @@ export class DonationStartFormComponent implements OnInit, AfterContentInit, Aft
     termsUrl = 'https://biggive.org/terms-and-conditions';
     termsProvider = `Big Give's`;
 
+    exactCurrency = new ExactCurrencyPipe();
   /**
    * Tracks internally whether (Person +) Donation setup is in flight. This is important to prevent duplicates, because multiple
    * time-variable triggers including user-initiated stepper step changes and async, invisible reCAPTCHA returns can cause us

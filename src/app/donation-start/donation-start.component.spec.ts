@@ -26,6 +26,7 @@ import {CommonModule, CurrencyPipe, DatePipe} from "@angular/common";
 import {MatTabsModule} from "@angular/material/tabs";
 import {OptimisedImagePipe} from "../optimised-image.pipe";
 import {TimeLeftPipe} from "../time-left.pipe";
+import { DonationStartFormComponent } from "./donation-start-form/donation-start-form.component"
 
 describe('DonationStartComponent', () => {
   beforeEach(waitForAsync(() => {
@@ -43,6 +44,7 @@ describe('DonationStartComponent', () => {
   (window as any).gtag = (...args: any[]) => args;
 
   let component: DonationStartComponent;
+  let formComponent: DonationStartFormComponent;
   let fixture: ComponentFixture<DonationStartComponent>;
 
   const getDummyCampaign = (campaignId: string) => {
@@ -135,7 +137,7 @@ describe('DonationStartComponent', () => {
         RouterTestingModule.withRoutes([
           {
             path: 'donate/:campaignId',
-            component: DonationStartComponent,
+            component: DonationStartComponent
           },
         ]),
       ],
@@ -172,7 +174,7 @@ describe('DonationStartComponent', () => {
   it('should have no errors with valid inputs, including for UK Gift Aid, and get correct expected amounts', () => {
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
-    component.donationForm.setValue({
+    component.form.nativeElement.donationForm.setValue({
       amounts: {
         coverFee: false,
         donationAmount: '£1234',
@@ -201,15 +203,15 @@ describe('DonationStartComponent', () => {
       },
     });
 
-    expect(component.donationForm.valid).toBe(true);
+    expect(component.form.nativeElement.donationForm.valid).toBe(true);
     // Expected match is £0 until donation set up + funds actually reserved.
-    expect(component.expectedMatchAmount()).toBe(0);
-    expect(component.expectedTotalAmount()).toBe(1542.5);
+    expect(component.form.nativeElement.expectedMatchAmount()).toBe(0);
+    expect(component.form.nativeElement.expectedTotalAmount()).toBe(1542.5);
     // Now we have the percentage field loading fully with `campaign` coming from
     // a route resolver, we expect this to get set dynamically from the 12.5%
     // deafult.
-    expect(component.amountsGroup.get('tipPercentage')?.value).toBe(12.5);
-    expect(component.tipAmount()).toBe(154.25);
+    expect(component.form.nativeElement.amountsGroup.get('tipPercentage')?.value).toBe(12.5);
+    expect(component.form.nativeElement.tipAmount()).toBe(154.25);
   });
 
   /**
@@ -218,7 +220,7 @@ describe('DonationStartComponent', () => {
   it('should have no errors with a non-UK-resident claim for UK Gift Aid', () => {
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
-    component.donationForm.setValue({
+    component.form.nativeElement.donationForm.setValue({
       amounts: {
         coverFee: false,
         donationAmount: '£1234',
@@ -247,13 +249,13 @@ describe('DonationStartComponent', () => {
       },
     });
 
-    expect(component.donationForm.valid).toBe(true);
+    expect(component.form.nativeElement.donationForm.valid).toBe(true);
   });
 
   it('should have an error with required radio buttons not set', () => {
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
-    component.donationForm.setValue({
+    component.form.nativeElement.donationForm.setValue({
       amounts: {
         coverFee: false,
         donationAmount: '1234',
@@ -282,15 +284,15 @@ describe('DonationStartComponent', () => {
       },
     });
 
-    expect(component.donationForm.valid).toBe(false);
+    expect(component.form.nativeElement.donationForm.valid).toBe(false);
 
-    expect(component.donationForm.controls.amounts!.get('donationAmount')?.errors).toBeNull();
+    expect(component.form.nativeElement.donationForm.controls.amounts!.get('donationAmount')?.errors).toBeNull();
 
-    const optInCharityEmailErrors: any = component.donationForm.controls.marketing!.get('optInCharityEmail')?.errors;
+    const optInCharityEmailErrors: any = component.form.nativeElement.donationForm.controls.marketing!.get('optInCharityEmail')?.errors;
     expect(Object.keys(optInCharityEmailErrors).length).toBe(1);
     expect(optInCharityEmailErrors.required).toBe(true);
 
-    const optInTbgEmailErrors: any = component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors;
+    const optInTbgEmailErrors: any = component.form.nativeElement.donationForm.controls.marketing!.get('optInTbgEmail')?.errors;
     expect(Object.keys(optInTbgEmailErrors).length).toBe(1);
     expect(optInTbgEmailErrors.required).toBe(true);
   });
@@ -298,7 +300,7 @@ describe('DonationStartComponent', () => {
   it('should have missing amount error', () => {
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
-    component.donationForm.setValue({
+    component.form.nativeElement.donationForm.setValue({
       amounts: {
         coverFee: false,
         donationAmount: null,
@@ -327,21 +329,21 @@ describe('DonationStartComponent', () => {
       },
     });
 
-    expect(component.donationForm.valid).toBe(false);
+    expect(component.form.nativeElement.donationForm.valid).toBe(false);
 
-    const donationAmountErrors: any = component.donationForm.controls.amounts!.get('donationAmount')?.errors;
+    const donationAmountErrors: any = component.form.nativeElement.donationForm.controls.amounts!.get('donationAmount')?.errors;
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.required).toBe(true);
 
-    expect(component.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing!.get('optInCharityEmail')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
+    expect(component.form.nativeElement.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
+    expect(component.form.nativeElement.donationForm.controls.marketing!.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.form.nativeElement.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have minimum amount error', () => {
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
-    component.donationForm.setValue({
+    component.form.nativeElement.donationForm.setValue({
       amounts: {
         coverFee: false,
         donationAmount: '0', // Simpler for now than testing e.g. '0.99' which also fails pattern validation
@@ -370,21 +372,21 @@ describe('DonationStartComponent', () => {
       },
     });
 
-    expect(component.donationForm.valid).toBe(false);
+    expect(component.form.nativeElement.donationForm.valid).toBe(false);
 
-    const donationAmountErrors: any = component.donationForm.controls.amounts!.get('donationAmount')?.errors;
+    const donationAmountErrors: any = component.form.nativeElement.donationForm.controls.amounts!.get('donationAmount')?.errors;
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.min).toBe(true);
 
-    expect(component.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing!.get('optInCharityEmail')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
+    expect(component.form.nativeElement.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
+    expect(component.form.nativeElement.donationForm.controls.marketing!.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.form.nativeElement.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have maximum amount error', () => {
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
-    component.donationForm.setValue({
+    component.form.nativeElement.donationForm.setValue({
       amounts: {
         coverFee: false,
         donationAmount: '25001',
@@ -413,21 +415,21 @@ describe('DonationStartComponent', () => {
       },
     });
 
-    expect(component.donationForm.valid).toBe(false);
+    expect(component.form.nativeElement.donationForm.valid).toBe(false);
 
-    const donationAmountErrors: any = component.donationForm.controls.amounts!.get('donationAmount')?.errors;
+    const donationAmountErrors: any = component.form.nativeElement.donationForm.controls.amounts!.get('donationAmount')?.errors;
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.max).toBe(true);
 
-    expect(component.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing!.get('optInCharityEmail')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
+    expect(component.form.nativeElement.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
+    expect(component.form.nativeElement.donationForm.controls.marketing!.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.form.nativeElement.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have mis-formatted amount error', () => {
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
-    component.donationForm.setValue({
+    component.form.nativeElement.donationForm.setValue({
       amounts: {
         coverFee: false,
         donationAmount: '8765,21',
@@ -456,24 +458,24 @@ describe('DonationStartComponent', () => {
       },
     });
 
-    expect(component.donationForm.valid).toBe(false);
+    expect(component.form.nativeElement.donationForm.valid).toBe(false);
 
-    const donationAmountErrors: any = component.donationForm.controls.amounts!.get('donationAmount')?.errors;
+    const donationAmountErrors: any = component.form.nativeElement.donationForm.controls.amounts!.get('donationAmount')?.errors;
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.pattern).toEqual({
       requiredPattern: '^[£$]?[0-9]+?(\\.00)?$',
       actualValue: '8765,21',
     });
 
-    expect(component.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing!.get('optInCharityEmail')?.errors).toBeNull();
-    expect(component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
+    expect(component.form.nativeElement.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
+    expect(component.form.nativeElement.donationForm.controls.marketing!.get('optInCharityEmail')?.errors).toBeNull();
+    expect(component.form.nativeElement.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
   });
 
   it('should have missing country & postcode & Gift Aid errors in Stripe + UK mode', () => {
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
-    component.donationForm.setValue({
+    component.form.nativeElement.donationForm.setValue({
       amounts: {
         coverFee: false,
         donationAmount: '£1234',
@@ -502,17 +504,17 @@ describe('DonationStartComponent', () => {
       },
     });
 
-    expect(component.donationForm.valid).toBe(false);
+    expect(component.form.nativeElement.donationForm.valid).toBe(false);
 
-    const billingCountryErrors: any = component.donationForm.controls.payment!.get('billingPostcode')?.errors;
+    const billingCountryErrors: any = component.form.nativeElement.donationForm.controls.payment!.get('billingPostcode')?.errors;
     expect(Object.keys(billingCountryErrors).length).toBe(1);
     expect(billingCountryErrors.required).toBe(true);
 
-    const billingPostcodeErrors: any = component.donationForm.controls.payment!.get('billingPostcode')?.errors;
+    const billingPostcodeErrors: any = component.form.nativeElement.donationForm.controls.payment!.get('billingPostcode')?.errors;
     expect(Object.keys(billingPostcodeErrors).length).toBe(1);
     expect(billingPostcodeErrors.required).toBe(true);
 
-    const giftAidErrors: any = component.donationForm.controls.giftAid!.get('giftAid')?.errors;
+    const giftAidErrors: any = component.form.nativeElement.donationForm.controls.giftAid!.get('giftAid')?.errors;
     expect(Object.keys(giftAidErrors).length).toBe(1);
     expect(giftAidErrors.required).toBe(true);
   });
@@ -520,7 +522,7 @@ describe('DonationStartComponent', () => {
   it('should have missing email address error in Stripe mode', () => {
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
 
-    component.donationForm.setValue({
+    component.form.nativeElement.donationForm.setValue({
       amounts: {
         coverFee: false,
         donationAmount: '£1234',
@@ -549,12 +551,12 @@ describe('DonationStartComponent', () => {
       },
     });
 
-    expect(component.donationForm.valid).toBe(false);
+    expect(component.form.nativeElement.donationForm.valid).toBe(false);
 
-    const emailAddressErrors: any = component.donationForm.controls.payment!.get('emailAddress')?.errors;
+    const emailAddressErrors: any = component.form.nativeElement.donationForm.controls.payment!.get('emailAddress')?.errors;
     expect(Object.keys(emailAddressErrors).length).toBe(1);
     expect(emailAddressErrors.required).toBe(true);
 
-    expect(component.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
+    expect(component.form.nativeElement.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
   });
 });

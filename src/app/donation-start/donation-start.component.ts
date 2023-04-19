@@ -36,6 +36,7 @@ import {CampaignGroupsService} from "../campaign-groups.service";
 import {TimeLeftPipe} from "../time-left.pipe";
 import {ImageService} from "../image.service";
 import { DonationStartService } from './donation-start.service';
+import { DonationStartFormComponent } from './donation-start-form/donation-start-form.component';
 
 @Component({
   selector: 'app-donation-start',
@@ -50,6 +51,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
 
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
+  @ViewChild('donation-start-form') form: ElementRef<DonationStartFormComponent>;
 
   card: StripeCardElement | null;
 
