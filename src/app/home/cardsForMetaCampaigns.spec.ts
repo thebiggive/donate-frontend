@@ -44,6 +44,17 @@ describe('cardsForMetaCampaigns', () => {
   };
 
   const gmfCard: HighlightCard = {
+    headerText: 'Double your donation in the Green Match Fund',
+    backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', 'https://donate.example.com'),
+    iconColor: 'brand-3',
+    bodyText: 'Donate from 20 April to 27 April 2023',
+    button: {
+      text: 'Donate now',
+      href: new URL('/green-match-fund-2023', "https://donate.example.com")
+    }
+  };
+
+  const oldGmfCard: HighlightCard = {
     headerText: 'Save the date for Green Match Fund',
     backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', 'https://donate.example.com'),
     iconColor: 'brand-3',
@@ -54,35 +65,47 @@ describe('cardsForMetaCampaigns', () => {
     }
   };
 
+  const afterGMFLaunch = new Date("2023-04-20T12:00:00+01:00");
+
   it('Shows explore card when there are no meta campaigns', () => {
     const metaCampaigns: readonly MetaCampaign[] = [];
 
-    const cards = cardsForMetaCampaigns(metaCampaigns, 'https://donate.example.com', 'https://blog.com')
+    const cards = cardsForMetaCampaigns(afterGMFLaunch, metaCampaigns, 'https://donate.example.com', 'https://blog.com')
 
-    expect(cards).toEqual([wgfCard, gmfCard, exploreCard]);
+    expect(cards).toEqual([gmfCard, wgfCard, exploreCard]);
   });
 
   it('Shows emergency and explore when there is only emergency metacampaign', () => {
     const metaCampaigns: readonly MetaCampaign[] = [emergencyMetaCampaign];
 
-    const cards = cardsForMetaCampaigns(metaCampaigns, 'https://donate.example.com', 'https://blog.com')
+    const cards = cardsForMetaCampaigns(afterGMFLaunch, metaCampaigns, 'https://donate.example.com', 'https://blog.com')
 
-    expect(cards).toEqual([emergencyCard, wgfCard, gmfCard, exploreCard]);
+    expect(cards).toEqual([emergencyCard, gmfCard,  wgfCard,exploreCard]);
   });
 
   it('Shows 4 emergencies with explore card', () => {
     const metaCampaigns: readonly MetaCampaign[] = Array(4).fill(emergencyMetaCampaign);
 
-    const cards = cardsForMetaCampaigns(metaCampaigns, 'https://donate.example.com', 'https://blog.com')
+    const cards = cardsForMetaCampaigns(afterGMFLaunch, metaCampaigns, 'https://donate.example.com', 'https://blog.com')
 
-    expect(cards).toEqual([...Array(4).fill(emergencyCard), wgfCard, gmfCard, exploreCard]);
+    expect(cards).toEqual([...Array(4).fill(emergencyCard), gmfCard, wgfCard, exploreCard]);
+  });
+
+  it('Shows old GMF card before Noon on Thursday', () => {
+    const metaCampaigns: readonly MetaCampaign[] = Array(4).fill(emergencyMetaCampaign);
+
+    const beforeGMFLaunch = new Date("2023-04-20T11:59:59+01:00");
+
+    const cards = cardsForMetaCampaigns(beforeGMFLaunch, metaCampaigns, 'https://donate.example.com', 'https://blog.com')
+
+    expect(cards).toEqual([...Array(4).fill(emergencyCard), wgfCard,  oldGmfCard, exploreCard]);
   });
 
   it('Shows 5 emergencies with no explore card', () => {
     const metaCampaigns: readonly MetaCampaign[] = Array(5).fill(emergencyMetaCampaign);
 
-    const cards = cardsForMetaCampaigns(metaCampaigns, 'https://donate.example.com', 'https://blog.com')
+    const cards = cardsForMetaCampaigns(afterGMFLaunch, metaCampaigns, 'https://donate.example.com', 'https://blog.com')
 
-    expect(cards).toEqual([...Array(5).fill(emergencyCard), wgfCard, gmfCard]);
+    expect(cards).toEqual([...Array(5).fill(emergencyCard), gmfCard, wgfCard]);
   });
 });
