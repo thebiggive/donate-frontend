@@ -87,6 +87,7 @@ export function app() {
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
           'js.stripe.com',
+          'biggive.matomo.cloud',
           // Next 2 needed for reCAPTCHA to fully load.
           'www.google.com',
           'www.gstatic.com',

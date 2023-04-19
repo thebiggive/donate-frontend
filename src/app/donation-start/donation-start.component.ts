@@ -55,7 +55,7 @@ import { ValidateBillingPostCode } from '../validators/validate-billing-post-cod
 import {CampaignGroupsService} from "../campaign-groups.service";
 import {TimeLeftPipe} from "../time-left.pipe";
 import {ImageService} from "../image.service";
-import {flags} from "../featureFlags";
+import { MatomoTracker } from 'ngx-matomo';
 
 @Component({
   selector: 'app-donation-start',
@@ -113,6 +113,13 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   personIsLoginReady = false;
   privacyUrl = 'https://biggive.org/privacy';
   showAddressLookup: boolean;
+
+  // Kind of a subset of `stripePaymentMethodReady`, which tracks just the Card Stripe.js element based
+  // on the `complete` property of the callback event. Doesn't cover PRBs, saved cards, or donation credit.
+  // Maintains its value and is NOT reset when settlement method changes to one of those, since it might
+  // change back.
+  stripeManualCardInputValid = false;
+
   stripePaymentMethodReady = false;
   stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
   stripeError?: string;
@@ -174,6 +181,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
     private imageService: ImageService,
+    private matomoTracker: MatomoTracker,
     private metaPixelService: MetaPixelService,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
@@ -573,7 +581,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // should remove an invalid post-code error in such a scenario.
     this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
 
-    this.stripePaymentMethodReady = state.complete;
+    this.stripeManualCardInputValid = this.stripePaymentMethodReady = state.complete;
     if (state.error) {
       this.stripeError = this.getStripeFriendlyError(state.error, 'card_change');
       this.stripeResponseErrorCode = state.error.code;
@@ -926,7 +934,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     // work-around-able, so for now it's not worth the refactoring time.
     const checked = event.checked;
 
-    this.stripePaymentMethodReady = checked;
+    this.stripePaymentMethodReady = checked || this.stripeManualCardInputValid;
 
     if (checked) {
       this.selectedSavedMethod = paymentMethod;
@@ -972,6 +980,15 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   }
 
   loadAuthedPersonInfo(id: string, jwt: string) {
+    if (!this.identityService) {
+      // This feels like an anti-pattern, but currently seems to be required. Since the "contained"
+      // login component is passed this public fn and could call it any time, it is not safe to assume
+      // that this page has its normal service dependencies. The current behaviour post-login seems to
+      // be that this is called as a no-op once, but then there's a reload during which it works?
+      console.log('No ID service');
+      return;
+    }
+
     this.identityService.get(id, jwt).subscribe((person: Person) => {
       this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
       this.personIsLoginReady = true;
@@ -1516,6 +1533,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     this.retrying = false;
     this.submitting = false;
 
+    this.stripeManualCardInputValid = false;
     if (this.card) {
       this.card.clear();
     }
@@ -1860,6 +1878,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   private exitPostDonationSuccess(donation: Donation) {
     this.analyticsService.logCheckoutDone(this.campaign, donation);
     this.metaPixelService.trackConversion(donation);
+    this.trackConversionWithMatomo(donation);
 
     this.cancelExpiryWarning();
     this.router.navigate(['thanks', donation.donationId], {
@@ -1887,6 +1906,44 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     }
 
     return false;
+  }
+
+  private trackConversionWithMatomo(donation: Donation) {
+    if (!donation?.donationId) {
+      return;
+    }
+
+    this.matomoTracker.addEcommerceItem(
+      `campaign-${this.campaignId}`,
+      `Donation to ${this.campaign.charity.name} for ${this.campaign.title}`,
+      undefined, // Not using product categories
+      donation.donationAmount,
+    );
+
+    if (donation.tipAmount > 0) {
+      this.matomoTracker.addEcommerceItem(
+        'tip',
+        'Big Give tip',
+        undefined, // Not using product categories
+        donation.tipAmount,
+      );
+    }
+
+    if (donation.feeCoverAmount > 0) {
+      this.matomoTracker.addEcommerceItem(
+        'fee-cover',
+        'Big Give platform fee cover',
+        undefined, // Not using product categories
+        donation.feeCoverAmount,
+      );
+    }
+
+    // "Tracks an Ecommerce order, including any eCommerce item previously added to the order."
+    this.matomoTracker.trackEcommerceOrder(
+      donation.donationId,
+      donation.donationAmount + donation.tipAmount + donation.feeCoverAmount,
+      donation.donationAmount,
+    );
   }
 
   // Three functions below copied from campaign-info.component. Apologies for duplication.
