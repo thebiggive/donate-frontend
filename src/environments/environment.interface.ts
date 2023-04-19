@@ -18,12 +18,13 @@ export interface Environment {
   blogUriPrefix: string,
 
   /** Prefix for pages served by the SF Experience Cloud */
-  experienceUriPrefix: string
+  experienceUriPrefix: string,
   donationsApiPrefix: string,
   getSiteControlId: string,
   googleAnalyticsId: string,
-  googleOptimizeId: string | null
-  identityApiPrefix: string
+  googleOptimizeId: string | null,
+  identityApiPrefix: string,
+  matomoSiteId: number | null, // null for no Matomo tracking.
   maximumDonationAmount: number,
   metaPixelId: string | null, // Set null to turn off init of Meta Pixel.
   minimumCreditAmount: number,

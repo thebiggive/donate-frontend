@@ -1,3 +1,4 @@
+import { DatePipe } from "@angular/common";
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +15,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RecaptchaModule } from 'ng-recaptcha';
+import { MatomoModule } from 'ngx-matomo';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
@@ -21,11 +23,7 @@ import { Campaign } from '../campaign.model';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { DonationStartComponent } from './donation-start.component';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
-import {CampaignDetailsComponent} from "../campaign-details/campaign-details.component";
-import {CommonModule, CurrencyPipe, DatePipe} from "@angular/common";
-import {MatTabsModule} from "@angular/material/tabs";
-import {OptimisedImagePipe} from "../optimised-image.pipe";
-import {TimeLeftPipe} from "../time-left.pipe";
+import { TimeLeftPipe } from "../time-left.pipe";
 
 describe('DonationStartComponent', () => {
   beforeEach(waitForAsync(() => {
@@ -125,6 +123,13 @@ describe('DonationStartComponent', () => {
         MatDialogModule,
         MatIconModule,
         MatInputModule,
+        MatomoModule.forRoot({
+          scriptUrl: `https://example.com/matomo.js`,
+          trackers: [],
+          routeTracking: {
+            enable: true,
+          }
+        }),
         MatRadioModule,
         MatProgressSpinnerModule,
         MatSelectModule,
