@@ -51,7 +51,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
 
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
-  @ViewChild('donation-start-form') form: ElementRef<DonationStartFormComponent>;
+  @ViewChild('donationStartFormChild') form: ElementRef<DonationStartFormComponent>;
 
   card: StripeCardElement | null;
 
@@ -122,7 +122,7 @@ export class DonationStartComponent implements OnDestroy, OnInit {
 
   donationFormSubscription = new Subscription();
   captchaSubscription = new Subscription();
-  
+
   constructor(
     public cardIconsService: CardIconsService,
     public dialog: MatDialog,

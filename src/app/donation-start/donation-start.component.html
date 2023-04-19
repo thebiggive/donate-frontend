@@ -30,8 +30,8 @@
 
       <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 
-      <app-donation-start-form *ngIf="campaignOpenOnLoad"
-      
+      <app-donation-start-form
+        #donationStartFormChild
       [authedPersonEvent]="personEventSubject.asObservable()"
       [identityService]="identityService"
       [person]="person"

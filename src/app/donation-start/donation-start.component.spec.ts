@@ -33,6 +33,9 @@ describe('DonationStartComponent', () => {
     TestBed.configureTestingModule({
       imports: [
       ],
+      declarations: [
+        DonationStartFormComponent,
+      ],
       providers: [
         TimeLeftPipe,
         DatePipe
@@ -162,6 +165,7 @@ describe('DonationStartComponent', () => {
     fixture = TestBed.createComponent(DonationStartComponent);
     component = fixture.componentInstance;
     component.campaign = getDummyCampaign('testCampaignIdForStripe');
+    component.ngOnInit();
     // Don't `fixture.detectChanges()` here, so tests can vary their route-resolved campaign.
   });
 
