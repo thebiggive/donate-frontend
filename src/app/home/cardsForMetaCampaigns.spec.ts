@@ -65,7 +65,7 @@ describe('cardsForMetaCampaigns', () => {
     }
   };
 
-  const afterGMFLaunch = new Date("2022-04-20T12:00:00+01:00");
+  const afterGMFLaunch = new Date("2023-04-20T12:00:00+01:00");
 
   it('Shows explore card when there are no meta campaigns', () => {
     const metaCampaigns: readonly MetaCampaign[] = [];
@@ -94,7 +94,7 @@ describe('cardsForMetaCampaigns', () => {
   it('Shows old GMF card before Noon on Thursday', () => {
     const metaCampaigns: readonly MetaCampaign[] = Array(4).fill(emergencyMetaCampaign);
 
-    const beforeGMFLaunch = new Date("2022-04-20T11:59:59+01:00");
+    const beforeGMFLaunch = new Date("2023-04-20T11:59:59+01:00");
 
     const cards = cardsForMetaCampaigns(beforeGMFLaunch, metaCampaigns, 'https://donate.example.com', 'https://blog.com')
 

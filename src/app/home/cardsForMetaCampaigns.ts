@@ -58,7 +58,7 @@ export const cardsForMetaCampaigns = function (
     anyExploreCard = [];
   }
 
-  if (viewingDate >= new Date("2022-04-20T12:00:00+01:00")) {
+  if (viewingDate >= new Date("2023-04-20T12:00:00+01:00")) {
     return [
       ...metaCampaignCards,
       {
