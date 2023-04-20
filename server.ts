@@ -25,6 +25,7 @@ const donationsApiHost = (new URL(environment.donationsApiPrefix)).host;
 const donateGlobalHost = (new URL(environment.donateGlobalUriPrefix)).host;
 const donateHost = (new URL(environment.donateUriPrefix)).host;
 const identityApiHost = (new URL(environment.identityApiPrefix)).host;
+const matomoUriBase = 'https://biggive.matomo.cloud';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app() {
@@ -46,6 +47,7 @@ export function app() {
           apiHost,
           donationsApiHost,
           identityApiHost,
+          matomoUriBase,
           'www.facebook.com', // Required for Meta Pixel in some browsers. https://josephpinder.com/blog/facebook-pixel-is-slowing-down-your-website-and-how-to-fix-it-securely
           'api.getAddress.io',
           '*.getsitecontrol.com',
@@ -72,10 +74,12 @@ export function app() {
           `'self'`,
           'data:',
           'https:',
+          matomoUriBase,
         ],
         'script-src': [
           donateGlobalHost,
           donateHost,
+          matomoUriBase,
           `'unsafe-eval'`,
           `'unsafe-inline'`,
           `'nonce-OT22mYwcUVPp' *.facebook.net`, // Meta Pixel. https://josephpinder.com/blog/facebook-pixel-is-slowing-down-your-website-and-how-to-fix-it-securely
@@ -87,7 +91,6 @@ export function app() {
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
           'js.stripe.com',
-          'biggive.matomo.cloud',
           // Next 2 needed for reCAPTCHA to fully load.
           'www.google.com',
           'www.gstatic.com',
