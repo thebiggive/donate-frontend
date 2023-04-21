@@ -80,7 +80,9 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   requestButtonShown = false;
   showChampionOptIn = false;
 
-  campaign: Campaign;
+  @Input() campaign: Campaign;
+  @Input() column: 'primary'|'secondary'
+
   donation?: Donation;
 
   campaignOpenOnLoad: boolean;
@@ -213,7 +215,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       this.stripeService.init();
     }
 
-    this.campaign = this.route.snapshot.data.campaign;
     this.setCampaignBasedVars();
 
     const idAndJWT = this.identityService.getIdAndJWT();

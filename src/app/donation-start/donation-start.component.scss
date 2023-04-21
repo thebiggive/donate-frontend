@@ -9,10 +9,6 @@ input:disabled {
   cursor: not-allowed; // Visual help on desktop when e.g. address lookup has frozen postcode field.
 }
 
-.b-back-button {
-  @include make-back-button;
-}
-
 .b-center {
   text-align: center;
 }
@@ -71,15 +67,6 @@ input:disabled {
   border: solid 1px $colour-grey;
   padding: 1rem;
   margin-bottom: 1rem;
-}
-
-.c-form-container {
-  display: flex;
-  flex-direction: column;
-
-  @media #{$breakpoint-lg} {
-    flex-direction: row;
-  }
 }
 
 .c-timer {
