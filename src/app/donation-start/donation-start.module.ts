@@ -22,6 +22,7 @@ import {ExactCurrencyPipe} from '../exact-currency.pipe';
 import {TimeLeftPipe} from '../time-left.pipe';
 import {CampaignDetailsModule} from "../campaign-details/campaign-details.module";
 import { DonationStartLoginComponent } from "./donation-start-login/donation-start-login.component";
+import {DonationStartContainerComponent} from "./donation-start-container/donation-start-container.component";
 
 @NgModule({
   imports: [
@@ -46,7 +47,7 @@ import { DonationStartLoginComponent } from "./donation-start-login/donation-sta
     TimeLeftPipe,
     CampaignDetailsModule,
   ],
-  declarations: [DonationStartComponent, DonationStartLoginComponent],
+  declarations: [DonationStartComponent, DonationStartLoginComponent, DonationStartContainerComponent],
   providers: [
     DatePipe,
   ]
