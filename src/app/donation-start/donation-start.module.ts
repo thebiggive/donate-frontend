@@ -23,6 +23,7 @@ import {TimeLeftPipe} from '../time-left.pipe';
 import {CampaignDetailsModule} from "../campaign-details/campaign-details.module";
 import { DonationStartLoginComponent } from "./donation-start-login/donation-start-login.component";
 import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
+import {DonationStartFormModule} from "../donation-start-form/donation-start-form.module";
 
 @NgModule({
     imports: [
@@ -46,7 +47,7 @@ import {DonationStartFormComponent} from "../donation-start-form/donation-start-
         RecaptchaModule,
         TimeLeftPipe,
         CampaignDetailsModule,
-        DonationStartFormComponent,
+        DonationStartFormModule,
     ],
   declarations: [DonationStartComponent, DonationStartLoginComponent],
   providers: [
