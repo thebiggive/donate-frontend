@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit, ViewChild} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -6,17 +6,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
-import {Card, PaymentMethod} from "@stripe/stripe-js";
+import {PaymentMethod} from "@stripe/stripe-js";
 import {COUNTRIES} from "../countries";
-import {MatOption, MatOptionModule} from "@angular/material/core";
+import {MatOptionModule} from "@angular/material/core";
 import {MatSelectModule} from "@angular/material/select";
-
 
 @Component({
   standalone: true,
   selector: 'app-update-card-modal',
   templateUrl: 'update-card-modal.html',
-  styleUrls: ['./update-card-modal.component.scss'],
   imports: [
     ...allChildComponentImports,
     FormsModule,
