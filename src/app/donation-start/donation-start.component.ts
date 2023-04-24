@@ -1947,15 +1947,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     );
   }
 
-  // Three functions below copied from campaign-info.component. Apologies for duplication.
-  getBeneficiaryIcon(beneficiary: string) {
-    return CampaignGroupsService.getBeneficiaryIcon(beneficiary);
-  }
-
-  getCategoryIcon(category: string) {
-    return CampaignGroupsService.getCategoryIcon(category);
-  }
-
   getPercentageRaised(campaign: Campaign): number | undefined {
     return CampaignService.percentRaised(campaign);
   }

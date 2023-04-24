@@ -530,32 +530,6 @@
         [championName]="campaign.championName"
         [championUrl]="'/' + campaign.parentRef + '/' + campaign.championRef">
       </biggive-campaign-highlights>
-
-      <div style="margin-bottom: 30px;">
-        <h5>Categories</h5>
-        <hr>
-        <div class="icons">
-          <li *ngFor="let category of campaign.categories" class="icon-wrapper">
-            <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
-            <span class="c-icon-title">
-              <!-- add zero width space to allow line break -->
-              {{ category.split('/').join('/\u200B') }}
-            </span>
-          </li>
-        </div>
-
-        <h5>Beneficiaries</h5>
-        <hr>
-        <div class="icons">
-          <li *ngFor="let beneficiary of campaign.beneficiaries" class="icon-wrapper">
-            <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
-            <span class="c-icon-title">
-              <!-- add zero width space to allow line break -->
-              {{ beneficiary.split('/').join('/\u200B') }}
-            </span>
-          </li>
-        </div>
-      </div>
     </div>
   </div>
   <p *ngIf="reservationExpiryTime()" class="c-timer">
