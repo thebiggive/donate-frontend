@@ -54,7 +54,7 @@ import { EMAIL_REGEXP } from '../validators/patterns';
 import { ValidateBillingPostCode } from '../validators/validate-billing-post-code';
 import {CampaignGroupsService} from "../campaign-groups.service";
 import {TimeLeftPipe} from "../time-left.pipe";
-import {ImageService} from "../image.service";
+// import {ImageService} from "../image.service";
 import { MatomoTracker } from 'ngx-matomo';
 
 @Component({
@@ -135,7 +135,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   triedToLeaveMarketing = false;
   campaignFinished: boolean;
   campaignOpen: boolean;
-  bannerUri: string | null;
+  // bannerUri: string | null;
   showAllPaymentMethods: boolean = false;
 
   private campaignId: string;
@@ -182,7 +182,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
     @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
-    private imageService: ImageService,
+    // private imageService: ImageService,
     private matomoTracker: MatomoTracker,
     private metaPixelService: MetaPixelService,
     private pageMeta: PageMetaService,
@@ -224,7 +224,7 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
       }
     }
 
-    this.imageService.getImageUri(this.campaign.bannerUri, 830).subscribe(uri => this.bannerUri = uri);
+    // this.imageService.getImageUri(this.campaign.bannerUri, 830).subscribe(uri => this.bannerUri = uri);
 
     // This block of code is copied from campaign-info.component. Apologies for duplication.
     this.campaignTarget = this.currencyPipe.transform(this.campaign.target, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
