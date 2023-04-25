@@ -21,6 +21,7 @@ export class BiggiveFormFieldSelect {
 
   @Prop() selectedValue: string | null;
   @Prop() selectedLabel: string | null;
+  @Prop() selectStyle: 'bordered' | 'underlined' = 'bordered';
 
   @Listen('doOptionSelect')
   doOptionSelectCompletedHandler(event) {
@@ -59,7 +60,7 @@ export class BiggiveFormFieldSelect {
 
   render() {
     return (
-      <div class={'dropdown space-below-' + this.spaceBelow}>
+      <div class={'dropdown space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle}>
         <div class="sleeve" onClick={this.toggleFocus} onMouseLeave={this.toggleFocus}>
           <span class="placeholder">{this.selectedLabel === null || this.selectedLabel === undefined ? this.placeholder : this.selectedLabel}</span>
         </div>

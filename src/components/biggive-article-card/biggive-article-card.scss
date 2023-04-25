@@ -30,10 +30,11 @@
     }
   }
   .slug {
-    @include font-size-small();
+    @include font-size-medium();
+    margin-bottom: $spacer-2;
   }
   .date {
-    @include font-size-x-small();
+    @include font-size-medium();
     margin-bottom: $spacer-3;
   }
   h3 {
@@ -81,5 +82,18 @@
       @include corner-clip-medium-bottom-left-top-right();
     
   }
+
+  
+
+  @each $key, $colour in $brandColours {
+    .main-title-colour-#{$key} h3 { color: $colour; }
+    .slug-colour-#{$key} .slug { color: $colour; }
+    .date-colour-#{$key} .date { color: $colour; }
+    .image-label-colour-#{$key} .image-label { color: $colour; }
+  }
+  
+  
+  
+
 
 }

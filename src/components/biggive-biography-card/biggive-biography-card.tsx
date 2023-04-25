@@ -60,7 +60,7 @@ export class BiggiveBiographyCard {
                   <img src={this.imageUrl} alt={this.fullName} title={this.fullName} />
                   <div class="circle">
                     <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M11 11v-11h1v11h11v1h-11v11h-1v-11h-11v-1h11z" />
+                      <path stroke-color="1" stroke="#000000" d="M11 11v-11h1v11h11v1h-11v11h-1v-11h-11v-1h11z" />
                     </svg>
                   </div>
                 </div>

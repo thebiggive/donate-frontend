@@ -23,4 +23,18 @@
       color: $colour-white;
     }
   }
+  .clear {
+    padding: 5px;
+    height: 26px;
+    width: 26px;
+    text-align: center;
+    svg {
+      top: 3px;
+      left: 0.5px;
+      position: relative;
+      height: 16px;
+      width: 16px;
+      transform: rotate(45deg);
+    }
+  }
 }

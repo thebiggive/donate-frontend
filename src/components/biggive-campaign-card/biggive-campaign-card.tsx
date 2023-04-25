@@ -117,37 +117,39 @@ export class BiggiveCampaignCard {
 
   render() {
     return (
-      <div class={'container space-below-' + this.spaceBelow.toString()} onClick={this.handleCardGeneralClick}>
+      <div class={'container space-below-' + this.spaceBelow.toString()}>
         <div class="sleeve">
-          {this.campaignType !== null ? (
-            <div class="campaign-type">
-              <span>{this.campaignType}</span>
-            </div>
-          ) : null}
+          <div onClick={this.handleCardGeneralClick}>
+            {this.campaignType !== null ? (
+              <div class="campaign-type">
+                <span>{this.campaignType}</span>
+              </div>
+            ) : null}
 
-          {this.banner !== null ? (
-            <div class="image-wrap banner" role="presentation" style={{ 'background-image': 'url(' + this.banner + ')' }}></div>
-          ) : (
-            <div class="image-wrap banner"></div>
-          )}
+            {this.banner !== null ? (
+              <div class="image-wrap banner" role="presentation" style={{ 'background-image': 'url(' + this.banner + ')' }}></div>
+            ) : (
+              <div class="image-wrap banner"></div>
+            )}
 
-          <div class="title-wrap">
-            <h3>{this.campaignTitle}</h3>
-            <div class="organisation-name">By {this.organisationName}</div>
-          </div>
+            <div class="title-wrap">
+              <h3>{this.campaignTitle}</h3>
+              <div class="organisation-name">By {this.organisationName}</div>
+            </div>
 
-          <div class="meta-wrap">
-            <div class="meta-item">
-              <span class="label">{this.primaryFigureLabel}</span>
-              <span class="text">{this.primaryFigureAmount}</span>
+            <div class="meta-wrap">
+              <div class="meta-item">
+                <span class="label">{this.primaryFigureLabel}</span>
+                <span class="text">{this.primaryFigureAmount}</span>
+              </div>
+              <div class="meta-item">
+                <span class="label">{this.secondaryFigureLabel}</span>
+                <span class="text">{this.secondaryFigureAmount}</span>
+              </div>
             </div>
-            <div class="meta-item">
-              <span class="label">{this.secondaryFigureLabel}</span>
-              <span class="text">{this.secondaryFigureAmount}</span>
+            <div class="progress-bar-wrap">
+              <biggive-progress-bar counter={this.progressBarCounter} colour-scheme="primary"></biggive-progress-bar>
             </div>
-          </div>
-          <div class="progress-bar-wrap">
-            <biggive-progress-bar counter={this.progressBarCounter} colour-scheme="primary"></biggive-progress-bar>
           </div>
           <div class="button-wrap">
             {this.isFutureCampaign || this.isPastCampaign ? (

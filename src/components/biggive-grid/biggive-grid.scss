@@ -87,6 +87,16 @@
 .column-count-6.column-gap-5 ::slotted(*) { width: calc( 100% / 6 - (($spacer-5 * 5) / 6) );}
 .column-count-6.column-gap-6 ::slotted(*) { width: calc( 100% / 6 - (($spacer-6 * 5) / 6) );}
 
+.column-count-3.column-gap-1:after { content: ""; @include flex-container-column(); width: calc( 100% / 3 - (($spacer-1 * 2) / 3) );}
+.column-count-3.column-gap-2:after { content: ""; @include flex-container-column(); width: calc( 100% / 3 - (($spacer-2 * 2) / 3) );}
+.column-count-3.column-gap-3:after { content: ""; @include flex-container-column(); width: calc( 100% / 3 - (($spacer-3 * 2) / 3) );}
+.column-count-3.column-gap-4:after { content: ""; @include flex-container-column(); width: calc( 100% / 3 - (($spacer-4 * 2) / 3) );}
+.column-count-3.column-gap-5:after { content: ""; @include flex-container-column(); width: calc( 100% / 3 - (($spacer-5 * 2) / 3) );}
+.column-count-3.column-gap-6:after { content: ""; @include flex-container-column(); width: calc( 100% / 3 - (($spacer-6 * 2) / 3) );}
+
+
+
+
 @media screen and (max-width: $screen-tablet-max) {
   .column-count-2 ::slotted(*),
   .column-count-3 ::slotted(*),

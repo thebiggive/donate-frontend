@@ -24,30 +24,32 @@ describe('biggive-campaign-card', () => {
      <mock:shadow-root>
        <div class="container space-below-4">
              <div class="sleeve">
-               <div class="campaign-type">
-                 <span>
-                   Match Funded
-                 </span>
-           </div>
-           <div class="banner image-wrap" role="presentation" style="background-image: url(undefined);"></div>
-           <div class="title-wrap">
-             <h3></h3>
-             <div class="organisation-name">
-               By
+               <div>
+                 <div class="campaign-type">
+                   <span>
+                     Match Funded
+                   </span>
              </div>
-           </div>
-           <div class="meta-wrap">
-             <div class="meta-item">
-               <span class="label">Primary label</span>
-               <span class="text">£123</span>
+             <div class="banner image-wrap" role="presentation" style="background-image: url(undefined);"></div>
+             <div class="title-wrap">
+               <h3></h3>
+               <div class="organisation-name">
+                 By
+               </div>
              </div>
-             <div class="meta-item">
-               <span class="label">Secondary label</span>
-               <span class="text">£1,000</span>
+             <div class="meta-wrap">
+               <div class="meta-item">
+                 <span class="label">Primary label</span>
+                 <span class="text">£123</span>
+               </div>
+               <div class="meta-item">
+                 <span class="label">Secondary label</span>
+                 <span class="text">£1,000</span>
+               </div>
              </div>
-           </div>
-           <div class="progress-bar-wrap">
-             <biggive-progress-bar colour-scheme="primary" counter="100"></biggive-progress-bar>
+             <div class="progress-bar-wrap">
+               <biggive-progress-bar colour-scheme="primary" counter="100"></biggive-progress-bar>
+             </div>
            </div>
            <div class="button-wrap">
              <biggive-button colour-scheme="primary" full-width="true" label="Donate now"></biggive-button>

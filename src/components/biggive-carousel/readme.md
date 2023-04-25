@@ -15,6 +15,19 @@
 | `spaceBelow`             | `space-below`              |             | `0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6`                                                                                                                                                                                  | `4`         |
 
 
+## Methods
+
+### `resizeToFitContent() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+
 ## Dependencies
 
 ### Used by

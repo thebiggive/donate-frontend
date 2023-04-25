@@ -79,6 +79,50 @@
 
     <biggive-page-section>
 
+      <biggive-campaign-card-filter-grid
+      category-options='["ABC", "DEF"]'
+      beneficiary-options='["ABC", "DEF"]'
+      location-options='["ABC", "DEF"]'
+      funding-options='["ABC", "DEF"]'
+      >
+    <biggive-grid slot="campaign-grid" column-count="3">
+      <biggive-campaign-card
+        campaign-type="Match Funded"
+        campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community"
+        organisation-name="Oxford Philharmonic Orchestra"
+        currency-code="GBP"
+        primary-figure-label="Total Raised"
+        primary-figure-amount="76543"
+        secondary-figure-label="Total Raised"
+        secondary-figure-amount="76543"
+        progress-bar-counter="75">
+      </biggive-campaign-card>
+      <biggive-campaign-card
+        data-filter-categories="[&quot;Healthcare&quot;]"
+        data-filter-beneficiaries="[&quot;Children&quot;]"
+        campaign-type="Match Funded"
+        campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community"
+        organisation-name="Oxford Philharmonic Orchestra"
+        currency-code="GBP"
+        primary-figure-label="Total Raised"
+        primary-figure-amount="76543"
+        secondary-figure-label="Total Raised"
+        secondary-figure-amount="76543">
+      </biggive-campaign-card>
+      <biggive-campaign-card
+        data-filter-categories="[&quot;Healthcare&quot;]"
+        data-filter-beneficiaries="[&quot;Children&quot;]"
+        campaign-type="Match Funded"
+        campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community"
+        organisation-name="Oxford Philharmonic Orchestra"
+        currency-code="GBP"
+        primary-figure-label="Total Raised"
+        primary-figure-amount="76543"
+        secondary-figure-label="Total Raised"
+        secondary-figure-amount="76543">
+      </biggive-campaign-card>
+    </biggive-grid>
+    </biggive-campaign-card-filter-grid>
 
 
       <biggive-filtered-carousel carousel-space-below="6" carousel-column-count="4">
@@ -591,8 +635,8 @@
           text-align="center"
           ratio="1,1"  
           rounded="false"
-          circle="true"  
-          url="" > 
+          circle="false"  
+          url="#testsheet" > 
         </biggive-biography-card>
 
         

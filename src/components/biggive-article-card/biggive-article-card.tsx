@@ -14,8 +14,6 @@ export class BiggiveArticleCard {
 
   @Prop() backgroundImageUrl: string = '';
 
-  @Prop() textColour: brandColour = 'black';
-
   @Prop() slug: string;
 
   @Prop() slugColour: brandColour = 'black';
@@ -57,8 +55,7 @@ export class BiggiveArticleCard {
           class={
             'sleeve background-colour-' +
             this.backgroundColour +
-            ' text-colour-' +
-            this.textColour +
+            ' text-colour-black ' +
             ' slug-colour-' +
             this.slugColour +
             ' date-colour-' +
