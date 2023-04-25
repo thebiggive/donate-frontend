@@ -54,7 +54,6 @@ import { EMAIL_REGEXP } from '../validators/patterns';
 import { ValidateBillingPostCode } from '../validators/validate-billing-post-code';
 import {CampaignGroupsService} from "../campaign-groups.service";
 import {TimeLeftPipe} from "../time-left.pipe";
-// import {ImageService} from "../image.service";
 import { MatomoTracker } from 'ngx-matomo';
 
 @Component({
@@ -133,8 +132,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
   // Track 'Next' clicks so we know when to show missing radio button error messages.
   triedToLeaveGiftAid = false;
   triedToLeaveMarketing = false;
-  campaignFinished: boolean;
-  campaignOpen: boolean;
   // bannerUri: string | null;
   showAllPaymentMethods: boolean = false;
 
@@ -168,8 +165,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
 
   private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
-  campaignRaised: string; // Formatted
-  campaignTarget: string; // Formatted
   private stepChangedBlockedByCaptcha = false;
 
 
@@ -223,15 +218,6 @@ export class DonationStartComponent implements AfterContentChecked, AfterContent
         this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
       }
     }
-
-    // this.imageService.getImageUri(this.campaign.bannerUri, 830).subscribe(uri => this.bannerUri = uri);
-
-    // This block of code is copied from campaign-info.component. Apologies for duplication.
-    this.campaignTarget = this.currencyPipe.transform(this.campaign.target, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
-    this.campaignRaised = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
-    this.campaignFinished = CampaignService.isInPast(this.campaign);
-    this.campaignOpen = CampaignService.isOpenForDonations(this.campaign);
-
 
     const formGroups: {
       amounts: FormGroup,   // Matching reservation happens at the end of this group.

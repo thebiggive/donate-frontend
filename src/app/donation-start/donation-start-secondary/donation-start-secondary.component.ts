@@ -5,8 +5,7 @@ import {CurrencyPipe, DatePipe, getCurrencySymbol, isPlatformBrowser} from '@ang
 import { CampaignService } from '../../campaign.service';
 import {TimeLeftPipe} from "../../time-left.pipe";
 import { Donation } from '../../donation.model';
-import { environment } from '../../../environments/environment';
-
+import {CampaignGroupsService} from "../../campaign-groups.service";
 
 @Component({
   selector: 'app-donation-start-secondary',
@@ -44,6 +43,7 @@ export class DonationStartSecondaryComponent implements OnInit {
     if(this.campaign) {
       this.imageService.getImageUri(this.campaign.bannerUri, 830).subscribe(uri => this.bannerUri = uri);
 
+      // This block of code is copied from campaign-info.component. Apologies for duplication.
       this.campaignRaised = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
       this.campaignTarget = this.currencyPipe.transform(this.campaign.target, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
       this.campaignOpen = CampaignService.isOpenForDonations(this.campaign);
@@ -55,11 +55,12 @@ export class DonationStartSecondaryComponent implements OnInit {
     return CampaignService.percentRaised(campaign);
   }
 
-  reservationExpiryTime(): Date | undefined {
-    if (!this.donation?.createdTime || !this.donation.matchReservedAmount) {
-      return undefined;
-    }
+  // Three functions below copied from campaign-info.component. Apologies for duplication.
+  getBeneficiaryIcon(beneficiary: string) {
+    return CampaignGroupsService.getBeneficiaryIcon(beneficiary);
+  }
 
-    return new Date(environment.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
+  getCategoryIcon(category: string) {
+    return CampaignGroupsService.getCategoryIcon(category);
   }
 }

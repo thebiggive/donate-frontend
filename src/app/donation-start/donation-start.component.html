@@ -22,7 +22,10 @@
 </app-donation-start-login>
 
   <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
-
+  <p *ngIf="reservationExpiryTime()" class="c-timer">
+    <span class="b-rt-0">Match funds reserved for&nbsp;</span>
+    <span class="b-rt-1 b-bold">{{ reservationExpiryTime() | timeLeft }}</span>
+  </p>
   <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaignOpenOnLoad">
     <mat-vertical-stepper
       id="stepper"

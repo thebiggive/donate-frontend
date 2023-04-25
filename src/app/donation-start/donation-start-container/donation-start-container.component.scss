@@ -13,31 +13,6 @@
   }
 }
 
-
-// code below copied from src/app/campaign-details/campaign-details.component.scss
-// I'm not keen on the copy & paste but I struggled to get it to work in a more elegant way.
-
-.icons {
-  @include format-icon-container;
-}
-
-.icon-wrapper {
-  @include format-icon-list-item;
-
-  // in campaign-details.component.scss the selector here is `svg` rather than `fa-icon`, but that doesn't seem to work
-  // here.
-  fa-icon.ng-fa-icon {
-    color: $colour-primary; // #2C089BFF
-    font-size: 40px;
-    min-width: 4rem;
-  }
-
-  .c-icon-title {
-    @include format-icon-title;
-  }
-}
-
-
 h5 {
   font-size: 1rem;
 }
