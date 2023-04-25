@@ -147,6 +147,7 @@
                 type="button"
                 mat-raised-button
                 color="primary"
+                [disabled]="! donationForm.controls['amounts']!.valid"
                 (click)="next()"
               >Next</button>
             </div>
