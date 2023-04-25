@@ -102,12 +102,4 @@ export class AppComponent implements AfterViewInit, OnInit {
       filter((event: RouterEvent) => event instanceof NavigationStart),
     ).subscribe(() => headerEl.closeMobileMenuFromOutside());
   }
-
-  /**
-   * Ensure browsers don't try to navigate to non-targets. Top level items with a sub-menu
-   * work on hover using pure CSS only.
-   */
-  noNav(event: Event) {
-    event.preventDefault();
-  }
 }
