@@ -42,8 +42,8 @@ const routes: Routes = [
     resolve: {
       campaign: CampaignResolver,
     },
-    loadChildren: () => import('./donation-start/donation-start.module')
-      .then(c => c.DonationStartModule),
+    loadChildren: () => import('./donation-start/donation-start-container/donation-start-container.module')
+      .then(c => c.DonationStartContainerModule),
   },
   {
     path: 'metacampaign/:campaignId',

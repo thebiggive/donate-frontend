@@ -19,13 +19,13 @@ import { MatomoModule } from 'ngx-matomo';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
-import { Campaign } from '../campaign.model';
-import { TBG_DONATE_STORAGE } from '../donation.service';
-import { DonationStartComponent } from './donation-start.component';
-import { TBG_DONATE_ID_STORAGE } from '../identity.service';
-import { TimeLeftPipe } from "../time-left.pipe";
+import { Campaign } from '../../campaign.model';
+import { TBG_DONATE_STORAGE } from '../../donation.service';
+import { DonationStartPrimaryComponent } from './donation-start-primary.component';
+import { TBG_DONATE_ID_STORAGE } from '../../identity.service';
+import { TimeLeftPipe } from "../../time-left.pipe";
 
-describe('DonationStartComponent', () => {
+describe('DonationStartPrimaryComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -40,8 +40,8 @@ describe('DonationStartComponent', () => {
 
   (window as any).gtag = (...args: any[]) => args;
 
-  let component: DonationStartComponent;
-  let fixture: ComponentFixture<DonationStartComponent>;
+  let component: DonationStartPrimaryComponent;
+  let fixture: ComponentFixture<DonationStartPrimaryComponent>;
 
   const getDummyCampaign = (campaignId: string) => {
     return new Campaign(
@@ -140,7 +140,7 @@ describe('DonationStartComponent', () => {
         RouterTestingModule.withRoutes([
           {
             path: 'donate/:campaignId',
-            component: DonationStartComponent,
+            component: DonationStartPrimaryComponent,
           },
         ]),
       ],
@@ -162,7 +162,7 @@ describe('DonationStartComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DonationStartComponent);
+    fixture = TestBed.createComponent(DonationStartPrimaryComponent);
     component = fixture.componentInstance;
     component.campaign = getDummyCampaign('testCampaignIdForStripe');
     // Don't `fixture.detectChanges()` here, so tests can vary their route-resolved campaign.

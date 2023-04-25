@@ -7,7 +7,10 @@
   </div>
   <div class="c-form-container">
     <div class="b-primary-column">
-      <app-donation-start [campaign]="campaign" [column]="'primary'"/>
+      <!-- <app-donation-start [campaign]="campaign" [column]="'primary'"/> -->
+      <app-donation-start-primary
+      [campaign]="campaign"
+    />
     </div>
     <div class="b-secondary-column">
       <app-donation-start-secondary

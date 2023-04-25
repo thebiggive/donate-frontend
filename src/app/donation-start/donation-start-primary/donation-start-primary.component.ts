@@ -25,47 +25,47 @@ import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, ta
 import { PaymentMethod, StripeCardElement, StripeElementChangeEvent, StripeError, StripePaymentRequestButtonElement } from '@stripe/stripe-js';
 import { EMPTY, Observer } from 'rxjs';
 
-import { AnalyticsService } from '../analytics.service';
-import { Campaign } from '../campaign.model';
-import { CampaignService } from '../campaign.service';
-import { CardIconsService } from '../card-icons.service';
-import { COUNTRIES } from '../countries';
-import { Donation } from '../donation.model';
-import { DonationCreatedResponse } from '../donation-created-response.model';
-import { DonationService } from '../donation.service';
-import { DonationStartMatchConfirmDialogComponent } from './donation-start-match-confirm-dialog.component';
-import { DonationStartMatchingExpiredDialogComponent } from './donation-start-matching-expired-dialog.component';
-import { DonationStartOfferReuseDialogComponent } from './donation-start-offer-reuse-dialog.component';
-import { environment } from '../../environments/environment';
-import { ExactCurrencyPipe } from '../exact-currency.pipe';
-import { GiftAidAddress } from '../gift-aid-address.model';
-import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
-import { IdentityService } from '../identity.service';
-import { LoginModalComponent } from '../login-modal/login-modal.component';
-import { MetaPixelService } from '../meta-pixel.service';
-import { PageMetaService } from '../page-meta.service';
-import { Person } from '../person.model';
-import { PostcodeService } from '../postcode.service';
-import { retryStrategy } from '../observable-retry';
-import { StripeService } from '../stripe.service';
-import { getCurrencyMaxValidator } from '../validators/currency-max';
-import { getCurrencyMinValidator } from '../validators/currency-min';
-import { EMAIL_REGEXP } from '../validators/patterns';
-import { ValidateBillingPostCode } from '../validators/validate-billing-post-code';
-import {CampaignGroupsService} from "../campaign-groups.service";
-import {TimeLeftPipe} from "../time-left.pipe";
+import { AnalyticsService } from '../../analytics.service';
+import { Campaign } from '../../campaign.model';
+import { CampaignService } from '../../campaign.service';
+import { CardIconsService } from '../../card-icons.service';
+import { COUNTRIES } from '../../countries';
+import { Donation } from '../../donation.model';
+import { DonationCreatedResponse } from '../../donation-created-response.model';
+import { DonationService } from '../../donation.service';
+import { DonationStartMatchConfirmDialogComponent } from '../donation-start-match-confirm-dialog.component';
+import { DonationStartMatchingExpiredDialogComponent } from '../donation-start-matching-expired-dialog.component';
+import { DonationStartOfferReuseDialogComponent } from '../donation-start-offer-reuse-dialog.component';
+import { environment } from '../../../environments/environment';
+import { ExactCurrencyPipe } from '../../exact-currency.pipe';
+import { GiftAidAddress } from '../../gift-aid-address.model';
+import { GiftAidAddressSuggestion } from '../../gift-aid-address-suggestion.model';
+import { IdentityService } from '../../identity.service';
+import { LoginModalComponent } from '../../login-modal/login-modal.component';
+import { MetaPixelService } from '../../meta-pixel.service';
+import { PageMetaService } from '../../page-meta.service';
+import { Person } from '../../person.model';
+import { PostcodeService } from '../../postcode.service';
+import { retryStrategy } from '../../observable-retry';
+import { StripeService } from '../../stripe.service';
+import { getCurrencyMaxValidator } from '../../validators/currency-max';
+import { getCurrencyMinValidator } from '../../validators/currency-min';
+import { EMAIL_REGEXP } from '../../validators/patterns';
+import { ValidateBillingPostCode } from '../../validators/validate-billing-post-code';
+import {CampaignGroupsService} from "../../campaign-groups.service";
+import {TimeLeftPipe} from "../../time-left.pipe";
 import { MatomoTracker } from 'ngx-matomo';
 
 @Component({
-  selector: 'app-donation-start',
-  templateUrl: './donation-start.component.html',
-  styleUrls: ['./donation-start.component.scss'],
+  selector: 'app-donation-start-primary',
+  templateUrl: './donation-start-primary.component.html',
+  styleUrls: ['./donation-start-primary.component.scss'],
   providers: [
     CurrencyPipe,
     TimeLeftPipe,
   ]
 })
-export class DonationStartComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
+export class DonationStartPrimaryComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
   @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
   @ViewChild('cardInfo') cardInfo: ElementRef;
