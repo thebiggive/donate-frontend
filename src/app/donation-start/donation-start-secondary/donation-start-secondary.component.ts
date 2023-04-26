@@ -20,11 +20,6 @@ import {CampaignGroupsService} from "../../campaign-groups.service";
 export class DonationStartSecondaryComponent implements OnInit {
 
   @Input() campaign: Campaign;
-  /**
-   * TODO: send the initalised reference from child component
-   * or remove the html part that requires reservationExpiryTime()
-  */ 
-  @Input() donation: Donation;
 
   bannerUri: string | null;
   campaignRaised: string; // Formatted
