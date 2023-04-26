@@ -43,14 +43,14 @@ describe('cardsForMetaCampaigns', () => {
     }
   };
 
-  const gmfCard: HighlightCard = {
-    headerText: 'Double your donation in the Green Match Fund',
-    backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', 'https://donate.example.com'),
+  const k2mCard: HighlightCard = {
+    headerText: 'Save the Date for Kind²Mind',
+    backgroundImageUrl: new URL('/assets/images/turquoise-texture.jpg', 'https://donate.example.com'),
     iconColor: 'brand-3',
-    bodyText: 'Donate from 20 April to 27 April 2023',
+    bodyText: '15 May to 22 May 2023',
     button: {
-      text: 'Donate now',
-      href: new URL('/green-match-fund-2023', "https://donate.example.com")
+      text: 'Find out more',
+      href: new URL('/kind-2-mind-2023', "https://donate.example.com")
     }
   };
 
@@ -72,7 +72,7 @@ describe('cardsForMetaCampaigns', () => {
 
     const cards = cardsForMetaCampaigns(afterGMFLaunch, metaCampaigns, 'https://donate.example.com', 'https://blog.com')
 
-    expect(cards).toEqual([gmfCard, wgfCard, exploreCard]);
+    expect(cards).toEqual([k2mCard, wgfCard, exploreCard]);
   });
 
   it('Shows emergency and explore when there is only emergency metacampaign', () => {
@@ -80,7 +80,7 @@ describe('cardsForMetaCampaigns', () => {
 
     const cards = cardsForMetaCampaigns(afterGMFLaunch, metaCampaigns, 'https://donate.example.com', 'https://blog.com')
 
-    expect(cards).toEqual([emergencyCard, gmfCard,  wgfCard,exploreCard]);
+    expect(cards).toEqual([emergencyCard, k2mCard,  wgfCard,exploreCard]);
   });
 
   it('Shows 4 emergencies with explore card', () => {
@@ -88,7 +88,7 @@ describe('cardsForMetaCampaigns', () => {
 
     const cards = cardsForMetaCampaigns(afterGMFLaunch, metaCampaigns, 'https://donate.example.com', 'https://blog.com')
 
-    expect(cards).toEqual([...Array(4).fill(emergencyCard), gmfCard, wgfCard, exploreCard]);
+    expect(cards).toEqual([...Array(4).fill(emergencyCard), k2mCard, wgfCard, exploreCard]);
   });
 
   it('Shows old GMF card before Noon on Thursday', () => {
@@ -106,6 +106,6 @@ describe('cardsForMetaCampaigns', () => {
 
     const cards = cardsForMetaCampaigns(afterGMFLaunch, metaCampaigns, 'https://donate.example.com', 'https://blog.com')
 
-    expect(cards).toEqual([...Array(5).fill(emergencyCard), gmfCard, wgfCard]);
+    expect(cards).toEqual([...Array(5).fill(emergencyCard), k2mCard, wgfCard]);
   });
 });
