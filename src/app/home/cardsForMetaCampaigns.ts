@@ -62,13 +62,13 @@ export const cardsForMetaCampaigns = function (
     return [
       ...metaCampaignCards,
       {
-        headerText: 'Double your donation in the Green Match Fund',
-        backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
+        headerText: 'Save the Date for Kind²Mind',
+        backgroundImageUrl: new URL('/assets/images/turquoise-texture.jpg', donateUriPrefix),
         iconColor: 'brand-3',
-        bodyText: 'Donate from 20 April to 27 April 2023',
+        bodyText: '15 May to 22 May 2023',
         button: {
-          text: 'Donate now',
-          href: new URL('/green-match-fund-2023', donateUriPrefix)
+          text: 'Find out more',
+          href: new URL('/kind-2-mind-2023', donateUriPrefix)
         }
       },
       {
