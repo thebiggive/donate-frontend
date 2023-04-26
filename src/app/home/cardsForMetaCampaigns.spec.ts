@@ -46,7 +46,7 @@ describe('cardsForMetaCampaigns', () => {
   const k2mCard: HighlightCard = {
     headerText: 'Save the Date for Kind²Mind',
     backgroundImageUrl: new URL('/assets/images/turquoise-texture.jpg', 'https://donate.example.com'),
-    iconColor: 'brand-6',
+    iconColor: 'brand-mhf-turquoise',
     bodyText: '15 May to 22 May 2023',
     button: {
       text: 'Find out more',
