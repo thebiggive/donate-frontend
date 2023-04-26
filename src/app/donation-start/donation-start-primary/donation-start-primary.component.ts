@@ -176,7 +176,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
-    // private imageService: ImageService,
     private matomoTracker: MatomoTracker,
     private metaPixelService: MetaPixelService,
     private pageMeta: PageMetaService,
