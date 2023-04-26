@@ -132,7 +132,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
   // Track 'Next' clicks so we know when to show missing radio button error messages.
   triedToLeaveGiftAid = false;
   triedToLeaveMarketing = false;
-  // bannerUri: string | null;
   showAllPaymentMethods: boolean = false;
 
   private campaignId: string;
