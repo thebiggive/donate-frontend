@@ -19,13 +19,13 @@ import { MatomoModule } from 'ngx-matomo';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
-import { Campaign } from '../../campaign.model';
-import { TBG_DONATE_STORAGE } from '../../donation.service';
-import { DonationStartPrimaryComponent } from './donation-start-primary.component';
-import { TBG_DONATE_ID_STORAGE } from '../../identity.service';
-import { TimeLeftPipe } from "../../time-left.pipe";
+import { Campaign } from '../campaign.model';
+import { TBG_DONATE_STORAGE } from '../donation.service';
+import { DonationStartComponent } from './donation-start.component';
+import { TBG_DONATE_ID_STORAGE } from '../identity.service';
+import { TimeLeftPipe } from "../time-left.pipe";
 
-describe('DonationStartPrimaryComponent', () => {
+describe('DonationStartComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -40,8 +40,8 @@ describe('DonationStartPrimaryComponent', () => {
 
   (window as any).gtag = (...args: any[]) => args;
 
-  let component: DonationStartPrimaryComponent;
-  let fixture: ComponentFixture<DonationStartPrimaryComponent>;
+  let component: DonationStartComponent;
+  let fixture: ComponentFixture<DonationStartComponent>;
 
   const getDummyCampaign = (campaignId: string) => {
     return new Campaign(
@@ -140,7 +140,7 @@ describe('DonationStartPrimaryComponent', () => {
         RouterTestingModule.withRoutes([
           {
             path: 'donate/:campaignId',
-            component: DonationStartPrimaryComponent,
+            component: DonationStartComponent,
           },
         ]),
       ],
@@ -162,7 +162,7 @@ describe('DonationStartPrimaryComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DonationStartPrimaryComponent);
+    fixture = TestBed.createComponent(DonationStartComponent);
     component = fixture.componentInstance;
     component.campaign = getDummyCampaign('testCampaignIdForStripe');
     // Don't `fixture.detectChanges()` here, so tests can vary their route-resolved campaign.

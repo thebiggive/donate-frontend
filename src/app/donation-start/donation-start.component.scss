@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@import '../../../abstract';
+@import '../../abstract';
 
 div .c-banner {
   background-color: white;
@@ -7,6 +7,10 @@ div .c-banner {
 
 input:disabled {
   cursor: not-allowed; // Visual help on desktop when e.g. address lookup has frozen postcode field.
+}
+
+.b-back-button {
+  @include make-back-button;
 }
 
 .b-center {
@@ -67,6 +71,15 @@ input:disabled {
   border: solid 1px $colour-grey;
   padding: 1rem;
   margin-bottom: 1rem;
+}
+
+.c-form-container {
+  display: flex;
+  flex-direction: column;
+
+  @media #{$breakpoint-lg} {
+    flex-direction: row;
+  }
 }
 
 .c-timer {
@@ -262,6 +275,33 @@ a {
   @media #{$breakpoint-md} {
     margin-top: inherit;
   }
+}
+
+// code below copied from src/app/campaign-details/campaign-details.component.scss
+// I'm not keen on the copy & paste but I struggled to get it to work in a more elegant way.
+
+.icons {
+  @include format-icon-container;
+}
+
+.icon-wrapper {
+  @include format-icon-list-item;
+
+  // in campaign-details.component.scss the selector here is `svg` rather than `fa-icon`, but that doesn't seem to work
+  // here.
+  fa-icon.ng-fa-icon {
+    color: $colour-primary; // #2C089BFF
+    font-size: 40px;
+    min-width: 4rem;
+  }
+
+  .c-icon-title {
+    @include format-icon-title;
+  }
+}
+
+h5 {
+  font-size: 1rem;
 }
 
 div.match-funded-badge {
