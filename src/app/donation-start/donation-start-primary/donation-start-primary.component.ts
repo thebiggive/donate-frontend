@@ -110,8 +110,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
   /** setTimeout reference (timer ID) if applicable. */
   expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
   loadingAddressSuggestions = false;
-  personId?: string;
-  personIsLoginReady = false;
+  @Input() personId?: string;
   privacyUrl = 'https://biggive.org/privacy';
   showAddressLookup: boolean;
 
@@ -209,13 +208,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     }
 
     this.setCampaignBasedVars();
-
-    const idAndJWT = this.identityService.getIdAndJWT();
-    if (idAndJWT !== undefined) {
-      if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
-        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
-      }
-    }
 
     const formGroups: {
       amounts: FormGroup,   // Matching reservation happens at the end of this group.
@@ -394,20 +386,8 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     this.stepHeaderEventsSet = true;
   }
 
-  login() {
-    const loginDialog = this.dialog.open(LoginModalComponent);
-    loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
-      if (data && data.id) {
-        this.loadAuthedPersonInfo(data.id, data.jwt);
-        location.reload(); // ensures correct menu is displayed
-      }
-    });
-  }
-
-  logout = () => {
+  reset = () => {
     this.creditPenceToUse = 0;
-    this.personId = undefined;
-    this.personIsLoginReady = false;
     this.stripePaymentMethodReady = false;
     this.donationForm.reset();
     this.identityService.clearJWT();
@@ -760,9 +740,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     this.submitting = false;
   }
 
-  get canLogin() {
-    return !this.personId;
-  }
 
   get donationAmountField() {
     if (!this.donationForm) {
@@ -962,25 +939,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
       this.card.mount(this.cardInfo.nativeElement);
       this.card.on('change', this.cardHandler);
     }
-  }
-
-  loadAuthedPersonInfo(id: string, jwt: string) {
-    if (!this.identityService) {
-      // This feels like an anti-pattern, but currently seems to be required. Since the "contained"
-      // login component is passed this public fn and could call it any time, it is not safe to assume
-      // that this page has its normal service dependencies. The current behaviour post-login seems to
-      // be that this is called as a no-op once, but then there's a reload during which it works?
-      console.log('No ID service');
-      return;
-    }
-
-    this.identityService.get(id, jwt).subscribe((person: Person) => {
-      this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
-      this.personIsLoginReady = true;
-      this.prepareDonationCredits(person);
-      this.prefillRarelyChangingFormValuesFromPerson(person);
-      this.loadFirstSavedStripeCardIfAny(id, jwt);
-    });
   }
 
   /**
@@ -1218,7 +1176,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
         (person: Person) => {
           this.identityService.saveJWT(person.id as string, person.completion_jwt as string);
           this.personId = person.id;
-          this.personIsLoginReady = false; // New Person -> no password etc. yet.
           donation.pspCustomerId = person.stripe_customer_id;
           this.createDonation(donation);
         },
@@ -1839,7 +1796,13 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
             this.selectedSavedMethod = this.stripeSavedMethods.length > 0 ? this.stripeSavedMethods[0] : undefined;
 
             if (this.personId) {
-              this.loadAuthedPersonInfo(this.personId, this.identityService.getJWT() as string);
+              const jwt = this.identityService.getJWT() as string;
+              this.identityService.get(this.personId, jwt).subscribe((person: Person) => {
+                if (! this.personId) {
+                  throw new Error("Person identifier went away");
+                }
+                this.loadPerson(person, this.personId, jwt)
+              });
             }
           },
           response => {
@@ -1933,5 +1896,12 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
 
   getPercentageRaised(campaign: Campaign): number | undefined {
     return CampaignService.percentRaised(campaign);
+  }
+
+  public loadPerson(person: Person, id: string, jwt: string) {
+    this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
+    this.prepareDonationCredits(person);
+    this.prefillRarelyChangingFormValuesFromPerson(person);
+    this.loadFirstSavedStripeCardIfAny(id, jwt);
   }
 }

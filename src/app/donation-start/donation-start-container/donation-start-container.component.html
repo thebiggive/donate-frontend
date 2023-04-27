@@ -13,8 +13,22 @@
         <h2 class="c-header__to b-grey b-light">For</h2>
         <h1 class="b-rh-2 b-bold">{{ campaign.title }}</h1>
       </div>
+
+      <app-donation-start-login
+        [logout]="this.logout"
+        [personId]="this.personId"
+        [email]="this.loggedInEmailAddress"
+        [personIsLoginReady]="personIsLoginReady"
+        [loadAuthedPersonInfo]="loadAuthedPersonInfo"
+        [creditPenceToUse]="this.donationStartForm && this.donationStartForm.creditPenceToUse || 0"
+        [campaign]="campaign"
+        [canLogin]="this.canLogin">
+      </app-donation-start-login>
+
       <app-donation-start-primary
+        #donation_start_form
       [campaign]="campaign"
+      [personId]="personId"
     />
     </div>
     <div class="b-secondary-column">
