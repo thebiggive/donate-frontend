@@ -15,18 +15,20 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {ReactiveFormsModule} from '@angular/forms';
 import {RecaptchaModule} from 'ng-recaptcha';
 
-import { allChildComponentImports } from '../../allChildComponentImports';
-import { DonationStartComponent } from './donation-start.component';
-import {DonationStartRoutingModule} from './donation-start-routing.module';
-import {ExactCurrencyPipe} from '../exact-currency.pipe';
-import {TimeLeftPipe} from '../time-left.pipe';
-import {CampaignDetailsModule} from "../campaign-details/campaign-details.module";
-import { DonationStartLoginComponent } from "./donation-start-login/donation-start-login.component";
+import { allChildComponentImports } from '../../../allChildComponentImports';
+import {ExactCurrencyPipe} from '../../exact-currency.pipe';
+import {TimeLeftPipe} from '../../time-left.pipe';
+import {CampaignDetailsModule} from "../../campaign-details/campaign-details.module";
+import { DonationStartLoginComponent } from "../donation-start-login/donation-start-login.component";
+import {DonationStartContainerComponent} from "../donation-start-container/donation-start-container.component";
+import { DonationStartPrimaryComponent } from "../donation-start-primary/donation-start-primary.component";
+import { DonationStartSecondaryComponent } from '../donation-start-secondary/donation-start-secondary.component';
+import { DonationStartContainerRoutingModule } from './donation-start-routing.module';
 
 @NgModule({
   imports: [
     ...allChildComponentImports,
-    DonationStartRoutingModule,
+    DonationStartContainerRoutingModule,
     ExactCurrencyPipe,
     FontAwesomeModule,
     MatAutocompleteModule,
@@ -46,9 +48,15 @@ import { DonationStartLoginComponent } from "./donation-start-login/donation-sta
     TimeLeftPipe,
     CampaignDetailsModule,
   ],
-  declarations: [DonationStartComponent, DonationStartLoginComponent],
+  declarations: [
+    DonationStartContainerComponent,
+    DonationStartLoginComponent,
+    DonationStartContainerComponent,
+    DonationStartPrimaryComponent,
+    DonationStartSecondaryComponent
+  ],
   providers: [
     DatePipe,
   ]
 })
-export class DonationStartModule {}
+export class DonationStartContainerModule {}

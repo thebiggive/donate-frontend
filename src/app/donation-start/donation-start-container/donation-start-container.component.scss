@@ -1,0 +1,18 @@
+@import '../../../abstract';
+
+.b-back-button {
+  @include make-back-button;
+}
+
+.c-form-container {
+  display: flex;
+  flex-direction: column;
+
+  @media #{$breakpoint-lg} {
+    flex-direction: row;
+  }
+}
+
+h5 {
+  font-size: 1rem;
+}
