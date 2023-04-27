@@ -816,7 +816,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
 
     this.idCaptchaCode = captchaResponse;
     if (!this.donation) {
-      this.createDonationAndMaybePerson(); // could be this actually?
+      this.createDonationAndMaybePerson();
     }
   }
 
@@ -973,8 +973,10 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
       console.log('No ID service');
       return;
     }
-
+    //this.identityService.clearJWT();
+    //this.donation = undefined;
     this.identityService.get(id, jwt).subscribe((person: Person) => {
+
       this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
       this.personIsLoginReady = true;
       this.prepareDonationCredits(person);
@@ -1051,7 +1053,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
         prefix = 'Payment method update failed: ';
         break;
       case 'confirm':
-        // TODO:
+        // TODO: 
         prefix = 'Payment processing failed: ';
     }
 
@@ -1207,6 +1209,8 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
 
     if (this.personId) {
       donation.pspCustomerId = this.identityService.getPspId();
+      console.log('donation: ', donation);
+      console.log('pspCustomerId: ', donation.pspCustomerId);
     }
 
     // Person already set up on page load.

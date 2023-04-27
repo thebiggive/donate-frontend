@@ -73,7 +73,7 @@ export class DonationService {
    */
   getProbablyResumableDonation(projectId: string): Observable<Donation | undefined> {
     this.removeOldLocalDonations();
-
+    console.log('in getProbablyResumbaleDonation');
     const existingDonations = this.getDonationCouplets().filter(donationItem => {
       return (
         donationItem.donation.projectId === projectId && // Only bring back donations to the same project/CCampaign...
@@ -81,6 +81,7 @@ export class DonationService {
         this.isResumable(donationItem.donation) // ...with a reusable last-known status.
       );
     });
+    console.log({existingDonations});
 
     if (existingDonations.length === 0) {
       return of(undefined); // No relevant donations to offer to resume.
