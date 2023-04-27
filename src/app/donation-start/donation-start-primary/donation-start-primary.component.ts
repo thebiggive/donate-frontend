@@ -1051,6 +1051,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
         prefix = 'Payment method update failed: ';
         break;
       case 'confirm':
+        // TODO: 
         prefix = 'Payment processing failed: ';
     }
 
