@@ -816,7 +816,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
 
     this.idCaptchaCode = captchaResponse;
     if (!this.donation) {
-      this.createDonationAndMaybePerson();
+      this.createDonationAndMaybePerson(); // could be this actually?
     }
   }
 
@@ -1051,7 +1051,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
         prefix = 'Payment method update failed: ';
         break;
       case 'confirm':
-        // TODO: 
+        // TODO:
         prefix = 'Payment processing failed: ';
     }
 
