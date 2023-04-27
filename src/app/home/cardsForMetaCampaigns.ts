@@ -72,10 +72,10 @@ export const cardsForMetaCampaigns = function (
         }
       },
       {
-        headerText: 'Double your donation in the Green Match Fund',
+        headerText: 'Green Match Fund',
         backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
         iconColor: 'brand-3',
-        bodyText: 'Donate from 20 April to 27 April 2023',
+        bodyText: '20 April to 27 April 2023',
         button: {
           text: 'See results',
           href: new URL('/green-match-fund-2023', donateUriPrefix)
