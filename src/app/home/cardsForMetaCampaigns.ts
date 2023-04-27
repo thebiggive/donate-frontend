@@ -72,6 +72,16 @@ export const cardsForMetaCampaigns = function (
         }
       },
       {
+        headerText: 'Green Match Fund',
+        backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
+        iconColor: 'brand-3',
+        bodyText: '20 April to 27 April 2023',
+        button: {
+          text: 'See results',
+          href: new URL('/green-match-fund-2023', donateUriPrefix)
+        }
+      },
+      {
         headerText: 'Applications for Women and Girls Match Fund now open!',
         backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', donateUriPrefix),
         iconColor: 'brand-2',
@@ -81,7 +91,6 @@ export const cardsForMetaCampaigns = function (
           href: new URL('/women-girls-match-fund', blogUriPrefix)
         }
       },
-      ...anyExploreCard,
     ];
   }
 
