@@ -37,23 +37,21 @@ export class BiggiveTotalizer {
   @Prop() mainMessage: string;
 
   setSpeed(itemsWidth: number) {
-    console.log('items width: ' + itemsWidth);
-    console.log('window width: ' + window.innerWidth);
+    const sleeve1: HTMLDivElement | null | undefined = this.host.shadowRoot?.querySelector('.ticker-wrap #sleeve_1');
+    const sleeve2: HTMLDivElement | null | undefined = this.host.shadowRoot?.querySelector('.ticker-wrap #sleeve_2');
 
-    // @ts-ignore
-    const sleeve1: HTMLDivElement = this.host.shadowRoot?.querySelector('.ticker-wrap #sleeve_1');
-    // @ts-ignore
-    const sleeve2: HTMLDivElement = this.host.shadowRoot?.querySelector('.ticker-wrap #sleeve_2');
+    if (!sleeve1 || !sleeve2) {
+      console.log('sleeve1 or sleeve2 is missing, skipping setSpeed()');
+      return;
+    }
 
+    // Restart the animation(s) on window resize to reduce the chance of jankiness.
     // https://stackoverflow.com/a/45036752/2803757
     sleeve1.style.animationName = 'none';
     sleeve2.style.animationName = 'none';
     sleeve1.offsetHeight;
 
     const duration = sleeve1.clientWidth / 50;
-
-    console.log('width is ' + sleeve1.clientWidth);
-    console.log('duation is: ' + sleeve1.clientWidth / 50);
 
     sleeve1.style.animationDuration = Math.round(duration) + 's';
     sleeve1.style.animationName = 'ticker';
@@ -69,21 +67,20 @@ export class BiggiveTotalizer {
   }
 
   componentDidRender() {
-    // @ts-ignore
-    const tickerItemsInternalWrapper: HTMLDivElement = this.host.querySelector(`[slot="ticker-items"]`);
+    const tickerItemsInternalWrapper: HTMLDivElement | null = this.host.querySelector(`[slot="ticker-items"]`);
+    const sleeve1: HTMLDivElement | null | undefined = this.host.shadowRoot?.querySelector('.ticker-wrap #sleeve_1');
+    const sleeve2: HTMLDivElement | null | undefined = this.host.shadowRoot?.querySelector('.ticker-wrap #sleeve_2');
 
-    // @ts-ignore
-    const sleeve1: HTMLDivElement = this.host.shadowRoot?.querySelector('.ticker-wrap #sleeve_1');
-    // @ts-ignore
-    const sleeve2: HTMLDivElement = this.host.shadowRoot?.querySelector('.ticker-wrap #sleeve_2');
+    if (!tickerItemsInternalWrapper || !sleeve1 || !sleeve2) {
+      console.log('tickerItemsInternalWrapper, sleeve1 or sleeve2 is missing, skipping totalizer animation setup');
+      return;
+    }
 
     // Clone all children of the ticker items internal wrapper and append them, so the ticker can show items without
     // a blank break. Sleeve 2 will animate on a delay per https://stackoverflow.com/a/45847760.
     tickerItemsInternalWrapper.childNodes.forEach((child: HTMLElement) => {
       sleeve2.appendChild(child.cloneNode(true)); // Deep clone all items.
     });
-
-    console.log('items width: ', tickerItemsInternalWrapper.clientWidth);
 
     if (tickerItemsInternalWrapper !== null && tickerItemsInternalWrapper !== undefined) {
       tickerItemsInternalWrapper.style.display = 'inline-flex';
