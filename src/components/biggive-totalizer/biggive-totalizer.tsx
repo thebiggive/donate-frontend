@@ -36,6 +36,31 @@ export class BiggiveTotalizer {
    */
   @Prop() mainMessage: string;
 
+  setSpeed() {
+    console.log('window width: ' + window.innerWidth);
+
+    // @ts-ignore
+    const sleeve1: HTMLDivElement = this.host.shadowRoot?.querySelector('.ticker-wrap #sleeve_1');
+    // @ts-ignore
+    const sleeve2: HTMLDivElement = this.host.shadowRoot?.querySelector('.ticker-wrap #sleeve_2');
+
+    // https://stackoverflow.com/a/45036752/2803757
+    sleeve1.style.animationName = 'none';
+    sleeve2.style.animationName = 'none';
+    sleeve1.offsetHeight;
+
+    const duration = sleeve1.clientWidth / 50;
+
+    console.log('width is ' + sleeve1.clientWidth);
+    console.log('duation is: ' + sleeve1.clientWidth / 50);
+
+    sleeve1.style.animationDuration = Math.round(duration) + 's';
+    sleeve2.style.animationDuration = Math.round(duration) + 's';
+    sleeve2.style.animationDelay = Math.round(duration / 2) + 's';
+    sleeve1.style.animationName = 'ticker';
+    sleeve2.style.animationName = 'ticker';
+  }
+
   componentDidRender() {
     // @ts-ignore
     const tickerItemsInternalWrapper: HTMLDivElement = this.host.querySelector(`[slot="ticker-items"]`);
@@ -56,14 +81,10 @@ export class BiggiveTotalizer {
       tickerItemsInternalWrapper.style.flex = 'none';
     }
 
-    console.log('width is ' + sleeve1.clientWidth);
-    console.log('duation is: ' + sleeve1.clientWidth / 50);
-
-    const tickerWidth = sleeve1.clientWidth;
-    const duration = tickerWidth / 50;
-    sleeve1.style.animationDuration = Math.round(duration) + 's';
-    sleeve2.style.animationDuration = Math.round(duration) + 's';
-    sleeve2.style.animationDelay = Math.round(duration / 2) + 's';
+    this.setSpeed();
+    window.addEventListener('resize', () => {
+      this.setSpeed();
+    });
   }
 
   render() {
