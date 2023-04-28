@@ -36,7 +36,8 @@ export class BiggiveTotalizer {
    */
   @Prop() mainMessage: string;
 
-  setSpeed() {
+  setSpeed(itemsWidth: number) {
+    console.log('items width: ' + itemsWidth);
     console.log('window width: ' + window.innerWidth);
 
     // @ts-ignore
@@ -55,10 +56,16 @@ export class BiggiveTotalizer {
     console.log('duation is: ' + sleeve1.clientWidth / 50);
 
     sleeve1.style.animationDuration = Math.round(duration) + 's';
-    sleeve2.style.animationDuration = Math.round(duration) + 's';
-    sleeve2.style.animationDelay = Math.round(duration / 2) + 's';
     sleeve1.style.animationName = 'ticker';
-    sleeve2.style.animationName = 'ticker';
+
+    // For now, only show the 2nd copy if there's space for it to not overlap. This means
+    // a bumpier loop on mobile, but we'd need a tweaked approach to wrap around cleanly
+    // where the item lists doesn't fit on the screen twice.
+    if (itemsWidth * 1.5 < sleeve1.clientWidth) {
+      sleeve2.style.animationDuration = Math.round(duration) + 's';
+      sleeve2.style.animationDelay = Math.round(duration / 2) + 's';
+      sleeve2.style.animationName = 'ticker';
+    }
   }
 
   componentDidRender() {
@@ -76,14 +83,16 @@ export class BiggiveTotalizer {
       sleeve2.appendChild(child.cloneNode(true)); // Deep clone all items.
     });
 
+    console.log('items width: ', tickerItemsInternalWrapper.clientWidth);
+
     if (tickerItemsInternalWrapper !== null && tickerItemsInternalWrapper !== undefined) {
       tickerItemsInternalWrapper.style.display = 'inline-flex';
       tickerItemsInternalWrapper.style.flex = 'none';
     }
 
-    this.setSpeed();
+    this.setSpeed(tickerItemsInternalWrapper.clientWidth);
     window.addEventListener('resize', () => {
-      this.setSpeed();
+      this.setSpeed(tickerItemsInternalWrapper.clientWidth);
     });
   }
 
