@@ -62,6 +62,10 @@
       // TS overrides the specific timings once the width of ticker elements is known.
       animation-duration: 10s;
 
+      @media (prefers-reduced-motion) {
+        animation-name: none; // Turn off movement when needed for a11y.
+      }
+
       .ticker-item {
         white-space: nowrap;
         padding: 0 $spacer-3;
