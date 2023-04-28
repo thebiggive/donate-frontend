@@ -387,6 +387,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
   }
 
   reset = () => {
+    this.personId = undefined;
     this.creditPenceToUse = 0;
     this.stripePaymentMethodReady = false;
     this.donationForm.reset();
