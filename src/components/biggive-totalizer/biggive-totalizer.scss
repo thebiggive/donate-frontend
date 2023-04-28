@@ -13,7 +13,19 @@
   }
 
   100% {
-    transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-150%, 0, 0);
+  }
+}
+
+@media screen and (max-width: $screen-tablet-max) {
+  @keyframes ticker {
+    0% {
+      transform: translate3d(0, 0, 0);
+    }
+  
+    100% {
+      transform: translate3d(-200%, 0, 0);
+    }
   }
 }
 
@@ -47,10 +59,17 @@
       animation-iteration-count: infinite;
       animation-timing-function: linear;
       animation-name: ticker;
-      animation-duration: 20s;
+      // TS overrides the specific timings once the width of ticker elements is known.
+      animation-duration: 10s;
+
       .ticker-item {
         white-space: nowrap;
         padding: 0 $spacer-3;
+      }
+
+      // https://stackoverflow.com/a/45847760
+      &.sleeve-delayed-copy {
+        animation-delay: 5s;
       }
     }
   }
