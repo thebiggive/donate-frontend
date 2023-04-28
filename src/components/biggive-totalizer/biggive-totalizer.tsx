@@ -58,7 +58,10 @@ export class BiggiveTotalizer {
 
     // For now, only show the 2nd copy if there's space for it to not overlap. This means
     // a bumpier loop on mobile, but we'd need a tweaked approach to wrap around cleanly
-    // where the item lists doesn't fit on the screen twice.
+    // where the item lists doesn't fit on the screen twice. The 1.5 ratio is a trial and
+    // error number which seems OK for now. It leaves a bit of a gap before items cycle
+    // back in at tablet sizes but is an improvement on what we had before at all breakpoints
+    // tested.
     if (itemsWidth * 1.5 < sleeve1.clientWidth) {
       sleeve2.style.animationDuration = Math.round(duration) + 's';
       sleeve2.style.animationDelay = Math.round(duration / 2) + 's';
