@@ -18,7 +18,7 @@ export class SearchService {
   changed: EventEmitter<boolean>; // Value indicates if an interactive UI change triggered this.
 
   nonDefaultsActive: boolean;
-  selectedSortLabel: string;
+  selectedSortLabel: 'Most raised' | 'Match funds remaining' | 'Relevance' | null;
 
   constructor() {
     this.changed = new EventEmitter();
@@ -76,22 +76,19 @@ export class SearchService {
   }
 
   private updateSelectedSortLabel() {
-    let selectedSortLabel = 'Match funds remaining';
     switch(this.selected.sortField) {
       case 'matchFundsRemaining':
-        selectedSortLabel = 'Match funds remaining';
+        this.selectedSortLabel  = 'Match funds remaining';
         break;
       case 'amountRaised':
-        selectedSortLabel = 'Most raised';
+        this.selectedSortLabel =  'Most raised';
         break;
       case 'Relevance':
-        selectedSortLabel = 'Relevance';
+        this.selectedSortLabel = 'Relevance';
         break;
       default:
         console.log('No active sort field name match');
     }
-
-    this.selectedSortLabel = selectedSortLabel;
   }
 
   filter(filterName: string, value: string|boolean) {
