@@ -3,22 +3,25 @@ import {Campaign} from "../../campaign.model";
 import {isPlatformBrowser} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 import { Donation } from 'src/app/donation.model';
-import {DonationStartPrimaryComponent} from "../donation-start-primary/donation-start-primary.component";
+import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
 import {Person} from "../../person.model";
 import {IdentityService} from "../../identity.service";
+import {environment} from "../../../environments/environment";
 @Component({
   templateUrl: './donation-start-container.component.html',
   styleUrls: ['./donation-start-container.component.scss']
 })
 export class DonationStartContainerComponent implements OnInit{
   campaign: Campaign;
-  donation: Donation;
+  campaignOpenOnLoad: boolean;
+  donation: Donation | undefined = undefined;
   personId?: string;
   personIsLoginReady = false;
   loggedInEmailAddress?: string;
 
 
-  @ViewChild('donation_start_form') donationStartForm: DonationStartPrimaryComponent
+  @ViewChild('donation_start_form') donationStartForm: DonationStartFormComponent
+  public reservationExpiryDate: Date| undefined = undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,6 +35,30 @@ export class DonationStartContainerComponent implements OnInit{
      if (idAndJWT) {
        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
      }
+     this.campaignOpenOnLoad = this.campaignIsOpen();
+
+   }
+
+  /**
+   * Unlike the CampaignService method which is more forgiving if the status gets stuck Active (we don't trust
+   * these to be right in Salesforce yet), this check relies solely on campaign dates.
+   */
+  private campaignIsOpen(): boolean {
+    return (
+      this.campaign
+        ? (new Date(this.campaign.startDate) <= new Date() && new Date(this.campaign.endDate) > new Date())
+        : false
+    );
+  }
+
+  updateReservationExpiryTime(): void {
+    if (!this.donation?.createdTime || !this.donation.matchReservedAmount) {
+      this.reservationExpiryDate = undefined;
+      return;
+    }
+
+    const date = new Date(environment.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
+    this.reservationExpiryDate = date;
   }
 
   logout = () => {
@@ -61,5 +88,10 @@ export class DonationStartContainerComponent implements OnInit{
 
   get canLogin() {
     return !this.personId;
+  }
+
+  setDonation = (donation: Donation) => {
+    this.donation = donation;
+    this.updateReservationExpiryTime();
   }
 }

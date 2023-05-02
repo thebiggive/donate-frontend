@@ -25,10 +25,19 @@
         [canLogin]="this.canLogin">
       </app-donation-start-login>
 
-      <app-donation-start-primary
+      <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
+
+      <p *ngIf="reservationExpiryDate" class="c-timer">
+        <span class="b-rt-0">Match funds reservedXXXXXXXXX for&nbsp;</span>
+        <span class="b-rt-1 b-bold">{{ reservationExpiryDate | timeLeft }}</span>
+      </p>
+
+      <app-donation-start-form *ngIf="campaignOpenOnLoad"
         #donation_start_form
       [campaign]="campaign"
       [personId]="personId"
+      [donationChangeCallBack]="setDonation"
+      [campaignOpenOnLoad]="campaignOpenOnLoad"
     />
     </div>
     <div class="b-secondary-column">

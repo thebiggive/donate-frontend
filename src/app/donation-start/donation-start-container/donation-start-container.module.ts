@@ -21,7 +21,7 @@ import {TimeLeftPipe} from '../../time-left.pipe';
 import {CampaignDetailsModule} from "../../campaign-details/campaign-details.module";
 import { DonationStartLoginComponent } from "../donation-start-login/donation-start-login.component";
 import {DonationStartContainerComponent} from "../donation-start-container/donation-start-container.component";
-import { DonationStartPrimaryComponent } from "../donation-start-primary/donation-start-primary.component";
+import { DonationStartFormComponent } from "../donation-start-form/donation-start-form.component";
 import { DonationStartSecondaryComponent } from '../donation-start-secondary/donation-start-secondary.component';
 import { DonationStartContainerRoutingModule } from './donation-start-routing.module';
 import {IdentityService} from "../../identity.service";
@@ -53,7 +53,7 @@ import {IdentityService} from "../../identity.service";
     DonationStartContainerComponent,
     DonationStartLoginComponent,
     DonationStartContainerComponent,
-    DonationStartPrimaryComponent,
+    DonationStartFormComponent,
     DonationStartSecondaryComponent
   ],
   providers: [

@@ -57,15 +57,15 @@ import {TimeLeftPipe} from "../../time-left.pipe";
 import { MatomoTracker } from 'ngx-matomo';
 
 @Component({
-  selector: 'app-donation-start-primary',
-  templateUrl: './donation-start-primary.component.html',
-  styleUrls: ['./donation-start-primary.component.scss'],
+  selector: 'app-donation-start-form',
+  templateUrl: './donation-start-form.component.html',
+  styleUrls: ['./donation-start-form.component.scss'],
   providers: [
     CurrencyPipe,
     TimeLeftPipe,
   ]
 })
-export class DonationStartPrimaryComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
+export class DonationStartFormComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
   @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
   @ViewChild('cardInfo') cardInfo: ElementRef;
@@ -82,9 +82,19 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
   @Input() campaign: Campaign;
   @Input() column: 'primary'|'secondary'
 
+  /**
+   * Called when the donation object is set or deleted. **NOT** called when properties of the object are changed.
+   */
+  @Input() donationChangeCallBack: (donation: Donation | undefined) => void = () => {};
+
   donation?: Donation;
 
-  campaignOpenOnLoad: boolean;
+  /**
+   * This property shouldn't really exist - if the campaign isn't open there's no need to load this component at all.
+   * It's just here as a hack to work around issues with exact currency pipe in tests that appeared when removing it.
+   *
+   */
+  @Input() campaignOpenOnLoad = false;
 
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
 
@@ -110,7 +120,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
   /** setTimeout reference (timer ID) if applicable. */
   expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
   loadingAddressSuggestions = false;
-  @Input() personId?: string;
+  @Input() personId?: string | undefined;
   privacyUrl = 'https://biggive.org/privacy';
   showAddressLookup: boolean;
 
@@ -826,13 +836,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     return this.donationAmount + this.giftAidAmount() + this.expectedMatchAmount();
   }
 
-  reservationExpiryTime(): Date | undefined {
-    if (!this.donation?.createdTime || !this.donation.matchReservedAmount) {
-      return undefined;
-    }
-
-    return new Date(environment.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
-  }
 
   /**
    * @returns Amount without any £/$s
@@ -1043,18 +1046,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
   }
 
   /**
-   * Unlike the CampaignService method which is more forgiving if the status gets stuck Active (we don't trust
-   * these to be right in Salesforce yet), this check relies solely on campaign dates.
-   */
-  private campaignIsOpen(): boolean {
-    return (
-      this.campaign
-        ? (new Date(this.campaign.startDate) <= new Date() && new Date(this.campaign.endDate) > new Date())
-        : false
-      );
-  }
-
-  /**
    * @returns whether any errors were found in the visible viewport.
    */
   private goToFirstVisibleError(): boolean {
@@ -1089,7 +1080,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     // We want to let donors finish the journey if they're on the page before the campaign
     // close date and it passes while they're completing the form – in particular they should
     // be able to use match funds secured until 30 minutes after the close time.
-    this.campaignOpenOnLoad = this.campaignIsOpen();
 
     this.currencySymbol = getCurrencySymbol(this.campaign.currencyCode, 'narrow', 'en-GB');
 
@@ -1328,6 +1318,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
 
     this.donationService.saveDonation(response.donation, response.jwt);
     this.donation = response.donation; // Simplify update() while we're on this page.
+    this.donationChangeCallBack(this.donation)
 
     this.analyticsService.logAmountChosen(
       response.donation.donationAmount,
@@ -1486,6 +1477,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     }
 
     delete this.donation;
+    this.donationChangeCallBack(undefined)
   }
 
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
@@ -1744,6 +1736,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
       if (proceed) {
         // Required for all use cases.
         this.donation = donation;
+        this.donationChangeCallBack(donation);
 
         this.scheduleMatchingExpiryWarning(this.donation);
 
