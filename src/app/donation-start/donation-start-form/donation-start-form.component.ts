@@ -53,6 +53,8 @@ import { EMAIL_REGEXP } from '../../validators/patterns';
 import { ValidateBillingPostCode } from '../../validators/validate-billing-post-code';
 import {TimeLeftPipe} from "../../time-left.pipe";
 import { MatomoTracker } from 'ngx-matomo';
+import {updateDonationFromForm} from "../updateDonationFromForm";
+import {sanitiseCurrency} from "../sanitiseCurrency";
 
 @Component({
   selector: 'app-donation-start-form',
@@ -470,49 +472,18 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.donation && event.selectedIndex > 1) {
       // After create() update all Angular form data on step changes, except billing
       // postcode & country which can be set manually or via PRB callbacks.
-      if (this.paymentGroup) {
-        this.donation.emailAddress = this.paymentGroup.value.emailAddress;
-        this.donation.firstName = this.paymentGroup.value.firstName;
-        this.donation.lastName = this.paymentGroup.value.lastName;
-      }
-
-      this.donation.feeCoverAmount = this.sanitiseCurrency(this.amountsGroup.value.feeCoverAmount);
-
-      this.donation.giftAid = this.giftAidGroup.value.giftAid;
-
-      // In alternative fee model, 'tip' is donor fee cover so not Gift Aid eligible.
-      this.donation.tipGiftAid = this.campaign.feePercentage ? false : this.giftAidGroup.value.giftAid;
-
-      this.donation.optInCharityEmail = this.marketingGroup.value.optInCharityEmail;
-      this.donation.optInTbgEmail = this.marketingGroup.value.optInTbgEmail;
-      this.donation.optInChampionEmail = this.marketingGroup.value.optInChampionEmail;
-
-      const lastTipAmount = this.donation.tipAmount;
-      this.donation.tipAmount = this.sanitiseCurrency(this.amountsGroup.value.tipAmount);
-      if (lastTipAmount !== this.donation.tipAmount) {
-        this.preparePaymentRequestButton(this.donation, this.paymentGroup);
-      }
-
-      if (this.donation.giftAid || this.donation.tipGiftAid) {
-        this.donation.homePostcode = this.giftAidGroup.value.homeOutsideUK ? 'OVERSEAS' : this.giftAidGroup.value.homePostcode;
-        this.donation.homeAddress = this.giftAidGroup.value.homeAddress;
-        // Optional additional field to improve data alignment w/ HMRC when a lookup was used.
-        this.donation.homeBuildingNumber = this.giftAidGroup.value.homeBuildingNumber || undefined;
-      } else {
-        this.donation.homePostcode = undefined;
-        this.donation.homeAddress = undefined;
-        this.donation.homeBuildingNumber = undefined;
-      }
-      this.donationService.updateLocalDonation(this.donation);
-
-      if (event.selectedStep.label === 'Receive updates') {
-        // Step 2 'Details' – whichever step(s) come before marketing prefs is the best fit for this step number.
-        this.analyticsService.logCheckoutStep(2, this.campaign, this.donation);
-      } else if (event.selectedStep.label === 'Confirm') {
-        // Step 3 'Confirm' is actually fired when comms preferences are done (to maintain
-        // historic order), i.e. when the new step is for finalising payment.
-        this.analyticsService.logCheckoutStep(3, this.campaign, this.donation);
-      }
+      updateDonationFromForm(
+        event,
+        this.donation,
+        this.analyticsService,
+        this.paymentGroup,
+        this.amountsGroup,
+        this.giftAidGroup,
+        this.donationService,
+        this.campaign,
+        this.marketingGroup,
+        this.preparePaymentRequestButton
+      );
       // Else it's not a step that cleanly maps to the historically-comparable
       // e-commerce funnel steps defined in our Analytics campaign, besides 1
       // (which we fire on donation create API callback) and 4 (which we fire
@@ -545,6 +516,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       });
     }
   }
+
 
   async onStripeCardChange(state: StripeElementChangeEvent) {
     this.stripePRBMethodReady = false; // Using card instead
@@ -770,7 +742,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * Quick getter for donation amount, to keep template use concise.
    */
   get donationAmount(): number {
-    return this.sanitiseCurrency(this.amountsGroup.value.donationAmount);
+    return sanitiseCurrency(this.amountsGroup.value.donationAmount);
   }
 
   /**
@@ -819,7 +791,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   feeCoverAmount(): number {
-    return this.sanitiseCurrency(this.amountsGroup.value.feeCoverAmount);
+    return sanitiseCurrency(this.amountsGroup.value.feeCoverAmount);
   }
 
   giftAidAmount(): number {
@@ -827,20 +799,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   tipAmount(): number {
-    return this.sanitiseCurrency(this.amountsGroup.value.tipAmount);
+    return sanitiseCurrency(this.amountsGroup.value.tipAmount);
   }
 
   expectedTotalAmount(): number {
     return this.donationAmount + this.giftAidAmount() + this.expectedMatchAmount();
   }
 
-
-  /**
-   * @returns Amount without any £/$s
-   */
-  sanitiseCurrency(amount: string): number {
-    return Number((amount || '0').replace('£', '').replace('$', ''));
-  }
 
   scrollTo(el: Element): void {
     if (el) {
@@ -1141,15 +1106,15 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       charityName: this.campaign.charity.name,
       countryCode: this.paymentGroup?.value.billingCountry || 'GB',
       currencyCode: this.campaign.currencyCode || 'GBP',
-      donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
+      donationAmount: sanitiseCurrency(this.amountsGroup.value.donationAmount),
       donationMatched: this.campaign.isMatched,
-      feeCoverAmount: this.sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
+      feeCoverAmount: sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
       paymentMethodType: (this.creditPenceToUse > 0) ? 'customer_balance' : 'card',
       projectId: this.campaignId,
       psp: this.psp,
-      tipAmount: this.sanitiseCurrency(this.amountsGroup.value.tipAmount),
+      tipAmount: sanitiseCurrency(this.amountsGroup.value.tipAmount),
     };
 
     if (this.personId) {
@@ -1230,7 +1195,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
 
-  private preparePaymentRequestButton(donation: Donation, paymentGroup: FormGroup) {
+  private preparePaymentRequestButton = (donation: Donation, paymentGroup: FormGroup) => {
     if (this.skipPRBs) {
       return;
     }
@@ -1295,7 +1260,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         this.paymentRequestButtonEl.nativeElement.style.display = 'none';
       }
     });
-  }
+  };
 
   private newDonationSuccess(response: DonationCreatedResponse) {
     this.creatingDonation = false;
@@ -1540,7 +1505,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         }
 
         const feeCoverAmount = this.amountsGroup.get('coverFee')?.value
-          ? this.getTipOrFeeAmount(this.campaign.feePercentage, this.sanitiseCurrency(donationAmount))
+          ? this.getTipOrFeeAmount(this.campaign.feePercentage, sanitiseCurrency(donationAmount))
           : '0.00';
 
         this.amountsGroup.patchValue({ feeCoverAmount });
@@ -1571,7 +1536,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           tipAmount?: string,
         } = {};
 
-        donationAmount = this.sanitiseCurrency(donationAmount);
+        donationAmount = sanitiseCurrency(donationAmount);
 
         if (!this.tipPercentageChanged) {
           let newDefault = this.initialTipSuggestedPercentage;
