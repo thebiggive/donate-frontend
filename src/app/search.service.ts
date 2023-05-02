@@ -18,7 +18,7 @@ export class SearchService {
   changed: EventEmitter<boolean>; // Value indicates if an interactive UI change triggered this.
 
   nonDefaultsActive: boolean;
-  selectedSortLabel: 'Most raised' | 'Match funds remaining' | 'Relevance' | null;
+  selectedSortLabel: 'Most raised' | 'Match funds remaining' | 'Relevance';
 
   constructor() {
     this.changed = new EventEmitter();
