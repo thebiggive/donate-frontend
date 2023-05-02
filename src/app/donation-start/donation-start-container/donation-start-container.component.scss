@@ -16,3 +16,15 @@
 h5 {
   font-size: 1rem;
 }
+
+.c-header {
+  h1, h3 {
+    margin-top: 0.25rem;
+  }
+
+  &__to {
+    @include size-md;
+    margin: 0;
+    margin-top: 0.25rem;
+  }
+}

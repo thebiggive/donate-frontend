@@ -24,6 +24,7 @@ import {DonationStartContainerComponent} from "../donation-start-container/donat
 import { DonationStartPrimaryComponent } from "../donation-start-primary/donation-start-primary.component";
 import { DonationStartSecondaryComponent } from '../donation-start-secondary/donation-start-secondary.component';
 import { DonationStartContainerRoutingModule } from './donation-start-routing.module';
+import {IdentityService} from "../../identity.service";
 
 @NgModule({
   imports: [

@@ -3,23 +3,6 @@
       donation-start-container.component, along with support code in the .component.ts file, tests etc. It should be
       possible to move piece by piece from the top start or end of the div.
     -->
-<div class="c-header">
-  <h2 class="c-header__to b-grey b-light">Donation to</h2>
-  <h3 class="b-rh-2 b-bold">{{ campaign.charity.name }}</h3>
-  <h2 class="c-header__to b-grey b-light">For</h2>
-  <h1 class="b-rh-2 b-bold">{{ campaign.title }}</h1>
-</div>
-
-<app-donation-start-login
-[logout]="logout"
-[personId]="personId"
-[email]="paymentGroup.value.emailAddress"
-[personIsLoginReady]="personIsLoginReady"
-[loadAuthedPersonInfo]="loadAuthedPersonInfo"
-[creditPenceToUse]="creditPenceToUse"
-[campaign]="campaign"
-[canLogin]="canLogin">
-</app-donation-start-login>
 
 <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 <p *ngIf="reservationExpiryTime()" class="c-timer">
