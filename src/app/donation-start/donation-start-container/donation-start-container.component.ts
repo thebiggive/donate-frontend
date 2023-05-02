@@ -12,6 +12,7 @@ import {IdentityService} from "../../identity.service";
 })
 export class DonationStartContainerComponent implements OnInit{
   campaign: Campaign;
+  campaignOpenOnLoad: boolean;
   donation: Donation;
   personId?: string;
   personIsLoginReady = false;
@@ -32,7 +33,22 @@ export class DonationStartContainerComponent implements OnInit{
      if (idAndJWT) {
        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
      }
+     this.campaignOpenOnLoad = this.campaignIsOpen();
+
+   }
+
+  /**
+   * Unlike the CampaignService method which is more forgiving if the status gets stuck Active (we don't trust
+   * these to be right in Salesforce yet), this check relies solely on campaign dates.
+   */
+  private campaignIsOpen(): boolean {
+    return (
+      this.campaign
+        ? (new Date(this.campaign.startDate) <= new Date() && new Date(this.campaign.endDate) > new Date())
+        : false
+    );
   }
+
 
   logout = () => {
     this.personId = undefined;

@@ -84,7 +84,12 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
 
   donation?: Donation;
 
-  campaignOpenOnLoad: boolean;
+  /**
+   * This property shouldn't really exist - if the campaign isn't open there's no need to load this component at all.
+   * It's just here as a hack to work around issues with exact currency pipe in tests that appeared when removing it.
+   *
+   */
+  @Input() campaignOpenOnLoad = false;
 
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
 
@@ -110,7 +115,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
   /** setTimeout reference (timer ID) if applicable. */
   expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
   loadingAddressSuggestions = false;
-  @Input() personId?: string;
+  @Input() personId?: string | undefined;
   privacyUrl = 'https://biggive.org/privacy';
   showAddressLookup: boolean;
 
@@ -1043,18 +1048,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
   }
 
   /**
-   * Unlike the CampaignService method which is more forgiving if the status gets stuck Active (we don't trust
-   * these to be right in Salesforce yet), this check relies solely on campaign dates.
-   */
-  private campaignIsOpen(): boolean {
-    return (
-      this.campaign
-        ? (new Date(this.campaign.startDate) <= new Date() && new Date(this.campaign.endDate) > new Date())
-        : false
-      );
-  }
-
-  /**
    * @returns whether any errors were found in the visible viewport.
    */
   private goToFirstVisibleError(): boolean {
@@ -1089,7 +1082,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     // We want to let donors finish the journey if they're on the page before the campaign
     // close date and it passes while they're completing the form – in particular they should
     // be able to use match funds secured until 30 minutes after the close time.
-    this.campaignOpenOnLoad = this.campaignIsOpen();
 
     this.currencySymbol = getCurrencySymbol(this.campaign.currencyCode, 'narrow', 'en-GB');
 

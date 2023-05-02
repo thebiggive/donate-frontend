@@ -25,10 +25,12 @@
         [canLogin]="this.canLogin">
       </app-donation-start-login>
 
-      <app-donation-start-primary
+      <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
+      <app-donation-start-primary *ngIf="campaignOpenOnLoad"
         #donation_start_form
       [campaign]="campaign"
       [personId]="personId"
+      [campaignOpenOnLoad]="campaignOpenOnLoad"
     />
     </div>
     <div class="b-secondary-column">
