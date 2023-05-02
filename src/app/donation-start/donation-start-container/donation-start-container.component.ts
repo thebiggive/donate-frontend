@@ -6,6 +6,7 @@ import { Donation } from 'src/app/donation.model';
 import {DonationStartPrimaryComponent} from "../donation-start-primary/donation-start-primary.component";
 import {Person} from "../../person.model";
 import {IdentityService} from "../../identity.service";
+import {environment} from "../../../environments/environment";
 @Component({
   templateUrl: './donation-start-container.component.html',
   styleUrls: ['./donation-start-container.component.scss']
@@ -13,13 +14,14 @@ import {IdentityService} from "../../identity.service";
 export class DonationStartContainerComponent implements OnInit{
   campaign: Campaign;
   campaignOpenOnLoad: boolean;
-  donation: Donation;
+  donation: Donation | undefined = undefined;
   personId?: string;
   personIsLoginReady = false;
   loggedInEmailAddress?: string;
 
 
   @ViewChild('donation_start_form') donationStartForm: DonationStartPrimaryComponent
+  public reservationExpiryDate: Date| undefined = undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,6 +51,15 @@ export class DonationStartContainerComponent implements OnInit{
     );
   }
 
+  updateReservationExpiryTime(): void {
+    if (!this.donation?.createdTime || !this.donation.matchReservedAmount) {
+      this.reservationExpiryDate = undefined;
+      return;
+    }
+
+    const date = new Date(environment.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
+    this.reservationExpiryDate = date;
+  }
 
   logout = () => {
     this.personId = undefined;
@@ -77,5 +88,10 @@ export class DonationStartContainerComponent implements OnInit{
 
   get canLogin() {
     return !this.personId;
+  }
+
+  setDonation = (donation: Donation) => {
+    this.donation = donation;
+    this.updateReservationExpiryTime();
   }
 }

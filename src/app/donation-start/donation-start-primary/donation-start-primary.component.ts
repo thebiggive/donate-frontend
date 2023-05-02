@@ -82,6 +82,11 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
   @Input() campaign: Campaign;
   @Input() column: 'primary'|'secondary'
 
+  /**
+   * Called when the donation object is set or deleted. **NOT** called when properties of the object are changed.
+   */
+  @Input() donationChangeCallBack: (donation: Donation | undefined) => void = () => {};
+
   donation?: Donation;
 
   /**
@@ -831,13 +836,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     return this.donationAmount + this.giftAidAmount() + this.expectedMatchAmount();
   }
 
-  reservationExpiryTime(): Date | undefined {
-    if (!this.donation?.createdTime || !this.donation.matchReservedAmount) {
-      return undefined;
-    }
-
-    return new Date(environment.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
-  }
 
   /**
    * @returns Amount without any £/$s
@@ -1320,6 +1318,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
 
     this.donationService.saveDonation(response.donation, response.jwt);
     this.donation = response.donation; // Simplify update() while we're on this page.
+    this.donationChangeCallBack(this.donation)
 
     this.analyticsService.logAmountChosen(
       response.donation.donationAmount,
@@ -1478,6 +1477,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     }
 
     delete this.donation;
+    this.donationChangeCallBack(undefined)
   }
 
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
@@ -1736,6 +1736,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
       if (proceed) {
         // Required for all use cases.
         this.donation = donation;
+        this.donationChangeCallBack(donation);
 
         this.scheduleMatchingExpiryWarning(this.donation);
 
