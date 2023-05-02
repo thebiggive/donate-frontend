@@ -3,7 +3,6 @@ import { Routes } from '@angular/router';
 import { CampaignListResolver } from './campaign-list.resolver';
 import { CampaignResolver } from './campaign.resolver';
 import { CharityCampaignsResolver } from './charity-campaigns.resolver';
-import { flags } from "./featureFlags";
 
 const routes: Routes = [
   {

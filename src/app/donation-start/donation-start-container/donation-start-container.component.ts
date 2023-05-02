@@ -1,6 +1,5 @@
-import {AfterContentChecked, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Campaign} from "../../campaign.model";
-import {isPlatformBrowser} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 import { Donation } from 'src/app/donation.model';
 import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
@@ -18,7 +17,6 @@ export class DonationStartContainerComponent implements OnInit{
   personId?: string;
   personIsLoginReady = false;
   loggedInEmailAddress?: string;
-
 
   @ViewChild('donation_start_form') donationStartForm: DonationStartFormComponent
   public reservationExpiryDate: Date| undefined = undefined;
