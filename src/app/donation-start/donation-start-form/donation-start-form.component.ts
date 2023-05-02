@@ -41,7 +41,6 @@ import { ExactCurrencyPipe } from '../../exact-currency.pipe';
 import { GiftAidAddress } from '../../gift-aid-address.model';
 import { GiftAidAddressSuggestion } from '../../gift-aid-address-suggestion.model';
 import { IdentityService } from '../../identity.service';
-import { LoginModalComponent } from '../../login-modal/login-modal.component';
 import { MetaPixelService } from '../../meta-pixel.service';
 import { PageMetaService } from '../../page-meta.service';
 import { Person } from '../../person.model';
@@ -52,7 +51,6 @@ import { getCurrencyMaxValidator } from '../../validators/currency-max';
 import { getCurrencyMinValidator } from '../../validators/currency-min';
 import { EMAIL_REGEXP } from '../../validators/patterns';
 import { ValidateBillingPostCode } from '../../validators/validate-billing-post-code';
-import {CampaignGroupsService} from "../../campaign-groups.service";
 import {TimeLeftPipe} from "../../time-left.pipe";
 import { MatomoTracker } from 'ngx-matomo';
 
@@ -911,6 +909,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onBillingPostCodeChanged(event: Event) {
     // If previous payment attempt failed due to incorrect post code
     // and the post code has just been changed again, clear stripeError
@@ -1275,6 +1274,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.stripeError = `Payment failed. Please check your card's billing address in your ${walletFriendlyName} wallet matches your the address your bank has, then try again.`;
         }
       },
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       error: (err) => {
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;

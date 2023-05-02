@@ -24,7 +24,6 @@ import { PostcodeService } from '../postcode.service';
 import { RegisterModalComponent } from '../register-modal/register-modal.component';
 import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
-import {flags} from "../featureFlags";
 
 @Component({
   selector: 'app-buy-credits',

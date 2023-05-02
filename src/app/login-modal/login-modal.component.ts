@@ -99,8 +99,10 @@ export class LoginModalComponent implements OnInit {
     }
 
     else if (this.userAskedForResetLink) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       this.identityService.getResetPasswordToken(this.resetPasswordForm.value.emailAddress, captchaResponse).subscribe((response) => {
         this.resetPasswordSuccess = true;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       }, (error) => {
         this.resetPasswordSuccess = false;
       });

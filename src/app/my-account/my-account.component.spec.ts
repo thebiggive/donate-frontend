@@ -13,7 +13,6 @@ describe('MyAccountComponent', () => {
   let component: MyAccountComponent;
   let fixture: ComponentFixture<MyAccountComponent>;
   let element: HTMLElement;
-  let main: HTMLElement;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

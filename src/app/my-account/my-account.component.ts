@@ -8,7 +8,7 @@ import {PaymentMethod} from "@stripe/stripe-js";
 import {DonationService} from "../donation.service";
 import {UpdateCardModalComponent} from "../update-card-modal/update-card-modal.component";
 import {MatDialog} from "@angular/material/dialog";
-import {faExclamationTriangle, faInfo} from "@fortawesome/free-solid-svg-icons";
+import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
