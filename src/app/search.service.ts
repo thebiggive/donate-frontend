@@ -18,6 +18,7 @@ export class SearchService {
   changed: EventEmitter<boolean>; // Value indicates if an interactive UI change triggered this.
 
   nonDefaultsActive: boolean;
+  selectedSortLabel: string;
 
   constructor() {
     this.changed = new EventEmitter();
@@ -59,6 +60,8 @@ export class SearchService {
     this.selected.term = blankSearchText ? '' : customSearchEvent.searchText;
     this.selected.sortField = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
 
+    this.updateSelectedSortLabel();
+
     if (this.selected.term !== previousSearchText) {
       if (blankSearchText) {
         // Reset everything
@@ -72,17 +75,23 @@ export class SearchService {
     this.changed.emit(true);
   }
 
-  getSelectedSortLabel() {
+  private updateSelectedSortLabel() {
+    let selectedSortLabel = 'Match funds remaining';
     switch(this.selected.sortField) {
       case 'matchFundsRemaining':
-        return 'Match funds remaining';
+        selectedSortLabel = 'Match funds remaining';
+        break;
       case 'amountRaised':
-        return 'Most raised';
+        selectedSortLabel = 'Most raised';
+        break;
       case 'Relevance':
-        return 'Relevance';
+        selectedSortLabel = 'Relevance';
+        break;
       default:
-        return null;
+        console.log('No active sort field name match');
     }
+
+    this.selectedSortLabel = selectedSortLabel;
   }
 
   filter(filterName: string, value: string|boolean) {
@@ -134,6 +143,8 @@ export class SearchService {
         }
       }
     }
+
+    this.updateSelectedSortLabel();
 
     this.changed.emit(false);
   }
