@@ -3,7 +3,7 @@ import {Campaign} from "../../campaign.model";
 import {isPlatformBrowser} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
 import { Donation } from 'src/app/donation.model';
-import {DonationStartPrimaryComponent} from "../donation-start-primary/donation-start-primary.component";
+import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
 import {Person} from "../../person.model";
 import {IdentityService} from "../../identity.service";
 import {environment} from "../../../environments/environment";
@@ -20,7 +20,7 @@ export class DonationStartContainerComponent implements OnInit{
   loggedInEmailAddress?: string;
 
 
-  @ViewChild('donation_start_form') donationStartForm: DonationStartPrimaryComponent
+  @ViewChild('donation_start_form') donationStartForm: DonationStartFormComponent
   public reservationExpiryDate: Date| undefined = undefined;
 
   constructor(

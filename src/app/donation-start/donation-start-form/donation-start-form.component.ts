@@ -57,15 +57,15 @@ import {TimeLeftPipe} from "../../time-left.pipe";
 import { MatomoTracker } from 'ngx-matomo';
 
 @Component({
-  selector: 'app-donation-start-primary',
-  templateUrl: './donation-start-primary.component.html',
-  styleUrls: ['./donation-start-primary.component.scss'],
+  selector: 'app-donation-start-form',
+  templateUrl: './donation-start-form.component.html',
+  styleUrls: ['./donation-start-form.component.scss'],
   providers: [
     CurrencyPipe,
     TimeLeftPipe,
   ]
 })
-export class DonationStartPrimaryComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
+export class DonationStartFormComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
   @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
   @ViewChild('cardInfo') cardInfo: ElementRef;

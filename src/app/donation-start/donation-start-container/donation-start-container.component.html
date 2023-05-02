@@ -32,7 +32,7 @@
         <span class="b-rt-1 b-bold">{{ reservationExpiryDate | timeLeft }}</span>
       </p>
 
-      <app-donation-start-primary *ngIf="campaignOpenOnLoad"
+      <app-donation-start-form *ngIf="campaignOpenOnLoad"
         #donation_start_form
       [campaign]="campaign"
       [personId]="personId"
