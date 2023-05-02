@@ -108,7 +108,10 @@ export class SearchService {
     const defaults: {[key: string]: any} = SearchService.selectedDefaults(defaultSort);
     const queryParams: {[key: string]: any} = {};
     for (const key in this.selected) {
-      if (this.selected[key] !== defaults[key]) {
+      // Non-default selections should go to the page's query params. The "global default" sort
+      // order should too iff there is a search term active, since the default sort in that
+      // specific scenario is Relevance.
+      if (this.selected[key] !== defaults[key] || (key === 'sortField' && this.hasTermFilterApplied())) {
         queryParams[key] = String(this.selected[key]);
       }
     }
