@@ -605,7 +605,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
         errorCodeDetail = '[code A1]'; // Donation property absent.
       }
 
-      this.stripeError = `Missing donation information – please refresh and try again, or email hello@thebiggive.org.uk quoting ${errorCodeDetail} if this problem persists`;
+      this.stripeError = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
       this.stripeResponseErrorCode = undefined;
       this.analyticsService.logError(
         'submit_missing_donation_basics',
@@ -1018,7 +1018,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     let customMessage = false;
     if (error.code === 'card_declined' && error.decline_code === 'generic_decline') {
       // Probably a custom Radar rule -> relatively likely to be an incorrect postcode.
-      friendlyError = `The payment was declined. Please ensure details provided (including postcode) match your card. Contact your bank or hello@thebiggive.org.uk if the problem persists.`;
+      friendlyError = `The payment was declined. Please ensure details provided (including postcode) match your card. Contact your bank or hello@biggive.org if the problem persists.`;
       customMessage = true;
     }
 

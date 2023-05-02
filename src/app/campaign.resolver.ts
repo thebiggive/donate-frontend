@@ -40,7 +40,7 @@ export class CampaignResolver implements Resolve<any> {
 
     if (campaignSlug && fundSlug && campaignSlug !== "campaign") {
       const query = this.campaignService.buildQuery(this.searchService.selected, 0, campaignId ?? undefined, campaignSlug, fundSlug);
-      const searchResult = this.campaignService.search(query as SearchQuery).subscribe(
+      this.campaignService.search(query as SearchQuery).subscribe(
         () => {},
         () => {
           this.router.navigateByUrl(`/${campaignSlug}`);
