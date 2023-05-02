@@ -401,7 +401,7 @@ export namespace Components {
         /**
           * This helps us inject a pre-selected dropdown value from outside of this component. This is especially helpful for the Meta campaign and Explore pages, where searching by text whipes out previous sort options and re-uses Relevance, or where one of those two pages is loaded directly with URL parameters - in such a scenario the dropdown shows that it's pre-selected. DON-558.
          */
-        "selectedSortByOption": 'Most raised' | 'Match funds remaining' | 'Relevance' | null;
+        "selectedSortByOption": 'Most raised' | 'Match funds remaining' | 'Relevance';
         /**
           * Space below component
          */
@@ -1907,7 +1907,7 @@ declare namespace LocalJSX {
         /**
           * This helps us inject a pre-selected dropdown value from outside of this component. This is especially helpful for the Meta campaign and Explore pages, where searching by text whipes out previous sort options and re-uses Relevance, or where one of those two pages is loaded directly with URL parameters - in such a scenario the dropdown shows that it's pre-selected. DON-558.
          */
-        "selectedSortByOption"?: 'Most raised' | 'Match funds remaining' | 'Relevance' | null;
+        "selectedSortByOption"?: 'Most raised' | 'Match funds remaining' | 'Relevance';
         /**
           * Space below component
          */

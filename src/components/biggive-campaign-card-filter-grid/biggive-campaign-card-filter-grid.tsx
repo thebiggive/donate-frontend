@@ -92,7 +92,7 @@ export class BiggiveCampaignCardFilterGrid {
    * two pages is loaded directly with URL parameters - in such a scenario the dropdown
    * shows that it's pre-selected. DON-558.
    */
-  @Prop() selectedSortByOption: 'Most raised' | 'Match funds remaining' | 'Relevance' | null = null;
+  @Prop() selectedSortByOption: 'Most raised' | 'Match funds remaining' | 'Relevance';
 
   /**
    * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
@@ -118,6 +118,8 @@ export class BiggiveCampaignCardFilterGrid {
    * State variable - causes re-render on change
    */
   @State() filtersApplied: boolean;
+
+  private initialSortByOption: 'Most raised' | 'Match funds remaining' | 'Relevance';
 
   private getSearchAndFilterObject(): {
     searchText: string;
@@ -242,7 +244,7 @@ export class BiggiveCampaignCardFilterGrid {
 
     // Clear all
     this.searchText = null;
-    this.selectedSortByOption = null;
+    this.selectedSortByOption = this.initialSortByOption;
     this.selectedFilterBeneficiary = null;
     this.selectedFilterCategory = null;
     this.selectedFilterFunding = null;
@@ -274,6 +276,7 @@ export class BiggiveCampaignCardFilterGrid {
   componentWillRender() {
     this.filtersApplied =
       this.selectedFilterCategory !== null || this.selectedFilterBeneficiary !== null || this.selectedFilterFunding !== null || this.selectedFilterLocation !== null;
+    this.initialSortByOption = this.selectedSortByOption;
   }
 
   render() {
