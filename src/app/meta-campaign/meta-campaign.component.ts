@@ -373,9 +373,10 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     const durationInDays = Math.floor((new Date(this.campaign.endDate).getTime() - new Date(this.campaign.startDate).getTime()) / 86400000);
 
     if (!this.fund) {
-      if (this.campaign.amountRaised > 0 && !campaignInFuture) {
+      if (!campaignInFuture) {
+        const showGiftAid = this.campaign.currencyCode === 'GBP' && this.campaign.amountRaised > 0;
         this.tickerMainMessage = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') +
-      ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
+          ' raised' + (showGiftAid ? ' inc. Gift Aid' : '');
       } else {
         this.tickerMainMessage = 'Opens in ' + this.timeLeftPipe.transform(this.campaign.startDate);
       }
