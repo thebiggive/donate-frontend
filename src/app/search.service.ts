@@ -18,6 +18,7 @@ export class SearchService {
   changed: EventEmitter<boolean>; // Value indicates if an interactive UI change triggered this.
 
   nonDefaultsActive: boolean;
+  selectedSortLabel: 'Most raised' | 'Match funds remaining' | 'Relevance';
 
   constructor() {
     this.changed = new EventEmitter();
@@ -59,6 +60,8 @@ export class SearchService {
     this.selected.term = blankSearchText ? '' : customSearchEvent.searchText;
     this.selected.sortField = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
 
+    this.updateSelectedSortLabel();
+
     if (this.selected.term !== previousSearchText) {
       if (blankSearchText) {
         // Reset everything
@@ -72,16 +75,19 @@ export class SearchService {
     this.changed.emit(true);
   }
 
-  getSelectedSortLabel() {
+  private updateSelectedSortLabel() {
     switch(this.selected.sortField) {
       case 'matchFundsRemaining':
-        return 'Match funds remaining';
+        this.selectedSortLabel  = 'Match funds remaining';
+        break;
       case 'amountRaised':
-        return 'Most raised';
+        this.selectedSortLabel =  'Most raised';
+        break;
       case 'Relevance':
-        return 'Relevance';
+        this.selectedSortLabel = 'Relevance';
+        break;
       default:
-        return null;
+        console.log('No active sort field name match');
     }
   }
 
@@ -99,7 +105,10 @@ export class SearchService {
     const defaults: {[key: string]: any} = SearchService.selectedDefaults(defaultSort);
     const queryParams: {[key: string]: any} = {};
     for (const key in this.selected) {
-      if (this.selected[key] !== defaults[key]) {
+      // Non-default selections should go to the page's query params. The "global default" sort
+      // order should too iff there is a search term active, since the default sort in that
+      // specific scenario is Relevance.
+      if (this.selected[key] !== defaults[key] || (key === 'sortField' && this.hasTermFilterApplied())) {
         queryParams[key] = String(this.selected[key]);
       }
     }
@@ -134,6 +143,8 @@ export class SearchService {
         }
       }
     }
+
+    this.updateSelectedSortLabel();
 
     this.changed.emit(false);
   }
