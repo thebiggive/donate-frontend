@@ -20,6 +20,7 @@ export class DonationStartContainerComponent implements OnInit{
 
   @ViewChild('donation_start_form') donationStartForm: DonationStartFormComponent
   public reservationExpiryDate: Date| undefined = undefined;
+  public dataLoaded = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,7 +35,7 @@ export class DonationStartContainerComponent implements OnInit{
        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
      }
      this.campaignOpenOnLoad = this.campaignIsOpen();
-
+     this.dataLoaded = true;
    }
 
   /**

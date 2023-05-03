@@ -173,6 +173,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
   private stepChangedBlockedByCaptcha = false;
+  private donor: Person | undefined;
 
 
   constructor(
@@ -311,6 +312,23 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         }
 
         // We have a resumable donation and aren't processing an error
+        if (this.donor && this.donor.stripe_customer_id !== existingDonation.pspCustomerId) {
+          // We can't resume a donation that has a different customer ID on it. Probably user logged in
+          // after creating the donation.
+          this.donationService.cancel(existingDonation).subscribe(() => {
+            this.analyticsService.logEvent(
+              'cancel_auto',
+              `Donation cancelled due to donor authentication change`,
+            );
+
+            if (this.donation) {
+              this.clearDonation(this.donation, true);
+            }
+            this.createDonationAndMaybePerson(); // Re-sets-up PRB etc.
+          });
+          return;
+        }
+
         this.offerExistingDonation(existingDonation);
     });
   }
@@ -1813,6 +1831,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   public loadPerson(person: Person, id: string, jwt: string) {
+    this.donor = person;
     this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
     this.prepareDonationCredits(person);
     this.prefillRarelyChangingFormValuesFromPerson(person);
