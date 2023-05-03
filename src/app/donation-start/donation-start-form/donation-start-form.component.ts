@@ -1812,10 +1812,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return false;
   }
 
-  getPercentageRaised(campaign: Campaign): number | undefined {
-    return CampaignService.percentRaised(campaign);
-  }
-
   public loadPerson(person: Person, id: string, jwt: string) {
     this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
     this.prepareDonationCredits(person);
