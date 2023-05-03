@@ -41,7 +41,7 @@ import { ExactCurrencyPipe } from '../../exact-currency.pipe';
 import { GiftAidAddress } from '../../gift-aid-address.model';
 import { GiftAidAddressSuggestion } from '../../gift-aid-address-suggestion.model';
 import { IdentityService } from '../../identity.service';
-import { MetaPixelService } from '../../meta-pixel.service';
+import { ConversionTrackingService } from '../../conversionTracking.service';
 import { PageMetaService } from '../../page-meta.service';
 import { Person } from '../../person.model';
 import { PostcodeService } from '../../postcode.service';
@@ -52,7 +52,6 @@ import { getCurrencyMinValidator } from '../../validators/currency-min';
 import { EMAIL_REGEXP } from '../../validators/patterns';
 import { ValidateBillingPostCode } from '../../validators/validate-billing-post-code';
 import {TimeLeftPipe} from "../../time-left.pipe";
-import { MatomoTracker } from 'ngx-matomo';
 import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
 
@@ -185,8 +184,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
-    private matomoTracker: MatomoTracker,
-    private metaPixelService: MetaPixelService,
+    private conversionTrackingService: ConversionTrackingService,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -1784,8 +1782,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   private exitPostDonationSuccess(donation: Donation) {
     this.analyticsService.logCheckoutDone(this.campaign, donation);
-    this.metaPixelService.trackConversion(donation);
-    this.trackConversionWithMatomo(donation);
+    this.conversionTrackingService.convert(donation, this.campaign);
 
     this.cancelExpiryWarning();
     this.router.navigate(['thanks', donation.donationId], {
@@ -1813,48 +1810,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     return false;
-  }
-
-  private trackConversionWithMatomo(donation: Donation) {
-    if (!donation?.donationId) {
-      return;
-    }
-
-    this.matomoTracker.addEcommerceItem(
-      `campaign-${this.campaignId}`,
-      `Donation to ${this.campaign.charity.name} for ${this.campaign.title}`,
-      undefined, // Not using product categories
-      donation.donationAmount,
-    );
-
-    if (donation.tipAmount > 0) {
-      this.matomoTracker.addEcommerceItem(
-        'tip',
-        'Big Give tip',
-        undefined, // Not using product categories
-        donation.tipAmount,
-      );
-    }
-
-    if (donation.feeCoverAmount > 0) {
-      this.matomoTracker.addEcommerceItem(
-        'fee-cover',
-        'Big Give platform fee cover',
-        undefined, // Not using product categories
-        donation.feeCoverAmount,
-      );
-    }
-
-    // "Tracks an Ecommerce order, including any eCommerce item previously added to the order."
-    this.matomoTracker.trackEcommerceOrder(
-      donation.donationId,
-      donation.donationAmount + donation.tipAmount + donation.feeCoverAmount,
-      donation.donationAmount,
-    );
-  }
-
-  getPercentageRaised(campaign: Campaign): number | undefined {
-    return CampaignService.percentRaised(campaign);
   }
 
   public loadPerson(person: Person, id: string, jwt: string) {
