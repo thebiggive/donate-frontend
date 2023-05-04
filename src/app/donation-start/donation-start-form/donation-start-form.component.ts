@@ -119,7 +119,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   /** setTimeout reference (timer ID) if applicable. */
   expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
   loadingAddressSuggestions = false;
-  @Input() personId?: string | undefined;
   privacyUrl = 'https://biggive.org/privacy';
   showAddressLookup: boolean;
 
@@ -173,7 +172,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
   private stepChangedBlockedByCaptcha = false;
-  private donor: Person | undefined;
+  @Input() donor: Person | undefined;
 
 
   constructor(
@@ -413,7 +412,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   reset = () => {
-    this.personId = undefined;
+    this.donor = undefined;
     this.creditPenceToUse = 0;
     this.stripePaymentMethodReady = false;
     this.donationForm.reset();
@@ -1133,12 +1132,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       tipAmount: sanitiseCurrency(this.amountsGroup.value.tipAmount),
     };
 
-    if (this.personId) {
+    if (this.donor?.id) {
       donation.pspCustomerId = this.identityService.getPspId();
     }
 
     // Person already set up on page load.
-    if (this.personId) {
+    if (this.donor?.id) {
       this.createDonation(donation);
     } else {
       const person: Person = {};
@@ -1146,7 +1145,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.identityService.create(person).subscribe(
         (person: Person) => {
           this.identityService.saveJWT(person.id as string, person.completion_jwt as string);
-          this.personId = person.id;
+          this.donor = person;
           donation.pspCustomerId = person.stripe_customer_id;
           this.createDonation(donation);
         },
@@ -1190,7 +1189,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
-    this.donationService.create(donation, this.personId, this.identityService.getJWT())
+    this.donationService.create(donation, this.donor?.id, this.identityService.getJWT())
     .subscribe({
       next: this.newDonationSuccess.bind(this),
       error: this.newDonationError.bind(this),
@@ -1770,13 +1769,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
             }
             this.selectedSavedMethod = this.stripeSavedMethods.length > 0 ? this.stripeSavedMethods[0] : undefined;
 
-            if (this.personId) {
+            if (this.donor?.id) {
               const jwt = this.identityService.getJWT() as string;
-              this.identityService.get(this.personId, jwt).subscribe((person: Person) => {
-                if (! this.personId) {
+              this.identityService.get(this.donor?.id, jwt).subscribe((person: Person) => {
+                if (! this.donor?.id) {
                   throw new Error("Person identifier went away");
                 }
-                this.loadPerson(person, this.personId, jwt)
+                this.loadPerson(person, this.donor.id, jwt)
               });
             }
           },
@@ -1831,8 +1830,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   public loadPerson(person: Person, id: string, jwt: string) {
-    this.donor = person;
-    this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
+    this.donor = person; // Should mean donations are attached to the Stripe Customer.
     this.prepareDonationCredits(person);
     this.prefillRarelyChangingFormValuesFromPerson(person);
     this.loadFirstSavedStripeCardIfAny(id, jwt);

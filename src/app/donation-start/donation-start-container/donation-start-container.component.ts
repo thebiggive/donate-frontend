@@ -21,6 +21,7 @@ export class DonationStartContainerComponent implements OnInit{
   @ViewChild('donation_start_form') donationStartForm: DonationStartFormComponent
   public reservationExpiryDate: Date| undefined = undefined;
   public dataLoaded = false;
+  public donor: Person | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -61,7 +62,7 @@ export class DonationStartContainerComponent implements OnInit{
   }
 
   logout = () => {
-    this.personId = undefined;
+    this.donor = undefined;
     // could just pass donationStartForm.reset directly to the logout button,
     // but we may well want to do more work here very soon.
     this.donationStartForm.reset();
@@ -78,7 +79,7 @@ export class DonationStartContainerComponent implements OnInit{
     }
 
     this.identityService.get(id, jwt).subscribe((person: Person) => {
-      this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
+      this.donor = person; // Should mean donations are attached to the Stripe Customer.
       this.personIsLoginReady = true;
       this.loggedInEmailAddress = person.email_address;
       this.donationStartForm.loadPerson(person, id, jwt);
@@ -86,7 +87,7 @@ export class DonationStartContainerComponent implements OnInit{
   };
 
   get canLogin() {
-    return !this.personId;
+    return !this.donor?.id;
   }
 
   setDonation = (donation: Donation) => {

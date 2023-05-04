@@ -16,7 +16,7 @@
 
       <app-donation-start-login
         [logout]="this.logout"
-        [personId]="this.personId"
+        [personId]="this.donor?.id"
         [email]="this.loggedInEmailAddress"
         [personIsLoginReady]="personIsLoginReady"
         [loadAuthedPersonInfo]="loadAuthedPersonInfo"
@@ -37,7 +37,7 @@
       <app-donation-start-form *ngIf="dataLoaded && campaignOpenOnLoad"
         #donation_start_form
       [campaign]="campaign"
-      [personId]="personId"
+      [donor]="donor"
       [donationChangeCallBack]="setDonation"
       [campaignOpenOnLoad]="campaignOpenOnLoad"
     />
