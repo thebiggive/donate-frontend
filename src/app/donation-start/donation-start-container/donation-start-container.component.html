@@ -31,16 +31,24 @@
         <span class="b-rt-0">Match funds reserved for&nbsp;</span>
         <span class="b-rt-1 b-bold">{{ reservationExpiryDate | timeLeft }}</span>
       </p>
-
       <!-- We don't want to let the form's ngInit run before ours completes, or we would have odd behaviour
-           around loading the logged in user - hence conditional on dataLoaded -->
-      <app-donation-start-form *ngIf="dataLoaded && campaignOpenOnLoad"
-        #donation_start_form
-      [campaign]="campaign"
-      [donor]="donor"
-      [donationChangeCallBack]="setDonation"
-      [campaignOpenOnLoad]="campaignOpenOnLoad"
-    />
+         around loading the logged in user - hence conditional on dataLoaded -->
+      <app-donation-start-form *ngIf="dataLoaded && campaignOpenOnLoad && !useNewDesign"
+         #donation_start_form
+       [campaign]="campaign"
+       [donor]="donor"
+       [donationChangeCallBack]="setDonation"
+       [campaignOpenOnLoad]="campaignOpenOnLoad"
+     />
+
+     <app-donation-start-form-new *ngIf="dataLoaded && campaignOpenOnLoad && useNewDesign"
+       #donation_start_form
+       [campaign]="campaign"
+       [donor]="donor"
+       [donationChangeCallBack]="setDonation"
+       [campaignOpenOnLoad]="campaignOpenOnLoad"
+     />
+
     </div>
     <div class="b-secondary-column">
       <app-donation-start-secondary

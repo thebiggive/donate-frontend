@@ -24,6 +24,8 @@ import {DonationStartContainerComponent} from "../donation-start-container/donat
 import { DonationStartFormComponent } from "../donation-start-form/donation-start-form.component";
 import { DonationStartSecondaryComponent } from '../donation-start-secondary/donation-start-secondary.component';
 import { DonationStartContainerRoutingModule } from './donation-start-routing.module';
+import {DonationStartFormNewComponent} from "../donation-start-form/donation-start-form-new.component";
+import {DonationStartFormParentComponent} from "../donation-start-form/donation-start-form-parent.component";
 
 @NgModule({
   imports: [
@@ -53,6 +55,8 @@ import { DonationStartContainerRoutingModule } from './donation-start-routing.mo
     DonationStartLoginComponent,
     DonationStartContainerComponent,
     DonationStartFormComponent,
+    DonationStartFormParentComponent,
+    DonationStartFormNewComponent,
     DonationStartSecondaryComponent
   ],
   providers: [
