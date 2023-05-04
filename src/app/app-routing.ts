@@ -45,6 +45,15 @@ const routes: Routes = [
       .then(c => c.DonationStartContainerModule),
   },
   {
+    path: 'donate-new-stepper/:campaignId',
+    pathMatch: 'full',
+    resolve: {
+      campaign: CampaignResolver,
+    },
+    loadChildren: () => import('./donation-start/donation-start-container/donation-start-container.module')
+      .then(c => c.DonationStartContainerModule),
+  },
+  {
     path: 'metacampaign/:campaignId',
     pathMatch: 'full',
     resolve: {

@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Campaign} from "../../campaign.model";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import { Donation } from 'src/app/donation.model';
 import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
 import {Person} from "../../person.model";
@@ -17,6 +17,7 @@ export class DonationStartContainerComponent implements OnInit{
   personId?: string;
   personIsLoginReady = false;
   loggedInEmailAddress?: string;
+  useNewDesign = false;
 
   @ViewChild('donation_start_form') donationStartForm: DonationStartFormComponent
   public reservationExpiryDate: Date| undefined = undefined;
@@ -25,8 +26,10 @@ export class DonationStartContainerComponent implements OnInit{
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private identityService: IdentityService,
   ) {
+    this.useNewDesign = router.url.startsWith("/donate-new-stepper/");
   }
 
    ngOnInit() {
