@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 import { CampaignListResolver } from './campaign-list.resolver';
 import { CampaignResolver } from './campaign.resolver';
@@ -37,15 +38,6 @@ const routes: Routes = [
   },
   {
     path: 'donate/:campaignId',
-    pathMatch: 'full',
-    resolve: {
-      campaign: CampaignResolver,
-    },
-    loadChildren: () => import('./donation-start/donation-start-container/donation-start-container.module')
-      .then(c => c.DonationStartContainerModule),
-  },
-  {
-    path: 'donate-new-stepper/:campaignId',
     pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
@@ -120,5 +112,19 @@ const routes: Routes = [
       .then(c => c.MetaCampaignModule),
   },
 ];
+
+if (environment.environmentId !== 'production') {
+   routes.unshift(
+    {
+      path: 'donate-new-stepper/:campaignId',
+      pathMatch: 'full',
+      resolve: {
+        campaign: CampaignResolver,
+      },
+      loadChildren: () => import('./donation-start/donation-start-container/donation-start-container.module')
+        .then(c => c.DonationStartContainerModule),
+    },
+   );
+}
 
 export {routes};
