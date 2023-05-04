@@ -149,7 +149,8 @@ describe('MetaCampaignComponent', () => {
     const noop = () => {
     };
 
-    const timeLeftPipe = new TimeLeftPipe('browser', {markForCheck: noop} as unknown as ChangeDetectorRef);
+    const timeLeftToOpenPipe = new TimeLeftPipe('browser', {markForCheck: noop} as unknown as ChangeDetectorRef);
+    const timeLeftToClosePipe = new TimeLeftPipe('browser', {markForCheck: noop} as unknown as ChangeDetectorRef);
     const currencyPipe = new CurrencyPipe('en-GB', 'GBP');
 
     const stubRoute = {queryParams: NEVER} as unknown as ActivatedRoute;
@@ -183,7 +184,8 @@ describe('MetaCampaignComponent', () => {
       dummyState,
       dummyTBG_DONATE_STORAGE,
       dummyScroller,
-      timeLeftPipe
+      timeLeftToOpenPipe,
+      timeLeftToClosePipe,
     );
   }
 
