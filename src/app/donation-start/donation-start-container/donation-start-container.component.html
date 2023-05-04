@@ -16,7 +16,7 @@
 
       <app-donation-start-login
         [logout]="this.logout"
-        [personId]="this.personId"
+        [personId]="this.donor?.id"
         [email]="this.loggedInEmailAddress"
         [personIsLoginReady]="personIsLoginReady"
         [loadAuthedPersonInfo]="loadAuthedPersonInfo"
@@ -32,10 +32,12 @@
         <span class="b-rt-1 b-bold">{{ reservationExpiryDate | timeLeft }}</span>
       </p>
 
-      <app-donation-start-form *ngIf="campaignOpenOnLoad"
+      <!-- We don't want to let the form's ngInit run before ours completes, or we would have odd behaviour
+           around loading the logged in user - hence conditional on dataLoaded -->
+      <app-donation-start-form *ngIf="dataLoaded && campaignOpenOnLoad"
         #donation_start_form
       [campaign]="campaign"
-      [personId]="personId"
+      [donor]="donor"
       [donationChangeCallBack]="setDonation"
       [campaignOpenOnLoad]="campaignOpenOnLoad"
     />
