@@ -1,6 +1,12 @@
 @use '@angular/material' as mat;
 @import '../../../abstract';
 
+.mat-stepper-horizontal, .mat-stepper-vertical {
+  background: none;
+  box-shadow: $box-shadow-soft;
+
+}
+
 div .c-banner {
   background-color: white;
 }

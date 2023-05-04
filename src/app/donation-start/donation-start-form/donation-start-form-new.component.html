@@ -1,5 +1,3 @@
-<h1>New Design for Stepper</h1>
-
 <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaignOpenOnLoad">
     <mat-vertical-stepper
       id="stepper"
@@ -18,7 +16,7 @@
           <img src="/assets/images/icon-tick.png" height="11" alt="Check mark">
           Match funds are currently available!
         </p>
-  
+
         <div class="donation-input donation-input-main">
           <p class="fixed-label">Donation to {{ campaign.charity.name }}</p>
           <mat-form-field hideRequiredMarker class="form-field b-center size-lg" color="primary">
@@ -31,7 +29,7 @@
             <input formControlName="donationAmount" id="donationAmount" matInput>
           </mat-form-field>
         </div>
-  
+
         <div
           class="error"
           aria-live="polite"
@@ -42,17 +40,17 @@
           <div *ngIf="donationAmountField?.errors?.pattern">Please enter a whole number of {{ currencySymbol }} without commas.</div>
           <div *ngIf="donationAmountField?.errors?.required">Please enter how much you would like to donate.</div>
         </div>
-  
+
         <mat-hint *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
           We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://biggive.org/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too). Please consider adding an optional tip.
         </mat-hint>
-  
+
         <div *ngIf="campaign.feePercentage && creditPenceToUse === 0">
           <mat-checkbox formControlName="coverFee" id="coverFee">
             Cover the {{ campaign.feePercentage}}% <a href="https://biggive.org/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> platform fee</a> for the &quot;{{ campaign.title }}&quot; campaign?
           </mat-checkbox>
         </div>
-  
+
         <div *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
           <mat-form-field appearance="outline">
             <mat-label for="tipPercentage">Donation to the Big Give Trust</mat-label>
@@ -64,10 +62,10 @@
               <mat-option [value]="'Other'">Other</mat-option>
             </mat-select>
           </mat-form-field>
-  
+
           <div *ngIf="customTip()" class="donation-input donation-input-tip">
             <p id="custom-tip-status" class="b-grey b-rt-sm donation-input-tip__status-help" aria-live="assertive">You've selected to give {{ tipAmount() | exactCurrency:campaign.currencyCode }} to the Big Give Trust. You can edit the amount in the next field.</p>
-  
+
             <p class="fixed-label">Donation to the Big Give Trust</p>
             <mat-form-field hideRequiredMarker class="form-field b-center b-rt-0" color="primary">
               <span class="prefix-tbg" matPrefix>{{ currencySymbol }}</span>
@@ -79,7 +77,7 @@
               <input formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status">
             </mat-form-field>
           </div>
-  
+
           <div
             class="error"
             aria-live="polite"
@@ -88,15 +86,15 @@
             Please enter how much you would like to donate to the Big Give as a number of
             {{ currencySymbol }}, optionally with 2 decimals and up to {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }}.
           </div>
-  
+
           <mat-hint *ngIf="!customTip()">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to support the Big Give</mat-hint>
-  
+
           <mat-hint *ngIf="customTip() && donationAmount && donationAmount > 0">
             {{ (tipAmount() > 0 && tipAmount() / donationAmount < 0.001) ? 'Less than 0.1%' : (tipAmount() / donationAmount) | percent:'1.0-1' }}
           of main donation
           </mat-hint>
         </div>
-  
+
         <p class="error" *ngIf="donationCreateError" aria-live="assertive">
           Sorry, we can't register your donation right now. Please try again in a moment
           or <a href="https://community.biggive.org/s/contact-us" target="_blank">
@@ -104,7 +102,7 @@
               contact us</a>
           if this message persists.
         </p>
-  
+
         <re-captcha
           #idCaptcha
           size="invisible"
@@ -113,7 +111,7 @@
           (errored)="captchaIdentityError()"
           siteKey="{{ recaptchaIdSiteKey }}"
         ></re-captcha>
-  
+
         <div>
           <button
             type="button"
@@ -124,7 +122,7 @@
           >Next</button>
       </div>
       </mat-step>
-  
+
       <mat-step
         *ngIf="campaign.currencyCode === 'GBP'"
         formGroupName="giftAid"
@@ -141,12 +139,12 @@
         <mat-radio-group tabindex="0" formControlName="giftAid">
           <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I want to Gift Aid my donation to {{ campaign.charity.name }} and any additional gift I make to the Big Give, including any donations made in the past 4 years or in the future</mat-radio-button>
           <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed</mat-radio-button>
-  
+
           <p class="error" *ngIf="triedToLeaveGiftAid && giftAidGroup.get('giftAid')?.hasError('required')" aria-live="assertive">
             Please choose whether you wish to claim Gift Aid.
           </p>
         </mat-radio-group>
-  
+
         <div *ngIf="giftAidGroup.value.giftAid">
           <mat-form-field>
             <mat-label for="homeAddress">Home address</mat-label>
@@ -158,7 +156,7 @@
               [matAutocomplete]="autoAddress"
               [matAutocompleteDisabled]="!showAddressLookup"
             >
-  
+
             <mat-autocomplete
               #autoAddress="matAutocomplete"
               [displayWith]="summariseAddressSuggestion"
@@ -168,7 +166,7 @@
                 {{ suggestion.address }}
               </mat-option>
             </mat-autocomplete>
-  
+
             <mat-hint>
               For your Gift Aid declaration to HMRC.
               <mat-spinner
@@ -181,19 +179,19 @@
             </mat-hint>
           </mat-form-field>
           <div class="error" *ngIf="giftAidGroup.get('homeAddress')?.errors?.maxlength">Maximum 255 characters exceeded</div>
-  
+
           <mat-form-field *ngIf="!giftAidGroup.value.homeOutsideUK">
             <mat-label for="homePostcode">Home postcode</mat-label>
             <input formControlName="homePostcode" id="homePostcode" matInput>
           </mat-form-field>
-  
+
           <div class="homeOutsideUK-wrapper">
             <mat-checkbox formControlName="homeOutsideUK" id="homeOutsideUK">
               Live outside the UK?
             </mat-checkbox>
           </div>
         </div>
-  
+
         <div>
           <button
             type="button"
@@ -203,7 +201,7 @@
           >Next</button>
         </div>
       </mat-step>
-  
+
       <mat-step
         formGroupName="payment"
         [stepControl]="paymentGroup"
@@ -214,13 +212,13 @@
           Payments processed securely by Stripe.
           <a href="https://stripe.com/docs/security/stripe" target="_blank"><mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> Learn more</a>.
         </p>
-  
+
         <mat-form-field>
           <mat-label for="firstName">First name</mat-label>
           <input formControlName="firstName" id="firstName" matInput>
         </mat-form-field>
         <div class="error" *ngIf="paymentGroup.get('firstName')?.errors?.maxlength">Maximum 40 characters exceeded</div>
-  
+
         <mat-form-field>
           <mat-label for="lastName">Last name</mat-label>
           <input formControlName="lastName" id="lastName" matInput>
@@ -228,21 +226,21 @@
           <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
         </mat-form-field>
         <div class="error" *ngIf="paymentGroup.get('lastName')?.errors?.maxlength">Maximum 80 characters exceeded</div>
-  
+
         <mat-form-field>
           <mat-label for="emailAddress">Email address</mat-label>
           <input formControlName="emailAddress" id="emailAddress" type="email" matInput>
           <mat-hint>We'll send you a donation receipt and use this to
             confirm it's you in case you have any queries.</mat-hint>
         </mat-form-field>
-  
+
         <div [style.display]="creditPenceToUse === 0 ? 'block' : 'none'" id="payment-request-button" #paymentRequestButton></div>
         <p *ngIf="requestButtonShown && !stripePRBMethodReady" class="b-center b-grey b-rt-sm">Or</p>
-  
+
         <div *ngIf="creditPenceToUse > 0">
           <p id="useCreditsMessage" class="b-center">Your credit balance will be applied against this donation. No further funds will be taken.</p>
         </div>
-  
+
         <div
           class="payment-method-options"
           *ngIf="creditPenceToUse === 0 && stripeSavedMethods.length > 0"
@@ -252,7 +250,7 @@
             [hidden]="i > 0 && !showAllPaymentMethods"
           >
             <mat-checkbox
-  
+
               [checked]="method === selectedSavedMethod"
               id="useSavedCard"
               (change)="onUseSavedCardChange($event, method)"
@@ -263,7 +261,7 @@
                 [icon]="cardIconsService.getCardIcon(method.card?.brand)"
               ></fa-icon>
               Use saved card ending {{ method.card?.last4 }}.
-  
+
             </mat-checkbox>
             <br />
             <a
@@ -272,10 +270,10 @@
             >
               (or pick another)
             </a>
-  
+
           </div>
         </div>
-  
+
         <!-- We need the ElementRef to always be available for Stripe.js mounting as there are
         a few dynamic ways the input can become or cease to be relevant. So just CSS-hide the
         element when not needed, and always mount it. -->
@@ -284,7 +282,7 @@
             <mat-label for="card-info">Card</mat-label>
             <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
           </div>
-  
+
           <mat-form-field>
             <mat-label for="billingCountry">Billing country</mat-label>
             <mat-select formControlName="billingCountry" id="billingCountry">
@@ -293,17 +291,17 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-  
+
           <mat-form-field>
             <mat-label for="billingPostcode">Billing postcode</mat-label>
             <input formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)">
           </mat-form-field>
         </div>
-  
+
         <p *ngIf="stripeError" class="error" aria-live="assertive">
           {{ stripeError }}
         </p>
-  
+
         <div>
           <button
             type="button"
@@ -314,7 +312,7 @@
           >Next</button>
         </div>
       </mat-step>
-  
+
       <mat-step
         formGroupName="marketing"
         [stepControl]="marketingGroup"
@@ -328,21 +326,21 @@
             Please choose whether you wish to receive updates from {{ campaign.charity.name }}.
           </p>
         </mat-radio-group>
-  
+
         <mat-hint>
           <p *ngIf="campaign.charity.optInStatement" class="no-margin-top b-rt-sm b-grey">{{ campaign.charity.optInStatement }}</p>
-  
+
           <p
             *ngIf="marketingGroup.value.optInCharityEmail === false"
             aria-live="polite"
             class="no-margin-top b-rt-sm b-grey"
           >
             <span *ngIf="giftAidGroup.value.giftAid">We will pass on your details for Gift Aid processing purposes, but the charity will be informed that you do not wish to receive communications.</span>
-  
+
             Please note that you might continue to receive communications from the charity if you have already shared your details with them via other methods.
           </p>
         </mat-hint>
-  
+
         <p class="b-bold b-rt-0" id="optInTbgEmail-label">Would you be happy to receive emails from the Big Give?</p>
         <mat-radio-group tabindex="0" aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
           <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from the Big Give</mat-radio-button>
@@ -356,7 +354,7 @@
             By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
           </p>
         </mat-hint>
-  
+
         <div *ngIf="showChampionOptIn">
           <p class="b-bold b-rt-0" id="optInChampionEmail-label">Would you be happy to receive emails from {{ campaign.championName }}?</p>
           <mat-radio-group tabindex="0" aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
@@ -373,7 +371,7 @@
             </p>
           </mat-hint>
         </div>
-  
+
         <div>
           <button
             type="button"
@@ -383,7 +381,7 @@
           >Next</button>
         </div>
       </mat-step>
-  
+
       <mat-step
         label="Confirm"
         class="c-make-your-donation"
@@ -398,7 +396,7 @@
             <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
             Privacy Policy</a>.
         </p>
-  
+
         <div class="c-donation-summary">
           <p class="error" *ngIf="donationUpdateError" aria-live="assertive">
             Sorry, we can't submit your donation right now. Please try again in a moment
@@ -408,19 +406,19 @@
             if this message persists.
           </p>
           <mat-spinner *ngIf="submitting" color="primary" diameter="30" aria-label="Processing your donation"></mat-spinner>
-  
+
           <p *ngIf="retrying" class="error" aria-live="polite">
             It looks like our system is a bit busy, one moment please&hellip;
           </p>
-  
+
           <p *ngIf="noPsps" class="error" aria-live="assertive">
             Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few minutes to try again.
           </p>
-  
+
           <p *ngIf="stripeError" class="error" aria-live="assertive">
             {{ stripeError }}
           </p>
-  
+
           <button
             type="submit"
             class="c-donate-button b-donate-button b-w-100 b-rt-1"
@@ -433,7 +431,7 @@
               {{ donationAndExtrasAmount | exactCurrency:campaign.currencyCode }}
             </span>
           </button>
-  
+
           <div class="c-breakdown b-center b-grey">
             <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }} donation to {{ campaign.charity.name }}</p>
             <p *ngIf="feeCoverAmount() > 0 || (creditPenceToUse === 0 && !campaign.feePercentage)" class="b-rt-sm b-m-0">
@@ -442,19 +440,19 @@
             <p *ngIf="feeCoverAmount() > 0" class="b-rt-sm b-m-0">{{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} to cover platform fee</p>
             <p *ngIf="creditPenceToUse === 0 && !campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give Trust &ndash; we rely on your generosity to support charities</p>
           </div>
-  
+
           <!-- Matching or Gift Aid reiteration -->
           <ul class="c-donation-receipt b-grey">
             <li *ngIf="giftAidAmount() > 0">
               <mat-icon aria-hidden="true">check</mat-icon>
               You have told us you would like to claim Gift Aid
             </li>
-  
+
             <li *ngIf="campaign.currencyCode === 'GBP' && giftAidAmount() === 0">
               <mat-icon aria-hidden="true">clear</mat-icon>
               You have told us you do not want to claim Gift Aid
             </li>
-  
+
             <li *ngIf="expectedMatchAmount() === donationAmount">
               <mat-icon aria-hidden="true">done_all</mat-icon>
               Your donation will be match funded
@@ -464,5 +462,4 @@
       </mat-step>
     </mat-vertical-stepper>
   </form>
-  
-  
+
