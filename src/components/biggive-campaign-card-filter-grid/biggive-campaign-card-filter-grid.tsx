@@ -88,11 +88,11 @@ export class BiggiveCampaignCardFilterGrid {
   /**
    * This helps us inject a pre-selected dropdown value from outside of this component.
    * This is especially helpful for the Meta campaign and Explore pages, where searching
-   * by text whipes out previous sort options and re-uses Relevance, or where one of those
+   * by text wipes out previous sort options and re-uses Relevance, or where one of those
    * two pages is loaded directly with URL parameters - in such a scenario the dropdown
    * shows that it's pre-selected. DON-558.
    */
-  @Prop() selectedSortByOption: 'Most raised' | 'Match funds remaining' | 'Relevance' | null = null;
+  @Prop() selectedSortByOption: 'Most raised' | 'Match funds remaining' | 'Relevance';
 
   /**
    * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
@@ -118,6 +118,8 @@ export class BiggiveCampaignCardFilterGrid {
    * State variable - causes re-render on change
    */
   @State() filtersApplied: boolean;
+
+  private initialSortByOption: 'Most raised' | 'Match funds remaining' | 'Relevance';
 
   private getSearchAndFilterObject(): {
     searchText: string;
@@ -242,7 +244,7 @@ export class BiggiveCampaignCardFilterGrid {
 
     // Clear all
     this.searchText = null;
-    this.selectedSortByOption = null;
+    this.selectedSortByOption = this.initialSortByOption;
     this.selectedFilterBeneficiary = null;
     this.selectedFilterCategory = null;
     this.selectedFilterFunding = null;
@@ -274,6 +276,7 @@ export class BiggiveCampaignCardFilterGrid {
   componentWillRender() {
     this.filtersApplied =
       this.selectedFilterCategory !== null || this.selectedFilterBeneficiary !== null || this.selectedFilterFunding !== null || this.selectedFilterLocation !== null;
+    this.initialSortByOption = this.selectedSortByOption;
   }
 
   render() {
@@ -345,7 +348,7 @@ export class BiggiveCampaignCardFilterGrid {
               <biggive-form-field-select select-style="underlined" placeholder={this.sortByPlaceholderText} selectedLabel={this.selectedSortByOption} id="sort-by">
                 <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>
                 <biggive-form-field-select-option value="matchFundsRemaining" label="Match funds remaining"></biggive-form-field-select-option>
-                <biggive-form-field-select-option value="Relevance" label="Relevance"></biggive-form-field-select-option>
+                {(this.searchText || '').length > 0 ? <biggive-form-field-select-option value="Relevance" label="Relevance"></biggive-form-field-select-option> : null}
               </biggive-form-field-select>
             </div>
           </div>
