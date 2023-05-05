@@ -31,6 +31,10 @@
   }
 }
 
+:host ::ng-deep .mat-stepper-vertical-line::before {
+  display: none;
+}
+
 div .c-banner {
   background-color: white;
 }
