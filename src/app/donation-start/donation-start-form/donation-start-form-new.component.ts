@@ -15,4 +15,11 @@ import { DonationStartFormParentComponent } from "./donation-start-form-parent.c
 })
 export class DonationStartFormNewComponent extends DonationStartFormParentComponent {
 
+  panelOpenState = false;
+
+  ngAfterContentInit(): void {
+    console.log({campaign: this.campaign});
+    console.log({donation: this.donation});
+  }
+
 }

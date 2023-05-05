@@ -26,7 +26,8 @@ import { DonationStartSecondaryComponent } from '../donation-start-secondary/don
 import { DonationStartContainerRoutingModule } from './donation-start-routing.module';
 import {DonationStartFormNewComponent} from "../donation-start-form/donation-start-form-new.component";
 import {DonationStartFormParentComponent} from "../donation-start-form/donation-start-form-parent.component";
-
+import {MatExpansionModule} from '@angular/material/expansion'; 
+import {MatDividerModule} from '@angular/material/divider';
 @NgModule({
   imports: [
     ...allChildComponentImports,
@@ -44,6 +45,8 @@ import {DonationStartFormParentComponent} from "../donation-start-form/donation-
     MatRadioModule,
     MatSelectModule,
     MatStepperModule,
+    MatExpansionModule,
+    MatDividerModule,
     PercentPipe,
     ReactiveFormsModule,
     RecaptchaModule,

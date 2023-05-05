@@ -75,7 +75,8 @@ input:disabled {
 }
 
 .mat-mdc-form-field {
-  width: 100%;
+  width: 70%;
+  margin: 0 auto;
 }
 
 .payment-method-options {
@@ -153,7 +154,7 @@ input:disabled {
 
 .donation-input {
   .form-field {
-    margin: 0;
+    margin: 0 auto;
     display: block;
     font-weight: 700;
   }
@@ -303,4 +304,26 @@ div.match-funded-badge {
 
 div.match-funded-badge-wrapper {
   position: relative;
+}
+
+// bullets as arrows: https://stackoverflow.com/a/12216973
+
+ul {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+li {
+  padding-left: 1em;
+  text-indent: -1em;
+}
+
+li:before {
+  content: "->";
+  padding-right: 5px;
+}
+
+.mat-expansion-panel-header {
+  padding: 0;
 }

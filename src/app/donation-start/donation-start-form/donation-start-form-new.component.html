@@ -17,6 +17,17 @@
           Match funds are currently available!
         </p>
 
+        <div style="display: flex; justify-content: start; margin-top: 10px; margin-bottom: 40px;">
+          <div style="margin-right: 170px;">
+            <p class="b-rt-0 b-m-0">You are supporting:</p>
+            <p class="b-rt-0 b-m-0 b-bold">{{ campaign.charity.name }}</p>
+          </div>
+          <div>
+            <p class="b-rt-0 b-m-0">For:</p>
+            <p class="b-rt-0 b-m-0 b-bold">{{ campaign.title }}</p>
+          </div>
+        </div>
+
         <div class="donation-input donation-input-main">
           <p class="fixed-label">Donation to {{ campaign.charity.name }}</p>
           <mat-form-field hideRequiredMarker class="form-field b-center size-lg" color="primary">
@@ -30,6 +41,10 @@
           </mat-form-field>
         </div>
 
+        <hr style="margin: 20px auto;">
+
+        <h2 class="b-rt-0 b-m-0 b-bold">Tip The Big Give</h2>
+        <p *ngIf="!campaign.feePercentage && creditPenceToUse === 0">Big Give has a 0% platform fee. That means we’re able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
         <div
           class="error"
           aria-live="polite"
@@ -41,9 +56,7 @@
           <div *ngIf="donationAmountField?.errors?.required">Please enter how much you would like to donate.</div>
         </div>
 
-        <mat-hint *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
-          We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://biggive.org/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too). Please consider adding an optional tip.
-        </mat-hint>
+        <!-- <mat-hint *ngIf="!campaign.feePercentage && creditPenceToUse === 0">Big Give has a 0% platform fee. That means we’re able to continue offering our services thanks to donors who leave an optional tip amount here:</mat-hint> -->
 
         <div *ngIf="campaign.feePercentage && creditPenceToUse === 0">
           <mat-checkbox formControlName="coverFee" id="coverFee">
@@ -51,7 +64,7 @@
           </mat-checkbox>
         </div>
 
-        <div *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
+        <div *ngIf="!campaign.feePercentage && creditPenceToUse === 0" style="text-align: center; margin-bottom: 50px;">
           <mat-form-field appearance="outline">
             <mat-label for="tipPercentage">Donation to the Big Give Trust</mat-label>
             <mat-select formControlName="tipPercentage" id="tipPercentage" (selectionChange)="tipPercentageChange()">
@@ -95,6 +108,40 @@
           </mat-hint>
         </div>
 
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+        
+            </mat-panel-title>
+
+          </mat-expansion-panel-header>
+          <p>This is the primary content of the panel.</p>
+        </mat-expansion-panel>
+        <mat-expansion-panel (opened)="panelOpenState = true"
+                             (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <h3 class="b-rt-0 b-m-0 b-bold">How does Big Give use tips?</h3>
+          </mat-expansion-panel-header>
+          <p>
+            Big Give is a registered charity (1136547). We don’t charge charities for using our platform; we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
+          </p>
+  <p>Your tips will be going to:</p>
+  <ul>
+    <li>Supporting our website and team, allowing charities to double their   
+      donations to good causes.
+    </li>
+    <li>Providing match funds in our Anchor Match Fund. Through tips, charities will receive funding to launch their own match funded campaign on Big Give.
+    </li>
+  </ul>
+  
+  <p>
+  Thank you for your generosity! Your tips ensures that we can continue to support charities and causes that are important to you.
+  
+          </p>
+  
+        </mat-expansion-panel>
+        <mat-divider></mat-divider>
+
         <p class="error" *ngIf="donationCreateError" aria-live="assertive">
           Sorry, we can't register your donation right now. Please try again in a moment
           or <a href="https://community.biggive.org/s/contact-us" target="_blank">
@@ -112,14 +159,14 @@
           siteKey="{{ recaptchaIdSiteKey }}"
         ></re-captcha>
 
-        <div>
-          <button
+        <div style="text-align: center">
+          <button style="width: 40%;"
             type="button"
             mat-raised-button
             color="primary"
             [disabled]="! donationForm.controls['amounts']!.valid"
             (click)="next()"
-          >Next</button>
+          >Continue</button>
       </div>
       </mat-step>
 
