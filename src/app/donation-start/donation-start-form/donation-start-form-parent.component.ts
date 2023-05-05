@@ -295,7 +295,9 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     if (isPlatformBrowser(this.platformId)) {
       this.handleCampaignViewUpdates();
     }
+  }
 
+  resumeDonationsIfPossible() {
     this.donationService.getProbablyResumableDonation(this.campaignId)
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;

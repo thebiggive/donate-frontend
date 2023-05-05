@@ -33,7 +33,7 @@
       </p>
       <!-- We don't want to let the form's ngInit run before ours completes, or we would have odd behaviour
          around loading the logged in user - hence conditional on dataLoaded -->
-      <app-donation-start-form *ngIf="dataLoaded && campaignOpenOnLoad && !useNewDesign"
+      <app-donation-start-form *ngIf="campaignOpenOnLoad && !useNewDesign"
          #donation_start_form
        [campaign]="campaign"
        [donor]="donor"
@@ -41,7 +41,7 @@
        [campaignOpenOnLoad]="campaignOpenOnLoad"
      />
 
-     <app-donation-start-form-new *ngIf="dataLoaded && campaignOpenOnLoad && useNewDesign"
+     <app-donation-start-form-new *ngIf="campaignOpenOnLoad && useNewDesign"
        #donation_start_form
        [campaign]="campaign"
        [donor]="donor"
