@@ -34,12 +34,16 @@ export class DonationStartContainerComponent implements OnInit{
 
    ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
+     this.campaignOpenOnLoad = this.campaignIsOpen();
+
      const idAndJWT = this.identityService.getIdAndJWT();
      if (idAndJWT) {
+       // we will wait until the person info is loaded before showing the form.
        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+     } else {
+       // we are not logged in, so can show the form imeditatly.
+       this.dataLoaded = true;
      }
-     this.campaignOpenOnLoad = this.campaignIsOpen();
-     this.dataLoaded = true;
    }
 
   /**
@@ -85,6 +89,7 @@ export class DonationStartContainerComponent implements OnInit{
       this.donor = person; // Should mean donations are attached to the Stripe Customer.
       this.personIsLoginReady = true;
       this.loggedInEmailAddress = person.email_address;
+      this.dataLoaded = true;
       this.donationStartForm.loadPerson(person, id, jwt);
     });
   };
