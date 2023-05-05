@@ -70,6 +70,15 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
 
+  // update card form
+  updateCardForm: FormGroup;
+
+  formattedCardExpiry: string;
+  readonly COUNTRIES = COUNTRIES;
+  countryCode: string | undefined;
+  postalCode: string | undefined;
+  // ------------------------------
+
   card: StripeCardElement | null;
   cardHandler = this.onStripeCardChange.bind(this);
   paymentRequestButton: StripePaymentRequestButtonElement | null;
@@ -127,12 +136,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   // Maintains its value and is NOT reset when settlement method changes to one of those, since it might
   // change back.
   stripeManualCardInputValid = false;
-
+  idAndJWT: {id: string, jwt: string} | undefined;
   stripePaymentMethodReady = false;
   stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
   stripeError?: string;
   stripeSavedMethods: PaymentMethod[] = [];
   selectedSavedMethod: PaymentMethod | undefined;
+  selectedSavedMethodExpired: boolean = false;
   submitting = false;
   termsProvider = `Big Give's`;
   termsUrl = 'https://biggive.org/terms-and-conditions';
@@ -140,7 +150,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   triedToLeaveGiftAid = false;
   triedToLeaveMarketing = false;
   showAllPaymentMethods: boolean = false;
-
+  private person: Person;
   private campaignId: string;
 
   /**
@@ -170,7 +180,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private billingPostcodeRegExp = new RegExp('^[0-9a-zA-Z -]{2,8}$');
 
   private idCaptchaCode?: string;
-  private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
+  stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
+  stripeErrorDeclineCode: string | undefined;
   private stepChangedBlockedByCaptcha = false;
 
 
@@ -214,6 +225,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (isPlatformBrowser(this.platformId)) {
       this.stripeService.init();
     }
+
+    this.updateCardForm = this.formBuilder.group({
+      billingCountry: [this.countryCode],
+      expiryDate: [this.formattedCardExpiry, [Validators.required]],
+      postalCode: [this.postalCode],
+    });
 
     this.setCampaignBasedVars();
 
@@ -417,6 +434,16 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return suggestion?.address || '';
   }
 
+  setPaymentMethod(card: StripeCardElement, billingDetails: PaymentMethod.BillingDetails) {
+    //this.card = card;
+    this.countryCode = billingDetails.address?.country || undefined;
+    this.postalCode = billingDetails.address?.postal_code || undefined
+
+    if(this.selectedSavedMethod) {
+      this.formattedCardExpiry = this.selectedSavedMethod.card!.exp_month.toString().padStart(2, "0") +  "/" + (this.selectedSavedMethod.card!.exp_year % 100).toString()
+    }
+  }
+
   addressChosen(event: MatAutocompleteSelectedEvent) {
     // Autocomplete's value.url should be an address we can /get.
     this.postcodeService.get(event.option.value.url).subscribe((address: GiftAidAddress) => {
@@ -446,6 +473,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         activeStepLabel.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }, 200);
+
+    console.log({selectedSavedMethod : this.selectedSavedMethod});
+    console.log({selectedSavedMethodExpired: this.selectedSavedMethodExpired});
 
     // If the original donation amount was updated, cancel that donation and
     // then (sequentially so any match funds are freed up first) create a new
@@ -544,6 +574,25 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         billingPostcode: this.giftAidGroup.value.homePostcode,
       });
     }
+  }
+
+  deletePaymentMethod() {
+    if (this.selectedSavedMethod !== undefined) {
+      this.stripeSavedMethods.filter(pm => pm.id === this.selectedSavedMethod!.id);
+      const JWT = this.identityService.getJWT() as string;
+      console.log({JWT});
+      this.donationService.deleteStripePaymentMethod(this.person, this.selectedSavedMethod, JWT)
+      .subscribe(() => {
+          this.loadFirstSavedStripeCardIfAny(this.personId!, JWT);
+        },
+        error => {
+          this.loadFirstSavedStripeCardIfAny(this.personId!, JWT);
+          alert(error.error.error)
+        }
+      )
+    }
+    location.reload();
+
   }
 
   async onStripeCardChange(state: StripeElementChangeEvent) {
@@ -902,11 +951,28 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (checked) {
       this.selectedSavedMethod = paymentMethod;
+      this.selectedSavedMethodExpired = this.checkPaymentMethodExpired(paymentMethod);
+
+      console.log({paymentMethod});
       this.updateFormWithBillingDetails(this.selectedSavedMethod);
     } else {
       this.selectedSavedMethod = undefined;
+      this.selectedSavedMethodExpired = false;
       this.prepareCardInput();
     }
+  }
+
+  checkPaymentMethodExpired(paymentMethod?: PaymentMethod): boolean {
+    if(paymentMethod) {
+      const expDate = new Date(paymentMethod.card!.exp_year, paymentMethod.card!.exp_month);
+      const currentDate = new Date();
+      if (currentDate > expDate) {
+        return true;
+      }
+    }
+    //return false;
+    const num = Math.round(Math.random());
+    return num > 0 ? true : false;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -983,6 +1049,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         const firstPaymentMethod = response.data[0]!;
 
         this.selectedSavedMethod = firstPaymentMethod;
+        this.selectedSavedMethodExpired = this.checkPaymentMethodExpired(this.selectedSavedMethod);
         this.updateFormWithBillingDetails(firstPaymentMethod);
       }
     });
@@ -1018,7 +1085,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     let friendlyError = error.message;
 
     let customMessage = false;
-    if (error.code === 'card_declined' && error.decline_code === 'generic_decline') {
+    if (error.code === 'card_declined') {
+      this.stripeErrorDeclineCode = error.decline_code;
       // Probably a custom Radar rule -> relatively likely to be an incorrect postcode.
       friendlyError = `The payment was declined. Please ensure details provided (including postcode) match your card. Contact your bank or hello@biggive.org if the problem persists.`;
       customMessage = true;
@@ -1788,6 +1856,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
               });
             }
             this.selectedSavedMethod = this.stripeSavedMethods.length > 0 ? this.stripeSavedMethods[0] : undefined;
+            this.selectedSavedMethodExpired = this.checkPaymentMethodExpired(this.selectedSavedMethod);
 
             if (this.personId) {
               const jwt = this.identityService.getJWT() as string;
@@ -1893,6 +1962,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   public loadPerson(person: Person, id: string, jwt: string) {
+    this.person = person;
     this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
     this.prepareDonationCredits(person);
     this.prefillRarelyChangingFormValuesFromPerson(person);

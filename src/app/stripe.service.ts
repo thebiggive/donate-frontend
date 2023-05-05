@@ -33,7 +33,7 @@ export class StripeService {
   private stripe: Stripe | null;
   private paymentMethodEvents: Map<string, PaymentRequestPaymentMethodEvent>;
   private paymentMethodIds: Map<string, string>; // Donation ID to payment method ID.
-
+  private paymentError: boolean = false;
   constructor(
     private analyticsService: AnalyticsService,
     private donationService: DonationService,
@@ -335,6 +335,129 @@ export class StripeService {
         { handleActions },
       ).then(async confirmResult => {
         const analyticsEventActionPrefix = handleActions ? 'stripe_card_' : 'stripe_prb_';
+
+        if (this.paymentError) {
+          confirmResult.error = {
+            charge: "ch_3N1UIEKkGuKkxwBN1KK5Qy9V",
+            code: "card_declined",
+            decline_code: "generic_decline",
+            doc_url: "https://stripe.com/docs/error-codes/card-declined",
+            message: "Your card was declined.",
+            payment_intent: {
+              id: "pi_3N1UIEKkGuKkxwBN1agWomFl",
+              object: "payment_intent",
+              amount: 575,
+              canceled_at: null,
+              cancellation_reason: null,
+              capture_method: "automatic",
+              client_secret: "pi_3N1UIEKkGuKkxwBN1agWomFl_secret_7AFGCP5jl6YXCFLFoyOJDWRNC",
+              confirmation_method: "automatic",
+              created: 1682599886,
+              currency: "gbp",
+              description: "Donation a2be860f-240c-4979-aeb9-da6866dc32e9 to Action Change (Formally GVI Trust)",
+              last_payment_error: {
+                charge: "ch_3N1UIEKkGuKkxwBN1KK5Qy9V",
+                code: "card_declined",
+                decline_code: "generic_decline",
+                doc_url: "https://stripe.com/docs/error-codes/card-declined",
+                message: "Your card was declined.",
+                payment_method: {
+                  id: "pm_1N1RbcKkGuKkxwBNWQ0Jwtxy",
+                  object: "payment_method",
+                  billing_details: {
+                    address: {
+                      city: null,
+                      country: "GB",
+                      line1: null,
+                      line2: null,
+                      postal_code: "SE16 2HW",
+                      state: null
+                    },
+                    email: "djhawro@gmail.com",
+                    name: "Dorota Hawro",
+                    phone: null
+                  },
+                  metadata: {},
+                  card: {
+                    brand: "visa",
+                    checks: {
+                      address_line1_check: null,
+                      address_postal_code_check: null,
+                      cvc_check: null
+                    },
+                    country: "GB",
+                    exp_month: 2,
+                    exp_year: 2028,
+                    funding: "debit",
+
+                    last4: "6014",
+                    three_d_secure_usage: {
+                      supported: true
+                    },
+                    wallet: null
+                  },
+                  created: 1682589557,
+                  customer: "cus_NkQ8PKqqBKmXMZ",
+                  livemode: true,
+                  type: "card"
+                },
+                type: "card_error"
+              },
+              livemode: true,
+              next_action: null,
+              payment_method: null,
+              payment_method_types: [
+                "card"
+              ],
+              receipt_email: null,
+              setup_future_usage: "on_session",
+              shipping: null,
+              status: "requires_payment_method"
+            },
+            payment_method: {
+              id: "pm_1N1RbcKkGuKkxwBNWQ0Jwtxy",
+              object: "payment_method",
+              billing_details: {
+                address: {
+                  city: null,
+                  country: "GB",
+                  line1: null,
+                  line2: null,
+                  postal_code: "SE16 2HW",
+                  state: null
+                },
+                email: "djhawro@gmail.com",
+                name: "Dorota Hawro",
+                phone: null
+              },
+              metadata: {},
+              card: {
+                brand: "visa",
+                checks: {
+                  address_line1_check: null,
+                  address_postal_code_check: null,
+                  cvc_check: null
+                },
+                country: "GB",
+                exp_month: 2,
+                exp_year: 2028,
+                funding: "debit",
+                last4: "6014",
+                three_d_secure_usage: {
+                  supported: true
+                },
+                wallet: null
+              },
+              created: 1682589557,
+              customer: "cus_NkQ8PKqqBKmXMZ",
+              livemode: true,
+              type: "card"
+            },
+            type: "card_error"
+          };
+          this.paymentError = false;
+        }
+
 
         if (confirmResult.error) {
           // Failure w/ no extra action applicable
