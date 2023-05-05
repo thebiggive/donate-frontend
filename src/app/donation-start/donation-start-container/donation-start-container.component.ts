@@ -85,13 +85,21 @@ export class DonationStartContainerComponent implements OnInit{
       return;
     }
 
-    this.identityService.get(id, jwt).subscribe((person: Person) => {
+    this.identityService.get(id, jwt).subscribe(
+      (person: Person) => {
       this.donor = person; // Should mean donations are attached to the Stripe Customer.
       this.personIsLoginReady = true;
       this.loggedInEmailAddress = person.email_address;
       this.dataLoaded = true;
       this.donationStartForm.loadPerson(person, id, jwt);
-    });
+      },
+      () => {
+        this.dataLoaded = true;
+      },
+      () => {
+        this.dataLoaded = true;
+      }
+    );
   };
 
   get canLogin() {
