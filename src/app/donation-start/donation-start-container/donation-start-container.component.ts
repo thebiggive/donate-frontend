@@ -92,7 +92,7 @@ export class DonationStartContainerComponent implements OnInit{
       this.donor = person; // Should mean donations are attached to the Stripe Customer.
       this.personIsLoginReady = true;
       this.loggedInEmailAddress = person.email_address;
-      this.donationStartForm?.loadPerson(person, id, jwt);
+      this.donationStartForm.loadPerson(person, id, jwt);
       this.donationStartForm.resumeDonationsIfPossible();
       },
       () => {
