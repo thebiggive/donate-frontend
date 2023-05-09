@@ -955,6 +955,7 @@ export namespace Components {
           * ISO-4217 currency code if input is for a money value
          */
         "currency": 'GBP' | 'USD' | undefined;
+        "prompt": string;
         "selectStyle": 'bordered' | 'underlined';
         "spaceBelow": number;
         "value": string;
@@ -2482,9 +2483,10 @@ declare namespace LocalJSX {
           * ISO-4217 currency code if input is for a money value
          */
         "currency"?: 'GBP' | 'USD' | undefined;
+        "prompt": string;
         "selectStyle"?: 'bordered' | 'underlined';
         "spaceBelow"?: number;
-        "value"?: string;
+        "value": string;
     }
     interface BiggiveTimeline {
         "buttonBackgroundColour"?: brandColour;

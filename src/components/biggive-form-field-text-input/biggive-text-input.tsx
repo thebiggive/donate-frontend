@@ -10,13 +10,14 @@ import { Component, h, Prop } from '@stencil/core';
   shadow: true,
 })
 export class BiggiveTextInput {
-  @Prop() value: string;
+  @Prop() value!: string;
   /**
    * ISO-4217 currency code if input is for a money value
    */
   @Prop() currency: 'GBP' | 'USD' | undefined;
   @Prop() spaceBelow: number = 0;
   @Prop() selectStyle: 'bordered' | 'underlined' = 'bordered';
+  @Prop() prompt!: string
 
   render() {
     const currencySymbol = this.currency === 'GBP' ? '£' : this.currency === 'USD' ? '$' : undefined;
@@ -33,6 +34,7 @@ export class BiggiveTextInput {
             <div style={{ clear: 'both' }}></div>
           </div>
         </div>
+        <div class="prompt">{this.prompt}</div>
       </div>
     );
   }

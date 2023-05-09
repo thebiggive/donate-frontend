@@ -5,6 +5,19 @@
 }
 
 .text-input {
+  position: relative;
+  .prompt {
+    position: absolute;
+    z-index: 2;
+    font-size: small;
+    top: -1em;
+    background-color: $colour-grey-background;
+    left: 4em;
+    padding-left: 1em;
+    padding-right: 1em;
+    color: $colour-primary-blue;
+  }
+
   @include standard-font();
   position: relative;
   text-align: left;
