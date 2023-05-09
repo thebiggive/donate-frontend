@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CampaignGroupsService } from '../campaign-groups.service';
@@ -7,13 +7,18 @@ import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { TimeLeftPipe } from '../time-left.pipe';
 
+const openPipeToken = 'TimeLeftToOpenPipe';
+const endPipeToken = 'timeLeftToEndPipe';
+
 @Component({
   selector: 'app-campaign-info',
   templateUrl: './campaign-info.component.html',
   styleUrls: ['./campaign-info.component.scss'],
   providers: [
     CurrencyPipe,
-    TimeLeftPipe,
+    // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
+    {provide: openPipeToken, useClass: TimeLeftPipe},
+    {provide: endPipeToken, useClass: TimeLeftPipe},
   ],
 })
 export class CampaignInfoComponent implements OnInit {
@@ -28,7 +33,8 @@ export class CampaignInfoComponent implements OnInit {
     private currencyPipe: CurrencyPipe,
     public datePipe: DatePipe,
     private route: ActivatedRoute,
-    public timeLeftPipe: TimeLeftPipe,
+    @Inject(openPipeToken) public timeLeftToOpenPipe: TimeLeftPipe,
+    @Inject(endPipeToken) public timeLeftToEndPipe: TimeLeftPipe,
   ) {
   }
 

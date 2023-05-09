@@ -19,13 +19,18 @@ import { SearchService } from '../search.service';
 import { TimeLeftPipe } from '../time-left.pipe';
 import { CampaignGroupsService } from '../campaign-groups.service';
 
+const openPipeToken = 'TimeLeftToOpenPipe';
+const endPipeToken = 'timeLeftToEndPipe';
+
 @Component({
   selector: 'app-meta-campaign',
   templateUrl: './meta-campaign.component.html',
   styleUrls: ['./meta-campaign.component.scss'],
   providers: [
-    CurrencyPipe, // Not standlone
-    TimeLeftPipe, // Injected for TS use
+    CurrencyPipe,
+    // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
+    {provide: openPipeToken, useClass: TimeLeftPipe},
+    {provide: endPipeToken, useClass: TimeLeftPipe},
     DatePipe,
   ],
 })
@@ -79,7 +84,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     private state: TransferState,
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
     private scroller: ViewportScroller,
-    private timeLeftPipe: TimeLeftPipe,
+    @Inject(openPipeToken) private timeLeftToOpenPipe: TimeLeftPipe,
+    @Inject(endPipeToken) private timeLeftToEndPipe: TimeLeftPipe,
   ) {
     route.params.pipe().subscribe(params => {
       this.campaignSlug = params.campaignSlug;
@@ -373,11 +379,12 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     const durationInDays = Math.floor((new Date(this.campaign.endDate).getTime() - new Date(this.campaign.startDate).getTime()) / 86400000);
 
     if (!this.fund) {
-      if (this.campaign.amountRaised > 0 && !campaignInFuture) {
+      if (!campaignInFuture) {
+        const showGiftAid = this.campaign.currencyCode === 'GBP' && this.campaign.amountRaised > 0;
         this.tickerMainMessage = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') +
-      ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
+          ' raised' + (showGiftAid ? ' inc. Gift Aid' : '');
       } else {
-        this.tickerMainMessage = 'Opens in ' + this.timeLeftPipe.transform(this.campaign.startDate);
+        this.tickerMainMessage = 'Opens in ' + this.timeLeftToOpenPipe.transform(this.campaign.startDate);
       }
     }
 
@@ -388,7 +395,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
         tickerItems.push(...[
           {
             label: 'remaining',
-            figure: this.timeLeftPipe.transform(this.campaign.endDate),
+            figure: this.timeLeftToEndPipe.transform(this.campaign.endDate),
           },
           {
             label: 'match funds remaining',
@@ -457,7 +464,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     if (CampaignService.isOpenForDonations(this.campaign)) {
       tickerItems.push({
         label: 'remaining',
-        figure: this.timeLeftPipe.transform(this.campaign.endDate),
+        figure: this.timeLeftToEndPipe.transform(this.campaign.endDate),
       });
     } else {
       tickerItems.push({

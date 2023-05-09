@@ -1,19 +1,23 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import { Campaign } from 'src/app/campaign.model';
 import {ImageService} from "../../image.service";
-import {CurrencyPipe, DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
+import {CurrencyPipe, DatePipe,} from '@angular/common';
 import { CampaignService } from '../../campaign.service';
 import {TimeLeftPipe} from "../../time-left.pipe";
-import { Donation } from '../../donation.model';
 import {CampaignGroupsService} from "../../campaign-groups.service";
+
+const openPipeToken = 'TimeLeftToOpenPipe';
+const endPipeToken = 'timeLeftToEndPipe';
 
 @Component({
   selector: 'app-donation-start-secondary',
   templateUrl: './donation-start-secondary.component.html',
   styleUrls: ['./donation-start-secondary.component.scss'],
-  providers: [ 
+  providers: [
     CurrencyPipe,
-    TimeLeftPipe,
+    // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
+    {provide: openPipeToken, useClass: TimeLeftPipe},
+    {provide: endPipeToken, useClass: TimeLeftPipe},
     DatePipe
   ]
 })
@@ -31,7 +35,8 @@ export class DonationStartSecondaryComponent implements OnInit {
     private imageService: ImageService,
     private currencyPipe: CurrencyPipe,
     public datePipe: DatePipe,
-    public timeLeftPipe: TimeLeftPipe
+    @Inject(openPipeToken) public timeLeftToOpenPipe: TimeLeftPipe,
+    @Inject(endPipeToken) public timeLeftToEndPipe: TimeLeftPipe,
   ) {}
 
   ngOnInit() {

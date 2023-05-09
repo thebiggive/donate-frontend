@@ -21,7 +21,7 @@ import { of } from 'rxjs';
 
 import { Campaign } from '../../campaign.model';
 import { TBG_DONATE_STORAGE } from '../../donation.service';
-import { DonationStartPrimaryComponent } from './donation-start-primary.component';
+import { DonationStartFormComponent } from './donation-start-form.component';
 import { TBG_DONATE_ID_STORAGE } from '../../identity.service';
 import { TimeLeftPipe } from "../../time-left.pipe";
 
@@ -40,8 +40,8 @@ describe('DonationStartPrimaryComponent', () => {
 
   (window as any).gtag = (...args: any[]) => args;
 
-  let component: DonationStartPrimaryComponent;
-  let fixture: ComponentFixture<DonationStartPrimaryComponent>;
+  let component: DonationStartFormComponent;
+  let fixture: ComponentFixture<DonationStartFormComponent>;
 
   const getDummyCampaign = (campaignId: string) => {
     return new Campaign(
@@ -140,7 +140,7 @@ describe('DonationStartPrimaryComponent', () => {
         RouterTestingModule.withRoutes([
           {
             path: 'donate/:campaignId',
-            component: DonationStartPrimaryComponent,
+            component: DonationStartFormComponent,
           },
         ]),
       ],
@@ -162,7 +162,7 @@ describe('DonationStartPrimaryComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DonationStartPrimaryComponent);
+    fixture = TestBed.createComponent(DonationStartFormComponent);
     component = fixture.componentInstance;
     component.campaign = getDummyCampaign('testCampaignIdForStripe');
     // Don't `fixture.detectChanges()` here, so tests can vary their route-resolved campaign.

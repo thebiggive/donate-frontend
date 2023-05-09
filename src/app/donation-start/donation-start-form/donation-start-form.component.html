@@ -1,31 +1,3 @@
-
-<!--  Todo - move all content of this column **EXCEPT the main <form>** out of this template and in to
-      donation-start-container.component, along with support code in the .component.ts file, tests etc. It should be
-      possible to move piece by piece from the top start or end of the div.
-    -->
-<div class="c-header">
-  <h2 class="c-header__to b-grey b-light">Donation to</h2>
-  <h3 class="b-rh-2 b-bold">{{ campaign.charity.name }}</h3>
-  <h2 class="c-header__to b-grey b-light">For</h2>
-  <h1 class="b-rh-2 b-bold">{{ campaign.title }}</h1>
-</div>
-
-<app-donation-start-login
-[logout]="logout"
-[personId]="personId"
-[email]="paymentGroup.value.emailAddress"
-[personIsLoginReady]="personIsLoginReady"
-[loadAuthedPersonInfo]="loadAuthedPersonInfo"
-[creditPenceToUse]="creditPenceToUse"
-[campaign]="campaign"
-[canLogin]="canLogin">
-</app-donation-start-login>
-
-<p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
-<p *ngIf="reservationExpiryTime()" class="c-timer">
-  <span class="b-rt-0">Match funds reserved for&nbsp;</span>
-  <span class="b-rt-1 b-bold">{{ reservationExpiryTime() | timeLeft }}</span>
-</p>
 <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaignOpenOnLoad">
   <mat-vertical-stepper
     id="stepper"
@@ -125,7 +97,7 @@
 
       <p class="error" *ngIf="donationCreateError" aria-live="assertive">
         Sorry, we can't register your donation right now. Please try again in a moment
-        or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank">
+        or <a href="https://community.biggive.org/s/contact-us" target="_blank">
           <mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
             contact us</a>
         if this message persists.
@@ -428,7 +400,7 @@
       <div class="c-donation-summary">
         <p class="error" *ngIf="donationUpdateError" aria-live="assertive">
           Sorry, we can't submit your donation right now. Please try again in a moment
-          or <a href="https://www.thebiggive.org.uk/s/contact-us" target="_blank">
+          or <a href="https://community.biggive.org/s/contact-us" target="_blank">
             <mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
               contact us</a>
           if this message persists.

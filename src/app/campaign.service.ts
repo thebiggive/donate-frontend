@@ -99,7 +99,8 @@ export class CampaignService {
       query.fundSlug = fundSlug;
     }
 
-    if (selected.sortField === '') { // this means sort by relevance for now
+    if (selected.sortField === 'Relevance') {
+      query.sortField = undefined; // Campaign API takes blank/default sort to be relevance.
       query.sortDirection = undefined;
     } else { // match funds left and amount raised both make most sense in 'desc' order
       query.sortDirection = 'desc';

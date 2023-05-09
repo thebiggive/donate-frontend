@@ -42,6 +42,7 @@ export class UpdateCardModalComponent implements OnInit {
   ) {}
 
   @HostListener('window:keyup.Enter', ['$event'])
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onDialogClick(event: KeyboardEvent): void {
     this.dialogRef.close(true);
   }

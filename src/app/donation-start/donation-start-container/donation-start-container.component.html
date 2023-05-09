@@ -7,9 +7,48 @@
   </div>
   <div class="c-form-container">
     <div class="b-primary-column">
-      <app-donation-start-primary
-      [campaign]="campaign"
-    />
+      <div class="c-header">
+        <h2 class="c-header__to b-grey b-light">Donation to</h2>
+        <h3 class="b-rh-2 b-bold">{{ campaign.charity.name }}</h3>
+        <h2 class="c-header__to b-grey b-light">For</h2>
+        <h1 class="b-rh-2 b-bold">{{ campaign.title }}</h1>
+      </div>
+
+      <app-donation-start-login
+        [logout]="this.logout"
+        [personId]="this.donor?.id"
+        [email]="this.loggedInEmailAddress"
+        [personIsLoginReady]="personIsLoginReady"
+        [loadAuthedPersonInfo]="loadAuthedPersonInfo"
+        [creditPenceToUse]="this.donationStartForm && this.donationStartForm.creditPenceToUse || 0"
+        [campaign]="campaign"
+        [canLogin]="this.canLogin">
+      </app-donation-start-login>
+
+      <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
+
+      <p *ngIf="reservationExpiryDate" class="c-timer">
+        <span class="b-rt-0">Match funds reserved for&nbsp;</span>
+        <span class="b-rt-1 b-bold">{{ reservationExpiryDate | timeLeft }}</span>
+      </p>
+      <!-- We don't want to let the form's ngInit run before ours completes, or we would have odd behaviour
+         around loading the logged in user - hence conditional on dataLoaded -->
+      <app-donation-start-form *ngIf="campaignOpenOnLoad && !useNewDesign"
+         #donation_start_form
+       [campaign]="campaign"
+       [donor]="donor"
+       [donationChangeCallBack]="setDonation"
+       [campaignOpenOnLoad]="campaignOpenOnLoad"
+     />
+
+     <app-donation-start-form-new *ngIf="campaignOpenOnLoad && useNewDesign"
+       #donation_start_form
+       [campaign]="campaign"
+       [donor]="donor"
+       [donationChangeCallBack]="setDonation"
+       [campaignOpenOnLoad]="campaignOpenOnLoad"
+     />
+
     </div>
     <div class="b-secondary-column">
       <app-donation-start-secondary

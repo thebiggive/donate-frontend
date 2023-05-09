@@ -14,7 +14,7 @@ export class DonationStartLoginComponent {
   @Input() logout: () => void;
   @Input() campaign: Campaign;
   @Input() creditPenceToUse: number;
-  @Input() email: string;
+  @Input() email?: string;
   @Input() personId: string | undefined;
   @Input() personIsLoginReady: boolean;
   @Input() canLogin: boolean;

@@ -41,8 +41,7 @@ import { ExactCurrencyPipe } from '../../exact-currency.pipe';
 import { GiftAidAddress } from '../../gift-aid-address.model';
 import { GiftAidAddressSuggestion } from '../../gift-aid-address-suggestion.model';
 import { IdentityService } from '../../identity.service';
-import { LoginModalComponent } from '../../login-modal/login-modal.component';
-import { MetaPixelService } from '../../meta-pixel.service';
+import { ConversionTrackingService } from '../../conversionTracking.service';
 import { PageMetaService } from '../../page-meta.service';
 import { Person } from '../../person.model';
 import { PostcodeService } from '../../postcode.service';
@@ -52,20 +51,18 @@ import { getCurrencyMaxValidator } from '../../validators/currency-max';
 import { getCurrencyMinValidator } from '../../validators/currency-min';
 import { EMAIL_REGEXP } from '../../validators/patterns';
 import { ValidateBillingPostCode } from '../../validators/validate-billing-post-code';
-import {CampaignGroupsService} from "../../campaign-groups.service";
 import {TimeLeftPipe} from "../../time-left.pipe";
-import { MatomoTracker } from 'ngx-matomo';
+import {updateDonationFromForm} from "../updateDonationFromForm";
+import {sanitiseCurrency} from "../sanitiseCurrency";
 
 @Component({
-  selector: 'app-donation-start-primary',
-  templateUrl: './donation-start-primary.component.html',
-  styleUrls: ['./donation-start-primary.component.scss'],
+  templateUrl: './donation-start-form.component.html',
   providers: [
     CurrencyPipe,
     TimeLeftPipe,
   ]
 })
-export class DonationStartPrimaryComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
+export class DonationStartFormParentComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
   @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
   @ViewChild('cardInfo') cardInfo: ElementRef;
@@ -82,9 +79,19 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
   @Input() campaign: Campaign;
   @Input() column: 'primary'|'secondary'
 
+  /**
+   * Called when the donation object is set or deleted. **NOT** called when properties of the object are changed.
+   */
+  @Input() donationChangeCallBack: (donation: Donation | undefined) => void = () => {};
+
   donation?: Donation;
 
-  campaignOpenOnLoad: boolean;
+  /**
+   * This property shouldn't really exist - if the campaign isn't open there's no need to load this component at all.
+   * It's just here as a hack to work around issues with exact currency pipe in tests that appeared when removing it.
+   *
+   */
+  @Input() campaignOpenOnLoad = false;
 
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
 
@@ -110,8 +117,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
   /** setTimeout reference (timer ID) if applicable. */
   expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
   loadingAddressSuggestions = false;
-  personId?: string;
-  personIsLoginReady = false;
   privacyUrl = 'https://biggive.org/privacy';
   showAddressLookup: boolean;
 
@@ -165,6 +170,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
   private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
   private stepChangedBlockedByCaptcha = false;
+  @Input() donor: Person | undefined;
 
 
   constructor(
@@ -176,8 +182,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
-    private matomoTracker: MatomoTracker,
-    private metaPixelService: MetaPixelService,
+    private conversionTrackingService: ConversionTrackingService,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -209,13 +214,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     }
 
     this.setCampaignBasedVars();
-
-    const idAndJWT = this.identityService.getIdAndJWT();
-    if (idAndJWT !== undefined) {
-      if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
-        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
-      }
-    }
 
     const formGroups: {
       amounts: FormGroup,   // Matching reservation happens at the end of this group.
@@ -297,7 +295,9 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     if (isPlatformBrowser(this.platformId)) {
       this.handleCampaignViewUpdates();
     }
+  }
 
+  resumeDonationsIfPossible() {
     this.donationService.getProbablyResumableDonation(this.campaignId)
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;
@@ -311,6 +311,23 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
         }
 
         // We have a resumable donation and aren't processing an error
+        if (this.donor && this.donor.stripe_customer_id !== existingDonation.pspCustomerId) {
+          // We can't resume a donation that has a different customer ID on it. Probably user logged in
+          // after creating the donation.
+          this.donationService.cancel(existingDonation).subscribe(() => {
+            this.analyticsService.logEvent(
+              'cancel_auto',
+              `Donation cancelled due to donor authentication change`,
+            );
+
+            if (this.donation) {
+              this.clearDonation(this.donation, true);
+            }
+            this.createDonationAndMaybePerson(); // Re-sets-up PRB etc.
+          });
+          return;
+        }
+
         this.offerExistingDonation(existingDonation);
     });
   }
@@ -394,20 +411,9 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     this.stepHeaderEventsSet = true;
   }
 
-  login() {
-    const loginDialog = this.dialog.open(LoginModalComponent);
-    loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
-      if (data && data.id) {
-        this.loadAuthedPersonInfo(data.id, data.jwt);
-        location.reload(); // ensures correct menu is displayed
-      }
-    });
-  }
-
-  logout = () => {
+  reset = () => {
+    this.donor = undefined;
     this.creditPenceToUse = 0;
-    this.personId = undefined;
-    this.personIsLoginReady = false;
     this.stripePaymentMethodReady = false;
     this.donationForm.reset();
     this.identityService.clearJWT();
@@ -481,49 +487,18 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     if (this.donation && event.selectedIndex > 1) {
       // After create() update all Angular form data on step changes, except billing
       // postcode & country which can be set manually or via PRB callbacks.
-      if (this.paymentGroup) {
-        this.donation.emailAddress = this.paymentGroup.value.emailAddress;
-        this.donation.firstName = this.paymentGroup.value.firstName;
-        this.donation.lastName = this.paymentGroup.value.lastName;
-      }
-
-      this.donation.feeCoverAmount = this.sanitiseCurrency(this.amountsGroup.value.feeCoverAmount);
-
-      this.donation.giftAid = this.giftAidGroup.value.giftAid;
-
-      // In alternative fee model, 'tip' is donor fee cover so not Gift Aid eligible.
-      this.donation.tipGiftAid = this.campaign.feePercentage ? false : this.giftAidGroup.value.giftAid;
-
-      this.donation.optInCharityEmail = this.marketingGroup.value.optInCharityEmail;
-      this.donation.optInTbgEmail = this.marketingGroup.value.optInTbgEmail;
-      this.donation.optInChampionEmail = this.marketingGroup.value.optInChampionEmail;
-
-      const lastTipAmount = this.donation.tipAmount;
-      this.donation.tipAmount = this.sanitiseCurrency(this.amountsGroup.value.tipAmount);
-      if (lastTipAmount !== this.donation.tipAmount) {
-        this.preparePaymentRequestButton(this.donation, this.paymentGroup);
-      }
-
-      if (this.donation.giftAid || this.donation.tipGiftAid) {
-        this.donation.homePostcode = this.giftAidGroup.value.homeOutsideUK ? 'OVERSEAS' : this.giftAidGroup.value.homePostcode;
-        this.donation.homeAddress = this.giftAidGroup.value.homeAddress;
-        // Optional additional field to improve data alignment w/ HMRC when a lookup was used.
-        this.donation.homeBuildingNumber = this.giftAidGroup.value.homeBuildingNumber || undefined;
-      } else {
-        this.donation.homePostcode = undefined;
-        this.donation.homeAddress = undefined;
-        this.donation.homeBuildingNumber = undefined;
-      }
-      this.donationService.updateLocalDonation(this.donation);
-
-      if (event.selectedStep.label === 'Receive updates') {
-        // Step 2 'Details' – whichever step(s) come before marketing prefs is the best fit for this step number.
-        this.analyticsService.logCheckoutStep(2, this.campaign, this.donation);
-      } else if (event.selectedStep.label === 'Confirm') {
-        // Step 3 'Confirm' is actually fired when comms preferences are done (to maintain
-        // historic order), i.e. when the new step is for finalising payment.
-        this.analyticsService.logCheckoutStep(3, this.campaign, this.donation);
-      }
+      updateDonationFromForm(
+        event,
+        this.donation,
+        this.analyticsService,
+        this.paymentGroup,
+        this.amountsGroup,
+        this.giftAidGroup,
+        this.donationService,
+        this.campaign,
+        this.marketingGroup,
+        this.preparePaymentRequestButton
+      );
       // Else it's not a step that cleanly maps to the historically-comparable
       // e-commerce funnel steps defined in our Analytics campaign, besides 1
       // (which we fire on donation create API callback) and 4 (which we fire
@@ -556,6 +531,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
       });
     }
   }
+
 
   async onStripeCardChange(state: StripeElementChangeEvent) {
     this.stripePRBMethodReady = false; // Using card instead
@@ -624,7 +600,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
         errorCodeDetail = '[code A1]'; // Donation property absent.
       }
 
-      this.stripeError = `Missing donation information – please refresh and try again, or email hello@thebiggive.org.uk quoting ${errorCodeDetail} if this problem persists`;
+      this.stripeError = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
       this.stripeResponseErrorCode = undefined;
       this.analyticsService.logError(
         'submit_missing_donation_basics',
@@ -760,9 +736,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     this.submitting = false;
   }
 
-  get canLogin() {
-    return !this.personId;
-  }
 
   get donationAmountField() {
     if (!this.donationForm) {
@@ -784,7 +757,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
    * Quick getter for donation amount, to keep template use concise.
    */
   get donationAmount(): number {
-    return this.sanitiseCurrency(this.amountsGroup.value.donationAmount);
+    return sanitiseCurrency(this.amountsGroup.value.donationAmount);
   }
 
   /**
@@ -833,7 +806,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
   }
 
   feeCoverAmount(): number {
-    return this.sanitiseCurrency(this.amountsGroup.value.feeCoverAmount);
+    return sanitiseCurrency(this.amountsGroup.value.feeCoverAmount);
   }
 
   giftAidAmount(): number {
@@ -841,27 +814,13 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
   }
 
   tipAmount(): number {
-    return this.sanitiseCurrency(this.amountsGroup.value.tipAmount);
+    return sanitiseCurrency(this.amountsGroup.value.tipAmount);
   }
 
   expectedTotalAmount(): number {
     return this.donationAmount + this.giftAidAmount() + this.expectedMatchAmount();
   }
 
-  reservationExpiryTime(): Date | undefined {
-    if (!this.donation?.createdTime || !this.donation.matchReservedAmount) {
-      return undefined;
-    }
-
-    return new Date(environment.reservationMinutes * 60000 + (new Date(this.donation.createdTime)).getTime());
-  }
-
-  /**
-   * @returns Amount without any £/$s
-   */
-  sanitiseCurrency(amount: string): number {
-    return Number((amount || '0').replace('£', '').replace('$', ''));
-  }
 
   scrollTo(el: Element): void {
     if (el) {
@@ -930,6 +889,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onBillingPostCodeChanged(event: Event) {
     // If previous payment attempt failed due to incorrect post code
     // and the post code has just been changed again, clear stripeError
@@ -962,25 +922,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
       this.card.mount(this.cardInfo.nativeElement);
       this.card.on('change', this.cardHandler);
     }
-  }
-
-  loadAuthedPersonInfo(id: string, jwt: string) {
-    if (!this.identityService) {
-      // This feels like an anti-pattern, but currently seems to be required. Since the "contained"
-      // login component is passed this public fn and could call it any time, it is not safe to assume
-      // that this page has its normal service dependencies. The current behaviour post-login seems to
-      // be that this is called as a no-op once, but then there's a reload during which it works?
-      console.log('No ID service');
-      return;
-    }
-
-    this.identityService.get(id, jwt).subscribe((person: Person) => {
-      this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
-      this.personIsLoginReady = true;
-      this.prepareDonationCredits(person);
-      this.prefillRarelyChangingFormValuesFromPerson(person);
-      this.loadFirstSavedStripeCardIfAny(id, jwt);
-    });
   }
 
   /**
@@ -1059,7 +1000,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     let customMessage = false;
     if (error.code === 'card_declined' && error.decline_code === 'generic_decline') {
       // Probably a custom Radar rule -> relatively likely to be an incorrect postcode.
-      friendlyError = `The payment was declined. Please ensure details provided (including postcode) match your card. Contact your bank or hello@thebiggive.org.uk if the problem persists.`;
+      friendlyError = `The payment was declined. Please ensure details provided (including postcode) match your card. Contact your bank or hello@biggive.org if the problem persists.`;
       customMessage = true;
     }
 
@@ -1081,18 +1022,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
       .select();
 
     this.cd.detectChanges();
-  }
-
-  /**
-   * Unlike the CampaignService method which is more forgiving if the status gets stuck Active (we don't trust
-   * these to be right in Salesforce yet), this check relies solely on campaign dates.
-   */
-  private campaignIsOpen(): boolean {
-    return (
-      this.campaign
-        ? (new Date(this.campaign.startDate) <= new Date() && new Date(this.campaign.endDate) > new Date())
-        : false
-      );
   }
 
   /**
@@ -1130,7 +1059,6 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     // We want to let donors finish the journey if they're on the page before the campaign
     // close date and it passes while they're completing the form – in particular they should
     // be able to use match funds secured until 30 minutes after the close time.
-    this.campaignOpenOnLoad = this.campaignIsOpen();
 
     this.currencySymbol = getCurrencySymbol(this.campaign.currencyCode, 'narrow', 'en-GB');
 
@@ -1193,23 +1121,23 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
       charityName: this.campaign.charity.name,
       countryCode: this.paymentGroup?.value.billingCountry || 'GB',
       currencyCode: this.campaign.currencyCode || 'GBP',
-      donationAmount: this.sanitiseCurrency(this.amountsGroup.value.donationAmount),
+      donationAmount: sanitiseCurrency(this.amountsGroup.value.donationAmount),
       donationMatched: this.campaign.isMatched,
-      feeCoverAmount: this.sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
+      feeCoverAmount: sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
       paymentMethodType: (this.creditPenceToUse > 0) ? 'customer_balance' : 'card',
       projectId: this.campaignId,
       psp: this.psp,
-      tipAmount: this.sanitiseCurrency(this.amountsGroup.value.tipAmount),
+      tipAmount: sanitiseCurrency(this.amountsGroup.value.tipAmount),
     };
 
-    if (this.personId) {
+    if (this.donor?.id) {
       donation.pspCustomerId = this.identityService.getPspId();
     }
 
     // Person already set up on page load.
-    if (this.personId) {
+    if (this.donor?.id) {
       this.createDonation(donation);
     } else {
       const person: Person = {};
@@ -1217,8 +1145,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
       this.identityService.create(person).subscribe(
         (person: Person) => {
           this.identityService.saveJWT(person.id as string, person.completion_jwt as string);
-          this.personId = person.id;
-          this.personIsLoginReady = false; // New Person -> no password etc. yet.
+          this.donor = person;
           donation.pspCustomerId = person.stripe_customer_id;
           this.createDonation(donation);
         },
@@ -1262,7 +1189,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
-    this.donationService.create(donation, this.personId, this.identityService.getJWT())
+    this.donationService.create(donation, this.donor?.id, this.identityService.getJWT())
     .subscribe({
       next: this.newDonationSuccess.bind(this),
       error: this.newDonationError.bind(this),
@@ -1283,7 +1210,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
 
-  private preparePaymentRequestButton(donation: Donation, paymentGroup: FormGroup) {
+  private preparePaymentRequestButton = (donation: Donation, paymentGroup: FormGroup) => {
     if (this.skipPRBs) {
       return;
     }
@@ -1327,6 +1254,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
           this.stripeError = `Payment failed. Please check your card's billing address in your ${walletFriendlyName} wallet matches your the address your bank has, then try again.`;
         }
       },
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       error: (err) => {
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
@@ -1347,7 +1275,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
         this.paymentRequestButtonEl.nativeElement.style.display = 'none';
       }
     });
-  }
+  };
 
   private newDonationSuccess(response: DonationCreatedResponse) {
     this.creatingDonation = false;
@@ -1370,6 +1298,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
 
     this.donationService.saveDonation(response.donation, response.jwt);
     this.donation = response.donation; // Simplify update() while we're on this page.
+    this.donationChangeCallBack(this.donation)
 
     this.analyticsService.logAmountChosen(
       response.donation.donationAmount,
@@ -1528,6 +1457,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     }
 
     delete this.donation;
+    this.donationChangeCallBack(undefined)
   }
 
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
@@ -1590,7 +1520,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
         }
 
         const feeCoverAmount = this.amountsGroup.get('coverFee')?.value
-          ? this.getTipOrFeeAmount(this.campaign.feePercentage, this.sanitiseCurrency(donationAmount))
+          ? this.getTipOrFeeAmount(this.campaign.feePercentage, sanitiseCurrency(donationAmount))
           : '0.00';
 
         this.amountsGroup.patchValue({ feeCoverAmount });
@@ -1621,7 +1551,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
           tipAmount?: string,
         } = {};
 
-        donationAmount = this.sanitiseCurrency(donationAmount);
+        donationAmount = sanitiseCurrency(donationAmount);
 
         if (!this.tipPercentageChanged) {
           let newDefault = this.initialTipSuggestedPercentage;
@@ -1786,6 +1716,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
       if (proceed) {
         // Required for all use cases.
         this.donation = donation;
+        this.donationChangeCallBack(donation);
 
         this.scheduleMatchingExpiryWarning(this.donation);
 
@@ -1838,8 +1769,14 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
             }
             this.selectedSavedMethod = this.stripeSavedMethods.length > 0 ? this.stripeSavedMethods[0] : undefined;
 
-            if (this.personId) {
-              this.loadAuthedPersonInfo(this.personId, this.identityService.getJWT() as string);
+            if (this.donor?.id) {
+              const jwt = this.identityService.getJWT() as string;
+              this.identityService.get(this.donor?.id, jwt).subscribe((person: Person) => {
+                if (! this.donor?.id) {
+                  throw new Error("Person identifier went away");
+                }
+                this.loadPerson(person, this.donor.id, jwt)
+              });
             }
           },
           response => {
@@ -1862,8 +1799,7 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
 
   private exitPostDonationSuccess(donation: Donation) {
     this.analyticsService.logCheckoutDone(this.campaign, donation);
-    this.metaPixelService.trackConversion(donation);
-    this.trackConversionWithMatomo(donation);
+    this.conversionTrackingService.convert(donation, this.campaign);
 
     this.cancelExpiryWarning();
     this.router.navigate(['thanks', donation.donationId], {
@@ -1893,45 +1829,10 @@ export class DonationStartPrimaryComponent implements AfterContentChecked, After
     return false;
   }
 
-  private trackConversionWithMatomo(donation: Donation) {
-    if (!donation?.donationId) {
-      return;
-    }
-
-    this.matomoTracker.addEcommerceItem(
-      `campaign-${this.campaignId}`,
-      `Donation to ${this.campaign.charity.name} for ${this.campaign.title}`,
-      undefined, // Not using product categories
-      donation.donationAmount,
-    );
-
-    if (donation.tipAmount > 0) {
-      this.matomoTracker.addEcommerceItem(
-        'tip',
-        'Big Give tip',
-        undefined, // Not using product categories
-        donation.tipAmount,
-      );
-    }
-
-    if (donation.feeCoverAmount > 0) {
-      this.matomoTracker.addEcommerceItem(
-        'fee-cover',
-        'Big Give platform fee cover',
-        undefined, // Not using product categories
-        donation.feeCoverAmount,
-      );
-    }
-
-    // "Tracks an Ecommerce order, including any eCommerce item previously added to the order."
-    this.matomoTracker.trackEcommerceOrder(
-      donation.donationId,
-      donation.donationAmount + donation.tipAmount + donation.feeCoverAmount,
-      donation.donationAmount,
-    );
-  }
-
-  getPercentageRaised(campaign: Campaign): number | undefined {
-    return CampaignService.percentRaised(campaign);
+  public loadPerson(person: Person, id: string, jwt: string) {
+    this.donor = person; // Should mean donations are attached to the Stripe Customer.
+    this.prepareDonationCredits(person);
+    this.prefillRarelyChangingFormValuesFromPerson(person);
+    this.loadFirstSavedStripeCardIfAny(id, jwt);
   }
 }

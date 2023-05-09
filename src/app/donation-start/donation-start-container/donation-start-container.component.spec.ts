@@ -1,4 +1,4 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import {DonationStartContainerComponent} from "./donation-start-container.component";
 import {ActivatedRoute} from "@angular/router";
@@ -7,6 +7,7 @@ import {InMemoryStorageService} from "ngx-webstorage-service";
 import {TBG_DONATE_ID_STORAGE} from "../../identity.service";
 import {TBG_DONATE_STORAGE} from "../../donation.service";
 import {Campaign} from "../../campaign.model";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('DonationStartLoginComponent', () => {
   let component: DonationStartContainerComponent;
@@ -15,7 +16,7 @@ describe('DonationStartLoginComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ DonationStartContainerComponent ],
-      imports: [MatDialogModule],
+      imports: [MatDialogModule, HttpClientTestingModule],
       providers: [
         {
           provide: ActivatedRoute,
