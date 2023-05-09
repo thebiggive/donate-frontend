@@ -63,9 +63,6 @@
 
     <biggive-page-section>
 
-      <biggive-text-input>
-        <p>Using the big give text input here</p>
-      </biggive-text-input>
 
       <biggive-campaign-card-filter-grid
       category-options='["ABC", "DEF"]'
@@ -819,13 +816,11 @@
       </biggive-tabbed-content>
 
 
-      <div style="background-color: #F4F4F4">
-        <p>text input below</p>
-        <biggive-text-input prefix="£" value="50.00">
-        </biggive-text-input>
-        <p>text input above</p>
-      </div>
 
+      <div style="background-color: #F4F4F4; padding: 20px;" >
+        <biggive-text-input currency="GBP" value="50.00">
+        </biggive-text-input>
+      </div>
       <biggive-tipping-slider percentage-start="0" percentage-end="30" donation-amount="200" donation-currency="GBP"></biggive-tipping-slider>
 
       <biggive-branded-image

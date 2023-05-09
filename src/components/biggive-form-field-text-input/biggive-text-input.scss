@@ -4,7 +4,7 @@
   display: contents;
 }
 
-.dropdown {
+.text-input {
   @include standard-font();
   position: relative;
   text-align: left;
@@ -16,7 +16,7 @@
         position: relative;
         background-color: $colour-primary-blue;
         @include corner-clip-small-top-right();
-        .placeholder {
+        .inner-sleave {
           background-color: $colour-grey-background;
           color: $colour-primary-blue;
           display: block;
@@ -57,6 +57,7 @@
     text-align: right;
     @include font-size-large();
     font-weight: bolder;
+    width: 10em;
   }
 }
 

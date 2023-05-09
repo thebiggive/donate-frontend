@@ -1,5 +1,9 @@
 import { Component, h, Prop } from '@stencil/core';
 
+/**
+ * Initially developed for use within the new donate stepper design. Currently has a hard-coded background
+ * of $colour-grey-background, intened to appear transparent when used on a page with a matching background.
+ */
 @Component({
   tag: 'biggive-text-input',
   styleUrl: 'biggive-text-input.scss',
@@ -7,18 +11,24 @@ import { Component, h, Prop } from '@stencil/core';
 })
 export class BiggiveTextInput {
   @Prop() value: string;
-  @Prop() prefix: string = '';
+  /**
+   * ISO-4217 currency code if input is for a money value
+   */
+  @Prop() currency: 'GBP' | 'USD' | undefined;
   @Prop() spaceBelow: number = 0;
   @Prop() selectStyle: 'bordered' | 'underlined' = 'bordered';
 
   render() {
+    const currencySymbol = this.currency === 'GBP' ? '£' : this.currency === 'USD' ? '$' : undefined;
     return (
-      <div class={'dropdown space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle}>
+      <div class={'text-input space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle}>
         <div class="sleeve">
-          <div class="placeholder">
-            <span class="" style={{ float: 'left' }}>
-              {this.prefix}
-            </span>
+          <div class="inner-sleave">
+            {currencySymbol && (
+              <span class="" style={{ float: 'left' }}>
+                {currencySymbol}
+              </span>
+            )}
             <input value={this.value} style={{ float: 'right' }} />
             <div style={{ clear: 'both' }}></div>
           </div>
