@@ -1,0 +1,62 @@
+@include spacers();
+
+:host {
+  display: contents;
+}
+
+.dropdown {
+  @include standard-font();
+  position: relative;
+  text-align: left;
+  &.select-style-bordered {
+    .sleeve {
+        @include font-size-large();
+        font-weight: bolder;
+        padding: 2px;
+        position: relative;
+        background-color: $colour-primary-blue;
+        @include corner-clip-small-top-right();
+        .placeholder {
+          background-color: $colour-grey-background;
+          color: $colour-primary-blue;
+          display: block;
+          position: relative;
+          padding: 10px 30px 10px 10px;
+          cursor: pointer;
+          clip-path:
+            polygon(
+                0% 0%,     /* top left */
+                0% 0%,     /* top left */
+                calc(100% - 14px) 0%,    /* top right */
+                100% 14px,   /* top right */
+                100% 100%,  /* bottom right */
+                100% 100%,  /* bottom right */
+                0 100%,   /* bottom left */
+                0 100%      /* bottom left */
+            );
+          &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            right: 20px;
+            top: 18px;
+            width: 10px;
+            height: 10px;
+            //background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSI3IiB2aWV3Qm94PSIwIDAgOSA3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNNS4yMzcxNiA2LjYyNDkzQzQuOTAzMjMgNy4xMjUwMiA0LjA5NyA3LjEyNTAyIDMuNzYzMDggNi42MjQ5M0wwLjEyMzg2OCAxLjE3MDYzQy0wLjIxOTk0IDAuNjU1NDU5IDAuMTkyNjMgMS44MzcxZS0wNyAwLjg2MDkwOCAyLjQyMTMyZS0wN0w4LjEzOTMzIDguNzg0MzJlLTA3QzguODA3MTggOS4zNjgxN2UtMDcgOS4yMTk3NSAwLjY1NTQ1OSA4Ljg3NjM3IDEuMTcwNjNMNS4yMzcxNiA2LjYyNDkzWiIgZmlsbD0iIzJDMDg5QiIvPgo8L3N2Zz4K');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center center;
+          }
+        }
+    }
+  }
+  input, input:focus {
+    outline: none;
+    border: none;
+    background-color: $colour-grey-background;
+    text-align: right;
+    @include font-size-large();
+    font-weight: bolder;
+  }
+}
+

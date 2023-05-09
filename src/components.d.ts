@@ -947,6 +947,10 @@ export namespace Components {
         "spaceBelow": spacingOption;
     }
     interface BiggiveTextInput {
+        "prefix": string;
+        "selectStyle": 'bordered' | 'underlined';
+        "spaceBelow": number;
+        "value": string;
     }
     interface BiggiveTimeline {
         "buttonBackgroundColour": brandColour;
@@ -2459,6 +2463,10 @@ declare namespace LocalJSX {
         "spaceBelow"?: spacingOption;
     }
     interface BiggiveTextInput {
+        "prefix"?: string;
+        "selectStyle"?: 'bordered' | 'underlined';
+        "spaceBelow"?: number;
+        "value"?: string;
     }
     interface BiggiveTimeline {
         "buttonBackgroundColour"?: brandColour;
