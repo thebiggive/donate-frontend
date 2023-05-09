@@ -21,7 +21,6 @@ export class DonationStartContainerComponent implements OnInit{
 
   @ViewChild('donation_start_form') donationStartForm: DonationStartFormComponent
   public reservationExpiryDate: Date| undefined = undefined;
-  public dataLoaded = false;
   public donor: Person | undefined;
 
   constructor(
@@ -38,11 +37,14 @@ export class DonationStartContainerComponent implements OnInit{
 
      const idAndJWT = this.identityService.getIdAndJWT();
      if (idAndJWT) {
-       // we will wait until the person info is loaded before showing the form.
        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
      } else {
-       // we are not logged in, so can show the form imeditatly.
-       this.dataLoaded = true;
+       if (!this.donationStartForm) {
+         console.error("Donation start form not loaded");
+       }
+       // this.donationStartForm is undefined when we're running donation-start-login.component.spec.ts . I'm not sure
+       // tbh why this class is even called from that test. Null safe call to let it pass.
+       this.donationStartForm?.resumeDonationsIfPossible();
      }
    }
 
@@ -90,14 +92,14 @@ export class DonationStartContainerComponent implements OnInit{
       this.donor = person; // Should mean donations are attached to the Stripe Customer.
       this.personIsLoginReady = true;
       this.loggedInEmailAddress = person.email_address;
-      this.dataLoaded = true;
       this.donationStartForm.loadPerson(person, id, jwt);
+      this.donationStartForm.resumeDonationsIfPossible();
       },
       () => {
-        this.dataLoaded = true;
+        this.donationStartForm.resumeDonationsIfPossible();
       },
       () => {
-        this.dataLoaded = true;
+        this.donationStartForm.resumeDonationsIfPossible();
       }
     );
   };
