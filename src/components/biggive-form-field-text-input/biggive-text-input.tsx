@@ -26,11 +26,11 @@ export class BiggiveTextInput {
         <div class="sleeve">
           <div class="inner-sleave">
             {currencySymbol && (
-              <span class="" style={{ float: 'left' }}>
+              <span class="currency-symbol">
                 {currencySymbol}
               </span>
             )}
-            <input value={this.value} style={{ float: 'right' }} />
+            <slot name="input"/>
             <div style={{ clear: 'both' }}></div>
           </div>
         </div>

@@ -3,8 +3,10 @@
 :host {
   display: contents;
 }
-
 .text-input {
+  .currency-symbol {
+    float: left;
+  }
   position: relative;
   .prompt {
     position: absolute;
@@ -62,15 +64,6 @@
           }
         }
     }
-  }
-  input, input:focus {
-    outline: none;
-    border: none;
-    background-color: $colour-grey-background;
-    text-align: right;
-    @include font-size-large();
-    font-weight: bolder;
-    width: 10em;
   }
 }
 

@@ -818,7 +818,16 @@
 
 
       <div style="background-color: #F4F4F4; padding: 20px;" >
-        <biggive-text-input currency="GBP" value="50.00" prompt="Enter your donation amount">
+        <!-- Not keen on all the hard coded styles below. When this component is used within frontend or wordpress the styles
+          will have to be passed from the CSS file of that app. Would be happier if it could be inside the stencil component
+          but that won't allow two way binding the data to the input
+          -->
+        <biggive-text-input currency="GBP"  prompt="Enter your donation amount">
+          <input
+            slot="input"
+            value="60.00"
+            style="float: right; outline: none; border: none; background-color: #f4f4f4; text-align: right; font-size: 24px; line-height: 30px; font-weight: bolder; width: 10em;"
+          />
         </biggive-text-input>
       </div>
       <biggive-tipping-slider percentage-start="0" percentage-end="30" donation-amount="200" donation-currency="GBP"></biggive-tipping-slider>
