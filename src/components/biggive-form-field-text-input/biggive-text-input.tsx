@@ -17,7 +17,7 @@ export class BiggiveTextInput {
   @Prop() currency: 'GBP' | 'USD' | undefined;
   @Prop() spaceBelow: number = 0;
   @Prop() selectStyle: 'bordered' | 'underlined' = 'bordered';
-  @Prop() prompt!: string
+  @Prop() prompt!: string;
 
   render() {
     const currencySymbol = this.currency === 'GBP' ? '£' : this.currency === 'USD' ? '$' : undefined;
@@ -25,12 +25,8 @@ export class BiggiveTextInput {
       <div class={'text-input space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle}>
         <div class="sleeve">
           <div class="inner-sleave">
-            {currencySymbol && (
-              <span class="currency-symbol">
-                {currencySymbol}
-              </span>
-            )}
-            <slot name="input"/>
+            {currencySymbol && <span class="currency-symbol">{currencySymbol}</span>}
+            <slot name="input" />
             <div style={{ clear: 'both' }}></div>
           </div>
         </div>
