@@ -9,6 +9,11 @@
 :host ::ng-deep .mat-step-header {
   // ng-deep is deprecated, but I'm not sure how else to apply our style choices inside the stepper.
   background-color: white;
+  font-weight: bold;
+
+  .mat-step-text-label {
+    font-weight: bold;
+  }
 
   .mat-step-icon {
     color: $colour-black;
@@ -142,6 +147,7 @@ input:disabled {
   display: block;
   text-align: center;
   margin-bottom: 1rem !important;
+  font-weight: bold;
 
   img {
     padding-right: 1rem;
@@ -320,10 +326,22 @@ li {
 }
 
 li:before {
-  content: "->";
+  content: "→";
   padding-right: 5px;
+}
+mat-expansion-panel {
+  margin-top: 30px;
 }
 
 .mat-expansion-panel-header {
-  padding: 0;
+  padding-right: 5px;
+  padding-left: 0; 
+}
+
+.button {
+  text-decoration: underline;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
 }
