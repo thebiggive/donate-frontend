@@ -946,7 +946,19 @@ export namespace Components {
         "headerTextColour": brandColour;
         "spaceBelow": spacingOption;
     }
+    /**
+     * Initially developed for use within the new donate stepper design. Currently has a hard-coded background
+     * of $colour-grey-background, intened to appear transparent when used on a page with a matching background.
+     */
     interface BiggiveTextInput {
+        /**
+          * ISO-4217 currency code if input is for a money value
+         */
+        "currency": 'GBP' | 'USD' | undefined;
+        "prompt": string;
+        "selectStyle": 'bordered' | 'underlined';
+        "spaceBelow": number;
+        "value": string;
     }
     interface BiggiveTimeline {
         "buttonBackgroundColour": brandColour;
@@ -1396,6 +1408,10 @@ declare global {
         prototype: HTMLBiggiveTableElement;
         new (): HTMLBiggiveTableElement;
     };
+    /**
+     * Initially developed for use within the new donate stepper design. Currently has a hard-coded background
+     * of $colour-grey-background, intened to appear transparent when used on a page with a matching background.
+     */
     interface HTMLBiggiveTextInputElement extends Components.BiggiveTextInput, HTMLStencilElement {
     }
     var HTMLBiggiveTextInputElement: {
@@ -2458,7 +2474,19 @@ declare namespace LocalJSX {
         "headerTextColour"?: brandColour;
         "spaceBelow"?: spacingOption;
     }
+    /**
+     * Initially developed for use within the new donate stepper design. Currently has a hard-coded background
+     * of $colour-grey-background, intened to appear transparent when used on a page with a matching background.
+     */
     interface BiggiveTextInput {
+        /**
+          * ISO-4217 currency code if input is for a money value
+         */
+        "currency"?: 'GBP' | 'USD' | undefined;
+        "prompt": string;
+        "selectStyle"?: 'bordered' | 'underlined';
+        "spaceBelow"?: number;
+        "value": string;
     }
     interface BiggiveTimeline {
         "buttonBackgroundColour"?: brandColour;
@@ -2705,6 +2733,10 @@ declare module "@stencil/core" {
             "biggive-tab": LocalJSX.BiggiveTab & JSXBase.HTMLAttributes<HTMLBiggiveTabElement>;
             "biggive-tabbed-content": LocalJSX.BiggiveTabbedContent & JSXBase.HTMLAttributes<HTMLBiggiveTabbedContentElement>;
             "biggive-table": LocalJSX.BiggiveTable & JSXBase.HTMLAttributes<HTMLBiggiveTableElement>;
+            /**
+             * Initially developed for use within the new donate stepper design. Currently has a hard-coded background
+             * of $colour-grey-background, intened to appear transparent when used on a page with a matching background.
+             */
             "biggive-text-input": LocalJSX.BiggiveTextInput & JSXBase.HTMLAttributes<HTMLBiggiveTextInputElement>;
             "biggive-timeline": LocalJSX.BiggiveTimeline & JSXBase.HTMLAttributes<HTMLBiggiveTimelineElement>;
             "biggive-timeline-entry": LocalJSX.BiggiveTimelineEntry & JSXBase.HTMLAttributes<HTMLBiggiveTimelineEntryElement>;
