@@ -193,19 +193,24 @@ input:disabled {
 }
 
 .donation-input.donation-input-main {
-  margin-top: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+  clear: both;
 
-  .fixed-label {
-    margin-top: 2rem;
-  }
-
-  .floating-label {
-    margin-top: 0.4rem;
-  }
-
-  .form-field {
-    font-size: 22px;
-  }
+  input {
+    float: right;
+    outline: none;
+    border: none;
+    background-color: $colour-background;
+    text-align: right;
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: bolder;
+    width: 10em;
+  };
 }
 
 .donation-input-tip__status-help {
@@ -303,4 +308,16 @@ div.match-funded-badge {
 
 div.match-funded-badge-wrapper {
   position: relative;
+}
+
+div.charity-info {
+  min-width: 300px;
+}
+div.charity-info, div.campaign-info {
+  min-height: 80px;
+  float: left;
+
+  .charity-name, .campaign-title {
+    font-weight: bold;
+  }
 }
