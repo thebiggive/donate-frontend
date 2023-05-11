@@ -3,6 +3,8 @@ import { Component, h, Prop } from '@stencil/core';
 /**
  * Initially developed for use within the new donate stepper design. Currently has a hard-coded background
  * of $colour-grey-background, intened to appear transparent when used on a page with a matching background.
+ *
+ * Please ensure input is styled as width: 100%.
  */
 @Component({
   tag: 'biggive-text-input',
@@ -18,7 +20,6 @@ export class BiggiveTextInput {
   @Prop() spaceBelow: number = 0;
   @Prop() selectStyle: 'bordered' | 'underlined' = 'bordered';
   @Prop() prompt!: string;
-
   render() {
     const currencySymbol = this.currency === 'GBP' ? '£' : this.currency === 'USD' ? '$' : undefined;
     return (
