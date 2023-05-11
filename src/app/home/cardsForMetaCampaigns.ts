@@ -73,7 +73,7 @@ export const cardsForMetaCampaigns = function (
       },
       {
         headerText: 'Applications for Christmas Challenge now open!',
-        backgroundImageUrl: new URL('/assets/images/card-background-cc.jpg', donateUriPrefix),
+        backgroundImageUrl: new URL('/assets/images/card-background-cc-lights.jpg', donateUriPrefix),
         iconColor: 'brand-1',
         bodyText: 'Deadline is 7 July 2023',
         button: {
