@@ -1,6 +1,6 @@
 
 import { CurrencyPipe } from "@angular/common";
-import { Component, ViewChild } from "@angular/core";
+import { AfterContentInit, Component, ElementRef, ViewChild } from "@angular/core";
 import { TimeLeftPipe } from "src/app/time-left.pipe";
 import { DonationStartFormParentComponent } from "./donation-start-form-parent.component";
 
@@ -13,31 +13,17 @@ import { DonationStartFormParentComponent } from "./donation-start-form-parent.c
     TimeLeftPipe,
   ]
 })
-export class DonationStartFormNewComponent extends DonationStartFormParentComponent {
+export class DonationStartFormNewComponent extends DonationStartFormParentComponent implements AfterContentInit {
 
   panelOpenState = false;
   percentage = 1;
   showCustomTipInput = false;
-  @ViewChild('biggive-tipping-slider') biggiveTippingSlider: any;
+  @ViewChild('tippingSlider', {static: true}) tippingSlider: ElementRef;
 
   ngAfterContentInit(): void {
     console.log({campaign: this.campaign});
     console.log({donation: this.donation});
-    console.log({biggiveTippingSlider: this.biggiveTippingSlider});
-  }
-
-  onDonationAmountChange(event: any) {
-    const tipValue = event.explicitOriginalTarget.children[0].innerText;
-    console.log({tipValue});
-    const isNan = isNaN(tipValue);
-    console.log(isNan);
-    if (isNan) {
-      // check if user didn't click away in which case the tipValue is invalid
-      this.percentage = tipValue;
-    }
-
-    console.log({ tippingSliderEvent: event.explicitOriginalTarget.children[0].innerText});
-    console.log({percentage: this.percentage});
+    console.log({tippingSlider: this.tippingSlider});
   }
 
   toggleTipInput(show: boolean) {

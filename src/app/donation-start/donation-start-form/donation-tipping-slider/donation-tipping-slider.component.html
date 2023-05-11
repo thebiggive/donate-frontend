@@ -1,0 +1,24 @@
+<div class="container space-below-0">
+    <div class="bar" #bar>
+      <div class="handle" #handle>
+        <div class="tooltip">
+          <span class="donation" >
+            <span class="donation-value" #donationValue>{{currencyFormatted}}</span>
+          </span>
+          &nbsp;
+          <span class="percentage">
+            (<span class="percentage-value" #percentageValue>{{percentageStart}}</span>%)
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="labels">
+      <div class="label-start">{{percentageStart}}%</div>
+      <div class="label-end">{{percentageEnd}}%</div>
+    </div>
+    <div class="reset">
+      <span class="button" onClick={resetSlider}>
+        Back to default
+      </span>
+    </div>
+</div>

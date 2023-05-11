@@ -28,6 +28,7 @@ import {DonationStartFormNewComponent} from "../donation-start-form/donation-sta
 import {DonationStartFormParentComponent} from "../donation-start-form/donation-start-form-parent.component";
 import {MatExpansionModule} from '@angular/material/expansion'; 
 import {MatDividerModule} from '@angular/material/divider';
+import { DonationTippingSliderComponent } from '../donation-start-form/donation-tipping-slider/donation-tipping-slider.component';
 @NgModule({
   imports: [
     ...allChildComponentImports,
@@ -60,7 +61,8 @@ import {MatDividerModule} from '@angular/material/divider';
     DonationStartFormComponent,
     DonationStartFormParentComponent,
     DonationStartFormNewComponent,
-    DonationStartSecondaryComponent
+    DonationStartSecondaryComponent,
+    DonationTippingSliderComponent
   ],
   providers: [
     DatePipe,

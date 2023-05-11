@@ -77,7 +77,7 @@
           </mat-form-field>-->
 
           <div *ngIf="showCustomTipInput" class="donation-input donation-input-tip">
-            <p id="custom-tip-status" class="b-grey b-rt-sm donation-input-tip__status-help" aria-live="assertive">You've selected to give {{ tipAmount() | exactCurrency:campaign.currencyCode }} to the Big Give Trust. You can edit the amount in the next field.</p>
+            <!-- <p id="custom-tip-status" class="b-grey b-rt-sm donation-input-tip__status-help" aria-live="assertive">You've selected to give {{ tipAmount() | exactCurrency:campaign.currencyCode }} to the Big Give Trust. You can edit the amount in the next field.</p> -->
 
             <p class="fixed-label">Donation to the Big Give Trust</p>
             <mat-form-field hideRequiredMarker class="form-field b-center b-rt-0" color="primary">
@@ -107,13 +107,12 @@
           of main donation
           </mat-hint>
         </div>
-
-        <biggive-tipping-slider *ngIf="!showCustomTipInput"
-          percentage="percentage"
-          percentage-end="30"
-          donation-amount="200"
-          donation-currency="GBP"
-          (click)="onDonationAmountChange($event)"/>
+        <app-donation-tipping-slider *ngIf="!showCustomTipInput" #tippingSlider
+          [percentageStart]="1"
+          [percentageEnd]="30"
+          [donationAmount]="200"
+          donationCurrency="GBP"
+        />
 
           <span class="button" (click)="toggleTipInput(true)" *ngIf="!showCustomTipInput">
             Enter custom tip
@@ -133,6 +132,7 @@
           <mat-expansion-panel-header>
             <h3 class="b-rt-0 b-m-0 b-bold">How does Big Give use tips?</h3>
           </mat-expansion-panel-header>
+          <hr/>
           <p>
             Big Give is a registered charity (1136547). We don’t charge charities for using our platform; we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
           </p>
