@@ -949,6 +949,7 @@ export namespace Components {
     /**
      * Initially developed for use within the new donate stepper design. Currently has a hard-coded background
      * of $colour-grey-background, intened to appear transparent when used on a page with a matching background.
+     * Please ensure input is styled as width: 100%.
      */
     interface BiggiveTextInput {
         /**
@@ -1411,6 +1412,7 @@ declare global {
     /**
      * Initially developed for use within the new donate stepper design. Currently has a hard-coded background
      * of $colour-grey-background, intened to appear transparent when used on a page with a matching background.
+     * Please ensure input is styled as width: 100%.
      */
     interface HTMLBiggiveTextInputElement extends Components.BiggiveTextInput, HTMLStencilElement {
     }
@@ -2477,6 +2479,7 @@ declare namespace LocalJSX {
     /**
      * Initially developed for use within the new donate stepper design. Currently has a hard-coded background
      * of $colour-grey-background, intened to appear transparent when used on a page with a matching background.
+     * Please ensure input is styled as width: 100%.
      */
     interface BiggiveTextInput {
         /**
@@ -2736,6 +2739,7 @@ declare module "@stencil/core" {
             /**
              * Initially developed for use within the new donate stepper design. Currently has a hard-coded background
              * of $colour-grey-background, intened to appear transparent when used on a page with a matching background.
+             * Please ensure input is styled as width: 100%.
              */
             "biggive-text-input": LocalJSX.BiggiveTextInput & JSXBase.HTMLAttributes<HTMLBiggiveTextInputElement>;
             "biggive-timeline": LocalJSX.BiggiveTimeline & JSXBase.HTMLAttributes<HTMLBiggiveTimelineElement>;

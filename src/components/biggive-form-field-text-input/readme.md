@@ -10,6 +10,8 @@
 Initially developed for use within the new donate stepper design. Currently has a hard-coded background
 of $colour-grey-background, intened to appear transparent when used on a page with a matching background.
 
+Please ensure input is styled as width: 100%.
+
 ## Properties
 
 | Property              | Attribute      | Description                                          | Type                          | Default      |

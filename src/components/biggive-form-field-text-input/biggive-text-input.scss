@@ -5,7 +5,7 @@
 }
 .text-input {
   .currency-symbol {
-    float: left;
+    position: absolute;
   }
   position: relative;
   .prompt {
@@ -37,7 +37,6 @@
           display: block;
           position: relative;
           padding: 10px 30px 10px 10px;
-          cursor: pointer;
           clip-path:
             polygon(
                 0% 0%,     /* top left */
