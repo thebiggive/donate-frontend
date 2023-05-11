@@ -62,23 +62,23 @@ export const cardsForMetaCampaigns = function (
     return [
       ...metaCampaignCards,
       {
-        headerText: 'Save the Date for Kind²Mind',
+        headerText: 'Double your donation in Kind²Mind',
         backgroundImageUrl: new URL('/assets/images/turquoise-texture.jpg', donateUriPrefix),
         iconColor: 'brand-mhf-turquoise',
         bodyText: '15 May to 22 May 2023',
         button: {
-          text: 'Find out more',
+          text: 'Donate now',
           href: new URL('/kind-2-mind-2023', donateUriPrefix)
         }
       },
       {
-        headerText: 'Green Match Fund',
+        headerText: 'Applications for Christmas Challenge now open!',
         backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
-        iconColor: 'brand-3',
-        bodyText: '20 April to 27 April 2023',
+        iconColor: 'brand-1',
+        bodyText: 'Deadline is 7 July 2023',
         button: {
-          text: 'See results',
-          href: new URL('/green-match-fund-2023', donateUriPrefix)
+          text: 'Apply now',
+          href: new URL('/christmas-challenge', blogUriPrefix)
         }
       },
       {
