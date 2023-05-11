@@ -325,3 +325,37 @@ div.charity-info, div.campaign-info {
 .colour-primary {
   color: $colour-primary;
 }
+
+.gift-aid-options {
+  display: flex;
+  justify-content: space-between;
+}
+
+div.gift-aid-option {
+  flex-basis: 50%;
+  background-color: $colour-card-background;
+  box-shadow: $box-shadow-soft;
+  border-radius: 4px;
+  margin-left: 12px;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 16px;
+  padding-bottom: 16px;
+  // no need for padding-top as form element inside has a top margin
+
+  position: relative;
+
+  ::ng-deep label {
+    padding-left: 40px;
+  }
+
+  ::ng-deep .mdc-radio {
+    position: absolute;
+    top: 8px;
+  }
+}
+
+div.gift-aid-option:first-child {
+  margin-right: 12px;
+  margin-left: 0;
+}
