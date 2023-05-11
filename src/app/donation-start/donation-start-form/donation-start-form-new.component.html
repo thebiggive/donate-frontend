@@ -163,17 +163,19 @@
           </p>
         </mat-radio-group>
 
-        <div *ngIf="giftAidGroup.value.giftAid">
-          <mat-form-field>
-            <mat-label for="homeAddress">Home address</mat-label>
-            <input
-              formControlName="homeAddress"
-              id="homeAddress"
-              matInput
-              autocomplete="off"
-              [matAutocomplete]="autoAddress"
-              [matAutocompleteDisabled]="!showAddressLookup"
-            >
+        <div id="giftAidAddressContainer" *ngIf="giftAidGroup.value.giftAid">
+          <div>
+            <biggive-text-input prompt="Enter your home address">
+              <input
+                formControlName="homeAddress"
+                id="homeAddress"
+                matInput
+                slot="input"
+                autocomplete="off"
+                [matAutocomplete]="autoAddress"
+                [matAutocompleteDisabled]="!showAddressLookup"
+              />
+            </biggive-text-input>
 
             <mat-autocomplete
               #autoAddress="matAutocomplete"
@@ -195,19 +197,23 @@
                 class="address-loading-spinner"
               ></mat-spinner>
             </mat-hint>
-          </mat-form-field>
           <div class="error" *ngIf="giftAidGroup.get('homeAddress')?.errors?.maxlength">Maximum 255 characters exceeded</div>
-
-          <mat-form-field *ngIf="!giftAidGroup.value.homeOutsideUK">
-            <mat-label for="homePostcode">Home postcode</mat-label>
-            <input formControlName="homePostcode" id="homePostcode" matInput>
-          </mat-form-field>
-
-          <div class="homeOutsideUK-wrapper">
-            <mat-checkbox formControlName="homeOutsideUK" id="homeOutsideUK">
-              Live outside the UK?
-            </mat-checkbox>
-          </div>
+        </div>
+        <div *ngIf="!giftAidGroup.value.homeOutsideUK">
+          <biggive-text-input prompt="Enter your home postcode">
+            <input
+              formControlName="homePostcode"
+              id="homePostcode"
+              matInput
+              slot="input"
+            />
+          </biggive-text-input>
+        </div>
+       </div>
+        <div class="homeOutsideUK-wrapper">
+          <mat-checkbox formControlName="homeOutsideUK" id="homeOutsideUK">
+            Live outside the UK?
+          </mat-checkbox>
         </div>
 
         <div>
