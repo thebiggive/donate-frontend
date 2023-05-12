@@ -98,9 +98,7 @@ input:disabled {
 }
 
 .StripeElement {
-  border: solid 1px $colour-grey;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  width: 100%;
 }
 
 .c-timer {
@@ -365,4 +363,17 @@ div.gift-aid-option {
     position: absolute;
     top: 8px;
   }
+}
+
+div.payment-details {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+div.payment-details > * {
+  // 35% is > 1/3 to ensure we can't have 3 in a row, well under 1/2 so we can have two with gap between
+  flex: 1 0 35%;
 }

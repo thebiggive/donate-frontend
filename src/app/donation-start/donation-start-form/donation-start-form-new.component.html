@@ -237,27 +237,36 @@
           <a href="https://stripe.com/docs/security/stripe" target="_blank"><mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> Learn more</a>.
         </p>
 
-        <mat-form-field>
-          <mat-label for="firstName">First name</mat-label>
-          <input formControlName="firstName" id="firstName" matInput>
-        </mat-form-field>
-        <div class="error" *ngIf="paymentGroup.get('firstName')?.errors?.maxlength">Maximum 40 characters exceeded</div>
+        <div class="payment-details">
+          <div>
+          <biggive-text-input  prompt="First Name *">
+            <input slot="input" formControlName="firstName" id="firstName" matInput>
+          </biggive-text-input>
+          <div class="error" *ngIf="paymentGroup.get('firstName')?.errors?.maxlength">Maximum 40 characters exceeded</div>
+          </div>
 
-        <mat-form-field>
-          <mat-label for="lastName">Last name</mat-label>
-          <input formControlName="lastName" id="lastName" matInput>
-          <mat-hint *ngIf="giftAidGroup.value.giftAid">For Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
-          <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
-        </mat-form-field>
-        <div class="error" *ngIf="paymentGroup.get('lastName')?.errors?.maxlength">Maximum 80 characters exceeded</div>
+          <div>
+            <biggive-text-input  prompt="Last Name *">
+              <input slot="input" formControlName="lastName" id="lastName" matInput>
+              </biggive-text-input>
+            <mat-hint *ngIf="giftAidGroup.value.giftAid">For Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
+            <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
+            <div class="error" *ngIf="paymentGroup.get('lastName')?.errors?.maxlength">Maximum 80 characters exceeded</div>
+          </div>
 
-        <mat-form-field>
-          <mat-label for="emailAddress">Email address</mat-label>
-          <input formControlName="emailAddress" id="emailAddress" type="email" matInput>
-          <mat-hint>We'll send you a donation receipt and use this to
-            confirm it's you in case you have any queries.</mat-hint>
-        </mat-form-field>
+          <div>
+            <biggive-text-input  prompt="Email Address *">
+              <input slot="input" formControlName="emailAddress" id="emailAddress" type="email" matInput>
+            </biggive-text-input>
+            <mat-hint>We'll send you a donation receipt and use this to
+              confirm it's you in case you have any queries.</mat-hint>
+          </div>
 
+          <div>
+            <!-- Placeholder to occupy last part the row and stop previous field expanding -->
+          </div>
+
+        </div>
         <div [style.display]="creditPenceToUse === 0 ? 'block' : 'none'" id="payment-request-button" #paymentRequestButton></div>
         <p *ngIf="requestButtonShown && !stripePRBMethodReady" class="b-center b-grey b-rt-sm">Or</p>
 
@@ -301,25 +310,35 @@
         <!-- We need the ElementRef to always be available for Stripe.js mounting as there are
         a few dynamic ways the input can become or cease to be relevant. So just CSS-hide the
         element when not needed, and always mount it. -->
-        <div [style.display]="!stripePRBMethodReady && !selectedSavedMethod && creditPenceToUse === 0 ? 'block' : 'none'">
+        <div class="payment-details" [style.display]="!stripePRBMethodReady && !selectedSavedMethod && creditPenceToUse === 0 ? 'flex' : 'none'">
           <div class="sr-combo-inputs-row">
-            <mat-label for="card-info">Card</mat-label>
-            <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+            <biggive-text-input  prompt="Card">
+            <div slot="input" class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+            </biggive-text-input>
           </div>
 
-          <mat-form-field>
-            <mat-label for="billingCountry">Billing country</mat-label>
-            <mat-select formControlName="billingCountry" id="billingCountry">
-              <mat-option *ngFor="let country of countryOptions" [value]="country.iso2">
-                {{ country.country }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <div>
+            <!--
+            todo - make biggive-form-field-select or an alternative usable with formControlName etc
+            and replace the select box below.
+            -->
+            <mat-form-field>
+              <mat-label for="billingCountry">Billing country</mat-label>
+              <mat-select formControlName="billingCountry" id="billingCountry">
+                <mat-option *ngFor="let country of countryOptions" [value]="country.iso2">
+                  {{ country.country }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-          <mat-form-field>
-            <mat-label for="billingPostcode">Billing postcode</mat-label>
-            <input formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)">
-          </mat-form-field>
+          <biggive-text-input  prompt="Billing postcode<">
+            <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)">
+          </biggive-text-input>
+
+          <div>
+            <!-- Placeholder to occupy last part the row and stop previous field expanding -->
+          </div>
         </div>
 
         <p *ngIf="stripeError" class="error" aria-live="assertive">
