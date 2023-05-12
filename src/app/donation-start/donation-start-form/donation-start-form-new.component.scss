@@ -336,13 +336,13 @@ div.charity-info, div.campaign-info {
   color: $colour-primary;
 }
 
-.gift-aid-options {
+.binary-options {
   display: flex;
   justify-content: space-between;
   gap: 24px;
 }
 
-div.gift-aid-option {
+div.binary-option {
   flex-basis: 50%;
   background-color: $colour-card-background;
   box-shadow: $box-shadow-soft;
