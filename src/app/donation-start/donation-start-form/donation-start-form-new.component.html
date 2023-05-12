@@ -447,7 +447,7 @@
         label="Confirm"
         class="c-make-your-donation"
       >
-        <p class="b-rt-0 b-m-0">By clicking on the <em>Donate</em> button, you agree to the {{ termsProvider }}
+        <p class="b-rt-0 b-m-0">By clicking on the <strong>Donate now</strong> button, you agree to Big Give's
           <a [href]="termsUrl" target="_blank">
             <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
               Terms and Conditions
@@ -457,6 +457,54 @@
             <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
             Privacy Policy</a>.
         </p>
+
+        <p class="b-bold b-rt-0">Your donation</p>
+
+        <table>
+          <tr>
+            <td>Your donation</td>
+            <td>{{ donationAmount | exactCurrency:campaign.currencyCode }}</td>
+          </tr>
+          <tr>
+            <td>Tip amount</td>
+            <td></td>
+          </tr>
+          <tr *ngIf="feeCoverAmount() > 0 || (creditPenceToUse === 0 && !campaign.feePercentage)">
+            <td>Platform fee</td>
+            <td>{{ feeCoverAmount() | exactCurrency:campaign.currencyCode }}</td>
+          </tr>
+          <tr>
+            <td>Total amount you will be charged</td>
+            <td>{{ donationAndExtrasAmount | exactCurrency:campaign.currencyCode }}</td>
+          </tr>
+        </table>
+
+
+        <div class="c-breakdown b-center">
+          <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }} donation to {{ campaign.charity.name }}</p>
+          <p *ngIf="feeCoverAmount() > 0 || (creditPenceToUse === 0 && !campaign.feePercentage)" class="b-rt-sm b-m-0">
+            <mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon>
+          </p>
+          <p *ngIf="creditPenceToUse === 0 && !campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give Trust &ndash; we rely on your generosity to support charities</p>
+        </div>
+
+        <!-- Matching or Gift Aid reiteration -->
+        <ul class="c-donation-receipt">
+          <li *ngIf="giftAidAmount() > 0">
+            <mat-icon aria-hidden="true">check</mat-icon>
+            You have told us you would like to claim Gift Aid
+          </li>
+
+          <li *ngIf="campaign.currencyCode === 'GBP' && giftAidAmount() === 0">
+            <mat-icon aria-hidden="true">clear</mat-icon>
+            You have told us you do not want to claim Gift Aid
+          </li>
+
+          <li *ngIf="expectedMatchAmount() === donationAmount">
+            <mat-icon aria-hidden="true">done_all</mat-icon>
+            Your donation will be match funded
+          </li>
+        </ul>
 
         <div class="c-donation-summary">
           <p class="error" *ngIf="donationUpdateError" aria-live="assertive">
@@ -487,38 +535,12 @@
             color="primary"
             [disabled]="submitting || donationForm.invalid"
           >
-            Donate
-            <span class="b-bold c-donate-button-amount">
-              {{ donationAndExtrasAmount | exactCurrency:campaign.currencyCode }}
-            </span>
+            Donate now
+<!--            <span class="b-bold c-donate-button-amount">-->
+<!--              {{ donationAndExtrasAmount | exactCurrency:campaign.currencyCode }}-->
+<!--            </span>-->
           </button>
 
-          <div class="c-breakdown b-center b-grey">
-            <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }} donation to {{ campaign.charity.name }}</p>
-            <p *ngIf="feeCoverAmount() > 0 || (creditPenceToUse === 0 && !campaign.feePercentage)" class="b-rt-sm b-m-0">
-              <mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon>
-            </p>
-            <p *ngIf="feeCoverAmount() > 0" class="b-rt-sm b-m-0">{{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} to cover platform fee</p>
-            <p *ngIf="creditPenceToUse === 0 && !campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give Trust &ndash; we rely on your generosity to support charities</p>
-          </div>
-
-          <!-- Matching or Gift Aid reiteration -->
-          <ul class="c-donation-receipt b-grey">
-            <li *ngIf="giftAidAmount() > 0">
-              <mat-icon aria-hidden="true">check</mat-icon>
-              You have told us you would like to claim Gift Aid
-            </li>
-
-            <li *ngIf="campaign.currencyCode === 'GBP' && giftAidAmount() === 0">
-              <mat-icon aria-hidden="true">clear</mat-icon>
-              You have told us you do not want to claim Gift Aid
-            </li>
-
-            <li *ngIf="expectedMatchAmount() === donationAmount">
-              <mat-icon aria-hidden="true">done_all</mat-icon>
-              Your donation will be match funded
-            </li>
-          </ul>
         </div>
       </mat-step>
     </mat-vertical-stepper>
