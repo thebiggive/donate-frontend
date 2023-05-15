@@ -25,8 +25,16 @@ import { DonationStartFormComponent } from './donation-start-form.component';
 import { TBG_DONATE_ID_STORAGE } from '../../identity.service';
 import { TimeLeftPipe } from "../../time-left.pipe";
 import {DonationStartFormParentComponent} from "./donation-start-form-parent.component";
+import {DonationStartFormNewComponent} from "./donation-start-form-new.component";
 
-describe('DonationStartPrimaryComponent', () => {
+/**
+ *  This file is currently identical to donation-start-form.component.spec.ts other than using the
+ *  new redesigned form component. Ideally I'd like to just have one file to test both, but since
+ *  we'll hopefully be deleting the old component soon anyway it isn't a big concern to have some
+ *  duplicate test code.
+ */
+
+describe('DonationStartNewPrimaryComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -42,7 +50,7 @@ describe('DonationStartPrimaryComponent', () => {
   (window as any).gtag = (...args: any[]) => args;
 
   let component: DonationStartFormParentComponent;
-  let fixture: ComponentFixture<DonationStartFormComponent>;
+  let fixture: ComponentFixture<DonationStartFormParentComponent>;
 
   const getDummyCampaign = (campaignId: string) => {
     return new Campaign(
@@ -163,7 +171,7 @@ describe('DonationStartPrimaryComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DonationStartFormComponent);
+    fixture = TestBed.createComponent(DonationStartFormNewComponent);
     component = fixture.componentInstance;
     component.campaign = getDummyCampaign('testCampaignIdForStripe');
     // Don't `fixture.detectChanges()` here, so tests can vary their route-resolved campaign.
