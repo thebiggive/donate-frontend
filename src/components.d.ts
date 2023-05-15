@@ -516,9 +516,14 @@ export namespace Components {
     }
     interface BiggiveFormFieldSelect {
         /**
+          * Must match background of containing element, or unintended shape will appear.
+         */
+        "backgroundColour": 'white' | 'grey';
+        /**
           * Placeholder
          */
         "placeholder": string;
+        "prompt": string;
         "selectStyle": 'bordered' | 'underlined';
         "selectedLabel": string | null;
         "selectedValue": string | null;
@@ -2039,6 +2044,10 @@ declare namespace LocalJSX {
     }
     interface BiggiveFormFieldSelect {
         /**
+          * Must match background of containing element, or unintended shape will appear.
+         */
+        "backgroundColour"?: 'white' | 'grey';
+        /**
           * This event `doChange` event is emitted and propogates to the parent component which handles it
          */
         "onDoSelectChange"?: (event: BiggiveFormFieldSelectCustomEvent<object>) => void;
@@ -2046,6 +2055,7 @@ declare namespace LocalJSX {
           * Placeholder
          */
         "placeholder"?: string;
+        "prompt"?: string;
         "selectStyle"?: 'bordered' | 'underlined';
         "selectedLabel"?: string | null;
         "selectedValue"?: string | null;

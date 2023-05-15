@@ -29,10 +29,10 @@ export class BiggiveCampaignCardFilterGrid {
   }>;
 
   sortByPlaceholderText = 'Sort by';
-  beneficiariesPlaceHolderText = 'Beneficiary';
-  categoriesPlaceHolderText = 'Category';
-  locationsPlaceHolderText = 'Location';
-  fundingPlaceHolderText = 'Funding';
+  beneficiariesPlaceHolderText = 'Select beneficiary';
+  categoriesPlaceHolderText = 'Select category';
+  locationsPlaceHolderText = 'Select location';
+  fundingPlaceHolderText = 'Select funding';
 
   /**
    * Space below component
@@ -307,37 +307,73 @@ export class BiggiveCampaignCardFilterGrid {
               <biggive-button class="filter" colourScheme="primary" onClick={this.handleFilterButtonClick} label="Filter" fullWidth={true} space-below="0"></biggive-button>
               <biggive-popup id="filter-popup">
                 <h4 class="space-above-0 space-below-3 text-colour-primary">Filters</h4>
-                <biggive-form-field-select placeholder={this.categoriesPlaceHolderText} selectedLabel={this.selectedFilterCategory} id="categories" space-below="2">
-                  {this.categoryOptions.length === 0
-                    ? undefined
-                    : (Array.isArray(this.categoryOptions) ? this.categoryOptions : JSON.parse(this.categoryOptions)).map(option => (
-                        <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                      ))}
-                </biggive-form-field-select>
+                <div class="select-wrapper-1">
+                  <biggive-form-field-select
+                    backgroundColour="white"
+                    prompt="Category"
+                    placeholder={this.categoriesPlaceHolderText}
+                    selectedLabel={this.selectedFilterCategory}
+                    id="categories"
+                    space-below="2"
+                  >
+                    {this.categoryOptions.length === 0
+                      ? undefined
+                      : (Array.isArray(this.categoryOptions) ? this.categoryOptions : JSON.parse(this.categoryOptions)).map(option => (
+                          <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
+                        ))}
+                  </biggive-form-field-select>
+                </div>
 
-                <biggive-form-field-select placeholder={this.beneficiariesPlaceHolderText} selectedLabel={this.selectedFilterBeneficiary} id="beneficiaries" space-below="2">
-                  {this.beneficiaryOptions.length === 0
-                    ? undefined
-                    : (Array.isArray(this.beneficiaryOptions) ? this.beneficiaryOptions : JSON.parse(this.beneficiaryOptions)).map(option => (
-                        <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                      ))}
-                </biggive-form-field-select>
+                <div class="select-wrapper-2">
+                  <biggive-form-field-select
+                    backgroundColour="white"
+                    prompt="Beneficiary"
+                    placeholder={this.beneficiariesPlaceHolderText}
+                    selectedLabel={this.selectedFilterBeneficiary}
+                    id="beneficiaries"
+                    space-below="2"
+                  >
+                    {this.beneficiaryOptions.length === 0
+                      ? undefined
+                      : (Array.isArray(this.beneficiaryOptions) ? this.beneficiaryOptions : JSON.parse(this.beneficiaryOptions)).map(option => (
+                          <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
+                        ))}
+                  </biggive-form-field-select>
+                </div>
 
-                <biggive-form-field-select placeholder={this.locationsPlaceHolderText} selectedLabel={this.selectedFilterLocation} id="locations" space-below="2">
-                  {this.locationOptions.length === 0
-                    ? undefined
-                    : (Array.isArray(this.locationOptions) ? this.locationOptions : JSON.parse(this.locationOptions)).map(option => (
-                        <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                      ))}
-                </biggive-form-field-select>
+                <div class="select-wrapper-3">
+                  <biggive-form-field-select
+                    backgroundColour="white"
+                    prompt="Location"
+                    placeholder={this.locationsPlaceHolderText}
+                    selectedLabel={this.selectedFilterLocation}
+                    id="locations"
+                    space-below="2"
+                  >
+                    {this.locationOptions.length === 0
+                      ? undefined
+                      : (Array.isArray(this.locationOptions) ? this.locationOptions : JSON.parse(this.locationOptions)).map(option => (
+                          <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
+                        ))}
+                  </biggive-form-field-select>
+                </div>
 
-                <biggive-form-field-select placeholder={this.fundingPlaceHolderText} selectedLabel={this.selectedFilterFunding} id="funding" space-below="2">
-                  {this.fundingOptions.length === 0
-                    ? undefined
-                    : (Array.isArray(this.fundingOptions) ? this.fundingOptions : JSON.parse(this.fundingOptions)).map(option => (
-                        <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                      ))}
-                </biggive-form-field-select>
+                <div class="select-wrapper-4">
+                  <biggive-form-field-select
+                    backgroundColour="white"
+                    prompt="Funding"
+                    placeholder={this.fundingPlaceHolderText}
+                    selectedLabel={this.selectedFilterFunding}
+                    id="funding"
+                    space-below="2"
+                  >
+                    {this.fundingOptions.length === 0
+                      ? undefined
+                      : (Array.isArray(this.fundingOptions) ? this.fundingOptions : JSON.parse(this.fundingOptions)).map(option => (
+                          <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
+                        ))}
+                  </biggive-form-field-select>
+                </div>
                 <div class="align-right">
                   <biggive-button label="Apply filters" onClick={this.handleApplyFilterButtonClick} />
                 </div>

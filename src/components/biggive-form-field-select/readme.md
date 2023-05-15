@@ -7,13 +7,15 @@
 
 ## Properties
 
-| Property        | Attribute        | Description           | Type                         | Default      |
-| --------------- | ---------------- | --------------------- | ---------------------------- | ------------ |
-| `placeholder`   | `placeholder`    | Placeholder           | `string`                     | `undefined`  |
-| `selectStyle`   | `select-style`   |                       | `"bordered" \| "underlined"` | `'bordered'` |
-| `selectedLabel` | `selected-label` |                       | `null \| string`             | `undefined`  |
-| `selectedValue` | `selected-value` |                       | `null \| string`             | `undefined`  |
-| `spaceBelow`    | `space-below`    | Space below component | `number`                     | `0`          |
+| Property           | Attribute           | Description                                                                   | Type                         | Default      |
+| ------------------ | ------------------- | ----------------------------------------------------------------------------- | ---------------------------- | ------------ |
+| `backgroundColour` | `background-colour` | Must match background of containing element, or unintended shape will appear. | `"grey" \| "white"`          | `undefined`  |
+| `placeholder`      | `placeholder`       | Placeholder                                                                   | `string`                     | `undefined`  |
+| `prompt`           | `prompt`            |                                                                               | `string`                     | `undefined`  |
+| `selectStyle`      | `select-style`      |                                                                               | `"bordered" \| "underlined"` | `'bordered'` |
+| `selectedLabel`    | `selected-label`    |                                                                               | `null \| string`             | `undefined`  |
+| `selectedValue`    | `selected-value`    |                                                                               | `null \| string`             | `undefined`  |
+| `spaceBelow`       | `space-below`       | Space below component                                                         | `number`                     | `0`          |
 
 
 ## Events

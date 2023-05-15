@@ -19,9 +19,15 @@ export class BiggiveFormFieldSelect {
   })
   doSelectChange: EventEmitter<object>;
 
+  @Prop() prompt: string;
   @Prop() selectedValue: string | null;
   @Prop() selectedLabel: string | null;
   @Prop() selectStyle: 'bordered' | 'underlined' = 'bordered';
+
+  /**
+   * Must match background of containing element, or unintended shape will appear.
+   */
+  @Prop() backgroundColour: 'white' | 'grey';
 
   @Listen('doOptionSelect')
   doOptionSelectCompletedHandler(event) {
@@ -64,9 +70,10 @@ export class BiggiveFormFieldSelect {
         <div class="sleeve" onClick={this.toggleFocus} onMouseLeave={this.toggleFocus}>
           <span class="placeholder">{this.selectedLabel === null || this.selectedLabel === undefined ? this.placeholder : this.selectedLabel}</span>
         </div>
-        <div class="options">
+        <div class={'options' + (this.backgroundColour === 'grey' ? ' grey' : '')}>
           <slot></slot>
         </div>
+        <div class={'prompt' + (this.backgroundColour === 'grey' ? ' grey' : '')}>{this.prompt}</div>
       </div>
     );
   }

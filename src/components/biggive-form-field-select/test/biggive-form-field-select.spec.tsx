@@ -17,6 +17,7 @@ describe('biggive-form-field-select', () => {
             <div class="options">
               <slot></slot>
             </div>
+            <div class="prompt"></div>
           </div>
         </mock:shadow-root>
       </biggive-form-field-select>

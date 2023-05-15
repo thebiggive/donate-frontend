@@ -4,6 +4,24 @@
   display: content;
 }
 
+// Each select needs a higher z-index than the one below,
+// so that the drop-down part will occlude it.
+.select-wrapper-1, .select-wrapper-2, .select-wrapper-3, .select-wrapper-4 {
+  position: relative;
+}
+.select-wrapper-1 {
+  z-index: 4;
+}
+.select-wrapper-2 {
+  z-index: 3;
+}
+.select-wrapper-3 {
+   z-index: 2;
+ }
+.select-wrapper-4 {
+  z-index: 1;
+}
+
 .container {
   @include standard-font();
   position: relative;
@@ -34,7 +52,6 @@
     }
   }
 }
-
 .selected-filter-wrap {
   display: flex;
   margin-bottom: 30px;
@@ -49,7 +66,7 @@
     text-decoration: none;
     background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIKCSB2aWV3Qm94PSIwIDAgMTguNCAxOC40IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAxOC40IDE4LjQ7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7c3Ryb2tlOiMwMDAwMDA7fQo8L3N0eWxlPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNOS4yLDguNUwxNywwLjdsMC43LDAuN0w5LjksOS4ybDcuOCw3LjhMMTcsMTcuN0w5LjIsOS45bC03LjgsNy44TDAuNywxN2w3LjgtNy44TDAuNywxLjRsMC43LTAuN0w5LjIsOC41eiIvPgo8L3N2Zz4K);
     background-repeat: no-repeat;
-    background-position: right 20px center; 
+    background-position: right 20px center;
     background-size: 12px auto;
     &:hover {
      background-color: $colour-white;
@@ -72,7 +89,7 @@
        color: $colour-primary-blue;
      }
     }
-  }  
+  }
 }
 
 .sort-filter-wrap {
