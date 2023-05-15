@@ -193,19 +193,36 @@ input:disabled {
 }
 
 .donation-input.donation-input-main {
-  margin-top: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+  clear: both;
 
-  .fixed-label {
-    margin-top: 2rem;
+  input {
+    text-align: right;
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: bolder;
   }
+}
 
-  .floating-label {
-    margin-top: 0.4rem;
-  }
+input {
+  float: right;
+  outline: none;
+  border: none;
+  background-color: $colour-background;
+  width: 100%;
+};
 
-  .form-field {
-    font-size: 22px;
-  }
+#giftAidAddressContainer {
+  margin-top: 60px;
+}
+
+div#giftAidAddressContainer > div {
+  width: 50%;
+  margin-top: 20px;
 }
 
 .donation-input-tip__status-help {
@@ -303,4 +320,49 @@ div.match-funded-badge {
 
 div.match-funded-badge-wrapper {
   position: relative;
+}
+
+div.charity-info {
+  min-width: 300px;
+}
+div.charity-info, div.campaign-info {
+  min-height: 80px;
+  float: left;
+
+  .charity-name, .campaign-title {
+    font-weight: bold;
+  }
+}
+
+.colour-primary {
+  color: $colour-primary;
+}
+
+.gift-aid-options {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+div.gift-aid-option {
+  flex-basis: 50%;
+  background-color: $colour-card-background;
+  box-shadow: $box-shadow-soft;
+  border-radius: 4px;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 16px;
+  padding-bottom: 16px;
+  // no need for padding-top as form element inside has a top margin
+
+  position: relative;
+
+  ::ng-deep label {
+    padding-left: 40px;
+  }
+
+  ::ng-deep .mdc-radio {
+    position: absolute;
+    top: 8px;
+  }
 }
