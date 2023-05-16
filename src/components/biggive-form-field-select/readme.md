@@ -11,7 +11,7 @@
 | --------------------- | ------------------- | ----------------------------------------------------------------------------- | ---------------------------- | ------------ |
 | `backgroundColour`    | `background-colour` | Must match background of containing element, or unintended shape will appear. | `"grey" \| "white"`          | `undefined`  |
 | `placeholder`         | `placeholder`       | Placeholder                                                                   | `string`                     | `undefined`  |
-| `prompt` _(required)_ | `prompt`            | Displayed as 'eyebrow' label over the top border of the box.                  | `string`                     | `undefined`  |
+| `prompt` _(required)_ | `prompt`            | Displayed as 'eyebrow' label over the top border of the box.                  | `null \| string`             | `undefined`  |
 | `selectStyle`         | `select-style`      |                                                                               | `"bordered" \| "underlined"` | `'bordered'` |
 | `selectedLabel`       | `selected-label`    |                                                                               | `null \| string`             | `undefined`  |
 | `selectedValue`       | `selected-value`    |                                                                               | `null \| string`             | `undefined`  |

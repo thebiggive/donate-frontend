@@ -526,7 +526,7 @@ export namespace Components {
         /**
           * Displayed as 'eyebrow' label over the top border of the box.
          */
-        "prompt": string;
+        "prompt": string | null;
         "selectStyle": 'bordered' | 'underlined';
         "selectedLabel": string | null;
         "selectedValue": string | null;
@@ -2064,7 +2064,7 @@ declare namespace LocalJSX {
         /**
           * Displayed as 'eyebrow' label over the top border of the box.
          */
-        "prompt": string;
+        "prompt": string | null;
         "selectStyle"?: 'bordered' | 'underlined';
         "selectedLabel"?: string | null;
         "selectedValue"?: string | null;

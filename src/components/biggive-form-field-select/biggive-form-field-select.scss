@@ -52,6 +52,9 @@
       display: block;
   }
 }
+.dropdown.noprompt {
+  margin-top: 0;
+}
 .options.grey {
   background-color: $colour-grey-background;
 }

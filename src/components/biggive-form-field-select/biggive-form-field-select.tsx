@@ -22,7 +22,7 @@ export class BiggiveFormFieldSelect {
   /**
    * Displayed as 'eyebrow' label over the top border of the box.
    */
-  @Prop() prompt!: string;
+  @Prop() prompt!: string | null;
 
   @Prop() selectedValue: string | null;
   @Prop() selectedLabel: string | null;
@@ -70,14 +70,14 @@ export class BiggiveFormFieldSelect {
 
   render() {
     return (
-      <div class={'dropdown space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle}>
+      <div class={'dropdown space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle + (this.prompt === null ? '  noprompt' : '')}>
         <div class="sleeve" onClick={this.toggleFocus} onMouseLeave={this.toggleFocus}>
           <span class="placeholder">{this.selectedLabel === null || this.selectedLabel === undefined ? this.placeholder : this.selectedLabel}</span>
         </div>
         <div class={'options' + (this.backgroundColour === 'grey' ? ' grey' : '')}>
           <slot></slot>
         </div>
-        <div class={'prompt' + (this.backgroundColour === 'grey' ? ' grey' : '')}>{this.prompt}</div>
+        {this.prompt && <div class={'prompt' + (this.backgroundColour === 'grey' ? ' grey' : '')}>{this.prompt}</div>}
       </div>
     );
   }
