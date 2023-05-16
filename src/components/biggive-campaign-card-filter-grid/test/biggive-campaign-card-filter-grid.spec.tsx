@@ -34,10 +34,18 @@ describe('biggive-campaign-card-filter-grid', () => {
                 <h4 class="space-above-0 space-below-3 text-colour-primary">
                   Filters
                 </h4>
-                <biggive-form-field-select id="categories" placeholder="Category" space-below="2"></biggive-form-field-select>
-                <biggive-form-field-select id="beneficiaries" placeholder="Beneficiary" space-below="2"></biggive-form-field-select>
-                <biggive-form-field-select id="locations" placeholder="Location" space-below="2"></biggive-form-field-select>
-                <biggive-form-field-select id="funding" placeholder="Funding" space-below="2"></biggive-form-field-select>
+                <div class="select-wrapper-1">
+                    <biggive-form-field-select backgroundcolour="white" id="categories" placeholder="Select category" prompt="Category" space-below="2"></biggive-form-field-select>
+                </div>
+                <div class="select-wrapper-2">
+                    <biggive-form-field-select backgroundcolour="white" id="beneficiaries" placeholder="Select beneficiary" prompt="Beneficiary" space-below="2"></biggive-form-field-select>
+                </div>
+                <div class="select-wrapper-3">
+                    <biggive-form-field-select backgroundcolour="white" id="locations" placeholder="Select location" prompt="Location" space-below="2"></biggive-form-field-select>
+                </div>
+                <div class="select-wrapper-4">
+                    <biggive-form-field-select backgroundcolour="white" id="funding" placeholder="Select funding" prompt="Funding" space-below="2"></biggive-form-field-select>
+                </div>
                 <div class="align-right">
                   <biggive-button label="Apply filters"></biggive-button>
                 </div>
@@ -100,10 +108,18 @@ describe('biggive-campaign-card-filter-grid', () => {
                 <h4 class="space-above-0 space-below-3 text-colour-primary">
                   Filters
                 </h4>
-                <biggive-form-field-select id="categories" placeholder="Category" space-below="2"></biggive-form-field-select>
-                <biggive-form-field-select id="beneficiaries" placeholder="Beneficiary" space-below="2"></biggive-form-field-select>
-                <biggive-form-field-select id="locations" placeholder="Location" space-below="2"></biggive-form-field-select>
-                <biggive-form-field-select id="funding" placeholder="Funding" space-below="2"></biggive-form-field-select>
+                <div class="select-wrapper-1">
+                    <biggive-form-field-select backgroundcolour="white" id="categories" placeholder="Select category" prompt="Category" space-below="2"></biggive-form-field-select>
+                </div>
+                <div class="select-wrapper-2">
+                    <biggive-form-field-select backgroundcolour="white" id="beneficiaries" placeholder="Select beneficiary" prompt="Beneficiary" space-below="2"></biggive-form-field-select>
+                </div>
+                <div class="select-wrapper-3">
+                    <biggive-form-field-select backgroundcolour="white" id="locations" placeholder="Select location" prompt="Location" space-below="2"></biggive-form-field-select>
+                </div>
+                <div class="select-wrapper-4">
+                    <biggive-form-field-select backgroundcolour="white" id="funding" placeholder="Select funding" prompt="Funding" space-below="2"></biggive-form-field-select>
+                </div>
                 <div class="align-right">
                   <biggive-button label="Apply filters"></biggive-button>
                 </div>

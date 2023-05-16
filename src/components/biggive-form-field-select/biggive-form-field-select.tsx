@@ -19,9 +19,19 @@ export class BiggiveFormFieldSelect {
   })
   doSelectChange: EventEmitter<object>;
 
+  /**
+   * Displayed as 'eyebrow' label over the top border of the box.
+   */
+  @Prop() prompt!: string | null;
+
   @Prop() selectedValue: string | null;
   @Prop() selectedLabel: string | null;
   @Prop() selectStyle: 'bordered' | 'underlined' = 'bordered';
+
+  /**
+   * Must match background of containing element, or unintended shape will appear.
+   */
+  @Prop() backgroundColour: 'white' | 'grey';
 
   @Listen('doOptionSelect')
   doOptionSelectCompletedHandler(event) {
@@ -60,13 +70,14 @@ export class BiggiveFormFieldSelect {
 
   render() {
     return (
-      <div class={'dropdown space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle}>
+      <div class={'dropdown space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle + (this.prompt === null ? '  noprompt' : '')}>
         <div class="sleeve" onClick={this.toggleFocus} onMouseLeave={this.toggleFocus}>
           <span class="placeholder">{this.selectedLabel === null || this.selectedLabel === undefined ? this.placeholder : this.selectedLabel}</span>
         </div>
-        <div class="options">
+        <div class={'options' + (this.backgroundColour === 'grey' ? ' grey' : '')}>
           <slot></slot>
         </div>
+        {this.prompt && <div class={'prompt' + (this.backgroundColour === 'grey' ? ' grey' : '')}>{this.prompt}</div>}
       </div>
     );
   }
