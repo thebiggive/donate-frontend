@@ -523,6 +523,9 @@ export namespace Components {
           * Placeholder
          */
         "placeholder": string;
+        /**
+          * Displayed as 'eyebrow' label over the top border of the box.
+         */
         "prompt": string;
         "selectStyle": 'bordered' | 'underlined';
         "selectedLabel": string | null;
@@ -961,6 +964,9 @@ export namespace Components {
           * ISO-4217 currency code if input is for a money value
          */
         "currency": 'GBP' | 'USD' | undefined;
+        /**
+          * Displayed as 'eyebrow' label over the top border of the box.
+         */
         "prompt": string;
         "selectStyle": 'bordered' | 'underlined';
         "spaceBelow": number;
@@ -2055,7 +2061,10 @@ declare namespace LocalJSX {
           * Placeholder
          */
         "placeholder"?: string;
-        "prompt"?: string;
+        /**
+          * Displayed as 'eyebrow' label over the top border of the box.
+         */
+        "prompt": string;
         "selectStyle"?: 'bordered' | 'underlined';
         "selectedLabel"?: string | null;
         "selectedValue"?: string | null;
@@ -2496,6 +2505,9 @@ declare namespace LocalJSX {
           * ISO-4217 currency code if input is for a money value
          */
         "currency"?: 'GBP' | 'USD' | undefined;
+        /**
+          * Displayed as 'eyebrow' label over the top border of the box.
+         */
         "prompt": string;
         "selectStyle"?: 'bordered' | 'underlined';
         "spaceBelow"?: number;

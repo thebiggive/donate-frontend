@@ -19,7 +19,11 @@ export class BiggiveFormFieldSelect {
   })
   doSelectChange: EventEmitter<object>;
 
-  @Prop() prompt: string;
+  /**
+   * Displayed as 'eyebrow' label over the top border of the box.
+   */
+  @Prop() prompt!: string;
+
   @Prop() selectedValue: string | null;
   @Prop() selectedLabel: string | null;
   @Prop() selectStyle: 'bordered' | 'underlined' = 'bordered';
