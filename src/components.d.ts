@@ -516,9 +516,17 @@ export namespace Components {
     }
     interface BiggiveFormFieldSelect {
         /**
+          * Must match background of containing element, or unintended shape will appear.
+         */
+        "backgroundColour": 'white' | 'grey';
+        /**
           * Placeholder
          */
         "placeholder": string;
+        /**
+          * Displayed as 'eyebrow' label over the top border of the box.
+         */
+        "prompt": string | null;
         "selectStyle": 'bordered' | 'underlined';
         "selectedLabel": string | null;
         "selectedValue": string | null;
@@ -956,6 +964,9 @@ export namespace Components {
           * ISO-4217 currency code if input is for a money value
          */
         "currency": 'GBP' | 'USD' | undefined;
+        /**
+          * Displayed as 'eyebrow' label over the top border of the box.
+         */
         "prompt": string;
         "selectStyle": 'bordered' | 'underlined';
         "spaceBelow": number;
@@ -2039,6 +2050,10 @@ declare namespace LocalJSX {
     }
     interface BiggiveFormFieldSelect {
         /**
+          * Must match background of containing element, or unintended shape will appear.
+         */
+        "backgroundColour"?: 'white' | 'grey';
+        /**
           * This event `doChange` event is emitted and propogates to the parent component which handles it
          */
         "onDoSelectChange"?: (event: BiggiveFormFieldSelectCustomEvent<object>) => void;
@@ -2046,6 +2061,10 @@ declare namespace LocalJSX {
           * Placeholder
          */
         "placeholder"?: string;
+        /**
+          * Displayed as 'eyebrow' label over the top border of the box.
+         */
+        "prompt": string | null;
         "selectStyle"?: 'bordered' | 'underlined';
         "selectedLabel"?: string | null;
         "selectedValue"?: string | null;
@@ -2486,6 +2505,9 @@ declare namespace LocalJSX {
           * ISO-4217 currency code if input is for a money value
          */
         "currency"?: 'GBP' | 'USD' | undefined;
+        /**
+          * Displayed as 'eyebrow' label over the top border of the box.
+         */
         "prompt": string;
         "selectStyle"?: 'bordered' | 'underlined';
         "spaceBelow"?: number;

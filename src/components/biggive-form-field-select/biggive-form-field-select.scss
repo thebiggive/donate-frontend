@@ -4,9 +4,25 @@
   display: contents;
 }
 
+.prompt {
+  position: absolute;
+  z-index: 2;
+  font-size: small;
+  top: -1em;
+  background-color: $colour-white;
+  left: 4em;
+  padding-left: 1em;
+  padding-right: 1em;
+  color: $colour-primary-blue;
+}
+.prompt.grey {
+  background-color: $colour-grey-background;
+}
+
 .dropdown {
   @include standard-font();
   position: relative;
+  margin-top: 1em;
   text-align: left;
   &.select-style-bordered {
     .sleeve {
@@ -36,4 +52,9 @@
       display: block;
   }
 }
-
+.dropdown.noprompt {
+  margin-top: 0;
+}
+.options.grey {
+  background-color: $colour-grey-background;
+}

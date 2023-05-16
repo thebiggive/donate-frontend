@@ -14,13 +14,13 @@ Please ensure input is styled as width: 100%.
 
 ## Properties
 
-| Property              | Attribute      | Description                                          | Type                          | Default      |
-| --------------------- | -------------- | ---------------------------------------------------- | ----------------------------- | ------------ |
-| `currency`            | `currency`     | ISO-4217 currency code if input is for a money value | `"GBP" \| "USD" \| undefined` | `undefined`  |
-| `prompt` _(required)_ | `prompt`       |                                                      | `string`                      | `undefined`  |
-| `selectStyle`         | `select-style` |                                                      | `"bordered" \| "underlined"`  | `'bordered'` |
-| `spaceBelow`          | `space-below`  |                                                      | `number`                      | `0`          |
-| `value` _(required)_  | `value`        |                                                      | `string`                      | `undefined`  |
+| Property              | Attribute      | Description                                                  | Type                          | Default      |
+| --------------------- | -------------- | ------------------------------------------------------------ | ----------------------------- | ------------ |
+| `currency`            | `currency`     | ISO-4217 currency code if input is for a money value         | `"GBP" \| "USD" \| undefined` | `undefined`  |
+| `prompt` _(required)_ | `prompt`       | Displayed as 'eyebrow' label over the top border of the box. | `string`                      | `undefined`  |
+| `selectStyle`         | `select-style` |                                                              | `"bordered" \| "underlined"`  | `'bordered'` |
+| `spaceBelow`          | `space-below`  |                                                              | `number`                      | `0`          |
+| `value` _(required)_  | `value`        |                                                              | `string`                      | `undefined`  |
 
 
 ----------------------------------------------

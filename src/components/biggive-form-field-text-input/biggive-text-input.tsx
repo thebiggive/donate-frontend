@@ -19,6 +19,10 @@ export class BiggiveTextInput {
   @Prop() currency: 'GBP' | 'USD' | undefined;
   @Prop() spaceBelow: number = 0;
   @Prop() selectStyle: 'bordered' | 'underlined' = 'bordered';
+
+  /**
+   * Displayed as 'eyebrow' label over the top border of the box.
+   * */
   @Prop() prompt!: string;
   render() {
     const currencySymbol = this.currency === 'GBP' ? '£' : this.currency === 'USD' ? '$' : undefined;
