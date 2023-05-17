@@ -34,10 +34,10 @@ export class BiggiveSheet {
     this.openSheet(window.location.hash);
   }
 
-  closeSheet() {
+  closeSheet = () => {
     this.host.shadowRoot?.querySelector('.container')?.classList.remove('active');
     history.pushState('', document.title, window.location.pathname);
-  }
+  };
 
   render() {
     return (

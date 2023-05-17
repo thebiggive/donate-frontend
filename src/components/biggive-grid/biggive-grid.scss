@@ -98,21 +98,21 @@
 
 
 @media screen and (max-width: $screen-tablet-max) {
-  .column-count-2 ::slotted(*),
-  .column-count-3 ::slotted(*),
-  .column-count-4 ::slotted(*),
-  .column-count-5 ::slotted(*),
-  .column-count-6 ::slotted(*) {
-    width: calc( 50% - (($spacer-4 * 1) / 2));
+
+  @for $i from 1 through 6 {
+    .column-count-#{$i}  ::slotted(*) { width: calc( 51% - (($spacer-4 * 1) / 2)) };
+    @for $j from 1 through 6 {
+      .column-count-#{$i}.column-gap-#{$j} ::slotted(*) { width: calc( 50% - (($spacer-4 * 1) / 2)) };
+    }
   }
+
 }
 
 @media screen and (max-width: $screen-mobile-max) {
-  .column-count-2 ::slotted(*),
-  .column-count-3 ::slotted(*),
-  .column-count-4 ::slotted(*),
-  .column-count-5 ::slotted(*),
-  .column-count-6 ::slotted(*) {
-    width: 100%;
+  @for $i from 1 through 6 {
+    .column-count-#{$i}  ::slotted(*) { width: 100%; };
+    @for $j from 1 through 6 {
+      .column-count-#{$i}.column-gap-#{$j}  ::slotted(*) { width: 100%; };
+    }
   }
 }
