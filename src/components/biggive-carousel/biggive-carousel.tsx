@@ -75,11 +75,11 @@ export class BiggiveCarousel {
 
   clickPrevHandler = () => {
     this.showTab('PREV');
-  }
+  };
 
   clickNextHandler = () => {
     this.showTab('NEXT');
-  }
+  };
 
   render() {
     return (
