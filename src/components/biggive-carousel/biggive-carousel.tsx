@@ -73,13 +73,13 @@ export class BiggiveCarousel {
     this.currentTab = newTab;
   }
 
-  clickPrevHandler() {
+  clickPrevHandler = () => {
     this.showTab('PREV');
-  }
+  };
 
-  clickNextHandler() {
+  clickNextHandler = () => {
     this.showTab('NEXT');
-  }
+  };
 
   render() {
     return (
