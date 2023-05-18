@@ -381,3 +381,45 @@ div.payment-details > * {
 div.payment-details > .sr-combo-inputs-row {
   flex-basis: 100%; // contains space for card logo, PAN, Expiry & CVV, half the column width is not enough.
 }
+
+table.summary {
+  text-align: left;
+  width: 100%;
+  border-spacing: 0 1em;
+  tr {
+    td:last-child {
+      text-align: right;
+    }
+    td {
+      div {
+        display: inline-block;
+        max-width: 15rem;
+      }
+      @media #{$breakpoint-sm} {
+        font-size: 1rem;
+      }
+      @media #{$breakpoint-md} {
+        font-size: 1.1rem;
+      }
+      @media #{$breakpoint-lg} {
+        font-size: 1.2rem;
+      }
+      @media #{$breakpoint-xl} {
+        font-size: 1.4rem;
+      }
+    }
+  }
+}
+//hr {
+//  margin: 0;
+//  width: 100%;
+//}
+.receives {
+  td {
+    background-color: $colour-highlight;
+    padding: 5px;
+  }
+}
+.total {
+  color: $colour-primary;
+}
