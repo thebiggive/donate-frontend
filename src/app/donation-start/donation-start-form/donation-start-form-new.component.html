@@ -316,19 +316,20 @@
             </biggive-text-input>
           </div>
 
-          <div>
-            <!--
-            todo - make biggive-form-field-select or an alternative usable with formControlName etc
-            and replace the select box below.
-            -->
-            <mat-form-field>
-              <mat-label for="billingCountry">Billing country</mat-label>
-              <mat-select formControlName="billingCountry" id="billingCountry">
-                <mat-option *ngFor="let country of countryOptions" [value]="country.iso2">
-                  {{ country.country }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
+          <div style="z-index: 2">
+            <biggive-form-field-select
+              backgroundColour="grey"
+              prompt="Billing country"
+              selectStyle="bordered"
+              selectedValue="this.paymentGroup.value.billingCountry"
+            >
+              <biggive-form-field-select-option
+                *ngFor="let country of countryOptions"
+                backgroundColour="grey"
+                [value]="country.iso2"
+                [label]="country.country">
+              </biggive-form-field-select-option>
+            </biggive-form-field-select>
           </div>
 
           <biggive-text-input  prompt="Billing postcode<">
