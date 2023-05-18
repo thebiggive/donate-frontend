@@ -55,7 +55,7 @@
 .selected-filter-wrap {
   display: flex;
   margin-bottom: 30px;
-  padding: 0 25px;
+  padding: 0;
   .button {
     cursor: pointer;
     border-radius: 20px;
@@ -96,7 +96,7 @@
   display: flex;
   justify-content: flex-end;
   margin-bottom: $spacer-4;
-  padding: 0 25px;
+  padding: 0;
   text-align: right;
   .clear-all {
     cursor: pointer;
