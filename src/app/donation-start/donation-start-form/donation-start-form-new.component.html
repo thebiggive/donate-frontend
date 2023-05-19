@@ -144,14 +144,14 @@
 
         <mat-radio-group tabindex="0" formControlName="giftAid">
 
-          <div class="gift-aid-options">
-            <div class="gift-aid-option">
+          <div class="binary-options">
+            <div class="binary-option">
             <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="true">
               <strong>Yes</strong>, I want to Gift Aid my donation to {{ campaign.charity.name }} and any additional gift I make to the Big Give, including any donations made in the past 4 years or in the future
             </mat-radio-button>
             </div>
 
-            <div class="gift-aid-option">
+            <div class="binary-option">
             <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="false">
               <strong>No</strong>, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed
             </mat-radio-button>
@@ -232,32 +232,40 @@
         label="Payment details"
       >
         <p class="b-grey b-rt-sm">
-          <mat-icon class="b-va-bottom" aria-hidden="true">lock</mat-icon>
-          Payments processed securely by Stripe.
-          <a href="https://stripe.com/docs/security/stripe" target="_blank"><mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> Learn more</a>.
+          <img src="/assets/images/powered-by-stripe-black.svg" alt="Powered by stripe" style="width: 14rem">
+          <br />
+          <a href="https://stripe.com/docs/security/stripe" target="_blank"><mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> Learn more about stripe</a>.
         </p>
+        <div class="payment-details">
+          <div>
+          <biggive-text-input  prompt="First Name *">
+            <input slot="input" formControlName="firstName" id="firstName" matInput>
+          </biggive-text-input>
+          <div class="error" *ngIf="paymentGroup.get('firstName')?.errors?.maxlength">Maximum 40 characters exceeded</div>
+          </div>
 
-        <mat-form-field>
-          <mat-label for="firstName">First name</mat-label>
-          <input formControlName="firstName" id="firstName" matInput>
-        </mat-form-field>
-        <div class="error" *ngIf="paymentGroup.get('firstName')?.errors?.maxlength">Maximum 40 characters exceeded</div>
+          <div>
+            <biggive-text-input  prompt="Last Name *">
+              <input slot="input" formControlName="lastName" id="lastName" matInput>
+              </biggive-text-input>
+            <mat-hint *ngIf="giftAidGroup.value.giftAid">For Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
+            <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
+            <div class="error" *ngIf="paymentGroup.get('lastName')?.errors?.maxlength">Maximum 80 characters exceeded</div>
+          </div>
 
-        <mat-form-field>
-          <mat-label for="lastName">Last name</mat-label>
-          <input formControlName="lastName" id="lastName" matInput>
-          <mat-hint *ngIf="giftAidGroup.value.giftAid">For Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
-          <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
-        </mat-form-field>
-        <div class="error" *ngIf="paymentGroup.get('lastName')?.errors?.maxlength">Maximum 80 characters exceeded</div>
+          <div>
+            <biggive-text-input  prompt="Email Address *">
+              <input slot="input" formControlName="emailAddress" id="emailAddress" type="email" matInput>
+            </biggive-text-input>
+            <mat-hint>We'll send you a donation receipt and use this to
+              confirm it's you in case you have any queries.</mat-hint>
+          </div>
 
-        <mat-form-field>
-          <mat-label for="emailAddress">Email address</mat-label>
-          <input formControlName="emailAddress" id="emailAddress" type="email" matInput>
-          <mat-hint>We'll send you a donation receipt and use this to
-            confirm it's you in case you have any queries.</mat-hint>
-        </mat-form-field>
+          <div>
+            <!-- Placeholder to occupy last part the row and stop previous field expanding -->
+          </div>
 
+        </div>
         <div [style.display]="creditPenceToUse === 0 ? 'block' : 'none'" id="payment-request-button" #paymentRequestButton></div>
         <p *ngIf="requestButtonShown && !stripePRBMethodReady" class="b-center b-grey b-rt-sm">Or</p>
 
@@ -301,25 +309,32 @@
         <!-- We need the ElementRef to always be available for Stripe.js mounting as there are
         a few dynamic ways the input can become or cease to be relevant. So just CSS-hide the
         element when not needed, and always mount it. -->
-        <div [style.display]="!stripePRBMethodReady && !selectedSavedMethod && creditPenceToUse === 0 ? 'block' : 'none'">
+        <div class="payment-details" [style.display]="!stripePRBMethodReady && !selectedSavedMethod && creditPenceToUse === 0 ? 'flex' : 'none'">
           <div class="sr-combo-inputs-row">
-            <mat-label for="card-info">Card</mat-label>
-            <div class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+            <biggive-text-input  prompt="Card">
+            <div slot="input" class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+            </biggive-text-input>
           </div>
 
-          <mat-form-field>
-            <mat-label for="billingCountry">Billing country</mat-label>
-            <mat-select formControlName="billingCountry" id="billingCountry">
-              <mat-option *ngFor="let country of countryOptions" [value]="country.iso2">
-                {{ country.country }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <div>
+            <!--
+            todo - make biggive-form-field-select or an alternative usable with formControlName etc
+            and replace the select box below.
+            -->
+            <mat-form-field>
+              <mat-label for="billingCountry">Billing country</mat-label>
+              <mat-select formControlName="billingCountry" id="billingCountry">
+                <mat-option *ngFor="let country of countryOptions" [value]="country.iso2">
+                  {{ country.country }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-          <mat-form-field>
-            <mat-label for="billingPostcode">Billing postcode</mat-label>
-            <input formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)">
-          </mat-form-field>
+          <biggive-text-input  prompt="Billing postcode<">
+            <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)">
+          </biggive-text-input>
+
         </div>
 
         <p *ngIf="stripeError" class="error" aria-live="assertive">
@@ -342,10 +357,16 @@
         [stepControl]="marketingGroup"
         label="Receive updates"
       >
-        <p class="b-bold b-rt-0" id="optInCharityEmail-label">Would you be happy to receive email updates from {{ campaign.charity.name }}?</p>
+        <p class="b-bold b-rt-0" id="optInCharityEmail-label">Would you be happy to receive email updates from <span class="colour-primary">{{ campaign.charity.name }}</span>?</p>
         <mat-radio-group tabindex="0" aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
-          <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.charity.name }}</mat-radio-button>
-          <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.charity.name }}</mat-radio-button>
+          <div class="binary-options">
+            <div class="binary-option">
+              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.charity.name }}</mat-radio-button>
+            </div>
+            <div class="binary-option">
+              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.charity.name }}</mat-radio-button>
+            </div>
+          </div>
           <p class="error" *ngIf="triedToLeaveMarketing && marketingGroup.get('optInCharityEmail')?.hasError('required')" aria-live="assertive">
             Please choose whether you wish to receive updates from {{ campaign.charity.name }}.
           </p>
@@ -365,10 +386,16 @@
           </p>
         </mat-hint>
 
-        <p class="b-bold b-rt-0" id="optInTbgEmail-label">Would you be happy to receive emails from the Big Give?</p>
+        <p class="b-bold b-rt-0" id="optInTbgEmail-label">Would you be happy to receive emails from the <span class="colour-primary">Big Give</span>?</p>
         <mat-radio-group tabindex="0" aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
-          <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from the Big Give</mat-radio-button>
-          <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from the Big Give</mat-radio-button>
+          <div class="binary-options">
+            <div class="binary-option">
+              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from the Big Give</mat-radio-button>
+            </div>
+            <div class="binary-option">
+              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from the Big Give</mat-radio-button>
+            </div>
+          </div>
           <p class="error" *ngIf="triedToLeaveMarketing && marketingGroup.get('optInTbgEmail')?.hasError('required')" aria-live="assertive">
             Please choose whether you wish to receive updates from the Big Give.
           </p>
@@ -380,11 +407,17 @@
         </mat-hint>
 
         <div *ngIf="showChampionOptIn">
-          <p class="b-bold b-rt-0" id="optInChampionEmail-label">Would you be happy to receive emails from {{ campaign.championName }}?</p>
+          <p class="b-bold b-rt-0" id="optInChampionEmail-label">Would you be happy to receive emails from <span class="colour-primary">{{ campaign.championName }}</span>?</p>
           <mat-radio-group tabindex="0" aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
             <mat-hint>{{ campaign.championOptInStatement }}.</mat-hint>
-            <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.championName }} </mat-radio-button>
-            <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.championName }} </mat-radio-button>
+            <div class="binary-options">
+              <div class="binary-option">
+                <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.championName }} </mat-radio-button>
+              </div>
+              <div class="binary-option">
+                <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.championName }} </mat-radio-button>
+              </div>
+            </div>
             <p class="error" *ngIf="triedToLeaveMarketing && marketingGroup.get('optInChampionEmail')?.hasError('required')" aria-live="assertive">
               Please choose whether you wish to receive updates from {{ campaign.championName }}.
             </p>
