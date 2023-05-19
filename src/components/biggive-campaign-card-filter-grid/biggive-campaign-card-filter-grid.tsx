@@ -68,22 +68,22 @@ export class BiggiveCampaignCardFilterGrid {
   /**
    * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
    */
-  @Prop() categoryOptions: string | string[] = [];
+  @Prop() categoryOptions: string | Record<string, string>;
 
   /**
    * JSON array of beneficiary key/values, or takes a stringified equiavalent (for Storybook)
    */
-  @Prop() beneficiaryOptions: string | string[] = [];
+  @Prop() beneficiaryOptions: string | Record<string, string>;
 
   /**
    * JSON array of location key/values, or takes a stringified equiavalent (for Storybook)
    */
-  @Prop() locationOptions: string | string[] = [];
+  @Prop() locationOptions: string | Record<string, string>;
 
   /**
    * JSON array of funding key/values, or takes a stringified equiavalent (for Storybook)
    */
-  @Prop() fundingOptions: string | string[] = [];
+  @Prop() fundingOptions: string | Record<string, string>;
 
   /**
    * This helps us inject a pre-selected dropdown value from outside of this component.
@@ -313,15 +313,10 @@ export class BiggiveCampaignCardFilterGrid {
                     prompt="Category"
                     placeholder={this.categoriesPlaceHolderText}
                     selectedLabel={this.selectedFilterCategory}
+                    options={this.categoryOptions}
                     id="categories"
                     space-below="2"
-                  >
-                    {this.categoryOptions.length === 0
-                      ? undefined
-                      : (Array.isArray(this.categoryOptions) ? this.categoryOptions : JSON.parse(this.categoryOptions)).map(option => (
-                          <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                        ))}
-                  </biggive-form-field-select>
+                  ></biggive-form-field-select>
                 </div>
 
                 <div class="select-wrapper-2">
@@ -330,15 +325,10 @@ export class BiggiveCampaignCardFilterGrid {
                     prompt="Beneficiary"
                     placeholder={this.beneficiariesPlaceHolderText}
                     selectedLabel={this.selectedFilterBeneficiary}
+                    options={this.beneficiaryOptions}
                     id="beneficiaries"
                     space-below="2"
-                  >
-                    {this.beneficiaryOptions.length === 0
-                      ? undefined
-                      : (Array.isArray(this.beneficiaryOptions) ? this.beneficiaryOptions : JSON.parse(this.beneficiaryOptions)).map(option => (
-                          <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                        ))}
-                  </biggive-form-field-select>
+                  ></biggive-form-field-select>
                 </div>
 
                 <div class="select-wrapper-3">
@@ -347,15 +337,10 @@ export class BiggiveCampaignCardFilterGrid {
                     prompt="Location"
                     placeholder={this.locationsPlaceHolderText}
                     selectedLabel={this.selectedFilterLocation}
+                    options={this.locationOptions}
                     id="locations"
                     space-below="2"
-                  >
-                    {this.locationOptions.length === 0
-                      ? undefined
-                      : (Array.isArray(this.locationOptions) ? this.locationOptions : JSON.parse(this.locationOptions)).map(option => (
-                          <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                        ))}
-                  </biggive-form-field-select>
+                  ></biggive-form-field-select>
                 </div>
 
                 <div class="select-wrapper-4">
@@ -364,15 +349,10 @@ export class BiggiveCampaignCardFilterGrid {
                     prompt="Funding"
                     placeholder={this.fundingPlaceHolderText}
                     selectedLabel={this.selectedFilterFunding}
+                    options={this.fundingOptions}
                     id="funding"
                     space-below="2"
-                  >
-                    {this.fundingOptions.length === 0
-                      ? undefined
-                      : (Array.isArray(this.fundingOptions) ? this.fundingOptions : JSON.parse(this.fundingOptions)).map(option => (
-                          <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                        ))}
-                  </biggive-form-field-select>
+                  ></biggive-form-field-select>
                 </div>
                 <div class="align-right">
                   <biggive-button label="Apply filters" onClick={this.handleApplyFilterButtonClick} />
@@ -381,7 +361,14 @@ export class BiggiveCampaignCardFilterGrid {
             </div>
 
             <div class="sort-wrap">
-              <biggive-form-field-select prompt={null} select-style="underlined" placeholder={this.sortByPlaceholderText} selectedLabel={this.selectedSortByOption} id="sort-by">
+              <biggive-form-field-select
+                options={{ amountRaised: 'Most raised', matchFundsRemaining: 'Match funds remaining' }}
+                prompt={null}
+                select-style="underlined"
+                placeholder={this.sortByPlaceholderText}
+                selectedLabel={this.selectedSortByOption}
+                id="sort-by"
+              >
                 <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>
                 <biggive-form-field-select-option value="matchFundsRemaining" label="Match funds remaining"></biggive-form-field-select-option>
                 {(this.searchText || '').length > 0 ? <biggive-form-field-select-option value="Relevance" label="Relevance"></biggive-form-field-select-option> : null}

@@ -353,7 +353,7 @@ export namespace Components {
         /**
           * JSON array of beneficiary key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "beneficiaryOptions": string | string[];
+        "beneficiaryOptions": string | Record<string, string>;
         /**
           * Defines the text on the search button
          */
@@ -361,11 +361,11 @@ export namespace Components {
         /**
           * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "categoryOptions": string | string[];
+        "categoryOptions": string | Record<string, string>;
         /**
           * JSON array of funding key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "fundingOptions": string | string[];
+        "fundingOptions": string | Record<string, string>;
         /**
           * Intro
          */
@@ -373,7 +373,7 @@ export namespace Components {
         /**
           * JSON array of location key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "locationOptions": string | string[];
+        "locationOptions": string | Record<string, string>;
         /**
           * Defines the text displayed as the placeholder in the input field before the user types anything
          */
@@ -520,6 +520,10 @@ export namespace Components {
          */
         "backgroundColour": 'white' | 'grey';
         /**
+          * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
+         */
+        "options": string | Record<string, string>;
+        /**
           * Placeholder
          */
         "placeholder": string;
@@ -534,16 +538,6 @@ export namespace Components {
           * Space below component
          */
         "spaceBelow": number;
-    }
-    interface BiggiveFormFieldSelectOption {
-        /**
-          * Label
-         */
-        "label": string;
-        /**
-          * Value
-         */
-        "value": string;
     }
     interface BiggiveFormattedText {
         /**
@@ -1125,10 +1119,6 @@ export interface BiggiveFormFieldSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLBiggiveFormFieldSelectElement;
 }
-export interface BiggiveFormFieldSelectOptionCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLBiggiveFormFieldSelectOptionElement;
-}
 export interface BiggiveIconButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLBiggiveIconButtonElement;
@@ -1257,12 +1247,6 @@ declare global {
     var HTMLBiggiveFormFieldSelectElement: {
         prototype: HTMLBiggiveFormFieldSelectElement;
         new (): HTMLBiggiveFormFieldSelectElement;
-    };
-    interface HTMLBiggiveFormFieldSelectOptionElement extends Components.BiggiveFormFieldSelectOption, HTMLStencilElement {
-    }
-    var HTMLBiggiveFormFieldSelectOptionElement: {
-        prototype: HTMLBiggiveFormFieldSelectOptionElement;
-        new (): HTMLBiggiveFormFieldSelectOptionElement;
     };
     interface HTMLBiggiveFormattedTextElement extends Components.BiggiveFormattedText, HTMLStencilElement {
     }
@@ -1494,7 +1478,6 @@ declare global {
         "biggive-footer": HTMLBiggiveFooterElement;
         "biggive-form": HTMLBiggiveFormElement;
         "biggive-form-field-select": HTMLBiggiveFormFieldSelectElement;
-        "biggive-form-field-select-option": HTMLBiggiveFormFieldSelectOptionElement;
         "biggive-formatted-text": HTMLBiggiveFormattedTextElement;
         "biggive-generic-icon": HTMLBiggiveGenericIconElement;
         "biggive-grid": HTMLBiggiveGridElement;
@@ -1877,7 +1860,7 @@ declare namespace LocalJSX {
         /**
           * JSON array of beneficiary key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "beneficiaryOptions"?: string | string[];
+        "beneficiaryOptions"?: string | Record<string, string>;
         /**
           * Defines the text on the search button
          */
@@ -1885,11 +1868,11 @@ declare namespace LocalJSX {
         /**
           * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "categoryOptions"?: string | string[];
+        "categoryOptions"?: string | Record<string, string>;
         /**
           * JSON array of funding key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "fundingOptions"?: string | string[];
+        "fundingOptions"?: string | Record<string, string>;
         /**
           * Intro
          */
@@ -1897,7 +1880,7 @@ declare namespace LocalJSX {
         /**
           * JSON array of location key/values, or takes a stringified equiavalent (for Storybook)
          */
-        "locationOptions"?: string | string[];
+        "locationOptions"?: string | Record<string, string>;
         /**
           * This event `doSearchAndFilterUpdate` event is emitted and propogates to the parent component which handles it
          */
@@ -2058,6 +2041,10 @@ declare namespace LocalJSX {
          */
         "onDoSelectChange"?: (event: BiggiveFormFieldSelectCustomEvent<object>) => void;
         /**
+          * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
+         */
+        "options": string | Record<string, string>;
+        /**
           * Placeholder
          */
         "placeholder"?: string;
@@ -2072,20 +2059,6 @@ declare namespace LocalJSX {
           * Space below component
          */
         "spaceBelow"?: number;
-    }
-    interface BiggiveFormFieldSelectOption {
-        /**
-          * Label
-         */
-        "label"?: string;
-        /**
-          * This event `doOptionSelect` event is emitted and propogates to the parent component which handles it
-         */
-        "onDoOptionSelect"?: (event: BiggiveFormFieldSelectOptionCustomEvent<object>) => void;
-        /**
-          * Value
-         */
-        "value"?: string;
     }
     interface BiggiveFormattedText {
         /**
@@ -2670,7 +2643,6 @@ declare namespace LocalJSX {
         "biggive-footer": BiggiveFooter;
         "biggive-form": BiggiveForm;
         "biggive-form-field-select": BiggiveFormFieldSelect;
-        "biggive-form-field-select-option": BiggiveFormFieldSelectOption;
         "biggive-formatted-text": BiggiveFormattedText;
         "biggive-generic-icon": BiggiveGenericIcon;
         "biggive-grid": BiggiveGrid;
@@ -2731,7 +2703,6 @@ declare module "@stencil/core" {
             "biggive-footer": LocalJSX.BiggiveFooter & JSXBase.HTMLAttributes<HTMLBiggiveFooterElement>;
             "biggive-form": LocalJSX.BiggiveForm & JSXBase.HTMLAttributes<HTMLBiggiveFormElement>;
             "biggive-form-field-select": LocalJSX.BiggiveFormFieldSelect & JSXBase.HTMLAttributes<HTMLBiggiveFormFieldSelectElement>;
-            "biggive-form-field-select-option": LocalJSX.BiggiveFormFieldSelectOption & JSXBase.HTMLAttributes<HTMLBiggiveFormFieldSelectOptionElement>;
             "biggive-formatted-text": LocalJSX.BiggiveFormattedText & JSXBase.HTMLAttributes<HTMLBiggiveFormattedTextElement>;
             "biggive-generic-icon": LocalJSX.BiggiveGenericIcon & JSXBase.HTMLAttributes<HTMLBiggiveGenericIconElement>;
             "biggive-grid": LocalJSX.BiggiveGrid & JSXBase.HTMLAttributes<HTMLBiggiveGridElement>;

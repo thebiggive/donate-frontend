@@ -26,6 +26,11 @@ export class BiggiveFormFieldSelect {
 
   @Prop() selectedValue: string | null;
   @Prop() selectedLabel: string | null;
+
+  /**
+   * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
+   */
+  @Prop() options!: string | Record<string, string>;
   @Prop() selectStyle: 'bordered' | 'underlined' = 'bordered';
 
   /**
@@ -71,15 +76,28 @@ export class BiggiveFormFieldSelect {
   render() {
     const greyIfRequired = this.backgroundColour === 'grey' ? ' grey' : '';
 
+    let options: Record<string, string>;
+    if (typeof this.options === 'string') {
+      options = JSON.parse(this.options);
+    } else {
+      options = this.options;
+    }
+
     return (
-      <div class={'dropdown space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle + (this.prompt === null ? '  noprompt' : '')}>
-        <div class="sleeve" onClick={this.toggleFocus} onMouseLeave={this.toggleFocus}>
-          <span class={'placeholder' + greyIfRequired}>{this.selectedLabel === null || this.selectedLabel === undefined ? this.placeholder : this.selectedLabel}</span>
-        </div>
-        <div class={'options' + greyIfRequired}>
-          <slot></slot>
-        </div>
-        {this.prompt && <div class={'prompt' + greyIfRequired}>{this.prompt}</div>}
+      <div>
+        <label class={greyIfRequired}>
+          <div class={'prompt' + greyIfRequired}>{this.prompt}</div>
+          <div class={'dropdown space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle + (this.prompt === null ? '  noprompt' : '')}>
+            <div class="sleeve">
+              <select class={greyIfRequired}>
+                {Object.entries(options).map((value: [string, string]) => (
+                  <option value={value[0]}>{value[1]}</option>
+                ))}
+              </select>
+              <div class="arrow"></div>
+            </div>
+          </div>
+        </label>
       </div>
     );
   }

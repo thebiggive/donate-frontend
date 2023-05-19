@@ -111,6 +111,8 @@
     }
 
     .filter-wrap {
+      background-color: $colour-grey-background; // temp for testing dropdown
+
       margin-left: $spacer-3;
 
       .button.filter {
