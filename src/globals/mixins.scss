@@ -368,6 +368,9 @@
       background-position: center center;
     }
   }
+  span.placeholder.grey {
+    background-color: $colour-grey-background;
+  }
 }
 
 @mixin dropdown-underlined {

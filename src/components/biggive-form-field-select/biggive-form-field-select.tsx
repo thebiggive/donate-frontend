@@ -69,15 +69,17 @@ export class BiggiveFormFieldSelect {
   }
 
   render() {
+    const greyIfRequired = this.backgroundColour === 'grey' ? ' grey' : '';
+
     return (
       <div class={'dropdown space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle + (this.prompt === null ? '  noprompt' : '')}>
         <div class="sleeve" onClick={this.toggleFocus} onMouseLeave={this.toggleFocus}>
-          <span class="placeholder">{this.selectedLabel === null || this.selectedLabel === undefined ? this.placeholder : this.selectedLabel}</span>
+          <span class={'placeholder' + greyIfRequired}>{this.selectedLabel === null || this.selectedLabel === undefined ? this.placeholder : this.selectedLabel}</span>
         </div>
-        <div class={'options' + (this.backgroundColour === 'grey' ? ' grey' : '')}>
+        <div class={'options' + greyIfRequired}>
           <slot></slot>
         </div>
-        {this.prompt && <div class={'prompt' + (this.backgroundColour === 'grey' ? ' grey' : '')}>{this.prompt}</div>}
+        {this.prompt && <div class={'prompt' + greyIfRequired}>{this.prompt}</div>}
       </div>
     );
   }
