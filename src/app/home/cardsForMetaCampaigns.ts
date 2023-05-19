@@ -61,7 +61,7 @@ export const cardsForMetaCampaigns = function (
 
   const now = new Date();
 
-  const k2mCard: HighlightCard = (now >= new Date("2023-05-22T12:00:00+01:00")) ? {
+  const k2mCard = (now >= new Date("2023-05-22T12:00:00+01:00")) ? {
     headerText: 'Kind²Mind results',
     backgroundImageUrl: new URL('/assets/images/turquoise-texture.jpg', donateUriPrefix),
     iconColor: 'brand-mhf-turquoise',
@@ -70,7 +70,7 @@ export const cardsForMetaCampaigns = function (
       text: 'See Results',
       href: new URL('/kind-2-mind-2023', donateUriPrefix)
     }
-  } :
+  } as const :
     {
     headerText: 'Double your donation in Kind²Mind',
     backgroundImageUrl: new URL('/assets/images/turquoise-texture.jpg', donateUriPrefix),
@@ -80,7 +80,7 @@ export const cardsForMetaCampaigns = function (
       text: 'Donate now',
       href: new URL('/kind-2-mind-2023', donateUriPrefix)
     }
-  };
+  } as const;
 
   return [
       ...metaCampaignCards,
