@@ -142,7 +142,6 @@ export class BiggiveCampaignCardFilterGrid {
     this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
   };
 
-
   private getSearchAndFilterObject(): {
     searchText: string;
     sortBy: string;
