@@ -1,4 +1,4 @@
-import { Component, Prop, h, Event, Element, EventEmitter, Listen } from '@stencil/core';
+import { Component, Prop, h, Element, State } from '@stencil/core';
 
 @Component({
   tag: 'biggive-form-field-select',
@@ -7,24 +7,16 @@ import { Component, Prop, h, Event, Element, EventEmitter, Listen } from '@stenc
 })
 export class BiggiveFormFieldSelect {
   @Element() el: HTMLDivElement;
-  /**
-   * This event `doChange` event is emitted and propogates to the parent
-   * component which handles it
-   */
-  @Event({
-    eventName: 'doSelectChange',
-    composed: true,
-    cancelable: true,
-    bubbles: true,
-  })
-  @Prop() onChange: (value: string) => void;
+
+  @Prop()
+  onSelectionChange: (value: string) => void;
   /**
    * Displayed as 'eyebrow' label over the top border of the box.
    */
   @Prop() prompt!: string | null;
 
-  @Prop() selectedValue: string | null;
-  @Prop() selectedLabel: string | null;
+  @Prop({ mutable: true }) selectedValue: string | null;
+  @Prop({ mutable: true }) selectedLabel: string | null;
 
   /**
    * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
@@ -37,11 +29,21 @@ export class BiggiveFormFieldSelect {
    */
   @Prop() backgroundColour: 'white' | 'grey';
 
-  doOptionSelectCompletedHandler(event) {
-    console.log({ event });
-    this.selectedValue = event.target.value;
+  @State()
+  placeHolderRemoved = false;
+
+  doOptionSelectCompletedHandler = event => {
+    const value = event.target.value;
+    this.selectedValue = value;
     this.selectedLabel = event.target.label;
-  }
+    if (typeof this.placeholder === 'string') {
+      // In future we might want to not remove the placeholder and allow people to go back to it. But
+      // we remove it today to maintain the existing filter grid behaviour
+
+      this.placeHolderRemoved = true;
+    }
+    this.onSelectionChange(value);
+  };
 
   /**
    * Space below component
@@ -50,7 +52,7 @@ export class BiggiveFormFieldSelect {
   /**
    * Placeholder
    */
-  @Prop() placeholder: string;
+  @Prop() placeholder: string | undefined;
 
   toggleFocus(event) {
     if (event.target) {
@@ -73,6 +75,13 @@ export class BiggiveFormFieldSelect {
       options = JSON.parse(this.options);
     } else {
       options = this.options;
+    }
+    if (Array.isArray(options)) {
+      options = Object.fromEntries(options.map((value: string) => [value, value]));
+    }
+
+    if (this.placeholder && !this.placeHolderRemoved) {
+      options = Object.assign({ __placeholder__: this.placeholder }, options);
     }
 
     return (

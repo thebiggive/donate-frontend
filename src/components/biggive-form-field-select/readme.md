@@ -7,23 +7,24 @@
 
 ## Properties
 
-| Property               | Attribute           | Description                                                                           | Type                                 | Default      |
-| ---------------------- | ------------------- | ------------------------------------------------------------------------------------- | ------------------------------------ | ------------ |
-| `backgroundColour`     | `background-colour` | Must match background of containing element, or unintended shape will appear.         | `"grey" \| "white"`                  | `undefined`  |
-| `options` _(required)_ | `options`           | JSON array of category key/values, or takes a stringified equiavalent (for Storybook) | `string \| { [x: string]: string; }` | `undefined`  |
-| `placeholder`          | `placeholder`       | Placeholder                                                                           | `string`                             | `undefined`  |
-| `prompt` _(required)_  | `prompt`            | Displayed as 'eyebrow' label over the top border of the box.                          | `null \| string`                     | `undefined`  |
-| `selectStyle`          | `select-style`      |                                                                                       | `"bordered" \| "underlined"`         | `'bordered'` |
-| `selectedLabel`        | `selected-label`    |                                                                                       | `null \| string`                     | `undefined`  |
-| `selectedValue`        | `selected-value`    |                                                                                       | `null \| string`                     | `undefined`  |
-| `spaceBelow`           | `space-below`       | Space below component                                                                 | `number`                             | `0`          |
+| Property               | Attribute           | Description                                                                                    | Type                                 | Default      |
+| ---------------------- | ------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------ | ------------ |
+| `backgroundColour`     | `background-colour` | Must match background of containing element, or unintended shape will appear.                  | `"grey" \| "white"`                  | `undefined`  |
+| `onSelectionChange`    | --                  | This event `doChange` event is emitted and propogates to the parent component which handles it | `(value: string) => void`            | `undefined`  |
+| `options` _(required)_ | `options`           | JSON array of category key/values, or takes a stringified equiavalent (for Storybook)          | `string \| { [x: string]: string; }` | `undefined`  |
+| `placeholder`          | `placeholder`       | Placeholder                                                                                    | `string`                             | `undefined`  |
+| `prompt` _(required)_  | `prompt`            | Displayed as 'eyebrow' label over the top border of the box.                                   | `null \| string`                     | `undefined`  |
+| `selectStyle`          | `select-style`      |                                                                                                | `"bordered" \| "underlined"`         | `'bordered'` |
+| `selectedLabel`        | `selected-label`    |                                                                                                | `null \| string`                     | `undefined`  |
+| `selectedValue`        | `selected-value`    |                                                                                                | `null \| string`                     | `undefined`  |
+| `spaceBelow`           | `space-below`       | Space below component                                                                          | `number`                             | `0`          |
 
 
 ## Events
 
-| Event            | Description                                                                                    | Type                  |
-| ---------------- | ---------------------------------------------------------------------------------------------- | --------------------- |
-| `doSelectChange` | This event `doChange` event is emitted and propogates to the parent component which handles it | `CustomEvent<object>` |
+| Event            | Description                                                                                    | Type               |
+| ---------------- | ---------------------------------------------------------------------------------------------- | ------------------ |
+| `doSelectChange` | This event `doChange` event is emitted and propogates to the parent component which handles it | `CustomEvent<any>` |
 
 
 ## Dependencies

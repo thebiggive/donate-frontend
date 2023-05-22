@@ -519,10 +519,7 @@ export namespace Components {
           * Must match background of containing element, or unintended shape will appear.
          */
         "backgroundColour": 'white' | 'grey';
-        /**
-          * This event `doChange` event is emitted and propogates to the parent component which handles it
-         */
-        "onChange": (value: string) => void;
+        "onSelectionChange": (value: string) => void;
         /**
           * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
          */
@@ -530,7 +527,7 @@ export namespace Components {
         /**
           * Placeholder
          */
-        "placeholder": string;
+        "placeholder": string | undefined;
         /**
           * Displayed as 'eyebrow' label over the top border of the box.
          */
@@ -1118,10 +1115,6 @@ export interface BiggiveCampaignCardCustomEvent<T> extends CustomEvent<T> {
 export interface BiggiveCampaignCardFilterGridCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLBiggiveCampaignCardFilterGridElement;
-}
-export interface BiggiveFormFieldSelectCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLBiggiveFormFieldSelectElement;
 }
 export interface BiggiveIconButtonCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2040,14 +2033,7 @@ declare namespace LocalJSX {
           * Must match background of containing element, or unintended shape will appear.
          */
         "backgroundColour"?: 'white' | 'grey';
-        /**
-          * This event `doChange` event is emitted and propogates to the parent component which handles it
-         */
-        "onChange"?: (value: string) => void;
-        /**
-          * This event `doChange` event is emitted and propogates to the parent component which handles it
-         */
-        "onDoSelectChange"?: (event: BiggiveFormFieldSelectCustomEvent<any>) => void;
+        "onSelectionChange"?: (value: string) => void;
         /**
           * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
          */
@@ -2055,7 +2041,7 @@ declare namespace LocalJSX {
         /**
           * Placeholder
          */
-        "placeholder"?: string;
+        "placeholder"?: string | undefined;
         /**
           * Displayed as 'eyebrow' label over the top border of the box.
          */
