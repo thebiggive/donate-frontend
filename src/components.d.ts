@@ -520,6 +520,10 @@ export namespace Components {
          */
         "backgroundColour": 'white' | 'grey';
         /**
+          * This event `doChange` event is emitted and propogates to the parent component which handles it
+         */
+        "onChange": (value: string) => void;
+        /**
           * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
          */
         "options": string | Record<string, string>;
@@ -2039,7 +2043,11 @@ declare namespace LocalJSX {
         /**
           * This event `doChange` event is emitted and propogates to the parent component which handles it
          */
-        "onDoSelectChange"?: (event: BiggiveFormFieldSelectCustomEvent<object>) => void;
+        "onChange"?: (value: string) => void;
+        /**
+          * This event `doChange` event is emitted and propogates to the parent component which handles it
+         */
+        "onDoSelectChange"?: (event: BiggiveFormFieldSelectCustomEvent<any>) => void;
         /**
           * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
          */

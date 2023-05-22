@@ -151,6 +151,7 @@ export class BiggiveCampaignCardFilterGrid {
 
   @Listen('doSelectChange')
   doOptionSelectCompletedHandler(event) {
+    console.log('In BiggiveCampaignCardFilterGrid.doOptionSelectCompletedHandler');
     const nameOfUpdatedDropdown = event.detail.placeholder;
     // If this method was trigerred by the selection of a 'Sort by' dropdown option, then
     // emit an event to search, but do NOT emit an event for example when filter options

@@ -17,8 +17,7 @@ export class BiggiveFormFieldSelect {
     cancelable: true,
     bubbles: true,
   })
-  doSelectChange: EventEmitter<object>;
-
+  @Prop() onChange: (value: string) => void;
   /**
    * Displayed as 'eyebrow' label over the top border of the box.
    */
@@ -38,17 +37,10 @@ export class BiggiveFormFieldSelect {
    */
   @Prop() backgroundColour: 'white' | 'grey';
 
-  @Listen('doOptionSelect')
   doOptionSelectCompletedHandler(event) {
-    this.selectedValue = event.detail.value;
-    this.selectedLabel = event.detail.label;
-    this.doSelectChange.emit({ value: this.selectedValue, label: this.selectedLabel, placeholder: this.placeholder });
-    if (this.el.shadowRoot !== null && this.el.shadowRoot !== undefined) {
-      const dropdown = this.el.shadowRoot.querySelector('.dropdown');
-      if (dropdown !== null && dropdown !== undefined) {
-        dropdown.classList.remove('active');
-      }
-    }
+    console.log({ event });
+    this.selectedValue = event.target.value;
+    this.selectedLabel = event.target.label;
   }
 
   /**
@@ -89,9 +81,11 @@ export class BiggiveFormFieldSelect {
           <div class={'prompt' + greyIfRequired}>{this.prompt}</div>
           <div class={'dropdown space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle + (this.prompt === null ? '  noprompt' : '')}>
             <div class="sleeve">
-              <select class={greyIfRequired}>
+              <select class={greyIfRequired} onChange={this.doOptionSelectCompletedHandler}>
                 {Object.entries(options).map((value: [string, string]) => (
-                  <option value={value[0]}>{value[1]}</option>
+                  <option selected={this.selectedValue === value[0]} value={value[0]}>
+                    {value[1]}
+                  </option>
                 ))}
               </select>
               <div class="arrow"></div>
