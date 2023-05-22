@@ -1,4 +1,4 @@
-import { Component, Prop, h, Event, Element, EventEmitter, Listen } from '@stencil/core';
+import { Component, Prop, h, Element, State } from '@stencil/core';
 
 @Component({
   tag: 'biggive-form-field-select',
@@ -7,25 +7,21 @@ import { Component, Prop, h, Event, Element, EventEmitter, Listen } from '@stenc
 })
 export class BiggiveFormFieldSelect {
   @Element() el: HTMLDivElement;
-  /**
-   * This event `doChange` event is emitted and propogates to the parent
-   * component which handles it
-   */
-  @Event({
-    eventName: 'doSelectChange',
-    composed: true,
-    cancelable: true,
-    bubbles: true,
-  })
-  doSelectChange: EventEmitter<object>;
 
+  @Prop()
+  onSelectionChange: (value: string) => void;
   /**
    * Displayed as 'eyebrow' label over the top border of the box.
    */
   @Prop() prompt!: string | null;
 
-  @Prop() selectedValue: string | null;
-  @Prop() selectedLabel: string | null;
+  @Prop({ mutable: true }) selectedValue: string | null;
+  @Prop({ mutable: true }) selectedLabel: string | null;
+
+  /**
+   * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
+   */
+  @Prop() options!: string | Record<string, string>;
   @Prop() selectStyle: 'bordered' | 'underlined' = 'bordered';
 
   /**
@@ -33,18 +29,21 @@ export class BiggiveFormFieldSelect {
    */
   @Prop() backgroundColour: 'white' | 'grey';
 
-  @Listen('doOptionSelect')
-  doOptionSelectCompletedHandler(event) {
-    this.selectedValue = event.detail.value;
-    this.selectedLabel = event.detail.label;
-    this.doSelectChange.emit({ value: this.selectedValue, label: this.selectedLabel, placeholder: this.placeholder });
-    if (this.el.shadowRoot !== null && this.el.shadowRoot !== undefined) {
-      const dropdown = this.el.shadowRoot.querySelector('.dropdown');
-      if (dropdown !== null && dropdown !== undefined) {
-        dropdown.classList.remove('active');
-      }
+  @State()
+  placeHolderRemoved = false;
+
+  doOptionSelectCompletedHandler = event => {
+    const value = event.target.value;
+    this.selectedValue = value;
+    this.selectedLabel = event.target.label;
+    if (typeof this.placeholder === 'string') {
+      // In future we might want to not remove the placeholder and allow people to go back to it. But
+      // we remove it today to maintain the existing filter grid behaviour
+
+      this.placeHolderRemoved = true;
     }
-  }
+    this.onSelectionChange(value);
+  };
 
   /**
    * Space below component
@@ -53,7 +52,7 @@ export class BiggiveFormFieldSelect {
   /**
    * Placeholder
    */
-  @Prop() placeholder: string;
+  @Prop() placeholder: string | undefined;
 
   toggleFocus(event) {
     if (event.target) {
@@ -71,15 +70,37 @@ export class BiggiveFormFieldSelect {
   render() {
     const greyIfRequired = this.backgroundColour === 'grey' ? ' grey' : '';
 
+    let options: Record<string, string>;
+    if (typeof this.options === 'string') {
+      options = JSON.parse(this.options);
+    } else {
+      options = this.options;
+    }
+    if (Array.isArray(options)) {
+      options = Object.fromEntries(options.map((value: string) => [value, value]));
+    }
+
+    if (typeof this.placeholder === 'string' && !this.placeHolderRemoved) {
+      options = Object.assign({ __placeholder__: this.placeholder }, options);
+    }
+
     return (
-      <div class={'dropdown space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle + (this.prompt === null ? '  noprompt' : '')}>
-        <div class="sleeve" onClick={this.toggleFocus} onMouseLeave={this.toggleFocus}>
-          <span class={'placeholder' + greyIfRequired}>{this.selectedLabel === null || this.selectedLabel === undefined ? this.placeholder : this.selectedLabel}</span>
-        </div>
-        <div class={'options' + greyIfRequired}>
-          <slot></slot>
-        </div>
-        {this.prompt && <div class={'prompt' + greyIfRequired}>{this.prompt}</div>}
+      <div>
+        <label class={greyIfRequired}>
+          <div class={'prompt' + greyIfRequired}>{this.prompt}</div>
+          <div class={'dropdown space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle + (this.prompt === null ? '  noprompt' : '')}>
+            <div class="sleeve">
+              <select class={greyIfRequired} onChange={this.doOptionSelectCompletedHandler}>
+                {Object.entries(options).map((value: [string, string]) => (
+                  <option selected={this.selectedValue === value[0]} value={value[0]}>
+                    {value[1]}
+                  </option>
+                ))}
+              </select>
+              <div class="arrow"></div>
+            </div>
+          </div>
+        </label>
       </div>
     );
   }
