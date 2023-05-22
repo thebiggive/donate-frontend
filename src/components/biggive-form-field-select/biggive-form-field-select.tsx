@@ -80,7 +80,7 @@ export class BiggiveFormFieldSelect {
       options = Object.fromEntries(options.map((value: string) => [value, value]));
     }
 
-    if (this.placeholder && !this.placeHolderRemoved) {
+    if (typeof this.placeholder === 'string' && !this.placeHolderRemoved) {
       options = Object.assign({ __placeholder__: this.placeholder }, options);
     }
 
