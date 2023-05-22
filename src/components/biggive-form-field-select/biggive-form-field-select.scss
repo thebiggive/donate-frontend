@@ -68,9 +68,6 @@ select.grey {
     z-index: 1;
     left: 0;
     right: 0;
-    border-left: 1px solid $colour-primary-blue;
-    border-right: 1px solid $colour-primary-blue;
-    border-bottom: 1px solid $colour-primary-blue;
   }
   &.active .options {
       display: block;
