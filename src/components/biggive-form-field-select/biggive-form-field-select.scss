@@ -1,7 +1,34 @@
 @include spacers();
 
+// Includes CSS taken from https://moderncss.dev/custom-select-styles-with-pure-css/
+
 :host {
   display: contents;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+select {
+  appearance: none;
+  border: none;
+  padding: 0 1em 0 0;
+  margin: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+  outline: none;
+  display: grid;
+  background-color: $colour-white;
+  align-items: center;
+}
+select.grey {
+  background-color: $colour-grey-background;
 }
 
 .prompt {
@@ -34,19 +61,14 @@
       @include dropdown-underlined();
     }
   }
-  .options {
+  select {
     max-height: 200px;
     overflow-x: hidden;
     overflow-y: scroll;
-    background-color: $colour-white;
-    position: absolute;
-    display: none;
+    width: 100%;
     z-index: 1;
     left: 0;
     right: 0;
-    border-left: 1px solid $colour-primary-blue;
-    border-right: 1px solid $colour-primary-blue;
-    border-bottom: 1px solid $colour-primary-blue;
   }
   &.active .options {
       display: block;

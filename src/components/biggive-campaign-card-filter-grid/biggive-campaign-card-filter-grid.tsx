@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, h, Listen, Prop, State } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, h, Prop, State } from '@stencil/core';
 import { faMagnifyingGlass } from '@fortawesome/pro-solid-svg-icons';
 
 @Component({
@@ -68,22 +68,22 @@ export class BiggiveCampaignCardFilterGrid {
   /**
    * JSON array of category key/values, or takes a stringified equiavalent (for Storybook)
    */
-  @Prop() categoryOptions: string | string[] = [];
+  @Prop() categoryOptions: string | Record<string, string>;
 
   /**
    * JSON array of beneficiary key/values, or takes a stringified equiavalent (for Storybook)
    */
-  @Prop() beneficiaryOptions: string | string[] = [];
+  @Prop() beneficiaryOptions: string | Record<string, string>;
 
   /**
    * JSON array of location key/values, or takes a stringified equiavalent (for Storybook)
    */
-  @Prop() locationOptions: string | string[] = [];
+  @Prop() locationOptions: string | Record<string, string>;
 
   /**
    * JSON array of funding key/values, or takes a stringified equiavalent (for Storybook)
    */
-  @Prop() fundingOptions: string | string[] = [];
+  @Prop() fundingOptions: string | Record<string, string>;
 
   /**
    * This helps us inject a pre-selected dropdown value from outside of this component.
@@ -92,27 +92,27 @@ export class BiggiveCampaignCardFilterGrid {
    * two pages is loaded directly with URL parameters - in such a scenario the dropdown
    * shows that it's pre-selected. DON-558.
    */
-  @Prop() selectedSortByOption: 'Most raised' | 'Match funds remaining' | 'Relevance';
+  @Prop({ mutable: true }) selectedSortByOption: 'Most raised' | 'Match funds remaining' | 'Relevance';
 
   /**
    * For injecting the chosen category to filter by, as per the comment above for `selectedSortByOption`.
    */
-  @Prop() selectedFilterCategory: string | null = null;
+  @Prop({ mutable: true }) selectedFilterCategory: string | null = null;
 
   /**
    * For injecting the chosen beneficiary to filter by, as per the comment above for `selectedSortByOption`.
    */
-  @Prop() selectedFilterBeneficiary: string | null = null;
+  @Prop({ mutable: true }) selectedFilterBeneficiary: string | null = null;
 
   /**
    * For injecting the chosen location to filter by, as per the comment above for `selectedSortByOption`.
    */
-  @Prop() selectedFilterLocation: string | null = null;
+  @Prop({ mutable: true }) selectedFilterLocation: string | null = null;
 
   /**
    * For injecting the chosen funding to filter by, as per the comment above for `selectedSortByOption`.
    */
-  @Prop() selectedFilterFunding: string | null = null;
+  @Prop({ mutable: true }) selectedFilterFunding: string | null = null;
 
   /**
    * State variable - causes re-render on change
@@ -120,6 +120,27 @@ export class BiggiveCampaignCardFilterGrid {
   @State() filtersApplied: boolean;
 
   private initialSortByOption: 'Most raised' | 'Match funds remaining' | 'Relevance';
+
+  categoryFilterSelectionChanged = (value: string) => {
+    this.selectedFilterCategory = value;
+  };
+
+  beneficiarySelectionChanged = (value: string) => {
+    this.selectedFilterBeneficiary = value;
+  };
+
+  locationSelectionChanged = (value: string) => {
+    this.selectedFilterLocation = value;
+  };
+
+  fundingelectionChanged = (value: string) => {
+    this.selectedFilterFunding = value;
+  };
+
+  sortByelectionChanged = (value: 'Most raised' | 'Match funds remaining' | 'Relevance') => {
+    this.selectedSortByOption = value;
+    this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
+  };
 
   private getSearchAndFilterObject(): {
     searchText: string;
@@ -147,37 +168,6 @@ export class BiggiveCampaignCardFilterGrid {
 
     // @ts-ignore
     return event;
-  }
-
-  @Listen('doSelectChange')
-  doOptionSelectCompletedHandler(event) {
-    const nameOfUpdatedDropdown = event.detail.placeholder;
-    // If this method was trigerred by the selection of a 'Sort by' dropdown option, then
-    // emit an event to search, but do NOT emit an event for example when filter options
-    // are selected, until the 'Apply filters' button is pressed which is handled separately
-    // by `handleApplyFilterButtonClick()`.
-    // Additional note -> we could, instead, do this:
-    // `<biggive-form-field-select placeholder="Sort by" id="sort-by" onDoSelectChange={this.someHandleMethod}>`
-    // but the problem with that is that `someHandleMethod` gets called first and then this
-    // method gets called, leading to two calls and more risk for error. DON-570.
-    switch (nameOfUpdatedDropdown) {
-      case this.sortByPlaceholderText:
-        this.selectedSortByOption = event.detail.value;
-        this.doSearchAndFilterUpdate.emit(this.getSearchAndFilterObject());
-        break;
-      case this.beneficiariesPlaceHolderText:
-        this.selectedFilterBeneficiary = event.detail.value;
-        break;
-      case this.categoriesPlaceHolderText:
-        this.selectedFilterCategory = event.detail.value;
-        break;
-      case this.fundingPlaceHolderText:
-        this.selectedFilterFunding = event.detail.value;
-        break;
-      case this.locationsPlaceHolderText:
-        this.selectedFilterLocation = event.detail.value;
-        break;
-    }
   }
 
   private handleApplyFilterButtonClick = () => {
@@ -313,15 +303,11 @@ export class BiggiveCampaignCardFilterGrid {
                     prompt="Category"
                     placeholder={this.categoriesPlaceHolderText}
                     selectedLabel={this.selectedFilterCategory}
+                    options={this.categoryOptions}
+                    onSelectionChange={this.categoryFilterSelectionChanged}
                     id="categories"
                     space-below="2"
-                  >
-                    {this.categoryOptions.length === 0
-                      ? undefined
-                      : (Array.isArray(this.categoryOptions) ? this.categoryOptions : JSON.parse(this.categoryOptions)).map(option => (
-                          <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                        ))}
-                  </biggive-form-field-select>
+                  ></biggive-form-field-select>
                 </div>
 
                 <div class="select-wrapper-2">
@@ -330,15 +316,11 @@ export class BiggiveCampaignCardFilterGrid {
                     prompt="Beneficiary"
                     placeholder={this.beneficiariesPlaceHolderText}
                     selectedLabel={this.selectedFilterBeneficiary}
+                    options={this.beneficiaryOptions}
+                    onSelectionChange={this.beneficiarySelectionChanged}
                     id="beneficiaries"
                     space-below="2"
-                  >
-                    {this.beneficiaryOptions.length === 0
-                      ? undefined
-                      : (Array.isArray(this.beneficiaryOptions) ? this.beneficiaryOptions : JSON.parse(this.beneficiaryOptions)).map(option => (
-                          <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                        ))}
-                  </biggive-form-field-select>
+                  ></biggive-form-field-select>
                 </div>
 
                 <div class="select-wrapper-3">
@@ -347,15 +329,11 @@ export class BiggiveCampaignCardFilterGrid {
                     prompt="Location"
                     placeholder={this.locationsPlaceHolderText}
                     selectedLabel={this.selectedFilterLocation}
+                    options={this.locationOptions}
+                    onSelectionChange={this.locationSelectionChanged}
                     id="locations"
                     space-below="2"
-                  >
-                    {this.locationOptions.length === 0
-                      ? undefined
-                      : (Array.isArray(this.locationOptions) ? this.locationOptions : JSON.parse(this.locationOptions)).map(option => (
-                          <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                        ))}
-                  </biggive-form-field-select>
+                  ></biggive-form-field-select>
                 </div>
 
                 <div class="select-wrapper-4">
@@ -364,15 +342,11 @@ export class BiggiveCampaignCardFilterGrid {
                     prompt="Funding"
                     placeholder={this.fundingPlaceHolderText}
                     selectedLabel={this.selectedFilterFunding}
+                    options={this.fundingOptions}
+                    onSelectionChange={this.fundingelectionChanged}
                     id="funding"
                     space-below="2"
-                  >
-                    {this.fundingOptions.length === 0
-                      ? undefined
-                      : (Array.isArray(this.fundingOptions) ? this.fundingOptions : JSON.parse(this.fundingOptions)).map(option => (
-                          <biggive-form-field-select-option value={option} label={option}></biggive-form-field-select-option>
-                        ))}
-                  </biggive-form-field-select>
+                  ></biggive-form-field-select>
                 </div>
                 <div class="align-right">
                   <biggive-button label="Apply filters" onClick={this.handleApplyFilterButtonClick} />
@@ -381,7 +355,15 @@ export class BiggiveCampaignCardFilterGrid {
             </div>
 
             <div class="sort-wrap">
-              <biggive-form-field-select prompt={null} select-style="underlined" placeholder={this.sortByPlaceholderText} selectedLabel={this.selectedSortByOption} id="sort-by">
+              <biggive-form-field-select
+                options={{ amountRaised: 'Most raised', matchFundsRemaining: 'Match funds remaining' }}
+                prompt={null}
+                select-style="underlined"
+                placeholder={this.sortByPlaceholderText}
+                selectedLabel={this.selectedSortByOption}
+                onSelectionChange={this.sortByelectionChanged}
+                id="sort-by"
+              >
                 <biggive-form-field-select-option value="amountRaised" label="Most raised"></biggive-form-field-select-option>
                 <biggive-form-field-select-option value="matchFundsRemaining" label="Match funds remaining"></biggive-form-field-select-option>
                 {(this.searchText || '').length > 0 ? <biggive-form-field-select-option value="Relevance" label="Relevance"></biggive-form-field-select-option> : null}

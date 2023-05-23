@@ -336,13 +336,11 @@
   position: relative;
   background-color: $colour-primary-blue;
   @include corner-clip-small-top-right();
-  span.placeholder {
-    background-color: $colour-white;
+  select {
     color: $colour-primary-blue;
     display: block;
     position: relative;
     padding: 10px 80px 10px 10px;
-    cursor: pointer;
     clip-path:
     polygon(
       0% 0%,     /* top left */
@@ -354,19 +352,22 @@
       0 100%,   /* bottom left */
       0 100%      /* bottom left */
     );
-    &:after {
-      content: '';
-      display: block;
-      position: absolute;
-      right: 20px;
-      top: 18px;
-      width: 10px;
-      height: 10px;
-      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSI3IiB2aWV3Qm94PSIwIDAgOSA3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNNS4yMzcxNiA2LjYyNDkzQzQuOTAzMjMgNy4xMjUwMiA0LjA5NyA3LjEyNTAyIDMuNzYzMDggNi42MjQ5M0wwLjEyMzg2OCAxLjE3MDYzQy0wLjIxOTk0IDAuNjU1NDU5IDAuMTkyNjMgMS44MzcxZS0wNyAwLjg2MDkwOCAyLjQyMTMyZS0wN0w4LjEzOTMzIDguNzg0MzJlLTA3QzguODA3MTggOS4zNjgxN2UtMDcgOS4yMTk3NSAwLjY1NTQ1OSA4Ljg3NjM3IDEuMTcwNjNMNS4yMzcxNiA2LjYyNDkzWiIgZmlsbD0iIzJDMDg5QiIvPgo8L3N2Zz4K');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center center;
+    span.placeholder.grey {
+      background-color: $colour-grey-background;
     }
+  }
+  div.arrow {
+    position: absolute;
+    right: 20px;
+    top: 18px;
+    width: 10px;
+    height: 10px;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSI3IiB2aWV3Qm94PSIwIDAgOSA3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNNS4yMzcxNiA2LjYyNDkzQzQuOTAzMjMgNy4xMjUwMiA0LjA5NyA3LjEyNTAyIDMuNzYzMDggNi42MjQ5M0wwLjEyMzg2OCAxLjE3MDYzQy0wLjIxOTk0IDAuNjU1NDU5IDAuMTkyNjMgMS44MzcxZS0wNyAwLjg2MDkwOCAyLjQyMTMyZS0wN0w4LjEzOTMzIDguNzg0MzJlLTA3QzguODA3MTggOS4zNjgxN2UtMDcgOS4yMTk3NSAwLjY1NTQ1OSA4Ljg3NjM3IDEuMTcwNjNMNS4yMzcxNiA2LjYyNDkzWiIgZmlsbD0iIzJDMDg5QiIvPgo8L3N2Zz4K');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    z-index: 1;
+    pointer-events: none;
   }
 }
 
@@ -375,26 +376,24 @@
   padding: 1px;
   position: relative;
   border-bottom: 1px solid $colour-primary-blue;
-  span.placeholder {
-    background-color: $colour-white;
+  select {
     color: $colour-primary-blue;
     display: block;
     position: relative;
     padding: 10px 80px 10px 10px;
-    cursor: pointer;
-    &:after {
-      content: '';
-      display: block;
-      position: absolute;
-      right: 20px;
-      top: 18px;
-      width: 10px;
-      height: 10px;
-      background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSI3IiB2aWV3Qm94PSIwIDAgOSA3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNNS4yMzcxNiA2LjYyNDkzQzQuOTAzMjMgNy4xMjUwMiA0LjA5NyA3LjEyNTAyIDMuNzYzMDggNi42MjQ5M0wwLjEyMzg2OCAxLjE3MDYzQy0wLjIxOTk0IDAuNjU1NDU5IDAuMTkyNjMgMS44MzcxZS0wNyAwLjg2MDkwOCAyLjQyMTMyZS0wN0w4LjEzOTMzIDguNzg0MzJlLTA3QzguODA3MTggOS4zNjgxN2UtMDcgOS4yMTk3NSAwLjY1NTQ1OSA4Ljg3NjM3IDEuMTcwNjNMNS4yMzcxNiA2LjYyNDkzWiIgZmlsbD0iIzJDMDg5QiIvPgo8L3N2Zz4K');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center center;
-    }
+  }
+  div.arrow {
+    position: absolute;
+    right: 20px;
+    top: 18px;
+    width: 10px;
+    height: 10px;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSI3IiB2aWV3Qm94PSIwIDAgOSA3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNNS4yMzcxNiA2LjYyNDkzQzQuOTAzMjMgNy4xMjUwMiA0LjA5NyA3LjEyNTAyIDMuNzYzMDggNi42MjQ5M0wwLjEyMzg2OCAxLjE3MDYzQy0wLjIxOTk0IDAuNjU1NDU5IDAuMTkyNjMgMS44MzcxZS0wNyAwLjg2MDkwOCAyLjQyMTMyZS0wN0w4LjEzOTMzIDguNzg0MzJlLTA3QzguODA3MTggOS4zNjgxN2UtMDcgOS4yMTk3NSAwLjY1NTQ1OSA4Ljg3NjM3IDEuMTcwNjNMNS4yMzcxNiA2LjYyNDkzWiIgZmlsbD0iIzJDMDg5QiIvPgo8L3N2Zz4K');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    z-index: 1;
+    pointer-events: none;
   }
 }
 
