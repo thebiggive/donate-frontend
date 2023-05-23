@@ -15,5 +15,4 @@ import { DonationStartFormParentComponent } from "./donation-start-form-parent.c
 })
 export class DonationStartFormNewComponent extends DonationStartFormParentComponent {
 
-    protected readonly Object = Object;
 }
