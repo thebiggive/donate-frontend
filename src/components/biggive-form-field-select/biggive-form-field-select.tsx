@@ -85,7 +85,7 @@ export class BiggiveFormFieldSelect {
     }
 
     return (
-      <div>
+      <div class="selectWrapper">
         <label class={greyIfRequired}>
           <div class={'prompt' + greyIfRequired}>{this.prompt}</div>
           <div class={'dropdown space-below-' + this.spaceBelow + ' select-style-' + this.selectStyle + (this.prompt === null ? '  noprompt' : '')}>

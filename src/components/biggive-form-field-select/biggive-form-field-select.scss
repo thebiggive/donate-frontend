@@ -30,7 +30,9 @@ select {
 select.grey {
   background-color: $colour-grey-background;
 }
-
+.selectWrapper {
+  position: relative;
+}
 .prompt {
   position: absolute;
   z-index: 2;
@@ -49,7 +51,6 @@ select.grey {
 .dropdown {
   @include standard-font();
   position: relative;
-  margin-top: 1em;
   text-align: left;
   &.select-style-bordered {
     .sleeve {
