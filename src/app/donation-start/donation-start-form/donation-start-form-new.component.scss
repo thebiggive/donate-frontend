@@ -366,18 +366,10 @@ div.binary-option {
 }
 
 div.payment-details {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
   margin-bottom: 2.5rem;
 }
 
 div.payment-details > * {
-  // 35% is > 1/3 to ensure we can't have 3 in a row, well under 1/2 so we can have two with gap between
-  flex: 1 0 35%;
-}
-
-div.payment-details > .sr-combo-inputs-row {
-  flex-basis: 100%; // contains space for card logo, PAN, Expiry & CVV, half the column width is not enough.
+  width: 100%;
+  margin-bottom: 24px;
 }
