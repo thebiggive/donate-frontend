@@ -14,6 +14,7 @@ describe('DonationTippingSliderComponent', () => {
 
     fixture = TestBed.createComponent(DonationTippingSliderComponent);
     component = fixture.componentInstance;
+    component.donationCurrency = "GBP";
     fixture.detectChanges();
   });
 
