@@ -309,29 +309,28 @@
         <!-- We need the ElementRef to always be available for Stripe.js mounting as there are
         a few dynamic ways the input can become or cease to be relevant. So just CSS-hide the
         element when not needed, and always mount it. -->
-        <div class="payment-details" [style.display]="!stripePRBMethodReady && !selectedSavedMethod && creditPenceToUse === 0 ? 'flex' : 'none'">
+        <div class="payment-details" [style.display]="!stripePRBMethodReady && !selectedSavedMethod && creditPenceToUse === 0 ? 'block' : 'none'">
           <div class="sr-combo-inputs-row">
             <biggive-text-input  prompt="Card">
             <div slot="input" class="sr-input sr-card-element" id="card-info" #cardInfo></div>
             </biggive-text-input>
           </div>
 
-          <div>
-            <!--
-            todo - make biggive-form-field-select or an alternative usable with formControlName etc
-            and replace the select box below.
-            -->
-            <mat-form-field>
-              <mat-label for="billingCountry">Billing country</mat-label>
-              <mat-select formControlName="billingCountry" id="billingCountry">
-                <mat-option *ngFor="let country of countryOptions" [value]="country.iso2">
-                  {{ country.country }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+          <!--
+          todo - use new version of component without top margin, remove negative margin above.
+          New component also corrects the prompt position.
+          -->
+          <biggive-form-field-select
+            [prompt]="'Billing country'"
+            [options]="countryOptionsObject"
+            [selectedValue]="selectedCountryCode"
+            [backgroundColour]="'grey'"
+            [onSelectionChange]="setSelectedCountry"
+            [spaceBelow]="3"
+          >
+          </biggive-form-field-select>
 
-          <biggive-text-input  prompt="Billing postcode<">
+          <biggive-text-input prompt="Billing postcode">
             <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)">
           </biggive-text-input>
 
