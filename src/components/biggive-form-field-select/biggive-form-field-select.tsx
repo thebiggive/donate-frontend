@@ -1,4 +1,4 @@
-import { Component, Prop, h, Element, State } from '@stencil/core';
+import { Component, Prop, h, Element } from '@stencil/core';
 
 @Component({
   tag: 'biggive-form-field-select',
@@ -29,19 +29,10 @@ export class BiggiveFormFieldSelect {
    */
   @Prop() backgroundColour: 'white' | 'grey';
 
-  @State()
-  placeHolderRemoved = false;
-
   doOptionSelectCompletedHandler = event => {
     const value = event.target.value;
     this.selectedValue = value;
     this.selectedLabel = event.target.label;
-    if (typeof this.placeholder === 'string') {
-      // In future we might want to not remove the placeholder and allow people to go back to it. But
-      // we remove it today to maintain the existing filter grid behaviour
-
-      this.placeHolderRemoved = true;
-    }
     this.onSelectionChange(value);
   };
 
@@ -80,7 +71,7 @@ export class BiggiveFormFieldSelect {
       options = Object.fromEntries(options.map((value: string) => [value, value]));
     }
 
-    if (typeof this.placeholder === 'string' && !this.placeHolderRemoved) {
+    if (typeof this.placeholder === 'string' && typeof this.selectedValue !== 'string') {
       options = Object.assign({ __placeholder__: this.placeholder }, options);
     }
 
