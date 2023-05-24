@@ -55,30 +55,44 @@ export const cardsForMetaCampaigns = function (
       }
     }];
   } else {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     anyExploreCard = [];
   }
 
-  if (viewingDate >= new Date("2023-04-20T12:00:00+01:00")) {
-    return [
+  const now = new Date();
+
+  const k2mCard = (now >= new Date("2023-05-22T12:00:00+01:00")) ? {
+    headerText: 'Kind²Mind results',
+    backgroundImageUrl: new URL('/assets/images/turquoise-texture.jpg', donateUriPrefix),
+    iconColor: 'brand-mhf-turquoise',
+    bodyText: '15 May to 22 May 2023',
+    button: {
+      text: 'See Results',
+      href: new URL('/kind-2-mind-2023', donateUriPrefix)
+    }
+  } as const :
+    {
+    headerText: 'Double your donation in Kind²Mind',
+    backgroundImageUrl: new URL('/assets/images/turquoise-texture.jpg', donateUriPrefix),
+    iconColor: 'brand-mhf-turquoise',
+    bodyText: '15 May to 22 May 2023',
+    button: {
+      text: 'Donate now',
+      href: new URL('/kind-2-mind-2023', donateUriPrefix)
+    }
+  } as const;
+
+  return [
       ...metaCampaignCards,
+      k2mCard,
       {
-        headerText: 'Save the Date for Kind²Mind',
-        backgroundImageUrl: new URL('/assets/images/turquoise-texture.jpg', donateUriPrefix),
-        iconColor: 'brand-mhf-turquoise',
-        bodyText: '15 May to 22 May 2023',
+        headerText: 'Applications for Christmas Challenge now open!',
+        backgroundImageUrl: new URL('/assets/images/card-background-cc-lights.jpg', donateUriPrefix),
+        iconColor: 'brand-1',
+        bodyText: 'Deadline is 7 July 2023',
         button: {
-          text: 'Find out more',
-          href: new URL('/kind-2-mind-2023', donateUriPrefix)
-        }
-      },
-      {
-        headerText: 'Green Match Fund',
-        backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
-        iconColor: 'brand-3',
-        bodyText: '20 April to 27 April 2023',
-        button: {
-          text: 'See results',
-          href: new URL('/green-match-fund-2023', donateUriPrefix)
+          text: 'Apply now',
+          href: new URL('/christmas-challenge', blogUriPrefix)
         }
       },
       {
@@ -92,32 +106,6 @@ export const cardsForMetaCampaigns = function (
         }
       },
     ];
-  }
-
-  return [
-    ...metaCampaignCards,
-    {
-      headerText: 'Applications for Women and Girls Match Fund now open!',
-      backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', donateUriPrefix),
-      iconColor: 'brand-2',
-      bodyText: 'Deadline is 23 June 2023',
-      button: {
-        text: 'Apply now',
-        href: new URL('/women-girls-match-fund', blogUriPrefix)
-      }
-    },
-    {
-      headerText: 'Save the date for Green Match Fund',
-      backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
-      iconColor: 'brand-3',
-      bodyText: '20th - 27th April 2023',
-      button: {
-        text: 'Save the date!',
-        href: new URL('/green-match-fund-2023', donateUriPrefix)
-      }
-    },
-    ...anyExploreCard,
-  ];
 }
 
 

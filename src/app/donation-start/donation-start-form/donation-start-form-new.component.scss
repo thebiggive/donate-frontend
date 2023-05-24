@@ -104,9 +104,7 @@ input:disabled {
 }
 
 .StripeElement {
-  border: solid 1px $colour-grey;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  width: 100%;
 }
 
 .c-timer {
@@ -200,19 +198,36 @@ input:disabled {
 }
 
 .donation-input.donation-input-main {
-  margin-top: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+  clear: both;
 
-  .fixed-label {
-    margin-top: 2rem;
+  input {
+    text-align: right;
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: bolder;
   }
+}
 
-  .floating-label {
-    margin-top: 0.4rem;
-  }
+input {
+  float: right;
+  outline: none;
+  border: none;
+  background-color: $colour-background;
+  width: 100%;
+};
 
-  .form-field {
-    font-size: 22px;
-  }
+#giftAidAddressContainer {
+  margin-top: 60px;
+}
+
+div#giftAidAddressContainer > div {
+  width: 50%;
+  margin-top: 20px;
 }
 
 .donation-input-tip__status-help {
@@ -344,4 +359,46 @@ mat-expansion-panel {
   width: 100%;
   text-align: center;
   cursor: pointer;
+}
+
+.colour-primary {
+  color: $colour-primary;
+}
+
+.binary-options {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+div.binary-option {
+  flex-basis: 50%;
+  background-color: $colour-card-background;
+  box-shadow: $box-shadow-soft;
+  border-radius: 4px;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 16px;
+  padding-bottom: 16px;
+  // no need for padding-top as form element inside has a top margin
+
+  position: relative;
+
+  ::ng-deep label {
+    padding-left: 40px;
+  }
+
+  ::ng-deep .mdc-radio {
+    position: absolute;
+    top: 8px;
+  }
+}
+
+div.payment-details {
+  margin-bottom: 2.5rem;
+}
+
+div.payment-details > * {
+  width: 100%;
+  margin-bottom: 24px;
 }

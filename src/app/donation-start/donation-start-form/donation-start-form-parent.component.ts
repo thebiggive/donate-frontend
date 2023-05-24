@@ -1,6 +1,6 @@
-import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import {StepperSelectionEvent} from '@angular/cdk/stepper';
 import {CurrencyPipe, DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
+import {HttpErrorResponse} from '@angular/common/http';
 import {
   AfterContentChecked,
   AfterContentInit,
@@ -14,43 +14,49 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatDialog } from '@angular/material/dialog';
-import { MatStepper } from '@angular/material/stepper';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RecaptchaComponent } from 'ng-recaptcha';
-import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
-import { PaymentMethod, StripeCardElement, StripeElementChangeEvent, StripeError, StripePaymentRequestButtonElement } from '@stripe/stripe-js';
-import { EMPTY, Observer } from 'rxjs';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatCheckboxChange} from '@angular/material/checkbox';
+import {MatDialog} from '@angular/material/dialog';
+import {MatStepper} from '@angular/material/stepper';
+import {ActivatedRoute, Router} from '@angular/router';
+import {RecaptchaComponent} from 'ng-recaptcha';
+import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
+import {
+  PaymentMethod,
+  StripeCardElement,
+  StripeElementChangeEvent,
+  StripeError,
+  StripePaymentRequestButtonElement
+} from '@stripe/stripe-js';
+import {EMPTY, Observer} from 'rxjs';
 
-import { AnalyticsService } from '../../analytics.service';
-import { Campaign } from '../../campaign.model';
-import { CampaignService } from '../../campaign.service';
-import { CardIconsService } from '../../card-icons.service';
-import { COUNTRIES } from '../../countries';
-import { Donation } from '../../donation.model';
-import { DonationCreatedResponse } from '../../donation-created-response.model';
-import { DonationService } from '../../donation.service';
-import { DonationStartMatchConfirmDialogComponent } from '../donation-start-match-confirm-dialog.component';
-import { DonationStartMatchingExpiredDialogComponent } from '../donation-start-matching-expired-dialog.component';
-import { DonationStartOfferReuseDialogComponent } from '../donation-start-offer-reuse-dialog.component';
-import { environment } from '../../../environments/environment';
-import { ExactCurrencyPipe } from '../../exact-currency.pipe';
-import { GiftAidAddress } from '../../gift-aid-address.model';
-import { GiftAidAddressSuggestion } from '../../gift-aid-address-suggestion.model';
-import { IdentityService } from '../../identity.service';
-import { ConversionTrackingService } from '../../conversionTracking.service';
-import { PageMetaService } from '../../page-meta.service';
-import { Person } from '../../person.model';
-import { PostcodeService } from '../../postcode.service';
-import { retryStrategy } from '../../observable-retry';
-import { StripeService } from '../../stripe.service';
-import { getCurrencyMaxValidator } from '../../validators/currency-max';
-import { getCurrencyMinValidator } from '../../validators/currency-min';
-import { EMAIL_REGEXP } from '../../validators/patterns';
-import { ValidateBillingPostCode } from '../../validators/validate-billing-post-code';
+import {AnalyticsService} from '../../analytics.service';
+import {Campaign} from '../../campaign.model';
+import {CampaignService} from '../../campaign.service';
+import {CardIconsService} from '../../card-icons.service';
+import {COUNTRIES} from '../../countries';
+import {Donation} from '../../donation.model';
+import {DonationCreatedResponse} from '../../donation-created-response.model';
+import {DonationService} from '../../donation.service';
+import {DonationStartMatchConfirmDialogComponent} from '../donation-start-match-confirm-dialog.component';
+import {DonationStartMatchingExpiredDialogComponent} from '../donation-start-matching-expired-dialog.component';
+import {DonationStartOfferReuseDialogComponent} from '../donation-start-offer-reuse-dialog.component';
+import {environment} from '../../../environments/environment';
+import {ExactCurrencyPipe} from '../../exact-currency.pipe';
+import {GiftAidAddress} from '../../gift-aid-address.model';
+import {GiftAidAddressSuggestion} from '../../gift-aid-address-suggestion.model';
+import {IdentityService} from '../../identity.service';
+import {ConversionTrackingService} from '../../conversionTracking.service';
+import {PageMetaService} from '../../page-meta.service';
+import {Person} from '../../person.model';
+import {PostcodeService} from '../../postcode.service';
+import {retryStrategy} from '../../observable-retry';
+import {StripeService} from '../../stripe.service';
+import {getCurrencyMaxValidator} from '../../validators/currency-max';
+import {getCurrencyMinValidator} from '../../validators/currency-min';
+import {EMAIL_REGEXP} from '../../validators/patterns';
+import {ValidateBillingPostCode} from '../../validators/validate-billing-post-code';
 import {TimeLeftPipe} from "../../time-left.pipe";
 import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
@@ -152,6 +158,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   private creatingDonation = false;
 
   private defaultCountryCode: string;
+  public selectedCountryCode: string;
   private previousDonation?: Donation;
   private stepHeaderEventsSet = false;
   private tipPercentageChanged = false;
@@ -175,6 +182,10 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   private stepChangedBlockedByCaptcha = false;
   @Input() donor: Person | undefined;
 
+  /**
+   * Keys are ISO2 codes, values are names.
+   */
+  public countryOptionsObject: Record<string, string>;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -198,6 +209,11 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
 
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
+    this.countryOptionsObject = Object.assign(
+      {},
+      ...(this.countryOptions.map(country => ({[country.iso2]: country.country})))
+    );
+    this.selectedCountryCode = this.defaultCountryCode;
   }
 
   ngOnDestroy() {
@@ -298,7 +314,16 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     if (isPlatformBrowser(this.platformId)) {
       this.handleCampaignViewUpdates();
     }
+  }
 
+  public setSelectedCountry = ((countryCode: string) => {
+    this.selectedCountryCode = countryCode;
+    this.paymentGroup.patchValue({
+      billingCountry: countryCode,
+    });
+  })
+
+  resumeDonationsIfPossible() {
     this.donationService.getProbablyResumableDonation(this.campaignId)
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;
