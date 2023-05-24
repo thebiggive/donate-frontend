@@ -55,6 +55,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   pageX: any;
   mousePos: number;
   position: number;
+  disableDefaults: boolean = false;
 
   constructor(
     public renderer: Renderer2
@@ -122,7 +123,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.derivedPercentage = Math.round((this.position / this.max) * this.percentageEnd >= 1 ? (this.position / this.max) * this.percentageEnd : 1);
    }
   // the calculation results from input changes
-   else {
+   else if (!this.disableDefaults){
       if (!this.donationAmount) {
         this.derivedPercentage = 0;
       }
@@ -147,6 +148,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
   move = (e: MouseEvent | TouchEvent) => {
     if (this.isMoving) {
+      this.disableDefaults = true;
       this.max = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
       //console.log({this.max});
 
