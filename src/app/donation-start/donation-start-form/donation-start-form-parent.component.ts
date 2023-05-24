@@ -179,7 +179,10 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   private stepChangedBlockedByCaptcha = false;
   @Input() donor: Person | undefined;
 
-  public countryOptionsObject: { [p: string]: string };
+  /**
+   * Keys are ISO2 codes, values are names.
+   */
+  public countryOptionsObject: Record<string, string>;
 
   constructor(
     private analyticsService: AnalyticsService,
