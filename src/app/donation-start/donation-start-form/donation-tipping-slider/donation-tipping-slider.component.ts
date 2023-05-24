@@ -1,11 +1,11 @@
-import { AfterContentInit, Component, ElementRef, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-donation-tipping-slider',
   templateUrl: './donation-tipping-slider.component.html',
   styleUrls: ['./donation-tipping-slider.component.scss']
 })
-export class DonationTippingSliderComponent implements OnInit, AfterContentInit, OnDestroy {
+export class DonationTippingSliderComponent implements OnInit, AfterContentInit, OnChanges, OnDestroy {
 
 
   @Input() spaceBelow: 0 | 1 | 2 | 3 | 4 | 5 | 6 = 0;
@@ -33,15 +33,17 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   @Input() donationAmount: number;
   //ISO-4217 currency code (e.g. GBP, USD)
   @Input() donationCurrency!: 'GBP' | 'USD';
+  @Input() onHandleMoved: (tipPercentage: number, tipAmount: number) => void;
 
   @ViewChild('handle', {static: true}) handle: ElementRef;
   @ViewChild('bar', {static: true}) bar: ElementRef;
   @ViewChild('percentageValue', {static: true}) percentageWrap: ElementRef;
   @ViewChild('donationValue', {static: true}) donationWrap: ElementRef;
-  
+
 
   containerClass: string;
-  donation: number;
+  derivedPercentage: number;
+  tipAmount: number;
   currencyFormatted: string;
 
   documentMouseupUnlistener: () => void;
@@ -49,6 +51,10 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   documentTouchmoveUnlistener: () => void;
 
   isMoving = false;
+  max: number;
+  pageX: any;
+  mousePos: number;
+  position: number;
 
   constructor(
     public renderer: Renderer2
@@ -69,8 +75,9 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
   ngOnInit() {
     this.containerClass = 'container space-below-' + this.spaceBelow;
-    this.donation = Math.round(this.donationAmount * (1 / 100));
-    this.currencyFormatted = this.format(this.donationCurrency, this.donation);
+    this.calcAndSetPercentage();
+    this.adjustDonationPercentageAndValue();
+    this.updateHandlePosition(undefined)
   }
 
   ngAfterContentInit() {
@@ -91,10 +98,44 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     }
   };
 
+  // detect changes in the donationAmount input
+  ngOnChanges(changed: any) {
+    this.max = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
+    if (changed.donationAmount.currentValue != changed.donationAmount.previousValue) {
+      this.calcAndSetPercentage();
+      this.calcAndSetTipAmount();
+      this.adjustDonationPercentageAndValue();
+      this.updateHandlePosition(undefined);
+      this.onHandleMoved(this.derivedPercentage, this.tipAmount);
+    }
+  }
+
   ngOnDestroy() {
     this.documentMousemoveUnlistener();
     this.documentMouseupUnlistener();
     this.documentTouchmoveUnlistener();
+  }
+
+  calcAndSetPercentage() {
+  // the calculation results from mouse click
+   if (this.isMoving) {
+    this.derivedPercentage = Math.round((this.position / this.max) * this.percentageEnd >= 1 ? (this.position / this.max) * this.percentageEnd : 1);
+   }
+  // the calculation results from input changes
+   else {
+      if (!this.donationAmount) {
+        this.derivedPercentage = 0;
+      }
+      if (this.donationAmount >= 1000) {
+        this.derivedPercentage = 7.5;
+      } else if (this.donationAmount >= 300) {
+        this.derivedPercentage = 10;
+      } else if (this.donationAmount >= 100) {
+        this.derivedPercentage = 12.5;
+      } else {
+        this.derivedPercentage = 15;
+      }
+    }
   }
 
   format(currencyCode: 'GBP' | 'USD', amount: number) {
@@ -106,30 +147,57 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
   move = (e: MouseEvent | TouchEvent) => {
     if (this.isMoving) {
-      const max = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
-      let pageX: number | undefined;
+      this.max = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
+      //console.log({this.max});
 
       if (window.TouchEvent && e instanceof TouchEvent) {
-        pageX = e.touches[0]?.pageX;
+        this.pageX = e.touches[0]?.pageX;
       } else {
         // we Know e is a MouseEvent because all platforms that supports TouchEvent would also have
         // a truthy window.TouchEvent - see https://stackoverflow.com/a/32882849/2803757
-        pageX = (e as MouseEvent).pageX;
+        this.pageX = (e as MouseEvent).pageX;
       }
 
-      if (pageX !== undefined) {
-        const mousePos = pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
-        const position = mousePos > max ? max : mousePos < 0 ? 0 : mousePos;
-        const percentage = (position / max) * this.percentageEnd >= 1 ? (position / max) * this.percentageEnd : 1;
-        const donation = Math.round(this.donationAmount * (percentage / 100));
-
-        this.percentageWrap.nativeElement.innerHTML = Math.round(percentage).toString();
-        this.donationWrap.nativeElement.innerHTML = this.format(this.donationCurrency, donation);
-
-        this.handle.nativeElement.style.marginLeft = position + 'px';
+      if (this.pageX !== undefined) {
+        if(this.derivedPercentage) {
+          this.calcAndSetTipAmount();
+          this.updateHandlePosition(e);
+          this.adjustDonationPercentageAndValue();
+          this.onHandleMoved(this.derivedPercentage, this.tipAmount);
+        }
       }
     }
 
+  }
+
+  calcAndSetTipAmount() {
+    if (this.donationAmount < 55) {
+      this.tipAmount = this.donationAmount * (this.derivedPercentage / 100);
+    } else {
+      this.tipAmount = Math.round(this.donationAmount * (this.derivedPercentage / 100));
+    }
+  }
+
+  public updateHandlePosition(e: MouseEvent | TouchEvent | undefined) {
+    if(!e) { // the handle position is driven by the donation input change
+      this.calcAndSetPercentage();
+      this.pageX = 122;
+      this.mousePos = this.pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
+      this.position = this.max * this.derivedPercentage / this.percentageEnd;
+      this.handle.nativeElement.style.marginLeft = this.position + 'px';
+    } else { // the handle position is driven by the mouse click on slider
+      this.mousePos = this.pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
+      this.position = this.mousePos > this.max ? this.max : this.mousePos < 0 ? 0 : this.mousePos;
+      this.calcAndSetPercentage();
+    }
+
+    this.handle.nativeElement.style.marginLeft = this.position + 'px';
+  }
+
+  public adjustDonationPercentageAndValue() {
+    this.percentageWrap.nativeElement.innerHTML = this.derivedPercentage.toString();
+    this.currencyFormatted = this.format(this.donationCurrency, this.tipAmount);
+    this.donationWrap.nativeElement.innerHTML = this.currencyFormatted;
   }
 
   resetSlider = () => {
@@ -137,10 +205,6 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.percentageWrap.nativeElement.innerHTML = '1';
     this.donationWrap.nativeElement.innerHTML = '1';
   };
-
-
-  
-
 }
 
 

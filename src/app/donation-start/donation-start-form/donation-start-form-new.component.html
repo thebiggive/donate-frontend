@@ -87,7 +87,7 @@
                   Donation to the Big Give Trust
                 </div>
               </mat-label>
-              <input formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status" [(ngModel)]="percentage">
+              <input formControlName="tipAmount" value="tipAmount()" id="tipAmount" matInput aria-describedby="custom-tip-status">
             </mat-form-field>
           </div>
 
@@ -107,18 +107,21 @@
           of main donation
           </mat-hint>
         </div>
-        <app-donation-tipping-slider *ngIf="!showCustomTipInput" #tippingSlider
-          [percentageStart]="1"
-          [percentageEnd]="30"
-          [donationAmount]="200"
-          donationCurrency="GBP"
-        />
+        <app-donation-tipping-slider
+            *ngIf="!showCustomTipInput"
+            #donationTippingSlider
+            [percentageStart]="1"
+            [percentageEnd]="maximumTipPercentage"
+            [donationAmount]="donationAmount"
+            donationCurrency="GBP"
+            [onHandleMoved]="onDonationSliderMove"
+          />
 
-          <span class="button" (click)="toggleTipInput(true)" *ngIf="!showCustomTipInput">
-            Enter custom tip
+          <span class="button" (click)="toggleTipInput()" *ngIf="!showCustomTipInput && donationAmount">
+            Other amount
           </span>
 
-          <span class="button" (click)="toggleTipInput(false)" *ngIf="showCustomTipInput">
+          <span *ngIf="showCustomTipInput && tipAmount() && !(tipAmount() > donationAmount * tipPercentage)"  class="button" (click)="toggleTipInput()" >
             Back to percentage tip
           </span>
 
@@ -144,12 +147,12 @@
             <li>Providing match funds in our Anchor Match Fund. Through tips, charities will receive funding to launch their own match funded campaign on Big Give.
             </li>
           </ul>
-  
+
   <p>
   Thank you for your generosity! Your tips ensure that we can continue to support charities and causes that are important to you.
-  
+
           </p>
-  
+
         </mat-expansion-panel>
 
         <p class="error" *ngIf="donationCreateError" aria-live="assertive">
