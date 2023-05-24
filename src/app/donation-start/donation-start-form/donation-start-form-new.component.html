@@ -316,20 +316,19 @@
             </biggive-text-input>
           </div>
 
-          <div style="margin-top: -1em;">
-            <!--
-            todo - use new version of component without top margin, remove negative margin above.
-            New component also corrects the prompt position.
-            -->
-            <biggive-form-field-select
-              [prompt]="'Billing country'"
-              [options]="countryOptionsObject"
-              [selectedValue]="selectedCountryCode"
-              [backgroundColour]="'grey'"
-              [onSelectionChange]="setSelectedCountry"
-            >
-            </biggive-form-field-select>
-          </div>
+          <!--
+          todo - use new version of component without top margin, remove negative margin above.
+          New component also corrects the prompt position.
+          -->
+          <biggive-form-field-select
+            [prompt]="'Billing country'"
+            [options]="countryOptionsObject"
+            [selectedValue]="selectedCountryCode"
+            [backgroundColour]="'grey'"
+            [onSelectionChange]="setSelectedCountry"
+            [spaceBelow]="3"
+          >
+          </biggive-form-field-select>
 
           <biggive-text-input prompt="Billing postcode">
             <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)">
