@@ -77,7 +77,6 @@
           </mat-form-field>-->
 
           <div *ngIf="showCustomTipInput" class="donation-input donation-input-main">
-            <!-- <p id="custom-tip-status" class="b-grey b-rt-sm donation-input-tip__status-help" aria-live="assertive">You've selected to give {{ tipAmount() | exactCurrency:campaign.currencyCode }} to the Big Give Trust. You can edit the amount in the next field.</p> -->
 
             <biggive-text-input currency="{{campaign.currencyCode}}"  prompt="Donation to the Big Give Trust">
               <input
