@@ -40,7 +40,6 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   @ViewChild('percentageValue', {static: true}) percentageWrap: ElementRef;
   @ViewChild('donationValue', {static: true}) donationWrap: ElementRef;
 
-
   containerClass: string;
   derivedPercentage: number;
   tipAmount: number;
