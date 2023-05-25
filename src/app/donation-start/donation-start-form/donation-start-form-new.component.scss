@@ -340,7 +340,7 @@ li {
   text-indent: -1em;
 }
 
-li:before {
+mat-expansion-panel li:before {
   content: "→";
   padding-right: 5px;
 }
