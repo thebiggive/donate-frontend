@@ -47,7 +47,6 @@ import { DonationTippingSliderComponent } from '../donation-start-form/donation-
     MatSelectModule,
     MatStepperModule,
     MatExpansionModule,
-    MatDividerModule,
     PercentPipe,
     ReactiveFormsModule,
     RecaptchaModule,

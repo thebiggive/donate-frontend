@@ -1,4 +1,6 @@
-
+/**
+ * TODO: should move most of the declarations up to the parent component!!!
+ */
 import { CurrencyPipe } from "@angular/common";
 import { Component, ViewChild } from "@angular/core";
 import { TimeLeftPipe } from "src/app/time-left.pipe";
@@ -23,5 +25,11 @@ export class DonationStartFormNewComponent extends DonationStartFormParentCompon
 
   toggleTipInput = () => {
     this.showCustomTipInput = this.showCustomTipInput === true ? false : true;
+  }
+
+  // TODO: understand the logic here better, replace tipPercentage with endPercentage
+  shouldShowBackToSlider() {
+    console.log(this.tipAmount())
+    return this.showCustomTipInput && this.tipAmount() && (this.tipAmount() <= this.donationAmount * this.tipPercentage)
   }
 }

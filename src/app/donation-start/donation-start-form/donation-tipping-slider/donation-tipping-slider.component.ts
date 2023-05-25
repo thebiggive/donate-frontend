@@ -116,7 +116,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.documentMouseupUnlistener();
     this.documentTouchmoveUnlistener();
   }
-
+  // TODO: check if the 15%
   calcAndSetPercentage() {
   // the calculation results from mouse click
    if (this.isMoving) {

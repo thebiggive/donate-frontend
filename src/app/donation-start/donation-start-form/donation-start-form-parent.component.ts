@@ -163,8 +163,11 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   private stepHeaderEventsSet = false;
   private tipPercentageChanged = false;
 
-  tipPercentage = 12.5;
-  tipValue: number | undefined = undefined;
+  /**
+   * TODO: consider removing this property and use the tipAmount instead
+   */
+  tipPercentage = 15;
+  tipValue: number | undefined;
   /**
    * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
    * input was valid (even if differently formatted). Loosely based on https://stackoverflow.com/a/10701634/2803757
@@ -1863,12 +1866,12 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     this.loadFirstSavedStripeCardIfAny(id, jwt);
   }
 
-  onDonationSliderMove = (tipPercentage: number, tipAmount: number) => {
-    this.tipPercentage = tipPercentage;
+  onDonationSliderMove = (tipAmount: number) => {
     this.tipAmountField?.setValue(tipAmount);
   }
 
   updateTipAmount = () => {
     this.tipAmountField?.setValue(this.tipValue);
   }
+
 }

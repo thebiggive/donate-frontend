@@ -107,22 +107,21 @@
             [percentageStart]="1"
             [percentageEnd]="maximumTipPercentage"
             [donationAmount]="donationAmount"
-            donationCurrency="GBP"
+            [donationCurrency]="campaign.currencyCode"
             [onHandleMoved]="onDonationSliderMove"
           />
 
           <span class="button" (click)="toggleTipInput()" *ngIf="!showCustomTipInput && donationAmount">
             Other amount
           </span>
-
-          <span *ngIf="showCustomTipInput && tipAmount() && !(tipAmount() > donationAmount * tipPercentage)"  class="button" (click)="toggleTipInput()" >
+          <!-- TODO: this check sets an infinite loop, need to check the logic -->
+          <span *ngIf="shouldShowBackToSlider()"  class="button" (click)="toggleTipInput()" >
             Back to percentage tip
           </span>
 
         <mat-expansion-panel hideToggle>
           <mat-expansion-panel-header>
           </mat-expansion-panel-header>
-          <p>This is the primary content of the panel.</p>
         </mat-expansion-panel>
         <mat-expansion-panel (opened)="panelOpenState = true"
                              (closed)="panelOpenState = false">

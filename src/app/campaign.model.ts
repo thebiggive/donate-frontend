@@ -25,7 +25,7 @@ export class Campaign {
       website: string,
     },
     public countries: string[],
-    public currencyCode: string,
+    public currencyCode: 'GBP' | 'USD',
     public donationCount: number,
     public endDate: Date,
     public impactReporting: string,
