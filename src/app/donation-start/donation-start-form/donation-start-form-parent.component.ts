@@ -843,7 +843,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   }
 
   tipAmount(): number {
-    //return sanitiseCurrency(this.amountsGroup.value.tipAmount);
     return this.donationAmount * this.tipPercentage / 100;
   }
 

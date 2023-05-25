@@ -63,7 +63,9 @@
         </div>
 
       <div *ngIf="!campaign.feePercentage && creditPenceToUse === 0" style="text-align: center; margin-bottom: 50px;">
-            <!-- <mat-form-field appearance="outline">
+            <!-- We may want to bring something like the below back to test a/b test against the slider, although using our
+                   custom select component instead of mat-select.
+            <mat-form-field appearance="outline">
             <mat-label for="tipPercentage">Donation to the Big Give Trust</mat-label>
             <mat-select formControlName="tipPercentage" id="tipPercentage" (selectionChange)="tipPercentageChange()">
               <mat-option [value]="7.5">7.5%</mat-option>
@@ -75,7 +77,6 @@
           </mat-form-field>-->
 
           <div *ngIf="showCustomTipInput" class="donation-input donation-input-main">
-            <!-- <p id="custom-tip-status" class="b-grey b-rt-sm donation-input-tip__status-help" aria-live="assertive">You've selected to give {{ tipAmount() | exactCurrency:campaign.currencyCode }} to the Big Give Trust. You can edit the amount in the next field.</p> -->
 
             <biggive-text-input currency="{{campaign.currencyCode}}"  prompt="Donation to the Big Give Trust">
               <input
