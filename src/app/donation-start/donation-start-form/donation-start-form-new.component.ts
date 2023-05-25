@@ -22,6 +22,6 @@ export class DonationStartFormNewComponent extends DonationStartFormParentCompon
   @ViewChild('tippingSlider') tippingSlider: DonationTippingSliderComponent;
 
   toggleTipInput = () => {
-    this.showCustomTipInput = this.showCustomTipInput === true ? false : true;
+    this.showCustomTipInput = ! this.showCustomTipInput;
   }
 }
