@@ -433,8 +433,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         this.goToFirstVisibleError();
       });
     }
-    console.log('form-parent, ngAfterContentChecked():');
-    console.log({tipAmount: this.tipAmount()})
     this.stepHeaderEventsSet = true;
   }
 
@@ -1866,14 +1864,11 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   }
 
   onDonationSliderMove = (tipPercentage: number, tipAmount: number) => {
-    console.log('onDonationSliderMove', {tipPercentage});
     this.tipPercentage = tipPercentage;
     this.tipAmountField?.setValue(tipAmount);
-    console.log(this.tipAmountField?.getRawValue())
   }
 
   updateTipAmount = () => {
-    console.log('custom input changed')
-    this.tipAmountField?.setValue(this.tipValue)
+    this.tipAmountField?.setValue(this.tipValue);
   }
 }

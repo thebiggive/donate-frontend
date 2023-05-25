@@ -150,7 +150,6 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     if (this.isMoving) {
       this.disableDefaults = true;
       this.max = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
-      //console.log({this.max});
 
       if (window.TouchEvent && e instanceof TouchEvent) {
         this.pageX = e.touches[0]?.pageX;
@@ -180,7 +179,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     }
   }
 
-  public updateHandlePosition(e: MouseEvent | TouchEvent | undefined) {
+  updateHandlePosition(e: MouseEvent | TouchEvent | undefined) {
     if(!e) { // the handle position is driven by the donation input change
       this.calcAndSetPercentage();
       this.pageX = 122;
@@ -196,7 +195,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.handle.nativeElement.style.marginLeft = this.position + 'px';
   }
 
-  public adjustDonationPercentageAndValue() {
+  adjustDonationPercentageAndValue() {
     this.percentageWrap.nativeElement.innerHTML = this.derivedPercentage.toString();
     this.currencyFormatted = this.format(this.donationCurrency, this.tipAmount);
     this.donationWrap.nativeElement.innerHTML = this.currencyFormatted;
