@@ -183,6 +183,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
    * Keys are ISO2 codes, values are names.
    */
   public countryOptionsObject: Record<string, string>;
+  paymentMethodChecked: boolean;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -438,6 +439,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     this.donor = undefined;
     this.creditPenceToUse = 0;
     this.stripePaymentMethodReady = false;
+    this.paymentMethodChecked = false;
     this.donationForm.reset();
     this.identityService.clearJWT();
     this.idCaptcha.reset();
@@ -878,6 +880,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.stepper.next();
       return;
     }
+    this.stripePaymentMethodReady = this.paymentMethodChecked || this.stripeManualCardInputValid;
 
     const promptingForCaptcha = this.promptForCaptcha();
 
@@ -899,11 +902,11 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     // Ideally, we would later track `card`'s validity separately so that going back up the page, ticking this
     // then unticking it leaves the card box valid without having to modify it. But this is rare and
     // work-around-able, so for now it's not worth the refactoring time.
-    const checked = event.checked;
+    this.paymentMethodChecked = event.checked;
 
-    this.stripePaymentMethodReady = checked || this.stripeManualCardInputValid;
+    this.stripePaymentMethodReady = this.paymentMethodChecked || this.stripeManualCardInputValid;
 
-    if (checked) {
+    if (this.paymentMethodChecked) {
       this.selectedSavedMethod = paymentMethod;
       this.updateFormWithBillingDetails(this.selectedSavedMethod);
     } else {
@@ -984,6 +987,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         // not null assertion is justified because we know the data length is > 0. Seems TS isn't smart enough to
         // notice that.
         const firstPaymentMethod = response.data[0]!;
+        this.paymentMethodChecked = true;
 
         this.selectedSavedMethod = firstPaymentMethod;
         this.updateFormWithBillingDetails(firstPaymentMethod);
@@ -1258,6 +1262,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
 
           this.stripePaymentMethodReady = true;
           this.stripePRBMethodReady = true;
+          this.paymentMethodChecked = true;
           this.removeStripeCardBillingValidators();
           this.jumpToStep('Receive updates');
 
@@ -1266,6 +1271,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         // Else there was no Payment Method (or details), so the PRB failed.
 
         this.stripePaymentMethodReady = false;
+        this.paymentMethodChecked = false;
         this.stripePRBMethodReady = false;
         this.addStripeCardBillingValidators();
 
@@ -1280,6 +1286,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       error: (err) => {
         this.stripePaymentMethodReady = false;
+        this.paymentMethodChecked = false;
         this.stripePRBMethodReady = false;
         this.addStripeCardBillingValidators();
         this.stripeError = 'Payment method handling failed';
@@ -1465,6 +1472,9 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     this.stripeResponseErrorCode = undefined;
 
     this.stripePaymentMethodReady = false;
+    if (this.stripeSavedMethods.length < 1) {
+      this.paymentMethodChecked = false;
+    }
     this.stripePRBMethodReady = false;
 
     this.retrying = false;
