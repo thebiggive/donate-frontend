@@ -9,6 +9,11 @@
 :host ::ng-deep .mat-step-header {
   // ng-deep is deprecated, but I'm not sure how else to apply our style choices inside the stepper.
   background-color: white;
+  font-weight: bold;
+
+  .mat-step-text-label {
+    font-weight: bold;
+  }
 
   .mat-step-icon {
     color: $colour-black;
@@ -75,7 +80,8 @@ input:disabled {
 }
 
 .mat-mdc-form-field {
-  width: 100%;
+  width: 70%;
+  margin: 0 auto;
 }
 
 .payment-method-options {
@@ -139,6 +145,7 @@ input:disabled {
   display: block;
   text-align: center;
   margin-bottom: 1rem !important;
+  font-weight: bold;
 
   img {
     padding-right: 1rem;
@@ -151,7 +158,7 @@ input:disabled {
 
 .donation-input {
   .form-field {
-    margin: 0;
+    margin: 0 auto;
     display: block;
     font-weight: 700;
   }
@@ -320,16 +327,38 @@ div.match-funded-badge-wrapper {
   position: relative;
 }
 
-div.charity-info {
-  min-width: 300px;
-}
-div.charity-info, div.campaign-info {
-  min-height: 80px;
-  float: left;
+// bullets as arrows: https://stackoverflow.com/a/12216973
 
-  .charity-name, .campaign-title {
-    font-weight: bold;
-  }
+ul {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+li {
+  padding-left: 1em;
+  text-indent: -1em;
+}
+
+mat-expansion-panel li:before {
+  content: "→";
+  padding-right: 5px;
+}
+mat-expansion-panel {
+  margin-top: 30px;
+}
+
+.mat-expansion-panel-header {
+  padding-right: 5px;
+  padding-left: 0; 
+}
+
+.button {
+  text-decoration: underline;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
 }
 
 .colour-primary {
