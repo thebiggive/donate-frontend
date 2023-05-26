@@ -46,8 +46,8 @@ describe('DonationTippingSliderComponent', () => {
       const donationAmount = args[0];
       const expectedDerivedPercentage = args[1];
 
-      const stubRenderer = {listen: () => { }} as unknown as Renderer2;
-      const slider =  new DonationTippingSliderComponent(stubRenderer);
+      const dummyRenderer = {listen: () => { }} as unknown as Renderer2;
+      const slider =  new DonationTippingSliderComponent(dummyRenderer);
 
       slider.donationAmount = donationAmount;
       slider.calcAndSetPercentage();
