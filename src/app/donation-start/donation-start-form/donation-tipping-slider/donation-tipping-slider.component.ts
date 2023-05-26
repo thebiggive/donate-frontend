@@ -51,7 +51,6 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
   isMoving = false;
   max: number;
-  pageX: any;
   position: number;
   disableDefaults: boolean = false;
 
@@ -149,18 +148,19 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
       this.disableDefaults = true;
       this.max = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
 
+      let pageX: number | undefined;
       if (window.TouchEvent && e instanceof TouchEvent) {
-        this.pageX = e.touches[0]?.pageX;
+        pageX = e.touches[0]?.pageX;
       } else {
         // we Know e is a MouseEvent because all platforms that supports TouchEvent would also have
         // a truthy window.TouchEvent - see https://stackoverflow.com/a/32882849/2803757
-        this.pageX = (e as MouseEvent).pageX;
+        pageX = (e as MouseEvent).pageX;
       }
 
-      if (this.pageX !== undefined) {
+      if (pageX !== undefined) {
         if(this.derivedPercentage) {
           this.calcAndSetTipAmount();
-          this.updateHandlePositionFromClick();
+          this.updateHandlePositionFromClick(pageX);
           this.adjustDonationPercentageAndValue();
           this.onHandleMoved(this.derivedPercentage, this.tipAmount);
         }
@@ -184,8 +184,8 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.handle.nativeElement.style.marginLeft = this.position + 'px';
   }
 
-  updateHandlePositionFromClick() {
-    const mousePos = this.pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
+  updateHandlePositionFromClick(pageX: number) {
+    const mousePos = pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
     this.position = mousePos > this.max ? this.max : mousePos < 0 ? 0 : mousePos;
     this.calcAndSetPercentage();
 
