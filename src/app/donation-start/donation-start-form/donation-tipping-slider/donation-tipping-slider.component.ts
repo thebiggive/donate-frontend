@@ -7,26 +7,6 @@ import { AfterContentInit, Component, ElementRef, Input, OnChanges, OnDestroy, O
 })
 export class DonationTippingSliderComponent implements OnInit, AfterContentInit, OnChanges, OnDestroy {
 
-
-  @Input() spaceBelow: 0 | 1 | 2 | 3 | 4 | 5 | 6 = 0;
-
-  @Input() colourScheme:
-  | 'primary' // blue
-  | 'secondary' // green
-  | 'tertiary' // coral
-  | 'brand-1' // cc-red
-  | 'brand-2' // wgmf-purple
-  | 'brand-3' // gmf-green
-  | 'brand-4' // emf-yellow
-  | 'brand-5' // c4c-orange
-  | 'brand-6' // mhf-turquoise
-  | 'white'
-  | 'black'
-  | 'grey-extra-light'
-  | 'grey-light'
-  | 'grey-medium'
-  | 'grey-dark' = 'primary';
-
   @Input() percentageCurrent: number;
   @Input() percentageStart: number;
   @Input() percentageEnd: number;
@@ -35,7 +15,13 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   @Input() donationCurrency!: 'GBP' | 'USD';
   @Input() onHandleMoved: (tipPercentage: number, tipAmount: number) => void;
 
+  /**
+   * movable part of the slider
+   */
   @ViewChild('handle', {static: true}) handle: ElementRef;
+  /**
+   * the horisontal slider bar, its width calculated based on device's screen size
+   */
   @ViewChild('bar', {static: true}) bar: ElementRef;
   @ViewChild('percentageValue', {static: true}) percentageWrap: ElementRef;
   @ViewChild('donationValue', {static: true}) donationWrap: ElementRef;
@@ -51,8 +37,6 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
   isMoving = false;
   max: number;
-  pageX: any;
-  mousePos: number;
   position: number;
   disableDefaults: boolean = false;
 
@@ -74,10 +58,9 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
 
   ngOnInit() {
-    this.containerClass = 'container space-below-' + this.spaceBelow;
     this.calcAndSetPercentage();
     this.adjustDonationPercentageAndValue();
-    this.updateHandlePosition(undefined)
+    this.updateHandlePositionFromDonationInput()
   }
 
   ngAfterContentInit() {
@@ -105,7 +88,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
       this.calcAndSetPercentage();
       this.calcAndSetTipAmount();
       this.adjustDonationPercentageAndValue();
-      this.updateHandlePosition(undefined);
+      this.updateHandlePositionFromDonationInput()
       this.onHandleMoved(this.derivedPercentage, this.tipAmount);
     }
   }
@@ -150,18 +133,19 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
       this.disableDefaults = true;
       this.max = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
 
+      let pageX: number | undefined;
       if (window.TouchEvent && e instanceof TouchEvent) {
-        this.pageX = e.touches[0]?.pageX;
+        pageX = e.touches[0]?.pageX;
       } else {
         // we Know e is a MouseEvent because all platforms that supports TouchEvent would also have
         // a truthy window.TouchEvent - see https://stackoverflow.com/a/32882849/2803757
-        this.pageX = (e as MouseEvent).pageX;
+        pageX = (e as MouseEvent).pageX;
       }
 
-      if (this.pageX !== undefined) {
+      if (pageX !== undefined) {
         if(this.derivedPercentage) {
           this.calcAndSetTipAmount();
-          this.updateHandlePosition(e);
+          this.updateHandlePositionFromClick(pageX);
           this.adjustDonationPercentageAndValue();
           this.onHandleMoved(this.derivedPercentage, this.tipAmount);
         }
@@ -178,18 +162,17 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     }
   }
 
-  updateHandlePosition(e: MouseEvent | TouchEvent | undefined) {
-    if(!e) { // the handle position is driven by the donation input change
-      this.calcAndSetPercentage();
-      this.pageX = 122;
-      this.mousePos = this.pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
-      this.position = this.max * this.derivedPercentage / this.percentageEnd;
-      this.handle.nativeElement.style.marginLeft = this.position + 'px';
-    } else { // the handle position is driven by the mouse click on slider
-      this.mousePos = this.pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
-      this.position = this.mousePos > this.max ? this.max : this.mousePos < 0 ? 0 : this.mousePos;
-      this.calcAndSetPercentage();
-    }
+  updateHandlePositionFromDonationInput() {
+    this.calcAndSetPercentage();
+    this.position = this.max * this.derivedPercentage / this.percentageEnd;
+
+    this.handle.nativeElement.style.marginLeft = this.position + 'px';
+  }
+
+  updateHandlePositionFromClick(pageX: number) {
+    const mousePos = pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
+    this.position = mousePos > this.max ? this.max : mousePos < 0 ? 0 : mousePos;
+    this.calcAndSetPercentage();
 
     this.handle.nativeElement.style.marginLeft = this.position + 'px';
   }
