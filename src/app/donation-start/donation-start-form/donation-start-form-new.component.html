@@ -535,7 +535,7 @@
             </tr>
             <tr *ngIf="giftAidAmount() > 0">
               <td>Gift Aid Amount</td>
-              <td>{{ giftAidAmount | exactCurrency:donation.currencyCode }}</td>
+              <td>{{ giftAidAmount() | exactCurrency:donation.currencyCode }}</td>
             </tr>
             <tr *ngIf="feeCoverAmount() > 0">
               <td>Platform fee</td>
