@@ -565,17 +565,12 @@
                 You have told us you would like to claim Gift Aid</div></td>
             </tr>
             <tr *ngIf="campaign.currencyCode === 'GBP' && giftAidAmount() === 0">
-
               You have told us you do not want to claim Gift Aid
             </tr>
             <tr *ngIf="expectedMatchAmount() === donationAmount">
               Your donation will be match funded
             </tr>
           </table>
-
-          <!-- todo -- include the amount that was removed from the button text below,
-          {{ donationAndExtrasAmount | exactCurrency:campaign.currencyCode }}
-          -->
 
           <button
             type="submit"
