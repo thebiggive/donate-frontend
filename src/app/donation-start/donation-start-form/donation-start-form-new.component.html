@@ -537,7 +537,7 @@
               <td>Gift Aid Amount</td>
               <td>{{ giftAidAmount | exactCurrency:donation.currencyCode }}</td>
             </tr>
-            <tr *ngIf="feeCoverAmount() > 0 || (creditPenceToUse === 0 && !campaign.feePercentage)">
+            <tr *ngIf="feeCoverAmount() > 0">
               <td>Platform fee</td>
               <td>{{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} </td>
             </tr>
@@ -559,7 +559,7 @@
                 You have told us you would like to claim Gift Aid</div></td>
             </tr>
             <tr *ngIf="campaign.currencyCode === 'GBP' && giftAidAmount() === 0">
-            
+
               You have told us you do not want to claim Gift Aid
             </tr>
             <tr *ngIf="expectedMatchAmount() === donationAmount">
