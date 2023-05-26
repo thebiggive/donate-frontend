@@ -541,7 +541,13 @@
               <td>Platform fee</td>
               <td>{{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} </td>
             </tr>
-            <tr *ngIf="donation.tipAmount > 0">
+
+            <!-- If the donor is using credit we wouldn't be taking a tip at this point,
+                   and if we are charging a campaign fee we wouldn't have asked for a tip
+                   -->
+            <tr
+              *ngIf="creditPenceToUse === 0 && !campaign.feePercentage"
+            >
               <td>Tip Amount</td>
               <td>{{ donation.tipAmount | exactCurrency:donation.currencyCode }}</td>
             </tr>
@@ -580,9 +586,6 @@
           >
             Donate now
           </button>
-
-          <!-- TODO: understand the logic on the line below -->
-          <!-- <p *ngIf="creditPenceToUse === 0 && !campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give Trust &ndash; we rely on your generosity to support charities</p> -->
         </div>
       </mat-step>
     </mat-vertical-stepper>
