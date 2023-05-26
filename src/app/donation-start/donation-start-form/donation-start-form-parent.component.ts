@@ -167,7 +167,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
    * TODO: consider removing this property and use the tipAmount instead
    * and understand why this has changed from 15 to 12.5
    */
-  tipPercentage = 12.5;
+  tipPercentage = 15;
   tipValue: number | undefined;
   /**
    * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
@@ -844,7 +844,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   }
 
   tipAmount(): number {
-    return this.donationAmount * this.tipPercentage / 100;
+    return sanitiseCurrency(this.amountsGroup.value.tipAmount);
   }
 
   expectedTotalAmount(): number {
@@ -1867,6 +1867,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   }
 
   onDonationSliderMove = (tipAmount: number) => {
+    this.amountsGroup.patchValue({tipAmount: tipAmount});
     this.tipAmountField?.setValue(tipAmount);
   }
 
