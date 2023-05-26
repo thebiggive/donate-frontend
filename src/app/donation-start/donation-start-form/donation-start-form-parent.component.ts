@@ -1,6 +1,6 @@
-import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import {StepperSelectionEvent} from '@angular/cdk/stepper';
 import {CurrencyPipe, DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
+import {HttpErrorResponse} from '@angular/common/http';
 import {
   AfterContentChecked,
   AfterContentInit,
@@ -14,46 +14,53 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatDialog } from '@angular/material/dialog';
-import { MatStepper } from '@angular/material/stepper';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RecaptchaComponent } from 'ng-recaptcha';
-import { debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap  } from 'rxjs/operators';
-import { PaymentMethod, StripeCardElement, StripeElementChangeEvent, StripeError, StripePaymentRequestButtonElement } from '@stripe/stripe-js';
-import { EMPTY, Observer } from 'rxjs';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatCheckboxChange} from '@angular/material/checkbox';
+import {MatDialog} from '@angular/material/dialog';
+import {MatStepper} from '@angular/material/stepper';
+import {ActivatedRoute, Router} from '@angular/router';
+import {RecaptchaComponent} from 'ng-recaptcha';
+import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
+import {
+  PaymentMethod,
+  StripeCardElement,
+  StripeElementChangeEvent,
+  StripeError,
+  StripePaymentRequestButtonElement
+} from '@stripe/stripe-js';
+import {EMPTY, Observer} from 'rxjs';
 
-import { AnalyticsService } from '../../analytics.service';
-import { Campaign } from '../../campaign.model';
-import { CampaignService } from '../../campaign.service';
-import { CardIconsService } from '../../card-icons.service';
-import { COUNTRIES } from '../../countries';
-import { Donation } from '../../donation.model';
-import { DonationCreatedResponse } from '../../donation-created-response.model';
-import { DonationService } from '../../donation.service';
-import { DonationStartMatchConfirmDialogComponent } from '../donation-start-match-confirm-dialog.component';
-import { DonationStartMatchingExpiredDialogComponent } from '../donation-start-matching-expired-dialog.component';
-import { DonationStartOfferReuseDialogComponent } from '../donation-start-offer-reuse-dialog.component';
-import { environment } from '../../../environments/environment';
-import { ExactCurrencyPipe } from '../../exact-currency.pipe';
-import { GiftAidAddress } from '../../gift-aid-address.model';
-import { GiftAidAddressSuggestion } from '../../gift-aid-address-suggestion.model';
-import { IdentityService } from '../../identity.service';
-import { ConversionTrackingService } from '../../conversionTracking.service';
-import { PageMetaService } from '../../page-meta.service';
-import { Person } from '../../person.model';
-import { PostcodeService } from '../../postcode.service';
-import { retryStrategy } from '../../observable-retry';
-import { StripeService } from '../../stripe.service';
-import { getCurrencyMaxValidator } from '../../validators/currency-max';
-import { getCurrencyMinValidator } from '../../validators/currency-min';
-import { EMAIL_REGEXP } from '../../validators/patterns';
-import { ValidateBillingPostCode } from '../../validators/validate-billing-post-code';
+import {AnalyticsService} from '../../analytics.service';
+import {Campaign} from '../../campaign.model';
+import {CampaignService} from '../../campaign.service';
+import {CardIconsService} from '../../card-icons.service';
+import {COUNTRIES} from '../../countries';
+import {Donation} from '../../donation.model';
+import {DonationCreatedResponse} from '../../donation-created-response.model';
+import {DonationService} from '../../donation.service';
+import {DonationStartMatchConfirmDialogComponent} from '../donation-start-match-confirm-dialog.component';
+import {DonationStartMatchingExpiredDialogComponent} from '../donation-start-matching-expired-dialog.component';
+import {DonationStartOfferReuseDialogComponent} from '../donation-start-offer-reuse-dialog.component';
+import {environment} from '../../../environments/environment';
+import {ExactCurrencyPipe} from '../../exact-currency.pipe';
+import {GiftAidAddress} from '../../gift-aid-address.model';
+import {GiftAidAddressSuggestion} from '../../gift-aid-address-suggestion.model';
+import {IdentityService} from '../../identity.service';
+import {ConversionTrackingService} from '../../conversionTracking.service';
+import {PageMetaService} from '../../page-meta.service';
+import {Person} from '../../person.model';
+import {PostcodeService} from '../../postcode.service';
+import {retryStrategy} from '../../observable-retry';
+import {StripeService} from '../../stripe.service';
+import {getCurrencyMaxValidator} from '../../validators/currency-max';
+import {getCurrencyMinValidator} from '../../validators/currency-min';
+import {EMAIL_REGEXP} from '../../validators/patterns';
+import {ValidateBillingPostCode} from '../../validators/validate-billing-post-code';
 import {TimeLeftPipe} from "../../time-left.pipe";
 import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
+import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation-tipping-slider.component";
 
 @Component({
   templateUrl: './donation-start-form.component.html',
@@ -68,6 +75,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
+  @ViewChild('donationTippingSlider') private donationTippingSlider: DonationTippingSliderComponent|undefined;
 
   card: StripeCardElement | null;
   cardHandler = this.onStripeCardChange.bind(this);
@@ -107,6 +115,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   marketingGroup: FormGroup;
 
   maximumDonationAmount: number;
+  maximumTipPercentage: number = 30;
   noPsps = false;
   psp: 'stripe';
   retrying = false;
@@ -149,12 +158,17 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   private creatingDonation = false;
 
   private defaultCountryCode: string;
+  public selectedCountryCode: string;
   private previousDonation?: Donation;
   private stepHeaderEventsSet = false;
   private tipPercentageChanged = false;
 
-  private initialTipSuggestedPercentage = 15;
-
+  /**
+   * TODO: consider removing this property and use the tipAmount instead
+   * and understand why this has changed from 15 to 12.5
+   */
+  tipPercentage = 15;
+  tipValue: number | undefined;
   /**
    * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
    * input was valid (even if differently formatted). Loosely based on https://stackoverflow.com/a/10701634/2803757
@@ -172,6 +186,10 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   private stepChangedBlockedByCaptcha = false;
   @Input() donor: Person | undefined;
 
+  /**
+   * Keys are ISO2 codes, values are names.
+   */
+  public countryOptionsObject: Record<string, string>;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -195,6 +213,11 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
 
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
+    this.countryOptionsObject = Object.assign(
+      {},
+      ...(this.countryOptions.map(country => ({[country.iso2]: country.country})))
+    );
+    this.selectedCountryCode = this.defaultCountryCode;
   }
 
   ngOnDestroy() {
@@ -230,8 +253,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         ]],
         coverFee: [false],
         feeCoverAmount: [null],
-        tipPercentage: [this.initialTipSuggestedPercentage], // See setConditionalValidators().
-        tipAmount: [null], // See setConditionalValidators().
+        tipPercentage: [this.tipPercentage], // See setConditionalValidators().
+        tipAmount: [null], // See setConditionalValidators()
       }),
       giftAid: this.formBuilder.group({
         giftAid: [null],        // See addUKValidators().
@@ -296,6 +319,13 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.handleCampaignViewUpdates();
     }
   }
+
+  public setSelectedCountry = ((countryCode: string) => {
+    this.selectedCountryCode = countryCode;
+    this.paymentGroup.patchValue({
+      billingCountry: countryCode,
+    });
+  })
 
   resumeDonationsIfPossible() {
     this.donationService.getProbablyResumableDonation(this.campaignId)
@@ -407,7 +437,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         this.goToFirstVisibleError();
       });
     }
-
     this.stepHeaderEventsSet = true;
   }
 
@@ -752,6 +781,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
 
     return this.donationForm.controls.amounts!.get('tipAmount');
   }
+
 
   /**
    * Quick getter for donation amount, to keep template use concise.
@@ -1548,13 +1578,13 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
         const updatedValues: {
           tipPercentage?: number | string,
-          tipAmount?: string,
+          tipAmount?: string
         } = {};
 
         donationAmount = sanitiseCurrency(donationAmount);
 
         if (!this.tipPercentageChanged) {
-          let newDefault = this.initialTipSuggestedPercentage;
+          let newDefault = this.tipPercentage;
           if (donationAmount >= 1000) {
             newDefault = 7.5;
           } else if (donationAmount >= 300) {
@@ -1760,7 +1790,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
             this.captcha.reset();
             this.idCaptcha.reset();
             this.stepper.reset();
-            this.amountsGroup.patchValue({ tipPercentage: this.initialTipSuggestedPercentage });
+            this.amountsGroup.patchValue({ tipPercentage: this.tipPercentage });
             this.tipPercentageChanged = false;
             if (this.paymentGroup) {
               this.paymentGroup.patchValue({
@@ -1835,4 +1865,14 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     this.prefillRarelyChangingFormValuesFromPerson(person);
     this.loadFirstSavedStripeCardIfAny(id, jwt);
   }
+
+  onDonationSliderMove = (tipAmount: number) => {
+    this.amountsGroup.patchValue({tipAmount: tipAmount});
+    this.tipAmountField?.setValue(tipAmount);
+  }
+
+  updateTipAmount = () => {
+    this.tipAmountField?.setValue(this.tipValue);
+  }
+
 }

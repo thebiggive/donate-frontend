@@ -1,29 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { getPasswordValidator } from '../validators/validate-passwords-same';
-import { allChildComponentImports } from '../../allChildComponentImports';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IdentityService } from '../identity.service';
 import { minPasswordLength } from 'src/environments/common';
 
 @Component({
-  standalone: true,
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.scss'],
-  imports: [
-    ...allChildComponentImports,
-    FormsModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-    ReactiveFormsModule,
-  ],
 })
 export class ResetPasswordComponent implements OnInit {
   minPasswordLength: number;

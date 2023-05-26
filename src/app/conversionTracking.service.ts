@@ -28,7 +28,7 @@ export class ConversionTrackingService {
     this.matomoTracker.addEcommerceItem(
       `campaign-${campaign.id}`,
       `Donation to ${campaign.charity.name} for ${campaign.title}`,
-      undefined, // Not using product categories
+      'Campaign charity donations',
       donation.donationAmount,
     );
 
@@ -36,7 +36,7 @@ export class ConversionTrackingService {
       this.matomoTracker.addEcommerceItem(
         'tip',
         'Big Give tip',
-        undefined, // Not using product categories
+        'Platform tip donations',
         donation.tipAmount,
       );
     }
@@ -45,7 +45,7 @@ export class ConversionTrackingService {
       this.matomoTracker.addEcommerceItem(
         'fee-cover',
         'Big Give platform fee cover',
-        undefined, // Not using product categories
+        'Processing fees',
         donation.feeCoverAmount,
       );
     }
