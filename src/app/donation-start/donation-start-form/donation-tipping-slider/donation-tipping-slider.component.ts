@@ -7,26 +7,6 @@ import { AfterContentInit, Component, ElementRef, Input, OnChanges, OnDestroy, O
 })
 export class DonationTippingSliderComponent implements OnInit, AfterContentInit, OnChanges, OnDestroy {
 
-
-  @Input() spaceBelow: 0 | 1 | 2 | 3 | 4 | 5 | 6 = 0;
-
-  @Input() colourScheme:
-  | 'primary' // blue
-  | 'secondary' // green
-  | 'tertiary' // coral
-  | 'brand-1' // cc-red
-  | 'brand-2' // wgmf-purple
-  | 'brand-3' // gmf-green
-  | 'brand-4' // emf-yellow
-  | 'brand-5' // c4c-orange
-  | 'brand-6' // mhf-turquoise
-  | 'white'
-  | 'black'
-  | 'grey-extra-light'
-  | 'grey-light'
-  | 'grey-medium'
-  | 'grey-dark' = 'primary';
-
   @Input() percentageCurrent: number;
   @Input() percentageStart: number;
   @Input() percentageEnd: number;
@@ -35,7 +15,13 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   @Input() donationCurrency!: 'GBP' | 'USD';
   @Input() onHandleMoved: (tipPercentage: number, tipAmount: number) => void;
 
+  /**
+   * movable part of the slider
+   */
   @ViewChild('handle', {static: true}) handle: ElementRef;
+  /**
+   * the horisontal slider bar, its width calculated based on device's screen size
+   */
   @ViewChild('bar', {static: true}) bar: ElementRef;
   @ViewChild('percentageValue', {static: true}) percentageWrap: ElementRef;
   @ViewChild('donationValue', {static: true}) donationWrap: ElementRef;
@@ -72,7 +58,6 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
 
   ngOnInit() {
-    this.containerClass = 'container space-below-' + this.spaceBelow;
     this.calcAndSetPercentage();
     this.adjustDonationPercentageAndValue();
     this.updateHandlePositionFromDonationInput()
