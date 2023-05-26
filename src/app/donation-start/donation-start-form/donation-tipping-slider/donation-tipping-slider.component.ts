@@ -52,7 +52,6 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   isMoving = false;
   max: number;
   pageX: any;
-  mousePos: number;
   position: number;
   disableDefaults: boolean = false;
 
@@ -180,16 +179,14 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
   updateHandlePositionFromDonationInput() {
     this.calcAndSetPercentage();
-    this.pageX = 122;
-    this.mousePos = this.pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
     this.position = this.max * this.derivedPercentage / this.percentageEnd;
 
     this.handle.nativeElement.style.marginLeft = this.position + 'px';
   }
 
   updateHandlePositionFromClick() {
-    this.mousePos = this.pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
-    this.position = this.mousePos > this.max ? this.max : this.mousePos < 0 ? 0 : this.mousePos;
+    const mousePos = this.pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
+    this.position = mousePos > this.max ? this.max : mousePos < 0 ? 0 : mousePos;
     this.calcAndSetPercentage();
 
     this.handle.nativeElement.style.marginLeft = this.position + 'px';
