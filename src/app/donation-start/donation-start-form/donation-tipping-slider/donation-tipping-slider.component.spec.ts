@@ -41,7 +41,7 @@ describe('DonationTippingSliderComponent', () => {
     [300, 10],
     [999, 10],
     [1000, 7.5],
-    ], function (name: string, args: Array<any>){
+    ], function (name: string, args: [number, number]){
     it(name, () => {
       const donationAmount = args[0];
       const expectedDerivedPercentage = args[1];
@@ -62,7 +62,7 @@ describe('DonationTippingSliderComponent', () => {
    * https://www.ontestautomation.com/data-driven-javascript-tests-using-jasmine/
    * If we use this a lot maybe move into separate file or find a data-driven testing library
    */
-  function usingDataIt(name: string, values: Array<Array<any>>, func: (...args: Array<any>)  => void) {
+  function usingDataIt(name: string, values: Array<Array<any>>, func: (name: string, ...args: Array<any>)  => void) {
     for(var i = 0, count = values.length; i < count; i++) {
       if(Object.prototype.toString.call(values[i]) !== '[Object Array]') {
         values[i] = [values[i]];
