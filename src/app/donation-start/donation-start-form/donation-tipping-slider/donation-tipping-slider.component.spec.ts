@@ -32,13 +32,42 @@ describe('DonationTippingSliderComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set the percentage defaults according to tipAmounts', () => {
-    const slider =  new DonationTippingSliderComponent({
-      listen: () => { },
-    } as unknown as Renderer2);
-    slider.donationAmount = 100;
-    slider.calcAndSetPercentage();
-    expect(slider.derivedPercentage).toBe(12.5);
-  });
+  usingDataIt('should have default percentage according to donation size', [
+  // [donation , expected default percentage]
+    [0, 15],
+    [99, 15],
+    [100, 12.5],
+    [299, 12.5],
+    [300, 10],
+    [999, 10],
+    [1000, 7.5],
+    ], function (name: string, args: Array<any>){
+    it(name, () => {
+      const donationAmount = args[0];
+      const expectedDerivedPercentage = args[1];
 
+      const stubRenderer = {listen: () => { }} as unknown as Renderer2;
+      const slider =  new DonationTippingSliderComponent(stubRenderer);
+
+      slider.donationAmount = donationAmount;
+      slider.calcAndSetPercentage();
+
+      expect(slider.derivedPercentage).toBe(expectedDerivedPercentage);
+    });
+    }
+  )
+
+  /**
+   * Based on function given at
+   * https://www.ontestautomation.com/data-driven-javascript-tests-using-jasmine/
+   * If we use this a lot maybe move into separate file or find a data-driven testing library
+   */
+  function usingDataIt(name: string, values: Array<Array<any>>, func: (...args: Array<any>)  => void) {
+    for(var i = 0, count = values.length; i < count; i++) {
+      if(Object.prototype.toString.call(values[i]) !== '[Object Array]') {
+        values[i] = [values[i]];
+      }
+      func(`${name} #${i} [${values[i]!.toString()}]`, ...values[i]!);
+    }
+  }
 });
