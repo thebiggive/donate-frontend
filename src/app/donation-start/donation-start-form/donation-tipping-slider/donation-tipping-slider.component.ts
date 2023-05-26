@@ -77,7 +77,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.containerClass = 'container space-below-' + this.spaceBelow;
     this.calcAndSetPercentage();
     this.adjustDonationPercentageAndValue();
-    this.updateHandlePosition(undefined)
+    this.updateHandlePositionFromDonationInput()
   }
 
   ngAfterContentInit() {
@@ -105,7 +105,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
       this.calcAndSetPercentage();
       this.calcAndSetTipAmount();
       this.adjustDonationPercentageAndValue();
-      this.updateHandlePosition(undefined);
+      this.updateHandlePositionFromDonationInput()
       this.onHandleMoved(this.derivedPercentage, this.tipAmount);
     }
   }
@@ -161,7 +161,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
       if (this.pageX !== undefined) {
         if(this.derivedPercentage) {
           this.calcAndSetTipAmount();
-          this.updateHandlePosition(e);
+          this.updateHandlePositionFromClick();
           this.adjustDonationPercentageAndValue();
           this.onHandleMoved(this.derivedPercentage, this.tipAmount);
         }
@@ -178,18 +178,19 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     }
   }
 
-  updateHandlePosition(e: MouseEvent | TouchEvent | undefined) {
-    if(!e) { // the handle position is driven by the donation input change
-      this.calcAndSetPercentage();
-      this.pageX = 122;
-      this.mousePos = this.pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
-      this.position = this.max * this.derivedPercentage / this.percentageEnd;
-      this.handle.nativeElement.style.marginLeft = this.position + 'px';
-    } else { // the handle position is driven by the mouse click on slider
-      this.mousePos = this.pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
-      this.position = this.mousePos > this.max ? this.max : this.mousePos < 0 ? 0 : this.mousePos;
-      this.calcAndSetPercentage();
-    }
+  updateHandlePositionFromDonationInput() {
+    this.calcAndSetPercentage();
+    this.pageX = 122;
+    this.mousePos = this.pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
+    this.position = this.max * this.derivedPercentage / this.percentageEnd;
+
+    this.handle.nativeElement.style.marginLeft = this.position + 'px';
+  }
+
+  updateHandlePositionFromClick() {
+    this.mousePos = this.pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
+    this.position = this.mousePos > this.max ? this.max : this.mousePos < 0 ? 0 : this.mousePos;
+    this.calcAndSetPercentage();
 
     this.handle.nativeElement.style.marginLeft = this.position + 'px';
   }
