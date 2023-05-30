@@ -1,4 +1,15 @@
-import { AfterContentInit, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 
 @Component({
   selector: 'app-donation-tipping-slider',
@@ -19,17 +30,20 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
    */
   @ViewChild('handle', {static: true}) handle: ElementRef;
   /**
-   * the horisontal slider bar, its width calculated based on device's screen size
+   * the horizontal slider bar, its width calculated based on device's screen size
    */
   @ViewChild('bar', {static: true}) bar: ElementRef;
   @ViewChild('percentageValue', {static: true}) percentageWrap: ElementRef;
   @ViewChild('donationValue', {static: true}) donationWrap: ElementRef;
 
-  containerClass: string;
   selectedPercentage: number;
   tipAmount: number;
   currencyFormatted: string;
 
+  /*
+  * See https://medium.com/claritydesignsystem/four-ways-of-listening-to-dom-events-in-angular-part-3-renderer2-listen-14c6fe052b59
+  * re next three properties
+  * */
   documentMouseupUnlistener: () => void;
   documentMousemoveUnlistener: () => void;
   documentTouchmoveUnlistener: () => void;
@@ -57,37 +71,37 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
 
   ngOnInit() {
+    this.setSliderAmounts();
+  }
+
+  private setSliderAmounts() {
     this.calcAndSetPercentage();
+    this.calcAndSetTipAmount();
     this.adjustDonationPercentageAndValue();
-    this.updateHandlePositionFromDonationInput()
+    this.updateHandlePositionFromDonationInput();
   }
 
   ngAfterContentInit() {
-    if (this.bar) {
-      this.bar.nativeElement.addEventListener('mousedown',  (e: MouseEvent | TouchEvent) => {
-        this.isMoving = true;
-        this.move(e);
-      });
+    this.bar.nativeElement.addEventListener('mousedown',  (e: MouseEvent | TouchEvent) => {
+      this.isMoving = true;
+      this.move(e);
+    });
 
-      this.bar.nativeElement.addEventListener('touchstart', (e: MouseEvent | TouchEvent) => {
-        this.isMoving = true;
-        this.move(e);
-      });
+    this.bar.nativeElement.addEventListener('touchstart', (e: MouseEvent | TouchEvent) => {
+      this.isMoving = true;
+      this.move(e);
+    });
 
-      this.bar.nativeElement.addEventListener('touchend', () => {
-        this.isMoving = false;
-      });
-    }
+    this.bar.nativeElement.addEventListener('touchend', () => {
+      this.isMoving = false;
+    });
   };
 
   // detect changes in the donationAmount input
-  ngOnChanges(changed: any) {
+  ngOnChanges(changed: SimpleChanges) {
     this.max = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
-    if (changed.donationAmount.currentValue != changed.donationAmount.previousValue) {
-      this.calcAndSetPercentage();
-      this.calcAndSetTipAmount();
-      this.adjustDonationPercentageAndValue();
-      this.updateHandlePositionFromDonationInput()
+    if (changed.donationAmount!.currentValue != changed.donationAmount!.previousValue) {
+      this.setSliderAmounts();
       this.onHandleMoved(this.selectedPercentage, this.tipAmount);
     }
   }
@@ -97,6 +111,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.documentMouseupUnlistener();
     this.documentTouchmoveUnlistener();
   }
+
   // TODO: check if the 15%
   calcAndSetPercentage() {
   // the calculation results from mouse click
@@ -162,9 +177,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   }
 
   updateHandlePositionFromDonationInput() {
-    this.calcAndSetPercentage();
     this.position = this.max * this.selectedPercentage / this.percentageEnd;
-
     this.handle.nativeElement.style.marginLeft = this.position + 'px';
   }
 
