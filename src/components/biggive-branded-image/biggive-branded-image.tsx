@@ -37,6 +37,7 @@ export class BiggiveBrandedImage {
 
   /**
    * Link to the charity's website
+   * @deprecated We should stop passing this soon, and will link to charity URLs alongside socials.
    */
   @Prop() charityUrl: string;
 
@@ -51,11 +52,7 @@ export class BiggiveBrandedImage {
         ) : null}
         {this.logoUrl !== undefined && this.logoUrl !== null ? <div class="logo-wrap" style={{ 'background-image': "url('" + this.logoUrl + "')" }}></div> : null}
 
-        {this.charityName !== undefined && this.charityName !== null ? (
-          <a id="charityName" href={this.charityUrl} target="_blank">
-            {this.charityName}
-          </a>
-        ) : null}
+        {this.charityName !== undefined && this.charityName !== null ? <h3 class="title">{this.charityName}</h3> : null}
         {this.charityLocation !== undefined && this.charityLocation !== null ? <div class="charity-info">{this.charityLocation}</div> : null}
       </div>
     );

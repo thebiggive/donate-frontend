@@ -19,7 +19,7 @@ export default {
       name: 'Service',
       control: {
         type: 'select',
-        options: ['Twitter', 'Facebook', 'Instagram', 'LinkedIn'],
+        options: ['Twitter', 'Facebook', 'Instagram', 'LinkedIn', 'Web', 'Whatsapp', 'YouTube'],
       },
     },
     url: {
