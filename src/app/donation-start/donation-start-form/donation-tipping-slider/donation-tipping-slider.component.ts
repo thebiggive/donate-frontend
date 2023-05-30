@@ -52,7 +52,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   documentTouchmoveUnlistener: () => void;
 
   isMoving = false;
-  max: number;
+  width: number;
   position: number;
   disableDefaults: boolean = false;
 
@@ -102,7 +102,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
   // detect changes in the donationAmount input
   ngOnChanges(changed: SimpleChanges) {
-    this.max = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
+    this.width = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
     if (changed.donationAmount!.currentValue != changed.donationAmount!.previousValue) {
       this.setSliderAmounts();
       this.onHandleMoved(this.selectedPercentage, this.tipAmount);
@@ -119,8 +119,13 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   calcAndSetPercentage() {
   // the calculation results from mouse click
    if (this.isMoving) {
-     const isAtLeastOne = (this.position / this.max) * this.percentageEnd >= 1;
-     this.selectedPercentage = Math.round(isAtLeastOne ? (this.position / this.max) * this.percentageEnd : 1);
+     const percentageRange = this.percentageEnd - this.percentageStart;
+
+     const calculatedPercentage = Math.round(
+       (this.position / this.width) * percentageRange + this.percentageStart
+     );
+
+     this.selectedPercentage = Math.max(this.percentageStart, Math.min(this.percentageEnd, calculatedPercentage));
    }
   // the calculation results from input changes
    else if (!this.disableDefaults){
@@ -149,7 +154,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   move = (e: MouseEvent | TouchEvent) => {
     if (this.isMoving) {
       this.disableDefaults = true;
-      this.max = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
+      this.width = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
 
       let pageX: number | undefined;
       if (window.TouchEvent && e instanceof TouchEvent) {
@@ -187,13 +192,25 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   }
 
   updateHandlePositionFromDonationInput() {
-    this.position = this.max * this.selectedPercentage / this.percentageEnd;
+    const positionAsFractionOfWidth = (this.selectedPercentage - this.percentageStart) / (this.percentageEnd - this.percentageStart);
+
+    if (positionAsFractionOfWidth < 0) {
+      console.error("Tip amount below minimum percentage");
+      return;
+    }
+
+    if (positionAsFractionOfWidth > 1) {
+      console.error("Tip amount above maximum percentage");
+      return;
+    }
+
+    this.position = this.width * positionAsFractionOfWidth;
     this.handle.nativeElement.style.marginLeft = this.position + 'px';
   }
 
   updateHandlePositionFromClick(pageX: number) {
     const mousePos = pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
-    this.position = mousePos > this.max ? this.max : mousePos < 0 ? 0 : mousePos;
+    this.position = mousePos > this.width ? this.width : mousePos < 0 ? 0 : mousePos;
     this.calcAndSetPercentage();
   }
 

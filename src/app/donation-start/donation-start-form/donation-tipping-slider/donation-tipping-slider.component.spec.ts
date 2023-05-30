@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Renderer2 } from '@angular/core';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {Renderer2} from '@angular/core';
 
-import { DonationTippingSliderComponent } from './donation-tipping-slider.component';
+import {DonationTippingSliderComponent} from './donation-tipping-slider.component';
 
 describe('DonationTippingSliderComponent', () => {
   let component: DonationTippingSliderComponent;
@@ -59,23 +59,24 @@ describe('DonationTippingSliderComponent', () => {
   );
 
   usingDataIt('the selected percentage is accurately calculated', [
-    // [position, max, percentageEnd , expected selected percentage]
-    [0, 10, 30, 1],
-    [50, 10, 30, 150]
-  ], function (name: string, args: [number, number, number, number]){
+    {position: 0, width: 10, percentageStart: 1, percentageEnd: 30, expectedPercentage: 1},
+    {position: 5, width: 10, percentageStart: 1, percentageEnd: 30, expectedPercentage: 16},
+    {position: 50, width: 10, percentageStart: 1, percentageEnd: 30, expectedPercentage: 30},
+    {position: 0, width: 10, percentageStart: 10, percentageEnd: 30, expectedPercentage: 10},
+    {position: -5, width: 10, percentageStart: 10, percentageEnd: 30, expectedPercentage: 10},
+  ], function (name: string, args: {position: number, width: number, percentageStart:number, percentageEnd: number, expectedPercentage: number }){
     it(name, () => {
       const slider =  new DonationTippingSliderComponent(dummyRenderer);
       slider.isMoving = true;
-      slider.position = args[0];
-      slider.max = args[1];
-      slider.percentageEnd = args[2];
+      slider.position = args.position;
+      slider.width = args.width;
+      slider.percentageStart = args.percentageStart
+      slider.percentageEnd = args.percentageEnd;
 
       slider.calcAndSetPercentage();
 
-      const expectedPercentage = args[3];
-      expect(slider.selectedPercentage).toBe(expectedPercentage);
-    })}
-  );
+      expect(slider.selectedPercentage).toBe(args.expectedPercentage);
+    })});
 
   it('Gives exact percentage tip for small donations', () => {
     const slider = new DonationTippingSliderComponent(dummyRenderer);
@@ -102,7 +103,7 @@ describe('DonationTippingSliderComponent', () => {
    * https://www.ontestautomation.com/data-driven-javascript-tests-using-jasmine/
    * If we use this a lot maybe move into separate file or find a data-driven testing library
    */
-  function usingDataIt(name: string, values: Array<Array<any>>, func: (name: string, ...args: Array<any>)  => void) {
+  function usingDataIt(name: string, values: Array<any>, func: (name: string, ...args: Array<any>)  => void) {
     for(var i = 0, count = values.length; i < count; i++) {
       if(Object.prototype.toString.call(values[i]) !== '[Object Array]') {
         values[i] = [values[i]];
