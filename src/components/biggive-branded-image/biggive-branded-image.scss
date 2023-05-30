@@ -15,9 +15,8 @@
     color: $colour-black;
     padding: $spacer-1 $spacer-3;
     width: 100%;
-    margin: auto;
+    margin: -17px auto 17px auto;
     transform: translateY(50%);
-    margin-top: -17px;
     box-sizing: border-box;
   }
 
@@ -30,9 +29,8 @@
     width: 120px;
     height: 120px;
     transform: translateY(-50%);
-    // -60px to offset the previous positioning of the logo, so charity name and location
-    // appear straight below it. + 10px for some spacing.
-    margin-bottom: calc(-60px + 10px);
+    margin-top: 30px;
+    margin-bottom: -30px; // Breathing space before charity name etc.
     background-size: contain;
     background-position: center center;
     background-repeat: no-repeat;
@@ -41,19 +39,12 @@
     @media screen and (max-width: $screen-tablet-max) {
       width: 100px;
       height: 100px;
-      margin-bottom: calc(-50px + 10px);
     }
 
     @media screen and (max-width: $screen-mobile-max) {
-      width: 80px;
-      height: 80px;
-      margin-bottom: calc(-40px + 10px);
-    }
-
-    @media screen and (max-width: $screen-mobile-small) {
       width: 70px;
       height: 70px;
-      margin-bottom: calc(-30px + 10px);
+      margin-top: 20px;
     }
   }
 
