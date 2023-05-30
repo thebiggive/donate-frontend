@@ -9,6 +9,7 @@ import {sanitiseCurrency} from "./sanitiseCurrency";
 
 export function updateDonationFromForm
 (event: StepperSelectionEvent,
+ tipValue: number|undefined,
  donation: Donation,
  analyticsService: AnalyticsService,
  paymentGroup: FormGroup,
@@ -37,7 +38,11 @@ export function updateDonationFromForm
   donation.optInChampionEmail = marketingGroup.value.optInChampionEmail;
 
   const lastTipAmount = donation.tipAmount;
-  donation.tipAmount = sanitiseCurrency(amountsGroup.value.tipAmount);
+  if (typeof tipValue === 'number') {
+    donation.tipAmount = tipValue;
+  } else {
+    donation.tipAmount = sanitiseCurrency(amountsGroup.value.tipAmount);
+  }
   if (lastTipAmount !== donation.tipAmount) {
     preparePaymentRequestButton(donation, paymentGroup);
   }
