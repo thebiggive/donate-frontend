@@ -169,6 +169,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   }
 
   calcAndSetTipAmount() {
+    // todo after adding unit tests - adjust logic to first calculate tipAmount then round iff tipAmount > 1
     if (this.donationAmount < 55) {
       this.tipAmount = this.donationAmount * (this.selectedPercentage / 100);
     } else {
@@ -190,15 +191,15 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   }
 
   adjustDonationPercentageAndValue() {
-    this.percentageWrap.nativeElement.innerHTML = this.selectedPercentage.toString();
+    this.percentageWrap.nativeElement.innerText = this.selectedPercentage.toString();
     this.currencyFormatted = this.format(this.donationCurrency, this.tipAmount);
-    this.donationWrap.nativeElement.innerHTML = this.currencyFormatted;
+    this.donationWrap.nativeElement.innerText = this.currencyFormatted;
   }
 
   resetSlider = () => {
     this.handle.nativeElement.style.marginLeft = '0px';
-    this.percentageWrap.nativeElement.innerHTML = '1';
-    this.donationWrap.nativeElement.innerHTML = '1';
+    this.percentageWrap.nativeElement.innerText = '1';
+    this.donationWrap.nativeElement.innerText = '1';
   };
 }
 
