@@ -131,6 +131,7 @@ export namespace Components {
         "charityName": string;
         /**
           * Link to the charity's website
+          * @deprecated We should stop passing this soon, and will link to charity URLs alongside socials.
          */
         "charityUrl": string;
         /**
@@ -908,6 +909,9 @@ export namespace Components {
         "sheetId": string;
         "textColour": brandColour;
     }
+    /**
+     * Used to indicate and link to a charity's social page, or their own web site.
+     */
     interface BiggiveSocialIcon {
         /**
           * Background colour
@@ -918,9 +922,13 @@ export namespace Components {
          */
         "iconColour": string;
         /**
+          * Used within accessible labels for links. Typically a charity name or "Big Give". Can also be "Share".
+         */
+        "labelPrefix": string;
+        /**
           * Service name
          */
-        "service": string;
+        "service": 'Facebook' | 'Instagram' | 'LinkedIn' | 'Twitter' | 'Web' | 'Whatsapp' | 'YouTube';
         /**
           * Url
          */
@@ -1377,6 +1385,9 @@ declare global {
         prototype: HTMLBiggiveSheetElement;
         new (): HTMLBiggiveSheetElement;
     };
+    /**
+     * Used to indicate and link to a charity's social page, or their own web site.
+     */
     interface HTMLBiggiveSocialIconElement extends Components.BiggiveSocialIcon, HTMLStencilElement {
     }
     var HTMLBiggiveSocialIconElement: {
@@ -1633,6 +1644,7 @@ declare namespace LocalJSX {
         "charityName"?: string;
         /**
           * Link to the charity's website
+          * @deprecated We should stop passing this soon, and will link to charity URLs alongside socials.
          */
         "charityUrl"?: string;
         /**
@@ -2421,6 +2433,9 @@ declare namespace LocalJSX {
         "sheetId"?: string;
         "textColour"?: brandColour;
     }
+    /**
+     * Used to indicate and link to a charity's social page, or their own web site.
+     */
     interface BiggiveSocialIcon {
         /**
           * Background colour
@@ -2431,9 +2446,13 @@ declare namespace LocalJSX {
          */
         "iconColour"?: string;
         /**
+          * Used within accessible labels for links. Typically a charity name or "Big Give". Can also be "Share".
+         */
+        "labelPrefix"?: string;
+        /**
           * Service name
          */
-        "service"?: string;
+        "service": 'Facebook' | 'Instagram' | 'LinkedIn' | 'Twitter' | 'Web' | 'Whatsapp' | 'YouTube';
         /**
           * Url
          */
@@ -2719,6 +2738,9 @@ declare module "@stencil/core" {
             "biggive-progress-bar": LocalJSX.BiggiveProgressBar & JSXBase.HTMLAttributes<HTMLBiggiveProgressBarElement>;
             "biggive-quote": LocalJSX.BiggiveQuote & JSXBase.HTMLAttributes<HTMLBiggiveQuoteElement>;
             "biggive-sheet": LocalJSX.BiggiveSheet & JSXBase.HTMLAttributes<HTMLBiggiveSheetElement>;
+            /**
+             * Used to indicate and link to a charity's social page, or their own web site.
+             */
             "biggive-social-icon": LocalJSX.BiggiveSocialIcon & JSXBase.HTMLAttributes<HTMLBiggiveSocialIconElement>;
             "biggive-tab": LocalJSX.BiggiveTab & JSXBase.HTMLAttributes<HTMLBiggiveTabElement>;
             "biggive-tabbed-content": LocalJSX.BiggiveTabbedContent & JSXBase.HTMLAttributes<HTMLBiggiveTabbedContentElement>;

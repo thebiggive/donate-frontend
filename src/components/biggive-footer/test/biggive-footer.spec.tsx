@@ -40,7 +40,7 @@ describe('biggive-footer', () => {
           <div class="social-icon-wrap">
             <slot name="social-icons"></slot>
           </div>
-          <p>&copy; 2007 – 2022 The Big Give Trust (1136547) | Company number 07273065  | Dragon Court, 27-29 Macklin Street, London WC2B 5LX, United Kingdom</p>
+          <p>&copy; 2007 – 2023 The Big Give Trust (1136547) | Company number 07273065  | Dragon Court, 27-29 Macklin Street, London WC2B 5LX, United Kingdom</p>
         </div>
 
       </footer>

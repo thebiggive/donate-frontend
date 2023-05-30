@@ -2,6 +2,9 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Component, Prop, h } from '@stencil/core';
 import { FontAwesomeIconsService } from '../../util/fontawesome-icons';
 
+/**
+ * Used to indicate and link to a charity's social page, or their own web site.
+ */
 @Component({
   tag: 'biggive-social-icon',
   styleUrl: 'biggive-social-icon.scss',
@@ -11,7 +14,12 @@ export class BiggiveSocialIcon {
   /**
    * Service name
    */
-  @Prop() service: string = 'Twitter';
+  @Prop() service!: 'Facebook' | 'Instagram' | 'LinkedIn' | 'Twitter' | 'Web' | 'Whatsapp' | 'YouTube';
+
+  /**
+   * Used within accessible labels for links. Typically a charity name or "Big Give". Can also be "Share".
+   */
+  @Prop() labelPrefix: string = 'Big Give';
 
   /**
    * Background colour
@@ -42,7 +50,7 @@ export class BiggiveSocialIcon {
   render() {
     return (
       <div class={'social-icon-item background-colour-' + this.backgroundColour + (this.wide ? ' wide' : '')}>
-        <a href={this.url} aria-label={`Big Give on ${this.service}`} target="_blank">
+        <a href={this.url} aria-label={`${this.labelPrefix} on ${this.service}`} target="_blank" rel="noopener">
           <svg
             width={this.getSocialIcon().icon[0]}
             height={this.getSocialIcon().icon[1]}
