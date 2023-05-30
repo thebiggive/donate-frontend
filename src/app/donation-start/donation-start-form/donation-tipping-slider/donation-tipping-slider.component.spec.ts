@@ -79,22 +79,22 @@ describe('DonationTippingSliderComponent', () => {
 
   it('Gives exact percentage tip for small donations', () => {
     const slider = new DonationTippingSliderComponent(dummyRenderer);
-    slider.donationAmount = 53;
+    slider.donationAmount = 54.5;
     slider.selectedPercentage = 50;
 
     slider.calcAndSetTipAmount();
 
-    expect(slider.tipAmount).toBe(26.5);
+    expect(slider.tipAmount).toBe(27.25);
   });
 
   it('Rounds up Tip Amount for large donations', () => {
     const slider = new DonationTippingSliderComponent(dummyRenderer);
-    slider.donationAmount = 57;
+    slider.donationAmount = 55;
     slider.selectedPercentage = 50;
 
     slider.calcAndSetTipAmount();
 
-    expect(slider.tipAmount).toBe(29);
+    expect(slider.tipAmount).toBe(28);
   });
 
   /**
