@@ -7,7 +7,6 @@ import { AfterContentInit, Component, ElementRef, Input, OnChanges, OnDestroy, O
 })
 export class DonationTippingSliderComponent implements OnInit, AfterContentInit, OnChanges, OnDestroy {
 
-  @Input() percentageCurrent: number;
   @Input() percentageStart: number;
   @Input() percentageEnd: number;
   @Input() donationAmount: number;
@@ -27,7 +26,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   @ViewChild('donationValue', {static: true}) donationWrap: ElementRef;
 
   containerClass: string;
-  derivedPercentage: number;
+  selectedPercentage: number;
   tipAmount: number;
   currencyFormatted: string;
 
@@ -89,7 +88,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
       this.calcAndSetTipAmount();
       this.adjustDonationPercentageAndValue();
       this.updateHandlePositionFromDonationInput()
-      this.onHandleMoved(this.derivedPercentage, this.tipAmount);
+      this.onHandleMoved(this.selectedPercentage, this.tipAmount);
     }
   }
 
@@ -102,21 +101,21 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   calcAndSetPercentage() {
   // the calculation results from mouse click
    if (this.isMoving) {
-    this.derivedPercentage = Math.round((this.position / this.max) * this.percentageEnd >= 1 ? (this.position / this.max) * this.percentageEnd : 1);
+    this.selectedPercentage = Math.round((this.position / this.max) * this.percentageEnd >= 1 ? (this.position / this.max) * this.percentageEnd : 1);
    }
   // the calculation results from input changes
    else if (!this.disableDefaults){
       if (!this.donationAmount) {
-        this.derivedPercentage = 0;
+        this.selectedPercentage = 0;
       }
       if (this.donationAmount >= 1000) {
-        this.derivedPercentage = 7.5;
+        this.selectedPercentage = 7.5;
       } else if (this.donationAmount >= 300) {
-        this.derivedPercentage = 10;
+        this.selectedPercentage = 10;
       } else if (this.donationAmount >= 100) {
-        this.derivedPercentage = 12.5;
+        this.selectedPercentage = 12.5;
       } else {
-        this.derivedPercentage = 15;
+        this.selectedPercentage = 15;
       }
     }
   }
@@ -143,11 +142,11 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
       }
 
       if (pageX !== undefined) {
-        if(this.derivedPercentage) {
+        if(this.selectedPercentage) {
           this.calcAndSetTipAmount();
           this.updateHandlePositionFromClick(pageX);
           this.adjustDonationPercentageAndValue();
-          this.onHandleMoved(this.derivedPercentage, this.tipAmount);
+          this.onHandleMoved(this.selectedPercentage, this.tipAmount);
         }
       }
     }
@@ -156,15 +155,15 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
   calcAndSetTipAmount() {
     if (this.donationAmount < 55) {
-      this.tipAmount = this.donationAmount * (this.derivedPercentage / 100);
+      this.tipAmount = this.donationAmount * (this.selectedPercentage / 100);
     } else {
-      this.tipAmount = Math.round(this.donationAmount * (this.derivedPercentage / 100));
+      this.tipAmount = Math.round(this.donationAmount * (this.selectedPercentage / 100));
     }
   }
 
   updateHandlePositionFromDonationInput() {
     this.calcAndSetPercentage();
-    this.position = this.max * this.derivedPercentage / this.percentageEnd;
+    this.position = this.max * this.selectedPercentage / this.percentageEnd;
 
     this.handle.nativeElement.style.marginLeft = this.position + 'px';
   }
@@ -178,7 +177,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   }
 
   adjustDonationPercentageAndValue() {
-    this.percentageWrap.nativeElement.innerHTML = this.derivedPercentage.toString();
+    this.percentageWrap.nativeElement.innerHTML = this.selectedPercentage.toString();
     this.currencyFormatted = this.format(this.donationCurrency, this.tipAmount);
     this.donationWrap.nativeElement.innerHTML = this.currencyFormatted;
   }

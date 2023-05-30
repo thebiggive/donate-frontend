@@ -52,7 +52,7 @@ describe('DonationTippingSliderComponent', () => {
       slider.donationAmount = donationAmount;
       slider.calcAndSetPercentage();
 
-      expect(slider.derivedPercentage).toBe(expectedDerivedPercentage);
+      expect(slider.selectedPercentage).toBe(expectedDerivedPercentage);
     });
     }
   )
