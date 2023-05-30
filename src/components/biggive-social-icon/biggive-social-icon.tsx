@@ -17,9 +17,9 @@ export class BiggiveSocialIcon {
   @Prop() service!: 'Facebook' | 'Instagram' | 'LinkedIn' | 'Twitter' | 'Web' | 'Whatsapp' | 'YouTube';
 
   /**
-   * Typically a charity name or "Big Give". Used within accessible labels for links.
+   * Used within accessible labels for links. Typically a charity name or "Big Give". Can also be "Share".
    */
-  @Prop() organisationName: string = 'Big Give';
+  @Prop() labelPrefix: string = 'Big Give';
 
   /**
    * Background colour
@@ -50,7 +50,7 @@ export class BiggiveSocialIcon {
   render() {
     return (
       <div class={'social-icon-item background-colour-' + this.backgroundColour + (this.wide ? ' wide' : '')}>
-        <a href={this.url} aria-label={`${this.organisationName} on ${this.service}`} target="_blank" rel="noopener">
+        <a href={this.url} aria-label={`${this.labelPrefix} on ${this.service}`} target="_blank" rel="noopener">
           <svg
             width={this.getSocialIcon().icon[0]}
             height={this.getSocialIcon().icon[1]}

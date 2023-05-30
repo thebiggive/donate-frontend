@@ -922,9 +922,9 @@ export namespace Components {
          */
         "iconColour": string;
         /**
-          * Typically a charity name or "Big Give". Used within accessible labels for links.
+          * Used within accessible labels for links. Typically a charity name or "Big Give". Can also be "Share".
          */
-        "organisationName": string;
+        "labelPrefix": string;
         /**
           * Service name
          */
@@ -2446,9 +2446,9 @@ declare namespace LocalJSX {
          */
         "iconColour"?: string;
         /**
-          * Typically a charity name or "Big Give". Used within accessible labels for links.
+          * Used within accessible labels for links. Typically a charity name or "Big Give". Can also be "Share".
          */
-        "organisationName"?: string;
+        "labelPrefix"?: string;
         /**
           * Service name
          */
