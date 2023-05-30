@@ -18,6 +18,9 @@ import {
 })
 export class DonationTippingSliderComponent implements OnInit, AfterContentInit, OnChanges, OnDestroy {
 
+  /**
+   * @todo start using this
+   */
   @Input() percentageStart: number;
   @Input() percentageEnd: number;
   @Input() donationAmount: number;
@@ -116,7 +119,8 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   calcAndSetPercentage() {
   // the calculation results from mouse click
    if (this.isMoving) {
-    this.selectedPercentage = Math.round((this.position / this.max) * this.percentageEnd >= 1 ? (this.position / this.max) * this.percentageEnd : 1);
+     const isAtLeastOne = (this.position / this.max) * this.percentageEnd >= 1;
+     this.selectedPercentage = Math.round(isAtLeastOne ? (this.position / this.max) * this.percentageEnd : 1);
    }
   // the calculation results from input changes
    else if (!this.disableDefaults){
@@ -157,15 +161,20 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
       }
 
       if (pageX !== undefined) {
-        if(this.selectedPercentage) {
-          this.calcAndSetTipAmount();
-          this.updateHandlePositionFromClick(pageX);
-          this.adjustDonationPercentageAndValue();
-          this.onHandleMoved(this.selectedPercentage, this.tipAmount);
-        }
+        this.updateSliderAndValues(pageX);
+        this.handle.nativeElement.style.marginLeft = this.position + 'px';
       }
     }
 
+  }
+
+  private updateSliderAndValues(pageX: number) {
+    if (this.selectedPercentage) {
+      this.calcAndSetTipAmount();
+      this.updateHandlePositionFromClick(pageX);
+      this.adjustDonationPercentageAndValue();
+      this.onHandleMoved(this.selectedPercentage, this.tipAmount);
+    }
   }
 
   calcAndSetTipAmount() {
@@ -186,8 +195,6 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     const mousePos = pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
     this.position = mousePos > this.max ? this.max : mousePos < 0 ? 0 : mousePos;
     this.calcAndSetPercentage();
-
-    this.handle.nativeElement.style.marginLeft = this.position + 'px';
   }
 
   adjustDonationPercentageAndValue() {

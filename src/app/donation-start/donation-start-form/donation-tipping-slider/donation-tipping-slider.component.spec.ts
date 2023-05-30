@@ -7,6 +7,8 @@ describe('DonationTippingSliderComponent', () => {
   let component: DonationTippingSliderComponent;
   let fixture: ComponentFixture<DonationTippingSliderComponent>;
 
+  const dummyRenderer = {listen: () => { }} as unknown as Renderer2;
+
   // beforeEach(async () => {
   //   await TestBed.configureTestingModule({
   //     declarations: [ DonationTippingSliderComponent ]
@@ -44,18 +46,56 @@ describe('DonationTippingSliderComponent', () => {
     ], function (name: string, args: [number, number]){
     it(name, () => {
       const donationAmount = args[0];
-      const expectedDerivedPercentage = args[1];
+      const expectedPercentage = args[1];
 
-      const dummyRenderer = {listen: () => { }} as unknown as Renderer2;
       const slider =  new DonationTippingSliderComponent(dummyRenderer);
 
       slider.donationAmount = donationAmount;
       slider.calcAndSetPercentage();
 
-      expect(slider.selectedPercentage).toBe(expectedDerivedPercentage);
+      expect(slider.selectedPercentage).toBe(expectedPercentage);
     });
     }
-  )
+  );
+
+  usingDataIt('the selected percentage is accurately calculated', [
+    // [position, max, percentageEnd , expected selected percentage]
+    [0, 10, 30, 1],
+    [50, 10, 30, 150]
+  ], function (name: string, args: [number, number, number, number]){
+    it(name, () => {
+      const slider =  new DonationTippingSliderComponent(dummyRenderer);
+      slider.isMoving = true;
+      slider.position = args[0];
+      slider.max = args[1];
+      slider.percentageEnd = args[2];
+
+      slider.calcAndSetPercentage();
+
+      const expectedPercentage = args[3];
+      expect(slider.selectedPercentage).toBe(expectedPercentage);
+    })}
+  );
+
+  it('Gives exact percentage tip for small donations', () => {
+    const slider = new DonationTippingSliderComponent(dummyRenderer);
+    slider.donationAmount = 53;
+    slider.selectedPercentage = 50;
+
+    slider.calcAndSetTipAmount();
+
+    expect(slider.tipAmount).toBe(26.5);
+  });
+
+  it('Rounds up Tip Amount for large donations', () => {
+    const slider = new DonationTippingSliderComponent(dummyRenderer);
+    slider.donationAmount = 57;
+    slider.selectedPercentage = 50;
+
+    slider.calcAndSetTipAmount();
+
+    expect(slider.tipAmount).toBe(29);
+  });
 
   /**
    * Based on function given at
