@@ -190,6 +190,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
    * Keys are ISO2 codes, values are names.
    */
   public countryOptionsObject: Record<string, string>;
+  private tipAmountFromSlider: number;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -399,6 +400,9 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.loadingAddressSuggestions = false;
       this.addressSuggestions = suggestions;
     });
+
+    this.amountsGroup?.patchValue({tipAmount: this.tipAmountFromSlider});
+    this.tipAmountField?.setValue(this.tipAmountFromSlider);
   }
 
   ngAfterContentChecked() {
@@ -1866,9 +1870,9 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     this.loadFirstSavedStripeCardIfAny(id, jwt);
   }
 
-  onDonationSliderMove = (tipAmount: number) => {
-    this.amountsGroup.patchValue({tipAmount: tipAmount});
-    this.tipAmountField?.setValue(tipAmount);
+  onDonationSliderMove = (tipPercentage: number, tipAmount: number) => {
+    this.tipAmountFromSlider = tipAmount;
+    this.tipValue = tipAmount;
   }
 
   updateTipAmount = () => {
