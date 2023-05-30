@@ -522,6 +522,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       // postcode & country which can be set manually or via PRB callbacks.
       updateDonationFromForm(
         event,
+        this.tipValue,
         this.donation,
         this.analyticsService,
         this.paymentGroup,
@@ -848,6 +849,10 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   }
 
   tipAmount(): number {
+    if (typeof this.tipValue === 'number') {
+      return this.tipValue;
+    }
+
     return sanitiseCurrency(this.amountsGroup.value.tipAmount);
   }
 
