@@ -17,14 +17,15 @@
           Match funds are currently available!
         </p>
 
-        <div class="charity-info">
-          You Are Supporting: <br/>
-          <span class="charity-name">{{campaign.charity.name}}</span>
-        </div>
-
-        <div class="campaign-info">
-          for: <br/>
-          <span class="campaign-title">{{campaign.title}}</span>
+        <div style="display: flex; justify-content: start; margin-top: 10px; margin-bottom: 40px;">
+          <div style="margin-right: 170px;">
+            <p class="b-rt-0 b-m-0">You are supporting:</p>
+            <p class="b-rt-0 b-m-0 b-bold">{{ campaign.charity.name }}</p>
+          </div>
+          <div>
+            <p class="b-rt-0 b-m-0">for:</p>
+            <p class="b-rt-0 b-m-0 b-bold">{{ campaign.title }}</p>
+          </div>
         </div>
 
         <div class="donation-input donation-input-main">
@@ -36,18 +37,20 @@
             </biggive-text-input>
         </div>
 
+        <hr style="margin: 20px auto;">
+
+        <h2 class="b-rt-0 b-m-0 b-bold">Tip The Big Give</h2>
+        <p *ngIf="!campaign.feePercentage && creditPenceToUse === 0">Big Give has a 0% platform fee. That means we’re able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
         <div
           class="error"
           aria-live="polite"
           *ngIf="donationAmountField?.invalid && donationAmountField?.errors && (donationAmountField?.dirty || donationAmountField?.touched)"
         >
           <div *ngIf="donationAmountField?.errors?.min">Sorry, the minimum donation is {{ currencySymbol }}1.</div>
-          <div *ngIf="donationAmountField?.errors?.max">Your donation must be {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }} or less to proceed. You can make multiple matched donations of {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }} if match funds are available.</div>
+          <div *ngIf="donationAmountField?.errors?.max">Your donation must be {{ (creditPenceToUse === 0 ? maximumDonationAmount : (creditPenceToUse / 100)) | exactCurrency:campaign.currencyCode }} or less to proceed.<span *ngIf="creditPenceToUse === 0"> You can make multiple matched donations of {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }} if match funds are available.</span></div>
           <div *ngIf="donationAmountField?.errors?.pattern">Please enter a whole number of {{ currencySymbol }} without commas.</div>
           <div *ngIf="donationAmountField?.errors?.required">Please enter how much you would like to donate.</div>
         </div>
-
-        <hr />
 
         <mat-hint *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
           We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://biggive.org/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too). Please consider adding an optional tip.
@@ -59,8 +62,10 @@
           </mat-checkbox>
         </div>
 
-        <div *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
-          <mat-form-field appearance="outline">
+      <div *ngIf="!campaign.feePercentage && creditPenceToUse === 0" style="text-align: center; margin-bottom: 50px;">
+            <!-- We may want to bring something like the below back to test a/b test against the slider, although using our
+                   custom select component instead of mat-select.
+            <mat-form-field appearance="outline">
             <mat-label for="tipPercentage">Donation to the Big Give Trust</mat-label>
             <mat-select formControlName="tipPercentage" id="tipPercentage" (selectionChange)="tipPercentageChange()">
               <mat-option [value]="7.5">7.5%</mat-option>
@@ -69,21 +74,16 @@
               <mat-option [value]="15">15%</mat-option>
               <mat-option [value]="'Other'">Other</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field>-->
 
-          <div *ngIf="customTip()" class="donation-input donation-input-tip">
-            <p id="custom-tip-status" class="b-grey b-rt-sm donation-input-tip__status-help" aria-live="assertive">You've selected to give {{ tipAmount() | exactCurrency:campaign.currencyCode }} to the Big Give Trust. You can edit the amount in the next field.</p>
+          <div *ngIf="showCustomTipInput" class="donation-input donation-input-main">
 
-            <p class="fixed-label">Donation to the Big Give Trust</p>
-            <mat-form-field hideRequiredMarker class="form-field b-center b-rt-0" color="primary">
-              <span class="prefix-tbg" matPrefix>{{ currencySymbol }}</span>
-              <mat-label for="donationAmount">
-                <div class="floating-label">
-                  Donation to the Big Give Trust
-                </div>
-              </mat-label>
-              <input formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status">
-            </mat-form-field>
+            <biggive-text-input currency="{{campaign.currencyCode}}"  prompt="Donation to the Big Give Trust">
+              <input
+                formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status"
+                slot="input"
+              />
+            </biggive-text-input>
           </div>
 
           <div
@@ -95,13 +95,59 @@
             {{ currencySymbol }}, optionally with 2 decimals and up to {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }}.
           </div>
 
-          <mat-hint *ngIf="!customTip()">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to support the Big Give</mat-hint>
+          <mat-hint *ngIf="!customTip()">{{ tipValue | exactCurrency:campaign.currencyCode }} donation to support the Big Give</mat-hint>
 
           <mat-hint *ngIf="customTip() && donationAmount && donationAmount > 0">
             {{ (tipAmount() > 0 && tipAmount() / donationAmount < 0.001) ? 'Less than 0.1%' : (tipAmount() / donationAmount) | percent:'1.0-1' }}
           of main donation
           </mat-hint>
         </div>
+        <app-donation-tipping-slider
+            *ngIf="!showCustomTipInput"
+            #donationTippingSlider
+            [percentageStart]="1"
+            [percentageEnd]="maximumTipPercentage"
+            [donationAmount]="donationAmount"
+            [donationCurrency]="campaign.currencyCode"
+            [onHandleMoved]="onDonationSliderMove"
+          />
+
+          <span class="button" (click)="toggleTipInput()" *ngIf="!showCustomTipInput && donationAmount">
+            Other amount
+          </span>
+          <!-- TODO: this check sets an infinite loop, need to check the logic -->
+          <span *ngIf="shouldShowBackToSlider()"  class="button" (click)="toggleTipInput()" >
+            Back to percentage tip
+          </span>
+
+        <mat-expansion-panel hideToggle>
+          <mat-expansion-panel-header>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
+        <mat-expansion-panel (opened)="panelOpenState = true"
+                             (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <h3 class="b-rt-0 b-m-0 b-bold">How does Big Give use tips?</h3>
+          </mat-expansion-panel-header>
+          <hr/>
+          <p>
+            Big Give is a registered charity (1136547). We don’t charge charities for using our platform; we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
+          </p>
+          <p>Your tips will be going to:</p>
+          <ul>
+            <li>Supporting our website and team, allowing charities to double their
+              donations to good causes.
+            </li>
+            <li>Providing match funds in our Anchor Match Fund. Through tips, charities will receive funding to launch their own match funded campaign on Big Give.
+            </li>
+          </ul>
+
+  <p>
+  Thank you for your generosity! Your tips ensure that we can continue to support charities and causes that are important to you.
+
+          </p>
+
+        </mat-expansion-panel>
 
         <p class="error" *ngIf="donationCreateError" aria-live="assertive">
           Sorry, we can't register your donation right now. Please try again in a moment
@@ -120,8 +166,8 @@
           siteKey="{{ recaptchaIdSiteKey }}"
         ></re-captcha>
 
-        <div>
-          <button
+        <div style="text-align: center">
+          <button style="width: 40%;"
             type="button"
             mat-raised-button
             color="primary"
@@ -442,7 +488,8 @@
         label="Confirm"
         class="c-make-your-donation"
       >
-        <p class="b-rt-0 b-m-0">By clicking on the <em>Donate</em> button, you agree to the {{ termsProvider }}
+        <p class="b-rt-0 b-m-0">By clicking on the <span class="b-bold">Donate now</span> button, you agree to
+          Big Give's
           <a [href]="termsUrl" target="_blank">
             <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
               Terms and Conditions
@@ -475,6 +522,55 @@
             {{ stripeError }}
           </p>
 
+          <p></p>
+
+          <table class="summary" *ngIf="donation">
+            <tr class="donationAmount">
+              <td>Your donation to {{ campaign.charity.name }}</td>
+              <td>{{ donationAmount | exactCurrency:donation.currencyCode }}</td>
+            </tr>
+            <tr *ngIf="donation.matchedAmount > 0">
+              <td>Matched Amount</td>
+              <td>{{ expectedMatchAmount() | exactCurrency:donation.currencyCode }}</td>
+            </tr>
+            <tr *ngIf="giftAidAmount() > 0">
+              <td>Gift Aid Amount</td>
+              <td>{{ giftAidAmount() | exactCurrency:donation.currencyCode }}</td>
+            </tr>
+            <tr *ngIf="feeCoverAmount() > 0">
+              <td>Platform fee</td>
+              <td>{{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} </td>
+            </tr>
+
+            <!-- If the donor is using credit we wouldn't be taking a tip at this point,
+                   and if we are charging a campaign fee we wouldn't have asked for a tip
+                   -->
+            <tr
+              *ngIf="creditPenceToUse === 0 && !campaign.feePercentage"
+            >
+              <td>Tip Amount</td>
+              <td>{{ donation.tipAmount | exactCurrency:donation.currencyCode }}</td>
+            </tr>
+
+            <tr>
+              <td colspan="2"><hr></td>
+            </tr>
+            <tr class="total">
+              <td><div><strong>Total amount you will be charged</strong></div></td>
+              <td><strong>{{ donationAndExtrasAmount | exactCurrency:donation.currencyCode }}</strong></td>
+            </tr>
+            <tr *ngIf="giftAidAmount() > 0">
+              <td colspan="2"><div>
+                You have told us you would like to claim Gift Aid</div></td>
+            </tr>
+            <tr *ngIf="campaign.currencyCode === 'GBP' && giftAidAmount() === 0">
+              You have told us you do not want to claim Gift Aid
+            </tr>
+            <tr *ngIf="expectedMatchAmount() === donationAmount">
+              Your donation will be match funded
+            </tr>
+          </table>
+
           <button
             type="submit"
             class="c-donate-button b-donate-button b-w-100 b-rt-1"
@@ -482,38 +578,8 @@
             color="primary"
             [disabled]="submitting || donationForm.invalid"
           >
-            Donate
-            <span class="b-bold c-donate-button-amount">
-              {{ donationAndExtrasAmount | exactCurrency:campaign.currencyCode }}
-            </span>
+            Donate now
           </button>
-
-          <div class="c-breakdown b-center b-grey">
-            <p class="b-rt-sm b-m-0">{{ donationAmount | exactCurrency:campaign.currencyCode }} donation to {{ campaign.charity.name }}</p>
-            <p *ngIf="feeCoverAmount() > 0 || (creditPenceToUse === 0 && !campaign.feePercentage)" class="b-rt-sm b-m-0">
-              <mat-icon class="b-rt-sm b-m-0" aria-hidden="false" aria-label="Plus">add</mat-icon>
-            </p>
-            <p *ngIf="feeCoverAmount() > 0" class="b-rt-sm b-m-0">{{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} to cover platform fee</p>
-            <p *ngIf="creditPenceToUse === 0 && !campaign.feePercentage" class="b-rt-sm b-m-0">{{ tipAmount() | exactCurrency:campaign.currencyCode }} donation to the Big Give Trust &ndash; we rely on your generosity to support charities</p>
-          </div>
-
-          <!-- Matching or Gift Aid reiteration -->
-          <ul class="c-donation-receipt b-grey">
-            <li *ngIf="giftAidAmount() > 0">
-              <mat-icon aria-hidden="true">check</mat-icon>
-              You have told us you would like to claim Gift Aid
-            </li>
-
-            <li *ngIf="campaign.currencyCode === 'GBP' && giftAidAmount() === 0">
-              <mat-icon aria-hidden="true">clear</mat-icon>
-              You have told us you do not want to claim Gift Aid
-            </li>
-
-            <li *ngIf="expectedMatchAmount() === donationAmount">
-              <mat-icon aria-hidden="true">done_all</mat-icon>
-              Your donation will be match funded
-            </li>
-          </ul>
         </div>
       </mat-step>
     </mat-vertical-stepper>

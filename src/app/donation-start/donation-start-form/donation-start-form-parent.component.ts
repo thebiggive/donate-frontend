@@ -60,6 +60,7 @@ import {ValidateBillingPostCode} from '../../validators/validate-billing-post-co
 import {TimeLeftPipe} from "../../time-left.pipe";
 import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
+import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation-tipping-slider.component";
 
 @Component({
   templateUrl: './donation-start-form.component.html',
@@ -74,6 +75,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
+  @ViewChild('donationTippingSlider') private donationTippingSlider: DonationTippingSliderComponent|undefined;
 
   card: StripeCardElement | null;
   cardHandler = this.onStripeCardChange.bind(this);
@@ -113,6 +115,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   marketingGroup: FormGroup;
 
   maximumDonationAmount: number;
+  maximumTipPercentage: number = 30;
   noPsps = false;
   psp: 'stripe';
   retrying = false;
@@ -160,8 +163,12 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   private stepHeaderEventsSet = false;
   private tipPercentageChanged = false;
 
-  private initialTipSuggestedPercentage = 15;
-
+  /**
+   * TODO: consider removing this property and use the tipAmount instead
+   * and understand why this has changed from 15 to 12.5
+   */
+  tipPercentage = 15;
+  tipValue: number | undefined;
   /**
    * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
    * input was valid (even if differently formatted). Loosely based on https://stackoverflow.com/a/10701634/2803757
@@ -184,6 +191,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
    */
   public countryOptionsObject: Record<string, string>;
   paymentMethodChecked: boolean;
+  private tipAmountFromSlider: number;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -247,8 +255,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         ]],
         coverFee: [false],
         feeCoverAmount: [null],
-        tipPercentage: [this.initialTipSuggestedPercentage], // See setConditionalValidators().
-        tipAmount: [null], // See setConditionalValidators().
+        tipPercentage: [this.tipPercentage], // See setConditionalValidators().
+        tipAmount: [null], // See setConditionalValidators()
       }),
       giftAid: this.formBuilder.group({
         giftAid: [null],        // See addUKValidators().
@@ -393,6 +401,9 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.loadingAddressSuggestions = false;
       this.addressSuggestions = suggestions;
     });
+
+    this.amountsGroup?.patchValue({tipAmount: this.tipAmountFromSlider});
+    this.tipAmountField?.setValue(this.tipAmountFromSlider);
   }
 
   ngAfterContentChecked() {
@@ -431,7 +442,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         this.goToFirstVisibleError();
       });
     }
-
     this.stepHeaderEventsSet = true;
   }
 
@@ -514,6 +524,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       // postcode & country which can be set manually or via PRB callbacks.
       updateDonationFromForm(
         event,
+        this.tipValue,
         this.donation,
         this.analyticsService,
         this.paymentGroup,
@@ -778,6 +789,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     return this.donationForm.controls.amounts!.get('tipAmount');
   }
 
+
   /**
    * Quick getter for donation amount, to keep template use concise.
    */
@@ -839,6 +851,10 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   }
 
   tipAmount(): number {
+    if (typeof this.tipValue === 'number') {
+      return this.tipValue;
+    }
+
     return sanitiseCurrency(this.amountsGroup.value.tipAmount);
   }
 
@@ -1581,13 +1597,13 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
         const updatedValues: {
           tipPercentage?: number | string,
-          tipAmount?: string,
+          tipAmount?: string
         } = {};
 
         donationAmount = sanitiseCurrency(donationAmount);
 
         if (!this.tipPercentageChanged) {
-          let newDefault = this.initialTipSuggestedPercentage;
+          let newDefault = this.tipPercentage;
           if (donationAmount >= 1000) {
             newDefault = 7.5;
           } else if (donationAmount >= 300) {
@@ -1793,7 +1809,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
             this.captcha.reset();
             this.idCaptcha.reset();
             this.stepper.reset();
-            this.amountsGroup.patchValue({ tipPercentage: this.initialTipSuggestedPercentage });
+            this.amountsGroup.patchValue({ tipPercentage: this.tipPercentage });
             this.tipPercentageChanged = false;
             if (this.paymentGroup) {
               this.paymentGroup.patchValue({
@@ -1868,4 +1884,14 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     this.prefillRarelyChangingFormValuesFromPerson(person);
     this.loadFirstSavedStripeCardIfAny(id, jwt);
   }
+
+  onDonationSliderMove = (tipPercentage: number, tipAmount: number) => {
+    this.tipAmountFromSlider = tipAmount;
+    this.tipValue = tipAmount;
+  }
+
+  updateTipAmount = () => {
+    this.tipAmountField?.setValue(this.tipValue);
+  }
+
 }
