@@ -31,6 +31,7 @@ export class DonationCompleteComponent implements OnInit {
   cardChargedAmount: number;
   complete = false;
   donation: Donation;
+  encodedShareUrl: string;
   giftAidAmount: number;
   loggedIn = false;
   minPasswordLength: number;
@@ -42,7 +43,6 @@ export class DonationCompleteComponent implements OnInit {
   registerErrorDescription?: string = undefined;
   registerErrorDescriptionHtml?: SafeHtml = undefined;
   registrationComplete = false;
-  shareUrl: string;
   timedOut = false;
   totalValue: number;
   donationIsLarge: boolean = false;
@@ -283,7 +283,7 @@ export class DonationCompleteComponent implements OnInit {
 
   private setSocialShares(campaign: Campaign) {
     const prefix = environment.donateGlobalUriPrefix;
-    this.shareUrl = `${prefix}/campaign/${campaign.id}`;
+    this.encodedShareUrl = encodeURIComponent(`${prefix}/campaign/${campaign.id}`);
     this.encodedPrefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
   }
 }

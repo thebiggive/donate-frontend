@@ -28,3 +28,8 @@ a {
   color: mat.get-color-from-palette($donate-primary);
   cursor: pointer;
 }
+
+// this had to be styled at the root https://stackoverflow.com/a/71023336/6514933
+div.mat-expansion-panel-body {
+  padding: 0 !important;
+}
