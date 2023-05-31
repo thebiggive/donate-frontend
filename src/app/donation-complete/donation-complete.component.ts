@@ -283,7 +283,7 @@ export class DonationCompleteComponent implements OnInit {
 
   private setSocialShares(campaign: Campaign) {
     const prefix = environment.donateGlobalUriPrefix;
-    this.shareUrl = `${prefix}/campaign/${campaign.id}`;
+    this.shareUrl = encodeURIComponent(`${prefix}/campaign/${campaign.id}`);
     this.encodedPrefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
   }
 }
