@@ -59,32 +59,18 @@ export const cardsForMetaCampaigns = function (
     anyExploreCard = [];
   }
 
-  const now = new Date();
-
-  const k2mCard = (now >= new Date("2023-05-22T12:00:00+01:00")) ? {
-    headerText: 'Kind²Mind results',
-    backgroundImageUrl: new URL('/assets/images/turquoise-texture.jpg', donateUriPrefix),
-    iconColor: 'brand-mhf-turquoise',
-    bodyText: '15 May to 22 May 2023',
-    button: {
-      text: 'See Results',
-      href: new URL('/kind-2-mind-2023', donateUriPrefix)
-    }
-  } as const :
-    {
-    headerText: 'Double your donation in Kind²Mind',
-    backgroundImageUrl: new URL('/assets/images/turquoise-texture.jpg', donateUriPrefix),
-    iconColor: 'brand-mhf-turquoise',
-    bodyText: '15 May to 22 May 2023',
-    button: {
-      text: 'Donate now',
-      href: new URL('/kind-2-mind-2023', donateUriPrefix)
-    }
-  } as const;
-
   return [
       ...metaCampaignCards,
-      k2mCard,
+      {
+        headerText: 'Save the date for Champions for Children',
+        backgroundImageUrl: new URL('/assets/images/cfc-plain-orange.png', donateUriPrefix),
+        iconColor: 'brand-5',
+        bodyText: '6 June to 20 June 2023',
+        button: {
+          text: 'Find out more',
+          href: new URL('/champions-for-children-2023', donateUriPrefix)
+        }
+      },
       {
         headerText: 'Applications for Christmas Challenge now open!',
         backgroundImageUrl: new URL('/assets/images/card-background-cc-lights.jpg', donateUriPrefix),
