@@ -154,7 +154,7 @@
           <biggive-social-icon
             service="Facebook"
             label-prefix="Share"
-            url="https://www.facebook.com/sharer/sharer.php?u={{ shareUrl }}" background-colour="tertiary"
+            url="https://www.facebook.com/sharer/sharer.php?u={{ encodedShareUrl }}" background-colour="tertiary"
             icon-colour="black"
             wide="true"
           ></biggive-social-icon>
@@ -162,7 +162,7 @@
           <biggive-social-icon
             service="Twitter"
             label-prefix="Share"
-            url="https://twitter.com/share?url={{ shareUrl }}&text={{ encodedPrefilledText }}"
+            url="https://twitter.com/share?url={{ encodedShareUrl }}&text={{ encodedPrefilledText }}"
             background-colour="tertiary"
             icon-colour="black"
             wide="true"
@@ -171,7 +171,7 @@
           <biggive-social-icon
             service="LinkedIn"
             label-prefix="Share"
-            url="https://www.linkedin.com/cws/share?url={{ shareUrl }}"
+            url="https://www.linkedin.com/cws/share?url={{ encodedShareUrl }}"
             background-colour="tertiary"
             icon-colour="black"
             wide="true"
