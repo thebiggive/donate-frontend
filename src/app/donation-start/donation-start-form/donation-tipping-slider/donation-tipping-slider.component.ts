@@ -103,6 +103,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   // detect changes in the donationAmount input
   ngOnChanges(changed: SimpleChanges) {
     this.width = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
+    console.log({width: this.width})
     if (changed.donationAmount!.currentValue != changed.donationAmount!.previousValue) {
       this.setSliderAmounts();
       this.onHandleMoved(this.selectedPercentage, this.tipAmount);
@@ -193,7 +194,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
   updateHandlePositionFromDonationInput() {
     const positionAsFractionOfWidth = (this.selectedPercentage - this.percentageStart) / (this.percentageEnd - this.percentageStart);
-
+    console.log({positionAsFractionOfWidth})
     if (positionAsFractionOfWidth < 0) {
       console.error("Tip amount below minimum percentage");
       return;
@@ -205,10 +206,12 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     }
 
     this.position = this.width * positionAsFractionOfWidth;
+    console.log({position: this.position})
     this.handle.nativeElement.style.marginLeft = this.position + 'px';
   }
 
   updateHandlePositionFromClick(pageX: number) {
+    this.width = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
     const mousePos = pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
     this.position = mousePos > this.width ? this.width : mousePos < 0 ? 0 : mousePos;
     this.calcAndSetPercentage();
@@ -227,10 +230,15 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   };
 
   setTipAmount(tipAmount: number) {
+    console.log(this);
+    console.log({tipAmount});
+    console.log({donationAmount: this.donationAmount});
     this.selectedPercentage = Math.round(tipAmount / this.donationAmount * 100);
+    console.log({selectedPercentage: this.selectedPercentage})
     this.tipAmount = tipAmount;
     this.updateHandlePositionFromDonationInput();
     this.adjustDonationPercentageAndValue();
+    console.log(this);
   }
 }
 

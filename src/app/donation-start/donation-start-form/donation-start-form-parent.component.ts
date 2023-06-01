@@ -1625,7 +1625,9 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         } else if (this.amountsGroup.get('tipPercentage')?.value !== 'Other') {
           updatedValues.tipAmount = this.getTipOrFeeAmount(this.amountsGroup.get('tipPercentage')?.value, donationAmount);
         }
-
+        if (updatedValues.tipAmount != undefined) {
+          this.tipValue = Number(updatedValues.tipAmount);
+        }
         this.amountsGroup.patchValue(updatedValues);
       });
 

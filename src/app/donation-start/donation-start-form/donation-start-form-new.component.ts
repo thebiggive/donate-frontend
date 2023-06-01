@@ -32,7 +32,7 @@ export class DonationStartFormNewComponent extends DonationStartFormParentCompon
   }
 
   displayPercentageTipInput = () => {
-    this.tippingSlider.setTipAmount(this.tipAmount());
     this.showCustomTipInput = false;
+    this.tippingSlider.setTipAmount(this.tipAmount());
   }
 }
