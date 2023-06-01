@@ -17,7 +17,7 @@
           Match funds are currently available!
         </p>
 
-        <div style="display: flex; justify-content: start; margin-top: 10px; margin-bottom: 40px;">
+        <div class="donationInfoWrapper">
           <div style="margin-right: 170px;">
             <p class="b-rt-0 b-m-0">You are supporting:</p>
             <p class="b-rt-0 b-m-0 b-bold">{{ campaign.charity.name }}</p>
@@ -402,7 +402,7 @@
         [stepControl]="marketingGroup"
         label="Receive updates"
       >
-        <p class="b-bold b-rt-0" id="optInCharityEmail-label">Would you be happy to receive email updates from <span class="colour-primary">{{ campaign.charity.name }}</span>?</p>
+        <p class="binary-question-header b-bold b-rt-0" id="optInCharityEmail-label">Would you be happy to receive email updates from <span class="colour-primary">{{ campaign.charity.name }}</span>?</p>
         <mat-radio-group tabindex="0" aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
           <div class="binary-options">
             <div class="binary-option">
@@ -431,7 +431,7 @@
           </p>
         </mat-hint>
 
-        <p class="b-bold b-rt-0" id="optInTbgEmail-label">Would you be happy to receive emails from the <span class="colour-primary">Big Give</span>?</p>
+        <p class="binary-question-header b-bold b-rt-0" id="optInTbgEmail-label">Would you be happy to receive emails from the <span class="colour-primary">Big Give</span>?</p>
         <mat-radio-group tabindex="0" aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
           <div class="binary-options">
             <div class="binary-option">
@@ -452,7 +452,7 @@
         </mat-hint>
 
         <div *ngIf="showChampionOptIn">
-          <p class="b-bold b-rt-0" id="optInChampionEmail-label">Would you be happy to receive emails from <span class="colour-primary">{{ campaign.championName }}</span>?</p>
+          <p class="binary-question-header b-bold b-rt-0" id="optInChampionEmail-label">Would you be happy to receive emails from <span class="colour-primary">{{ campaign.championName }}</span>?</p>
           <mat-radio-group tabindex="0" aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
             <mat-hint>{{ campaign.championOptInStatement }}.</mat-hint>
             <div class="binary-options">
