@@ -225,6 +225,13 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.percentageWrap.nativeElement.innerText = '1';
     this.donationWrap.nativeElement.innerText = '1';
   };
+
+  setTipAmount(tipAmount: number) {
+    this.selectedPercentage = Math.round(tipAmount / this.donationAmount * 100);
+    this.tipAmount = tipAmount;
+    this.updateHandlePositionFromDonationInput();
+    this.adjustDonationPercentageAndValue();
+  }
 }
 
 

@@ -115,7 +115,13 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   marketingGroup: FormGroup;
 
   maximumDonationAmount: number;
-  maximumTipPercentage: number = 30;
+  maximumTipPercentage = 30 as const;
+
+  /**
+   * This is a suggested minimum, the lowest people can select using the slider. We still let them select any tip amount
+   * of custom tip, including zero.
+   */
+  minimumTipPercentage = 1 as const;
   noPsps = false;
   psp: 'stripe';
   retrying = false;
@@ -191,6 +197,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
    */
   public countryOptionsObject: Record<string, string>;
   private tipAmountFromSlider: number;
+  public tipIsWithinSuggestedPercentRange: boolean = true;
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -312,6 +319,14 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     if (marketingGroup != null) {
       this.marketingGroup = marketingGroup;
     }
+
+    this.amountsGroup.get('tipAmount')?.valueChanges.subscribe((tipAmount: string) => {
+      this.tipValue = sanitiseCurrency(tipAmount);
+      const minSuggestedTip = this.donationAmount * this.minimumTipPercentage / 100;
+      const maxSuggestedTip = this.donationAmount * this.maximumTipPercentage / 100;
+
+      this.tipIsWithinSuggestedPercentRange = this.tipValue >= minSuggestedTip && this.tipValue <= maxSuggestedTip;
+    });
 
     this.maximumDonationAmount = environment.maximumDonationAmount;
     this.skipPRBs = !environment.psps.stripe.prbEnabled;
@@ -853,6 +868,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       return this.tipValue;
     }
 
+    console.error("We should never be hitting this, the tipValue should now always be set to an number");
     return sanitiseCurrency(this.amountsGroup.value.tipAmount);
   }
 
@@ -1716,7 +1732,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
    * @param donationAmount  Sanitised, e.g. via get() helper `donationAmount`.
    * @returns Tip or fee cover amount as a decimal string, as if input directly into a form field.
    */
-  private getTipOrFeeAmount(percentage: number, donationAmount?: number): string {
+  protected getTipOrFeeAmount(percentage: number, donationAmount?: number): string {
     if (this.creditPenceToUse > 0) {
       return '0'; // No tips on donation credit settlements.
     }

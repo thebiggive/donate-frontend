@@ -76,7 +76,7 @@
             </mat-select>
           </mat-form-field>-->
 
-          <div *ngIf="showCustomTipInput" class="donation-input donation-input-main">
+          <div [style]="showCustomTipInput ? '' : 'display: none;'" class="donation-input donation-input-main">
 
             <biggive-text-input currency="{{campaign.currencyCode}}"  prompt="Donation to the Big Give Trust">
               <input
@@ -103,20 +103,20 @@
           </mat-hint>
         </div>
         <app-donation-tipping-slider
-            *ngIf="!showCustomTipInput"
+            [style]="showCustomTipInput ? 'display: none;' : ''"
             #donationTippingSlider
-            [percentageStart]="1"
+            [percentageStart]="minimumTipPercentage"
             [percentageEnd]="maximumTipPercentage"
             [donationAmount]="donationAmount"
             [donationCurrency]="campaign.currencyCode"
             [onHandleMoved]="onDonationSliderMove"
           />
 
-          <span class="button" (click)="toggleTipInput()" *ngIf="!showCustomTipInput && donationAmount">
+          <span class="button" (click)="displayCustomTipInput()" *ngIf="!showCustomTipInput && donationAmount">
             Other amount
           </span>
           <!-- TODO: this check sets an infinite loop, need to check the logic -->
-          <span *ngIf="shouldShowBackToSlider()"  class="button" (click)="toggleTipInput()" >
+          <span *ngIf="showCustomTipInput && tipIsWithinSuggestedPercentRange"  class="button" (click)="displayPercentageTipInput()" >
             Back to percentage tip
           </span>
 
