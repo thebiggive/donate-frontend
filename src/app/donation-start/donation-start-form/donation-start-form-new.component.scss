@@ -387,6 +387,15 @@ mat-expansion-panel {
   display: flex;
   justify-content: space-between;
   gap: 24px;
+  flex-direction: column;
+
+  @media ($breakpoint-md) {
+    flex-direction: row;
+  }
+}
+
+p.binary-question-header {
+  margin-top: 30px;
 }
 
 div.binary-option {
