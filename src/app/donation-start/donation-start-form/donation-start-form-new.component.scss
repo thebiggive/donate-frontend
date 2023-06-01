@@ -44,6 +44,19 @@ div .c-banner {
   background-color: white;
 }
 
+div.donationInfoWrapper {
+  display: flex;
+  justify-content: start;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  flex-direction: column;
+  gap: 20px;
+
+  @media #{$breakpoint-md} {
+    flex-direction: row;
+  }
+}
+
 input:disabled {
   cursor: not-allowed; // Visual help on desktop when e.g. address lookup has frozen postcode field.
 }
