@@ -894,6 +894,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.stepper.next();
       return;
     }
+    this.stripePaymentMethodReady = !!this.selectedSavedMethod || this.stripeManualCardInputValid;
 
     const promptingForCaptcha = this.promptForCaptcha();
 
@@ -916,7 +917,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     // then unticking it leaves the card box valid without having to modify it. But this is rare and
     // work-around-able, so for now it's not worth the refactoring time.
     const checked = event.checked;
-
     this.stripePaymentMethodReady = checked || this.stripeManualCardInputValid;
 
     if (checked) {
@@ -1000,7 +1000,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         // not null assertion is justified because we know the data length is > 0. Seems TS isn't smart enough to
         // notice that.
         const firstPaymentMethod = response.data[0]!;
-
         this.selectedSavedMethod = firstPaymentMethod;
         this.updateFormWithBillingDetails(firstPaymentMethod);
       }
@@ -1481,6 +1480,9 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     this.stripeResponseErrorCode = undefined;
 
     this.stripePaymentMethodReady = false;
+    if (this.stripeSavedMethods.length < 1) {
+      this.selectedSavedMethod = undefined;
+    }
     this.stripePRBMethodReady = false;
 
     this.retrying = false;
