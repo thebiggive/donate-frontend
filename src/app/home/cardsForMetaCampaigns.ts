@@ -43,6 +43,46 @@ export const cardsForMetaCampaigns = function (
 
   let anyExploreCard: readonly HighlightCard[];
 
+  const now = new Date();
+  let C4Ccard: HighlightCard;
+
+  if (now >= new Date("2023-06-20T12:00:00+01:00")) {
+    C4Ccard = {
+      headerText: 'Champions for Children Results',
+      backgroundImageUrl: new URL('/assets/images/cfc-plain-orange.png', donateUriPrefix),
+      iconColor: 'brand-5',
+      bodyText: '6 June to 20 June 2023',
+      button: {
+        text: 'See Results',
+        href: new URL('/champions-for-children-2023', donateUriPrefix)
+      }
+    }
+  }
+  else if (now >= new Date("2023-06-06T12:00:00+01:00")) {
+    C4Ccard = {
+      headerText: 'Double your donation in Champions for Children',
+      backgroundImageUrl: new URL('/assets/images/cfc-plain-orange.png', donateUriPrefix),
+      iconColor: 'brand-5',
+      bodyText: '6 June to 20 June 2023',
+      button: {
+        text: 'Donate now',
+        href: new URL('/champions-for-children-2023', donateUriPrefix)
+      }
+    }
+  }
+  else {
+    C4Ccard = {
+      headerText: 'Save the date for Champions for Children',
+      backgroundImageUrl: new URL('/assets/images/cfc-plain-orange.png', donateUriPrefix),
+      iconColor: 'brand-5',
+      bodyText: '6 June to 20 June 2023',
+      button: {
+        text: 'Find out more',
+        href: new URL('/champions-for-children-2023', donateUriPrefix)
+      }
+    }
+  }
+
   if (metacampaigns.length < 5) {
     anyExploreCard = [{
       headerText: 'One donation. Twice the impact.',
@@ -61,16 +101,7 @@ export const cardsForMetaCampaigns = function (
 
   return [
       ...metaCampaignCards,
-      {
-        headerText: 'Save the date for Champions for Children',
-        backgroundImageUrl: new URL('/assets/images/cfc-plain-orange.png', donateUriPrefix),
-        iconColor: 'brand-5',
-        bodyText: '6 June to 20 June 2023',
-        button: {
-          text: 'Find out more',
-          href: new URL('/champions-for-children-2023', donateUriPrefix)
-        }
-      },
+      C4Ccard,
       {
         headerText: 'Applications for Christmas Challenge now open!',
         backgroundImageUrl: new URL('/assets/images/card-background-cc-lights.jpg', donateUriPrefix),
