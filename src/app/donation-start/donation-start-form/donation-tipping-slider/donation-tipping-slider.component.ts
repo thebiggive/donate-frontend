@@ -87,11 +87,12 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
    * Re-positions the slider to display the already-chosen tip amount. Used when resizing the window.
    */
   private updateToNewWidth() {
-    this.updateWidth();
+    this.detectWidth();
     this.setTipAmount(this.tipAmount);
   }
 
   private setSliderAmounts() {
+    this.detectWidth();
     this.calcAndSetPercentage();
     this.calcAndSetTipAmount();
     this.adjustDonationPercentageAndValue();
@@ -116,7 +117,6 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
   // detect changes in the donationAmount input
   ngOnChanges(changed: SimpleChanges) {
-    this.width = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
     if (changed.donationAmount!.currentValue != changed.donationAmount!.previousValue) {
       this.setSliderAmounts();
       this.onHandleMoved(this.selectedPercentage, this.tipAmount);
@@ -169,7 +169,6 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   move = (e: MouseEvent | TouchEvent) => {
     if (this.isMoving) {
       this.disableDefaults = true;
-      this.width = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
 
       let pageX: number | undefined;
       if (window.TouchEvent && e instanceof TouchEvent) {
@@ -223,12 +222,11 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.handle.nativeElement.style.marginLeft = this.position + 'px';
   }
 
-  private updateWidth() {
+  private detectWidth() {
     this.width = this.bar.nativeElement.getBoundingClientRect().width - this.handle.nativeElement.getBoundingClientRect().width;
   }
 
   updateHandlePositionFromClick(pageX: number) {
-    this.updateWidth();
     const barLeftPos = this.bar.nativeElement.getBoundingClientRect().left;
     // mousePos is the x position the slider has been dragged to, measured as an offset from the start of the bar.
     const mousePos = pageX - barLeftPos - this.handle.nativeElement.getBoundingClientRect().width / 2;

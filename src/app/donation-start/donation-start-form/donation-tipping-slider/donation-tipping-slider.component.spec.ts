@@ -1,25 +1,16 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {Renderer2} from '@angular/core';
+import {NgZone, Renderer2} from '@angular/core';
 
 import {DonationTippingSliderComponent} from './donation-tipping-slider.component';
+import {ViewportRuler} from "@angular/cdk/scrolling";
 
 describe('DonationTippingSliderComponent', () => {
   let component: DonationTippingSliderComponent;
   let fixture: ComponentFixture<DonationTippingSliderComponent>;
 
   const dummyRenderer = {listen: () => { }} as unknown as Renderer2;
-
-  // beforeEach(async () => {
-  //   await TestBed.configureTestingModule({
-  //     declarations: [ DonationTippingSliderComponent ]
-  //   })
-  //   .compileComponents();
-
-  //   fixture = TestBed.createComponent(DonationTippingSliderComponent);
-  //   component = fixture.componentInstance;
-  //   component.donationCurrency = "GBP";
-  //   fixture.detectChanges();
-  // });
+  const dummyViewportRuler = {change: () => ({subscribe: () => {}})} as unknown as ViewportRuler;
+  const dummyZone = undefined as unknown as NgZone;
 
   it('should create', async () => {
     await TestBed.configureTestingModule({
@@ -48,7 +39,7 @@ describe('DonationTippingSliderComponent', () => {
       const donationAmount = args[0];
       const expectedPercentage = args[1];
 
-      const slider =  new DonationTippingSliderComponent(dummyRenderer);
+      const slider =  new DonationTippingSliderComponent(dummyRenderer, dummyViewportRuler, dummyZone);
 
       slider.donationAmount = donationAmount;
       slider.calcAndSetPercentage();
@@ -66,7 +57,7 @@ describe('DonationTippingSliderComponent', () => {
     {position: -5, width: 10, percentageStart: 10, percentageEnd: 30, expectedPercentage: 10},
   ], function (name: string, args: {position: number, width: number, percentageStart:number, percentageEnd: number, expectedPercentage: number }){
     it(name, () => {
-      const slider =  new DonationTippingSliderComponent(dummyRenderer);
+      const slider =  new DonationTippingSliderComponent(dummyRenderer, dummyViewportRuler, dummyZone);
       slider.isMoving = true;
       slider.position = args.position;
       slider.width = args.width;
@@ -79,7 +70,7 @@ describe('DonationTippingSliderComponent', () => {
     })});
 
   it('Gives exact percentage tip for small donations', () => {
-    const slider = new DonationTippingSliderComponent(dummyRenderer);
+    const slider = new DonationTippingSliderComponent(dummyRenderer, dummyViewportRuler, dummyZone);
     slider.donationAmount = 54.5;
     slider.selectedPercentage = 50;
 
@@ -89,7 +80,7 @@ describe('DonationTippingSliderComponent', () => {
   });
 
   it('Rounds up Tip Amount for large donations', () => {
-    const slider = new DonationTippingSliderComponent(dummyRenderer);
+    const slider = new DonationTippingSliderComponent(dummyRenderer, dummyViewportRuler, dummyZone);
     slider.donationAmount = 55;
     slider.selectedPercentage = 50;
 
