@@ -168,6 +168,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
   move = (e: MouseEvent | TouchEvent) => {
     if (this.isMoving) {
+      this.detectWidth();
       this.disableDefaults = true;
 
       let pageX: number | undefined;
