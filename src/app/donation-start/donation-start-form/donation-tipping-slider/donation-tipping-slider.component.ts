@@ -2,7 +2,7 @@ import {
   AfterContentInit,
   Component,
   ElementRef,
-  Input,
+  Input, NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -10,6 +10,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
+import {ViewportRuler} from "@angular/cdk/scrolling";
 
 @Component({
   selector: 'app-donation-tipping-slider',
@@ -56,8 +57,13 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   position: number;
   disableDefaults: boolean = false;
 
+  private readonly viewportChange = this.viewPortRuler.change(100)
+    .subscribe(() => this.ngZone.run(() => this.updateToNewWidth()));
+
   constructor(
-    public renderer: Renderer2
+    public renderer: Renderer2,
+    private readonly viewPortRuler: ViewportRuler,
+    private readonly ngZone: NgZone,
   ) {
     this.documentMouseupUnlistener = renderer.listen('document', 'mouseup', () => {
       this.isMoving = false;
@@ -75,6 +81,14 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
   ngOnInit() {
     this.setSliderAmounts();
+  }
+
+  /**
+   * Re-positions the slider to display the already-chosen tip amount. Used when resizing the window.
+   */
+  private updateToNewWidth() {
+    this.updateWidth();
+    this.setTipAmount(this.tipAmount);
   }
 
   private setSliderAmounts() {
@@ -113,6 +127,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.documentMousemoveUnlistener();
     this.documentMouseupUnlistener();
     this.documentTouchmoveUnlistener();
+    this.viewportChange.unsubscribe();
   }
 
   // TODO: check if the 15%
