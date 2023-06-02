@@ -208,9 +208,19 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.handle.nativeElement.style.marginLeft = this.position + 'px';
   }
 
+  private updateWidth() {
+    this.width = this.bar.nativeElement.getBoundingClientRect().width - this.handle.nativeElement.getBoundingClientRect().width;
+  }
+
   updateHandlePositionFromClick(pageX: number) {
-    const mousePos = pageX - this.bar.nativeElement.getBoundingClientRect().left - this.handle.nativeElement.getBoundingClientRect().width / 2;
-    this.position = mousePos > this.width ? this.width : mousePos < 0 ? 0 : mousePos;
+    this.updateWidth();
+    const barLeftPos = this.bar.nativeElement.getBoundingClientRect().left;
+    // mousePos is the x position the slider has been dragged to, measured as an offset from the start of the bar.
+    const mousePos = pageX - barLeftPos - this.handle.nativeElement.getBoundingClientRect().width / 2;
+
+    // We don't allow the slider to move outside the bar:
+    this.position = Math.max(0, Math.min(this.width, mousePos));
+
     this.calcAndSetPercentage();
   }
 
