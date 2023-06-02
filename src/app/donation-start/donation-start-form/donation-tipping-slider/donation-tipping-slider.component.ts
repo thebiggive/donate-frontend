@@ -209,7 +209,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   }
 
   updateHandlePositionFromClick(pageX: number) {
-    const mousePos = pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
+    const mousePos = pageX - this.bar.nativeElement.getBoundingClientRect().left - this.handle.nativeElement.getBoundingClientRect().width / 2;
     this.position = mousePos > this.width ? this.width : mousePos < 0 ? 0 : mousePos;
     this.calcAndSetPercentage();
   }
