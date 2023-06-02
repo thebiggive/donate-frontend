@@ -37,10 +37,6 @@
             </biggive-text-input>
         </div>
 
-        <hr style="margin: 20px auto;">
-
-        <h2 class="b-rt-0 b-m-0 b-bold">Tip The Big Give</h2>
-        <p *ngIf="!campaign.feePercentage && creditPenceToUse === 0">Big Give has a 0% platform fee. That means we’re able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
         <div
           class="error"
           aria-live="polite"
@@ -51,6 +47,11 @@
           <div *ngIf="donationAmountField?.errors?.pattern">Please enter a whole number of {{ currencySymbol }} without commas.</div>
           <div *ngIf="donationAmountField?.errors?.required">Please enter how much you would like to donate.</div>
         </div>
+
+        <hr style="margin: 20px auto;">
+
+        <h2 class="b-rt-0 b-m-0 b-bold">Tip The Big Give</h2>
+        <p *ngIf="!campaign.feePercentage && creditPenceToUse === 0">Big Give has a 0% platform fee. That means we’re able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
 
         <mat-hint *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
           We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://biggive.org/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too). Please consider adding an optional tip.

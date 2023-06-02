@@ -5,10 +5,11 @@
           <span class="donation" >
             <span class="donation-value" #donationValue>{{currencyFormatted}}</span>
           </span>
-          &nbsp;
+          <span *ngIf="currencyFormatted">&nbsp;(</span>
           <span class="percentage">
-            (<span class="percentage-value" #percentageValue>{{selectedPercentage}}</span>%)
+            <span class="percentage-value" #percentageValue>{{selectedPercentage}}</span>%
           </span>
+          <span *ngIf="currencyFormatted">)</span>
         </div>
       </div>
     </div>
