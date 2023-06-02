@@ -160,6 +160,10 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   }
 
   format(currencyCode: 'GBP' | 'USD', amount: number) {
+    if (Number.isNaN(amount)) {
+      return "";
+    }
+
     return Intl.NumberFormat('en-GB', {
       style: 'currency',
       currency: currencyCode,
@@ -198,6 +202,11 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   }
 
   calcAndSetTipAmount() {
+    if (Number.isNaN(this.donationAmount) || this.donationAmount == 0) {
+      this.tipAmount = NaN;
+      return;
+    }
+
     // todo after adding unit tests - adjust logic to first calculate tipAmount then round iff tipAmount > 1
     if (this.donationAmount < 55) {
       this.tipAmount = this.donationAmount * (this.selectedPercentage / 100);
@@ -251,7 +260,9 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   };
 
   setTipAmount(tipAmount: number) {
-    this.selectedPercentage = Math.round(tipAmount / this.donationAmount * 100);
+    if (this.donationAmount  > 0) {
+      this.selectedPercentage = Math.round(tipAmount / this.donationAmount * 100);
+    }
     this.tipAmount = tipAmount;
     this.updateHandlePositionFromDonationInput();
     this.adjustDonationPercentageAndValue();
