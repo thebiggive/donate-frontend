@@ -48,12 +48,12 @@ export const cardsForMetaCampaigns = function (
 
   if (now >= new Date("2023-06-20T12:00:00+01:00")) {
     C4Ccard = {
-      headerText: 'Champions for Children Results',
+      headerText: 'Champions for Children results',
       backgroundImageUrl: new URL('/assets/images/cfc-plain-orange.png', donateUriPrefix),
       iconColor: 'brand-5',
       bodyText: '6 June to 20 June 2023',
       button: {
-        text: 'See Results',
+        text: 'See results',
         href: new URL('/champions-for-children-2023', donateUriPrefix)
       }
     }
