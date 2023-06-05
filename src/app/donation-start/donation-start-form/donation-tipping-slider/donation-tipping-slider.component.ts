@@ -229,7 +229,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     }
 
     this.position = this.width * positionAsFractionOfWidth;
-    this.handle.nativeElement.style.marginLeft = this.position + 'px';
+    this.handle.nativeElement.style.marginLeft = Math.round(positionAsFractionOfWidth * 100) + '%';
   }
 
   private detectWidth() {
