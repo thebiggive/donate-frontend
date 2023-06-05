@@ -114,8 +114,14 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   paymentGroup: FormGroup;
   marketingGroup: FormGroup;
 
-  maximumDonationAmount: number;
-  maximumTipPercentage: number = 30;
+  maximumDonationAmount = environment.maximumDonationAmount;
+  maximumTipPercentage = 30 as const;
+
+  /**
+   * This is a suggested minimum, the lowest people can select using the slider. We still let them select any tip amount
+   * of custom tip, including zero.
+   */
+  minimumTipPercentage = 1 as const;
   noPsps = false;
   psp: 'stripe';
   retrying = false;
@@ -191,6 +197,25 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
    */
   public countryOptionsObject: Record<string, string>;
   private tipAmountFromSlider: number;
+  public tipIsWithinSuggestedPercentRange: boolean = true;
+
+  panelOpenState = false;
+  percentage = 1;
+  showCustomTipInput = false;
+  @ViewChild('donationTippingSlider') tippingSlider: DonationTippingSliderComponent;
+
+  displayCustomTipInput = () => {
+    if (this.tipValue) {
+      this.amountsGroup.get('tipAmount')?.setValue(this.tipValue.toString());
+    }
+    this.tipValue = undefined;
+    this.showCustomTipInput = true;
+  }
+
+  displayPercentageTipInput = () => {
+    this.tippingSlider.setTipAmount(this.tipAmount());
+    this.showCustomTipInput = false;
+  }
 
   constructor(
     private analyticsService: AnalyticsService,
@@ -313,7 +338,14 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.marketingGroup = marketingGroup;
     }
 
-    this.maximumDonationAmount = environment.maximumDonationAmount;
+    this.amountsGroup.get('tipAmount')?.valueChanges.subscribe((tipAmount: string) => {
+      this.tipValue = sanitiseCurrency(tipAmount);
+      const minSuggestedTip = this.donationAmount * this.minimumTipPercentage / 100;
+      const maxSuggestedTip = this.donationAmount * this.maximumTipPercentage / 100;
+
+      this.tipIsWithinSuggestedPercentRange = this.tipValue >= minSuggestedTip && this.tipValue <= maxSuggestedTip;
+    });
+
     this.skipPRBs = !environment.psps.stripe.prbEnabled;
 
     if (isPlatformBrowser(this.platformId)) {
@@ -853,6 +885,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       return this.tipValue;
     }
 
+    console.error("We should never be hitting this, the tipValue should now always be set to an number");
     return sanitiseCurrency(this.amountsGroup.value.tipAmount);
   }
 
@@ -894,6 +927,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.stepper.next();
       return;
     }
+    this.stripePaymentMethodReady = !!this.selectedSavedMethod || this.stripeManualCardInputValid;
 
     const promptingForCaptcha = this.promptForCaptcha();
 
@@ -916,7 +950,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     // then unticking it leaves the card box valid without having to modify it. But this is rare and
     // work-around-able, so for now it's not worth the refactoring time.
     const checked = event.checked;
-
     this.stripePaymentMethodReady = checked || this.stripeManualCardInputValid;
 
     if (checked) {
@@ -1000,7 +1033,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         // not null assertion is justified because we know the data length is > 0. Seems TS isn't smart enough to
         // notice that.
         const firstPaymentMethod = response.data[0]!;
-
         this.selectedSavedMethod = firstPaymentMethod;
         this.updateFormWithBillingDetails(firstPaymentMethod);
       }
@@ -1481,6 +1513,9 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     this.stripeResponseErrorCode = undefined;
 
     this.stripePaymentMethodReady = false;
+    if (this.stripeSavedMethods.length < 1) {
+      this.selectedSavedMethod = undefined;
+    }
     this.stripePRBMethodReady = false;
 
     this.retrying = false;
@@ -1714,7 +1749,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
    * @param donationAmount  Sanitised, e.g. via get() helper `donationAmount`.
    * @returns Tip or fee cover amount as a decimal string, as if input directly into a form field.
    */
-  private getTipOrFeeAmount(percentage: number, donationAmount?: number): string {
+  protected getTipOrFeeAmount(percentage: number, donationAmount?: number): string {
     if (this.creditPenceToUse > 0) {
       return '0'; // No tips on donation credit settlements.
     }

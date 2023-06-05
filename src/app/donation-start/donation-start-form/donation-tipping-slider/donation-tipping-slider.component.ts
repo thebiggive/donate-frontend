@@ -2,7 +2,7 @@ import {
   AfterContentInit,
   Component,
   ElementRef,
-  Input,
+  Input, NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -10,6 +10,7 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
+import {ViewportRuler} from "@angular/cdk/scrolling";
 
 @Component({
   selector: 'app-donation-tipping-slider',
@@ -56,8 +57,13 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   position: number;
   disableDefaults: boolean = false;
 
+  private readonly viewportChange = this.viewPortRuler.change(100)
+    .subscribe(() => this.ngZone.run(() => this.updateToNewWidth()));
+
   constructor(
-    public renderer: Renderer2
+    public renderer: Renderer2,
+    private readonly viewPortRuler: ViewportRuler,
+    private readonly ngZone: NgZone,
   ) {
     this.documentMouseupUnlistener = renderer.listen('document', 'mouseup', () => {
       this.isMoving = false;
@@ -77,7 +83,16 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.setSliderAmounts();
   }
 
+  /**
+   * Re-positions the slider to display the already-chosen tip amount. Used when resizing the window.
+   */
+  private updateToNewWidth() {
+    this.detectWidth();
+    this.setTipAmount(this.tipAmount);
+  }
+
   private setSliderAmounts() {
+    this.detectWidth();
     this.calcAndSetPercentage();
     this.calcAndSetTipAmount();
     this.adjustDonationPercentageAndValue();
@@ -102,7 +117,6 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
   // detect changes in the donationAmount input
   ngOnChanges(changed: SimpleChanges) {
-    this.width = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
     if (changed.donationAmount!.currentValue != changed.donationAmount!.previousValue) {
       this.setSliderAmounts();
       this.onHandleMoved(this.selectedPercentage, this.tipAmount);
@@ -113,6 +127,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.documentMousemoveUnlistener();
     this.documentMouseupUnlistener();
     this.documentTouchmoveUnlistener();
+    this.viewportChange.unsubscribe();
   }
 
   // TODO: check if the 15%
@@ -145,6 +160,10 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   }
 
   format(currencyCode: 'GBP' | 'USD', amount: number) {
+    if (Number.isNaN(amount)) {
+      return "";
+    }
+
     return Intl.NumberFormat('en-GB', {
       style: 'currency',
       currency: currencyCode,
@@ -153,8 +172,8 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
   move = (e: MouseEvent | TouchEvent) => {
     if (this.isMoving) {
+      this.detectWidth();
       this.disableDefaults = true;
-      this.width = this.bar.nativeElement.offsetWidth - this.handle.nativeElement.offsetWidth;
 
       let pageX: number | undefined;
       if (window.TouchEvent && e instanceof TouchEvent) {
@@ -183,6 +202,11 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   }
 
   calcAndSetTipAmount() {
+    if (Number.isNaN(this.donationAmount) || this.donationAmount == 0) {
+      this.tipAmount = NaN;
+      return;
+    }
+
     // todo after adding unit tests - adjust logic to first calculate tipAmount then round iff tipAmount > 1
     if (this.donationAmount < 55) {
       this.tipAmount = this.donationAmount * (this.selectedPercentage / 100);
@@ -208,9 +232,18 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.handle.nativeElement.style.marginLeft = this.position + 'px';
   }
 
+  private detectWidth() {
+    this.width = this.bar.nativeElement.getBoundingClientRect().width - this.handle.nativeElement.getBoundingClientRect().width;
+  }
+
   updateHandlePositionFromClick(pageX: number) {
-    const mousePos = pageX - this.bar.nativeElement.offsetLeft - this.handle.nativeElement.offsetWidth / 2;
-    this.position = mousePos > this.width ? this.width : mousePos < 0 ? 0 : mousePos;
+    const barLeftPos = this.bar.nativeElement.getBoundingClientRect().left;
+    // mousePos is the x position the slider has been dragged to, measured as an offset from the start of the bar.
+    const mousePos = pageX - barLeftPos - this.handle.nativeElement.getBoundingClientRect().width / 2;
+
+    // We don't allow the slider to move outside the bar:
+    this.position = Math.max(0, Math.min(this.width, mousePos));
+
     this.calcAndSetPercentage();
   }
 
@@ -225,6 +258,15 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.percentageWrap.nativeElement.innerText = '1';
     this.donationWrap.nativeElement.innerText = '1';
   };
+
+  setTipAmount(tipAmount: number) {
+    if (this.donationAmount  > 0) {
+      this.selectedPercentage = Math.round(tipAmount / this.donationAmount * 100);
+    }
+    this.tipAmount = tipAmount;
+    this.updateHandlePositionFromDonationInput();
+    this.adjustDonationPercentageAndValue();
+  }
 }
 
 

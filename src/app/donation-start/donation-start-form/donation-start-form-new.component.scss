@@ -44,6 +44,19 @@ div .c-banner {
   background-color: white;
 }
 
+div.donationInfoWrapper {
+  display: flex;
+  justify-content: start;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  flex-direction: column;
+  gap: 20px;
+
+  @media #{$breakpoint-md} {
+    flex-direction: row;
+  }
+}
+
 input:disabled {
   cursor: not-allowed; // Visual help on desktop when e.g. address lookup has frozen postcode field.
 }
@@ -202,7 +215,7 @@ input:disabled {
   margin-bottom: 2.5rem;
   margin-left: auto;
   margin-right: auto;
-  width: 400px;
+  max-width: 400px;
   clear: both;
 
   input {
@@ -210,6 +223,11 @@ input:disabled {
     font-size: 24px;
     line-height: 30px;
     font-weight: bolder;
+
+    @media (max-width: 370px) {
+      // on very narrow screens we need to give space for the prompt text above the input.
+      margin-top: 30px;
+    }
   }
 }
 
@@ -226,7 +244,6 @@ input {
 }
 
 div#giftAidAddressContainer > div {
-  width: 50%;
   margin-top: 20px;
 }
 
@@ -350,7 +367,7 @@ mat-expansion-panel {
 
 .mat-expansion-panel-header {
   padding-right: 5px;
-  padding-left: 0; 
+  padding-left: 0;
 }
 
 .button {
@@ -369,6 +386,15 @@ mat-expansion-panel {
   display: flex;
   justify-content: space-between;
   gap: 24px;
+  flex-direction: column;
+
+  @media ($breakpoint-md) {
+    flex-direction: row;
+  }
+}
+
+p.binary-question-header {
+  margin-top: 30px;
 }
 
 div.binary-option {

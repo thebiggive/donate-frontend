@@ -1,11 +1,10 @@
 /**
  * TODO: should move most of the declarations up to the parent component!!!
  */
-import { CurrencyPipe } from "@angular/common";
-import { Component, ViewChild } from "@angular/core";
-import { TimeLeftPipe } from "src/app/time-left.pipe";
-import { DonationStartFormParentComponent } from "./donation-start-form-parent.component";
-import { DonationTippingSliderComponent } from "./donation-tipping-slider/donation-tipping-slider.component";
+import {CurrencyPipe} from "@angular/common";
+import {Component} from "@angular/core";
+import {TimeLeftPipe} from "src/app/time-left.pipe";
+import {DonationStartFormParentComponent} from "./donation-start-form-parent.component";
 
 @Component({
   selector: 'app-donation-start-form-new',
@@ -17,19 +16,5 @@ import { DonationTippingSliderComponent } from "./donation-tipping-slider/donati
   ]
 })
 export class DonationStartFormNewComponent extends DonationStartFormParentComponent {
-
-  panelOpenState = false;
-  percentage = 1;
-  showCustomTipInput = false;
-  @ViewChild('tippingSlider') tippingSlider: DonationTippingSliderComponent;
-
-  toggleTipInput = () => {
-    this.showCustomTipInput = ! this.showCustomTipInput;
-  }
-
-  // TODO: understand the logic here better, replace tipPercentage with endPercentage
-  shouldShowBackToSlider() {
-    console.log(this.tipAmount())
-    return this.showCustomTipInput && this.tipAmount() && (this.tipAmount() <= this.donationAmount * this.tipPercentage)
-  }
+  // this class intentionally left empty - it only exists as a place to hang a @Component decorator. Everything else is in parent class.
 }
