@@ -4,7 +4,7 @@
 export class Fund {
   constructor(
     /**
-     * Unique ID for a fund assigned by the Big Give, in Salesforce case-insensitive format. 18 character string.
+     * Unique ID for a fund assigned by Big Give, in Salesforce case-insensitive format. 18 character string.
      */
     public id: string,
     public type: string,

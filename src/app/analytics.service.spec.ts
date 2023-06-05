@@ -39,7 +39,7 @@ describe('AnalyticsService', () => {
         },
       ],
       ['Animals'],
-      'The Big Give Match Fund',
+      'Big Give Match Fund',
       {
         id: 'sfCharityAsd1',
         name: 'The Test Charity',
