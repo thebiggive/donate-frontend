@@ -44,7 +44,7 @@ describe('MetaCampaignComponent', () => {
     '',
     {
       id: 'tbgId',
-      name: 'The Big Give',
+      name: 'Big Give',
       donateLinkId: 'SFIdOrLegacyId',
       optInStatement: 'Opt in statement.',
       website: 'https://www.thebiggive.org.uk',
