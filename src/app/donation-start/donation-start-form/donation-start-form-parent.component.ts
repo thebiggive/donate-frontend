@@ -199,6 +199,24 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   private tipAmountFromSlider: number;
   public tipIsWithinSuggestedPercentRange: boolean = true;
 
+  panelOpenState = false;
+  percentage = 1;
+  showCustomTipInput = false;
+  @ViewChild('donationTippingSlider') tippingSlider: DonationTippingSliderComponent;
+
+  displayCustomTipInput = () => {
+    if (this.tipValue) {
+      this.amountsGroup.get('tipAmount')?.setValue(this.tipValue.toString());
+    }
+    this.tipValue = undefined;
+    this.showCustomTipInput = true;
+  }
+
+  displayPercentageTipInput = () => {
+    this.tippingSlider.setTipAmount(this.tipAmount());
+    this.showCustomTipInput = false;
+  }
+
   constructor(
     private analyticsService: AnalyticsService,
     public cardIconsService: CardIconsService,
