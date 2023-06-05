@@ -51,11 +51,10 @@
         <hr style="margin: 20px auto;">
 
         <h2 class="b-rt-0 b-m-0 b-bold">Tip Big Give</h2>
-        <p *ngIf="!campaign.feePercentage && creditPenceToUse === 0">Big Give has a 0% platform fee. That means we’re able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
-
-        <mat-hint *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
-          We don't charge any platform fees to charities and rely on the generosity of people like you to support others (we’re a <a href="https://biggive.org/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>charity</a> too). Please consider adding an optional tip.
-        </mat-hint>
+        <p *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
+          Big Give doesn't charge platform fees. That means we're only able to continue offering our services thanks to
+          the generosity of donors who leave an optional tip amount here.
+        </p>
 
         <div *ngIf="campaign.feePercentage && creditPenceToUse === 0">
           <mat-checkbox formControlName="coverFee" id="coverFee">
@@ -95,8 +94,6 @@
             Please enter how much you would like to donate to the Big Give as a number of
             {{ currencySymbol }}, optionally with 2 decimals and up to {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }}.
           </div>
-
-          <mat-hint *ngIf="!customTip()">{{ tipValue | exactCurrency:campaign.currencyCode }} donation to support the Big Give</mat-hint>
 
           <mat-hint *ngIf="customTip() && donationAmount && donationAmount > 0">
             {{ (tipAmount() > 0 && tipAmount() / donationAmount < 0.001) ? 'Less than 0.1%' : (tipAmount() / donationAmount) | percent:'1.0-1' }}
