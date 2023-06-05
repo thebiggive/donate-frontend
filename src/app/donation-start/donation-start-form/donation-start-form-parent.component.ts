@@ -206,7 +206,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
 
   displayCustomTipInput = () => {
     if (this.tipValue) {
-      this.amountsGroup.get('tipAmount')?.setValue(this.tipValue.toString());
+      this.amountsGroup.get('tipAmount')?.setValue(this.tipValue.toFixed(2));
     }
     this.tipValue = undefined;
     this.showCustomTipInput = true;
