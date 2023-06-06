@@ -95,7 +95,9 @@
             {{ currencySymbol }}, optionally with 2 decimals and up to {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }}.
           </div>
 
-          <mat-hint *ngIf="customTip() && donationAmount && donationAmount > 0">
+        <mat-hint *ngIf="!customTip() && donationAmount && donationAmount > 0">{{ tipValue | exactCurrency:campaign.currencyCode }} donation to support Big Give</mat-hint>
+
+        <mat-hint *ngIf="customTip() && donationAmount && donationAmount > 0">
             {{ (tipAmount() > 0 && tipAmount() / donationAmount < 0.001) ? 'Less than 0.1%' : (tipAmount() / donationAmount) | percent:'1.0-1' }}
           of main donation
           </mat-hint>
