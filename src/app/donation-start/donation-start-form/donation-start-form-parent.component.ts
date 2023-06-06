@@ -153,8 +153,10 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   triedToLeaveGiftAid = false;
   triedToLeaveMarketing = false;
   showAllPaymentMethods: boolean = false;
+  protected readonly environmentId = environment.environmentId;
 
-  private campaignId: string;
+
+  protected campaignId: string;
 
   /**
    * Tracks internally whether (Person +) Donation setup is in flight. This is important to prevent duplicates, because multiple

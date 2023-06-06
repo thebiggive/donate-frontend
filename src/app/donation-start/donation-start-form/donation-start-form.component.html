@@ -1,4 +1,13 @@
 <form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaignOpenOnLoad">
+  <div *ngIf="environmentId === 'development' || environmentId==='staging'" style="outline: 2px dotted green">
+    <p>
+      <strong>
+      As this is not production we also have the
+      <a [href]="'/donate-new-stepper/' + campaignId">NEW STEPPER</a>
+      for testing
+      </strong>
+    </p>
+  </div>
   <mat-vertical-stepper
     id="stepper"
     linear
