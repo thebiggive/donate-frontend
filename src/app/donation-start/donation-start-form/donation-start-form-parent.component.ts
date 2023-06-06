@@ -347,7 +347,10 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.tipIsWithinSuggestedPercentRange = this.tipValue >= minSuggestedTip && this.tipValue <= maxSuggestedTip;
     });
 
-    this.maximumDonationAmount = environment.maximumDonationAmount;
+    this.maximumDonationAmount = this.creditPenceToUse === 0 ?
+      environment.maximumDonationAmount:
+      Math.min(this.creditPenceToUse / 100, environment.maximumDonationAmount);
+
     this.skipPRBs = !environment.psps.stripe.prbEnabled;
 
     if (isPlatformBrowser(this.platformId)) {
