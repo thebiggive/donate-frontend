@@ -114,7 +114,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   paymentGroup: FormGroup;
   marketingGroup: FormGroup;
 
-  maximumDonationAmount = environment.maximumDonationAmount;
+  maximumDonationAmount: number;
   maximumTipPercentage = 30 as const;
 
   /**
@@ -346,6 +346,10 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
 
       this.tipIsWithinSuggestedPercentRange = this.tipValue >= minSuggestedTip && this.tipValue <= maxSuggestedTip;
     });
+
+    this.maximumDonationAmount = this.creditPenceToUse === 0 ?
+      environment.maximumDonationAmount:
+      Math.min(this.creditPenceToUse / 100, environment.maximumDonationAmount);
 
     this.skipPRBs = !environment.psps.stripe.prbEnabled;
 
