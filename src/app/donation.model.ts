@@ -1,6 +1,20 @@
 import { DonationStatus } from './donation-status.type';
 
-export const maximumDonationAmount = 25_000;
+export function maximumDonationAmount(currencyCode: string, creditPenceToUse: number): number {
+  if (currencyCode !== 'GBP') {
+    throw new Error(`No maximum defined for currency ${currencyCode}`);
+  }
+
+  if (creditPenceToUse > 0) {
+    return Math.min(creditPenceToUse / 100, maximumDonationAmountForFundedDonation)
+  }
+
+  return maximumDonationAmountForCardDonation
+}
+
+
+export const maximumDonationAmountForCardDonation = 25_000;
+export const maximumDonationAmountForFundedDonation = 200_000;
   /**
  * Many properties on `Donation` are nullable, because they are set only:
  * * after the donation has been persisted in Salesforce (e.g. `status`, `createdTime`, ...); or

@@ -1,5 +1,5 @@
 import {AbstractControl, ValidationErrors, ValidatorFn} from '@angular/forms';
-import {maximumDonationAmount} from "../donation.model";
+import {maximumDonationAmountForCardDonation} from "../donation.model";
 
 export function getCurrencyMaxValidator(limitOverride?: number): ValidatorFn {
   return (control: AbstractControl) : ValidationErrors | null => {
@@ -9,10 +9,7 @@ export function getCurrencyMaxValidator(limitOverride?: number): ValidatorFn {
 
       const value = Number(control.value.replace('£', '').replace('$', ''));
 
-      let effectiveLimit = maximumDonationAmount;
-      if (limitOverride !== undefined) {
-        effectiveLimit = Math.min(effectiveLimit, limitOverride);
-      }
+      const effectiveLimit = limitOverride ?? maximumDonationAmountForCardDonation;
 
       if (value > effectiveLimit) {
           return {

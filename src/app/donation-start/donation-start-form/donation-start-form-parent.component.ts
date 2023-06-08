@@ -347,9 +347,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.tipIsWithinSuggestedPercentRange = this.tipValue >= minSuggestedTip && this.tipValue <= maxSuggestedTip;
     });
 
-    this.maximumDonationAmount = this.creditPenceToUse === 0 ?
-      maximumDonationAmount:
-      Math.min(this.creditPenceToUse / 100, maximumDonationAmount);
+    this.maximumDonationAmount = maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse);
 
     this.skipPRBs = !environment.psps.stripe.prbEnabled;
 
@@ -1620,7 +1618,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.amountsGroup.controls.donationAmount!.setValidators([
         Validators.required,
         getCurrencyMinValidator(1), // min donation is £1
-        getCurrencyMaxValidator(this.creditPenceToUse === 0 ? undefined : this.creditPenceToUse / 100),
+        getCurrencyMaxValidator(maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse)),
         Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
       ]);
 
