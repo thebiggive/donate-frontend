@@ -36,7 +36,7 @@ import {Campaign} from '../../campaign.model';
 import {CampaignService} from '../../campaign.service';
 import {CardIconsService} from '../../card-icons.service';
 import {COUNTRIES} from '../../countries';
-import {Donation} from '../../donation.model';
+import {Donation, maximumDonationAmount} from '../../donation.model';
 import {DonationCreatedResponse} from '../../donation-created-response.model';
 import {DonationService} from '../../donation.service';
 import {DonationStartMatchConfirmDialogComponent} from '../donation-start-match-confirm-dialog.component';
@@ -348,8 +348,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     });
 
     this.maximumDonationAmount = this.creditPenceToUse === 0 ?
-      environment.maximumDonationAmount:
-      Math.min(this.creditPenceToUse / 100, environment.maximumDonationAmount);
+      maximumDonationAmount:
+      Math.min(this.creditPenceToUse / 100, maximumDonationAmount);
 
     this.skipPRBs = !environment.psps.stripe.prbEnabled;
 
