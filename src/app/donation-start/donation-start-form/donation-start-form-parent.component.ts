@@ -1008,6 +1008,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         person.cash_balance[this.campaign.currencyCode.toLowerCase()]!.toString() as string,
         10
       );
+      this.maximumDonationAmount = maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse);
       this.stripePaymentMethodReady = true;
       this.setConditionalValidators();
     }
