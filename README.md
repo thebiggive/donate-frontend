@@ -1,6 +1,6 @@
-# The Big Give Donate Frontend
+# Big Give Donate Frontend
 
-This Angular project is a web frontend allowing donors to discover the Big Give
+This Angular project is a web frontend allowing donors to discover Big Give
 charities' campaigns and donate to them.
 
 ## Getting started

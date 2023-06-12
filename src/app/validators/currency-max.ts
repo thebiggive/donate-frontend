@@ -12,7 +12,7 @@ export function getCurrencyMaxValidator(limitOverride?: number): ValidatorFn {
 
       let effectiveLimit = environment.maximumDonationAmount;
       if (limitOverride !== undefined) {
-        effectiveLimit = limitOverride;
+        effectiveLimit = Math.min(effectiveLimit, limitOverride);
       }
 
       if (value > effectiveLimit) {

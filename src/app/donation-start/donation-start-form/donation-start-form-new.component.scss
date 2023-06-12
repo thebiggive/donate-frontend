@@ -355,6 +355,10 @@ ul {
 li {
   padding-left: 1em;
   text-indent: -1em;
+
+  * {
+    text-indent: initial;
+  }
 }
 
 mat-expansion-panel li:before {

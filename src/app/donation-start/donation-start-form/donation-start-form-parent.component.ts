@@ -114,7 +114,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   paymentGroup: FormGroup;
   marketingGroup: FormGroup;
 
-  maximumDonationAmount = environment.maximumDonationAmount;
+  maximumDonationAmount: number;
   maximumTipPercentage = 30 as const;
 
   /**
@@ -153,8 +153,10 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   triedToLeaveGiftAid = false;
   triedToLeaveMarketing = false;
   showAllPaymentMethods: boolean = false;
+  protected readonly environmentId = environment.environmentId;
 
-  private campaignId: string;
+
+  protected campaignId: string;
 
   /**
    * Tracks internally whether (Person +) Donation setup is in flight. This is important to prevent duplicates, because multiple
@@ -206,9 +208,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
 
   displayCustomTipInput = () => {
     if (this.tipValue) {
-      this.amountsGroup.get('tipAmount')?.setValue(this.tipValue.toString());
+      this.amountsGroup.get('tipAmount')?.setValue(this.tipValue.toFixed(2));
     }
-    this.tipValue = undefined;
     this.showCustomTipInput = true;
   }
 
@@ -345,6 +346,10 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
 
       this.tipIsWithinSuggestedPercentRange = this.tipValue >= minSuggestedTip && this.tipValue <= maxSuggestedTip;
     });
+
+    this.maximumDonationAmount = this.creditPenceToUse === 0 ?
+      environment.maximumDonationAmount:
+      Math.min(this.creditPenceToUse / 100, environment.maximumDonationAmount);
 
     this.skipPRBs = !environment.psps.stripe.prbEnabled;
 
@@ -927,7 +932,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.stepper.next();
       return;
     }
-    this.stripePaymentMethodReady = !!this.selectedSavedMethod || this.stripeManualCardInputValid;
+    this.stripePaymentMethodReady = !!this.selectedSavedMethod || this.stripeManualCardInputValid || this.creditPenceToUse > 0;
 
     const promptingForCaptcha = this.promptForCaptcha();
 

@@ -26,7 +26,7 @@ describe('CampaignService', () => {
         },
       ],
       ['Animals'],
-      'The Big Give Match Fund',
+      'Big Give Match Fund',
       {
         id: '0011r00002HHAprAAH',
         name: 'Awesome Charity',

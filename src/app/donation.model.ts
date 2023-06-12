@@ -10,7 +10,7 @@ export interface Donation {
     autoConfirmFromCashBalance?: boolean;
 
     /**
-     * Unique ID for a charity Account assigned by the Big Give, in Salesforce
+     * Unique ID for a charity Account assigned by Big Give, in Salesforce
      * case-insensitive format. 18 character string.
      */
     charityId: string;
@@ -48,7 +48,7 @@ export interface Donation {
     paymentMethodType: 'card' | 'customer_balance';
 
     /**
-     * Unique ID for a CCampaign / project assigned by the Big Give, in Salesforce
+     * Unique ID for a CCampaign / project assigned by Big Give, in Salesforce
      * case-insensitive format. 18 character string.
      */
     projectId: string;
