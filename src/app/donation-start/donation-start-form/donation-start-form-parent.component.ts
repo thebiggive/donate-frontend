@@ -932,7 +932,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.stepper.next();
       return;
     }
-    this.stripePaymentMethodReady = !!this.selectedSavedMethod || this.stripeManualCardInputValid;
+    this.stripePaymentMethodReady = !!this.selectedSavedMethod || this.stripeManualCardInputValid || this.creditPenceToUse > 0;
 
     const promptingForCaptcha = this.promptForCaptcha();
 
