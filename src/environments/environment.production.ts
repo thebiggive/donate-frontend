@@ -18,7 +18,6 @@ export const environment: Environment = {
   // googleOptimizeId: 'OPT-W78W6BT', // Bring back when we have an experiment to run
   identityApiPrefix: 'https://identity-production.thebiggive.org.uk/v1',
   matomoSiteId: 3,
-  maximumDonationAmount: 25_000,
   metaPixelId: '1696575857422204',
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
