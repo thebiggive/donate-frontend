@@ -10,6 +10,7 @@ import { minPasswordLength } from 'src/environments/common';
 import { RecaptchaModule } from 'ng-recaptcha';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Person } from '../person.model';
+import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.component";
 
 @Component({
   standalone: true,
@@ -25,6 +26,7 @@ import { Person } from '../person.model';
     MatRadioModule,
     ReactiveFormsModule,
     RecaptchaModule,
+    PopupStandaloneComponent,
   ]
 })
 export class DonationCompleteSetPasswordDialogComponent implements OnInit {
