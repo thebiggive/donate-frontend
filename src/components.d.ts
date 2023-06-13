@@ -877,8 +877,6 @@ export namespace Components {
         "closeFromOutside": () => Promise<void>;
         "openFromOutside": () => Promise<void>;
     }
-    interface BiggivePopupStandalone {
-    }
     interface BiggiveProgressBar {
         /**
           * Colour Scheme
@@ -987,17 +985,6 @@ export namespace Components {
          */
         "date": string;
         "heading": string;
-    }
-    interface BiggiveTippingSlider {
-        "colourScheme": brandColour;
-        "donationAmount": number;
-        /**
-          * ISO-4217 currency code (e.g. GBP, USD)
-         */
-        "donationCurrency": 'GBP' | 'USD';
-        "percentageEnd": number;
-        "percentageStart": number;
-        "spaceBelow": spacingOption;
     }
     interface BiggiveTotalizer {
         /**
@@ -1353,12 +1340,6 @@ declare global {
         prototype: HTMLBiggivePopupElement;
         new (): HTMLBiggivePopupElement;
     };
-    interface HTMLBiggivePopupStandaloneElement extends Components.BiggivePopupStandalone, HTMLStencilElement {
-    }
-    var HTMLBiggivePopupStandaloneElement: {
-        prototype: HTMLBiggivePopupStandaloneElement;
-        new (): HTMLBiggivePopupStandaloneElement;
-    };
     interface HTMLBiggiveProgressBarElement extends Components.BiggiveProgressBar, HTMLStencilElement {
     }
     var HTMLBiggiveProgressBarElement: {
@@ -1424,12 +1405,6 @@ declare global {
         prototype: HTMLBiggiveTimelineEntryElement;
         new (): HTMLBiggiveTimelineEntryElement;
     };
-    interface HTMLBiggiveTippingSliderElement extends Components.BiggiveTippingSlider, HTMLStencilElement {
-    }
-    var HTMLBiggiveTippingSliderElement: {
-        prototype: HTMLBiggiveTippingSliderElement;
-        new (): HTMLBiggiveTippingSliderElement;
-    };
     interface HTMLBiggiveTotalizerElement extends Components.BiggiveTotalizer, HTMLStencilElement {
     }
     var HTMLBiggiveTotalizerElement: {
@@ -1493,7 +1468,6 @@ declare global {
         "biggive-page-columns": HTMLBiggivePageColumnsElement;
         "biggive-page-section": HTMLBiggivePageSectionElement;
         "biggive-popup": HTMLBiggivePopupElement;
-        "biggive-popup-standalone": HTMLBiggivePopupStandaloneElement;
         "biggive-progress-bar": HTMLBiggiveProgressBarElement;
         "biggive-quote": HTMLBiggiveQuoteElement;
         "biggive-sheet": HTMLBiggiveSheetElement;
@@ -1504,7 +1478,6 @@ declare global {
         "biggive-text-input": HTMLBiggiveTextInputElement;
         "biggive-timeline": HTMLBiggiveTimelineElement;
         "biggive-timeline-entry": HTMLBiggiveTimelineEntryElement;
-        "biggive-tipping-slider": HTMLBiggiveTippingSliderElement;
         "biggive-totalizer": HTMLBiggiveTotalizerElement;
         "biggive-totalizer-ticker-item": HTMLBiggiveTotalizerTickerItemElement;
         "biggive-video": HTMLBiggiveVideoElement;
@@ -2390,8 +2363,6 @@ declare namespace LocalJSX {
     }
     interface BiggivePopup {
     }
-    interface BiggivePopupStandalone {
-    }
     interface BiggiveProgressBar {
         /**
           * Colour Scheme
@@ -2500,17 +2471,6 @@ declare namespace LocalJSX {
          */
         "date"?: string;
         "heading"?: string;
-    }
-    interface BiggiveTippingSlider {
-        "colourScheme"?: brandColour;
-        "donationAmount"?: number;
-        /**
-          * ISO-4217 currency code (e.g. GBP, USD)
-         */
-        "donationCurrency": 'GBP' | 'USD';
-        "percentageEnd"?: number;
-        "percentageStart"?: number;
-        "spaceBelow"?: spacingOption;
     }
     interface BiggiveTotalizer {
         /**
@@ -2655,7 +2615,6 @@ declare namespace LocalJSX {
         "biggive-page-columns": BiggivePageColumns;
         "biggive-page-section": BiggivePageSection;
         "biggive-popup": BiggivePopup;
-        "biggive-popup-standalone": BiggivePopupStandalone;
         "biggive-progress-bar": BiggiveProgressBar;
         "biggive-quote": BiggiveQuote;
         "biggive-sheet": BiggiveSheet;
@@ -2666,7 +2625,6 @@ declare namespace LocalJSX {
         "biggive-text-input": BiggiveTextInput;
         "biggive-timeline": BiggiveTimeline;
         "biggive-timeline-entry": BiggiveTimelineEntry;
-        "biggive-tipping-slider": BiggiveTippingSlider;
         "biggive-totalizer": BiggiveTotalizer;
         "biggive-totalizer-ticker-item": BiggiveTotalizerTickerItem;
         "biggive-video": BiggiveVideo;
@@ -2715,7 +2673,6 @@ declare module "@stencil/core" {
             "biggive-page-columns": LocalJSX.BiggivePageColumns & JSXBase.HTMLAttributes<HTMLBiggivePageColumnsElement>;
             "biggive-page-section": LocalJSX.BiggivePageSection & JSXBase.HTMLAttributes<HTMLBiggivePageSectionElement>;
             "biggive-popup": LocalJSX.BiggivePopup & JSXBase.HTMLAttributes<HTMLBiggivePopupElement>;
-            "biggive-popup-standalone": LocalJSX.BiggivePopupStandalone & JSXBase.HTMLAttributes<HTMLBiggivePopupStandaloneElement>;
             "biggive-progress-bar": LocalJSX.BiggiveProgressBar & JSXBase.HTMLAttributes<HTMLBiggiveProgressBarElement>;
             "biggive-quote": LocalJSX.BiggiveQuote & JSXBase.HTMLAttributes<HTMLBiggiveQuoteElement>;
             "biggive-sheet": LocalJSX.BiggiveSheet & JSXBase.HTMLAttributes<HTMLBiggiveSheetElement>;
@@ -2731,7 +2688,6 @@ declare module "@stencil/core" {
             "biggive-text-input": LocalJSX.BiggiveTextInput & JSXBase.HTMLAttributes<HTMLBiggiveTextInputElement>;
             "biggive-timeline": LocalJSX.BiggiveTimeline & JSXBase.HTMLAttributes<HTMLBiggiveTimelineElement>;
             "biggive-timeline-entry": LocalJSX.BiggiveTimelineEntry & JSXBase.HTMLAttributes<HTMLBiggiveTimelineEntryElement>;
-            "biggive-tipping-slider": LocalJSX.BiggiveTippingSlider & JSXBase.HTMLAttributes<HTMLBiggiveTippingSliderElement>;
             "biggive-totalizer": LocalJSX.BiggiveTotalizer & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerElement>;
             "biggive-totalizer-ticker-item": LocalJSX.BiggiveTotalizerTickerItem & JSXBase.HTMLAttributes<HTMLBiggiveTotalizerTickerItemElement>;
             "biggive-video": LocalJSX.BiggiveVideo & JSXBase.HTMLAttributes<HTMLBiggiveVideoElement>;
