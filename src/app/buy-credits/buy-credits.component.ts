@@ -11,7 +11,7 @@ import { AnalyticsService } from '../analytics.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { DonationService } from '../donation.service';
-import { Donation } from '../donation.model';
+import {Donation, maximumDonationAmountForFundedDonation} from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { environment } from 'src/environments/environment';
 import { FundingInstruction } from '../fundingInstruction.model';
@@ -46,7 +46,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
   loadingAddressSuggestions = false;
   minimumCreditAmount = environment.minimumCreditAmount;
   maximumCreditAmount = environment.maximumCreditAmount;
-  maximumDonationAmount = environment.maximumDonationAmount;
+  maximumDonationAmount = maximumDonationAmountForFundedDonation;
   showAddressLookup: boolean = true;
   personId?: string;
   sortCode?: string;
@@ -95,7 +95,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
           // Below we validate the tip as a donation because when buying donation credits, tips are set
           // set as real donations to a dedicated Big Give SF campaign.
           // See MAT-266 and the Slack thread linked it its description for more context.
-          getCurrencyMaxValidator(environment.maximumDonationAmount),
+          getCurrencyMaxValidator(maximumDonationAmountForFundedDonation),
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
       }),

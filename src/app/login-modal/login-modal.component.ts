@@ -11,6 +11,7 @@ import { Credentials } from '../credentials.model';
 import { environment } from '../../environments/environment';
 import { IdentityService } from '../identity.service';
 import { EMAIL_REGEXP } from '../validators/patterns';
+import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.component";
 
 @Component({
   standalone: true,
@@ -26,6 +27,7 @@ import { EMAIL_REGEXP } from '../validators/patterns';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     RecaptchaModule,
+    PopupStandaloneComponent,
   ],
 })
 export class LoginModalComponent implements OnInit {

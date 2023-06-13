@@ -25,7 +25,6 @@ export const environment: Environment = {
   googleOptimizeId: null,
   identityApiPrefix: 'https://identity-regression.thebiggivetest.org.uk/v1',
   matomoSiteId: null,
-  maximumDonationAmount: 25_000,
   metaPixelId: '165372943080609',
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,

@@ -25,7 +25,6 @@ export interface Environment {
   googleOptimizeId: string | null,
   identityApiPrefix: string,
   matomoSiteId: number | null, // null for no Matomo tracking.
-  maximumDonationAmount: number,
   metaPixelId: string | null, // Set null to turn off init of Meta Pixel.
   minimumCreditAmount: number,
   maximumCreditAmount: number,

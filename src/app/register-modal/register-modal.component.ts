@@ -10,6 +10,7 @@ import {environment} from '../../environments/environment';
 import {IdentityService} from '../identity.service';
 import {EMAIL_REGEXP} from '../validators/patterns';
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
+import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.component";
 
 @Component({
   standalone: true,
@@ -24,6 +25,7 @@ import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
     MatInputModule,
     ReactiveFormsModule,
     RecaptchaModule,
+    PopupStandaloneComponent,
   ],
 })
 export class RegisterModalComponent implements OnInit {

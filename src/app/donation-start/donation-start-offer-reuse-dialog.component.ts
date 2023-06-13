@@ -5,6 +5,7 @@ import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Donation } from '../donation.model';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
+import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.component";
 
 @Component({
   standalone: true,
@@ -15,6 +16,7 @@ import { ExactCurrencyPipe } from '../exact-currency.pipe';
     ExactCurrencyPipe,
     MatButtonModule,
     MatDialogModule,
+    PopupStandaloneComponent,
   ],
 })
 export class DonationStartOfferReuseDialogComponent {
