@@ -1,4 +1,4 @@
-<biggive-popup-standalone>
+<app-popup-standalone>
   <re-captcha
     #captcha
     size="invisible"
@@ -53,12 +53,12 @@
           <mat-label for="loginEmailAddress">Email address</mat-label>
           <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress">
         </mat-form-field>
-  
+
         <mat-form-field class="b-w-100" color="primary">
           <mat-label for="loginPassword">Password</mat-label>
           <input matInput type="password" id="loginPassword" formControlName="password">
         </mat-form-field>
-  
+
         <p *ngIf="loginError" class="error" aria-live="assertive">
           Login error: {{ loginError }}
         </p>
@@ -79,4 +79,4 @@
       </div>
     </mat-dialog-actions>
   </ng-template>
-</biggive-popup-standalone>
+</app-popup-standalone>

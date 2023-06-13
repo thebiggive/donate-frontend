@@ -3,6 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
+import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.component";
 
 @Component({
   standalone: true,
@@ -12,6 +13,7 @@ import { allChildComponentImports } from '../../allChildComponentImports';
     ...allChildComponentImports,
     MatButtonModule,
     MatDialogModule,
+    PopupStandaloneComponent,
   ],
 })
 export class DonationStartMatchingExpiredDialogComponent {
