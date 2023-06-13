@@ -253,12 +253,6 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.donationWrap.nativeElement.innerText = this.currencyFormatted;
   }
 
-  resetSlider = () => {
-    this.handle.nativeElement.style.marginLeft = '0px';
-    this.percentageWrap.nativeElement.innerText = '1';
-    this.donationWrap.nativeElement.innerText = '1';
-  };
-
   setTipAmount(tipAmount: number) {
     if (this.donationAmount  > 0) {
       this.selectedPercentage = Math.round(tipAmount / this.donationAmount * 100);
