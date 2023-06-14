@@ -87,7 +87,7 @@ export class BiggiveTimeline {
     }
   }
 
-  clickTabHandler(e) {
+  clickTabHandler = (e) => {
     let i = 0;
     for (let el of e.target.parentElement.children) {
       if (el == e.target) {
@@ -126,16 +126,22 @@ export class BiggiveTimeline {
       }
     }
 
-    sleeve.style.transitionDuration = '0.3s';
-    sleeve.style.transitionTimingFunction = 'ease-out';
-    sleeve.style.transform = 'translate3d(' + this.scrollOffset + 'px, 0, 0)';
+    sleeve.querySelectorAll('li').forEach( (li) => {
+
+      li.style.transitionDuration = '0.3s';
+      li.style.transitionTimingFunction = 'ease-out';
+      li.style.transform = 'translate3d(' + this.scrollOffset + 'px, 0, 0)';
+  
+
+    });
+
   }
 
-  clickPrevHandler() {
+  clickPrevHandler = () => {
     this.scrollTab('PREV');
   }
 
-  clickNextHandler() {
+  clickNextHandler = () => {
     this.scrollTab('NEXT');
   }
 
