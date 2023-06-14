@@ -77,7 +77,7 @@ export class BiggiveTabbedContent {
     }
   }
 
-  clickTabHandler(e: MouseEvent) {
+  clickTabHandler = (e: MouseEvent) => {
     let i = 0;
     const parent = (e.target as Element).parentElement!;
     for (let el of Array.from(parent.children)) {
@@ -117,16 +117,20 @@ export class BiggiveTabbedContent {
       }
     }
 
-    sleeve.style.transitionDuration = '0.3s';
-    sleeve.style.transitionTimingFunction = 'ease-out';
-    sleeve.style.transform = 'translate3d(' + this.scrollOffset + 'px, 0, 0)';
+
+    sleeve.querySelectorAll('li').forEach( (li) => {
+      li.style.transitionDuration = '0.3s';
+      li.style.transitionTimingFunction = 'ease-out';
+      li.style.transform = 'translate3d(' + this.scrollOffset + 'px, 0, 0)';
+    });
+
   }
 
-  clickPrevHandler() {
+  clickPrevHandler = () => {
     this.scrollTab('PREV');
   }
 
-  clickNextHandler() {
+  clickNextHandler = () => {
     this.scrollTab('NEXT');
   }
 
