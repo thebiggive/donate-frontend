@@ -26,6 +26,10 @@ export class BiggiveArticleCard {
 
   @Prop() mainTitleColour: brandColour = 'black';
 
+  @Prop() mainImageUrl: string;
+
+  @Prop() mainImageAltText: string;
+
   @Prop() image1Url: string;
 
   @Prop() image1AltText: string;
@@ -76,6 +80,15 @@ export class BiggiveArticleCard {
           <div class="content-wrap">
             {this.slug != '' ? <div class="slug text-colour-primary">{this.slug}</div> : null}
             {this.date != '' ? <div class="date">{this.date}</div> : null}
+
+            {this.mainImageUrl != '' ? (
+                  <div class="main-image-container">
+                    <div class="image-wrap">
+                      <img src={this.mainImageUrl} alt={this.mainImageAltText} title={this.mainImageAltText} />
+                    </div>
+                  </div>
+                ) : null}
+
             <h3 class="title">
               <a href={this.buttonUrl}>{this.mainTitle}</a>
             </h3>

@@ -34,6 +34,8 @@ export namespace Components {
         "image2Url": string;
         "imageLabel": string;
         "imageLabelColour": brandColour;
+        "mainImageAltText": string;
+        "mainImageUrl": string;
         "mainTitle": string;
         "mainTitleColour": brandColour;
         "slug": string;
@@ -1520,6 +1522,8 @@ declare namespace LocalJSX {
         "image2Url"?: string;
         "imageLabel"?: string;
         "imageLabelColour"?: brandColour;
+        "mainImageAltText"?: string;
+        "mainImageUrl"?: string;
         "mainTitle"?: string;
         "mainTitleColour"?: brandColour;
         "slug"?: string;
