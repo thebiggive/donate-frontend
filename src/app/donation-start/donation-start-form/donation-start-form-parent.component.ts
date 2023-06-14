@@ -831,6 +831,21 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   }
 
   /**
+   * As these elements are right-aligned, the click will generally happen on the left, but since users
+   * are more likely to have a backspace key than a delete key (especially on mobile) it's better for the curser
+   * to be at the end of the content.
+   *
+   * Precondition: event.currentTarget should be an HTML input element.
+   */
+  public moveCurserToEnd = (event: FocusEvent) =>
+  {
+    const input = event.currentTarget as HTMLInputElement;
+    const contentLength = input.value.length;
+
+    input.setSelectionRange(contentLength, contentLength);
+  }
+
+  /**
    * Donation plus any tip and/or fee cover.
    */
   get donationAndExtrasAmount(): number {
