@@ -32,6 +32,7 @@
             <biggive-text-input currency="{{campaign.currencyCode}}"  prompt="Enter your donation amount">
               <input
                 formControlName="donationAmount" id="donationAmount" matInput
+                (focus)="moveCurserToEnd($event)"
                 slot="input"
               />
             </biggive-text-input>
@@ -84,6 +85,7 @@
                 <input
                   formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status"
                   slot="input"
+                  (focus)="moveCurserToEnd($event)"
                 />
               </biggive-text-input>
             </div>
