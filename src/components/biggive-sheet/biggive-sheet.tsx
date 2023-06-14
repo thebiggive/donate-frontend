@@ -19,15 +19,17 @@ export class BiggiveSheet {
   @Prop() textColour: brandColour = 'white';
 
   openSheet(hash: string) {
+    alert(hash);
+    alert(this.sheetId);
     if (hash != '' && hash == this.sheetId) {
       this.host.shadowRoot?.querySelector('.container')?.classList.add('active');
     }
   }
 
   componentWillLoad() {
-    window.onhashchange = () => {
+    window.addEventListener('hashchange', () => {
       this.openSheet(window.location.hash);
-    };
+    });
   }
 
   componentDidRender() {
