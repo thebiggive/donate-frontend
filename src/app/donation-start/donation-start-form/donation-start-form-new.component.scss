@@ -40,6 +40,11 @@
   display: none;
 }
 
+:host ::ng-deep .mat-vertical-content-container {
+  // no need for the margin since we don't have the vertical line.
+  margin-left: 0;
+}
+
 div .c-banner {
   background-color: white;
 }
