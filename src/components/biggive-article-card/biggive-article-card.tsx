@@ -82,12 +82,12 @@ export class BiggiveArticleCard {
             {this.date != '' ? <div class="date">{this.date}</div> : null}
 
             {this.mainImageUrl != '' ? (
-                  <div class="main-image-container">
-                    <div class="image-wrap">
-                      <img src={this.mainImageUrl} alt={this.mainImageAltText} title={this.mainImageAltText} />
-                    </div>
-                  </div>
-                ) : null}
+              <div class="main-image-container">
+                <div class="image-wrap">
+                  <img src={this.mainImageUrl} alt={this.mainImageAltText} title={this.mainImageAltText} />
+                </div>
+              </div>
+            ) : null}
 
             <h3 class="title">
               <a href={this.buttonUrl}>{this.mainTitle}</a>

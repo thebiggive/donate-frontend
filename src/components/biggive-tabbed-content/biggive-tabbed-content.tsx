@@ -87,7 +87,7 @@ export class BiggiveTabbedContent {
       }
       i++;
     }
-  }
+  };
 
   scrollTab(direction: 'NEXT' | 'PREV') {
     if (!this.scrollContextTab) {
@@ -117,22 +117,20 @@ export class BiggiveTabbedContent {
       }
     }
 
-
-    sleeve.querySelectorAll('li').forEach( (li) => {
+    sleeve.querySelectorAll('li').forEach(li => {
       li.style.transitionDuration = '0.3s';
       li.style.transitionTimingFunction = 'ease-out';
       li.style.transform = 'translate3d(' + this.scrollOffset + 'px, 0, 0)';
     });
-
   }
 
   clickPrevHandler = () => {
     this.scrollTab('PREV');
-  }
+  };
 
   clickNextHandler = () => {
     this.scrollTab('NEXT');
-  }
+  };
 
   render() {
     return (

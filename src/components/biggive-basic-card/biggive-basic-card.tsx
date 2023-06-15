@@ -18,6 +18,10 @@ export class BiggiveBasicCard {
 
   @Prop() textColour: brandColour = 'black';
 
+  @Prop() mainImageUrl: string;
+
+  @Prop() mainImageAltText: string;
+
   @Prop() mainTitle: string;
 
   @Prop() subtitle: string;
@@ -27,6 +31,10 @@ export class BiggiveBasicCard {
   @Prop() icon: boolean = true;
 
   @Prop() iconColour: brandColour = 'primary';
+
+  @Prop() buttonAlign: string = 'center';
+
+  @Prop() buttonStyle: string = 'standard';
 
   @Prop() buttonLabel: string;
 
@@ -72,11 +80,18 @@ export class BiggiveBasicCard {
                   </svg>
                 </div>
               ) : null}
+              {this.mainImageUrl != '' ? (
+                <div class="main-image-container">
+                  <div class="image-wrap">
+                    <img src={this.mainImageUrl} alt={this.mainImageAltText} title={this.mainImageAltText} />
+                  </div>
+                </div>
+              ) : null}
               <HeadingTag class="title">{this.mainTitle}</HeadingTag>
               <div class="subtitle">{this.subtitle}</div>
               <div class="teaser">{this.teaser}</div>
               {this.buttonLabel != null && this.buttonUrl != null && this.buttonUrl != '' ? (
-                <div class="button-wrap">
+                <div class={'button-wrap align-' + this.buttonAlign}>
                   <biggive-button colour-scheme={this.buttonColourScheme} label={this.buttonLabel}></biggive-button>
                 </div>
               ) : null}

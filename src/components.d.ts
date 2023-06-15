@@ -48,8 +48,10 @@ export namespace Components {
         "addAnimation": boolean;
         "backgroundColour": brandColour;
         "backgroundImageUrl": string;
+        "buttonAlign": string;
         "buttonColourScheme": string;
         "buttonLabel": string;
+        "buttonStyle": string;
         "buttonUrl": string;
         "cardColour": brandColour;
         "clipBottomLeftCorner": boolean;
@@ -57,6 +59,8 @@ export namespace Components {
         "headingLevel": 1 | 2 | 3 | 4 | 5 | 6;
         "icon": boolean;
         "iconColour": brandColour;
+        "mainImageAltText": string;
+        "mainImageUrl": string;
         "mainTitle": string;
         "spaceBelow": spacingOption;
         "subtitle": string;
@@ -1536,8 +1540,10 @@ declare namespace LocalJSX {
         "addAnimation"?: boolean;
         "backgroundColour"?: brandColour;
         "backgroundImageUrl"?: string;
+        "buttonAlign"?: string;
         "buttonColourScheme"?: string;
         "buttonLabel"?: string;
+        "buttonStyle"?: string;
         "buttonUrl"?: string;
         "cardColour"?: brandColour;
         "clipBottomLeftCorner"?: boolean;
@@ -1545,6 +1551,8 @@ declare namespace LocalJSX {
         "headingLevel"?: 1 | 2 | 3 | 4 | 5 | 6;
         "icon"?: boolean;
         "iconColour"?: brandColour;
+        "mainImageAltText"?: string;
+        "mainImageUrl"?: string;
         "mainTitle"?: string;
         "spaceBelow"?: spacingOption;
         "subtitle"?: string;
