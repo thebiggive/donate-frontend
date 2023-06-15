@@ -4,6 +4,30 @@
 .mat-stepper-horizontal, .mat-stepper-vertical {
   background: none;
   box-shadow: $box-shadow-soft;
+  //font-size: 14px;
+  @include b-rt-0;
+}
+
+:host ::ng-deep div.mdc-form-field {
+  font-size: inherit;
+}
+
+:host ::ng-deep .mdc-button__label {
+  font-size: inherit;
+}
+
+div.mdc-form-field label {
+  outline: 3px solid green;
+  font-size: inherit;
+}
+
+:host ::ng-deep .mat-step-label, .mat-step-label-selected {
+  @include b-rt-1;
+  //font-size: 30px;
+}
+
+input {
+  @include b-rt-0;
 }
 
 :host ::ng-deep .mat-step-header {
@@ -79,8 +103,6 @@ input:disabled {
 }
 
 .b-rt-sm {
-  @include b-rt-sm;
-
   .material-icons {
     font-size: 1rem;
     width: 1rem;
@@ -454,18 +476,6 @@ table.summary {
       div {
         display: inline-block;
         max-width: 15rem;
-      }
-      @media #{$breakpoint-sm} {
-        font-size: 1rem;
-      }
-      @media #{$breakpoint-md} {
-        font-size: 1.1rem;
-      }
-      @media #{$breakpoint-lg} {
-        font-size: 1.2rem;
-      }
-      @media #{$breakpoint-xl} {
-        font-size: 1.4rem;
       }
     }
   }

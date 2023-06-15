@@ -6,6 +6,7 @@ import {Component} from "@angular/core";
 import {TimeLeftPipe} from "src/app/time-left.pipe";
 import {DonationStartFormParentComponent} from "./donation-start-form-parent.component";
 
+
 @Component({
   selector: 'app-donation-start-form-new',
   templateUrl: './donation-start-form-new.component.html',
@@ -16,5 +17,6 @@ import {DonationStartFormParentComponent} from "./donation-start-form-parent.com
   ]
 })
 export class DonationStartFormNewComponent extends DonationStartFormParentComponent {
+  readonly stripeElementFontSize = (window && window.innerWidth >= 968) ? "18px" : "14px";
   // this class intentionally left empty - it only exists as a place to hang a @Component decorator. Everything else is in parent class.
 }

@@ -998,6 +998,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     }
   }
 
+  readonly stripeElementFontSize: '14px' | '18px';
+
   private prepareCardInput() {
     if (this.cardInfo.nativeElement.children.length > 0) {
       // Card input was already ready.
@@ -1007,7 +1009,10 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     // Card element is mounted the same way regardless of donation info. See
     // this.createDonationAndMaybePerson().subscribe(...) for Payment Request Button mount, which needs donation info
     // first and so happens in `preparePaymentRequestButton()`.
-    this.card = this.stripeService.getCard();
+
+    // const fontSize = (this instanceof DonationStartFormNewComponent) ? '18px' : '14px';
+
+    this.card = this.stripeService.getCard(this.stripeElementFontSize);
     if (this.cardInfo && this.card) { // Ensure #cardInfo not hidden by PRB success.
       this.card.mount(this.cardInfo.nativeElement);
       this.card.on('change', this.cardHandler);

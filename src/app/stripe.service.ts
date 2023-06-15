@@ -183,7 +183,7 @@ export class StripeService {
     });
   }
 
-  getCard(): StripeCardElement | null {
+  getCard(fontSize: '14px' | '18px'): StripeCardElement | null {
     if (!this.elements) {
       console.log('Stripe Elements not ready');
       return null;
@@ -204,7 +204,7 @@ export class StripeService {
       style: {
         base: {
           fontFamily: 'Euclid Triangle, sans-serif',
-          fontSize: '14px',
+          fontSize: fontSize,
         },
       },
     });
