@@ -199,7 +199,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
    */
   public countryOptionsObject: Record<string, string>;
   private tipAmountFromSlider: number;
-  public tipIsWithinSuggestedPercentRange: boolean = true;
 
   panelOpenState = false;
   percentage = 1;
@@ -207,14 +206,25 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   @ViewChild('donationTippingSlider') tippingSlider: DonationTippingSliderComponent;
 
   displayCustomTipInput = () => {
-    if (this.tipValue) {
-      this.amountsGroup.get('tipAmount')?.setValue(this.tipValue.toFixed(2));
-    }
+    this.amountsGroup.get('tipAmount')?.setValue('');
+
+    // We don't want to show a validation error right now just because this is empty. We will show it if the donor goes into this field and then laeves it invalid.
+    this.amountsGroup.get('tipAmount')?.markAsUntouched();
     this.showCustomTipInput = true;
   }
 
   displayPercentageTipInput = () => {
-    this.tippingSlider.setTipAmount(this.tipAmount());
+    const tipValue = Math.max(
+      this.minimumTipPercentage * this.donationAmount / 100,
+      Math.min(this.maximumTipPercentage * this.donationAmount / 100, this.tipValue || 0)
+    );
+
+    const tipValueRounded = tipValue.toFixed(2);
+    this.tipValue = Number(tipValueRounded);
+
+    this.tippingSlider.setTipAmount(this.tipValue);
+
+    this.amountsGroup.get('tipAmount')?.setValue(tipValueRounded);
     this.showCustomTipInput = false;
   }
 
@@ -341,10 +351,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
 
     this.amountsGroup.get('tipAmount')?.valueChanges.subscribe((tipAmount: string) => {
       this.tipValue = sanitiseCurrency(tipAmount);
-      const minSuggestedTip = this.donationAmount * this.minimumTipPercentage / 100;
-      const maxSuggestedTip = this.donationAmount * this.maximumTipPercentage / 100;
-
-      this.tipIsWithinSuggestedPercentRange = this.tipValue >= minSuggestedTip && this.tipValue <= maxSuggestedTip;
     });
 
     this.maximumDonationAmount = maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse);

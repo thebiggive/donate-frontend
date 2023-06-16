@@ -120,7 +120,7 @@
               Other amount
             </span>
             <!-- TODO: this check sets an infinite loop, need to check the logic -->
-            <span *ngIf="showCustomTipInput && tipIsWithinSuggestedPercentRange"  class="button" (click)="displayPercentageTipInput()" >
+            <span *ngIf="showCustomTipInput" class="button" (click)="displayPercentageTipInput()" >
               Back to percentage tip
             </span>
 
