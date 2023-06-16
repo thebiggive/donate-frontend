@@ -32,7 +32,6 @@
             <biggive-text-input currency="{{campaign.currencyCode}}"  prompt="Enter your donation amount">
               <input
                 formControlName="donationAmount" id="donationAmount" matInput
-                (focus)="moveCurserToEnd($event)"
                 slot="input"
               />
             </biggive-text-input>
@@ -85,7 +84,6 @@
                 <input
                   formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status"
                   slot="input"
-                  (focus)="moveCurserToEnd($event)"
                 />
               </biggive-text-input>
             </div>
@@ -120,7 +118,7 @@
               Other amount
             </span>
             <!-- TODO: this check sets an infinite loop, need to check the logic -->
-            <span *ngIf="showCustomTipInput && tipIsWithinSuggestedPercentRange"  class="button" (click)="displayPercentageTipInput()" >
+            <span *ngIf="showCustomTipInput" class="button" (click)="displayPercentageTipInput()" >
               Back to percentage tip
             </span>
 
