@@ -208,7 +208,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   displayCustomTipInput = () => {
     this.amountsGroup.get('tipAmount')?.setValue('');
 
-    // We don't want to show a validation error right now just because this is empty. We will show it if the donor goes into this field and then laeves it invalid.
+    // We don't want to show a validation error right now just because this is empty. We will show it if the donor goes into this field and then leaves it invalid.
     this.amountsGroup.get('tipAmount')?.markAsUntouched();
     this.showCustomTipInput = true;
   }
