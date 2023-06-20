@@ -13,10 +13,15 @@ const routes: Routes = [
       .then(c => c.HomeModule),
   },
   {
+    path: 'transfer-funds',
+    pathMatch: 'full',
+    loadChildren: () => import('./transfer-funds/transfer-funds.module')
+      .then(c => c.TransferFundsModule),
+  },
+  {
     path: 'buy-credits',
     pathMatch: 'full',
-    loadChildren: () => import('./buy-credits/buy-credits.module')
-      .then(c => c.BuyCreditsModule),
+    redirectTo: "/transfer-funds"
   },
   {
     path: 'campaign/:campaignId',

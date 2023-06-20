@@ -12,15 +12,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
-import { BuyCreditsComponent } from './buy-credits.component';
-import { BuyCreditsRoutingModule } from './buy-credits-routing.module';
+import { TransferFundsComponent } from './transfer-funds.component';
+import { TransferFundsRoutingModule } from './transfer-funds-routing.module';
 import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import { TimeLeftPipe } from '../time-left.pipe';
 
 @NgModule({
   imports: [
     ...allChildComponentImports,
-    BuyCreditsRoutingModule,
+    TransferFundsRoutingModule,
     ExactCurrencyPipe,
     MatAutocompleteModule,
     MatButtonModule,
@@ -35,6 +35,6 @@ import { TimeLeftPipe } from '../time-left.pipe';
     ReactiveFormsModule,
     TimeLeftPipe,
   ],
-  declarations: [BuyCreditsComponent],
+  declarations: [TransferFundsComponent],
 })
-export class BuyCreditsModule {}
+export class TransferFundsModule {}

@@ -1,5 +1,5 @@
 /**
- * Used when purchasing donation credits. See DON-532
+ * Used when purchasing transfering donation funds. See DON-532
  */
 export class FundingInstruction {
   constructor(
