@@ -33,6 +33,9 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
    * movable part of the slider
    */
   @ViewChild('handle', {static: true}) handle: ElementRef;
+
+  @ViewChild('tooltip', {static: true}) tooltip: ElementRef;
+
   /**
    * the horizontal slider bar, its width calculated based on device's screen size
    */
@@ -187,6 +190,19 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
       if (pageX !== undefined) {
         this.updateSliderAndValues(pageX);
         this.handle.nativeElement.style.marginLeft = this.position + 'px';
+
+        const sliderRatio = this.position / this.width;
+
+        if (sliderRatio < 0.1) {
+          // numbers below based on solving the simultaneous equations to interpolate between 50% for most of the
+          // space, -200% at one edge and + 200% at the other edge.
+          this.tooltip.nativeElement.style.left = (sliderRatio * -1500 + 200) +  "%";
+        } else if (sliderRatio > 0.9) {
+          this.tooltip.nativeElement.style.left = (sliderRatio * -2500 + 2300) +  "%";
+        }
+        else {
+          this.tooltip.nativeElement.style.left = "50%";
+        }
       }
     }
 
