@@ -20,6 +20,11 @@ describe('biggive-basic-card', () => {
                      <path class="fill-primary" d="M20.4789 36.4199L6.36785e-06 5.89713e-05L40.9724 6.61352e-05L20.4789 36.4199Z"></path>
                    </svg>
                  </div>
+                 <div class="main-image-container">
+                   <div class="image-wrap">
+                     <img>
+                   </div>
+                </div>
                 <h3 class="title"></h3>
                  <div class="subtitle"></div>
                  <div class="teaser"></div>

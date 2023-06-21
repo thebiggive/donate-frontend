@@ -15,6 +15,11 @@ describe('biggive-article-card', () => {
                   <div class="content-wrap">
                     <div class="slug text-colour-primary"></div>
                     <div class="date"></div>
+                    <div class="main-image-container">
+                      <div class="image-wrap">
+                        <img>
+                      </div>
+                    </div>
                     <h3 class="title">
                       <a></a>
                     </h3>
