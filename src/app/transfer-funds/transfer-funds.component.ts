@@ -26,11 +26,11 @@ import { getCurrencyMinValidator } from '../validators/currency-min';
 import { getCurrencyMaxValidator } from '../validators/currency-max';
 
 @Component({
-  selector: 'app-buy-credits',
-  templateUrl: './buy-credits.component.html',
-  styleUrls: ['./buy-credits.component.scss'],
+  selector: 'app-transfer-funds',
+  templateUrl: './transfer-funds.component.html',
+  styleUrls: ['./transfer-funds.component.scss'],
 })
-export class BuyCreditsComponent implements AfterContentInit, OnInit {
+export class TransferFundsComponent implements AfterContentInit, OnInit {
   addressSuggestions: GiftAidAddressSuggestion[] = [];
   isLoggedIn: boolean = false;
   isLoading: boolean = false;
@@ -92,7 +92,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
           // Explicitly enforce minimum custom tip amount of £0. This is already covered by the regexp
           // validation rule below, but it's good to add the explicit check for future-proofness
           getCurrencyMinValidator(), // no override, so custom tip amount min is £0 (default)
-          // Below we validate the tip as a donation because when buying donation credits, tips are set
+          // Below we validate the tip as a donation because when transfering funds, tips are set
           // set as real donations to a dedicated Big Give SF campaign.
           // See MAT-266 and the Slack thread linked it its description for more context.
           getCurrencyMaxValidator(maximumDonationAmountForFundedDonation),
@@ -209,7 +209,7 @@ export class BuyCreditsComponent implements AfterContentInit, OnInit {
     });
   }
 
-  buyCredits(): void {
+  createAccount(): void {
     this.isLoading = true;
     const idAndJWT = this.identityService.getIdAndJWT();
     if (idAndJWT !== undefined) {
