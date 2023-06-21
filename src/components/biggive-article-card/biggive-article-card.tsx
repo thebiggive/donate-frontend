@@ -84,7 +84,7 @@ export class BiggiveArticleCard {
             {this.mainImageUrl != '' ? (
               <div class="main-image-container">
                 <div class="image-wrap">
-                  <img src={this.mainImageUrl} alt={this.mainImageAltText} title={this.mainImageAltText} />
+                  <img src={this.mainImageUrl} alt={this.mainImageAltText} />
                 </div>
               </div>
             ) : null}
@@ -97,7 +97,7 @@ export class BiggiveArticleCard {
                 {this.image1Url != '' ? (
                   <div class="image-container">
                     <div class="image-wrap" style={{ 'background-image': "url('" + this.image1Url + "')" }}>
-                      <img src={this.image1Url} alt={this.image1AltText} title={this.image1AltText} />
+                      <img src={this.image1Url} alt={this.image1AltText} />
                     </div>
                   </div>
                 ) : null}
@@ -105,7 +105,7 @@ export class BiggiveArticleCard {
                 {this.image2Url != '' ? (
                   <div class="image-container">
                     <div class="image-wrap" style={{ 'background-image': "url('" + this.image2Url + "')" }}>
-                      <img src={this.image2Url} alt={this.image2AltText} title={this.image2AltText} />
+                      <img src={this.image2Url} alt={this.image2AltText} />
                     </div>
                   </div>
                 ) : null}
