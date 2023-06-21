@@ -31,7 +31,6 @@
       overflow: hidden;
       max-height: 0;
       padding: 0 20px;
-      transition: max-height 0.5s ease-in-out;
     }
     &.expanded {
       .content {

@@ -25,9 +25,9 @@ export class BiggiveSheet {
   }
 
   componentWillLoad() {
-    window.onhashchange = () => {
+    window.addEventListener('hashchange', () => {
       this.openSheet(window.location.hash);
-    };
+    });
   }
 
   componentDidRender() {

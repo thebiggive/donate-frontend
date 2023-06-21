@@ -61,4 +61,21 @@
   .subtitle {
     margin-bottom: $spacer-3;
   }
+  .main-image-container {
+    margin-bottom: 15px;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+  .button-wrap {
+    text-align: center;
+    &.align-left {
+      text-align: left;
+    }
+    &.align-right {
+      text-align: right;
+    }
+  }
+
 }
