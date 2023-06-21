@@ -198,7 +198,7 @@
 
         <div *ngIf="isLoggedIn && isPurchaseComplete">
             <h2>Transfer Instructions</h2>
-            <p>Please bank transfer of {{ totalToTransfer | exactCurrency: currency }} to your Donation Funds account using the following details (keep them safe!)::</p>
+            <p>Please make a bank transfer of {{ totalToTransfer | exactCurrency: currency }} to your Donation Funds account using the following details</p>
             <p><strong>Recipient</strong> {{ accountHolderName }}</p>
             <p><strong>Sort Code:</strong> {{ sortCode }}</p>
             <p><strong>Account Number:</strong> {{ accountNumber }}</p>
