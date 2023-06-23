@@ -100,16 +100,7 @@ export const cardsForMetaCampaigns = function (
         }
       },
       DECcard,
-      {
-        headerText: 'Applications for Women and Girls Match Fund now open!',
-        backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', donateUriPrefix),
-        iconColor: 'brand-2',
-        bodyText: 'Deadline is 23 June 2023',
-        button: {
-          text: 'Apply now',
-          href: new URL('/women-girls-match-fund', blogUriPrefix)
-        }
-      },
+      ...anyExploreCard
     ];
 }
 
