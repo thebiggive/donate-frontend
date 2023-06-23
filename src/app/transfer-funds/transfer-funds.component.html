@@ -5,7 +5,7 @@
       <button mat-raised-button (click)="logout()">Log out</button>
     </div>
     <div class="b-container">
-        <h3 class="b-rh-1 b-bold">Purchase Donation Credits</h3>
+        <h3 class="b-rh-1 b-bold">Transfer Donation Funds</h3>
 
         <form *ngIf="isLoggedIn && !isLoading && !isPurchaseComplete" [formGroup]="creditForm">
             <mat-stepper orientation="vertical" [linear]="true" #stepper>
@@ -13,10 +13,10 @@
                     [completed]="false"
                     formGroupName="amounts"
                     [stepControl]="amountsGroup"
-                    label="Your Donation Credits"
+                    label="Your Donation Funds"
                 >
                     <mat-form-field class="form-field b-center size-lg" hideRequiredMarker>
-                        <mat-label>Credit amount ({{ currency }})</mat-label>
+                        <mat-label>Amount ({{ currency }})</mat-label>
                         <input matInput placeholder="Enter amount in {{ currency }}" formControlName="creditAmount" required>
                     </mat-form-field>
                     <p class="error" *ngIf="creditAmountField?.errors && creditAmountField?.invalid && (creditAmountField?.dirty || creditAmountField?.touched)">
@@ -160,14 +160,14 @@
                 <mat-step>
                     <ng-template matStepLabel>Submission</ng-template>
 
-                    <p>By clicking on the 'Purchase Credits' button below, you legally agree to transfer the credit funds via bank transfer to the bank account and sort code
+                    <p>By clicking on the 'Create my Donation Funds account' button below, you agree to transfer the funds via bank transfer to the bank account and sort code
                         displayed on the next screen. See our <a href="https://biggive.org/terms-and-conditions" target="_blank">Terms and Conditions</a> for more information.
                     </p>
 
                     <p>We use <a href="https://stripe.com" target="_blank">Stripe</a> as our payments processor.</p>
 
                     <div>
-                        <button mat-button (click)="buyCredits()">Purchase Credits</button>
+                        <button mat-button (click)="createAccount()">Create my Donation Funds account</button>
                     </div>
                 </mat-step>
             </mat-stepper>
@@ -179,7 +179,7 @@
         </div>
 
         <div *ngIf="!isLoggedIn && !isLoading">
-            <p>You must be logged in to purchase donation credits.</p>
+            <p>You must be logged in to transfer donation funds.</p>
 
             <div class="auth-options">
                 <button
@@ -198,7 +198,7 @@
 
         <div *ngIf="isLoggedIn && isPurchaseComplete">
             <h2>Transfer Instructions</h2>
-            <p>Please bank transfer us {{ totalToTransfer | exactCurrency: currency }} using the following details (keep them safe!):</p>
+            <p>Please make a bank transfer of {{ totalToTransfer | exactCurrency: currency }} to your Donation Funds account using the following details</p>
             <p><strong>Recipient</strong> {{ accountHolderName }}</p>
             <p><strong>Sort Code:</strong> {{ sortCode }}</p>
             <p><strong>Account Number:</strong> {{ accountNumber }}</p>
