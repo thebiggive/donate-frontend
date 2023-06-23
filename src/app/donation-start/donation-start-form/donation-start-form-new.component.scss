@@ -10,6 +10,8 @@
   // ng-deep is deprecated, but I'm not sure how else to apply our style choices inside the stepper.
   background-color: white;
   font-weight: bold;
+  margin-top: 15px;
+  padding: 16px 24px;
 
   .mat-step-text-label {
     font-weight: bold;
