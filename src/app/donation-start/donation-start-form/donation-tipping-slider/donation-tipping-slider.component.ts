@@ -195,10 +195,10 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
 
         if (sliderRatio < 0.1) {
           // numbers below based on solving the simultaneous equations to interpolate between 50% for most of the
-          // space, -200% at one edge and + 200% at the other edge.
+          // space, -100% at one edge and + 200% at the other edge.
           this.tooltip.nativeElement.style.left = (sliderRatio * -1500 + 200) +  "%";
         } else if (sliderRatio > 0.9) {
-          this.tooltip.nativeElement.style.left = (sliderRatio * -2500 + 2300) +  "%";
+          this.tooltip.nativeElement.style.left = (sliderRatio * -1500 + 1400) +  "%";
         }
         else {
           this.tooltip.nativeElement.style.left = "50%";
