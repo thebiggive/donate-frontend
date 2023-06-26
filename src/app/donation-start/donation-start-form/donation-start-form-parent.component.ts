@@ -122,6 +122,14 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
    * of custom tip, including zero.
    */
   minimumTipPercentage = 1 as const;
+  readonly suggestedTipPercentages = {
+    '7.5': '7.5%',
+    '10': '10%',
+    '12.5': '12.5%',
+    '15': '15%',
+    'Other': 'Other'
+  };
+
   noPsps = false;
   psp: 'stripe';
   retrying = false;
@@ -171,10 +179,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   private stepHeaderEventsSet = false;
   private tipPercentageChanged = false;
 
-  /**
-   * TODO: consider removing this property and use the tipAmount instead
-   * and understand why this has changed from 15 to 12.5
-   */
   tipPercentage = 15;
   tipValue: number | undefined;
   /**
@@ -198,6 +202,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
    * Keys are ISO2 codes, values are names.
    */
   public countryOptionsObject: Record<string, string>;
+  public tipControlStyle: 'dropdown'|'slider';
+
   private tipAmountFromSlider: number;
 
   panelOpenState = false;
@@ -228,6 +234,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     this.showCustomTipInput = false;
   }
 
+
   constructor(
     private analyticsService: AnalyticsService,
     public cardIconsService: CardIconsService,
@@ -255,6 +262,9 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       ...(this.countryOptions.map(country => ({[country.iso2]: country.country})))
     );
     this.selectedCountryCode = this.defaultCountryCode;
+
+    this.tipControlStyle = (route.snapshot.queryParams?.tipControl?.toLowerCase() === 'dropdown')
+      ? 'dropdown' : 'slider'
   }
 
   ngOnDestroy() {
@@ -361,6 +371,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.handleCampaignViewUpdates();
     }
   }
+
 
   public setSelectedCountry = ((countryCode: string) => {
     this.selectedCountryCode = countryCode;
@@ -1579,6 +1590,24 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     this.giftAidGroup.updateValueAndValidity();
   }
 
+  public updateTipAmountFromSelectedPercentage = (tipPercentage: string) => {
+    if (tipPercentage === 'Other') {
+      this.displayCustomTipInput();
+      return;
+    }
+    this.showCustomTipInput = false;
+
+    const tipOrFeeAmount = this.getTipOrFeeAmount(Number(tipPercentage), this.donationAmount);
+
+    this.tipPercentage = Number(tipPercentage);
+    this.tipValue = Number(tipOrFeeAmount);
+    this.amountsGroup.patchValue({
+      // Keep value consistent with format of manual string inputs.
+      tipAmount: tipOrFeeAmount,
+    });
+  };
+
+
   private setConditionalValidators(): void {
     // Do not add a validator on `tipPercentage` because as a dropdown it always
     // has a value anyway, and this complicates repopulating the form when e.g.
@@ -1656,16 +1685,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         this.amountsGroup.patchValue(updatedValues);
       });
 
-      this.amountsGroup.get('tipPercentage')?.valueChanges.subscribe(tipPercentage => {
-        if (tipPercentage === 'Other') {
-          return;
-        }
-
-        this.amountsGroup.patchValue({
-          // Keep value consistent with format of manual string inputs.
-          tipAmount: this.getTipOrFeeAmount(tipPercentage, this.donationAmount),
-        });
-      });
+      this.amountsGroup.get('tipPercentage')?.valueChanges.subscribe(this.updateTipAmountFromSelectedPercentage);
     }
 
     this.giftAidGroup.get('homeOutsideUK')?.valueChanges.subscribe(homeOutsideUK => {
