@@ -2,7 +2,8 @@ import {
   AfterContentInit,
   Component,
   ElementRef,
-  Input, NgZone,
+  Input,
+  NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -92,6 +93,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   private updateToNewWidth() {
     this.detectWidth();
     this.setTipAmount(this.tipAmount);
+    this.repositionTooltip();
   }
 
   private setSliderAmounts() {
@@ -100,6 +102,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.calcAndSetTipAmount();
     this.adjustDonationPercentageAndValue();
     this.updateHandlePositionFromDonationInput();
+    this.repositionTooltip();
   }
 
   ngAfterContentInit() {
@@ -190,22 +193,29 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
       if (pageX !== undefined) {
         this.updateSliderAndValues(pageX);
         this.handle.nativeElement.style.marginLeft = this.position + 'px';
-
-        const sliderRatio = this.position / this.width;
-
-        if (sliderRatio < 0.1) {
-          // numbers below based on solving the simultaneous equations to interpolate between 50% for most of the
-          // space, -100% at one edge and + 200% at the other edge.
-          this.tooltip.nativeElement.style.left = (sliderRatio * -1500 + 200) +  "%";
-        } else if (sliderRatio > 0.9) {
-          this.tooltip.nativeElement.style.left = (sliderRatio * -1500 + 1400) +  "%";
-        }
-        else {
-          this.tooltip.nativeElement.style.left = "50%";
-        }
       }
+      this.repositionTooltip();
     }
 
+  }
+
+  private repositionTooltip() {
+    const tooltipWidth = this.tooltip.nativeElement.getBoundingClientRect().width;
+    const barWidth = this.bar.nativeElement.getBoundingClientRect().width;
+
+    if (tooltipWidth === 0) {
+      // presumably not ready to be adjusted yet.
+      return;
+    }
+
+    const idealPosition = this.position + this.handle.nativeElement.getBoundingClientRect().width / 2;
+
+    // Constrain the position so the tooltip doesn't go off the edges:
+    const constrainedPosition = Math.min(barWidth - tooltipWidth / 2 - 3,
+      Math.max(tooltipWidth / 2 + 3, idealPosition)
+    );
+
+    this.tooltip.nativeElement.style.left = constrainedPosition + "px";
   }
 
   private updateSliderAndValues(pageX: number) {
@@ -213,6 +223,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
       this.calcAndSetTipAmount();
       this.updateHandlePositionFromClick(pageX);
       this.adjustDonationPercentageAndValue();
+      this.repositionTooltip();
       this.onHandleMoved(this.selectedPercentage, this.tipAmount);
     }
   }
