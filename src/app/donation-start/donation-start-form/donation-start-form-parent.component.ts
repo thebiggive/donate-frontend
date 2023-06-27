@@ -998,7 +998,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     // Card element is mounted the same way regardless of donation info. See
     // this.createDonationAndMaybePerson().subscribe(...) for Payment Request Button mount, which needs donation info
     // first and so happens in `preparePaymentRequestButton()`.
-
     this.card = this.stripeService.getCard();
     if (this.cardInfo && this.card) { // Ensure #cardInfo not hidden by PRB success.
       this.card.mount(this.cardInfo.nativeElement);

@@ -6,7 +6,6 @@ import {Component} from "@angular/core";
 import {TimeLeftPipe} from "src/app/time-left.pipe";
 import {DonationStartFormParentComponent} from "./donation-start-form-parent.component";
 
-
 @Component({
   selector: 'app-donation-start-form-new',
   templateUrl: './donation-start-form-new.component.html',
