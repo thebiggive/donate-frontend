@@ -1,7 +1,7 @@
   <div class="container space-below-0">
     <div class="bar" #bar>
       <div class="handle" #handle>
-        <div class="tooltip">
+        <div class="tooltip" #tooltip>
             <span class="donation-value" #donationValue>{{currencyFormatted}}</span>
           <span *ngIf="currencyFormatted">&nbsp;(</span>
             <span class="percentage-value" #percentageValue>{{selectedPercentage}}</span>%<span *ngIf="currencyFormatted">)</span>

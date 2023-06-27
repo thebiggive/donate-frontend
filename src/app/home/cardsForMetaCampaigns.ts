@@ -44,41 +44,29 @@ export const cardsForMetaCampaigns = function (
   let anyExploreCard: readonly HighlightCard[];
 
   const now = new Date();
-  let C4Ccard: HighlightCard;
+  let DECcard: HighlightCard;
 
-  if (now >= new Date("2023-06-20T12:00:00+01:00")) {
-    C4Ccard = {
-      headerText: 'Champions for Children results',
-      backgroundImageUrl: new URL('/assets/images/cfc-plain-orange.png', donateUriPrefix),
+  if (now >= new Date("2023-07-31T12:00:00+01:00")) {
+    DECcard = {
+      headerText: 'DEC Ukraine Humanitarian Appeal',
+      backgroundImageUrl: new URL('/assets/images/emergency-card.png', donateUriPrefix),
       iconColor: 'brand-5',
-      bodyText: '6 June to 20 June 2023',
+      bodyText: '15 June to 31 July 2023',
       button: {
         text: 'See results',
-        href: new URL('/champions-for-children-2023', donateUriPrefix)
-      }
-    }
-  }
-  else if (now >= new Date("2023-06-06T12:00:00+01:00")) {
-    C4Ccard = {
-      headerText: 'Double your donation in Champions for Children',
-      backgroundImageUrl: new URL('/assets/images/cfc-plain-orange.png', donateUriPrefix),
-      iconColor: 'brand-5',
-      bodyText: '6 June to 20 June 2023',
-      button: {
-        text: 'Donate now',
-        href: new URL('/champions-for-children-2023', donateUriPrefix)
+        href: new URL('/campaign/a056900002RXrG9AAL', donateUriPrefix)
       }
     }
   }
   else {
-    C4Ccard = {
-      headerText: 'Save the date for Champions for Children',
-      backgroundImageUrl: new URL('/assets/images/cfc-plain-orange.png', donateUriPrefix),
+    DECcard = {
+      headerText: 'DEC Ukraine Humanitarian Appeal',
+      backgroundImageUrl: new URL('/assets/images/emergency-card.png', donateUriPrefix),
       iconColor: 'brand-5',
-      bodyText: '6 June to 20 June 2023',
+      bodyText: '15 June to 31 July 2023',
       button: {
-        text: 'Find out more',
-        href: new URL('/champions-for-children-2023', donateUriPrefix)
+        text: 'Donate now',
+        href: new URL('/campaign/a056900002RXrG9AAL', donateUriPrefix)
       }
     }
   }
@@ -101,7 +89,6 @@ export const cardsForMetaCampaigns = function (
 
   return [
       ...metaCampaignCards,
-      C4Ccard,
       {
         headerText: 'Applications for Christmas Challenge now open!',
         backgroundImageUrl: new URL('/assets/images/card-background-cc-lights.jpg', donateUriPrefix),
@@ -112,16 +99,8 @@ export const cardsForMetaCampaigns = function (
           href: new URL('/christmas-challenge', blogUriPrefix)
         }
       },
-      {
-        headerText: 'Applications for Women and Girls Match Fund now open!',
-        backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', donateUriPrefix),
-        iconColor: 'brand-2',
-        bodyText: 'Deadline is 23 June 2023',
-        button: {
-          text: 'Apply now',
-          href: new URL('/women-girls-match-fund', blogUriPrefix)
-        }
-      },
+      DECcard,
+      ...anyExploreCard
     ];
 }
 

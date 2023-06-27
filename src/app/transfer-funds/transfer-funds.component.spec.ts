@@ -16,11 +16,11 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 
-import { BuyCreditsComponent } from './buy-credits.component';
+import { TransferFundsComponent } from './transfer-funds.component';
 
-describe('BuyCreditsComponent', () => {
-  let component: BuyCreditsComponent;
-  let fixture: ComponentFixture<BuyCreditsComponent>;
+describe('TransferFundsComponent', () => {
+  let component: TransferFundsComponent;
+  let fixture: ComponentFixture<TransferFundsComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -41,8 +41,8 @@ describe('BuyCreditsComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([
           {
-            path: 'buy-credits',
-            component: BuyCreditsComponent,
+            path: 'transfer-funds',
+            component: TransferFundsComponent,
           },
         ]),
       ],
@@ -63,7 +63,7 @@ describe('BuyCreditsComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(BuyCreditsComponent);
+    fixture = TestBed.createComponent(TransferFundsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
