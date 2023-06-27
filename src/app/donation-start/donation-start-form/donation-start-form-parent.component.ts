@@ -1001,8 +1001,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     // this.createDonationAndMaybePerson().subscribe(...) for Payment Request Button mount, which needs donation info
     // first and so happens in `preparePaymentRequestButton()`.
 
-    // const fontSize = (this instanceof DonationStartFormNewComponent) ? '18px' : '14px';
-
     this.card = this.stripeService.getCard(this.stripeElementFontSize);
     if (this.cardInfo && this.card) { // Ensure #cardInfo not hidden by PRB success.
       this.card.mount(this.cardInfo.nativeElement);
