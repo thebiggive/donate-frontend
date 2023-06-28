@@ -7,7 +7,7 @@
   </div>
   <div class="c-form-container">
     <div class="b-primary-column">
-      <div class="c-header">
+      <div class="c-header" *ngIf="! useNewDesign">
         <h2 class="c-header__to b-grey b-light">Donation to</h2>
         <h3 class="b-rh-2 b-bold">{{ campaign.charity.name }}</h3>
         <h2 class="c-header__to b-grey b-light">For</h2>
