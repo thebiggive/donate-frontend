@@ -101,7 +101,9 @@
             </div>
 
           <!-- The text below is not shown if we have the slider because it would just repeat content that's already displayed on the slider itself -->
-          <mat-hint *ngIf="!customTip() && donationAmount && donationAmount > 0 && tipControlStyle !== 'slider'">{{ tipValue | exactCurrency:campaign.currencyCode }} donation to support Big Give</mat-hint>
+          <mat-hint *ngIf="!customTip() && donationAmount && donationAmount > 0 && tipControlStyle !== 'slider'">
+            <p>{{ tipValue | exactCurrency:campaign.currencyCode }} donation to support Big Give</p>
+          </mat-hint>
 
           <mat-hint *ngIf="customTip() && donationAmount && donationAmount > 0">
               {{ (tipAmount() > 0 && tipAmount() / donationAmount < 0.001) ? 'Less than 0.1%' : (tipAmount() / donationAmount) | percent:'1.0-1' }}
@@ -208,13 +210,13 @@
           <div class="binary-options">
             <div class="binary-option">
             <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="true">
-              <strong>Yes</strong>, I want to Gift Aid my donation to {{ campaign.charity.name }} and any additional gift I make to Big Give, including any donations made in the past 4 years or in the future
+                <strong>Yes</strong>, I want to Gift Aid my donation to {{ campaign.charity.name }} and any additional gift I make to Big Give, including any donations made in the past 4 years or in the future
             </mat-radio-button>
             </div>
 
             <div class="binary-option">
             <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="false">
-              <strong>No</strong>, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed
+                <strong>No</strong>, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed
             </mat-radio-button>
             </div>
           </div>
@@ -293,10 +295,10 @@
         [stepControl]="paymentGroup"
         label="Payment details"
       >
-        <p class="b-grey b-rt-sm">
-          <img src="/assets/images/powered-by-stripe-black.svg" alt="Powered by stripe" style="width: 14rem">
+        <p class="b-grey b-rt-sm" style="padding-top: 20px">
+          <img src="/assets/images/powered-by-stripe-black.svg" alt="Powered by stripe" style="width: 12.7rem">
           <br />
-          <a href="https://stripe.com/docs/security/stripe" target="_blank"><mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> Learn more about stripe</a>.
+          <a href="https://stripe.com/docs/security/stripe" target="_blank" style="display: inline-block; width: 13rem"><mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> Learn more about stripe.</a>
         </p>
         <div class="payment-details">
           <div>
@@ -423,10 +425,14 @@
         <mat-radio-group tabindex="0" aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
           <div class="binary-options">
             <div class="binary-option">
-              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.charity.name }}</mat-radio-button>
+              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">
+                Yes, I'm happy to receive emails from {{ campaign.charity.name }}
+              </mat-radio-button>
             </div>
             <div class="binary-option">
-              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.charity.name }}</mat-radio-button>
+              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">
+                  No, I would not like to receive emails from {{ campaign.charity.name }}
+              </mat-radio-button>
             </div>
           </div>
           <p class="error" *ngIf="triedToLeaveMarketing && marketingGroup.get('optInCharityEmail')?.hasError('required')" aria-live="assertive">
@@ -452,10 +458,14 @@
         <mat-radio-group tabindex="0" aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
           <div class="binary-options">
             <div class="binary-option">
-              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from Big Give</mat-radio-button>
+              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">
+                  Yes, I'm happy to receive emails from Big Give
+              </mat-radio-button>
             </div>
             <div class="binary-option">
-              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from Big Give</mat-radio-button>
+              <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">
+                  No, I would not like to receive emails from Big Give
+              </mat-radio-button>
             </div>
           </div>
           <p class="error" *ngIf="triedToLeaveMarketing && marketingGroup.get('optInTbgEmail')?.hasError('required')" aria-live="assertive">
@@ -474,10 +484,14 @@
             <mat-hint>{{ campaign.championOptInStatement }}.</mat-hint>
             <div class="binary-options">
               <div class="binary-option">
-                <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">Yes, I'm happy to receive emails from {{ campaign.championName }} </mat-radio-button>
+                <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">
+                    Yes, I'm happy to receive emails from {{ campaign.championName }}
+                </mat-radio-button>
               </div>
               <div class="binary-option">
-                <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">No, I would not like to receive emails from {{ campaign.championName }} </mat-radio-button>
+                <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">
+                    No, I would not like to receive emails from {{ campaign.championName }}
+                </mat-radio-button>
               </div>
             </div>
             <p class="error" *ngIf="triedToLeaveMarketing && marketingGroup.get('optInChampionEmail')?.hasError('required')" aria-live="assertive">
