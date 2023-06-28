@@ -65,18 +65,21 @@
           </div>
 
         <div *ngIf="!campaign.feePercentage && creditPenceToUse === 0" style="text-align: center; margin-bottom: 50px;">
-              <!-- We may want to bring something like the below back to test a/b test against the slider, although using our
-                     custom select component instead of mat-select.
-              <mat-form-field appearance="outline">
-              <mat-label for="tipPercentage">Donation to the Big Give Trust</mat-label>
-              <mat-select formControlName="tipPercentage" id="tipPercentage" (selectionChange)="tipPercentageChange()">
-                <mat-option [value]="7.5">7.5%</mat-option>
-                <mat-option [value]="10">10%</mat-option>
-                <mat-option [value]="12.5">12.5%</mat-option>
-                <mat-option [value]="15">15%</mat-option>
-                <mat-option [value]="'Other'">Other</mat-option>
-              </mat-select>
-            </mat-form-field>-->
+
+
+          <!-- Question - what should the prompt text be. There is no equivilent on the slider version. Or should
+    add it somewhere to the slider? -->
+          <div class="donation-input donation-input-main">
+            <biggive-form-field-select *ngIf="tipControlStyle === 'dropdown'"
+                                       [prompt]="'Donation to the Big Give Trust'"
+                                       [options]="suggestedTipPercentages"
+                                       [selectedValue]="this.showCustomTipInput ? 'Other' : tipPercentage"
+                                       [backgroundColour]="'grey'"
+                                       [onSelectionChange]="updateTipAmountFromSelectedPercentage"
+                                       [spaceBelow]="3"
+            >
+            </biggive-form-field-select>
+          </div>
 
             <div [style]="showCustomTipInput ? '' : 'display: none;'" class="donation-input donation-input-main">
 
@@ -104,7 +107,8 @@
             of main donation
             </mat-hint>
           </div>
-          <app-donation-tipping-slider
+
+          <app-donation-tipping-slider *ngIf="tipControlStyle === 'slider'"
               [style]="showCustomTipInput ? 'display: none;' : ''"
               #donationTippingSlider
               [percentageStart]="minimumTipPercentage"
@@ -114,11 +118,15 @@
               [onHandleMoved]="onDonationSliderMove"
             />
 
-            <span class="button" (click)="displayCustomTipInput()" *ngIf="!showCustomTipInput && donationAmount">
+            <span
+              class="button"
+              (click)="displayCustomTipInput()"
+              *ngIf="(!showCustomTipInput && donationAmount) && tipControlStyle === 'slider'"
+            >
               Other amount
             </span>
             <!-- TODO: this check sets an infinite loop, need to check the logic -->
-            <span *ngIf="showCustomTipInput" class="button" (click)="displayPercentageTipInput()" >
+            <span *ngIf="showCustomTipInput && tipControlStyle === 'slider'" class="button" (click)="displayPercentageTipInput()" >
               Back to percentage tip
             </span>
 
