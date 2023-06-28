@@ -64,13 +64,13 @@
             </mat-checkbox>
           </div>
 
-        <div *ngIf="!campaign.feePercentage && creditPenceToUse === 0" style="text-align: center; margin-bottom: 50px;">
+        <div *ngIf="!campaign.feePercentage && creditPenceToUse === 0" style="text-align: center;">
 
 
           <!-- Question - what should the prompt text be. There is no equivilent on the slider version. Or should
     add it somewhere to the slider? -->
-          <div class="donation-input donation-input-main">
-            <biggive-form-field-select *ngIf="tipControlStyle === 'dropdown'"
+          <div class="donation-input donation-input-main" *ngIf="tipControlStyle === 'dropdown'">
+            <biggive-form-field-select
                                        [prompt]="'Donation to the Big Give Trust'"
                                        [options]="suggestedTipPercentages"
                                        [selectedValue]="this.showCustomTipInput ? 'Other' : tipPercentage"
@@ -100,7 +100,8 @@
               {{ currencySymbol }}, optionally with 2 decimals and up to {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }}.
             </div>
 
-          <mat-hint *ngIf="!customTip() && donationAmount && donationAmount > 0">{{ tipValue | exactCurrency:campaign.currencyCode }} donation to support Big Give</mat-hint>
+          <!-- The text below is not shown if we have the slider because it would just repeat content that's already displayed on the slider itself -->
+          <mat-hint *ngIf="!customTip() && donationAmount && donationAmount > 0 && tipControlStyle !== 'slider'">{{ tipValue | exactCurrency:campaign.currencyCode }} donation to support Big Give</mat-hint>
 
           <mat-hint *ngIf="customTip() && donationAmount && donationAmount > 0">
               {{ (tipAmount() > 0 && tipAmount() / donationAmount < 0.001) ? 'Less than 0.1%' : (tipAmount() / donationAmount) | percent:'1.0-1' }}
