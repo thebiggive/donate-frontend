@@ -111,6 +111,15 @@
             </mat-hint>
           </div>
 
+          <biggive-accordion>
+            <biggive-accordion-entry heading="ABC">
+              <p>1 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+              <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+            </biggive-accordion-entry>
+          </biggive-accordion>
+
+          
+
           <app-donation-tipping-slider *ngIf="tipControlStyle === 'slider'"
               [style]="showCustomTipInput ? 'display: none;' : ''"
               #donationTippingSlider
@@ -133,7 +142,8 @@
               Back to percentage tip
             </span>
 
-          <mat-expansion-panel hideToggle>
+
+          <!-- <mat-expansion-panel hideToggle>
             <mat-expansion-panel-header>
             </mat-expansion-panel-header>
           </mat-expansion-panel>
@@ -162,7 +172,7 @@
 
             </p>
 
-          </mat-expansion-panel>
+          </mat-expansion-panel> -->
         </div>
 
         <p class="error" *ngIf="donationCreateError" aria-live="assertive">
