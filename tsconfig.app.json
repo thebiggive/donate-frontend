@@ -23,7 +23,13 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noFallthroughCasesInSwitch": true,
-    "paths": { "@angular/*": [ "./node_modules/@angular/*" ] },
+    "paths": { 
+      "@angular/*": [ "./node_modules/@angular/*" ],
+      "@biggive/components": ["components-library"],
+      "@biggive/components/loader": ["components-library/loader/index.cjs.js"],
+      "@biggive/components-react": ["components-library/src/lib/stencil-generated/components.ts"],
+      "@biggive/components/dist/components":["./components-library/dist/components/index.js"]
+    },
     "importHelpers": true,
     "strictNullChecks": true,
     "noUncheckedIndexedAccess": true,
