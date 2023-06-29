@@ -33,7 +33,10 @@ input {
   background-color: white;
   font-weight: bold;
   margin-top: 15px;
-  padding: 16px 24px;
+  padding-top: 16px;
+  padding-right: 24px;
+  padding-left: 24px;
+  padding-bottom: 16px;
 
   .mat-step-text-label {
     font-weight: bold;
@@ -58,6 +61,11 @@ input {
       margin-top: 17px;
     }
   }
+}
+
+:host ::ng-deep .c-your-donation .mat-step-header {
+  background: #2AF135;
+  padding-top: 36px;
 }
 
 :host ::ng-deep .mat-stepper-vertical-line::before {
