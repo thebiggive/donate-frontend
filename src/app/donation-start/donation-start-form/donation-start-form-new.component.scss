@@ -33,7 +33,7 @@ input {
   background-color: white;
   font-weight: bold;
   margin-top: 15px;
-  padding-top: 16px;
+  padding-top: 54px;
   padding-right: 24px;
   padding-left: 24px;
   padding-bottom: 16px;
@@ -63,9 +63,13 @@ input {
   }
 }
 
-:host ::ng-deep .c-your-donation .mat-step-header {
+:host .c-your-donation ::ng-deep .mat-step-header {
   background: #2AF135;
-  padding-top: 36px;
+  padding-top: 360px;
+}
+
+#cdk-step-label-0-0 {
+  padding-top: 54px;
 }
 
 :host ::ng-deep .mat-stepper-vertical-line::before {
