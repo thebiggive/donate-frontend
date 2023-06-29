@@ -1,0 +1,1241 @@
+// Should only be used for Sass variables, mixins and functions; not contain any CSS.
+// https://github.com/ionic-team/stencil-sass#inject-globals-sass-paths
+
+// Text
+@mixin standard-font() {
+  font-family: 'Euclid Triangle', sans-serif;
+  font-size: 17px;
+  line-height: 24px;
+}
+
+@mixin font-size-xx-small() {
+  font-size: 9px;
+  line-height: 11px;
+}
+
+@mixin font-size-x-small() {
+  font-size: 11px;
+  line-height: 14px;
+}
+
+@mixin font-size-small() {
+  font-size: 13px;
+  line-height: 17px;
+}
+
+@mixin font-size-medium() {
+  font-size: 17px;
+  line-height: 24px;
+}
+
+@mixin font-size-large() {
+  font-size: 24px;
+  line-height: 30px;
+}
+
+@mixin heading-1() {
+  font-size: 47px;
+  line-height: 60px;
+  font-weight: bold;
+}
+
+@mixin heading-2() {
+  font-size: 38px;
+  line-height: 45px;
+  font-weight: bold;
+}
+
+@mixin heading-3() {
+  font-size: 25px;
+  line-height: 32px;
+  font-weight: bold;
+}
+
+@mixin heading-4() {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: bold;
+}
+
+@mixin heading-5() {
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: bold;
+}
+
+@mixin subtitle() {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: bold;
+}
+
+
+@mixin max-width-10() {
+  max-width: 10%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-15() {
+  max-width: 15%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-20() {
+  max-width: 20%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-25() {
+  max-width: 25%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-30() {
+  max-width: 30%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-35() {
+  max-width: 35%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-40() {
+  max-width: 40%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-45() {
+  max-width: 45%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-50() {
+  max-width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-55() {
+  max-width: 55%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-60() {
+  max-width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-65() {
+  max-width: 65%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-70() {
+  max-width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-75() {
+  max-width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-80() {
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-85() {
+  max-width: 85%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-90() {
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin max-width-95() {
+  max-width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+// Layout + spacing
+
+@mixin absolute-fill() {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+@mixin section-container() {
+  max-width: $screen-desktop-max;
+  padding-left: $spacer-3;
+  padding-right: $spacer-3;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+@mixin flex-container-row() {
+  display: flex;
+  justify-content: space-between;
+}
+
+@mixin flex-container-column() {
+  display: flex;
+  flex-direction: column;
+}
+
+// Features
+@mixin icon() {
+  height: 1rem;
+  width: 2rem;
+  vertical-align: -.125rem;
+}
+
+@mixin icon-large() {
+  width: $icon-size-large;
+  height: $icon-size-large;
+  border-radius: 50%;
+  text-align: center;
+  transition: all ease-in-out 0.5s;
+  display: inline-block;
+  margin-right: 10px;
+  &.colour-scheme-primary {background-color: $colour-primary-blue; svg {fill: $colour-white;}}
+  &.colour-scheme-secondary {background-color: $colour-secondary-green; svg {fill: $colour-black;}}
+  &.colour-scheme-tertiary {background-color: $colour-tertiary-coral; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-1 {background-color: $colour-brand-cc-red; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-2 {background-color: $colour-brand-wgmf-purple; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-3 {background-color: $colour-brand-gmf-green; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-4 {background-color: $colour-brand-emf-yellow; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-5 {background-color: $colour-brand-c4c-orange; svg {fill: $colour-black;}}
+  &.colour-scheme-brand-6 {background-color: $colour-brand-grey; svg {fill: $colour-black;}}
+  &.colour-scheme-white {background-color: $colour-white; svg {fill: $colour-black;}}
+  &.colour-scheme-black {background-color: $colour-black; svg {fill: $colour-white;}}
+  &.colour-scheme-black {background-color: $colour-grey-extra-light; svg {fill: $colour-grey-extra-light;}}
+  &.colour-scheme-black {background-color: $colour-grey-light; svg {fill: $colour-grey-light;}}
+  &.colour-scheme-black {background-color: $colour-grey-medium; svg {fill: $colour-grey-medium;}}
+  &.colour-scheme-black {background-color: $colour-grey-dark; svg {fill: $colour-grey-dark;}}
+  &:hover {
+    background-color: $colour-white;
+    svg {
+      fill: $colour-black;
+    }
+  }
+  a {
+    display: grid;
+    position: relative;
+    padding: 10px;
+    box-sizing: border-box;
+    height: 100%;
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+@mixin icon-medium() {
+  @include icon-large();
+  width: 30px;
+  height: 30px;
+  a {
+    padding: 6px;
+  }
+}
+
+@mixin progress-bar {
+  display: flex;
+  .slider {
+    margin: auto 15px auto 0;
+    position: relative;
+    flex-grow: 1;
+    &:before {
+      content: '';
+      @include absolute-fill();
+      background-color: $colour-grey-light;
+      border-radius: 4px;
+    }
+    .progress {
+      position: relative;
+      border-radius: 4px;
+      background-color: $colour-black;
+      height: 8px;
+    }
+  }
+  .counter {
+    font-weight: 700;
+    color: $colour-black;
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+
+@mixin progress-bar-primary {
+  .slider {
+    .progress {
+      background-color: $colour-primary-blue;
+    }
+  }
+  .counter {
+    color: $colour-primary-blue;
+  }
+}
+
+@mixin progress-bar-secondary {
+  .slider {
+    .progress {
+      background-color: $colour-secondary-green;
+    }
+  }
+  .counter {
+    color: $colour-secondary-green;
+  }
+}
+
+@mixin input-text {
+  @include standard-font();
+  color: $colour-black;
+  padding: $spacer-1 $spacer-2;
+  box-sizing: border-box;
+  width: 100%;
+  &:focus {
+    outline: 0;
+  }
+  &:placeholder {
+    color: $colour-grey-dark;
+  }
+}
+
+@mixin dropdown {
+  @include font-size-medium();
+  padding: 1px;
+  position: relative;
+  background-color: $colour-primary-blue;
+  @include corner-clip-small-top-right();
+  select {
+    color: $colour-primary-blue;
+    display: block;
+    position: relative;
+    padding: 10px 80px 10px 10px;
+    clip-path:
+    polygon(
+      0% 0%,     /* top left */
+      0% 0%,     /* top left */
+      calc(100% - 14px) 0%,    /* top right */
+      100% 14px,   /* top right */
+      100% 100%,  /* bottom right */
+      100% 100%,  /* bottom right */
+      0 100%,   /* bottom left */
+      0 100%      /* bottom left */
+    );
+    span.placeholder.grey {
+      background-color: $colour-grey-background;
+    }
+  }
+  div.arrow {
+    position: absolute;
+    right: 20px;
+    top: 18px;
+    width: 10px;
+    height: 10px;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSI3IiB2aWV3Qm94PSIwIDAgOSA3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNNS4yMzcxNiA2LjYyNDkzQzQuOTAzMjMgNy4xMjUwMiA0LjA5NyA3LjEyNTAyIDMuNzYzMDggNi42MjQ5M0wwLjEyMzg2OCAxLjE3MDYzQy0wLjIxOTk0IDAuNjU1NDU5IDAuMTkyNjMgMS44MzcxZS0wNyAwLjg2MDkwOCAyLjQyMTMyZS0wN0w4LjEzOTMzIDguNzg0MzJlLTA3QzguODA3MTggOS4zNjgxN2UtMDcgOS4yMTk3NSAwLjY1NTQ1OSA4Ljg3NjM3IDEuMTcwNjNMNS4yMzcxNiA2LjYyNDkzWiIgZmlsbD0iIzJDMDg5QiIvPgo8L3N2Zz4K');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    z-index: 1;
+    pointer-events: none;
+  }
+}
+
+@mixin dropdown-underlined {
+  @include font-size-medium();
+  padding: 1px;
+  position: relative;
+  border-bottom: 1px solid $colour-primary-blue;
+  select {
+    color: $colour-primary-blue;
+    display: block;
+    position: relative;
+    padding: 10px 80px 10px 10px;
+  }
+  div.arrow {
+    position: absolute;
+    right: 20px;
+    top: 18px;
+    width: 10px;
+    height: 10px;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOSIgaGVpZ2h0PSI3IiB2aWV3Qm94PSIwIDAgOSA3IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNNS4yMzcxNiA2LjYyNDkzQzQuOTAzMjMgNy4xMjUwMiA0LjA5NyA3LjEyNTAyIDMuNzYzMDggNi42MjQ5M0wwLjEyMzg2OCAxLjE3MDYzQy0wLjIxOTk0IDAuNjU1NDU5IDAuMTkyNjMgMS44MzcxZS0wNyAwLjg2MDkwOCAyLjQyMTMyZS0wN0w4LjEzOTMzIDguNzg0MzJlLTA3QzguODA3MTggOS4zNjgxN2UtMDcgOS4yMTk3NSAwLjY1NTQ1OSA4Ljg3NjM3IDEuMTcwNjNMNS4yMzcxNiA2LjYyNDkzWiIgZmlsbD0iIzJDMDg5QiIvPgo8L3N2Zz4K');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    z-index: 1;
+    pointer-events: none;
+  }
+}
+
+@mixin button {
+  @include font-size-medium();
+  padding: 10px 30px;
+  border-radius: 5px;
+  border: 1px solid $colour-black;
+  background-color: $colour-black;
+  color: $colour-white;
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  transition: all ease-in-out 0.5s;
+  cursor: pointer;
+  &:hover {
+    background-color: $colour-white;
+    color: $colour-black;
+  }
+}
+
+
+
+@mixin button-small {
+  @include font-size-small();
+  padding: 5px 15px;
+}
+
+@mixin button-rounded {
+  border-radius: 27.5px;
+  &.size-small {
+    border-radius: 20px;
+  }
+}
+
+@mixin button-clear-primary {
+  color: $colour-primary-blue;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-secondary {
+  color: $colour-secondary-green;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-tertiary {
+  color: $colour-tertiary-coral;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-brand-1 {
+  color: $colour-brand-cc-red;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-brand-2 {
+  color: $colour-brand-wgmf-purple;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-brand-3 {
+  color: $colour-brand-gmf-green;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-brand-4 {
+  color: $colour-brand-emf-yellow;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-brand-5 {
+  color: $colour-brand-c4c-orange;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-brand-6 {
+  color: $colour-brand-grey;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-white {
+  color: $colour-white;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    color: $colour-white;
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-black {
+  color: $colour-black;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    color: $colour-black;
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-grey-extra-light {
+  color: $colour-grey-extra-light;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    color: $colour-grey-extra-light;
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-grey-light {
+  color: $colour-grey-light;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    color: $colour-grey-light;
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-grey-medium {
+  color: $colour-grey-medium;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    color: $colour-grey-medium;
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-clear-grey-dark {
+  color: $colour-grey-dark;
+  background-color: transparent;
+  text-decoration: underline;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+  &:hover {
+    color: $colour-grey-dark;
+    text-decoration: none;
+    background-color: transparent;
+  }
+}
+
+@mixin button-primary {
+  color: $colour-white;
+  background-color: $colour-primary-blue;
+  border-color: $colour-primary-blue;
+  &:hover {
+    color: $colour-primary-blue;
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-secondary {
+  color: $colour-black;
+  background-color: $colour-secondary-green;
+  border-color: $colour-secondary-green;
+  &:hover {
+    background-color: $colour-white;
+    border-color: $colour-black;
+  }
+}
+
+@mixin button-tertiary {
+  color: $colour-white;
+  background-color: $colour-tertiary-coral;
+  border-color: $colour-tertiary-coral;
+  &:hover {
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-brand-1 {
+  color: $colour-white;
+  background-color: $colour-brand-cc-red;
+  border-color: $colour-brand-cc-red;
+  &:hover {
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-brand-2 {
+  color: $colour-white;
+  background-color: $colour-brand-wgmf-purple;
+  border-color: $colour-brand-wgmf-purple;
+  &:hover {
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-brand-3 {
+  color: $colour-white;
+  background-color: $colour-brand-gmf-green;
+  border-color: $colour-brand-gmf-green;
+  &:hover {
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-brand-4 {
+  color: $colour-white;
+  background-color: $colour-brand-emf-yellow;
+  border-color: $colour-brand-emf-yellow;
+  &:hover {
+    background-color: $colour-black;
+  }
+}
+
+@mixin button-brand-5 {
+  color: $colour-white;
+  background-color: $colour-brand-c4c-orange;
+  border-color: $colour-brand-c4c-orange;
+  &:hover {
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-brand-6 {
+  color: $colour-white;
+  background-color: $colour-brand-grey;
+  border-color: $colour-brand-grey;
+  &:hover {
+    background-color: $colour-black;
+  }
+}
+
+@mixin button-brand-mhf-turquoise {
+  color: $colour-white;
+  background-color: $colour-brand-mhf-turquoise;
+  border-color: $colour-brand-mhf-turquoise;
+  &:hover {
+    background-color: $colour-black;
+  }
+}
+
+@mixin button-white {
+  color: $colour-primary-blue;
+  background-color: $colour-white;
+  border-color: $colour-white;
+  &:hover {
+    color: $colour-black;
+    background-color: $colour-secondary-green;
+  }
+}
+
+@mixin button-black {
+  color: $colour-white;
+  background-color: $colour-black;
+  border-color: $colour-black;
+  &:hover {
+    color: $colour-black;
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-grey-extra-light {
+  color: $colour-black;
+  background-color: $colour-grey-extra-light;
+  border-color: $colour-grey-extra-light;
+  &:hover {
+    color: $colour-grey-extra-light;
+    background-color: $colour-black;
+  }
+}
+
+@mixin button-grey-light {
+  color: $colour-black;
+  background-color: $colour-grey-light;
+  border-color: $colour-grey-light;
+  &:hover {
+    color: $colour-grey-light;
+    background-color: $colour-black;
+  }
+}
+
+@mixin button-grey-medium {
+  color: $colour-white;
+  background-color: $colour-grey-medium;
+  border-color: $colour-grey-medium;
+  &:hover {
+    color: $colour-grey-medium;
+    background-color: $colour-white;
+  }
+}
+
+@mixin button-grey-dark {
+  color: $colour-white;
+  background-color: $colour-grey-dark;
+  border-color: $colour-grey-dark;
+  &:hover {
+    color: $colour-grey-dark;
+    background-color: $colour-white;
+  }
+}
+
+
+
+@mixin lower-shadow() {
+  // filter: drop-shadow(-1px 3px 12px rgba(0,0,0,0.25));
+}
+
+@mixin all-round-shadow() {
+  // box-shadow: 0px 0px 30px rgb(0 0 0 / 20%);
+}
+
+// Shapes
+@mixin triangle-text-badge($text-size, $width, $height) {
+  margin-left: 15px;
+  width: 0;
+  height: 0;
+  border-style: inset;
+  border-width: $height $width 0 $width;
+  border-color: $colour-secondary-green transparent transparent transparent;
+  float: left;
+  transform: rotate(360deg);
+
+  span {
+    display: block;
+    text-align: center;
+    top: calc(0px - $height);
+    left: -25px;
+    position: relative;
+    width: $width;
+    height: $width;
+    margin: 0;
+    color: $colour-primary-blue;
+    font-size: $text-size;
+  }
+}
+
+@mixin corner-clip-bottom-left() {
+  clip-path:
+    polygon(
+      0% 0%,     /* top left */
+      0% 0%,     /* top left */
+      100% 0%,    /* top right */
+      100% 0%,   /* top right */
+      100% 100%,  /* bottom right */
+      100% 100%,  /* bottom right */
+      10% 100%,   /* bottom left */
+      0 90%      /* bottom left */
+    );
+}
+
+
+@mixin corner-clip-medium-bottom-left-top-right() {
+  clip-path:
+    polygon(
+      0% 0%,     /* top left */
+      0% 0%,     /* top left */
+      calc(100% - 50px) 0%,    /* top right */
+      100% 50px,   /* top right */
+      100% 100%,  /* bottom right */
+      100% 100%,  /* bottom right */
+      50px 100%,   /* bottom left */
+      0 calc(100% - 50px)      /* bottom left */
+    );
+}
+
+@mixin corner-clip-medium-bottom-left() {
+  clip-path:
+    polygon(
+      0% 0%,     /* top left */
+      0% 0%,     /* top left */
+      100% 0%,    /* top right */
+      100% 0,   /* top right */
+      100% 100%,  /* bottom right */
+      100% 100%,  /* bottom right */
+      50px 100%,   /* bottom left */
+      0 calc(100% - 50px)      /* bottom left */
+    );
+}
+
+@mixin corner-clip-medium-top-right() {
+  clip-path:
+  polygon(
+    0% 0%,     /* top left */
+    0% 0%,     /* top left */
+    calc(100% - 50px) 0%,    /* top right */
+    100% 50px,   /* top right */
+    100% 100%,  /* bottom right */
+    100% 100%,  /* bottom right */
+    0% 100%,   /* bottom left */
+    0 100%      /* bottom left */
+  );
+}
+
+@mixin corner-clip-small-bottom-left() {
+  clip-path:
+    polygon(
+      0% 0%,     /* top left */
+      0% 0%,     /* top left */
+      100% 0%,    /* top right */
+      100% 0,   /* top right */
+      100% 100%,  /* bottom right */
+      100% 100%,  /* bottom right */
+      15px 100%,   /* bottom left */
+      0 calc(100% - 15px)      /* bottom left */
+    );
+}
+
+
+@mixin corner-clip-small-top-right() {
+  clip-path:
+    polygon(
+      0% 0%,     /* top left */
+      0% 0%,     /* top left */
+      calc(100% - 15px) 0%,    /* top right */
+      100% 15px,   /* top right */
+      100% 100%,  /* bottom right */
+      100% 100%,  /* bottom right */
+      0 100%,   /* bottom left */
+      0 100%      /* bottom left */
+    );
+}
+
+
+@mixin popup() {
+  position: fixed;
+  display: none;
+  z-index: 100;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacer-3;
+  background-color: rgba(0,0,0,0.75);
+  transition: all 0.5s ease-in-out;
+  .sleeve {
+    position: relative;
+    max-width: 600px;
+    padding: $spacer-4;
+    box-sizing: border-box;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: $colour-white;
+    text-align: left;
+  }
+  .header {
+    .close {
+      width: 25px;
+      height: 25px;
+      position: absolute;
+      top: $spacer-2;
+      right: $spacer-2;
+      background-color: $colour-primary-blue;
+      background-image: url(/assets/images/cross.svg?1);
+      background-size: 50% 50%;
+      background-position: center center;
+      background-repeat: no-repeat;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  }
+}
+
+@mixin video-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+
+  iframe, video {
+    position: absolute;
+    border: 0;
+    display: block;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@mixin alignments {
+  .align-left {text-align: left;}
+  .align-right {text-align: right;}
+  .align-center {text-align: center;}
+  .align-justify {text-align: justify;}
+}
+
+@mixin backgrounds {
+  .background-colour-hover-primary:hover,
+  .background-colour-primary {
+      background-color: $colour-primary-blue;
+  }
+
+  .background-colour-hover-secondary:hover,
+  .background-colour-secondary {
+      background-color: $colour-secondary-green;
+  }
+
+  .background-colour-hover-tertiary:hover,
+  .background-colour-tertiary {
+      background-color: $colour-tertiary-coral;
+  }
+
+  .background-colour-hover-brand-1:hover,
+  .background-colour-brand-1 {
+      background-color: $colour-brand-cc-red;
+  }
+
+  .background-colour-hover-brand-2:hover,
+  .background-colour-brand-2 {
+      background-color: $colour-brand-wgmf-purple;
+  }
+
+  .background-colour-hover-brand-3:hover,
+  .background-colour-brand-3 {
+      background-color: $colour-brand-gmf-green;
+  }
+
+  .background-colour-hover-brand-4:hover,
+  .background-colour-brand-4 {
+      background-color: $colour-brand-emf-yellow;
+  }
+
+  .background-colour-hover-brand-5:hover,
+  .background-colour-brand-5 {
+      background-color: $colour-brand-c4c-orange;
+  }
+
+  .background-colour-hover-brand-6:hover,
+  .background-colour-brand-6 {
+      background-color: $colour-brand-mhf-turquoise;
+  }
+
+  .background-colour-hover-white:hover,
+  .background-colour-white {
+      background-color: $colour-white;
+  }
+
+  .background-colour-hover-black:hover,
+  .background-colour-black {
+      background-color: $colour-black;
+  }
+  .background-colour-hover-white:hover,
+  .background-colour-white {
+      background-color: $colour-white;
+  }
+  .background-colour-hover-grey-extra-light:hover,
+  .background-colour-grey-extra-light {
+      background-color: $colour-grey-extra-light;
+  }
+  .background-colour-hover-grey-light:hover,
+  .background-colour-grey-light {
+      background-color: $colour-grey-light;
+  }
+  .background-colour-hover-grey-medium:hover,
+  .background-colour-grey-medium {
+      background-color: $colour-grey-medium;
+  }
+  .background-colour-hover-grey-dark:hover,
+  .background-colour-grey-dark {
+      background-color: $colour-grey-dark;
+  }
+}
+
+@mixin fills {
+  .fill-primary {
+      fill: $colour-primary-blue;
+  }
+
+  .fill-secondary {
+      fill: $colour-secondary-green;
+  }
+
+  .fill-tertiary {
+      fill: $colour-tertiary-coral;
+  }
+
+  .fill-brand-1 {
+      fill: $colour-brand-cc-red;
+  }
+
+  .fill-brand-2 {
+      fill: $colour-brand-wgmf-purple;
+  }
+
+  .fill-brand-3 {
+      fill: $colour-brand-gmf-green;
+  }
+
+  .fill-brand-4 {
+      fill: $colour-brand-emf-yellow;
+  }
+
+  .fill-brand-5 {
+      fill: $colour-brand-c4c-orange;
+  }
+
+  .fill-brand-6 {
+      fill: $colour-brand-grey;
+  }
+
+  .fill-brand-mhf-turquoise {
+    fill: $colour-brand-mhf-turquoise;
+  }
+
+  .fill-white {
+      fill: $colour-white;
+  }
+
+  .fill-black {
+      fill: $colour-black;
+  }
+
+  .fill-grey-extra-light {
+    fill: $colour-grey-extra-light;
+  }
+
+  .fill-grey-light {
+    fill: $colour-grey-light;
+  }
+
+  .fill-grey-medium {
+    fill: $colour-grey-medium;
+  }
+
+  .fill-grey-dark {
+    fill: $colour-grey-dark;
+  }
+
+  .fill-red {
+      fill: red;
+  }
+}
+
+@mixin headings {
+  h1, .heading-1 {
+    @include heading-1();
+  }
+
+  h2, .heading-2 {
+      @include heading-2();
+  }
+
+  h3, .heading-3 {
+      @include heading-3();
+  }
+
+  h4, .heading-4 {
+      @include heading-4();
+  }
+
+  h5, .heading-5 {
+      @include heading-5();
+  }
+}
+
+@mixin image-alignment {
+  .image-wrap img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+@mixin spacers {
+  .space-above-0 { margin-top: 0; }
+  .space-above-1 { margin-top: $spacer-1; }
+  .space-above-2 { margin-top: $spacer-2; }
+  .space-above-3 { margin-top: $spacer-3; }
+  .space-above-4 { margin-top: $spacer-4; }
+  .space-above-5 { margin-top: $spacer-5; }
+  .space-above-6 { margin-top: $spacer-6; }
+  .space-below-0 { margin-bottom: 0; }
+  .space-below-1 { margin-bottom: $spacer-1; }
+  .space-below-2 { margin-bottom: $spacer-2; }
+  .space-below-3 { margin-bottom: $spacer-3; }
+  .space-below-4 { margin-bottom: $spacer-4; }
+  .space-below-5 { margin-bottom: $spacer-5; }
+  .space-below-6 { margin-bottom: $spacer-6; }
+}
+
+@mixin text-colours {
+  .text-colour-hover-primary:hover,
+  .text-colour-primary {
+      color: $colour-primary-blue;
+  }
+
+  .text-colour-hover-secondary:hover,
+  .text-colour-secondary {
+      color: $colour-secondary-green;
+  }
+
+  .text-colour-hover-tertiary:hover,
+  .text-colour-tertiary {
+      color: $colour-tertiary-coral;
+  }
+
+  .text-colour-hover-brand-1:hover,
+  .text-colour-brand-1 {
+      color: $colour-brand-cc-red;
+  }
+
+  .text-colour-hover-brand-2:hover,
+  .text-colour-brand-2 {
+      color: $colour-brand-wgmf-purple;
+  }
+
+  .text-colour-hover-brand-3:hover,
+  .text-colour-brand-3 {
+      color: $colour-brand-gmf-green;
+  }
+
+  .text-colour-hover-brand-4:hover,
+  .text-colour-brand-4 {
+      color: $colour-brand-emf-yellow;
+  }
+
+  .text-colour-hover-brand-5:hover,
+  .text-colour-brand-5 {
+      color: $colour-brand-c4c-orange;
+  }
+
+  .text-colour-hover-brand-6:hover,
+  .text-colour-brand-6 {
+      color: $colour-brand-grey;
+  }
+
+  .text-colour-hover-white:hover,
+  .text-colour-white {
+      color: $colour-white;
+  }
+
+  .text-colour-hover-black:hover,
+  .text-colour-black {
+      color: $colour-black;
+  }
+
+  .text-colour-hover-grey-extra-light:hover,
+  .text-colour-grey-extra-light {
+      color: $colour-grey-extra-light;
+  }
+
+  .text-colour-hover-grey-light:hover,
+  .text-colour-grey-light {
+      color: $colour-grey-light;
+  }
+
+  .text-colour-hover-grey-medium:hover,
+  .text-colour-grey-medium {
+      color: $colour-grey-medium;
+  }
+
+  .text-colour-hover-grey-dark:hover,
+  .text-colour-grey-dark {
+      color: $colour-grey-dark;
+  }
+}

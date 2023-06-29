@@ -1,0 +1,30 @@
+@include alignments();
+@include headings();
+@include spacers();
+
+:host {
+  display: contents;
+}
+
+.container {
+  @include standard-font();
+  @each $key, $colour in $brandColours {
+    .heading-colour-#{$key} { color: $colour; }
+  }
+  display: flex;
+
+  h1,h2,h3,h4,h5 {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    svg {
+      height: 0.7em;
+      margin-right: 0.2em;
+    }
+  }
+
+  @each $key, $colour in $brandColours {
+    .icon-colour-#{$key} svg path { fill: $colour; }
+  }
+
+}

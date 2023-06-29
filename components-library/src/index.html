@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <title>Big Give Components</title>
+
+    <link href="./assets/fonts/EuclidTriangle/stylesheet.css" rel="stylesheet" type="text/css" />
+
+    <script type="module" src="/build/biggive.esm.js"></script>
+    <script nomodule src="/build/biggive.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body style="background-color: #F1F1F1;">
+
+  <biggive-main-menu
+    use-preset-menu-content="true"
+    donate-url-prefix="http://localhost:4200"
+    blog-url-prefix="http://localhost:30003"
+    experience-url-prefix="https://www.thebiggive.org.uk"
+    is-logged-in="false"
+  ></biggive-main-menu>
+
+    <biggive-totalizer
+    space-below="0"
+    primary-colour="primary"
+    primary-text-colour="white"
+    secondary-colour="secondary"
+    secondary-text-colour="black"
+    main-message="£27,438,003 raised inc. Gift Aid">
+
+    <div slot="ticker-items">
+      <biggive-totalizer-ticker-item figure="£1000" label="match funds remaining"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£2000" label="total raised"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="£1000" label="donations"></biggive-totalizer-ticker-item>
+      <biggive-totalizer-ticker-item figure="5" label="days remaining"></biggive-totalizer-ticker-item>
+    </div>
+  </biggive-totalizer>
+
+
+
+
+    <biggive-hero-image
+        colour-scheme="primary"
+        main-image="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
+        main-title="Christmas Challenge 2022"
+        main-title-colour="primary"
+        teaser="The Christmas Challenge takes place from 29 November to 6 December. We are aiming to raise £22.5 million for participating charities. One donation, twice the impact."
+        button-url="https://www.google.com"
+        button-label="Donate now"
+        logo="/assets/images/sample-champion.png"
+      ></biggive-hero-image>
+
+
+
+
+
+    <biggive-page-section>
+
+
+      <!-- Long list of words as location options to simulate UX of a country drop-down -->
+      <biggive-campaign-card-filter-grid
+      category-options='["ABC", "DEF"]'
+      beneficiary-options='["ABC", "DEF"]'
+      location-options='["activity", "actor", "administration", "administration", "advertising", "agency", "application", "argument", "article", "association", "assumption", "attention", "camera", "cancer", "charity", "childhood", "chocolate", "combination", "communication", "community", "concept", "construction", "contract", "contribution", "cousin", "customer", "definition", "election", "enthusiasm", "estate", "event", "examination", "extent", "failure", "family", "football", "grocery", "guidance", "guidance", "highway", "history", "hotel", "imagination", "impression", "income", "independence", "lady", "leadership", "management", "manufacturer", "memory", "message", "midnight", "moment", "nation", "negotiation", "negotiation", "negotiation", "newspaper", "opportunity", "organization", "organization", "owner", "painting", "patience", "people", "personality", "piano", "piano", "player", "poetry", "politics", "population", "possession", "possibility", "power", "power", "president", "promotion", "psychology", "psychology", "ratio", "reading", "reading", "recognition", "recommendation", "reflection", "refrigerator", "reputation", "response", "responsibility", "restaurant", "revenue", "salad", "sample", "science", "sector", "selection", "shopping", "significance", "software", "strategy", "suggestion", "suggestion", "surgery", "system", "tension", "theory", "tradition", "unit", "university", "university", "variation", "warning", "wedding"]'
+      funding-options='["ABC", "DEF"]'
+      >
+    <biggive-grid slot="campaign-grid" column-count="3">
+      <biggive-campaign-card
+        campaign-type="Match Funded"
+        campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community"
+        organisation-name="Oxford Philharmonic Orchestra"
+        currency-code="GBP"
+        primary-figure-label="Total Raised"
+        primary-figure-amount="76543"
+        secondary-figure-label="Total Raised"
+        secondary-figure-amount="76543"
+        progress-bar-counter="75">
+      </biggive-campaign-card>
+      <biggive-campaign-card
+        data-filter-categories="[&quot;Healthcare&quot;]"
+        data-filter-beneficiaries="[&quot;Children&quot;]"
+        campaign-type="Match Funded"
+        campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community"
+        organisation-name="Oxford Philharmonic Orchestra"
+        currency-code="GBP"
+        primary-figure-label="Total Raised"
+        primary-figure-amount="76543"
+        secondary-figure-label="Total Raised"
+        secondary-figure-amount="76543">
+      </biggive-campaign-card>
+      <biggive-campaign-card
+        data-filter-categories="[&quot;Healthcare&quot;]"
+        data-filter-beneficiaries="[&quot;Children&quot;]"
+        campaign-type="Match Funded"
+        campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community"
+        organisation-name="Oxford Philharmonic Orchestra"
+        currency-code="GBP"
+        primary-figure-label="Total Raised"
+        primary-figure-amount="76543"
+        secondary-figure-label="Total Raised"
+        secondary-figure-amount="76543">
+      </biggive-campaign-card>
+    </biggive-grid>
+    </biggive-campaign-card-filter-grid>
+
+
+      <biggive-filtered-carousel carousel-space-below="6" carousel-column-count="4">
+
+        <biggive-article-card
+          filters="DEF"
+          columnspace-below="3" -
+          background-colour="grey-light"
+          background-image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          text-colour="black"
+          background-colour="black"
+          slug="+ This is my slug"
+          slug-colour="black"
+          date="September 2022"
+          date-colour="black"
+          main-title="DEF"
+          main-title-colour="primary"
+
+          image-1-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-1-alt-text="My alt text"
+          image-1-label="this is my label"
+
+          image-2-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-2-alt-text="My alt text"
+          image-2-label="this is my label"
+
+          image-label-colour="black"
+
+          button-label="Read the blog"
+          button-url="#"
+          button-colour="black"
+
+          clip-bottom-left-corner="true"
+          clip-top-right-corner="false"
+        >
+        </biggive-article-card>
+
+
+        <biggive-article-card
+          filters="ABC"
+          columnspace-below="3" -
+          background-colour="grey-light"
+          background-image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          text-colour="black"
+          background-colour="black"
+          slug="+ This is my slug"
+          slug-colour="black"
+          date="September 2022"
+          date-colour="black"
+          main-title="ABC"
+          main-title-colour="primary"
+
+          image-1-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-1-alt-text="My alt text"
+          image-1-label="this is my label"
+
+          image-2-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-2-alt-text="My alt text"
+          image-2-label="this is my label"
+
+          image-label-colour="black"
+
+          button-label="Read the blog"
+          button-url="#"
+          button-colour="black"
+
+          clip-bottom-left-corner="true"
+          clip-top-right-corner="false"
+        >
+        </biggive-article-card>
+
+        <biggive-article-card
+        filters="ABC|DEF"
+        columnspace-below="3" -
+        background-colour="grey-light"
+        background-image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        text-colour="black"
+        background-colour="black"
+        slug="+ This is my slug"
+        slug-colour="black"
+        date="September 2022"
+        date-colour="black"
+        main-title="ABC|DEF"
+        main-title-colour="primary"
+
+        image-1-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        image-1-alt-text="My alt text"
+        image-1-label="this is my label"
+
+        image-2-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        image-2-alt-text="My alt text"
+        image-2-label="this is my label"
+
+        image-label-colour="black"
+
+        button-label="Read the blog"
+        button-url="#"
+        button-colour="black"
+
+        clip-bottom-left-corner="true"
+        clip-top-right-corner="false"
+      >
+      </biggive-article-card>
+
+
+        <biggive-article-card
+          columnspace-below="3" -
+          background-colour="secondary"
+          background-image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          text-colour="black"
+          background-colour="black"
+          slug="+ This is my slug"
+          slug-colour="black"
+          date="+ This is my slug"
+          date-colour="black"
+          main-title="+ This is my slug"
+          main-title-colour="black"
+
+          image-1-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-1-alt-text="My alt text"
+          image-1-label="this is my label"
+
+          image-2-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-2-alt-text="My alt text"
+          image-2-label="this is my label"
+
+          image-label-colour="black"
+
+          button-label="Read the blog"
+          button-url="#"
+          button-colour="secondary"
+          clip-bottom-left-corner="true"
+          clip-top-right-corner="true"
+        >
+        </biggive-article-card>
+
+        <biggive-article-card
+          columnspace-below="3" -
+          background-colour="secondary"
+          background-image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          text-colour="black"
+          background-colour="black"
+          slug="+ This is my slug"
+          slug-colour="black"
+          date="+ This is my slug"
+          date-colour="black"
+          main-title="+ This is my slug"
+          main-title-colour="black"
+
+          image-1-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-1-alt-text="My alt text"
+          image-1-label="this is my label"
+
+          image-2-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-2-alt-text="My alt text"
+          image-2-label="this is my label"
+
+          image-label-colour="black"
+
+          button-label="Read the blog"
+          button-url="#"
+          button-colour="secondary"
+          clip-bottom-left-corner="true"
+          clip-bottom-right-corner="true"
+        >
+        </biggive-article-card>
+
+
+        <biggive-article-card
+        columnspace-below="3" -
+        background-colour="brand-1"
+        background-image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        text-colour="black"
+        background-colour="black"
+        slug="+ This is my slug"
+        slug-colour="black"
+        date="+ This is my slug"
+        date-colour="black"
+        main-title="+ This is my slug"
+        main-title-colour="black"
+
+        image-1-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        image-1-alt-text="My alt text"
+        image-1-label="this is my label"
+
+        image-2-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        image-2-alt-text="My alt text"
+        image-2-label="this is my label"
+
+        image-label-colour="black"
+
+        button-label="Read the blog"
+        button-url="#"
+        button-colour="secondary"
+        clip-bottom-left-corner="true"
+        clip-bottom-right-corner="true"
+      >
+      </biggive-article-card>
+
+
+      </biggive-filtered-carousel>
+
+
+
+      <biggive-timeline space-below="6" entry-background-colour="grey-extra-light" entry-text-colour="tertiary">
+
+        <biggive-timeline-entry date="2022-01-01" heading="Heading 1">
+          <p>This is the content</p>
+        </biggive-timeline-entry>
+
+        <biggive-timeline-entry date="2022-01-01" heading="Heading 2">
+          <p>This is the content</p>
+        </biggive-timeline-entry>
+
+        <biggive-timeline-entry date="2023-01-01" heading="Heading 3">
+          <p>This is the content</p>
+        </biggive-timeline-entry>
+
+
+      </biggive-timeline>
+
+      <biggive-sheet
+        id="testsheet"
+        background-colour="brand-1"
+      >
+
+        <biggive-formatted-text default-text-colour="white">
+
+          <h2>This is the text which I want to add</h2>
+          <p>2 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+          <p>2 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+          <p>2 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+          <p>2 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+          <p>2 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+          <p>2 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+          <p>2 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+
+        </iggive-formatted-te>
+
+      </biggive-sheet>
+
+
+      <biggive-image-button
+        image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        size="medium"
+        text="read me 12345"
+        url="#testsheet"
+        background-colour="white"
+        background-padding=3
+        circle="true"
+        arrow="true"
+        arrow-colour="primary"
+        shadow="true"
+        rounded="true"
+      >
+      </biggive-image-button>
+
+
+      <biggive-icon-button
+      icon-group="misc"
+      icon="AlarmClock"
+      size="medium"
+      text="read me 12345"
+      url="https://www.google.com"
+      background-colour="grey-light"
+      background-padding=3
+      circle="true"
+      arrow="true"
+      arrow-colour="black"
+      shadow="true"
+      rounded="true"
+      >
+      </biggive-icon-button>
+
+
+      <biggive-icon-button
+      icon-group="misc"
+      icon="AlarmClock"
+      size="xx-large"
+      url="https://www.google.com"
+      background-colour="primary"
+      circle="true"
+    >
+    </biggive-icon-button>
+
+      <biggive-image-button
+        image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        size="xx-large"
+        url="https://www.google.com"
+        background-colour="primary"
+        circle="true"
+      >
+      </biggive-image-button>
+
+      <biggive-carousel space-below="6" column-count="4">
+
+        <biggive-article-card
+          space-below="6"
+          background-colour="grey-light"
+          background-image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          text-colour="black"
+          background-colour="black"
+          slug="+ This is my slug"
+          slug-colour="black"
+          date="September 2022"
+          date-colour="black"
+          main-title="This is the title of the blog article. This is the title of the blog article"
+          main-title-colour="primary"
+
+          image-1-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-1-alt-text="My alt text"
+          image-1-label="this is my label"
+
+          image-2-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-2-alt-text="My alt text"
+          image-2-label="this is my label"
+
+          image-label-colour="black"
+
+          button-label="Read the blog"
+          button-url="#"
+          button-colour="black"
+
+          clip-bottom-left-corner="true"
+          clip-top-right-corner="false"
+        >
+        </biggive-article-card>
+
+
+        <biggive-article-card
+          space-below="6"
+          background-colour="grey-light"
+          background-image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          text-colour="black"
+          background-colour="black"
+          slug="+ This is my slug"
+          slug-colour="black"
+          date="September 2022"
+          date-colour="black"
+          main-title="This is the title of the blog article. This is the title of the blog article"
+          main-title-colour="primary"
+
+          image-1-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-1-alt-text="My alt text"
+          image-1-label="this is my label"
+
+          image-2-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-2-alt-text="My alt text"
+          image-2-label="this is my label"
+
+          image-label-colour="black"
+
+          button-label="Read the blog"
+          button-url="#"
+          button-colour="black"
+
+          clip-bottom-left-corner="true"
+          clip-top-right-corner="false"
+        >
+        </biggive-article-card>
+
+        <biggive-article-card
+        space-below="6"
+        background-colour="grey-light"
+        background-image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        text-colour="black"
+        background-colour="black"
+        slug="+ This is my slug"
+        slug-colour="black"
+        date="September 2022"
+        date-colour="black"
+        main-title="This is the title of the blog article. This is the title of the blog article"
+        main-title-colour="primary"
+
+        image-1-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        image-1-alt-text="My alt text"
+        image-1-label="this is my label"
+
+        image-2-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        image-2-alt-text="My alt text"
+        image-2-label="this is my label"
+
+        image-label-colour="black"
+
+        button-label="Read the blog"
+        button-url="#"
+        button-colour="black"
+
+        clip-bottom-left-corner="true"
+        clip-top-right-corner="false"
+      >
+      </biggive-article-card>
+
+
+        <biggive-article-card
+          space-below="6"
+          background-colour="secondary"
+          background-image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          text-colour="black"
+          background-colour="black"
+          slug="+ This is my slug"
+          slug-colour="black"
+          date="+ This is my slug"
+          date-colour="black"
+          main-title="+ This is my slug"
+          main-title-colour="black"
+
+          image-1-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-1-alt-text="My alt text"
+          image-1-label="this is my label"
+
+          image-2-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-2-alt-text="My alt text"
+          image-2-label="this is my label"
+
+          image-label-colour="black"
+
+          button-label="Read the blog"
+          button-url="#"
+          button-colour="secondary"
+          clip-bottom-left-corner="true"
+          clip-top-right-corner="true"
+        >
+        </biggive-article-card>
+
+        <biggive-article-card
+          space-below="6"
+          background-colour="secondary"
+          background-image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          text-colour="black"
+          background-colour="black"
+          slug="+ This is my slug"
+          slug-colour="black"
+          date="+ This is my slug"
+          date-colour="black"
+          main-title="+ This is my slug"
+          main-title-colour="black"
+
+          image-1-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-1-alt-text="My alt text"
+          image-1-label="this is my label"
+
+          image-2-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-2-alt-text="My alt text"
+          image-2-label="this is my label"
+
+          image-label-colour="black"
+
+          button-label="Read the blog"
+          button-url="#"
+          button-colour="secondary"
+          clip-bottom-left-corner="true"
+          clip-bottom-right-corner="true"
+        >
+        </biggive-article-card>
+
+
+        <biggive-article-card
+        space-below="6"
+        background-colour="brand-1"
+        background-image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        text-colour="black"
+        background-colour="black"
+        slug="+ This is my slug"
+        slug-colour="black"
+        date="+ This is my slug"
+        date-colour="black"
+        main-title="+ This is my slug"
+        main-title-colour="black"
+
+        image-1-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        image-1-alt-text="My alt text"
+        image-1-label="this is my label"
+
+        image-2-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        image-2-alt-text="My alt text"
+        image-2-label="this is my label"
+
+        image-label-colour="black"
+
+        button-label="Read the blog"
+        button-url="#"
+        button-colour="secondary"
+        clip-bottom-left-corner="true"
+        clip-bottom-right-corner="true"
+      >
+      </biggive-article-card>
+
+
+      </biggive-carousel>
+
+
+      <biggive-carousel space-below="6" column-count="4">
+
+        <biggive-biography-card
+          space-below="6"
+          border-width="3"
+          image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          text-colour="secondary"
+          background-colour="brand-6"
+          full-name="AAATom Paterson"
+          job-title="IT"
+          text-align="center"
+          ratio="1,1"
+          rounded="false"
+          circle="false"
+          url="#testsheet" >
+        </biggive-biography-card>
+
+
+        <biggive-biography-card
+          space-below="6"
+          border-width="3"
+          image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          text-colour="secondary"
+          background-colour="brand-6"
+          full-name="AAATom Paterson"
+          job-title="IT"
+          text-align="center"
+          ratio="1,1"
+          rounded="false"
+          circle="true"
+          url="" >
+        </biggive-biography-card>
+
+
+        <biggive-biography-card
+          space-below="6"
+          border-width="3"
+          image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          text-colour="secondary"
+          background-colour="brand-6"
+          full-name="AAATom Paterson"
+          job-title="IT"
+          text-align="center"
+          ratio="1,1"
+          rounded="false"
+          circle="true"
+          url="" >
+        </biggive-biography-card>
+
+
+        <biggive-biography-card
+          space-below="6"
+          border-width="3"
+          image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          text-colour="secondary"
+          background-colour="brand-6"
+          full-name="AAATom Paterson"
+          job-title="IT"
+          text-align="center"
+          ratio="1,1"
+          rounded="false"
+          circle="true"
+          url="" >
+        </biggive-biography-card>
+
+        <biggive-biography-card
+          space-below="6"
+          image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          image-style="contain"
+          text-colour="primary"
+          background-colour="black"
+          full-name="Tom Paterson"
+          job-title="IT"
+          ratio="[1,1]"
+          circle="false"
+          url="https://www.google.com" >
+        </biggive-biography-card>
+
+
+        <biggive-biography-card
+          space-below="6"
+          image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+          text-colour="primary"
+          full-name="Tom Paterson"
+          job-title="IT"
+          ratio="[1,1]"
+          circle="false"
+          url="https://www.google.com" >
+        </biggive-biography-card>
+
+
+        <biggive-biography-card
+        space-below="6"
+        image-url="http://biggive.thomas-paterson.co.uk/wp-content/uploads/2023/02/Grid.png"
+        text-colour="primary"
+        full-name="Tom Paterson"
+        job-title="IT"
+        ratio="[1,1]"
+        circle="false"
+        url="https://www.google.com" >
+      </biggive-biography-card>
+
+
+
+      </biggive-carousel>
+
+
+
+
+      <biggive-accordion space-below="6" column-count="3" heading-colour="primary">
+
+        <biggive-accordion-entry heading="ABC">
+          <p>1 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+        </biggive-accordion-entry>
+
+        <biggive-accordion-entry heading="DEF">
+          <p>2 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+        </biggive-accordion-entry>
+
+        <biggive-accordion-entry heading="GHI">
+          <p>3 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+        </biggive-accordion-entry>
+
+      </biggive-accordion>
+
+
+
+      <biggive-carousel space-below="6" column-count="3">
+
+        <biggive-quote
+        space-below="0"
+        default-text-colour="black"
+        quote="1 Lorem ipsum dolor sit amet, has quod diam dolore cu, at solet interesset eam, cu nec affert quando legendos. Ut libris aperiam quo. Et tollit intellegebat mea. Dico nostrud vivendum no his, nam ne sumo illum iudicabit. Cu nec velit argumentum, no quando offendit neglegentur ius.  "
+        attribution="this is the attribution"
+        >
+        </biggive-quote>
+
+        <biggive-quote
+        space-below="0"
+        default-text-colour="black"
+        quote="2 Lorem ipsum dolor sit amet, has quod diam dolore cu, at solet interesset eam, cu nec affert quando legendos. Ut libris aperiam quo. Et tollit intellegebat mea. Dico nostrud vivendum no his, nam ne sumo illum iudicabit. Cu nec velit argumentum, no quando offendit neglegentur ius.  "
+        attribution="this is the attribution"
+        >
+        </biggive-quote>
+
+        <biggive-quote
+        space-below="0"
+        default-text-colour="black"
+        quote="3 Lorem ipsum dolor sit amet, has quod diam dolore cu, at solet interesset eam, cu nec affert quando legendos. Ut libris aperiam quo. Et tollit intellegebat mea. Dico nostrud vivendum no his, nam ne sumo illum iudicabit. Cu nec velit argumentum, no quando offendit neglegentur ius.  "
+        attribution="this is the attribution"
+        >
+        </biggive-quote>
+
+        <biggive-quote
+        space-below="0"
+        default-text-colour="black"
+        quote="4 Lorem ipsum dolor sit amet, has quod diam dolore cu, at solet interesset eam, cu nec affert quando legendos. Ut libris aperiam quo. Et tollit intellegebat mea. Dico nostrud vivendum no his, nam ne sumo illum iudicabit. Cu nec velit argumentum, no quando offendit neglegentur ius.  "
+        attribution="this is the attribution"
+        >
+        </biggive-quote>
+
+        <biggive-quote
+        space-below="0"
+        default-text-colour="black"
+        quote="5 Lorem ipsum dolor sit amet, has quod diam dolore cu, at solet interesset eam, cu nec affert quando legendos. Ut libris aperiam quo. Et tollit intellegebat mea. Dico nostrud vivendum no his, nam ne sumo illum iudicabit. Cu nec velit argumentum, no quando offendit neglegentur ius.  "
+        attribution="this is the attribution"
+        >
+        </biggive-quote>
+
+      </biggive-carousel>
+
+
+
+      <biggive-tabbed-content space-below="6">
+        <biggive-tab tab-title="ABC">
+          <p>1 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+        </biggive-tab>
+
+        <biggive-tab tab-title="DEF">
+          <p>2 Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+          <p>Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+        </biggive-tab>
+
+        <biggive-tab tab-title="GHI">
+          <p>3 Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+          <p>Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+        </biggive-tab>
+
+        <biggive-tab tab-title="JKL">
+          <p>4 Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+          <p>Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>4 Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+          <p>Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>4 Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+          <p>Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>4 Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+          <p>Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+          <p>4 Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
+          <p>Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
+
+        </biggive-tab>
+
+      </biggive-tabbed-content>
+
+
+
+      <div style="background-color: #F4F4F4; padding: 20px;" >
+        <!-- Not keen on all the hard coded styles below. When this component is used within frontend or wordpress the styles
+          will have to be passed from the CSS file of that app. Would be happier if it could be inside the stencil component
+          but that won't allow two way binding the data to the input
+          -->
+        <biggive-text-input currency="GBP"  prompt="Enter your donation amount">
+          <input
+            slot="input"
+            value="60.00"
+            style="float: right; outline: none; border: none; background-color: #f4f4f4; text-align: right; font-size: 24px; line-height: 30px; font-weight: bolder; width: 100%;"
+          />
+        </biggive-text-input>
+      </div>
+      <biggive-tipping-slider percentage-start="0" percentage-end="30" donation-amount="200" donation-currency="GBP"></biggive-tipping-slider>
+
+      <biggive-branded-image
+        space-below="3"
+        image-url="https://images-production.thebiggive.org.uk/0011r00002Hofk6AAB/CCampaign%20Banner/75340c02-cd36-41bc-8d38-548cda5be1f5.png"
+        logo-url="https://images-production.thebiggive.org.uk/0011r00002Hofk6AAB/Charity%20Logo/db3298e4-ab2e-4da3-b4fc-66d5bf146f75.png"
+        slug="Match Funded"
+        charity-name="Big Give"
+        charity-location="London"
+        charity-url="https://thebiggive.org.uk"
+        >
+      </biggive-branded-image>
+
+      <biggive-campaign-highlights
+        space-below="0"
+        currency-code="GBP"
+        primary-figure-label="Total raised"
+        primary-figure-amount="£1,000,000"
+        secondary-figure-label="Total remaining"
+        secondary-figure-amount="£1,000,000"
+        progress-bar-counter="100"
+        primary-stat-icon="AlarmClock"
+        primary-stat-text="31 days left"
+        secondary-stat-icon="Heart"
+        secondary-stat-text="4129 donations"
+        champion-name="The Reed Foundation"
+        champion-url="https://thebiggive.org.uk"
+        >
+      </biggive-campaign-highlights>
+
+      <biggive-quote
+        space-below="4"
+        default-text-colour="black"
+        quote="Lorem ipsum dolor sit amet, has quod diam dolore cu, at solet interesset eam, cu nec affert quando legendos. Ut libris aperiam quo. Et tollit intellegebat mea. Dico nostrud vivendum no his, nam ne sumo illum iudicabit. Cu nec velit argumentum, no quando offendit neglegentur ius.  "
+        attribution="this is the attribution"
+        >
+      </biggive-quote>
+    </biggive-page-section>
+
+
+    <biggive-grid
+    column-count="6"
+    space-between="true">
+    <biggive-image
+      image-url="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-1.png"
+      image-alt-text="The Passage"
+      width="150"
+    >
+    </biggive-image>
+    <biggive-image
+      image-url="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-1.png"
+      image-alt-text="Disasters Emergency Committee"
+      width="150"
+    >
+    </biggive-image>
+    <biggive-image
+      image-url="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-1.png"
+      image-alt-text="National Emergencies Trust"
+      width="150"
+    >
+    </biggive-image>
+    <biggive-image
+      image-url="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-1.png"
+      image-alt-text="Mail Force"
+      width="150"
+    >
+    </biggive-image>
+    <biggive-image
+      image-url="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-1.png"
+      image-alt-text="Friends of the Earth"
+      width="150"
+    >
+    </biggive-image>
+    <biggive-image
+      image-url="https://tbg-staging-component-library.s3.eu-west-1.amazonaws.com/images/charity-1.png"
+      image-alt-text="Borne - Research to prevent premature birth"
+      width="150"
+    >
+    </biggive-image>
+
+  </biggive-grid>
+
+    <biggive-page-columns>
+
+      <biggive-page-column slot="column-primary">
+
+        <biggive-heading  text="This is my title" size="4"></biggive-heading>
+
+        <biggive-social-icon-group>
+          <biggive-social-icon service="Twitter" url="#" colour-scheme="black"></biggive-social-icon>
+          <biggive-social-icon service="Facebook" url="#" colour-scheme="black"></biggive-social-icon>
+        </biggive-social-icon-group>
+
+        <biggive-back-to-top></biggive-back-to-top>
+
+      </biggive-page-column>
+
+
+      <biggive-page-column slot="column-secondary">
+
+        <biggive-campaign-highlights
+        space-below="3"
+        progress-bar-counter="75"
+        primary-figure-label="Label one"
+        primary-figure-amount="1000"
+        secondary-figure-label="Label two"
+        secondary-figure-amount="2000"
+        ></biggive-campaign-highlights>
+
+        <biggive-button
+        full-width="true"
+        label="Donate now"
+        url="#"
+        ></biggive-button>
+
+
+      </biggive-page-column>
+    </biggive-page-columns>
+
+    <biggive-page-section>
+
+    <biggive-campaign-card-filter-grid id="ABC" selected-label="Match funds remaining">
+      <biggive-grid slot="campaign-grid" column-count="3">
+        <biggive-campaign-card
+          data-filter-categories="[&quot;Finance&quot;]"
+          data-filter-beneficiaries="[&quot;Children&quot;,&quot;Adults&quot;]"
+          banner="https://images-production.thebiggive.org.uk/0011r00002PPoEVAA1/CCampaign%20Banner/929196ec-dad2-408c-86b8-5df47e6147a4.png?width=830&format=webp"
+          campaign-type="Match Funded"
+          campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community"
+          organisation-name="Oxford Philharmonic Orchestra"
+          currency-code="GBP"
+          more-info-button-url="https://example.org"
+          primary-figure-label="Total Raised"
+          primary-figure-amount="76543"
+          secondary-figure-label="Total Raised"
+          secondary-figure-amount="76543"
+          progress-bar-counter="75">
+        </biggive-campaign-card>
+        <biggive-campaign-card
+          data-filter-categories="[&quot;Finance&quot;]"
+          data-filter-beneficiaries="[&quot;Children&quot;,&quot;Adults&quot;]"
+          campaign-type="Match Funded"
+          campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community"
+          organisation-name="Oxford Philharmonic Orchestra"
+          currency-code="GBP"
+          more-info-button-url="https://example.org"
+          primary-figure-label="Total Raised"
+          primary-figure-amount="76543"
+          secondary-figure-label="Total Raised"
+          secondary-figure-amount="76543"
+          >
+        </biggive-campaign-card>
+        <biggive-campaign-card
+        data-filter-categories="[&quot;Finance&quot;]"
+        data-filter-beneficiaries="[&quot;Children&quot;,&quot;Adults&quot;]"
+          campaign-type="Match Funded"
+          currency-code="GBP"
+          primary-figure-label="Total Raised"
+          primary-figure-amount="76543"
+          secondary-figure-label="Total Raised"
+          secondary-figure-amount="76543"
+          >
+        </biggive-campaign-card>
+        <biggive-campaign-card
+        data-filter-categories="[&quot;Finance&quot;]"
+          data-filter-beneficiaries="[&quot;Children&quot;,&quot;Adults&quot;]"
+          campaign-type="Match Funded"
+          currency-code="GBP"
+          primary-figure-label="Total Raised"
+          primary-figure-amount="76543"
+          secondary-figure-label="Total Raised"
+          secondary-figure-amount="76543"
+          >
+        </biggive-campaign-card>
+        <biggive-campaign-card
+        data-filter-categories="[&quot;Finance&quot;]"
+          data-filter-beneficiaries="[&quot;Children&quot;,&quot;Adults&quot;]"
+          campaign-type="Match Funded"
+          currency-code="GBP"
+          primary-figure-label="Total Raised"
+          primary-figure-amount="76543"
+          secondary-figure-label="Total Raised"
+          secondary-figure-amount="76543"
+          >
+        </biggive-campaign-card>
+        </div>
+      </biggive-grid>
+    </biggive-campaign-card-filter-grid>
+
+
+  </biggive-page-section>
+
+      <biggive-page-section colour-scheme="primary" space-after="4" colour-scheme="tertiary" section-style-top="crop-right">
+        <biggive-call-to-action
+        colourScheme="black"
+        slug="My test slug"
+        slug-colour="primary"
+        main-title="This is the title"
+        main-title-colour="secondary"
+        subtitle="This is the subtitle"
+        subtitle-colour="white"
+        teaser="This is the teaser This is the teaser This is the teaser This is the teaserThis is the teaser"
+        teaser-colour="white"
+        primary-button-url="#"
+        primary-button-label="Click me"
+        primary-button-colour-scheme="primary"
+        secondary-button-url="#"
+        secondary-button-label="Click me"
+        secondary-button-colour-scheme="clear-primary"
+        ></biggive-call-to-action>
+      </biggive-page-section>
+
+
+      <biggive-page-section space-after="4" colour-scheme="white">
+        <biggive-image-feature
+          teaser="this is my teaser this is my teaser"
+          slug="My test slug"
+          main-title="My title"
+          teaser="This is my teaser This is my teaser This is my teaser This is my teaserThis is my teaser This is my teaser This is my teaser This is my teaser This is my teaser This is my teaser"
+          colour-scheme="primary"
+          image-url="https://media.istockphoto.com/vectors/childish-seamless-dotted-pattern-with-colorful-doodle-letters-fun-vector-id1208462693"
+          button-url="#"
+          button-label="Click here"
+          button-colour-scheme="tertiary">
+        </biggive-image-feature>
+
+      </biggive-page-section>
+
+
+      <biggive-page-section space-after="4" colour-scheme="white">
+        <biggive-call-to-action colourScheme="black" slug="My test slug" main-title-colour="secondary" main-title="This is the title" subtitle="This is the subtitle" subtitleColour="secondary"
+        primary-button-url="#"
+        primary-button-label="Click me"
+        primary-button-colour-scheme="primary"
+        secondary-button-url="#"
+        secondary-button-label="Click me"
+        secondary-button-colour-scheme="clear-primary"
+        ></biggive-call-to-action>
+      </biggive-page-section>
+
+      <biggive-page-section space-after="4" section-style-top="crop-right" colour-scheme="tertiary">
+        <biggive-video-feature teaser="this is my teaser this is my teaser" slug="My test slug" main-title="My title" teaser="This is my teaser This is my teaser This is my teaser This is my teaserThis is my teaser This is my teaser This is my teaser This is my teaser This is my teaser This is my teaser" colour-scheme="white"  video-url="https://www.youtube.com/watch?v=5HAMc3VTlAI" button-url="#" button-label="Click here" button-colour-scheme="clear-white"></biggive-video-feature>
+      </biggive-page-section>
+
+
+
+      <biggive-page-section>
+        <biggive-grid column-count="3">
+          <biggive-campaign-card
+            campaign-type="Match Funded"
+            campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community"
+            organisation-name="Oxford Philharmonic Orchestra"
+            currency-code="GBP"
+            primary-figure-label="Total Raised"
+            primary-figure-amount="76543"
+            secondary-figure-label="Total Raised"
+            secondary-figure-amount="76543"
+            progress-bar-counter="75">
+          </biggive-campaign-card>
+          <biggive-campaign-card
+            campaign-type="Match Funded"
+            campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community"
+            organisation-name="Oxford Philharmonic Orchestra"
+            currency-code="GBP"
+            primary-figure-label="Total Raised"
+            primary-figure-amount="76543"
+            secondary-figure-label="Total Raised"
+            secondary-figure-amount="76543"
+            progress-bar-counter="75">
+          </biggive-campaign-card>
+          <biggive-campaign-card
+            campaign-type="Match Funded"
+            campaign-title="Oxford Piano Festival Fundraising Campaign for LGBTQ+ community"
+            organisation-name="Oxford Philharmonic Orchestra"
+            currency-code="GBP"
+            primary-figure-label="Total Raised"
+            primary-figure-amount="76543"
+            secondary-figure-label="Total Raised"
+            secondary-figure-amount="76543"
+            progress-bar-counter="75">
+          </biggive-campaign-card>
+        </biggive-grid>
+
+      </biggive-page-section>
+
+    <biggive-button full-width="true"  colour-scheme="primary" label="Help" url="https://www.google.com"></biggive-button>
+
+    <biggive-button full-width="true" colour-scheme="secondary" label="ABC" url="https://www.google.com"></biggive-button>
+
+    <biggive-button full-width="true" colour-scheme="clear-primary" label="DEF" url="https://www.google.com"></biggive-button>
+
+    <biggive-progress-bar colour-scheme="primary" counter="15" ></biggive-progress-bar>
+
+    <biggive-progress-bar colour-scheme="secondary" counter="100" ></biggive-progress-bar>
+
+    <biggive-progress-bar colour-scheme="primary" counter="75" ></biggive-progress-bar>
+
+    <biggive-footer
+      heading-level=3
+      use-preset-footer="true"
+      blog-url-prefix="http://localhost:30003"
+      experience-url-prefix="https://www.thebiggive.org.uk"
+      ></biggive-footer>
+  </body>
+</html>

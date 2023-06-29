@@ -1,0 +1,105 @@
+@include spacers();
+@include text-colours();
+
+
+:host {
+  display: contents;
+}
+
+.container {
+  @include standard-font();
+  position: relative;
+
+  .items {
+    overflow: hidden;
+    .sleeve {
+      display: flex;
+      min-width: 100%;
+      overflow: hidden;
+    }
+  }
+
+
+  .navigation {
+    padding: 10px 0;
+    text-align: right;
+    display: flex;
+    justify-content: end;
+    position: relative;
+    z-index: 1;
+    .button {
+      margin-left: 15px;
+      display: block;
+      width: 30px;
+      height: 30px;
+      padding: 2.5px 10px;
+      box-sizing: border-box;
+      background-color: #FFFFFF;
+      box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25);
+      border-radius: 50%;
+      cursor: pointer;
+      text-align: center;
+      svg {
+        width: 15px;
+        height: 15px;
+        position: relative;
+        top: 2.5px;
+      }
+      &.prev {
+        left: 0;
+        svg {
+          left: -3px;
+        }
+      }
+      &.next {
+        right: 0;
+        svg {
+          left: -1px;
+        }
+      }
+    }
+  }
+
+}
+
+.container ::slotted(.hidden) {
+  display: none;
+}
+
+.column-count-5 ::slotted(*) {
+  width: calc( (100% / 5) - (( $spacer-4 * 4 ) / 5 ) );
+  @include flex-container-column();
+}
+
+.column-count-4 ::slotted(*) {
+  width: calc( (100% / 4) - (( $spacer-4 * 3 ) / 4 ) );
+  @include flex-container-column();
+}
+
+.column-count-3 ::slotted(*) {
+  width: calc( (100% / 3) - (( $spacer-4 * 2 ) / 3 ) );
+  @include flex-container-column();
+}
+
+.column-count-2 ::slotted(*) {
+  width: calc( (100% / 2) - (( $spacer-4 * 1 ) / 2 ) );
+  @include flex-container-column();
+}
+
+@media screen and (max-width: $screen-tablet-max) {
+  .column-count-2 ::slotted(*),
+  .column-count-3 ::slotted(*),
+  .column-count-4 ::slotted(*),
+  .column-count-5 ::slotted(*) {
+    width: calc( 50% - (($spacer-4 * 1) / 2));
+  }
+}
+
+@media screen and (max-width: $screen-mobile-max) {
+  .column-count-2 ::slotted(*),
+  .column-count-3 ::slotted(*),
+  .column-count-4 ::slotted(*),
+  .column-count-5 ::slotted(*) {
+    width: 100%;
+  }
+}

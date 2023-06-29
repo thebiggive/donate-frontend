@@ -1,0 +1,81 @@
+@include backgrounds();
+@include fills();
+@include spacers();
+@include text-colours();
+
+:host {
+  display: contents;
+}
+
+.container {
+  @include standard-font();
+  position: relative;
+  text-align: center;
+  background-size: cover;
+  background-position: center center;
+  padding: $spacer-4;
+  height: 100%;
+  white-space: pre-wrap;
+  a,
+  a:hover {
+    text-decoration: none;
+  }
+  .sleeve {
+    padding: $spacer-4;
+    height: 100%;
+    box-sizing: border-box;
+    transition: all 1s ease-in-out;
+  }
+  &.add-animation-true:hover .sleeve {
+    margin: -30px;
+    padding: 60px;
+    height: calc(100% + 60px);
+  }
+  &.clip-bottom-left-corner-false.clip-top-right-corner-true {
+    .sleeve {
+      @include corner-clip-medium-top-right();
+    }
+  }
+  &.clip-bottom-left-corner-true.clip-top-right-corner-false {
+    .sleeve {
+      @include corner-clip-medium-bottom-left();
+    }
+  }
+  &.clip-bottom-left-corner-true.clip-top-right-corner-true {
+    .sleeve {
+      @include corner-clip-medium-bottom-left-top-right();
+    }
+  }
+
+  .icon {
+    svg {
+      width: 50px;
+      height: auto;
+    }
+  }
+  .title {
+    // these have to be the heading level passed in based on order of headings, but in terms of design we want it look like H3.
+    @include heading-3();
+    margin-bottom: $spacer-3;
+  }
+  .subtitle {
+    margin-bottom: $spacer-3;
+  }
+  .main-image-container {
+    margin-bottom: 15px;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+  .button-wrap {
+    text-align: center;
+    &.align-left {
+      text-align: left;
+    }
+    &.align-right {
+      text-align: right;
+    }
+  }
+
+}

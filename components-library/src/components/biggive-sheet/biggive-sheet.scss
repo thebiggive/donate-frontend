@@ -1,0 +1,131 @@
+@include backgrounds();
+@include text-colours();
+@include fills();
+
+:host {
+  display: contents;
+  @include standard-font();
+}
+
+
+.container {
+
+  &.active {
+    .popup {
+      transform: translateX(0);
+    }
+    .background {
+      position: fixed;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0,0,0,0.6);
+      z-index: 99;
+    }
+  }
+
+  .popup {
+    position: fixed;
+    transition: transform 1s ease-in-out;
+    transform: translateX(100%);
+    z-index: 999;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 66%;
+
+
+  .header {
+    padding: 45px;
+    display: flex;
+    justify-content: space-between;
+    .back-link {
+      cursor: pointer;
+      display: flex;
+      font-size: 14px;
+      .svg-wrap {
+        @each $key, $colour in $brandColours {
+          &.colour-#{$key} svg path { fill: $colour; }
+        }
+        display: flex;
+        margin: 5px 15px auto 0;
+        svg {
+          height: 14px;
+          width: auto;
+        }
+      }
+    }
+
+    .close-link {
+      margin-bottom: auto;
+      cursor: pointer;
+      .svg-wrap {
+        display: block;
+        width: 30px;
+        height: 30px;
+        background-color: #FFFFFF;
+        border-radius: 50%;
+        text-align: center;
+        padding: 6.5px;
+        box-sizing: border-box;
+        svg {
+          display: inline-block;
+          top: -1.5px;
+          position: relative;
+          stroke-width: 1;
+          stroke: #000000;      
+          height: 15px;
+          width: 15px;
+          transform: rotate(45deg);
+        }
+      }
+    }
+
+  }
+
+
+  .content{
+    padding: 0 45px 90px 90px;
+    margin-right: 45px;
+    max-height: calc(100vh - 200px);
+    overflow-y: scroll;
+    box-sizing: border-box;
+  }
+
+  }
+
+}
+
+
+@media screen and (max-width: $screen-tablet-max) {
+  .container {
+    .header {
+      padding: 15px;
+    }
+    .content {
+      padding: 0 15px 30px 30px;
+      margin-right: 15px;
+      max-height: calc(100vh - 90px);
+    }
+    .popup {
+      width: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: $screen-mobile-max) {
+  .container {
+    .header {
+      padding: 15px;
+    }
+    .content {
+      padding: 0 15px 30px 30px;
+      margin-right: 15px;
+      max-height: calc(100vh - 90px);
+    }
+    .popup {
+      width: 100%;
+    }
+  }
+}

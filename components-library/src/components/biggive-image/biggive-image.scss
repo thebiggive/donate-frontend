@@ -1,0 +1,10 @@
+@include image-alignment();
+@include spacers();
+
+:host {
+  display: contents;
+}
+
+.container {
+  @include standard-font();
+}

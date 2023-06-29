@@ -1,0 +1,147 @@
+@include image-alignment();
+@include spacers();
+
+:host {
+  display: contents;
+}
+
+.container {
+  @include standard-font();
+  @include lower-shadow();
+  background-color: $colour-white;
+  padding: 25px;
+  box-sizing: border-box;
+  height: fit-content;
+
+  .campaign-title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-weight: bold;
+    span {
+      background-color: $colour-secondary-green;
+      color: $colour-black;
+      padding: $spacer-1 $spacer-3;
+      display: inline-block;
+    }
+  }
+  .banner {
+    top: 0;
+    margin-top: 19px;
+    padding-bottom: $aspect-ratio-banners;
+    background-color: #F1F1F1;
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-bottom: $spacer-4;
+    img {
+      display: none;
+    }
+  }
+  .meta-wrap {
+    @include flex-container-row();
+    margin-top: auto;
+    margin-bottom: $spacer-3;
+    .meta-item {
+      width: calc( 50% - $spacer-3 );
+      .label {
+        @include font-size-small();
+        display: block;
+      }
+      .text {
+        @include heading-3();
+        display: block;
+
+        @media screen and (max-width: $screen-tablet-max) {
+          font-size: 23px;
+        }
+
+        @media screen and (max-width: $screen-mobile-max) {
+          font-size: 21px;;
+        }
+
+        @media screen and (max-width: $screen-mobile-small) {
+          font-size: 17px;
+        }
+      }
+      &:last-child {
+        text-align: right;
+        .text {
+          color: $colour-primary-blue;
+        }
+      }
+    }
+  }
+  .progress-bar-wrap {
+    padding-bottom: $spacer-2;
+    margin-bottom: $spacer-2;
+    border-bottom: 1px solid $colour-grey-light;
+  }
+  .stat-wrap {
+    @include flex-container-row();
+    .stat-item {
+      @include font-size-medium();
+      font-weight: bold;
+      width: calc( 50% - $spacer-3 );
+      margin: auto 0 auto $spacer-3;
+
+      .label {
+        position: relative;
+        bottom: 7px;
+      }
+
+      @media screen and (max-width: $screen-mobile-max) {
+        @include font-size-small();
+        margin: auto 0;
+        text-align: center;
+
+        .label {
+          bottom: 5px;
+        }
+      }
+
+      svg {
+        fill: $colour-tertiary-coral;
+      }
+    }
+  }
+
+  .championed-by {
+    text-align: left;
+    margin-left: 20px;
+    margin-top: 20px;
+    color: $colour-black;
+
+    font-size: 15px;
+
+    @media screen and (max-width: $screen-tablet-max) {
+      font-size: 14px;
+    }
+
+    @media screen and (max-width: $screen-mobile-max) {
+      text-align: center;
+      margin-left: 0;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    @media screen and (max-width: $screen-mobile-small) {
+      font-size: 12px;
+    }
+
+    a {
+      text-decoration: none;
+      font-weight: bold;
+      color: $colour-primary-blue;
+      @media screen and (max-width: $screen-mobile-small) {
+        // Show Champion Name on new line in smaller screens
+        display: block;
+      }
+    }
+  }
+
+  @media screen and (max-width: $screen-mobile-max) {
+    padding: 15px;
+  }
+}

@@ -1,0 +1,54 @@
+@include spacers();
+@include text-colours();
+
+:host {
+  display: contents;
+}
+
+.container {
+  @include standard-font();
+  position: relative;
+
+
+  .entry {
+    h3.heading {
+      position: relative;
+      margin: 25px 0 0 0;
+      padding: 15px 60px 10px 20px;
+      border-bottom: 1px solid $colour-black;
+      cursor: pointer;
+      span.arrow {
+        display: block;
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        width: 40px;
+        height: 20px;
+        text-align: center;
+      }
+    }
+    .content {
+      overflow: hidden;
+      max-height: 0;
+      padding: 0 20px;
+    }
+    &.expanded {
+      .content {
+        max-height: 100%;
+      }
+      span.arrow {
+        transform: rotate(-180deg);
+      }
+    }
+  }
+
+  @each $key, $colour in $brandColours {
+    &.heading-colour-#{$key} .entry h3.heading svg path { stroke: $colour; }
+    &.heading-colour-#{$key} h3.heading { color: $colour; }
+    &.text-colour-#{$key} .content { color: $colour; }
+  }
+
+
+}
+
+

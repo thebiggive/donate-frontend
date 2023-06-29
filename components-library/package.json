@@ -1,0 +1,72 @@
+{
+  "name": "@biggive/components",
+  "_comment": "Version number below is automatically replaced during CircleCI build.",
+  "version": "0.0.1",
+  "description": "Big Give Components",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
+  "types": "dist/types/interfaces.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
+  "unpkg": "dist/biggive/biggive.esm.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thebiggive/components.git"
+  },
+  "files": [
+    "dist/",
+    "loader/",
+    "hydrate/"
+  ],
+  "scripts": {
+    "build": "stencil build --docs",
+    "start": "stencil build --dev --watch --serve",
+    "lint": "eslint --max-warnings=0 src/**/*{.ts,.tsx}",
+    "lint:fix": "eslint --fix src/**/*{.ts,.tsx}",
+    "test": "stencil test --spec --e2e",
+    "test.watch": "stencil test --spec --e2e --watchAll",
+    "generate": "stencil generate",
+    "prepare": "husky install",
+    "pre-commit": "lint-staged",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/free-brands-svg-icons": "^6.1.2",
+    "@fortawesome/free-solid-svg-icons": "^6.1.2",
+    "@fortawesome/pro-duotone-svg-icons": "^6.1.2",
+    "@fortawesome/pro-regular-svg-icons": "^6.1.2",
+    "@fortawesome/pro-solid-svg-icons": "^6.1.2",
+    "@stencil/core": "^2.13.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.9",
+    "@stencil/angular-output-target": "^0.4.0",
+    "@stencil/eslint-plugin": "^0.4.0",
+    "@stencil/sass": "^1.5.2",
+    "@storybook/addon-actions": "^6.5.12",
+    "@storybook/addon-essentials": "^6.5.12",
+    "@storybook/addon-interactions": "^6.5.12",
+    "@storybook/addon-links": "^6.5.12",
+    "@storybook/builder-webpack4": "^6.5.12",
+    "@storybook/html": "^6.5.12",
+    "@storybook/manager-webpack4": "^6.5.12",
+    "@storybook/testing-library": "^0.0.13",
+    "@types/jest": "^27.0.3",
+    "babel-loader": "^8.2.5",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.0",
+    "jest": "^27.4.5",
+    "jest-cli": "^27.4.5",
+    "lint-staged": "^13.0.3",
+    "prettier": "2.7.1",
+    "puppeteer": "^15.4.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "license": "MIT"
+}

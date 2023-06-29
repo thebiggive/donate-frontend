@@ -1,0 +1,76 @@
+@include spacers();
+@include text-colours();
+
+:host {
+  display: contents;
+}
+
+::slotted(*) {
+  display: none;
+}
+
+.container {
+  @include standard-font();
+  position: relative;
+
+  .navigation {
+    padding: 0 40px;
+    .button {
+      position: absolute;
+      top: 5px;
+      display: block;
+      width: 30px;
+      height: 30px;
+      padding: 2.5px 10px;
+      box-sizing: border-box;
+      background-color: #FFFFFF;
+      box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25);
+      border-radius: 50%;
+      cursor: pointer;
+      text-align: center;
+      &.prev {
+        left: 0;
+      }
+      &.next {
+        right: 0;
+      }
+      svg {
+        width: 10px;
+        height: 10px;
+      }
+    }
+    .sleeve {
+      border-bottom: 1px solid $colour-grey-light;
+      overflow: hidden;
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        display: flex;
+        li {
+          flex-grow: 1;
+          padding: 10px 20px;
+          margin: 0;
+          width: calc(33.3% - 20px);
+          border-bottom: 3px solid transparent;
+          text-align: center;
+          white-space: nowrap;
+          cursor: pointer;
+          &.selected {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+
+  @each $key, $colour in $brandColours {
+    &.text-colour-#{$key} .navigation li { color: $colour; }
+    &.navigation-highlight-colour-#{$key} .navigation ul {border-color: $colour; }
+    &.selected-text-colour-#{$key} .navigation li.selected { color: $colour; border-color: $colour; }
+    &.selected-navigation-highlight-colour-#{$key} .navigation li.selected { border-color: $colour; }
+    &.button-background-colour-#{$key} .navigation .button { background-color: $colour; }
+    &.button-icon-colour-#{$key} .navigation .button svg path { stroke: $colour; }
+  }
+
+}

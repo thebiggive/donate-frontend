@@ -1,0 +1,106 @@
+@include backgrounds();
+@include image-alignment();
+@include spacers();
+@include text-colours();
+
+:host {
+  display: contents;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  @include standard-font();
+  position: relative;
+  text-align: left;
+  @include lower-shadow();
+  .sleeve {
+    height: 100%;
+    box-sizing: border-box;
+    background-size: cover;
+    padding:  $spacer-3 $spacer-3 $spacer-2 $spacer-3;
+    .content-wrap {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .slug {
+    @include font-size-medium();
+    margin-bottom: $spacer-2;
+  }
+  .date {
+    @include font-size-medium();
+    margin-bottom: $spacer-3;
+  }
+  h3 {
+    @include heading-4();
+    padding-bottom: $spacer-3;
+    margin-bottom: auto;
+    a,
+    a:hover {
+      text-decoration: none;
+    }
+  }
+  .main-image-container {
+    margin-bottom: 15px;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+  .image-group {
+    display: flex;
+    margin-bottom: $spacer-3;
+    .image-container {
+      margin-right: 15px;
+      .image-wrap {
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        background-size: cover;
+        background-position: center center;
+        margin-bottom: $spacer-1;
+        img {
+          display: none;
+        }
+      }
+    }
+  }
+  .image-label {
+    @include font-size-x-small();
+  }
+
+
+  .clip-bottom-left-corner-false.clip-top-right-corner-true {
+    
+      @include corner-clip-medium-top-right();
+    
+  }
+  .clip-bottom-left-corner-true.clip-top-right-corner-false {
+      @include corner-clip-medium-bottom-left();
+  }
+    
+  .clip-bottom-left-corner-true.clip-top-right-corner-true {
+      @include corner-clip-medium-bottom-left-top-right();
+    
+  }
+
+  
+
+  @each $key, $colour in $brandColours {
+    .main-title-colour-#{$key} h3 { color: $colour; }
+    .slug-colour-#{$key} .slug { color: $colour; }
+    .date-colour-#{$key} .date { color: $colour; }
+    .image-label-colour-#{$key} .image-label { color: $colour; }
+  }
+  
+  
+  
+
+
+}

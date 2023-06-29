@@ -1,0 +1,99 @@
+@font-face {
+    font-family: 'Euclid Triangle';
+    src: local('Euclid Triangle SemiBold Italic'), local('EuclidTriangle-SemiBoldItalic'),
+        url('EuclidTriangle-SemiBoldItalic.woff2') format('woff2'),
+        url('EuclidTriangle-SemiBoldItalic.woff') format('woff');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Euclid Triangle';
+    src: local('Euclid Triangle Bold'), local('EuclidTriangle-Bold'),
+        url('EuclidTriangle-Bold.woff2') format('woff2'),
+        url('EuclidTriangle-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Euclid Triangle';
+    src: local('Euclid Triangle Medium Italic'), local('EuclidTriangle-MediumItalic'),
+        url('EuclidTriangle-MediumItalic.woff2') format('woff2'),
+        url('EuclidTriangle-MediumItalic.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Euclid Triangle';
+    src: local('Euclid Triangle Light'), local('EuclidTriangle-Light'),
+        url('EuclidTriangle-Light.woff2') format('woff2'),
+        url('EuclidTriangle-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Euclid Triangle';
+    src: local('Euclid Triangle Regular'), local('EuclidTriangle-Regular'),
+        url('EuclidTriangle-Regular.woff2') format('woff2'),
+        url('EuclidTriangle-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Euclid Triangle';
+    src: local('Euclid Triangle Light Italic'), local('EuclidTriangle-LightItalic'),
+        url('EuclidTriangle-LightItalic.woff2') format('woff2'),
+        url('EuclidTriangle-LightItalic.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Euclid Triangle';
+    src: local('Euclid Triangle Medium'), local('EuclidTriangle-Medium'),
+        url('EuclidTriangle-Medium.woff2') format('woff2'),
+        url('EuclidTriangle-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Euclid Triangle';
+    src: local('Euclid Triangle Italic'), local('EuclidTriangle-Italic'),
+        url('EuclidTriangle-Italic.woff2') format('woff2'),
+        url('EuclidTriangle-Italic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Euclid Triangle';
+    src: local('Euclid Triangle Bold Italic'), local('EuclidTriangle-BoldItalic'),
+        url('EuclidTriangle-BoldItalic.woff2') format('woff2'),
+        url('EuclidTriangle-BoldItalic.woff') format('woff');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Euclid Triangle';
+    src: local('Euclid Triangle SemiBold'), local('EuclidTriangle-SemiBold'),
+        url('EuclidTriangle-SemiBold.woff2') format('woff2'),
+        url('EuclidTriangle-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}

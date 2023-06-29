@@ -1,0 +1,13 @@
+// Global "concrete" styles, unlike mixins, make every single component bigger! They
+// should be kept to the minimum we can manage without things becoming very hard to
+// maintain.
+
+// Default link styles are global for now because they're very small and used in a
+// large proportion of components.
+a {
+    color: inherit;
+    text-decoration: underline;
+    &:hover {
+        text-decoration: none;
+    }
+}

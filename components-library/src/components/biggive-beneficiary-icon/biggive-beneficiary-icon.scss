@@ -1,0 +1,23 @@
+@include backgrounds();
+@include fills();
+
+:host {
+  display: contents;
+}
+
+.container {
+  @include standard-font();
+  display: flex;
+  justify-content: flex-start;
+  .label {
+    padding-left: $spacer-3;
+    @include font-size-x-small();
+    width: 60px;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}
+
+.beneficiary-icon-item {
+  @include icon-medium();
+}

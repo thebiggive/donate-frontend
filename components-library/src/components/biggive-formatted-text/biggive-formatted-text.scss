@@ -1,0 +1,33 @@
+@include spacers();
+@include text-colours();
+
+:host {
+  display: block;
+}
+
+.container {
+  @include standard-font();
+  img {
+    width: 100%;
+    height: auto;
+  }
+  &.max-width-10 .sleeve { @include max-width-10(); }
+  &.max-width-15 .sleeve { @include max-width-15(); }
+  &.max-width-20 .sleeve { @include max-width-20(); }
+  &.max-width-25 .sleeve { @include max-width-25(); }
+  &.max-width-30 .sleeve { @include max-width-30(); }
+  &.max-width-35 .sleeve { @include max-width-35(); }
+  &.max-width-40 .sleeve { @include max-width-40(); }
+  &.max-width-45 .sleeve { @include max-width-45(); }
+  &.max-width-50 .sleeve { @include max-width-50(); }
+  &.max-width-55 .sleeve { @include max-width-55(); }
+  &.max-width-60 .sleeve { @include max-width-60(); }
+  &.max-width-65 .sleeve { @include max-width-65(); }
+  &.max-width-70 .sleeve { @include max-width-70(); }
+  &.max-width-75 .sleeve { @include max-width-75(); }
+  &.max-width-80 .sleeve { @include max-width-80(); }
+  &.max-width-85 .sleeve { @include max-width-85(); }
+  &.max-width-90 .sleeve { @include max-width-90(); }
+  &.max-width-95 .sleeve { @include max-width-95(); }
+}
+

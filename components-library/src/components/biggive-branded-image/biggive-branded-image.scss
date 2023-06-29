@@ -1,0 +1,73 @@
+@include image-alignment();
+@include spacers();
+
+:host {
+  display: contents;
+}
+
+.container {
+  @include standard-font();
+  position: relative;
+  .slug {
+    text-align: center;
+    font-weight: bold;
+    background-color: $colour-secondary-green;
+    color: $colour-black;
+    padding: $spacer-1 $spacer-3;
+    width: 100%;
+    margin: -17px auto 17px auto;
+    transform: translateY(50%);
+    box-sizing: border-box;
+  }
+
+  img {
+    width: 100%;
+  }
+
+  .logo-wrap {
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    transform: translateY(-50%);
+    margin-top: 30px;
+    margin-bottom: -30px; // Breathing space before charity name etc.
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #FFFFFF;
+
+    @media screen and (max-width: $screen-tablet-max) {
+      width: 100px;
+      height: 100px;
+    }
+
+    @media screen and (max-width: $screen-mobile-max) {
+      width: 70px;
+      height: 70px;
+      margin-top: 20px;
+    }
+  }
+
+  #charityName {
+    color: $colour-primary-blue;
+    display: block;
+    margin-bottom: 5px;
+    width: fit-content; // so link doesn't go full width
+  }
+
+  #charityName, .charity-info {
+    font-size: 17px;
+
+    @media screen and (max-width: $screen-tablet-max) {
+      font-size: 16px;
+    }
+
+    @media screen and (max-width: $screen-mobile-max) {
+      font-size: 15px;
+    }
+
+    @media screen and (max-width: $screen-mobile-small) {
+      font-size: 14px;
+    }
+  }
+}

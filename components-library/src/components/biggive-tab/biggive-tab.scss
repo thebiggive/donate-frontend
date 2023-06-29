@@ -1,0 +1,8 @@
+:host {
+  display: contents;
+}
+
+
+.container {
+  @include standard-font();
+}

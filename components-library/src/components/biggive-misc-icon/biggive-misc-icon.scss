@@ -1,0 +1,37 @@
+@include backgrounds();
+@include fills();
+
+:host {
+  display: contents;
+}
+
+.misc-icon-item {
+  @include icon-large();
+
+  @media screen and (max-width: $screen-mobile-max) {
+    @include icon-medium();
+    margin: auto;
+
+    a {
+      margin: auto;
+    }
+  }
+}
+
+.CaretRight {
+  height: 10px;
+  width: 10px;
+  margin-right: 0px;
+  a {
+    padding: 0px;
+  }
+}
+
+.MenuClose {
+  a {
+    svg {
+      height: 12px;
+      width: 12px;
+    }
+  }
+}

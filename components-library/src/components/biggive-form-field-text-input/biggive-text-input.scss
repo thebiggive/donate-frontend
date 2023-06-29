@@ -1,0 +1,67 @@
+@include spacers();
+
+:host {
+  display: contents;
+}
+.text-input {
+  .currency-symbol {
+    position: absolute;
+  }
+  position: relative;
+  .prompt {
+    position: absolute;
+    z-index: 2;
+    font-size: small;
+    top: -1em;
+    background-color: $colour-grey-background;
+    left: 4em;
+    padding-left: 1em;
+    padding-right: 1em;
+    color: $colour-primary-blue;
+  }
+
+  @include standard-font();
+  position: relative;
+  text-align: left;
+  &.select-style-bordered {
+    .sleeve {
+        @include font-size-large();
+        font-weight: bolder;
+        padding: 2px;
+        position: relative;
+        background-color: $colour-primary-blue;
+        @include corner-clip-small-top-right();
+        .inner-sleave {
+          background-color: $colour-grey-background;
+          color: $colour-primary-blue;
+          display: block;
+          position: relative;
+          padding: 10px 30px 10px 10px;
+          clip-path:
+            polygon(
+                0% 0%,     /* top left */
+                0% 0%,     /* top left */
+                calc(100% - 14px) 0%,    /* top right */
+                100% 14px,   /* top right */
+                100% 100%,  /* bottom right */
+                100% 100%,  /* bottom right */
+                0 100%,   /* bottom left */
+                0 100%      /* bottom left */
+            );
+          &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            right: 20px;
+            top: 18px;
+            width: 10px;
+            height: 10px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center center;
+          }
+        }
+    }
+  }
+}
+

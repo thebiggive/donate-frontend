@@ -1,0 +1,72 @@
+// Should only be used for Sass variables, mixins and functions; not contain any CSS.
+// https://github.com/ionic-team/stencil-sass#inject-globals-sass-paths
+
+$screen-mobile-x-small: 350px;
+$screen-mobile-small: 450px;
+$screen-mobile-medium: 475px;
+$screen-mobile-max: 576px;
+$screen-tablet-max: 768px;
+$screen-large: 968px;
+$screen-desktop-max: 1200px;
+
+$aspect-ratio-banners: percentage(0.30555); // 0.30555 is approx 352 / 1152
+
+$colour-primary-blue: #2C089B;
+$colour-secondary-green: #2AF135;
+$colour-tertiary-coral: #FF7272;
+
+
+$colour-brand-cc-red: #B30510; // Christmas Challenge
+$colour-brand-wgmf-purple: #6E0887; // Women and Girls Match Fund
+$colour-brand-gmf-green: #50B400; // Green Match Fund
+$colour-brand-emf-yellow: #FFE500; // Emergency Match Fund
+$colour-brand-c4c-orange: #F07D00; // Champions for Children
+$colour-brand-mhf-turquoise: #62CFC9; // Mental Health Fund
+$colour-brand-grey: #CBC8C8;
+
+$colour-white: #FFFFFF;
+$colour-black: #000000;
+
+$colour-grey-extra-light: #D7D7D7;
+$colour-grey-light: #E8E8E8;
+$colour-grey-medium: #8A8A8A;
+$colour-grey-dark: #4A4A4A;
+
+$colour-grey-background: #F4F4F4; // Main app background in donate-frontend
+
+/**
+ * @see brandColour in src/globals/brand-colour.ts . This and that should be updated together.
+ */
+$brandColours: (
+    "primary": $colour-primary-blue,
+    "secondary": $colour-secondary-green,
+    "tertiary": $colour-tertiary-coral,
+    "brand-1": $colour-brand-cc-red,
+    "brand-2": $colour-brand-wgmf-purple,
+    "brand-3": $colour-brand-gmf-green,
+    "brand-4": $colour-brand-emf-yellow,
+    "brand-5": $colour-brand-c4c-orange,
+    "brand-6": $colour-brand-mhf-turquoise,
+    "white": $colour-white,
+    "black": $colour-black,
+    "grey-extra-light": $colour-grey-extra-light,
+    "grey-light": $colour-grey-light,
+    "grey-medium": $colour-grey-medium,
+    "grey-dark": $colour-grey-dark,
+);
+
+
+$spacer-0: 0;
+$spacer-1: 5px;
+$spacer-2: 10px;
+$spacer-3: 15px;
+$spacer-4: 30px;
+$spacer-5: 45px;
+$spacer-6: 60px;
+$spacer-7: 90px;
+$spacer-8: 120px;
+$spacer-9: 150px;
+$spacer-10: 180px;
+
+$icon-size-large: 40px;
+$nav-height-desktop: 70px;

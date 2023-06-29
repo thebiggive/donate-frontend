@@ -1,0 +1,146 @@
+@include image-alignment();
+@include spacers();
+@include backgrounds();
+@include text-colours();
+
+:host {
+  display: block;
+}
+
+.container {
+
+  @each $key, $colour in $brandColours {
+    &.background-colour-#{$key} .image-wrap { background-color: $colour; }
+  }
+
+  text-align: left;
+  &.text-align-center {
+    text-align: center;
+  }
+  &.text-align-right {
+    text-align: right;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  h3.full-name {
+    font-size: font-size-medium();
+    margin: 0;
+  }
+
+  div.job-title {
+    font-size: font-size-small();
+    margin: 0;    
+  }
+  
+
+  .sleeve {
+
+    
+    @each $key, $colour in $brandColours {
+
+      &.border-width-1.border-colour-#{$key} { border: $spacer-1 solid $colour; }
+      &.border-width-2.border-colour-#{$key} { border: $spacer-2 solid $colour; }
+      &.border-width-3.border-colour-#{$key} { border: $spacer-3 solid $colour; }
+      &.border-width-4.border-colour-#{$key} { border: $spacer-4 solid $colour; }
+      &.border-width-5.border-colour-#{$key} { border: $spacer-5 solid $colour; }
+      &.border-width-6.border-colour-#{$key} { border: $spacer-6 solid $colour; }
+    }
+  
+
+    margin-bottom: $spacer-2;
+
+    &.circle-true {
+      overflow: hidden;
+      border-radius: 50%;
+    }
+
+
+    .image-wrap {
+      position: relative;
+      background-position: center center;
+      background-size: cover;
+      background-repeat: no-repeat;
+  
+      &.image-style-cover {
+        background-size: cover;
+      }
+      &.image-style-contain {
+        background-size: contain;
+      }
+  
+      &[data-ratio="1,1"] { padding-bottom: 100%; }
+      &[data-ratio="1,1"].border-width-1 { padding-bottom: calc(100% - ( $spacer-1 * 2 )); }
+      &[data-ratio="1,1"].border-width-2 { padding-bottom: calc(100% - ( $spacer-2 * 2 )); }
+      &[data-ratio="1,1"].border-width-3 { padding-bottom: calc(100% - ( $spacer-3 * 2 )); }
+      &[data-ratio="1,1"].border-width-4 { padding-bottom: calc(100% - ( $spacer-4 * 2 )); }
+      &[data-ratio="1,1"].border-width-5 { padding-bottom: calc(100% - ( $spacer-5 * 2 )); }
+      &[data-ratio="1,1"].border-width-6 { padding-bottom: calc(100% - ( $spacer-6 * 2 )); }
+  
+      &[data-ratio="1,1.5"] { padding-bottom: 150%; }
+      &[data-ratio="1,1.5"].border-width-1 { padding-bottom: calc(150% - ( $spacer-1 * 2 )); }
+      &[data-ratio="1,1.5"].border-width-2 { padding-bottom: calc(150% - ( $spacer-2 * 2 )); }
+      &[data-ratio="1,1.5"].border-width-3 { padding-bottom: calc(150% - ( $spacer-3 * 2 )); }
+      &[data-ratio="1,1.5"].border-width-4 { padding-bottom: calc(150% - ( $spacer-4 * 2 )); }
+      &[data-ratio="1,1.5"].border-width-5 { padding-bottom: calc(150% - ( $spacer-5 * 2 )); }
+      &[data-ratio="1,1.5"].border-width-6 { padding-bottom: calc(150% - ( $spacer-6 * 2 )); }
+  
+      &[data-ratio="1,2"] { padding-bottom: 200%; }
+      &[data-ratio="1,2"].border-width-1 { padding-bottom: calc(200% - ( $spacer-1 * 2 )); }
+      &[data-ratio="1,2"].border-width-2 { padding-bottom: calc(200% - ( $spacer-2 * 2 )); }
+      &[data-ratio="1,2"].border-width-3 { padding-bottom: calc(200% - ( $spacer-3 * 2 )); }
+      &[data-ratio="1,2"].border-width-4 { padding-bottom: calc(200% - ( $spacer-4 * 2 )); }
+      &[data-ratio="1,2"].border-width-5 { padding-bottom: calc(200% - ( $spacer-5 * 2 )); }
+      &[data-ratio="1,2"].border-width-6 { padding-bottom: calc(200% - ( $spacer-6 * 2 )); }
+  
+  
+  
+  
+  
+  
+      &.rounded-true {
+        overflow: hidden;
+        border-radius: 10px;
+      }
+  
+  
+  
+  
+  
+      .circle {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background-color: #FFFFFF;
+        bottom: 15px;
+        right: 15px;
+        border-radius: 50%;
+        text-align: center;
+        padding: 6.5px;
+        box-sizing: border-box;
+        svg {
+          position: relative;
+          display: inline-block;
+          top: -1px;
+          height: 15px;
+          width: 15px;
+        }
+      }
+  
+  
+  
+      img {
+        display: none;
+      }
+
+
+  }
+
+
+
+  }
+
+
+}

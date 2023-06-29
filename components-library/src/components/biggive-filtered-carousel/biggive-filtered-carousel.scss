@@ -1,0 +1,40 @@
+
+
+
+:host {
+  display: block;
+}
+
+
+.filters {
+  margin-bottom: $spacer-3;
+  .button {
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 5px 20px;
+    margin-right: 15px;
+    @include font-size-small();
+    background-color: $colour-tertiary-coral;
+    color: $colour-black;
+    border-color: $colour-tertiary-coral;
+    &.active {
+      background-color: $colour-black;
+      border-color: $colour-black;
+      color: $colour-white;
+    }
+  }
+  .clear {
+    padding: 5px;
+    height: 26px;
+    width: 26px;
+    text-align: center;
+    svg {
+      top: 3px;
+      left: 0.5px;
+      position: relative;
+      height: 16px;
+      width: 16px;
+      transform: rotate(45deg);
+    }
+  }
+}

@@ -1,0 +1,83 @@
+@include spacers();
+
+// Includes CSS taken from https://moderncss.dev/custom-select-styles-with-pure-css/
+
+:host {
+  display: contents;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+select {
+  appearance: none;
+  border: none;
+  padding: 0 1em 0 0;
+  margin: 0;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: inherit;
+  line-height: inherit;
+  outline: none;
+  display: grid;
+  background-color: $colour-white;
+  align-items: center;
+}
+select.grey {
+  background-color: $colour-grey-background;
+}
+.selectWrapper {
+  position: relative;
+}
+.prompt {
+  position: absolute;
+  z-index: 2;
+  font-size: small;
+  top: -1em;
+  background-color: $colour-white;
+  left: 4em;
+  padding-left: 1em;
+  padding-right: 1em;
+  color: $colour-primary-blue;
+}
+.prompt.grey {
+  background-color: $colour-grey-background;
+}
+
+.dropdown {
+  @include standard-font();
+  position: relative;
+  text-align: left;
+  &.select-style-bordered {
+    .sleeve {
+      @include dropdown();
+    }
+  }
+  &.select-style-underlined {
+    .sleeve {
+      @include dropdown-underlined();
+    }
+  }
+  select {
+    max-height: 200px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 100%;
+    z-index: 1;
+    left: 0;
+    right: 0;
+  }
+  &.active .options {
+      display: block;
+  }
+}
+.dropdown.noprompt {
+  margin-top: 0;
+}
+.options.grey {
+  background-color: $colour-grey-background;
+}

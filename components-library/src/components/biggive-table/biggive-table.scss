@@ -1,0 +1,49 @@
+@include backgrounds();
+@include fills();
+
+:host {
+  display: contents;
+  @include standard-font();
+}
+
+
+.container {
+
+  @each $key, $colour in $brandColours {
+    &.header-text-colour-#{$key} thead { color: $colour; }
+    &.header-background-colour-#{$key} thead { background-color: $colour; }
+    &.body-text-colour-#{$key} tbody { color: $colour; }
+    &.body-background-colour-#{$key} tbody { background-color: $colour; }
+  }
+
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 0;
+
+    td,th {
+      padding: 10px 20px;
+      border: 0;
+      font-size: inherit;
+    }
+
+    thead {
+      filter: drop-shadow(-1px 3px 12px rgba(0,0,0,0.15));
+      td,th {
+        font-weight: bold;
+      }
+    }
+
+    tbody {
+      tr.odd {
+        background-color: rgba(255,255,255,0.3);
+      }
+      
+      td,th {
+        font-size: 80%;
+      }
+    }
+
+  }
+}

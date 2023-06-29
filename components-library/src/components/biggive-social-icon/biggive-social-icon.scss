@@ -1,0 +1,23 @@
+@include backgrounds();
+@include fills();
+
+:host {
+  display: contents;
+}
+
+.social-icon-item {
+  margin-right: 6px;
+  @include icon-large();
+
+  &.wide {
+    margin-right: 30px;
+  }
+
+  @media screen and (max-width: $screen-mobile-max) {
+    @include icon-medium();
+
+    &.wide {
+      @include icon-medium();
+    }
+  }
+}

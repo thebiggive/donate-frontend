@@ -1,0 +1,183 @@
+:host {
+  display: contents;
+}
+
+.footer {
+  @include standard-font();
+  color: $colour-white;
+}
+
+nav {
+  width: calc(33.3% - 20px);
+  margin: 0;
+  padding: 0;
+  .heading {
+    @include heading-5();
+    border-bottom: 1px solid $colour-white;
+    padding-bottom: $spacer-2;
+    margin-bottom: $spacer-2;
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    li {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      margin-top: 15px;
+    }
+  }
+}
+
+nav ul li a {
+  color: $colour-white;
+  text-decoration: none;
+  // target all classes prefixed with 'icon-' so we don't repeat code
+  &[class^='icon-'],
+  &[class*='icon-'] {
+    padding-left: 20px;
+    background-repeat: no-repeat;
+    background-size: auto 10px;
+    background-position: left center;
+  }
+
+  &.icon-green {
+    background-image: url(/assets/images/triangles-combined-green-match-white.svg);
+  }
+
+  &.icon-children {
+    background-image: url(/assets/images/triangles-combined-children-white.svg);
+  }
+
+  &.icon-christmas {
+    background-image: url(/assets/images/triangles-combined-christmas-challenge-white.svg);
+  }
+
+  &.icon-green-match {
+    background-image: url(/assets/images/triangles-combined-green-match-white.svg);
+  }
+
+  &.icon-women-girls {
+    background-image: url(/assets/images/triangles-combined-women-girls-white.svg);
+  }
+
+  &.icon-mental-health {
+    background-image: url(/assets/images/triangles-combined-mental-health-white.svg);
+  }
+
+  &.icon-anchor-match {
+    background-image: url(/assets/images/triangles-combined-anchor-white.svg);
+  }
+
+  &.icon-emergency {
+    background-image: url(/assets/images/triangles-combined-emergency-white.svg);
+  }
+}
+
+.row-top {
+  background-image: url(/assets/images/biggive-triangle-green.svg);
+  background-repeat: no-repeat;
+  background-size: auto 75px;
+  background-position: $spacer-6 30px;
+  background-color: $colour-primary-blue;
+  padding: 100px $spacer-6 $spacer-6 $spacer-6;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  .button-wrap {
+    margin-top: $spacer-6;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+}
+
+footer .row-bottom {
+  background-color: $colour-black;
+  padding: $spacer-6 $spacer-6 $spacer-3 $spacer-6;
+  border-top: 1px solid $colour-white;
+
+  .fr-logo {
+    width: 135px;
+  }
+
+  .postscript-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+
+    @media screen and (max-width: $screen-tablet-max) {
+      flex-direction: column;
+    }
+  }
+
+  .nav.nav-postscript {
+    text-align: right;
+    flex-grow: 1;
+
+    @media screen and (max-width: $screen-tablet-max) {
+      text-align: center;
+    }
+  }
+
+  .nav-postscript li {
+    display: inline-block;
+    margin-left: 1rem;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    @media screen and (max-width: $screen-tablet-max) {
+      display: block;
+      width: 100%;
+      margin-left: 0;
+    }
+  }
+
+  .social-icon-wrap {
+    border-top: 1px solid $colour-white;
+    padding-top: $spacer-4;
+    margin-top: $spacer-4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: $spacer-4;
+
+    .social-icon-item {
+      margin: 0 $spacer-3;
+    }
+  }
+
+  p {
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: $screen-tablet-max) {
+  .row-top {
+    padding: $spacer-3;
+  }
+}
+
+@media screen and (max-width: $screen-tablet-max) {
+  nav {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: $spacer-4;
+  }
+
+  .row-top {
+    background-size: auto 50px;
+    padding-top: 80px;
+    padding-left: 15px;
+    background-position: 15px 30px;
+
+    .button-wrap * {
+      width: 100% !important;
+    }
+  }
+}

@@ -1,0 +1,58 @@
+@include image-alignment();
+@include spacers();
+@include text-colours();
+
+:host {
+  display: contents;
+}
+
+.container {
+  @include all-round-shadow();
+  @include standard-font();
+  height: 100%;
+  background-color: white;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 600px;
+  padding: $spacer-6;
+  .image-wrap {
+    text-align: center;
+    margin-bottom: $spacer-3;
+    svg {
+      height: 30px;
+      width: auto;
+      margin: auto;
+    }
+  }
+  .quote {
+    margin-bottom: $spacer-4;
+  }
+
+  @each $key, $colour in $brandColours {
+    &.quote-icon-colour-#{$key} .image-wrap path { fill: $colour; }
+  }
+
+
+  @media screen and (max-width: $screen-tablet-max) {
+    padding: $spacer-5;
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  @media screen and (max-width: $screen-mobile-max) {
+    padding: $spacer-4;
+    @include font-size-small();
+
+    svg {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  @media screen and (max-width: $screen-mobile-small) {
+    padding: $spacer-3;
+  }
+}

@@ -45,3 +45,37 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+components-library/dist/
+components-library/loader/
+components-library/hydrate/
+components-library/www/
+
+# Storybook builds happen as part of CI publish.
+components-library/storybook-static/
+
+# Stencil generated Angular copies. `npm run build` inside `angular` regenerates these.
+angular/projects/components/src/lib/stencil-generated
+!angular/projects/components/src/lib/stencil-generated/.gitkeep
+
+*~
+*.sw[mnpcod]
+*.log
+*.lock
+*.tmp
+*.tmp.*
+log.txt
+*.sublime-project
+*.sublime-workspace
+
+components-library/.stencil/
+components-library/.idea/
+components-library/.vscode/
+components-library/.sass-cache/
+components-library/.versions/
+components-library/node_modules/
+$RECYCLE.BIN/
+
+.DS_Store
+Thumbs.db
+UserInterfaceState.xcuserstate
+components-library/.env

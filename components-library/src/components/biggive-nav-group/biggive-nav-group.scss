@@ -1,0 +1,11 @@
+:host {
+  display: contents;
+}
+
+
+ul {
+  @include standard-font();
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}

@@ -1,0 +1,19 @@
+@include spacers();
+
+:host {
+  display: block;
+  margin-bottom: $spacer-1;
+  @include standard-font();
+}
+
+.progress-bar {
+    @include progress-bar();
+}
+
+.progress-bar-primary {
+    @include progress-bar-primary();
+}
+
+.progress-bar-secondary {
+    @include progress-bar-secondary();
+}

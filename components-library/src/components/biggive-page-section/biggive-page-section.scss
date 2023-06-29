@@ -1,0 +1,215 @@
+@include spacers();
+
+:host {
+  display: contents;
+}
+
+.container {
+  @include standard-font();
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  .sleeve {
+    @include section-container();
+    padding: $spacer-4;
+  }
+}
+
+.container.full-bleed {
+  // from https://stackoverflow.com/questions/22083157/extend-background-color-of-header-beyond-container-with-css
+  box-shadow: 0 0 0 100vmax $colour-primary-blue;
+  clip-path: inset(0 -100vmax);
+}
+
+.container.style-top-crop-right:before {
+  content: '';
+  display: block;
+  height: 75px;
+  clip-path: polygon(0 0, 0% 100%, 100% 100%);
+  transform: translateY(1px);
+}
+
+.container.style-top-crop-left:before {
+  content: '';
+  display: block;
+  height: 75px;
+  clip-path: polygon(100% 0, 100% 0%, 100% 100%, 0 100%);
+  transform: translateY(1px);
+}
+
+.container.style-bottom-crop-right:after {
+  content: '';
+  display: block;
+  height: 75px;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  transform: translateY(-1px);
+}
+
+.container.style-bottom-crop-left:after {
+  content: '';
+  display: block;
+  height: 75px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  transform: translateY(-1px);
+}
+
+.container .sleeve {
+  position: relative;
+  text-align: left;
+}
+
+.container.max-width-10 .sleeve { @include max-width-10(); }
+.container.max-width-15 .sleeve { @include max-width-15(); }
+.container.max-width-20 .sleeve { @include max-width-20(); }
+.container.max-width-25 .sleeve { @include max-width-25(); }
+.container.max-width-30 .sleeve { @include max-width-30(); }
+.container.max-width-35 .sleeve { @include max-width-35(); }
+.container.max-width-40 .sleeve { @include max-width-40(); }
+.container.max-width-45 .sleeve { @include max-width-45(); }
+.container.max-width-50 .sleeve { @include max-width-50(); }
+.container.max-width-55 .sleeve { @include max-width-55(); }
+.container.max-width-60 .sleeve { @include max-width-60(); }
+.container.max-width-65 .sleeve { @include max-width-65(); }
+.container.max-width-70 .sleeve { @include max-width-70(); }
+.container.max-width-75 .sleeve { @include max-width-75(); }
+.container.max-width-80 .sleeve { @include max-width-80(); }
+.container.max-width-85 .sleeve { @include max-width-85(); }
+.container.max-width-90 .sleeve { @include max-width-90(); }
+.container.max-width-95 .sleeve { @include max-width-95(); }
+
+
+
+.container .sleeve:before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  top: 0;
+  bottom: 0;
+}
+
+.container.background-color-primary:before,
+.container.background-color-primary:after,
+.container.background-color-primary .sleeve,
+.container.background-color-primary .sleeve:before {
+  background-color: $colour-primary-blue;
+  color: $colour-white;
+}
+
+.container.background-color-secondary:before,
+.container.background-color-secondary:after,
+.container.background-color-secondary .sleeve:before,
+.container.background-color-secondary .sleeve {
+  background-color: $colour-secondary-green;
+  color: $colour-white;
+}
+
+.container.background-color-tertiary:before,
+.container.background-color-tertiary:after,
+.container.background-color-tertiary .sleeve:before,
+.container.background-color-tertiary .sleeve {
+  background-color: $colour-tertiary-coral;
+  color: $colour-white;
+}
+
+.container.background-color-brand-1:before,
+.container.background-color-brand-1:after,
+.container.background-color-brand-1 .sleeve:before,
+.container.background-color-brand-1 .sleeve {
+  background-color: $colour-brand-cc-red;
+  color: $colour-white;
+}
+
+.container.background-color-brand-2:before,
+.container.background-color-brand-2:after,
+.container.background-color-brand-2 .sleeve:before,
+.container.background-color-brand-2 .sleeve {
+  background-color: $colour-brand-wgmf-purple;
+  color: $colour-white;
+}
+
+.container.background-color-brand-3:before,
+.container.background-color-brand-3:after,
+.container.background-color-brand-3 .sleeve:before,
+.container.background-color-brand-3 .sleeve {
+  background-color: $colour-brand-gmf-green;
+  color: $colour-white;
+}
+
+.container.background-color-brand-4:before,
+.container.background-color-brand-4:after,
+.container.background-color-brand-4 .sleeve:before,
+.container.background-color-brand-4 .sleeve {
+  background-color: $colour-brand-emf-yellow;
+  color: $colour-white;
+}
+
+.container.background-color-brand-5:before,
+.container.background-color-brand-5:after,
+.container.background-color-brand-5 .sleeve:before,
+.container.background-color-brand-5 .sleeve {
+  background-color: $colour-brand-c4c-orange;
+  color: $colour-white;
+}
+
+.container.background-color-brand-6:before,
+.container.background-color-brand-6:after,
+.container.background-color-brand-6 .sleeve:before,
+.container.background-color-brand-6 .sleeve {
+  background-color: $colour-brand-mhf-turquoise;
+  color: $colour-white;
+}
+
+
+
+.container.background-color-white:before,
+.container.background-color-white:after,
+.container.background-color-white .sleeve:before,
+.container.background-color-white .sleeve {
+  background-color: $colour-white;
+  color: $colour-black;
+}
+
+
+.container.background-color-black:before,
+.container.background-color-black:after,
+.container.background-color-black .sleeve:before,
+.container.background-color-black .sleeve {
+  background-color: $colour-black;
+  color: $colour-white;
+}
+
+.container.background-color-grey-extra-light:before,
+.container.background-color-grey-extra-light:after,
+.container.background-color-grey-extra-light .sleeve:before,
+.container.background-color-grey-extra-light .sleeve {
+  background-color: $colour-grey-extra-light;
+  color: $colour-black;
+}
+
+.container.background-color-grey-light:before,
+.container.background-color-grey-light:after,
+.container.background-color-grey-light .sleeve:before,
+.container.background-color-grey-light .sleeve {
+  background-color: $colour-grey-light;
+  color: $colour-black;
+}
+
+.container.background-color-grey-medium:before,
+.container.background-color-grey-medium:after,
+.container.background-color-grey-medium .sleeve:before,
+.container.background-color-grey-medium .sleeve {
+  background-color: $colour-grey-medium;
+  color: $colour-white;
+}
+
+.container.background-color-grey-dark:before,
+.container.background-color-grey-dark:after,
+.container.background-color-grey-dark .sleeve:before,
+.container.background-color-grey-dark .sleeve {
+  background-color: $colour-grey-dark;
+  color: $colour-white;
+}
+

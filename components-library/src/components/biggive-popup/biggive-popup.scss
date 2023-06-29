@@ -1,0 +1,10 @@
+:host {
+  display: contents;
+}
+
+.popup {
+  @include popup();
+  &[data-visible=true] {
+    display: block;
+  }
+}

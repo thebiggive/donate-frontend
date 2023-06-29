@@ -1,0 +1,44 @@
+@include headings();
+@include spacers();
+@include text-colours();
+
+:host {
+  display: contents;
+  @include standard-font();
+}
+
+.container {
+  @include section-container();
+  position: relative;
+  text-align: center;
+}
+
+
+.content-wrap {
+  .slug {
+    margin: 0;
+    padding: 0;
+  }
+  h2 {
+    margin: 0 0 $spacer-1 0;
+    padding: 0;
+  }
+  .subtitle {
+    margin: 0 0 $spacer-1 0;
+    padding: 0;
+  }
+  .teaser {
+    margin: $spacer-3 auto $spacer-3 auto;
+    max-width: 400px;
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: $screen-mobile-max) {
+  .content-wrap {
+    text-align: right
+  }
+  h2 {
+    padding: 40px 0;
+  }
+}

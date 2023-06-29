@@ -1,0 +1,77 @@
+@include backgrounds();
+@include spacers();
+@include text-colours();
+
+:host {
+  display: contents;
+  @include standard-font();
+}
+
+@keyframes ticker {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-200%, 0, 0);
+  }
+}
+
+.container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  .main-message-wrap {
+    position: absolute;
+    z-index: 1;
+    padding: $spacer-2 $spacer-4;
+    left: 0;
+    top: 0;
+    @include font-size-large();
+    font-weight: 600;
+    max-width: 33.3%;
+  }
+  .ticker-wrap {
+    padding: $spacer-2 0 $spacer-2 0;
+    min-height: 17px;
+    @include font-size-medium();
+    overflow: hidden;
+    position: relative;
+    .sleeve {
+      will-change: transform; // https://web.dev/stick-to-compositor-only-properties-and-manage-layer-count/
+      width: 100%;
+      position: absolute;
+      left: 100%;
+      display: flex;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+      animation-name: ticker;
+      // TS overrides the specific timings once the width of ticker elements is known.
+      animation-duration: 10s;
+
+      @media (prefers-reduced-motion) {
+        animation-name: none; // Turn off movement when needed for a11y.
+      }
+
+      .ticker-item {
+        white-space: nowrap;
+        padding: 0 $spacer-3;
+      }
+
+      // https://stackoverflow.com/a/45847760
+      &.sleeve-delayed-copy {
+        animation-delay: 5s;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $screen-tablet-max) {
+  .container {
+    .main-message-wrap {
+      @include font-size-medium();
+      padding: $spacer-2;
+    }
+  }
+}
