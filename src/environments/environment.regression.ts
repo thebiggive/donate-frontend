@@ -21,8 +21,6 @@ export const environment: Environment = {
   experienceUriPrefix: 'https://thebiggive--regtest1.sandbox.my.site.com',
   donationsApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
-  googleAnalyticsId: 'UA-2979952-3',
-  googleOptimizeId: null,
   identityApiPrefix: 'https://identity-regression.thebiggivetest.org.uk/v1',
   matomoSiteId: null,
   metaPixelId: '165372943080609',

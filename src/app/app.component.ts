@@ -4,7 +4,6 @@ import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@an
 import {BiggiveMainMenu} from '@biggive/components-angular';
 import {filter} from 'rxjs/operators';
 
-import {AnalyticsService} from './analytics.service';
 import {DonationService} from './donation.service';
 import {GetSiteControlService} from './getsitecontrol.service';
 import {MetaPixelService} from './meta-pixel.service';
@@ -30,7 +29,6 @@ export class AppComponent implements AfterViewInit, OnInit {
   public isDataLoaded = false;
 
   constructor(
-    private analyticsService: AnalyticsService,
     private identityService: IdentityService,
     @Inject(APP_BASE_HREF) private baseHref: string,
     private donationService: DonationService,
@@ -67,7 +65,6 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      this.analyticsService.init();
       this.getSiteControlService.init();
       this.metaPixelService.init();
 

@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 import jwtDecode from 'jwt-decode';
+import { MatomoTracker } from 'ngx-matomo';
 import { StorageService } from 'ngx-webstorage-service';
 import {Observable, of} from 'rxjs';
 
-import { AnalyticsService } from './analytics.service';
 import { Credentials } from './credentials.model';
 import { environment } from '../environments/environment';
 import { IdentityJWT } from './identity-jwt.model';
@@ -27,8 +27,8 @@ export class IdentityService {
   private jwtModifiedCallbacks: Array<() => void> = [];
 
   constructor(
-    private analyticsService: AnalyticsService,
     private http: HttpClient,
+    private matomoTracker: MatomoTracker,
     @Inject(TBG_DONATE_ID_STORAGE) private storage: StorageService,
   ) {}
 
@@ -178,7 +178,8 @@ export class IdentityService {
     const jwt = this.getJWT();
 
     if (jwt === undefined) {
-      this.analyticsService.logError(
+      this.matomoTracker.trackEvent(
+        'identity_error',
         'auth_jwt_error',
         `Not authorised to work with person ${person.id}`,
       );

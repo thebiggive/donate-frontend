@@ -6,12 +6,12 @@ import { StorageService } from 'ngx-webstorage-service';
 import { Observable, of } from 'rxjs';
 import { PaymentMethod } from '@stripe/stripe-js';
 
-import { AnalyticsService } from './analytics.service';
 import { COUNTRY_CODE } from './country-code.token';
 import { Donation } from './donation.model';
 import { DonationCreatedResponse } from './donation-created-response.model';
 import { environment } from '../environments/environment';
 import {Person} from "./person.model";
+import { MatomoTracker } from 'ngx-matomo';
 
 export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
 
@@ -25,9 +25,9 @@ export class DonationService {
   private readonly storageKey = `${environment.donateGlobalUriPrefix}/v2`; // Key is per-domain/env
 
   constructor(
-    private analyticsService: AnalyticsService,
     @Optional() @Inject(COUNTRY_CODE) private defaultCountryCode: string,
     private http: HttpClient,
+    private matomoTracker: MatomoTracker,
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
     private state: TransferState,
@@ -252,7 +252,8 @@ export class DonationService {
     const donationDataItems = this.getDonationCouplets().filter(donationItem => donationItem.donation.donationId === donation.donationId);
 
     if (donationDataItems.length !== 1) {
-      this.analyticsService.logError(
+      this.matomoTracker.trackEvent(
+        'donate_error',
         'auth_jwt_error',
         `Not authorised to work with donation ${donation.donationId} to campaign ${donation.projectId}`,
       );

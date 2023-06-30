@@ -1,5 +1,4 @@
 import {StepperSelectionEvent} from "@angular/cdk/stepper";
-import {AnalyticsService} from "../analytics.service";
 import {FormGroup} from "@angular/forms";
 import {DonationService} from "../donation.service";
 import {Donation} from "../donation.model";
@@ -11,7 +10,6 @@ export function updateDonationFromForm
 (event: StepperSelectionEvent,
  tipValue: number|undefined,
  donation: Donation,
- analyticsService: AnalyticsService,
  paymentGroup: FormGroup,
  amountsGroup: FormGroup,
  giftAidGroup: FormGroup,
@@ -58,13 +56,4 @@ export function updateDonationFromForm
     donation.homeBuildingNumber = undefined;
   }
   donationService.updateLocalDonation(donation);
-
-  if (event.selectedStep.label === 'Receive updates') {
-    // Step 2 'Details' – whichever step(s) come before marketing prefs is the best fit for this step number.
-    analyticsService.logCheckoutStep(2, campaign, donation);
-  } else if (event.selectedStep.label === 'Confirm') {
-    // Step 3 'Confirm' is actually fired when comms preferences are done (to maintain
-    // historic order), i.e. when the new step is for finalising payment.
-    analyticsService.logCheckoutStep(3, campaign, donation);
-  }
 }

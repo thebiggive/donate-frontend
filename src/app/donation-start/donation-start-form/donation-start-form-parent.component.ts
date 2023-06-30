@@ -31,7 +31,6 @@ import {
 } from '@stripe/stripe-js';
 import {EMPTY, Observer} from 'rxjs';
 
-import {AnalyticsService} from '../../analytics.service';
 import {Campaign} from '../../campaign.model';
 import {CampaignService} from '../../campaign.service';
 import {CardIconsService} from '../../card-icons.service';
@@ -61,6 +60,7 @@ import {TimeLeftPipe} from "../../time-left.pipe";
 import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
 import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation-tipping-slider.component";
+import { MatomoTracker } from 'ngx-matomo';
 
 @Component({
   templateUrl: './donation-start-form.component.html',
@@ -236,15 +236,15 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
 
 
   constructor(
-    private analyticsService: AnalyticsService,
     public cardIconsService: CardIconsService,
     private cd: ChangeDetectorRef,
+    private conversionTrackingService: ConversionTrackingService,
     public dialog: MatDialog,
     private donationService: DonationService,
     @Inject(ElementRef) private elRef: ElementRef,
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
-    private conversionTrackingService: ConversionTrackingService,
+    private matomoTracker: MatomoTracker,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -398,7 +398,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
           // We can't resume a donation that has a different customer ID on it. Probably user logged in
           // after creating the donation.
           this.donationService.cancel(existingDonation).subscribe(() => {
-            this.analyticsService.logEvent(
+            this.matomoTracker.trackEvent(
+              'donate',
               'cancel_auto',
               `Donation cancelled due to donor authentication change`,
             );
@@ -555,7 +556,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     if (this.donation !== undefined && this.donationAmount > 0 && this.donationAmount !== this.donation.donationAmount) {
       this.donationService.cancel(this.donation)
         .subscribe(() => {
-          this.analyticsService.logEvent(
+          this.matomoTracker.trackEvent(
+            'donate',
             'cancel_auto',
             `Donation cancelled because amount was updated ${this.donation?.donationId} to campaign ${this.campaignId}`,
           );
@@ -576,14 +578,13 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         event,
         this.tipValue,
         this.donation,
-        this.analyticsService,
         this.paymentGroup,
         this.amountsGroup,
         this.giftAidGroup,
         this.donationService,
         this.campaign,
         this.marketingGroup,
-        this.preparePaymentRequestButton
+        this.preparePaymentRequestButton,
       );
       // Else it's not a step that cleanly maps to the historically-comparable
       // e-commerce funnel steps defined in our Analytics campaign, besides 1
@@ -655,13 +656,13 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.stripeError = this.getStripeFriendlyError(paymentMethodResult.error, 'method_setup');
       this.stripeResponseErrorCode = paymentMethodResult.error.code;
       this.submitting = false;
-      this.analyticsService.logError('stripe_payment_method_error', paymentMethodResult.error.message ?? '[No message]');
+      this.matomoTracker.trackEvent('donate_error', 'stripe_payment_method_error', paymentMethodResult.error.message ?? '[No message]');
 
       return;
     }
 
     if (!paymentMethodResult.paymentMethod) {
-      this.analyticsService.logError('stripe_payment_method_error_invalid_response', 'No error or paymentMethod');
+      this.matomoTracker.trackEvent('donate_error', 'stripe_payment_method_error_invalid_response', 'No error or paymentMethod');
       return;
     }
 
@@ -688,7 +689,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
 
       this.stripeError = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
       this.stripeResponseErrorCode = undefined;
-      this.analyticsService.logError(
+      this.matomoTracker.trackEvent(
+        'donate_error', 
         'submit_missing_donation_basics',
         `Donation not set or form invalid ${errorCodeDetail}`,
       );
@@ -724,7 +726,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       )
       .subscribe(async (donation: Donation) => {
         if (donation.psp === 'stripe') {
-          this.analyticsService.logCheckoutStep(4, this.campaign, donation); // 'Pay'.
           this.payWithStripe();
         }
       }, response => {
@@ -735,7 +736,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
           // Unhandled 5xx crashes etc.
           errorMessage = `Could not update donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
         }
-        this.analyticsService.logError('donation_update_failed', errorMessage);
+        this.matomoTracker.trackEvent('donate_error', 'donation_update_failed', errorMessage);
         this.retrying = false;
         this.donationUpdateError = true;
         this.submitting = false;
@@ -748,7 +749,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     if (!this.donation || !this.donation.clientSecret || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
       this.stripeResponseErrorCode = undefined;
-      this.analyticsService.logError('stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
+      this.matomoTracker.trackEvent('donate_error', 'stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
       return;
     }
 
@@ -756,14 +757,16 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       // Settlement is via the Customer's cash balance, with no client-side provision of a Payment Method.
       this.donationService.finaliseCashBalancePurchase(this.donation).subscribe(
         (donation) => {
-          this.analyticsService.logEvent(
-            '`stripe_customer_balance_payment_success',
+          this.matomoTracker.trackEvent(
+            'donate',
+            'stripe_customer_balance_payment_success',
             `Stripe Intent expected to auto-confirm for donation ${donation.donationId} to campaign ${donation.projectId}`,
           );
           this.exitPostDonationSuccess(donation);
         },
         (error: HttpErrorResponse) => {
-          this.analyticsService.logError(
+          this.matomoTracker.trackEvent(
+            'donate_error',
             'stripe_customer_balance_payment_error',
             error.message ?? '[No message]',
           );
@@ -805,7 +808,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     }
 
     if (!result.paymentIntent) {
-      this.analyticsService.logError('stripe_pay_missing_pi', 'No error or paymentIntent');
+      this.matomoTracker.trackEvent('donate_error', 'stripe_pay_missing_pi', 'No error or paymentIntent');
       return;
     }
 
@@ -816,7 +819,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     }
 
     // else Intent 'done' but not a successful status.
-    this.analyticsService.logError('stripe_intent_not_success', result.paymentIntent.status);
+    this.matomoTracker.trackEvent('donate_error', 'stripe_intent_not_success', result.paymentIntent.status);
     this.stripeError = `Status: ${result.paymentIntent.status}`;
     this.stripeResponseErrorCode = undefined;
     this.submitting = false;
@@ -856,7 +859,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
 
   captchaIdentityError() {
     // Not passing event as it will "most often (if not always) be empty". https://github.com/DethAriel/ng-recaptcha#events
-    this.analyticsService.logError('person_captcha_failed', 'reCAPTCHA hit errored() callback', 'identity_error');
+    this.matomoTracker.trackEvent('identity_error', 'person_captcha_failed', 'reCAPTCHA hit errored() callback');
     this.creatingDonation = false;
     this.donationCreateError = true;
     this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
@@ -938,7 +941,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     if (this.donationCreateError && this.stepper.selected?.label === 'Your donation') {
       if (this.donation) {
         this.clearDonation(this.donation, true);
-        this.analyticsService.logEvent(
+        this.matomoTracker.trackEvent(
+          'donate',
           'create_retry',
           `Donation cleared ahead of creation retry for campaign ${this.campaignId}`,
         );
@@ -1173,8 +1177,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     this.setConditionalValidators();
     this.setChampionOptInValidity();
 
-    this.analyticsService.logCampaignChosen(this.campaign);
-
     // auto redirect back to campaign page if donations not open yet
     if (!CampaignService.isOpenForDonations(this.campaign)) {
       this.router.navigateByUrl(`/campaign/${this.campaign.id}`, { replaceUrl: true });
@@ -1243,7 +1245,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         },
         (error: HttpErrorResponse) => {
           // In ID-on mode, we can't proceed without the Person/Stripe Customer.
-          this.analyticsService.logError('person_create_failed', `${error.status}: ${error.message}`, 'identity_error');
+          this.matomoTracker.trackEvent('identity_error', 'person_create_failed', `${error.status}: ${error.message}`);
           this.creatingDonation = false;
           this.donationCreateError = true;
           this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
@@ -1296,7 +1298,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       // Unhandled 5xx crashes etc.
       errorMessage = `Could not create new donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
     }
-    this.analyticsService.logError('donation_create_failed', errorMessage);
+    this.matomoTracker.trackEvent('donate_error', 'donation_create_failed', errorMessage);
     this.creatingDonation = false;
     this.donationCreateError = true;
     this.stepper.previous(); // Go back to step 1 to surface the internal error.
@@ -1314,7 +1316,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     const paymentRequestResultObserver: Observer<{billingDetails: PaymentMethod.BillingDetails | undefined, walletName: string}> = {
       next: (observed) => {
         if (observed.billingDetails && donation) {
-          this.analyticsService.logEvent(
+          this.matomoTracker.trackEvent(
+            'donate',
             'stripe_prb_setup_success',
             `Stripe PRB success for donation ${donation.donationId} to campaign ${this.campaignId}`,
           );
@@ -1378,7 +1381,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       !response.donation.projectId
     );
     if (createResponseMissingData) {
-      this.analyticsService.logError(
+      this.matomoTracker.trackEvent(
+        'donate_error', 
         'donation_create_response_incomplete',
         `Missing expected response data creating new donation for campaign ${this.campaignId}`,
       );
@@ -1392,24 +1396,23 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     this.donation = response.donation; // Simplify update() while we're on this page.
     this.donationChangeCallBack(this.donation)
 
-    this.analyticsService.logAmountChosen(
+    this.matomoTracker.trackEvent(
+      `donate_amount_chosen_${this.campaign.currencyCode}`,
+      `Donation to campaign ${this.campaignId}`,
+      `donation_${this.campaignId}`,
       response.donation.donationAmount,
-      this.campaignId,
-      [],
-      this.campaign.currencyCode,
     );
 
     if (response.donation.tipAmount > 0) {
-      this.analyticsService.logTipAmountChosen(
+      this.matomoTracker.trackEvent(
+        `tip_amount_chosen_${this.campaign.currencyCode}`,
+        `Tip alongside donation to campaign ${this.campaignId}`,
+        `tip_with_${this.campaignId}`,
         response.donation.tipAmount,
-        this.campaignId,
-        this.campaign.currencyCode,
       );
     }
 
     if (this.psp === 'stripe') {
-      this.analyticsService.logCheckoutStep(1, this.campaign, this.donation);
-
       if (this.creditPenceToUse > 0) {
         this.stripePaymentMethodReady = true;
       } else {
@@ -1442,7 +1445,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   }
 
   private offerExistingDonation(donation: Donation) {
-    this.analyticsService.logEvent('existing_donation_offered', `Found pending donation to campaign ${this.campaignId}`);
+    this.matomoTracker.trackEvent('donate', 'existing_donation_offered', `Found pending donation to campaign ${this.campaignId}`);
 
     // Ensure we do not claim match funds are reserved when offering an old
     // donation if the reservation time is up. See also the on-page-timeout counterpart
@@ -1556,7 +1559,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   }
 
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
-    this.analyticsService.logEvent('alerted_no_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
+    this.matomoTracker.trackEvent('donate', 'alerted_no_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     this.promptToContinue(
       'Great news - this charity has reached their target',
       'There are no match funds currently available for this charity.',
@@ -1572,7 +1575,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
    *                    by the Donations API.
    */
   private promptToContinueWithPartialMatching(donation: Donation) {
-    this.analyticsService.logEvent('alerted_partial_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
+    this.matomoTracker.trackEvent('donate', 'alerted_partial_match_funds', `Asked donor whether to continue for campaign ${this.campaignId}`);
     const formattedReservedAmount = (new ExactCurrencyPipe()).transform(donation.matchReservedAmount, donation.currencyCode);
     this.promptToContinue(
       'Not all match funds are available',
@@ -1856,7 +1859,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.donationService.cancel(donation)
         .subscribe(
           () => {
-            this.analyticsService.logEvent('cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
+            this.matomoTracker.trackEvent('donate', 'cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
 
             this.clearDonation(donation, true);
 
@@ -1884,7 +1887,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
             }
           },
           response => {
-            this.analyticsService.logError(
+            this.matomoTracker.trackEvent(
+              'donate_error',
               'cancel_failed',
               `Could not cancel donation ${donation.donationId} to campaign ${this.campaignId}: ${response.error.error}`,
             );
@@ -1902,7 +1906,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   }
 
   private exitPostDonationSuccess(donation: Donation) {
-    this.analyticsService.logCheckoutDone(this.campaign, donation);
     this.conversionTrackingService.convert(donation, this.campaign);
 
     this.cancelExpiryWarning();

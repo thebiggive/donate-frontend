@@ -1,13 +1,16 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import {MyAccountComponent} from "./my-account.component";
 import {HttpClientModule} from "@angular/common/http";
-import {IdentityService, TBG_DONATE_ID_STORAGE} from '../identity.service';
-import {InMemoryStorageService} from "ngx-webstorage-service";
-import {DonationService, TBG_DONATE_STORAGE} from "../donation.service";
-import {of} from "rxjs";
 import {NO_ERRORS_SCHEMA} from "@angular/core";
-import {PaymentMethod} from "@stripe/stripe-js";
 import {MatDialogModule} from "@angular/material/dialog";
+import { MatomoModule } from 'ngx-matomo';
+import {InMemoryStorageService} from "ngx-webstorage-service";
+import {of} from "rxjs";
+import {PaymentMethod} from "@stripe/stripe-js";
+
+import {DonationService, TBG_DONATE_STORAGE} from "../donation.service";
+import {IdentityService, TBG_DONATE_ID_STORAGE} from '../identity.service';
+import {MyAccountComponent} from "./my-account.component";
+import { ActivatedRoute } from '@angular/router';
 
 describe('MyAccountComponent', () => {
   let component: MyAccountComponent;
@@ -21,10 +24,18 @@ describe('MyAccountComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
-        MatDialogModule,
         HttpClientModule,
+        MatDialogModule,
+        MatomoModule.forRoot({
+          scriptUrl: `https://example.com/matomo.js`,
+          trackers: [],
+          routeTracking: {
+            enable: true,
+          }
+        }),
       ],
       providers: [
+        { provide: ActivatedRoute, useValue: {} }, // Needed for ngx-matomo not to crash.
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
