@@ -14,7 +14,6 @@ import * as helmet from 'helmet';
 import * as morgan from 'morgan';
 import { join } from 'path';
 
-import { AnalyticsService } from './src/app/analytics.service';
 import { AppServerModule } from './src/main.server';
 import { COUNTRY_CODE } from './src/app/country-code.token';
 import { environment } from './src/environments/environment';
@@ -52,8 +51,6 @@ export function app() {
           'api.getAddress.io',
           '*.getsitecontrol.com',
           'fonts.googleapis.com',
-          'stats.g.doubleclick.net',
-          'www.google-analytics.com',
         ],
         'default-src': [
           `'self'`,
@@ -85,8 +82,6 @@ export function app() {
           `'nonce-OT22mYwcUVPp' *.facebook.net`, // Meta Pixel. https://josephpinder.com/blog/facebook-pixel-is-slowing-down-your-website-and-how-to-fix-it-securely
           `'nonce-${environment.recaptchaNonce}'`,
           `'sha256-wNvBKHC/AcXH+tcTOtnmNx/Ag5exRdBFD8iL9UUQ8es='`, // Unsupported browser inline script.
-          `'sha256-${createHash('sha256').update(AnalyticsService.getConfigureContent()).digest('base64')}'`,
-          `'sha256-${createHash('sha256').update(AnalyticsService.getOptimizeAntiFlickerScript()).digest('base64')}'`,
           `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.

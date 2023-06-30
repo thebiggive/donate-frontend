@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { MatomoTracker } from 'ngx-matomo';
 import {
   CanMakePaymentResult,
   loadStripe,
@@ -16,7 +17,6 @@ import {
 } from '@stripe/stripe-js';
 import { Observer } from 'rxjs';
 
-import { AnalyticsService } from './analytics.service';
 import { environment } from '../environments/environment';
 import { Donation } from './donation.model';
 import { DonationService } from './donation.service';
@@ -35,8 +35,8 @@ export class StripeService {
   private paymentMethodIds: Map<string, string>; // Donation ID to payment method ID.
 
   constructor(
-    private analyticsService: AnalyticsService,
     private donationService: DonationService,
+    private matomoTracker: MatomoTracker,
   ) {}
 
   async init() {
@@ -338,7 +338,8 @@ export class StripeService {
 
         if (confirmResult.error) {
           // Failure w/ no extra action applicable
-          this.analyticsService.logError(
+          this.matomoTracker.trackEvent(
+            'donate_error',
             `${analyticsEventActionPrefix}payment_error`,
             confirmResult.error.message ?? '[No message]',
           );
@@ -355,7 +356,8 @@ export class StripeService {
 
         if (confirmResult.paymentIntent.status !== 'requires_action') {
           // Success w/ no extra action needed
-          this.analyticsService.logEvent(
+          this.matomoTracker.trackEvent(
+            'donate',
             `${analyticsEventActionPrefix}payment_success`,
             `Stripe Intent processing or done for donation ${donation.donationId} to campaign ${donation.projectId}`,
           );
@@ -365,13 +367,21 @@ export class StripeService {
         }
 
         // The PaymentIntent requires an action e.g. 3DS verification; let Stripe.js handle the flow.
-        this.analyticsService.logEvent(`${analyticsEventActionPrefix}requires_action`, confirmResult.paymentIntent.next_action?.type ?? '[Action unknown]');
+        this.matomoTracker.trackEvent(
+          'donate',
+          `${analyticsEventActionPrefix}requires_action`,
+          confirmResult.paymentIntent.next_action?.type ?? '[Action unknown]',
+        );
         this.stripe?.confirmCardPayment(donation.clientSecret || '').then(confirmAgainResult => {
           if (confirmAgainResult.error) {
             if (donation.donationId) {
               this.paymentMethodIds.delete(donation.donationId); // As above
             }
-            this.analyticsService.logError(`${analyticsEventActionPrefix}further_action_error`, confirmAgainResult.error.message ?? '[No message]');
+            this.matomoTracker.trackEvent(
+              'donate_error',
+              `${analyticsEventActionPrefix}further_action_error`,
+              confirmAgainResult.error.message ?? '[No message]',
+            );
           }
 
           // Extra action done, whether successfully or not.

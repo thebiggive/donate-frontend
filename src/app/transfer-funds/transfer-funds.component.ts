@@ -4,10 +4,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
+import { MatomoTracker } from 'ngx-matomo';
 import { EMPTY } from 'rxjs';
 import { startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
-import { AnalyticsService } from '../analytics.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { DonationService } from '../donation.service';
@@ -58,10 +58,10 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   constructor(
     private formBuilder: FormBuilder,
     public dialog: MatDialog,
-    private analyticsService: AnalyticsService,
     private campaignService: CampaignService,
     private donationService: DonationService,
     private identityService: IdentityService,
+    private matomoTracker: MatomoTracker,
     @Inject(PLATFORM_ID) private platformId: Object,
     private postcodeService: PostcodeService,
   ) {}
@@ -430,7 +430,8 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       !response.donation.projectId
     );
     if (createResponseMissingData) {
-      this.analyticsService.logError(
+      this.matomoTracker.trackEvent(
+        'donate_error',
         'credit_tip_donation_create_response_incomplete',
         `Missing expected response data creating new donation for campaign ${this.campaign.id}`,
       );
@@ -451,6 +452,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     } else {
       errorMessage = `Could not create new donation for campaign ${this.campaign.id}: HTTP code ${response.status}`;
     }
-    this.analyticsService.logError('credit_tip_donation_create_failed', errorMessage);
+    this.matomoTracker.trackEvent('donate_error', 'credit_tip_donation_create_failed', errorMessage);
   }
 }
