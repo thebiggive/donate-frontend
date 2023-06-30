@@ -7,11 +7,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { MatomoModule } from 'ngx-matomo';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
+
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
-
 import { ResetPasswordComponent } from './reset-password.component';
+
 
 
 describe('ResetPasswordComponent', () => {
@@ -27,6 +29,13 @@ describe('ResetPasswordComponent', () => {
         MatButtonModule,
         MatDialogModule,
         MatInputModule,
+        MatomoModule.forRoot({
+          scriptUrl: `https://example.com/matomo.js`,
+          trackers: [],
+          routeTracking: {
+            enable: true,
+          }
+        }),
         MatProgressSpinnerModule,
         NoopAnimationsModule,
         ReactiveFormsModule,

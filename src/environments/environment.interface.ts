@@ -21,8 +21,6 @@ export interface Environment {
   experienceUriPrefix: string,
   donationsApiPrefix: string,
   getSiteControlId: string,
-  googleAnalyticsId: string,
-  googleOptimizeId: string | null,
   identityApiPrefix: string,
   matomoSiteId: number | null, // null for no Matomo tracking.
   metaPixelId: string | null, // Set null to turn off init of Meta Pixel.

@@ -1,10 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+import { MatomoTracker } from 'ngx-matomo';
 import { RecaptchaComponent } from 'ng-recaptcha';
 
-import { AnalyticsService } from '../analytics.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { Credentials } from '../credentials.model';
@@ -16,8 +18,6 @@ import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
 import { minPasswordLength } from 'src/environments/common';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-donation-complete',
@@ -56,11 +56,11 @@ export class DonationCompleteComponent implements OnInit {
   faExclamationTriangle = faExclamationTriangle;
   isDataLoaded = false;
   constructor(
-    private analyticsService: AnalyticsService,
     private campaignService: CampaignService,
     public dialog: MatDialog,
     private donationService: DonationService,
     private identityService: IdentityService,
+    private matomoTracker: MatomoTracker,
     private pageMeta: PageMetaService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
@@ -91,7 +91,7 @@ export class DonationCompleteComponent implements OnInit {
     const donationLocalCopy = this.donationService.getDonation(this.donationId);
 
     if (donationLocalCopy === undefined) {
-      this.analyticsService.logError('thank_you_no_local_copy', `Donation ID ${this.donationId}`);
+      this.matomoTracker.trackEvent('donate', 'thank_you_no_local_copy', `Donation ID ${this.donationId}`);
       this.noAccess = true; // If we don't have the local auth token we can never load the details.
       return;
     }
@@ -143,13 +143,13 @@ export class DonationCompleteComponent implements OnInit {
         location.reload();
       },
       (error: HttpErrorResponse) => {
-        this.analyticsService.logError('login_failed', `${error.status}: ${error.message}`, 'identity_error');
+        this.matomoTracker.trackEvent('identity_error', 'login_failed', `${error.status}: ${error.message}`);
       });
   }
 
   private setPassword(password: string, stayLoggedIn: boolean) {
     if (!this.person) {
-      this.analyticsService.logError('person_password_set_missing_data', 'No person in component', 'identity_error');
+      this.matomoTracker.trackEvent('identity_error', 'person_password_set_missing_data', 'No person in component');
       this.registerError = 'Cannot set password without a person';
       return;
     }
@@ -160,7 +160,7 @@ export class DonationCompleteComponent implements OnInit {
         () => { // Success. Must subscribe for call to fire.
           this.registerError = undefined;
           this.registrationComplete = true;
-          this.analyticsService.logEvent('person_password_set', 'Account password creation complete', 'identity');
+          this.matomoTracker.trackEvent('identity', 'person_password_set', 'Account password creation complete');
 
           // We should only auto-login (and therefore execute the captcha) if the donor requested a persistent session.
           if (stayLoggedIn) {
@@ -182,14 +182,14 @@ export class DonationCompleteComponent implements OnInit {
           }
 
           this.registerError = error.message;
-          this.analyticsService.logError('person_password_set_failed', `${error.status}: ${error.message}`, 'identity_error');
+          this.matomoTracker.trackEvent('identity_error', 'person_password_set_failed', `${error.status}: ${error.message}`);
         },
       );
   }
 
   private setDonation(donation: Donation) {
     if (donation === undefined || !donation.firstName || !donation.lastName || !donation.emailAddress) {
-      this.analyticsService.logError('thank_you_lookup_failed', `Donation ID ${this.donationId}`);
+      this.matomoTracker.trackEvent('donate', 'thank_you_lookup_failed', `Donation ID ${this.donationId}`);
       this.noAccess = true; // If we don't have the local auth token we can never load the details.
       return;
     }
@@ -213,7 +213,7 @@ export class DonationCompleteComponent implements OnInit {
             }, (error: HttpErrorResponse) => {
               // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
               // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
-              this.analyticsService.logError('person_core_data_update_failed', `${error.status}: ${error.message}`, 'identity_error');
+              this.matomoTracker.trackEvent('identity_error', 'person_core_data_update_failed', `${error.status}: ${error.message}`);
             });
         } // End token-not-finalised condition.
       } // Else no ID JWT saved. Donor may have already set a password but opted to log out.
@@ -231,7 +231,7 @@ export class DonationCompleteComponent implements OnInit {
     });
 
     if (donation && this.donationService.isComplete(donation)) {
-      this.analyticsService.logEvent('thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
+      this.matomoTracker.trackEvent('donate', 'thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
 
       this.cardChargedAmount = donation.donationAmount + donation.feeCoverAmount + donation.tipAmount;
       this.giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;
@@ -257,7 +257,7 @@ export class DonationCompleteComponent implements OnInit {
       return;
     }
 
-    this.analyticsService.logError('thank_you_timed_out_pre_complete', `Donation to campaign ${donation.projectId}`);
+    this.matomoTracker.trackEvent('donate', 'thank_you_timed_out_pre_complete', `Donation to campaign ${donation.projectId}`);
     this.timedOut = true;
   }
 
