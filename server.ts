@@ -94,12 +94,6 @@ export function app() {
           // Next 2 needed for reCAPTCHA to fully load.
           'www.google.com',
           'www.gstatic.com',
-          // https://support.google.com/optimize/answer/7388531?hl=en
-          'optimize.google.com',
-          'www.googleanalytics.com',
-          'www.google-analytics.com',
-          'www.googleoptimize.com',
-          'www.googletagmanager.com',
         ],
       },
     },

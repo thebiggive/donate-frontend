@@ -13,11 +13,8 @@ export const environment: Environment = {
   blogUriPrefix: 'https://biggive.org',
   donationsApiPrefix: 'https://matchbot-production.thebiggive.org.uk/v1',
   getSiteControlId: '97792',
-  googleAnalyticsId: 'UA-2979952-1',
-  googleOptimizeId: null,
-  // googleOptimizeId: 'OPT-W78W6BT', // Bring back when we have an experiment to run
   identityApiPrefix: 'https://identity-production.thebiggive.org.uk/v1',
-  matomoSiteId: (new Date()) < new Date('2023-06-30 00:00:00+0100') ? 3 : 2,
+  matomoSiteId: 2,
   metaPixelId: '1696575857422204',
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
