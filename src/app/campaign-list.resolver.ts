@@ -7,8 +7,7 @@ import { CampaignService } from './campaign.service';
 export class CampaignListResolver  {
   constructor(private campaignService: CampaignService) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  resolve(route: ActivatedRouteSnapshot) {
+  resolve(_: ActivatedRouteSnapshot) {
     const defaultListQuery = {
       limit: CampaignService.perPage,
       offset: 0,

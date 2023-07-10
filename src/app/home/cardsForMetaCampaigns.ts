@@ -83,7 +83,6 @@ export const cardsForMetaCampaigns = function (
       }
     }];
   } else {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     anyExploreCard = [];
   }
 
