@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
-import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -9,7 +9,7 @@ import {CampaignService, SearchQuery} from './campaign.service';
 import {SearchService} from "./search.service";
 
 @Injectable()
-export class CampaignResolver implements Resolve<any> {
+export class CampaignResolver  {
   constructor(
     public campaignService: CampaignService,
     public searchService: SearchService,
