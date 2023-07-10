@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 
 import { CampaignService } from './campaign.service';
 import { EMPTY, Observable, of } from 'rxjs';
@@ -7,7 +7,7 @@ import { CampaignSummary } from './campaign-summary.model';
 import { catchError } from 'rxjs/operators';
 
 @Injectable()
-export class CharityCampaignsResolver implements Resolve<any> {
+export class CharityCampaignsResolver  {
   constructor(private campaignService: CampaignService, private router: Router) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<CampaignSummary[]> {

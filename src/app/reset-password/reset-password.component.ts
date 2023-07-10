@@ -66,18 +66,17 @@ export class ResetPasswordComponent implements OnInit {
 
   saveNewPassword = () => {
     this.savingNewPassword = true;
-    this.identityService.resetPassword(this.passwordForm.controls.password!.value, this.token).subscribe(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      (response) => {
+    this.identityService.resetPassword(this.passwordForm.controls.password!.value, this.token).subscribe({
+      next: (_) => {
         this.savingNewPassword = false;
         this.saveSuccessful = true;
       },
-      (error) => {
+      error: (error) => {
         this.savingNewPassword = false;
         this.saveSuccessful = false;
         this.errorMessage = error.error?.error?.description;
-      }
-    )
+      },
+    });
   };
 
   onPasswordConfirmationFocus = () => {

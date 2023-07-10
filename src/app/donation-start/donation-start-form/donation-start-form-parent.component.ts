@@ -985,8 +985,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onBillingPostCodeChanged(event: Event) {
+  onBillingPostCodeChanged(_: Event) {
     // If previous payment attempt failed due to incorrect post code
     // and the post code has just been changed again, clear stripeError
     // and clear stripeResponseErrorCode. This is because if we don't,
@@ -1349,8 +1348,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
           this.stripeError = `Payment failed. Please check your card's billing address in your ${walletFriendlyName} wallet matches your the address your bank has, then try again.`;
         }
       },
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      error: (err) => {
+
+      error: (_) => {
         this.stripePaymentMethodReady = false;
         this.stripePRBMethodReady = false;
         this.addStripeCardBillingValidators();

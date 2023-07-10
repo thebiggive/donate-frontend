@@ -74,7 +74,7 @@
                                        [options]="suggestedTipPercentages"
                                        [selectedValue]="this.showCustomTipInput ? 'Other' : tipPercentage"
                                        [backgroundColour]="'grey'"
-                                       [onSelectionChange]="updateTipAmountFromSelectedPercentage"
+                                       [selectionChanged]="updateTipAmountFromSelectedPercentage"
                                        [spaceBelow]="3"
             >
             </biggive-form-field-select>
@@ -388,7 +388,7 @@
             [options]="countryOptionsObject"
             [selectedValue]="selectedCountryCode"
             [backgroundColour]="'grey'"
-            [onSelectionChange]="setSelectedCountry"
+            [selectionChanged]="setSelectedCountry"
             [spaceBelow]="3"
           >
           </biggive-form-field-select>

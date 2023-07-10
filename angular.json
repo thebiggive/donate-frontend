@@ -256,7 +256,8 @@
               "vendor": true
             },
             "namedChunks": false,
-            "extractLicenses": true
+            "extractLicenses": true,
+            "buildOptimizer": true
           },
           "configurations": {
             "production": {

@@ -1,7 +1,6 @@
 import { AbstractControl } from '@angular/forms';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function ValidateBillingPostCode(c: AbstractControl) {
+export function ValidateBillingPostCode(_: AbstractControl) {
     return {
         invalidBillingPostCode: true
     };

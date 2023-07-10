@@ -9,10 +9,10 @@ export interface Environment {
   creditTipsCampaign: string,
   apiUriPrefix: string
   creditDonationsEnabled: boolean
-  donateGlobalUriPrefix: string,
 
   /** Prefix for pages served by this Angular application */
-  donateUriPrefix: string,
+  donateGlobalUriPrefix: string,
+  donateUriPrefix: string, // Uses legacy host for redirects
 
   /** Prefix for pages served by WordPress */
   blogUriPrefix: string,
