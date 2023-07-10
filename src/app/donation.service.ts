@@ -234,8 +234,7 @@ export class DonationService {
   }
 
   removeOldLocalDonations() {
-    let donationsOlderThan30Days: Array<{ donation: Donation, jwt: string }>;
-    donationsOlderThan30Days = this.getDonationCouplets().filter(donationItem => {
+    const donationsOlderThan30Days: Array<{ donation: Donation, jwt: string }> = this.getDonationCouplets().filter(donationItem => {
       return (!donationItem.donation.createdTime || this.getCreatedTime(donationItem.donation) < (Date.now() - 2592000000));
     });
     for (const oldDonationCouplet of donationsOlderThan30Days) {

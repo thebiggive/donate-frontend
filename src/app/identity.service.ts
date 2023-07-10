@@ -49,8 +49,7 @@ export class IdentityService {
         }
       }
     );
-  };
-
+  }
 
   checkTokenValid(token: string): Observable<object> {
     return this.http.get(
@@ -66,7 +65,7 @@ export class IdentityService {
         secret: token
       },
     );
-  };
+  }
 
   create(person: Person): Observable<Person> {
     return this.http.post<Person>(
