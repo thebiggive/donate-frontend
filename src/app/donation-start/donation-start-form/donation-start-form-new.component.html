@@ -132,22 +132,24 @@
               Back to percentage tip
             </span>
 
-            <biggive-accordion>
+          <biggive-accordion>
 
-              <biggive-accordion-entry heading="ABC">
-                <p>1 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
-                <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
-              </biggive-accordion-entry>
-        
-              <biggive-accordion-entry heading="DEF">
-                <p>2 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
-                <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
-              </biggive-accordion-entry>
-        
-              <biggive-accordion-entry heading="GHI">
-                <p>3 Lorem ipsum dolor sit amet, fabulas appetere no sed. Per ea partem pertinacia, modo mollis usu ut. Audire eruditi ex his, ut imperdiet constituam ullamcorper nam. Sed cu etiam iudico qualisque. Dicam alienum ei vel.</p>
-                <p>Quo ex mutat malorum conceptam, at usu dicta perfecto deserunt. An prompta offendit mel, sit regione constituto ei. Ludus possim hendrerit id vis, cu vim sonet dolorem mnesarchum, sit soleat aliquid eu. Ancillae appellantur cum ea. Agam delenit id qui, est summo corpora an.</p>
-              </biggive-accordion-entry>
+           <div slot="biggive-accordion-entry" heading="DEF">
+                <p>
+                  Big Give is a registered charity (1136547). We don’t charge charities for using our platform; we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
+                </p>
+                <p>Your tips will be going to:</p>
+                <ul>
+                  <li>Supporting our website and team, allowing charities to double their
+                    donations to good causes.
+                  </li>
+                  <li>Providing match funds in our
+                    <a href="https://biggive.org/anchor-match-fund/" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>Anchor Match Fund</a>
+                    Through tips, charities will receive funding to launch their own match funded campaign on Big Give.
+                  </li>
+                </ul>
+                <p>
+            </div>
         
             </biggive-accordion>
 
@@ -158,9 +160,9 @@
           <mat-expansion-panel (opened)="panelOpenState = true"
                                (closed)="panelOpenState = false">
             <mat-expansion-panel-header>
-              <h3 class="b-rt-0 b-m-0 b-bold">How does Big Give use tips?</h3>
+              <h3 class="b-rt-0 b-m-0 b-bold">How does Big Give use tips? <hr/></h3>
+              
             </mat-expansion-panel-header>
-            <hr/>
             <p>
               Big Give is a registered charity (1136547). We don’t charge charities for using our platform; we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
             </p>
