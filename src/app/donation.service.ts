@@ -1,7 +1,14 @@
 import { isPlatformServer } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID } from '@angular/core';
-import { makeStateKey, TransferState } from '@angular/platform-browser';
+import {
+  Inject,
+  Injectable,
+  InjectionToken,
+  makeStateKey,
+  Optional,
+  PLATFORM_ID,
+  TransferState,
+} from '@angular/core';
 import { StorageService } from 'ngx-webstorage-service';
 import { Observable, of } from 'rxjs';
 import { PaymentMethod } from '@stripe/stripe-js';

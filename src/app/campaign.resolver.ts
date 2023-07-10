@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import { makeStateKey, TransferState } from '@angular/platform-browser';
+import { Injectable, makeStateKey, TransferState } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
