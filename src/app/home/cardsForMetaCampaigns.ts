@@ -83,7 +83,6 @@ export const cardsForMetaCampaigns = function (
       }
     }];
   } else {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     anyExploreCard = [];
   }
 
@@ -93,7 +92,7 @@ export const cardsForMetaCampaigns = function (
         headerText: 'Applications for Christmas Challenge now open!',
         backgroundImageUrl: new URL('/assets/images/card-background-cc-lights.jpg', donateUriPrefix),
         iconColor: 'brand-1',
-        bodyText: 'Deadline is 7 July 2023',
+        bodyText: 'Deadline is 19 July 2023',
         button: {
           text: 'Apply now',
           href: new URL('/christmas-challenge', blogUriPrefix)

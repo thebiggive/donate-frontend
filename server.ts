@@ -89,6 +89,7 @@ export function app() {
           // Next 2 needed for reCAPTCHA to fully load.
           'www.google.com',
           'www.gstatic.com',
+          'https://www.youtube.com/', // YT `/iframe_api` on home page needs this atm?
         ],
       },
     },
