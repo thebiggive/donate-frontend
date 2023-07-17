@@ -85,7 +85,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   showChampionOptIn = false;
 
   @Input({ required: true }) campaign: Campaign;
-  @Input() column: 'primary'|'secondary'
 
   /**
    * Called when the donation object is set or deleted. **NOT** called when properties of the object are changed.
