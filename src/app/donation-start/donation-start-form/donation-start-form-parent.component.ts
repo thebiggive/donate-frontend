@@ -84,8 +84,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   requestButtonShown = false;
   showChampionOptIn = false;
 
-  @Input() campaign: Campaign;
-  @Input() column: 'primary'|'secondary'
+  @Input({ required: true }) campaign: Campaign;
 
   /**
    * Called when the donation object is set or deleted. **NOT** called when properties of the object are changed.
@@ -196,7 +195,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
   private stepChangedBlockedByCaptcha = false;
-  @Input() donor: Person | undefined;
+  @Input({ required: true }) donor: Person | undefined;
 
   /**
    * Keys are ISO2 codes, values are names.
@@ -690,7 +689,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       this.stripeError = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
       this.stripeResponseErrorCode = undefined;
       this.matomoTracker.trackEvent(
-        'donate_error', 
+        'donate_error',
         'submit_missing_donation_basics',
         `Donation not set or form invalid ${errorCodeDetail}`,
       );
@@ -1381,7 +1380,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     );
     if (createResponseMissingData) {
       this.matomoTracker.trackEvent(
-        'donate_error', 
+        'donate_error',
         'donation_create_response_incomplete',
         `Missing expected response data creating new donation for campaign ${this.campaignId}`,
       );

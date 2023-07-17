@@ -23,7 +23,7 @@ const endPipeToken = 'timeLeftToEndPipe';
 })
 export class DonationStartSecondaryComponent implements OnInit {
 
-  @Input() campaign: Campaign;
+  @Input({ required: true }) campaign: Campaign;
 
   bannerUri: string | null;
   campaignRaised: string; // Formatted
