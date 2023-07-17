@@ -23,7 +23,7 @@ const endPipeToken = 'timeLeftToEndPipe';
 })
 export class CampaignInfoComponent implements OnInit {
   additionalImageUris: Array<string|null> = [];
-  @Input() campaign: Campaign;
+  @Input({ required: true }) campaign: Campaign;
   campaignOpen: boolean;
   campaignFinished: boolean;
   campaignRaised: string; // Formatted

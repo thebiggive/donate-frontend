@@ -10,14 +10,14 @@ import { LoginModalComponent } from '../../login-modal/login-modal.component';
   styleUrls: ['./donation-start-login.component.scss']
 })
 export class DonationStartLoginComponent {
-  @Input() loadAuthedPersonInfo: (dataId: string, dataJwt: string) => void;
-  @Input() logout: () => void;
-  @Input() campaign: Campaign;
-  @Input() creditPenceToUse: number;
-  @Input() email?: string;
-  @Input() personId: string | undefined;
-  @Input() personIsLoginReady: boolean;
-  @Input() canLogin: boolean;
+  @Input({ required: true }) loadAuthedPersonInfo: (dataId: string, dataJwt: string) => void;
+  @Input({ required: true }) logout: () => void;
+  @Input({ required: true }) campaign: Campaign;
+  @Input({ required: true }) creditPenceToUse: number;
+  @Input({ required: true }) email?: string;
+  @Input({ required: true }) personId: string | undefined;
+  @Input({ required: true }) personIsLoginReady: boolean;
+  @Input({ required: true }) canLogin: boolean;
 
   constructor(
     public dialog: MatDialog,
