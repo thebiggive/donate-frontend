@@ -28,6 +28,13 @@ input {
   @include b-rt-0;
 }
 
+@supports (-webkit-overflow-scrolling: touch) {
+  // see https://stackoverflow.com/a/65043782
+  input {
+    font-size: 16px;
+  }
+}
+
 :host ::ng-deep .mat-step-header {
   // ng-deep is deprecated, but I'm not sure how else to apply our style choices inside the stepper.
   background-color: white;
