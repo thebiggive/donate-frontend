@@ -25,7 +25,7 @@ div.mdc-form-field label {
   // which is different for the selected and non-selected step. Also overriding that by being more specific
   // in the selector above, including 'div', but don't want to rely just on that.
 
-  font-size: 18px !important; ;
+  font-size: 17px !important; ;
   line-height: 20px;
   @media #{$breakpoint-lg} {
     font-size: 20px !important;

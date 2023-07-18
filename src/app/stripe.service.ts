@@ -183,7 +183,7 @@ export class StripeService {
     });
   }
 
-  getCard(fontsize: '14px'|'18px'): StripeCardElement | null {
+  getCard(fontsize: '14px'|'17px'): StripeCardElement | null {
     if (!this.elements) {
       console.log('Stripe Elements not ready');
       return null;

@@ -237,7 +237,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
    * just here because it varies between the old and new stepper designs. Once the old stepper is deleted
    * this can be hard coded in stripe service again.
    */
-  protected inputFontSize: '14px'|'18px' = '14px';
+  protected inputFontSize: '14px'|'17px' = '14px';
 
 
   constructor(
