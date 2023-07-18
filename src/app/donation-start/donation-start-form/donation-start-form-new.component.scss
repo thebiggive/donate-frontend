@@ -20,8 +20,17 @@ div.mdc-form-field label {
   font-size: inherit;
 }
 
-:host ::ng-deep .mat-step-label, .mat-step-label-selected {
-  @include b-rt-0;
+:host ::ng-deep div.mat-step-label, div.mat-step-label-selected, div.mat-step-label.mat-step-label-selected {
+  // important is a bit of a hack to make sure we override the font size set by material design,
+  // which is different for the selected and non-selected step. Also overriding that by being more specific
+  // in the selector above, including 'div', but don't want to rely just on that.
+
+  font-size: 17px !important; ;
+  line-height: 20px;
+  @media #{$breakpoint-lg} {
+    font-size: 20px !important;
+    line-height: 27px;
+  }
 }
 
 input {
