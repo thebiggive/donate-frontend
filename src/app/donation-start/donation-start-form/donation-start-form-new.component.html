@@ -139,9 +139,9 @@
           <mat-expansion-panel (opened)="panelOpenState = true"
                                (closed)="panelOpenState = false">
             <mat-expansion-panel-header>
-              <h3 class="b-rt-0 b-m-0 b-bold">How does Big Give use tips?</h3>
+              <h3 class="b-rt-0 b-m-0 b-bold"><span class="span-hr"></span>How does Big Give use tips?</h3>
+              
             </mat-expansion-panel-header>
-            <hr/>
             <p>
               Big Give is a registered charity (1136547). We don’t charge charities for using our platform; we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
             </p>
@@ -184,7 +184,7 @@
         <div style="text-align: center">
           <button style="width: 40%;"
             type="button"
-            class="continue b-w-100 b-rt-1"
+            class="continue b-w-100 b-rt-0"
             mat-raised-button
             color="primary"
             [disabled]="! donationForm.controls['amounts']!.valid"
@@ -281,7 +281,7 @@
         <div style="text-align: center">
           <button
             type="button"
-            class="continue b-w-100 b-rt-1"
+            class="continue b-w-100 b-rt-0"
             mat-raised-button
             color="primary"
             (click)="triedToLeaveGiftAid = true; next()"
@@ -406,7 +406,7 @@
         <div style="text-align: center">
           <button
             type="button"
-            class="continue b-w-100 b-rt-1"
+            class="continue b-w-100 b-rt-0"
             mat-raised-button
             color="primary"
             [disabled]="!stripePaymentMethodReady"
@@ -507,7 +507,7 @@
         <div style="text-align: center">
           <button
             type="button"
-            class="continue b-w-100 b-rt-1"
+            class="continue b-w-100 b-rt-0"
             mat-raised-button
             color="primary"
             (click)="triedToLeaveMarketing = true; next()"
