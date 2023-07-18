@@ -21,7 +21,7 @@ div.mdc-form-field label {
 }
 
 :host ::ng-deep .mat-step-label, .mat-step-label-selected {
-  @include b-rt-0;
+  @include b-rt-1;
 }
 
 input {
@@ -498,16 +498,4 @@ table.summary {
 }
 .total {
   color: $colour-primary;
-}
-
-h3 {
-  display: inline-block;
-}
-
-.span-hr {
-  display:inline-block;
-  width:100%;
-  border-top: 1px solid #888888;
-  margin-top: 26px;
-  position: absolute;
 }
