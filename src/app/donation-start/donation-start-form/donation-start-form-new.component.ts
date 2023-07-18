@@ -16,5 +16,7 @@ import {DonationStartFormParentComponent} from "./donation-start-form-parent.com
   ]
 })
 export class DonationStartFormNewComponent extends DonationStartFormParentComponent {
-  // this class intentionally left empty - it only exists as a place to hang a @Component decorator. Everything else is in parent class.
+  // this class intentionally left mostly empty - it only exists as a place to hang a @Component decorator. Everything else is in parent class.
+
+  protected inputFontSize: '14px'|'18px' = '18px';
 }
