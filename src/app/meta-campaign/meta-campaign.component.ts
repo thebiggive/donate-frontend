@@ -1,6 +1,16 @@
 import { CurrencyPipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
-import { AfterViewChecked, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
+import {
+  AfterViewChecked,
+  Component,
+  HostListener,
+  Inject,
+  makeStateKey,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  StateKey,
+  TransferState,
+} from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { StorageService } from 'ngx-webstorage-service';
 import { Subscription } from 'rxjs';

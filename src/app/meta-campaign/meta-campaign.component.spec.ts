@@ -1,5 +1,6 @@
 import {AsyncPipe, CommonModule, CurrencyPipe, DatePipe, ViewportScroller} from '@angular/common';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {TransferState} from "@angular/core";
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -26,7 +27,6 @@ import {NavigationService} from "../navigation.service";
 import {PageMetaService} from "../page-meta.service";
 import {ChangeDetectorRef, EventEmitter} from "@angular/core";
 import {SearchService} from "../search.service";
-import {TransferState} from "@angular/platform-browser";
 
 describe('MetaCampaignComponent', () => {
   let component: MetaCampaignComponent;

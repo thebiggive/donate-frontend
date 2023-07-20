@@ -36,7 +36,7 @@ const matomoTrackers = environment.matomoSiteId ? [
   ],
   imports: [
     BrowserAnimationsModule,
-    BrowserModule.withServerTransition({ appId: 'donate-frontend' }),
+    BrowserModule,
     ComponentsModule,
     HttpClientModule,
     // Matomo module always imported, but with 0 trackers set if site ID omitted for the env.

@@ -1,7 +1,14 @@
 import { isPlatformServer } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken, Optional, PLATFORM_ID } from '@angular/core';
-import { makeStateKey, TransferState } from '@angular/platform-browser';
+import {
+  Inject,
+  Injectable,
+  InjectionToken,
+  makeStateKey,
+  Optional,
+  PLATFORM_ID,
+  TransferState,
+} from '@angular/core';
 import { StorageService } from 'ngx-webstorage-service';
 import { Observable, of } from 'rxjs';
 import { PaymentMethod } from '@stripe/stripe-js';
@@ -227,8 +234,7 @@ export class DonationService {
   }
 
   removeOldLocalDonations() {
-    let donationsOlderThan30Days: Array<{ donation: Donation, jwt: string }>;
-    donationsOlderThan30Days = this.getDonationCouplets().filter(donationItem => {
+    const donationsOlderThan30Days: Array<{ donation: Donation, jwt: string }> = this.getDonationCouplets().filter(donationItem => {
       return (!donationItem.donation.createdTime || this.getCreatedTime(donationItem.donation) < (Date.now() - 2592000000));
     });
     for (const oldDonationCouplet of donationsOlderThan30Days) {

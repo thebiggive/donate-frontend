@@ -23,12 +23,12 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   /**
    * @todo start using this
    */
-  @Input() percentageStart: number;
-  @Input() percentageEnd: number;
-  @Input() donationAmount: number;
+  @Input({ required: true }) percentageStart: number;
+  @Input({ required: true }) percentageEnd: number;
+  @Input({ required: true }) donationAmount: number;
   //ISO-4217 currency code (e.g. GBP, USD)
-  @Input() donationCurrency!: 'GBP' | 'USD';
-  @Input() onHandleMoved: (tipPercentage: number, tipAmount: number) => void;
+  @Input({ required: true }) donationCurrency!: 'GBP' | 'USD';
+  @Input({ required: true }) onHandleMoved: (tipPercentage: number, tipAmount: number) => void;
 
   /**
    * movable part of the slider

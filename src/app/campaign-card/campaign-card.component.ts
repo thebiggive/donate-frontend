@@ -24,7 +24,7 @@ import { ImageService } from '../image.service';
   ],
 })
 export class CampaignCardComponent implements OnInit {
-  @Input() campaign: CampaignSummary;
+  @Input({ required: true }) campaign: CampaignSummary;
   @Input() inFundContext: boolean;
   bannerUri: string|null = null;
   isFinished: boolean;

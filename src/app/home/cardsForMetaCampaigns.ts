@@ -83,23 +83,22 @@ export const cardsForMetaCampaigns = function (
       }
     }];
   } else {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     anyExploreCard = [];
   }
 
   return [
-      ...metaCampaignCards,
+    ...metaCampaignCards,
+      DECcard,
       {
-        headerText: 'Applications for Christmas Challenge now open!',
-        backgroundImageUrl: new URL('/assets/images/card-background-cc-lights.jpg', donateUriPrefix),
-        iconColor: 'brand-1',
-        bodyText: 'Deadline is 19 July 2023',
+        headerText: 'Applications for Anchor Match Fund are open!',
+        backgroundImageUrl: new URL('/assets/images/anchor-match-fund.jpg', donateUriPrefix),
+        iconColor: 'primary',
+        bodyText: 'Second edition deadline is 31st December 2023',
         button: {
           text: 'Apply now',
-          href: new URL('/christmas-challenge', blogUriPrefix)
+          href: new URL('/anchor-match-fund/', blogUriPrefix)
         }
       },
-      DECcard,
       ...anyExploreCard
     ];
 }

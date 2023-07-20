@@ -20,12 +20,28 @@ div.mdc-form-field label {
   font-size: inherit;
 }
 
-:host ::ng-deep .mat-step-label, .mat-step-label-selected {
-  @include b-rt-1;
+:host ::ng-deep div.mat-step-label, div.mat-step-label-selected, div.mat-step-label.mat-step-label-selected {
+  // important is a bit of a hack to make sure we override the font size set by material design,
+  // which is different for the selected and non-selected step. Also overriding that by being more specific
+  // in the selector above, including 'div', but don't want to rely just on that.
+
+  font-size: 17px !important; ;
+  line-height: 20px;
+  @media #{$breakpoint-lg} {
+    font-size: 20px !important;
+    line-height: 27px;
+  }
 }
 
 input {
   @include b-rt-0;
+}
+
+@supports (-webkit-overflow-scrolling: touch) {
+  // see https://stackoverflow.com/a/65043782
+  input {
+    font-size: 16px;
+  }
 }
 
 :host ::ng-deep .mat-step-header {
@@ -166,6 +182,10 @@ input:disabled {
     margin-top: 1rem;
     margin-bottom: 1rem;
   }
+}
+
+input {
+  font-family: inherit;
 }
 
 .c-your-donation {
@@ -460,7 +480,12 @@ div.payment-details {
 
 div.payment-details > * {
   width: 100%;
-  margin-bottom: 24px;
+  margin-bottom: 36px;
+}
+
+div.sr-card-element {
+  min-height: 22px;
+  padding-top: 3px;
 }
 
 table.summary {
@@ -487,4 +512,16 @@ table.summary {
 }
 .total {
   color: $colour-primary;
+}
+
+h3 {
+  display: inline-block;
+}
+
+.span-hr {
+  display:inline-block;
+  width:100%;
+  border-top: 1px solid #888888;
+  margin-top: 26px;
+  position: absolute;
 }
