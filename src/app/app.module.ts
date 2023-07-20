@@ -48,6 +48,7 @@ const matomoTrackers = environment.matomoSiteId ? [
       }
     }),
     RouterModule.forRoot(routes, {
+      bindToComponentInputs: true,
       initialNavigation: 'enabledBlocking', // "This value is required for server-side rendering to work." https://angular.io/api/router/InitialNavigation
       onSameUrlNavigation: 'reload', // Allows Explore & home logo links to clear search filters in ExploreComponent
       scrollPositionRestoration: 'enabled',

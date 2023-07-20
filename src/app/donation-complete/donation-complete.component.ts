@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -25,6 +25,7 @@ import { minPasswordLength } from 'src/environments/common';
   styleUrls: ['./donation-complete.component.scss'],
 })
 export class DonationCompleteComponent implements OnInit {
+  @Input({ required: true }) private donationId: string;
   @ViewChild('captcha') captcha: RecaptchaComponent;
 
   campaign?: Campaign;
@@ -46,7 +47,6 @@ export class DonationCompleteComponent implements OnInit {
   timedOut = false;
   totalValue: number;
   donationIsLarge: boolean = false;
-  private donationId: string;
   private readonly maxTries = 5;
   private patchedCorePersonInfo = false;
   private person?: Person;
@@ -65,10 +65,7 @@ export class DonationCompleteComponent implements OnInit {
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
   ) {
-    route.params.pipe().subscribe(params => {
-      this.donationId = params.donationId;
-      this.checkDonation();
-    });
+    this.checkDonation();
   }
 
   ngOnInit() {
