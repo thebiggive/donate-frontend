@@ -4,7 +4,6 @@ import {
   Component,
   HostListener,
   Inject,
-  Input,
   makeStateKey,
   OnDestroy,
   OnInit,
@@ -46,16 +45,11 @@ const endPipeToken = 'timeLeftToEndPipe';
   ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
-  // Campaign ID may be passed instead
-  @Input({ required: false }) private campaignSlug: string;
-  // Passed only on the fund-filtered view of this page.
-  @Input({ required: false }) private fundSlug: string;
-
   public campaign: Campaign;
   public children: CampaignSummary[] = [];
   public filterError = false;
   public fund?: Fund;
-
+  public fundSlug: string;
   public hasMore = true;
   public loading = false; // Server render gets initial result set; set true when filters change.
   public tickerItems: { label: string, figure: string }[] = [];
@@ -64,6 +58,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   private autoScrollTimer: any; // State update setTimeout reference, for client side scroll to previous position.
   private campaignId: string;
+  private campaignSlug: string;
   private offset = 0;
   private routeChangeListener: Subscription;
   private routeParamSubscription: Subscription;
@@ -102,6 +97,10 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     @Inject(openPipeToken) private timeLeftToOpenPipe: TimeLeftPipe,
     @Inject(endPipeToken) private timeLeftToEndPipe: TimeLeftPipe,
   ) {
+    route.params.pipe().subscribe(params => {
+      this.campaignSlug = params.campaignSlug;
+      this.fundSlug = params.fundSlug;
+    });
   }
 
   @HostListener('doSearchAndFilterUpdate', ['$event'])
