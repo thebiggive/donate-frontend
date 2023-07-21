@@ -406,26 +406,15 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       donation.pspCustomerId = this.identityService.getPspId();
     }
 
-    this.createDonation(donation);
-  }
-
-  /**
-   * Creates a Donation itself. Both success and error callbacks should unconditionally set `creatingDonation` false.
-   */
-  private createDonation(donation: Donation) {
-    if (this.donor === undefined) {
-      throw new Error("Cannot create donation without logged in donor");
-    }
-
     // No re-tries for create() where donors have only entered amounts. If the
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
     this.donationService.create(donation, this.donor.id, this.identityService.getJWT())
-    .subscribe({
-      next: this.newDonationSuccess.bind(this),
-      error: this.newDonationError.bind(this),
-    });
+      .subscribe({
+        next: this.newDonationSuccess.bind(this),
+        error: this.newDonationError.bind(this),
+      });
   }
 
   private newDonationSuccess(response: DonationCreatedResponse) {
