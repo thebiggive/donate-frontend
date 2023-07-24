@@ -13,6 +13,38 @@
   }
 }
 
+.c-timer_new_design {
+  z-index: 2;
+  position: fixed;
+  left: 0;
+  width: 100%;
+  background: $colour-black;
+  color: white;
+  text-align: center;
+  font-size: 20px;
+
+  .centered {
+    display: inline-block;
+    padding: 0;
+    margin: auto;
+    line-height: 3em;
+  }
+
+  span {
+    display: block;
+    float: left;
+  }
+
+ span.time-left {
+   font-size: 24px;
+   margin-left: 1em;
+   background-color: $colour-primary;
+   color: white;
+   height: 100%;
+   padding: 0 1em;
+ }
+}
+
 h5 {
   font-size: 1rem;
 }
