@@ -32,14 +32,12 @@ import { getCurrencyMaxValidator } from '../validators/currency-max';
 })
 export class TransferFundsComponent implements AfterContentInit, OnInit {
   addressSuggestions: GiftAidAddressSuggestion[] = [];
-  isLoggedIn: boolean = false;
   isLoading: boolean = false;
   isPurchaseComplete = false;
   isOptedIntoGiftAid = false;
   currency = '£';
   campaign: Campaign;
   donation?: Donation;
-  userFullName: string;
   creditForm: FormGroup;
   amountsGroup: FormGroup;
   giftAidGroup: FormGroup;
@@ -48,12 +46,12 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   maximumCreditAmount = environment.maximumCreditAmount;
   maximumDonationAmount = maximumDonationAmountForFundedDonation;
   showAddressLookup: boolean = true;
-  personId?: string;
   sortCode?: string;
   accountNumber?: string;
   accountHolderName?: string;
   private initialTipSuggestedPercentage = 15;
   private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
+  donor: Person | undefined = undefined;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -313,9 +311,8 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   }
 
   logout() {
-    this.personId = undefined;
+    this.donor = undefined;
     this.isLoading = false;
-    this.isLoggedIn = false;
 
     this.accountHolderName = undefined;
     this.accountNumber = undefined;
@@ -329,11 +326,8 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   private loadAuthedPersonInfo(id: string, jwt: string) {
     this.isLoading = true;
     this.identityService.get(id, jwt).subscribe((person: Person) => {
-      this.isLoggedIn = true;
       this.isLoading = false;
-      this.userFullName = person.first_name + ' ' + person.last_name;
-
-      this.personId = person.id; // Should mean donations are attached to the Stripe Customer.
+      this.donor = person;
 
       // Pre-fill rarely-changing form values from the Person.
       this.giftAidGroup.patchValue({
@@ -367,7 +361,14 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       return;
     }
 
+    if (this.donor === undefined) {
+      throw new Error("Cannot create donation without logged in donor");
+    }
+
     const donation: Donation = {
+      emailAddress: this.donor.email_address,
+      firstName: this.donor.first_name,
+      lastName: this.donor.last_name,
       charityId: this.campaign.charity.id,
       charityName: this.campaign.charity.name,
       countryCode: 'GB', // hard coded to GB only for now
@@ -401,26 +402,19 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       donation.homeBuildingNumber = undefined;
     }
 
-    if (this.personId) {
+    if (this.donor.id) {
       donation.pspCustomerId = this.identityService.getPspId();
     }
 
-    this.createDonation(donation);
-  }
-
-  /**
-   * Creates a Donation itself. Both success and error callbacks should unconditionally set `creatingDonation` false.
-   */
-  private createDonation(donation: Donation) {
     // No re-tries for create() where donors have only entered amounts. If the
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
-    this.donationService.create(donation, this.personId, this.identityService.getJWT())
-    .subscribe({
-      next: this.newDonationSuccess.bind(this),
-      error: this.newDonationError.bind(this),
-    });
+    this.donationService.create(donation, this.donor.id, this.identityService.getJWT())
+      .subscribe({
+        next: this.newDonationSuccess.bind(this),
+        error: this.newDonationError.bind(this),
+      });
   }
 
   private newDonationSuccess(response: DonationCreatedResponse) {

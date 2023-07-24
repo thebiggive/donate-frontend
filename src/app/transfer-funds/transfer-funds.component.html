@@ -1,13 +1,13 @@
 <main>
-    <div *ngIf="isLoggedIn" id="loggedInHeader">
-        <p>Logged in as {{ userFullName }}</p>
+    <div *ngIf="donor" id="loggedInHeader">
+        <p>Logged in as {{ donor.first_name }} {{donor.last_name}}</p>
       <button id="my-account-link" mat-raised-button routerLink="/my-account">My Account</button>
       <button mat-raised-button (click)="logout()">Log out</button>
     </div>
     <div class="b-container">
         <h3 class="b-rh-1 b-bold">Transfer Donation Funds</h3>
 
-        <form *ngIf="isLoggedIn && !isLoading && !isPurchaseComplete" [formGroup]="creditForm">
+        <form *ngIf="donor && !isLoading && !isPurchaseComplete" [formGroup]="creditForm">
             <mat-stepper orientation="vertical" [linear]="true" #stepper>
                 <mat-step
                     [completed]="false"
@@ -178,7 +178,7 @@
             <mat-spinner [diameter]="40" aria-label="Loading your details"></mat-spinner>
         </div>
 
-        <div *ngIf="!isLoggedIn && !isLoading">
+        <div *ngIf="!donor && !isLoading">
             <p>You must be logged in to transfer donation funds.</p>
 
             <div class="auth-options">
@@ -196,7 +196,7 @@
             </div>
         </div>
 
-        <div *ngIf="isLoggedIn && isPurchaseComplete">
+        <div *ngIf="donor && isPurchaseComplete">
             <h2>Transfer Instructions</h2>
             <p>Please make a bank transfer of {{ totalToTransfer | exactCurrency: currency }} to your Donation Funds account using the following details</p>
             <p><strong>Recipient</strong> {{ accountHolderName }}</p>
