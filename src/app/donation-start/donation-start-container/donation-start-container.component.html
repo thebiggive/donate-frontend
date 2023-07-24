@@ -1,4 +1,10 @@
 <main class="b-container">
+  <div *ngIf="reservationExpiryDate && useNewDesign" class="c-timer_new_design">
+    <div class="centered">
+      <span class="b-rt-0">Your match funds are reserved for:&nbsp;</span>
+      <span class="b-rt-1 b-bold time-left">{{ reservationExpiryDate | timeLeft }}</span>
+    </div>
+  </div>
   <div class="b-back-button">
     <a mat-icon-button [routerLink]="'/campaign/' + campaign.id">
       <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
@@ -27,7 +33,7 @@
 
       <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 
-      <p *ngIf="reservationExpiryDate" class="c-timer">
+      <p *ngIf="reservationExpiryDate && !useNewDesign" class="c-timer">
         <span class="b-rt-0">Match funds reserved for&nbsp;</span>
         <span class="b-rt-1 b-bold">{{ reservationExpiryDate | timeLeft }}</span>
       </p>
