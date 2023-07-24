@@ -351,6 +351,10 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   }
 
   private createAndFinaliseTipDonation() {
+    if (this.donor === undefined) {
+      throw new Error("Cannot create donation without logged in donor");
+    }
+
     // The donation amount to Big Give is whatever the user is 'tipping' in the Buy Credits form.
     const donationAmount = this.calculatedTipAmount();
 
@@ -359,10 +363,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     // required field. DON-689.
     if (donationAmount <= 0) {
       return;
-    }
-
-    if (this.donor === undefined) {
-      throw new Error("Cannot create donation without logged in donor");
     }
 
     const donation: Donation = {
