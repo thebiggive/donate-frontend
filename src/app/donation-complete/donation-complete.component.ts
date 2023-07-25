@@ -1,8 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { MatomoTracker } from 'ngx-matomo';
 import { RecaptchaComponent } from 'ng-recaptcha';
@@ -14,10 +13,10 @@ import { Donation } from '../donation.model';
 import { DonationCompleteSetPasswordDialogComponent } from './donation-complete-set-password-dialog.component';
 import { DonationService } from '../donation.service';
 import { environment } from '../../environments/environment';
+import { minPasswordLength } from '../../environments/common';
 import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
-import { minPasswordLength } from 'src/environments/common';
 
 @Component({
   selector: 'app-donation-complete',
@@ -25,6 +24,7 @@ import { minPasswordLength } from 'src/environments/common';
   styleUrls: ['./donation-complete.component.scss'],
 })
 export class DonationCompleteComponent implements OnInit {
+  @Input({ required: true }) private donationId: string;
   @ViewChild('captcha') captcha: RecaptchaComponent;
 
   campaign?: Campaign;
@@ -46,7 +46,6 @@ export class DonationCompleteComponent implements OnInit {
   timedOut = false;
   totalValue: number;
   donationIsLarge: boolean = false;
-  private donationId: string;
   private readonly maxTries = 5;
   private patchedCorePersonInfo = false;
   private person?: Person;
@@ -62,16 +61,13 @@ export class DonationCompleteComponent implements OnInit {
     private identityService: IdentityService,
     private matomoTracker: MatomoTracker,
     private pageMeta: PageMetaService,
-    private route: ActivatedRoute,
     private sanitizer: DomSanitizer,
   ) {
-    route.params.pipe().subscribe(params => {
-      this.donationId = params.donationId;
-      this.checkDonation();
-    });
   }
 
   ngOnInit() {
+    this.checkDonation();
+    
     this.minPasswordLength = minPasswordLength;
 
     this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {

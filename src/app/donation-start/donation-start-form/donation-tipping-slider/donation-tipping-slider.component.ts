@@ -256,7 +256,13 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     }
 
     this.position = this.width * positionAsFractionOfWidth;
-    this.handle.nativeElement.style.marginLeft = Math.round(positionAsFractionOfWidth * 100) + '%';
+
+    const handleWidthAsProportion = 0.0499;
+    // can't actually pull this from the DOM necessarily as it may be
+    // invisible. 5% seems to be close in testing. It doesn't matter if the handle position isn't 100% mathematically correct,
+    // we don't expect donors to get a ruler out and measure it and complain if it's not in the exact right position for their tip.
+
+    this.handle.nativeElement.style.marginLeft = Math.max(0, Math.round((positionAsFractionOfWidth - handleWidthAsProportion) * 100)) + '%';
   }
 
   private detectWidth() {
