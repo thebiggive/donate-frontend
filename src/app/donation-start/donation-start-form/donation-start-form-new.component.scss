@@ -278,11 +278,11 @@ input {
 }
 
 input {
-  float: right;
   outline: none;
   border: none;
   background-color: $colour-background;
   width: 100%;
+  padding: 0; // We rely on containing element margin, and don't want vendor-dependent extra padding.
 };
 
 #giftAidAddressContainer {
