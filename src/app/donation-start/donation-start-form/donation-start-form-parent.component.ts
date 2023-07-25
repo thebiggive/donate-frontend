@@ -852,7 +852,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
    * Quick getter for donation amount, to keep template use concise.
    */
   get donationAmount(): number {
-    return sanitiseCurrency(this.amountsGroup.value.donationAmount);
+    return sanitiseCurrency(this.amountsGroup.value.donationAmount?.trim());
   }
 
   /**
@@ -1219,7 +1219,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       charityName: this.campaign.charity.name,
       countryCode: this.paymentGroup?.value.billingCountry || 'GB',
       currencyCode: this.campaign.currencyCode || 'GBP',
-      donationAmount: sanitiseCurrency(this.amountsGroup.value.donationAmount),
+      donationAmount: this.donationAmount,
       donationMatched: this.campaign.isMatched,
       feeCoverAmount: sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
       matchedAmount: 0, // Only set >0 after donation completed
@@ -1652,7 +1652,10 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       if (this.creditPenceToUse === 0) {
         this.amountsGroup.controls.tipAmount!.setValidators([
           Validators.required,
-          Validators.pattern('^[£$]?[0-9]+?(\\.[0-9]{2})?$'),
+          // We allow spaces at start and end of amount inputs because people can easily paste them in
+          // by mistake, and they don't do any harm. Maxlength in the HTML makes sure there can't be so much as
+          // to stop the number being visible.
+          Validators.pattern('^ *[£$]?[0-9]+?(\\.[0-9]{2})? *$'),
           getCurrencyMaxValidator(),
         ]);
       }
@@ -1662,7 +1665,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         Validators.required,
         getCurrencyMinValidator(1), // min donation is £1
         getCurrencyMaxValidator(maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse)),
-        Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
+        Validators.pattern('^ *[£$]?[0-9]+?(\\.00)? *$'),
       ]);
 
       this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {

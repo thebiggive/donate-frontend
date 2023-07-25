@@ -30,6 +30,7 @@
         <div class="donation-input donation-input-main">
             <biggive-text-input currency="{{campaign.currencyCode}}"  prompt="Enter your donation amount">
               <input
+                maxlength="10"
                 formControlName="donationAmount" id="donationAmount" matInput
                 slot="input"
               />
@@ -84,6 +85,7 @@
 
               <biggive-text-input currency="{{campaign.currencyCode}}"  prompt="Donation to the Big Give Trust">
                 <input
+                  maxlength="10"
                   formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status"
                   slot="input"
                 />

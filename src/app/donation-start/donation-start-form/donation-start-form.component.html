@@ -35,7 +35,7 @@
               Donation to {{ campaign.charity.name }}
             </div>
           </mat-label>
-          <input formControlName="donationAmount" id="donationAmount" matInput>
+          <input formControlName="donationAmount" id="donationAmount" maxlength="10" matInput>
         </mat-form-field>
       </div>
 
@@ -83,7 +83,7 @@
                 Donation to the Big Give Trust
               </div>
             </mat-label>
-            <input formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status">
+            <input formControlName="tipAmount" id="tipAmount" maxlength="10" matInput aria-describedby="custom-tip-status">
           </mat-form-field>
         </div>
 
