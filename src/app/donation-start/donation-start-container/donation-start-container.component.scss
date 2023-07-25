@@ -14,7 +14,7 @@
 }
 
 .c-timer_new_design {
-  z-index: 2;
+  z-index: 10; // must be high enough to occulude eyebrowe prompt texts on inputs in the Payment Details section.
   position: fixed;
   left: 0;
   width: 100%;
