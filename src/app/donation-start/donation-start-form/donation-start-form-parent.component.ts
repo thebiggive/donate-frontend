@@ -365,7 +365,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     }
 
     this.amountsGroup.get('tipAmount')?.valueChanges.subscribe((tipAmount: string) => {
-      this.tipValue = sanitiseCurrency(tipAmount);
+      this.tipValue = sanitiseCurrency(tipAmount?.trim());
     });
 
     this.maximumDonationAmount = maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse);
@@ -1227,7 +1227,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
       paymentMethodType: (this.creditPenceToUse > 0) ? 'customer_balance' : 'card',
       projectId: this.campaignId,
       psp: this.psp,
-      tipAmount: sanitiseCurrency(this.amountsGroup.value.tipAmount),
+      tipAmount: sanitiseCurrency(this.amountsGroup.value.tipAmount?.trim()),
     };
 
     if (this.donor?.id) {
@@ -1655,7 +1655,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
           // We allow spaces at start and end of amount inputs because people can easily paste them in
           // by mistake, and they don't do any harm. Maxlength in the HTML makes sure there can't be so much as
           // to stop the number being visible.
-          Validators.pattern('^ *[£$]?[0-9]+?(\\.[0-9]{2})? *$'),
+          Validators.pattern('^\\s*[£$]?[0-9]+?(\\.[0-9]{2})?\\s*$'),
           getCurrencyMaxValidator(),
         ]);
       }
@@ -1665,7 +1665,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
         Validators.required,
         getCurrencyMinValidator(1), // min donation is £1
         getCurrencyMaxValidator(maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse)),
-        Validators.pattern('^ *[£$]?[0-9]+?(\\.00)? *$'),
+        Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
       ]);
 
       this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
