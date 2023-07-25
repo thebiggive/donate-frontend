@@ -142,7 +142,7 @@
                                (closed)="panelOpenState = false">
             <mat-expansion-panel-header>
               <h3 class="b-rt-0 b-m-0 b-bold"><span class="span-hr"></span>How does Big Give use tips?</h3>
-              
+
             </mat-expansion-panel-header>
             <p>
               Big Give is a registered charity (1136547). We don’t charge charities for using our platform; we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
@@ -268,6 +268,7 @@
             <input
               formControlName="homePostcode"
               id="homePostcode"
+              autocapitalize="characters"
               matInput
               slot="input"
             />
@@ -319,8 +320,8 @@
           </div>
 
           <div>
-            <biggive-text-input  prompt="Email Address *">
-              <input slot="input" formControlName="emailAddress" id="emailAddress" type="email" matInput>
+            <biggive-text-input prompt="Email Address *">
+              <input slot="input" formControlName="emailAddress" id="emailAddress" type="email" autocapitalize="off" matInput>
             </biggive-text-input>
             <mat-hint>We'll send you a donation receipt and use this to
               confirm it's you in case you have any queries.</mat-hint>
@@ -395,7 +396,7 @@
           </div>
 
           <biggive-text-input prompt="Billing postcode">
-            <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)">
+            <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)" autocapitalize="characters">
           </biggive-text-input>
 
         </div>
