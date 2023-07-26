@@ -21,22 +21,30 @@
   background: $colour-black;
   color: white;
   text-align: center;
-  font-size: 20px;
+  @media #{$breakpoint-lg} {
+    font-size: 20px;
+  }
+  font-size: 15px;
 
   .centered {
-    display: inline-block;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
     padding: 0;
     margin: auto;
     line-height: 3em;
+    white-space: nowrap;
   }
 
   span {
-    display: block;
-    float: left;
+    display: inline-block;
   }
 
  span.time-left {
-   font-size: 24px;
+   @media #{$breakpoint-lg} {
+     font-size: 24px;
+   }
+   font-size: 18px;
    margin-left: 1em;
    background-color: $colour-primary;
    color: white;
