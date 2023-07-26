@@ -266,6 +266,7 @@
         <div *ngIf="!giftAidGroup.value.homeOutsideUK">
           <biggive-text-input prompt="Enter your home postcode">
             <input
+              autocomplete="postal-code"
               formControlName="homePostcode"
               id="homePostcode"
               autocapitalize="characters"
@@ -305,14 +306,14 @@
         <div class="payment-details">
           <div>
           <biggive-text-input  prompt="First Name *">
-            <input slot="input" formControlName="firstName" id="firstName" matInput>
+            <input slot="input" formControlName="firstName" id="firstName" autocomplete="given-name"  matInput>
           </biggive-text-input>
           <div class="error" *ngIf="paymentGroup.get('firstName')?.errors?.maxlength">Maximum 40 characters exceeded</div>
           </div>
 
           <div>
             <biggive-text-input  prompt="Last Name *">
-              <input slot="input" formControlName="lastName" id="lastName" matInput>
+              <input slot="input" formControlName="lastName" id="lastName" autocomplete="family-name" matInput>
               </biggive-text-input>
             <mat-hint *ngIf="giftAidGroup.value.giftAid">For Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
             <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
@@ -320,8 +321,8 @@
           </div>
 
           <div>
-            <biggive-text-input prompt="Email Address *">
-              <input slot="input" formControlName="emailAddress" id="emailAddress" type="email" autocapitalize="off" matInput>
+            <biggive-text-input  prompt="Email Address *">
+              <input slot="input" formControlName="emailAddress" id="emailAddress" type="email" autocapitalize="off"  autocomplete="email"  matInput>
             </biggive-text-input>
             <mat-hint>We'll send you a donation receipt and use this to
               confirm it's you in case you have any queries.</mat-hint>
@@ -396,7 +397,7 @@
           </div>
 
           <biggive-text-input prompt="Billing postcode">
-            <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)" autocapitalize="characters">
+            <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)" autocapitalize="characters" autocomplete="postal-code">
           </biggive-text-input>
 
         </div>
