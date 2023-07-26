@@ -523,13 +523,13 @@ h3 {
 }
 
 mat-expansion-panel-header h3 {
-  min-height: 30px; // must be at least this high or so to make the .span-hr visible
+  min-height: 34px; // must be at least this high or so to make the .span-hr visible
 }
 
 .span-hr {
   display:inline-block;
   width:100%;
   border-top: 1px solid #888888;
-  margin-top: 26px;
+  margin-top: 30px;
   position: absolute;
 }
