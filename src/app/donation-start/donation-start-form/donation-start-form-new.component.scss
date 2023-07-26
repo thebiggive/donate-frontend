@@ -518,6 +518,14 @@ h3 {
   display: inline-block;
 }
 
+.mat-expansion-panel{
+  box-shadow: none !important;
+}
+
+mat-expansion-panel-header h3 {
+  min-height: 30px; // must be at least this high or so to make the .span-hr visible
+}
+
 .span-hr {
   display:inline-block;
   width:100%;
