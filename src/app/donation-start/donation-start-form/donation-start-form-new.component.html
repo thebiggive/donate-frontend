@@ -542,7 +542,6 @@
                 contact us</a>
             if this message persists.
           </p>
-          <mat-spinner *ngIf="submitting" color="primary" diameter="30" aria-label="Processing your donation"></mat-spinner>
 
           <p *ngIf="retrying" class="error" aria-live="polite">
             It looks like our system is a bit busy, one moment please&hellip;
@@ -605,15 +604,16 @@
             </tr>
           </table>
 
-          <button
+          <button *ngIf="!submitting"
             type="submit"
             class="c-donate-button b-donate-button b-w-100 b-rt-1"
             mat-raised-button
             color="primary"
-            [disabled]="submitting || donationForm.invalid"
+            [disabled]="donationForm.invalid"
           >
             Donate now
           </button>
+          <mat-spinner *ngIf="submitting" color="primary" diameter="30" aria-label="Processing your donation"></mat-spinner>
         </div>
       </mat-step>
     </mat-vertical-stepper>
