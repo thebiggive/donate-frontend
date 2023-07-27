@@ -601,9 +601,6 @@
               <td><div><strong>Total amount you will be charged</strong></div></td>
               <td><strong>{{ donationAndExtrasAmount | exactCurrency:donation.currencyCode }}</strong></td>
             </tr>
-            <tr *ngIf="campaign.currencyCode === 'GBP' && giftAidAmount() === 0">
-              You have told us you do not want to claim Gift Aid
-            </tr>
           </table>
 
           <button *ngIf="!submitting"
