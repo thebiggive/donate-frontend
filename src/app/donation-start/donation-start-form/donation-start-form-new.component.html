@@ -29,7 +29,19 @@
 
         <div class="donation-input donation-input-main">
             <biggive-text-input currency="{{campaign.currencyCode}}">
-              <label slot="label" for="donationAmount">Enter your donation amount</label>
+              <!-- If a charity name is more than about 20 chars it may not fit in the label space and would
+                   make the input unusable
+               -->
+              <label
+                *ngIf="campaign.charity.name.length < 20; else donationLabelWithoutCharityName"
+                slot="label"
+                for="donationAmount"
+              >
+                Donation to {{campaign.charity.name}}
+              </label>
+              <ng-template #donationLabelWithoutCharityName>
+              <label slot="label" for="donationAmount">Donation</label>
+              </ng-template>
               <input
                 maxlength="10"
                 formControlName="donationAmount" id="donationAmount" matInput
