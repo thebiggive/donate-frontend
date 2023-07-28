@@ -91,11 +91,11 @@ div .c-banner {
 
 div.donationInfoWrapper {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin-top: 10px;
   margin-bottom: 40px;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px;
 
   @media #{$breakpoint-md} {
     flex-direction: row;
