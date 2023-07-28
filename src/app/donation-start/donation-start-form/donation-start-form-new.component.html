@@ -30,6 +30,7 @@
         <div class="donation-input donation-input-main">
             <biggive-text-input currency="{{campaign.currencyCode}}"  prompt="Enter your donation amount">
               <input
+                maxlength="10"
                 formControlName="donationAmount" id="donationAmount" matInput
                 slot="input"
               />
@@ -84,6 +85,7 @@
 
               <biggive-text-input currency="{{campaign.currencyCode}}"  prompt="Donation to the Big Give Trust">
                 <input
+                  maxlength="10"
                   formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status"
                   slot="input"
                 />
@@ -140,7 +142,7 @@
                                (closed)="panelOpenState = false">
             <mat-expansion-panel-header>
               <h3 class="b-rt-0 b-m-0 b-bold"><span class="span-hr"></span>How does Big Give use tips?</h3>
-              
+
             </mat-expansion-panel-header>
             <p>
               Big Give is a registered charity (1136547). We don’t charge charities for using our platform; we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
@@ -264,8 +266,10 @@
         <div *ngIf="!giftAidGroup.value.homeOutsideUK">
           <biggive-text-input prompt="Enter your home postcode">
             <input
+              autocomplete="postal-code"
               formControlName="homePostcode"
               id="homePostcode"
+              autocapitalize="characters"
               matInput
               slot="input"
             />
@@ -302,14 +306,14 @@
         <div class="payment-details">
           <div>
           <biggive-text-input  prompt="First Name *">
-            <input slot="input" formControlName="firstName" id="firstName" matInput>
+            <input slot="input" formControlName="firstName" id="firstName" autocomplete="given-name"  matInput>
           </biggive-text-input>
           <div class="error" *ngIf="paymentGroup.get('firstName')?.errors?.maxlength">Maximum 40 characters exceeded</div>
           </div>
 
           <div>
             <biggive-text-input  prompt="Last Name *">
-              <input slot="input" formControlName="lastName" id="lastName" matInput>
+              <input slot="input" formControlName="lastName" id="lastName" autocomplete="family-name" matInput>
               </biggive-text-input>
             <mat-hint *ngIf="giftAidGroup.value.giftAid">For Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
             <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
@@ -318,7 +322,7 @@
 
           <div>
             <biggive-text-input  prompt="Email Address *">
-              <input slot="input" formControlName="emailAddress" id="emailAddress" type="email" matInput>
+              <input slot="input" formControlName="emailAddress" id="emailAddress" type="email" autocapitalize="off"  autocomplete="email"  matInput>
             </biggive-text-input>
             <mat-hint>We'll send you a donation receipt and use this to
               confirm it's you in case you have any queries.</mat-hint>
@@ -393,7 +397,7 @@
           </div>
 
           <biggive-text-input prompt="Billing postcode">
-            <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)">
+            <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)" autocapitalize="characters" autocomplete="postal-code">
           </biggive-text-input>
 
         </div>
@@ -538,7 +542,6 @@
                 contact us</a>
             if this message persists.
           </p>
-          <mat-spinner *ngIf="submitting" color="primary" diameter="30" aria-label="Processing your donation"></mat-spinner>
 
           <p *ngIf="retrying" class="error" aria-live="polite">
             It looks like our system is a bit busy, one moment please&hellip;
@@ -601,15 +604,16 @@
             </tr>
           </table>
 
-          <button
+          <button *ngIf="!submitting"
             type="submit"
             class="c-donate-button b-donate-button b-w-100 b-rt-1"
             mat-raised-button
             color="primary"
-            [disabled]="submitting || donationForm.invalid"
+            [disabled]="donationForm.invalid"
           >
             Donate now
           </button>
+          <mat-spinner *ngIf="submitting" color="primary" diameter="30" aria-label="Processing your donation"></mat-spinner>
         </div>
       </mat-step>
     </mat-vertical-stepper>

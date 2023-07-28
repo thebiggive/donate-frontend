@@ -17,7 +17,7 @@
         <form [formGroup]="resetPasswordForm">
           <mat-form-field class="b-w-100" color="primary">
             <mat-label for="loginEmailAddress">Email address</mat-label>
-            <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress">
+            <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off">
           </mat-form-field>
           <p class="b-rt-0">Please enter your email address.</p>
         </form>
@@ -51,7 +51,7 @@
       <form [formGroup]="loginForm">
         <mat-form-field class="b-w-100" color="primary">
           <mat-label for="loginEmailAddress">Email address</mat-label>
-          <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress">
+          <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off">
         </mat-form-field>
 
         <mat-form-field class="b-w-100" color="primary">

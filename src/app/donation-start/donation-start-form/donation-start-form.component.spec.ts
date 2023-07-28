@@ -467,7 +467,7 @@ describe('DonationStartPrimaryComponent', () => {
     const donationAmountErrors: any = component.donationForm.controls.amounts!.get('donationAmount')?.errors;
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.pattern).toEqual({
-      requiredPattern: '^[£$]?[0-9]+?(\\.00)?$',
+      requiredPattern: '^\\s*[£$]?[0-9]+?(\\.00)?\\s*$',
       actualValue: '8765,21',
     });
 

@@ -91,7 +91,7 @@ div .c-banner {
 
 div.donationInfoWrapper {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   margin-top: 10px;
   margin-bottom: 40px;
   flex-direction: column;
@@ -518,10 +518,18 @@ h3 {
   display: inline-block;
 }
 
+.mat-expansion-panel{
+  box-shadow: none !important;
+}
+
+mat-expansion-panel-header h3 {
+  min-height: 34px; // must be at least this high or so to make the .span-hr visible
+}
+
 .span-hr {
   display:inline-block;
   width:100%;
   border-top: 1px solid #888888;
-  margin-top: 26px;
+  margin-top: 30px;
   position: absolute;
 }
