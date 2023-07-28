@@ -33,14 +33,14 @@
                    make the input unusable
                -->
               <label
-                *ngIf="campaign.charity.name.length < 20; else donationLabelWithoutCharityName"
+                *ngIf="campaign.charity.name.length < 20; else donationLabelTruncated"
                 slot="label"
                 for="donationAmount"
               >
                 Donation to {{campaign.charity.name}}
               </label>
-              <ng-template #donationLabelWithoutCharityName>
-              <label slot="label" for="donationAmount">Donation</label>
+              <ng-template #donationLabelTruncated>
+              <label slot="label" for="donationAmount">Donation to {{campaign.charity.name.slice(0, 17)}}…</label>
               </ng-template>
               <input
                 maxlength="10"
