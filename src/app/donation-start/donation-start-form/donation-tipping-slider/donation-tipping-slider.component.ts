@@ -106,19 +106,26 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
   }
 
   ngAfterContentInit() {
-    this.bar.nativeElement.addEventListener('mousedown',  (e: MouseEvent | TouchEvent) => {
+    const barElement = this.bar.nativeElement;
+
+    barElement.addEventListener('mousedown',  (e: MouseEvent | TouchEvent) => {
       this.isMoving = true;
       this.move(e);
     });
 
-    this.bar.nativeElement.addEventListener('touchstart', (e: MouseEvent | TouchEvent) => {
+    barElement.addEventListener('touchstart', (e: MouseEvent | TouchEvent) => {
       this.isMoving = true;
       this.move(e);
     });
 
-    this.bar.nativeElement.addEventListener('touchend', () => {
+    barElement.addEventListener('touchend', () => {
       this.isMoving = false;
     });
+
+    barElement.setAttribute("role", "progressbar");
+    barElement.setAttribute("aria-valuemin", this.percentageStart);
+    barElement.setAttribute("aria-valuemax", this.percentageEnd);
+    barElement.setAttribute("aria-valuenow", this.selectedPercentage)
   };
 
   // detect changes in the donationAmount input
@@ -163,6 +170,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
         this.selectedPercentage = 15;
       }
     }
+    this.bar.nativeElement.setAttribute("aria-valuenow", this.selectedPercentage)
   }
 
   format(currencyCode: 'GBP' | 'USD', amount: number) {
@@ -225,6 +233,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
       this.adjustDonationPercentageAndValue();
       this.repositionTooltip();
       this.onHandleMoved(this.selectedPercentage, this.tipAmount);
+      this.bar.nativeElement.setAttribute("aria-valuenow", this.selectedPercentage)
     }
   }
 
@@ -284,6 +293,7 @@ export class DonationTippingSliderComponent implements OnInit, AfterContentInit,
     this.percentageWrap.nativeElement.innerText = this.selectedPercentage.toString();
     this.currencyFormatted = this.format(this.donationCurrency, this.tipAmount);
     this.donationWrap.nativeElement.innerText = this.currencyFormatted;
+    this.bar.nativeElement.setAttribute("aria-valuenow", this.selectedPercentage)
   }
 
   setTipAmount(tipAmount: number) {
