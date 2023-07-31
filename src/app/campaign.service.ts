@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import {Observable, of} from 'rxjs';
 
 import { Campaign } from './campaign.model';
+import { CampaignStats } from './campaign-stats.model';
 import { CampaignSummary } from './campaign-summary.model';
 import { environment } from '../environments/environment';
 import { SelectedType } from './search.service';
@@ -189,6 +190,10 @@ export class CampaignService {
   fetchAllMetaCampaigns(): Observable<readonly MetaCampaign[]> {
     return of([
     ]);
+  }
+
+  getCampaignImpactStats(): Observable<CampaignStats>{
+    return this.http.get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`)
   }
 }
 

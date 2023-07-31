@@ -2,6 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 
 import { Campaign } from './campaign.model';
+import { CampaignStats } from './campaign-stats.model';
 import { CampaignService } from './campaign.service';
 import { environment } from '../environments/environment';
 
@@ -76,6 +77,12 @@ describe('CampaignService', () => {
     );
   };
 
+  const getDummyCampaignStats = () => {
+    return new CampaignStats(10000, 4);
+  }
+
+
+
   beforeEach(() => TestBed.configureTestingModule({
     imports: [ HttpClientTestingModule ],
     providers: [ CampaignService ],
@@ -96,6 +103,23 @@ describe('CampaignService', () => {
     const request = httpMock.expectOne(`${environment.apiUriPrefix}/campaigns/services/apexrest/v1.0/campaigns/a051r00001EywjpAAB`);
     expect(request.request.method).toBe('GET');
     request.flush(dummyCampaign);
+  });
+
+  it('should retrieve campaign totals from API', () => {
+    const service: CampaignService = TestBed.inject(CampaignService);
+    const httpMock: HttpTestingController = TestBed.inject(HttpTestingController);
+
+    const dummyCampaignStats: CampaignStats = getDummyCampaignStats();
+
+    service.getCampaignImpactStats().subscribe(campaignStats => {
+      expect(campaignStats).toEqual(dummyCampaignStats);
+    }, () => {
+      expect(false).toBe(true);
+    });
+
+    const request = httpMock.expectOne(`${environment.apiUriPrefix}/campaigns/services/apexrest/v1.0/campaigns/stats`);
+    expect(request.request.method).toBe('GET');
+    request.flush(dummyCampaignStats);
   });
 
   it ('should allow donation attempts to any campaign with status Active, regardless of its dates', () => {
