@@ -194,7 +194,7 @@ div.clearfix {
 }
 
 .receipt {
-  width: 60%;
+  max-width: min(580px, 80%);
   margin: auto;
 
   table {
