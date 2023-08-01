@@ -91,11 +91,15 @@ div .c-banner {
 
 div.donationInfoWrapper {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin-top: 10px;
   margin-bottom: 40px;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px;
+
+  div {
+    flex-basis: 40%;
+  }
 
   @media #{$breakpoint-md} {
     flex-direction: row;
@@ -311,7 +315,7 @@ a {
 }
 
 button.continue, .c-donate-button {
-  margin-top: 36px !important;
+  margin-top: 22px !important;
   margin-bottom: 22px !important;
   padding: 1.5rem;
   max-width: 300px;

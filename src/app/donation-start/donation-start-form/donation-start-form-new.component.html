@@ -17,7 +17,7 @@
         </p>
 
         <div class="donationInfoWrapper">
-          <div style="margin-right: 170px;">
+          <div>
             <p class="b-rt-0 b-m-0">You are supporting:</p>
             <p class="b-rt-0 b-m-0 b-bold">{{ campaign.charity.name }}</p>
           </div>
@@ -28,7 +28,20 @@
         </div>
 
         <div class="donation-input donation-input-main">
-            <biggive-text-input currency="{{campaign.currencyCode}}"  prompt="Enter your donation amount">
+            <biggive-text-input currency="{{campaign.currencyCode}}">
+              <!-- If a charity name is more than about 20 chars it may not fit in the label space and would
+                   make the input unusable
+               -->
+              <label
+                *ngIf="campaign.charity.name.length < 20; else donationLabelTruncated"
+                slot="label"
+                for="donationAmount"
+              >
+                Donation to {{campaign.charity.name}}
+              </label>
+              <ng-template #donationLabelTruncated>
+              <label slot="label" for="donationAmount">Donation to {{campaign.charity.name.slice(0, 17)}}…</label>
+              </ng-template>
               <input
                 maxlength="10"
                 formControlName="donationAmount" id="donationAmount" matInput
@@ -83,7 +96,8 @@
 
             <div [style]="showCustomTipInput ? '' : 'display: none;'" class="donation-input donation-input-main">
 
-              <biggive-text-input currency="{{campaign.currencyCode}}"  prompt="Donation to the Big Give Trust">
+              <biggive-text-input currency="{{campaign.currencyCode}}" >
+                <label slot="label" for="tipAmount">Donation to the Big Give Trust</label>
                 <input
                   maxlength="10"
                   formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status"
@@ -229,7 +243,8 @@
 
         <div id="giftAidAddressContainer" *ngIf="giftAidGroup.value.giftAid">
           <div>
-            <biggive-text-input prompt="Enter your home address">
+            <biggive-text-input>
+              <label slot="label" for="homeAddress">Enter your home address</label>
               <input
                 formControlName="homeAddress"
                 id="homeAddress"
@@ -264,7 +279,8 @@
           <div class="error" *ngIf="giftAidGroup.get('homeAddress')?.errors?.maxlength">Maximum 255 characters exceeded</div>
         </div>
         <div *ngIf="!giftAidGroup.value.homeOutsideUK">
-          <biggive-text-input prompt="Enter your home postcode">
+          <biggive-text-input>
+            <label slot="label" for="homePostcode">Enter your home postcode</label>
             <input
               autocomplete="postal-code"
               formControlName="homePostcode"
@@ -305,14 +321,16 @@
         </p>
         <div class="payment-details">
           <div>
-          <biggive-text-input  prompt="First Name *">
+          <biggive-text-input>
+            <label slot="label" for="firstName">First Name *</label>
             <input slot="input" formControlName="firstName" id="firstName" autocomplete="given-name"  matInput>
           </biggive-text-input>
           <div class="error" *ngIf="paymentGroup.get('firstName')?.errors?.maxlength">Maximum 40 characters exceeded</div>
           </div>
 
           <div>
-            <biggive-text-input  prompt="Last Name *">
+            <biggive-text-input>
+              <label slot="label" for="lastName">Last Name *</label>
               <input slot="input" formControlName="lastName" id="lastName" autocomplete="family-name" matInput>
               </biggive-text-input>
             <mat-hint *ngIf="giftAidGroup.value.giftAid">For Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
@@ -321,7 +339,8 @@
           </div>
 
           <div>
-            <biggive-text-input  prompt="Email Address *">
+            <biggive-text-input>
+              <label slot="label" for="emailAddress">Email Address *</label>
               <input slot="input" formControlName="emailAddress" id="emailAddress" type="email" autocapitalize="off"  autocomplete="email"  matInput>
             </biggive-text-input>
             <mat-hint>We'll send you a donation receipt and use this to
@@ -378,7 +397,8 @@
         element when not needed, and always mount it. -->
         <div class="payment-details" [style.display]="!stripePRBMethodReady && !selectedSavedMethod && creditPenceToUse === 0 ? 'block' : 'none'">
           <div class="sr-combo-inputs-row">
-            <biggive-text-input  prompt="Card">
+            <biggive-text-input>
+              <span slot="label">Card</span> <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe not us -->
             <div slot="input" class="sr-input sr-card-element" id="card-info" #cardInfo></div>
             </biggive-text-input>
           </div>
@@ -396,7 +416,8 @@
             </biggive-form-field-select>
           </div>
 
-          <biggive-text-input prompt="Billing postcode">
+          <biggive-text-input>
+            <label slot="label" for="billingPostcode">Billing postcode</label>
             <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)" autocapitalize="characters" autocomplete="postal-code">
           </biggive-text-input>
 
@@ -591,16 +612,6 @@
             <tr class="total">
               <td><div><strong>Total amount you will be charged</strong></div></td>
               <td><strong>{{ donationAndExtrasAmount | exactCurrency:donation.currencyCode }}</strong></td>
-            </tr>
-            <tr *ngIf="giftAidAmount() > 0">
-              <td colspan="2"><div>
-                You have told us you would like to claim Gift Aid</div></td>
-            </tr>
-            <tr *ngIf="campaign.currencyCode === 'GBP' && giftAidAmount() === 0">
-              You have told us you do not want to claim Gift Aid
-            </tr>
-            <tr *ngIf="expectedMatchAmount() === donationAmount">
-              Your donation will be match funded
             </tr>
           </table>
 
