@@ -1,11 +1,11 @@
 export class CampaignStats {
     constructor(
         /**
-         * @param: total amount raised (including adjustment) for all except master campaigns
+         * @param: all-time total amount raised (including adjustment) for all except master campaigns in pounds GBP
         */
-        public totalRaisedWithAdjustment: number,
+        public totalRaised: number,
         /**
-         * @param: total count of all non-master campaigns
+         * @param: count all non-master campaigns
          */
         public totalCampaignCount: number
     ) {}

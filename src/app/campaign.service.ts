@@ -193,7 +193,7 @@ export class CampaignService {
   }
 
   getCampaignImpactStats(): Observable<CampaignStats>{
-    return of(new CampaignStats(1000, 5));
+    return of(new CampaignStats(242_309_804, 15_000));
     //return this.http.get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`)
   }
 }
