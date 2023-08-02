@@ -14,6 +14,16 @@ export class HomeComponent implements OnInit {
 
   highlightCards: readonly HighlightCard[] = [
     {
+      headerText: 'Upcoming Match Funding Campaigns',
+      bodyText: "Discover our exciting range of match funding opportunities for 2023/2024",
+      iconColor: "primary",
+      backgroundImageUrl: new URL('/assets/images/peach-texture.jpg', environment.donateGlobalUriPrefix),
+      button: {
+        text: "Find out more",
+        href: new URL('/charities', environment.blogUriPrefix),
+      }
+    },
+    {
       headerText: 'Applications for Anchor Match Fund are open!',
       backgroundImageUrl: new URL('/assets/images/anchor-match-fund.jpg', environment.donateGlobalUriPrefix),
       iconColor: 'primary',
@@ -33,16 +43,6 @@ export class HomeComponent implements OnInit {
         href: new URL('/explore', environment.donateGlobalUriPrefix),
       }
     },
-    {
-      headerText: 'Upcoming Match Funding Campaigns',
-      bodyText: "Discover our exciting range of match funding opportunities for 2023/2024",
-      iconColor: "primary",
-      backgroundImageUrl: new URL('/assets/images/peach-texture.jpg', environment.donateGlobalUriPrefix),
-      button: {
-        text: "Find out more",
-        href: new URL('/charities', environment.blogUriPrefix),
-      }
-    }
   ];
 
   public constructor(
