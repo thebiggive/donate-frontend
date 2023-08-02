@@ -208,7 +208,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
   panelOpenState = false;
   percentage = 1;
   showCustomTipInput = false;
-  @ViewChild('donationTippingSlider') tippingSlider: DonationTippingSliderComponent;
+  // will be undefined if the drop-down is in use instead of the slider.
+  @ViewChild('donationTippingSlider') tippingSlider: DonationTippingSliderComponent | undefined;
 
   displayCustomTipInput = () => {
     this.amountsGroup.get('tipAmount')?.setValue('');
@@ -227,7 +228,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     const tipValueRounded = tipValue.toFixed(2);
     this.tipValue = Number(tipValueRounded);
 
-    this.tippingSlider.setTipAmount(this.tipValue);
+    this.tippingSlider?.setTipAmount(this.tipValue);
 
     this.amountsGroup.get('tipAmount')?.setValue(tipValueRounded);
     this.showCustomTipInput = false;
@@ -268,8 +269,8 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     );
     this.selectedCountryCode = this.defaultCountryCode;
 
-    this.tipControlStyle = (route.snapshot.queryParams?.tipControl?.toLowerCase() === 'dropdown')
-      ? 'dropdown' : 'slider'
+    this.tipControlStyle = (route.snapshot.queryParams?.tipControl?.toLowerCase() === 'slider')
+      ? 'slider' : 'dropdown'
   }
 
   ngOnDestroy() {
