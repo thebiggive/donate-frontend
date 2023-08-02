@@ -2,7 +2,6 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 
 import { Campaign } from './campaign.model';
-import { CampaignStats } from './campaign-stats.model';
 import { CampaignService } from './campaign.service';
 import { environment } from '../environments/environment';
 
