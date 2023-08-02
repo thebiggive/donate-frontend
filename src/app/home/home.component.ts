@@ -4,7 +4,6 @@ import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "./HighlightCard";
 import {environment} from "../../environments/environment";
 import {CampaignService} from "../campaign.service";
-import {cardsForMetaCampaigns} from "./cardsForMetaCampaigns";
 import { CampaignStats } from '../campaign-stats.model';
 import { Observable } from 'rxjs';
 
@@ -14,10 +13,41 @@ import { Observable } from 'rxjs';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+
   mainTitle = 'Matching Donations.\nMultiplying Impact.';
   campaignImpactStats$: Observable<CampaignStats> = this.campaignService.getCampaignImpactStats();
-  highlightCards: readonly HighlightCard[];
-  loading: boolean = true;
+  highlightCards: readonly HighlightCard[] = [
+    {
+      headerText: 'Upcoming Match Funding Campaigns',
+      bodyText: "Discover our exciting range of match funding opportunities for 2023/2024",
+      iconColor: "tertiary",
+      backgroundImageUrl: new URL('/assets/images/peach-texture.jpg', environment.donateGlobalUriPrefix),
+      button: {
+        text: "Find out more",
+        href: new URL('/charities', environment.blogUriPrefix),
+      }
+    },
+    {
+      headerText: 'Applications for Anchor Match Fund are open!',
+      backgroundImageUrl: new URL('/assets/images/anchor-match-fund.jpg', environment.donateGlobalUriPrefix),
+      iconColor: 'primary',
+      bodyText: 'Second edition deadline is 31st December 2023',
+      button: {
+        text: 'Apply now',
+        href: new URL('/anchor-match-fund/', environment.blogUriPrefix)
+      }
+    },
+    {
+      headerText: 'One donation. Twice the impact.',
+      bodyText: "You donate.\nWe double it.",
+      iconColor: "primary",
+      backgroundImageUrl: new URL('/assets/images/blue-texture.jpg', environment.donateGlobalUriPrefix),
+      button: {
+        text: "Explore now",
+        href: new URL('/explore', environment.donateGlobalUriPrefix),
+      }
+    },
+  ];
 
   public constructor(
     private pageMeta: PageMetaService,
@@ -25,14 +55,6 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.campaignService.fetchAllMetaCampaigns().subscribe(metaCampaigns => {
-        this.highlightCards = cardsForMetaCampaigns(new Date(), metaCampaigns, environment.donateGlobalUriPrefix, environment.blogUriPrefix);
-        this.loading = false;
-      }, () => {
-        this.loading = false;
-      },
-    );
-
     this.pageMeta.setCommon(
       'Big Give',
       'Big Give – discover campaigns and donate',

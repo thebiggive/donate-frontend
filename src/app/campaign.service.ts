@@ -7,8 +7,6 @@ import { CampaignStats } from './campaign-stats.model';
 import { CampaignSummary } from './campaign-summary.model';
 import { environment } from '../environments/environment';
 import { SelectedType } from './search.service';
-import {MetaCampaign} from "./metaCampaign.model";
-
 @Injectable({
   providedIn: 'root',
 })
@@ -181,15 +179,6 @@ export class CampaignService {
     }
 
     return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`);
-  }
-
-  /**
-   * This will connect to SF to load campaigns to potentially display on the homepage, subject to sorting
-   * and filtering to be done within the TS app. Until we have the SF API to connect to we return a canned value here.
-   */
-  fetchAllMetaCampaigns(): Observable<readonly MetaCampaign[]> {
-    return of([
-    ]);
   }
 
   getCampaignImpactStats(): Observable<CampaignStats>{
