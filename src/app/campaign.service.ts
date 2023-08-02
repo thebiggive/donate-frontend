@@ -1,8 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 
 import { Campaign } from './campaign.model';
+import { CampaignStats } from './campaign-stats.model';
 import { CampaignSummary } from './campaign-summary.model';
 import { environment } from '../environments/environment';
 import { SelectedType } from './search.service';
@@ -178,6 +179,13 @@ export class CampaignService {
     }
 
     return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`);
+  }
+
+  getCampaignImpactStats(): Observable<CampaignStats>{
+    // temporarily hardcoded until the endpoint is ready on SF side
+    // TODO: replace with the commented line below
+    return of(new CampaignStats(242_309_804, 15_000));
+    // return this.http.get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`)
   }
 }
 
