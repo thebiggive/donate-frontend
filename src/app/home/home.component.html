@@ -35,7 +35,7 @@
       <biggive-call-to-action *ngIf="(campaignImpactStats$ | async) as stats"
         default-text-colour="secondary"
         [mainTitle]="stats.formattedTotalRaised()"
-        [subtitle]="stats.formattedTotalCount()"
+        [subtitle]="'raised for over ' + stats.formattedTotalCount() + ' charity projects since 2008'"
         subtitle-colour="white"
         secondary-button-label="Read about our impact"
         secondary-button-url="https://biggive.org/impact"

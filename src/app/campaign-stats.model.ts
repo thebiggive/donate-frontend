@@ -12,5 +12,5 @@ export class CampaignStats {
 
     formattedTotalRaised = () => ("£" + this.totalRaised.toLocaleString('en-GB'));
 
-    formattedTotalCount = () => ("raised for over " + this.totalCampaignCount + " charity projects since 2008" );
+    formattedTotalCount = () => this.totalCampaignCount.toLocaleString('en-GB');
   }

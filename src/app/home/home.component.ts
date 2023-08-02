@@ -13,9 +13,10 @@ import { Observable } from 'rxjs';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-
   mainTitle = 'Matching Donations.\nMultiplying Impact.';
+
   campaignImpactStats$: Observable<CampaignStats> = this.campaignService.getCampaignImpactStats();
+  
   highlightCards: readonly HighlightCard[] = [
     {
       headerText: 'Upcoming Match Funding Campaigns',
