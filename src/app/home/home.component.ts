@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
     {
       headerText: 'Upcoming Match Funding Campaigns',
       bodyText: "Discover our exciting range of match funding opportunities for 2023/2024",
-      iconColor: "primary",
+      iconColor: "tertiary",
       backgroundImageUrl: new URL('/assets/images/peach-texture.jpg', environment.donateGlobalUriPrefix),
       button: {
         text: "Find out more",
