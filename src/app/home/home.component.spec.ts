@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -20,6 +21,7 @@ describe('HomeComponent', () => {
       declarations: [
       ],
       imports: [
+        AsyncPipe,
         HttpClientTestingModule,
         MatIconModule,
         MatInputModule,
