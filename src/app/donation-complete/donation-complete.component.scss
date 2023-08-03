@@ -154,9 +154,12 @@ hr {
 }
 
 .donation-summary {
-  text-align: center;
+  @media #{$breakpoint-md} {
+    text-align: center;
+  }
   width: 80%;
-  margin: 8rem auto;
+  margin-right: auto;
+  margin-left: auto;
 
   p {
     margin: 2rem 0;
@@ -193,7 +196,7 @@ div.clearfix {
 }
 
 .receipt {
-  width: 60%;
+  max-width: min(580px, 80%);
   margin: auto;
 
   table {
