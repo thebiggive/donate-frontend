@@ -154,7 +154,9 @@ hr {
 }
 
 .donation-summary {
-  text-align: center;
+  @media #{$breakpoint-md} {
+    text-align: center;
+  }
   width: 80%;
   margin-right: auto;
   margin-left: auto;
