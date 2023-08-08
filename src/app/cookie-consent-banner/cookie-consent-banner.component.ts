@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-cookie-consent-banner',
@@ -7,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class CookieConsentBannerComponent {
 
+  protected readonly environment = environment;
 }

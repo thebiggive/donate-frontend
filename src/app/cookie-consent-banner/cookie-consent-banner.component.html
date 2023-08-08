@@ -6,11 +6,12 @@ To help us make our marketing and website better,
 we'd like your consent to use cookies on behalf of third parties too.
 
 <!-- todo: Use env specific link? -->
-<a href="https://biggive.org/privacy/">Find out more in our Privacy Policy</a>
+<a href="{{environment.blogUriPrefix}}/privacy">Find out more in our Privacy Policy</a>
 
+  <div class="button-group">
 <biggive-button
   space-below="0"
-  colour-scheme="white"
+  colour-scheme="grey-light"
   is-past-campaign="false"
   is-future-campaign="false"
   label="Choose Preferences"
@@ -22,10 +23,9 @@ we'd like your consent to use cookies on behalf of third parties too.
   button-id="save-details-button"
 ></biggive-button>
 
-
 <biggive-button
   space-below="0"
-  colour-scheme="white"
+  colour-scheme="secondary"
   is-past-campaign="false"
   is-future-campaign="false"
   label="Accept All Cookies"
@@ -36,4 +36,5 @@ we'd like your consent to use cookies on behalf of third parties too.
   centered="false"
   button-id="save-details-button"
   ></biggive-button>
+</div>
 </div>

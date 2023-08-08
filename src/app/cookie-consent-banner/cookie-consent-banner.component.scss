@@ -1,4 +1,30 @@
+@import '../../abstract';
+
+* {
+  //outline: 1px dotted blue;
+}
+
 div.cooke-consent-container {
+  border-radius: 10px;
   background: white;
   border: 1px solid black;
+  max-width: 500px;
+  padding: 1em;
+}
+
+div.button-group {
+  margin-top: 1em;
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  flex-direction: column;
+
+  @media #{$breakpoint-md} {
+    flex-direction: row;
+  }
+
+    biggive-button {
+      gap: 1em;
+      margin-bottom: 10em;
+  }
 }
