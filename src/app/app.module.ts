@@ -21,6 +21,7 @@ import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import { TBG_DONATE_STORAGE } from './donation.service';
 import { environment } from '../environments/environment';
 import { TBG_DONATE_ID_STORAGE } from './identity.service';
+import {CookieConsentBannerComponent} from "./cookie-consent-banner/cookie-consent-banner.component";
 
 const matomoBaseUri = 'https://biggive.matomo.cloud';
 const matomoTrackers = environment.matomoSiteId ? [
@@ -31,9 +32,10 @@ const matomoTrackers = environment.matomoSiteId ? [
 ] : [];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-  ],
+    declarations: [
+        AppComponent,
+        CookieConsentBannerComponent,
+    ],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
