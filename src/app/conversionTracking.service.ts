@@ -2,21 +2,17 @@ import {MatomoTracker} from "ngx-matomo";
 import {Injectable} from "@angular/core";
 import {Donation} from "./donation.model";
 import {Campaign} from "./campaign.model";
-import {MetaPixelService} from "./meta-pixel.service";
-
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConversionTrackingService {
   constructor(
-    private metaPixelService: MetaPixelService,
     private matomoTracker: MatomoTracker,
   ) {
   }
 
   public convert(donation: Donation, campaign: Campaign) {
-    this.metaPixelService.trackConversion(donation);
     this.trackConversionWithMatomo(donation, campaign);
   }
 

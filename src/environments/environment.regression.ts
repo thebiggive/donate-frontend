@@ -23,7 +23,6 @@ export const environment: Environment = {
   getSiteControlId: '97792',
   identityApiPrefix: 'https://identity-regression.thebiggivetest.org.uk/v1',
   matomoSiteId: null,
-  metaPixelId: '165372943080609',
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',

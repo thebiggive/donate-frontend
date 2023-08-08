@@ -3,6 +3,9 @@ import {Component, OnInit} from '@angular/core';
 import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "./HighlightCard";
 import {environment} from "../../environments/environment";
+import {CampaignService} from "../campaign.service";
+import { CampaignStats } from '../campaign-stats.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +15,8 @@ import {environment} from "../../environments/environment";
 export class HomeComponent implements OnInit {
   mainTitle = 'Matching Donations.\nMultiplying Impact.';
 
+  campaignImpactStats$: Observable<CampaignStats> = this.campaignService.getCampaignImpactStats();
+  
   highlightCards: readonly HighlightCard[] = [
     {
       headerText: 'Upcoming Match Funding Campaigns',
@@ -47,6 +52,7 @@ export class HomeComponent implements OnInit {
 
   public constructor(
     private pageMeta: PageMetaService,
+    private campaignService: CampaignService,
   ) {}
 
   ngOnInit() {

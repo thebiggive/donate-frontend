@@ -15,7 +15,6 @@ export const environment: Environment = {
   getSiteControlId: '97792',
   identityApiPrefix: 'https://identity-production.thebiggive.org.uk/v1',
   matomoSiteId: 2,
-  metaPixelId: '1696575857422204',
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',

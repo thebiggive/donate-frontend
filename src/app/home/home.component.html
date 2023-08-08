@@ -32,10 +32,10 @@
     section-style-bottom="crop-right">
 
     <div style="padding: 50px 0 40px 0;">
-      <biggive-call-to-action
+      <biggive-call-to-action *ngIf="(campaignImpactStats$ | async) as stats"
         default-text-colour="secondary"
-        main-title="£242,309,804"
-        subtitle="raised for over 15,000 charity projects since 2008"
+        [mainTitle]="stats.formattedTotalRaised()"
+        [subtitle]="'raised for over ' + stats.formattedTotalCount() + ' charity projects since 2008'"
         subtitle-colour="white"
         secondary-button-label="Read about our impact"
         secondary-button-url="https://biggive.org/impact"
