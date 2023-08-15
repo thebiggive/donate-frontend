@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatomoModule } from 'ngx-matomo';
-import { InMemoryStorageService } from 'ngx-webstorage-service';
+import {InMemoryStorageService, SESSION_STORAGE} from 'ngx-webstorage-service';
 
 import { Donation } from './donation.model';
 import { DonationCreatedResponse } from './donation-created-response.model';
@@ -56,6 +56,7 @@ describe('DonationService', () => {
     providers: [
       // Inject in-memory storage for tests, in place of local storage.
       { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
+      { provide: SESSION_STORAGE, useExisting: InMemoryStorageService },
       DonationService,
       InMemoryStorageService,
     ],
