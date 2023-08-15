@@ -96,7 +96,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     private route: ActivatedRoute,
     public searchService: SearchService,
     private state: TransferState,
-    @Inject(SESSION_STORAGE) private storage: StorageService,
+    @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     private scroller: ViewportScroller,
     @Inject(openPipeToken) private timeLeftToOpenPipe: TimeLeftPipe,
     @Inject(endPipeToken) private timeLeftToEndPipe: TimeLeftPipe,
@@ -257,7 +257,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
         time: Date.now(), // ms
       };
 
-      this.storage.set(this.recentChildrenKey, recentChildrenData);
+      this.sessionStorage.set(this.recentChildrenKey, recentChildrenData);
     }, () => {
       this.filterError = true; // Error, should only be thrown if the callout SF API returns an error
       this.loading = false;
@@ -273,7 +273,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.offset = 0;
     const query = this.campaignService.buildQuery(this.searchService.selected, 0, this.campaignId, this.campaignSlug, this.fundSlug);
 
-    const recentChildrenData = this.storage.get(this.recentChildrenKey);
+    const recentChildrenData = this.sessionStorage.get(this.recentChildrenKey);
     // Only an exact query match should reinstate the same child campaigns on load.
     if (
       recentChildrenData &&
