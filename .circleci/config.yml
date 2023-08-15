@@ -204,6 +204,9 @@ workflows:
             - ecs-deploys
           requires:
             - deploy-regression-static
+          setup-remote-docker: true
+          remote-docker-version: '24.0.5'
+          remote-docker-layer-caching: true
           extra-build-args: '--build-arg BUILD_ENV=regression --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN}'
           repo: '${AWS_ECR_REPO_NAME}'
           region: '${AWS_REGION}'
@@ -238,6 +241,9 @@ workflows:
             - ecs-deploys
           requires:
             - deploy-staging-static
+          setup-remote-docker: true
+          remote-docker-version: '24.0.5'
+          remote-docker-layer-caching: true
           extra-build-args: '--build-arg BUILD_ENV=staging --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN}'
           repo: '${AWS_ECR_REPO_NAME}'
           region: '${AWS_REGION}'
@@ -291,6 +297,9 @@ workflows:
             - ecs-deploys
           requires:
             - deploy-production-static
+          setup-remote-docker: true
+          remote-docker-version: '24.0.5'
+          remote-docker-layer-caching: true
           extra-build-args: '--build-arg BUILD_ENV=production --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN}'
           repo: '${AWS_ECR_REPO_NAME}'
           region: '${AWS_REGION}'
