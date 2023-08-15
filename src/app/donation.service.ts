@@ -236,6 +236,10 @@ export class DonationService {
     this.sessionStorage.set(this.storageKey, donationCouplets);
   }
 
+  /**
+   * This funtion can be deleted 1 day after this version is deployed - when we store only in session storage there is no need
+   * to remove anything.
+   */
   removeOldLocalDonations() {
     const donationsOlderThan8Hours: Array<{ donation: Donation, jwt: string }> = this.getDonationCouplets().filter(donationItem => {
       return (!donationItem.donation.createdTime || this.getCreatedTime(donationItem.donation) < (Date.now() - (8 * 60 * 60 * 1_000)));
