@@ -13,7 +13,7 @@ import {
   TransferState,
 } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
-import { StorageService } from 'ngx-webstorage-service';
+import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
 import { Subscription } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
@@ -97,7 +97,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     private route: ActivatedRoute,
     public searchService: SearchService,
     private state: TransferState,
-    @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
+    @Inject(SESSION_STORAGE) private storage: StorageService,
     private scroller: ViewportScroller,
     @Inject(openPipeToken) private timeLeftToOpenPipe: TimeLeftPipe,
     @Inject(endPipeToken) private timeLeftToEndPipe: TimeLeftPipe,
