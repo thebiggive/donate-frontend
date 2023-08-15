@@ -232,14 +232,15 @@ export class DonationService {
       1,
     );
 
+    this.storage.set(this.storageKey, donationCouplets);
     this.sessionStorage.set(this.storageKey, donationCouplets);
   }
 
   removeOldLocalDonations() {
-    const donationsOlderThan30Days: Array<{ donation: Donation, jwt: string }> = this.getDonationCouplets().filter(donationItem => {
-      return (!donationItem.donation.createdTime || this.getCreatedTime(donationItem.donation) < (Date.now() - 2592000000));
+    const donationsOlderThan8Hours: Array<{ donation: Donation, jwt: string }> = this.getDonationCouplets().filter(donationItem => {
+      return (!donationItem.donation.createdTime || this.getCreatedTime(donationItem.donation) < (Date.now() - (8 * 60 * 60 * 1_000)));
     });
-    for (const oldDonationCouplet of donationsOlderThan30Days) {
+    for (const oldDonationCouplet of donationsOlderThan8Hours) {
       this.removeLocalDonation(oldDonationCouplet.donation);
     }
   }
