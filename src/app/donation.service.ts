@@ -1,24 +1,16 @@
-import { isPlatformServer } from '@angular/common';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {
-  Inject,
-  Injectable,
-  InjectionToken,
-  makeStateKey,
-  Optional,
-  PLATFORM_ID,
-  TransferState,
-} from '@angular/core';
-import { StorageService } from 'ngx-webstorage-service';
-import { Observable, of } from 'rxjs';
-import { PaymentMethod } from '@stripe/stripe-js';
+import {isPlatformServer} from '@angular/common';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Inject, Injectable, InjectionToken, makeStateKey, Optional, PLATFORM_ID, TransferState,} from '@angular/core';
+import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
+import {Observable, of} from 'rxjs';
+import {PaymentMethod} from '@stripe/stripe-js';
 
-import { COUNTRY_CODE } from './country-code.token';
-import { Donation } from './donation.model';
-import { DonationCreatedResponse } from './donation-created-response.model';
-import { environment } from '../environments/environment';
+import {COUNTRY_CODE} from './country-code.token';
+import {Donation} from './donation.model';
+import {DonationCreatedResponse} from './donation-created-response.model';
+import {environment} from '../environments/environment';
 import {Person} from "./person.model";
-import { MatomoTracker } from 'ngx-matomo';
+import {MatomoTracker} from 'ngx-matomo';
 
 export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
 
@@ -36,7 +28,15 @@ export class DonationService {
     private http: HttpClient,
     private matomoTracker: MatomoTracker,
     @Inject(PLATFORM_ID) private platformId: Object,
+
+    @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
+
+    /**
+     * @todo - after a version of this that includes the `sessionStorage` property above has been deployed for
+     * one day remove this - it's only here to allow us to retrieve donation info stored just before that change.
+     */
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
+
     private state: TransferState,
   ) {}
 
@@ -217,7 +217,8 @@ export class DonationService {
 
     const donationCouplets = this.getDonationCouplets();
     donationCouplets.push({ donation, jwt });
-    this.storage.set(this.storageKey, donationCouplets);
+
+    this.sessionStorage.set(this.storageKey, donationCouplets);
   }
 
   removeLocalDonation(donation?: Donation) {
@@ -230,7 +231,8 @@ export class DonationService {
       donationCouplets.findIndex(donationItem => donationItem.donation.donationId === donation.donationId),
       1,
     );
-    this.storage.set(this.storageKey, donationCouplets);
+
+    this.sessionStorage.set(this.storageKey, donationCouplets);
   }
 
   removeOldLocalDonations() {
@@ -304,7 +306,7 @@ export class DonationService {
    * status & additional data, and to cancel it if it's Pending or Reserved.
    */
   private getDonationCouplets(): Array<{ donation: Donation, jwt: string }> {
-    return this.storage.get(this.storageKey) || [];
+    return this.sessionStorage.get(this.storageKey) ?? this.storage.get(this.storageKey) ?? [];
   }
 
   deleteStripePaymentMethod(person: Person, method: PaymentMethod, jwt: string) {
