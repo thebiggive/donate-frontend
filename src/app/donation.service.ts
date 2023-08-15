@@ -237,7 +237,7 @@ export class DonationService {
   }
 
   /**
-   * This funtion can be deleted 1 day after this version is deployed - when we store only in session storage there is no need
+   * @todo This funtion can be deleted 1 day after this version is deployed - when we store only in session storage there is no need
    * to remove anything.
    */
   removeOldLocalDonations() {
