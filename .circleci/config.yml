@@ -36,14 +36,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - v4-dependencies-{{ checksum "package-lock.json" }}
+            - v3-dependencies-{{ checksum "package-lock.json" }}
 
       - run: npm install --quiet
 
       - save_cache:
           paths:
             - node_modules
-          key: v4-dependencies-{{ checksum "package-lock.json" }}
+          key: v3-dependencies-{{ checksum "package-lock.json" }}
 
       - run: npm run ci
 
