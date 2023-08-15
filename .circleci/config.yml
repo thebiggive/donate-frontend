@@ -9,7 +9,7 @@ orbs:
   slack: circleci/slack@4.12.5
 
 jobs:
-  build:
+  test:
     docker:
       - image: cimg/node:16.18-browsers
         auth:
@@ -36,14 +36,15 @@ jobs:
 
       - restore_cache:
           keys:
-            - v3-dependencies-{{ checksum "package-lock.json" }}
+            - v4-dependencies-with-chrome-{{ checksum "package-lock.json" }}
 
       - run: npm install --quiet
 
       - save_cache:
           paths:
             - node_modules
-          key: v3-dependencies-{{ checksum "package-lock.json" }}
+            - /home/circleci/.cache/puppeteer
+          key: v4-dependencies-with-chrome-{{ checksum "package-lock.json" }}
 
       - run: npm run ci
 
@@ -63,8 +64,16 @@ jobs:
     steps:
       - checkout
 
+      - restore_cache:
+          keys:
+            - v4-dependencies-{{ checksum "package-lock.json" }}
       - run: npm config set puppeteer_skip_chromium_download true
       - run: npm install --quiet
+      - save_cache:
+          paths:
+            - node_modules
+            - /home/circleci/.cache/puppeteer
+          key: v4-dependencies-{{ checksum "package-lock.json" }}
 
       - run: npm run build:staging
 
@@ -98,8 +107,16 @@ jobs:
     steps:
       - checkout
 
+      - restore_cache:
+          keys:
+            - v4-dependencies-{{ checksum "package-lock.json" }}
       - run: npm config set puppeteer_skip_chromium_download true
       - run: npm install --quiet
+      - save_cache:
+          paths:
+            - node_modules
+            - /home/circleci/.cache/puppeteer
+          key: v4-dependencies-{{ checksum "package-lock.json" }}
 
       - run: npm run build:regression
 
@@ -133,8 +150,16 @@ jobs:
     steps:
       - checkout
 
+      - restore_cache:
+          keys:
+            - v4-dependencies-{{ checksum "package-lock.json" }}
       - run: npm config set puppeteer_skip_chromium_download true
       - run: npm install --quiet
+      - save_cache:
+          paths:
+            - node_modules
+            - /home/circleci/.cache/puppeteer
+          key: v4-dependencies-{{ checksum "package-lock.json" }}
 
       - run: npm run build:production
 
@@ -153,9 +178,9 @@ jobs:
             --cache-control "max-age=86400"
 
 workflows:
-  build:
+  commit:
     jobs:
-      - build:
+      - test:
           context:
             - docker-hub-creds
             - jira
