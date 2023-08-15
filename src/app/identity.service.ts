@@ -1,15 +1,16 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken } from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Inject, Injectable, InjectionToken} from '@angular/core';
 import jwtDecode from 'jwt-decode';
-import { MatomoTracker } from 'ngx-matomo';
-import { StorageService } from 'ngx-webstorage-service';
+import {MatomoTracker} from 'ngx-matomo';
+import {StorageService} from 'ngx-webstorage-service';
 import {Observable, of} from 'rxjs';
 
-import { Credentials } from './credentials.model';
-import { environment } from '../environments/environment';
-import { IdentityJWT } from './identity-jwt.model';
-import { Person } from './person.model';
-import { FundingInstruction } from './fundingInstruction.model';
+import {Credentials} from './credentials.model';
+import {environment} from '../environments/environment';
+import {IdentityJWT} from './identity-jwt.model';
+import {Person} from './person.model';
+import {FundingInstruction} from './fundingInstruction.model';
+import {CookieService} from 'ngx-cookie-service';
 
 export const TBG_DONATE_ID_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_ID_STORAGE');
 
@@ -17,6 +18,7 @@ export const TBG_DONATE_ID_STORAGE = new InjectionToken<StorageService>('TBG_DON
   providedIn: 'root',
 })
 export class IdentityService {
+  private readonly cookieName = 'SESSION';
   private readonly loginPath = '/auth';
   private readonly peoplePath = '/people';
   private readonly resetPasswordTokenPath = '/password-reset-token';
@@ -29,7 +31,12 @@ export class IdentityService {
   constructor(
     private http: HttpClient,
     private matomoTracker: MatomoTracker,
+
+    /**
+     * @todo remove StorageService once we have been saving JWTs to cookies for one day in prod.
+     */
     @Inject(TBG_DONATE_ID_STORAGE) private storage: StorageService,
+    private cookieService: CookieService,
   ) {}
 
   login(credentials: Credentials): Observable<{ jwt: string}> {
@@ -106,19 +113,25 @@ export class IdentityService {
   }
 
   clearJWT() {
+    this.cookieService.delete(this.cookieName);
     this.storage.remove(this.storageKey);
     this.executeJwtCallBacks();
   }
 
   getIdAndJWT(): { id: string, jwt: string } | undefined {
-    const idAndJwt = this.storage.get(this.storageKey);
+    const cookieValue = this.cookieService.get(this.cookieName);
+    var idAndJwt: {jwt: string, id: string};
+    if (cookieValue) {
+      idAndJwt = JSON.parse(cookieValue);
+    } else {
+      idAndJwt = this.storage.get(this.storageKey);
+    }
 
     if (idAndJwt === undefined) {
       return undefined;
     }
 
-    const data = this.getTokenPayload(idAndJwt?.jwt);
-    if (data.exp as number < Math.floor(Date.now() / 1000)) {
+    if (this.getTokenPayload(idAndJwt.jwt).exp as number < Math.floor(Date.now() / 1000)) {
       // JWT has expired.
       this.clearJWT();
       return undefined;
@@ -142,7 +155,8 @@ export class IdentityService {
   }
 
   saveJWT(id: string, jwt: string) {
-    this.storage.set(this.storageKey, { id, jwt });
+    const daysTilExpiry = 1;
+    this.cookieService.set(this.cookieName, JSON.stringify({id, jwt}), daysTilExpiry, '/');
     this.executeJwtCallBacks();
   }
 
