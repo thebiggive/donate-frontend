@@ -98,7 +98,9 @@ export function app() {
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
   server.engine('html', ngExpressEngine({
     bootstrap: AppServerModule,
-    inlineCriticalCss: false, // https://github.com/angular/universal/issues/2106#issuecomment-859720224
+    // Historically we needed this off to avoid worse performance problems than
+    // the inlining fixed. But latest Angular 16.1 releases have a possible improvement – https://github.com/angular/universal/issues/2106
+    inlineCriticalCss: true,
   }));
 
   server.set('view engine', 'html');

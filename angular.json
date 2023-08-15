@@ -59,7 +59,7 @@
                 "scripts": true,
                 "styles": {
                   "minify": true,
-                  "inlineCritical": false
+                  "inlineCritical": true
                 },
                 "fonts": true
               },
@@ -101,7 +101,7 @@
                 "scripts": true,
                 "styles": {
                   "minify": true,
-                  "inlineCritical": false
+                  "inlineCritical": true
                 },
                 "fonts": true
               },
@@ -143,7 +143,7 @@
                 "scripts": true,
                 "styles": {
                   "minify": true,
-                  "inlineCritical": false
+                  "inlineCritical": true
                 },
                 "fonts": true
               },
@@ -246,7 +246,7 @@
             "tsConfig": "tsconfig.server.json",
             "optimization": {
               "scripts": true,
-              "styles": false
+              "styles": true
             },
             "outputHashing": "none",
             "sourceMap": {
