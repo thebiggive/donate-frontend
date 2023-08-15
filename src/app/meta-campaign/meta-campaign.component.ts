@@ -20,7 +20,6 @@ import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { DatePipe } from '@angular/common'
-import { TBG_DONATE_STORAGE } from '../donation.service';
 import { environment } from '../../environments/environment';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
