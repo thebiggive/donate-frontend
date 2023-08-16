@@ -232,17 +232,14 @@ export class DonationService {
       1,
     );
 
-    this.storage.set(this.storageKey, donationCouplets);
     this.sessionStorage.set(this.storageKey, donationCouplets);
   }
 
+  /**
+   * Removes donations that were set in local storage before we switched ot using session storage.
+   */
   removeOldLocalDonations() {
-    const donationsOlderThan8Hours: Array<{ donation: Donation, jwt: string }> = this.getDonationCouplets().filter(donationItem => {
-      return (!donationItem.donation.createdTime || this.getCreatedTime(donationItem.donation) < (Date.now() - (8 * 60 * 60 * 1_000)));
-    });
-    for (const oldDonationCouplet of donationsOlderThan8Hours) {
-      this.removeLocalDonation(oldDonationCouplet.donation);
-    }
+    this.storage.remove(this.storageKey);
   }
 
   /**
