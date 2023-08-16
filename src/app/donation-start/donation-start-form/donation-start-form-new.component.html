@@ -188,15 +188,6 @@
           if this message persists.
         </p>
 
-        <re-captcha
-          #idCaptcha
-          size="invisible"
-          errorMode="handled"
-          (resolved)="captchaIdentityReturn($event)"
-          (errored)="captchaIdentityError()"
-          siteKey="{{ recaptchaIdSiteKey }}"
-        ></re-captcha>
-
         <div style="text-align: center">
           <button style="width: 40%;"
             type="button"
@@ -445,7 +436,7 @@
         label="Receive updates"
       >
         <p class="binary-question-header b-bold b-rt-0" id="optInCharityEmail-label">Would you be happy to receive email updates from <span class="colour-primary">{{ campaign.charity.name }}</span>?</p>
-        <mat-radio-group tabindex="0" aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
+        <mat-radio-group aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
           <div class="binary-options">
             <div class="binary-option">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">
@@ -478,7 +469,7 @@
         </mat-hint>
 
         <p class="binary-question-header b-bold b-rt-0" id="optInTbgEmail-label">Would you be happy to receive emails from the <span class="colour-primary">Big Give</span>?</p>
-        <mat-radio-group tabindex="0" aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
+        <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
           <div class="binary-options">
             <div class="binary-option">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">
@@ -503,7 +494,7 @@
 
         <div *ngIf="showChampionOptIn">
           <p class="binary-question-header b-bold b-rt-0" id="optInChampionEmail-label">Would you be happy to receive emails from <span class="colour-primary">{{ campaign.championName }}</span>?</p>
-          <mat-radio-group tabindex="0" aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
+          <mat-radio-group aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
             <mat-hint>{{ campaign.championOptInStatement }}.</mat-hint>
             <div class="binary-options">
               <div class="binary-option">
@@ -628,5 +619,13 @@
         </div>
       </mat-step>
     </mat-vertical-stepper>
+    <re-captcha
+      #idCaptcha
+      size="invisible"
+      errorMode="handled"
+      (resolved)="captchaIdentityReturn($event)"
+      (errored)="captchaIdentityError()"
+      siteKey="{{ recaptchaIdSiteKey }}"
+    ></re-captcha>
   </form>
 
