@@ -54,7 +54,7 @@ describe('DonationService', () => {
       RouterTestingModule,
     ],
     providers: [
-      // Inject in-memory storage for tests, in place of local storage and ession storage.
+      // Inject in-memory storage for tests, in place of local storage and session storage.
       // We need to use 'useClass', not 'useExisting' here otherwise we would use the same object in tests to represent
       // both storage places, and they will interfere with each other.
       { provide: TBG_DONATE_STORAGE, useClass: InMemoryStorageService },

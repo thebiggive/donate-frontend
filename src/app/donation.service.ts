@@ -236,7 +236,7 @@ export class DonationService {
   }
 
   /**
-   * Removes donations that were set in local storage before we switched ot using session storage.
+   * Removes donations that were set in local storage before we switched to using session storage.
    */
   removeOldLocalDonations() {
     this.storage.remove(this.storageKey);
