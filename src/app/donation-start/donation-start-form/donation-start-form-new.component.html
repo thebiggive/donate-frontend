@@ -159,7 +159,7 @@
 
             </mat-expansion-panel-header>
             <p>
-              Big Give is a registered charity (1136547). We don’t charge charities for using our platform; we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
+              Big Give is a registered charity (charity number 1136547). We don’t charge charities for using our platform; we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
             </p>
             <p>Your tips will be going to:</p>
             <ul>
@@ -167,7 +167,7 @@
                 donations to good causes.
               </li>
               <li>Providing match funds in our
-                <a href="https://biggive.org/anchor-match-fund/" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>Anchor Match Fund</a>
+                <a href="https://biggive.org/anchor-match-fund/" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>Anchor Match Fund</a>.
                 Through tips, charities will receive funding to launch their own match funded campaign on Big Give.
               </li>
             </ul>
@@ -187,15 +187,6 @@
               contact us</a>
           if this message persists.
         </p>
-
-        <re-captcha
-          #idCaptcha
-          size="invisible"
-          errorMode="handled"
-          (resolved)="captchaIdentityReturn($event)"
-          (errored)="captchaIdentityError()"
-          siteKey="{{ recaptchaIdSiteKey }}"
-        ></re-captcha>
 
         <div style="text-align: center">
           <button style="width: 40%;"
@@ -445,7 +436,7 @@
         label="Receive updates"
       >
         <p class="binary-question-header b-bold b-rt-0" id="optInCharityEmail-label">Would you be happy to receive email updates from <span class="colour-primary">{{ campaign.charity.name }}</span>?</p>
-        <mat-radio-group tabindex="0" aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
+        <mat-radio-group aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
           <div class="binary-options">
             <div class="binary-option">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">
@@ -478,7 +469,7 @@
         </mat-hint>
 
         <p class="binary-question-header b-bold b-rt-0" id="optInTbgEmail-label">Would you be happy to receive emails from the <span class="colour-primary">Big Give</span>?</p>
-        <mat-radio-group tabindex="0" aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
+        <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
           <div class="binary-options">
             <div class="binary-option">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">
@@ -503,7 +494,7 @@
 
         <div *ngIf="showChampionOptIn">
           <p class="binary-question-header b-bold b-rt-0" id="optInChampionEmail-label">Would you be happy to receive emails from <span class="colour-primary">{{ campaign.championName }}</span>?</p>
-          <mat-radio-group tabindex="0" aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
+          <mat-radio-group aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
             <mat-hint>{{ campaign.championOptInStatement }}.</mat-hint>
             <div class="binary-options">
               <div class="binary-option">
@@ -628,5 +619,13 @@
         </div>
       </mat-step>
     </mat-vertical-stepper>
+    <re-captcha
+      #idCaptcha
+      size="invisible"
+      errorMode="handled"
+      (resolved)="captchaIdentityReturn($event)"
+      (errored)="captchaIdentityError()"
+      siteKey="{{ recaptchaIdSiteKey }}"
+    ></re-captcha>
   </form>
 
