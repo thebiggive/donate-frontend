@@ -400,25 +400,13 @@ div.match-funded-badge-wrapper {
 
 // bullets as arrows: https://stackoverflow.com/a/12216973
 
-ul {
-  list-style: none;
-  margin-left: 0;
-  padding-left: 0;
-}
-
-li {
+mat-expansion-panel ul li {
+  list-style: none "\2192" outside; // \2192 is "→"
   padding-left: 1em;
-  text-indent: -1em;
 
-  * {
-    text-indent: initial;
-  }
 }
 
-mat-expansion-panel li:before {
-  content: "→";
-  padding-right: 5px;
-}
+
 mat-expansion-panel {
   margin-top: 30px;
 }
