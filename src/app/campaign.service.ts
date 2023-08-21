@@ -182,10 +182,9 @@ export class CampaignService {
   }
 
   getCampaignImpactStats(): Observable<CampaignStats>{
-    // temporarily hardcoded until the endpoint is ready on SF side
-    // TODO: replace with the commented line below
-    return of(new CampaignStats(242_309_804, 15_000));
-    // return this.http.get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`)
+    //const apiRsp = this.http.get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`);
+    const apiRsp = this.http.get<CampaignStats>('https://sf-api-production.thebiggive.org.uk/campaigns/services/apexrest/v1.0/campaigns/stats');
+    return apiRsp;
   }
 }
 

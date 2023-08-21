@@ -34,8 +34,8 @@
     <div style="padding: 50px 0 40px 0;">
       <biggive-call-to-action *ngIf="(campaignImpactStats$ | async) as stats"
         default-text-colour="secondary"
-        [mainTitle]="stats.formattedTotalRaised()"
-        [subtitle]="'raised for over ' + stats.formattedTotalCount() + ' charity projects since 2008'"
+        [mainTitle]="formattedTotalRaised(stats.totalRaised)"
+        [subtitle]="'raised for over ' + formattedTotalCount(stats.totalCampaignCount) + ' charity projects since 2008'"
         subtitle-colour="white"
         secondary-button-label="Read about our impact"
         secondary-button-url="https://biggive.org/impact"
