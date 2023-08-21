@@ -9,8 +9,4 @@ export class CampaignStats {
          */
         public totalCampaignCount: number
     ) {}
-
-    formattedTotalRaised = () => ("£" + this.totalRaised.toLocaleString('en-GB'));
-
-    formattedTotalCount = () => this.totalCampaignCount.toLocaleString('en-GB');
   }
