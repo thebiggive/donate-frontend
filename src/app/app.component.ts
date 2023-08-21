@@ -10,10 +10,12 @@ import {NavigationService} from './navigation.service';
 import {Person} from "./person.model";
 import {IdentityService} from "./identity.service";
 import {environment} from "../environments/environment";
+import {flags} from "./featureFlags";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  styleUrls: ["./app.component.scss"]
 })
 export class AppComponent implements AfterViewInit, OnInit {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
@@ -26,6 +28,9 @@ export class AppComponent implements AfterViewInit, OnInit {
   public readonly experienceUriPrefix = environment.experienceUriPrefix;
 
   public isDataLoaded = false;
+
+  protected readonly environment = environment;
+  protected readonly flags = flags;
 
   constructor(
     private identityService: IdentityService,
