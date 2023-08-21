@@ -60,11 +60,8 @@ export function app() {
           'fonts.googleapis.com',
           'fonts.gstatic.com',
           'js.stripe.com',
-          'optimize.google.com',
           'player.vimeo.com',
-          // Next 2 needed for reCAPTCHA to fully load.
-          'recaptcha.google.com',
-          'www.google.com',
+          'recaptcha.net',
           'www.youtube.com',
         ],
         'img-src': [
@@ -86,8 +83,7 @@ export function app() {
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
           'js.stripe.com',
-          // Next 2 needed for reCAPTCHA to fully load.
-          'www.google.com',
+          'recaptcha.net',
           'www.gstatic.com',
           'https://www.youtube.com/', // YT `/iframe_api` on home page needs this atm?
         ],

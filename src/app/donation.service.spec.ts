@@ -2,7 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MatomoModule } from 'ngx-matomo';
-import { InMemoryStorageService } from 'ngx-webstorage-service';
+import {InMemoryStorageService, SESSION_STORAGE} from 'ngx-webstorage-service';
 
 import { Donation } from './donation.model';
 import { DonationCreatedResponse } from './donation-created-response.model';
@@ -54,8 +54,11 @@ describe('DonationService', () => {
       RouterTestingModule,
     ],
     providers: [
-      // Inject in-memory storage for tests, in place of local storage.
-      { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
+      // Inject in-memory storage for tests, in place of local storage and session storage.
+      // We need to use 'useClass', not 'useExisting' here otherwise we would use the same object in tests to represent
+      // both storage places, and they will interfere with each other.
+      { provide: TBG_DONATE_STORAGE, useClass: InMemoryStorageService },
+      { provide: SESSION_STORAGE, useClass: InMemoryStorageService },
       DonationService,
       InMemoryStorageService,
     ],

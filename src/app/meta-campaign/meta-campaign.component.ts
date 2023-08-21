@@ -13,14 +13,13 @@ import {
   TransferState,
 } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
-import { StorageService } from 'ngx-webstorage-service';
+import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
 import { Subscription } from 'rxjs';
 
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { DatePipe } from '@angular/common'
-import { TBG_DONATE_STORAGE } from '../donation.service';
 import { environment } from '../../environments/environment';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
@@ -97,7 +96,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     private route: ActivatedRoute,
     public searchService: SearchService,
     private state: TransferState,
-    @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
+    @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     private scroller: ViewportScroller,
     @Inject(openPipeToken) private timeLeftToOpenPipe: TimeLeftPipe,
     @Inject(endPipeToken) private timeLeftToEndPipe: TimeLeftPipe,
@@ -258,7 +257,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
         time: Date.now(), // ms
       };
 
-      this.storage.set(this.recentChildrenKey, recentChildrenData);
+      this.sessionStorage.set(this.recentChildrenKey, recentChildrenData);
     }, () => {
       this.filterError = true; // Error, should only be thrown if the callout SF API returns an error
       this.loading = false;
@@ -274,7 +273,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.offset = 0;
     const query = this.campaignService.buildQuery(this.searchService.selected, 0, this.campaignId, this.campaignSlug, this.fundSlug);
 
-    const recentChildrenData = this.storage.get(this.recentChildrenKey);
+    const recentChildrenData = this.sessionStorage.get(this.recentChildrenKey);
     // Only an exact query match should reinstate the same child campaigns on load.
     if (
       recentChildrenData &&

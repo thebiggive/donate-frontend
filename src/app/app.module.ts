@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { ComponentsModule } from '@biggive/components-angular';
 import { TransferHttpCacheModule } from '@nguniversal/common';
-import { RECAPTCHA_NONCE } from 'ng-recaptcha';
+import {RECAPTCHA_BASE_URL, RECAPTCHA_NONCE} from 'ng-recaptcha';
 import { MatomoModule } from 'ngx-matomo';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
@@ -73,6 +73,10 @@ const matomoTrackers = environment.matomoSiteId ? [
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: RECAPTCHA_NONCE, useValue: environment.recaptchaNonce },
+    {
+      provide: RECAPTCHA_BASE_URL,
+      useValue: 'https://recaptcha.net/recaptcha/api.js'  // using this URL instead of default google.com means we avoid google.com cookies.
+    }
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
