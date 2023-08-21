@@ -1,4 +1,4 @@
-import { APP_BASE_HREF } from '@angular/common';
+import {APP_BASE_HREF, AsyncPipe} from '@angular/common';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -20,7 +20,9 @@ import { TBG_DONATE_ID_STORAGE } from './identity.service'
 describe('AppComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      declarations: [AppComponent],
       imports: [
+        AsyncPipe,
         HttpClientTestingModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatIconModule,

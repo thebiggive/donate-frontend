@@ -11,6 +11,7 @@ import {Person} from "./person.model";
 import {IdentityService} from "./identity.service";
 import {environment} from "../environments/environment";
 import {flags} from "./featureFlags";
+import {CookiePreferenceService} from "./cookiePreference.service";
 
 @Component({
   selector: 'app-root',
@@ -31,6 +32,7 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   protected readonly environment = environment;
   protected readonly flags = flags;
+  protected readonly userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
 
   constructor(
     private identityService: IdentityService,
@@ -38,6 +40,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     private donationService: DonationService,
     private getSiteControlService: GetSiteControlService,
     private navigationService: NavigationService,
+    private cookiePreferenceService: CookiePreferenceService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
   ) {
@@ -49,6 +52,10 @@ export class AppComponent implements AfterViewInit, OnInit {
         }
       }
     });
+
+    this.cookiePreferenceService.userHasExpressedCookiePreference().subscribe({
+        next: value => {console.log({value})}
+    })
   }
 
   /**
@@ -100,5 +107,10 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationStart),
     ).subscribe(() => headerEl.closeMobileMenuFromOutside());
+  }
+
+  @HostListener('cookieBannerAcceptAllSelected', ['$event'])
+  onCookieBannerAcceptAllSelected(_event: CustomEvent) {
+    this.cookiePreferenceService.agreeToAll();
   }
 }

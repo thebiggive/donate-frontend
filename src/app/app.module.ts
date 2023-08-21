@@ -1,4 +1,4 @@
-import { APP_BASE_HREF, DatePipe } from '@angular/common';
+import {APP_BASE_HREF, AsyncPipe, DatePipe} from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
@@ -35,6 +35,7 @@ const matomoTrackers = environment.matomoSiteId ? [
     AppComponent,
   ],
   imports: [
+    AsyncPipe,
     BrowserAnimationsModule,
     BrowserModule,
     ComponentsModule,
