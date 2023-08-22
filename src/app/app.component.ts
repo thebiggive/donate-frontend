@@ -52,10 +52,6 @@ export class AppComponent implements AfterViewInit, OnInit {
         }
       }
     });
-
-    this.cookiePreferenceService.userHasExpressedCookiePreference().subscribe({
-        next: value => {console.log({value})}
-    })
   }
 
   /**

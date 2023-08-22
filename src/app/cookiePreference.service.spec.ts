@@ -24,7 +24,7 @@ describe('CookiePreferenceService', () => {
     })
   })
 
-  it('should show say user not expressed cookie preference if all cookies accepted cookie is set', (done) => {
+  it('should show user expressed cookie preference if all cookies accepted cookie is set', (done) => {
     mockCookieService.get = (name) => {
       expect(name).toBe('cookie-preferences');
       return '{"agreedToAll": true}';
