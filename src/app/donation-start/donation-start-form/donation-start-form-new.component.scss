@@ -398,12 +398,9 @@ div.match-funded-badge-wrapper {
   position: relative;
 }
 
-// bullets as arrows: https://stackoverflow.com/a/12216973
-
 mat-expansion-panel ul li {
-  list-style: none url("/assets/images/arrow-right.svg") outside;
+  list-style: none disc outside;
   padding-left: 1em;
-
 }
 
 
