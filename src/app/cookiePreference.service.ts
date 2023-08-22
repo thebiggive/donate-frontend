@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable, Subject} from "rxjs";
 import {CookieService} from "ngx-cookie-service";
+import {environment} from "../environments/environment";
 
 type CookiePreferences =
     {agreedToAll: true} |
@@ -38,7 +39,7 @@ export class CookiePreferenceService {
 
   agreeToAll() {
     const preferences: CookiePreferences = {agreedToAll: true};
-    this.cookieService.set(this.cookieName, JSON.stringify(preferences), this.cookieExpiryPeriodDays)
+    this.cookieService.set(this.cookieName, JSON.stringify(preferences), this.cookieExpiryPeriodDays, '/', environment.sharedCookieDomain)
     this.userHasAgreedToAllCookies.next(true);
   }
 }

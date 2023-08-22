@@ -17,6 +17,7 @@ export const environment: Environment = {
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   donateGlobalUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
   donateUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
+  sharedCookieDomain: '.thebiggivetest.org.uk',
   blogUriPrefix: 'https://biggive.org',
   experienceUriPrefix: 'https://thebiggive--regtest1.sandbox.my.site.com',
   donationsApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',

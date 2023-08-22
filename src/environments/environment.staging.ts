@@ -16,6 +16,7 @@ export const environment: Environment = {
   donateGlobalUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   blogUriPrefix: 'https://wp-staging.thebiggivetest.org.uk',
+  sharedCookieDomain: '.thebiggivetest.org.uk',
   experienceUriPrefix: 'https://thebiggive--full.sandbox.my.site.com',
   donationsApiPrefix: 'https://matchbot-staging.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',

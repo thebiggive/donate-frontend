@@ -17,6 +17,11 @@ export interface Environment {
   /** Prefix for pages served by WordPress */
   blogUriPrefix: string,
 
+  /** Domain for cookies to be shared between donate-frontend, wordpress etc.
+   * Currently, ".biggive.org" in production.
+   */
+   sharedCookieDomain: string;
+
   /** Prefix for pages served by the SF Experience Cloud */
   experienceUriPrefix: string,
   donationsApiPrefix: string,

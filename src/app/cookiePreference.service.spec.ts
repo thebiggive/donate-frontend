@@ -42,10 +42,12 @@ describe('CookiePreferenceService', () => {
 
   it('Should set a cookie to show the user accepts all cookies', done => {
     // @ts-ignore - we don't need to take all the params, only the ones our SUT will actually pass.
-    mockCookieService.set = (name, value: string, duration: number) => {
+    mockCookieService.set = (name, value: string, duration: number, path: string, domain: string) => {
       expect(name).toBe('cookie-preferences');
       expect(JSON.parse(value).agreedToAll).toBe(true);
       expect(duration).toBe(365);
+      expect(path).toBe('/');
+      expect(domain).toBe('localhost');
 
       // not the most efficient way to assert that this function is called, if the SUT fails to call it we just get
       // a time out failure by not calling done within 5 seconds. There's nothing async here so we could fail straight
