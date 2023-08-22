@@ -14,3 +14,7 @@
   [blogUrlPrefix]="blogUriPrefix"
   [experienceUrlPrefix]="experienceUriPrefix"
 ></biggive-footer>
+
+<div id="cookie-banner" *ngIf="(userHasExpressedCookiePreference$ | async) === false && flags.cookieBannerEnabled">
+    <biggive-cookie-banner [blogUriPrefix]="environment.blogUriPrefix" />
+</div>

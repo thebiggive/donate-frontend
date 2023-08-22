@@ -16,6 +16,7 @@ export const environment: Environment = {
   donateGlobalUriPrefix: 'http://localhost:4200',
   donateUriPrefix: 'http://localhost:4200',
   blogUriPrefix: 'http://localhost:30003',
+  sharedCookieDomain: 'localhost',
   experienceUriPrefix: 'https://thebiggive--full.sandbox.my.site.com',
   donationsApiPrefix: 'http://localhost:30030/v1',
   getSiteControlId: '97792',
