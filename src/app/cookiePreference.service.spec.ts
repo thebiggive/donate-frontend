@@ -40,6 +40,39 @@ describe('CookiePreferenceService', () => {
     })
   })
 
+  it('should show user expressed cookie preference if marketing cookies are accepted', (done) => {
+    mockCookieService.get = (name) => {
+      expect(name).toBe('cookie-preferences');
+      return '{"agreedToAll": false, "agreedToCookieTypes": {"marketing": true}}';
+    };
+
+    const service = new CookiePreferenceService(mockCookieService);
+
+    service.userHasExpressedCookiePreference().subscribe({
+      next: value => {
+        expect(value).toBe(true);
+        done();
+      }
+    })
+  })
+
+
+  it('should show user expressed cookie preference if marketing cookies are rejected', (done) => {
+    mockCookieService.get = (name) => {
+      expect(name).toBe('cookie-preferences');
+      return '{"agreedToAll": false, "agreedToCookieTypes": {"marketing": false}}';
+    };
+
+    const service = new CookiePreferenceService(mockCookieService);
+
+    service.userHasExpressedCookiePreference().subscribe({
+      next: value => {
+        expect(value).toBe(true);
+        done();
+      }
+    })
+  })
+
   it('Should set a cookie to show the user accepts all cookies', done => {
     // @ts-ignore - we don't need to take all the params, only the ones our SUT will actually pass.
     mockCookieService.set = (name, value: string, duration: number, path: string, domain: string) => {
@@ -58,5 +91,22 @@ describe('CookiePreferenceService', () => {
     const service = new CookiePreferenceService(mockCookieService);
 
     service.agreeToAll();
+  });
+
+  it('Should set a cookie to show the user accepts specified', done => {
+    // @ts-ignore - we don't need to take all the params, only the ones our SUT will actually pass.
+    mockCookieService.set = (name, value: string, duration: number, path: string, domain: string) => {
+      expect(name).toBe('cookie-preferences');
+      expect(JSON.parse(value)).toEqual({agreedToAll: false, agreedToCookieTypes: {marketing: true}});
+      expect(duration).toBe(365);
+      expect(path).toBe('/');
+      expect(domain).toBe('localhost');
+
+      done();
+    };
+
+    const service = new CookiePreferenceService(mockCookieService);
+
+    service.storePreferences({agreedToAll: false, agreedToCookieTypes: {marketing: true}})
   });
 });
