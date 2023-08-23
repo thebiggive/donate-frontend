@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {BehaviorSubject, Observable, Subject} from "rxjs";
 import {CookieService} from "ngx-cookie-service";
 import {environment} from "../environments/environment";
+import {map} from "rxjs/operators";
 
 type CookiePreferences =
     {agreedToAll: true} |
@@ -16,7 +17,8 @@ type CookiePreferences =
 })
 export class CookiePreferenceService {
 
-  private userHasAgreedToAllCookies: Subject<boolean>;
+  private cookiePreferences$: Subject<CookiePreferences | undefined>;
+
   private readonly cookieName = "cookie-preferences";
   private readonly cookieExpiryPeriodDays = 365;
 
@@ -27,19 +29,24 @@ export class CookiePreferenceService {
     try {
       cookiePreferences = JSON.parse(this.cookieService.get(this.cookieName)) as CookiePreferences;
     } catch (e) {
-      cookiePreferences = null;
+      cookiePreferences = undefined;
     }
 
-    this.userHasAgreedToAllCookies = new BehaviorSubject(!! (cookiePreferences && cookiePreferences.agreedToAll))
+    this.cookiePreferences$ = new BehaviorSubject(cookiePreferences)
   }
   userHasExpressedCookiePreference(): Observable<boolean>
   {
-    return this.userHasAgreedToAllCookies;
+    return this.cookiePreferences$.pipe(map(value => !! value));
   }
 
   agreeToAll() {
     const preferences: CookiePreferences = {agreedToAll: true};
     this.cookieService.set(this.cookieName, JSON.stringify(preferences), this.cookieExpiryPeriodDays, '/', environment.sharedCookieDomain)
-    this.userHasAgreedToAllCookies.next(true);
+    this.cookiePreferences$.next(preferences);
+  }
+
+  storePreferences(preferences: CookiePreferences) {
+    this.cookieService.set(this.cookieName, JSON.stringify(preferences), this.cookieExpiryPeriodDays, '/', environment.sharedCookieDomain)
+    this.cookiePreferences$.next(preferences);
   }
 }

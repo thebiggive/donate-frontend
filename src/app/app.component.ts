@@ -109,4 +109,9 @@ export class AppComponent implements AfterViewInit, OnInit {
   onCookieBannerAcceptAllSelected(_event: CustomEvent) {
     this.cookiePreferenceService.agreeToAll();
   }
+
+  @HostListener('cookieBannerSavePreferencesSelected', ['$event'])
+  onCookieBannerSavePreferencesSelected(event: CustomEvent) {
+    this.cookiePreferenceService.storePreferences({agreedToAll: false, agreedToCookieTypes: event.detail});
+  }
 }
