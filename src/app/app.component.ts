@@ -1,5 +1,5 @@
 import {APP_BASE_HREF, isPlatformBrowser} from '@angular/common';
-import {AfterViewInit, Component, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
 import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
 import {BiggiveMainMenu} from '@biggive/components-angular';
 import {filter} from 'rxjs/operators';
@@ -12,13 +12,14 @@ import {IdentityService} from "./identity.service";
 import {environment} from "../environments/environment";
 import {flags} from "./featureFlags";
 import {CookiePreferenceService} from "./cookiePreference.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ["./app.component.scss"]
 })
-export class AppComponent implements AfterViewInit, OnInit {
+export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
 
   public isLoggedIn: boolean = false;
@@ -33,6 +34,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   protected readonly environment = environment;
   protected readonly flags = flags;
   protected readonly userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
+  private marketingCookieOptInSubscription: Subscription | undefined;
 
   constructor(
     private identityService: IdentityService,
@@ -71,7 +73,15 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      this.getSiteControlService.init();
+
+      if (flags.cookieBannerEnabled) {
+        this.marketingCookieOptInSubscription = this.cookiePreferenceService.userOptInToMarketingCookies().subscribe(() => {
+          this.getSiteControlService.init();
+          this.marketingCookieOptInSubscription?.unsubscribe();
+        });
+      } else {
+        this.getSiteControlService.init();
+      }
 
       // Temporarily client-side redirect the previous non-global domain to the new one.
       // Once most inbound links are updated, we can probably replace the app redirect
@@ -103,6 +113,10 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationStart),
     ).subscribe(() => headerEl.closeMobileMenuFromOutside());
+  }
+
+  ngOnDestroy() {
+    this.marketingCookieOptInSubscription?.unsubscribe();
   }
 
   @HostListener('cookieBannerAcceptAllSelected', ['$event'])
