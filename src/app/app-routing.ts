@@ -41,6 +41,16 @@ const routes: Routes = [
       .then(c => c.CharityModule),
   },
   {
+    // this entry will be deleted very soon - just leaving up for a few days in case of any issues with the new one.
+    path: 'donate-old-stepper/:campaignId',
+    pathMatch: 'full',
+    resolve: {
+      campaign: CampaignResolver,
+    },
+    loadChildren: () => import('./donation-start/donation-start-container/donation-start-container.module')
+      .then(c => c.DonationStartContainerModule),
+  },
+  {
     path: 'donate/:campaignId',
     pathMatch: 'full',
     resolve: {
@@ -52,11 +62,7 @@ const routes: Routes = [
   {
     path: 'donate-new-stepper/:campaignId',
     pathMatch: 'full',
-    resolve: {
-      campaign: CampaignResolver,
-    },
-    loadChildren: () => import('./donation-start/donation-start-container/donation-start-container.module')
-      .then(c => c.DonationStartContainerModule),
+    redirectTo: 'donate/:campaignId',
   },
   {
     path: 'metacampaign/:campaignId',

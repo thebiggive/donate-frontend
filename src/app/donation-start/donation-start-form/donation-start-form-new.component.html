@@ -616,7 +616,9 @@
           >
             Donate now
           </button>
-          <mat-spinner *ngIf="submitting" color="primary" diameter="30" aria-label="Processing your donation"></mat-spinner>
+          <div aria-live="polite">
+            <mat-spinner *ngIf="submitting" color="primary" diameter="30" aria-label="Processing your donation" ></mat-spinner>
+          </div>
         </div>
       </mat-step>
     </mat-vertical-stepper>

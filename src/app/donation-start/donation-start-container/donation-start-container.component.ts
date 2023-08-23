@@ -28,7 +28,7 @@ export class DonationStartContainerComponent implements OnInit{
     private router: Router,
     private identityService: IdentityService,
   ) {
-    this.useNewDesign = router.url.startsWith("/donate-new-stepper/");
+    this.useNewDesign = ! router.url.startsWith("/donate-old-stepper/");
   }
 
    ngOnInit() {

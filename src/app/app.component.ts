@@ -10,10 +10,13 @@ import {NavigationService} from './navigation.service';
 import {Person} from "./person.model";
 import {IdentityService} from "./identity.service";
 import {environment} from "../environments/environment";
+import {flags} from "./featureFlags";
+import {CookiePreferenceService} from "./cookiePreference.service";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  styleUrls: ["./app.component.scss"]
 })
 export class AppComponent implements AfterViewInit, OnInit {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
@@ -27,12 +30,17 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   public isDataLoaded = false;
 
+  protected readonly environment = environment;
+  protected readonly flags = flags;
+  protected readonly userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
+
   constructor(
     private identityService: IdentityService,
     @Inject(APP_BASE_HREF) private baseHref: string,
     private donationService: DonationService,
     private getSiteControlService: GetSiteControlService,
     private navigationService: NavigationService,
+    private cookiePreferenceService: CookiePreferenceService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
   ) {
@@ -95,5 +103,15 @@ export class AppComponent implements AfterViewInit, OnInit {
     this.router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationStart),
     ).subscribe(() => headerEl.closeMobileMenuFromOutside());
+  }
+
+  @HostListener('cookieBannerAcceptAllSelected', ['$event'])
+  onCookieBannerAcceptAllSelected(_event: CustomEvent) {
+    this.cookiePreferenceService.agreeToAll();
+  }
+
+  @HostListener('cookieBannerSavePreferencesSelected', ['$event'])
+  onCookieBannerSavePreferencesSelected(event: CustomEvent) {
+    this.cookiePreferenceService.storePreferences({agreedToAll: false, agreedToCookieTypes: event.detail});
   }
 }
