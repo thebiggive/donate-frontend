@@ -4,10 +4,12 @@ import {CampaignStats} from './campaign-stats.model';
 import {CampaignService} from "./campaign.service";
 import {inject} from "@angular/core";
 
-export const campaignStatsResolver: ResolveFn<{
+type FormattedCampaignStats = {
   totalRaisedFormatted: string,
   totalCountFormatted: string
-}> = (_route: ActivatedRouteSnapshot) => {
+};
+
+export const campaignStatsResolver: ResolveFn<FormattedCampaignStats> = (_route: ActivatedRouteSnapshot) => {
 
   const formatTotalRaised = (totalRaised: number): string => ("£" + totalRaised.toLocaleString('en-GB'));
 
@@ -15,10 +17,7 @@ export const campaignStatsResolver: ResolveFn<{
 
   const campaignService = inject(CampaignService);
 
-  const subject = new ReplaySubject<{
-    totalRaisedFormatted: string,
-    totalCountFormatted: string
-  }>();
+  const subject = new ReplaySubject<FormattedCampaignStats>();
 
   let requested = false;
   // Request data only if it has not been requested yet
