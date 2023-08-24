@@ -27,7 +27,7 @@ export const campaignStatsResolver: ResolveFn<FormattedCampaignStats | null> = (
     campaignService.getCampaignImpactStats()
       .subscribe({
         next: (stats: CampaignStats) => {
-        const totalRaisedFormatted = formatTotalRaised(stats.totalRaised);
+        const totalRaisedFormatted = formatTotalRaised(Math.floor(stats.totalRaised));
         const totalCountFormatted = formatTotalCount(stats.totalCampaignCount);
         subject.next({
           totalRaisedFormatted,
@@ -35,8 +35,9 @@ export const campaignStatsResolver: ResolveFn<FormattedCampaignStats | null> = (
         });
         },
           error: (err) => {
-          console.error(err);
-          subject.next(null);
+            console.log("Campaign stats API resolved with an error: ");
+            console.error(err);
+            subject.next(null);
         }
       });
   }
