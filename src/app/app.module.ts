@@ -48,7 +48,7 @@ const matomoTrackers = environment.matomoSiteId ? [
       routeTracking: {
         enable: true,
       },
-        requireConsent: flags.cookieBannerEnabled,
+        requireCookieConsent: flags.cookieBannerEnabled,
     }),
     RouterModule.forRoot(routes, {
       bindToComponentInputs: true,
