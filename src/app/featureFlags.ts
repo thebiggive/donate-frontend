@@ -5,7 +5,7 @@ export const flagsForEnvironment = (_: EnvironmentID) => {
   return {
     // Banner needs more work to look right and be useful before release - see ticket
     // DON-783
-    cookieBannerEnabled: environment.environmentId === 'development',
+    cookieBannerEnabled: (environment.environmentId === 'development' || environment.environmentId === 'staging'),
   };
 }
 
