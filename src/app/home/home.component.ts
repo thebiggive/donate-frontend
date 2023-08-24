@@ -1,11 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-
+import { ActivatedRoute } from '@angular/router';
 import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "./HighlightCard";
 import {environment} from "../../environments/environment";
-import {CampaignService} from "../campaign.service";
-import { CampaignStats } from '../campaign-stats.model';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -14,8 +11,11 @@ import { Observable } from 'rxjs';
 })
 export class HomeComponent implements OnInit {
   mainTitle = 'Matching Donations.\nMultiplying Impact.';
+  stats: {
+    totalRaisedFormatted: string,
+    totalCountFormatted: string
+  };
 
-  campaignImpactStats$: Observable<CampaignStats> = this.campaignService.getCampaignImpactStats();
   
   highlightCards: readonly HighlightCard[] = [
     {
@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit {
 
   public constructor(
     private pageMeta: PageMetaService,
-    private campaignService: CampaignService,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
@@ -61,9 +61,6 @@ export class HomeComponent implements OnInit {
       'Big Give – discover campaigns and donate',
       'https://images-production.thebiggive.org.uk/0011r00002IMRknAAH/CCampaign%20Banner/db3faeb1-d20d-4747-bb80-1ae9286336a3.jpg',
     );
+    this.stats = this.route.snapshot.data.stats;
   }
-
-  formattedTotalRaised = (totalRaised: number): string => ("£" + totalRaised.toLocaleString('en-GB'));
-
-  formattedTotalCount = (totalCampaignCount: number): string => totalCampaignCount.toLocaleString('en-GB');
 }

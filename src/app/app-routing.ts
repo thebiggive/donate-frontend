@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { CampaignListResolver } from './campaign-list.resolver';
+import { CampaignStatsResolver } from './campaign-stats-resolver';
 import { CampaignResolver } from './campaign.resolver';
 import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 
@@ -8,6 +9,9 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
+    resolve: {
+      stats: CampaignStatsResolver,
+    },
     loadChildren: () => import('./home/home.module')
       .then(c => c.HomeModule),
   },
