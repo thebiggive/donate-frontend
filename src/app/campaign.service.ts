@@ -181,11 +181,8 @@ export class CampaignService {
     return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`);
   }
 
-  getCampaignImpactStats(): Observable<CampaignStats>{
-    // TODO: uncomment the dynamic uri below, atm hardcoded prod api sf staging doesn't work
-    //const apiRsp = this.http.get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`);
-    const apiRsp = this.http.get<CampaignStats>('https://sf-api-production.thebiggive.org.uk/campaigns/services/apexrest/v1.0/campaigns/stats');
-    return apiRsp;
+  getCampaignImpactStats() {
+    return this.http.get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`);
   }
 }
 

@@ -9,7 +9,7 @@ type FormattedCampaignStats = {
   totalCountFormatted: string
 };
 
-export const campaignStatsResolver: ResolveFn<FormattedCampaignStats> = (_route: ActivatedRouteSnapshot) => {
+export const campaignStatsResolver: ResolveFn<FormattedCampaignStats | null> = (_route: ActivatedRouteSnapshot) => {
 
   const formatTotalRaised = (totalRaised: number): string => ("£" + totalRaised.toLocaleString('en-GB'));
 
@@ -17,7 +17,7 @@ export const campaignStatsResolver: ResolveFn<FormattedCampaignStats> = (_route:
 
   const campaignService = inject(CampaignService);
 
-  const subject = new ReplaySubject<FormattedCampaignStats>();
+  const subject = new ReplaySubject<FormattedCampaignStats | null>();
 
   let requested = false;
   // Request data only if it has not been requested yet
@@ -25,13 +25,19 @@ export const campaignStatsResolver: ResolveFn<FormattedCampaignStats> = (_route:
     requested = true;
 
     campaignService.getCampaignImpactStats()
-      .subscribe((stats: CampaignStats) => {
+      .subscribe({
+        next: (stats: CampaignStats) => {
         const totalRaisedFormatted = formatTotalRaised(stats.totalRaised);
         const totalCountFormatted = formatTotalCount(stats.totalCampaignCount);
         subject.next({
           totalRaisedFormatted,
           totalCountFormatted
         });
+        },
+          error: (err) => {
+          console.error(err);
+          subject.next(null);
+        }
       });
   }
   // Return the subject. Pipe in first() because resolvers
