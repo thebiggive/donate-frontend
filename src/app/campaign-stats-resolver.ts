@@ -1,49 +1,41 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
-import { first, Observable, ReplaySubject } from 'rxjs';
-import { CampaignStats } from './campaign-stats.model';
-import { CampaignService } from "./campaign.service";
+import {ActivatedRouteSnapshot, ResolveFn} from '@angular/router';
+import {first, ReplaySubject} from 'rxjs';
+import {CampaignStats} from './campaign-stats.model';
+import {CampaignService} from "./campaign.service";
+import {inject} from "@angular/core";
 
-/**
- * Based on: https://stackoverflow.com/questions/51484623/angular-6-only-call-a-resolver-once
- */
-@Injectable({
-  providedIn: 'root'
-})
+export const campaignStatsResolver: ResolveFn<{
+  totalRaisedFormatted: string,
+  totalCountFormatted: string
+}> = (_route: ActivatedRouteSnapshot) => {
 
-export class CampaignStatsResolver  implements Resolve<number> {
-  requested = false;
-  // The replay subject will emit the last value that has been passed in
-  subject = new ReplaySubject<{
+  const formatTotalRaised = (totalRaised: number): string => ("£" + totalRaised.toLocaleString('en-GB'));
+
+  const formatTotalCount = (totalCampaignCount: number): string => totalCampaignCount.toLocaleString('en-GB');
+
+  const campaignService = inject(CampaignService);
+
+  const subject = new ReplaySubject<{
     totalRaisedFormatted: string,
     totalCountFormatted: string
   }>();
 
-  public constructor(
-    private campaignService: CampaignService,
-  ) {}
+  let requested = false;
+  // Request data only if it has not been requested yet
+  if (!requested) {
+    requested = true;
 
-  resolve(_route: ActivatedRouteSnapshot): Observable<any> {
-      // Request data only if it has not been requested yet
-      if (!this.requested) {
-          this.requested = true;
-          
-          this.campaignService.getCampaignImpactStats()
-              .subscribe((stats: CampaignStats) => {
-                const totalRaisedFormatted = this.formatTotalRaised(stats.totalRaised);
-                const totalCountFormatted = this.formatTotalCount(stats.totalCampaignCount);
-                this.subject.next({
-                  totalRaisedFormatted,
-                  totalCountFormatted
-                });
-          });
-      }
-      // Return the subject. Pipe in first() because resolvers 
-      // only emit on completion of an observable.
-      return this.subject.pipe(first());
+    campaignService.getCampaignImpactStats()
+      .subscribe((stats: CampaignStats) => {
+        const totalRaisedFormatted = formatTotalRaised(stats.totalRaised);
+        const totalCountFormatted = formatTotalCount(stats.totalCampaignCount);
+        subject.next({
+          totalRaisedFormatted,
+          totalCountFormatted
+        });
+      });
   }
-
-  formatTotalRaised = (totalRaised: number): string => ("£" + totalRaised.toLocaleString('en-GB'));
-
-  formatTotalCount = (totalCampaignCount: number): string => totalCampaignCount.toLocaleString('en-GB');
-}
+  // Return the subject. Pipe in first() because resolvers
+  // only emit on completion of an observable.
+  return subject.pipe(first());
+};
