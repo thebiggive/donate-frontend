@@ -85,7 +85,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
       } else {
         this.getSiteControlService.init();
         // no-need to simulate user consent for matomo here, if the banner isn't enabled we don't have
-        //  `requireConsent: true` in the matomo config.
+        //  `requireCookieConsent: true` in the matomo config.
       }
 
       // Temporarily client-side redirect the previous non-global domain to the new one.
