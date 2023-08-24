@@ -13,6 +13,7 @@ import {environment} from "../environments/environment";
 import {flags} from "./featureFlags";
 import {CookiePreferenceService} from "./cookiePreference.service";
 import {Subscription} from "rxjs";
+import {MatomoTracker} from "ngx-matomo";
 
 @Component({
   selector: 'app-root',
@@ -44,6 +45,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private navigationService: NavigationService,
     private cookiePreferenceService: CookiePreferenceService,
     @Inject(PLATFORM_ID) private platformId: Object,
+    private matomoTracker: MatomoTracker,
     private router: Router,
   ) {
     // https://www.amadousall.com/angular-routing-how-to-display-a-loading-indicator-when-navigating-between-routes/
@@ -78,9 +80,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.marketingCookieOptInSubscription = this.cookiePreferenceService.userOptInToMarketingCookies().subscribe(() => {
           this.getSiteControlService.init();
           this.marketingCookieOptInSubscription?.unsubscribe();
+          this.matomoTracker.setCookieConsentGiven();
         });
       } else {
         this.getSiteControlService.init();
+        // no-need to simulate user consent for matomo here, if the banner isn't enabled we don't have
+        //  `requireCookieConsent: true` in the matomo config.
       }
 
       // Temporarily client-side redirect the previous non-global domain to the new one.
