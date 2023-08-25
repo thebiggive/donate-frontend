@@ -63,7 +63,9 @@ import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation
 import { MatomoTracker } from 'ngx-matomo';
 
 @Component({
+  selector: 'app-donation-start-form-parent',
   templateUrl: './donation-start-form-new.component.html',
+  styleUrls: ['./donation-start-form-new.component.scss'],
   providers: [
     CurrencyPipe,
     TimeLeftPipe,
@@ -233,13 +235,6 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     this.amountsGroup.get('tipAmount')?.setValue(tipValueRounded);
     this.showCustomTipInput = false;
   }
-
-  /**
-   * just here because it varies between the old and new stepper designs. Once the old stepper is deleted
-   * this can be hard coded in stripe service again.
-   */
-  protected inputFontSize: '14px'|'17px' = '14px';
-
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -1018,7 +1013,7 @@ export class DonationStartFormParentComponent implements AfterContentChecked, Af
     // Card element is mounted the same way regardless of donation info. See
     // this.createDonationAndMaybePerson().subscribe(...) for Payment Request Button mount, which needs donation info
     // first and so happens in `preparePaymentRequestButton()`.
-    this.card = this.stripeService.getCard(this.inputFontSize);
+    this.card = this.stripeService.getCard();
     if (this.cardInfo && this.card) { // Ensure #cardInfo not hidden by PRB success.
       this.card.mount(this.cardInfo.nativeElement);
       this.card.on('change', this.cardHandler);

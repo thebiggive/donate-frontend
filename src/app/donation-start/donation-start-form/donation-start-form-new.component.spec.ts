@@ -21,11 +21,9 @@ import { of } from 'rxjs';
 
 import { Campaign } from '../../campaign.model';
 import { TBG_DONATE_STORAGE } from '../../donation.service';
-import { DonationStartFormComponent } from './donation-start-form.component';
 import { TBG_DONATE_ID_STORAGE } from '../../identity.service';
 import { TimeLeftPipe } from "../../time-left.pipe";
 import {DonationStartFormParentComponent} from "./donation-start-form-parent.component";
-import {DonationStartFormNewComponent} from "./donation-start-form-new.component";
 
 /**
  *  This file is currently identical to donation-start-form.component.spec.ts other than using the
@@ -149,7 +147,7 @@ describe('DonationStartNewPrimaryComponent', () => {
         RouterTestingModule.withRoutes([
           {
             path: 'donate/:campaignId',
-            component: DonationStartFormComponent,
+            component: DonationStartFormParentComponent,
           },
         ]),
       ],
@@ -171,7 +169,7 @@ describe('DonationStartNewPrimaryComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DonationStartFormNewComponent);
+    fixture = TestBed.createComponent(DonationStartFormParentComponent);
     component = fixture.componentInstance;
     component.campaign = getDummyCampaign('testCampaignIdForStripe');
     // Don't `fixture.detectChanges()` here, so tests can vary their route-resolved campaign.

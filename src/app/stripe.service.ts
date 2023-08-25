@@ -183,7 +183,7 @@ export class StripeService {
     });
   }
 
-  getCard(fontsize: '14px'|'17px'): StripeCardElement | null {
+  getCard(): StripeCardElement | null {
     if (!this.elements) {
       console.log('Stripe Elements not ready');
       return null;
@@ -205,7 +205,7 @@ export class StripeService {
         base: {
           // note the font family does not load correctly in my dev env, but it should be OK on staging / prod.
           fontFamily: 'Euclid Triangle, sans-serif',
-          fontSize: fontsize,
+          fontSize: '17px',
         },
       },
     });
