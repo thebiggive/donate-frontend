@@ -1,4 +1,7 @@
-export interface GiftAidAddressSuggestion {
-  address: string;
-  url: string; // Path to GET the full address.
+export class GiftAidAddressSuggestion {
+  constructor(
+    public address: string,
+    public url: string, // Path to GET the full address.
+  ) {
+  }
 }

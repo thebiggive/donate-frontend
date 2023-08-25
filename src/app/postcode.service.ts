@@ -18,7 +18,9 @@ export class PostcodeService {
     const uri = `${environment.postcodeLookupUri}/autocomplete/${encodeURIComponent(partialAddress)}?top=20&api-key=${environment.postcodeLookupKey}`;
 
     return this.http.get<GiftAidAddressSuggestion[]>(uri).pipe(
-      map((response: any) => response.suggestions),
+      map((response: any) => response.suggestions.map(
+        (s: {address: string, url: string}) => new GiftAidAddressSuggestion(s.address, s.url))
+      ),
       catchError((error) => {
         console.log('PostcodeService.getSuggestions() error', error);
         return EMPTY;
