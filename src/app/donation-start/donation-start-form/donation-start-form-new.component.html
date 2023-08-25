@@ -180,14 +180,15 @@
 
           </mat-expansion-panel>
         </div>
-
-        <p class="error" *ngIf="donationCreateError" aria-live="assertive">
-          Sorry, we can't register your donation right now. Please try again in a moment
-          or <a href="https://community.biggive.org/s/contact-us" target="_blank">
-            <mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
-              contact us</a>
-          if this message persists.
-        </p>
+        <div aria-live="polite">
+          <p class="error" *ngIf="donationCreateError">
+            Sorry, we can't register your donation right now. Please try again in a moment
+            or <a href="https://community.biggive.org/s/contact-us" target="_blank">
+              <mat-icon aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+                contact us</a>
+            if this message persists.
+          </p>
+        </div>
 
         <div style="text-align: center">
           <button style="width: 40%;"
