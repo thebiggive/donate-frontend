@@ -61,7 +61,7 @@
         </p>
       </div>
 
-      <hr>
+      <hr aria-hidden="true">
 
       <div class="donation-summary">
         <p><strong>Hi {{ donation.firstName }},</strong></p>
@@ -103,7 +103,7 @@
         </div>
       </biggive-page-section>
       <div>
-        <hr *ngIf="!donationIsLarge">
+        <hr *ngIf="!donationIsLarge" aria-hidden="true">
         <div class="large-donation-spacer" *ngIf="donationIsLarge"></div>
         <div class="receipt">
           <p><strong>Your Receipt</strong></p>
@@ -142,7 +142,7 @@
 
         </div>
 
-        <hr class="shorter">
+        <hr class="shorter" aria-hidden="true">
 
       </div>
 
