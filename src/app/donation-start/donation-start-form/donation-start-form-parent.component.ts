@@ -63,7 +63,7 @@ import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation
 import { MatomoTracker } from 'ngx-matomo';
 
 @Component({
-  templateUrl: './donation-start-form.component.html',
+  templateUrl: './donation-start-form-new.component.html',
   providers: [
     CurrencyPipe,
     TimeLeftPipe,

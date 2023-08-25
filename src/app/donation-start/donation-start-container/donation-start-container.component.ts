@@ -1,11 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Campaign} from "../../campaign.model";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import { Donation } from 'src/app/donation.model';
-import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
 import {Person} from "../../person.model";
 import {IdentityService} from "../../identity.service";
 import {environment} from "../../../environments/environment";
+import {DonationStartFormParentComponent} from "../donation-start-form/donation-start-form-parent.component";
 @Component({
   templateUrl: './donation-start-container.component.html',
   styleUrls: ['./donation-start-container.component.scss']
@@ -17,18 +17,15 @@ export class DonationStartContainerComponent implements OnInit{
   personId?: string;
   personIsLoginReady = false;
   loggedInEmailAddress?: string;
-  useNewDesign = false;
 
-  @ViewChild('donation_start_form') donationStartForm: DonationStartFormComponent
+  @ViewChild('donation_start_form') donationStartForm: DonationStartFormParentComponent
   public reservationExpiryDate: Date| undefined = undefined;
   public donor: Person | undefined;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private identityService: IdentityService,
   ) {
-    this.useNewDesign = ! router.url.startsWith("/donate-old-stepper/");
   }
 
    ngOnInit() {
