@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start-with-backend": "(cd ../matchbot/; docker compose up -d) && (cd ../identity/; docker compose up -d) &&  ng serve",
     "start-dangerously": "ng serve --host 0.0.0.0",
     "test": "ng test",
     "test-ci": "ng test --karma-config ./karma-ci.conf.js --browsers=ChromeHeadlessNoSandbox",
