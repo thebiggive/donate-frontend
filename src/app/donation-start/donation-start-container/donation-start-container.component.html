@@ -28,7 +28,7 @@
 
       <!-- We don't want to let the form's ngInit run before ours completes, or we would have odd behaviour
          around loading the logged in user - hence conditional on dataLoaded -->
-     <app-donation-start-form-parent *ngIf="campaignOpenOnLoad"
+     <app-donation-start-form *ngIf="campaignOpenOnLoad"
        #donation_start_form
        [campaign]="campaign"
        [donor]="donor"

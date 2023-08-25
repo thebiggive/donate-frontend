@@ -23,7 +23,7 @@ import { DonationStartLoginComponent } from "../donation-start-login/donation-st
 import {DonationStartContainerComponent} from "./donation-start-container.component";
 import { DonationStartSecondaryComponent } from '../donation-start-secondary/donation-start-secondary.component';
 import { DonationStartContainerRoutingModule } from './donation-start-routing.module';
-import {DonationStartFormParentComponent} from "../donation-start-form/donation-start-form-parent.component";
+import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
 import {MatExpansionModule} from '@angular/material/expansion';
 import { DonationTippingSliderComponent } from '../donation-start-form/donation-tipping-slider/donation-tipping-slider.component';
 @NgModule({
@@ -54,7 +54,7 @@ import { DonationTippingSliderComponent } from '../donation-start-form/donation-
     DonationStartContainerComponent,
     DonationStartLoginComponent,
     DonationStartContainerComponent,
-    DonationStartFormParentComponent,
+    DonationStartFormComponent,
     DonationStartSecondaryComponent,
     DonationTippingSliderComponent
   ],

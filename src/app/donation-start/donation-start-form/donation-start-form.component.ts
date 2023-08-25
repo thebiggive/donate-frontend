@@ -63,15 +63,15 @@ import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation
 import { MatomoTracker } from 'ngx-matomo';
 
 @Component({
-  selector: 'app-donation-start-form-parent',
-  templateUrl: './donation-start-form-new.component.html',
-  styleUrls: ['./donation-start-form-new.component.scss'],
+  selector: 'app-donation-start-form',
+  templateUrl: './donation-start-form.component.html',
+  styleUrls: ['./donation-start-form.component.scss'],
   providers: [
     CurrencyPipe,
     TimeLeftPipe,
   ]
 })
-export class DonationStartFormParentComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
+export class DonationStartFormComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
   @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
   @ViewChild('cardInfo') cardInfo: ElementRef;

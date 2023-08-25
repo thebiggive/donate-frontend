@@ -5,7 +5,7 @@ import { Donation } from 'src/app/donation.model';
 import {Person} from "../../person.model";
 import {IdentityService} from "../../identity.service";
 import {environment} from "../../../environments/environment";
-import {DonationStartFormParentComponent} from "../donation-start-form/donation-start-form-parent.component";
+import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
 @Component({
   templateUrl: './donation-start-container.component.html',
   styleUrls: ['./donation-start-container.component.scss']
@@ -18,7 +18,7 @@ export class DonationStartContainerComponent implements OnInit{
   personIsLoginReady = false;
   loggedInEmailAddress?: string;
 
-  @ViewChild('donation_start_form') donationStartForm: DonationStartFormParentComponent
+  @ViewChild('donation_start_form') donationStartForm: DonationStartFormComponent
   public reservationExpiryDate: Date| undefined = undefined;
   public donor: Person | undefined;
 
