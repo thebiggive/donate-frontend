@@ -1,8 +1,109 @@
 @use '@angular/material' as mat;
 @import '../../../abstract';
 
+.mat-stepper-horizontal, .mat-stepper-vertical {
+  background: none;
+  box-shadow: $box-shadow-soft;
+  @include b-rt-0;
+}
+
+:host ::ng-deep div.mdc-form-field {
+  font-size: inherit;
+}
+
+:host ::ng-deep .mdc-button__label {
+  font-size: inherit;
+}
+
+div.mdc-form-field label {
+  outline: 3px solid green;
+  font-size: inherit;
+}
+
+:host ::ng-deep div.mat-step-label, div.mat-step-label-selected, div.mat-step-label.mat-step-label-selected {
+  // important is a bit of a hack to make sure we override the font size set by material design,
+  // which is different for the selected and non-selected step. Also overriding that by being more specific
+  // in the selector above, including 'div', but don't want to rely just on that.
+
+  font-size: 17px !important; ;
+  line-height: 20px;
+  @media #{$breakpoint-lg} {
+    font-size: 20px !important;
+    line-height: 27px;
+  }
+}
+
+input {
+  @include b-rt-0;
+}
+
+@supports (-webkit-overflow-scrolling: touch) {
+  // see https://stackoverflow.com/a/65043782
+  input {
+    font-size: 16px;
+  }
+}
+
+:host ::ng-deep .mat-step-header {
+  // ng-deep is deprecated, but I'm not sure how else to apply our style choices inside the stepper.
+  background-color: white;
+  font-weight: bold;
+  margin-top: 15px;
+  padding: 16px 24px;
+
+  .mat-step-text-label {
+    font-weight: bold;
+  }
+
+  .mat-step-icon {
+    color: $colour-black;
+    background-color: transparent !important;
+    border-radius: 0;
+
+    // Borders on three sides like this with the right and
+    // left transparent creates an equilateral triangle.
+    // (left + right) * 86% = bottom
+    // from https://css-tricks.com/snippets/css/css-triangle/
+    width: 0;
+    height: 0;
+    border-left: 17px solid transparent;
+    border-right: 17px solid transparent;
+    border-bottom: 29.2px solid $colour-highlight;
+
+    .mat-step-icon-content {
+      margin-top: 17px;
+    }
+  }
+}
+
+:host ::ng-deep .mat-stepper-vertical-line::before {
+  display: none;
+}
+
+:host ::ng-deep .mat-vertical-content-container {
+  // no need for the margin since we don't have the vertical line.
+  margin-left: 0;
+}
+
 div .c-banner {
   background-color: white;
+}
+
+div.donationInfoWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  flex-direction: column;
+  gap: 40px;
+
+  div {
+    flex-basis: 40%;
+  }
+
+  @media #{$breakpoint-md} {
+    flex-direction: row;
+  }
 }
 
 input:disabled {
@@ -22,8 +123,6 @@ input:disabled {
 }
 
 .b-rt-sm {
-  @include b-rt-sm;
-
   .material-icons {
     font-size: 1rem;
     width: 1rem;
@@ -41,7 +140,8 @@ input:disabled {
 }
 
 .mat-mdc-form-field {
-  width: 100%;
+  width: 70%;
+  margin: 0 auto;
 }
 
 .payment-method-options {
@@ -64,9 +164,7 @@ input:disabled {
 }
 
 .StripeElement {
-  border: solid 1px $colour-grey;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  width: 100%;
 }
 
 .c-timer {
@@ -90,6 +188,10 @@ input:disabled {
   }
 }
 
+input {
+  font-family: inherit;
+}
+
 .c-your-donation {
   p {
     margin: 0;
@@ -102,11 +204,11 @@ input:disabled {
 .c-your-donation__highlight {
   background: $colour-highlight;
   color: $colour-black;
-  border-radius: 4px;
   padding: 0.5rem;
   display: block;
   text-align: center;
   margin-bottom: 1rem !important;
+  font-weight: bold;
 
   img {
     padding-right: 1rem;
@@ -119,7 +221,7 @@ input:disabled {
 
 .donation-input {
   .form-field {
-    margin: 0;
+    margin: 0 auto;
     display: block;
     font-weight: 700;
   }
@@ -159,19 +261,40 @@ input:disabled {
 }
 
 .donation-input.donation-input-main {
-  margin-top: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 400px;
+  clear: both;
 
-  .fixed-label {
-    margin-top: 2rem;
-  }
+  input {
+    text-align: right;
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: bolder;
 
-  .floating-label {
-    margin-top: 0.4rem;
+    @media (max-width: 370px) {
+      // on very narrow screens we need to give space for the prompt text above the input.
+      margin-top: 30px;
+    }
   }
+}
 
-  .form-field {
-    font-size: 22px;
-  }
+input {
+  outline: none;
+  border: none;
+  background-color: $colour-background;
+  width: 100%;
+  padding: 0; // We rely on containing element margin, and don't want vendor-dependent extra padding.
+};
+
+#giftAidAddressContainer {
+  margin-top: 60px;
+}
+
+div#giftAidAddressContainer > div {
+  margin-top: 20px;
 }
 
 .donation-input-tip__status-help {
@@ -191,12 +314,16 @@ a {
   }
 }
 
+button.continue, .c-donate-button {
+  margin-top: 22px !important;
+  margin-bottom: 22px !important;
+  padding: 1.5rem;
+  max-width: 300px;
+}
+
 .c-donate-button {
   @include make-donate-button;
 
-  margin: 1.5rem 0 0.5rem 0;
-  padding: 1.5rem;
-  max-width: 300px;
 }
 
 .c-donate-button-amount {
@@ -269,4 +396,129 @@ div.match-funded-badge {
 
 div.match-funded-badge-wrapper {
   position: relative;
+}
+
+mat-expansion-panel ul li {
+  list-style: none disc outside;
+  padding-left: 1em;
+}
+
+
+mat-expansion-panel {
+  margin-top: 30px;
+}
+
+.mat-expansion-panel-header {
+  padding-right: 5px;
+  padding-left: 0;
+}
+
+.button {
+  text-decoration: underline;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.colour-primary {
+  color: $colour-primary;
+}
+
+.binary-options {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  flex-direction: column;
+
+  @media ($breakpoint-md) {
+    flex-direction: row;
+  }
+}
+
+p.binary-question-header {
+  margin-top: 30px;
+}
+
+div.binary-option {
+  flex-basis: 50%;
+  background-color: $colour-card-background;
+  box-shadow: $box-shadow-soft;
+  border-radius: 4px;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 16px;
+  padding-bottom: 16px;
+  // no need for padding-top as form element inside has a top margin
+
+  position: relative;
+
+  ::ng-deep label {
+    padding-left: 40px;
+  }
+
+  ::ng-deep .mdc-radio {
+    position: absolute;
+    top: 8px;
+  }
+}
+
+div.payment-details {
+  margin-bottom: 2.5rem;
+}
+
+div.payment-details > * {
+  width: 100%;
+  margin-bottom: 36px;
+}
+
+div.sr-card-element {
+  min-height: 22px;
+  padding-top: 3px;
+}
+
+table.summary {
+  text-align: left;
+  width: 100%;
+  border-spacing: 0 1em;
+  tr {
+    td:last-child {
+      text-align: right;
+    }
+    td {
+      div {
+        display: inline-block;
+        max-width: 15rem;
+      }
+    }
+  }
+}
+.receives {
+  td {
+    background-color: $colour-highlight;
+    padding: 5px;
+  }
+}
+.total {
+  color: $colour-primary;
+}
+
+h3 {
+  display: inline-block;
+}
+
+.mat-expansion-panel{
+  box-shadow: none !important;
+}
+
+mat-expansion-panel-header h3 {
+  min-height: 34px; // must be at least this high or so to make the .span-hr visible
+}
+
+.span-hr {
+  display:inline-block;
+  width:100%;
+  border-top: 1px solid #888888;
+  margin-top: 30px;
+  position: absolute;
 }

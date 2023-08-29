@@ -21,12 +21,11 @@ import { of } from 'rxjs';
 
 import { Campaign } from '../../campaign.model';
 import { TBG_DONATE_STORAGE } from '../../donation.service';
-import { DonationStartFormComponent } from './donation-start-form.component';
 import { TBG_DONATE_ID_STORAGE } from '../../identity.service';
 import { TimeLeftPipe } from "../../time-left.pipe";
-import {DonationStartFormParentComponent} from "./donation-start-form-parent.component";
+import {DonationStartFormComponent} from "./donation-start-form.component";
 
-describe('DonationStartPrimaryComponent', () => {
+describe('DonationStartNewPrimaryComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -41,7 +40,7 @@ describe('DonationStartPrimaryComponent', () => {
 
   (window as any).gtag = (...args: any[]) => args;
 
-  let component: DonationStartFormParentComponent;
+  let component: DonationStartFormComponent;
   let fixture: ComponentFixture<DonationStartFormComponent>;
 
   const getDummyCampaign = (campaignId: string) => {
