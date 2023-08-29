@@ -46,7 +46,7 @@
     "@fortawesome/pro-duotone-svg-icons": "^6.2.0",
     "@fortawesome/pro-solid-svg-icons": "^6.2.0",
     "@nguniversal/express-engine": "^16.1.2",
-    "@stripe/stripe-js": "^1.23.0",
+    "@stripe/stripe-js": "^2.1.0",
     "compression": "^1.7.4",
     "express": "^4.17.3",
     "helmet": "^4.4.1",
