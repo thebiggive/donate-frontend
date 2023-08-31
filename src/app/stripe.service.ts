@@ -12,7 +12,6 @@ import {
   Stripe,
   StripeCardElement,
   StripeElements,
-  StripePaymentElement,
   StripePaymentRequestButtonElement,
 } from '@stripe/stripe-js';
 import {Observer} from 'rxjs';
