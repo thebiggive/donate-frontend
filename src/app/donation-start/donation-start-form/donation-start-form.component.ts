@@ -1013,7 +1013,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
             card: "never" // we have our own terms copy for the future payment in donation-start-form.component.html
           },
           fields: {
-            billingDetails: "never",
+            billingDetails: 'auto', // we could set 'never' here, but then we'd have to pass all the details in our `confirmPayment` call, in more detail than we collect.
           },
           business:
               {name: "Big Give"}

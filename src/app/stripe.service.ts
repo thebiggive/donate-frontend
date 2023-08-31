@@ -370,11 +370,31 @@ export class StripeService {
       return;
     }
 
+    // const donorName = donation.firstName || '' + ' ' +  donation.lastName;
+
+    // If we want to not show billing details inside the Stripe payment element we have to pass billing details
+    // as payment_method_data here, with at least this much detail - but we don't collect addresses in that much detail.
+    // const paymentMethodData = {
+    //   billing_details:
+    //     {
+    //       name: donorName,
+    //       address: {
+    //         city: '',
+    //         state: '',
+    //         country: donation.countryCode,
+    //         postal_code: donation.billingPostalAddress
+    //       },
+    //       email: donation.emailAddress,
+    //       phone: ''
+    //     }
+    // };
+
     return await this.stripe?.confirmPayment({
       elements: elements,
       clientSecret: donation.clientSecret as string,
       redirect: 'if_required',
       confirmParams: {
+        // payment_method_data: paymentMethodData,
         return_url: "http://localhost.com"
       }
     });
