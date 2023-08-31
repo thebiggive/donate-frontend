@@ -395,7 +395,7 @@ export class StripeService {
       redirect: 'if_required',
       confirmParams: {
         // payment_method_data: paymentMethodData,
-        return_url: "http://localhost.com"
+        return_url: environment.donateGlobalUriPrefix + "/thanks/" + donation.donationId
       }
     });
   }
