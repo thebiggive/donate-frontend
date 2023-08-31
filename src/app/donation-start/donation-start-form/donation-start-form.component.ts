@@ -1006,7 +1006,19 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // Card element is mounted the same way regardless of donation info. See
     // this.createDonationAndMaybePerson().subscribe(...) for Payment Request Button mount, which needs donation info
     // first and so happens in `preparePaymentRequestButton()`.
-    this.stripePaymentElement = this.stripeElements.create("payment");
+    this.stripePaymentElement = this.stripeElements.create(
+        "payment",
+        {
+          terms: {
+            card: "never" // we have our own terms copy for the future payment in donation-start-form.component.html
+          },
+          fields: {
+            billingDetails: "never",
+          },
+          business:
+              {name: "Big Give"}
+        }
+    );
     if (this.cardInfo && this.stripePaymentElement) { // Ensure #cardInfo not hidden by PRB success.
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
       this.stripePaymentElement.on('change', this.cardHandler);

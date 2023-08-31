@@ -178,33 +178,6 @@ export class StripeService {
     });
   }
 
-  getCard(elements: StripeElements): StripePaymentElement | null {
-
-
-    const existingElement = elements.getElement('payment');
-    if (existingElement) {
-      return existingElement;
-    }
-
-    return elements.create('payment');
-
-    // return elements.create('card', {
-    //   // In order to make things quicker when home & billing postcodes are the same,
-    //   // we always collect this outside the form (defaulting to home value where appropriate)
-    //   // so can always hide it from the Stripe form. We pass in the value we collected in
-    //   // `confirmCardPayment()` instead.
-    //   hidePostalCode: true,
-    //   iconStyle: 'solid',
-    //   style: {
-    //     base: {
-    //       // note the font family does not load correctly in my dev env, but it should be OK on staging / prod.
-    //       fontFamily: 'Euclid Triangle, sans-serif',
-    //       fontSize: '17px',
-    //     },
-    //   },
-    // });
-  }
-
   getPaymentRequestButton(
       donation: Donation,
       elements: StripeElements,
