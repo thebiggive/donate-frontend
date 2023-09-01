@@ -62,7 +62,7 @@ export class StripeService {
       throw new Error('Stripe not ready');
     }
 
-    const amountInMinorUnit = (donation.tipAmount + donation.donationAmount) * 100;
+    const amountInMinorUnit = Math.floor((donation.tipAmount + donation.donationAmount) * 100);
 
     return this.stripe.elements({
       fonts: [

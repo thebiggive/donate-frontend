@@ -37,6 +37,9 @@ export interface Donation {
      */
     currencyCode: string;
 
+    /**
+     * Counted in major units of the relevant currency. Should be whole number.
+     */
     donationAmount: number;
 
     /**
@@ -125,6 +128,9 @@ export interface Donation {
      */
     status?: DonationStatus;
 
+    /**
+     * Counted in major units of the relevant currency - may be fractional.
+     */
     tipAmount: number;
 
     /**
