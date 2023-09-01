@@ -1009,6 +1009,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.stripePaymentElement = this.stripeElements.create(
         "payment",
         {
+          wallets: {
+            // we may turn these on later, for now these wallets are presented outside the payment element.
+            applePay: 'never',
+            googlePay: 'never'
+          },
           terms: {
             card: "never" // we have our own terms copy for the future payment in donation-start-form.component.html
           },
