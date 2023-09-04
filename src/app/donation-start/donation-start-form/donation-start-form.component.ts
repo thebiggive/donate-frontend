@@ -1018,7 +1018,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
             card: "never" // we have our own terms copy for the future payment in donation-start-form.component.html
           },
           fields: {
-            billingDetails: 'auto', // we could set 'never' here, but then we'd have to pass all the details in our `confirmPayment` call, in more detail than we collect.
+            billingDetails: {
+              address: {
+                // We have our own input fields for country and postal code - we will pass these to stripe on payment confirmation.
+                country: "never",
+                postalCode: "never",
+              }
+            },
           },
           business:
               {name: "Big Give"}

@@ -1,18 +1,18 @@
 import {Injectable} from '@angular/core';
 import {MatomoTracker} from 'ngx-matomo';
 import {
-  CanMakePaymentResult,
-  loadStripe,
-  PaymentIntentResult,
-  PaymentMethod,
-  PaymentMethodCreateParams,
-  PaymentRequest,
-  PaymentRequestItem,
-  PaymentRequestPaymentMethodEvent,
-  Stripe,
-  StripeCardElement,
-  StripeElements,
-  StripePaymentRequestButtonElement,
+    CanMakePaymentResult,
+    loadStripe,
+    PaymentIntentResult,
+    PaymentMethod,
+    PaymentMethodCreateParams,
+    PaymentRequest,
+    PaymentRequestItem,
+    PaymentRequestPaymentMethodEvent,
+    Stripe,
+    StripeCardElement,
+    StripeElements,
+    StripePaymentRequestButtonElement,
 } from '@stripe/stripe-js';
 import {Observer} from 'rxjs';
 
@@ -77,6 +77,7 @@ export class StripeService {
       amount: amountInMinorUnit,
       setup_future_usage: 'on_session',
       on_behalf_of: campaign.charity.stripeAccountId,
+      paymentMethodCreation: 'manual',
     });
   }
 
@@ -370,31 +371,24 @@ export class StripeService {
       return;
     }
 
-    // const donorName = donation.firstName || '' + ' ' +  donation.lastName;
-
     // If we want to not show billing details inside the Stripe payment element we have to pass billing details
     // as payment_method_data here, with at least this much detail - but we don't collect addresses in that much detail.
-    // const paymentMethodData = {
-    //   billing_details:
-    //     {
-    //       name: donorName,
-    //       address: {
-    //         city: '',
-    //         state: '',
-    //         country: donation.countryCode,
-    //         postal_code: donation.billingPostalAddress
-    //       },
-    //       email: donation.emailAddress,
-    //       phone: ''
-    //     }
-    // };
+    const paymentMethodData = {
+      billing_details:
+        {
+          address: {
+            country: donation.countryCode,
+            postal_code: donation.billingPostalAddress
+          },
+        }
+    };
 
     return await this.stripe?.confirmPayment({
       elements: elements,
       clientSecret: donation.clientSecret as string,
       redirect: 'if_required',
       confirmParams: {
-        // payment_method_data: paymentMethodData,
+        payment_method_data: paymentMethodData,
         return_url: environment.donateGlobalUriPrefix + "/thanks/" + donation.donationId
       }
     });
