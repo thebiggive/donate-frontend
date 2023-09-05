@@ -391,9 +391,12 @@
         <div class="payment-details" [style.display]="!stripePRBMethodReady && !selectedSavedMethod && creditPenceToUse === 0 ? 'block' : 'none'">
           <div class="sr-combo-inputs-row">
             <biggive-text-input>
-              <span slot="label">Card</span> <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe not us -->
+              <span slot="label">Payment Method</span> <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe not us -->
             <div slot="input" class="sr-input sr-card-element" id="card-info" #cardInfo></div>
             </biggive-text-input>
+            <div>
+              Your card information will be held for re-use if you set a password on the next page. It is held securely only with Stripe.
+            </div>
           </div>
 
           <div>
