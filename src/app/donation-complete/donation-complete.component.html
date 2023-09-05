@@ -107,7 +107,8 @@
         <div class="large-donation-spacer" *ngIf="donationIsLarge"></div>
         <div class="receipt">
           <p><strong>Your Receipt</strong></p>
-          <p>{{donation.createdTime | date: 'medium'}}</p>
+          <!-- Date time appears as e.g. "Sep 5, 2023, 2:54 PM" -->
+          <p>{{donation.createdTime | date: 'mediumDate'}}, {{donation.createdTime | date: 'shortTime'}}</p>
           <br>
 
           <table>
