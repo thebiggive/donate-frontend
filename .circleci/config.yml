@@ -182,7 +182,9 @@ jobs:
       env:
         type: string
     docker:
-      - image: node:16.18 # As above, match the app's Dockerfile base version.
+      # As above, match the app's Dockerfile base version. Here we also want to make sure
+      # we're using CircleCI's convenience image so that e.g. `docker` is available.
+      - image: cimg/node:16.18
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_ACCESS_TOKEN
@@ -222,6 +224,7 @@ workflows:
           env: regression
           name: "Build Regression ECR image"
           context:
+            - docker-hub-creds
             - ecs-deploys
           requires:
             - deploy-regression-static
@@ -255,6 +258,7 @@ workflows:
           env: staging
           name: "Build Staging ECR image"
           context:
+            - docker-hub-creds
             - ecs-deploys
           requires:
             - deploy-staging-static
@@ -307,6 +311,7 @@ workflows:
           env: production
           name: "Build Production ECR image"
           context:
+            - docker-hub-creds
             - ecs-deploys
           requires:
             - deploy-production-static
