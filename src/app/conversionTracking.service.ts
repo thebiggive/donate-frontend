@@ -4,6 +4,7 @@ import {Donation} from "./donation.model";
 import {Campaign} from "./campaign.model";
 import {CookiePreferenceService} from "./cookiePreference.service";
 import {take} from "rxjs";
+import {flags} from "./featureFlags";
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +26,7 @@ export class ConversionTrackingService {
   }
 
   private trackConversionWithMatomo(donation: Donation, campaign: Campaign) {
-    if (! this.marketingCookiesAllowed) {
+    if (flags.cookieBannerEnabled && ! this.marketingCookiesAllowed) {
       return;
     }
 
