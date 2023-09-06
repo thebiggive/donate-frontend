@@ -9,7 +9,8 @@ type CookiePreferences =
     {
       agreedToAll: false,
       agreedToCookieTypes: {
-        marketing: boolean,
+        analyticsAndTesting: boolean,
+        thirdParty: boolean,
       }};
 
 @Injectable({
@@ -19,7 +20,7 @@ export class CookiePreferenceService {
 
   private cookiePreferences$: Subject<CookiePreferences | undefined>;
 
-  private optInToMarketingCookies$: Subject<null>;
+  private optInToAnalyticsAndTesting$: Subject<null>;
 
   private readonly cookieName = "cookie-preferences";
   private readonly cookieExpiryPeriodDays = 365;
@@ -35,10 +36,10 @@ export class CookiePreferenceService {
     }
 
     this.cookiePreferences$ = new BehaviorSubject(cookiePreferences);
-    if (cookiePreferences?.agreedToAll || cookiePreferences?.agreedToCookieTypes.marketing) {
-        this.optInToMarketingCookies$ = new BehaviorSubject(null);
+    if (cookiePreferences?.agreedToAll || cookiePreferences?.agreedToCookieTypes.analyticsAndTesting) {
+        this.optInToAnalyticsAndTesting$ = new BehaviorSubject(null);
     } else {
-      this.optInToMarketingCookies$ = new Subject<null>;
+      this.optInToAnalyticsAndTesting$ = new Subject<null>;
     }
   }
   userHasExpressedCookiePreference(): Observable<boolean>
@@ -50,24 +51,24 @@ export class CookiePreferenceService {
    * Returns an observable that emits void iff and when the user has agreed to accept marketing cookies - either
    * on subscription if they agreed in the past and we saved a cookie, or later if they agree during this session.
    */
-  userOptInToMarketingCookies(): Observable<null>
+  userOptInToAnalyticsAndTesting(): Observable<null>
   {
-    return this.optInToMarketingCookies$;
+    return this.optInToAnalyticsAndTesting$;
   }
 
   agreeToAll() {
     const preferences: CookiePreferences = {agreedToAll: true};
     this.cookieService.set(this.cookieName, JSON.stringify(preferences), this.cookieExpiryPeriodDays, '/', environment.sharedCookieDomain)
     this.cookiePreferences$.next(preferences);
-    this.optInToMarketingCookies$.next(null);
+    this.optInToAnalyticsAndTesting$.next(null);
   }
 
   storePreferences(preferences: CookiePreferences) {
     this.cookieService.set(this.cookieName, JSON.stringify(preferences), this.cookieExpiryPeriodDays, '/', environment.sharedCookieDomain)
     this.cookiePreferences$.next(preferences);
 
-    if (preferences.agreedToAll || preferences.agreedToCookieTypes.marketing) {
-      this.optInToMarketingCookies$.next(null);
+    if (preferences.agreedToAll || preferences.agreedToCookieTypes.analyticsAndTesting) {
+      this.optInToAnalyticsAndTesting$.next(null);
     }
   }
 }

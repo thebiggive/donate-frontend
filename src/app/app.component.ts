@@ -35,7 +35,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   protected readonly environment = environment;
   protected readonly flags = flags;
   protected readonly userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
-  private marketingCookieOptInSubscription: Subscription | undefined;
+  private analyticsAndTestingCookieOptInSubscription: Subscription | undefined;
 
   constructor(
     private identityService: IdentityService,
@@ -77,9 +77,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
 
       if (flags.cookieBannerEnabled) {
-        this.marketingCookieOptInSubscription = this.cookiePreferenceService.userOptInToMarketingCookies().subscribe(() => {
+        this.analyticsAndTestingCookieOptInSubscription = this.cookiePreferenceService.userOptInToAnalyticsAndTesting().subscribe(() => {
           this.getSiteControlService.init();
-          this.marketingCookieOptInSubscription?.unsubscribe();
+          this.analyticsAndTestingCookieOptInSubscription?.unsubscribe();
           this.matomoTracker.setCookieConsentGiven();
         });
       } else {
@@ -121,7 +121,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.marketingCookieOptInSubscription?.unsubscribe();
+    this.analyticsAndTestingCookieOptInSubscription?.unsubscribe();
   }
 
   @HostListener('cookieBannerAcceptAllSelected', ['$event'])
