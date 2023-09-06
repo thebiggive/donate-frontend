@@ -97,7 +97,7 @@ describe('CookiePreferenceService', () => {
     // @ts-ignore - we don't need to take all the params, only the ones our SUT will actually pass.
     mockCookieService.set = (name, value: string, duration: number, path: string, domain: string) => {
       expect(name).toBe('cookie-preferences');
-      expect(JSON.parse(value)).toEqual({agreedToAll: false, agreedToCookieTypes: {marketing: true}});
+      expect(JSON.parse(value)).toEqual({agreedToAll: false, agreedToCookieTypes: {analyticsAndTesting: true, thirdParty: false}});
       expect(duration).toBe(365);
       expect(path).toBe('/');
       expect(domain).toBe('localhost');
@@ -107,6 +107,6 @@ describe('CookiePreferenceService', () => {
 
     const service = new CookiePreferenceService(mockCookieService);
 
-    service.storePreferences({agreedToAll: false, agreedToCookieTypes: {marketing: true}})
+    service.storePreferences({agreedToAll: false, agreedToCookieTypes: {analyticsAndTesting: true, thirdParty: false}})
   });
 });
