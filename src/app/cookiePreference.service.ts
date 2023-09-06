@@ -1,10 +1,10 @@
 import {Injectable} from "@angular/core";
-import {BehaviorSubject, Observable, Subject} from "rxjs";
+import {BehaviorSubject, Observable, Subject, take} from "rxjs";
 import {CookieService} from "ngx-cookie-service";
 import {environment} from "../environments/environment";
 import {map} from "rxjs/operators";
 
-type CookiePreferences =
+export type CookiePreferences =
     {agreedToAll: true} |
     {
       agreedToAll: false,
@@ -13,6 +13,9 @@ type CookiePreferences =
         thirdParty: boolean,
       }};
 
+export const agreesToAnalyticsAndTracking = (prefs: CookiePreferences) => prefs.agreedToAll || prefs.agreedToCookieTypes.analyticsAndTesting;
+export const agreesToThirdParty = (prefs: CookiePreferences) => prefs.agreedToAll || prefs.agreedToCookieTypes.thirdParty;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -20,7 +23,7 @@ export class CookiePreferenceService {
 
   private cookiePreferences$: Subject<CookiePreferences | undefined>;
 
-  private optInToAnalyticsAndTesting$: Subject<null>;
+  private optInToAnalyticsAndTesting$: Subject<CookiePreferences>;
 
   private readonly cookieName = "cookie-preferences";
   private readonly cookieExpiryPeriodDays = 365;
@@ -36,10 +39,10 @@ export class CookiePreferenceService {
     }
 
     this.cookiePreferences$ = new BehaviorSubject(cookiePreferences);
-    if (cookiePreferences?.agreedToAll || cookiePreferences?.agreedToCookieTypes.analyticsAndTesting) {
-        this.optInToAnalyticsAndTesting$ = new BehaviorSubject(null);
+    if (cookiePreferences?.agreedToAll || cookiePreferences?.agreedToCookieTypes.analyticsAndTesting || cookiePreferences?.agreedToCookieTypes.thirdParty) {
+        this.optInToAnalyticsAndTesting$ = new BehaviorSubject(cookiePreferences);
     } else {
-      this.optInToAnalyticsAndTesting$ = new Subject<null>;
+      this.optInToAnalyticsAndTesting$ = new Subject<CookiePreferences>;
     }
   }
   userHasExpressedCookiePreference(): Observable<boolean>
@@ -48,27 +51,29 @@ export class CookiePreferenceService {
   }
 
   /**
-   * Returns an observable that emits void iff and when the user has agreed to accept marketing cookies - either
+   * Returns an observable that emits void iff and when the user has agreed to accept cookies - either
    * on subscription if they agreed in the past and we saved a cookie, or later if they agree during this session.
    */
-  userOptInToAnalyticsAndTesting(): Observable<null>
+  userOptInToSomeCookies(): Observable<CookiePreferences>
   {
-    return this.optInToAnalyticsAndTesting$;
+    // There's no UI to allow a user to express a preference more than once without reloading the page, so we pipe the observable through take(1)
+    // to make subscriptions automatically end free memory as soon as the opt-in is given.
+    return this.optInToAnalyticsAndTesting$.pipe(take(1));
   }
 
   agreeToAll() {
     const preferences: CookiePreferences = {agreedToAll: true};
     this.cookieService.set(this.cookieName, JSON.stringify(preferences), this.cookieExpiryPeriodDays, '/', environment.sharedCookieDomain)
     this.cookiePreferences$.next(preferences);
-    this.optInToAnalyticsAndTesting$.next(null);
+    this.optInToAnalyticsAndTesting$.next(preferences);
   }
 
   storePreferences(preferences: CookiePreferences) {
     this.cookieService.set(this.cookieName, JSON.stringify(preferences), this.cookieExpiryPeriodDays, '/', environment.sharedCookieDomain)
     this.cookiePreferences$.next(preferences);
 
-    if (preferences.agreedToAll || preferences.agreedToCookieTypes.analyticsAndTesting) {
-      this.optInToAnalyticsAndTesting$.next(null);
+    if (preferences.agreedToAll || preferences.agreedToCookieTypes.analyticsAndTesting || preferences.agreedToCookieTypes.thirdParty) {
+      this.optInToAnalyticsAndTesting$.next(preferences);
     }
   }
 }

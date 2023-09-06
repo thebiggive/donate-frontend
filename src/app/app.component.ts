@@ -1,5 +1,5 @@
 import {APP_BASE_HREF, isPlatformBrowser} from '@angular/common';
-import {AfterViewInit, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
 import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
 import {BiggiveMainMenu} from '@biggive/components-angular';
 import {filter} from 'rxjs/operators';
@@ -11,8 +11,12 @@ import {Person} from "./person.model";
 import {IdentityService} from "./identity.service";
 import {environment} from "../environments/environment";
 import {flags} from "./featureFlags";
-import {CookiePreferenceService} from "./cookiePreference.service";
-import {Subscription} from "rxjs";
+import {
+  agreesToAnalyticsAndTracking,
+  agreesToThirdParty,
+  CookiePreferences,
+  CookiePreferenceService
+} from "./cookiePreference.service";
 import {MatomoTracker} from "ngx-matomo";
 
 @Component({
@@ -20,7 +24,7 @@ import {MatomoTracker} from "ngx-matomo";
   templateUrl: './app.component.html',
   styleUrls: ["./app.component.scss"]
 })
-export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
+export class AppComponent implements AfterViewInit, OnInit {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
 
   public isLoggedIn: boolean = false;
@@ -35,7 +39,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   protected readonly environment = environment;
   protected readonly flags = flags;
   protected readonly userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
-  private analyticsAndTestingCookieOptInSubscription: Subscription | undefined;
 
   constructor(
     private identityService: IdentityService,
@@ -77,10 +80,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
 
       if (flags.cookieBannerEnabled) {
-        this.analyticsAndTestingCookieOptInSubscription = this.cookiePreferenceService.userOptInToAnalyticsAndTesting().subscribe(() => {
-          this.getSiteControlService.init();
-          this.analyticsAndTestingCookieOptInSubscription?.unsubscribe();
-          this.matomoTracker.setCookieConsentGiven();
+        this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {
+          if (agreesToThirdParty(preferences)) {
+            this.getSiteControlService.init();
+          }
+
+          if (agreesToAnalyticsAndTracking(preferences)) {
+            this.matomoTracker.setCookieConsentGiven();
+          }
         });
       } else {
         this.getSiteControlService.init();
@@ -118,10 +125,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     this.router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationStart),
     ).subscribe(() => headerEl.closeMobileMenuFromOutside());
-  }
-
-  ngOnDestroy() {
-    this.analyticsAndTestingCookieOptInSubscription?.unsubscribe();
   }
 
   @HostListener('cookieBannerAcceptAllSelected', ['$event'])
