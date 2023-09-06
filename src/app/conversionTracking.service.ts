@@ -2,21 +2,34 @@ import {MatomoTracker} from "ngx-matomo";
 import {Injectable} from "@angular/core";
 import {Donation} from "./donation.model";
 import {Campaign} from "./campaign.model";
+import {CookiePreferenceService} from "./cookiePreference.service";
+import {take} from "rxjs";
+import {flags} from "./featureFlags";
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConversionTrackingService {
+  private marketingCookiesAllowed: boolean = false;
   constructor(
     private matomoTracker: MatomoTracker,
+    private cookiePreferenceService: CookiePreferenceService,
   ) {
+    this.cookiePreferenceService.userOptInToAnalyticsAndTesting().pipe(take(1)).subscribe(
+      () => this.marketingCookiesAllowed = true
+    );
   }
+
 
   public convert(donation: Donation, campaign: Campaign) {
     this.trackConversionWithMatomo(donation, campaign);
   }
 
   private trackConversionWithMatomo(donation: Donation, campaign: Campaign) {
+    if (flags.cookieBannerEnabled && ! this.marketingCookiesAllowed) {
+      return;
+    }
+
     if (!donation?.donationId) {
       return;
     }
