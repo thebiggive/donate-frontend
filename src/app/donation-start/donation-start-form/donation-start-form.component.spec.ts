@@ -1,29 +1,102 @@
-import { DatePipe } from "@angular/common";
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectModule } from '@angular/material/select';
-import { MatStepperModule } from '@angular/material/stepper';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { RecaptchaModule } from 'ng-recaptcha';
-import { MatomoModule } from 'ngx-matomo';
-import { InMemoryStorageService } from 'ngx-webstorage-service';
-import { of } from 'rxjs';
+import {CurrencyPipe, DatePipe} from "@angular/common";
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatSelectModule} from '@angular/material/select';
+import {MatStepperModule} from '@angular/material/stepper';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {ActivatedRoute, Router} from '@angular/router';
+import {RouterTestingModule} from '@angular/router/testing';
+import {RecaptchaModule} from 'ng-recaptcha';
+import {MatomoModule, MatomoTracker} from 'ngx-matomo';
+import {InMemoryStorageService} from 'ngx-webstorage-service';
+import {of} from 'rxjs';
 
-import { Campaign } from '../../campaign.model';
-import { TBG_DONATE_STORAGE } from '../../donation.service';
-import { TBG_DONATE_ID_STORAGE } from '../../identity.service';
-import { TimeLeftPipe } from "../../time-left.pipe";
+import {Campaign} from '../../campaign.model';
+import {DonationService, TBG_DONATE_STORAGE} from '../../donation.service';
+import {IdentityService, TBG_DONATE_ID_STORAGE} from '../../identity.service';
+import {TimeLeftPipe} from "../../time-left.pipe";
 import {DonationStartFormComponent} from "./donation-start-form.component";
+import {CardIconsService} from "../../card-icons.service";
+import {ChangeDetectorRef, ElementRef} from "@angular/core";
+import {ConversionTrackingService} from "../../conversionTracking.service";
+import {PageMetaService} from "../../page-meta.service";
+import {PostcodeService} from "../../postcode.service";
+import {StripeService} from "../../stripe.service";
+import {Donation} from "../../donation.model";
+
+function makeDonationStartFormComponent(donationService: DonationService,) {
+  const donationStartFormComponent = new DonationStartFormComponent(
+    undefined as unknown as CardIconsService,
+    undefined as unknown as ChangeDetectorRef,
+    {
+      convert: () => {
+      }
+    } as unknown as ConversionTrackingService,
+    undefined as unknown as MatDialog,
+    donationService,
+    undefined as unknown as ElementRef<any>,
+    undefined as unknown as FormBuilder,
+    undefined as unknown as IdentityService,
+    {
+      trackEvent: () => {
+      }
+    } as unknown as MatomoTracker,
+    undefined as unknown as PageMetaService,
+    undefined as unknown as PostcodeService,
+    {},
+    {snapshot: {}} as unknown as ActivatedRoute,
+    {
+      navigate: () => {
+      }
+    } as unknown as Router,
+    undefined as unknown as StripeService,
+    undefined as unknown as CurrencyPipe,
+    undefined as unknown as DatePipe,
+    undefined as unknown as TimeLeftPipe
+  );
+
+  const stubGroup = {
+    patchValue: () => {
+    },
+    controls: {
+      donationAmount: {
+        setValidators: () => {
+        }
+      },
+      billingCountry: {
+        setValidators: () => {
+        }, updateValueAndValidity: () => {
+        }
+      },
+      billingPostcode: {
+        setValidators: () => {
+        }, updateValueAndValidity: () => {
+        }
+      },
+    },
+    get: () => {
+    },
+  } as unknown as FormGroup<any>;
+
+  donationStartFormComponent.amountsGroup = stubGroup;
+
+  donationStartFormComponent.giftAidGroup = stubGroup;
+
+  donationStartFormComponent.paymentGroup = stubGroup;
+
+  donationStartFormComponent.campaign = {currencyCode: 'GBP'} as Campaign;
+
+  donationStartFormComponent.donation = {clientSecret: 'client_secret'} as Donation;
+  return donationStartFormComponent;
+}
 
 describe('DonationStartNewPrimaryComponent', () => {
   beforeEach(waitForAsync(() => {
@@ -385,6 +458,51 @@ describe('DonationStartNewPrimaryComponent', () => {
     expect(component.donationForm.controls.marketing!.get('optInCharityEmail')?.errors).toBeNull();
     expect(component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
   });
+
+
+  it('Should allow paying with donation funds with no saved payment method', async () => {
+    var finaliseCashBalancePurchaseCalled = false;
+
+    const fakeDonationService = {
+      getDefaultCounty: () => 'gb',
+      finaliseCashBalancePurchase: (donation: Donation)=> {
+        finaliseCashBalancePurchaseCalled = true;
+        return of(donation);
+      },
+      getPaymentMethods: () => of({data: []}),
+    } as unknown as DonationService;
+
+    const sut = makeDonationStartFormComponent(fakeDonationService);
+
+    sut.loadPerson({cash_balance: {gbp: 100}}, 'personID', 'jwt');
+
+    await sut.payWithStripe();
+
+    expect(finaliseCashBalancePurchaseCalled).toBe(true)
+  });
+
+  it('Should not allow paying with with no payment method and no funds', async () => {
+    var finaliseCashBalancePurchaseCalled = false;
+
+    const fakeDonationService = {
+      getDefaultCounty: () => 'gb',
+      finaliseCashBalancePurchase: (donation: Donation)=> {
+        finaliseCashBalancePurchaseCalled = true;
+        return of(donation);
+      },
+      getPaymentMethods: () => of({data: []}),
+    } as unknown as DonationService;
+
+    const sut = makeDonationStartFormComponent(fakeDonationService);
+
+    sut.loadPerson({cash_balance: {gbp: 0}}, 'personID', 'jwt');
+
+    await sut.payWithStripe();
+
+    expect(finaliseCashBalancePurchaseCalled).toBe(false)
+  });
+
+
 
   it('should have maximum amount error', () => {
     fixture.detectChanges(); // Detect initial state from async beforeEach(), including Stripe-enabled charity.
