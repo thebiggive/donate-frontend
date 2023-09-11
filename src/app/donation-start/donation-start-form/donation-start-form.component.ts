@@ -726,7 +726,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   async payWithStripe() {
-    const methodIsReady = this.stripePaymentElement || this.selectedSavedMethod;
+    const hasCredit = this.creditPenceToUse > 0;
+
+    const methodIsReady = this.stripePaymentElement || this.selectedSavedMethod || hasCredit;
 
     if (!this.donation || !this.donation.clientSecret || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
@@ -735,7 +737,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    if (this.creditPenceToUse > 0) {
+    if (hasCredit) {
       // Settlement is via the Customer's cash balance, with no client-side provision of a Payment Method.
       this.donationService.finaliseCashBalancePurchase(this.donation).subscribe(
         (donation) => {
