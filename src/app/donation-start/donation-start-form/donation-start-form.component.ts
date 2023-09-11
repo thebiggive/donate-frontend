@@ -726,9 +726,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   async payWithStripe() {
+    this.donationService.finaliseCashBalancePurchase(this.donation as Donation);
+
     const hasCredit = this.creditPenceToUse > 0;
+    console.log({hasCredit});
 
     const methodIsReady = this.stripePaymentElement || this.selectedSavedMethod || hasCredit;
+
+    console.log({methodIsReady})
 
     if (!this.donation || !this.donation.clientSecret || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';

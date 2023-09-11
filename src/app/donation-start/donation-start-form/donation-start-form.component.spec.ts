@@ -20,10 +20,14 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { of } from 'rxjs';
 
 import { Campaign } from '../../campaign.model';
-import { TBG_DONATE_STORAGE } from '../../donation.service';
+import {DonationService, TBG_DONATE_STORAGE} from '../../donation.service';
 import { TBG_DONATE_ID_STORAGE } from '../../identity.service';
 import { TimeLeftPipe } from "../../time-left.pipe";
 import {DonationStartFormComponent} from "./donation-start-form.component";
+
+const mockDonationService: jasmine.SpyObj<DonationService> = jasmine.createSpyObj(
+  'DonationService', ['finaliseCashBalancePurchase']
+);
 
 describe('DonationStartNewPrimaryComponent', () => {
   beforeEach(waitForAsync(() => {
@@ -32,7 +36,8 @@ describe('DonationStartNewPrimaryComponent', () => {
       ],
       providers: [
         TimeLeftPipe,
-        DatePipe
+        DatePipe,
+        {provide: DonationService, value: mockDonationService}
       ],
     })
       .compileComponents();
@@ -298,6 +303,15 @@ describe('DonationStartNewPrimaryComponent', () => {
     const optInTbgEmailErrors: any = component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors;
     expect(Object.keys(optInTbgEmailErrors).length).toBe(1);
     expect(optInTbgEmailErrors.required).toBe(true);
+  });
+
+  it('Should allow paying with donation funds with no save payment method', async () => {
+    const finaliseCashBalancePurchase = mockDonationService.finaliseCashBalancePurchase.
+    and.callFake(donation => of(donation));
+
+    await component.payWithStripe();
+
+    expect(finaliseCashBalancePurchase.calls.count()).toBe(1);
   });
 
   it('should have missing amount error', () => {
