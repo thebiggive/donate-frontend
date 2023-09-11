@@ -13,7 +13,7 @@ import { SelectedType } from './search.service';
 export class CampaignService {
   static perPage = 6;
 
-  private apiPath = '/campaigns/services/apexrest/v1.0';
+  private apiPath = '/campaigns/services/apexrest/v1.0' as const;
 
   constructor(
     private http: HttpClient,
