@@ -464,7 +464,7 @@ describe('DonationStartNewPrimaryComponent', () => {
     var finaliseCashBalancePurchaseCalled = false;
 
     const fakeDonationService = {
-      getDefaultCounty: () => 'gb',
+      getDefaultCounty: () => 'GB',
       finaliseCashBalancePurchase: (donation: Donation)=> {
         finaliseCashBalancePurchaseCalled = true;
         return of(donation);
@@ -485,7 +485,7 @@ describe('DonationStartNewPrimaryComponent', () => {
     var finaliseCashBalancePurchaseCalled = false;
 
     const fakeDonationService = {
-      getDefaultCounty: () => 'gb',
+      getDefaultCounty: () => 'GB',
       finaliseCashBalancePurchase: (donation: Donation)=> {
         finaliseCashBalancePurchaseCalled = true;
         return of(donation);
