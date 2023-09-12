@@ -575,6 +575,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.createDonationAndMaybePerson(); // Re-sets-up PRB etc.
         });
 
+      console.log("step changed, will get new stripe elements and prepare card input");
+      this.stripeElements = this.stripeService.stripeElements(this.donation, this.campaign);
+      this.prepareCardInput();
+
       return;
     }
 
@@ -615,7 +619,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
       if (this.psp === 'stripe' && this.donation) {
         this.stripeElements = this.stripeService.stripeElements(this.donation, this.campaign);
-        this.prepareCardInput();
+        this.ensureCardInputIsPrepared();
       }
 
       return;
@@ -974,7 +978,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.updateFormWithBillingDetails(this.selectedSavedMethod);
     } else {
       this.selectedSavedMethod = undefined;
-      this.prepareCardInput();
+      this.ensureCardInputIsPrepared();
     }
   }
 
@@ -996,12 +1000,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
-  private prepareCardInput() {
-    if (this.cardInfo.nativeElement.children.length > 0) {
-      // Card input was already ready.
-      return;
+  private ensureCardInputIsPrepared() {
+    if (this.cardInfo.nativeElement.children.length === 0) {
+      this.prepareCardInput();
     }
+  }
 
+  private prepareCardInput() {
     if (!this.stripeElements) {
       console.error('Stripe Elements not ready');
       return;
@@ -1443,7 +1448,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         const stripeElements = this.stripeService.stripeElements(this.donation, this.campaign);
         this.stripeElements = stripeElements
         this.preparePaymentRequestButton(this.donation, this.paymentGroup);
-        this.prepareCardInput();
+        this.ensureCardInputIsPrepared();
       }
     }
 
