@@ -19,7 +19,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatDialog} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {RecaptchaComponent} from 'ng-recaptcha';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
@@ -252,6 +252,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
     @Inject(PLATFORM_ID) private platformId: Object,
+    private route: ActivatedRoute,
     private router: Router,
     private stripeService: StripeService,
     public datePipe: DatePipe,

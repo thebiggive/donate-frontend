@@ -52,6 +52,7 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     undefined as unknown as PageMetaService,
     undefined as unknown as PostcodeService,
     {},
+    {snapshot: {}} as unknown as ActivatedRoute,
     {
       navigate: () => {
       }
