@@ -45,7 +45,6 @@ describe('MetaCampaignComponent', () => {
     {
       id: 'tbgId',
       name: 'Big Give',
-      donateLinkId: 'SFIdOrLegacyId',
       optInStatement: 'Opt in statement.',
       website: 'https://www.thebiggive.org.uk',
       regulatorNumber: '123456',

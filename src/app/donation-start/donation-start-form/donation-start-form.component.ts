@@ -253,13 +253,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private route: ActivatedRoute,
     private router: Router,
     private stripeService: StripeService,
-    private currencyPipe: CurrencyPipe,
     public datePipe: DatePipe,
     public timeLeftPipe: TimeLeftPipe,
-
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
     this.countryOptionsObject = Object.assign(

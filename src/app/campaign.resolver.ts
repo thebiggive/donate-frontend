@@ -39,12 +39,12 @@ export class CampaignResolver  {
 
     if (campaignSlug && fundSlug && campaignSlug !== "campaign") {
       const query = this.campaignService.buildQuery(this.searchService.selected, 0, campaignId ?? undefined, campaignSlug, fundSlug);
-      this.campaignService.search(query as SearchQuery).subscribe(
-        () => {},
-        () => {
+      this.campaignService.search(query as SearchQuery).subscribe({
+        next: () => {},
+        error: () => {
           this.router.navigateByUrl(`/${campaignSlug}`);
-        }
-      )
+        },
+      });
     }
 
     return this.loadWithStateCache(

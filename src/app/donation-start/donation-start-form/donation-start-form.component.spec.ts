@@ -52,13 +52,11 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     undefined as unknown as PageMetaService,
     undefined as unknown as PostcodeService,
     {},
-    {snapshot: {}} as unknown as ActivatedRoute,
     {
       navigate: () => {
       }
     } as unknown as Router,
     undefined as unknown as StripeService,
-    undefined as unknown as CurrencyPipe,
     undefined as unknown as DatePipe,
     undefined as unknown as TimeLeftPipe
   );
@@ -140,7 +138,6 @@ describe('DonationStartNewPrimaryComponent', () => {
         {
           id: '0011r00002HHAprAAH',
           name: 'Awesome Charity',
-          donateLinkId: 'SFIdOrLegacyId',
           optInStatement: 'Opt in statement.',
           regulatorNumber: '123456',
           regulatorRegion: 'Scotland',
