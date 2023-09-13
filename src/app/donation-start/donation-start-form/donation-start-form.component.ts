@@ -547,7 +547,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   async stepChanged(event: StepperSelectionEvent) {
-    // We need to allow enough time for the Stepper's animation to get the window to
+    if (event.selectedStep.label === this.yourDonationStepLabel) {
+      // workaround bug issue DON-883 - without resestting the page the stripe element is not usable for the new donation that will be created in this step.
+      // Not ideal as this loses content the donor may have typed already, but better to reset the page than let them enter donation details and then fail to
+      // take the payment.
+      this.reset();
+    }
+
+      // We need to allow enough time for the Stepper's animation to get the window to
     // its final position for this step, before this scroll position update can be reliably
     // helpful.
     setTimeout(() => {
