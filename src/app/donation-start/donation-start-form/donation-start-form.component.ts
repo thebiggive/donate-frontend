@@ -241,6 +241,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   private stripeElements: StripeElements | undefined;
+  private preparingCardInputCount: number = 0;
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -559,7 +560,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     // If the original donation amount was updated, cancel that donation and
     // then (sequentially so any match funds are freed up first) create a new
-    // one for the updated amount.
+    // one for the updated amount. // here
     if (this.donation !== undefined && this.donationAmount > 0 && this.donationAmount !== this.donation.donationAmount) {
       this.donationService.cancel(this.donation)
         .subscribe(() => {
@@ -570,14 +571,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           );
 
           if (this.donation) {
-            this.clearDonation(this.donation, true);
-          }
-          this.createDonationAndMaybePerson(); // Re-sets-up PRB etc.
-        });
+            this.clearDonation(this.donation, true); // includes call ot StripeElementBase.clear
 
-      console.log("step changed, will get new stripe elements and prepare card input");
-      this.stripeElements = this.stripeService.stripeElements(this.donation, this.campaign);
-      this.prepareCardInput();
+            this.createDonationAndMaybePerson(); // Re-sets-up PRB etc.
+            console.log("step changed, will get new stripe elements and prepare card input");
+            // this.prepareCardInput();
+          }
+        });
 
       return;
     }
@@ -1013,6 +1013,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (!this.stripeElements) {
       console.error('Stripe Elements not ready');
       return;
+    }
+    this.preparingCardInputCount++;
+    console.log(`Preparing card input for time no ${this.preparingCardInputCount}`);
+    console.trace();
+    if (this.preparingCardInputCount === 3) {
+      console.error("Preparing card input too many times...");
     }
     console.log("preparing card input...")
 
@@ -1479,6 +1485,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     this.scheduleMatchingExpiryWarning(this.donation);
+    this.stripeElements = this.stripeService.stripeElements(this.donation, this.campaign);
+    this.prepareCardInput();
   }
 
   private offerExistingDonation(donation: Donation) {
