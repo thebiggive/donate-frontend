@@ -1,5 +1,5 @@
 import {StepperSelectionEvent} from '@angular/cdk/stepper';
-import {CurrencyPipe, DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
+import {DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
 import {HttpErrorResponse} from '@angular/common/http';
 import {
   AfterContentChecked,
@@ -19,7 +19,7 @@ import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatDialog} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {RecaptchaComponent} from 'ng-recaptcha';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
@@ -69,7 +69,6 @@ import {MatomoTracker} from 'ngx-matomo';
   templateUrl: './donation-start-form.component.html',
   styleUrls: ['./donation-start-form.component.scss'],
   providers: [
-    CurrencyPipe,
     TimeLeftPipe,
   ]
 })
