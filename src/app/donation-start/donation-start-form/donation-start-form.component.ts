@@ -618,6 +618,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       }
 
       if (this.psp === 'stripe' && this.donation) {
+        console.log("will write step changed part 2 - going to ensure not replace card input");
         this.stripeElements = this.stripeService.stripeElements(this.donation, this.campaign);
         this.ensureCardInputIsPrepared();
       }
@@ -1003,6 +1004,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private ensureCardInputIsPrepared() {
     if (this.cardInfo.nativeElement.children.length === 0) {
       this.prepareCardInput();
+    } else {
+      console.log("not preparing card input, as its already ready ...")
     }
   }
 
@@ -1011,6 +1014,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       console.error('Stripe Elements not ready');
       return;
     }
+    console.log("preparing card input...")
 
     // Card element is mounted the same way regardless of donation info. See
     // this.createDonationAndMaybePerson().subscribe(...) for Payment Request Button mount, which needs donation info
@@ -1446,6 +1450,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         this.stripePaymentMethodReady = true;
       } else {
         const stripeElements = this.stripeService.stripeElements(this.donation, this.campaign);
+        console.log("will write stripe elements in newDonationSuccess");
         this.stripeElements = stripeElements
         this.preparePaymentRequestButton(this.donation, this.paymentGroup);
         this.ensureCardInputIsPrepared();
