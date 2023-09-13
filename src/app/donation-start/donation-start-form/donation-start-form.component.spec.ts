@@ -1,4 +1,4 @@
-import {CurrencyPipe, DatePipe} from "@angular/common";
+import {DatePipe} from '@angular/common';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
