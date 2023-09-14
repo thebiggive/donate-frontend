@@ -1,9 +1,9 @@
 <div>
   <biggive-campaign-highlights
     space-below=0
-    [primaryFigureLabel]="primaryFigureLabel"
+    [primaryFigureLabel]="this.campaign.parentUsesSharedFunds ? 'Overall total raised' : 'Amount raised'"
     [primaryFigureAmount]="campaignRaised"
-    [secondaryFigureLabel]="secondaryFigureLabel"
+    [secondaryFigureLabel]="this.campaign.parentUsesSharedFunds ? 'Overall target' : 'Campaign target'"
     [secondaryFigureAmount]="campaignTarget"
     [progressBarCounter]="getPercentageRaised(campaign)?.toFixed(0)"
     primary-stat-icon="AlarmClock"

@@ -36,8 +36,6 @@ export class CampaignInfoComponent implements OnInit {
   campaignRaised: string; // Formatted
   campaignTarget: string; // Formatted
   donationCount: number;
-  primaryFigureLabel: string = 'Amount raised';
-  secondaryFigureLabel: string = 'Campaign target';
 
   constructor(
     private currencyPipe: CurrencyPipe,
@@ -67,11 +65,6 @@ export class CampaignInfoComponent implements OnInit {
     this.donationCount = this.campaign.parentUsesSharedFunds
       ? (this.campaign.parentDonationCount || 0)
       : this.campaign.donationCount;
-
-    if (this.campaign.parentUsesSharedFunds) {
-      this.primaryFigureLabel = 'Overall total raised';
-      this.secondaryFigureLabel = 'Overall target';
-    }
   }
 
   getPercentageRaised(campaign: Campaign): number | undefined {
