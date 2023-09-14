@@ -35,6 +35,10 @@ export class CampaignInfoComponent implements OnInit {
   campaignFinished: boolean;
   campaignRaised: string; // Formatted
   campaignTarget: string; // Formatted
+  /**
+   * The count of donations to the parent campaign if it shares funds, or to this
+   * specific campaign otherwise.
+   */
   donationCount: number;
 
   constructor(
