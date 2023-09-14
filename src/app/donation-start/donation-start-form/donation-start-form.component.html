@@ -9,7 +9,7 @@
       <mat-step
         formGroupName="amounts"
         [stepControl]="amountsGroup"
-        label="Your donation"
+        [label]="yourDonationStepLabel"
         class="c-your-donation"
       >
         <p *ngIf="campaign.matchFundsRemaining > 0" class="c-your-donation__highlight">

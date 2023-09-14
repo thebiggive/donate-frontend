@@ -214,6 +214,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   // will be undefined if the drop-down is in use instead of the slider.
   @ViewChild('donationTippingSlider') tippingSlider: DonationTippingSliderComponent | undefined;
 
+  yourDonationStepLabel = 'Your donation' as const;
+
   displayCustomTipInput = () => {
     this.amountsGroup.get('tipAmount')?.setValue('');
 
@@ -542,7 +544,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   async stepChanged(event: StepperSelectionEvent) {
-    // We need to allow enough time for the Stepper's animation to get the window to
+    if (event.selectedStep.label === this.yourDonationStepLabel) {
+      // workaround bug issue DON-883 - without resestting the page the stripe element is not usable for the new donation that will be created in this step.
+      // Not ideal as this loses content the donor may have typed already, but better to reset the page than let them enter donation details and then fail to
+      // take the payment.
+      this.reset();
+    }
+
+      // We need to allow enough time for the Stepper's animation to get the window to
     // its final position for this step, before this scroll position update can be reliably
     // helpful.
     setTimeout(() => {
@@ -599,11 +608,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // Create a donation if coming from first step and not offering to resume
     // an existing donation and not just patching tip amount on `donation`
     // having already gone forward then back in the form.
-    if (event.previouslySelectedStep.label === 'Your donation') {
+    if (event.previouslySelectedStep.label === this.yourDonationStepLabel) {
       if (
         !this.donation && // No change or only tip amount changed, if we got here.
         (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled') &&
-        event.selectedStep.label !== 'Your donation' // Resets fire a 0 -> 0 index event.
+        event.selectedStep.label !== this.yourDonationStepLabel // Resets fire a 0 -> 0 index event.
       ) {
         this.createDonationAndMaybePerson();
       }
@@ -926,7 +935,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // click, probably because that method needs a refreshed DOM to detect if custom
     // error elements are still present. So the safest fix for now is to skip it
     // when we know we have only just hidden the error in this call.
-    if (this.donationCreateError && this.stepper.selected?.label === 'Your donation') {
+    if (this.donationCreateError && this.stepper.selected?.label === this.yourDonationStepLabel) {
       if (this.donation) {
         this.clearDonation(this.donation, true);
         this.matomoTracker.trackEvent(
@@ -1873,7 +1882,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           tipPercentage,
         });
 
-        if (this.stepper.selected?.label === 'Your donation') {
+        if (this.stepper.selected?.label === this.yourDonationStepLabel) {
           this.jumpToStep(donation.currencyCode === 'GBP' ? 'Gift Aid' : 'Payment details');
         }
 
