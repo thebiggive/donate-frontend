@@ -1,7 +1,9 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+import { allChildComponentImports } from '../../allChildComponentImports';
 import { CampaignGroupsService } from '../campaign-groups.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
@@ -12,8 +14,13 @@ const endPipeToken = 'timeLeftToEndPipe';
 
 @Component({
   selector: 'app-campaign-info',
+  standalone: true,
   templateUrl: './campaign-info.component.html',
   styleUrls: ['./campaign-info.component.scss'],
+  imports: [
+    ...allChildComponentImports,
+    FontAwesomeModule,
+  ],
   providers: [
     CurrencyPipe,
     // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
@@ -28,6 +35,9 @@ export class CampaignInfoComponent implements OnInit {
   campaignFinished: boolean;
   campaignRaised: string; // Formatted
   campaignTarget: string; // Formatted
+  donationCount: number;
+  primaryFigureLabel: string = 'Amount raised';
+  secondaryFigureLabel: string = 'Campaign target';
 
   constructor(
     private currencyPipe: CurrencyPipe,
@@ -42,8 +52,24 @@ export class CampaignInfoComponent implements OnInit {
     this.campaign = this.route.snapshot.data.campaign;
     this.campaignOpen = CampaignService.isOpenForDonations(this.campaign);
     this.campaignFinished = CampaignService.isInPast(this.campaign);
-    this.campaignTarget = this.currencyPipe.transform(this.campaign.target, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
-    this.campaignRaised = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') as string;
+    this.campaignTarget = this.currencyPipe.transform(
+      this.campaign.parentUsesSharedFunds ? this.campaign.parentTarget : this.campaign.target,
+      this.campaign.currencyCode,
+      'symbol',
+      '1.0-0',
+    ) as string;
+    this.campaignRaised = this.currencyPipe.transform(
+      this.campaign.parentUsesSharedFunds ? this.campaign.parentAmountRaised : this.campaign.amountRaised,
+      this.campaign.currencyCode,
+      'symbol',
+      '1.0-0',
+    ) as string;
+    this.donationCount = this.campaign.parentUsesSharedFunds ? this.campaign.parentDonationCount : this.campaign.donationCount;
+
+    if (this.campaign.parentUsesSharedFunds) {
+      this.primaryFigureLabel = 'Overall total raised';
+      this.secondaryFigureLabel = 'Overall target';
+    }
   }
 
   getPercentageRaised(campaign: Campaign): number | undefined {

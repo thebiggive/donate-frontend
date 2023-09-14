@@ -127,21 +127,4 @@ h1 {
   background-color: white;
 }
 
-#campaign-highlights-beneficiaries-and-categories-mobile {
-  display: block;
-  margin-top: 30px;
-}
-
-#campaign-highlights-beneficiaries-and-categories-desktop {
-  display: none;
-}
-
-@media #{$breakpoint-lg} {
-  #campaign-highlights-beneficiaries-and-categories-mobile {
-    display: none;
-  }
-
-  #campaign-highlights-beneficiaries-and-categories-desktop {
-    display: block;
-  }
-}
+@include vary-campaign-info-layout();

@@ -1,3 +1,6 @@
+/**
+ * @link https://app.swaggerhub.com/apis/Noel/TBG-Campaigns/#/Campaign
+ */
 export class Campaign {
   constructor(
     public id: string,
@@ -32,6 +35,10 @@ export class Campaign {
     public isMatched: boolean,
     public matchFundsRemaining: number,
     public matchFundsTotal: number,
+    public parentAmountRaised: number,
+    public parentDonationCount: number,
+    public parentTarget: number,
+    public parentUsesSharedFunds: boolean,
     public problem: string,
     public quotes: Array<{person: string, quote: string}>,
     public ready: boolean,
@@ -42,6 +49,7 @@ export class Campaign {
     public target: number,
     public title: string,
     public updates: Array<{content: string, modifiedDate: Date}>,
+    public usesSharedFunds: boolean,
     public alternativeFundUse?: string,
     public campaignCount?: number,
     public championOptInStatement?: string,

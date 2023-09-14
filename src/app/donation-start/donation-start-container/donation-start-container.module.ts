@@ -16,6 +16,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {RecaptchaModule} from 'ng-recaptcha';
 
 import { allChildComponentImports } from '../../../allChildComponentImports';
+import { CampaignInfoComponent } from '../../campaign-info/campaign-info.component';
 import {ExactCurrencyPipe} from '../../exact-currency.pipe';
 import {TimeLeftPipe} from '../../time-left.pipe';
 import {CampaignDetailsModule} from "../../campaign-details/campaign-details.module";
@@ -29,6 +30,7 @@ import { DonationTippingSliderComponent } from '../donation-start-form/donation-
 @NgModule({
   imports: [
     ...allChildComponentImports,
+    CampaignInfoComponent,
     DonationStartContainerRoutingModule,
     ExactCurrencyPipe,
     FontAwesomeModule,
