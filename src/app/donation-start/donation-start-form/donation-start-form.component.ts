@@ -1,5 +1,5 @@
 import {StepperSelectionEvent} from '@angular/cdk/stepper';
-import {CurrencyPipe, DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
+import {DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
 import {HttpErrorResponse} from '@angular/common/http';
 import {
   AfterContentChecked,
@@ -69,7 +69,6 @@ import {MatomoTracker} from 'ngx-matomo';
   templateUrl: './donation-start-form.component.html',
   styleUrls: ['./donation-start-form.component.scss'],
   providers: [
-    CurrencyPipe,
     TimeLeftPipe,
   ]
 })
@@ -256,10 +255,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private route: ActivatedRoute,
     private router: Router,
     private stripeService: StripeService,
-    private currencyPipe: CurrencyPipe,
     public datePipe: DatePipe,
     public timeLeftPipe: TimeLeftPipe,
-
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
     this.countryOptionsObject = Object.assign(

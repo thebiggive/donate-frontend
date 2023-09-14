@@ -1,4 +1,4 @@
-import {CurrencyPipe, DatePipe} from "@angular/common";
+import {DatePipe} from '@angular/common';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
@@ -58,7 +58,6 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
       }
     } as unknown as Router,
     undefined as unknown as StripeService,
-    undefined as unknown as CurrencyPipe,
     undefined as unknown as DatePipe,
     undefined as unknown as TimeLeftPipe
   );
@@ -140,7 +139,6 @@ describe('DonationStartNewPrimaryComponent', () => {
         {
           id: '0011r00002HHAprAAH',
           name: 'Awesome Charity',
-          donateLinkId: 'SFIdOrLegacyId',
           optInStatement: 'Opt in statement.',
           regulatorNumber: '123456',
           regulatorRegion: 'Scotland',
