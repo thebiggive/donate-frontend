@@ -64,7 +64,9 @@ export class CampaignInfoComponent implements OnInit {
       'symbol',
       '1.0-0',
     ) as string;
-    this.donationCount = this.campaign.parentUsesSharedFunds ? this.campaign.parentDonationCount : this.campaign.donationCount;
+    this.donationCount = this.campaign.parentUsesSharedFunds
+      ? (this.campaign.parentDonationCount || 0)
+      : this.campaign.donationCount;
 
     if (this.campaign.parentUsesSharedFunds) {
       this.primaryFigureLabel = 'Overall total raised';

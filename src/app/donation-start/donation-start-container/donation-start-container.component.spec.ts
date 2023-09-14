@@ -94,6 +94,7 @@ describe('DonationStartLoginComponent', () => {
       true,
       987.00,
       988.00,
+      false,
       'The situation',
       [
         {
@@ -109,7 +110,11 @@ describe('DonationStartLoginComponent', () => {
       2000.01,
       'Some title',
       [],
+      false,
       'Some information about what happens if funds are not used',
+      undefined,
+      undefined,
+      undefined,
       undefined,
       undefined,
       undefined,
@@ -124,5 +129,4 @@ describe('DonationStartLoginComponent', () => {
       },
     );
   };
-
 });

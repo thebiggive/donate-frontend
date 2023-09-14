@@ -59,6 +59,7 @@ describe('MetaCampaignComponent', () => {
     true,
     987,
     988,
+    false,
     'The situation',
     [],
     true,
@@ -69,6 +70,7 @@ describe('MetaCampaignComponent', () => {
     15000,
     'Test Master Campaign!',
     [],
+    false,
   );
 
   beforeEach(waitForAsync(() => {
