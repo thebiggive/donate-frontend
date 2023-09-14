@@ -12,7 +12,6 @@ const endPipeToken = 'timeLeftToEndPipe';
 @Component({
   selector: 'app-donation-start-secondary',
   templateUrl: './donation-start-secondary.component.html',
-  styleUrls: ['./donation-start-secondary.component.scss'],
   providers: [
     CurrencyPipe,
     // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
