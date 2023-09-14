@@ -15,12 +15,11 @@ h5 {
 .icon-wrapper {
     @include format-icon-list-item;
 
-    // in campaign-details.component.scss the selector here is `svg` rather than `fa-icon`, but that doesn't seem to work
-    // here.
     fa-icon.ng-fa-icon {
-        color: $colour-primary; // #2C089BFF
+        color: $colour-primary; // #2C089B
         font-size: 40px;
         min-width: 4rem;
+        text-align: center;
     }
 
     .c-icon-title {
