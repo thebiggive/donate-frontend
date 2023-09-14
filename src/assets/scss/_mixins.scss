@@ -259,8 +259,8 @@
 
 /**
  * Show & hide different placements of the highlight info based on breakpoint.
- * Keeping as a mixin for now, just in case we want to make Donate vary the placement
- * too. For now it's just used on Campaign Details.
+ * Sometimes to place the highlights in a different part of the markup, sometimes
+ * to hide them entirely on mobile.
  */
 @mixin vary-campaign-info-layout {
   #campaign-highlights-beneficiaries-and-categories-mobile {
