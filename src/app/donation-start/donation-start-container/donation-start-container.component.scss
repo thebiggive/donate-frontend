@@ -1,7 +1,5 @@
 @import '../../../abstract';
 
-@include vary-campaign-info-layout();
-
 .b-back-button {
   @include make-back-button;
 }

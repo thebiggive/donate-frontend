@@ -38,9 +38,9 @@
 
     </div>
     <div class="b-secondary-column">
-      <app-donation-start-secondary
-        [campaign]="campaign"
-      />
+      <div *ngIf="campaign">
+        <app-campaign-info [campaign]="campaign"></app-campaign-info>
+      </div>
     </div>
   </div>
 </main>
