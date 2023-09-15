@@ -44,6 +44,7 @@ describe('CampaignService', () => {
       true,
       987.00,
       988.00,
+      false,
       'The situation',
       [
         {
@@ -56,9 +57,9 @@ describe('CampaignService', () => {
       new Date(),
       'Active',
       'Some long summary',
-      2000.01,
       'Some title',
       [],
+      false,
       'Some information about what happens if funds are not used',
       undefined,
       undefined,
@@ -67,6 +68,10 @@ describe('CampaignService', () => {
       undefined,
       undefined,
       undefined,
+      undefined,
+      undefined,
+      undefined,
+      2000.01,
       undefined,
       {
         provider: 'youtube',

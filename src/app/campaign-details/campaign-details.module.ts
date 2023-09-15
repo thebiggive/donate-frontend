@@ -18,6 +18,7 @@ import { TimeLeftPipe } from '../time-left.pipe';
     imports: [
         ...allChildComponentImports,
         CampaignDetailsRoutingModule,
+        CampaignInfoComponent,
         CurrencyPipe,
         FontAwesomeModule,
         MatButtonModule,
@@ -28,7 +29,7 @@ import { TimeLeftPipe } from '../time-left.pipe';
         OptimisedImagePipe,
         TimeLeftPipe,
     ],
-    declarations: [CampaignDetailsComponent, CampaignInfoComponent],
+    declarations: [CampaignDetailsComponent],
     providers: [
         DatePipe,
     ],

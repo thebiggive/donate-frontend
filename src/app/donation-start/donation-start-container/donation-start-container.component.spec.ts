@@ -94,6 +94,7 @@ describe('DonationStartLoginComponent', () => {
       true,
       987.00,
       988.00,
+      false,
       'The situation',
       [
         {
@@ -106,9 +107,9 @@ describe('DonationStartLoginComponent', () => {
       new Date(),
       'Active',
       'Some long summary',
-      2000.01,
       'Some title',
       [],
+      false,
       'Some information about what happens if funds are not used',
       undefined,
       undefined,
@@ -118,11 +119,14 @@ describe('DonationStartLoginComponent', () => {
       undefined,
       undefined,
       undefined,
+      undefined,
+      undefined,
+      2000.01,
+      undefined,
       {
         provider: 'youtube',
         key: '1G_Abc2delF',
       },
     );
   };
-
 });

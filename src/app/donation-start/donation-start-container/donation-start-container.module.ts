@@ -16,12 +16,12 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {RecaptchaModule} from 'ng-recaptcha';
 
 import { allChildComponentImports } from '../../../allChildComponentImports';
+import { CampaignInfoComponent } from '../../campaign-info/campaign-info.component';
 import {ExactCurrencyPipe} from '../../exact-currency.pipe';
 import {TimeLeftPipe} from '../../time-left.pipe';
 import {CampaignDetailsModule} from "../../campaign-details/campaign-details.module";
 import { DonationStartLoginComponent } from "../donation-start-login/donation-start-login.component";
 import {DonationStartContainerComponent} from "./donation-start-container.component";
-import { DonationStartSecondaryComponent } from '../donation-start-secondary/donation-start-secondary.component';
 import { DonationStartContainerRoutingModule } from './donation-start-routing.module';
 import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
 import {MatExpansionModule} from '@angular/material/expansion';
@@ -29,6 +29,7 @@ import { DonationTippingSliderComponent } from '../donation-start-form/donation-
 @NgModule({
   imports: [
     ...allChildComponentImports,
+    CampaignInfoComponent,
     DonationStartContainerRoutingModule,
     ExactCurrencyPipe,
     FontAwesomeModule,
@@ -55,7 +56,6 @@ import { DonationTippingSliderComponent } from '../donation-start-form/donation-
     DonationStartLoginComponent,
     DonationStartContainerComponent,
     DonationStartFormComponent,
-    DonationStartSecondaryComponent,
     DonationTippingSliderComponent
   ],
   providers: [
