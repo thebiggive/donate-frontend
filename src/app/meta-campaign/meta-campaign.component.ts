@@ -83,6 +83,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   categoryOptions: string[] = [];
   locationOptions: string[] = [];
   fundingOptions: string[] = [];
+  parentIsSharedFund: boolean;
 
   constructor(
     private campaignService: CampaignService,
@@ -134,6 +135,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
     this.campaignId = this.campaign.id;
+    this.parentIsSharedFund = this.campaign.usesSharedFunds;
     this.title = this.campaign.title;
 
     this.listenForRouteChanges();
@@ -209,6 +211,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   getPercentageRaised(childCampaign: CampaignSummary) {
+    if (this.campaign.usesSharedFunds) {
+      // No progressbar on child cards when parent is e.g. a shared fund emergency appeal.
+      return null;
+    }
+
     return CampaignService.percentRaised(childCampaign);
   }
 
