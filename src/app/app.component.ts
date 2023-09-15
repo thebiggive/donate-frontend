@@ -76,9 +76,10 @@ export class AppComponent implements AfterViewInit, OnInit {
     } // Else fall back to normal link behaviour
   }
 
-  ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
+  public isPlatformBrowser = isPlatformBrowser(this.platformId);
 
+  ngOnInit() {
+    if (this.isPlatformBrowser) {
       if (flags.cookieBannerEnabled) {
         this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {
           if (agreesToThirdParty(preferences)) {

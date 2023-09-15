@@ -15,6 +15,13 @@
   [experienceUrlPrefix]="experienceUriPrefix"
 ></biggive-footer>
 
-<div id="cookie-banner" *ngIf="(userHasExpressedCookiePreference$ | async) === false && flags.cookieBannerEnabled">
+  <!-- We only render the following div if isPlatformBrowser, because if rendered on the server side it would flash up on page reload
+       for a few hundred ms for people who have already made cookie preference selection who don't need to see it again. I found
+       that was an issue on mobile, I couldn't see the issue on desktop browsers.
+   -->
+<div
+  id="cookie-banner"
+  *ngIf="isPlatformBrowser && (userHasExpressedCookiePreference$ | async) === false && flags.cookieBannerEnabled"
+>
     <biggive-cookie-banner [blogUriPrefix]="environment.blogUriPrefix" />
 </div>
