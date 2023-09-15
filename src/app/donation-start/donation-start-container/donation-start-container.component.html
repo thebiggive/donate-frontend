@@ -44,6 +44,20 @@
         *ngIf="campaign"
         id="campaign-highlights-beneficiaries-and-categories-desktop"
       >
+        <div class="match-funded-badge-wrapper">
+          <div *ngIf="campaign.matchFundsRemaining > 0" class="match-funded-badge">
+            Match Funded
+          </div>
+        </div>
+        <div class="c-banner">
+          <img
+            class="c-banner__image b-w-100"
+            *ngIf="bannerUri"
+            [src]="bannerUri"
+            alt=""
+            role="presentation"
+          >
+        </div>
         <app-campaign-info [campaign]="campaign"></app-campaign-info>
       </div>
     </div>
