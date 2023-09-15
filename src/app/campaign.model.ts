@@ -43,7 +43,6 @@ export class Campaign {
     public startDate: Date,
     public status: 'Active' | 'Expired' | 'Preview' | 'Pending',
     public summary: string = '',
-    public target: number,
     public title: string,
     public updates: Array<{content: string, modifiedDate: Date}>,
     public usesSharedFunds: boolean,
@@ -58,6 +57,7 @@ export class Campaign {
     public parentRef?: string,
     public parentTarget?: number,
     public surplusDonationInfo?: string,
+    public target?: number,
     public thankYouMessage?: string,
     public video?: {provider: string, key: string},
   ) {}

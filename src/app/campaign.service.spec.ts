@@ -57,7 +57,6 @@ describe('CampaignService', () => {
       new Date(),
       'Active',
       'Some long summary',
-      2000.01,
       'Some title',
       [],
       false,
@@ -72,6 +71,7 @@ describe('CampaignService', () => {
       undefined,
       undefined,
       undefined,
+      2000.01,
       undefined,
       {
         provider: 'youtube',

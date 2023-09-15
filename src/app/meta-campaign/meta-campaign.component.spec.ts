@@ -67,10 +67,21 @@ describe('MetaCampaignComponent', () => {
     new Date(),
     'Active',
     'Test Master Campaign detail',
-    15000,
     'Test Master Campaign!',
     [],
     false,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    15000,
   );
 
   beforeEach(waitForAsync(() => {

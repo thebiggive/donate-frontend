@@ -107,7 +107,6 @@ describe('DonationStartLoginComponent', () => {
       new Date(),
       'Active',
       'Some long summary',
-      2000.01,
       'Some title',
       [],
       false,
@@ -122,6 +121,7 @@ describe('DonationStartLoginComponent', () => {
       undefined,
       undefined,
       undefined,
+      2000.01,
       undefined,
       {
         provider: 'youtube',

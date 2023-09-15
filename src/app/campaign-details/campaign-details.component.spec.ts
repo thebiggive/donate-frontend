@@ -79,7 +79,6 @@ describe('CampaignDetailsComponent', () => {
       new Date(),
       'Active',
       'Test campaign description',
-      1234,
       'Test Campaign!',
       [],
       false,
@@ -94,6 +93,7 @@ describe('CampaignDetailsComponent', () => {
       undefined,
       undefined,
       undefined,
+      1234,
       undefined,
       {
         provider: 'youtube',
