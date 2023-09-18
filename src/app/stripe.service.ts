@@ -1,12 +1,6 @@
 import {Injectable} from '@angular/core';
 import {MatomoTracker} from 'ngx-matomo';
-import {
-    loadStripe,
-    PaymentIntentResult,
-    PaymentMethod,
-    Stripe,
-    StripeElements,
-} from '@stripe/stripe-js';
+import {loadStripe, PaymentIntentResult, PaymentMethod, Stripe, StripeElements,} from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
 import {Donation} from './donation.model';
@@ -89,7 +83,6 @@ export class StripeService {
           this.payWithMethod(
             donation,
             paymentMethod.id, // Sending the full object for completion means properties like "customer" crash the callout.
-            true, // Never a *new* PRB (wallet) when the method is saved, so always handle actions.
           ).then(result => {
             resolve(result);
           }).catch(error => {
@@ -99,20 +92,17 @@ export class StripeService {
     });
   }
 
-  private payWithMethod(donation: Donation, payment_method: any, handleActions: boolean): Promise<PaymentIntentResult> {
+  private payWithMethod(donation: Donation, payment_method: string): Promise<PaymentIntentResult> {
     return new Promise((resolve) => {
       this.stripe?.confirmCardPayment(
         donation.clientSecret as string,
         { payment_method },
-        { handleActions },
       ).then(async confirmResult => {
-        const analyticsEventActionPrefix = handleActions ? 'stripe_card_' : 'stripe_prb_';
-
         if (confirmResult.error) {
           // Failure w/ no extra action applicable
           this.matomoTracker.trackEvent(
             'donate_error',
-            `${analyticsEventActionPrefix}payment_error`,
+            `stripe_card_payment_error`,
             confirmResult.error.message ?? '[No message]',
           );
 
@@ -124,7 +114,7 @@ export class StripeService {
           // Success w/ no extra action needed
           this.matomoTracker.trackEvent(
             'donate',
-            `${analyticsEventActionPrefix}payment_success`,
+            `stripe_card_payment_success`,
             `Stripe Intent processing or done for donation ${donation.donationId} to campaign ${donation.projectId}`,
           );
 
@@ -135,14 +125,14 @@ export class StripeService {
         // The PaymentIntent requires an action e.g. 3DS verification; let Stripe.js handle the flow.
         this.matomoTracker.trackEvent(
           'donate',
-          `${analyticsEventActionPrefix}requires_action`,
+          `stripe_card_requires_action`,
           confirmResult.paymentIntent.next_action?.type ?? '[Action unknown]',
         );
         this.stripe?.confirmCardPayment(donation.clientSecret || '').then(confirmAgainResult => {
           if (confirmAgainResult.error) {
             this.matomoTracker.trackEvent(
               'donate_error',
-              `${analyticsEventActionPrefix}further_action_error`,
+              `stripe_card_further_action_error`,
               confirmAgainResult.error.message ?? '[No message]',
             );
           }
