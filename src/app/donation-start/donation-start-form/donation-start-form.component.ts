@@ -1158,7 +1158,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.currencySymbol = getCurrencySymbol(this.campaign.currencyCode, 'narrow', 'en-GB');
 
-    if (this.campaign.charity.stripeAccountId) {
+    if (environment.psps.stripe.enabled && this.campaign.charity.stripeAccountId) {
       this.psp = 'stripe';
     } else {
       this.noPsps = true;
