@@ -6,7 +6,6 @@ import {
     PaymentIntentResult,
     PaymentMethod,
     PaymentRequest,
-    PaymentRequestPaymentMethodEvent,
     Stripe,
     StripeElements,
 } from '@stripe/stripe-js';
@@ -25,8 +24,6 @@ export class StripeService {
   private lastCardCountry?: string;
   private paymentRequest: PaymentRequest;
   private stripe: Stripe | null;
-  private paymentMethodEvents: Map<string, PaymentRequestPaymentMethodEvent>;
-  private paymentMethodIds: Map<string, string>; // Donation ID to payment method ID.
 
   constructor(
     private donationService: DonationService,
@@ -39,9 +36,6 @@ export class StripeService {
     }
 
     this.didInit = true;
-
-    this.paymentMethodEvents = new Map();
-    this.paymentMethodIds = new Map();
 
     // Initialising through the ES Module like this is not required, but is made available by
     // an official Stripe-maintained package and gives us TypeScript types for
@@ -129,12 +123,6 @@ export class StripeService {
             confirmResult.error.message ?? '[No message]',
           );
 
-          if (donation.donationId) {
-            // Ensure we don't try to re-use the same payment method, as with PRBs it seemingly gets "disconnected"
-            // from the Customer and retries fail.
-            this.paymentMethodIds.delete(donation.donationId);
-          }
-
           resolve(confirmResult);
           return;
         }
@@ -159,9 +147,6 @@ export class StripeService {
         );
         this.stripe?.confirmCardPayment(donation.clientSecret || '').then(confirmAgainResult => {
           if (confirmAgainResult.error) {
-            if (donation.donationId) {
-              this.paymentMethodIds.delete(donation.donationId); // As above
-            }
             this.matomoTracker.trackEvent(
               'donate_error',
               `${analyticsEventActionPrefix}further_action_error`,
