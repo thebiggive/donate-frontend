@@ -81,7 +81,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   stripePaymentElement: StripePaymentElement | undefined;
   cardHandler = this.onStripeCardChange.bind(this);
 
-  requestButtonShown = false;
   showChampionOptIn = false;
 
   @Input({ required: true }) campaign: Campaign;
@@ -152,13 +151,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   stripeSavedMethods: PaymentMethod[] = [];
   selectedSavedMethod: PaymentMethod | undefined;
   submitting = false;
-  termsProvider = `Big Give's`;
   termsUrl = 'https://biggive.org/terms-and-conditions';
   // Track 'Next' clicks so we know when to show missing radio button error messages.
   triedToLeaveGiftAid = false;
   triedToLeaveMarketing = false;
   showAllPaymentMethods: boolean = false;
-  protected readonly environmentId = environment.environmentId;
 
 
   protected campaignId: string;
@@ -204,7 +201,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private tipAmountFromSlider: number;
 
   panelOpenState = false;
-  percentage = 1;
   showCustomTipInput = false;
   // will be undefined if the drop-down is in use instead of the slider.
   @ViewChild('donationTippingSlider') tippingSlider: DonationTippingSliderComponent | undefined;
@@ -656,12 +652,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
-  setAmount(amount: number) {
-    // We need to keep this as a string for consistency with manual donor-input amounts,
-    // so that `submit()` doesn't fall over trying to clean it of possible currency symbols.
-    this.amountsGroup.patchValue({ donationAmount: amount.toString() });
-  }
-
   async submit() {
     if (!this.donation || this.donationForm.invalid) {
       let errorCodeDetail = '[code B1]'; // Form invalid.
@@ -1001,9 +991,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    // Card element is mounted the same way regardless of donation info. See
-    // this.createDonationAndMaybePerson().subscribe(...) for Payment Request Button mount, which needs donation info
-    // first and so happens in `preparePaymentRequestButton()`.
     this.stripePaymentElement = this.stripeElements.create(
         "payment",
         {
@@ -1360,8 +1347,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       if (this.creditPenceToUse > 0) {
         this.stripePaymentMethodReady = true;
       } else {
-        const stripeElements = this.stripeService.stripeElements(this.donation, this.campaign);
-        this.stripeElements = stripeElements
+        this.stripeElements = this.stripeService.stripeElements(this.donation, this.campaign)
         this.prepareCardInput();
       }
     }

@@ -113,31 +113,6 @@ export class StripeService {
     return this.paymentRequest.canMakePayment();
   }
 
-  private getPaymentRequestButtonDisplayItems(donation: Donation): PaymentRequestItem[] | undefined {
-    const items = [
-      {
-        amount: 100 * donation.donationAmount,
-        label: `Donation to ${donation.charityName}`,
-      },
-    ];
-
-    if (donation.tipAmount > 0) {
-      items.push({
-        amount: parseInt((100 * donation.tipAmount).toString(), 10),
-        label: 'Donation to Big Give',
-      });
-    }
-
-    if (donation.feeCoverAmount > 0) {
-      items.push({
-        amount: parseInt((100 * donation.feeCoverAmount).toString(), 10),
-        label: 'Fee cover',
-      });
-    }
-
-    return items;
-  }
-
   private payWithMethod(donation: Donation, payment_method: any, handleActions: boolean): Promise<PaymentIntentResult> {
     return new Promise((resolve) => {
       this.stripe?.confirmCardPayment(
