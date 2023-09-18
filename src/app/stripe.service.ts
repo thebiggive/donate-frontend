@@ -10,9 +10,7 @@ import {
     PaymentRequestPaymentMethodEvent,
     Stripe,
     StripeElements,
-    StripePaymentRequestButtonElement,
 } from '@stripe/stripe-js';
-import {Observer} from 'rxjs';
 
 import {environment} from '../environments/environment';
 import {Donation} from './donation.model';
@@ -111,100 +109,8 @@ export class StripeService {
     });
   }
 
-  getPaymentRequestButton(
-      donation: Donation,
-      elements: StripeElements,
-      resultObserver: Observer<{billingDetails: PaymentMethod.BillingDetails | undefined, walletName: string}>,
-  ): StripePaymentRequestButtonElement | null {
-    if (!this.stripe) {
-      console.log('Stripe not ready');
-      return null;
-    }
-
-    if (this.paymentRequest) {
-      this.paymentRequest.update({
-        currency: donation.currencyCode.toLowerCase() || 'gbp',
-        total: this.getPaymentRequestButtonTotal(donation),
-        displayItems: this.getPaymentRequestButtonDisplayItems(donation),
-      });
-    } else {
-      this.paymentRequest = this.stripe.paymentRequest({
-        country: donation.countryCode || 'GB',
-        currency: donation.currencyCode.toLowerCase() || 'gbp',
-        total: this.getPaymentRequestButtonTotal(donation),
-        displayItems: this.getPaymentRequestButtonDisplayItems(donation),
-        requestPayerName: true,
-        requestPayerEmail: true,
-      });
-    }
-
-    // Always re-define the `on()` so that `resultObserver` is using the latest observer,
-    // in the event that we re-created the PRB, and not trying to call back to a stale
-    // element.
-    this.paymentRequest.on('paymentmethod', (event: PaymentRequestPaymentMethodEvent) => {
-      // Update fee details before confirming payment
-      this.setLastCardMetadata(
-          event.paymentMethod?.card?.brand,
-          event.paymentMethod?.card?.country || 'N/A',
-      );
-
-      if (!donation.donationId) {
-        event.complete('fail');
-        console.log('No donation client secret to complete PaymentRequest');
-        return;
-      }
-
-      this.paymentMethodEvents.set(donation.donationId, event);
-      this.paymentMethodIds.set(donation.donationId, event.paymentMethod.id);
-
-      // On success, let the page hide the card details & make 'Next' available.
-      resultObserver.next({
-        billingDetails: event.paymentMethod?.billing_details,
-        walletName: event.walletName,
-      });
-    });
-
-    const existingElement = elements.getElement('paymentRequestButton');
-    if (existingElement) {
-      return existingElement;
-    }
-
-    return elements.create('paymentRequestButton', {
-      paymentRequest: this.paymentRequest,
-      style: {
-        paymentRequestButton: {
-          type: 'donate',
-        },
-      },
-    });
-  }
-
-
-
-
   canUsePaymentRequest(): Promise<CanMakePaymentResult|null> {
     return this.paymentRequest.canMakePayment();
-  }
-
-  private getPaymentRequestButtonTotal(donation: Donation): PaymentRequestItem {
-    let label = `Donation to ${donation.charityName}`;
-
-    if (donation.tipAmount > 0) {
-      label = `${label} and Big Give`;
-    }
-
-    if (donation.feeCoverAmount > 0) {
-      label = `${label} and fee cover`;
-    }
-
-    return {
-      label,
-      // In pence/cents, inc. tip
-      amount:
-        parseInt((100 * donation.donationAmount).toString(), 10) +
-        parseInt((100 * donation.tipAmount).toString(), 10) +
-        parseInt((100 * donation.feeCoverAmount).toString(), 10),
-    };
   }
 
   private getPaymentRequestButtonDisplayItems(donation: Donation): PaymentRequestItem[] | undefined {
