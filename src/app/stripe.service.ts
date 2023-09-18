@@ -1,11 +1,9 @@
 import {Injectable} from '@angular/core';
 import {MatomoTracker} from 'ngx-matomo';
 import {
-    CanMakePaymentResult,
     loadStripe,
     PaymentIntentResult,
     PaymentMethod,
-    PaymentRequest,
     Stripe,
     StripeElements,
 } from '@stripe/stripe-js';
@@ -22,7 +20,6 @@ export class StripeService {
   private didInit = false;
   private lastCardBrand?: string;
   private lastCardCountry?: string;
-  private paymentRequest: PaymentRequest;
   private stripe: Stripe | null;
 
   constructor(
@@ -100,10 +97,6 @@ export class StripeService {
           });
         });
     });
-  }
-
-  canUsePaymentRequest(): Promise<CanMakePaymentResult|null> {
-    return this.paymentRequest.canMakePayment();
   }
 
   private payWithMethod(donation: Donation, payment_method: any, handleActions: boolean): Promise<PaymentIntentResult> {
