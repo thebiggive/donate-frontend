@@ -5,12 +5,10 @@ import {
     loadStripe,
     PaymentIntentResult,
     PaymentMethod,
-    PaymentMethodCreateParams,
     PaymentRequest,
     PaymentRequestItem,
     PaymentRequestPaymentMethodEvent,
     Stripe,
-    StripeCardElement,
     StripeElements,
     StripePaymentRequestButtonElement,
 } from '@stripe/stripe-js';
