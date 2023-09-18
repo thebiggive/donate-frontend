@@ -34,8 +34,6 @@ export interface Environment {
   postcodeLookupUri: string
   psps: {
     stripe: {
-      enabled: boolean,
-      prbEnabled: boolean,
       publishableKey: string
     },
   },
