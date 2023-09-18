@@ -6,7 +6,6 @@ import {
     PaymentIntentResult,
     PaymentMethod,
     PaymentRequest,
-    PaymentRequestItem,
     PaymentRequestPaymentMethodEvent,
     Stripe,
     StripeElements,
