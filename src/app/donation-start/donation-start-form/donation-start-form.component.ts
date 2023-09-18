@@ -231,6 +231,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   private stripeElements: StripeElements | undefined;
+  private selectedPaymentMethodType: string | undefined;
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -625,7 +626,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
 
-  async onStripeCardChange(state: StripeElementChangeEvent) {
+  /**
+   * According to stripe docs https://stripe.com/docs/js/element/events/on_change?type=paymentElement the change event has
+   * a value key as expected here. I'm not sure why that isn't included in the TS StripeElementChangeEvent interface.
+   */
+  async onStripeCardChange(state: StripeElementChangeEvent & {value: {type: string}}) {
     this.addStripeCardBillingValidators();
 
     // Re-evaluate stripe card billing validators after being set above.
@@ -650,6 +655,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
       return;
     }
+
+    this.selectedPaymentMethodType = state.value.type;
   }
 
   async submit() {
@@ -736,7 +743,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
             'stripe_customer_balance_payment_success',
             `Stripe Intent expected to auto-confirm for donation ${donation.donationId} to campaign ${donation.projectId}`,
           );
-          this.exitPostDonationSuccess(donation);
+          this.exitPostDonationSuccess(donation, 'donation-funds');
         },
         (error: HttpErrorResponse) => {
           this.matomoTracker.trackEvent(
@@ -791,7 +798,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     // See https://stripe.com/docs/payments/intents
     if (['succeeded', 'processing'].includes(result.paymentIntent.status)) {
-      this.exitPostDonationSuccess(this.donation);
+      this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
       return;
     }
 
@@ -1014,6 +1021,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
               {name: "Big Give"}
         }
     );
+
     if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
       this.stripePaymentElement.on('change', this.cardHandler);
@@ -1830,7 +1838,30 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
-  private exitPostDonationSuccess(donation: Donation) {
+  private exitPostDonationSuccess(donation: Donation, stripe_donation_method: string|undefined) {
+    var action: string;
+    switch (stripe_donation_method) {
+        case 'card':
+          action = `stripe_card_payment_success`;
+          break;
+        case 'prb': // todo - check what value is actually emitted from the stripe element in staging and adjust this line.
+          action = 'stripe_prb_payment_success';
+          break;
+        default:
+            if (this.selectedSavedMethod) {
+                action = 'stripe_card_payment_success';
+            }
+            action = 'unknown_method_'+ stripe_donation_method+'_payment_success';
+            break;
+    }
+
+    console.log(stripe_donation_method);
+
+    this.matomoTracker.trackEvent(
+      'donate',
+      action,
+      `Stripe Intent processing or done for donation ${donation.donationId} to campaign ${donation.projectId}`,
+    );
     this.conversionTrackingService.convert(donation, this.campaign);
 
     this.cancelExpiryWarning();
