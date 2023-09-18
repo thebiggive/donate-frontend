@@ -45,7 +45,6 @@ describe('MetaCampaignComponent', () => {
     {
       id: 'tbgId',
       name: 'Big Give',
-      donateLinkId: 'SFIdOrLegacyId',
       optInStatement: 'Opt in statement.',
       website: 'https://www.thebiggive.org.uk',
       regulatorNumber: '123456',
@@ -60,6 +59,7 @@ describe('MetaCampaignComponent', () => {
     true,
     987,
     988,
+    false,
     'The situation',
     [],
     true,
@@ -67,9 +67,21 @@ describe('MetaCampaignComponent', () => {
     new Date(),
     'Active',
     'Test Master Campaign detail',
-    15000,
     'Test Master Campaign!',
     [],
+    false,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    15000,
   );
 
   beforeEach(waitForAsync(() => {

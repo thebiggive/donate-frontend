@@ -11,7 +11,13 @@ import {Person} from "./person.model";
 import {IdentityService} from "./identity.service";
 import {environment} from "../environments/environment";
 import {flags} from "./featureFlags";
-import {CookiePreferenceService} from "./cookiePreference.service";
+import {
+  agreesToAnalyticsAndTracking,
+  agreesToThirdParty,
+  CookiePreferences,
+  CookiePreferenceService
+} from "./cookiePreference.service";
+import {MatomoTracker} from "ngx-matomo";
 
 @Component({
   selector: 'app-root',
@@ -42,6 +48,7 @@ export class AppComponent implements AfterViewInit, OnInit {
     private navigationService: NavigationService,
     private cookiePreferenceService: CookiePreferenceService,
     @Inject(PLATFORM_ID) private platformId: Object,
+    private matomoTracker: MatomoTracker,
     private router: Router,
   ) {
     // https://www.amadousall.com/angular-routing-how-to-display-a-loading-indicator-when-navigating-between-routes/
@@ -69,9 +76,25 @@ export class AppComponent implements AfterViewInit, OnInit {
     } // Else fall back to normal link behaviour
   }
 
+  public isPlatformBrowser = isPlatformBrowser(this.platformId);
+
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.getSiteControlService.init();
+    if (this.isPlatformBrowser) {
+      if (flags.cookieBannerEnabled) {
+        this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {
+          if (agreesToThirdParty(preferences)) {
+            this.getSiteControlService.init();
+          }
+
+          if (agreesToAnalyticsAndTracking(preferences)) {
+            this.matomoTracker.setCookieConsentGiven();
+          }
+        });
+      } else {
+        this.getSiteControlService.init();
+        // no-need to simulate user consent for matomo here, if the banner isn't enabled we don't have
+        //  `requireCookieConsent: true` in the matomo config.
+      }
 
       // Temporarily client-side redirect the previous non-global domain to the new one.
       // Once most inbound links are updated, we can probably replace the app redirect

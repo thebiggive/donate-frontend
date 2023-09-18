@@ -4,7 +4,7 @@ orbs:
   aws-ecr: circleci/aws-ecr@8.1.3
   aws-ecs: circleci/aws-ecs@3.2.0
   aws-s3: circleci/aws-s3@3.0.0
-  browser-tools: circleci/browser-tools@1.4.3
+  browser-tools: circleci/browser-tools@1.4.4
   jira: circleci/jira@1.3.1
   slack: circleci/slack@4.12.5
 
@@ -177,6 +177,21 @@ jobs:
             --acl public-read \
             --cache-control "max-age=86400"
 
+  build-ecr:
+    machine:
+      enabled: true
+      docker_layer_caching: true
+    parameters:
+      env:
+        type: string
+    steps:
+      - aws-ecr/build-and-push-image:
+          # cache-from format is e.g. 123.dkr.ecr.eu-west-1.amazonaws.com/thebiggive-donate:staging
+          extra-build-args: '--build-arg BUILD_ENV=<< parameters.env >> --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN} --cache-from "${AWS_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>"'
+          repo: '${AWS_ECR_REPO_NAME}'
+          region: '${AWS_REGION}'
+          tag: '<< parameters.env >>,<< parameters.env >>-${CIRCLE_SHA1}'
+
 workflows:
   commit:
     jobs:
@@ -199,21 +214,21 @@ workflows:
           context:
             - docker-hub-creds
             - ecs-deploys # Includes AWS_REGION
-      - aws-ecr/build-and-push-image:
+      - build-ecr:
+          env: regression
+          name: "Build Regression ECR image"
           context:
+            - docker-hub-creds
             - ecs-deploys
           requires:
             - deploy-regression-static
-          extra-build-args: '--build-arg BUILD_ENV=regression --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN}'
-          repo: '${AWS_ECR_REPO_NAME}'
-          region: '${AWS_REGION}'
-          tag: 'regression,regression-${CIRCLE_SHA1}'
       - aws-ecs/deploy-service-update:
+          name: "Deploy Regression ECS with new image"
           context:
             - ecs-deploys
             - slack
           requires:
-            - aws-ecr/build-and-push-image
+            - "Build Regression ECR image"
           aws-region: AWS_REGION
           family: 'tbg-regression-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
           cluster: 'tbg-regression-${AWS_REGION}'
@@ -233,22 +248,22 @@ workflows:
           context:
             - docker-hub-creds
             - ecs-deploys # Includes AWS_REGION
-      - aws-ecr/build-and-push-image:
+      - build-ecr:
+          env: staging
+          name: "Build Staging ECR image"
           context:
+            - docker-hub-creds
             - ecs-deploys
           requires:
             - deploy-staging-static
-          extra-build-args: '--build-arg BUILD_ENV=staging --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN}'
-          repo: '${AWS_ECR_REPO_NAME}'
-          region: '${AWS_REGION}'
-          tag: 'staging,staging-${CIRCLE_SHA1}'
       - aws-ecs/deploy-service-update:
+          name: "Deploy Staging ECS with new image"
           context:
             - ecs-deploys
             - jira
             - slack
           requires:
-            - aws-ecr/build-and-push-image
+            - "Build Staging ECR image"
           aws-region: AWS_REGION
           family: 'tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
           cluster: 'tbg-staging-${AWS_REGION}'
@@ -286,22 +301,22 @@ workflows:
           context:
             - docker-hub-creds
             - ecs-deploys # Includes AWS_REGION
-      - aws-ecr/build-and-push-image:
+      - build-ecr:
+          env: production
+          name: "Build Production ECR image"
           context:
+            - docker-hub-creds
             - ecs-deploys
           requires:
             - deploy-production-static
-          extra-build-args: '--build-arg BUILD_ENV=production --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN}'
-          repo: '${AWS_ECR_REPO_NAME}'
-          region: '${AWS_REGION}'
-          tag: 'production,production-${CIRCLE_SHA1}'
       - aws-ecs/deploy-service-update:
+          name: "Deploy Production ECS with new image"
           context:
             - ecs-deploys
             - jira
             - slack
           requires:
-            - aws-ecr/build-and-push-image
+            - "Build Production ECR image"
           aws-region: AWS_REGION
           family: 'tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
           cluster: 'tbg-production-${AWS_REGION}'

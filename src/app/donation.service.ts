@@ -54,6 +54,9 @@ export class DonationService {
     }
   }
 
+  /**
+   * @return Country code as uppercase alpha-2 ISO code, e.g. 'GB', 'VA', 'US' etc
+   */
   getDefaultCounty(): string {
     return this.defaultCountryCode;
   }
@@ -188,7 +191,7 @@ export class DonationService {
       : `${environment.donationsApiPrefix}${this.apiPath}`;
 
     return this.http.post<DonationCreatedResponse>(
-      endpoint,
+      endpoint + "?forNewPaymentElement=true", // temp flag until its always true
       donation,
       this.getPersonAuthHttpOptions(jwt),
     );

@@ -1,11 +1,12 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Campaign} from "../../campaign.model";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import { Donation } from 'src/app/donation.model';
-import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
 import {Person} from "../../person.model";
 import {IdentityService} from "../../identity.service";
 import {environment} from "../../../environments/environment";
+import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
+import {ImageService} from "../../image.service";
 @Component({
   templateUrl: './donation-start-container.component.html',
   styleUrls: ['./donation-start-container.component.scss']
@@ -17,23 +18,23 @@ export class DonationStartContainerComponent implements OnInit{
   personId?: string;
   personIsLoginReady = false;
   loggedInEmailAddress?: string;
-  useNewDesign = false;
 
   @ViewChild('donation_start_form') donationStartForm: DonationStartFormComponent
   public reservationExpiryDate: Date| undefined = undefined;
   public donor: Person | undefined;
+  public bannerUri: string | null;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private identityService: IdentityService,
+    private imageService: ImageService,
   ) {
-    this.useNewDesign = ! router.url.startsWith("/donate-old-stepper/");
   }
 
    ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
      this.campaignOpenOnLoad = this.campaignIsOpen();
+     this.imageService.getImageUri(this.campaign.bannerUri, 830).subscribe(uri => this.bannerUri = uri);
 
      const idAndJWT = this.identityService.getIdAndJWT();
      if (idAndJWT) {

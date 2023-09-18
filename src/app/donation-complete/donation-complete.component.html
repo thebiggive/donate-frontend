@@ -16,12 +16,19 @@
       your donation is processed.
     </p>
 
+    <div aria-live="polite">
+      <div *ngIf="complete">
+        <div class="screenreader-only">
+          Thank you! Your generous donation has been made successfully.
+        </div>
+      </div>
+    </div>
     <div *ngIf="complete">
 
       <div class="thank-you">
         <h2>Thank you!</h2>
 
-        <p class="thank-you-text">Your generous donation has<br/>been made successfully</p>
+        <p class="thank-you-text">Your generous donation has been made successfully</p>
 
         <div class="cta" *ngIf="!registrationComplete">
           <div class="button-wrapper">
@@ -30,7 +37,7 @@
               colour-scheme="white"
               is-past-campaign="false"
               is-future-campaign="false"
-              label="Save my details"
+              label="Save my card details"
               open-in-new-tab="false"
               full-width="true"
               size="medium"
@@ -61,7 +68,7 @@
         </p>
       </div>
 
-      <hr>
+      <hr aria-hidden="true">
 
       <div class="donation-summary">
         <p><strong>Hi {{ donation.firstName }},</strong></p>
@@ -103,11 +110,12 @@
         </div>
       </biggive-page-section>
       <div>
-        <hr *ngIf="!donationIsLarge">
+        <hr *ngIf="!donationIsLarge" aria-hidden="true">
         <div class="large-donation-spacer" *ngIf="donationIsLarge"></div>
         <div class="receipt">
           <p><strong>Your Receipt</strong></p>
-          <p>{{donation.createdTime | date: 'medium'}}</p>
+          <!-- Date time appears as e.g. "Sep 5, 2023, 2:54 PM" -->
+          <p>{{donation.createdTime | date: 'mediumDate'}}, {{donation.createdTime | date: 'shortTime'}}</p>
           <br>
 
           <table>
@@ -128,7 +136,7 @@
               <td>{{ donation.tipAmount | exactCurrency:donation.currencyCode }}</td>
             </tr>
             <tr>
-              <td colspan="2"><hr></td>
+              <td colspan="2"><hr aria-hidden="true"></td>
             </tr>
             <tr class="receives">
               <td>Charity Receives</td>
@@ -142,7 +150,7 @@
 
         </div>
 
-        <hr class="shorter">
+        <hr class="shorter" aria-hidden="true">
 
       </div>
 

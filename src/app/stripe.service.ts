@@ -1,32 +1,31 @@
-import { Injectable } from '@angular/core';
-import { MatomoTracker } from 'ngx-matomo';
+import {Injectable} from '@angular/core';
+import {MatomoTracker} from 'ngx-matomo';
 import {
-  CanMakePaymentResult,
-  loadStripe,
-  PaymentIntentResult,
-  PaymentMethod,
-  PaymentRequestPaymentMethodEvent,
-  PaymentMethodCreateParams,
-  PaymentRequest,
-  PaymentRequestItem,
-  Stripe,
-  StripeCardElement,
-  StripeElements,
-  StripeError,
-  StripePaymentRequestButtonElement,
+    CanMakePaymentResult,
+    loadStripe,
+    PaymentIntentResult,
+    PaymentMethod,
+    PaymentMethodCreateParams,
+    PaymentRequest,
+    PaymentRequestItem,
+    PaymentRequestPaymentMethodEvent,
+    Stripe,
+    StripeCardElement,
+    StripeElements,
+    StripePaymentRequestButtonElement,
 } from '@stripe/stripe-js';
-import { Observer } from 'rxjs';
+import {Observer} from 'rxjs';
 
-import { environment } from '../environments/environment';
-import { Donation } from './donation.model';
-import { DonationService } from './donation.service';
+import {environment} from '../environments/environment';
+import {Donation} from './donation.model';
+import {DonationService} from './donation.service';
+import {Campaign} from "./campaign.model";
 
 @Injectable({
   providedIn: 'root',
 })
 export class StripeService {
   private didInit = false;
-  private elements: StripeElements;
   private lastCardBrand?: string;
   private lastCardCountry?: string;
   private paymentRequest: PaymentRequest;
@@ -55,35 +54,31 @@ export class StripeService {
     // checks that we are handling Stripe objects as intended.
     // See https://github.com/stripe/stripe-js
     this.stripe = await loadStripe(environment.psps.stripe.publishableKey);
-    if (this.stripe) {
-      this.elements = this.stripe.elements({fonts: [
+  }
+
+  stripeElements(donation: Donation, campaign: Campaign)
+  {
+    if (!this.stripe) {
+      throw new Error('Stripe not ready');
+    }
+
+    const amountInMinorUnit = Math.floor((donation.tipAmount + donation.donationAmount) * 100);
+
+    return this.stripe.elements({
+      fonts: [
         {
           family: 'Euclid Triangle',
           src: `url('${environment.donateGlobalUriPrefix}/d/EuclidTriangle-Regular.1d45abfd25720872.woff2') format('woff2')`,
           weight: '400',
         },
-      ]});
-    }
-  }
-
-  async createPaymentMethod(
-    cardElement: StripeCardElement,
-    donorName?: string,
-  ): Promise<{paymentMethod?: PaymentMethod; error?: StripeError}> {
-    if (!this.stripe) {
-      console.log('Stripe not ready');
-      return {};
-    }
-
-    // See https://stripe.com/docs/js/payment_methods
-    const result = await this.stripe.createPaymentMethod({
-      type: 'card',
-      card: cardElement,
-      billing_details: {
-        name: donorName,
-      },
+      ],
+      mode: 'payment',
+      currency: donation.currencyCode.toLowerCase(),
+      amount: amountInMinorUnit,
+      setup_future_usage: 'on_session',
+      on_behalf_of: campaign.charity.stripeAccountId,
+      paymentMethodCreation: 'manual',
     });
-    return result;
   }
 
   setLastCardMetadata(cardBrand?: string, cardCountry?: string) {
@@ -183,40 +178,13 @@ export class StripeService {
     });
   }
 
-  getCard(fontsize: '14px'|'17px'): StripeCardElement | null {
-    if (!this.elements) {
-      console.log('Stripe Elements not ready');
-      return null;
-    }
-
-    const existingElement = this.elements.getElement('card');
-    if (existingElement) {
-      return existingElement;
-    }
-
-    return this.elements.create('card', {
-      // In order to make things quicker when home & billing postcodes are the same,
-      // we always collect this outside the form (defaulting to home value where appropriate)
-      // so can always hide it from the Stripe form. We pass in the value we collected in
-      // `confirmCardPayment()` instead.
-      hidePostalCode: true,
-      iconStyle: 'solid',
-      style: {
-        base: {
-          // note the font family does not load correctly in my dev env, but it should be OK on staging / prod.
-          fontFamily: 'Euclid Triangle, sans-serif',
-          fontSize: fontsize,
-        },
-      },
-    });
-  }
-
   getPaymentRequestButton(
-    donation: Donation,
-    resultObserver: Observer<{billingDetails: PaymentMethod.BillingDetails | undefined, walletName: string}>,
+      donation: Donation,
+      elements: StripeElements,
+      resultObserver: Observer<{billingDetails: PaymentMethod.BillingDetails | undefined, walletName: string}>,
   ): StripePaymentRequestButtonElement | null {
-    if (!this.elements || !this.stripe) {
-      console.log('Stripe Elements not ready');
+    if (!this.stripe) {
+      console.log('Stripe not ready');
       return null;
     }
 
@@ -243,8 +211,8 @@ export class StripeService {
     this.paymentRequest.on('paymentmethod', (event: PaymentRequestPaymentMethodEvent) => {
       // Update fee details before confirming payment
       this.setLastCardMetadata(
-        event.paymentMethod?.card?.brand,
-        event.paymentMethod?.card?.country || 'N/A',
+          event.paymentMethod?.card?.brand,
+          event.paymentMethod?.card?.country || 'N/A',
       );
 
       if (!donation.donationId) {
@@ -263,12 +231,12 @@ export class StripeService {
       });
     });
 
-    const existingElement = this.elements.getElement('paymentRequestButton');
+    const existingElement = elements.getElement('paymentRequestButton');
     if (existingElement) {
       return existingElement;
     }
 
-    return this.elements.create('paymentRequestButton', {
+    return elements.create('paymentRequestButton', {
       paymentRequest: this.paymentRequest,
       style: {
         paymentRequestButton: {
@@ -277,6 +245,9 @@ export class StripeService {
       },
     });
   }
+
+
+
 
   canUsePaymentRequest(): Promise<CanMakePaymentResult|null> {
     return this.paymentRequest.canMakePayment();
@@ -389,6 +360,37 @@ export class StripeService {
           resolve(confirmAgainResult);
         });
       });
+    });
+  }
+
+  async confirmPaymentWithPaymentElement(donation: Donation, elements: StripeElements): Promise<PaymentIntentResult | undefined>
+  {
+    const {error: submitError} = await elements.submit();
+    if (submitError) {
+      console.error(submitError); // @todo handle this error better.
+      return;
+    }
+
+    // If we want to not show billing details inside the Stripe payment element we have to pass billing details
+    // as payment_method_data here, with at least this much detail - but we don't collect addresses in that much detail.
+    const paymentMethodData = {
+      billing_details:
+        {
+          address: {
+            country: donation.countryCode,
+            postal_code: donation.billingPostalAddress
+          },
+        }
+    };
+
+    return await this.stripe?.confirmPayment({
+      elements: elements,
+      clientSecret: donation.clientSecret as string,
+      redirect: 'if_required',
+      confirmParams: {
+        payment_method_data: paymentMethodData,
+        return_url: environment.donateGlobalUriPrefix + "/thanks/" + donation.donationId
+      }
     });
   }
 }

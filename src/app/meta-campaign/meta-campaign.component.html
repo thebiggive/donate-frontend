@@ -61,10 +61,10 @@
             [moreInfoButtonUrl]="'/campaign/' + campaign.id"
             [organisationName]="campaign.charity.name"
             primary-figure-label="Match Funds Remaining"
-            [primaryFigureAmount]="campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : '1.0-0'"
+            [primaryFigureAmount]="parentIsSharedFund ? null : (campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : '1.0-0')"
             [progressBarCounter]="getPercentageRaised(campaign)"
             secondary-figure-label="Total Funds Raised"
-            [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : '1.0-0'"
+            [secondaryFigureAmount]="parentIsSharedFund ? null : (campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : '1.0-0')"
             [isFutureCampaign]="isInFuture(campaign)"
             [isPastCampaign]="isInPast(campaign)"
             [datetime]="getRelevantDateAsStr(campaign)">

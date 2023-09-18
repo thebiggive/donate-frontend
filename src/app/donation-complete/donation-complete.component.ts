@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import { MatDialog } from '@angular/material/dialog';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { MatomoTracker } from 'ngx-matomo';
@@ -219,8 +219,8 @@ export class DonationCompleteComponent implements OnInit {
     this.campaignService.getOneById(donation.projectId).subscribe(campaign => {
       this.campaign = campaign;
       this.pageMeta.setCommon(
-        `${campaign.charity.name}`,
-        `Thanks for donating to the "${campaign.title}" campaign`,
+        `Thank you for donating to the "${campaign.title}" campaign`,
+        ``,
         campaign.bannerUri,
       );
       this.setSocialShares(campaign);

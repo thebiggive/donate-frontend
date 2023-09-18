@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 
 import { Campaign } from './campaign.model';
 import { CampaignStats } from './campaign-stats.model';
@@ -13,7 +13,7 @@ import { SelectedType } from './search.service';
 export class CampaignService {
   static perPage = 6;
 
-  private apiPath = '/campaigns/services/apexrest/v1.0';
+  private apiPath = '/campaigns/services/apexrest/v1.0' as const;
 
   constructor(
     private http: HttpClient,
@@ -181,11 +181,8 @@ export class CampaignService {
     return this.http.get<Campaign>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/slug/${campaignSlug}`);
   }
 
-  getCampaignImpactStats(): Observable<CampaignStats>{
-    // temporarily hardcoded until the endpoint is ready on SF side
-    // TODO: replace with the commented line below
-    return of(new CampaignStats(242_309_804, 15_000));
-    // return this.http.get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`)
+  getCampaignImpactStats() {
+    return this.http.get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`);
   }
 }
 
