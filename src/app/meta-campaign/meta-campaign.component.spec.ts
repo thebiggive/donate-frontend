@@ -1,6 +1,5 @@
 import {AsyncPipe, CommonModule, CurrencyPipe, DatePipe, ViewportScroller} from '@angular/common';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {TransferState} from "@angular/core";
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -178,7 +177,6 @@ describe('MetaCampaignComponent', () => {
     const dummyPLATFORM_ID = {} as Object;
     const dummyRouter = {events: NEVER} as unknown as Router;
     const dummySearchService = {changed: new EventEmitter(), reset: noop} as unknown as SearchService;
-    const dummyState = {} as TransferState;
     const dummyTBG_DONATE_STORAGE = {} as StorageService;
     const dummyScroller = {} as ViewportScroller;
 
@@ -193,7 +191,6 @@ describe('MetaCampaignComponent', () => {
       dummyRouter,
       stubRoute,
       dummySearchService,
-      dummyState,
       dummyTBG_DONATE_STORAGE,
       dummyScroller,
       timeLeftToOpenPipe,

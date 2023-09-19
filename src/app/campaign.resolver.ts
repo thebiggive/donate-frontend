@@ -1,11 +1,11 @@
-import { Injectable, makeStateKey, TransferState } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
-import { EMPTY, Observable, of } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { Campaign } from './campaign.model';
 import {CampaignService, SearchQuery} from './campaign.service';
-import {SearchService} from "./search.service";
+import {SearchService} from './search.service';
 
 @Injectable()
 export class CampaignResolver  {
@@ -13,7 +13,6 @@ export class CampaignResolver  {
     public campaignService: CampaignService,
     public searchService: SearchService,
     private router: Router,
-    private state: TransferState,
   ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Campaign> {
@@ -31,7 +30,7 @@ export class CampaignResolver  {
     }
 
     if (campaignId) {
-      return this.loadWithStateCache(
+      return this.load(
         campaignId,
         (identifier: string) => this.campaignService.getOneById(identifier),
       );
@@ -47,22 +46,16 @@ export class CampaignResolver  {
       });
     }
 
-    return this.loadWithStateCache(
+    return this.load(
       campaignSlug || '',
       (identifier: string) => this.campaignService.getOneBySlug(identifier),
     );
   }
 
-  private loadWithStateCache(
+  private load(
     identifier: string,
     method: (identifier: string) => Observable<Campaign>,
   ): Observable<Campaign> {
-    const campaignKey = makeStateKey<Campaign>(`campaign-${identifier}`);
-    const campaign = this.state.get(campaignKey, undefined);
-    if (campaign) {
-      return of(campaign);
-    }
-
     const observable = method(identifier)
       .pipe(catchError(error => {
         console.log(`CampaignResolver load error: "${error.message}"`);
@@ -72,11 +65,7 @@ export class CampaignResolver  {
         return EMPTY;
       }));
 
-    observable.subscribe(loadedCampaign => {
-      // Save in state for future routes, e.g. when moving between `CampaignDetailComponent`
-      // and `DonationStartComponent`.
-      this.state.set(campaignKey, loadedCampaign);
-    });
+    observable.subscribe(() => {});
 
     return observable;
   }

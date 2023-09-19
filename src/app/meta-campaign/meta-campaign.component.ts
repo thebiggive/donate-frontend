@@ -5,12 +5,9 @@ import {
   HostListener,
   Inject,
   Input,
-  makeStateKey,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
-  StateKey,
-  TransferState,
 } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
 import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
@@ -96,7 +93,6 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     private router: Router,
     private route: ActivatedRoute,
     public searchService: SearchService,
-    private state: TransferState,
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     private scroller: ViewportScroller,
     @Inject(openPipeToken) private timeLeftToOpenPipe: TimeLeftPipe,
@@ -142,16 +138,12 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
     this.setSecondaryPropsAndRun(this.campaign);
 
-    let fundKey: StateKey<Fund>;
     if (this.fundSlug) {
-      fundKey = makeStateKey<Fund>(`fund-${this.fundSlug}`);
-      this.fund = this.state.get<Fund | undefined>(fundKey, undefined);
       this.setFundSpecificProps();
     }
 
     if (!this.fund && this.fundSlug) {
       this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
-        this.state.set<Fund>(fundKey, fund);
         this.fund = fund;
         this.setFundSpecificProps();
       });
