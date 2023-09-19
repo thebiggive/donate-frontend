@@ -1847,7 +1847,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const stripeMethod = stripe_donation_method || 'undefined';
 
-    // if not card then we assume it must be prb i.e. Google Pay or Apple Pay.
+    // if not card then we assume it must be a Payment Request Button i.e. Google Pay or Apple Pay.
     const action = stripe_donation_method === 'card' ?
         'stripe_card_payment_success' : 'stripe_prb_payment_success';
 
