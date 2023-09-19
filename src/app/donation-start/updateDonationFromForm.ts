@@ -16,7 +16,6 @@ export function updateDonationFromForm
  donationService: DonationService,
  campaign: Campaign,
  marketingGroup: FormGroup,
- preparePaymentRequestButton: (donation: Donation, formgroup: FormGroup) => void,
 ) {
   if (paymentGroup) {
     donation.emailAddress = paymentGroup.value.emailAddress;
@@ -35,14 +34,10 @@ export function updateDonationFromForm
   donation.optInTbgEmail = marketingGroup.value.optInTbgEmail;
   donation.optInChampionEmail = marketingGroup.value.optInChampionEmail;
 
-  const lastTipAmount = donation.tipAmount;
   if (typeof tipValue === 'number') {
     donation.tipAmount = tipValue;
   } else {
     donation.tipAmount = sanitiseCurrency(amountsGroup.value.tipAmount);
-  }
-  if (lastTipAmount !== donation.tipAmount) {
-    preparePaymentRequestButton(donation, paymentGroup);
   }
 
   if (donation.giftAid || donation.tipGiftAid) {
