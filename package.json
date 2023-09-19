@@ -19,8 +19,7 @@
     "build:ssr:production": "npm run build:production && ng run donate-frontend:server:production",
     "build:ssr:regression": "npm run build:regression && ng run donate-frontend:server:regression",
     "build:ssr:staging": "npm run build:staging && ng run donate-frontend:server:staging",
-    "e2e-ci": "webdriver-manager update --versions.chrome 114.0.5735.90 && ng e2e --webdriver-update=false --protractor-config=e2e/protractor-ci.conf.js",
-    "ci": "npm run lint && npm run test-ci && npm run e2e-ci && npm run build:staging",
+    "ci": "npm run lint && npm run test-ci && npm run ci && npm run build:staging",
     "dev:ssr": "ng run donate-frontend:serve-ssr",
     "serve:ssr": "node dist/server/main.js",
     "link-components": "./link-components.sh",
@@ -85,6 +84,7 @@
     "@types/node": "^14.18.12",
     "@typescript-eslint/eslint-plugin": "^5.59.2",
     "@typescript-eslint/parser": "^5.59.2",
+    "cypress": "latest",
     "eslint": "^8.39.0",
     "jasmine-core": "^3.99.1",
     "jasmine-spec-reporter": "~7.0.0",
@@ -93,14 +93,12 @@
     "karma-coverage-istanbul-reporter": "~3.0.3",
     "karma-jasmine": "~4.0.1",
     "karma-jasmine-html-reporter": "^1.6.0",
-    "protractor": "~7.0.0",
     "puppeteer": "20.6.*",
     "ts-loader": "^8.1.0",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.5",
     "webpack": "^5.76.0",
-    "webpack-cli": "^4.5.0",
-    "cypress": "latest"
+    "webpack-cli": "^4.5.0"
   },
   "engines": {
     "node": ">=14.15",
