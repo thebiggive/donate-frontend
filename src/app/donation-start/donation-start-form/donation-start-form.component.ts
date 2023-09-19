@@ -1007,7 +1007,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
             googlePay: 'auto'
           },
           terms: {
-            card: "never" // we have our own terms copy for the future payment in donation-start-form.component.html
+            // We have our own terms copy for the future payment in donation-start-form.component.html
+            card: "never",
+            applePay: "never",
+            googlePay: "never",
           },
           fields: {
             billingDetails: {
