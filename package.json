@@ -19,7 +19,7 @@
     "build:ssr:production": "npm run build:production && ng run donate-frontend:server:production",
     "build:ssr:regression": "npm run build:regression && ng run donate-frontend:server:regression",
     "build:ssr:staging": "npm run build:staging && ng run donate-frontend:server:staging",
-    "ci": "npm run lint && npm run test-ci && npm run ci && npm run build:staging",
+    "ci": "npm run lint && npm run test-ci && npm run e2e && npm run build:staging",
     "dev:ssr": "ng run donate-frontend:serve-ssr",
     "serve:ssr": "node dist/server/main.js",
     "link-components": "./link-components.sh",
