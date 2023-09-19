@@ -1847,9 +1847,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const stripeMethod = stripe_donation_method || 'undefined';
 
+    // if not card then we assume it must be prb i.e. Google Pay or Apple Pay.
+    const action = stripe_donation_method === 'card' ?
+        'stripe_card_payment_success' : 'stripe_prb_payment_success';
+
     this.matomoTracker.trackEvent(
       'donate',
-      'stripe_card_payment_success',
+      action,
       `Stripe Intent processing or done for donation ${donation.donationId} to campaign ${donation.projectId}, stripe method ${stripeMethod}`,
     );
     this.conversionTrackingService.convert(donation, this.campaign);
