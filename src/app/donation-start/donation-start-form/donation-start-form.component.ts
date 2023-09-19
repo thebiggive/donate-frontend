@@ -630,8 +630,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * According to stripe docs https://stripe.com/docs/js/element/events/on_change?type=paymentElement the change event has
    * a value key as expected here. I'm not sure why that isn't included in the TS StripeElementChangeEvent interface.
    */
-  async onStripeCardChange(state: StripeElementChangeEvent & {value: {type: string}}) {
-    console.log('Change evt', state);
+  async onStripeCardChange(state: StripeElementChangeEvent & ({value: {type: string} | undefined})) {
     this.addStripeCardBillingValidators();
 
     // Re-evaluate stripe card billing validators after being set above.
@@ -657,7 +656,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    this.selectedPaymentMethodType = state.value.type;
+    if (state.value) {
+      this.selectedPaymentMethodType = state.value.type;
+    }
   }
 
   async submit() {
@@ -1843,28 +1844,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   private exitPostDonationSuccess(donation: Donation, stripe_donation_method: string|undefined) {
-    var action: string;
-    switch (stripe_donation_method) {
-        case 'card':
-          action = `stripe_card_payment_success`;
-          break;
-        case 'prb': // todo - check what value is actually emitted from the stripe element in staging and adjust this line.
-          action = 'stripe_prb_payment_success';
-          break;
-        default:
-            if (this.selectedSavedMethod) {
-                action = 'stripe_card_payment_success';
-            }
-            action = 'unknown_method_'+ stripe_donation_method+'_payment_success';
-            break;
-    }
 
-    console.log(stripe_donation_method);
+    const stripeMethod = stripe_donation_method || 'undefined';
 
     this.matomoTracker.trackEvent(
       'donate',
-      action,
-      `Stripe Intent processing or done for donation ${donation.donationId} to campaign ${donation.projectId}`,
+      'stripe_card_payment_success',
+      `Stripe Intent processing or done for donation ${donation.donationId} to campaign ${donation.projectId}, stripe method ${stripeMethod}`,
     );
     this.conversionTrackingService.convert(donation, this.campaign);
 
