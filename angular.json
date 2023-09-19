@@ -227,8 +227,8 @@
           "builder": "@cypress/schematic:cypress",
           "options": {
             "devServerTarget": "donate-frontend:serve",
-            "watch": true,
-            "headless": false
+            "watch": false,
+            "headless": true
           },
           "configurations": {
             "production": {
@@ -334,8 +334,8 @@
         "cypress-open": {
           "builder": "@cypress/schematic:cypress",
           "options": {
-            "watch": true,
-            "headless": false
+            "watch": false,
+            "headless": true
           }
         }
       }
