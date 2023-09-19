@@ -631,6 +631,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * a value key as expected here. I'm not sure why that isn't included in the TS StripeElementChangeEvent interface.
    */
   async onStripeCardChange(state: StripeElementChangeEvent & {value: {type: string}}) {
+    console.log('Change evt', state);
     this.addStripeCardBillingValidators();
 
     // Re-evaluate stripe card billing validators after being set above.
