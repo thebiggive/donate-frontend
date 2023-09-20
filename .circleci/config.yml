@@ -48,7 +48,7 @@ jobs:
       - run: npm run ci
 
       - store_artifacts:
-          path: cyprus/screenshots
+          path: cypress/screenshots
 
   deploy-staging-static:
     docker:
