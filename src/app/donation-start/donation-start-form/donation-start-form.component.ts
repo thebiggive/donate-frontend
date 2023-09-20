@@ -761,7 +761,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     // Else settlement is via a new or saved card (including wallets / Payment Request Buttons).
-    let result: { paymentIntent: PaymentIntent; error?: undefined } | { paymentIntent?: undefined; error: StripeError } | undefined;
+    // let result: { paymentIntent: PaymentIntent; error?: undefined } | { paymentIntent?: undefined; error: StripeError } | undefined;
+    let result: any;
 
     if (this.selectedSavedMethod) {
       result = await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.selectedSavedMethod);

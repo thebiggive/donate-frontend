@@ -6,6 +6,8 @@ import {environment} from '../environments/environment';
 import {Donation} from './donation.model';
 import {DonationService} from './donation.service';
 import {Campaign} from "./campaign.model";
+import {HttpClient} from "@angular/common/http";
+import {firstValueFrom} from "rxjs";
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +21,7 @@ export class StripeService {
   constructor(
     private donationService: DonationService,
     private matomoTracker: MatomoTracker,
+    private http: HttpClient,
   ) {}
 
   async init() {
@@ -144,8 +147,12 @@ export class StripeService {
     });
   }
 
-  async confirmPaymentWithPaymentElement(donation: Donation, elements: StripeElements): Promise<PaymentIntentResult | undefined>
+  async confirmPaymentWithPaymentElement(donation: Donation, elements: StripeElements)
   {
+    if (! this.stripe) {
+    throw new Error("Stripe not ready");
+    }
+
     const {error: submitError} = await elements.submit();
     if (submitError) {
       console.error(submitError); // @todo handle this error better.
@@ -164,14 +171,19 @@ export class StripeService {
         }
     };
 
-    return await this.stripe?.confirmPayment({
-      elements: elements,
-      clientSecret: donation.clientSecret as string,
-      redirect: 'if_required',
-      confirmParams: {
-        payment_method_data: paymentMethodData,
-        return_url: environment.donateGlobalUriPrefix + "/thanks/" + donation.donationId
+    const {error, paymentMethod} = await this.stripe.createPaymentMethod(
+      {elements: elements, params: paymentMethodData}
+    );
+
+    if (error) {
+      console.error(error); // @todo handle this error better.
+      return;
+    }
+
+    return firstValueFrom(this.http.post(
+      `${environment.donationsApiPrefix}/donations/confirm`, {
+        stripePaymentMethodId: paymentMethod.id,
       }
-    });
+    ))
   }
 }
