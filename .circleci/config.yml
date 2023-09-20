@@ -47,6 +47,9 @@ jobs:
 
       - run: npm run ci
 
+      - store_artifacts:
+          path: cyprus/screenshots
+
   deploy-staging-static:
     docker:
       # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app
