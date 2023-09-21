@@ -181,7 +181,7 @@ export class StripeService {
     }
 
     return firstValueFrom(this.http.post(
-      `${environment.donationsApiPrefix}/donations/confirm`, {
+      `${environment.donationsApiPrefix}/donations/${donation.donationId}/confirm`, {
         stripePaymentMethodId: paymentMethod.id,
       }
     ))
