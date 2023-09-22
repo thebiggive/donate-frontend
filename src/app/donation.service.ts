@@ -351,4 +351,13 @@ export class DonationService {
       {headers: this.getPersonAuthHttpOptions(jwt).headers}
     );
   }
+
+  confirmCardPayment(donation: Donation, paymentMethod: PaymentMethod) {
+    return this.http.post(
+      `${environment.donationsApiPrefix}/donations/${donation.donationId}/confirm`, {
+        stripePaymentMethodId: paymentMethod.id,
+      },
+      this.getAuthHttpOptions(donation),
+    );
+  }
 }

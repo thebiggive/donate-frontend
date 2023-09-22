@@ -180,10 +180,7 @@ export class StripeService {
       return;
     }
 
-    return firstValueFrom(this.http.post(
-      `${environment.donationsApiPrefix}/donations/${donation.donationId}/confirm`, {
-        stripePaymentMethodId: paymentMethod.id,
-      }
-    ))
+    // todo - consider moving below line into component so we don't have the stripe service depending on donation service.
+    return firstValueFrom(this.donationService.confirmCardPayment(donation, paymentMethod));
   }
 }
