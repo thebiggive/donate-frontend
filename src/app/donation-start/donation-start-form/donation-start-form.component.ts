@@ -23,7 +23,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {RecaptchaComponent} from 'ng-recaptcha';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
-  PaymentIntent,
   PaymentMethod,
   StripeElementChangeEvent,
   StripeElements,
