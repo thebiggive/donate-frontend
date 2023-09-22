@@ -29,7 +29,7 @@ import {
   StripeError,
   StripePaymentElement,
 } from '@stripe/stripe-js';
-import {EMPTY} from 'rxjs';
+import {EMPTY, firstValueFrom} from 'rxjs';
 
 import {Campaign} from '../../campaign.model';
 import {CampaignService} from '../../campaign.service';
@@ -759,9 +759,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    // Else settlement is via a new or saved card (including wallets / Payment Request Buttons).
-    // let result: { paymentIntent: PaymentIntent; error?: undefined } | { paymentIntent?: undefined; error: StripeError } | undefined;
-    let result: any;
+    let result:
+      {
+        paymentIntent?: undefined | { status: string; client_secret: string | null },
+        error?: undefined,
+      } |
+      { error: StripeError } |
+      undefined;
 
     if (this.selectedSavedMethod) {
       result = await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.selectedSavedMethod);
@@ -769,7 +773,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       if (!this.stripeElements) {
         throw new Error("Missing stripe elements");
       }
-      result = await this.stripeService.confirmPaymentWithPaymentElement(this.donation, this.stripeElements);
+      // maybe we just want to get the method from the element and then pay with donation service...
+      const confirmationResult = await this.stripeService.confirmPaymentWithPaymentElement(this.donation, this.stripeElements);
+
+      if (confirmationResult.paymentMethod) {
+        result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, confirmationResult.paymentMethod));
+      } else {
+        result = {error: confirmationResult.error};
+      }
     }
 
     if (!result || result.error) {

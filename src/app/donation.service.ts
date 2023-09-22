@@ -352,8 +352,10 @@ export class DonationService {
     );
   }
 
-  confirmCardPayment(donation: Donation, paymentMethod: PaymentMethod) {
-    return this.http.post(
+  confirmCardPayment(donation: Donation, paymentMethod: PaymentMethod):
+    Observable<{ paymentIntent: { status: string; client_secret: string } }>
+  {
+    return this.http.post<{paymentIntent: {status: string, client_secret: string}}>(
       `${environment.donationsApiPrefix}/donations/${donation.donationId}/confirm`, {
         stripePaymentMethodId: paymentMethod.id,
       },

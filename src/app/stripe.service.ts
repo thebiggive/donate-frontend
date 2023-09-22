@@ -1,13 +1,11 @@
 import {Injectable} from '@angular/core';
 import {MatomoTracker} from 'ngx-matomo';
-import {loadStripe, PaymentIntentResult, PaymentMethod, Stripe, StripeElements,} from '@stripe/stripe-js';
+import {loadStripe, PaymentIntentResult, PaymentMethod, Stripe, StripeElements, StripeError,} from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
 import {Donation} from './donation.model';
 import {DonationService} from './donation.service';
 import {Campaign} from "./campaign.model";
-import {HttpClient} from "@angular/common/http";
-import {firstValueFrom} from "rxjs";
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +19,6 @@ export class StripeService {
   constructor(
     private donationService: DonationService,
     private matomoTracker: MatomoTracker,
-    private http: HttpClient,
   ) {}
 
   async init() {
@@ -147,16 +144,16 @@ export class StripeService {
     });
   }
 
-  async confirmPaymentWithPaymentElement(donation: Donation, elements: StripeElements)
-  {
+  async confirmPaymentWithPaymentElement(donation: Donation, elements: StripeElements): Promise<
+    { paymentMethod: PaymentMethod; error?: undefined } | { paymentMethod?: undefined; error: StripeError }
+  > {
     if (! this.stripe) {
     throw new Error("Stripe not ready");
     }
 
     const {error: submitError} = await elements.submit();
     if (submitError) {
-      console.error(submitError); // @todo handle this error better.
-      return;
+      return {error: submitError, paymentMethod: undefined}
     }
 
     // If we want to not show billing details inside the Stripe payment element we have to pass billing details
@@ -171,16 +168,8 @@ export class StripeService {
         }
     };
 
-    const {error, paymentMethod} = await this.stripe.createPaymentMethod(
+    return await this.stripe.createPaymentMethod(
       {elements: elements, params: paymentMethodData}
     );
-
-    if (error) {
-      console.error(error); // @todo handle this error better.
-      return;
-    }
-
-    // todo - consider moving below line into component so we don't have the stripe service depending on donation service.
-    return firstValueFrom(this.donationService.confirmCardPayment(donation, paymentMethod));
   }
 }
