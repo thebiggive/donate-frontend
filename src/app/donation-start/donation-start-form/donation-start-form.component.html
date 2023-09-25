@@ -427,7 +427,7 @@
             class="continue b-w-100 b-rt-0"
             mat-raised-button
             color="primary"
-            [disabled]="!stripePaymentMethodReady"
+            [disabled]="!stripePaymentMethodReady && !selectedSavedMethod"
             (click)="next()"
           >Continue</button>
         </div>
