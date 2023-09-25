@@ -768,35 +768,34 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       { error: StripeError } |
       undefined;
 
-    if (this.selectedSavedMethod) {
-      result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, this.selectedSavedMethod));
-    } else {
-      if (!this.stripeElements) {
-        throw new Error("Missing stripe elements");
-      }
-      const confirmationResult = await this.stripeService.confirmPaymentWithPaymentElement(this.donation, this.stripeElements);
+    if (!this.stripeElements && !this.selectedSavedMethod) {
+      throw new Error("Missing stripe elements");
+    }
 
-      if (confirmationResult.paymentMethod) {
-        result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, confirmationResult.paymentMethod));
+    const paymentMethod = this.selectedSavedMethod || (
+      await this.stripeService.confirmPaymentWithPaymentElement(this.donation, <StripeElements>this.stripeElements)
+    ).paymentMethod;
+
+    if (paymentMethod) {
+      result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, paymentMethod));
 
       if (result?.paymentIntent && result.paymentIntent.status === 'requires_action') {
-          if (! result.paymentIntent.client_secret) {
-            throw new Error("payment intent requires action but client secret missing")
-          }
-          const {
-            error,
-          } = await this.stripeService.handleNextAction(result.paymentIntent!.client_secret);
-          if (! error) {
-            this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
-            return;
-          } else {
-            result = {error: error};
-          }
+        if (!result.paymentIntent.client_secret) {
+          throw new Error("payment intent requires action but client secret missing")
         }
-
-      } else {
-        result = {error: confirmationResult.error};
+        const {
+          error,
+        } = await this.stripeService.handleNextAction(result.paymentIntent!.client_secret);
+        if (!error) {
+          this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
+          return;
+        } else {
+          result = {error: error};
+        }
       }
+
+    } else {
+      result = {error: (await this.stripeService.confirmPaymentWithPaymentElement(this.donation, <StripeElements>this.stripeElements)).error};
     }
 
     if (!result || result.error) {
