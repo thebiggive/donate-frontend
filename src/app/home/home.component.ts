@@ -56,7 +56,7 @@ export class HomeComponent implements OnInit {
     //   backgroundImageUrl: new URL('/assets/images/red-coral-texture.png', environment.donateGlobalUriPrefix),
     //   button: {
     //     text: "Apply now",
-    //     href: new URL('/artsforimpact', environment.donateGlobalUriPrefix),
+    //     href: new URL('/artsforimpact', environment.environment.blogUriPrefix),
     //   }
     // },
   ];
