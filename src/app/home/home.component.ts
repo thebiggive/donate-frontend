@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
       backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', environment.donateGlobalUriPrefix),
       button: {
         text: "Find out more",
-        href: new URL('/women-and-girls-2023/', environment.blogUriPrefix),
+        href: new URL('/women-and-girls-2023/', environment.donateGlobalUriPrefix),
       }
     },
     {
