@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
     {
       headerText: 'Save the date for Women and Girls Match Fund',
       bodyText: "11th - 18th October 2023",
-      iconColor: "brand-wgmf-purple",
+      iconColor: "brand-2",
       backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', environment.donateGlobalUriPrefix),
       button: {
         text: "Find out more",
