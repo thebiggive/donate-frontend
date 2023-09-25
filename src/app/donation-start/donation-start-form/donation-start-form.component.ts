@@ -729,7 +729,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const methodIsReady = this.stripePaymentElement || this.selectedSavedMethod || hasCredit;
 
-    if (!this.donation || !this.donation.clientSecret || !methodIsReady) {
+    if (!this.donation || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
       this.stripeResponseErrorCode = undefined;
       this.matomoTracker.trackEvent('donate_error', 'stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);

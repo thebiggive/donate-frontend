@@ -81,11 +81,6 @@ export interface Donation {
      */
     billingPostalAddress?: string;
 
-    /**
-     * Used to complete payment details with some PSPs, e.g. Stripe.
-     */
-    clientSecret?: string;
-
     charityName?: string;
 
     /**
