@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {MatomoTracker} from 'ngx-matomo';
-import {loadStripe, PaymentIntentResult, PaymentMethod, Stripe, StripeElements, StripeError,} from '@stripe/stripe-js';
+import {loadStripe, PaymentMethod, Stripe, StripeElements, StripeError,} from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
 import {Donation} from './donation.model';
