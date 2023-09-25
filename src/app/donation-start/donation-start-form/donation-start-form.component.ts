@@ -23,6 +23,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {RecaptchaComponent} from 'ng-recaptcha';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
+  PaymentIntent,
   PaymentMethod,
   StripeElementChangeEvent,
   StripeElements,
@@ -761,7 +762,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     let result:
       {
-        paymentIntent?: undefined | { status: string; client_secret: string | null },
+        paymentIntent?: undefined | { status: PaymentIntent.Status; client_secret: string | null },
         error?: undefined,
       } |
       { error: StripeError } |
@@ -773,11 +774,26 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       if (!this.stripeElements) {
         throw new Error("Missing stripe elements");
       }
-      // maybe we just want to get the method from the element and then pay with donation service...
       const confirmationResult = await this.stripeService.confirmPaymentWithPaymentElement(this.donation, this.stripeElements);
 
       if (confirmationResult.paymentMethod) {
         result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, confirmationResult.paymentMethod));
+
+      if (result?.paymentIntent && result.paymentIntent.status === 'requires_action') {
+          if (! result.paymentIntent.client_secret) {
+            throw new Error("payment intent requires action but client secret missing")
+          }
+          const {
+            error,
+          } = await this.stripeService.handleNextAction(result.paymentIntent!.client_secret);
+          if (! error) {
+            this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
+            return;
+          } else {
+            result = {error: error};
+          }
+        }
+
       } else {
         result = {error: confirmationResult.error};
       }

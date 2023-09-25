@@ -172,4 +172,14 @@ export class StripeService {
       {elements: elements, params: paymentMethodData}
     );
   }
+
+  async handleNextAction(clientSecret: string) {
+    if (! this.stripe) {
+      throw new Error("Stripe not ready");
+    }
+
+    return await this.stripe.handleNextAction({
+      clientSecret: clientSecret
+    });
+  }
 }

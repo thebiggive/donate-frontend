@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Inject, Injectable, InjectionToken, makeStateKey, Optional, PLATFORM_ID, TransferState,} from '@angular/core';
 import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
 import {Observable, of} from 'rxjs';
-import {PaymentMethod} from '@stripe/stripe-js';
+import {PaymentIntent, PaymentMethod} from '@stripe/stripe-js';
 
 import {COUNTRY_CODE} from './country-code.token';
 import {Donation} from './donation.model';
@@ -353,9 +353,9 @@ export class DonationService {
   }
 
   confirmCardPayment(donation: Donation, paymentMethod: PaymentMethod):
-    Observable<{ paymentIntent: { status: string; client_secret: string } }>
+    Observable<{ paymentIntent: { status: PaymentIntent.Status; client_secret: string } }>
   {
-    return this.http.post<{paymentIntent: {status: string, client_secret: string}}>(
+    return this.http.post<{paymentIntent: {status: PaymentIntent.Status, client_secret: string}}>(
       `${environment.donationsApiPrefix}/donations/${donation.donationId}/confirm`, {
         stripePaymentMethodId: paymentMethod.id,
       },
