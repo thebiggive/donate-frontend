@@ -19,13 +19,23 @@ export class HomeComponent implements OnInit {
   
   highlightCards: readonly HighlightCard[] = [
     {
-      headerText: 'Upcoming Match Funding Campaigns',
-      bodyText: "Discover our exciting range of match funding opportunities for 2023/2024",
-      iconColor: "tertiary",
-      backgroundImageUrl: new URL('/assets/images/peach-texture.jpg', environment.donateGlobalUriPrefix),
+      headerText: 'Save the date for Women and Girls Match Fund',
+      bodyText: "11th - 18th October 2023",
+      iconColor: "brand-2",
+      backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', environment.donateGlobalUriPrefix),
       button: {
         text: "Find out more",
-        href: new URL('/charities', environment.blogUriPrefix),
+        href: new URL('/women-and-girls-2023/', environment.blogUriPrefix),
+      }
+    },
+    {
+      headerText: 'Double your donation for Global’s Make Some Noise',
+      backgroundImageUrl: new URL('/assets/images/blue-texture.jpg', environment.donateGlobalUriPrefix),
+      iconColor: 'primary',
+      bodyText: 'Donate between 20th September - 31st October 2023',
+      button: {
+        text: 'Donate now',
+        href: new URL('/campaign/a056900001xpxqVAAQ', environment.blogUriPrefix)
       }
     },
     {
@@ -38,16 +48,17 @@ export class HomeComponent implements OnInit {
         href: new URL('/anchor-match-fund/', environment.blogUriPrefix)
       }
     },
-    {
-      headerText: 'One donation. Twice the impact.',
-      bodyText: "You donate.\nWe double it.",
-      iconColor: "primary",
-      backgroundImageUrl: new URL('/assets/images/blue-texture.jpg', environment.donateGlobalUriPrefix),
-      button: {
-        text: "Explore now",
-        href: new URL('/explore', environment.donateGlobalUriPrefix),
-      }
-    },
+    // TODO: Following should replace Anchor Mach Fund card on 2nd October 2023
+    // {
+    //   headerText: ' Applications for Arts for Impact are now open!',
+    //   bodyText: "Apply by 3rd November 2023",
+    //   iconColor: "brand-afa-pink",
+    //   backgroundImageUrl: new URL('/assets/images/red-coral-texture.png', environment.donateGlobalUriPrefix),
+    //   button: {
+    //     text: "Apply now",
+    //     href: new URL('/artsforimpact', environment.donateGlobalUriPrefix),
+    //   }
+    // },
   ];
 
   public constructor(
