@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
     {
       headerText: 'Save the date for Women and Girls Match Fund',
       bodyText: "11th - 18th October 2023",
-      iconColor: "brand-2",
+      iconColor: "brand-wgmf-purple",
       backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', environment.donateGlobalUriPrefix),
       button: {
         text: "Find out more",
@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
       bodyText: 'Donate between 20th September - 31st October 2023',
       button: {
         text: 'Donate now',
-        href: new URL('/campaign/a056900001xpxqVAAQ', environment.blogUriPrefix)
+        href: new URL('/campaign/a056900001xpxqVAAQ', environment.donateGlobalUriPrefix)
       }
     },
     {
@@ -48,11 +48,11 @@ export class HomeComponent implements OnInit {
         href: new URL('/anchor-match-fund/', environment.blogUriPrefix)
       }
     },
-    // TODO: Following should replace Anchor Mach Fund card on 2nd October 2023
+    // TODO: hould replace Anchor Mach Fund card on 2nd October 2023
     // {
     //   headerText: ' Applications for Arts for Impact are now open!',
     //   bodyText: "Apply by 3rd November 2023",
-    //   iconColor: "brand-afa-pink",
+    //   iconColor: "primary",
     //   backgroundImageUrl: new URL('/assets/images/red-coral-texture.png', environment.donateGlobalUriPrefix),
     //   button: {
     //     text: "Apply now",
