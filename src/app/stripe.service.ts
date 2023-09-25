@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {loadStripe, PaymentMethod, Stripe, StripeElements, StripeError,} from '@stripe/stripe-js';
+import {loadStripe, PaymentMethodResult, Stripe, StripeElements} from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
 import {Donation} from './donation.model';
@@ -52,9 +52,7 @@ export class StripeService {
     });
   }
 
-  async confirmPaymentWithPaymentElement(donation: Donation, elements: StripeElements): Promise<
-    { paymentMethod: PaymentMethod; error?: undefined } | { paymentMethod?: undefined; error: StripeError }
-  > {
+  async prepareMethodFromPaymentElement(donation: Donation, elements: StripeElements): Promise<PaymentMethodResult> {
     if (! this.stripe) {
       throw new Error("Stripe not ready");
     }

@@ -772,13 +772,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       throw new Error("Missing stripe elements");
     }
 
-    let confirmResult;
+    let paymentMethodResult;
     let paymentMethod;
     if (this.selectedSavedMethod) {
       paymentMethod = this.selectedSavedMethod;
     } else {
-      confirmResult = await this.stripeService.confirmPaymentWithPaymentElement(this.donation, <StripeElements>this.stripeElements);
-      paymentMethod = confirmResult.paymentMethod;
+      paymentMethodResult = await this.stripeService.prepareMethodFromPaymentElement(this.donation, <StripeElements>this.stripeElements);
+      paymentMethod = paymentMethodResult.paymentMethod;
     }
 
     if (paymentMethod) {
@@ -799,7 +799,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         }
       } // Else there's a `paymentMethod` which is already successful or errored » both handled later.
     } else {
-      result = {error: confirmResult?.error};
+      result = {error: paymentMethodResult?.error};
     }
 
     if (!result || result.error) {
