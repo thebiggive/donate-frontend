@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Inject, Injectable, InjectionToken, makeStateKey, Optional, PLATFORM_ID, TransferState,} from '@angular/core';
 import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
 import {Observable, of} from 'rxjs';
-import {PaymentIntent, PaymentMethod} from '@stripe/stripe-js';
+import {PaymentMethod} from '@stripe/stripe-js';
 
 import {COUNTRY_CODE} from './country-code.token';
 import {Donation} from './donation.model';
@@ -155,6 +155,27 @@ export class DonationService {
       donation,
       this.getAuthHttpOptions(donation),
     );
+  }
+
+  /**
+   * Sets card metadata to ensure the correct fees are applied. Also updates the local copy
+   * of the donation as a side effect.
+   */
+  updatePaymentDetails(donation: Donation, cardBrand = 'N/A', cardCountry = 'N/A'): Observable<Donation> {
+    if (donation.cardBrand === cardBrand && donation.cardCountry === cardCountry) {
+      return of(donation); // No-op. No fee change or new info -> don't call the server.
+    }
+
+    donation.cardBrand = cardBrand;
+    donation.cardCountry = cardCountry;
+
+    const observable = this.update(donation);
+
+    observable.subscribe(updatedDonation => {
+      this.updateLocalDonation(updatedDonation);
+    });
+
+    return observable;
   }
 
   getPaymentMethods(personId?: string, jwt?: string): Observable<{ data: PaymentMethod[] }> {
@@ -328,17 +349,6 @@ export class DonationService {
         }}
       },
       {headers: this.getPersonAuthHttpOptions(jwt).headers}
-    );
-  }
-
-  confirmCardPayment(donation: Donation, paymentMethod: PaymentMethod):
-    Observable<{ paymentIntent: { status: PaymentIntent.Status; client_secret: string } }>
-  {
-    return this.http.post<{paymentIntent: {status: PaymentIntent.Status, client_secret: string}}>(
-      `${environment.donationsApiPrefix}/donations/${donation.donationId}/confirm`, {
-        stripePaymentMethodId: paymentMethod.id,
-      },
-      this.getAuthHttpOptions(donation),
     );
   }
 }

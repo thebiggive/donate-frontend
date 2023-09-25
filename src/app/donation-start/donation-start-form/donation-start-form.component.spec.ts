@@ -93,7 +93,7 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
 
   donationStartFormComponent.campaign = {currencyCode: 'GBP'} as Campaign;
 
-  donationStartFormComponent.donation = {} as Donation;
+  donationStartFormComponent.donation = {clientSecret: 'client_secret'} as Donation;
   return donationStartFormComponent;
 }
 

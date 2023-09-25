@@ -81,6 +81,11 @@ export interface Donation {
      */
     billingPostalAddress?: string;
 
+    /**
+     * Used to complete payment details with some PSPs, e.g. Stripe.
+     */
+    clientSecret?: string;
+
     charityName?: string;
 
     /**
@@ -137,4 +142,11 @@ export interface Donation {
      * ISO 8601 formatted datetime
      */
     updatedTime?: string;
+
+    cardBrand?: string;
+
+    /**
+     * ISO 3166 formated countries
+     */
+    cardCountry?: string;
 }
