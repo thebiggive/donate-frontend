@@ -137,11 +137,4 @@ export interface Donation {
      * ISO 8601 formatted datetime
      */
     updatedTime?: string;
-
-    cardBrand?: string;
-
-    /**
-     * ISO 3166 formated countries
-     */
-    cardCountry?: string;
 }
