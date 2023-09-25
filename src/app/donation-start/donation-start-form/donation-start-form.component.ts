@@ -769,7 +769,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       undefined;
 
     if (this.selectedSavedMethod) {
-      result = await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.selectedSavedMethod);
+      result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, this.selectedSavedMethod));
     } else {
       if (!this.stripeElements) {
         throw new Error("Missing stripe elements");
