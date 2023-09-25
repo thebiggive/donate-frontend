@@ -1,10 +1,8 @@
 import {Injectable} from '@angular/core';
-import {MatomoTracker} from 'ngx-matomo';
-import {loadStripe, PaymentIntentResult, PaymentMethod, Stripe, StripeElements,} from '@stripe/stripe-js';
+import {loadStripe, PaymentMethodResult, Stripe, StripeElements} from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
 import {Donation} from './donation.model';
-import {DonationService} from './donation.service';
 import {Campaign} from "./campaign.model";
 
 @Injectable({
@@ -12,14 +10,7 @@ import {Campaign} from "./campaign.model";
 })
 export class StripeService {
   private didInit = false;
-  private lastCardBrand?: string;
-  private lastCardCountry?: string;
   private stripe: Stripe | null;
-
-  constructor(
-    private donationService: DonationService,
-    private matomoTracker: MatomoTracker,
-  ) {}
 
   async init() {
     if (this.didInit) {
@@ -61,99 +52,18 @@ export class StripeService {
     });
   }
 
-  setLastCardMetadata(cardBrand?: string, cardCountry?: string) {
-    this.lastCardBrand = cardBrand;
-    this.lastCardCountry = cardCountry;
-  }
+  async prepareMethodFromPaymentElement(donation: Donation, elements: StripeElements): Promise<PaymentMethodResult> {
+    if (! this.stripe) {
+      throw new Error("Stripe not ready");
+    }
 
-  async confirmPaymentWithSavedMethod(
-    donationPreUpdate: Donation,
-    paymentMethod: PaymentMethod
-  ): Promise<PaymentIntentResult | undefined> {
-    return new Promise<PaymentIntentResult>((resolve, reject) => {
-      this.setLastCardMetadata(paymentMethod.card?.brand, paymentMethod.card?.country as string);
-
-      this.donationService.updatePaymentDetails(donationPreUpdate, this.lastCardBrand, this.lastCardCountry)
-        .subscribe(donation => {
-          if (!donation.clientSecret || !donation.donationId) {
-            reject('Missing ID in card-details-updated donation');
-            return;
-          }
-
-          this.payWithMethod(
-            donation,
-            paymentMethod.id, // Sending the full object for completion means properties like "customer" crash the callout.
-          ).then(result => {
-            resolve(result);
-          }).catch(error => {
-            reject(error);
-          });
-        });
-    });
-  }
-
-  private payWithMethod(donation: Donation, payment_method: string): Promise<PaymentIntentResult> {
-    return new Promise((resolve) => {
-      this.stripe?.confirmCardPayment(
-        donation.clientSecret as string,
-        { payment_method },
-      ).then(async confirmResult => {
-        if (confirmResult.error) {
-          // Failure w/ no extra action applicable
-          this.matomoTracker.trackEvent(
-            'donate_error',
-            `stripe_card_payment_error`,
-            confirmResult.error.message ?? '[No message]',
-          );
-
-          resolve(confirmResult);
-          return;
-        }
-
-        if (confirmResult.paymentIntent.status !== 'requires_action') {
-          // Success w/ no extra action needed
-          this.matomoTracker.trackEvent(
-            'donate',
-            `stripe_card_payment_success`,
-            `Stripe Intent processing or done for donation ${donation.donationId} to campaign ${donation.projectId}`,
-          );
-
-          resolve(confirmResult);
-          return;
-        }
-
-        // The PaymentIntent requires an action e.g. 3DS verification; let Stripe.js handle the flow.
-        this.matomoTracker.trackEvent(
-          'donate',
-          `stripe_card_requires_action`,
-          confirmResult.paymentIntent.next_action?.type ?? '[Action unknown]',
-        );
-        this.stripe?.confirmCardPayment(donation.clientSecret || '').then(confirmAgainResult => {
-          if (confirmAgainResult.error) {
-            this.matomoTracker.trackEvent(
-              'donate_error',
-              `stripe_card_further_action_error`,
-              confirmAgainResult.error.message ?? '[No message]',
-            );
-          }
-
-          // Extra action done, whether successfully or not.
-          resolve(confirmAgainResult);
-        });
-      });
-    });
-  }
-
-  async confirmPaymentWithPaymentElement(donation: Donation, elements: StripeElements): Promise<PaymentIntentResult | undefined>
-  {
     const {error: submitError} = await elements.submit();
     if (submitError) {
-      console.error(submitError); // @todo handle this error better.
-      return;
+      return {error: submitError, paymentMethod: undefined}
     }
 
     // If we want to not show billing details inside the Stripe payment element we have to pass billing details
-    // as payment_method_data here, with at least this much detail - but we don't collect addresses in that much detail.
+    // as `params.billing_details` here.
     const paymentMethodData = {
       billing_details:
         {
@@ -164,14 +74,18 @@ export class StripeService {
         }
     };
 
-    return await this.stripe?.confirmPayment({
-      elements: elements,
-      clientSecret: donation.clientSecret as string,
-      redirect: 'if_required',
-      confirmParams: {
-        payment_method_data: paymentMethodData,
-        return_url: environment.donateGlobalUriPrefix + "/thanks/" + donation.donationId
-      }
+    return await this.stripe.createPaymentMethod(
+      {elements: elements, params: paymentMethodData}
+    );
+  }
+
+  async handleNextAction(clientSecret: string) {
+    if (! this.stripe) {
+      throw new Error("Stripe not ready");
+    }
+
+    return await this.stripe.handleNextAction({
+      clientSecret: clientSecret
     });
   }
 }

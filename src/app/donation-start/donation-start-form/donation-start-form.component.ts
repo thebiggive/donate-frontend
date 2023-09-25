@@ -30,7 +30,7 @@ import {
   StripeError,
   StripePaymentElement,
 } from '@stripe/stripe-js';
-import {EMPTY} from 'rxjs';
+import {EMPTY, firstValueFrom} from 'rxjs';
 
 import {Campaign} from '../../campaign.model';
 import {CampaignService} from '../../campaign.service';
@@ -729,7 +729,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const methodIsReady = this.stripePaymentElement || this.selectedSavedMethod || hasCredit;
 
-    if (!this.donation || !this.donation.clientSecret || !methodIsReady) {
+    if (!this.donation || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
       this.stripeResponseErrorCode = undefined;
       this.matomoTracker.trackEvent('donate_error', 'stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
@@ -760,16 +760,46 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    // Else settlement is via a new or saved card (including wallets / Payment Request Buttons).
-    let result: { paymentIntent: PaymentIntent; error?: undefined } | { paymentIntent?: undefined; error: StripeError } | undefined;
+    let result:
+      {
+        paymentIntent?: undefined | { status: PaymentIntent.Status; client_secret: string | null },
+        error?: undefined,
+      } |
+      { error: StripeError } |
+      undefined;
 
+    if (!this.stripeElements && !this.selectedSavedMethod) {
+      throw new Error("Missing stripe elements");
+    }
+
+    let paymentMethodResult;
+    let paymentMethod;
     if (this.selectedSavedMethod) {
-      result = await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.selectedSavedMethod);
+      paymentMethod = this.selectedSavedMethod;
     } else {
-      if (!this.stripeElements) {
-        throw new Error("Missing stripe elements");
-      }
-      result = await this.stripeService.confirmPaymentWithPaymentElement(this.donation, this.stripeElements);
+      paymentMethodResult = await this.stripeService.prepareMethodFromPaymentElement(this.donation, <StripeElements>this.stripeElements);
+      paymentMethod = paymentMethodResult.paymentMethod;
+    }
+
+    if (paymentMethod) {
+      result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, paymentMethod));
+
+      if (result?.paymentIntent && result.paymentIntent.status === 'requires_action') {
+        if (!result.paymentIntent.client_secret) {
+          throw new Error("payment intent requires action but client secret missing")
+        }
+        const {
+          error,
+        } = await this.stripeService.handleNextAction(result.paymentIntent!.client_secret);
+        if (!error) {
+          this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
+          return;
+        } else {
+          result = {error: error};
+        }
+      } // Else there's a `paymentMethod` which is already successful or errored » both handled later.
+    } else {
+      result = {error: paymentMethodResult?.error};
     }
 
     if (!result || result.error) {
