@@ -1,10 +1,8 @@
 import {Injectable} from '@angular/core';
-import {MatomoTracker} from 'ngx-matomo';
-import {loadStripe, PaymentMethod, Stripe, StripeElements, StripeError,} from '@stripe/stripe-js';
+import {loadStripe, PaymentMethodResult, Stripe, StripeElements} from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
 import {Donation} from './donation.model';
-import {DonationService} from './donation.service';
 import {Campaign} from "./campaign.model";
 
 @Injectable({
@@ -12,14 +10,7 @@ import {Campaign} from "./campaign.model";
 })
 export class StripeService {
   private didInit = false;
-  private lastCardBrand?: string;
-  private lastCardCountry?: string;
   private stripe: Stripe | null;
-
-  constructor(
-    private donationService: DonationService,
-    private matomoTracker: MatomoTracker,
-  ) {}
 
   async init() {
     if (this.didInit) {
@@ -61,16 +52,9 @@ export class StripeService {
     });
   }
 
-  setLastCardMetadata(cardBrand?: string, cardCountry?: string) {
-    this.lastCardBrand = cardBrand;
-    this.lastCardCountry = cardCountry;
-  }
-
-  async confirmPaymentWithPaymentElement(donation: Donation, elements: StripeElements): Promise<
-    { paymentMethod: PaymentMethod; error?: undefined } | { paymentMethod?: undefined; error: StripeError }
-  > {
+  async prepareMethodFromPaymentElement(donation: Donation, elements: StripeElements): Promise<PaymentMethodResult> {
     if (! this.stripe) {
-    throw new Error("Stripe not ready");
+      throw new Error("Stripe not ready");
     }
 
     const {error: submitError} = await elements.submit();
@@ -79,7 +63,7 @@ export class StripeService {
     }
 
     // If we want to not show billing details inside the Stripe payment element we have to pass billing details
-    // as payment_method_data here, with at least this much detail - but we don't collect addresses in that much detail.
+    // as `params.billing_details` here.
     const paymentMethodData = {
       billing_details:
         {
