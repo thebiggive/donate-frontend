@@ -29,7 +29,6 @@ export const environment: Environment = {
   psps: {
     stripe: {
       enabled: true,
-      prbEnabled: false, // Payment Request Buttons – Apple & Google Pay. Unsupported without SSL.
       publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },

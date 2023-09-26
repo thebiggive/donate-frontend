@@ -23,7 +23,6 @@ export const environment: Environment = {
   psps: {
     stripe: {
       enabled: true,
-      prbEnabled: true, // Payment Request Buttons – Apple & Google Pay
       publishableKey: 'pk_live_51GxbdTKkGuKkxwBN1KsxsHMC8MrSeooSxBRETK6zoUYZSkKsjSLLryXE3vPIQm5jM6uV1Lsdvr9GoYB1dShkSELQ00xffCRBIi',
     },
   },

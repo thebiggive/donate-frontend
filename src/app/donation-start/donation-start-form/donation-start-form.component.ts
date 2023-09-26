@@ -29,9 +29,8 @@ import {
   StripeElements,
   StripeError,
   StripePaymentElement,
-  StripePaymentRequestButtonElement
 } from '@stripe/stripe-js';
-import {EMPTY, Observer} from 'rxjs';
+import {EMPTY, firstValueFrom} from 'rxjs';
 
 import {Campaign} from '../../campaign.model';
 import {CampaignService} from '../../campaign.service';
@@ -76,15 +75,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   @ViewChild('captcha') captcha: RecaptchaComponent;
   @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
   @ViewChild('cardInfo') cardInfo: ElementRef;
-  @ViewChild('paymentRequestButton') paymentRequestButtonEl: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
   @ViewChild('donationTippingSlider') private donationTippingSlider: DonationTippingSliderComponent|undefined;
 
   stripePaymentElement: StripePaymentElement | undefined;
   cardHandler = this.onStripeCardChange.bind(this);
-  paymentRequestButton: StripePaymentRequestButtonElement | null;
 
-  requestButtonShown = false;
   showChampionOptIn = false;
 
   @Input({ required: true }) campaign: Campaign;
@@ -135,7 +131,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   noPsps = false;
   psp: 'stripe';
   retrying = false;
-  skipPRBs: boolean;
   addressSuggestions: GiftAidAddressSuggestion[] = [];
   donationCreateError = false;
   donationUpdateError = false;
@@ -145,25 +140,22 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   privacyUrl = 'https://biggive.org/privacy';
   showAddressLookup: boolean;
 
-  // Kind of a subset of `stripePaymentMethodReady`, which tracks just the Card Stripe.js element based
-  // on the `complete` property of the callback event. Doesn't cover PRBs, saved cards, or donation credit.
+  // Kind of a subset of `stripePaymentMethodReady`, which tracks just the Payment Element Stripe.js element based
+  // on the `complete` property of the callback event. Doesn't cover saved cards, or donation credit.
   // Maintains its value and is NOT reset when settlement method changes to one of those, since it might
   // change back.
   stripeManualCardInputValid = false;
 
   stripePaymentMethodReady = false;
-  stripePRBMethodReady = false; // Payment Request Button (Apple/Google Pay) method set.
   stripeError?: string;
   stripeSavedMethods: PaymentMethod[] = [];
   selectedSavedMethod: PaymentMethod | undefined;
   submitting = false;
-  termsProvider = `Big Give's`;
   termsUrl = 'https://biggive.org/terms-and-conditions';
   // Track 'Next' clicks so we know when to show missing radio button error messages.
   triedToLeaveGiftAid = false;
   triedToLeaveMarketing = false;
   showAllPaymentMethods: boolean = false;
-  protected readonly environmentId = environment.environmentId;
 
 
   protected campaignId: string;
@@ -209,7 +201,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private tipAmountFromSlider: number;
 
   panelOpenState = false;
-  percentage = 1;
   showCustomTipInput = false;
   // will be undefined if the drop-down is in use instead of the slider.
   @ViewChild('donationTippingSlider') tippingSlider: DonationTippingSliderComponent | undefined;
@@ -240,6 +231,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   private stripeElements: StripeElements | undefined;
+  private selectedPaymentMethodType: string | undefined;
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -369,8 +361,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.maximumDonationAmount = maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse);
 
-    this.skipPRBs = !environment.psps.stripe.prbEnabled;
-
     if (isPlatformBrowser(this.platformId)) {
       this.handleCampaignViewUpdates();
     }
@@ -411,7 +401,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
             if (this.donation) {
               this.clearDonation(this.donation, true);
             }
-            this.createDonationAndMaybePerson(); // Re-sets-up PRB etc.
+            this.createDonationAndMaybePerson();
           });
           return;
         }
@@ -579,7 +569,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           if (this.donation) {
             this.clearDonation(this.donation, true);
           }
-          this.createDonationAndMaybePerson(); // Re-sets-up PRB etc.
+          this.createDonationAndMaybePerson();
         });
 
       return;
@@ -598,7 +588,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         this.donationService,
         this.campaign,
         this.marketingGroup,
-        this.preparePaymentRequestButton,
       );
       // Else it's not a step that cleanly maps to the historically-comparable
       // e-commerce funnel steps defined in our Analytics campaign, besides 1
@@ -637,8 +626,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
 
-  async onStripeCardChange(state: StripeElementChangeEvent) {
-    this.stripePRBMethodReady = false; // Using card instead
+  /**
+   * According to stripe docs https://stripe.com/docs/js/element/events/on_change?type=paymentElement the change event has
+   * a value key as expected here. I'm not sure why that isn't included in the TS StripeElementChangeEvent interface.
+   */
+  async onStripeCardChange(state: StripeElementChangeEvent & ({value: {type: string} | undefined})) {
     this.addStripeCardBillingValidators();
 
     // Re-evaluate stripe card billing validators after being set above.
@@ -663,12 +655,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
       return;
     }
-  }
 
-  setAmount(amount: number) {
-    // We need to keep this as a string for consistency with manual donor-input amounts,
-    // so that `submit()` doesn't fall over trying to clean it of possible currency symbols.
-    this.amountsGroup.patchValue({ donationAmount: amount.toString() });
+    if (state.value) {
+      this.selectedPaymentMethodType = state.value.type;
+    }
   }
 
   async submit() {
@@ -739,7 +729,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const methodIsReady = this.stripePaymentElement || this.selectedSavedMethod || hasCredit;
 
-    if (!this.donation || !this.donation.clientSecret || !methodIsReady) {
+    if (!this.donation || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
       this.stripeResponseErrorCode = undefined;
       this.matomoTracker.trackEvent('donate_error', 'stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
@@ -755,7 +745,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
             'stripe_customer_balance_payment_success',
             `Stripe Intent expected to auto-confirm for donation ${donation.donationId} to campaign ${donation.projectId}`,
           );
-          this.exitPostDonationSuccess(donation);
+          this.exitPostDonationSuccess(donation, 'donation-funds');
         },
         (error: HttpErrorResponse) => {
           this.matomoTracker.trackEvent(
@@ -770,16 +760,46 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    // Else settlement is via a new or saved card (including wallets / Payment Request Buttons).
-    let result: { paymentIntent: PaymentIntent; error?: undefined } | { paymentIntent?: undefined; error: StripeError } | undefined;
+    let result:
+      {
+        paymentIntent?: undefined | { status: PaymentIntent.Status; client_secret: string | null },
+        error?: undefined,
+      } |
+      { error: StripeError } |
+      undefined;
 
+    if (!this.stripeElements && !this.selectedSavedMethod) {
+      throw new Error("Missing stripe elements");
+    }
+
+    let paymentMethodResult;
+    let paymentMethod;
     if (this.selectedSavedMethod) {
-      result = await this.stripeService.confirmPaymentWithSavedMethod(this.donation, this.selectedSavedMethod);
+      paymentMethod = this.selectedSavedMethod;
     } else {
-      if (!this.stripeElements) {
-        throw new Error("Missing stripe elements");
-      }
-      result = await this.stripeService.confirmPaymentWithPaymentElement(this.donation, this.stripeElements);
+      paymentMethodResult = await this.stripeService.prepareMethodFromPaymentElement(this.donation, <StripeElements>this.stripeElements);
+      paymentMethod = paymentMethodResult.paymentMethod;
+    }
+
+    if (paymentMethod) {
+      result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, paymentMethod));
+
+      if (result?.paymentIntent && result.paymentIntent.status === 'requires_action') {
+        if (!result.paymentIntent.client_secret) {
+          throw new Error("payment intent requires action but client secret missing")
+        }
+        const {
+          error,
+        } = await this.stripeService.handleNextAction(result.paymentIntent!.client_secret);
+        if (!error) {
+          this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
+          return;
+        } else {
+          result = {error: error};
+        }
+      } // Else there's a `paymentMethod` which is already successful or errored » both handled later.
+    } else {
+      result = {error: paymentMethodResult?.error};
     }
 
     if (!result || result.error) {
@@ -797,10 +817,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       }
       this.submitting = false;
 
-      // Reset PRB to make sure everything knows we need a new PaymentMethod.
-      // And go back to the payment step for the PRB to be clicked again, or card
-      // to be entered.
-      this.preparePaymentRequestButton(this.donation, this.paymentGroup)
       this.jumpToStep('Payment details');
       this.goToFirstVisibleError();
 
@@ -814,7 +830,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     // See https://stripe.com/docs/payments/intents
     if (['succeeded', 'processing'].includes(result.paymentIntent.status)) {
-      this.exitPostDonationSuccess(this.donation);
+      this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
       return;
     }
 
@@ -1014,19 +1030,18 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    // Card element is mounted the same way regardless of donation info. See
-    // this.createDonationAndMaybePerson().subscribe(...) for Payment Request Button mount, which needs donation info
-    // first and so happens in `preparePaymentRequestButton()`.
     this.stripePaymentElement = this.stripeElements.create(
         "payment",
         {
           wallets: {
-            // we may turn these on later, for now these wallets are presented outside the payment element.
-            applePay: 'never',
-            googlePay: 'never'
+            applePay: 'auto',
+            googlePay: 'auto'
           },
           terms: {
-            card: "never" // we have our own terms copy for the future payment in donation-start-form.component.html
+            // We have our own terms copy for the future payment in donation-start-form.component.html
+            card: "never",
+            applePay: "never",
+            googlePay: "never",
           },
           fields: {
             billingDetails: {
@@ -1041,7 +1056,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
               {name: "Big Give"}
         }
     );
-    if (this.cardInfo && this.stripePaymentElement) { // Ensure #cardInfo not hidden by PRB success.
+
+    if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
       this.stripePaymentElement.on('change', this.cardHandler);
     }
@@ -1330,79 +1346,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.donationCreateError = true;
     this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
-
-  private preparePaymentRequestButton = (donation: Donation, paymentGroup: FormGroup) => {
-    if (this.skipPRBs) {
-      return;
-    }
-
-    if (this.paymentRequestButton) {
-      this.paymentRequestButton.clear();
-    }
-
-    const paymentRequestResultObserver: Observer<{billingDetails: PaymentMethod.BillingDetails | undefined, walletName: string}> = {
-      next: (observed) => {
-        if (observed.billingDetails && donation) {
-          this.matomoTracker.trackEvent(
-            'donate',
-            'stripe_prb_setup_success',
-            `Stripe PRB success for donation ${donation.donationId} to campaign ${this.campaignId}`,
-          );
-
-          // Set form and `donation` billing fields from PRB card's data.
-          paymentGroup.patchValue({
-            billingCountry: observed.billingDetails.address?.country,
-            billingPostcode: observed.billingDetails.address?.postal_code,
-          });
-
-          this.stripePaymentMethodReady = true;
-          this.stripePRBMethodReady = true;
-          this.removeStripeCardBillingValidators();
-          this.jumpToStep('Receive updates');
-
-          return;
-        }
-        // Else there was no Payment Method (or details), so the PRB failed.
-
-        this.stripePaymentMethodReady = false;
-        this.stripePRBMethodReady = false;
-        this.addStripeCardBillingValidators();
-
-        // I *think* `payWithStripe()` also sets `this.stripeError` & `this.stripeResponseErrorCode`,
-        // but that this event's handling typically happens later. So we can take the opportunity to replace
-        // `stripeError` with a more specific, wallet-targeted explanation.
-        if (this.stripeResponseErrorCode === 'card_declined') {
-          const walletFriendlyName = observed.walletName === 'apple_pay' ? 'Apple Pay' : 'Google Pay';
-          this.stripeError = `Payment failed. Please check your card's billing address in your ${walletFriendlyName} wallet matches your the address your bank has, then try again.`;
-        }
-      },
-
-      error: (_) => {
-        this.stripePaymentMethodReady = false;
-        this.stripePRBMethodReady = false;
-        this.addStripeCardBillingValidators();
-        this.stripeError = 'Payment method handling failed';
-        this.stripeResponseErrorCode = undefined;
-      },
-      complete: () => {},
-    };
-
-    if (! this.stripeElements) {
-      throw new Error("Stripe elements not ready");
-    }
-
-    this.paymentRequestButton = this.stripeService.getPaymentRequestButton(donation, this.stripeElements, paymentRequestResultObserver);
-
-    this.stripeService.canUsePaymentRequest().then(canUse => {
-      if (canUse && this.paymentRequestButton) {
-        this.paymentRequestButton.mount(this.paymentRequestButtonEl.nativeElement);
-        this.requestButtonShown = true;
-      } else {
-        this.paymentRequestButtonEl.nativeElement.style.display = 'none';
-      }
-    });
-  };
-
   private newDonationSuccess(response: DonationCreatedResponse) {
     this.creatingDonation = false;
 
@@ -1447,9 +1390,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       if (this.creditPenceToUse > 0) {
         this.stripePaymentMethodReady = true;
       } else {
-        const stripeElements = this.stripeService.stripeElements(this.donation, this.campaign);
-        this.stripeElements = stripeElements
-        this.preparePaymentRequestButton(this.donation, this.paymentGroup);
+        this.stripeElements = this.stripeService.stripeElements(this.donation, this.campaign)
         this.prepareCardInput();
       }
     }
@@ -1574,18 +1515,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.stripeSavedMethods.length < 1) {
       this.selectedSavedMethod = undefined;
     }
-    this.stripePRBMethodReady = false;
-
     this.retrying = false;
     this.submitting = false;
 
     this.stripeManualCardInputValid = false;
     if (this.stripePaymentElement) {
       this.stripePaymentElement.clear();
-    }
-
-    if (this.paymentRequestButton) {
-      this.paymentRequestButton.clear();
     }
 
     delete this.donation;
@@ -1864,10 +1799,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
         this.scheduleMatchingExpiryWarning(this.donation);
 
-        if (this.psp === 'stripe') {
-          this.preparePaymentRequestButton(this.donation, this.paymentGroup);
-        }
-
         // In doc block use case (a), we need to put the amounts from the previous
         // donation into the form and move to Step 2.
         const tipPercentageFixed = (100 * donation.tipAmount / donation.donationAmount).toFixed(1);
@@ -1942,7 +1873,19 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
-  private exitPostDonationSuccess(donation: Donation) {
+  private exitPostDonationSuccess(donation: Donation, stripe_donation_method: string|undefined) {
+
+    const stripeMethod = stripe_donation_method || 'undefined';
+
+    // if not card then we assume it must be a Payment Request Button i.e. Google Pay or Apple Pay.
+    const action = stripe_donation_method === 'card' ?
+        'stripe_card_payment_success' : 'stripe_prb_payment_success';
+
+    this.matomoTracker.trackEvent(
+      'donate',
+      action,
+      `Stripe Intent processing or done for donation ${donation.donationId} to campaign ${donation.projectId}, stripe method ${stripeMethod}`,
+    );
     this.conversionTrackingService.convert(donation, this.campaign);
 
     this.cancelExpiryWarning();

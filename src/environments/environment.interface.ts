@@ -34,8 +34,7 @@ export interface Environment {
   postcodeLookupUri: string
   psps: {
     stripe: {
-      enabled: boolean,
-      prbEnabled: boolean,
+      enabled: boolean; // currently this is true in all envs, but typing as boolean in case we want to change it at short notice.
       publishableKey: string
     },
   },
