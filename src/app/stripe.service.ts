@@ -27,13 +27,10 @@ export class StripeService {
     this.stripe = await loadStripe(environment.psps.stripe.publishableKey);
   }
 
-  stripeElements(donation: Donation, campaign: Campaign)
-  {
+  stripeElements(donation: Donation, campaign: Campaign) {
     if (!this.stripe) {
       throw new Error('Stripe not ready');
     }
-
-    const amountInMinorUnit = Math.floor((donation.tipAmount + donation.donationAmount) * 100);
 
     return this.stripe.elements({
       fonts: [
@@ -45,11 +42,15 @@ export class StripeService {
       ],
       mode: 'payment',
       currency: donation.currencyCode.toLowerCase(),
-      amount: amountInMinorUnit,
+      amount: this.amountIncTipInMinorUnit(donation),
       setup_future_usage: 'on_session',
       on_behalf_of: campaign.charity.stripeAccountId,
       paymentMethodCreation: 'manual',
     });
+  }
+
+  updateAmount(elements: StripeElements, donation: Donation) {
+    elements.update({amount: this.amountIncTipInMinorUnit(donation)});
   }
 
   async prepareMethodFromPaymentElement(donation: Donation, elements: StripeElements): Promise<PaymentMethodResult> {
@@ -87,5 +88,9 @@ export class StripeService {
     return await this.stripe.handleNextAction({
       clientSecret: clientSecret
     });
+  }
+
+  private amountIncTipInMinorUnit(donation: Donation) {
+    return Math.floor((donation.tipAmount + donation.donationAmount) * 100);
   }
 }

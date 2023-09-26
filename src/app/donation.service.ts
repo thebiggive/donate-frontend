@@ -170,7 +170,7 @@ export class DonationService {
       : `${environment.donationsApiPrefix}${this.apiPath}`;
 
     return this.http.post<DonationCreatedResponse>(
-      endpoint + "?forNewPaymentElement=true", // temp flag until its always true
+      endpoint,
       donation,
       this.getPersonAuthHttpOptions(jwt),
     );
