@@ -101,8 +101,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
 
-  countryOptions = COUNTRIES;
-
   creditPenceToUse = 0; // Set non-zero if logged in and Customer has a credit balance to spend. Caps donation amount too in that case.
   currencySymbol: string;
 
@@ -120,13 +118,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * of custom tip, including zero.
    */
   minimumTipPercentage = 1 as const;
-  readonly suggestedTipPercentages = {
-    '7.5': '7.5%',
-    '10': '10%',
-    '12.5': '12.5%',
-    '15': '15%',
-    'Other': 'Other'
-  };
+  readonly suggestedTipPercentages = [
+    {value: '7.5', label: '7.5%'},
+    {value: '10', label: '10%'},
+    {value: '12.5', label: '12.5%'},
+    {value: '15', label: '15%'},
+    {value: 'Other', label: 'Other'}
+  ] as const;
 
   noPsps = false;
   psp: 'stripe';
@@ -195,7 +193,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   /**
    * Keys are ISO2 codes, values are names.
    */
-  public countryOptionsObject: Record<string, string>;
+  public countryOptionsObject: Array<{label: string, value: string}>;
   public tipControlStyle: 'dropdown'|'slider';
 
   private tipAmountFromSlider: number;
@@ -253,10 +251,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     public timeLeftPipe: TimeLeftPipe,
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
-    this.countryOptionsObject = Object.assign(
-      {},
-      ...(this.countryOptions.map(country => ({[country.iso2]: country.country})))
-    );
+    this.countryOptionsObject = COUNTRIES.map(country => ({label: country.country, value: country.iso2}))
     this.selectedCountryCode = this.defaultCountryCode;
 
     this.tipControlStyle = (route.snapshot.queryParams?.tipControl?.toLowerCase() === 'slider')
