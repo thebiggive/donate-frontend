@@ -522,3 +522,8 @@ mat-expansion-panel-header h3 {
   margin-top: 30px;
   position: absolute;
 }
+
+::ng-deep .snack-bar {
+  background-color: $colour-primary-contrast;
+  color: #bb2222; // matching angular native palette
+}

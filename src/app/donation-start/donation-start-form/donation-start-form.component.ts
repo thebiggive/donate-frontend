@@ -62,6 +62,7 @@ import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
 import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation-tipping-slider.component";
 import {MatomoTracker} from 'ngx-matomo';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-donation-start-form',
@@ -249,6 +250,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private stripeService: StripeService,
     public datePipe: DatePipe,
     public timeLeftPipe: TimeLeftPipe,
+    private _snackBar: MatSnackBar
+
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
     this.countryOptionsObject = COUNTRIES.map(country => ({label: country.country, value: country.iso2}))
@@ -962,6 +965,16 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (!this.goToFirstVisibleError()) {
       this.stepper.next();
     }
+  }
+
+  progressFromStepOne() {
+    const control = this.donationForm.controls['amounts'];
+    if(! control!.valid) {
+      console.log(control?.errors);
+      this._snackBar.open(control?.errors?.toString() || 'error message', undefined, { duration: 5_000, panelClass: 'snack-bar' });
+      return;
+    }
+    this.next();
   }
 
   onUseSavedCardChange(event: MatCheckboxChange, paymentMethod: PaymentMethod) {
