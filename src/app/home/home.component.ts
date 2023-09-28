@@ -1,8 +1,30 @@
 import {Component, OnInit} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "./HighlightCard";
 import {environment} from "../../environments/environment";
+
+const ArtsForImpactCard: HighlightCard = {
+  headerText: "Applications for Arts for Impact are now open!",
+  backgroundImageUrl: new URL('/assets/images/red-coral-texture.png', environment.donateGlobalUriPrefix),
+  iconColor: 'brand-afa-pink',
+  bodyText: 'Apply by 3rd November 2023',
+  button: {
+    text: "Apply now",
+    href: new URL('/artsforimpact/', environment.blogUriPrefix)
+  }
+} as const;
+
+const AnchorMatchFundCard: HighlightCard = {
+  headerText: 'Applications for Anchor Match Fund are open!',
+  backgroundImageUrl: new URL('/assets/images/anchor-match-fund.jpg', environment.donateGlobalUriPrefix),
+  iconColor: 'primary',
+  bodyText: 'Second edition deadline is 31st December 2023',
+  button: {
+    text: 'Apply now',
+    href: new URL('/anchor-match-fund/', environment.blogUriPrefix)
+  }
+} as const;
 
 @Component({
   selector: 'app-home',
@@ -16,7 +38,7 @@ export class HomeComponent implements OnInit {
     totalCountFormatted: string
   };
 
-  
+
   highlightCards: readonly HighlightCard[] = [
     {
       headerText: 'Save the date for Women and Girls Match Fund',
@@ -38,27 +60,7 @@ export class HomeComponent implements OnInit {
         href: new URL('/campaign/a056900001xpxqVAAQ', environment.donateGlobalUriPrefix)
       }
     },
-    {
-      headerText: 'Applications for Anchor Match Fund are open!',
-      backgroundImageUrl: new URL('/assets/images/anchor-match-fund.jpg', environment.donateGlobalUriPrefix),
-      iconColor: 'primary',
-      bodyText: 'Second edition deadline is 31st December 2023',
-      button: {
-        text: 'Apply now',
-        href: new URL('/anchor-match-fund/', environment.blogUriPrefix)
-      }
-    },
-    // TODO: hould replace Anchor Mach Fund card on 2nd October 2023
-    // {
-    //   headerText: ' Applications for Arts for Impact are now open!',
-    //   bodyText: "Apply by 3rd November 2023",
-    //   iconColor: "primary",
-    //   backgroundImageUrl: new URL('/assets/images/red-coral-texture.png', environment.donateGlobalUriPrefix),
-    //   button: {
-    //     text: "Apply now",
-    //     href: new URL('/artsforimpact', environment.environment.blogUriPrefix),
-    //   }
-    // },
+    new Date() > new Date('2023-10-09T12:00:00') ? ArtsForImpactCard : AnchorMatchFundCard,
   ];
 
   public constructor(
