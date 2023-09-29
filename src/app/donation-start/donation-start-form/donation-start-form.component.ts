@@ -101,8 +101,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
 
-  countryOptions = COUNTRIES;
-
   creditPenceToUse = 0; // Set non-zero if logged in and Customer has a credit balance to spend. Caps donation amount too in that case.
   currencySymbol: string;
 
@@ -120,13 +118,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * of custom tip, including zero.
    */
   minimumTipPercentage = 1 as const;
-  readonly suggestedTipPercentages = {
-    '7.5': '7.5%',
-    '10': '10%',
-    '12.5': '12.5%',
-    '15': '15%',
-    'Other': 'Other'
-  };
+  readonly suggestedTipPercentages = [
+    {value: '7.5', label: '7.5%'},
+    {value: '10', label: '10%'},
+    {value: '12.5', label: '12.5%'},
+    {value: '15', label: '15%'},
+    {value: 'Other', label: 'Other'}
+  ] as const;
 
   noPsps = false;
   psp: 'stripe';
@@ -195,7 +193,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   /**
    * Keys are ISO2 codes, values are names.
    */
-  public countryOptionsObject: Record<string, string>;
+  public countryOptionsObject: Array<{label: string, value: string}>;
   public tipControlStyle: 'dropdown'|'slider';
 
   private tipAmountFromSlider: number;
@@ -253,10 +251,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     public timeLeftPipe: TimeLeftPipe,
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
-    this.countryOptionsObject = Object.assign(
-      {},
-      ...(this.countryOptions.map(country => ({[country.iso2]: country.country})))
-    );
+    this.countryOptionsObject = COUNTRIES.map(country => ({label: country.country, value: country.iso2}))
     this.selectedCountryCode = this.defaultCountryCode;
 
     this.tipControlStyle = (route.snapshot.queryParams?.tipControl?.toLowerCase() === 'slider')
@@ -268,10 +263,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.clearDonation(this.donation, false);
     }
 
-    if (this.stripePaymentElement) {
-      this.stripePaymentElement.off('change');
-      this.stripePaymentElement.destroy();
-    }
+    this.destroyStripeElements();
   }
 
   ngOnInit() {
@@ -498,6 +490,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.donationForm.reset();
     this.identityService.clearJWT();
     this.idCaptcha.reset();
+    this.destroyStripeElements();
 
     location.reload();
   }
@@ -534,17 +527,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   async stepChanged(event: StepperSelectionEvent) {
-    if (event.selectedStep.label === this.yourDonationStepLabel) {
-      // workaround bug issue DON-883 - without resestting the page the stripe element is not usable for the new donation that will be created in this step.
-      // Not ideal as this loses content the donor may have typed already, but better to reset the page than let them enter donation details and then fail to
-      // take the payment.
-
-      if (this.donation) {
-        this.donationService.cancel(this.donation).subscribe(() => this.reset());
-      }
-    }
-
-      // We need to allow enough time for the Stepper's animation to get the window to
+    // We need to allow enough time for the Stepper's animation to get the window to
     // its final position for this step, before this scroll position update can be reliably
     // helpful.
     setTimeout(() => {
@@ -593,8 +576,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       // e-commerce funnel steps defined in our Analytics campaign, besides 1
       // (which we fire on donation create API callback) and 4 (which we fire
       // alongside calling payWithStripe()).
-
-
     }
 
     // Create a donation if coming from first step and not offering to resume
@@ -610,8 +591,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       }
 
       if (this.psp === 'stripe' && this.donation) {
-        this.stripeElements = this.stripeService.stripeElements(this.donation, this.campaign);
-        this.prepareCardInput();
+        // Whether the donation's new or not, we need Stripe ready including an expected `amount` based
+        // on the latest core donation + tip values.
+        this.prepareStripeElements();
       }
 
       return;
@@ -841,7 +823,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.submitting = false;
   }
 
-
   get donationAmountField() {
     if (!this.donationForm) {
       return undefined;
@@ -976,7 +957,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-
     // For all other errors, attempting to proceed should just help the donor find
     // the error on the page if there is one.
     if (!this.goToFirstVisibleError()) {
@@ -997,7 +977,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.updateFormWithBillingDetails(this.selectedSavedMethod);
     } else {
       this.selectedSavedMethod = undefined;
-      this.prepareCardInput();
+      this.prepareStripeElements();
     }
   }
 
@@ -1019,14 +999,20 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
-  private prepareCardInput() {
-    if (this.cardInfo.nativeElement.children.length > 0) {
-      // Card input was already ready.
+  private prepareStripeElements() {
+    if (!this.donation) {
+      console.log('Donation not ready for Stripe');
       return;
     }
 
-    if (!this.stripeElements) {
-      console.error('Stripe Elements not ready');
+    if (this.stripeElements) {
+      this.stripeService.updateAmount(this.stripeElements, this.donation);
+    } else {
+      this.stripeElements = this.stripeService.stripeElements(this.donation, this.campaign);
+    }
+
+    if (this.stripePaymentElement) {
+      // Payment element was already ready & we presume mounted.
       return;
     }
 
@@ -1052,14 +1038,22 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
               }
             },
           },
-          business:
-              {name: "Big Give"}
+          business: {name: "Big Give"},
         }
     );
 
     if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
       this.stripePaymentElement.on('change', this.cardHandler);
+    }
+  }
+
+  private destroyStripeElements() {
+    if (this.stripePaymentElement) {
+      this.stripePaymentElement.off('change');
+      this.stripePaymentElement.destroy();
+      this.stripePaymentElement = undefined;
+      this.stripeElements = undefined;
     }
   }
 
@@ -1302,7 +1296,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * @private
    */
   private promptForCaptcha() {
-
     if (this.idCaptchaCode) {
       return false;
     }
@@ -1346,6 +1339,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.donationCreateError = true;
     this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
+
   private newDonationSuccess(response: DonationCreatedResponse) {
     this.creatingDonation = false;
 
@@ -1390,8 +1384,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       if (this.creditPenceToUse > 0) {
         this.stripePaymentMethodReady = true;
       } else {
-        this.stripeElements = this.stripeService.stripeElements(this.donation, this.campaign)
-        this.prepareCardInput();
+        this.prepareStripeElements();
       }
     }
 
@@ -1508,20 +1501,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.creatingDonation = false;
     this.donationCreateError = false;
     this.donationUpdateError = false;
-    this.stripeError = undefined;
-    this.stripeResponseErrorCode = undefined;
 
-    this.stripePaymentMethodReady = false;
     if (this.stripeSavedMethods.length < 1) {
       this.selectedSavedMethod = undefined;
     }
     this.retrying = false;
     this.submitting = false;
-
-    this.stripeManualCardInputValid = false;
-    if (this.stripePaymentElement) {
-      this.stripePaymentElement.clear();
-    }
 
     delete this.donation;
     this.donationChangeCallBack(undefined)

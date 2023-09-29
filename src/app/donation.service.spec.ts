@@ -90,7 +90,7 @@ describe('DonationService', () => {
           expect(false).toBe(true); // Always fail if observable errors
         });
 
-        const mockPost = httpMock.expectOne(`${environment.donationsApiPrefix}/donations?forNewPaymentElement=true`);
+        const mockPost = httpMock.expectOne(`${environment.donationsApiPrefix}/donations`);
         expect(mockPost.request.method).toEqual('POST');
         expect(mockPost.cancelled).toBeFalsy();
         expect(mockPost.request.responseType).toEqual('json');
