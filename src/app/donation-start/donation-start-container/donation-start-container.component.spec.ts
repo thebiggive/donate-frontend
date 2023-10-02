@@ -1,4 +1,5 @@
 import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {Component} from "@angular/core";
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import {ActivatedRoute} from "@angular/router";
@@ -7,17 +8,33 @@ import {InMemoryStorageService} from "ngx-webstorage-service";
 import {of} from "rxjs";
 
 import {DonationStartContainerComponent} from "./donation-start-container.component";
+import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
 import {TBG_DONATE_ID_STORAGE} from "../../identity.service";
 import {TBG_DONATE_STORAGE} from "../../donation.service";
 import {Campaign} from "../../campaign.model";
 
-describe('DonationStartLoginComponent', () => {
+// See https://medium.com/angular-in-depth/angular-unit-testing-viewchild-4525e0c7b756
+@Component({
+  selector: 'app-donation-start-form',
+  template: '',
+  providers: [
+    { provide: DonationStartFormComponent, useClass: DonationStartFormStubComponent },
+  ],
+})
+class DonationStartFormStubComponent {
+  resumeDonationsIfPossible() {}
+}
+
+describe('DonationStartContainer', () => {
   let component: DonationStartContainerComponent;
   let fixture: ComponentFixture<DonationStartContainerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DonationStartContainerComponent ],
+      declarations: [
+        DonationStartContainerComponent,
+        DonationStartFormStubComponent,
+      ],
       imports: [
         HttpClientTestingModule,
         MatDialogModule,
@@ -51,8 +68,11 @@ describe('DonationStartLoginComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it(`should create and call form's donation resume helper`, () => {
+    spyOn(component.donationStartForm, 'resumeDonationsIfPossible');
+    component.ngAfterViewInit();
     expect(component).toBeTruthy();
+    expect(component.donationStartForm.resumeDonationsIfPossible).toHaveBeenCalled();
   });
 
   const getDummyCampaign = (campaignId: string) => {
