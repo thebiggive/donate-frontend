@@ -1,5 +1,5 @@
-import {DatePipe} from "@angular/common";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {Component} from "@angular/core";
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import {ActivatedRoute} from "@angular/router";
@@ -12,20 +12,18 @@ import {DonationStartFormComponent} from "../donation-start-form/donation-start-
 import {TBG_DONATE_ID_STORAGE} from "../../identity.service";
 import {TBG_DONATE_STORAGE} from "../../donation.service";
 import {Campaign} from "../../campaign.model";
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 
-// @Component({
-//   selector: 'app-donation-start-form',
-//   template: '',
-//   providers: [
-//     DatePipe,
-//     { provide: DonationStartFormComponent, useClass: StubDonationStartFormComponent },
-//   ],
-// })
-// class StubDonationStartFormComponent {
-//   // campaign = getDummyCampaign('testCampaignIdForStripe'); // todo rm?
-//   resumeDonationsIfPossible() {}
-// }
+// See https://medium.com/angular-in-depth/angular-unit-testing-viewchild-4525e0c7b756
+@Component({
+  selector: 'app-donation-start-form',
+  template: '',
+  providers: [
+    { provide: DonationStartFormComponent, useClass: DonationStartFormStubComponent },
+  ],
+})
+class DonationStartFormStubComponent {
+  resumeDonationsIfPossible() {}
+}
 
 describe('DonationStartContainer', () => {
   let component: DonationStartContainerComponent;
@@ -35,7 +33,7 @@ describe('DonationStartContainer', () => {
     await TestBed.configureTestingModule({
       declarations: [
         DonationStartContainerComponent,
-        DonationStartFormComponent,
+        DonationStartFormStubComponent,
       ],
       imports: [
         HttpClientTestingModule,
@@ -47,7 +45,6 @@ describe('DonationStartContainer', () => {
             enable: true,
           }
         }),
-        NoopAnimationsModule,
       ],
       providers: [
         {
@@ -59,8 +56,6 @@ describe('DonationStartContainer', () => {
             },
           },
         },
-        DatePipe,
-        // { provide: [{DonationStartFormComponent, useClass: StubDonationStartFormComponent}] },
         InMemoryStorageService,
         { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
@@ -70,7 +65,6 @@ describe('DonationStartContainer', () => {
 
     fixture = TestBed.createComponent(DonationStartContainerComponent);
     component = fixture.componentInstance;
-    // component.donationStartForm = TestBed.inject(StubDonationStartFormComponent);
     fixture.detectChanges();
   });
 
