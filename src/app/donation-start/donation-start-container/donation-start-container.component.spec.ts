@@ -1,3 +1,4 @@
+import {DatePipe} from "@angular/common";
 import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -7,17 +8,35 @@ import {InMemoryStorageService} from "ngx-webstorage-service";
 import {of} from "rxjs";
 
 import {DonationStartContainerComponent} from "./donation-start-container.component";
+import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
 import {TBG_DONATE_ID_STORAGE} from "../../identity.service";
 import {TBG_DONATE_STORAGE} from "../../donation.service";
 import {Campaign} from "../../campaign.model";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 
-describe('DonationStartLoginComponent', () => {
+// @Component({
+//   selector: 'app-donation-start-form',
+//   template: '',
+//   providers: [
+//     DatePipe,
+//     { provide: DonationStartFormComponent, useClass: StubDonationStartFormComponent },
+//   ],
+// })
+// class StubDonationStartFormComponent {
+//   // campaign = getDummyCampaign('testCampaignIdForStripe'); // todo rm?
+//   resumeDonationsIfPossible() {}
+// }
+
+describe('DonationStartContainer', () => {
   let component: DonationStartContainerComponent;
   let fixture: ComponentFixture<DonationStartContainerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DonationStartContainerComponent ],
+      declarations: [
+        DonationStartContainerComponent,
+        DonationStartFormComponent,
+      ],
       imports: [
         HttpClientTestingModule,
         MatDialogModule,
@@ -28,6 +47,7 @@ describe('DonationStartLoginComponent', () => {
             enable: true,
           }
         }),
+        NoopAnimationsModule,
       ],
       providers: [
         {
@@ -39,6 +59,8 @@ describe('DonationStartLoginComponent', () => {
             },
           },
         },
+        DatePipe,
+        // { provide: [{DonationStartFormComponent, useClass: StubDonationStartFormComponent}] },
         InMemoryStorageService,
         { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
@@ -48,11 +70,15 @@ describe('DonationStartLoginComponent', () => {
 
     fixture = TestBed.createComponent(DonationStartContainerComponent);
     component = fixture.componentInstance;
+    // component.donationStartForm = TestBed.inject(StubDonationStartFormComponent);
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it(`should create and call form's donation resume helper`, () => {
+    spyOn(component.donationStartForm, 'resumeDonationsIfPossible');
+    component.ngAfterViewInit();
     expect(component).toBeTruthy();
+    expect(component.donationStartForm.resumeDonationsIfPossible).toHaveBeenCalled();
   });
 
   const getDummyCampaign = (campaignId: string) => {

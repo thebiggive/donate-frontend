@@ -110,8 +110,6 @@ describe('DonationStartNewPrimaryComponent', () => {
       .compileComponents();
   }));
 
-  (window as any).gtag = (...args: any[]) => args;
-
   let component: DonationStartFormComponent;
   let fixture: ComponentFixture<DonationStartFormComponent>;
 
