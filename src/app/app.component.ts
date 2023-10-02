@@ -2,6 +2,7 @@ import {APP_BASE_HREF, isPlatformBrowser} from '@angular/common';
 import {AfterViewInit, Component, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
 import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
 import {BiggiveMainMenu} from '@biggive/components-angular';
+import {MatomoTracker} from "ngx-matomo";
 import {filter} from 'rxjs/operators';
 
 import {DonationService} from './donation.service';
@@ -17,7 +18,6 @@ import {
   CookiePreferences,
   CookiePreferenceService
 } from "./cookiePreference.service";
-import {MatomoTracker} from "ngx-matomo";
 
 @Component({
   selector: 'app-root',

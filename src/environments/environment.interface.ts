@@ -28,6 +28,7 @@ export interface Environment {
   getSiteControlId: string,
   identityApiPrefix: string,
   matomoSiteId: number | null, // null for no Matomo tracking.
+  matomoNonZeroTipGoalId: number | null, // Only tracks GBP campaigns; sends tip as value in £.
   minimumCreditAmount: number,
   maximumCreditAmount: number,
   postcodeLookupKey: string,

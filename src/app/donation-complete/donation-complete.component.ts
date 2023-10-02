@@ -227,7 +227,13 @@ export class DonationCompleteComponent implements OnInit {
     });
 
     if (donation && this.donationService.isComplete(donation)) {
+      // This is linked to the Donation Complete goal in Matomo, so we don't need to separately
+      // `trackGoal()` for that.
       this.matomoTracker.trackEvent('donate', 'thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
+
+      if (donation.tipAmount > 0 && environment.matomoNonZeroTipGoalId && donation.currencyCode === 'GBP') {
+        this.matomoTracker.trackGoal(environment.matomoNonZeroTipGoalId, donation.tipAmount);
+      }
 
       this.cardChargedAmount = donation.donationAmount + donation.feeCoverAmount + donation.tipAmount;
       this.giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;
