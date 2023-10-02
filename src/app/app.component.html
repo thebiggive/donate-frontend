@@ -1,3 +1,17 @@
+  <div class="skip-to-content-link">
+    <biggive-button
+      space-above="5"
+      colour-scheme="primary"
+      label="Skip to content"
+      full-width="true"
+      size="medium"
+      rounded="false"
+      url="#content"
+    ></biggive-button>
+
+  </div>
+
+
   <biggive-main-menu *ngIf="isDataLoaded"
     [usePresetMenuContent]="true"
     [donateUrlPrefix]="donateUriPrefix"
@@ -6,6 +20,9 @@
     [isLoggedIn]="isLoggedIn"
     ></biggive-main-menu>
 
+  <a id="content">
+    <!-- target for "skip to content" link -->
+  </a>
   <router-outlet></router-outlet>
 
   <biggive-footer
