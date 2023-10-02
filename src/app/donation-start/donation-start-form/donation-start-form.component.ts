@@ -1,5 +1,6 @@
 import {StepperSelectionEvent} from '@angular/cdk/stepper';
 import {DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
+import {flags} from "../../featureFlags";
 import {HttpErrorResponse} from '@angular/common/http';
 import {
     AfterContentChecked,
@@ -81,7 +82,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   stripePaymentElement: StripePaymentElement | undefined;
   cardHandler = this.onStripeCardChange.bind(this);
-
+  don819FlagEnabled = flags.don819FlagEnabled;
   showChampionOptIn = false;
 
   @Input({ required: true }) campaign: Campaign;

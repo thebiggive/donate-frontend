@@ -55,7 +55,19 @@
           aria-live="polite"
           *ngIf="donationAmountField?.invalid && donationAmountField?.errors && (donationAmountField?.dirty || donationAmountField?.touched)"
         >
+        <div *ngIf="don819FlagEnabled">
           {{displayableAmountsStepErrors()}}
+        </div>
+
+        <div *ngIf="!don819FlagEnabled">
+          <div *ngIf="donationAmountField?.errors?.min">Sorry, the minimum donation is {{ currencySymbol }}1.</div>
+          <div *ngIf="donationAmountField?.errors?.max">Your donation must be {{ maximumDonationAmount  | exactCurrency:campaign.currencyCode }} or less to proceed.<span *ngIf="creditPenceToUse === 0"> You can make multiple matched donations of {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }} if match funds are available.</span></div>
+          <div *ngIf="donationAmountField?.errors?.max">Your donation must be {{ maximumDonationAmount  | exactCurrency:campaign.currencyCode }} or less to proceed.<span *ngIf="creditPenceToUse === 0"> You can make multiple matched donations of {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }} if match funds are available.</span></div>
+          <div *ngIf="donationAmountField?.errors?.pattern">Please enter a whole number of {{ currencySymbol }} without commas.</div>
+          <div *ngIf="donationAmountField?.errors?.pattern">Please enter a whole number of {{ currencySymbol }} without commas.</div>
+          <div *ngIf="donationAmountField?.errors?.required">Please enter how much you would like to donate.</div>
+          <div *ngIf="donationAmountField?.errors?.required">Please enter how much you would like to donate.</div>
+        </div>
         </div>
 
         <div *ngIf="creditPenceToUse === 0">
@@ -193,6 +205,7 @@
             class="continue b-w-100 b-rt-0"
             mat-raised-button
             color="primary"
+            [disabled]="!donationForm.controls['amounts']!.valid && !don819FlagEnabled"
             (click)="progressFromStepOne()"
           >Continue</button>
       </div>
