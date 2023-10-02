@@ -764,7 +764,20 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     if (paymentMethod) {
-      result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, paymentMethod));
+      try {
+        result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, paymentMethod));
+      } catch (httpError) {
+        this.stripeError = httpError.error?.error?.message;
+        this.stripeResponseErrorCode = httpError.error?.error?.code;
+        this.submitting = false;
+        this.matomoTracker.trackEvent(
+          'donate_error', 
+          'stripe_confirm_failed',
+          httpError.error?.error?.code,
+        );
+
+        return;
+      }
 
       if (result?.paymentIntent && result.paymentIntent.status === 'requires_action') {
         if (!result.paymentIntent.client_secret) {
@@ -777,7 +790,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
           return;
         } else {
+          // Next action (e.g. 3D Secure) was run by Stripe.js, and failed.
           result = {error: error};
+          this.submitting = false;
         }
       } // Else there's a `paymentMethod` which is already successful or errored » both handled later.
     } else {
