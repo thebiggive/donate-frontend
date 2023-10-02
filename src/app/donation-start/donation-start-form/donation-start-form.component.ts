@@ -767,14 +767,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       try {
         result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, paymentMethod));
       } catch (httpError) {
-        this.stripeError = httpError.error?.error?.message;
-        this.stripeResponseErrorCode = httpError.error?.error?.code;
-        this.submitting = false;
         this.matomoTracker.trackEvent(
           'donate_error', 
           'stripe_confirm_failed',
           httpError.error?.error?.code,
         );
+
+        this.handleStripeError(httpError.error?.error, 'confirm');
 
         return;
       }
@@ -800,23 +799,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     if (!result || result.error) {
+      // Client-side issue that wasn't a next_action should be a `prepareMethodFromPaymentElement()`
+      // problem.
       if (result) {
-        this.stripeError = this.getStripeFriendlyError(result.error, 'confirm');
-        this.stripeResponseErrorCode = result.error.code;
-        if (this.isBillingPostcodePossiblyInvalid()) {
-          this.paymentGroup.controls.billingPostcode!.setValidators([
-            Validators.required,
-            Validators.pattern(this.billingPostcodeRegExp),
-            ValidateBillingPostCode
-          ]);
-          this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
-        }
+        this.handleStripeError(result.error, 'method_setup');
       }
+
       this.submitting = false;
-
-      this.jumpToStep('Payment details');
-      this.goToFirstVisibleError();
-
       return;
     }
 
@@ -1126,11 +1115,34 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.stripePaymentMethodReady = true;
   }
 
+  private handleStripeError(
+    error: StripeError | {message: string, code: string, decline_code?: string},
+    context: string,
+  ) {
+    this.submitting = false;
+    this.stripeError = this.getStripeFriendlyError(error, context);
+    this.stripeResponseErrorCode = error.code;
+    if (this.isBillingPostcodePossiblyInvalid()) {
+      this.paymentGroup.controls.billingPostcode!.setValidators([
+        Validators.required,
+        Validators.pattern(this.billingPostcodeRegExp),
+        ValidateBillingPostCode
+      ]);
+      this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
+    }
+
+    this.jumpToStep('Payment details');
+    this.goToFirstVisibleError();
+  }
+
   /**
    * @param error
    * @param context 'method_setup', 'card_change' or 'confirm'.
    */
-  private getStripeFriendlyError(error: StripeError, context: string): string {
+  private getStripeFriendlyError(
+    error: StripeError | {message: string, code: string, decline_code?: string},
+    context: string,
+  ): string {
     let prefix = '';
     switch (context) {
       case 'method_setup':
