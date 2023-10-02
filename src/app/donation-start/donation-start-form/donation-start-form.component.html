@@ -120,6 +120,11 @@
             <p>{{ tipValue | exactCurrency:campaign.currencyCode }} donation to support Big Give</p>
           </mat-hint>
 
+          <div *ngIf="alternateCopy">
+            <!-- TODO set real alternative copy instead of adding this para. -->
+            <p>Big Give is a charity, and we reinvest any surplus in helping charities on our platform!</p>
+          </div>
+
           <mat-hint *ngIf="customTip() && donationAmount && donationAmount > 0">
               {{ (tipAmount() > 0 && tipAmount() / donationAmount < 0.001) ? 'Less than 0.1%' : (tipAmount() / donationAmount) | percent:'1.0-1' }}
             of main donation

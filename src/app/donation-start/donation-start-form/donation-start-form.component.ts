@@ -44,6 +44,7 @@ import {DonationStartMatchingExpiredDialogComponent} from '../donation-start-mat
 import {DonationStartOfferReuseDialogComponent} from '../donation-start-offer-reuse-dialog.component';
 import {environment} from '../../../environments/environment';
 import {ExactCurrencyPipe} from '../../exact-currency.pipe';
+import {flags} from '../../featureFlags';
 import {GiftAidAddress} from '../../gift-aid-address.model';
 import {GiftAidAddressSuggestion} from '../../gift-aid-address-suggestion.model';
 import {IdentityService} from '../../identity.service';
@@ -63,6 +64,10 @@ import {sanitiseCurrency} from "../sanitiseCurrency";
 import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation-tipping-slider.component";
 import {MatomoTracker} from 'ngx-matomo';
 
+declare var _paq: {
+  push: (args: Array<string|object>) => void,
+};
+
 @Component({
   selector: 'app-donation-start-form',
   templateUrl: './donation-start-form.component.html',
@@ -77,6 +82,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
   @ViewChild('donationTippingSlider') private donationTippingSlider: DonationTippingSliderComponent|undefined;
+
+  alternateCopy = false; // Varies tip copy for A/B test.
 
   stripePaymentElement: StripePaymentElement | undefined;
   cardHandler = this.onStripeCardChange.bind(this);
@@ -269,6 +276,37 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.stripeService.init();
+
+      // ngx-matomo sets up window._paq internally, and doesn't have
+      // A/B test methods, so we work with the global ourselves.
+      if (flags.abTestingEnabled && globalThis.hasOwnProperty('_paq')) {
+        _paq.push(['AbTesting::create', {
+          name: 'new_tip_copy_2023_10_02_b', // TODO configure in environment.
+          percentage: 100,
+          includedTargets: [{"attribute":"url","inverted":"0","type":"any","value":""}],
+          excludedTargets: [],
+          // TODO add start & end dates, controlled in environment.
+          variations: [
+            {
+                name: 'original',
+                activate: (_event: any) => {
+                  // No change from the original form.
+                  console.log('Original test variant active!');
+                }
+            },
+            {
+                name: 'copy_b', // TODO get name or ID from environment.
+                activate: (_event: any) => {
+                  this.alternateCopy = true;
+                  console.log('copy B test variant active!');
+                }
+            },
+          ],
+          trigger: () => {
+              return true;
+          },
+        }]);
+      }
     }
 
     this.setCampaignBasedVars();
