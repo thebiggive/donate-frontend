@@ -8,21 +8,21 @@ const ArtsForImpactCard: HighlightCard = {
   headerText: "Applications for Arts for Impact are now open!",
   backgroundImageUrl: new URL('/assets/images/red-coral-texture.png', environment.donateGlobalUriPrefix),
   iconColor: 'brand-afa-pink',
-  bodyText: 'Apply by 3rd November 2023',
+  bodyText: 'Apply by 15th December 2023',
   button: {
     text: "Apply now",
     href: new URL('/artsforimpact/', environment.blogUriPrefix)
   }
 } as const;
 
-const AnchorMatchFundCard: HighlightCard = {
-  headerText: 'Applications for Anchor Match Fund are open!',
+const SignUpCard: HighlightCard = {
+  headerText: 'Join our mailing list!',
   backgroundImageUrl: new URL('/assets/images/anchor-match-fund.jpg', environment.donateGlobalUriPrefix),
   iconColor: 'primary',
-  bodyText: 'Second edition deadline is 31st December 2023',
+  bodyText: 'Get the latest updates and campaign reminders straight to your inbox',
   button: {
-    text: 'Apply now',
-    href: new URL('/anchor-match-fund/', environment.blogUriPrefix)
+    text: 'Sign up now',
+    href: new URL('http://eepurl.com/bDbW3r)
   }
 } as const;
 
