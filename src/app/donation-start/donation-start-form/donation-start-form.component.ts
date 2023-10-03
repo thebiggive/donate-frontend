@@ -15,7 +15,7 @@ import {
     PLATFORM_ID,
     ViewChild,
 } from '@angular/core';
-import {FormBuilder, FormGroup, ValidationErrors, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatDialog} from '@angular/material/dialog';
@@ -953,7 +953,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
     this.stripePaymentMethodReady = !!this.selectedSavedMethod || this.stripeManualCardInputValid || this.creditPenceToUse > 0;
-
+    
     const promptingForCaptcha = this.promptForCaptcha();
 
     if (promptingForCaptcha) {
@@ -1225,11 +1225,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     const firstElInStepWithAngularError = stepJustDone.querySelector('.ng-invalid.ng-touched[formControlName]');
     if (firstElInStepWithAngularError && !this.closeAncestorsHaveDisplayNone(firstElInStepWithAngularError)) {
       this.scrollTo(firstElInStepWithAngularError);
+      console.log(firstElInStepWithAngularError);
       return true;
     }
 
     const firstCustomError = stepJustDone.querySelector('.error');
     if (firstCustomError) {
+      console.log(firstCustomError);
       this.scrollTo(firstCustomError);
       return true;
     }
