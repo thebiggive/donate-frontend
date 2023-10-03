@@ -44,7 +44,6 @@ import {DonationStartMatchingExpiredDialogComponent} from '../donation-start-mat
 import {DonationStartOfferReuseDialogComponent} from '../donation-start-offer-reuse-dialog.component';
 import {environment} from '../../../environments/environment';
 import {ExactCurrencyPipe} from '../../exact-currency.pipe';
-import {flags} from '../../featureFlags';
 import {GiftAidAddress} from '../../gift-aid-address.model';
 import {GiftAidAddressSuggestion} from '../../gift-aid-address-suggestion.model';
 import {IdentityService} from '../../identity.service';
