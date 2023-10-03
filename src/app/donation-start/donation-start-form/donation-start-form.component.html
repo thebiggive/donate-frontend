@@ -226,8 +226,8 @@
             </div>
           </div>
 
-          <p class="error" *ngIf="triedToLeaveGiftAid && giftAidGroup.get('giftAid')?.hasError('required')" aria-live="assertive">
-            Please choose whether you wish to claim Gift Aid.
+          <p class="error" *ngIf="triedToLeaveGiftAid && giftAidGroupErrors()" aria-live="assertive">
+            {{giftAidGroupErrors()}}
           </p>
         </mat-radio-group>
 

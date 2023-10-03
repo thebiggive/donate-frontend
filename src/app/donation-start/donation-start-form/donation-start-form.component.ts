@@ -993,6 +993,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.next()
   }
 
+  public giftAidGroupErrors = () => {
+    if (this.giftAidGroup.get('giftAid')?.hasError('required')) {
+      return 'Please choose whether you wish to claim Gift Aid.'
+    }
+
+    return '';
+  }
+
     public displayableAmountsStepErrors = () => {
         const errors = this.donationAmountField?.errors;
 
