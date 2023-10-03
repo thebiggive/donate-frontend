@@ -151,36 +151,35 @@ export class DonationCompleteComponent implements OnInit {
     }
 
     this.person.raw_password = password;
-    this.identityService.update(this.person)
-      .subscribe(
-        () => { // Success. Must subscribe for call to fire.
-          this.registerError = undefined;
-          this.registrationComplete = true;
-          this.matomoTracker.trackEvent('identity', 'person_password_set', 'Account password creation complete');
+    this.identityService.update(this.person).subscribe({
+      next: () => { // Success. Must subscribe for call to fire.
+        this.registerError = undefined;
+        this.registrationComplete = true;
+        this.matomoTracker.trackEvent('identity', 'person_password_set', 'Account password creation complete');
 
-          // We should only auto-login (and therefore execute the captcha) if the donor requested a persistent session.
-          if (stayLoggedIn) {
-            this.captcha.execute(); // Leads to loginCaptchaReturn() assuming the captcha succeeds.
-          } else {
-            // Otherwise we should remove even the temporary ID token.
-            this.identityService.clearJWT();
-          }
-        },
-        (error: HttpErrorResponse) => {
-          const htmlErrorDescription = error.error?.error?.htmlDescription;
-          if (error.error?.error?.type === "DUPLICATE_EMAIL_ADDRESS_WITH_PASSWORD") {
-            this.registerErrorDescription = "Your password could not be set. There is already a password set for your email address.";
-          } else if (htmlErrorDescription) {
-            // we bypass security because we trust the Identity server.
-            this.registerErrorDescriptionHtml = this.sanitizer.bypassSecurityTrustHtml(htmlErrorDescription)
-          } else {
-            this.registerErrorDescription = error.error?.error?.description
-          }
+        // We should only auto-login (and therefore execute the captcha) if the donor requested a persistent session.
+        if (stayLoggedIn) {
+          this.captcha.execute(); // Leads to loginCaptchaReturn() assuming the captcha succeeds.
+        } else {
+          // Otherwise we should remove even the temporary ID token.
+          this.identityService.clearJWT();
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        const htmlErrorDescription = error.error?.error?.htmlDescription;
+        if (error.error?.error?.type === "DUPLICATE_EMAIL_ADDRESS_WITH_PASSWORD") {
+          this.registerErrorDescription = "Your password could not be set. There is already a password set for your email address.";
+        } else if (htmlErrorDescription) {
+          // we bypass security because we trust the Identity server.
+          this.registerErrorDescriptionHtml = this.sanitizer.bypassSecurityTrustHtml(htmlErrorDescription)
+        } else {
+          this.registerErrorDescription = error.error?.error?.description
+        }
 
-          this.registerError = error.message;
-          this.matomoTracker.trackEvent('identity_error', 'person_password_set_failed', `${error.status}: ${error.message}`);
-        },
-      );
+        this.registerError = error.message;
+        this.matomoTracker.trackEvent('identity_error', 'person_password_set_failed', `${error.status}: ${error.message}`);
+      },
+    });
   }
 
   private setDonation(donation: Donation) {
@@ -202,14 +201,17 @@ export class DonationCompleteComponent implements OnInit {
           this.registrationComplete = true;
         } else {
           this.identityService.update(person)
-            .subscribe(person => {
-              this.patchedCorePersonInfo = true;
-              this.person = person;
-              this.offerToSetPassword = !person.has_password;
-            }, (error: HttpErrorResponse) => {
-              // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
-              // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
-              this.matomoTracker.trackEvent('identity_error', 'person_core_data_update_failed', `${error.status}: ${error.message}`);
+            .subscribe({
+              next: person => {
+                this.patchedCorePersonInfo = true;
+                this.person = person;
+                this.offerToSetPassword = !person.has_password;
+              },
+              error: (error: HttpErrorResponse) => {
+                // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
+                // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
+                this.matomoTracker.trackEvent('identity_error', 'person_core_data_update_failed', `${error.status}: ${error.message}`);
+              },
             });
         } // End token-not-finalised condition.
       } // Else no ID JWT saved. Donor may have already set a password but opted to log out.
