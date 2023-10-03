@@ -1,18 +1,19 @@
 import {StepperSelectionEvent} from '@angular/cdk/stepper';
 import {DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
+import {flags} from "../../featureFlags";
 import {HttpErrorResponse} from '@angular/common/http';
 import {
-  AfterContentChecked,
-  AfterContentInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Inject,
-  Input,
-  OnDestroy,
-  OnInit,
-  PLATFORM_ID,
-  ViewChild,
+    AfterContentChecked,
+    AfterContentInit,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    Inject,
+    Input,
+    OnDestroy,
+    OnInit,
+    PLATFORM_ID,
+    ViewChild,
 } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -23,12 +24,12 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {RecaptchaComponent} from 'ng-recaptcha';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
-  PaymentIntent,
-  PaymentMethod,
-  StripeElementChangeEvent,
-  StripeElements,
-  StripeError,
-  StripePaymentElement,
+    PaymentIntent,
+    PaymentMethod,
+    StripeElementChangeEvent,
+    StripeElements,
+    StripeError,
+    StripePaymentElement,
 } from '@stripe/stripe-js';
 import {EMPTY, firstValueFrom} from 'rxjs';
 
@@ -62,6 +63,7 @@ import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
 import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation-tipping-slider.component";
 import {MatomoTracker} from 'ngx-matomo';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-donation-start-form',
@@ -80,7 +82,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   stripePaymentElement: StripePaymentElement | undefined;
   cardHandler = this.onStripeCardChange.bind(this);
-
+  don819FlagEnabled = flags.don819FlagEnabled;
   showChampionOptIn = false;
 
   @Input({ required: true }) campaign: Campaign;
@@ -249,6 +251,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private stripeService: StripeService,
     public datePipe: DatePipe,
     public timeLeftPipe: TimeLeftPipe,
+    private snackBar: MatSnackBar
+
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
     this.countryOptionsObject = COUNTRIES.map(country => ({label: country.country, value: country.iso2}))
@@ -953,7 +957,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
     this.stripePaymentMethodReady = !!this.selectedSavedMethod || this.stripeManualCardInputValid || this.creditPenceToUse > 0;
-
+    
     const promptingForCaptcha = this.promptForCaptcha();
 
     if (promptingForCaptcha) {
@@ -968,7 +972,57 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
-  onUseSavedCardChange(event: MatCheckboxChange, paymentMethod: PaymentMethod) {
+  progressFromStepOne() {
+
+    const control = this.donationForm.controls['amounts'];
+    if(! control!.valid) {
+        this.snackBar.open(
+          this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount',
+            undefined,
+            { duration: 5_000, panelClass: 'snack-bar' }
+        );
+
+      return;
+    }
+
+    this.next();
+  }
+
+    public displayableAmountsStepErrors = () => {
+        const errors = this.donationAmountField?.errors;
+
+        if (!errors) {
+            return '';
+        }
+
+        if (errors.min) {
+            return `Sorry, the minimum donation is ${this.currencySymbol}1.`;
+        }
+
+        if (errors.max) {
+            return `Your donation must be ${this.currencySymbol}${this.maximumDonationAmount} or less to proceed.`
+                + (
+                    this.creditPenceToUse === 0 ?
+                        ` You can make multiple matched donations of ` +
+                        `${this.currencySymbol}${this.maximumDonationAmount} if match funds are available.`
+                        : ''
+                );
+        }
+
+        if (errors.pattern) {
+            return `Please enter a whole number of ${this.currencySymbol} without commas.`
+        }
+
+        if (errors.required) {
+            return 'Please enter how much you would like to donate.';
+        }
+
+        const message = "Sorry, something went wrong with the form - please try again or contact Big Give";
+        console.error(message);
+        return message;
+    };
+
+    onUseSavedCardChange(event: MatCheckboxChange, paymentMethod: PaymentMethod) {
     // For now, we assume unticking happens before card entry, so we can just set the validity flag to false.
     // Ideally, we would later track `card`'s validity separately so that going back up the page, ticking this
     // then unticking it leaves the card box valid without having to modify it. But this is rare and
