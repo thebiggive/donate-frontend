@@ -110,7 +110,7 @@ export class IdentityService {
       `${environment.identityApiPrefix}${this.peoplePath}/${person.id}`,
       person,
       this.getAuthHttpOptions(person),
-    ).pipe(retry(2), delay(2000));
+    ).pipe(retry(2), delay(2_000));
   }
 
   clearJWT() {
