@@ -279,13 +279,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
       // ngx-matomo sets up window._paq internally, and doesn't have
       // A/B test methods, so we work with the global ourselves.
-      if (flags.abTestingEnabled && globalThis.hasOwnProperty('_paq')) {
+      if (environment.matomoAbTest && globalThis.hasOwnProperty('_paq')) {
         _paq.push(['AbTesting::create', {
-          name: 'new_tip_copy_2023_10_02_b', // TODO configure in environment.
+          name: environment.matomoAbTest.name,
           percentage: 100,
           includedTargets: [{"attribute":"url","inverted":"0","type":"any","value":""}],
           excludedTargets: [],
-          // TODO add start & end dates, controlled in environment.
+          startDateTime: environment.matomoAbTest.startDate,
+          endDateTime: environment.matomoAbTest.endDate,
           variations: [
             {
                 name: 'original',
@@ -295,10 +296,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
                 }
             },
             {
-                name: 'copy_b', // TODO get name or ID from environment.
+                name: environment.matomoAbTest.variantName,
                 activate: (_event: any) => {
                   this.alternateCopy = true;
-                  console.log('copy B test variant active!');
+                  console.log('Copy B test variant active!');
                 }
             },
           ],

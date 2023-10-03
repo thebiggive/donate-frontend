@@ -23,6 +23,11 @@ export const environment: Environment = {
   identityApiPrefix: 'http://localhost:30050/v1',
   matomoSiteId: 4,
   matomoNonZeroTipGoalId: 1,
+  matomoAbTest: {
+    name: 'new_tip_copy_2023_10_02_b',
+    startDate: '2023/10/02 18:30:11 UTC',
+    variantName: 'copy_b',
+  },
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',

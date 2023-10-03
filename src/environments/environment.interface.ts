@@ -20,7 +20,7 @@ export interface Environment {
   /** Domain for cookies to be shared between donate-frontend, wordpress etc.
    * Currently, ".biggive.org" in production.
    */
-   sharedCookieDomain: string;
+  sharedCookieDomain: string;
 
   /** Prefix for pages served by the SF Experience Cloud */
   experienceUriPrefix: string,
@@ -29,6 +29,12 @@ export interface Environment {
   identityApiPrefix: string,
   matomoSiteId: number | null, // null for no Matomo tracking.
   matomoNonZeroTipGoalId: number | null, // Only tracks GBP campaigns; sends tip as value in £.
+  matomoAbTest?: {
+    name: string,
+    variantName: string, // The one that's not 'original'.
+    startDate: string,
+    endDate?: string, // Typically omit for dev/staging evaluation.
+  },
   minimumCreditAmount: number,
   maximumCreditAmount: number,
   postcodeLookupKey: string,
