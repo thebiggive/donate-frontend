@@ -22,7 +22,7 @@ const SignUpCard: HighlightCard = {
   bodyText: 'Get the latest updates and campaign reminders straight to your inbox',
   button: {
     text: 'Sign up now',
-    href: new URL('http://eepurl.com/bDbW3r)
+    href: new URL('http://eepurl.com/bDbW3r')
   }
 } as const;
 
@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
         href: new URL('/campaign/a056900001xpxqVAAQ', environment.donateGlobalUriPrefix)
       }
     },
-    new Date() > new Date('2023-10-09T12:00:00') ? ArtsForImpactCard : AnchorMatchFundCard,
+    new Date() > new Date('2023-10-09T12:00:00') ? ArtsForImpactCard : SignUpCard,
   ];
 
   public constructor(
