@@ -772,7 +772,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, paymentMethod));
       } catch (httpError) {
         this.matomoTracker.trackEvent(
-          'donate_error', 
+          'donate_error',
           'stripe_confirm_failed',
           httpError.error?.error?.code,
         );
@@ -957,7 +957,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
     this.stripePaymentMethodReady = !!this.selectedSavedMethod || this.stripeManualCardInputValid || this.creditPenceToUse > 0;
-    
+
     const promptingForCaptcha = this.promptForCaptcha();
 
     if (promptingForCaptcha) {
@@ -986,6 +986,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     this.next();
+  }
+
+  progressFromStepGiftAid(): void {
+    this.triedToLeaveGiftAid = true;
+    this.next()
   }
 
     public displayableAmountsStepErrors = () => {
