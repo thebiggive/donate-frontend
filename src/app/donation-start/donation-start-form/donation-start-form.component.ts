@@ -3,17 +3,17 @@ import {DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
 import {flags} from "../../featureFlags";
 import {HttpErrorResponse} from '@angular/common/http';
 import {
-    AfterContentChecked,
-    AfterContentInit,
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    Inject,
-    Input,
-    OnDestroy,
-    OnInit,
-    PLATFORM_ID,
-    ViewChild,
+  AfterContentChecked,
+  AfterContentInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
 } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -24,12 +24,12 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {RecaptchaComponent} from 'ng-recaptcha';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
-    PaymentIntent,
-    PaymentMethod,
-    StripeElementChangeEvent,
-    StripeElements,
-    StripeError,
-    StripePaymentElement,
+  PaymentIntent,
+  PaymentMethod,
+  StripeElementChangeEvent,
+  StripeElements,
+  StripeError,
+  StripePaymentElement,
 } from '@stripe/stripe-js';
 import {EMPTY, firstValueFrom} from 'rxjs';
 
@@ -976,11 +976,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const control = this.donationForm.controls['amounts'];
     if(! control!.valid) {
-        this.snackBar.open(
-          this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount',
-            undefined,
-            { duration: 5_000, panelClass: 'snack-bar' }
-        );
+      this.showErrorToast(this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount');
 
       return;
     }
@@ -988,12 +984,50 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.next();
   }
 
+  /**
+   * Displays a message on screen to let a donor know why they can't progress from the current step. Message should be
+   * an explanation, e.g. because they need to fill in a certain field or what they have entered isn't usable.
+   */
+  private showErrorToast(message: string) {
+    this.snackBar.open(
+      message,
+      undefined,
+      {duration: 5_000, panelClass: 'snack-bar'}
+    );
+  }
+
   progressFromStepGiftAid(): void {
     this.triedToLeaveGiftAid = true;
+    const giftAidRequiredRadioError = this.giftAidRequiredRadioError();
+    const errorMessages = giftAidRequiredRadioError ? [giftAidRequiredRadioError] : [];
+
+    const homeAddressErrors = this.giftAidGroup?.controls?.homeAddress?.errors;
+    if (homeAddressErrors?.required) {
+      errorMessages.push("Please enter your home address");
+    }
+
+    if (homeAddressErrors?.maxlength) {
+      errorMessages.push(`Please enter your address in ${homeAddressErrors.maxlength.requiredLength} characters or less`);
+    }
+
+    const homePostcodeErrors = this.giftAidGroup?.controls?.homePostcode?.errors;
+    if (homePostcodeErrors?.required) {
+      errorMessages.push("Please enter your home postcode");
+    }
+
+    if (homePostcodeErrors?.pattern) {
+      errorMessages.push("Please enter a UK postcode");
+    }
+
+    if (errorMessages.length > 0 && this.don819FlagEnabled) {
+      this.showErrorToast(errorMessages.join(". "));
+      return;
+    }
+
     this.next()
   }
 
-  public giftAidGroupErrors = () => {
+  public giftAidRequiredRadioError = (): string => {
     if (this.giftAidGroup.get('giftAid')?.hasError('required')) {
       return 'Please choose whether you wish to claim Gift Aid.'
     }

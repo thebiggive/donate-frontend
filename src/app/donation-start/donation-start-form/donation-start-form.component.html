@@ -226,8 +226,8 @@
             </div>
           </div>
 
-          <p class="error" *ngIf="triedToLeaveGiftAid && giftAidGroupErrors()" aria-live="polite">
-            {{giftAidGroupErrors()}}
+          <p class="error" *ngIf="triedToLeaveGiftAid && giftAidRequiredRadioError()" aria-live="polite">
+            {{giftAidRequiredRadioError()}}
           </p>
         </mat-radio-group>
 
