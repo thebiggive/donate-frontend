@@ -55,7 +55,7 @@
           aria-live="polite"
           *ngIf="donationAmountField?.invalid && donationAmountField?.errors && (donationAmountField?.dirty || donationAmountField?.touched)"
         >
-        {{ displayableAmountsStepErrors( )}}
+        {{ displayableAmountsStepErrors() }}
         </div>
 
         <div *ngIf="creditPenceToUse === 0">

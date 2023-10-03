@@ -1225,13 +1225,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     const firstElInStepWithAngularError = stepJustDone.querySelector('.ng-invalid.ng-touched[formControlName]');
     if (firstElInStepWithAngularError && !this.closeAncestorsHaveDisplayNone(firstElInStepWithAngularError)) {
       this.scrollTo(firstElInStepWithAngularError);
-      console.log(firstElInStepWithAngularError);
       return true;
     }
 
     const firstCustomError = stepJustDone.querySelector('.error');
     if (firstCustomError) {
-      console.log(firstCustomError);
       this.scrollTo(firstCustomError);
       return true;
     }
