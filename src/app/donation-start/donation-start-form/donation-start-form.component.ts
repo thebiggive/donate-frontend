@@ -1022,7 +1022,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.snackBar.open(
       message,
       undefined,
-      {duration: 5_000, panelClass: 'snack-bar'}
+      {
+        // formula for duration from https://ux.stackexchange.com/a/85898/7211
+        duration: Math.min(Math.max(message.length * 50, 2_000), 7_000),
+        panelClass: 'snack-bar'
+      }
     );
   }
 
