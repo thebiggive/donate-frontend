@@ -1023,9 +1023,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       message,
       undefined,
       {
+
         // formula for duration from https://ux.stackexchange.com/a/85898/7211
-        duration: Math.min(Math.max(message.length * 50, 2_000), 7_000),
-        panelClass: 'snack-bar'
+        duration: 50_000, // Math.min(Math.max(message.length * 50, 2_000), 7_000),
+        panelClass: 'snack-bar',
       }
     );
   }
