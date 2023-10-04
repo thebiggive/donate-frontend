@@ -65,6 +65,10 @@ import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation
 import {MatomoTracker} from 'ngx-matomo';
 import {MatSnackBar} from "@angular/material/snack-bar";
 
+declare var _paq: {
+  push: (args: Array<string|object>) => void,
+};
+
 @Component({
   selector: 'app-donation-start-form',
   templateUrl: './donation-start-form.component.html',
@@ -79,6 +83,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
   @ViewChild('donationTippingSlider') private donationTippingSlider: DonationTippingSliderComponent|undefined;
+
+  alternateCopy = false; // Varies tip copy for A/B test.
 
   stripePaymentElement: StripePaymentElement | undefined;
   cardHandler = this.onStripeCardChange.bind(this);
@@ -273,6 +279,38 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.stripeService.init();
+
+      // ngx-matomo sets up window._paq internally, and doesn't have
+      // A/B test methods, so we work with the global ourselves.
+      if (environment.matomoAbTest && globalThis.hasOwnProperty('_paq')) {
+        _paq.push(['AbTesting::create', {
+          name: environment.matomoAbTest.name,
+          percentage: 100,
+          includedTargets: [{"attribute":"url","inverted":"0","type":"any","value":""}],
+          excludedTargets: [],
+          startDateTime: environment.matomoAbTest.startDate,
+          endDateTime: environment.matomoAbTest.endDate,
+          variations: [
+            {
+                name: 'original',
+                activate: (_event: any) => {
+                  // No change from the original form.
+                  console.log('Original test variant active!');
+                }
+            },
+            {
+                name: environment.matomoAbTest.variantName,
+                activate: (_event: any) => {
+                  this.alternateCopy = true;
+                  console.log('Copy B test variant active!');
+                }
+            },
+          ],
+          trigger: () => {
+              return true;
+          },
+        }]);
+      }
     }
 
     this.setCampaignBasedVars();

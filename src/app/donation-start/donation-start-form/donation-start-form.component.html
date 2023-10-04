@@ -64,8 +64,13 @@
 
           <h2 class="b-rt-0 b-m-0 b-bold">Tip Big Give</h2>
           <p *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
-            Big Give doesn't charge platform fees. That means we're only able to continue offering our services thanks to
-            the generosity of donors who leave an optional tip amount here.
+            <span *ngIf="!alternateCopy">
+              Big Give doesn't charge platform fees. That means we're only able to continue offering our services thanks to
+              the generosity of donors who leave a tip.
+            </span>
+            <span *ngIf="alternateCopy">
+              Big Give is a registered charity (1136547), and since 2008, our aim has been to help thousands of charities double the difference of their donations. Thanks to the generosity of people like you who leave a tip, we can continue providing a match funding platform for the charities and causes you care about. 
+            </span>
           </p>
 
           <div *ngIf="campaign.feePercentage && creditPenceToUse === 0">
@@ -101,6 +106,8 @@
                   slot="input"
                 />
               </biggive-text-input>
+
+              <p>Did you know Big Give is a charity, too? Tips help us provide a platform that doubles the difference of your donation to the causes closest to your heart. We truly appreciate any tip you can give - no matter the size.</p>
             </div>
 
             <div
@@ -149,32 +156,45 @@
             <mat-expansion-panel-header>
             </mat-expansion-panel-header>
           </mat-expansion-panel>
-          <mat-expansion-panel (opened)="panelOpenState = true"
-                               (closed)="panelOpenState = false">
+          <mat-expansion-panel
+            (opened)="panelOpenState = true"
+            (closed)="panelOpenState = false"
+          >
             <mat-expansion-panel-header>
               <h3 class="b-rt-0 b-m-0 b-bold"><span class="span-hr"></span>How does Big Give use tips?</h3>
-
             </mat-expansion-panel-header>
-            <p>
-              Big Give is a registered charity, no 1136547. We don’t charge charities for using our platform; we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
-            </p>
-            <p>Your tips will be going to:</p>
-            <ul>
-              <li>Supporting our website and team, allowing charities to double their
-                donations to good causes.
-              </li>
-              <li>Providing match funds. Through tips, charities can receive funds from Big Give to launch their own campaign.
-                <a href="https://biggive.org/anchor-match-fund/" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
-                  Read more about the Anchor Match fund.
-                </a>
-              </li>
-            </ul>
 
-    <p>
-    Thank you for your generosity! Your tips ensure that we can continue to support charities and causes that are important to you.
+            <div *ngIf="!alternateCopy">
+              <p>
+                Big Give is a registered charity, no 1136547. We don't charge charities for using our platform; we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
+              </p>
+              <p>Your tips will be going to:</p>
+              <ul>
+                <li>Supporting our website and team, allowing charities to double their
+                  donations to good causes.
+                </li>
+                <li>Providing match funds. Through tips, charities can receive funds from Big Give to launch their own campaign.
+                  <a href="https://biggive.org/anchor-match-fund/" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+                    Read more about the Anchor Match fund.
+                  </a>
+                </li>
+              </ul>
+              <p>
+                Thank you for your generosity! Your tips ensure that we can continue to support charities and causes that are important to you.
+              </p>
+            </div>
 
-            </p>
-
+            <div *ngIf="alternateCopy">
+              <p>
+                We don't charge charities for using our platform; instead, we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
+              </p>
+              <p>Everything we make goes back into supporting charities. Your tips will be:</p>
+              <ul>
+                <li>Doubling the difference onwards by providing match funding. Through tips, charities will receive funding in our <a href="https://biggive.org/anchor-match-fund/" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> Anchor Match fund</a> to help launch their campaigns.</li>
+                <li>Helping us maintain our website and support our team, so we can keep working with your favourite charities for many years to come.</li>
+              </ul>
+              <p>Thank you! If you have any questions about tips, please contact us at hello@biggive.org.</p>
+            </div>
           </mat-expansion-panel>
         </div>
         <div aria-live="polite">
