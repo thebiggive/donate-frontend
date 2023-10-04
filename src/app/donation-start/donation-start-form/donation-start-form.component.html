@@ -449,8 +449,8 @@
               </mat-radio-button>
             </div>
           </div>
-          <p class="error" *ngIf="triedToLeaveMarketing && marketingGroup.get('optInCharityEmail')?.hasError('required')" aria-live="assertive">
-            Please choose whether you wish to receive updates from {{ campaign.charity.name }}.
+          <p class="error" *ngIf="triedToLeaveMarketing && errorMessagesForMarketingStep().optInCharityEmailRequired" aria-live="assertive">
+            {{errorMessagesForMarketingStep().optInCharityEmailRequired}}.
           </p>
         </mat-radio-group>
 
@@ -482,8 +482,8 @@
               </mat-radio-button>
             </div>
           </div>
-          <p class="error" *ngIf="triedToLeaveMarketing && marketingGroup.get('optInTbgEmail')?.hasError('required')" aria-live="assertive">
-            Please choose whether you wish to receive updates from Big Give.
+          <p class="error" *ngIf="triedToLeaveMarketing && errorMessagesForMarketingStep().optInTbgEmailRequired" aria-live="assertive">
+            {{errorMessagesForMarketingStep().optInTbgEmailRequired}}
           </p>
         </mat-radio-group>
         <mat-hint *ngIf="marketingGroup.value.optInTbgEmail === false" aria-live="polite">
@@ -508,8 +508,8 @@
                 </mat-radio-button>
               </div>
             </div>
-            <p class="error" *ngIf="triedToLeaveMarketing && marketingGroup.get('optInChampionEmail')?.hasError('required')" aria-live="assertive">
-              Please choose whether you wish to receive updates from {{ campaign.championName }}.
+            <p class="error" *ngIf="triedToLeaveMarketing && errorMessagesForMarketingStep().optInChampionEmailRequired" aria-live="polite">
+              {{errorMessagesForMarketingStep().optInChampionEmailRequired}}
             </p>
           </mat-radio-group>
           <mat-hint *ngIf="marketingGroup.value.optInChampionEmail === false" aria-live="polite">
@@ -525,7 +525,7 @@
             class="continue b-w-100 b-rt-0"
             mat-raised-button
             color="primary"
-            (click)="triedToLeaveMarketing = true; next()"
+            (click)="progressFromStepReceiveUpdates()"
           >Continue</button>
         </div>
       </mat-step>
