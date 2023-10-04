@@ -654,7 +654,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         errorCodeDetail = '[code A1]'; // Donation property absent.
       }
 
-      this.stripeError = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
+      const errorMessage = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
+
+      if (this.don819FlagEnabled) {
+        this.showErrorToast(errorMessage);
+      }
+
+      this.stripeError = errorMessage;
+
       this.stripeResponseErrorCode = undefined;
       this.matomoTracker.trackEvent(
         'donate_error',
@@ -678,6 +685,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // Can't proceed if campaign info not looked up yet or no usable PSP
     if (!this.donation || !this.campaign || !this.campaign.charity.id || !this.psp) {
       this.donationUpdateError = true;
+      if (this.don819FlagEnabled) {
+        this.showErrorToast("Sorry, we can't submit your donation right now.");
+      }
       return;
     }
 
@@ -696,16 +706,19 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.payWithStripe();
         }
       }, response => {
-        let errorMessage: string;
+        let errorMessageForTracking: string;
         if (response.message) {
-          errorMessage = `Could not update donation for campaign ${this.campaignId}: ${response.message}`;
+          errorMessageForTracking = `Could not update donation for campaign ${this.campaignId}: ${response.message}`;
         } else {
           // Unhandled 5xx crashes etc.
-          errorMessage = `Could not update donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
+          errorMessageForTracking = `Could not update donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
         }
-        this.matomoTracker.trackEvent('donate_error', 'donation_update_failed', errorMessage);
+        this.matomoTracker.trackEvent('donate_error', 'donation_update_failed', errorMessageForTracking);
         this.retrying = false;
         this.donationUpdateError = true;
+          if (this.don819FlagEnabled) {
+              this.showErrorToast("Sorry, we can't submit your donation right now.");
+          }
         this.submitting = false;
       });
   }
