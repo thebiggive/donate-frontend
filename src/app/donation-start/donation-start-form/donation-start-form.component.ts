@@ -1977,6 +1977,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       .toFixed(2);
   }
 
+  get readyToProgressFromPaymentStep(): boolean {
+    return ! ((!this.stripePaymentMethodReady && !this.selectedSavedMethod) || !this.paymentGroup.valid)
+  }
+
   private promptToContinue(
     title: string,
     status: string,
