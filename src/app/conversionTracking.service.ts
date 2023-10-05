@@ -3,7 +3,6 @@ import {Injectable} from "@angular/core";
 import {Donation} from "./donation.model";
 import {Campaign} from "./campaign.model";
 import {agreesToAnalyticsAndTracking, CookiePreferences, CookiePreferenceService} from "./cookiePreference.service";
-import {flags} from "./featureFlags";
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +24,7 @@ export class ConversionTrackingService {
   }
 
   private trackConversionWithMatomo(donation: Donation, campaign: Campaign) {
-    if (flags.cookieBannerEnabled && ! this.analyticsAndTrackingCookiesAllowed) {
+    if (! this.analyticsAndTrackingCookiesAllowed) {
       return;
     }
 
