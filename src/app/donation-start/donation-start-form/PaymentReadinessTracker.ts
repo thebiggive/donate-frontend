@@ -6,33 +6,35 @@
  * Originally extracted from the DonationStartFormComponent
  */
 export class PaymentReadinessTracker {
+  /**
+   * Property name taken from the component. The name doesn't really reflect the usage. Planning to remove this property.
+   */
+  private stripePaymentMethodReady: boolean = false;
+
+
+  /**
+   * Any saved card that the donor has indicated they want to re-use for this donation. For the purpose of this class
+   * we only care about whether it's truthy or falsy.
+   */
+  private selectedSavedMethod: unknown = undefined;
+
+
+  /**
+   * Whether or not a complete payment method has been entered into the payment element
+   */
+  private stripeManualCardInputValid: boolean = false;
+
+  /**
+   * Balance of the donors funds accounts in pence
+   */
+  private creditPenceToUse: number = 0;
+
   constructor(
-    /**
-     * Property name taken from the component. The name doesn't really reflect the usage. Planning to remove this property.
-     */
-    private stripePaymentMethodReady: boolean = false,
-
-    /**
-     * Any saved card that the donor has indicated they want to re-use for this donation. For the purpose of this class
-     * we only care about whether it's truthy or falsy.
-     */
-    private selectedSavedMethod: unknown = undefined,
-
     /**
      * Payment group from the Material form. If Angular Material has a validation error then we're not going to be ready
      * to proceed.
      */
     private paymentGroup: { valid: boolean },
-
-    /**
-     * Whether or not a complete payment method has been entered into the payment element
-     */
-    private stripeManualCardInputValid: boolean = false,
-
-    /**
-     * Balance of the donors funds accounts in pence
-     */
-    private creditPenceToUse: number = 0,
 ) {
   }
 

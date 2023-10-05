@@ -269,7 +269,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.tipControlStyle = (route.snapshot.queryParams?.tipControl?.toLowerCase() === 'slider')
       ? 'slider' : 'dropdown'
 
-    this.paymentReadinessTracker = new PaymentReadinessTracker(this.stripePaymentMethodReady, this.selectedSavedMethod, this.paymentGroup, this.stripeManualCardInputValid)
+    this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup)
   }
 
   ngOnDestroy() {
@@ -533,12 +533,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.donor = undefined;
     this.creditPenceToUse = 0;
     this.stripePaymentMethodReady = false;
-    this.paymentReadinessTracker = new PaymentReadinessTracker(
-        false,
-        undefined,
-        this.paymentGroup,
-        false,
-    );
+    this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup,);
     this.donationForm.reset();
     this.identityService.clearJWT();
     this.idCaptcha.reset();
