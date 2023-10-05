@@ -32,6 +32,7 @@ import {PostcodeService} from "../../postcode.service";
 import {StripeService} from "../../stripe.service";
 import {Donation} from "../../donation.model";
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {CdkStep} from "@angular/cdk/stepper";
 
 function makeDonationStartFormComponent(donationService: DonationService,) {
   const donationStartFormComponent = new DonationStartFormComponent(
@@ -70,7 +71,7 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     controls: {
       donationAmount: {
         setValidators: () => {
-        }
+        },
       },
       billingCountry: {
         setValidators: () => {
@@ -87,13 +88,16 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     },
   } as unknown as FormGroup<any>;
 
-  donationStartFormComponent.amountsGroup = stubGroup;
+  donationStartFormComponent.amountsGroup = {...stubGroup} as unknown as FormGroup<any>;
 
-  donationStartFormComponent.giftAidGroup = stubGroup;
+  donationStartFormComponent.giftAidGroup = {...stubGroup} as unknown as FormGroup<any>;
 
-  donationStartFormComponent.paymentGroup = stubGroup;
+  donationStartFormComponent.paymentGroup = {...stubGroup} as unknown as FormGroup<any>;
 
-  donationStartFormComponent.campaign = {currencyCode: 'GBP'} as Campaign;
+  donationStartFormComponent.campaign = {
+    currencyCode: 'GBP',
+    charity: {id: 'CharityID'},
+  } as Campaign;
 
   donationStartFormComponent.donation = {} as Donation;
   return donationStartFormComponent;
@@ -684,4 +688,50 @@ describe('DonationStartNewPrimaryComponent', () => {
 
     expect(component.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
   });
+
+  const fakeDonationService = {
+    getDefaultCounty: () => 'GB',
+    finaliseCashBalancePurchase: (_donation: Donation)=> {
+      () => {}
+    },
+    getPaymentMethods: () => of({data: []}),
+  } as unknown as DonationService;
+
+  it('is not initially ready to progress from payment step', () => {
+    const sut = makeDonationStartFormComponent(fakeDonationService)
+
+    expect(sut.readyToProgressFromPaymentStep).toBeFalse()
+  });
+
+  /**
+   * Scenario: Using a payment card.
+   */
+  it('is ready to progress from payment step when all the needful is done', async () => {
+    const sut = makeDonationStartFormComponent(fakeDonationService)
+
+    sut.donation = undefined;
+    sut.psp = 'stripe';
+    // @ts-ignore
+    sut.amountsGroup.value = {donationAmount: "1"};
+    sut.paymentGroup.value = {billingCountry: 'GB'};
+
+    sut.captchaIdentityReturn('captchaResponse');
+
+    await sut.stepChanged({
+      previouslySelectedIndex: 0,
+      previouslySelectedStep: {label: sut.yourDonationStepLabel} as unknown as CdkStep,
+      selectedIndex: 0,
+      selectedStep: {label: "anything other than your donation"} as unknown as CdkStep
+    });
+
+    await sut.onStripeCardChange({
+      elementType: 'payment',
+      empty: false,
+      error: undefined,
+      complete: true,
+      value: undefined
+    });
+
+    expect(sut.readyToProgressFromPaymentStep).toBeTrue()
+  })
 });

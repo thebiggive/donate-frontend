@@ -675,6 +675,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // Don't jump forward when the card *is* valid, as the donor might have been
     // intending to edit something else in the `payment` step; let them click Next.
     if (!this.donation || !this.stripePaymentMethodReady || !this.stripePaymentElement || !this.stripeElements) {
+      console.log({donation: this.donation, stripeMR: this.stripePaymentMethodReady, spe: this.stripePaymentElement, elements: this.stripeElements});
       this.jumpToStep('Payment details');
 
       return;
@@ -1952,6 +1953,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   private addStripeCardBillingValidators() {
+    console.log({paymentgroup: this.paymentGroup})
     this.paymentGroup.controls.billingCountry!.setValidators([
       Validators.required,
     ]);
