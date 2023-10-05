@@ -25,13 +25,13 @@ describe('PaymentReadinessTracker', () => {
 
   it("Allows proceeding from payment step when donor has credit", () => {
     const sut = new PaymentReadinessTracker({valid: true});
-    sut.donorHasCredit();
+    sut.donorHasFunds();
     expect(sut.readyToProgressFromPaymentStep).toBeTrue();
   });
 
   it("Allows proceeding from payment step when donation credits are prepared", () => {
     const sut = new PaymentReadinessTracker({valid: true});
-    sut.donationCreditsPrepared(1);
+    sut.donationFundsPrepared(1);
     expect(sut.readyToProgressFromPaymentStep).toBeTrue();
   });
 

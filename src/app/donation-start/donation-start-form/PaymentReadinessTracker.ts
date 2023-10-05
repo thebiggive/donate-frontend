@@ -24,7 +24,7 @@ export class PaymentReadinessTracker {
   /**
    * Balance of the donors funds accounts in pence
    */
-  private donorCredit: boolean = false;
+  private donorFunds: boolean = false;
 
 
   constructor(
@@ -38,7 +38,7 @@ export class PaymentReadinessTracker {
 
   get readyToProgressFromPaymentStep(): boolean {
     const usingSavedCard = !!this.selectedSavedMethod && this.useSavedCard;
-    const atLeastOneWayOfPayingIsReady = this.donorCredit || usingSavedCard || this.paymentElementIsComplete;
+    const atLeastOneWayOfPayingIsReady = this.donorFunds || usingSavedCard || this.paymentElementIsComplete;
     const formHasNoValidationErrors = this.paymentGroup.valid;
 
     return formHasNoValidationErrors && atLeastOneWayOfPayingIsReady
@@ -49,8 +49,8 @@ export class PaymentReadinessTracker {
     this.useSavedCard = true;
   }
 
-  donorHasCredit() {
-    this.donorCredit = true;
+  donorHasFunds() {
+    this.donorFunds = true;
   }
 
   onStripeCardChange(state: { complete: boolean }) {
@@ -61,8 +61,8 @@ export class PaymentReadinessTracker {
     this.useSavedCard = useSavedCard;
   }
 
-  donationCreditsPrepared(creditPenceToUse: number) {
-    this.donorCredit = creditPenceToUse > 0;
+  donationFundsPrepared(fundPenceToUse: number) {
+    this.donorFunds = fundPenceToUse > 0;
   }
 
   clearSavedPaymentMethod() {

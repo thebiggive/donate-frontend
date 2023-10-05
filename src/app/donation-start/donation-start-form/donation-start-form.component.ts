@@ -1279,7 +1279,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       );
       this.maximumDonationAmount = maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse);
       this.stripePaymentMethodReady = true;
-      this.paymentReadinessTracker.donationCreditsPrepared(this.creditPenceToUse);
+      this.paymentReadinessTracker.donationFundsPrepared(this.creditPenceToUse);
       this.setConditionalValidators();
     }
   }
@@ -1622,7 +1622,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (this.psp === 'stripe') {
       if (this.creditPenceToUse > 0) {
-        this.paymentReadinessTracker.donorHasCredit();
+        this.paymentReadinessTracker.donorHasFunds();
         this.stripePaymentMethodReady = true;
       } else {
         this.prepareStripeElements();
