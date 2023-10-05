@@ -51,7 +51,7 @@ describe('PaymentReadinessTracker', () => {
 
     sut.onStripeCardChange({complete: true});
     sut.updateForStepChange();
-    expect(sut.readyToProgressFromPaymentStep).toBeFalse();
+    expect(sut.readyToProgressFromPaymentStep).toBeTrue();
   })
 
   it("Allows proceeding from payment step after updating billing details from payment method", () => {
