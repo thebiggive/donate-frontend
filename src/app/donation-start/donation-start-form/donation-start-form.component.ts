@@ -692,7 +692,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         errorCodeDetail = '[code A1]'; // Donation property absent.
       }
 
-      this.stripeError = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
+      const errorMessage = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
+
+      if (this.don819FlagEnabled) {
+        this.showErrorToast(errorMessage);
+      }
+
+      this.stripeError = errorMessage;
+
       this.stripeResponseErrorCode = undefined;
       this.matomoTracker.trackEvent(
         'donate_error',
@@ -716,6 +723,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // Can't proceed if campaign info not looked up yet or no usable PSP
     if (!this.donation || !this.campaign || !this.campaign.charity.id || !this.psp) {
       this.donationUpdateError = true;
+      if (this.don819FlagEnabled) {
+        this.showErrorToast("Sorry, we can't submit your donation right now.");
+      }
       return;
     }
 
@@ -734,16 +744,19 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.payWithStripe();
         }
       }, response => {
-        let errorMessage: string;
+        let errorMessageForTracking: string;
         if (response.message) {
-          errorMessage = `Could not update donation for campaign ${this.campaignId}: ${response.message}`;
+          errorMessageForTracking = `Could not update donation for campaign ${this.campaignId}: ${response.message}`;
         } else {
           // Unhandled 5xx crashes etc.
-          errorMessage = `Could not update donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
+          errorMessageForTracking = `Could not update donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
         }
-        this.matomoTracker.trackEvent('donate_error', 'donation_update_failed', errorMessage);
+        this.matomoTracker.trackEvent('donate_error', 'donation_update_failed', errorMessageForTracking);
         this.retrying = false;
         this.donationUpdateError = true;
+          if (this.don819FlagEnabled) {
+              this.showErrorToast("Sorry, we can't submit your donation right now.");
+          }
         this.submitting = false;
       });
   }
@@ -905,7 +918,24 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.matomoTracker.trackEvent('identity_error', 'person_captcha_failed', 'reCAPTCHA hit errored() callback');
     this.creatingDonation = false;
     this.donationCreateError = true;
+    this.showDonationCreateError();
     this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
+  }
+
+  /**
+   * Called when ever we set this.donationCreateError = true. For now its all one error message but we may want to
+   * replace some of the calls with a different more specific message that identifies the cause of the problem if it will
+   * either help donors directly or if they might usefully quote it to us in a support case.
+   */
+  showDonationCreateError() {
+    if (! this.don819FlagEnabled) {
+      return;
+    }
+
+    this.showErrorToast(
+        "Sorry, we can't register your donation right now. Please try again in a moment or contact " +
+        " us if this message persists."
+    )
   }
 
   captchaIdentityReturn(captchaResponse: string) {
@@ -1030,7 +1060,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.snackBar.open(
       message,
       undefined,
-      {duration: 5_000, panelClass: 'snack-bar'}
+      {
+        // formula for duration from https://ux.stackexchange.com/a/85898/7211
+        duration: Math.min(Math.max(message.length * 50, 2_000), 7_000),
+        panelClass: 'snack-bar',
+      }
     );
   }
 
@@ -1430,6 +1464,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (!this.campaign || !this.campaign.charity.id || !this.psp) {
       this.donationCreateError = true;
+      this.showDonationCreateError();
       return;
     }
 
@@ -1476,6 +1511,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.matomoTracker.trackEvent('identity_error', 'person_create_failed', `${error.status}: ${error.message}`);
           this.creatingDonation = false;
           this.donationCreateError = true;
+          this.showDonationCreateError();
           this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
         }
       )
@@ -1528,6 +1564,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.matomoTracker.trackEvent('donate_error', 'donation_create_failed', errorMessage);
     this.creatingDonation = false;
     this.donationCreateError = true;
+    this.showDonationCreateError();
     this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
 
@@ -1546,6 +1583,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         `Missing expected response data creating new donation for campaign ${this.campaignId}`,
       );
       this.donationCreateError = true;
+      this.showDonationCreateError();
       this.stepper.previous(); // Go back to step 1 to surface the internal error.
 
       return;
