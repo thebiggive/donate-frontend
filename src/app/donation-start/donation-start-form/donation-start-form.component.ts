@@ -1194,7 +1194,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.paymentProgressTracker.selectedSavedPaymentMethod();
     } else {
       this.selectedSavedMethod = undefined;
-      this.paymentProgressTracker.clearSavedPaymentMethod();
       this.prepareStripeElements();
     }
   }

@@ -1,9 +1,16 @@
+/**
+ * This object tracks whether a donor is ready to progress past the payment stage of the donation start form. At time of
+ * writing it just returns a boolean from readyToProgressFromPaymentStep, but my plan is to add a function to return
+ * a list of reasons *why* we are not ready for them to proceed that we can display using snackbar.
+ *
+ * Originally extracted from the DonationStartFormComponent
+ */
 export class PaymentReadinessTracker {
   constructor(
     private stripePaymentMethodReady: boolean = false,
     private selectedSavedMethod: unknown = undefined,
-    private paymentGroup: { valid: boolean } = {valid: false},
-    private stripeManualCardInputValid: boolean,
+    private paymentGroup: { valid: boolean },
+    private stripeManualCardInputValid: boolean = false,
     private creditPenceToUse: number = 0,
 ) {
   }
