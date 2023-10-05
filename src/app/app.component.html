@@ -1,4 +1,8 @@
   <div class="skip-to-content-link">
+    <!--
+          Can't use a simple relative link for the URL because we have base href set of /d/ set in non-dev environments
+          which is needed for links to assets but would break this.
+    -->
     <biggive-button
       space-above="5"
       colour-scheme="primary"
@@ -6,7 +10,7 @@
       full-width="true"
       size="medium"
       rounded="false"
-      url="#content"
+      [url]="currentUrl.toString() + '#content'"
     ></biggive-button>
 
   </div>
