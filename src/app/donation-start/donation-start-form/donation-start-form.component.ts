@@ -1065,6 +1065,31 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.next()
   }
 
+  progressFromStepReceiveUpdates(): void {
+    this.triedToLeaveMarketing = true;
+    const errorMessages = Object.values(this.errorMessagesForMarketingStep()).filter(Boolean)
+    if (errorMessages.length > 0 && this.don819FlagEnabled) {
+      this.showErrorToast(errorMessages.join(" "));
+      return;
+    }
+
+    this.next()
+  }
+
+  public errorMessagesForMarketingStep = () => {
+    return {
+      optInChampionEmailRequired: this.marketingGroup.get('optInChampionEmail')?.hasError('required') ?
+        `Please choose whether you wish to receive updates from ${this.campaign.championName}.` : null,
+
+      optInTbgEmailRequired: this.marketingGroup.get('optInTbgEmail')?.hasError('required') ?
+        'Please choose whether you wish to receive updates from Big Give.' : null,
+
+      optInCharityEmailRequired: this.marketingGroup.get('optInCharityEmail')?.hasError('required') ?
+        `Please choose whether you wish to receive updates from ${this.campaign.charity.name}.` : null
+    };
+  }
+
+
   public giftAidRequiredRadioError = (): string => {
     if (this.giftAidGroup.get('giftAid')?.hasError('required')) {
       return 'Please choose whether you wish to claim Gift Aid.'
