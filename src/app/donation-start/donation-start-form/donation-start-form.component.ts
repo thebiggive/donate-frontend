@@ -1032,7 +1032,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
     this.stripePaymentMethodReady = !!this.selectedSavedMethod || this.stripeManualCardInputValid || this.creditPenceToUse > 0;
-    this.paymentReadinessTracker.updateForStepChange();
 
     const promptingForCaptcha = this.promptForCaptcha();
 
@@ -1323,7 +1322,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     });
 
     this.stripePaymentMethodReady = true;
-    this.paymentReadinessTracker.formUpdatedWithBillingDetails();
   }
 
   private handleStripeError(

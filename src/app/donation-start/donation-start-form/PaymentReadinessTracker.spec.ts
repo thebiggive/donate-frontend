@@ -11,7 +11,6 @@ describe('PaymentReadinessTracker', () => {
     const sut = new PaymentReadinessTracker({valid: true});
 
     sut.selectedSavedPaymentMethod();
-    sut.updateForStepChange();
     expect(sut.readyToProgressFromPaymentStep).toBeTrue();
   });
 
@@ -20,7 +19,6 @@ describe('PaymentReadinessTracker', () => {
     const sut = new PaymentReadinessTracker(paymentGroup);
 
     sut.selectedSavedPaymentMethod();
-    sut.updateForStepChange();
     paymentGroup.valid = false;
     expect(sut.readyToProgressFromPaymentStep).toBeFalse();
   });
@@ -37,34 +35,33 @@ describe('PaymentReadinessTracker', () => {
     expect(sut.readyToProgressFromPaymentStep).toBeTrue();
   });
 
+  it("Allows proceeding from payment step when a saved card is selected ", () => {
+    const sut = new PaymentReadinessTracker({valid: true});
+
+    sut.selectedSavedPaymentMethod();
+    sut.onUseSavedCardChange(true);
+    expect(sut.readyToProgressFromPaymentStep).toBeTrue();
+  });
+
   it("Blocks proceeding from payment step when a saved card is selected but not to be used", () => {
     const sut = new PaymentReadinessTracker({valid: true});
 
     sut.selectedSavedPaymentMethod();
     sut.onUseSavedCardChange(false);
-    sut.updateForStepChange();
-    expect(sut.readyToProgressFromPaymentStep).toBeTrue();
+    expect(sut.readyToProgressFromPaymentStep).toBeFalse();
   });
 
   it("Allows proceeding from payment step when a complete payment card is given", () => {
     const sut = new PaymentReadinessTracker({valid: true});
 
     sut.onStripeCardChange({complete: true});
-    sut.updateForStepChange();
     expect(sut.readyToProgressFromPaymentStep).toBeTrue();
   })
-
-  it("Allows proceeding from payment step after updating billing details from payment method", () => {
-    const sut = new PaymentReadinessTracker({valid: true});
-    sut.formUpdatedWithBillingDetails();
-    expect(sut.readyToProgressFromPaymentStep).toBeTrue();
-  });
 
     it("Blocks proceeding fromm payment step when an incomplete payment card is given", () => {
     const sut = new PaymentReadinessTracker({valid: true});
 
     sut.onStripeCardChange({complete: false});
-    sut.updateForStepChange();
     expect(sut.readyToProgressFromPaymentStep).toBeFalse();
   })
 
@@ -73,7 +70,6 @@ describe('PaymentReadinessTracker', () => {
 
     sut.selectedSavedPaymentMethod();
     sut.clearSavedPaymentMethod();
-    sut.updateForStepChange();
     expect(sut.readyToProgressFromPaymentStep).toBeFalse();
   });
 });

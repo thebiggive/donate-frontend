@@ -7,27 +7,25 @@
  */
 export class PaymentReadinessTracker {
   /**
-   * Property name taken from the component. The name doesn't really reflect the usage. Planning to remove this property.
-   */
-  private stripePaymentMethodReady: boolean = false;
-
-
-  /**
-   * Any saved card that the donor has indicated they want to re-use for this donation. For the purpose of this class
-   * we only care about whether it's truthy or falsy.
+   * The selected saved payment method, if any. In this class we only care whether it's defined or not.
    */
   private selectedSavedMethod: unknown = undefined;
 
+  /**
+   * Does the donor want to use that method?
+   */
+  private useSavedCard: boolean = false;
 
   /**
-   * Whether or not a complete payment method has been entered into the payment element
+   * Does the stripe payment element have a complete card?
    */
   private stripeManualCardInputValid: boolean = false;
 
   /**
    * Balance of the donors funds accounts in pence
    */
-  private creditPenceToUse: number = 0;
+  private donorCredit: boolean = false;
+
 
   constructor(
     /**
@@ -39,37 +37,29 @@ export class PaymentReadinessTracker {
   }
 
   get readyToProgressFromPaymentStep(): boolean {
-    return !((!this.stripePaymentMethodReady && !this.selectedSavedMethod) || !this.paymentGroup.valid)
+    const usingSavedCard = this.selectedSavedMethod && this.useSavedCard;
+    return !(!this.stripeManualCardInputValid && !usingSavedCard && !this.donorCredit || !this.paymentGroup.valid)
   }
 
   selectedSavedPaymentMethod() {
-    this.stripePaymentMethodReady = true;
     this.selectedSavedMethod = true;
+    this.useSavedCard = true;
   }
 
   donorHasCredit() {
-    this.stripePaymentMethodReady = true;
-  }
-
-  updateForStepChange() {
-    this.stripePaymentMethodReady = !!this.selectedSavedMethod || this.stripeManualCardInputValid || this.creditPenceToUse > 0;
+    this.donorCredit = true;
   }
 
   onStripeCardChange(state: { complete: boolean }) {
-    this.stripeManualCardInputValid = this.stripePaymentMethodReady = state.complete;
+    this.stripeManualCardInputValid = state.complete;
   }
 
   onUseSavedCardChange(useSavedCard: boolean) {
-    this.stripePaymentMethodReady = useSavedCard || this.stripeManualCardInputValid;
+    this.useSavedCard = useSavedCard;
   }
 
   donationCreditsPrepared(creditPenceToUse: number) {
-    this.stripePaymentMethodReady = true;
-    this.creditPenceToUse = creditPenceToUse;
-  }
-
-  formUpdatedWithBillingDetails() {
-    this.stripePaymentMethodReady = true;
+    this.donorCredit = creditPenceToUse > 0;
   }
 
   clearSavedPaymentMethod() {
