@@ -1,9 +1,9 @@
 import {environment} from "../environments/environment";
 import {EnvironmentID} from "../environments/environment.interface";
 
-export const flagsForEnvironment = (_: EnvironmentID) => {
+export const flagsForEnvironment = (environmentId: EnvironmentID) => {
   return {
-    don819FlagEnabled: (environment.environmentId === 'development'),
+    don819FlagEnabled: (environmentId === 'development'),
   };
 }
 
