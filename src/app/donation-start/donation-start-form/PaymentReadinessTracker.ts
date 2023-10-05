@@ -19,7 +19,7 @@ export class PaymentReadinessTracker {
   /**
    * Does the stripe payment element have a complete card?
    */
-  private stripeManualCardInputValid: boolean = false;
+  private paymentElementIsComplete: boolean = false;
 
   /**
    * Balance of the donors funds accounts in pence
@@ -37,8 +37,11 @@ export class PaymentReadinessTracker {
   }
 
   get readyToProgressFromPaymentStep(): boolean {
-    const usingSavedCard = this.selectedSavedMethod && this.useSavedCard;
-    return !(!this.stripeManualCardInputValid && !usingSavedCard && !this.donorCredit || !this.paymentGroup.valid)
+    const usingSavedCard = !!this.selectedSavedMethod && this.useSavedCard;
+    const atLeastOneWayOfPayingIsReady = this.donorCredit || usingSavedCard || this.paymentElementIsComplete;
+    const formHasNoValidationErrors = this.paymentGroup.valid;
+
+    return formHasNoValidationErrors && atLeastOneWayOfPayingIsReady
   }
 
   selectedSavedPaymentMethod() {
@@ -51,7 +54,7 @@ export class PaymentReadinessTracker {
   }
 
   onStripeCardChange(state: { complete: boolean }) {
-    this.stripeManualCardInputValid = state.complete;
+    this.paymentElementIsComplete = state.complete;
   }
 
   onUseSavedCardChange(useSavedCard: boolean) {
