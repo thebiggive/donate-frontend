@@ -69,7 +69,7 @@
               the generosity of donors who leave a tip.
             </span>
             <span *ngIf="alternateCopy">
-              Big Give is a registered charity (1136547), and since 2008, our aim has been to help thousands of charities double the difference of their donations. Thanks to the generosity of people like you who leave a tip, we can continue providing a match funding platform for the charities and causes you care about. 
+              Big Give is a registered charity (1136547), and since 2008, our aim has been to help thousands of charities double the difference of their donations. Thanks to the generosity of people like you who leave a tip, we can continue providing a match funding platform for the charities and causes you care about.
             </span>
           </p>
 
@@ -444,7 +444,7 @@
             class="continue b-w-100 b-rt-0"
             mat-raised-button
             color="primary"
-            [disabled]="(!stripePaymentMethodReady && !selectedSavedMethod) || !paymentGroup.valid"
+            [disabled]="! readyToProgressFromPaymentStep"
             (click)="next()"
           >Continue</button>
         </div>
