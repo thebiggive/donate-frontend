@@ -33,6 +33,7 @@ import {StripeService} from "../../stripe.service";
 import {Donation} from "../../donation.model";
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {CdkStep} from "@angular/cdk/stepper";
+import {Person} from "../../person.model";
 
 function makeDonationStartFormComponent(donationService: DonationService,) {
   const donationStartFormComponent = new DonationStartFormComponent(
@@ -46,7 +47,9 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     donationService,
     undefined as unknown as ElementRef<any>,
     undefined as unknown as FormBuilder,
-    undefined as unknown as IdentityService,
+    {
+      create: (person: Person) => of(person)
+    } as unknown as IdentityService,
     {
       trackEvent: () => {
       }
@@ -713,6 +716,8 @@ describe('DonationStartNewPrimaryComponent', () => {
     sut.psp = 'stripe';
     // @ts-ignore
     sut.amountsGroup.value = {donationAmount: "1"};
+
+    // @ts-ignore
     sut.paymentGroup.value = {billingCountry: 'GB'};
 
     sut.captchaIdentityReturn('captchaResponse');
