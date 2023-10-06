@@ -22,7 +22,7 @@ export class PaymentReadinessTracker {
   private paymentElementIsComplete: boolean = false;
 
   /**
-   * Balance of the donors funds accounts in pence
+   * Do we have a logged-in donor with a non-zero funds balance?
    */
   private donorFunds: boolean = false;
 
