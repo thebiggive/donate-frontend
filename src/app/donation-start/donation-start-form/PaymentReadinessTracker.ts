@@ -44,6 +44,22 @@ export class PaymentReadinessTracker {
     return formHasNoValidationErrors && atLeastOneWayOfPayingIsReady
   }
 
+  /**
+   * Returns an object with properties that may each be an error message giving a reason why we can't immediately let
+   * the user progress.
+   */
+  errorMessagesForAttemptToProgress() {
+    const usingSavedCard = !!this.selectedSavedMethod && this.useSavedCard;
+    const atLeastOneWayOfPayingIsReady = this.donorFunds || usingSavedCard || this.paymentElementIsComplete;
+
+    const noWayToPayMessage = "Plea";
+    return {
+      // todo - replace error below with something more specific to the individual fields of the form.
+      formValidationError: !this.paymentGroup.valid ? "Please fill in all required fields of the form" : undefined,
+      noWayToPay: !atLeastOneWayOfPayingIsReady ? noWayToPayMessage : undefined,
+    };
+  }
+
   selectedSavedPaymentMethod() {
     this.selectedSavedMethod = true;
     this.useSavedCard = true;
