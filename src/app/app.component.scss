@@ -9,9 +9,19 @@
 
 .skip-to-content-link {
   z-index: 10;
+  margin: auto;
+  text-align: center;
+  width: 100%;
   position: absolute;
-  transform: translateY(-100%);
+  font-size: 16px;
+  transform: translateY(-1000%);
   transition: transform 0.3s;
+
+  a {
+    background-color: $colour-background;
+    padding: 5px;
+    border-radius: 3px;
+  }
 }
 
 .skip-to-content-link:focus-within {

@@ -3,16 +3,7 @@
           Can't use a simple relative link for the URL because we have base href set of /d/ set in non-dev environments
           which is needed for links to assets but would break this.
     -->
-    <biggive-button
-      space-above="5"
-      colour-scheme="primary"
-      label="Skip to content"
-      full-width="true"
-      size="medium"
-      rounded="false"
-      [url]="currentUrl.toString() + '#content'"
-    ></biggive-button>
-
+    <a [href]="currentUrl.toString() + '#content'">Skip to content</a>
   </div>
 
 
