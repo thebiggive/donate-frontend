@@ -17,7 +17,7 @@ export class PaymentReadinessTracker {
   private useSavedCard: boolean = false;
 
   /**
-   * Does the stripe payment element have a complete card?
+   * Does the stripe payment element have a complete card, selected wallet or equivalent?
    */
   private paymentElementIsComplete: boolean = false;
 
