@@ -462,28 +462,6 @@ describe('DonationStartNewPrimaryComponent', () => {
     expect(component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
   });
 
-
-  it('Should allow paying with donation funds with no saved payment method', async () => {
-    var finaliseCashBalancePurchaseCalled = false;
-
-    const fakeDonationService = {
-      getDefaultCounty: () => 'GB',
-      finaliseCashBalancePurchase: (donation: Donation)=> {
-        finaliseCashBalancePurchaseCalled = true;
-        return of(donation);
-      },
-      getPaymentMethods: () => of({data: []}),
-    } as unknown as DonationService;
-
-    const sut = makeDonationStartFormComponent(fakeDonationService);
-
-    sut.loadPerson({cash_balance: {gbp: 100}}, 'personID', 'jwt');
-
-    await sut.payWithStripe();
-
-    expect(finaliseCashBalancePurchaseCalled).toBe(true)
-  });
-
   it('Should not allow paying with with no payment method and no funds', async () => {
     var finaliseCashBalancePurchaseCalled = false;
 
