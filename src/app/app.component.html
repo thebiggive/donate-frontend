@@ -1,3 +1,21 @@
+  <div class="skip-to-content-link">
+    <!--
+          Can't use a simple relative link for the URL because we have base href set of /d/ set in non-dev environments
+          which is needed for links to assets but would break this.
+    -->
+    <biggive-button
+      space-above="5"
+      colour-scheme="primary"
+      label="Skip to content"
+      full-width="true"
+      size="medium"
+      rounded="false"
+      [url]="currentUrl.toString() + '#content'"
+    ></biggive-button>
+
+  </div>
+
+
   <biggive-main-menu *ngIf="isDataLoaded"
     [usePresetMenuContent]="true"
     [donateUrlPrefix]="donateUriPrefix"
@@ -6,6 +24,9 @@
     [isLoggedIn]="isLoggedIn"
     ></biggive-main-menu>
 
+  <a id="content">
+    <!-- target for "skip to content" link -->
+  </a>
   <router-outlet></router-outlet>
 
   <biggive-footer

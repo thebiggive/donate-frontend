@@ -39,6 +39,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   protected readonly environment = environment;
   protected readonly flags = flags;
   protected readonly userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
+  public currentUrl: URL;
 
   constructor(
     private identityService: IdentityService,
@@ -59,6 +60,8 @@ export class AppComponent implements AfterViewInit, OnInit {
         }
       }
     });
+
+    this.currentUrl = new URL(environment.donateGlobalUriPrefix + router.url);
   }
 
   /**
