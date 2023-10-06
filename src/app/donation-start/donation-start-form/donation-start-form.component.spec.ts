@@ -98,7 +98,6 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
   donationStartFormComponent.donation = {} as Donation;
   return donationStartFormComponent;
 }
-
 describe('DonationStartNewPrimaryComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
