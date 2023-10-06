@@ -268,8 +268,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.tipControlStyle = (route.snapshot.queryParams?.tipControl?.toLowerCase() === 'slider')
       ? 'slider' : 'dropdown'
-
-    this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup)
   }
 
   ngOnDestroy() {
@@ -402,6 +400,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (isPlatformBrowser(this.platformId)) {
       this.handleCampaignViewUpdates();
     }
+
+    this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup)
   }
 
 
