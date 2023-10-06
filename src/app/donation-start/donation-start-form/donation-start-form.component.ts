@@ -1,5 +1,6 @@
 import {StepperSelectionEvent} from '@angular/cdk/stepper';
 import {DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
+import {flags} from "../../featureFlags";
 import {HttpErrorResponse} from '@angular/common/http';
 import {
   AfterContentChecked,
@@ -62,6 +63,11 @@ import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
 import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation-tipping-slider.component";
 import {MatomoTracker} from 'ngx-matomo';
+import {MatSnackBar} from "@angular/material/snack-bar";
+
+declare var _paq: {
+  push: (args: Array<string|object>) => void,
+};
 
 @Component({
   selector: 'app-donation-start-form',
@@ -78,9 +84,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   @ViewChild('stepper') private stepper: MatStepper;
   @ViewChild('donationTippingSlider') private donationTippingSlider: DonationTippingSliderComponent|undefined;
 
+  alternateCopy = false; // Varies tip copy for A/B test.
+
   stripePaymentElement: StripePaymentElement | undefined;
   cardHandler = this.onStripeCardChange.bind(this);
-
+  don819FlagEnabled = flags.don819FlagEnabled;
   showChampionOptIn = false;
 
   @Input({ required: true }) campaign: Campaign;
@@ -249,6 +257,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private stripeService: StripeService,
     public datePipe: DatePipe,
     public timeLeftPipe: TimeLeftPipe,
+    private snackBar: MatSnackBar
+
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
     this.countryOptionsObject = COUNTRIES.map(country => ({label: country.country, value: country.iso2}))
@@ -269,6 +279,38 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.stripeService.init();
+
+      // ngx-matomo sets up window._paq internally, and doesn't have
+      // A/B test methods, so we work with the global ourselves.
+      if (environment.matomoAbTest && globalThis.hasOwnProperty('_paq')) {
+        _paq.push(['AbTesting::create', {
+          name: environment.matomoAbTest.name,
+          percentage: 100,
+          includedTargets: [{"attribute":"url","inverted":"0","type":"any","value":""}],
+          excludedTargets: [],
+          startDateTime: environment.matomoAbTest.startDate,
+          endDateTime: environment.matomoAbTest.endDate,
+          variations: [
+            {
+                name: 'original',
+                activate: (_event: any) => {
+                  // No change from the original form.
+                  console.log('Original test variant active!');
+                }
+            },
+            {
+                name: environment.matomoAbTest.variantName,
+                activate: (_event: any) => {
+                  this.alternateCopy = true;
+                  console.log('Copy B test variant active!');
+                }
+            },
+          ],
+          trigger: () => {
+              return true;
+          },
+        }]);
+      }
     }
 
     this.setCampaignBasedVars();
@@ -650,7 +692,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         errorCodeDetail = '[code A1]'; // Donation property absent.
       }
 
-      this.stripeError = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
+      const errorMessage = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
+
+      if (this.don819FlagEnabled) {
+        this.showErrorToast(errorMessage);
+      }
+
+      this.stripeError = errorMessage;
+
       this.stripeResponseErrorCode = undefined;
       this.matomoTracker.trackEvent(
         'donate_error',
@@ -674,6 +723,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // Can't proceed if campaign info not looked up yet or no usable PSP
     if (!this.donation || !this.campaign || !this.campaign.charity.id || !this.psp) {
       this.donationUpdateError = true;
+      if (this.don819FlagEnabled) {
+        this.showErrorToast("Sorry, we can't submit your donation right now.");
+      }
       return;
     }
 
@@ -692,16 +744,19 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.payWithStripe();
         }
       }, response => {
-        let errorMessage: string;
+        let errorMessageForTracking: string;
         if (response.message) {
-          errorMessage = `Could not update donation for campaign ${this.campaignId}: ${response.message}`;
+          errorMessageForTracking = `Could not update donation for campaign ${this.campaignId}: ${response.message}`;
         } else {
           // Unhandled 5xx crashes etc.
-          errorMessage = `Could not update donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
+          errorMessageForTracking = `Could not update donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
         }
-        this.matomoTracker.trackEvent('donate_error', 'donation_update_failed', errorMessage);
+        this.matomoTracker.trackEvent('donate_error', 'donation_update_failed', errorMessageForTracking);
         this.retrying = false;
         this.donationUpdateError = true;
+          if (this.don819FlagEnabled) {
+              this.showErrorToast("Sorry, we can't submit your donation right now.");
+          }
         this.submitting = false;
       });
   }
@@ -764,7 +819,19 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     if (paymentMethod) {
-      result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, paymentMethod));
+      try {
+        result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, paymentMethod));
+      } catch (httpError) {
+        this.matomoTracker.trackEvent(
+          'donate_error',
+          'stripe_confirm_failed',
+          httpError.error?.error?.code,
+        );
+
+        this.handleStripeError(httpError.error?.error, 'confirm');
+
+        return;
+      }
 
       if (result?.paymentIntent && result.paymentIntent.status === 'requires_action') {
         if (!result.paymentIntent.client_secret) {
@@ -777,7 +844,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
           return;
         } else {
+          // Next action (e.g. 3D Secure) was run by Stripe.js, and failed.
           result = {error: error};
+          this.submitting = false;
         }
       } // Else there's a `paymentMethod` which is already successful or errored » both handled later.
     } else {
@@ -785,23 +854,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     if (!result || result.error) {
+      // Client-side issue that wasn't a next_action should be a `prepareMethodFromPaymentElement()`
+      // problem.
       if (result) {
-        this.stripeError = this.getStripeFriendlyError(result.error, 'confirm');
-        this.stripeResponseErrorCode = result.error.code;
-        if (this.isBillingPostcodePossiblyInvalid()) {
-          this.paymentGroup.controls.billingPostcode!.setValidators([
-            Validators.required,
-            Validators.pattern(this.billingPostcodeRegExp),
-            ValidateBillingPostCode
-          ]);
-          this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
-        }
+        this.handleStripeError(result.error, 'method_setup');
       }
+
       this.submitting = false;
-
-      this.jumpToStep('Payment details');
-      this.goToFirstVisibleError();
-
       return;
     }
 
@@ -859,7 +918,24 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.matomoTracker.trackEvent('identity_error', 'person_captcha_failed', 'reCAPTCHA hit errored() callback');
     this.creatingDonation = false;
     this.donationCreateError = true;
+    this.showDonationCreateError();
     this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
+  }
+
+  /**
+   * Called when ever we set this.donationCreateError = true. For now its all one error message but we may want to
+   * replace some of the calls with a different more specific message that identifies the cause of the problem if it will
+   * either help donors directly or if they might usefully quote it to us in a support case.
+   */
+  showDonationCreateError() {
+    if (! this.don819FlagEnabled) {
+      return;
+    }
+
+    this.showErrorToast(
+        "Sorry, we can't register your donation right now. Please try again in a moment or contact " +
+        " us if this message persists."
+    )
   }
 
   captchaIdentityReturn(captchaResponse: string) {
@@ -964,7 +1040,133 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
-  onUseSavedCardChange(event: MatCheckboxChange, paymentMethod: PaymentMethod) {
+  progressFromStepOne() {
+
+    const control = this.donationForm.controls['amounts'];
+    if(! control!.valid) {
+      this.showErrorToast(this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount');
+
+      return;
+    }
+
+    this.next();
+  }
+
+  /**
+   * Displays a message on screen to let a donor know why they can't progress from the current step. Message should be
+   * an explanation, e.g. because they need to fill in a certain field or what they have entered isn't usable.
+   */
+  private showErrorToast(message: string) {
+    this.snackBar.open(
+      message,
+      undefined,
+      {
+        // formula for duration from https://ux.stackexchange.com/a/85898/7211
+        duration: Math.min(Math.max(message.length * 50, 2_000), 7_000),
+        panelClass: 'snack-bar',
+      }
+    );
+  }
+
+  progressFromStepGiftAid(): void {
+    this.triedToLeaveGiftAid = true;
+    const giftAidRequiredRadioError = this.giftAidRequiredRadioError();
+    const errorMessages = giftAidRequiredRadioError ? [giftAidRequiredRadioError] : [];
+
+    const homeAddressErrors = this.giftAidGroup?.controls?.homeAddress?.errors;
+    if (homeAddressErrors?.required) {
+      errorMessages.push("Please enter your home address");
+    }
+
+    if (homeAddressErrors?.maxlength) {
+      errorMessages.push(`Please enter your address in ${homeAddressErrors.maxlength.requiredLength} characters or less`);
+    }
+
+    const homePostcodeErrors = this.giftAidGroup?.controls?.homePostcode?.errors;
+    if (homePostcodeErrors?.required) {
+      errorMessages.push("Please enter your home postcode");
+    }
+
+    if (homePostcodeErrors?.pattern) {
+      errorMessages.push("Please enter a UK postcode");
+    }
+
+    if (errorMessages.length > 0 && this.don819FlagEnabled) {
+      this.showErrorToast(errorMessages.join(". "));
+      return;
+    }
+
+    this.next()
+  }
+
+  progressFromStepReceiveUpdates(): void {
+    this.triedToLeaveMarketing = true;
+    const errorMessages = Object.values(this.errorMessagesForMarketingStep()).filter(Boolean)
+    if (errorMessages.length > 0 && this.don819FlagEnabled) {
+      this.showErrorToast(errorMessages.join(" "));
+      return;
+    }
+
+    this.next()
+  }
+
+  public errorMessagesForMarketingStep = () => {
+    return {
+      optInChampionEmailRequired: this.marketingGroup.get('optInChampionEmail')?.hasError('required') ?
+        `Please choose whether you wish to receive updates from ${this.campaign.championName}.` : null,
+
+      optInTbgEmailRequired: this.marketingGroup.get('optInTbgEmail')?.hasError('required') ?
+        'Please choose whether you wish to receive updates from Big Give.' : null,
+
+      optInCharityEmailRequired: this.marketingGroup.get('optInCharityEmail')?.hasError('required') ?
+        `Please choose whether you wish to receive updates from ${this.campaign.charity.name}.` : null
+    };
+  }
+
+
+  public giftAidRequiredRadioError = (): string => {
+    if (this.giftAidGroup.get('giftAid')?.hasError('required')) {
+      return 'Please choose whether you wish to claim Gift Aid.'
+    }
+
+    return '';
+  }
+
+    public displayableAmountsStepErrors = () => {
+        const errors = this.donationAmountField?.errors;
+
+        if (!errors) {
+            return '';
+        }
+
+        if (errors.min) {
+            return `Sorry, the minimum donation is ${this.currencySymbol}1.`;
+        }
+
+        if (errors.max) {
+            return `Your donation must be ${this.currencySymbol}${this.maximumDonationAmount} or less to proceed.`
+                + (
+                    this.creditPenceToUse === 0 ?
+                        ` You can make multiple matched donations of ` +
+                        `${this.currencySymbol}${this.maximumDonationAmount} if match funds are available.`
+                        : ''
+                );
+        }
+
+        if (errors.pattern) {
+            return `Please enter a whole number of ${this.currencySymbol} without commas.`
+        }
+
+        if (errors.required) {
+            return 'Please enter how much you would like to donate.';
+        }
+
+        const message = "Sorry, something went wrong with the form - please try again or contact Big Give";
+        console.error(message);
+        return message;
+    };
+
+    onUseSavedCardChange(event: MatCheckboxChange, paymentMethod: PaymentMethod) {
     // For now, we assume unticking happens before card entry, so we can just set the validity flag to false.
     // Ideally, we would later track `card`'s validity separately so that going back up the page, ticking this
     // then unticking it leaves the card box valid without having to modify it. But this is rare and
@@ -1111,11 +1313,34 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.stripePaymentMethodReady = true;
   }
 
+  private handleStripeError(
+    error: StripeError | {message: string, code: string, decline_code?: string},
+    context: string,
+  ) {
+    this.submitting = false;
+    this.stripeError = this.getStripeFriendlyError(error, context);
+    this.stripeResponseErrorCode = error.code;
+    if (this.isBillingPostcodePossiblyInvalid()) {
+      this.paymentGroup.controls.billingPostcode!.setValidators([
+        Validators.required,
+        Validators.pattern(this.billingPostcodeRegExp),
+        ValidateBillingPostCode
+      ]);
+      this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
+    }
+
+    this.jumpToStep('Payment details');
+    this.goToFirstVisibleError();
+  }
+
   /**
    * @param error
    * @param context 'method_setup', 'card_change' or 'confirm'.
    */
-  private getStripeFriendlyError(error: StripeError, context: string): string {
+  private getStripeFriendlyError(
+    error: StripeError | {message: string, code: string, decline_code?: string},
+    context: string,
+  ): string {
     let prefix = '';
     switch (context) {
       case 'method_setup':
@@ -1239,6 +1464,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (!this.campaign || !this.campaign.charity.id || !this.psp) {
       this.donationCreateError = true;
+      this.showDonationCreateError();
       return;
     }
 
@@ -1285,6 +1511,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.matomoTracker.trackEvent('identity_error', 'person_create_failed', `${error.status}: ${error.message}`);
           this.creatingDonation = false;
           this.donationCreateError = true;
+          this.showDonationCreateError();
           this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
         }
       )
@@ -1337,6 +1564,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.matomoTracker.trackEvent('donate_error', 'donation_create_failed', errorMessage);
     this.creatingDonation = false;
     this.donationCreateError = true;
+    this.showDonationCreateError();
     this.stepper.previous(); // Go back to step 1 to surface the internal error.
   }
 
@@ -1355,6 +1583,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         `Missing expected response data creating new donation for campaign ${this.campaignId}`,
       );
       this.donationCreateError = true;
+      this.showDonationCreateError();
       this.stepper.previous(); // Go back to step 1 to surface the internal error.
 
       return;

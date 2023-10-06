@@ -21,7 +21,7 @@
    -->
 <div
   id="cookie-banner"
-  *ngIf="isPlatformBrowser && (userHasExpressedCookiePreference$ | async) === false && flags.cookieBannerEnabled"
+  *ngIf="isPlatformBrowser && (userHasExpressedCookiePreference$ | async) === false"
 >
     <biggive-cookie-banner [blogUriPrefix]="environment.blogUriPrefix" />
 </div>

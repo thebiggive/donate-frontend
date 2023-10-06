@@ -1,16 +1,17 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Inject, Injectable, InjectionToken} from '@angular/core';
 import jwtDecode from 'jwt-decode';
+import {CookieService} from 'ngx-cookie-service';
 import {MatomoTracker} from 'ngx-matomo';
 import {StorageService} from 'ngx-webstorage-service';
 import {Observable, of} from 'rxjs';
+import {delay, retry} from 'rxjs/operators';
 
 import {Credentials} from './credentials.model';
 import {environment} from '../environments/environment';
 import {IdentityJWT} from './identity-jwt.model';
 import {Person} from './person.model';
 import {FundingInstruction} from './fundingInstruction.model';
-import {CookieService} from 'ngx-cookie-service';
 
 export const TBG_DONATE_ID_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_ID_STORAGE');
 
@@ -109,7 +110,7 @@ export class IdentityService {
       `${environment.identityApiPrefix}${this.peoplePath}/${person.id}`,
       person,
       this.getAuthHttpOptions(person),
-    );
+    ).pipe(retry(2), delay(2_000));
   }
 
   clearJWT() {

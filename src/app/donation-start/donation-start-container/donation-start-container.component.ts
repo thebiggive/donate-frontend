@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {Campaign} from "../../campaign.model";
 import {ActivatedRoute} from "@angular/router";
 import { Donation } from 'src/app/donation.model';
@@ -11,7 +11,7 @@ import {ImageService} from "../../image.service";
   templateUrl: './donation-start-container.component.html',
   styleUrls: ['./donation-start-container.component.scss']
 })
-export class DonationStartContainerComponent implements OnInit{
+export class DonationStartContainerComponent implements AfterViewInit, OnInit{
   campaign: Campaign;
   campaignOpenOnLoad: boolean;
   donation: Donation | undefined = undefined;
@@ -31,23 +31,22 @@ export class DonationStartContainerComponent implements OnInit{
   ) {
   }
 
-   ngOnInit() {
+  ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
-     this.campaignOpenOnLoad = this.campaignIsOpen();
-     this.imageService.getImageUri(this.campaign.bannerUri, 830).subscribe(uri => this.bannerUri = uri);
+    this.campaignOpenOnLoad = this.campaignIsOpen();
+    this.imageService.getImageUri(this.campaign.bannerUri, 830).subscribe(uri => this.bannerUri = uri);
+  }
 
-     const idAndJWT = this.identityService.getIdAndJWT();
-     if (idAndJWT) {
-       this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
-     } else {
-       if (!this.donationStartForm) {
-         console.error("Donation start form not loaded");
-       }
-       // this.donationStartForm is undefined when we're running donation-start-login.component.spec.ts . I'm not sure
-       // tbh why this class is even called from that test. Null safe call to let it pass.
-       this.donationStartForm?.resumeDonationsIfPossible();
-     }
-   }
+  ngAfterViewInit() {
+    const idAndJWT = this.identityService.getIdAndJWT();
+    if (idAndJWT) {
+      // Callback will `resumeDonationsIfPossible()` after loading the person.
+      this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+      return;
+    }
+
+    this.donationStartForm.resumeDonationsIfPossible();
+  }
 
   /**
    * Unlike the CampaignService method which is more forgiving if the status gets stuck Active (we don't trust

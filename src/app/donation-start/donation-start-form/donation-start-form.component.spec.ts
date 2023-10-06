@@ -31,6 +31,7 @@ import {PageMetaService} from "../../page-meta.service";
 import {PostcodeService} from "../../postcode.service";
 import {StripeService} from "../../stripe.service";
 import {Donation} from "../../donation.model";
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 function makeDonationStartFormComponent(donationService: DonationService,) {
   const donationStartFormComponent = new DonationStartFormComponent(
@@ -59,7 +60,8 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     } as unknown as Router,
     undefined as unknown as StripeService,
     undefined as unknown as DatePipe,
-    undefined as unknown as TimeLeftPipe
+    undefined as unknown as TimeLeftPipe,
+    undefined as unknown as MatSnackBar,
   );
 
   const stubGroup = {
@@ -104,13 +106,12 @@ describe('DonationStartNewPrimaryComponent', () => {
       ],
       providers: [
         TimeLeftPipe,
-        DatePipe
+        DatePipe,
+        MatSnackBar
       ],
     })
       .compileComponents();
   }));
-
-  (window as any).gtag = (...args: any[]) => args;
 
   let component: DonationStartFormComponent;
   let fixture: ComponentFixture<DonationStartFormComponent>;

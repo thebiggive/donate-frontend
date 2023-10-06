@@ -2,6 +2,7 @@ import {APP_BASE_HREF, isPlatformBrowser} from '@angular/common';
 import {AfterViewInit, Component, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
 import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
 import {BiggiveMainMenu} from '@biggive/components-angular';
+import {MatomoTracker} from "ngx-matomo";
 import {filter} from 'rxjs/operators';
 
 import {DonationService} from './donation.service';
@@ -17,7 +18,6 @@ import {
   CookiePreferences,
   CookiePreferenceService
 } from "./cookiePreference.service";
-import {MatomoTracker} from "ngx-matomo";
 
 @Component({
   selector: 'app-root',
@@ -80,21 +80,15 @@ export class AppComponent implements AfterViewInit, OnInit {
 
   ngOnInit() {
     if (this.isPlatformBrowser) {
-      if (flags.cookieBannerEnabled) {
-        this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {
-          if (agreesToThirdParty(preferences)) {
-            this.getSiteControlService.init();
-          }
+      this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {
+        if (agreesToThirdParty(preferences)) {
+          this.getSiteControlService.init();
+        }
 
-          if (agreesToAnalyticsAndTracking(preferences)) {
-            this.matomoTracker.setCookieConsentGiven();
-          }
-        });
-      } else {
-        this.getSiteControlService.init();
-        // no-need to simulate user consent for matomo here, if the banner isn't enabled we don't have
-        //  `requireCookieConsent: true` in the matomo config.
-      }
+        if (agreesToAnalyticsAndTracking(preferences)) {
+          this.matomoTracker.setCookieConsentGiven();
+        }
+      });
 
       // Temporarily client-side redirect the previous non-global domain to the new one.
       // Once most inbound links are updated, we can probably replace the app redirect
