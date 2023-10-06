@@ -1,4 +1,4 @@
-  <div class="skip-to-content-link">
+  <div class="skip-to-content-link" *ngIf="currentUrlWithoutHash$ | async as currentUrl">
     <!--
           Can't use a simple relative link for the URL because we have base href set of /d/ set in non-dev environments
           which is needed for links to assets but would break this.
