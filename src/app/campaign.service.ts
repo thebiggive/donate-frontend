@@ -67,7 +67,22 @@ export class CampaignService {
     return dateToUse;
   }
 
-  static percentRaised(campaign: (Campaign | CampaignSummary)): number | undefined {
+  /**
+   * @param useParentIfApplicable Whether to get a percentage for the parent/meta-campaign if possible. This
+   *                              is possible when `campaign` is a detailed Campaign, e.g. on /campaign/..., and
+   *                              it takes effect when the `parentUsesSharedFunds`.
+   */
+  static percentRaised(
+    campaign: (Campaign | CampaignSummary),
+    useParentIfApplicable = false,
+  ): number | undefined {
+    if (useParentIfApplicable) {
+      campaign = campaign as Campaign;
+      if (campaign.parentUsesSharedFunds && campaign.parentTarget && campaign.parentAmountRaised) {
+        return Math.round((campaign.parentAmountRaised / campaign.parentTarget) * 100);
+      }
+    }
+
     if (!campaign.target) {
       return undefined;
     }
