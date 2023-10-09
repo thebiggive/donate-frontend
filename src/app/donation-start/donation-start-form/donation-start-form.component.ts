@@ -2166,4 +2166,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.tipAmountField?.setValue(this.tipValue);
   }
 
+  continueFromPaymentStep() {
+    if (! this.readyToProgressFromPaymentStep) {
+      this.showErrorToast(this.paymentReadinessTracker.getErrorsBlockingProgress().join(" "));
+      return;
+    }
+
+    this.next()
+  }
 }

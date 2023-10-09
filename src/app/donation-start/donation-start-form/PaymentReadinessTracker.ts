@@ -32,7 +32,16 @@ export class PaymentReadinessTracker {
      * Payment group from the Material form. If Angular Material has a validation error then we're not going to be ready
      * to proceed.
      */
-    private paymentGroup: { valid: boolean },
+    private paymentGroup: {
+      controls: {
+        [key: string]: {
+          errors: {
+            [key: string]: unknown;
+          } | null
+        }},
+
+        valid: boolean
+    }
 ) {
   }
 
@@ -42,6 +51,41 @@ export class PaymentReadinessTracker {
     const formHasNoValidationErrors = this.paymentGroup.valid;
 
     return formHasNoValidationErrors && atLeastOneWayOfPayingIsReady
+  }
+
+  /**
+   * Returns an array of messages explaining why the donor cannot immediately progress past the payment step. Will
+   * be displayed to them so they can fix.
+   */
+  public getErrorsBlockingProgress(): string[] {
+    // todo - add in error message about lack of way to pay.
+    return this.humanReadableFormValidationErrors();
+  }
+
+  /**
+   * todo - translate keys to human readable names, deal with errors other than 'reqauired'
+   */
+  private humanReadableFormValidationErrors() {
+    return this.getFormValidationErrors().map((error) => {
+      switch (error.error) {
+        case 'required':
+          return `Please complete field  ${error.key}.`;
+        default:
+          return `Unknown error with field  ${error.key}.`;
+      }
+    });
+  }
+
+  getFormValidationErrors(): { key: string; error: string }[] {
+    const errors: {key: string, error: string}[] = [];
+
+    Object.entries(this.paymentGroup.controls).forEach(([key, control]) => {
+      const errorsFromThisControl = Object.entries(control.errors ?? []).filter(Boolean);
+
+      errorsFromThisControl.forEach(([errorType]) => errors.push({key: key, error: errorType}))
+    });
+
+    return errors;
   }
 
   selectedSavedPaymentMethod() {
