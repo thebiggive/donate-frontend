@@ -26,7 +26,10 @@ export class PaymentReadinessTracker {
    */
   private donorFunds: boolean = false;
 
-
+  /**
+   * Does the logged in donor have a saved card, even if they don't want to use it?
+   */
+  private hasASavedCard: boolean = false;
   constructor(
     /**
      * Payment group from the Material form. If Angular Material has a validation error then we're not going to be ready
@@ -46,11 +49,7 @@ export class PaymentReadinessTracker {
   }
 
   get readyToProgressFromPaymentStep(): boolean {
-    const usingSavedCard = !!this.selectedSavedMethod && this.useSavedCard;
-    const atLeastOneWayOfPayingIsReady = this.donorFunds || usingSavedCard || this.paymentElementIsComplete;
-    const formHasNoValidationErrors = this.paymentGroup.valid;
-
-    return formHasNoValidationErrors && atLeastOneWayOfPayingIsReady
+    return this.getErrorsBlockingProgress().length === 0;
   }
 
   /**
@@ -58,22 +57,55 @@ export class PaymentReadinessTracker {
    * be displayed to them so they can fix.
    */
   public getErrorsBlockingProgress(): string[] {
-    // todo - add in error message about lack of way to pay.
-    return this.humanReadableFormValidationErrors();
+    const usingSavedCard = !!this.selectedSavedMethod && this.useSavedCard;
+    const atLeastOneWayOfPayingIsReady = this.donorFunds || usingSavedCard || this.paymentElementIsComplete;
+
+    let paymentErrors: string[] = [];
+    if (!atLeastOneWayOfPayingIsReady) {
+      paymentErrors = [
+        this.hasASavedCard ?
+          "Please complete your new payment method, or select a saved payment method." :
+          "Please complete your payment method."
+      ];
+    }
+
+    return [...this.humanReadableFormValidationErrors(), ...paymentErrors];
   }
 
   /**
    * todo - translate keys to human readable names, deal with errors other than 'reqauired'
    */
   private humanReadableFormValidationErrors() {
-    return this.getFormValidationErrors().map((error) => {
+    const fieldNames = {
+      firstName: 'first name',
+      lastName: 'last name',
+      emailAddress: 'email address',
+      billingPostcode: 'billing postcode',
+    }
+
+    const errors = this.getFormValidationErrors().map((error) => {
+      const key = error.key as keyof typeof fieldNames;
+
+      const fieldName = fieldNames[key];
+
       switch (error.error) {
         case 'required':
-          return `Please complete field  ${error.key}.`;
+          return `Please enter your ${fieldName}.`;
+        case 'pattern':
+          return `Sorry, your ${fieldName} is not recognised - Please enter a valid ${fieldName}.`;
         default:
-          return `Unknown error with field  ${error.key}.`;
+          console.error(error);
+          return `Sorry, there is an error with the ${key} field.`;
       }
     });
+
+    if (errors.length === 0 && ! this.paymentGroup.valid ) {
+      // hopefully will never happen in prod.
+      console.error("Unexpected payment group error");
+      return ['Please check all fields in the payment section and correct any errors.'];
+    }
+
+    return errors;
   }
 
   getFormValidationErrors(): { key: string; error: string }[] {
@@ -91,6 +123,7 @@ export class PaymentReadinessTracker {
   selectedSavedPaymentMethod() {
     this.selectedSavedMethod = true;
     this.useSavedCard = true;
+    this.hasASavedCard = true;
   }
 
   donorHasFunds() {

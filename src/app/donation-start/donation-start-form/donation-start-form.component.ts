@@ -240,6 +240,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private stripeElements: StripeElements | undefined;
   private selectedPaymentMethodType: string | undefined;
   private paymentReadinessTracker: PaymentReadinessTracker;
+  public paymentStepErrors: string = "";
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -2168,10 +2169,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   continueFromPaymentStep() {
     if (! this.readyToProgressFromPaymentStep) {
-      this.showErrorToast(this.paymentReadinessTracker.getErrorsBlockingProgress().join(" "));
+      this.paymentStepErrors = this.paymentReadinessTracker.getErrorsBlockingProgress().join(" ");
+      this.showErrorToast(this.paymentStepErrors);
       return;
+    } else {
+      this.paymentStepErrors = "";
+      this.next()
     }
-
-    this.next()
   }
 }
