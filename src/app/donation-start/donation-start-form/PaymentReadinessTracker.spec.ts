@@ -6,11 +6,38 @@ describe('PaymentReadinessTracker', () => {
     paymentGroup = {valid: true, controls: {}};
   })
 
-
   it('Initially says we are not ready to progress from payment step', () => {
     const sut = new PaymentReadinessTracker(paymentGroup);
 
     expect(sut.readyToProgressFromPaymentStep).toBeFalse();
+  })
+
+  it('Lists errors according to payment group controls.', () => {
+    const sut = new PaymentReadinessTracker(paymentGroup);
+    paymentGroup.controls = {
+      firstName: {errors: {required: true}},
+      lastName: {errors: {required: true}},
+      emailAddress: {errors: {required: true}},
+      billingPostcode: {errors: {required: true}},
+    }
+
+    expect(sut.getErrorsBlockingProgress()).toEqual([
+      'Please enter your first name.',
+      'Please enter your last name.',
+      'Please enter your email address.',
+      'Please enter your billing postcode.',
+      'Please complete your payment method.',
+    ]);
+  })
+
+  it('Prompts to select saved card if deselected.', () => {
+    const sut = new PaymentReadinessTracker(paymentGroup);
+    sut.selectedSavedPaymentMethod();
+    sut.clearSavedPaymentMethod();
+
+    expect(sut.getErrorsBlockingProgress()).toEqual([
+      'Please complete your new payment method, or select a saved payment method.',
+    ]);
   })
 
   it("Allows proceeding from payment step when a saved card is selected", () => {
