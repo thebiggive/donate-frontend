@@ -4,7 +4,7 @@ import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "./HighlightCard";
 import {environment} from "../../environments/environment";
 
-const wgmfCampaignIsOpen = new Date() > new Date('2023-10-11T12:00:00');
+const wgmfCampaignIsOpen = new Date() > new Date('2023-10-11T12:00:00+01:00');
 
 const WGMFCard = wgmfCampaignIsOpen ? {
   headerText: 'Double your donation in the Women and Girls Match Fund',
