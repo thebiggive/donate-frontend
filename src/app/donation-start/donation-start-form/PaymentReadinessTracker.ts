@@ -89,7 +89,7 @@ export class PaymentReadinessTracker {
         case 'required':
           return `Please enter your ${fieldName}.`;
         case 'pattern':
-          return `Sorry, your ${fieldName} is not recognised - Please enter a valid ${fieldName}.`;
+          return `Sorry, your ${fieldName} is not recognised - please enter a valid ${fieldName}.`;
         default:
           console.error(error);
           return `Sorry, there is an error with the ${key} field.`;
