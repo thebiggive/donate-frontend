@@ -240,6 +240,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private stripeElements: StripeElements | undefined;
   private selectedPaymentMethodType: string | undefined;
   private paymentReadinessTracker: PaymentReadinessTracker;
+  public paymentStepErrors: string = "";
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -2166,4 +2167,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.tipAmountField?.setValue(this.tipValue);
   }
 
+  continueFromPaymentStep() {
+    if (! this.readyToProgressFromPaymentStep) {
+      this.paymentStepErrors = this.paymentReadinessTracker.getErrorsBlockingProgress().join(" ");
+      this.showErrorToast(this.paymentStepErrors);
+      return;
+    } else {
+      this.paymentStepErrors = "";
+      this.next()
+    }
+  }
 }

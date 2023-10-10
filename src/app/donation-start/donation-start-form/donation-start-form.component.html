@@ -434,8 +434,15 @@
 
         </div>
 
-        <p *ngIf="stripeError" class="error" aria-live="assertive">
+        <p *ngIf="stripeError" class="error" aria-live="polite">
           {{ stripeError }}
+        </p>
+
+        <p class="error" *ngIf="paymentStepErrors && don819FlagEnabled">
+          <!-- No need for aria-live on this because the errors will have already been in an aria-live toast pop.
+               They are here in addition to all the donor to review them in detail.
+          -->
+          {{paymentStepErrors}}
         </p>
 
         <div style="text-align: center">
@@ -444,8 +451,8 @@
             class="continue b-w-100 b-rt-0"
             mat-raised-button
             color="primary"
-            [disabled]="! readyToProgressFromPaymentStep"
-            (click)="next()"
+            [disabled]="! readyToProgressFromPaymentStep && ! don819FlagEnabled"
+            (click)="continueFromPaymentStep()"
           >Continue</button>
         </div>
       </mat-step>
