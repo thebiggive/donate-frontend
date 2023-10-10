@@ -72,9 +72,6 @@ export class PaymentReadinessTracker {
     return [...this.humanReadableFormValidationErrors(), ...paymentErrors];
   }
 
-  /**
-   * todo - translate keys to human readable names, deal with errors other than 'reqauired'
-   */
   private humanReadableFormValidationErrors() {
     const fieldNames = {
       firstName: 'first name',
