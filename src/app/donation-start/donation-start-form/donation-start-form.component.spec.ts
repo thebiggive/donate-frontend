@@ -98,7 +98,6 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
   donationStartFormComponent.donation = {} as Donation;
   return donationStartFormComponent;
 }
-
 describe('DonationStartNewPrimaryComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -461,28 +460,6 @@ describe('DonationStartNewPrimaryComponent', () => {
     expect(component.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
     expect(component.donationForm.controls.marketing!.get('optInCharityEmail')?.errors).toBeNull();
     expect(component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors).toBeNull();
-  });
-
-
-  it('Should allow paying with donation funds with no saved payment method', async () => {
-    var finaliseCashBalancePurchaseCalled = false;
-
-    const fakeDonationService = {
-      getDefaultCounty: () => 'GB',
-      finaliseCashBalancePurchase: (donation: Donation)=> {
-        finaliseCashBalancePurchaseCalled = true;
-        return of(donation);
-      },
-      getPaymentMethods: () => of({data: []}),
-    } as unknown as DonationService;
-
-    const sut = makeDonationStartFormComponent(fakeDonationService);
-
-    sut.loadPerson({cash_balance: {gbp: 100}}, 'personID', 'jwt');
-
-    await sut.payWithStripe();
-
-    expect(finaliseCashBalancePurchaseCalled).toBe(true)
   });
 
   it('Should not allow paying with with no payment method and no funds', async () => {

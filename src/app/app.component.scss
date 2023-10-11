@@ -1,6 +1,29 @@
+@import '../abstract';
+
 #cookie-banner {
   position: fixed;
   bottom: 3em;
   right: 3em;
   z-index: 10;
+}
+
+.skip-to-content-link {
+  z-index: 10;
+  margin: auto;
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  font-size: 16px;
+  transform: translateY(-1000%);
+  transition: transform 0.3s;
+
+  a {
+    background-color: $colour-background;
+    padding: 5px;
+    border-radius: 3px;
+  }
+}
+
+.skip-to-content-link:focus-within {
+  transform: translateY(0%);
 }

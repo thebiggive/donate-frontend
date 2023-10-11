@@ -64,6 +64,7 @@ import {sanitiseCurrency} from "../sanitiseCurrency";
 import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation-tipping-slider.component";
 import {MatomoTracker} from 'ngx-matomo';
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {PaymentReadinessTracker} from "./PaymentReadinessTracker";
 
 declare var _paq: {
   push: (args: Array<string|object>) => void,
@@ -238,6 +239,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   private stripeElements: StripeElements | undefined;
   private selectedPaymentMethodType: string | undefined;
+  private paymentReadinessTracker: PaymentReadinessTracker;
+  public paymentStepErrors: string = "";
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -398,6 +401,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (isPlatformBrowser(this.platformId)) {
       this.handleCampaignViewUpdates();
     }
+
+    this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup)
   }
 
 
@@ -529,6 +534,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.donor = undefined;
     this.creditPenceToUse = 0;
     this.stripePaymentMethodReady = false;
+    this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup,);
     this.donationForm.reset();
     this.identityService.clearJWT();
     this.idCaptcha.reset();
@@ -663,6 +669,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
 
     this.stripeManualCardInputValid = this.stripePaymentMethodReady = state.complete;
+    this.paymentReadinessTracker.onStripeCardChange(state);
+
     if (state.error) {
       this.stripeError = this.getStripeFriendlyError(state.error, 'card_change');
       this.stripeResponseErrorCode = state.error.code;
@@ -1173,10 +1181,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // work-around-able, so for now it's not worth the refactoring time.
     const checked = event.checked;
     this.stripePaymentMethodReady = checked || this.stripeManualCardInputValid;
+    this.paymentReadinessTracker.onUseSavedCardChange(checked);
 
     if (checked) {
       this.selectedSavedMethod = paymentMethod;
       this.updateFormWithBillingDetails(this.selectedSavedMethod);
+      this.paymentReadinessTracker.selectedSavedPaymentMethod();
     } else {
       this.selectedSavedMethod = undefined;
       this.prepareStripeElements();
@@ -1270,6 +1280,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       );
       this.maximumDonationAmount = maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse);
       this.stripePaymentMethodReady = true;
+      this.paymentReadinessTracker.donationFundsPrepared(this.creditPenceToUse);
       this.setConditionalValidators();
     }
   }
@@ -1298,6 +1309,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         // notice that.
         const firstPaymentMethod = response.data[0]!;
         this.selectedSavedMethod = firstPaymentMethod;
+        this.paymentReadinessTracker.selectedSavedPaymentMethod();
         this.updateFormWithBillingDetails(firstPaymentMethod);
       }
     });
@@ -1611,6 +1623,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (this.psp === 'stripe') {
       if (this.creditPenceToUse > 0) {
+        this.paymentReadinessTracker.donorHasFunds();
         this.stripePaymentMethodReady = true;
       } else {
         this.prepareStripeElements();
@@ -1733,6 +1746,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (this.stripeSavedMethods.length < 1) {
       this.selectedSavedMethod = undefined;
+      this.paymentReadinessTracker.clearSavedPaymentMethod();
     }
     this.retrying = false;
     this.submitting = false;
@@ -1977,6 +1991,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       .toFixed(2);
   }
 
+  get readyToProgressFromPaymentStep(): boolean {
+    return this.paymentReadinessTracker.readyToProgressFromPaymentStep;
+  }
+
   private promptToContinue(
     title: string,
     status: string,
@@ -2057,6 +2075,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
               });
             }
             this.selectedSavedMethod = this.stripeSavedMethods.length > 0 ? this.stripeSavedMethods[0] : undefined;
+            if (this.selectedSavedMethod) {
+              this.paymentReadinessTracker.selectedSavedPaymentMethod();
+            }
 
             if (this.donor?.id) {
               const jwt = this.identityService.getJWT() as string;
@@ -2146,4 +2167,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.tipAmountField?.setValue(this.tipValue);
   }
 
+  continueFromPaymentStep() {
+    if (! this.readyToProgressFromPaymentStep) {
+      this.paymentStepErrors = this.paymentReadinessTracker.getErrorsBlockingProgress().join(" ");
+      this.showErrorToast(this.paymentStepErrors);
+      return;
+    } else {
+      this.paymentStepErrors = "";
+      this.next()
+    }
+  }
 }

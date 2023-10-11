@@ -3,7 +3,7 @@ import {AfterViewInit, Component, HostListener, Inject, OnInit, PLATFORM_ID, Vie
 import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
 import {BiggiveMainMenu} from '@biggive/components-angular';
 import {MatomoTracker} from "ngx-matomo";
-import {filter} from 'rxjs/operators';
+import {filter, map} from 'rxjs/operators';
 
 import {DonationService} from './donation.service';
 import {GetSiteControlService} from './getsitecontrol.service';
@@ -18,6 +18,7 @@ import {
   CookiePreferences,
   CookiePreferenceService
 } from "./cookiePreference.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -39,6 +40,7 @@ export class AppComponent implements AfterViewInit, OnInit {
   protected readonly environment = environment;
   protected readonly flags = flags;
   protected readonly userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
+  public currentUrlWithoutHash$: Observable<URL>;
 
   constructor(
     private identityService: IdentityService,
@@ -59,6 +61,15 @@ export class AppComponent implements AfterViewInit, OnInit {
         }
       }
     });
+
+    this.currentUrlWithoutHash$ = router.events.pipe(
+      filter((event: RouterEvent) => event instanceof NavigationEnd),
+      map((_event) => {
+        const url = new URL(environment.donateGlobalUriPrefix + router.url);
+        url.hash = "";
+        return url;
+      })
+    );
   }
 
   /**
