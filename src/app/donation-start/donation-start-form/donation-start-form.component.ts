@@ -1052,7 +1052,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const control = this.donationForm.controls['amounts'];
     if(! control!.valid) {
-      this.showErrorToast(this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount');
+      this.showErrorToast(this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount or tip amount');
 
       return;
     }
@@ -1140,38 +1140,52 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return '';
   }
 
+    /**
+     * @todo - refactor to make friendly by combining messages re donation amount and re tip errors -
+     * we should show both at once if necassary. But one at a time may do for this weekend.
+     */
     public displayableAmountsStepErrors = () => {
-        const errors = this.donationAmountField?.errors;
+      const donationAmountErrors = this.donationAmountField?.errors;
+      const tipErrors = this.tipAmountField?.errors;
 
-        if (!errors) {
-            return '';
-        }
+      if (! donationAmountErrors && ! tipErrors) {
+        return '';
+      }
 
-        if (errors.min) {
-            return `Sorry, the minimum donation is ${this.currencySymbol}1.`;
-        }
+      if (donationAmountErrors?.min) {
+        return `Sorry, the minimum donation is ${this.currencySymbol}1.`;
+      }
 
-        if (errors.max) {
-            return `Your donation must be ${this.currencySymbol}${this.maximumDonationAmount} or less to proceed.`
-                + (
-                    this.creditPenceToUse === 0 ?
-                        ` You can make multiple matched donations of ` +
-                        `${this.currencySymbol}${this.maximumDonationAmount} if match funds are available.`
-                        : ''
-                );
-        }
+      if (donationAmountErrors?.max) {
+        return `Your donation must be ${this.currencySymbol}${this.maximumDonationAmount} or less to proceed.`
+          + (
+            this.creditPenceToUse === 0 ?
+              ` You can make multiple matched donations of ` +
+              `${this.currencySymbol}${this.maximumDonationAmount} if match funds are available.`
+              : ''
+          );
+      }
 
-        if (errors.pattern) {
-            return `Please enter a whole number of ${this.currencySymbol} without commas.`
-        }
+      if (donationAmountErrors?.pattern) {
+        return `Please enter a whole number of ${this.currencySymbol} without commas.`
+      }
 
-        if (errors.required) {
-            return 'Please enter how much you would like to donate.';
-        }
+      if (donationAmountErrors?.required) {
+        return 'Please enter how much you would like to donate.';
+      }
 
-        const message = "Sorry, something went wrong with the form - please try again or contact Big Give";
-        console.error(message);
-        return message;
+      // todo - refactor tip messages below to remove duplication.
+      if (tipErrors?.pattern) {
+        return "Please enter how much you would like to donate to Big Give as a number of £, optionally with 2 decimals and up to £25,000."
+      }
+
+      if (tipErrors?.required) {
+        return "Please enter how much you would like to donate to Big Give."
+      }
+
+      const message = "Sorry, something went wrong with the form - please try again or contact Big Give";
+      console.error(message);
+      return message;
     };
 
     onUseSavedCardChange(event: MatCheckboxChange, paymentMethod: PaymentMethod) {
