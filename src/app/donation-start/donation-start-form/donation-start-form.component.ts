@@ -2042,11 +2042,16 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           tipPercentage = 'Other';
         }
 
-        this.amountsGroup.patchValue({
+        const patchForValue = {
           donationAmount: donation.donationAmount.toString(),
           tipAmount: donation.tipAmount.toString(),
           tipPercentage,
-        });
+        };
+
+        this.amountsGroup.patchValue(patchForValue);
+        // not sure why this is needed - the patchValue above seems like it should be enough. But that seems to not work,
+        // see DON-909.
+        this.amountsGroup.get('tipAmount')?.setValue(patchForValue.tipAmount);
 
         if (this.stepper.selected?.label === this.yourDonationStepLabel) {
           this.jumpToStep(donation.currencyCode === 'GBP' ? 'Gift Aid' : 'Payment details');
