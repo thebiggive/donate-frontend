@@ -1052,7 +1052,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const control = this.donationForm.controls['amounts'];
     if(! control!.valid) {
-      this.showErrorToast(this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount');
+      this.showErrorToast(this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount or tip amount');
 
       return;
     }
@@ -1140,38 +1140,52 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return '';
   }
 
+    /**
+     * @todo - refactor to make friendly by combining messages re donation amount and re tip errors -
+     * we should show both at once if necassary. But one at a time may do for this weekend.
+     */
     public displayableAmountsStepErrors = () => {
-        const errors = this.donationAmountField?.errors;
+      const donationAmountErrors = this.donationAmountField?.errors;
+      const tipErrors = this.tipAmountField?.errors;
 
-        if (!errors) {
-            return '';
-        }
+      if (! donationAmountErrors && ! tipErrors) {
+        return '';
+      }
 
-        if (errors.min) {
-            return `Sorry, the minimum donation is ${this.currencySymbol}1.`;
-        }
+      if (donationAmountErrors?.min) {
+        return `Sorry, the minimum donation is ${this.currencySymbol}1.`;
+      }
 
-        if (errors.max) {
-            return `Your donation must be ${this.currencySymbol}${this.maximumDonationAmount} or less to proceed.`
-                + (
-                    this.creditPenceToUse === 0 ?
-                        ` You can make multiple matched donations of ` +
-                        `${this.currencySymbol}${this.maximumDonationAmount} if match funds are available.`
-                        : ''
-                );
-        }
+      if (donationAmountErrors?.max) {
+        return `Your donation must be ${this.currencySymbol}${this.maximumDonationAmount} or less to proceed.`
+          + (
+            this.creditPenceToUse === 0 ?
+              ` You can make multiple matched donations of ` +
+              `${this.currencySymbol}${this.maximumDonationAmount} if match funds are available.`
+              : ''
+          );
+      }
 
-        if (errors.pattern) {
-            return `Please enter a whole number of ${this.currencySymbol} without commas.`
-        }
+      if (donationAmountErrors?.pattern) {
+        return `Please enter a whole number of ${this.currencySymbol} without commas.`
+      }
 
-        if (errors.required) {
-            return 'Please enter how much you would like to donate.';
-        }
+      if (donationAmountErrors?.required) {
+        return 'Please enter how much you would like to donate.';
+      }
 
-        const message = "Sorry, something went wrong with the form - please try again or contact Big Give";
-        console.error(message);
-        return message;
+      // todo - refactor tip messages below to remove duplication.
+      if (tipErrors?.pattern) {
+        return "Please enter how much you would like to donate to Big Give as a number of £, optionally with 2 decimals and up to £25,000."
+      }
+
+      if (tipErrors?.required) {
+        return "Please enter how much you would like to donate to Big Give."
+      }
+
+      const message = "Sorry, something went wrong with the form - please try again or contact Big Give";
+      console.error(message);
+      return message;
     };
 
     onUseSavedCardChange(event: MatCheckboxChange, paymentMethod: PaymentMethod) {
@@ -1848,7 +1862,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           // We allow spaces at start and end of amount inputs because people can easily paste them in
           // by mistake, and they don't do any harm. Maxlength in the HTML makes sure there can't be so much as
           // to stop the number being visible.
-          Validators.pattern('^\\s*[£$]?[0-9]+?(\\.[0-9]{2})?\\s*$'),
+          Validators.pattern('^\\s*[£$]?[0-9]+?(\\.[0-9]{1,2})?\\s*$'),
           getCurrencyMaxValidator(),
         ]);
       }
@@ -2042,11 +2056,16 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           tipPercentage = 'Other';
         }
 
-        this.amountsGroup.patchValue({
+        const patchForValue = {
           donationAmount: donation.donationAmount.toString(),
           tipAmount: donation.tipAmount.toString(),
           tipPercentage,
-        });
+        };
+
+        this.amountsGroup.patchValue(patchForValue);
+        // not sure why this is needed - the patchValue above seems like it should be enough. But that seems to not work,
+        // see DON-909.
+        this.amountsGroup.get('tipAmount')?.setValue(patchForValue.tipAmount);
 
         if (this.stepper.selected?.label === this.yourDonationStepLabel) {
           this.jumpToStep(donation.currencyCode === 'GBP' ? 'Gift Aid' : 'Payment details');
