@@ -1043,21 +1043,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     // For all other errors, attempting to proceed should just help the donor find
     // the error on the page if there is one.
-    if (this.goToFirstVisibleError()) {
-      return;
+    if (!this.goToFirstVisibleError()) {
+      this.stepper.next();
     }
-
-    if (!this.donationForm.valid) {
-      // This should never happen, we should be showing a more specific error message if required and returning
-      // before we get here. But just in case we show something rather than being silent. stepper.next doesn't do
-      // anything when form is invalid.
-      this.showErrorToast(
-        "Sorry, there is an an error in this form - please check all fields and try again. If the problem continues "
-        + "please contact Big Give."
-      )
-      return;
-    }
-    this.stepper.next();
   }
 
   progressFromStepOne() {
