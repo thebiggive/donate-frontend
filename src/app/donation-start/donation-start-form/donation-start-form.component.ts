@@ -1848,7 +1848,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           // We allow spaces at start and end of amount inputs because people can easily paste them in
           // by mistake, and they don't do any harm. Maxlength in the HTML makes sure there can't be so much as
           // to stop the number being visible.
-          Validators.pattern('^\\s*[£$]?[0-9]+?(\\.[0-9]{2})?\\s*$'),
+          Validators.pattern('^\\s*[£$]?[0-9]+?(\\.[0-9]{1,2})?\\s*$'),
           getCurrencyMaxValidator(),
         ]);
       }
