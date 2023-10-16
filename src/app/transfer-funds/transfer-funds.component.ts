@@ -11,6 +11,7 @@ import { startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/o
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { DonationService } from '../donation.service';
+import { DonorAccountService } from '../donor-account.service';
 import {Donation, maximumDonationAmountForFundedDonation} from '../donation.model';
 import { DonationCreatedResponse } from '../donation-created-response.model';
 import { environment } from 'src/environments/environment';
@@ -58,6 +59,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     public dialog: MatDialog,
     private campaignService: CampaignService,
     private donationService: DonationService,
+    private donorAccountService: DonorAccountService,
     private identityService: IdentityService,
     private matomoTracker: MatomoTracker,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -208,6 +210,9 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   }
 
   createAccount(): void {
+    if (! this.donor) {
+      throw new Error("Donor info not loaded");
+    }
     this.isLoading = true;
     const idAndJWT = this.identityService.getIdAndJWT();
     if (idAndJWT !== undefined) {
@@ -217,6 +222,11 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
         this.accountNumber = response.bank_transfer.financial_addresses[0]!.sort_code.account_number;
         this.sortCode = response.bank_transfer.financial_addresses[0]!.sort_code.sort_code;
         this.accountHolderName = response.bank_transfer.financial_addresses[0]!.sort_code.account_holder_name;
+      });
+
+      this.donorAccountService.createAccount(this.donor).subscribe({
+        next: () => {console.log("Account created")},
+        error () {}, // no need to do anything, possibly matchbot just doesn't have the account creation route yet.
       });
 
       this.createAndFinaliseTipDonation();
