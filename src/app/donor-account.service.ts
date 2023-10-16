@@ -23,7 +23,13 @@ export class DonorAccountService {
 
     return this.http.post(
       `${environment.donationsApiPrefix}/${donor.id}/donor-account`,
-      {emailAddress: donor.email_address},
+      {
+        emailAddress: donor.email_address,
+        donorName: {
+          firstName: donor.first_name,
+          lastName: donor.last_name,
+        }
+      },
       {headers: new HttpHeaders({'X-Tbg-Auth': jwt})}
     );
   }
