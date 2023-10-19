@@ -7,7 +7,7 @@ import {environment} from "../../environments/environment";
 const wgmfCampaignIsOpen = new Date() > new Date('2023-10-11T12:00:00+01:00');
 
 const WGMFCard = wgmfCampaignIsOpen ? {
-  headerText: "Woman and Girl\'s Match Fund",
+  headerText: "Woman and Girls Match Fund",
   bodyText: "11th - 18th October 2023",
   iconColor: "brand-wgmf-purple",
   backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', environment.donateGlobalUriPrefix),
