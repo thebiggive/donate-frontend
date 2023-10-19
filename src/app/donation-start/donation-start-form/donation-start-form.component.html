@@ -213,7 +213,6 @@
             class="continue b-w-100 b-rt-0"
             mat-raised-button
             color="primary"
-            [disabled]="!donationForm.controls['amounts']!.valid && !don819FlagEnabled"
             (click)="progressFromStepOne()"
           >Continue</button>
       </div>
@@ -439,7 +438,7 @@
           {{ stripeError }}
         </p>
 
-        <p class="error" *ngIf="paymentStepErrors && don819FlagEnabled">
+        <p class="error" *ngIf="paymentStepErrors">
           <!-- No need for aria-live on this because the errors will have already been in an aria-live toast pop.
                They are here in addition to all the donor to review them in detail.
           -->
@@ -452,7 +451,6 @@
             class="continue b-w-100 b-rt-0"
             mat-raised-button
             color="primary"
-            [disabled]="! readyToProgressFromPaymentStep && ! don819FlagEnabled"
             (click)="continueFromPaymentStep()"
           >Continue</button>
         </div>
@@ -639,7 +637,6 @@
             class="c-donate-button b-donate-button b-w-100 b-rt-1"
             mat-raised-button
             color="primary"
-            [disabled]="donationForm.invalid && ! don819FlagEnabled"
           >
             Donate now
           </button>

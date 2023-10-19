@@ -1,6 +1,5 @@
 import {StepperSelectionEvent} from '@angular/cdk/stepper';
 import {DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
-import {flags} from "../../featureFlags";
 import {HttpErrorResponse} from '@angular/common/http';
 import {
   AfterContentChecked,
@@ -89,7 +88,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   stripePaymentElement: StripePaymentElement | undefined;
   cardHandler = this.onStripeCardChange.bind(this);
-  don819FlagEnabled = flags.don819FlagEnabled;
   showChampionOptIn = false;
 
   @Input({ required: true }) campaign: Campaign;
@@ -702,9 +700,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
       const errorMessage = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
 
-      if (this.don819FlagEnabled) {
-        this.showErrorToast(errorMessage);
-      }
+      this.showErrorToast(errorMessage);
 
       this.stripeError = errorMessage;
 
@@ -731,9 +727,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // Can't proceed if campaign info not looked up yet or no usable PSP
     if (!this.donation || !this.campaign || !this.campaign.charity.id || !this.psp) {
       this.donationUpdateError = true;
-      if (this.don819FlagEnabled) {
-        this.showErrorToast("Sorry, we can't submit your donation right now.");
-      }
+      this.showErrorToast("Sorry, we can't submit your donation right now.");
       return;
     }
 
@@ -762,9 +756,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         this.matomoTracker.trackEvent('donate_error', 'donation_update_failed', errorMessageForTracking);
         this.retrying = false;
         this.donationUpdateError = true;
-          if (this.don819FlagEnabled) {
-              this.showErrorToast("Sorry, we can't submit your donation right now.");
-          }
+        this.showErrorToast("Sorry, we can't submit your donation right now.");
         this.submitting = false;
       });
   }
@@ -936,10 +928,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * either help donors directly or if they might usefully quote it to us in a support case.
    */
   showDonationCreateError() {
-    if (! this.don819FlagEnabled) {
-      return;
-    }
-
     this.showErrorToast(
         "Sorry, we can't register your donation right now. Please try again in a moment or contact " +
         " us if this message persists."
@@ -1099,7 +1087,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       errorMessages.push("Please enter a UK postcode");
     }
 
-    if (errorMessages.length > 0 && this.don819FlagEnabled) {
+    if (errorMessages.length > 0) {
       this.showErrorToast(errorMessages.join(". "));
       return;
     }
@@ -1110,7 +1098,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   progressFromStepReceiveUpdates(): void {
     this.triedToLeaveMarketing = true;
     const errorMessages = Object.values(this.errorMessagesForMarketingStep()).filter(Boolean)
-    if (errorMessages.length > 0 && this.don819FlagEnabled) {
+    if (errorMessages.length > 0) {
       this.showErrorToast(errorMessages.join(" "));
       return;
     }
