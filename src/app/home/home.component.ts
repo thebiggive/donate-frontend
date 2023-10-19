@@ -7,12 +7,12 @@ import {environment} from "../../environments/environment";
 const wgmfCampaignIsOpen = new Date() > new Date('2023-10-11T12:00:00+01:00');
 
 const WGMFCard = wgmfCampaignIsOpen ? {
-  headerText: 'Double your donation in the Women and Girls Match Fund',
-  bodyText: "Donate between 11th - 18th October 2023",
+  headerText: "Woman and Girl\'s Match Fund",
+  bodyText: "11th - 18th October 2023",
   iconColor: "brand-wgmf-purple",
   backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', environment.donateGlobalUriPrefix),
   button: {
-    text: "Donate Now",
+    text: "See results",
     href: new URL('/women-and-girls-2023/', environment.donateGlobalUriPrefix),
   }
 } as const :
