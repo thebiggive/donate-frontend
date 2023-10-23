@@ -157,7 +157,7 @@ describe('CampaignService', () => {
     campaign.amountRaised = 98;
     campaign.target = 200;
 
-    expect(CampaignService.percentRaised(campaign, true)).toBe(49);
+    expect(CampaignService.percentRaisedOfCampaignOrParent(campaign)).toBe(49);
   });
 
   it ('should return the % raised for the parent campaign when its parent does use shared funds', () => {
@@ -168,6 +168,6 @@ describe('CampaignService', () => {
     campaign.parentAmountRaised = 1000;
     campaign.parentTarget = 2000;
 
-    expect(CampaignService.percentRaised(campaign, true)).toBe(50);
+    expect(CampaignService.percentRaisedOfCampaignOrParent(campaign)).toBe(50);
   });
 });

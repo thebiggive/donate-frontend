@@ -121,7 +121,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   getPercentageRaised(childCampaign: CampaignSummary) {
-    return CampaignService.percentRaised(childCampaign);
+    return CampaignService.percentRaisedOfIndividualCampaign(childCampaign);
   }
 
   private moreMightExist(): boolean {

@@ -27,7 +27,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   campaignInPast = false;
   donateEnabled = true;
   fromFund = false;
-  percentRaised?: number;
   videoEmbedUrl?: SafeResourceUrl;
 
   private timer: any; // State update setTimeout reference, for client side when donations open soon
@@ -89,8 +88,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
          }, msToLaunch);
       }
     }
-
-    this.percentRaised = CampaignService.percentRaised(campaign);
 
     let summaryStart;
     if (campaign.summary) {
