@@ -208,6 +208,7 @@
 }
 
 @mixin format-icon-container {
+  padding-left: 0; // Support e.g. use in `<ul/>` cross-browser.
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
