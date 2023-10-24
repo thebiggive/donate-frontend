@@ -33,7 +33,6 @@ import {
 import {EMPTY, firstValueFrom} from 'rxjs';
 
 import {Campaign} from '../../campaign.model';
-import {CampaignService} from '../../campaign.service';
 import {CardIconsService} from '../../card-icons.service';
 import {COUNTRIES} from '../../countries';
 import {Donation, maximumDonationAmount} from '../../donation.model';
