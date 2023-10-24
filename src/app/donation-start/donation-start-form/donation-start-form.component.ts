@@ -35,7 +35,6 @@ import {
 import {EMPTY, firstValueFrom} from 'rxjs';
 
 import {Campaign} from '../../campaign.model';
-import {CampaignService} from '../../campaign.service';
 import {CardIconsService} from '../../card-icons.service';
 import {campaignHiddenMessage} from '../../../environments/common';
 import {COUNTRIES} from '../../countries';
@@ -1423,9 +1422,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return false;
   }
 
-  /**
-   * Redirect if campaign's not open yet; set up page metadata if it is
-   */
   private setCampaignBasedVars() {
     this.campaignId = this.campaign.id;
 
@@ -1457,12 +1453,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.setConditionalValidators();
     this.setChampionOptInValidity();
-
-    // auto redirect back to campaign page if donations not open yet
-    if (!CampaignService.isOpenForDonations(this.campaign)) {
-      this.router.navigateByUrl(`/campaign/${this.campaign.id}`, { replaceUrl: true });
-      return;
-    }
 
     this.pageMeta.setCommon(
       `Donate to ${this.campaign.charity.name}`,

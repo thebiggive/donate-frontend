@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
-import { campaignHiddenMessage } from '../../environments/common';
+import { campaignHiddenMessage, currencyPipeDigitsInfo } from '../../environments/common';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { NavigationService } from '../navigation.service';
@@ -24,12 +24,12 @@ import { TimeLeftPipe } from '../time-left.pipe';
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   campaign: Campaign;
-  isPendingOrNotReady = false;
-  campaignInFuture = false;
   campaignInPast = false;
   donateEnabled = true;
   fromFund = false;
   videoEmbedUrl?: SafeResourceUrl;
+
+  currencyPipeDigitsInfo = currencyPipeDigitsInfo;
 
   private timer: any; // State update setTimeout reference, for client side when donations open soon
 
@@ -76,9 +76,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   }
 
   private setSecondaryProps(campaign: Campaign) {
-    this.campaignInFuture = CampaignService.isInFuture(campaign);
     this.campaignInPast = CampaignService.isInPast(campaign);
-    this.isPendingOrNotReady = CampaignService.isPendingOrNotReady(campaign);
     this.donateEnabled = CampaignService.isOpenForDonations(campaign);
 
     // If donations open within 24 hours, set a timer to update this page's state.
@@ -86,7 +84,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       const msToLaunch = new Date(campaign.startDate).getTime() - Date.now();
       if (msToLaunch > 0 && msToLaunch < 86400000) {
         this.timer = setTimeout(() => {
-          this.campaignInFuture = false;
           this.donateEnabled = true;
          }, msToLaunch);
       }

@@ -1,12 +1,15 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
+
 import {Campaign} from "../../campaign.model";
-import {ActivatedRoute} from "@angular/router";
+import {CampaignService} from '../../campaign.service';
 import { Donation } from 'src/app/donation.model';
 import {Person} from "../../person.model";
 import {IdentityService} from "../../identity.service";
 import {environment} from "../../../environments/environment";
 import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
 import {ImageService} from "../../image.service";
+
 @Component({
   templateUrl: './donation-start-container.component.html',
   styleUrls: ['./donation-start-container.component.scss']
@@ -25,14 +28,22 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
   public bannerUri: string | null;
 
   constructor(
-    private route: ActivatedRoute,
     private identityService: IdentityService,
     private imageService: ImageService,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
   }
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
+
+    // auto redirect back to campaign page if donations not open according to date *or* status.
+    if (!CampaignService.isOpenForDonations(this.campaign)) {
+      this.router.navigateByUrl(`/campaign/${this.campaign.id}`, { replaceUrl: true });
+      return;
+    }
+
     this.campaignOpenOnLoad = this.campaignIsOpen();
     this.imageService.getImageUri(this.campaign.bannerUri, 830).subscribe(uri => this.bannerUri = uri);
   }
@@ -45,7 +56,9 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
       return;
     }
 
-    this.donationStartForm.resumeDonationsIfPossible();
+    if (this.donationStartForm) {
+      this.donationStartForm.resumeDonationsIfPossible();
+    }
   }
 
   /**

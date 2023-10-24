@@ -1,4 +1,4 @@
-import { CurrencyPipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
+import { CurrencyPipe, DatePipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
 import {
   AfterViewChecked,
   Component,
@@ -19,7 +19,8 @@ import { Subscription } from 'rxjs';
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
-import { DatePipe } from '@angular/common'
+
+import { currencyPipeDigitsInfo } from '../../environments/common';
 import { environment } from '../../environments/environment';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
@@ -84,6 +85,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   locationOptions: string[] = [];
   fundingOptions: string[] = [];
   parentIsSharedFund: boolean;
+
+  currencyPipeDigitsInfo = currencyPipeDigitsInfo;
 
   constructor(
     private campaignService: CampaignService,
@@ -398,7 +401,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     if (!this.fund) {
       if (!campaignInFuture) {
         const showGiftAid = this.campaign.currencyCode === 'GBP' && this.campaign.amountRaised > 0;
-        this.tickerMainMessage = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') +
+        this.tickerMainMessage = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
           ' raised' + (showGiftAid ? ' inc. Gift Aid' : '');
       } else {
         this.tickerMainMessage = 'Opens in ' + this.timeLeftToOpenPipe.transform(this.campaign.startDate);
@@ -416,7 +419,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
           },
           {
             label: 'match funds remaining',
-            figure: this.currencyPipe.transform(this.campaign.matchFundsRemaining, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
+            figure: this.currencyPipe.transform(this.campaign.matchFundsRemaining, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) as string,
           },
         ]);
       } else {
@@ -446,7 +449,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
       tickerItems.push({
         label: 'total match funds',
-        figure: this.currencyPipe.transform(this.campaign.matchFundsTotal, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
+        figure: this.currencyPipe.transform(this.campaign.matchFundsTotal, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) as string,
       });
     }
 
@@ -469,14 +472,14 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   private setFundSpecificProps() {
-    this.tickerMainMessage = this.currencyPipe.transform(this.fund?.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') +
+    this.tickerMainMessage = this.currencyPipe.transform(this.fund?.amountRaised, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
       ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
 
     const durationInDays = Math.floor((new Date(this.campaign.endDate).getTime() - new Date(this.campaign.startDate).getTime()) / 86400000);
     const tickerItems = [];
     tickerItems.push({
       label: 'total match funds',
-      figure: this.currencyPipe.transform(this.fund?.totalAmount, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
+      figure: this.currencyPipe.transform(this.fund?.totalAmount, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) as string,
     });
     if (CampaignService.isOpenForDonations(this.campaign)) {
       tickerItems.push({
