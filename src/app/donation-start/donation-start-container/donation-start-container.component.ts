@@ -87,7 +87,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
       return;
     }
 
-    this.identityService.get(id, jwt).subscribe(
+    this.identityService.get(id, jwt, false).subscribe(
       (person: Person) => {
       this.donor = person; // Should mean donations are attached to the Stripe Customer.
       this.personIsLoginReady = true;

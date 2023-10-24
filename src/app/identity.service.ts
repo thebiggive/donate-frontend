@@ -81,19 +81,24 @@ export class IdentityService {
       person);
   }
 
-  get(id: string, jwt: string): Observable<Person> {
+  get(id: string, jwt: string, withTipBalances: boolean): Observable<Person> {
     return this.http.get<Person>(
       `${environment.identityApiPrefix}${this.peoplePath}/${id}`,
       {
         headers: new HttpHeaders({ 'X-Tbg-Auth': jwt }),
+        params: {
+          withTipBalances: withTipBalances ? 'true' : 'false',
+        },
       },
     );
   }
 
-  /** Returns an observable of a person if logged in, or of null.
-   *  Note that the person may not have a password - if not they should
-   *  probably not be treated as fully logged-in, although we could offer
-   *  them the opportunity to set a password.
+  /**
+   * Returns an observable of a person if logged in, or of null.
+   * Note that the person may not have a password - if not they should
+   * probably not be treated as fully logged-in, although we could offer
+   * them the opportunity to set a password. This call doesn't get their pending
+   * bank-funded tips balance, which is only used on the Transfer Funds page.
    */
   getLoggedInPerson(): Observable<null|Person> {
     const idAndJWT = this.getIdAndJWT();
@@ -102,7 +107,7 @@ export class IdentityService {
       return of(null);
     }
 
-    return this.get(idAndJWT.id, idAndJWT.jwt);
+    return this.get(idAndJWT.id, idAndJWT.jwt, false);
   }
 
   update(person: Person): Observable<Person> {

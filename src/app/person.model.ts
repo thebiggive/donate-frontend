@@ -15,6 +15,12 @@ export interface Person {
     cash_balance?: { [currencyCode: string]: number };
 
     /**
+     * The total of donor fund form-created pending tips for the given Person, which will be fulfilled
+     * by bank transfers
+     */
+    pending_tip_balance?: { [currencyCode: string]: number };
+
+    /**
      * These 3 expected on first update.
      */
     email_address?: string;

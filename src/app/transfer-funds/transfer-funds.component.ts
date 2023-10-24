@@ -96,7 +96,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
           getCurrencyMinValidator(), // no override, so custom tip amount min is £0 (default)
           // Below we validate the tip as a donation because when transfering funds, tips are set
           // set as real donations to a dedicated Big Give SF campaign.
-          // See MAT-266 and the Slack thread linked it its description for more context.
+          // See MAT-266 and the Slack thread linked in its description for more context.
           getCurrencyMaxValidator(maximumDonationAmountForFundedDonation),
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
@@ -342,17 +342,24 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
   private loadAuthedPersonInfo(id: string, jwt: string) {
     this.isLoading = true;
-    this.identityService.get(id, jwt).subscribe((person: Person) => {
+    this.identityService.get(id, jwt, true).subscribe((person: Person) => {
       this.isLoading = false;
       this.donor = person;
 
-      // Pre-fill rarely-changing form values from the Person.
-      this.giftAidGroup.patchValue({
-        homeAddress: person.home_address_line_1,
-        homeOutsideUK: person.home_country_code !== null && person.home_country_code !== 'GB',
-        homePostcode: person.home_postcode,
-      });
-
+      if ((this.donor?.pending_tip_balance?.gbp || 0) > 0) {
+        // Ensure form field for Gift Aid is off as it's N/A; this also turns off its validation and `isOptedIntoGiftAid`
+        // as side effects.
+        this.giftAidGroup.patchValue({
+          giftAid: false,
+        });
+      } else {
+        // Pre-fill rarely-changing form values from the Person.
+        this.giftAidGroup.patchValue({
+          homeAddress: person.home_address_line_1,
+          homeOutsideUK: person.home_country_code !== null && person.home_country_code !== 'GB',
+          homePostcode: person.home_postcode,
+        });
+      }
     });
   }
 
