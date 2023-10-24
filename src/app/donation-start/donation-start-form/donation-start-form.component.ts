@@ -411,14 +411,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   })
 
   resumeDonationsIfPossible() {
-    this.donationService.getProbablyResumableDonation(this.campaignId)
+    this.donationService.getProbablyResumableDonation(this.campaignId, this.getPaymentMethodType())
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;
 
         // The local check might not have the latest donation status in edge cases, so we need to check the copy
         // the Donations API returned still has a resumable status and wasn't completed or cancelled since being
         // saved locally.
-        if (!existingDonation || !this.donationService.isResumable(existingDonation)) {
+        if (!existingDonation || !this.donationService.isResumable(existingDonation, this.getPaymentMethodType())) {
           // No resumable donations
           return;
         }
@@ -652,7 +652,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
-
   /**
    * According to stripe docs https://stripe.com/docs/js/element/events/on_change?type=paymentElement the change event has
    * a value key as expected here. I'm not sure why that isn't included in the TS StripeElementChangeEvent interface.
@@ -774,8 +773,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (hasCredit) {
       // Settlement is via the Customer's cash balance, with no client-side provision of a Payment Method.
-      this.donationService.finaliseCashBalancePurchase(this.donation).subscribe(
-        (donation) => {
+      this.donationService.finaliseCashBalancePurchase(this.donation).subscribe({
+        next: (donation) => {
           this.matomoTracker.trackEvent(
             'donate',
             'stripe_customer_balance_payment_success',
@@ -783,15 +782,18 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           );
           this.exitPostDonationSuccess(donation, 'donation-funds');
         },
-        (error: HttpErrorResponse) => {
+        error: (response: HttpErrorResponse) => {
+          // I think this is the path to a detailed message in MatchBot `ActionError`s.
+          const errorMsg = response.error?.error?.description;
+
           this.matomoTracker.trackEvent(
             'donate_error',
             'stripe_customer_balance_payment_error',
-            error.message ?? '[No message]',
+            errorMsg ?? '[No message]',
           );
-          this.stripeError = `Cash balance application failed: ${error.message}`;
+          this.stripeError = 'Your donation has not been processed as it seems you have insufficient funds. Please refresh the page to see your remaining balance.';
         },
-      );
+      });
 
       return;
     }
@@ -1500,7 +1502,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       feeCoverAmount: sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
-      paymentMethodType: (this.creditPenceToUse > 0) ? 'customer_balance' : 'card',
+      paymentMethodType: this.getPaymentMethodType(),
       projectId: this.campaignId,
       psp: this.psp,
       tipAmount: sanitiseCurrency(this.amountsGroup.value.tipAmount?.trim()),
@@ -2186,5 +2188,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.paymentStepErrors = "";
       this.next()
     }
+  }
+
+  private getPaymentMethodType() {
+    return (this.creditPenceToUse > 0) ? 'customer_balance' : 'card';
   }
 }
