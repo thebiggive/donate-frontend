@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
-import { campaignHiddenMessage } from '../../environments/common';
+import { campaignHiddenMessage, currencyPipeDigitsInfo } from '../../environments/common';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { NavigationService } from '../navigation.service';
@@ -28,6 +28,8 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   donateEnabled = true;
   fromFund = false;
   videoEmbedUrl?: SafeResourceUrl;
+
+  currencyPipeDigitsInfo = currencyPipeDigitsInfo;
 
   private timer: any; // State update setTimeout reference, for client side when donations open soon
 

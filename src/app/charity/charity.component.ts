@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { currencyPipeDigitsInfo } from '../../environments/common';
 import { CampaignSummary } from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
 import { CampaignService } from '../campaign.service';
@@ -13,6 +14,7 @@ import { CampaignService } from '../campaign.service';
 })
 export class CharityComponent implements OnInit {
   campaigns: CampaignSummary[];
+  currencyPipeDigitsInfo = currencyPipeDigitsInfo;
 
   constructor(
     private datePipe: DatePipe,
