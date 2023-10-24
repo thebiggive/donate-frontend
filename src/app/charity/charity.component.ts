@@ -41,11 +41,7 @@ export class CharityComponent implements OnInit {
     return date ? this.datePipe.transform(date, 'dd/MM/yyyy, HH:mm') : null;
   }
 
-  isInFuture(campaign: CampaignSummary) {
-    return CampaignService.isInFuture(campaign);
-  }
+  isInFuture = CampaignService.isInFuture;
 
-  isInPast(campaign: CampaignSummary) {
-    return CampaignService.isInPast(campaign);
-  }
+  isInPast = CampaignService.isInPast;
 }
