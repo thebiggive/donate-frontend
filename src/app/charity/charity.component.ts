@@ -36,7 +36,7 @@ export class CharityComponent implements OnInit {
     CampaignService.percentRaisedOfIndividualCampaign(childCampaign);
   }
 
-  getRelevantDateAsStr(campaign: CampaignSummary) {
+  getRelevantDateAsStr(campaign: CampaignSummary): string | null {
     const date = CampaignService.getRelevantDate(campaign);
     return date ? this.datePipe.transform(date, 'dd/MM/yyyy, HH:mm') : null;
   }
