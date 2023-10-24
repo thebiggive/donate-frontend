@@ -33,3 +33,11 @@ a {
 div.mat-expansion-panel-body {
   padding: 0 !important;
 }
+
+.snack-bar {
+  --mdc-snackbar-supporting-text-size: 17px;
+  --mdc-snackbar-supporting-text-font: $font-family;
+  --mdc-snackbar-supporting-text-line-height: 20px;
+  background-color: $colour-primary-contrast;
+  color: #bb2222; // matching angular native palette
+}

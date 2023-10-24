@@ -1,8 +1,10 @@
 import { DatePipe, isPlatformBrowser, Location } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
+import { campaignHiddenMessage } from '../../environments/common';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { NavigationService } from '../navigation.service';
@@ -38,6 +40,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
+    private snackBar: MatSnackBar,
     public timeLeftPipe: TimeLeftPipe,
   ) {
     route.queryParams.forEach((params: Params) => {
@@ -103,6 +106,17 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${campaign.video.key}`);
     } else if (campaign.video && campaign.video.provider === 'vimeo') {
       this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://player.vimeo.com/video/${campaign.video.key}`);
+    }
+
+    if (campaign.hidden) {
+      this.snackBar.open(
+        campaignHiddenMessage,
+        undefined,
+        {
+          duration: 7_000,
+          panelClass: 'snack-bar',
+        }
+      );
     }
   }
 }

@@ -24,6 +24,10 @@ export class CampaignService {
   }
 
   static isOpenForDonations(campaign: Campaign): boolean {
+    if (campaign.hidden) {
+      return false;
+    }
+
     if (this.isPendingOrNotReady(campaign)) {
       return false;
     }
