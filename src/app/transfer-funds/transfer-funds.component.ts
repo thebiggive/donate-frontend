@@ -1,30 +1,30 @@
-import { isPlatformBrowser } from '@angular/common';
-import { AfterContentInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSelectChange } from '@angular/material/select';
-import { MatomoTracker } from 'ngx-matomo';
-import { EMPTY } from 'rxjs';
-import { startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import {isPlatformBrowser} from '@angular/common';
+import {AfterContentInit, Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSelectChange} from '@angular/material/select';
+import {MatomoTracker} from 'ngx-matomo';
+import {EMPTY} from 'rxjs';
+import {debounceTime, distinctUntilChanged, startWith, switchMap} from 'rxjs/operators';
 
-import { Campaign } from '../campaign.model';
-import { CampaignService } from '../campaign.service';
-import { DonationService } from '../donation.service';
-import { DonorAccountService } from '../donor-account.service';
+import {Campaign} from '../campaign.model';
+import {CampaignService} from '../campaign.service';
+import {DonationService} from '../donation.service';
+import {DonorAccountService} from '../donor-account.service';
 import {Donation, maximumDonationAmountForFundedDonation} from '../donation.model';
-import { DonationCreatedResponse } from '../donation-created-response.model';
-import { environment } from 'src/environments/environment';
-import { FundingInstruction } from '../fundingInstruction.model';
-import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
-import { GiftAidAddress } from '../gift-aid-address.model';
-import { IdentityService } from '../identity.service';
-import { LoginModalComponent } from '../login-modal/login-modal.component';
-import { Person } from '../person.model';
-import { PostcodeService } from '../postcode.service';
-import { RegisterModalComponent } from '../register-modal/register-modal.component';
-import { getCurrencyMinValidator } from '../validators/currency-min';
-import { getCurrencyMaxValidator } from '../validators/currency-max';
+import {DonationCreatedResponse} from '../donation-created-response.model';
+import {environment} from 'src/environments/environment';
+import {FundingInstruction} from '../fundingInstruction.model';
+import {GiftAidAddressSuggestion} from '../gift-aid-address-suggestion.model';
+import {GiftAidAddress} from '../gift-aid-address.model';
+import {IdentityService} from '../identity.service';
+import {LoginModalComponent} from '../login-modal/login-modal.component';
+import {Person} from '../person.model';
+import {PostcodeService} from '../postcode.service';
+import {RegisterModalComponent} from '../register-modal/register-modal.component';
+import {getCurrencyMinValidator} from '../validators/currency-min';
+import {getCurrencyMaxValidator} from '../validators/currency-max';
 
 @Component({
   selector: 'app-transfer-funds',
@@ -42,6 +42,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   creditForm: FormGroup;
   amountsGroup: FormGroup;
   giftAidGroup: FormGroup;
+  marketingGroup: FormGroup;
   loadingAddressSuggestions = false;
   minimumCreditAmount = environment.minimumCreditAmount;
   maximumCreditAmount = environment.maximumCreditAmount;
@@ -79,6 +80,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     const formGroups: {
       amounts: FormGroup,
       giftAid: FormGroup
+      marketing: FormGroup,
     } = {
       amounts: this.formBuilder.group({
         creditAmount: [null, [
@@ -106,6 +108,9 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
         homeOutsideUK: [null],
         homePostcode: [null],
       }),
+      marketing: this.formBuilder.group( {
+        optInTbgEmail: [null, [Validators.required]],
+      })
       // T&Cs agreement is implicit through submitting the form.
     };
 
@@ -120,6 +125,8 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     if (giftAidGroup != null) {
       this.giftAidGroup = giftAidGroup;
     }
+
+    this.marketingGroup = this.creditForm.get('marketing') as FormGroup<any>;
 
     // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
     this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
@@ -391,9 +398,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       matchedAmount: 0, // Tips are always unmatched
       matchReservedAmount: 0, // Tips are always unmatched
       optInCharityEmail: false,
-      // For now, corporate partners can be auto opted in under legit interest
-      // to keep the form simpler.
-      optInTbgEmail: true,
+      optInTbgEmail: this.marketingGroup.value.optInTbgEmail,
       paymentMethodType: 'customer_balance',
       projectId: this.campaign.id,
       psp: 'stripe',
