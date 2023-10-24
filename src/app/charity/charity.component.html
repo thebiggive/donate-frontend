@@ -10,10 +10,30 @@
       </p>
     </div>
 
-    <div class="c-grid">
-      <div *ngFor="let campaign of campaigns">
-        <app-campaign-card [campaign]="campaign"></app-campaign-card>
-      </div>
-    </div>
+    <biggive-grid
+        slot="campaign-grid"
+        column-count="3"
+        *ngIf="campaigns"
+      >
+        <div *ngFor="let campaign of campaigns">
+          <biggive-campaign-card
+            id="campaign-{{campaign.id}}"
+            [banner]="campaign.imageUri | optimisedImage:830 | async"
+            [campaignType]="campaign.isMatched ? 'Match Funded' : null"
+            [campaignTitle]="campaign.title"
+            [donateButtonUrl]="'/donate/' + campaign.id"
+            [moreInfoButtonUrl]="'/campaign/' + campaign.id"
+            [organisationName]="campaign.charity.name"
+            primary-figure-label="Match Funds Remaining"
+            [primaryFigureAmount]="campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : '1.0-0'"
+            [progressBarCounter]="getPercentageRaised(campaign)"
+            secondary-figure-label="Total Funds Raised"
+            [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : '1.0-0'"
+            [isFutureCampaign]="isInFuture(campaign)"
+            [isPastCampaign]="isInPast(campaign)"
+            [datetime]="getRelevantDateAsStr(campaign)">
+          </biggive-campaign-card>
+        </div>
+      </biggive-grid>
   </div>
 </main>
