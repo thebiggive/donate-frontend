@@ -22,8 +22,6 @@ import { TimeLeftPipe } from '../time-left.pipe';
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   campaign: Campaign;
-  isPendingOrNotReady = false;
-  campaignInFuture = false;
   campaignInPast = false;
   donateEnabled = true;
   fromFund = false;
@@ -73,9 +71,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
   }
 
   private setSecondaryProps(campaign: Campaign) {
-    this.campaignInFuture = CampaignService.isInFuture(campaign);
     this.campaignInPast = CampaignService.isInPast(campaign);
-    this.isPendingOrNotReady = CampaignService.isPendingOrNotReady(campaign);
     this.donateEnabled = CampaignService.isOpenForDonations(campaign);
 
     // If donations open within 24 hours, set a timer to update this page's state.
@@ -83,7 +79,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       const msToLaunch = new Date(campaign.startDate).getTime() - Date.now();
       if (msToLaunch > 0 && msToLaunch < 86400000) {
         this.timer = setTimeout(() => {
-          this.campaignInFuture = false;
           this.donateEnabled = true;
          }, msToLaunch);
       }
