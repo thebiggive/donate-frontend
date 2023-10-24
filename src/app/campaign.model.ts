@@ -51,6 +51,7 @@ export class Campaign {
     public championOptInStatement?: string,
     public championRef?: string,
     public feePercentage?: number,
+    public hidden = false,
     public logoUri?: string,
     public parentAmountRaised?: number,
     public parentDonationCount?: number,

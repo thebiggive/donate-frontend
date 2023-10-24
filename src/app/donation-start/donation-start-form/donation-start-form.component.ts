@@ -18,9 +18,11 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatStepper} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RecaptchaComponent} from 'ng-recaptcha';
+import {MatomoTracker} from 'ngx-matomo';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
   PaymentIntent,
@@ -35,6 +37,7 @@ import {EMPTY, firstValueFrom} from 'rxjs';
 import {Campaign} from '../../campaign.model';
 import {CampaignService} from '../../campaign.service';
 import {CardIconsService} from '../../card-icons.service';
+import {campaignHiddenMessage} from '../../../environments/common';
 import {COUNTRIES} from '../../countries';
 import {Donation, maximumDonationAmount} from '../../donation.model';
 import {DonationCreatedResponse} from '../../donation-created-response.model';
@@ -61,8 +64,6 @@ import {TimeLeftPipe} from "../../time-left.pipe";
 import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
 import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation-tipping-slider.component";
-import {MatomoTracker} from 'ngx-matomo';
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {PaymentReadinessTracker} from "./PaymentReadinessTracker";
 
 declare var _paq: {
@@ -162,7 +163,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   triedToLeaveMarketing = false;
   showAllPaymentMethods: boolean = false;
 
-
   protected campaignId: string;
 
   /**
@@ -258,8 +258,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private stripeService: StripeService,
     public datePipe: DatePipe,
     public timeLeftPipe: TimeLeftPipe,
-    private snackBar: MatSnackBar
-
+    private snackBar: MatSnackBar,
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
     this.countryOptionsObject = COUNTRIES.map(country => ({label: country.country, value: country.iso2}))
@@ -1442,6 +1441,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (this.campaign.championOptInStatement) {
       this.showChampionOptIn = true;
+    }
+
+    if (this.campaign.hidden) {
+      this.showErrorToast(campaignHiddenMessage);
     }
   }
 

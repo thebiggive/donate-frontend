@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTabsModule} from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -25,6 +26,7 @@ import { TimeLeftPipe } from '../time-left.pipe';
         MatCardModule,
         MatIconModule,
         MatProgressSpinnerModule,
+        MatSnackBarModule,
         MatTabsModule,
         OptimisedImagePipe,
         TimeLeftPipe,

@@ -65,6 +65,7 @@ describe('CampaignService', () => {
       undefined,
       undefined,
       undefined,
+      false,
       undefined,
       undefined,
       undefined,
@@ -110,6 +111,16 @@ describe('CampaignService', () => {
 
     expect(CampaignService.isOpenForDonations(campaign)).toBe(true);
     expect(CampaignService.isInFuture(campaign)).toBe(false);
+  });
+
+  it ('should block donation attempts to any hidden campaign', () => {
+    const campaign = getDummyCampaign();
+    campaign.startDate = new Date((new Date()).getTime() - 86400000);
+    campaign.endDate = new Date((new Date()).getTime() + 86400000);
+    campaign.status = 'Active';
+    campaign.hidden = true;
+
+    expect(CampaignService.isOpenForDonations(campaign)).toBe(false);
   });
 
   it ('should allow donation attempts to any campaign in active date range, even if Status gets stuck in Preview', () => {
