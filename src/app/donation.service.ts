@@ -71,11 +71,11 @@ export class DonationService {
     return couplet.donation;
   }
 
-  isResumable(donation: Donation, requiredPaymentMethodType: 'card' | 'customer_balance'): boolean {
+  isResumable(donation: Donation, paymentMethodType: 'card' | 'customer_balance'): boolean {
     return (
       donation.status !== undefined &&
       this.resumableStatuses.includes(donation.status) &&
-      donation.paymentMethodType === requiredPaymentMethodType
+      donation.paymentMethodType === paymentMethodType
     );
   }
 
@@ -87,7 +87,7 @@ export class DonationService {
    */
   getProbablyResumableDonation(
     projectId: string,
-    requiredPaymentMethodType: 'card' | 'customer_balance',
+    paymentMethodType: 'card' | 'customer_balance',
   ): Observable<Donation | undefined> {
     this.removeOldLocalDonations();
 
@@ -95,7 +95,7 @@ export class DonationService {
       return (
         donationItem.donation.projectId === projectId && // Only bring back donations to the same project/CCampaign...
         this.getCreatedTime(donationItem.donation) > (Date.now() - 600000) && // ...from the past 10 minutes...
-        this.isResumable(donationItem.donation, requiredPaymentMethodType) // ...with a reusable last-known status & method.
+        this.isResumable(donationItem.donation, paymentMethodType) // ...with a reusable last-known status & method.
       );
     });
 
