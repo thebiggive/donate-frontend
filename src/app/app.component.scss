@@ -1,5 +1,9 @@
 @import '../abstract';
 
+biggive-main-menu {
+  z-index: 11; // Must be greater than match funds reserved banner.
+}
+
 #cookie-banner {
   position: fixed;
   bottom: 3em;

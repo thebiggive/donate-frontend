@@ -7,13 +7,14 @@
   </div>
 
 
-  <biggive-main-menu *ngIf="isDataLoaded"
+  <biggive-main-menu
+    *ngIf="isDataLoaded"
     [usePresetMenuContent]="true"
     [donateUrlPrefix]="donateUriPrefix"
     [blogUrlPrefix]="blogUriPrefix"
     [experienceUrlPrefix]="experienceUriPrefix"
     [isLoggedIn]="isLoggedIn"
-    ></biggive-main-menu>
+  ></biggive-main-menu>
 
   <a id="content">
     <!-- target for "skip to content" link -->
