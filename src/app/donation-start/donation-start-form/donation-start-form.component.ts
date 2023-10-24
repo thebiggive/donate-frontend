@@ -412,14 +412,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   })
 
   resumeDonationsIfPossible() {
-    this.donationService.getProbablyResumableDonation(this.campaignId)
+    this.donationService.getProbablyResumableDonation(this.campaignId, this.getPaymentMethodType())
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;
 
         // The local check might not have the latest donation status in edge cases, so we need to check the copy
         // the Donations API returned still has a resumable status and wasn't completed or cancelled since being
         // saved locally.
-        if (!existingDonation || !this.donationService.isResumable(existingDonation)) {
+        if (!existingDonation || !this.donationService.isResumable(existingDonation, this.getPaymentMethodType())) {
           // No resumable donations
           return;
         }
@@ -652,7 +652,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       });
     }
   }
-
 
   /**
    * According to stripe docs https://stripe.com/docs/js/element/events/on_change?type=paymentElement the change event has
@@ -1497,7 +1496,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       feeCoverAmount: sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
-      paymentMethodType: (this.creditPenceToUse > 0) ? 'customer_balance' : 'card',
+      paymentMethodType: this.getPaymentMethodType(),
       projectId: this.campaignId,
       psp: this.psp,
       tipAmount: sanitiseCurrency(this.amountsGroup.value.tipAmount?.trim()),
@@ -2183,5 +2182,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.paymentStepErrors = "";
       this.next()
     }
+  }
+
+  private getPaymentMethodType() {
+    return (this.creditPenceToUse > 0) ? 'customer_balance' : 'card';
   }
 }

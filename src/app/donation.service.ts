@@ -71,24 +71,31 @@ export class DonationService {
     return couplet.donation;
   }
 
-  isResumable(donation: Donation): boolean {
-    return (donation.status !== undefined && this.resumableStatuses.includes(donation.status));
+  isResumable(donation: Donation, requiredPaymentMethodType: 'card' | 'customer_balance'): boolean {
+    return (
+      donation.status !== undefined &&
+      this.resumableStatuses.includes(donation.status) &&
+      donation.paymentMethodType === requiredPaymentMethodType
+    );
   }
 
   /**
    * Get a recent eligible-for-resuming donation to this same campaign/project, if any exists. We look
    * for candidates based on local status initially but return an Observable resulting from a re-GET
-   * so we include the latest server status. This is why this private method only knows the donation is
+   * so we include the latest server status. This is why this method only knows the donation is
    * 'probably' resumable.
    */
-  getProbablyResumableDonation(projectId: string): Observable<Donation | undefined> {
+  getProbablyResumableDonation(
+    projectId: string,
+    requiredPaymentMethodType: 'card' | 'customer_balance',
+  ): Observable<Donation | undefined> {
     this.removeOldLocalDonations();
 
     const existingDonations = this.getDonationCouplets().filter(donationItem => {
       return (
         donationItem.donation.projectId === projectId && // Only bring back donations to the same project/CCampaign...
         this.getCreatedTime(donationItem.donation) > (Date.now() - 600000) && // ...from the past 10 minutes...
-        this.isResumable(donationItem.donation) // ...with a reusable last-known status.
+        this.isResumable(donationItem.donation, requiredPaymentMethodType) // ...with a reusable last-known status & method.
       );
     });
 

@@ -188,7 +188,7 @@ describe('DonationService', () => {
 
       service.saveDonation(inputDonation, 'fakeheader.fakebody.fakesig');
 
-      service.getProbablyResumableDonation('11I400000009Sds3e3').subscribe(outputDonation => {
+      service.getProbablyResumableDonation('11I400000009Sds3e3', 'card').subscribe(outputDonation => {
         expect(outputDonation).toBe(inputDonation);
       }, () => {
         expect(false).toBe(true); // Always fail on observable error
@@ -210,7 +210,7 @@ describe('DonationService', () => {
   it('should return undefined for resumable donations with unknown project ID', () => {
     const service: DonationService = TestBed.inject(DonationService);
     service.saveDonation(getDummyDonation(), 'fakeheader.fakebody.fakesig');
-    service.getProbablyResumableDonation('notARealProjectId').subscribe(donation => {
+    service.getProbablyResumableDonation('notARealProjectId', 'card').subscribe(donation => {
       expect(donation).toBeUndefined();
     }, () => {
       expect(false).toBe(true); // Always fail on observable error
