@@ -109,7 +109,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
         homePostcode: [null],
       }),
       marketing: this.formBuilder.group( {
-        optInTbgEmail: [null, [Validators.required]],
+        optInTbgEmail: [null], // See also setConditionalValidators(); only required if no existing tip's pending.
       })
       // T&Cs agreement is implicit through submitting the form.
     };
@@ -346,6 +346,8 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       this.isLoading = false;
       this.donor = person;
 
+      this.setConditionalValidators();
+
       if ((this.donor?.pending_tip_balance?.gbp || 0) > 0) {
         // Ensure form field for Gift Aid is off as it's N/A; this also turns off its validation and `isOptedIntoGiftAid`
         // as side effects.
@@ -361,6 +363,13 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
         });
       }
     });
+  }
+
+  private setConditionalValidators() {
+    const tipMayBeSet = !((this.donor?.pending_tip_balance?.gbp || 0) > 0);
+    const validatorsForFieldsRequiredIfTipMayBeSet = tipMayBeSet ? [Validators.required] : [];
+
+    this.marketingGroup.controls.optInTbgEmail!.setValidators(validatorsForFieldsRequiredIfTipMayBeSet);
   }
 
   private getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK: boolean) {

@@ -167,6 +167,7 @@
                     </div>
                 </mat-step>
               <mat-step
+                *ngIf="!donor.pending_tip_balance?.gbp"
                 formGroupName="marketing"
                 [stepControl]="marketingGroup"
               >
