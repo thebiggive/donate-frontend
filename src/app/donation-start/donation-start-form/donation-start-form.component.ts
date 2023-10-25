@@ -2093,7 +2093,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
             if (this.donor?.id) {
               const jwt = this.identityService.getJWT() as string;
-              this.identityService.get(this.donor?.id, jwt, false).subscribe((person: Person) => {
+              this.identityService.get(this.donor?.id, jwt).subscribe((person: Person) => {
                 if (! this.donor?.id) {
                   throw new Error("Person identifier went away");
                 }
