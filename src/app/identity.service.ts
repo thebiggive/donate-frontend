@@ -81,7 +81,7 @@ export class IdentityService {
       person);
   }
 
-  get(id: string, jwt: string, withTipBalances: boolean): Observable<Person> {
+  get(id: string, jwt: string, {withTipBalances = false}: {withTipBalances?: boolean} = {}): Observable<Person> {
     return this.http.get<Person>(
       `${environment.identityApiPrefix}${this.peoplePath}/${id}`,
       {
@@ -107,7 +107,7 @@ export class IdentityService {
       return of(null);
     }
 
-    return this.get(idAndJWT.id, idAndJWT.jwt, false);
+    return this.get(idAndJWT.id, idAndJWT.jwt);
   }
 
   update(person: Person): Observable<Person> {

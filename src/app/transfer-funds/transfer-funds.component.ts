@@ -342,7 +342,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
   private loadAuthedPersonInfo(id: string, jwt: string) {
     this.isLoading = true;
-    this.identityService.get(id, jwt, true).subscribe((person: Person) => {
+    this.identityService.get(id, jwt, {withTipBalances: true}).subscribe((person: Person) => {
       this.isLoading = false;
       this.donor = person;
 

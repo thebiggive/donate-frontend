@@ -15,7 +15,7 @@ export interface Person {
     cash_balance?: { [currencyCode: string]: number };
 
     /**
-     * The total of donor fund form-created pending tips for the given Person, which will be fulfilled
+     * The total of donor fund form-created pending tips for the given Person, counted in minor-currency units i.e. pence which will be fulfilled
      * by bank transfers
      */
     pending_tip_balance?: { [currencyCode: string]: number };
