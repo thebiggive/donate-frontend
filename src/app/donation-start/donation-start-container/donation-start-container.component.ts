@@ -83,13 +83,6 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
     this.reservationExpiryDate = date;
   }
 
-  logout = () => {
-    this.donor = undefined;
-    // could just pass donationStartForm.reset directly to the logout button,
-    // but we may well want to do more work here very soon.
-    this.donationStartForm.reset();
-  }
-
   loadAuthedPersonInfo = (id: string, jwt: string) => {
     if (!this.identityService) {
       // This feels like an anti-pattern, but currently seems to be required. Since the "contained"

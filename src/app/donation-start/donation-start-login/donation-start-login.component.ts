@@ -11,7 +11,6 @@ import { LoginModalComponent } from '../../login-modal/login-modal.component';
 })
 export class DonationStartLoginComponent {
   @Input({ required: true }) loadAuthedPersonInfo: (dataId: string, dataJwt: string) => void;
-  @Input({ required: true }) logout: () => void;
   @Input({ required: true }) campaign: Campaign;
   @Input({ required: true }) creditPenceToUse: number;
   @Input({ required: true }) email?: string;
