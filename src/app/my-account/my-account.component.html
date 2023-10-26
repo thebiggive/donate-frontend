@@ -15,10 +15,6 @@
       </div>
       <h2>Your Details</h2>
       <table *ngIf="person" id="personal-details">
-        <!--
-        Not sure why Typescript doesn't allow me to concatenate like this.
-        <h2>{{person.first_name + person.last_name}}</h2>
-        -->
         <tr>
           <td>Name</td>
           <td>{{person.first_name}} {{person.last_name}}</td>
@@ -38,8 +34,13 @@
       </table>
     </biggive-page-section>
 
-    <biggive-page-section>
+    <biggive-page-section *ngIf="person">
       <h2>Your Payment Methods</h2>
+
+      <!-- We only check for GBP balances for now, as we only support UK bank transfers rn -->
+      <div *ngIf="person.cash_balance?.gbp">
+        <p>Your Donation Funds balance: <strong>{{ ((person.cash_balance?.gbp || 0) / 100) | exactCurrency:'GBP' }}</strong></p>
+      </div>
 
       <p *ngIf="registerErrorDescription" class="error" aria-live="assertive">
         <fa-icon [icon]="faExclamationTriangle"></fa-icon>
@@ -103,7 +104,7 @@
       </table>
 
       <div *ngIf="paymentMethods !== undefined && paymentMethods.length === 0">
-        No saved payment methods
+        No saved cards
       </div>
     </biggive-page-section>
 
