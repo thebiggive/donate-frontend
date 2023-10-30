@@ -26,6 +26,10 @@ import {RegisterModalComponent} from '../register-modal/register-modal.component
 import {getCurrencyMinValidator} from '../validators/currency-min';
 import {getCurrencyMaxValidator} from '../validators/currency-max';
 
+/**
+ * Support for topping up Stripe customer_balance via bank transfer. Only
+ * available for GBP campaigns and UK donors for now.
+ */
 @Component({
   selector: 'app-transfer-funds',
   templateUrl: './transfer-funds.component.html',
@@ -265,10 +269,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   onTipSelectorChanged(e: MatSelectChange) {
     if (e.value === 'Other') {
       this.creditForm.get('amounts')?.get('customTipAmount')?.addValidators(Validators.required);
-
-    }
-
-    else {
+    } else {
       this.creditForm.get('amounts')?.get('customTipAmount')?.removeValidators(Validators.required);
     }
 
@@ -340,6 +341,18 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     this.identityService.clearJWT();
   }
 
+  /**
+   * Amount in existing committed tips to be fulfilled, in minor units (i.e. pence),
+   * currently just for GBP / UK bank transfers. 0 if donor's not yet loaded.
+   */
+  get pendingTipBalance(): number {
+    return this.donor?.pending_tip_balance?.gbp || 0;
+  }
+
+  get donorHasPendingTipBalance(): boolean {
+    return this.pendingTipBalance > 0;
+  }
+
   private loadAuthedPersonInfo(id: string, jwt: string) {
     this.isLoading = true;
     this.identityService.get(id, jwt, {withTipBalances: true}).subscribe((person: Person) => {
@@ -348,7 +361,11 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
       this.setConditionalValidators();
 
-      if ((this.donor?.pending_tip_balance?.gbp || 0) > 0) {
+      if (this.donorHasPendingTipBalance) {
+        this.amountsGroup.patchValue({
+          customTipAmount: 0,
+          tipPercentage: 0,
+        });
         // Ensure form field for Gift Aid is off as it's N/A; this also turns off its validation and `isOptedIntoGiftAid`
         // as side effects.
         this.giftAidGroup.patchValue({
@@ -366,10 +383,10 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   }
 
   private setConditionalValidators() {
-    const tipMayBeSet = !((this.donor?.pending_tip_balance?.gbp || 0) > 0);
-    const validatorsForFieldsRequiredIfTipMayBeSet = tipMayBeSet ? [Validators.required] : [];
+    const tipFieldsAvailable = this.pendingTipBalance === 0;
+    const validatorsForFieldsRequiredIfTipFieldsAvailable = tipFieldsAvailable ? [Validators.required] : [];
 
-    this.marketingGroup.controls.optInTbgEmail!.setValidators(validatorsForFieldsRequiredIfTipMayBeSet);
+    this.marketingGroup.controls.optInTbgEmail!.setValidators(validatorsForFieldsRequiredIfTipFieldsAvailable);
   }
 
   private getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK: boolean) {
@@ -391,10 +408,9 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     // The donation amount to Big Give is whatever the user is 'tipping' in the Buy Credits form.
     const donationAmount = this.calculatedTipAmount();
 
-    // If user fills Buy Credits form with a £0 tip to Big Give, then do NOT attempt to create
-    // the donation, because MatchBot will respond with an error saying donationAmount is a
-    // required field. DON-689.
-    if (donationAmount <= 0) {
+    // If user didn't tip, OR if an existing tip's detected but we somehow have tip numbers
+    // set, do not create a new tip.
+    if (donationAmount <= 0 || this.donorHasPendingTipBalance) {
       return;
     }
 
