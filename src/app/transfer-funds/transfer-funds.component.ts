@@ -345,7 +345,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
    * Amount in existing committed tips to be fulfilled, in minor units (i.e. pence),
    * currently just for GBP / UK bank transfers. 0 if donor's not yet loaded.
    */
-  get pendingTipBalance() {
+  get pendingTipBalance(): number {
     return this.donor?.pending_tip_balance?.gbp || 0;
   }
 
