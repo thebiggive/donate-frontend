@@ -258,16 +258,18 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       this.children = clearExisting ? campaignSummaries : [...this.children, ...campaignSummaries];
       this.loading = false;
 
-      // Save children so we can go 'back' here in the browser and maintain scroll position.
-      // Only an exact query match should reinstate the same child campaigns on load.
-      const recentChildrenData = {
-        query: this.normaliseQueryForRecentChildrenComparison(query),
-        offset: this.offset,
-        children: this.children,
-        time: Date.now(), // ms
-      };
+      if (isPlatformBrowser(this.platformId)) {
+        // Save children so we can go 'back' here in the browser and maintain scroll position.
+        // Only an exact query match should reinstate the same child campaigns on load.
+        const recentChildrenData = {
+          query: this.normaliseQueryForRecentChildrenComparison(query),
+          offset: this.offset,
+          children: this.children,
+          time: Date.now(), // ms
+        };
 
-      this.sessionStorage.set(this.recentChildrenKey, recentChildrenData);
+        this.sessionStorage.set(this.recentChildrenKey, recentChildrenData);
+      }
     }, () => {
       this.filterError = true; // Error, should only be thrown if the callout SF API returns an error
       this.loading = false;
@@ -282,6 +284,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.loading = true;
     this.offset = 0;
     const query = this.campaignService.buildQuery(this.searchService.selected, 0, this.campaignId, this.campaignSlug, this.fundSlug);
+
+    if (!isPlatformBrowser(this.platformId)) { // Server renders don't need the scroll restoration help
+      this.doCampaignSearch(query as SearchQuery, true); // Clear existing children, though there _should_ be none on server
+      return;
+    }
 
     const recentChildrenData = this.sessionStorage.get(this.recentChildrenKey);
     // Only an exact query match should reinstate the same child campaigns on load.
@@ -308,9 +315,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       return;
     }
 
-    // Else need to load children newly.
-    this.children = [];
-    this.doCampaignSearch(query as SearchQuery, true);
+    // Else need to load children newly in browser.
+    this.doCampaignSearch(query as SearchQuery, true); // Clear existing children
   }
 
   private setSecondaryPropsAndRun(campaign: Campaign) {
