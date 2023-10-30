@@ -349,6 +349,10 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     return this.donor?.pending_tip_balance?.gbp || 0;
   }
 
+  get donorHasPendingTipBalance(): boolean {
+    return this.pendingTipBalance > 0;
+  }
+
   private loadAuthedPersonInfo(id: string, jwt: string) {
     this.isLoading = true;
     this.identityService.get(id, jwt, {withTipBalances: true}).subscribe((person: Person) => {
@@ -357,7 +361,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
       this.setConditionalValidators();
 
-      if (this.pendingTipBalance > 0) {
+      if (this.donorHasPendingTipBalance) {
         this.amountsGroup.patchValue({
           customTipAmount: 0,
           tipPercentage: 0,
@@ -406,7 +410,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
     // If user didn't tip, OR if an existing tip's detected but we somehow have tip numbers
     // set, do not create a new tip.
-    if (donationAmount <= 0 || this.pendingTipBalance > 0) {
+    if (donationAmount <= 0 || this.donorHasPendingTipBalance) {
       return;
     }
 

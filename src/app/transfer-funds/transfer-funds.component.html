@@ -23,7 +23,7 @@
                         Must be between {{ minimumCreditAmount | exactCurrency:currency }} and {{ maximumCreditAmount | exactCurrency:currency }} inclusive.
                     </p>
 
-                    <div *ngIf="pendingTipBalance > 0">
+                    <div *ngIf="donorHasPendingTipBalance">
                         <p>Thanks for tipping Big Give {{ (pendingTipBalance / 100) | exactCurrency:"GBP" }} </p>
                     </div>
 
