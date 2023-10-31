@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
@@ -12,6 +13,7 @@ describe('CharityComponent', () => {
       declarations: [],
       providers: [
         { provide: ActivatedRoute, useValue: { snapshot: { data: { campaigns: [] }} } },
+        DatePipe,
       ],
     })
     .compileComponents();

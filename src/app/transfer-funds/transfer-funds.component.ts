@@ -1,31 +1,35 @@
-import { isPlatformBrowser } from '@angular/common';
-import { AfterContentInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSelectChange } from '@angular/material/select';
-import { MatomoTracker } from 'ngx-matomo';
-import { EMPTY } from 'rxjs';
-import { startWith, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import {isPlatformBrowser} from '@angular/common';
+import {AfterContentInit, Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSelectChange} from '@angular/material/select';
+import {MatomoTracker} from 'ngx-matomo';
+import {EMPTY} from 'rxjs';
+import {debounceTime, distinctUntilChanged, startWith, switchMap} from 'rxjs/operators';
 
-import { Campaign } from '../campaign.model';
-import { CampaignService } from '../campaign.service';
-import { DonationService } from '../donation.service';
-import { DonorAccountService } from '../donor-account.service';
+import {Campaign} from '../campaign.model';
+import {CampaignService} from '../campaign.service';
+import {DonationService} from '../donation.service';
+import {DonorAccountService} from '../donor-account.service';
 import {Donation, maximumDonationAmountForFundedDonation} from '../donation.model';
-import { DonationCreatedResponse } from '../donation-created-response.model';
-import { environment } from 'src/environments/environment';
-import { FundingInstruction } from '../fundingInstruction.model';
-import { GiftAidAddressSuggestion } from '../gift-aid-address-suggestion.model';
-import { GiftAidAddress } from '../gift-aid-address.model';
-import { IdentityService } from '../identity.service';
-import { LoginModalComponent } from '../login-modal/login-modal.component';
-import { Person } from '../person.model';
-import { PostcodeService } from '../postcode.service';
-import { RegisterModalComponent } from '../register-modal/register-modal.component';
-import { getCurrencyMinValidator } from '../validators/currency-min';
-import { getCurrencyMaxValidator } from '../validators/currency-max';
+import {DonationCreatedResponse} from '../donation-created-response.model';
+import {environment} from 'src/environments/environment';
+import {FundingInstruction} from '../fundingInstruction.model';
+import {GiftAidAddressSuggestion} from '../gift-aid-address-suggestion.model';
+import {GiftAidAddress} from '../gift-aid-address.model';
+import {IdentityService} from '../identity.service';
+import {LoginModalComponent} from '../login-modal/login-modal.component';
+import {Person} from '../person.model';
+import {PostcodeService} from '../postcode.service';
+import {RegisterModalComponent} from '../register-modal/register-modal.component';
+import {getCurrencyMinValidator} from '../validators/currency-min';
+import {getCurrencyMaxValidator} from '../validators/currency-max';
 
+/**
+ * Support for topping up Stripe customer_balance via bank transfer. Only
+ * available for GBP campaigns and UK donors for now.
+ */
 @Component({
   selector: 'app-transfer-funds',
   templateUrl: './transfer-funds.component.html',
@@ -42,6 +46,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   creditForm: FormGroup;
   amountsGroup: FormGroup;
   giftAidGroup: FormGroup;
+  marketingGroup: FormGroup;
   loadingAddressSuggestions = false;
   minimumCreditAmount = environment.minimumCreditAmount;
   maximumCreditAmount = environment.maximumCreditAmount;
@@ -79,6 +84,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     const formGroups: {
       amounts: FormGroup,
       giftAid: FormGroup
+      marketing: FormGroup,
     } = {
       amounts: this.formBuilder.group({
         creditAmount: [null, [
@@ -94,7 +100,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
           getCurrencyMinValidator(), // no override, so custom tip amount min is £0 (default)
           // Below we validate the tip as a donation because when transfering funds, tips are set
           // set as real donations to a dedicated Big Give SF campaign.
-          // See MAT-266 and the Slack thread linked it its description for more context.
+          // See MAT-266 and the Slack thread linked in its description for more context.
           getCurrencyMaxValidator(maximumDonationAmountForFundedDonation),
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
@@ -106,6 +112,9 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
         homeOutsideUK: [null],
         homePostcode: [null],
       }),
+      marketing: this.formBuilder.group( {
+        optInTbgEmail: [null], // See also setConditionalValidators(); only required if no existing tip's pending.
+      })
       // T&Cs agreement is implicit through submitting the form.
     };
 
@@ -120,6 +129,8 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     if (giftAidGroup != null) {
       this.giftAidGroup = giftAidGroup;
     }
+
+    this.marketingGroup = this.creditForm.get('marketing') as FormGroup<any>;
 
     // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
     this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
@@ -258,10 +269,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   onTipSelectorChanged(e: MatSelectChange) {
     if (e.value === 'Other') {
       this.creditForm.get('amounts')?.get('customTipAmount')?.addValidators(Validators.required);
-
-    }
-
-    else {
+    } else {
       this.creditForm.get('amounts')?.get('customTipAmount')?.removeValidators(Validators.required);
     }
 
@@ -333,20 +341,52 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     this.identityService.clearJWT();
   }
 
+  /**
+   * Amount in existing committed tips to be fulfilled, in minor units (i.e. pence),
+   * currently just for GBP / UK bank transfers. 0 if donor's not yet loaded.
+   */
+  get pendingTipBalance(): number {
+    return this.donor?.pending_tip_balance?.gbp || 0;
+  }
+
+  get donorHasPendingTipBalance(): boolean {
+    return this.pendingTipBalance > 0;
+  }
+
   private loadAuthedPersonInfo(id: string, jwt: string) {
     this.isLoading = true;
-    this.identityService.get(id, jwt).subscribe((person: Person) => {
+    this.identityService.get(id, jwt, {withTipBalances: true}).subscribe((person: Person) => {
       this.isLoading = false;
       this.donor = person;
 
-      // Pre-fill rarely-changing form values from the Person.
-      this.giftAidGroup.patchValue({
-        homeAddress: person.home_address_line_1,
-        homeOutsideUK: person.home_country_code !== null && person.home_country_code !== 'GB',
-        homePostcode: person.home_postcode,
-      });
+      this.setConditionalValidators();
 
+      if (this.donorHasPendingTipBalance) {
+        this.amountsGroup.patchValue({
+          customTipAmount: 0,
+          tipPercentage: 0,
+        });
+        // Ensure form field for Gift Aid is off as it's N/A; this also turns off its validation and `isOptedIntoGiftAid`
+        // as side effects.
+        this.giftAidGroup.patchValue({
+          giftAid: false,
+        });
+      } else {
+        // Pre-fill rarely-changing form values from the Person.
+        this.giftAidGroup.patchValue({
+          homeAddress: person.home_address_line_1,
+          homeOutsideUK: person.home_country_code !== null && person.home_country_code !== 'GB',
+          homePostcode: person.home_postcode,
+        });
+      }
     });
+  }
+
+  private setConditionalValidators() {
+    const tipFieldsAvailable = this.pendingTipBalance === 0;
+    const validatorsForFieldsRequiredIfTipFieldsAvailable = tipFieldsAvailable ? [Validators.required] : [];
+
+    this.marketingGroup.controls.optInTbgEmail!.setValidators(validatorsForFieldsRequiredIfTipFieldsAvailable);
   }
 
   private getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK: boolean) {
@@ -368,10 +408,9 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     // The donation amount to Big Give is whatever the user is 'tipping' in the Buy Credits form.
     const donationAmount = this.calculatedTipAmount();
 
-    // If user fills Buy Credits form with a £0 tip to Big Give, then do NOT attempt to create
-    // the donation, because MatchBot will respond with an error saying donationAmount is a
-    // required field. DON-689.
-    if (donationAmount <= 0) {
+    // If user didn't tip, OR if an existing tip's detected but we somehow have tip numbers
+    // set, do not create a new tip.
+    if (donationAmount <= 0 || this.donorHasPendingTipBalance) {
       return;
     }
 
@@ -391,9 +430,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       matchedAmount: 0, // Tips are always unmatched
       matchReservedAmount: 0, // Tips are always unmatched
       optInCharityEmail: false,
-      // For now, corporate partners can be auto opted in under legit interest
-      // to keep the form simpler.
-      optInTbgEmail: true,
+      optInTbgEmail: this.marketingGroup.value.optInTbgEmail,
       paymentMethodType: 'customer_balance',
       projectId: this.campaign.id,
       psp: 'stripe',

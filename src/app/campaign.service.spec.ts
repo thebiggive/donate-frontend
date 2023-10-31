@@ -65,6 +65,7 @@ describe('CampaignService', () => {
       undefined,
       undefined,
       undefined,
+      false,
       undefined,
       undefined,
       undefined,
@@ -112,6 +113,16 @@ describe('CampaignService', () => {
     expect(CampaignService.isInFuture(campaign)).toBe(false);
   });
 
+  it ('should block donation attempts to any hidden campaign', () => {
+    const campaign = getDummyCampaign();
+    campaign.startDate = new Date((new Date()).getTime() - 86400000);
+    campaign.endDate = new Date((new Date()).getTime() + 86400000);
+    campaign.status = 'Active';
+    campaign.hidden = true;
+
+    expect(CampaignService.isOpenForDonations(campaign)).toBe(false);
+  });
+
   it ('should allow donation attempts to any campaign in active date range, even if Status gets stuck in Preview', () => {
     const campaign = getDummyCampaign();
     campaign.startDate = new Date((new Date()).getTime() - 86400000);
@@ -157,7 +168,7 @@ describe('CampaignService', () => {
     campaign.amountRaised = 98;
     campaign.target = 200;
 
-    expect(CampaignService.percentRaised(campaign, true)).toBe(49);
+    expect(CampaignService.percentRaisedOfCampaignOrParent(campaign)).toBe(49);
   });
 
   it ('should return the % raised for the parent campaign when its parent does use shared funds', () => {
@@ -168,6 +179,6 @@ describe('CampaignService', () => {
     campaign.parentAmountRaised = 1000;
     campaign.parentTarget = 2000;
 
-    expect(CampaignService.percentRaised(campaign, true)).toBe(50);
+    expect(CampaignService.percentRaisedOfCampaignOrParent(campaign)).toBe(50);
   });
 });

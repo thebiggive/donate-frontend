@@ -167,19 +167,6 @@ input:disabled {
   width: 100%;
 }
 
-.c-timer {
-  position: fixed;
-  top: 47px;
-  left: 0;
-  width: 100%;
-  background: $colour-highlight;
-  color: $colour-black;
-  padding: 0.5rem;
-  display: block;
-  text-align: center;
-}
-
-
 .c-donate-form {
   margin: 2rem auto;
   h2 {
@@ -301,9 +288,8 @@ div#giftAidAddressContainer > div {
   margin-bottom: 1.5rem;
 }
 
-
 a {
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 .c-breakdown {
@@ -521,12 +507,4 @@ mat-expansion-panel-header h3 {
   border-top: 1px solid #888888;
   margin-top: 30px;
   position: absolute;
-}
-
-::ng-deep .snack-bar {
-  --mdc-snackbar-supporting-text-size: 17px;
-  --mdc-snackbar-supporting-text-font: $font-family;
-  --mdc-snackbar-supporting-text-line-height: 20px;
-  background-color: $colour-primary-contrast;
-  color: #bb2222; // matching angular native palette
 }

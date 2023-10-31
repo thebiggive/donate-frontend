@@ -1,5 +1,5 @@
 <main class="b-container">
-  <div *ngIf="reservationExpiryDate" class="c-timer_new_design">
+  <div *ngIf="reservationExpiryDate" class="c-timer">
     <div class="centered">
       <span class="b-rt-0">Your match funds are reserved for:&nbsp;</span>
       <span class="b-rt-1 b-bold time-left">{{ reservationExpiryDate | timeLeft }}</span>
@@ -14,7 +14,6 @@
   <div class="c-form-container">
     <div class="b-primary-column">
       <app-donation-start-login
-        [logout]="this.logout"
         [personId]="this.donor?.id"
         [email]="this.loggedInEmailAddress"
         [personIsLoginReady]="personIsLoginReady"

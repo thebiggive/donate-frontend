@@ -3,17 +3,18 @@
           Can't use a simple relative link for the URL because we have base href set of /d/ set in non-dev environments
           which is needed for links to assets but would break this.
     -->
-    <a *ngIf="flags.skipToContentLinkEnabled" [href]="currentUrl.toString() + '#content'">Skip to content</a>
+    <a [href]="currentUrl.toString() + '#content'">Skip to content</a>
   </div>
 
 
-  <biggive-main-menu *ngIf="isDataLoaded"
+  <biggive-main-menu
+    *ngIf="isDataLoaded"
     [usePresetMenuContent]="true"
     [donateUrlPrefix]="donateUriPrefix"
     [blogUrlPrefix]="blogUriPrefix"
     [experienceUrlPrefix]="experienceUriPrefix"
     [isLoggedIn]="isLoggedIn"
-    ></biggive-main-menu>
+  ></biggive-main-menu>
 
   <a id="content">
     <!-- target for "skip to content" link -->

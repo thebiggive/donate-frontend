@@ -24,6 +24,10 @@ export class CampaignService {
   }
 
   static isOpenForDonations(campaign: Campaign): boolean {
+    if (campaign.hidden) {
+      return false;
+    }
+
     if (this.isPendingOrNotReady(campaign)) {
       return false;
     }
@@ -67,22 +71,7 @@ export class CampaignService {
     return dateToUse;
   }
 
-  /**
-   * @param useParentIfApplicable Whether to get a percentage for the parent/meta-campaign if possible. This
-   *                              is possible when `campaign` is a detailed Campaign, e.g. on /campaign/..., and
-   *                              it takes effect when the `parentUsesSharedFunds`.
-   */
-  static percentRaised(
-    campaign: (Campaign | CampaignSummary),
-    useParentIfApplicable = false,
-  ): number | undefined {
-    if (useParentIfApplicable) {
-      campaign = campaign as Campaign;
-      if (campaign.parentUsesSharedFunds && campaign.parentTarget && campaign.parentAmountRaised) {
-        return Math.round((campaign.parentAmountRaised / campaign.parentTarget) * 100);
-      }
-    }
-
+  static percentRaisedOfIndividualCampaign(campaign: (Campaign | CampaignSummary)) {
     if (!campaign.target) {
       return undefined;
     }
@@ -91,6 +80,17 @@ export class CampaignService {
     // their targets. <biggive-progress-bar> component ensures the bar doesn't overflow.
     // See DON-650.
     return Math.round((campaign.amountRaised / campaign.target) * 100);
+  }
+
+  /**
+   * Gets % of the parent target if `parentUsesSharedFunds`, or the individual target otherwise.
+   */
+  static percentRaisedOfCampaignOrParent(campaign: Campaign): number | undefined {
+    if (campaign.parentUsesSharedFunds && campaign.parentTarget && campaign.parentAmountRaised) {
+      return Math.round((campaign.parentAmountRaised / campaign.parentTarget) * 100);
+    }
+
+    return CampaignService.percentRaisedOfIndividualCampaign(campaign);
   }
 
   buildQuery(selected: SelectedType, offset: number, campaignId?: string, campaignSlug?: string, fundSlug?: string): {[key: string]: any} {

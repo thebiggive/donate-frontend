@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
+import { currencyPipeDigitsInfo } from '../../environments/common';
 import { CampaignGroupsService } from '../campaign-groups.service';
 import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
@@ -58,13 +59,13 @@ export class CampaignInfoComponent implements OnInit {
       this.campaign.parentUsesSharedFunds ? this.campaign.parentTarget : this.campaign.target,
       this.campaign.currencyCode,
       'symbol',
-      '1.0-0',
+      currencyPipeDigitsInfo,
     ) as string;
     this.campaignRaised = this.currencyPipe.transform(
       this.campaign.parentUsesSharedFunds ? this.campaign.parentAmountRaised : this.campaign.amountRaised,
       this.campaign.currencyCode,
       'symbol',
-      '1.0-0',
+      currencyPipeDigitsInfo,
     ) as string;
     this.donationCount = this.campaign.parentUsesSharedFunds
       ? (this.campaign.parentDonationCount || 0)
@@ -72,7 +73,7 @@ export class CampaignInfoComponent implements OnInit {
   }
 
   getPercentageRaised(campaign: Campaign): number | undefined {
-    return CampaignService.percentRaised(campaign, true);
+    return CampaignService.percentRaisedOfCampaignOrParent(campaign);
   }
 
   getBeneficiaryIcon(beneficiary: string) {

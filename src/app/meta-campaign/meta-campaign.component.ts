@@ -1,4 +1,4 @@
-import { CurrencyPipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
+import { CurrencyPipe, DatePipe, isPlatformBrowser, ViewportScroller } from '@angular/common';
 import {
   AfterViewChecked,
   Component,
@@ -19,7 +19,8 @@ import { Subscription } from 'rxjs';
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
 import { CampaignService, SearchQuery } from '../campaign.service';
-import { DatePipe } from '@angular/common'
+
+import { currencyPipeDigitsInfo } from '../../environments/common';
 import { environment } from '../../environments/environment';
 import { Fund } from '../fund.model';
 import { FundService } from '../fund.service';
@@ -84,6 +85,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   locationOptions: string[] = [];
   fundingOptions: string[] = [];
   parentIsSharedFund: boolean;
+
+  currencyPipeDigitsInfo = currencyPipeDigitsInfo;
 
   constructor(
     private campaignService: CampaignService,
@@ -216,7 +219,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       return null;
     }
 
-    return CampaignService.percentRaised(childCampaign);
+    return CampaignService.percentRaisedOfIndividualCampaign(childCampaign);
   }
 
   isInFuture(campaign: CampaignSummary) {
@@ -255,16 +258,18 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       this.children = clearExisting ? campaignSummaries : [...this.children, ...campaignSummaries];
       this.loading = false;
 
-      // Save children so we can go 'back' here in the browser and maintain scroll position.
-      // Only an exact query match should reinstate the same child campaigns on load.
-      const recentChildrenData = {
-        query: this.normaliseQueryForRecentChildrenComparison(query),
-        offset: this.offset,
-        children: this.children,
-        time: Date.now(), // ms
-      };
+      if (isPlatformBrowser(this.platformId)) {
+        // Save children so we can go 'back' here in the browser and maintain scroll position.
+        // Only an exact query match should reinstate the same child campaigns on load.
+        const recentChildrenData = {
+          query: this.normaliseQueryForRecentChildrenComparison(query),
+          offset: this.offset,
+          children: this.children,
+          time: Date.now(), // ms
+        };
 
-      this.sessionStorage.set(this.recentChildrenKey, recentChildrenData);
+        this.sessionStorage.set(this.recentChildrenKey, recentChildrenData);
+      }
     }, () => {
       this.filterError = true; // Error, should only be thrown if the callout SF API returns an error
       this.loading = false;
@@ -279,6 +284,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.loading = true;
     this.offset = 0;
     const query = this.campaignService.buildQuery(this.searchService.selected, 0, this.campaignId, this.campaignSlug, this.fundSlug);
+
+    if (!isPlatformBrowser(this.platformId)) { // Server renders don't need the scroll restoration help
+      this.doCampaignSearch(query as SearchQuery, true); // Clear existing children, though there _should_ be none on server
+      return;
+    }
 
     const recentChildrenData = this.sessionStorage.get(this.recentChildrenKey);
     // Only an exact query match should reinstate the same child campaigns on load.
@@ -305,9 +315,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       return;
     }
 
-    // Else need to load children newly.
-    this.children = [];
-    this.doCampaignSearch(query as SearchQuery, true);
+    // Else need to load children newly in browser.
+    this.doCampaignSearch(query as SearchQuery, true); // Clear existing children
   }
 
   private setSecondaryPropsAndRun(campaign: Campaign) {
@@ -398,7 +407,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     if (!this.fund) {
       if (!campaignInFuture) {
         const showGiftAid = this.campaign.currencyCode === 'GBP' && this.campaign.amountRaised > 0;
-        this.tickerMainMessage = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') +
+        this.tickerMainMessage = this.currencyPipe.transform(this.campaign.amountRaised, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
           ' raised' + (showGiftAid ? ' inc. Gift Aid' : '');
       } else {
         this.tickerMainMessage = 'Opens in ' + this.timeLeftToOpenPipe.transform(this.campaign.startDate);
@@ -416,7 +425,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
           },
           {
             label: 'match funds remaining',
-            figure: this.currencyPipe.transform(this.campaign.matchFundsRemaining, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
+            figure: this.currencyPipe.transform(this.campaign.matchFundsRemaining, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) as string,
           },
         ]);
       } else {
@@ -446,7 +455,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
       tickerItems.push({
         label: 'total match funds',
-        figure: this.currencyPipe.transform(this.campaign.matchFundsTotal, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
+        figure: this.currencyPipe.transform(this.campaign.matchFundsTotal, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) as string,
       });
     }
 
@@ -469,14 +478,14 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   private setFundSpecificProps() {
-    this.tickerMainMessage = this.currencyPipe.transform(this.fund?.amountRaised, this.campaign.currencyCode, 'symbol', '1.0-0') +
+    this.tickerMainMessage = this.currencyPipe.transform(this.fund?.amountRaised, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
       ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
 
     const durationInDays = Math.floor((new Date(this.campaign.endDate).getTime() - new Date(this.campaign.startDate).getTime()) / 86400000);
     const tickerItems = [];
     tickerItems.push({
       label: 'total match funds',
-      figure: this.currencyPipe.transform(this.fund?.totalAmount, this.campaign.currencyCode, 'symbol', '1.0-0') as string,
+      figure: this.currencyPipe.transform(this.fund?.totalAmount, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) as string,
     });
     if (CampaignService.isOpenForDonations(this.campaign)) {
       tickerItems.push({

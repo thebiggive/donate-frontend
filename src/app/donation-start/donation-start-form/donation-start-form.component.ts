@@ -18,9 +18,11 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatStepper} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RecaptchaComponent} from 'ng-recaptcha';
+import {MatomoTracker} from 'ngx-matomo';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
   PaymentIntent,
@@ -33,8 +35,8 @@ import {
 import {EMPTY, firstValueFrom} from 'rxjs';
 
 import {Campaign} from '../../campaign.model';
-import {CampaignService} from '../../campaign.service';
 import {CardIconsService} from '../../card-icons.service';
+import {campaignHiddenMessage} from '../../../environments/common';
 import {COUNTRIES} from '../../countries';
 import {Donation, maximumDonationAmount} from '../../donation.model';
 import {DonationCreatedResponse} from '../../donation-created-response.model';
@@ -61,8 +63,6 @@ import {TimeLeftPipe} from "../../time-left.pipe";
 import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
 import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation-tipping-slider.component";
-import {MatomoTracker} from 'ngx-matomo';
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {PaymentReadinessTracker} from "./PaymentReadinessTracker";
 
 declare var _paq: {
@@ -162,7 +162,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   triedToLeaveMarketing = false;
   showAllPaymentMethods: boolean = false;
 
-
   protected campaignId: string;
 
   /**
@@ -258,8 +257,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private stripeService: StripeService,
     public datePipe: DatePipe,
     public timeLeftPipe: TimeLeftPipe,
-    private snackBar: MatSnackBar
-
+    private snackBar: MatSnackBar,
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
     this.countryOptionsObject = COUNTRIES.map(country => ({label: country.country, value: country.iso2}))
@@ -412,14 +410,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   })
 
   resumeDonationsIfPossible() {
-    this.donationService.getProbablyResumableDonation(this.campaignId)
+    this.donationService.getProbablyResumableDonation(this.campaignId, this.getPaymentMethodType())
       .subscribe((existingDonation: (Donation|undefined)) => {
         this.previousDonation = existingDonation;
 
         // The local check might not have the latest donation status in edge cases, so we need to check the copy
         // the Donations API returned still has a resumable status and wasn't completed or cancelled since being
         // saved locally.
-        if (!existingDonation || !this.donationService.isResumable(existingDonation)) {
+        if (!existingDonation || !this.donationService.isResumable(existingDonation, this.getPaymentMethodType())) {
           // No resumable donations
           return;
         }
@@ -653,7 +651,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
-
   /**
    * According to stripe docs https://stripe.com/docs/js/element/events/on_change?type=paymentElement the change event has
    * a value key as expected here. I'm not sure why that isn't included in the TS StripeElementChangeEvent interface.
@@ -775,8 +772,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (hasCredit) {
       // Settlement is via the Customer's cash balance, with no client-side provision of a Payment Method.
-      this.donationService.finaliseCashBalancePurchase(this.donation).subscribe(
-        (donation) => {
+      this.donationService.finaliseCashBalancePurchase(this.donation).subscribe({
+        next: (donation) => {
           this.matomoTracker.trackEvent(
             'donate',
             'stripe_customer_balance_payment_success',
@@ -784,15 +781,18 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           );
           this.exitPostDonationSuccess(donation, 'donation-funds');
         },
-        (error: HttpErrorResponse) => {
+        error: (response: HttpErrorResponse) => {
+          // I think this is the path to a detailed message in MatchBot `ActionError`s.
+          const errorMsg = response.error?.error?.description;
+
           this.matomoTracker.trackEvent(
             'donate_error',
             'stripe_customer_balance_payment_error',
-            error.message ?? '[No message]',
+            errorMsg ?? '[No message]',
           );
-          this.stripeError = `Cash balance application failed: ${error.message}`;
+          this.stripeError = 'Your donation has not been processed as it seems you have insufficient funds. Please refresh the page to see your remaining balance.';
         },
-      );
+      });
 
       return;
     }
@@ -1422,9 +1422,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return false;
   }
 
-  /**
-   * Redirect if campaign's not open yet; set up page metadata if it is
-   */
   private setCampaignBasedVars() {
     this.campaignId = this.campaign.id;
 
@@ -1443,6 +1440,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.campaign.championOptInStatement) {
       this.showChampionOptIn = true;
     }
+
+    if (this.campaign.hidden) {
+      this.showErrorToast(campaignHiddenMessage);
+    }
   }
 
   private handleCampaignViewUpdates() {
@@ -1452,12 +1453,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.setConditionalValidators();
     this.setChampionOptInValidity();
-
-    // auto redirect back to campaign page if donations not open yet
-    if (!CampaignService.isOpenForDonations(this.campaign)) {
-      this.router.navigateByUrl(`/campaign/${this.campaign.id}`, { replaceUrl: true });
-      return;
-    }
 
     this.pageMeta.setCommon(
       `Donate to ${this.campaign.charity.name}`,
@@ -1497,7 +1492,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       feeCoverAmount: sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
-      paymentMethodType: (this.creditPenceToUse > 0) ? 'customer_balance' : 'card',
+      paymentMethodType: this.getPaymentMethodType(),
       projectId: this.campaignId,
       psp: this.psp,
       tipAmount: sanitiseCurrency(this.amountsGroup.value.tipAmount?.trim()),
@@ -2183,5 +2178,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.paymentStepErrors = "";
       this.next()
     }
+  }
+
+  private getPaymentMethodType() {
+    return (this.creditPenceToUse > 0) ? 'customer_balance' : 'card';
   }
 }

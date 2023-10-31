@@ -1,9 +1,8 @@
 import {environment} from "../environments/environment";
 import {EnvironmentID} from "../environments/environment.interface";
 
-export const flagsForEnvironment = (environmentId: EnvironmentID) => {
+export const flagsForEnvironment = (_environmentId: EnvironmentID) => {
   return {
-    skipToContentLinkEnabled: environmentId !== 'production',
   } as const;
 }
 

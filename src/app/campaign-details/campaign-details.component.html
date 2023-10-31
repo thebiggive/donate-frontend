@@ -1,4 +1,14 @@
 <main class="b-container">
+  <biggive-page-section *ngIf="campaignInPast">
+    <biggive-call-to-action
+      class="b-mt-40"
+      main-title="This campaign has now closed"
+      [subtitle]="'But ' + campaign.charity.name + ' may have others'"
+      primary-button-label="View all their campaigns"
+      [primaryButtonUrl]="'/charity/' + campaign.charity.id "
+    ></biggive-call-to-action>
+  </biggive-page-section>
+
   <div class="b-back-button">
     <biggive-formatted-text>
       <a *ngIf="campaign.parentRef && fromFund" mat-icon-button [routerLink]="'/' + campaign.parentRef + '/' + campaign.championRef">
@@ -233,7 +243,7 @@
 
             <ul class="c-budget" *ngFor="let detail of campaign.budgetDetails">
               <li class="c-budget__item">
-                <span class="c-budget__value b-semi-bold">{{ detail.amount | currency : campaign.currencyCode : 'symbol' : '1.0-0' }}</span>
+                <span class="c-budget__value b-semi-bold">{{ detail.amount | currency : campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo }}</span>
                 &ndash; {{ detail.description }}
               </li>
             </ul>

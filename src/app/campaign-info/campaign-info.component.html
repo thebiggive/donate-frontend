@@ -29,7 +29,7 @@
 
     <h5>Beneficiaries</h5>
     <hr>
-    <div class="icons">
+    <ul class="icons">
       <li *ngFor="let beneficiary of campaign.beneficiaries" class="icon-wrapper">
         <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
         <span class="c-icon-title">
@@ -37,6 +37,6 @@
           {{ beneficiary.split('/').join('/\u200B') }}
         </span>
       </li>
-    </div>
+    </ul>
   </div>
 </div>

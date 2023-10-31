@@ -1,13 +1,14 @@
+import { DatePipe } from '@angular/common';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+import { currencyPipeDigitsInfo } from '../../environments/common';
 import { CampaignService, SearchQuery } from '../campaign.service';
 import { CampaignGroupsService } from '../campaign-groups.service';
 import { CampaignSummary } from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
 import { SearchService } from '../search.service';
-import { DatePipe } from '@angular/common';
 
 /** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
@@ -18,6 +19,7 @@ import { DatePipe } from '@angular/common';
 })
 export class ExploreComponent implements OnDestroy, OnInit {
   campaigns: CampaignSummary[];
+  currencyPipeDigitsInfo = currencyPipeDigitsInfo;
   loading = false; // Server render gets initial result set; set true when filters change.
   /** Whether any non-default search logic besides an order change has been applied. */
   searched = false;
@@ -121,7 +123,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   getPercentageRaised(childCampaign: CampaignSummary) {
-    return CampaignService.percentRaised(childCampaign);
+    return CampaignService.percentRaisedOfIndividualCampaign(childCampaign);
   }
 
   private moreMightExist(): boolean {
