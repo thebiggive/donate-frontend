@@ -51,7 +51,7 @@ export class MyAccountComponent implements OnInit {
       }
     });
 
-    setTimeout(() => this.checkForPaymentCardsIfNotLoaded(), 5_000);
+    setTimeout(this.checkForPaymentCardsIfNotLoaded, 5_000);
   }
 
   loadPaymentMethods() {
