@@ -50,13 +50,15 @@ export class MyAccountComponent implements OnInit {
         this.loadPaymentMethods();
       }
     });
+
+    setTimeout(this.checkForPaymentCardsIfNotLoaded, 5_000);
   }
 
   loadPaymentMethods() {
     // not so keen on the component using the donation service and the identity service together like this
     // would rather call one service and have it do everything for us. Not sure what service would be best to put
     // this code in.
-    this.donationService.getPaymentMethods(this.person.id, this.jwtAsString())
+    this.donationService.getPaymentMethods(this.person.id, this.jwtAsString(), {cacheBust: true})
       .subscribe((response: { data: PaymentMethod[] }) => {
           this.paymentMethods = response.data;
         }
@@ -137,4 +139,16 @@ export class MyAccountComponent implements OnInit {
 
     return {year, month}
   }
+
+    /**
+     * To work around a bug where it seems sometimes new payment cards are not showing on this page, if there are none
+     * loaded at this point we check again with the server.
+     */
+    private checkForPaymentCardsIfNotLoaded = () => {
+        if (this.paymentMethods && this.paymentMethods.length > 0) {
+          return;
+        }
+
+        this.loadPaymentMethods();
+    };
 }
