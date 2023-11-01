@@ -164,9 +164,11 @@ export class DonationService {
     );
   }
 
-  getPaymentMethods(personId?: string, jwt?: string): Observable<{ data: PaymentMethod[] }> {
+  getPaymentMethods(personId?: string, jwt?: string, {cacheBust}: { cacheBust?: boolean} = {cacheBust: false}): Observable<{ data: PaymentMethod[] }> {
+    const cacheBuster = cacheBust ? ("?t=" + new Date().getTime()) : '';
+
     return this.http.get<{ data: PaymentMethod[] }>(
-      `${environment.donationsApiPrefix}/people/${personId}/payment_methods`,
+      `${environment.donationsApiPrefix}/people/${personId}/payment_methods${cacheBuster}`,
       this.getPersonAuthHttpOptions(jwt),
     );
   }
