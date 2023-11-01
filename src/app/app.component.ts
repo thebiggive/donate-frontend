@@ -130,7 +130,10 @@ export class AppComponent implements AfterViewInit, OnInit {
     const headerEl = this.header;
     this.router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationStart),
-    ).subscribe(() => headerEl.closeMobileMenuFromOutside());
+    ).subscribe(
+      // we have seen TypeError: Cannot read properties of undefined (reading 'closeMobileMenuFromOutside'). So check headerEl is defined beofore reading the prop:
+      () => headerEl && headerEl.closeMobileMenuFromOutside()
+    );
   }
 
   @HostListener('cookieBannerAcceptAllSelected', ['$event'])
