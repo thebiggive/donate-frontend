@@ -50,10 +50,12 @@
           <p>This helps you to make doubling your donation easier.</p>
         </div>
 
+        <div aria-live="polite">
         <p *ngIf="registrationComplete" id="registrationCompleteText">
           <strong>You are now registered<span *ngIf="loggedIn"> and logged in</span>.</strong> You can now donate faster
           using your chosen email address and password.
         </p>
+        </div>
 
         <div class="cta" *ngIf="registrationComplete && loggedIn">
           <div class="button-wrapper">
