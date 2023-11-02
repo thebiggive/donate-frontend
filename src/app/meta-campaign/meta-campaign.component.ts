@@ -119,7 +119,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId) && this.tickerUpdateTimer) {
-      clearInterval(this.tickerUpdateTimer);
+      clearTimeout(this.tickerUpdateTimer);
     }
 
     if (this.routeChangeListener) {
