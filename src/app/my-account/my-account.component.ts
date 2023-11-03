@@ -25,7 +25,7 @@ export class MyAccountComponent implements OnDestroy, OnInit {
   registerSucessMessage: string | undefined;
   protected readonly faExclamationTriangle = faExclamationTriangle;
 
-  private savedCardsTimer: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
+  private savedCardsTimer: undefined | ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
 
   constructor(
     private pageMeta: PageMetaService,
