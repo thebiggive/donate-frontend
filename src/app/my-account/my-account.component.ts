@@ -51,12 +51,12 @@ export class MyAccountComponent implements OnDestroy, OnInit {
       } else {
         this.person = person;
         this.loadPaymentMethods();
+
+        if (isPlatformBrowser(this.platformId)) {
+          this.savedCardsTimer = setTimeout(this.checkForPaymentCardsIfNotLoaded, 5_000);
+        }
       }
     });
-
-    if (isPlatformBrowser(this.platformId)) {
-      this.savedCardsTimer = setTimeout(this.checkForPaymentCardsIfNotLoaded, 5_000);
-    }
   }
 
   ngOnDestroy() {
