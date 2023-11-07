@@ -84,6 +84,15 @@ export class HomeComponent implements OnInit {
       'https://images-production.thebiggive.org.uk/0011r00002IMRknAAH/CCampaign%20Banner/db3faeb1-d20d-4747-bb80-1ae9286336a3.jpg',
     );
     this.stats = this.route.snapshot.data.stats;
+
+
+    if (environment.environmentId !== 'production') {
+      const queryParams = this.route.snapshot.queryParams;
+
+      if (queryParams.simulatedDate) {
+        this.currentTime = new Date(queryParams.simulatedDate);
+      }
+    }
   }
 
   get highlightCardsToShow(): readonly HighlightCard[] {
