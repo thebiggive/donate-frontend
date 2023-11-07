@@ -7,6 +7,7 @@ import {environment} from "../../environments/environment";
 const CCOpenDate = new Date('2023-11-28T12:00:00+00:00');
 const CCCloseDate = new Date('2023-12-05T12:00:00+00:00')
 const ArtsForImpactApplicationCloseDate = new Date('2023-12-16T00:00:00+00:00');
+const GMFApplicationCloseDate = new Date('2024-01-17T00:00:00+00:00');
 
 @Component({
   selector: 'app-home',
@@ -61,7 +62,7 @@ export class HomeComponent implements OnInit {
     },
     {
       appearAt: 'asap',
-      disappearAt: 'never',
+      disappearAt: GMFApplicationCloseDate,
       headerText: "Applications for Green Match Fund are now open!",
       bodyText: "Apply by January 16 2024",
       iconColor: "brand-gmf-green",
