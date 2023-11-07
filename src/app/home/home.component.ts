@@ -6,7 +6,7 @@ import {environment} from "../../environments/environment";
 
 const CCOpenDate = new Date('2023-11-28T12:00:00+00:00');
 const CCCloseDate = new Date('2023-12-05T12:00:00+00:00')
-const ArtsForImpactApplicationCloseDate = new Date('2023-12-16T12:00:00+00:00');
+const ArtsForImpactApplicationCloseDate = new Date('2023-12-16T00:00:00+00:00');
 
 @Component({
   selector: 'app-home',
