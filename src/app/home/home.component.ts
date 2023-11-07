@@ -4,7 +4,9 @@ import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "./HighlightCard";
 import {environment} from "../../environments/environment";
 
-const globalCampaignCloseDate = new Date('2023-10-31T23:00:00+00:00');
+const CCOpenDate = new Date('2023-11-28T12:00:00+00:00');
+const CCCloseDate = new Date('2023-12-05T12:00:00+00:00')
+const ArtsForImpactApplicationCloseDate = new Date('2023-12-16T12:00:00+00:00');
 
 @Component({
   selector: 'app-home',
@@ -23,43 +25,55 @@ export class HomeComponent implements OnInit {
   private highlightCards: readonly HighlightCard[] = [
     {
       appearAt: 'asap',
-      disappearAt: 'never',
-      headerText: "Woman and Girls Match Fund",
-      bodyText: "11th - 18th October 2023",
-      iconColor: "brand-wgmf-purple",
-      backgroundImageUrl: new URL('/assets/images/wmg-purple-texture.jpg', environment.donateGlobalUriPrefix),
+      disappearAt: CCOpenDate,
+      headerText: 'Christmas Challenge 2023 is starting soon!',
+      bodyText: 'Save the date 28th November - 5th December 2023',
+      iconColor: "brand-cc-red",
+      backgroundImageUrl: new URL('/assets/images/card-background-cc-lights.jpg', environment.donateGlobalUriPrefix),
       button: {
-        text: "See results",
-        href: new URL('/women-and-girls-2023/', environment.donateGlobalUriPrefix),
+        text: 'Find out more',
+        href: new URL('/christmas-challenge-2023', environment.donateGlobalUriPrefix)
       }
     },
     {
-      appearAt: globalCampaignCloseDate,
-      disappearAt: 'never',
-      headerText: 'Global’s Make Some Noise',
-      backgroundImageUrl: new URL('/assets/images/blue-texture.jpg', environment.donateGlobalUriPrefix),
-      iconColor: 'primary',
-      bodyText: '20th September - 31st October 2023',
-      button: {
-        text: 'See results',
-        href: new URL('/campaign/a056900001xpxqVAAQ', environment.donateGlobalUriPrefix)
-      }
-    },
-    {
-      appearAt: 'asap',
-      disappearAt: globalCampaignCloseDate,
-      headerText: 'Double your donation for Global’s Make Some Noise',
-      backgroundImageUrl: new URL('/assets/images/blue-texture.jpg', environment.donateGlobalUriPrefix),
-      iconColor: 'primary',
-      bodyText: 'Donate between 20th September - 31st October 2023',
+      appearAt: CCOpenDate,
+      disappearAt: CCCloseDate,
+      headerText: 'Double the difference - Christmas Challenge',
+      bodyText: '28th November - 5th December 2023',
+      iconColor: "brand-cc-red",
+      backgroundImageUrl: new URL('/assets/images/card-background-cc-lights.jpg', environment.donateGlobalUriPrefix),
       button: {
         text: 'Donate now',
-        href: new URL('/campaign/a056900001xpxqVAAQ', environment.donateGlobalUriPrefix)
+        href: new URL('/christmas-challenge-2023', environment.donateGlobalUriPrefix)
+      }
+    },
+    {
+      appearAt: CCCloseDate,
+      disappearAt: 'never',
+      headerText: 'Christmas Challenge 2023',
+      bodyText: '28th November - 5th December 2023',
+      iconColor: "brand-cc-red",
+      backgroundImageUrl: new URL('/assets/images/card-background-cc-lights.jpg', environment.donateGlobalUriPrefix),
+      button: {
+        text: 'See Results',
+        href: new URL('/christmas-challenge-2023', environment.donateGlobalUriPrefix)
       }
     },
     {
       appearAt: 'asap',
       disappearAt: 'never',
+      headerText: "Applications for Green Match Fund are now open!",
+      bodyText: "Apply by January 16 2024",
+      iconColor: "brand-gmf-green",
+      backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', environment.donateGlobalUriPrefix),
+      button: {
+        text: "Apply now",
+        href: new URL('/green-match-fund/', environment.blogUriPrefix),
+      }
+    },
+    {
+      appearAt: 'asap',
+      disappearAt: ArtsForImpactApplicationCloseDate,
       headerText: "Applications for Arts for Impact are now open!",
       backgroundImageUrl: new URL('/assets/images/red-coral-texture.png', environment.donateGlobalUriPrefix),
       iconColor: 'brand-afa-pink',
@@ -67,6 +81,18 @@ export class HomeComponent implements OnInit {
       button: {
         text: "Apply now",
         href: new URL('/artsforimpact/', environment.blogUriPrefix)
+      }
+    },
+    {
+      appearAt: ArtsForImpactApplicationCloseDate,
+      disappearAt: "never",
+      headerText: "One donation. Twice the impact.",
+      bodyText: 'You donate.\nWe double it.',
+      backgroundImageUrl: new URL('/assets/images/blue-texture.jpg', environment.donateGlobalUriPrefix),
+      iconColor: 'primary',
+      button: {
+        text: "Explore now",
+        href: new URL('/explore/', environment.donateGlobalUriPrefix)
       }
     },
   ];
