@@ -115,8 +115,13 @@ export class HomeComponent implements OnInit {
     if (environment.environmentId !== 'production') {
       const queryParams = this.route.snapshot.queryParams;
 
-      if (queryParams.simulatedDate) {
-        this.currentTime = new Date(queryParams.simulatedDate);
+      if (queryParams?.simulatedDate) {
+        const simulatedDate = new Date(queryParams.simulatedDate);
+        if (isNaN(simulatedDate.getTime())) {
+          alert("cant parse simulated date given");
+          throw new Error("Invalid date");
+        }
+        this.currentTime = simulatedDate;
       }
     }
   }
