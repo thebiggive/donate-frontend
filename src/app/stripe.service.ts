@@ -91,6 +91,7 @@ export class StripeService {
   }
 
   private amountIncTipInMinorUnit(donation: Donation) {
-    return Math.floor((donation.tipAmount + donation.donationAmount) * 100);
+    // use round not floor to avoid issues like returning 114 as the sum of £1 and £0.15
+    return Math.round((donation.tipAmount + donation.donationAmount) * 100);
   }
 }
