@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit {
       appearAt: 'asap',
       disappearAt: GMFApplicationCloseDate,
       headerText: "Applications for Green Match Fund are now open!",
-      bodyText: "Apply by January 16 2024",
+      bodyText: "Apply by 16th January 2024",
       iconColor: "brand-gmf-green",
       backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', environment.donateGlobalUriPrefix),
       button: {
