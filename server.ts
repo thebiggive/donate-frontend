@@ -37,6 +37,7 @@ export function app() {
   server.use(compression());
   // Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
   // https://github.com/helmetjs/helmet#reference
+  // @ts-ignore -- not ideal of course. See https://github.com/helmetjs/helmet/issues/235
   server.use(helmet({
     contentSecurityPolicy: {
       directives: {
