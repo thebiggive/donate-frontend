@@ -50,7 +50,7 @@
     "@stripe/stripe-js": "^2.1.0",
     "compression": "^1.7.4",
     "express": "^4.17.3",
-    "helmet": "^4.4.1",
+    "helmet": "^7.1.0",
     "jwt-decode": "^3.1.2",
     "material-icons-font": "^2.1.0",
     "morgan": "^1.10.0",
