@@ -9,8 +9,8 @@
   ></biggive-hero-image>
 
   <div class="b-container">
-    <biggive-grid [columnCount]="highlightCards.length">
-      <biggive-basic-card *ngFor="let card of highlightCards"
+    <biggive-grid [columnCount]="highlightCardsToShow.length">
+      <biggive-basic-card *ngFor="let card of highlightCardsToShow"
                           [spaceBelow]='4'
                           [headingLevel]="2"
                           [buttonColourScheme]="'clear-primary'"
@@ -77,12 +77,6 @@
       <biggive-image
         image-url="/assets/images/logo-net.png"
         image-alt-text="National Emergencies Trust"
-        width="150"
-      >
-      </biggive-image>
-      <biggive-image
-        image-url="/assets/images/logo-mail-force.png"
-        image-alt-text="Mail Force"
         width="150"
       >
       </biggive-image>

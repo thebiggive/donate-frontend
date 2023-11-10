@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import {PageMetaService} from '../page-meta.service';
-import {DatePipe} from '@angular/common';
+import {DatePipe, isPlatformBrowser} from '@angular/common';
 import {IdentityService} from "../identity.service";
 import {Person} from "../person.model";
 import {Router} from "@angular/router";
@@ -17,7 +17,7 @@ import {HttpErrorResponse} from "@angular/common/http";
   styleUrls: ['./my-account.component.scss'],
   providers: [DatePipe]
 })
-export class MyAccountComponent implements OnInit {
+export class MyAccountComponent implements OnDestroy, OnInit {
   public person: Person;
 
   public paymentMethods: PaymentMethod[]|undefined = undefined;
@@ -25,11 +25,14 @@ export class MyAccountComponent implements OnInit {
   registerSucessMessage: string | undefined;
   protected readonly faExclamationTriangle = faExclamationTriangle;
 
+  private savedCardsTimer: undefined | ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
+
   constructor(
     private pageMeta: PageMetaService,
     public dialog: MatDialog,
     private identityService: IdentityService,
     private donationService: DonationService,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
   ) {
     this.identityService = identityService;
@@ -48,15 +51,25 @@ export class MyAccountComponent implements OnInit {
       } else {
         this.person = person;
         this.loadPaymentMethods();
+
+        if (isPlatformBrowser(this.platformId)) {
+          this.savedCardsTimer = setTimeout(this.checkForPaymentCardsIfNotLoaded, 5_000);
+        }
       }
     });
+  }
+
+  ngOnDestroy() {
+    if (isPlatformBrowser(this.platformId) && this.savedCardsTimer) {
+      clearTimeout(this.savedCardsTimer);
+    }
   }
 
   loadPaymentMethods() {
     // not so keen on the component using the donation service and the identity service together like this
     // would rather call one service and have it do everything for us. Not sure what service would be best to put
     // this code in.
-    this.donationService.getPaymentMethods(this.person.id, this.jwtAsString())
+    this.donationService.getPaymentMethods(this.person.id, this.jwtAsString(), {cacheBust: true})
       .subscribe((response: { data: PaymentMethod[] }) => {
           this.paymentMethods = response.data;
         }
@@ -137,4 +150,16 @@ export class MyAccountComponent implements OnInit {
 
     return {year, month}
   }
+
+    /**
+     * To work around a bug where it seems sometimes new payment cards are not showing on this page, if there are none
+     * loaded at this point we check again with the server.
+     */
+    private checkForPaymentCardsIfNotLoaded = () => {
+        if (this.paymentMethods && this.paymentMethods.length > 0) {
+          return;
+        }
+
+        this.loadPaymentMethods();
+    };
 }

@@ -10,7 +10,7 @@ import { createHash } from 'crypto';
 import * as express from 'express';
 import { Request, Response } from 'express';
 import { existsSync } from 'fs';
-import * as helmet from 'helmet';
+import helmet from 'helmet';
 import * as morgan from 'morgan';
 import { join } from 'path';
 

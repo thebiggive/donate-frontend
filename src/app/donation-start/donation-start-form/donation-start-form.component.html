@@ -152,10 +152,6 @@
               Back to percentage tip
             </span>
 
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-            </mat-expansion-panel-header>
-          </mat-expansion-panel>
           <mat-expansion-panel
             (opened)="panelOpenState = true"
             (closed)="panelOpenState = false"
@@ -561,15 +557,14 @@
         class="c-make-your-donation"
       >
         <p class="b-rt-0 b-m-0 b-mt-40">By clicking on the <span class="b-bold">Donate now</span> button, you agree to
-          Big Give's
+          Big Give's Terms and Conditions and Privacy Policy. <br/>
           <a [href]="termsUrl" target="_blank">
             <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
-              Terms and Conditions
-          </a>
-            and
+              Read our Terms and Conditions
+          </a>,
           <a [href]="privacyUrl" target="_blank">
             <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
-            Privacy Policy</a>.
+            read our Privacy Policy</a>.
         </p>
 
         <div class="c-donation-summary">
