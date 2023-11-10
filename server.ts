@@ -10,7 +10,7 @@ import { createHash } from 'crypto';
 import * as express from 'express';
 import { Request, Response } from 'express';
 import { existsSync } from 'fs';
-import * as helmet from 'helmet';
+import helmet from 'helmet';
 import * as morgan from 'morgan';
 import { join } from 'path';
 
@@ -37,7 +37,6 @@ export function app() {
   server.use(compression());
   // Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
   // https://github.com/helmetjs/helmet#reference
-  // @ts-ignore -- not ideal of course. See https://github.com/helmetjs/helmet/issues/235
   server.use(helmet({
     contentSecurityPolicy: {
       directives: {
