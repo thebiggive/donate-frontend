@@ -140,7 +140,7 @@ export class HomeComponent implements OnInit {
       this.router.navigate(
         ['/christmas-challenge-2023'],
         {
-          replaceUrl: true, // As we are redirecting imediatly it would be confusing to leave a page the user hasn't seen in their history.
+          replaceUrl: true, // As we are redirecting immediately it would be confusing to leave a page the user hasn't seen in their history.
 
         }
       );
