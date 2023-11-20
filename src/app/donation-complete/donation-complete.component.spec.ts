@@ -73,7 +73,7 @@ describe('DonationCompleteComponent', () => {
       feeCoverAmount: 0,
       matchReservedAmount: 0,
       matchedAmount: 0,
-      paymentMethodType: 'card',
+      pspMethodType: 'card',
       projectId: "",
       psp: "stripe",
       tipAmount: 0,

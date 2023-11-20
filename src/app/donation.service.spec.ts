@@ -31,7 +31,7 @@ describe('DonationService', () => {
       matchReservedAmount: 500.01,
       optInCharityEmail: true,
       optInTbgEmail: false,
-      paymentMethodType: 'card',
+      pspMethodType: 'card',
       projectId: '11I400000009Sds3e3',
       psp: 'stripe',
       status,
