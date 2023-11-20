@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "./HighlightCard";
 import {environment} from "../../environments/environment";
+import {isPlatformBrowser} from "@angular/common";
 
 const CCOpenDate = new Date('2023-11-28T12:00:00+00:00');
 const CCCloseDate = new Date('2023-12-05T12:00:00+00:00')
@@ -101,6 +102,8 @@ export class HomeComponent implements OnInit {
   public constructor(
     private pageMeta: PageMetaService,
     private route: ActivatedRoute,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {
   }
 
@@ -112,10 +115,9 @@ export class HomeComponent implements OnInit {
     );
     this.stats = this.route.snapshot.data.stats;
 
+    const queryParams = this.route.snapshot.queryParams;
 
     if (environment.environmentId !== 'production') {
-      const queryParams = this.route.snapshot.queryParams;
-
       if (queryParams?.simulatedDate) {
         const simulatedDate = new Date(queryParams.simulatedDate);
         if (isNaN(simulatedDate.getTime())) {
@@ -124,6 +126,24 @@ export class HomeComponent implements OnInit {
         }
         this.currentTime = simulatedDate;
       }
+    }
+
+    // start the redirect 12 hours in advance of CC open:
+    const startRedirectingToCCAt = new Date('2023-11-28T00:00:00+00:00');
+
+    // end the redirect exactly at the time CC closes.
+    if (
+      !queryParams.hasOwnProperty('noredirect') &&
+      this.currentTime >= startRedirectingToCCAt &&
+      this.currentTime < CCCloseDate &&
+      isPlatformBrowser(this.platformId)) {
+      this.router.navigate(
+        ['/christmas-challenge-2023'],
+        {
+          replaceUrl: true, // As we are redirecting immediately it would be confusing to leave a page the user hasn't seen in their history.
+
+        }
+      );
     }
   }
 
