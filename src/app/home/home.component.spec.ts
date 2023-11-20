@@ -33,7 +33,7 @@ describe('HomeComponent', () => {
         RouterTestingModule,
       ],
       providers: [
-        { provide: ActivatedRoute, useValue: { snapshot: { data: { campaigns: [] }} } },
+        { provide: ActivatedRoute, useValue: { snapshot: { queryParams: {}, data: { campaigns: [] }} } },
       ],
     })
     .compileComponents();
