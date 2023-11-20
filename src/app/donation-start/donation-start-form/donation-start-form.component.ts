@@ -1272,7 +1272,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   /**
-   * Updates the balance of doantion credits available for use, and connected readiness + validation vars.
+   * Updates the balance of donation credits available for use, and connected readiness + validation vars.
    */
   private prepareDonationCredits(person: Person) {
     if (environment.creditDonationsEnabled && person.cash_balance && person.cash_balance[this.campaign.currencyCode.toLowerCase()]! > 0) {
@@ -1284,6 +1284,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.stripePaymentMethodReady = true;
       this.paymentReadinessTracker.donationFundsPrepared(this.creditPenceToUse);
       this.setConditionalValidators();
+
+      if (this.donation) {
+        this.donation.pspMethodType = this.getPaymentMethodType();
+      }
     }
   }
 
