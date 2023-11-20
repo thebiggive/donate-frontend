@@ -128,7 +128,7 @@ export class DonationCompleteComponent implements OnInit {
 
     this.identityService.login(credentials)
       .subscribe(response => {
-        // It's still the same person, just a longer lived token. So for now just recycle the ID. We'll probably improve
+        // It's still the same person, just an upgraded / "complete" token. So for now just recycle the ID. We'll probably improve
         // `/auth` to return the ID separately soon, so we can do a normal login form that's able to call this without
         // having to decode the JWT (though maybe that's a good thing for the frontend to be able to do anyway?).
         // For now, keep console logging these even live, because the app

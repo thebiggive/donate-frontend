@@ -75,7 +75,7 @@ export class DonationService {
     return (
       donation.status !== undefined &&
       this.resumableStatuses.includes(donation.status) &&
-      donation.paymentMethodType === paymentMethodType
+      donation.pspMethodType === paymentMethodType
     );
   }
 
@@ -94,7 +94,7 @@ export class DonationService {
     const existingDonations = this.getDonationCouplets().filter(donationItem => {
       return (
         donationItem.donation.projectId === projectId && // Only bring back donations to the same project/CCampaign...
-        this.getCreatedTime(donationItem.donation) > (Date.now() - 600000) && // ...from the past 10 minutes...
+        this.getCreatedTime(donationItem.donation) > (Date.now() - 1_500_000) && // ...from the past 25 minutes...
         this.isResumable(donationItem.donation, paymentMethodType) // ...with a reusable last-known status & method.
       );
     });
@@ -164,7 +164,11 @@ export class DonationService {
     );
   }
 
-  getPaymentMethods(personId?: string, jwt?: string, {cacheBust}: { cacheBust?: boolean} = {cacheBust: false}): Observable<{ data: PaymentMethod[] }> {
+  getPaymentMethods(
+    personId?: string,
+    jwt?: string,
+    {cacheBust}: { cacheBust?: boolean} = {cacheBust: false}
+  ): Observable<{ data: PaymentMethod[] }> {
     const cacheBuster = cacheBust ? ("?t=" + new Date().getTime()) : '';
 
     return this.http.get<{ data: PaymentMethod[] }>(
@@ -311,6 +315,7 @@ export class DonationService {
       this.getPersonAuthHttpOptions(jwt),
     );
   }
+
   updatePaymentMethod(
     person: Person,
     jwt: string,

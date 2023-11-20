@@ -1492,7 +1492,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       feeCoverAmount: sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
-      paymentMethodType: this.getPaymentMethodType(),
+      pspMethodType: this.getPaymentMethodType(),
       projectId: this.campaignId,
       psp: this.psp,
       tipAmount: sanitiseCurrency(this.amountsGroup.value.tipAmount?.trim()),
@@ -2155,9 +2155,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   public loadPerson(person: Person, id: string, jwt: string) {
     this.donor = person; // Should mean donations are attached to the Stripe Customer.
-    this.prepareDonationCredits(person);
-    this.prefillRarelyChangingFormValuesFromPerson(person);
-    this.loadFirstSavedStripeCardIfAny(id, jwt);
+
+    // Only tokens for Identity users with a password have enough access to load payment methods, use credit
+    // balances and access personal data beyond the anonymous new Customer basics.
+    if (this.identityService.isTokenForFinalisedUser(jwt)) {
+      this.prepareDonationCredits(person);
+      this.prefillRarelyChangingFormValuesFromPerson(person);
+      this.loadFirstSavedStripeCardIfAny(id, jwt);
+    }
   }
 
   onDonationSliderMove = (tipPercentage: number, tipAmount: number) => {
