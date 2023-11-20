@@ -68,11 +68,12 @@ describe('DonationStartContainer', () => {
     fixture.detectChanges();
   });
 
-  it(`should create and call form's donation resume helper`, () => {
-    spyOn(component.donationStartForm, 'resumeDonationsIfPossible');
+  it(`should call Identity.getIdAndJWT()`, () => {
+    // This leads to conditional Person-loading logic afterwards, where applicable.
+    spyOn(component.identityService, 'getIdAndJWT');
     component.ngAfterViewInit();
     expect(component).toBeTruthy();
-    expect(component.donationStartForm.resumeDonationsIfPossible).toHaveBeenCalled();
+    expect(component.identityService.getIdAndJWT).toHaveBeenCalled();
   });
 
   const getDummyCampaign = (campaignId: string) => {

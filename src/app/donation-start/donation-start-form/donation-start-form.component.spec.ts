@@ -34,6 +34,9 @@ import {Donation} from "../../donation.model";
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 function makeDonationStartFormComponent(donationService: DonationService,) {
+  const mockIdentityService = TestBed.inject(IdentityService);
+  spyOn(mockIdentityService, 'isTokenForFinalisedUser').and.returnValue(true);
+
   const donationStartFormComponent = new DonationStartFormComponent(
     undefined as unknown as CardIconsService,
     undefined as unknown as ChangeDetectorRef,
@@ -45,7 +48,7 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     donationService,
     undefined as unknown as ElementRef<any>,
     undefined as unknown as FormBuilder,
-    undefined as unknown as IdentityService,
+    mockIdentityService,
     {
       trackEvent: () => {
       }
@@ -98,6 +101,7 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
   donationStartFormComponent.donation = {} as Donation;
   return donationStartFormComponent;
 }
+
 describe('DonationStartNewPrimaryComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

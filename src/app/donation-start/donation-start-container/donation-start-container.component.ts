@@ -27,7 +27,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
   public bannerUri: string | null;
 
   constructor(
-    private identityService: IdentityService,
+    public identityService: IdentityService,
     private imageService: ImageService,
     private route: ActivatedRoute,
     private router: Router,
