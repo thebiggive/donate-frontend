@@ -19,8 +19,9 @@
         [loadAuthedPersonInfo]="loadAuthedPersonInfo"
         [creditPenceToUse]="this.donationStartForm && this.donationStartForm.creditPenceToUse || 0"
         [campaign]="campaign"
-        [canLogin]="this.canLogin">
-      </app-donation-start-login>
+        [canLogin]="this.canLogin"
+        [loginChangeEmitter]="identityService.loginStatusChanged"
+      ></app-donation-start-login>
 
       <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
 

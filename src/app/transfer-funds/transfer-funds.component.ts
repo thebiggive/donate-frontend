@@ -358,6 +358,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     this.identityService.get(id, jwt, {withTipBalances: true}).subscribe((person: Person) => {
       this.isLoading = false;
       this.donor = person;
+      this.identityService.loginStatusChanged.emit(true);
 
       this.setConditionalValidators();
 

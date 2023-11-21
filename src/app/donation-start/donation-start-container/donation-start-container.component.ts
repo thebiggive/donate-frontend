@@ -94,6 +94,10 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
         this.loggedInEmailAddress = person.email_address;
         this.donationStartForm.loadPerson(person, id, jwt);
         this.donationStartForm.resumeDonationsIfPossible();
+
+        if (this.identityService.isTokenForFinalisedUser(jwt)) {
+          this.identityService.loginStatusChanged.emit(true);
+        }
       },
       error: (err) => {
         console.log('Could not load Person info: ', err)
