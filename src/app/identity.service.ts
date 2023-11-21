@@ -1,5 +1,5 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Inject, Injectable, InjectionToken} from '@angular/core';
+import {EventEmitter, Inject, Injectable, InjectionToken} from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import {CookieService} from 'ngx-cookie-service';
 import {MatomoTracker} from 'ngx-matomo';
@@ -27,7 +27,8 @@ export class IdentityService {
   // Key is per-domain/env. For now we simply store a single JWT (or none).
   private readonly storageKey = `${environment.identityApiPrefix}/v1/jwt`;
 
-  private jwtModifiedCallbacks: Array<() => void> = [];
+  // Tracks and changes login status; shared between e.g. outer app menu and specific pages.
+  loginStatusChanged = new EventEmitter<boolean>();
 
   constructor(
     private http: HttpClient,
@@ -94,6 +95,13 @@ export class IdentityService {
   }
 
   /**
+   * Quick & dirty helper to infer logged in status from token without adding wasteful API calls.
+   */
+  probablyHaveLoggedInPerson(): boolean {
+    return this.getIdAndJWT() !== undefined && this.isTokenForFinalisedUser(this.getJWT() as string);
+  }
+
+  /**
    * Returns an observable of a person if logged in, or of null.
    * Note that the person may not have a password - if not they should
    * probably not be treated as fully logged-in, although we could offer
@@ -121,7 +129,7 @@ export class IdentityService {
   clearJWT() {
     this.cookieService.delete(this.cookieName);
     this.storage.remove(this.storageKey);
-    this.executeJwtCallBacks();
+    this.loginStatusChanged.emit(false);
   }
 
   getIdAndJWT(): { id: string, jwt: string } | undefined {
@@ -163,21 +171,6 @@ export class IdentityService {
   saveJWT(id: string, jwt: string) {
     const daysTilExpiry = 1;
     this.cookieService.set(this.cookieName, JSON.stringify({id, jwt}), daysTilExpiry, '/');
-    this.executeJwtCallBacks();
-  }
-
-
-  private executeJwtCallBacks() {
-    this.jwtModifiedCallbacks.forEach(callback => callback());
-  }
-
-  /**
-   * Runs the given callback any time a JWT is stored, removed or modified.
-   *
-   * I'm sure this is not idiomatic angular, but it's working.
-   */
-  onJWTModified(callback: () => void) {
-    this.jwtModifiedCallbacks.push(callback);
   }
 
   getFundingInstructions(id: string, jwt: string): Observable<FundingInstruction> {

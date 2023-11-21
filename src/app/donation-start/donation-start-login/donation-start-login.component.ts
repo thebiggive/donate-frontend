@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Campaign } from 'src/app/campaign.model';
 import { LoginModalComponent } from '../../login-modal/login-modal.component';
@@ -17,6 +17,8 @@ export class DonationStartLoginComponent {
   @Input({ required: true }) personId: string | undefined;
   @Input({ required: true }) canLogin: boolean;
 
+  @Input({ required: true }) private loginChangeEmitter: EventEmitter<boolean>;
+
   constructor(
     public dialog: MatDialog,
   ) {}
@@ -26,7 +28,7 @@ export class DonationStartLoginComponent {
     loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
       if (data && data.id) {
         this.loadAuthedPersonInfo(data.id, data.jwt);
-        location.reload(); // ensures correct menu is displayed
+        this.loginChangeEmitter.emit(true);
       }
     });
   }
