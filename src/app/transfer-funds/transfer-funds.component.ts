@@ -358,6 +358,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     this.identityService.get(id, jwt, {withTipBalances: true}).subscribe((person: Person) => {
       this.isLoading = false;
       this.donor = person;
+      this.identityService.loginStatusChanged.emit(true);
 
       this.setConditionalValidators();
 
@@ -431,7 +432,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       matchReservedAmount: 0, // Tips are always unmatched
       optInCharityEmail: false,
       optInTbgEmail: this.marketingGroup.value.optInTbgEmail,
-      paymentMethodType: 'customer_balance',
+      pspMethodType: 'customer_balance',
       projectId: this.campaign.id,
       psp: 'stripe',
       tipAmount: 0,

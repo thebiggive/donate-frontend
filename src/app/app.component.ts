@@ -1,5 +1,5 @@
 import {APP_BASE_HREF, isPlatformBrowser} from '@angular/common';
-import {AfterViewInit, Component, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
 import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
 import {BiggiveMainMenu} from '@biggive/components-angular';
 import {MatomoTracker} from "ngx-matomo";
@@ -8,7 +8,6 @@ import {filter, map} from 'rxjs/operators';
 import {DonationService} from './donation.service';
 import {GetSiteControlService} from './getsitecontrol.service';
 import {NavigationService} from './navigation.service';
-import {Person} from "./person.model";
 import {IdentityService} from "./identity.service";
 import {environment} from "../environments/environment";
 import {flags} from "./featureFlags";
@@ -18,14 +17,14 @@ import {
   CookiePreferences,
   CookiePreferenceService
 } from "./cookiePreference.service";
-import {Observable} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ["./app.component.scss"]
 })
-export class AppComponent implements AfterViewInit, OnInit {
+export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
 
   public isLoggedIn: boolean = false;
@@ -41,6 +40,9 @@ export class AppComponent implements AfterViewInit, OnInit {
   protected readonly flags = flags;
   protected readonly userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
   public currentUrlWithoutHash$: Observable<URL>;
+  
+  private getPersonSubscription: Subscription;
+  private loginStatusChangeSubscription: Subscription;
 
   constructor(
     private identityService: IdentityService,
@@ -115,15 +117,26 @@ export class AppComponent implements AfterViewInit, OnInit {
     // page the donor lands on makes wider use of DonationService or not.
     this.donationService.deriveDefaultCountry();
 
-    this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
-      this.isLoggedIn = !! person && !! person.has_password;
-
-      this.isDataLoaded = true;
-
-      this.identityService.onJWTModified(() => {
-        this.ngOnInit()
-      });
+    this.loginStatusChangeSubscription = this.identityService.loginStatusChanged.subscribe({
+      next: (isLoggedIn: boolean) => {
+        this.isLoggedIn = isLoggedIn;
+         // This double-checks the JWT and sets `isLoggedIn` again, but if event emitters' use is correct then
+         // that's a no-op.
+        this.updatePersonInfo();
+      },
     });
+
+    this.updatePersonInfo();
+  }
+
+  ngOnDestroy() {
+    if (this.getPersonSubscription) {
+      this.getPersonSubscription.unsubscribe();
+    }
+
+    if (this.loginStatusChangeSubscription) {
+      this.loginStatusChangeSubscription.unsubscribe();
+    }
   }
 
   ngAfterViewInit() {
@@ -144,5 +157,10 @@ export class AppComponent implements AfterViewInit, OnInit {
   @HostListener('cookieBannerSavePreferencesSelected', ['$event'])
   onCookieBannerSavePreferencesSelected(event: CustomEvent) {
     this.cookiePreferenceService.storePreferences({agreedToAll: false, agreedToCookieTypes: event.detail});
+  }
+
+  private updatePersonInfo() {
+    this.isLoggedIn = this.identityService.probablyHaveLoggedInPerson();
+    this.isDataLoaded = true;
   }
 }

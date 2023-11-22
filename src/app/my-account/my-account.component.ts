@@ -78,7 +78,7 @@ export class MyAccountComponent implements OnDestroy, OnInit {
 
   logout() {
     this.identityService.clearJWT();
-    window.location.href="/";
+    this.router.navigate(['']);
   }
 
   deleteMethod(method: PaymentMethod) {

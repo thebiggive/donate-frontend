@@ -19,7 +19,6 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
   campaignOpenOnLoad: boolean;
   donation: Donation | undefined = undefined;
   personId?: string;
-  personIsLoginReady = false;
   loggedInEmailAddress?: string;
 
   @ViewChild('donation_start_form') donationStartForm: DonationStartFormComponent
@@ -28,7 +27,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
   public bannerUri: string | null;
 
   constructor(
-    private identityService: IdentityService,
+    public identityService: IdentityService,
     private imageService: ImageService,
     private route: ActivatedRoute,
     private router: Router,
@@ -54,10 +53,6 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
       // Callback will `resumeDonationsIfPossible()` after loading the person.
       this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
       return;
-    }
-
-    if (this.donationStartForm) {
-      this.donationStartForm.resumeDonationsIfPossible();
     }
   }
 
@@ -93,21 +88,21 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
       return;
     }
 
-    this.identityService.get(id, jwt).subscribe(
-      (person: Person) => {
-      this.donor = person; // Should mean donations are attached to the Stripe Customer.
-      this.personIsLoginReady = true;
-      this.loggedInEmailAddress = person.email_address;
-      this.donationStartForm.loadPerson(person, id, jwt);
-      this.donationStartForm.resumeDonationsIfPossible();
-      },
-      () => {
+    this.identityService.get(id, jwt).subscribe({
+      next: (person: Person) => {
+        this.donor = person; // Should mean donations are attached to the Stripe Customer.
+        this.loggedInEmailAddress = person.email_address;
+        this.donationStartForm.loadPerson(person, id, jwt);
         this.donationStartForm.resumeDonationsIfPossible();
+
+        if (this.identityService.isTokenForFinalisedUser(jwt)) {
+          this.identityService.loginStatusChanged.emit(true);
+        }
       },
-      () => {
-        this.donationStartForm.resumeDonationsIfPossible();
-      }
-    );
+      error: (err) => {
+        console.log('Could not load Person info: ', err)
+      },
+    });
   };
 
   get canLogin() {

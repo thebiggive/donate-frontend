@@ -4,7 +4,7 @@
       <p><button mat-raised-button (click)="login()">Log in</button></p>
     </div>
 
-    <div *ngIf="personId && personIsLoginReady && email" class="id-info">
+    <div *ngIf="personId && email" class="id-info">
       <p>Logged in as <strong>{{ email}}</strong></p>
       <p>We'll pre-fill some fields with your saved details, but you can change them if you need to.</p>
       <p *ngIf="creditPenceToUse > 0">Your credit balance will be used and the donation value capped at {{ creditPenceToUse / 100 | exactCurrency:campaign.currencyCode }}</p>
