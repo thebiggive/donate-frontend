@@ -24,6 +24,12 @@ export class HomeComponent implements OnInit {
 
   private currentTime = new Date();
 
+  /**
+   * Prevents the user seeing the content if we're about to redirect them to a different page.
+   * As suggested at https://stackoverflow.com/a/58962726/2526181
+   */
+  protected mayBeAboutToRedirect: boolean = true;
+
   private highlightCards: readonly HighlightCard[] = [
     {
       appearAt: 'asap',
@@ -135,15 +141,17 @@ export class HomeComponent implements OnInit {
     if (
       !queryParams.hasOwnProperty('noredirect') &&
       this.currentTime >= startRedirectingToCCAt &&
-      this.currentTime < CCCloseDate &&
-      isPlatformBrowser(this.platformId)) {
-      this.router.navigate(
+      this.currentTime < CCCloseDate
+      ) {
+      isPlatformBrowser(this.platformId) && this.router.navigate(
         ['/christmas-challenge-2023'],
         {
           replaceUrl: true, // As we are redirecting immediately it would be confusing to leave a page the user hasn't seen in their history.
 
         }
       );
+    } else {
+      this.mayBeAboutToRedirect = false;
     }
   }
 
