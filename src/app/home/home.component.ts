@@ -1,5 +1,5 @@
 import {isPlatformBrowser} from "@angular/common";
-import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component, Inject, OnInit, Optional, PLATFORM_ID} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RESPONSE} from '@nguniversal/express-engine/tokens';
 
@@ -112,7 +112,7 @@ export class HomeComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
-    @Inject(RESPONSE) private response: any,
+    @Optional() @Inject(RESPONSE) private response: any,
   ) {
   }
 
