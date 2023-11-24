@@ -2,6 +2,7 @@ import {isPlatformBrowser} from "@angular/common";
 import {Component, Inject, OnInit, Optional, PLATFORM_ID} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RESPONSE} from '@nguniversal/express-engine/tokens';
+import { Response } from "express";
 
 import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "./HighlightCard";
@@ -112,7 +113,7 @@ export class HomeComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
-    @Optional() @Inject(RESPONSE) private response: any,
+    @Optional() @Inject(RESPONSE) private response: Response,
   ) {
   }
 
