@@ -65,11 +65,10 @@
           <h2 class="b-rt-0 b-m-0 b-bold">Tip Big Give</h2>
           <p *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
             <span *ngIf="!alternateCopy">
-              Big Give doesn't charge platform fees. That means we're only able to continue offering our services thanks to
-              the generosity of donors who leave a tip.
+              Big Give is a registered charity (1136547), and since 2008, thanks to the generosity of people like you who leave a tip, we can continue providing a match funding platform for the charities and causes you care about.
             </span>
             <span *ngIf="alternateCopy">
-              Big Give is a registered charity (1136547), and since 2008, our aim has been to help thousands of charities double the difference of their donations. Thanks to the generosity of people like you who leave a tip, we can continue providing a match funding platform for the charities and causes you care about.
+              Big Give is a registered charity (1136547) and since 2008 has been helping thousands of charities double their donations. Tips left by generous people like you go into our Anchor Match Fund to provide further match funding for our charity partners as well as helping us deliver our charitable mission. Doubling the difference.
             </span>
           </p>
 
@@ -86,38 +85,38 @@
     add it somewhere to the slider? -->
           <div class="donation-input donation-input-main" *ngIf="tipControlStyle === 'dropdown'">
             <biggive-form-field-select
-                                       [prompt]="'Donation to the Big Give Trust'"
-                                       [options]="suggestedTipPercentages"
-                                       [selectedValue]="this.showCustomTipInput ? 'Other' : tipPercentage"
-                                       [backgroundColour]="'grey'"
-                                       [selectionChanged]="updateTipAmountFromSelectedPercentage"
-                                       [spaceBelow]="3"
+              [prompt]="'Donation to the Big Give Trust'"
+              [options]="suggestedTipPercentages"
+              [selectedValue]="this.showCustomTipInput ? 'Other' : tipPercentage"
+              [backgroundColour]="'grey'"
+              [selectionChanged]="updateTipAmountFromSelectedPercentage"
+              [spaceBelow]="3"
             >
             </biggive-form-field-select>
           </div>
 
-            <div [style]="showCustomTipInput ? '' : 'display: none;'" class="donation-input donation-input-main">
+          <div [style]="showCustomTipInput ? '' : 'display: none;'" class="donation-input donation-input-main">
 
-              <biggive-text-input currency="{{campaign.currencyCode}}" >
-                <label slot="label" for="tipAmount">Donation to the Big Give Trust</label>
-                <input
-                  maxlength="10"
-                  formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status"
-                  slot="input"
-                />
-              </biggive-text-input>
+            <biggive-text-input currency="{{campaign.currencyCode}}" >
+              <label slot="label" for="tipAmount">Donation to the Big Give Trust</label>
+              <input
+                maxlength="10"
+                formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status"
+                slot="input"
+              />
+            </biggive-text-input>
 
-              <p>Did you know Big Give is a charity, too? Tips help us provide a platform that doubles the difference of your donation to the causes closest to your heart. We truly appreciate any tip you can give - no matter the size.</p>
-            </div>
+            <p>Did you know Big Give is a charity, too? Tips help us provide a platform that doubles the difference of your donation to the causes closest to your heart. We truly appreciate any tip you can give - no matter the size.</p>
+          </div>
 
-            <div
-              class="error"
-              aria-live="polite"
-              *ngIf="tipAmountField?.invalid && tipAmountField?.errors && (tipAmountField?.dirty || tipAmountField?.touched)"
-            >
-              Please enter how much you would like to donate to Big Give as a number of
-              {{ currencySymbol }}, optionally with 2 decimals and up to {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }}.
-            </div>
+          <div
+            class="error"
+            aria-live="polite"
+            *ngIf="tipAmountField?.invalid && tipAmountField?.errors && (tipAmountField?.dirty || tipAmountField?.touched)"
+          >
+            Please enter how much you would like to donate to Big Give as a number of
+            {{ currencySymbol }}, optionally with 2 decimals and up to {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }}.
+          </div>
 
           <!-- The text below is not shown if we have the slider because it would just repeat content that's already displayed on the slider itself -->
           <mat-hint *ngIf="!customTip() && donationAmount && donationAmount > 0 && tipControlStyle !== 'slider'">
@@ -162,32 +161,24 @@
 
             <div *ngIf="!alternateCopy">
               <p>
-                Big Give is a registered charity, no 1136547. We don't charge charities for using our platform; we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
+                We don’t charge charities for using our platform; instead, we rely on the generosity of people who donate to leave a voluntary tip. This helps us to run our match funding campaigns and double the difference we can all make in the world.
               </p>
-              <p>Your tips will be going to:</p>
+              <p><strong>Everything we make goes back into supporting charities. Your tips will be:</strong></p>
               <ul>
-                <li>Supporting our website and team, allowing charities to double their
-                  donations to good causes.
-                </li>
-                <li>Providing match funds. Through tips, charities can receive funds from Big Give to launch their own campaign.
-                  <a href="https://biggive.org/anchor-match-fund/" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
-                    Read more about the Anchor Match fund.
-                  </a>
-                </li>
+                <li>Doubling the difference onwards by providing match funding. Using additional funds raised from tips, charities will receive funding from Big Give’s Anchor Match Fund to help launch their campaigns.</li>
+                <li>Helping us maintain our website and support our team so we can keep working with your favourite charities for many years to come.</li>
               </ul>
-              <p>
-                Thank you for your generosity! Your tips ensure that we can continue to support charities and causes that are important to you.
-              </p>
+              <p>Thank you! If you have any questions about tips, please contact us at hello@biggive.org.</p>
             </div>
 
             <div *ngIf="alternateCopy">
               <p>
-                We don't charge charities for using our platform; instead, we rely on the generosity of people who donate to leave a Voluntary Tip, which helps us run our match funding campaigns.
+                We believe giving is one of the most fulfilling things you can do. Whatever cause you support, we’re able to provide a platform that helps your gift make double the difference thanks to the generosity of people who leave a voluntary tip.
               </p>
-              <p>Everything we make goes back into supporting charities. Your tips will be:</p>
+              <p><strong>Everything we make goes back into supporting charities. Your tips will be:</strong></p>
               <ul>
-                <li>Doubling the difference onwards by providing match funding. Through tips, charities will receive funding in our <a href="https://biggive.org/anchor-match-fund/" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> Anchor Match fund</a> to help launch their campaigns.</li>
-                <li>Helping us maintain our website and support our team, so we can keep working with your favourite charities for many years to come.</li>
+                <li>Helping thousands of charities who make a huge difference in the areas they work in but do not have the access to funds or publicity of others. Your contributions help Big Give maintain a website that supports charities and gives them a voice.</li>
+                <li>Doubling donations in charity campaigns. Through tips, charities can receive funding from our Anchor Match Fund to help launch their campaigns.</li>
               </ul>
               <p>Thank you! If you have any questions about tips, please contact us at hello@biggive.org.</p>
             </div>
