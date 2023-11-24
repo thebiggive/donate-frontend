@@ -1,9 +1,11 @@
+import {isPlatformBrowser} from "@angular/common";
 import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {RESPONSE} from '@nguniversal/express-engine/tokens';
+
 import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "./HighlightCard";
 import {environment} from "../../environments/environment";
-import {isPlatformBrowser} from "@angular/common";
 
 const CCOpenDate = new Date('2023-11-28T12:00:00+00:00');
 const CCCloseDate = new Date('2023-12-05T12:00:00+00:00')
@@ -110,6 +112,7 @@ export class HomeComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(RESPONSE) private response: any,
   ) {
   }
 
@@ -143,13 +146,18 @@ export class HomeComponent implements OnInit {
       this.currentTime >= startRedirectingToCCAt &&
       this.currentTime < CCCloseDate
       ) {
-      isPlatformBrowser(this.platformId) && this.router.navigate(
-        ['/christmas-challenge-2023'],
-        {
-          replaceUrl: true, // As we are redirecting immediately it would be confusing to leave a page the user hasn't seen in their history.
+        const redirectSlugIncSlash = '/christmas-challenge-2023';
+        if (isPlatformBrowser(this.platformId)) {
+          this.router.navigate(
+            [redirectSlugIncSlash],
+            {
+              replaceUrl: true, // As we are redirecting immediately it would be confusing to leave a page the user hasn't seen in their history.
 
+            }
+          );
+        } else {
+          this.response.redirect(302, redirectSlugIncSlash);
         }
-      );
     } else {
       this.mayBeAboutToRedirect = false;
     }
