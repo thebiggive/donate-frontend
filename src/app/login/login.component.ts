@@ -94,15 +94,17 @@ export class LoginComponent {
         raw_password: this.loginForm.value.password,
       };
 
-      this.identityService.login(credentials).subscribe((response: { id: string, jwt: string }) => {
-        this.identityService.saveJWT(response.id, response.jwt);
-        this.loggingIn = false;
-      }, (error) => {
-        this.captcha.reset();
-        const errorDescription = error.error.error.description;
-        this.loginError = errorDescription || error.message || 'Unknown error';
-        this.loggingIn = false;
-      });
+      this.identityService.login(credentials).subscribe({
+        next: (response: { id: string, jwt: string }) => {
+          this.identityService.saveJWT(response.id, response.jwt);
+          this.loggingIn = false;
+        },
+        error: (error) => {
+          this.captcha.reset();
+          const errorDescription = error.error.error.description;
+          this.loginError = errorDescription || error.message || 'Unknown error';
+          this.loggingIn = false;
+      }});
     }
 
     else if (this.userAskedForResetLink) {
