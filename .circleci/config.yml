@@ -227,6 +227,16 @@ workflows:
             - ecs-deploys
           requires:
             - deploy-regression-static
+          post-steps:
+            - jira/notify:
+                job_type: deployment
+                environment_type: staging
+            - slack/notify:
+                # Temporarily sending alarms to test alarm sending setup.
+                channel: deployments, staging-alarms, production-alarms, regression-alarms
+#                event: fail
+                template: basic_fail_1
+                mentions: <@here>
       - aws-ecs/deploy-service-update:
           name: "Deploy Regression ECS with new image"
           context:
@@ -240,8 +250,10 @@ workflows:
           container-image-name-updates: 'container=donate,tag=regression-${CIRCLE_SHA1}'
           post-steps:
             - slack/notify:
+                channel: deployments, regression-alarms
                 event: fail
                 template: basic_fail_1
+                mentions: <@here>
 
   deploy-staging:
     jobs:
@@ -261,6 +273,16 @@ workflows:
             - ecs-deploys
           requires:
             - deploy-staging-static
+          post-steps:
+            - jira/notify:
+                job_type: deployment
+                environment_type: staging
+            - slack/notify:
+                # Temporarily sending alarms to test alarm sending setup.
+                channel: deployments, staging-alarms, production-alarms, regression-alarms
+#                event: fail
+                template: basic_fail_1
+                mentions: <@here>
       - aws-ecs/deploy-service-update:
           name: "Deploy Staging ECS with new image"
           context:
@@ -278,6 +300,7 @@ workflows:
                 job_type: deployment
                 environment_type: staging
             - slack/notify:
+                channel: deployments
                 custom: |
                   {
                     "blocks": [
@@ -293,8 +316,11 @@ workflows:
                     ]
                   }
             - slack/notify:
+                # Temporarily sending alarms to test alarm sending setup.
+                channel: deployments, staging-alarms, production-alarms, regression-alarms
                 event: fail
                 template: basic_fail_1
+                mentions: <@here>
 
   deploy-production:
     jobs:
@@ -314,6 +340,13 @@ workflows:
             - ecs-deploys
           requires:
             - deploy-production-static
+          post-steps:
+            - slack/notify:
+                # Temporarily sending alarms to test alarm sending setup.
+                channel: deployments, staging-alarms, production-alarms, regression-alarms
+                event: fail
+                template: basic_fail_1
+                mentions: <@here>
       - aws-ecs/deploy-service-update:
           name: "Deploy Production ECS with new image"
           context:
@@ -331,6 +364,7 @@ workflows:
                 job_type: deployment
                 environment_type: production
             - slack/notify:
+                channel: deployments
                 custom: |
                   {
                     "blocks": [
@@ -347,4 +381,5 @@ workflows:
                   }
             - slack/notify:
                 event: fail
+                channel: deployments, production-alarms
                 template: basic_fail_1
