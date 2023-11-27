@@ -12,8 +12,8 @@ import {Credentials} from "../credentials.model";
 import {IdentityService} from "../identity.service";
 import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
-import {ActivatedRoute, Router} from "@angular/router";
-import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+import {ActivatedRoute} from "@angular/router";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-login',
