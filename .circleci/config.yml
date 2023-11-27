@@ -228,9 +228,6 @@ workflows:
           requires:
             - deploy-regression-static
           post-steps:
-            - jira/notify:
-                job_type: deployment
-                environment_type: staging
             - slack/notify:
                 # Temporarily sending alarms to test alarm sending setup.
                 channel: deployments, staging-alarms, production-alarms, regression-alarms
@@ -274,9 +271,6 @@ workflows:
           requires:
             - deploy-staging-static
           post-steps:
-            - jira/notify:
-                job_type: deployment
-                environment_type: staging
             - slack/notify:
                 # Temporarily sending alarms to test alarm sending setup.
                 channel: deployments, staging-alarms, production-alarms, regression-alarms
