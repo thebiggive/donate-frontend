@@ -15,10 +15,6 @@ import {EMAIL_REGEXP} from "../validators/patterns";
 import {Router} from "@angular/router";
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 
-// fred@biggive.org.uk
-// Ye0uluThYe0uluTh
-
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -105,14 +101,11 @@ export class LoginComponent {
       this.identityService.login(credentials).subscribe({
         next: (response: { id: string, jwt: string }) => {
           this.identityService.saveJWT(response.id, response.jwt);
-          this.snackBar.open(
-            "You are now logged in",
-            undefined,
-            {
-              duration: 3_000,
-              panelClass: 'snack-bar',
-            });
-          this.router.navigate(['/']);
+          // assign window.location rather than the more angular-proper way of
+          // this.router.navigateByUrl('/') because we need to force the main menu to be updated
+          // to show that we're now logged in.
+
+          window.location.href = '/';
         },
         error: (error) => {
           this.captcha.reset();
