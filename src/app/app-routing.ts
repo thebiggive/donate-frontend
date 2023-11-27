@@ -138,12 +138,6 @@ const routes: Routes = [
     loadChildren: () => import('./my-account/my-account.module')
       .then(c => c.MyAccountModule),
   },
-  {
-    path: 'my-account',
-    pathMatch: 'full',
-    loadChildren: () => import('./my-account/my-account.module')
-      .then(c => c.MyAccountModule),
-  },
   // This is effectively our 404 handler because we support any string as meta-campaign
   // slug. So check `CampaignResolver` for adjusting what happens if the slug doesn't
   // match a campaign.
