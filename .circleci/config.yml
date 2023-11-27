@@ -227,6 +227,16 @@ workflows:
             - ecs-deploys
           requires:
             - deploy-regression-static
+          post-steps:
+            - jira/notify:
+                job_type: deployment
+                environment_type: staging
+            - slack/notify:
+                # Temporarily sending alarms to test alarm sending setup.
+                channel: deployments, staging-alarms, production-alarms, regression-alarms
+#                event: fail
+                template: basic_fail_1
+                mentions: <@here>
       - aws-ecs/deploy-service-update:
           name: "Deploy Regression ECS with new image"
           context:
@@ -263,6 +273,16 @@ workflows:
             - ecs-deploys
           requires:
             - deploy-staging-static
+          post-steps:
+            - jira/notify:
+                job_type: deployment
+                environment_type: staging
+            - slack/notify:
+                # Temporarily sending alarms to test alarm sending setup.
+                channel: deployments, staging-alarms, production-alarms, regression-alarms
+#                event: fail
+                template: basic_fail_1
+                mentions: <@here>
       - aws-ecs/deploy-service-update:
           name: "Deploy Staging ECS with new image"
           context:
@@ -320,6 +340,16 @@ workflows:
             - ecs-deploys
           requires:
             - deploy-production-static
+          post-steps:
+            - jira/notify:
+                job_type: deployment
+                environment_type: staging
+            - slack/notify:
+                # Temporarily sending alarms to test alarm sending setup.
+                channel: deployments, staging-alarms, production-alarms, regression-alarms
+                event: fail
+                template: basic_fail_1
+                mentions: <@here>
       - aws-ecs/deploy-service-update:
           name: "Deploy Production ECS with new image"
           context:
