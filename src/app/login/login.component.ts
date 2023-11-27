@@ -12,11 +12,17 @@ import {Credentials} from "../credentials.model";
 import {IdentityService} from "../identity.service";
 import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
+import {Router} from "@angular/router";
+import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+
+// fred@biggive.org.uk
+// Ye0uluThYe0uluTh
+
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule],
+  imports: [CommonModule, ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatSnackBarModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -35,6 +41,8 @@ export class LoginComponent {
   constructor(
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
+    private router: Router,
+    private snackBar: MatSnackBar,
   ) {
   }
 
@@ -97,7 +105,14 @@ export class LoginComponent {
       this.identityService.login(credentials).subscribe({
         next: (response: { id: string, jwt: string }) => {
           this.identityService.saveJWT(response.id, response.jwt);
-          this.loggingIn = false;
+          this.snackBar.open(
+            "You are now logged in",
+            undefined,
+            {
+              duration: 3_000,
+              panelClass: 'snack-bar',
+            });
+          this.router.navigate(['/']);
         },
         error: (error) => {
           this.captcha.reset();
