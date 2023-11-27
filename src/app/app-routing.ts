@@ -4,6 +4,8 @@ import { CampaignListResolver } from './campaign-list.resolver';
 import { CampaignResolver } from './campaign.resolver';
 import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import {campaignStatsResolver} from "./campaign-stats-resolver";
+import {LoginComponent} from "./login/login.component";
+import {environment} from "../environments/environment";
 
 const routes: Routes = [
   {
@@ -122,6 +124,12 @@ const routes: Routes = [
     loadChildren: () => import('./my-account/my-account.module')
       .then(c => c.MyAccountModule),
   },
+  {
+    path: 'my-account',
+    pathMatch: 'full',
+    loadChildren: () => import('./my-account/my-account.module')
+      .then(c => c.MyAccountModule),
+  },
   // This is effectively our 404 handler because we support any string as meta-campaign
   // slug. So check `CampaignResolver` for adjusting what happens if the slug doesn't
   // match a campaign.
@@ -135,5 +143,15 @@ const routes: Routes = [
       .then(c => c.MetaCampaignModule),
   },
 ];
+
+if (environment.environmentId !== 'production') {
+  routes.unshift(
+    {
+      path: 'login',
+      pathMatch: 'full',
+      component: LoginComponent,
+    },
+  );
+}
 
 export {routes};
