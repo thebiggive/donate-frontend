@@ -225,6 +225,7 @@ workflows:
           context:
             - docker-hub-creds
             - ecs-deploys
+            - slack
           requires:
             - deploy-regression-static
           post-steps:
@@ -262,6 +263,7 @@ workflows:
           context:
             - docker-hub-creds
             - ecs-deploys # Includes AWS_REGION
+            - slack
       - build-ecr:
           env: staging
           name: "Build Staging ECR image"
@@ -332,6 +334,7 @@ workflows:
           context:
             - docker-hub-creds
             - ecs-deploys
+            - slack
           requires:
             - deploy-production-static
           post-steps:
