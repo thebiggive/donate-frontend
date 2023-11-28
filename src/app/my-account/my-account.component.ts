@@ -76,8 +76,8 @@ export class MyAccountComponent implements OnDestroy, OnInit {
       );
   }
 
-  async logout() {
-    await this.identityService.clearJWT();
+  logout() {
+    this.identityService.clearJWT();
     this.router.navigate(['']);
   }
 
