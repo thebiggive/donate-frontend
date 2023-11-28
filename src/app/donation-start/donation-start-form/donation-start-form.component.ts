@@ -526,13 +526,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.stepHeaderEventsSet = true;
   }
 
-  reset = () => {
+  reset = async () => {
     this.donor = undefined;
     this.creditPenceToUse = 0;
     this.stripePaymentMethodReady = false;
     this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup,);
     this.donationForm.reset();
-    this.identityService.clearJWT();
+    await this.identityService.clearJWT();
     this.idCaptcha.reset();
     this.destroyStripeElements();
 

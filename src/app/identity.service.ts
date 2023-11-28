@@ -126,10 +126,17 @@ export class IdentityService {
     ).pipe(retry(2), delay(2_000));
   }
 
-  clearJWT() {
+  /**
+   * We've seen logout not working in some cases, perhaps because use of navigate imediatly after deleting the cookie
+   * is making the cookie deletion un reliable. So await this function before navigating.
+   */
+  async clearJWT() {
     this.cookieService.delete(this.cookieName);
     this.storage.remove(this.storageKey);
     this.loginStatusChanged.emit(false);
+
+    const point4Seconds = 4_00;
+    await new Promise(resolve => setTimeout(resolve, point4Seconds));
   }
 
   getIdAndJWT(): { id: string, jwt: string } | undefined {
