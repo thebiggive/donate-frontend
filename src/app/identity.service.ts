@@ -128,6 +128,9 @@ export class IdentityService {
 
   clearJWT() {
     this.cookieService.delete(this.cookieName);
+
+    // delete didn't seem to work reliably, so also directly setting an empty cookie that expires in the past here:
+    this.cookieService.set(this.cookieName, '', new Date('1970-01-01'), '/')
     this.storage.remove(this.storageKey);
     this.loginStatusChanged.emit(false);
   }
