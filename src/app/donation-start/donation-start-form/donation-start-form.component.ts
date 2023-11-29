@@ -78,7 +78,6 @@ declare var _paq: {
   ]
 })
 export class DonationStartFormComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
-  @ViewChild('captcha') captcha: RecaptchaComponent;
   @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
@@ -533,8 +532,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup,);
     this.donationForm.reset();
     this.identityService.clearJWT();
-    this.idCaptcha.reset();
     this.destroyStripeElements();
+
+    // We should probably reinstate `this.idCaptcha.reset();` here iff we replace the full
+    // location.reload(). For as long as we are unloading the whole doc, there should be
+    // no need to reset the ViewChild.
 
     location.reload();
   }
@@ -941,6 +943,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.idCaptchaCode = undefined;
       return;
     }
+
     if (this.stepChangedBlockedByCaptcha) {
       this.stepper.next();
       this.stepChangedBlockedByCaptcha = false;
@@ -1545,7 +1548,18 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return false;
     }
 
-    this.idCaptcha.reset();
+    try {
+      this.idCaptcha.reset();
+    } catch (e) {
+      // The donor may be having connection problems, and we've seen reCAPTCHA behave weirdly if the
+      // @ViewChild doesn't have a working, mounted element here. To avoid wasting donors' time and
+      // failing later, track so we can measure frequency and attempt a full reset – which currently 
+      // includes a page reload.
+      this.matomoTracker.trackEvent('identity_error', 'person_captcha_reset_failed', e.message);
+      this.reset();
+      return true; // Make sure callers treat this as "not ready", while we finish reloading.
+    }
+
     this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
 
     return true;
@@ -1730,6 +1744,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
+  /**
+   * Also resets captcha & relevant donation persistence state mgmt,
+   * and returns to step 1 so required input can be collected again.
+   */
   private clearDonation(donation: Donation, clearAllRecord: boolean) {
     if (clearAllRecord) { // i.e. don't keep donation around for /thanks/... or reuse.
       this.donationService.removeLocalDonation(donation);
@@ -1740,6 +1758,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // Ensure we get a new code on donation setup if person ID somehow gets cleared. Sending a code we
     // already verified again will fail and block creating a new person without a page refresh.
     this.idCaptchaCode = undefined;
+    try {
+      this.idCaptcha.reset();
+    } catch (e) {
+      this.matomoTracker.trackEvent('identity_error', 'person_captcha_reset_failed_during_clear', e.message);
+      this.reset();
+      return;
+    }
 
     this.creatingDonation = false;
     this.donationCreateError = false;
@@ -1754,6 +1779,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     delete this.donation;
     this.donationChangeCallBack(undefined)
+
+    // If we are clearing the donation, then any attempts to submit() if donor is further down the
+    // form are doomed to fail.
+    this.jumpToStep(this.yourDonationStepLabel);
   }
 
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
@@ -2067,11 +2096,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           () => {
             this.matomoTracker.trackEvent('donate', 'cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
 
+            // Also resets captcha.
             this.clearDonation(donation, true);
 
             // Go back to 1st step to encourage donor to try again
-            this.captcha.reset();
-            this.idCaptcha.reset();
             this.stepper.reset();
             this.amountsGroup.patchValue({ tipPercentage: this.tipPercentage });
             this.tipPercentageChanged = false;
