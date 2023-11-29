@@ -1779,6 +1779,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     delete this.donation;
     this.donationChangeCallBack(undefined)
+
+    // If we are clearing the donation, then any attempts to submit() if donor is further down the
+    // form are doomed to fail.
+    this.jumpToStep(this.yourDonationStepLabel);
   }
 
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
