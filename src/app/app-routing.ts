@@ -1,9 +1,25 @@
-import { Routes } from '@angular/router';
+import {Router, Routes} from '@angular/router';
 
 import { CampaignListResolver } from './campaign-list.resolver';
 import { CampaignResolver } from './campaign.resolver';
 import { CharityCampaignsResolver } from './charity-campaigns.resolver';
 import {campaignStatsResolver} from "./campaign-stats-resolver";
+import {LoginComponent} from "./login/login.component";
+import {environment} from "../environments/environment";
+import {inject} from "@angular/core";
+import {IdentityService} from "./identity.service";
+
+const redirectToHomeIfLoggedIn = () => {
+  const identityService = inject(IdentityService);
+  const router = inject(Router);
+
+  const isLoggedIn = identityService.probablyHaveLoggedInPerson();
+  if (! isLoggedIn) {
+    return true;
+  } else {
+    return router.parseUrl('/');
+  }
+};
 
 const routes: Routes = [
   {
@@ -135,5 +151,18 @@ const routes: Routes = [
       .then(c => c.MetaCampaignModule),
   },
 ];
+
+if (environment.environmentId !== 'production') {
+  routes.unshift(
+    {
+      path: 'login',
+      pathMatch: 'full',
+      component: LoginComponent,
+      canActivate: [
+        redirectToHomeIfLoggedIn,
+      ],
+    },
+  );
+}
 
 export {routes};
