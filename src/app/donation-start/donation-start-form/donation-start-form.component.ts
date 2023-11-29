@@ -532,8 +532,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup,);
     this.donationForm.reset();
     this.identityService.clearJWT();
-    this.idCaptcha.reset();
     this.destroyStripeElements();
+
+    // We should probably reinstate `this.idCaptcha.reset();` here iff we replace the full
+    // location.reload(). For as long as we are unloading the whole doc, there should be
+    // no need to reset the ViewChild.
 
     location.reload();
   }
@@ -1545,7 +1548,18 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return false;
     }
 
-    this.idCaptcha.reset();
+    try {
+      this.idCaptcha.reset();
+    } catch (e) {
+      // The donor may be having connection problems, and we've seen reCAPTCHA behave weirdly if the
+      // @ViewChild doesn't have a working, mounted element here. To avoid wasting donors' time and
+      // failing later, track so we can measure frequency and attempt a full reset – which currently 
+      // includes a page reload.
+      this.matomoTracker.trackEvent('identity_error', 'person_captcha_reset_failed', e.message);
+      this.reset();
+      return true; // Make sure callers treat this as "not ready", while we finish reloading.
+    }
+
     this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
 
     return true;
