@@ -34,6 +34,7 @@
                -->
               <label
                 *ngIf="campaign.charity.name.length < 20; else donationLabelTruncated"
+                class="label-with-limited-space"
                 slot="label"
                 for="donationAmount"
               >
