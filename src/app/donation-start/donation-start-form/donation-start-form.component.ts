@@ -192,7 +192,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
-  private stepChangedBlockedByCaptcha = false;
+  private stepChangeBlockedByCaptcha = false;
   @Input({ required: true }) donor: Person | undefined;
 
   /**
@@ -507,6 +507,31 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     const stepperHeaders = stepper.getElementsByClassName('mat-step-header');
     for (const stepperHeader of stepperHeaders) {
       stepperHeader.addEventListener('click', (clickEvent: any) => {
+        // Disallow any step jumps by header click without a valid captcha, since the donor could have
+        // dismissed the puzzle (including by accident) and they'll face errors later, which are more annoying,
+        // without a working code. If they click step 1 while on step 1 this might fire the captcha slightly
+        // earlier than normal, but that should be mostly harmless – at worst if they take that unusual
+        // step they might have to solve 2 puzzles.
+
+        // For now, I've gone with only checking this on header click because the other way of changing step
+        // is, as far as we know, working. And we want to minimise the change during CC23. A better solution
+        // later might be to remove all the captcha executes that happen specifically on button clicks (`next()`)
+        // and to execute it in `stepChanged()` – except when just booted back to step 0 – instead.
+        if (!this.idCaptchaCode) {
+          clickEvent.preventDefault();
+
+          try {
+            this.idCaptcha.reset();
+          } catch (e) {
+            this.matomoTracker.trackEvent('identity_error', 'step_change_captcha_reset_failed', e.message);
+            this.reset(); // Includes page refresh atm – annoying but less so than filling out even more broken fields.
+            return;
+          }
+
+          this.idCaptcha.execute();
+          return;
+        }
+
         if (clickEvent.target.innerText.includes('Your details') && this.stepper.selected?.label === 'Gift Aid') {
           this.triedToLeaveGiftAid = true;
         }
@@ -944,9 +969,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    if (this.stepChangedBlockedByCaptcha) {
+    if (this.stepChangeBlockedByCaptcha) {
       this.stepper.next();
-      this.stepChangedBlockedByCaptcha = false;
+      this.stepChangeBlockedByCaptcha = false;
     }
 
     this.idCaptchaCode = captchaResponse;
@@ -1028,7 +1053,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     const promptingForCaptcha = this.promptForCaptcha();
 
     if (promptingForCaptcha) {
-      this.stepChangedBlockedByCaptcha = true;
+      this.stepChangeBlockedByCaptcha = true;
       return;
     }
 
@@ -1553,7 +1578,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     } catch (e) {
       // The donor may be having connection problems, and we've seen reCAPTCHA behave weirdly if the
       // @ViewChild doesn't have a working, mounted element here. To avoid wasting donors' time and
-      // failing later, track so we can measure frequency and attempt a full reset – which currently 
+      // failing later, track so we can measure frequency and attempt a full reset – which currently
       // includes a page reload.
       this.matomoTracker.trackEvent('identity_error', 'person_captcha_reset_failed', e.message);
       this.reset();
