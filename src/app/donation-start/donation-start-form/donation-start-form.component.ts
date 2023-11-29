@@ -520,7 +520,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         if (!this.idCaptchaCode) {
           clickEvent.preventDefault();
 
-          this.stepChangeBlockedByCaptcha = true;
           try {
             this.idCaptcha.reset();
           } catch (e) {
