@@ -43,8 +43,9 @@ input {
   white-space: nowrap;
   text-overflow: ellipsis;
 
-  @media #{$breakpoint-sm} {
-    max-width: 150px;
+  max-width: 150px;
+  @media #{$breakpoint-smallish} {
+    max-width: 100%;
   }
 }
 
