@@ -37,6 +37,18 @@ input {
   @include b-rt-0;
 }
 
+.label-with-limited-space {
+  overflow: hidden;
+  display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  max-width: 150px;
+  @media #{$breakpoint-smallish} {
+    max-width: 100%;
+  }
+}
+
 @supports (-webkit-overflow-scrolling: touch) {
   // see https://stackoverflow.com/a/65043782
   input {
