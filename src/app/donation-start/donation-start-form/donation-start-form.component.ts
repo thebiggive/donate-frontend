@@ -598,6 +598,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   async stepChanged(event: StepperSelectionEvent) {
+    if (event.selectedStep.label === 'Payment details' && !this.idCaptchaCode) {
+      this.showErrorToast('Sorry, you need to complete the "captcha" puzzle first – this is a fraud control to help protect our donors');
+      this.jumpToStep(event.previouslySelectedStep.label);
+      this.idCaptcha.execute();
+      return;
+    }
+
     // We need to allow enough time for the Stepper's animation to get the window to
     // its final position for this step, before this scroll position update can be reliably
     // helpful.
@@ -1012,7 +1019,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   expectedTotalAmount(): number {
     return this.donationAmount + this.giftAidAmount() + this.expectedMatchAmount();
   }
-
 
   scrollTo(el: Element): void {
     if (el) {
@@ -1862,7 +1868,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     });
   };
 
-
   private setConditionalValidators(): void {
     // Do not add a validator on `tipPercentage` because as a dropdown it always
     // has a value anyway, and this complicates repopulating the form when e.g.
@@ -2048,6 +2053,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   get readyToProgressFromPaymentStep(): boolean {
     return this.paymentReadinessTracker.readyToProgressFromPaymentStep;
+  }
+
+  get captchaIsSolved(): boolean {
+    return this.idCaptchaCode !== undefined;
   }
 
   private promptToContinue(
