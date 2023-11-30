@@ -599,7 +599,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   async stepChanged(event: StepperSelectionEvent) {
     if (event.selectedStep.label === 'Payment details' && !this.idCaptchaCode) {
-      this.showErrorToast('Sorry, you need to complete the "captcha" puzzle first – this is a fraud control to help protect donors');
+      this.showErrorToast('Sorry, you need to complete the "captcha" puzzle first – this is a fraud control to help protect our donors');
       this.jumpToStep(event.previouslySelectedStep.label);
       this.idCaptcha.execute();
       return;
