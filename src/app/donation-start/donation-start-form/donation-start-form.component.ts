@@ -709,6 +709,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // We need to check the current index in the stepper because we've seen this fire as soon
     // as the step *before* 'Payment details' loads and initialises the Stripe Payment element.
     if (!this.donation || !this.stripePaymentMethodReady || !this.stripePaymentElement || !this.stripeElements) {
+      // Gift Aid step is only shown (at step index 1) when campaign is in GBP.
       const paymentStepIndex = this.donation?.currencyCode === 'GBP' ? 2 : 1;
       if (this.stepper.selectedIndex > paymentStepIndex) {
         this.jumpToStep('Payment details');
