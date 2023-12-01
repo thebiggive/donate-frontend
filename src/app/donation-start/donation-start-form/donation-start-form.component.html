@@ -1,4 +1,10 @@
-<form class="c-donate-form" (ngSubmit)="submit()" [formGroup]="donationForm" *ngIf="campaignOpenOnLoad">
+<form
+  class="c-donate-form"
+  (ngSubmit)="submit()"
+  (keydown.enter)="interceptSubmitAndProceedInstead($event)"
+  [formGroup]="donationForm"
+  *ngIf="campaignOpenOnLoad"
+>
     <mat-vertical-stepper
       id="stepper"
       linear
@@ -34,6 +40,7 @@
                -->
               <label
                 *ngIf="campaign.charity.name.length < 20; else donationLabelTruncated"
+                class="label-with-limited-space"
                 slot="label"
                 for="donationAmount"
               >

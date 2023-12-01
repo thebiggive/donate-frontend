@@ -11,7 +11,7 @@ describe('App boot fundamentals', () => {
   })
 
   it('Shows our copy on the Donate home page', () => {
-    cy.visit('/');
+    cy.visit('/?noredirect');
 
     cy.contains('Matching Donations.');
     cy.contains('£500,000');
