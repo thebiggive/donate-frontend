@@ -689,11 +689,20 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   async submit() {
-    if (!this.donation || this.donationForm.invalid) {
-      let errorCodeDetail = '[code B1]'; // Form invalid.
-      if (!this.donation) {
-        errorCodeDetail = '[code A1]'; // Donation property absent.
-      }
+    if (this.donation && this.donationForm.invalid) {
+      // Form invalid but submitted may mean enter was pressed inside Stripe.js. Best action
+      // is to simply not submit yet.
+      this.showErrorToast('Please complete the remaining fields to submit your donation.');
+      this.matomoTracker.trackEvent(
+        'donate_error',
+        'submit_while_invalid',
+        `Donation form invalid, maybe because of early Stripe enter submit`,
+      );
+      return;
+    }
+    
+    if (!this.donation) {
+      const errorCodeDetail = '[code A1]'; // Donation property absent.
 
       const errorMessage = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
 
