@@ -1,6 +1,5 @@
 <form
   class="c-donate-form"
-  (ngSubmit)="submit()"
   (keydown.enter)="interceptSubmitAndProceedInstead($event)"
   [formGroup]="donationForm"
   *ngIf="campaignOpenOnLoad"
@@ -625,8 +624,10 @@
             </tr>
           </table>
 
-          <button *ngIf="!submitting"
-            type="submit"
+          <button
+            *ngIf="!submitting"
+            (click)="submit()"
+            (keyup.enter)="submit()"
             class="c-donate-button b-donate-button b-w-100 b-rt-1"
             mat-raised-button
             color="primary"
