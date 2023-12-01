@@ -1308,16 +1308,20 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   private markYourDonationStepIncomplete() {
     const step = this.stepper.steps.get(0);
-    if (step) {
-      step.completed = false;
+    if (!step) {
+      throw new Error('Step 0 not found');
     }
+
+    step.completed = false;
   }
 
   private markYourDonationStepComplete() {
     const step = this.stepper.steps.get(0);
-    if (step) {
-      step.completed = true;
+    if (!step) {
+      throw new Error('Step 0 not found');
     }
+
+    step.completed = true;
   }
 
   private destroyStripeElements() {
