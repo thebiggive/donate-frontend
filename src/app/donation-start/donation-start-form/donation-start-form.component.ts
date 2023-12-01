@@ -1345,12 +1345,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   private handleStripeError(
-    error: StripeError | {message: string, code: string, decline_code?: string},
+    error: StripeError | {message: string, code: string, decline_code?: string} | undefined,
     context: string,
   ) {
     this.submitting = false;
     this.stripeError = this.getStripeFriendlyError(error, context);
-    this.stripeResponseErrorCode = error.code;
+    this.stripeResponseErrorCode = error?.code;
     if (this.isBillingPostcodePossiblyInvalid()) {
       this.paymentGroup.controls.billingPostcode!.setValidators([
         Validators.required,
@@ -1369,9 +1369,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * @param context 'method_setup', 'card_change' or 'confirm'.
    */
   private getStripeFriendlyError(
-    error: StripeError | {message: string, code: string, decline_code?: string},
+    error: StripeError | {message: string, code: string, decline_code?: string} | undefined,
     context: string,
   ): string {
+    if (! error) {
+      return "Sorry, we encountered an error trying to take your donation. Please try again in a moment or contact " +
+        " us if this message persists.";
+    }
+
     let prefix = '';
     switch (context) {
       case 'method_setup':
