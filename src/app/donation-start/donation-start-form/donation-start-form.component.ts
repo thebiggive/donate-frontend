@@ -982,7 +982,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     this.idCaptchaCode = captchaResponse;
-    if (!this.donation) {
+    if (!this.donation && this.donationAmount > 0) {
       this.createDonationAndMaybePerson();
     }
   }
