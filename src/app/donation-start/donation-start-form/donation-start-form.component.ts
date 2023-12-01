@@ -1384,6 +1384,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       customMessage = true;
     }
 
+    if (error.code === 'card_declined' && error.decline_code === 'invalid_amount') {
+      // We've seen e.g. HSBC in Nov '23 decline large donations with this code.
+      friendlyError = 'The payment was declined. You might need to contact your bank before making a donation of this amount.';
+      customMessage = true;
+    }
+
     if (customMessage && context === 'confirm') {
       prefix = ''; // Don't show extra context info in the most common `context`, when showing our already-long custom copy.
     }
