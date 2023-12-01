@@ -268,7 +268,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   ngOnDestroy() {
     if (this.donation) {
-      this.clearDonation(this.donation, false);
+      this.clearDonation(this.donation, false, false);
     }
 
     this.destroyStripeElements();
@@ -433,7 +433,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
             );
 
             if (this.donation) {
-              this.clearDonation(this.donation, true);
+              // We already know the requested amount, so no need to jump back.
+              this.clearDonation(this.donation, true, false);
             }
             this.createDonationAndMaybePerson();
           });
@@ -507,28 +508,18 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     const stepperHeaders = stepper.getElementsByClassName('mat-step-header');
     for (const stepperHeader of stepperHeaders) {
       stepperHeader.addEventListener('click', (clickEvent: any) => {
-        // Disallow any step jumps by header click without a valid captcha, since the donor could have
-        // dismissed the puzzle (including by accident) and they'll face errors later, which are more annoying,
-        // without a working code. If they click step 1 while on step 1 this might fire the captcha slightly
-        // earlier than normal, but that should be mostly harmless – at worst if they take that unusual
-        // step they might have to solve 2 puzzles.
+        if (clickEvent.target.index > 0 && !this.donor && !this.idCaptchaCode && !this.donation) {
+          // Disallow any step jumps by header click without a valid captcha, since the donor could have
+          // dismissed the puzzle (including by accident) and they'll face errors later, which are more annoying,
+          // without a working code.
+          clickEvent?.preventDefault();
+          this.promptForCaptcha();
+          this.jumpToStep(this.yourDonationStepLabel);
+          return;
+        }
 
-        // For now, I've gone with only checking this on header click because the other way of changing step
-        // is, as far as we know, working. And we want to minimise the change during CC23. A better solution
-        // later might be to remove all the captcha executes that happen specifically on button clicks (`next()`)
-        // and to execute it in `stepChanged()` – except when just booted back to step 0 – instead.
-        if (!this.idCaptchaCode) {
-          clickEvent.preventDefault();
-
-          try {
-            this.idCaptcha.reset();
-          } catch (e) {
-            this.matomoTracker.trackEvent('identity_error', 'step_change_captcha_reset_failed', e.message);
-            this.reset(); // Includes page refresh atm – annoying but less so than filling out even more broken fields.
-            return;
-          }
-
-          this.idCaptcha.execute();
+        if (clickEvent.target.index > 0) {
+          this.progressFromStepOne(); // Handles amount error if needed, like Continue button does.
           return;
         }
 
@@ -598,10 +589,19 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   async stepChanged(event: StepperSelectionEvent) {
-    if (event.selectedStep.label === 'Payment details' && !this.idCaptchaCode) {
-      this.showErrorToast('Sorry, you need to complete the "captcha" puzzle first – this is a fraud control to help protect our donors');
-      this.jumpToStep(event.previouslySelectedStep.label);
-      this.idCaptcha.execute();
+    if (event.selectedIndex > 0 && !this.donor) {
+      if (event.selectedIndex > 1) {
+        // Try to help explain why they're blocked in cases of persistent later step heading clicks etc.
+        this.showErrorToast("Sorry, you must complete the puzzle to proceed; this is a security measure to protects donors' cards");
+        // Immediate step jumps seem to be disallowed
+        setTimeout(() => {
+          this.jumpToStep(this.yourDonationStepLabel);
+          this.promptForCaptcha();
+        }, 200);
+      } else {
+        this.promptForCaptcha(); // In case we jumped e.g. via step header.
+      }
+
       return;
     }
 
@@ -628,7 +628,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           );
 
           if (this.donation) {
-            this.clearDonation(this.donation, true);
+            // We know the new amount already, so no need to jump back.
+            this.clearDonation(this.donation, true, false);
           }
           this.createDonationAndMaybePerson();
         });
@@ -665,7 +666,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         (this.previousDonation === undefined || this.previousDonation.status === 'Cancelled') &&
         event.selectedStep.label !== this.yourDonationStepLabel // Resets fire a 0 -> 0 index event.
       ) {
-        this.createDonationAndMaybePerson();
+        // Typically an Identity captcha call has already been set off and its callback will create the donation.
+        // But if we get here without a donation and with a code ready, we should create the donation now.
+        if (!this.creatingDonation && this.donor) {
+          this.createDonationAndMaybePerson();
+        }
       }
 
       if (this.psp === 'stripe' && this.donation) {
@@ -711,8 +716,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // Jump back if we get an out of band message back that the card is *not* valid/ready.
     // Don't jump forward when the card *is* valid, as the donor might have been
     // intending to edit something else in the `payment` step; let them click Next.
+    // We need to check the current index in the stepper because we've seen this fire as soon
+    // as the step *before* 'Payment details' loads and initialises the Stripe Payment element.
     if (!this.donation || !this.stripePaymentMethodReady || !this.stripePaymentElement || !this.stripeElements) {
-      this.jumpToStep('Payment details');
+      const paymentStepIndex = this.donation?.currencyCode === 'GBP' ? 2 : 1;
+      if (this.stepper.selectedIndex > paymentStepIndex) {
+        this.jumpToStep('Payment details');
+      }
 
       return;
     }
@@ -972,6 +982,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (captchaResponse === null) {
       // Ensure no other callback tries to use the old captcha code, and will re-execute
       // the catcha to get a new one as needed instead.
+
+      // Blank returns happen e.g. on prompt and on expiry. So even when we know a puzzle was just
+      // opened we can't safely show an incomplete puzzle error based on this callback.
       this.idCaptchaCode = undefined;
       return;
     }
@@ -980,6 +993,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.stepper.next();
       this.stepChangeBlockedByCaptcha = false;
     }
+
+    this.markYourDonationStepComplete();
 
     this.idCaptchaCode = captchaResponse;
     if (!this.donation && this.donationAmount > 0) {
@@ -1048,7 +1063,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // when we know we have only just hidden the error in this call.
     if (this.donationCreateError && this.stepper.selected?.label === this.yourDonationStepLabel) {
       if (this.donation) {
-        this.clearDonation(this.donation, true);
+        this.clearDonation(this.donation, true, true);
         this.matomoTracker.trackEvent(
           'donate',
           'create_retry',
@@ -1300,6 +1315,20 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
+  private markYourDonationStepIncomplete() {
+    const step = this.stepper.steps.get(0);
+    if (step) {
+      step.completed = false;
+    }
+  }
+
+  private markYourDonationStepComplete() {
+    const step = this.stepper.steps.get(0);
+    if (step) {
+      step.completed = true;
+    }
+  }
+
   private destroyStripeElements() {
     if (this.stripePaymentElement) {
       this.stripePaymentElement.off('change');
@@ -1514,8 +1543,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    if (! this.idCaptchaCode) {
-      // we don't have a captcha code yet, not ready to create the donation.
+    if (!this.donor && !this.idCaptchaCode) {
+      this.markYourDonationStepIncomplete();
       return;
     }
 
@@ -1588,6 +1617,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       // No need for a captcha if the donation is already created.
       return false;
     }
+
+    this.markYourDonationStepIncomplete();
 
     try {
       this.idCaptcha.reset();
@@ -1788,24 +1819,18 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   /**
    * Also resets captcha & relevant donation persistence state mgmt,
    * and returns to step 1 so required input can be collected again.
+   * We DON'T reset `this.donor`, so there should be no need for a new captcha code.
+   *
+   * @param jumpToStart If the caller is already setting up a known-value donation alongside the clear,
+   *                        this should be false. In other cases we need to know the new amount so it
+   *                        should usually be true, if the page is not being unloaded.
    */
-  private clearDonation(donation: Donation, clearAllRecord: boolean) {
+  private clearDonation(donation: Donation, clearAllRecord: boolean, jumpToStart: boolean) {
     if (clearAllRecord) { // i.e. don't keep donation around for /thanks/... or reuse.
       this.donationService.removeLocalDonation(donation);
     }
 
     this.cancelExpiryWarning();
-
-    // Ensure we get a new code on donation setup if person ID somehow gets cleared. Sending a code we
-    // already verified again will fail and block creating a new person without a page refresh.
-    this.idCaptchaCode = undefined;
-    try {
-      this.idCaptcha.reset();
-    } catch (e) {
-      this.matomoTracker.trackEvent('identity_error', 'person_captcha_reset_failed_during_clear', e.message);
-      this.reset();
-      return;
-    }
 
     this.creatingDonation = false;
     this.donationCreateError = false;
@@ -1821,9 +1846,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     delete this.donation;
     this.donationChangeCallBack(undefined)
 
-    // If we are clearing the donation, then any attempts to submit() if donor is further down the
-    // form are doomed to fail.
-    this.jumpToStep(this.yourDonationStepLabel);
+    if (jumpToStart) {
+      this.jumpToStep(this.yourDonationStepLabel);
+    }
   }
 
   private promptToContinueWithNoMatchingLeft(donation: Donation) {
@@ -2065,10 +2090,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return this.paymentReadinessTracker.readyToProgressFromPaymentStep;
   }
 
-  get captchaIsSolved(): boolean {
-    return this.idCaptchaCode !== undefined;
-  }
-
   private promptToContinue(
     title: string,
     status: string,
@@ -2136,12 +2157,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
       // Else cancel the existing donation and remove our local record.
       this.donationService.cancel(donation)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             this.matomoTracker.trackEvent('donate', 'cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
 
             // Also resets captcha.
-            this.clearDonation(donation, true);
+            this.clearDonation(donation, true, true);
 
             // Go back to 1st step to encourage donor to try again
             this.stepper.reset();
@@ -2167,14 +2188,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
               });
             }
           },
-          response => {
+          error: response => {
             this.matomoTracker.trackEvent(
               'donate_error',
               'cancel_failed',
               `Could not cancel donation ${donation.donationId} to campaign ${this.campaignId}: ${response.error.error}`,
             );
           },
-        );
+        });
     };
   }
 
