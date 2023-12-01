@@ -508,16 +508,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     const stepperHeaders = stepper.getElementsByClassName('mat-step-header');
     for (const stepperHeader of stepperHeaders) {
       stepperHeader.addEventListener('click', (clickEvent: any) => {
-        if (clickEvent.target.index > 0 && !this.donor && !this.idCaptchaCode && !this.donation) {
-          // Disallow any step jumps by header click without a valid captcha, since the donor could have
-          // dismissed the puzzle (including by accident) and they'll face errors later, which are more annoying,
-          // without a working code.
-          clickEvent?.preventDefault();
-          this.promptForCaptcha();
-          this.jumpToStep(this.yourDonationStepLabel);
-          return;
-        }
-
         if (clickEvent.target.index > 0) {
           this.progressFromStepOne(); // Handles amount error if needed, like Continue button does.
           return;
