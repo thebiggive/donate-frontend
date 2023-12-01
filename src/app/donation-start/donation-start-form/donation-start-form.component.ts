@@ -1033,6 +1033,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.tipPercentageChanged = true;
   }
 
+  interceptSubmitAndProceedInstead(event: Event) {
+    event.preventDefault();
+    this.next();
+  }
+
   next() {
     // If the initial donation *create* has failed, we want to try again each time,
     // not just re-surface the existing error. The step change event is what
@@ -1071,7 +1076,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   progressFromStepOne() {
-
     const control = this.donationForm.controls['amounts'];
     if(! control!.valid) {
       this.showErrorToast(this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount or tip amount');
@@ -1162,55 +1166,55 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return '';
   }
 
-    /**
-     * @todo - refactor to make friendly by combining messages re donation amount and re tip errors -
-     * we should show both at once if necassary. But one at a time may do for this weekend.
-     */
-    public displayableAmountsStepErrors = () => {
-      const donationAmountErrors = this.donationAmountField?.errors;
-      const tipErrors = this.tipAmountField?.errors;
+  /**
+   * @todo - refactor to make friendly by combining messages re donation amount and re tip errors -
+   * we should show both at once if necassary. But one at a time may do for this weekend.
+   */
+  public displayableAmountsStepErrors = () => {
+    const donationAmountErrors = this.donationAmountField?.errors;
+    const tipErrors = this.tipAmountField?.errors;
 
-      if (! donationAmountErrors && ! tipErrors) {
-        return '';
-      }
+    if (! donationAmountErrors && ! tipErrors) {
+      return '';
+    }
 
-      if (donationAmountErrors?.min) {
-        return `Sorry, the minimum donation is ${this.currencySymbol}1.`;
-      }
+    if (donationAmountErrors?.min) {
+      return `Sorry, the minimum donation is ${this.currencySymbol}1.`;
+    }
 
-      if (donationAmountErrors?.max) {
-        return `Your donation must be ${this.currencySymbol}${this.maximumDonationAmount} or less to proceed.`
-          + (
-            this.creditPenceToUse === 0 ?
-              ` You can make multiple matched donations of ` +
-              `${this.currencySymbol}${this.maximumDonationAmount} if match funds are available.`
-              : ''
-          );
-      }
+    if (donationAmountErrors?.max) {
+      return `Your donation must be ${this.currencySymbol}${this.maximumDonationAmount} or less to proceed.`
+        + (
+          this.creditPenceToUse === 0 ?
+            ` You can make multiple matched donations of ` +
+            `${this.currencySymbol}${this.maximumDonationAmount} if match funds are available.`
+            : ''
+        );
+    }
 
-      if (donationAmountErrors?.pattern) {
-        return `Please enter a whole number of ${this.currencySymbol} without commas.`
-      }
+    if (donationAmountErrors?.pattern) {
+      return `Please enter a whole number of ${this.currencySymbol} without commas.`
+    }
 
-      if (donationAmountErrors?.required) {
-        return 'Please enter how much you would like to donate.';
-      }
+    if (donationAmountErrors?.required) {
+      return 'Please enter how much you would like to donate.';
+    }
 
-      // todo - refactor tip messages below to remove duplication.
-      if (tipErrors?.pattern) {
-        return "Please enter how much you would like to donate to Big Give as a number of £, optionally with 2 decimals and up to £25,000."
-      }
+    // todo - refactor tip messages below to remove duplication.
+    if (tipErrors?.pattern) {
+      return "Please enter how much you would like to donate to Big Give as a number of £, optionally with 2 decimals and up to £25,000."
+    }
 
-      if (tipErrors?.required) {
-        return "Please enter how much you would like to donate to Big Give."
-      }
+    if (tipErrors?.required) {
+      return "Please enter how much you would like to donate to Big Give."
+    }
 
-      const message = "Sorry, something went wrong with the form - please try again or contact Big Give";
-      console.error(message);
-      return message;
-    };
+    const message = "Sorry, something went wrong with the form - please try again or contact Big Give";
+    console.error(message);
+    return message;
+  };
 
-    onUseSavedCardChange(event: MatCheckboxChange, paymentMethod: PaymentMethod) {
+  onUseSavedCardChange(event: MatCheckboxChange, paymentMethod: PaymentMethod) {
     // For now, we assume unticking happens before card entry, so we can just set the validity flag to false.
     // Ideally, we would later track `card`'s validity separately so that going back up the page, ticking this
     // then unticking it leaves the card box valid without having to modify it. But this is rare and
@@ -1411,6 +1415,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (error.code === 'card_declined' && error.decline_code === 'generic_decline') {
       // Probably a custom Radar rule -> relatively likely to be an incorrect postcode.
       friendlyError = `The payment was declined. Please ensure details provided (including postcode) match your card. Contact your bank or hello@biggive.org if the problem persists.`;
+      customMessage = true;
+    }
+
+    if (error.code === 'card_declined' && error.decline_code === 'invalid_amount') {
+      // We've seen e.g. HSBC in Nov '23 decline large donations with this code.
+      friendlyError = 'The payment was declined. You might need to contact your bank before making a donation of this amount.';
       customMessage = true;
     }
 
