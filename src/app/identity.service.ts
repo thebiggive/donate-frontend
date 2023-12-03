@@ -30,6 +30,10 @@ export class IdentityService {
   // Tracks and changes login status; shared between e.g. outer app menu and specific pages.
   loginStatusChanged = new EventEmitter<boolean>();
 
+  /**
+   * Indicates whether any cash balance recorded for the logged in person is likely to be out
+   * of date and in need of need refreshing before next use.
+   */
   cashBalanceStale = false;
 
   constructor(
