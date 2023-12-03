@@ -30,6 +30,8 @@ export class IdentityService {
   // Tracks and changes login status; shared between e.g. outer app menu and specific pages.
   loginStatusChanged = new EventEmitter<boolean>();
 
+  cashBalanceStale = false;
+
   constructor(
     private http: HttpClient,
     private matomoTracker: MatomoTracker,
@@ -83,6 +85,8 @@ export class IdentityService {
   }
 
   get(id: string, jwt: string, {withTipBalances = false}: {withTipBalances?: boolean} = {}): Observable<Person> {
+    this.cashBalanceStale = false;
+
     return this.http.get<Person>(
       `${environment.identityApiPrefix}${this.peoplePath}/${id}`,
       {

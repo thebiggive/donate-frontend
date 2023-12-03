@@ -92,13 +92,13 @@ export class DonationCompleteComponent implements OnInit {
       return;
     }
 
-    this.donationService.get(donationLocalCopy).subscribe(
-      donation => this.setDonation(donation),
+    this.donationService.get(donationLocalCopy).subscribe({
+      next: donation => this.setDonation(donation),
       // Get error may occur e.g. after a DB reset; unlikely recoverable within the
       // page view so treat it like a timeout. Error message encourages donors to
       // refresh to try loading again when any server problem's resolved.
-      () => this.timedOut = true,
-    );
+      error: () => this.timedOut = true,
+    });
   }
 
   openSetPasswordDialog() {
@@ -188,6 +188,11 @@ export class DonationCompleteComponent implements OnInit {
       this.matomoTracker.trackEvent('donate', 'thank_you_lookup_failed', `Donation ID ${this.donationId}`);
       this.noAccess = true; // If we don't have the local auth token we can never load the details.
       return;
+    }
+
+    if (donation.pspMethodType === 'customer_balance') {
+      // Set a hint for Donate & My Account to refresh this later iff it's needed.
+      this.identityService.cashBalanceStale = true;
     }
 
     if (!this.patchedCorePersonInfo) {

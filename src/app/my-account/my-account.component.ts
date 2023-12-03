@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import {AfterViewInit, Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {PageMetaService} from '../page-meta.service';
 import {DatePipe, isPlatformBrowser} from '@angular/common';
 import {IdentityService} from "../identity.service";
@@ -17,7 +17,7 @@ import {HttpErrorResponse} from "@angular/common/http";
   styleUrls: ['./my-account.component.scss'],
   providers: [DatePipe]
 })
-export class MyAccountComponent implements OnDestroy, OnInit {
+export class MyAccountComponent implements AfterViewInit, OnDestroy, OnInit {
   public person: Person;
 
   public paymentMethods: PaymentMethod[]|undefined = undefined;
@@ -45,6 +45,22 @@ export class MyAccountComponent implements OnDestroy, OnInit {
       'https://images-production.thebiggive.org.uk/0011r00002IMRknAAH/CCampaign%20Banner/db3faeb1-d20d-4747-bb80-1ae9286336a3.jpg',
     );
 
+    this.loadPerson();
+  }
+
+  ngAfterViewInit() {
+    if (this.identityService.cashBalanceStale) {
+      this.loadPerson();
+    }
+  }
+
+  ngOnDestroy() {
+    if (isPlatformBrowser(this.platformId) && this.savedCardsTimer) {
+      clearTimeout(this.savedCardsTimer);
+    }
+  }
+
+  private loadPerson() {
     this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
       if (! person) {
         this.router.navigate(['']);
@@ -59,13 +75,7 @@ export class MyAccountComponent implements OnDestroy, OnInit {
     });
   }
 
-  ngOnDestroy() {
-    if (isPlatformBrowser(this.platformId) && this.savedCardsTimer) {
-      clearTimeout(this.savedCardsTimer);
-    }
-  }
-
-  loadPaymentMethods() {
+  private loadPaymentMethods() {
     // not so keen on the component using the donation service and the identity service together like this
     // would rather call one service and have it do everything for us. Not sure what service would be best to put
     // this code in.
