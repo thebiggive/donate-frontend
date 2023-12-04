@@ -733,7 +733,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       );
       return;
     }
-    
+
     if (!this.donation) {
       const errorCodeDetail = '[code A1]'; // Donation property absent.
 
@@ -1436,9 +1436,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * @param context 'method_setup', 'card_change' or 'confirm'.
    */
   private getStripeFriendlyError(
-    error: StripeError | {message: string, code: string, decline_code?: string} | undefined,
+    error: StripeError | {message: string, code: string, decline_code?: string, description?: string} | undefined,
     context: string,
   ): string {
+
+    console.log({error, context})
 
     let prefix = '';
     switch (context) {
@@ -1452,7 +1454,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         prefix = 'Payment processing failed: ';
     }
 
-    if (! error) {
+    if (! error || (! error.message && ! error.code)) {
+      if (error && error.hasOwnProperty('description')) {
+        // @ts-ignore - not sure why TS doesn't recognise that it must have a description because I jsut checked
+        // with hasOwnProperty.
+        return `${prefix}${error!.description}`;
+      }
       return `${prefix}Sorry, we encountered an error. Please try again in a moment or contact us if this message persists.`;
     }
 
