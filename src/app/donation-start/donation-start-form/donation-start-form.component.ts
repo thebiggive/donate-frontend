@@ -1456,7 +1456,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (! error || (! error.message && ! error.code)) {
       if (error && error.hasOwnProperty('description')) {
-        // @ts-ignore - not sure why TS doesn't recognise that it must have a description because I jsut checked
+        // @ts-ignore - not sure why TS doesn't recognise that it must have a description because I just checked
         // with hasOwnProperty.
         return `${prefix}${error!.description}`;
       }
