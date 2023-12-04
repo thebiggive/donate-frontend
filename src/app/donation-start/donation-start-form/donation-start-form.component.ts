@@ -509,7 +509,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     for (const stepperHeader of stepperHeaders) {
       stepperHeader.addEventListener('click', (clickEvent: any) => {
         if (clickEvent.target.index > 0) {
-          this.progressFromStepOne(); // Handles amount error if needed, like Continue button does.
+          this.progressToNonAmountsStep(); // Handles amount error if needed, like Continue button does.
           return;
         }
 
@@ -1081,7 +1081,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
-  progressFromStepOne() {
+  /**
+   * Validates the `amounts` group, then calls the general step change fn `next()`. Used by both
+   * the first Continue button and by the step header click handler, which I think helped guard
+   * against a scenario where one might get 'stuck' without seeing the amount error that explains why.
+   */
+  progressToNonAmountsStep() {
     const control = this.donationForm.controls['amounts'];
     if(! control!.valid) {
       this.showErrorToast(this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount or tip amount');
