@@ -1440,7 +1440,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     context: string,
   ): string {
 
-    console.log({error, context})
 
     let prefix = '';
     switch (context) {
