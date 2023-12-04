@@ -1372,10 +1372,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     error: StripeError | {message: string, code: string, decline_code?: string} | undefined,
     context: string,
   ): string {
-    if (! error) {
-      return "Sorry, we encountered an error trying to take your donation. Please try again in a moment or contact " +
-        " us if this message persists.";
-    }
 
     let prefix = '';
     switch (context) {
@@ -1387,6 +1383,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         break;
       case 'confirm':
         prefix = 'Payment processing failed: ';
+    }
+
+    if (! error) {
+      return `${prefix}Sorry, we encountered an error. Please try again in a moment or contact us if this message persists.`;
     }
 
     let friendlyError = error.message;
