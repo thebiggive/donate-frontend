@@ -1825,7 +1825,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * and returns to step 1 so required input can be collected again.
    * We DON'T reset `this.donor`, so there should be no need for a new captcha code.
    *
-   * @param jumpToStart If the caller is already setting up a known-value donation alongside the clear,
+   * @param clearAllRecord  Don't keep donation around for /thanks/... or reuse.
+   * @param jumpToStart     If the caller is already setting up a known-value donation alongside the clear,
    *                        this should be false. In other cases we need to know the new amount so it
    *                        should usually be true, if the page is not being unloaded.
    */
