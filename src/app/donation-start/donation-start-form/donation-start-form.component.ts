@@ -580,7 +580,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   async stepChanged(event: StepperSelectionEvent) {
     if (event.selectedIndex > 0 && !this.donor) {
-      if (event.selectedIndex > 1) {
+      if (event.selectedIndex >= this.paymentStepIndex) {
         // Try to help explain why they're blocked in cases of persistent later step heading clicks etc.
         this.showErrorToast("Sorry, you must complete the puzzle to proceed; this is a security measure to protects donors' cards");
         // Immediate step jumps seem to be disallowed
@@ -709,9 +709,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // We need to check the current index in the stepper because we've seen this fire as soon
     // as the step *before* 'Payment details' loads and initialises the Stripe Payment element.
     if (!this.donation || !this.stripePaymentMethodReady || !this.stripePaymentElement || !this.stripeElements) {
-      // Gift Aid step is only shown (at step index 1) when campaign is in GBP.
-      const paymentStepIndex = this.donation?.currencyCode === 'GBP' ? 2 : 1;
-      if (this.stepper.selectedIndex > paymentStepIndex) {
+      if (this.stepper.selectedIndex > this.paymentStepIndex) {
         this.jumpToStep('Payment details');
       }
 
@@ -933,6 +931,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return this.donationForm.controls.amounts!.get('tipAmount');
   }
 
+  /**
+   * Gift Aid step is only shown (at step index 1) when campaign is in GBP.
+   */
+  get paymentStepIndex() {
+    return this.donation?.currencyCode === 'GBP' ? 2 : 1;
+  }
 
   /**
    * Quick getter for donation amount, to keep template use concise.
