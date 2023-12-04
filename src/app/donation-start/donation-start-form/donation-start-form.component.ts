@@ -268,7 +268,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   ngOnDestroy() {
     if (this.donation) {
-      this.clearDonation(this.donation, false, false);
+      this.clearDonation(this.donation, {clearAllRecord: false, jumpToStart: false});
     }
 
     this.destroyStripeElements();
@@ -434,7 +434,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
             if (this.donation) {
               // We already know the requested amount, so no need to jump back.
-              this.clearDonation(this.donation, true, false);
+              this.clearDonation(this.donation, {clearAllRecord: true, jumpToStart: false});
             }
             this.createDonationAndMaybePerson();
           });
@@ -619,7 +619,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
           if (this.donation) {
             // We know the new amount already, so no need to jump back.
-            this.clearDonation(this.donation, true, false);
+            this.clearDonation(this.donation, {clearAllRecord: true, jumpToStart: false});
           }
           this.createDonationAndMaybePerson();
         });
@@ -1054,7 +1054,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // when we know we have only just hidden the error in this call.
     if (this.donationCreateError && this.stepper.selected?.label === this.yourDonationStepLabel) {
       if (this.donation) {
-        this.clearDonation(this.donation, true, true);
+        this.clearDonation(this.donation, {clearAllRecord: true, jumpToStart: true});
         this.matomoTracker.trackEvent(
           'donate',
           'create_retry',
@@ -1820,7 +1820,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    *                        this should be false. In other cases we need to know the new amount so it
    *                        should usually be true, if the page is not being unloaded.
    */
-  private clearDonation(donation: Donation, clearAllRecord: boolean, jumpToStart: boolean) {
+  private clearDonation(donation: Donation, {clearAllRecord, jumpToStart}: {clearAllRecord: boolean; jumpToStart: boolean}) {
     if (clearAllRecord) { // i.e. don't keep donation around for /thanks/... or reuse.
       this.donationService.removeLocalDonation(donation);
     }
@@ -2157,7 +2157,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
             this.matomoTracker.trackEvent('donate', 'cancel', `Donor cancelled donation ${donation.donationId} to campaign ${this.campaignId}`),
 
             // Also resets captcha.
-            this.clearDonation(donation, true, true);
+            this.clearDonation(donation, {clearAllRecord: true, jumpToStart: true});
 
             // Go back to 1st step to encourage donor to try again
             this.stepper.reset();
