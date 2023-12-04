@@ -579,7 +579,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   async stepChanged(event: StepperSelectionEvent) {
-    if (event.selectedIndex > 0 && !this.donor) {
+    if (event.selectedIndex > 0 && !this.donor && this.idCaptchaCode == undefined) {
       if (event.selectedIndex >= this.paymentStepIndex) {
         // Try to help explain why they're blocked in cases of persistent later step heading clicks etc.
         this.showErrorToast("Sorry, you must complete the puzzle to proceed; this is a security measure to protects donors' cards");
