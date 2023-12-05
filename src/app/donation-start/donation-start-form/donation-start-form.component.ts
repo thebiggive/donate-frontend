@@ -82,7 +82,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
-  @ViewChild('donationTippingSlider') private donationTippingSlider: DonationTippingSliderComponent|undefined;
 
   alternateCopy = false; // Varies tip copy for A/B test.
 
