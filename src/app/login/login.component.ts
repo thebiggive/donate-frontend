@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit{
   }
 
   login(): void {
-    this.loggingIn = true; // todo - add visible indication of this to page, e.g. spinner and removal of button
+    this.loggingIn = true;
     this.captcha.reset();
     this.captcha.execute();
   }

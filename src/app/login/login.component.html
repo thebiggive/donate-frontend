@@ -67,10 +67,17 @@
         <mat-dialog-actions style="justify-content: space-between;">
           <a (click)="forgotPasswordClicked()">Forgot Password?</a>
           <div>
+
+            <div aria-live="polite">
+              <mat-spinner *ngIf="loggingIn" color="primary" diameter="30" aria-label="Logging in"></mat-spinner>
+            </div>
+
+            <!-- todo - maybe stop using [disabled] below, replace with toast -->
             <button
+              *ngIf="! loggingIn"
               id="login-modal-submit"
               mat-raised-button
-              [disabled]="!loginForm.valid || loggingIn"
+              [disabled]="!loginForm.valid"
               (click)="login()"
               color="primary"
             >Log in</button>
