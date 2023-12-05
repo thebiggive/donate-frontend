@@ -36,6 +36,7 @@ export class DonationCompleteComponent implements OnInit {
   loggedIn = false;
   minPasswordLength: number;
   noAccess = false;
+  offerToSetPassword = false;
   encodedPrefilledText: string;
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   registerError?: string;
@@ -205,6 +206,7 @@ export class DonationCompleteComponent implements OnInit {
               next: person => {
                 this.patchedCorePersonInfo = true;
                 this.person = person;
+                this.offerToSetPassword = !person.has_password;
               },
               error: (error: HttpErrorResponse) => {
                 // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
