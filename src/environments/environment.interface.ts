@@ -50,4 +50,5 @@ export interface Environment {
   // https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do
   recaptchaIdentitySiteKey: string,
   reservationMinutes: number,
+  showDebugInfo: boolean,
 }
