@@ -944,7 +944,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * Gift Aid step is only shown (at step index 1) when campaign is in GBP.
    */
   get paymentStepIndex() {
-    return this.donation?.currencyCode === 'GBP' ? 2 : 1;
+    return this.campaign.currencyCode  === 'GBP' ? 2 : 1;
   }
 
   /**
