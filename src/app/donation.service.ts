@@ -337,9 +337,12 @@ export class DonationService {
         },
         billing_details: {
           address: {
-          country: updatedMethodDetails.countryCode,
-          postal_code: updatedMethodDetails.postalCode
-        }}
+            country: updatedMethodDetails.countryCode,
+            postal_code: updatedMethodDetails.postalCode
+          },
+          email: person.email_address,
+          name: `${person.first_name} ${person.last_name}`,
+        }
       },
       {headers: this.getPersonAuthHttpOptions(jwt).headers}
     );
