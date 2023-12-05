@@ -30,6 +30,8 @@ export interface Donation {
      */
     charityId: string;
 
+    creationRecaptchaCode?: string;
+
     /**
      * ISO 4217 code for the currency in which all monetary values are denominated.
      */
