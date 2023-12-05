@@ -15,6 +15,10 @@ import {EMAIL_REGEXP} from "../validators/patterns";
 import {ActivatedRoute} from "@angular/router";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 
+export function isAllowableRedirectPath(redirectParam: string) {
+  return ! redirectParam.match(/[^a-zA-Z0-9\-_\/]/);
+}
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -64,7 +68,7 @@ export class LoginComponent implements OnInit{
 
     // allowed chars in URL to redirect to: a-z, A-Z, 0-9, - _ /
 
-    if (redirectParam && ! redirectParam.match(/[^a-zA-Z0-9\-_\/]/)) {
+    if (redirectParam && isAllowableRedirectPath(redirectParam)) {
       this.targetUrl = new URL(environment.donateGlobalUriPrefix + '/' + redirectParam);
     }
   }
