@@ -119,6 +119,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   maximumDonationAmount: number;
   maximumTipPercentage = 30 as const;
 
+  showDebugInfo = environment.showDebugInfo;
+
   /**
    * This is a suggested minimum, the lowest people can select using the slider. We still let them select any tip amount
    * of custom tip, including zero.

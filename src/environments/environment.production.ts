@@ -37,4 +37,5 @@ export const environment: Environment = {
   recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
   recaptchaIdentitySiteKey: '6Lc9uFAgAAAAADPHW12p_oJ3QxcNA3xglajo5hl2',
   reservationMinutes: 30,
+  showDebugInfo: false,
 };
