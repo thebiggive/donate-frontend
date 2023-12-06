@@ -6,12 +6,14 @@
 // We might want to refactor to remove duplication, but I'm not sure where the common code would fit best,
 // and I think it probably makes sense to wait until we have a third copy and then factor out common parts.
 
+
 main {
-  background-color: $colour-primary;
+  //background-color: $colour-primary;
+  @include make-container;
 }
 
 form {
-  max-width: 40em;
+  //max-width: 40em;
   margin: auto;
 }
 
@@ -65,7 +67,7 @@ input {
   display: none;
   @media #{$breakpoint-lg} {
     display: block;
-    background-image: url(../../assets/images/banner-my-account.jpg);
+    background-image: url(../../assets/images/grey-header.jpg);
     background-size: cover;
     background-position: center;
     width: 100%;

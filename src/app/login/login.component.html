@@ -5,8 +5,7 @@
       <div class="heading-wrapper">
         <biggive-heading
           space-above=0
-          space-below=1
-          colour="tertiary"
+          space-below=6
           html-element="h1"
           size="1"
           align="center"
@@ -59,16 +58,15 @@
       </div>
 
       <ng-template #logIn>
-        <mat-dialog-content class="mat-typography">
           <form [formGroup]="loginForm">
 
-            <biggive-text-input spaceBelow="3">
+            <biggive-text-input spaceBelow="4">
               <label slot="label" for="loginEmailAddress">Email address *</label>
               <input
                 slot="input"
                 matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off">
             </biggive-text-input>
-            <biggive-text-input spaceBelow="3">
+            <biggive-text-input spaceBelow="4">
               <label slot="label" for="loginPassword">Password *</label>
               <input
                 slot="input"
@@ -79,10 +77,6 @@
               Login error: {{ loginError }}
             </p>
           </form>
-        </mat-dialog-content>
-
-        <mat-dialog-actions style="justify-content: space-between;">
-          <a (click)="forgotPasswordClicked()">Forgot Password?</a>
           <div>
 
             <!-- todo - maybe stop using [disabled] below, replace with toast -->
@@ -105,7 +99,8 @@
               />
             </div>
           </div>
-        </mat-dialog-actions>
+
+        <a (click)="forgotPasswordClicked()" style="text-decoration: underline">Forgot Password?</a>
       </ng-template>
     </biggive-page-section>
   </div>
