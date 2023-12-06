@@ -17,7 +17,8 @@ const redirectFromLoginIfLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
   if (! isLoggedIn) {
     return true;
   } else {
-    const redirectPath = isAllowableRedirectPath(requestedRedirect) ? `/${requestedRedirect}` : '/'
+    const redirectPath = (requestedRedirect && isAllowableRedirectPath(requestedRedirect)) ?
+      `/${requestedRedirect}` : '/my-account'
     return router.parseUrl(redirectPath);
   }
 };

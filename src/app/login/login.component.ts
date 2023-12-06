@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit{
   protected resetPasswordForm: FormGroup;
   protected resetPasswordSuccess: boolean|undefined = undefined;
   protected recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
-  private targetUrl: URL = new URL(environment.donateGlobalUriPrefix);
+  private targetUrl: URL = new URL(environment.donateGlobalUriPrefix + "/my-account");
 
   constructor(
     private formBuilder: FormBuilder,
