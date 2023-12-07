@@ -5,7 +5,6 @@ import {CampaignResolver} from './campaign.resolver';
 import {CharityCampaignsResolver} from './charity-campaigns.resolver';
 import {campaignStatsResolver} from "./campaign-stats-resolver";
 import {isAllowableRedirectPath, LoginComponent} from "./login/login.component";
-import {environment} from "../environments/environment";
 import {inject} from "@angular/core";
 import {IdentityService} from "./identity.service";
 import { flags } from './featureFlags';
