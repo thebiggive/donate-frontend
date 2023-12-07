@@ -8,6 +8,7 @@ import {isAllowableRedirectPath, LoginComponent} from "./login/login.component";
 import {environment} from "../environments/environment";
 import {inject} from "@angular/core";
 import {IdentityService} from "./identity.service";
+import { flags } from './featureFlags';
 
 const redirectFromLoginIfLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
   const router = inject(Router);
@@ -21,6 +22,22 @@ const redirectFromLoginIfLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
       `/${requestedRedirect}` : '/my-account'
     return router.parseUrl(redirectPath);
   }
+};
+
+const redirectFromMyAccount = () => {
+  const router = inject(Router);
+  const isLoggedIn = inject(IdentityService).probablyHaveLoggedInPerson();
+
+  if ( isLoggedIn ) {
+    return true;
+  } else if (! flags.loginPageEnabled ) {
+    return true;
+  }
+
+  // on successful login the login page redirects back to My Account by default.
+  // If we need to redirect to any other pages in future, we can take an ActivatedRouteSnapshot param here
+  // and pass it to the login page as an 'r' query param.
+  return router.parseUrl('/login');
 };
 
 const routes: Routes = [
@@ -127,6 +144,9 @@ const routes: Routes = [
   {
     path: 'my-account',
     pathMatch: 'full',
+    canActivate: [
+      redirectFromMyAccount,
+    ],
     loadChildren: () => import('./my-account/my-account.module')
       .then(c => c.MyAccountModule),
   },
@@ -144,7 +164,7 @@ const routes: Routes = [
   },
 ];
 
-if (environment.environmentId !== 'production') {
+if (flags.loginPageEnabled ) {
   routes.unshift(
     {
       path: 'login',
