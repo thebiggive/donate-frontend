@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {ComponentsModule} from "@biggive/components-angular";
 import {MatButtonModule} from "@angular/material/button";
@@ -27,7 +27,7 @@ export function isAllowableRedirectPath(redirectParam: string) {
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit, OnDestroy{
   @ViewChild('captcha') captcha: RecaptchaComponent;
   protected forgotPassword = false;
   protected loggingIn = false;
@@ -47,7 +47,13 @@ export class LoginComponent implements OnInit{
   ) {
   }
 
+  ngOnDestroy() {
+    document.body.classList.remove('primary-colour');
+  }
+
   ngOnInit() {
+    document.body.classList.add('primary-colour');
+
     this.loginForm = this.formBuilder.group({
       emailAddress: [null, [
         Validators.required,

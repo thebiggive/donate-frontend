@@ -19,6 +19,10 @@ body {
   color: $colour-black;
 }
 
+body.primary-colour {
+  background-color: $colour-primary;
+}
+
 p,
 li {
   @include b-rt-0;
