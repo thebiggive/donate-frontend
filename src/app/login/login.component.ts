@@ -13,7 +13,8 @@ import {IdentityService} from "../identity.service";
 import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
 import {ActivatedRoute} from "@angular/router";
-import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 export function isAllowableRedirectPath(redirectParam: string) {
   return ! redirectParam.match(/[^a-zA-Z0-9\-_\/]/);
@@ -22,9 +23,9 @@ export function isAllowableRedirectPath(redirectParam: string) {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatSnackBarModule],
+  imports: [CommonModule, ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatSnackBarModule, MatAutocompleteModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit{
   @ViewChild('captcha') captcha: RecaptchaComponent;
@@ -36,12 +37,13 @@ export class LoginComponent implements OnInit{
   protected resetPasswordForm: FormGroup;
   protected resetPasswordSuccess: boolean|undefined = undefined;
   protected recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
-  private targetUrl: URL = new URL(environment.donateGlobalUriPrefix);
+  private targetUrl: URL = new URL(environment.donateGlobalUriPrefix + "/my-account");
 
   constructor(
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
     private activatedRoute: ActivatedRoute,
+    private snackBar: MatSnackBar,
   ) {
   }
 
@@ -53,7 +55,6 @@ export class LoginComponent implements OnInit{
       ]],
       password: [null, [
         Validators.required,
-        Validators.minLength(10),
       ]],
     });
 
@@ -74,6 +75,18 @@ export class LoginComponent implements OnInit{
   }
 
   login(): void {
+    if (! this.loginForm.valid) {
+      this.snackBar.open(
+        'Please enter your email email address and password to log in',
+        undefined,
+        {
+          duration: 5_000,
+          panelClass: 'snack-bar',
+        }
+      );
+      return;
+    }
+
     this.loggingIn = true;
     this.captcha.reset();
     this.captcha.execute();
@@ -122,7 +135,18 @@ export class LoginComponent implements OnInit{
         error: (error) => {
           this.captcha.reset();
           const errorDescription = error.error.error.description;
-          this.loginError = errorDescription || error.message || 'Unknown error';
+          const loginError = errorDescription || error.message || 'Unknown error';
+
+          this.snackBar.open(
+            loginError,
+            undefined,
+            {
+              duration: 5_000,
+              panelClass: 'snack-bar',
+            });
+
+          this.loginError = loginError;
+
           this.loggingIn = false;
       }});
     }
