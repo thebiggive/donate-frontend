@@ -22,7 +22,7 @@ export function isAllowableRedirectPath(redirectParam: string) {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule,MatAutocompleteModule],
+  imports: [CommonModule, ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatAutocompleteModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   protected resetPasswordSuccess: boolean|undefined = undefined;
   protected recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   private targetUrl: URL = new URL(environment.donateGlobalUriPrefix + "/my-account");
+  protected passwordResetError: undefined|string = undefined;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -105,7 +106,6 @@ export class LoginComponent implements OnInit, OnDestroy{
         default:
           this.loginError = 'Unknown Error - please try again or contact us if this error persists';
       }
-
       return;
     }
 
@@ -114,11 +114,24 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.captcha.execute();
   }
 
-  forgotPasswordClicked(): void {
-    this.forgotPassword = true;
-  }
-
   resetPasswordClicked(): void {
+    this.passwordResetError = undefined;
+    if (!this.resetPasswordForm.valid) {
+      const emailErrors = this.resetPasswordForm.controls?.emailAddress?.errors;
+
+      switch (true) {
+        case emailErrors?.required:
+          this.passwordResetError = 'Email address is required';
+          break;
+        case !!emailErrors?.pattern:
+          this.passwordResetError = `'${emailErrors!.pattern.actualValue}' is not a recognised email address`;
+          break;
+        default:
+          this.passwordResetError = 'Unknown Error - please try again or contact us if this error persists';
+      }
+      return;
+    }
+
     this.userAskedForResetLink = true;
     this.captcha.reset();
     this.captcha.execute();

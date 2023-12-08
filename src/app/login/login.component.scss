@@ -93,12 +93,12 @@ div.login {
   }
 }
 
-#login-button {
+#login-button, #reset-password-button {
   width: 80%;
   text-align: center;
   margin: auto;
   @media #{$breakpoint-lg} {
-    max-width: 10em;
+    max-width: 15em;
   }
 }
 
