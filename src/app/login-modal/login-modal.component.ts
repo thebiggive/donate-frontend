@@ -56,7 +56,6 @@ export class LoginModalComponent implements OnInit {
       ]],
       password: [null, [
         Validators.required,
-        Validators.minLength(10),
       ]],
     });
 
