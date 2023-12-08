@@ -13,7 +13,6 @@ import {IdentityService} from "../identity.service";
 import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
 import {ActivatedRoute} from "@angular/router";
-import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 export function isAllowableRedirectPath(redirectParam: string) {
@@ -23,7 +22,7 @@ export function isAllowableRedirectPath(redirectParam: string) {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatSnackBarModule, MatAutocompleteModule],
+  imports: [CommonModule, ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatAutocompleteModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
@@ -38,12 +37,12 @@ export class LoginComponent implements OnInit, OnDestroy{
   protected resetPasswordSuccess: boolean|undefined = undefined;
   protected recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   private targetUrl: URL = new URL(environment.donateGlobalUriPrefix + "/my-account");
+  protected passwordResetError: undefined|string = undefined;
 
   constructor(
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
     private activatedRoute: ActivatedRoute,
-    private snackBar: MatSnackBar,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
   }
@@ -87,14 +86,26 @@ export class LoginComponent implements OnInit, OnDestroy{
 
   login(): void {
     if (! this.loginForm.valid) {
-      this.snackBar.open(
-        'Please enter your email email address and password to log in',
-        undefined,
-        {
-          duration: 5_000,
-          panelClass: 'snack-bar',
-        }
-      );
+
+      const emailErrors = this.loginForm.controls?.emailAddress?.errors;
+      const passwordErrors = this.loginForm.controls?.password?.errors;
+
+      switch (true) {
+        case emailErrors?.required && passwordErrors?.required:
+          this.loginError = 'Email address and password are required';
+          break;
+        case emailErrors?.required:
+          this.loginError = 'Email address is required';
+          break;
+        case passwordErrors?.required:
+          this.loginError = 'Password is required';
+          break;
+        case !!emailErrors?.pattern:
+          this.loginError = `'${emailErrors!.pattern.actualValue}' is not a recognised email address`;
+          break;
+        default:
+          this.loginError = 'Unknown Error - please try again or contact us if this error persists';
+      }
       return;
     }
 
@@ -103,11 +114,24 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.captcha.execute();
   }
 
-  forgotPasswordClicked(): void {
-    this.forgotPassword = true;
-  }
-
   resetPasswordClicked(): void {
+    this.passwordResetError = undefined;
+    if (!this.resetPasswordForm.valid) {
+      const emailErrors = this.resetPasswordForm.controls?.emailAddress?.errors;
+
+      switch (true) {
+        case emailErrors?.required:
+          this.passwordResetError = 'Email address is required';
+          break;
+        case !!emailErrors?.pattern:
+          this.passwordResetError = `'${emailErrors!.pattern.actualValue}' is not a recognised email address`;
+          break;
+        default:
+          this.passwordResetError = 'Unknown Error - please try again or contact us if this error persists';
+      }
+      return;
+    }
+
     this.userAskedForResetLink = true;
     this.captcha.reset();
     this.captcha.execute();
@@ -119,6 +143,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   }
 
   captchaReturn(captchaResponse: string): void {
+    this.loginError = undefined;
     if (captchaResponse === null) {
       // We had a code but now don't, e.g. after expiry at 1 minute. In this case
       // the trigger wasn't a login click so do nothing. A repeat login attempt will
@@ -146,17 +171,7 @@ export class LoginComponent implements OnInit, OnDestroy{
         error: (error) => {
           this.captcha.reset();
           const errorDescription = error.error.error.description;
-          const loginError = errorDescription || error.message || 'Unknown error';
-
-          this.snackBar.open(
-            loginError,
-            undefined,
-            {
-              duration: 5_000,
-              panelClass: 'snack-bar',
-            });
-
-          this.loginError = loginError;
+          this.loginError = errorDescription || error.message || 'Unknown error';
 
           this.loggingIn = false;
       }});

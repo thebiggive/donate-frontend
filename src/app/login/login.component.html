@@ -26,81 +26,94 @@
         <h2 mat-dialog-title>Reset Password</h2>
 
         <div *ngIf="!userAskedForResetLink">
-          <mat-dialog-content class="mat-typography">
-            <form [formGroup]="resetPasswordForm">
-              <mat-form-field class="b-w-100" color="primary">
-                <mat-label for="loginEmailAddress">Email address</mat-label>
-                <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off">
-              </mat-form-field>
-              <p class="b-rt-0">Please enter your email address.</p>
-            </form>
-          </mat-dialog-content>
-
-          <mat-dialog-actions align="end">
-            <button
-              id="reset-password-modal-submit"
-              mat-raised-button
-              [disabled]="!resetPasswordForm.valid || userAskedForResetLink"
-              (click)="resetPasswordClicked()"
-              color="primary"
-            >Reset Password
-            </button>
-          </mat-dialog-actions>
-        </div>
-
-        <div *ngIf="userAskedForResetLink">
-          <mat-spinner *ngIf="resetPasswordSuccess === undefined" [diameter]="40"
-                       aria-label="Loading your details"></mat-spinner>
-          <p *ngIf="resetPasswordSuccess">Please check your email and click on the password reset link received.</p>
-          <p *ngIf="resetPasswordSuccess === false" class="error">Sorry, we encountered a problem. Please <a
-            href="https://community.biggive.org/s/contact-us" target="_blank">contact us</a> for help.</p>
-        </div>
-      </div>
-
-      <ng-template #logIn>
-          <form [formGroup]="loginForm">
+          <form [formGroup]="resetPasswordForm">
 
             <biggive-text-input spaceBelow="4">
               <label slot="label" for="loginEmailAddress">Email address *</label>
               <input
-                slot="input"
-                matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off">
-            </biggive-text-input>
-            <biggive-text-input spaceBelow="4">
-              <label slot="label" for="loginPassword">Password *</label>
-              <input
-                slot="input"
-                matInput type="password" id="loginPassword" formControlName="password">
+                slot="input" matInput type="email" id="ResetPasswordEmailAddress" formControlName="emailAddress"
+                autocapitalize="off">
             </biggive-text-input>
 
-            <p *ngIf="loginError" class="error" aria-live="assertive">
-              Login error: {{ loginError }}
-            </p>
           </form>
-          <div>
 
-            <!-- todo - maybe stop using [disabled] below, replace with toast -->
-
-            <div id="login-button">
-              <div aria-live="polite">
-                <mat-spinner *ngIf="loggingIn" color="primary" diameter="30" aria-label="Logging in"></mat-spinner>
-              </div>
-
-              <biggive-button
-                *ngIf="! loggingIn"
-                space-above="5"
-                colour-scheme="primary"
-                label="Log in"
-                full-width="true"
-                disabled="!loginForm.valid"
-                size="medium"
-                rounded="false"
-                (click)="login()"
-              />
-            </div>
+          <div aria-live="polite">
+            <p *ngIf="passwordResetError" class="error" aria-live="assertive">
+              {{ passwordResetError }}
+            </p>
           </div>
 
-        <a (click)="forgotPasswordClicked()" style="text-decoration: underline">Forgot Password?</a>
+          <div id="reset-password-button">
+            <biggive-button
+              *ngIf="! userAskedForResetLink"
+              space-above="5"
+              colour-scheme="primary"
+              label="Reset password"
+              full-width="true"
+              size="medium"
+              rounded="false"
+              (click)="resetPasswordClicked()"
+            />
+          </div>
+
+        </div>
+
+        <div aria-live="polite">
+          <div *ngIf="userAskedForResetLink">
+            <mat-spinner *ngIf="resetPasswordSuccess === undefined" [diameter]="40"
+                         aria-label="Loading your details"></mat-spinner>
+            <p *ngIf="resetPasswordSuccess">Please check your email and click on the password reset link received.</p>
+            <p *ngIf="resetPasswordSuccess === false" class="error">Sorry, we encountered a problem. Please <a
+              href="https://community.biggive.org/s/contact-us" target="_blank">contact us</a> for help.</p>
+          </div>
+        </div>
+        <a (click)="this.forgotPassword = false" style="text-decoration: underline">Login</a>
+      </div>
+
+      <ng-template #logIn>
+        <form [formGroup]="loginForm">
+
+          <biggive-text-input spaceBelow="4">
+            <label slot="label" for="loginEmailAddress">Email address *</label>
+            <input
+              slot="input"
+              matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off">
+          </biggive-text-input>
+          <biggive-text-input spaceBelow="4">
+            <label slot="label" for="loginPassword">Password *</label>
+            <input
+              slot="input"
+              matInput type="password" id="loginPassword" formControlName="password">
+          </biggive-text-input>
+
+          <div aria-live="polite">
+            <p *ngIf="loginError" class="error" aria-live="assertive">
+              {{ loginError }}
+            </p>
+          </div>
+        </form>
+        <div>
+
+          <div id="login-button">
+            <div aria-live="polite">
+              <mat-spinner *ngIf="loggingIn" color="primary" diameter="30" aria-label="Logging in"></mat-spinner>
+            </div>
+
+            <biggive-button
+              *ngIf="! loggingIn"
+              space-above="5"
+              colour-scheme="primary"
+              label="Log in"
+              full-width="true"
+              disabled="!loginForm.valid"
+              size="medium"
+              rounded="false"
+              (click)="login()"
+            />
+          </div>
+        </div>
+
+        <a (click)="this.forgotPassword = true" style="text-decoration: underline">Forgot Password?</a>
       </ng-template>
     </biggive-page-section>
   </div>
