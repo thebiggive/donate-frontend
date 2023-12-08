@@ -13,7 +13,6 @@ import {IdentityService} from "../identity.service";
 import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
 import {ActivatedRoute} from "@angular/router";
-import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 export function isAllowableRedirectPath(redirectParam: string) {
@@ -23,7 +22,7 @@ export function isAllowableRedirectPath(redirectParam: string) {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatSnackBarModule, MatAutocompleteModule],
+  imports: [CommonModule, ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule,MatAutocompleteModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
@@ -43,7 +42,6 @@ export class LoginComponent implements OnInit, OnDestroy{
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
     private activatedRoute: ActivatedRoute,
-    private snackBar: MatSnackBar,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
   }
@@ -108,14 +106,6 @@ export class LoginComponent implements OnInit, OnDestroy{
           this.loginError = 'Unknown Error - please try again or contact us if this error persists';
       }
 
-      this.snackBar.open(
-        this.loginError,
-        undefined,
-        {
-          duration: 5_000,
-          panelClass: 'snack-bar',
-        }
-      );
       return;
     }
 
@@ -168,17 +158,7 @@ export class LoginComponent implements OnInit, OnDestroy{
         error: (error) => {
           this.captcha.reset();
           const errorDescription = error.error.error.description;
-          const loginError = errorDescription || error.message || 'Unknown error';
-
-          this.snackBar.open(
-            loginError,
-            undefined,
-            {
-              duration: 5_000,
-              panelClass: 'snack-bar',
-            });
-
-          this.loginError = loginError;
+          this.loginError = errorDescription || error.message || 'Unknown error';
 
           this.loggingIn = false;
       }});
