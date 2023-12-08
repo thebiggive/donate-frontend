@@ -1,5 +1,5 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
 import {ComponentsModule} from "@biggive/components-angular";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDialogModule} from "@angular/material/dialog";
@@ -44,15 +44,20 @@ export class LoginComponent implements OnInit, OnDestroy{
     private identityService: IdentityService,
     private activatedRoute: ActivatedRoute,
     private snackBar: MatSnackBar,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {
   }
 
   ngOnDestroy() {
-    document.body.classList.remove('primary-colour');
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.classList.remove('primary-colour');
+    }
   }
 
   ngOnInit() {
-    document.body.classList.add('primary-colour');
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.classList.add('primary-colour');
+    }
 
     this.loginForm = this.formBuilder.group({
       emailAddress: [null, [
