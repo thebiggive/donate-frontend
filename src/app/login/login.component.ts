@@ -87,8 +87,29 @@ export class LoginComponent implements OnInit, OnDestroy{
 
   login(): void {
     if (! this.loginForm.valid) {
+
+      const emailErrors = this.loginForm.controls?.emailAddress?.errors;
+      const passwordErrors = this.loginForm.controls?.password?.errors;
+
+      switch (true) {
+        case emailErrors?.required && passwordErrors?.required:
+          this.loginError = 'Email address and password are required';
+          break;
+        case emailErrors?.required:
+          this.loginError = 'Email address is required';
+          break;
+        case passwordErrors?.required:
+          this.loginError = 'Password is required';
+          break;
+        case !!emailErrors?.pattern:
+          this.loginError = `'${emailErrors!.pattern.actualValue}' is not a recognised email address`;
+          break;
+        default:
+          this.loginError = 'Unknown Error - please try again or contact us if this error persists';
+      }
+
       this.snackBar.open(
-        'Please enter your email email address and password to log in',
+        this.loginError,
         undefined,
         {
           duration: 5_000,
@@ -119,6 +140,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   }
 
   captchaReturn(captchaResponse: string): void {
+    this.loginError = undefined;
     if (captchaResponse === null) {
       // We had a code but now don't, e.g. after expiry at 1 minute. In this case
       // the trigger wasn't a login click so do nothing. A repeat login attempt will
