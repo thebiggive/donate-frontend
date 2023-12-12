@@ -1612,6 +1612,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       person.captcha_code = this.idCaptchaCode;
       this.identityService.create(person).subscribe(
         (person: Person) => {
+          // would like to move the line below inside `identityService.create` but that caused test errors when I tried
           this.identityService.saveJWT(person.id as string, person.completion_jwt as string);
           this.donor = person;
           donation.pspCustomerId = person.stripe_customer_id;

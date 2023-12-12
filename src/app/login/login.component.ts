@@ -159,9 +159,7 @@ export class LoginComponent implements OnInit, OnDestroy{
       };
 
       this.identityService.login(credentials).subscribe({
-        next: (response: { id: string, jwt: string }) => {
-          // todo - see if we can make login do `saveJWT` internally and delete it here?
-          this.identityService.saveJWT(response.id, response.jwt);
+        next: (_response: { id: string, jwt: string }) => {
           // assign window.location rather than the more angular-proper way of
           // this.router.navigateByUrl('/') because we need to force the main menu to be updated
           // to show that we're now logged in.
