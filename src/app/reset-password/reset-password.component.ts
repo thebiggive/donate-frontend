@@ -15,7 +15,7 @@ export class ResetPasswordComponent implements OnInit {
   passwordForm: FormGroup;
   savingNewPassword: boolean = false;
   saveSuccessful: boolean|undefined = undefined;
-  errorMessage: string | undefined;
+  errorMessageHtml: string | undefined;
   token: string;
   tokenValid: boolean|undefined = undefined;
 
@@ -69,12 +69,13 @@ export class ResetPasswordComponent implements OnInit {
     this.identityService.resetPassword(this.passwordForm.controls.password!.value, this.token).subscribe({
       next: (_) => {
         this.savingNewPassword = false;
+        this.errorMessageHtml = undefined;
         this.saveSuccessful = true;
       },
       error: (error) => {
         this.savingNewPassword = false;
         this.saveSuccessful = false;
-        this.errorMessage = error.error?.error?.description;
+        this.errorMessageHtml = error.error?.error?.description;
       },
     });
   };
