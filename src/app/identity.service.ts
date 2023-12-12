@@ -5,7 +5,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {MatomoTracker} from 'ngx-matomo';
 import {StorageService} from 'ngx-webstorage-service';
 import {Observable, of} from 'rxjs';
-import {delay, retry} from 'rxjs/operators';
+import {delay, retry, tap} from 'rxjs/operators';
 
 import {Credentials} from './credentials.model';
 import {environment} from '../environments/environment';
@@ -41,11 +41,16 @@ export class IdentityService {
     private cookieService: CookieService,
   ) {}
 
-  login(credentials: Credentials): Observable<{ jwt: string}> {
-    return this.http.post<{ jwt: string}>(
+  login(credentials: Credentials): Observable<{ id: string, jwt: string}> {
+    return this.http.post<{ id: string, jwt: string }>(
       `${environment.identityApiPrefix}${this.loginPath}`,
       credentials,
-    );
+    ).pipe(tap({
+      next: (response)  => {
+        this.saveJWT(response.id, response.jwt);
+        this.loginStatusChanged.emit(true);
+      }
+    }));
   }
 
   getResetPasswordToken(email: string, captchaCode: string): Observable<[]> {
@@ -79,7 +84,12 @@ export class IdentityService {
   create(person: Person): Observable<Person> {
     return this.http.post<Person>(
       `${environment.identityApiPrefix}${this.peoplePath}`,
-      person);
+      person).pipe(
+        tap((person) => {
+          this.saveJWT(person.id as string, person.completion_jwt as string);
+          this.loginStatusChanged.emit(true);
+        })
+    )
   }
 
   get(id: string, jwt: string, {withTipBalances = false}: {withTipBalances?: boolean} = {}): Observable<Person> {
@@ -171,7 +181,7 @@ export class IdentityService {
     return this.getTokenPayload(jwt).sub.complete;
   }
 
-  saveJWT(id: string, jwt: string) {
+  private saveJWT(id: string, jwt: string) {
     const daysTilExpiry = 1;
     this.cookieService.set(this.cookieName, JSON.stringify({id, jwt}), daysTilExpiry, '/');
   }

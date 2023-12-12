@@ -1612,7 +1612,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       person.captcha_code = this.idCaptchaCode;
       this.identityService.create(person).subscribe(
         (person: Person) => {
-          this.identityService.saveJWT(person.id as string, person.completion_jwt as string);
           this.donor = person;
           donation.pspCustomerId = person.stripe_customer_id;
           this.createDonation(donation);

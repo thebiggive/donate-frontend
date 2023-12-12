@@ -66,7 +66,7 @@ export class DonationCompleteComponent implements OnInit {
 
   ngOnInit() {
     this.checkDonation();
-    
+
     this.minPasswordLength = minPasswordLength;
 
     this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
@@ -126,7 +126,7 @@ export class DonationCompleteComponent implements OnInit {
     };
 
     this.identityService.login(credentials).subscribe({
-      next: response => {
+      next: _response => {
         // It's still the same person, just an upgraded / "complete" token. So for now just recycle the ID. We'll probably improve
         // `/auth` to return the ID separately soon, so we can do a normal login form that's able to call this without
         // having to decode the JWT (though maybe that's a good thing for the frontend to be able to do anyway?).
@@ -134,8 +134,6 @@ export class DonationCompleteComponent implements OnInit {
         // gives no visual indication that a longer-term token's been
         // set up yet.
         console.log('Upgraded local token to a long-lived one with more permissions');
-        this.identityService.saveJWT(this.person?.id as string, response.jwt);
-        this.identityService.loginStatusChanged.emit(true);
       },
       error: (error: HttpErrorResponse) => {
         this.matomoTracker.trackEvent('identity_error', 'login_failed', `${error.status}: ${error.message}`);
