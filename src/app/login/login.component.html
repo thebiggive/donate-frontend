@@ -71,7 +71,10 @@
       </div>
 
       <ng-template #logIn>
-        <form [formGroup]="loginForm">
+        <form
+          [formGroup]="loginForm"
+          (keydown.enter)="login()"
+        >
 
           <biggive-text-input spaceBelow="4">
             <label slot="label" for="loginEmailAddress">Email address *</label>
