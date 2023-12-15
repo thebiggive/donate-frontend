@@ -80,7 +80,6 @@ export class RegisterModalComponent implements OnInit {
         email_address: this.form.value.emailAddress,
         raw_password: this.form.value.password,
       }).subscribe((response: { id: string, jwt: string }) => {
-        this.identityService.saveJWT(response.id, response.jwt);
         this.dialogRef.close(response);
         this.registering = false;
       }, (error) => {
@@ -108,6 +107,7 @@ export class RegisterModalComponent implements OnInit {
       first_name: this.form.value.firstName,
       last_name: this.form.value.lastName,
     }).subscribe(initialPerson => {
+      // would like to move the line below inside `identityService.create` but that caused test errors when I tried
       this.identityService.saveJWT(initialPerson.id as string, initialPerson.completion_jwt as string);
 
       initialPerson.raw_password = this.form.value.password;

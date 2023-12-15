@@ -56,7 +56,6 @@ export class LoginModalComponent implements OnInit {
       ]],
       password: [null, [
         Validators.required,
-        Validators.minLength(10),
       ]],
     });
 
@@ -89,7 +88,6 @@ export class LoginModalComponent implements OnInit {
       };
 
       this.identityService.login(credentials).subscribe((response: { id: string, jwt: string }) => {
-        this.identityService.saveJWT(response.id, response.jwt);
         this.dialogRef.close(response);
         this.loggingIn = false;
       }, (error) => {

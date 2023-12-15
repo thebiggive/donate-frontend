@@ -42,6 +42,7 @@ export const environment: Environment = {
   recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
   recaptchaIdentitySiteKey: '6LfisFAgAAAAAOPEarzMPQ2gln_0Q-RENbD3bHzd',
   reservationMinutes: 30,
+  showDebugInfo: false,
 };
 
 /*

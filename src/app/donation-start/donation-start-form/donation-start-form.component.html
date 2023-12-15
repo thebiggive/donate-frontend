@@ -1,6 +1,16 @@
+<div
+  *ngIf="showDebugInfo"
+  style="outline: solid green 1px; position: fixed; top: 200px; left: 50px; width: 400px; background: white"
+>
+  Selected saved method: {{selectedSavedMethod?.id}} {{selectedSavedMethod?.card?.last4}} <br/> Customer of method {{selectedSavedMethod?.customer}}
+  <br /><br>
+  Customer: Email: {{donor?.email_address}} <br/> ID: {{donor?.id}} <br/> Stripe ID {{donor?.stripe_customer_id}}
+  <br/><br>
+  Donation {{ donation?.donationAmount }}
+  <br>PSP customer ID: {{donation?.pspCustomerId}}
+</div>
 <form
   class="c-donate-form"
-  (ngSubmit)="submit()"
   (keydown.enter)="interceptSubmitAndProceedInstead($event)"
   [formGroup]="donationForm"
   *ngIf="campaignOpenOnLoad"
@@ -207,7 +217,7 @@
             class="continue b-w-100 b-rt-0"
             mat-raised-button
             color="primary"
-            (click)="progressFromStepOne()"
+            (click)="progressToNonAmountsStep()"
           >Continue</button>
       </div>
       </mat-step>
@@ -401,8 +411,11 @@
           <div class="sr-combo-inputs-row">
             <biggive-text-input>
               <span slot="label">Payment Method</span> <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe not us -->
-            <div slot="input" class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+              <div slot="input" class="sr-input sr-card-element" id="card-info" #cardInfo></div>
             </biggive-text-input>
+            <div *ngIf="!donor" class="error" aria-live="polite">
+              <p>Payment fields require the "captcha" puzzle to be solved before we can show them safely.</p>
+            </div>
             <div>
               Your card information will be held for re-use if you set a password on the next page. It is held securely only with Stripe.
             </div>
@@ -625,8 +638,10 @@
             </tr>
           </table>
 
-          <button *ngIf="!submitting"
-            type="submit"
+          <button
+            *ngIf="!submitting"
+            (click)="submit()"
+            (keyup.enter)="submit()"
             class="c-donate-button b-donate-button b-w-100 b-rt-1"
             mat-raised-button
             color="primary"

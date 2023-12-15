@@ -43,6 +43,7 @@ export const environment: Environment = {
   // https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do
   recaptchaIdentitySiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
   reservationMinutes: 30,
+  showDebugInfo: true,
 };
 
 /*
