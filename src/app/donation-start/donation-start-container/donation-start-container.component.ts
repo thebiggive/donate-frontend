@@ -91,7 +91,9 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
     this.identityService.get(id, jwt).subscribe({
       next: (person: Person) => {
         this.donor = person; // Should mean donations are attached to the Stripe Customer.
-        this.loggedInEmailAddress = person.email_address;
+        if (this.identityService.probablyHaveLoggedInPerson()) {
+          this.loggedInEmailAddress = person.email_address;
+        }
         this.donationStartForm.loadPerson(person, id, jwt);
         this.donationStartForm.resumeDonationsIfPossible();
 
