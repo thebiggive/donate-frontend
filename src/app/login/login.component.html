@@ -95,8 +95,10 @@
             </p>
           </div>
         </form>
-        <div>
-
+        <div id="actions">
+          <div>
+            <a (click)="this.forgotPassword = true" style="text-decoration: underline">Forgot Password?</a>
+          </div>
           <div id="login-button">
             <div aria-live="polite">
               <mat-spinner *ngIf="loggingIn" color="primary" diameter="30" aria-label="Logging in"></mat-spinner>
@@ -105,6 +107,7 @@
             <biggive-button
               *ngIf="! loggingIn"
               space-above="5"
+              spaceBelow="0"
               colour-scheme="primary"
               label="Log in"
               full-width="true"
@@ -114,9 +117,11 @@
               (click)="login()"
             />
           </div>
-        </div>
+          <div>
+             <!-- Empty placeholder to mirror div for "forgot password link" on other side and keep login button centred. -->
+          </div>
 
-        <a (click)="this.forgotPassword = true" style="text-decoration: underline">Forgot Password?</a>
+        </div>
       </ng-template>
     </biggive-page-section>
   </div>
