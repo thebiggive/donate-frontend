@@ -102,6 +102,29 @@ div.login {
   }
 }
 
+#login-actions, #reset-actions {
+  display: flex;
+  flex-direction: column-reverse;
+  @media #{$breakpoint-md} {
+    flex-direction: row;
+  }
+
+  div {
+    // aligns the bottom edge of the content of each div
+    margin-top: auto;
+    flex-basis: 20%;
+  }
+
+  #login-button, #reset-password-button {
+    margin-bottom: 1em;
+    width: 100%;
+    @media #{$breakpoint-md} {
+      margin-bottom: 0;
+    }
+    flex-basis: 60%;
+  }
+}
+
 .error {
   color: mat.get-color-from-palette($donate-warn);
   margin: 1rem 0;
