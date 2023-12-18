@@ -43,17 +43,25 @@
             </p>
           </div>
 
-          <div id="reset-password-button">
-            <biggive-button
-              *ngIf="! userAskedForResetLink"
-              space-above="5"
-              colour-scheme="primary"
-              label="Reset password"
-              full-width="true"
-              size="medium"
-              rounded="false"
-              (click)="resetPasswordClicked()"
-            />
+          <div id="login-actions">
+            <div>
+              <a (click)="this.forgotPassword = false" style="text-decoration: underline">Return to Login page</a>
+            </div>
+            <div id="reset-password-button">
+              <biggive-button
+                *ngIf="! userAskedForResetLink"
+                space-above="5"
+                colour-scheme="primary"
+                label="Reset password"
+                full-width="true"
+                size="medium"
+                rounded="false"
+                (click)="resetPasswordClicked()"
+              />
+            </div>
+            <div>
+            <!-- Empty placeholder to mirror div for "Return to Login page" on other side and keep button centred. -->
+            </div>
           </div>
 
         </div>
@@ -67,7 +75,6 @@
               href="https://community.biggive.org/s/contact-us" target="_blank">contact us</a> for help.</p>
           </div>
         </div>
-        <a (click)="this.forgotPassword = false" style="text-decoration: underline">Return to Login page</a>
       </div>
 
       <ng-template #logIn>
@@ -95,7 +102,7 @@
             </p>
           </div>
         </form>
-        <div id="actions">
+        <div id="reset-actions">
           <div>
             <a (click)="this.forgotPassword = true" style="text-decoration: underline">Forgot Password?</a>
           </div>

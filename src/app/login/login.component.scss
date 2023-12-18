@@ -102,7 +102,7 @@ div.login {
   }
 }
 
-#actions {
+#login-actions, #reset-actions {
   display: flex;
   flex-direction: column-reverse;
   @media #{$breakpoint-md} {
@@ -115,7 +115,7 @@ div.login {
     flex-basis: 20%;
   }
 
-  #login-button {
+  #login-button, #reset-password-button {
     margin-bottom: 1em;
     width: 100%;
     @media #{$breakpoint-md} {
