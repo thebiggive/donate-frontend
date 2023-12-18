@@ -12,7 +12,7 @@ import {Credentials} from "../credentials.model";
 import {IdentityService} from "../identity.service";
 import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 export function isAllowableRedirectPath(redirectParam: string) {
@@ -36,13 +36,14 @@ export class LoginComponent implements OnInit, OnDestroy{
   protected resetPasswordForm: FormGroup;
   protected resetPasswordSuccess: boolean|undefined = undefined;
   protected recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
-  private targetUrl: URL = new URL(environment.donateGlobalUriPrefix + "/my-account");
+  private redirectPath: string = '/my-account';
   protected passwordResetError: undefined|string = undefined;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private identityService: IdentityService,
-    private activatedRoute: ActivatedRoute,
+    private readonly formBuilder: FormBuilder,
+    private readonly identityService: IdentityService,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
   }
@@ -80,7 +81,7 @@ export class LoginComponent implements OnInit, OnDestroy{
     // allowed chars in URL to redirect to: a-z, A-Z, 0-9, - _ /
 
     if (redirectParam && isAllowableRedirectPath(redirectParam)) {
-      this.targetUrl = new URL(environment.donateGlobalUriPrefix + '/' + redirectParam);
+      this.redirectPath = '/' + redirectParam;
     }
   }
 
@@ -160,11 +161,7 @@ export class LoginComponent implements OnInit, OnDestroy{
 
       this.identityService.login(credentials).subscribe({
         next: (_response: { id: string, jwt: string }) => {
-          // assign window.location rather than the more angular-proper way of
-          // this.router.navigateByUrl('/') because we need to force the main menu to be updated
-          // to show that we're now logged in.
-
-          window.location.href = this.targetUrl.href;
+          this.router.navigateByUrl(this.redirectPath);
         },
         error: (error) => {
           this.captcha.reset();
