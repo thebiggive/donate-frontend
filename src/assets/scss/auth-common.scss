@@ -1,0 +1,124 @@
+// common CSS rules used in authentication related pages - my account, register and login.
+@use '@angular/material' as mat;
+@import '../../abstract';
+
+main {
+  @include make-container;
+  margin: 0 0;
+}
+
+form {
+  margin: auto;
+}
+
+#banner {
+  display: none;
+  @media #{$breakpoint-lg} {
+    display: block;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 250px;
+  }
+}
+
+input {
+  @include b-rt-0;
+  outline: none;
+  border: none;
+  background-color: $colour-background;
+  width: 100%;
+  padding: 0; // We rely on containing element margin, and don't want vendor-dependent extra padding.
+
+  margin: 0 auto;
+  display: block;
+  font-weight: 700;
+
+  // Larger breakpoints only
+  .floating-label {
+    white-space: initial; // make text run onto next line instead of overflowing parent div.
+    font-size: 16px; // Even larger input fields need small placeholders to fit long charity names.
+
+    @media only screen and (max-width: 650px) {
+      display: none;
+    }
+
+    @media only screen and (max-width: 1200px) {
+      font-size: 12px;
+    }
+
+    @media only screen and (max-width: 800px) {
+      font-size: 10px;
+    }
+  }
+
+  // Small breakpoints only
+  .fixed-label {
+    display: none;
+
+    @media only screen and (max-width: 650px) {
+      display: block;
+      color: mat.get-color-from-palette($donate-primary);
+      font-size: 10px;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-left: 1.5rem;
+    }
+  }
+}
+
+main > div {
+  box-sizing: border-box;
+  color: $colour-primary;
+  background-color: $colour-background;
+  width: 100%;
+
+  @media #{$breakpoint-lg} {
+    padding-top: 0;
+    padding-right: 100px;
+    padding-left: 100px;
+    padding-bottom: 20px;
+    position: relative;
+    top: -125px;
+    width: 80%;
+    margin: auto;
+  }
+}
+
+div.actions {
+  display: flex;
+  flex-direction: column-reverse;
+  @media #{$breakpoint-md} {
+    flex-direction: row;
+  }
+
+  div {
+    // aligns the bottom edge of the content of each div
+    margin-top: auto;
+    flex-basis: 20%;
+  }
+
+  #register-button, #reset-password-button {
+    margin-bottom: 1em;
+    width: 100%;
+    @media #{$breakpoint-md} {
+      margin-bottom: 0;
+    }
+    flex-basis: 60%;
+  }
+}
+
+#register-button, #reset-password-button, #login-button, #reset-password-button  {
+  width: 80%;
+  text-align: center;
+  margin: auto;
+  @media #{$breakpoint-lg} {
+    max-width: 15em;
+  }
+}
+
+.error {
+  color: mat.get-color-from-palette($donate-warn);
+  margin: 1rem 0;
+}
