@@ -108,7 +108,25 @@
       </div>
     </biggive-page-section>
 
-    <div id="logout">
+    <div id="account-actions">
+      <biggive-button
+        space-above="5"
+        colour-scheme="white"
+        label="Explore Campaigns"
+        full-width="true"
+        size="medium"
+        url="/explore"
+      />
+
+      <biggive-button
+        space-above="5"
+        colour-scheme="white"
+        label="Transfer Donation Funds"
+        full-width="true"
+        size="medium"
+        url="/transfer-funds"
+      />
+
       <biggive-button
         space-above="5"
         colour-scheme="white"
@@ -119,6 +137,5 @@
         (click)="logout()"
       />
     </div>
-
   </div>
 </main>

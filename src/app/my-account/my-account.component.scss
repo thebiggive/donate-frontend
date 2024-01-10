@@ -55,6 +55,13 @@ div.my-account {
   }
 }
 
+#account-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 17px;
+}
+
 table#personal-details, table#paymentMethods {
   width: 100%;
   td {
