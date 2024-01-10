@@ -8,8 +8,9 @@ import {isAllowableRedirectPath, LoginComponent} from "./login/login.component";
 import {inject} from "@angular/core";
 import {IdentityService} from "./identity.service";
 import { flags } from './featureFlags';
+import {RegisterComponent} from "./register/register.component";
 
-const redirectFromLoginIfLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
+const redirectIfAlreadyLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
   const router = inject(Router);
   const requestedRedirect = snapshot.queryParams.r;
   const isLoggedIn = inject(IdentityService).probablyHaveLoggedInPerson();
@@ -170,7 +171,18 @@ if (flags.loginPageEnabled ) {
       pathMatch: 'full',
       component: LoginComponent,
       canActivate: [
-        redirectFromLoginIfLoggedIn,
+        redirectIfAlreadyLoggedIn,
+      ],
+    },
+  );
+
+  routes.unshift(
+    {
+      path: 'register',
+      pathMatch: 'full',
+      component: RegisterComponent,
+      canActivate: [
+        redirectIfAlreadyLoggedIn,
       ],
     },
   );

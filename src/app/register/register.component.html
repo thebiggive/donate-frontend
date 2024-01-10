@@ -1,0 +1,92 @@
+<div id="banner"></div>
+<main>
+  <div class="register">
+    <biggive-page-section>
+      <div class="heading-wrapper">
+        <biggive-heading
+          space-above=0
+          space-below=6
+          html-element="h1"
+          size="1"
+          align="center"
+          text="Donor Registration"
+        ></biggive-heading>
+      </div>
+      <re-captcha
+        #captcha
+        size="invisible"
+        errorMode="handled"
+        (resolved)="captchaReturn($event)"
+        (errored)="captchaError()"
+        siteKey="{{ recaptchaIdSiteKey }}"
+      ></re-captcha>
+
+      <p>
+        Registering as a donor with Big Give will help you donate to multiple campaigns, and will you the option
+        to donate by bank transfer as an alternative to using a payment card.
+      </p>
+      </biggive-page-section>
+      <biggive-page-section>
+
+        <form
+          [formGroup]="registrationForm"
+          (keydown.enter)="register()"
+        >
+
+          <biggive-text-input spaceBelow="4">
+            <label slot="label" for="firstName">First Name *</label>
+            <input
+              slot="input"
+              matInput type="text" id="firstName" formControlName="firstName">
+          </biggive-text-input>
+          <biggive-text-input spaceBelow="4">
+            <label slot="label" for="lastName">Last Name *</label>
+            <input
+              slot="input"
+              matInput type="text" id="lastName" formControlName="lastName">
+          </biggive-text-input>
+          <biggive-text-input spaceBelow="4">
+            <label slot="label" for="emailAddress">Email address *</label>
+            <input
+              slot="input"
+              matInput type="email" id="emailAddress" formControlName="emailAddress" autocapitalize="off">
+          </biggive-text-input>
+          <biggive-text-input spaceBelow="4">
+            <label slot="label" for="password">Password *</label>
+            <input
+              slot="input"
+              matInput type="password" id="password" formControlName="password">
+          </biggive-text-input>
+
+          <div aria-live="polite">
+            <p *ngIf="errorHtml" class="error" aria-live="assertive">
+              Registration error: <span [innerHtml]="errorHtml"></span>
+            </p>
+            <p *ngIf="error" class="error" aria-live="assertive">
+              {{ error }}
+            </p>
+          </div>
+        </form>
+        <div id="reset-actions">
+          <div id="register-button">
+            <div aria-live="polite">
+              <mat-spinner *ngIf="processing" color="primary" diameter="30" aria-label="Processing"></mat-spinner>
+            </div>
+
+            <biggive-button
+              *ngIf="! processing"
+              space-above="5"
+              spaceBelow="0"
+              colour-scheme="primary"
+              label="Register"
+              full-width="true"
+              disabled="!registrationForm.valid"
+              size="medium"
+              rounded="false"
+              (click)="register()"
+            />
+          </div>
+        </div>
+    </biggive-page-section>
+  </div>
+</main>
