@@ -14,6 +14,7 @@ import {EMAIL_REGEXP} from "../validators/patterns";
 import {Router} from "@angular/router";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
+import {myAccountPath} from "../app-routing";
 
 @Component({
   selector: 'app-register',
@@ -122,7 +123,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         raw_password: this.registrationForm.value.password,
       }).subscribe({
         next: () => {
-          this.router.navigateByUrl('/my-account');
+          this.router.navigateByUrl('/' + myAccountPath);
         },
         error: (error) => {
           this.captcha.reset();

@@ -14,6 +14,7 @@ import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {registerPath} from "../app-routing";
 
 export function isAllowableRedirectPath(redirectParam: string) {
   return ! redirectParam.match(/[^a-zA-Z0-9\-_\/]/);
@@ -38,6 +39,8 @@ export class LoginComponent implements OnInit, OnDestroy{
   protected recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   private redirectPath: string = '/my-account';
   protected passwordResetError: undefined|string = undefined;
+  protected readonly registerPath = registerPath;
+
 
   constructor(
     private readonly formBuilder: FormBuilder,
