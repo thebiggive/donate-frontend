@@ -40,6 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy{
   private redirectPath: string = '/my-account';
   protected passwordResetError: undefined|string = undefined;
   protected readonly registerPath = registerPath;
+  protected registerUrl: string;
 
 
   constructor(
@@ -83,8 +84,12 @@ export class LoginComponent implements OnInit, OnDestroy{
 
     // allowed chars in URL to redirect to: a-z, A-Z, 0-9, - _ /
 
+    this.registerUrl = '/' + this.registerPath;
     if (redirectParam && isAllowableRedirectPath(redirectParam)) {
       this.redirectPath = '/' + redirectParam;
+
+      const redirectQuery = new URLSearchParams({r: redirectParam})
+      this.registerUrl += "?" + redirectQuery.toString();
     }
   }
 
