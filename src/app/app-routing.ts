@@ -10,6 +10,10 @@ import {IdentityService} from "./identity.service";
 import { flags } from './featureFlags';
 import {RegisterComponent} from "./register/register.component";
 
+export const registerPath = 'register';
+export const myAccountPath = 'my-account';
+
+
 const redirectIfAlreadyLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
   const router = inject(Router);
   const requestedRedirect = snapshot.queryParams.r;
@@ -19,7 +23,7 @@ const redirectIfAlreadyLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
     return true;
   } else {
     const redirectPath = (requestedRedirect && isAllowableRedirectPath(requestedRedirect)) ?
-      `/${requestedRedirect}` : '/my-account'
+      `/${requestedRedirect}` : '/' + myAccountPath
     return router.parseUrl(redirectPath);
   }
 };
@@ -142,7 +146,7 @@ const routes: Routes = [
       .then(c => c.ExploreModule),
   },
   {
-    path: 'my-account',
+    path: myAccountPath,
     pathMatch: 'full',
     canActivate: [
       redirectFromMyAccount,
@@ -178,7 +182,7 @@ if (flags.loginPageEnabled ) {
 
   routes.unshift(
     {
-      path: 'register',
+      path: registerPath,
       pathMatch: 'full',
       component: RegisterComponent,
       canActivate: [
