@@ -1,13 +1,22 @@
 import {HighlightCard} from "./home/HighlightCard";
 import {ActivatedRouteSnapshot, ResolveFn} from '@angular/router';
 import {environment} from "../environments/environment";
+import {inject} from "@angular/core";
+import {CampaignService} from "./campaign.service";
 
-export const highlightCardsResolver: ResolveFn<readonly HighlightCard[] | null> = (_route: ActivatedRouteSnapshot) => {
+export const highlightCardsResolver: ResolveFn<readonly HighlightCard[] | null> = (route: ActivatedRouteSnapshot) => {
+  const campaignService = inject(CampaignService);
+
+  if (route.queryParams.hasOwnProperty('highlightAPIEnabled') && environment.environmentId !== 'production') {
+    return campaignService.getHomePageHighlightCards();
+  }
 
     const Jan8th = new Date('2024-01-08T00:00:00+00:00');
     const Feb9th = new Date('2024-02-09T23:59:59+00:00');
     const ArtsForImpactApplicationCloseDate = new Date('2023-12-16T00:00:00+00:00');
     const GMFApplicationCloseDate = new Date('2024-01-17T00:00:00+00:00');
+
+
 
     const highlightCards: readonly HighlightCard[] = [
         {
