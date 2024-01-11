@@ -28,7 +28,7 @@ const redirectIfAlreadyLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
   }
 };
 
-const redirectFromMyAccount = () => {
+const requireLoginWhenLoginPageLaunched = (activatedRoute: ActivatedRouteSnapshot) => {
   const router = inject(Router);
   const isLoggedIn = inject(IdentityService).probablyHaveLoggedInPerson();
 
@@ -41,7 +41,14 @@ const redirectFromMyAccount = () => {
   // on successful login the login page redirects back to My Account by default.
   // If we need to redirect to any other pages in future, we can take an ActivatedRouteSnapshot param here
   // and pass it to the login page as an 'r' query param.
+  const redirectPath = activatedRoute?.routeConfig?.path;
+  if (redirectPath) {
+    const query = new URLSearchParams({r: redirectPath})
+    const url = '/login?' + query.toString();
+    return router.parseUrl(url);
+  }
   return router.parseUrl('/login');
+
 };
 
 const routes: Routes = [
@@ -57,6 +64,9 @@ const routes: Routes = [
   {
     path: 'transfer-funds',
     pathMatch: 'full',
+    canActivate: [
+      requireLoginWhenLoginPageLaunched,
+    ],
     loadChildren: () => import('./transfer-funds/transfer-funds.module')
       .then(c => c.TransferFundsModule),
   },
@@ -149,7 +159,7 @@ const routes: Routes = [
     path: myAccountPath,
     pathMatch: 'full',
     canActivate: [
-      redirectFromMyAccount,
+      requireLoginWhenLoginPageLaunched,
     ],
     loadChildren: () => import('./my-account/my-account.module')
       .then(c => c.MyAccountModule),
