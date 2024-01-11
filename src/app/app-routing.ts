@@ -4,6 +4,7 @@ import {CampaignListResolver} from './campaign-list.resolver';
 import {CampaignResolver} from './campaign.resolver';
 import {CharityCampaignsResolver} from './charity-campaigns.resolver';
 import {campaignStatsResolver} from "./campaign-stats-resolver";
+import {highlightCardsResolver} from "./highlight-cards-resolver";
 import {isAllowableRedirectPath, LoginComponent} from "./login/login.component";
 import {inject} from "@angular/core";
 import {IdentityService} from "./identity.service";
@@ -57,6 +58,7 @@ const routes: Routes = [
     pathMatch: 'full',
     resolve: {
       stats: campaignStatsResolver,
+      highlights: highlightCardsResolver
     },
     loadChildren: () => import('./home/home.module')
       .then(c => c.HomeModule),

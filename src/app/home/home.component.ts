@@ -9,10 +9,6 @@ import {HighlightCard} from "./HighlightCard";
 import {environment} from "../../environments/environment";
 
 const CCCloseDate = new Date('2023-12-05T12:00:00+00:00');
-const Jan8th = new Date('2024-01-08T00:00:00+00:00');
-const Feb9th = new Date('2024-02-09T23:59:59+00:00');
-const ArtsForImpactApplicationCloseDate = new Date('2023-12-16T00:00:00+00:00');
-const GMFApplicationCloseDate = new Date('2024-01-17T00:00:00+00:00');
 
 @Component({
   selector: 'app-home',
@@ -34,92 +30,7 @@ export class HomeComponent implements OnInit {
    */
   protected mayBeAboutToRedirect: boolean = true;
 
-  private highlightCards: readonly HighlightCard[] = [
-    {
-      appearAt: Jan8th,
-      disappearAt: Feb9th,
-      headerText: 'Applications for Kind²Mind are now open!',
-      bodyText: 'Apply by February 9th 2024',
-      iconColor: "brand-mhf-turquoise",
-      backgroundImageUrl: new URL('/assets/images/turquoise-texture.jpg', environment.donateGlobalUriPrefix),
-      button: {
-        text: 'Apply now',
-        href: new URL('/kind2mind/', environment.blogUriPrefix)
-      }
-    },
-    {
-      appearAt: Jan8th,
-      disappearAt: Feb9th,
-      headerText: 'Applications for Champions for Children by The Childhood Trust are now open!',
-      bodyText: 'Apply by February 9th 2024',
-      iconColor: "brand-c4c-orange",
-      backgroundImageUrl: new URL('/assets/images/colour-orange.png', environment.donateGlobalUriPrefix),
-      button: {
-        text: 'Apply now',
-        href: new URL('/champions-for-children/', environment.blogUriPrefix)
-      }
-    },
-    {
-      appearAt: 'asap',
-      disappearAt: Jan8th,
-      headerText: 'Christmas Challenge 2023',
-      bodyText: '28th November - 5th December 2023',
-      iconColor: "brand-cc-red",
-      backgroundImageUrl: new URL('/assets/images/card-background-cc-lights.jpg', environment.donateGlobalUriPrefix),
-      button: {
-        text: 'See Results',
-        href: new URL('/christmas-challenge-2023', environment.donateGlobalUriPrefix)
-      }
-    },
-    {
-      appearAt: 'asap',
-      disappearAt: GMFApplicationCloseDate,
-      headerText: "Applications for Green Match Fund are now open!",
-      bodyText: "Apply by 16th January 2024",
-      iconColor: "brand-gmf-green",
-      backgroundImageUrl: new URL('/assets/images/card-background-gmf.jpg', environment.donateGlobalUriPrefix),
-      button: {
-        text: "Apply now",
-        href: new URL('/green-match-fund/', environment.blogUriPrefix),
-      }
-    },
-    {
-      appearAt: 'asap',
-      disappearAt: ArtsForImpactApplicationCloseDate,
-      headerText: "Applications for Arts for Impact are now open!",
-      backgroundImageUrl: new URL('/assets/images/red-coral-texture.png', environment.donateGlobalUriPrefix),
-      iconColor: 'brand-afa-pink',
-      bodyText: 'Apply by 15th December 2023',
-      button: {
-        text: "Apply now",
-        href: new URL('/artsforimpact/', environment.blogUriPrefix)
-      }
-    },
-    {
-      appearAt: 'asap',
-      disappearAt: Jan8th,
-      headerText: "One donation. Twice the impact.",
-      bodyText: 'You donate.\nWe double it.',
-      backgroundImageUrl: new URL('/assets/images/blue-texture.jpg', environment.donateGlobalUriPrefix),
-      iconColor: 'primary',
-      button: {
-        text: "Explore now",
-        href: new URL('/explore/', environment.donateGlobalUriPrefix)
-      }
-    },
-    {
-      appearAt: GMFApplicationCloseDate,
-      disappearAt: 'never',
-      headerText: "One donation. Twice the impact.",
-      bodyText: 'You donate.\nWe double it.',
-      backgroundImageUrl: new URL('/assets/images/blue-texture.jpg', environment.donateGlobalUriPrefix),
-      iconColor: 'primary',
-      button: {
-        text: "Explore now",
-        href: new URL('/explore/', environment.donateGlobalUriPrefix)
-      }
-    },
-  ];
+  private highlightCards: HighlightCard[];
 
   public constructor(
     private pageMeta: PageMetaService,
@@ -137,7 +48,7 @@ export class HomeComponent implements OnInit {
       'https://images-production.thebiggive.org.uk/0011r00002IMRknAAH/CCampaign%20Banner/db3faeb1-d20d-4747-bb80-1ae9286336a3.jpg',
     );
     this.stats = this.route.snapshot.data.stats;
-
+    this.highlightCards = this.route.snapshot.data.highlights;
     const queryParams = this.route.snapshot.queryParams;
 
     if (environment.environmentId !== 'production') {
