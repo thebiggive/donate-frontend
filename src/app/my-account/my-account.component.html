@@ -34,12 +34,36 @@
       </table>
     </biggive-page-section>
 
+    <biggive-page-section>
+
+    <div class="account-actions">
+        <biggive-button
+          space-above="5"
+          colour-scheme="white"
+          label="Explore Campaigns"
+          full-width="true"
+          size="medium"
+          url="/explore"
+        />
+
+        <biggive-button
+          space-above="5"
+          colour-scheme="white"
+          label="Transfer Donation Funds"
+          full-width="true"
+          size="medium"
+          url="/transfer-funds"
+        />
+      </div>
+    </biggive-page-section>
+
     <biggive-page-section *ngIf="person">
       <h2>Your Payment Methods</h2>
 
-      <!-- We only check for GBP balances for now, as we only support UK bank transfers rn -->
-      <div *ngIf="person.cash_balance?.gbp">
-        <p>Your Donation Funds balance: <strong>{{ ((person.cash_balance?.gbp || 0) / 100) | exactCurrency:'GBP' }}</strong></p>
+      <h3 *ngIf="hasDonationFunds">Donation Funds</h3>
+
+      <div *ngIf="hasDonationFunds">
+        <p>Available balance: <strong>{{ ((person.cash_balance?.gbp || 0) / 100) | exactCurrency:'GBP' }}</strong></p>
       </div>
 
       <p *ngIf="registerErrorDescription" class="error" aria-live="assertive">
@@ -55,7 +79,11 @@
         <mat-spinner color="accent" [diameter]="40" aria-label="Loading payment methods"></mat-spinner>
       </div>
 
-      <table id="paymentMethods" *ngIf="paymentMethods !== undefined && paymentMethods.length > 0">
+      <h3>
+        Saved Cards
+      </h3>
+
+      <table id="paymentMethods" *ngIf="hasSavedPaymentMethods">
         <tr *ngFor="let method of paymentMethods">
 
           <td class="cardBrand">
@@ -77,27 +105,13 @@
           <td class="cardUpdateButton"
             *ngIf="method.card !== undefined"
           >
-            <biggive-button
-              space-above="5"
-              colour-scheme="white"
-              label="Edit"
-              full-width="false"
-              size="medium"
-              rounded="false"
-              (click)="updateCard(method.id, method.card, method.billing_details)"
-            />
+            <a (click)="updateCard(method.id, method.card, method.billing_details)">
+              Edit
+            </a>
           </td>
 
           <td class="cardDeleteButton">
-            <biggive-button
-              space-above="5"
-              colour-scheme="white"
-              label="Delete"
-              full-width="false"
-              size="medium"
-              rounded="false"
-              (click)="deleteMethod(method)"
-              />
+            <a (click)="deleteMethod(method)">Delete</a>
           </td>
         </tr>
 
@@ -108,25 +122,7 @@
       </div>
     </biggive-page-section>
 
-    <div id="account-actions">
-      <biggive-button
-        space-above="5"
-        colour-scheme="white"
-        label="Explore Campaigns"
-        full-width="true"
-        size="medium"
-        url="/explore"
-      />
-
-      <biggive-button
-        space-above="5"
-        colour-scheme="white"
-        label="Transfer Donation Funds"
-        full-width="true"
-        size="medium"
-        url="/transfer-funds"
-      />
-
+    <div class="logout-row">
       <biggive-button
         space-above="5"
         colour-scheme="white"
