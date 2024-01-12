@@ -1,16 +1,9 @@
 @use '@angular/material' as mat;
 @import '../../abstract';
+@import "../../assets/scss/auth-common";
 
 #banner {
-  display: none;
-  @media #{$breakpoint-lg} {
-    display: block;
-    background-image: url(../../assets/images/banner-my-account.jpg);
-    background-size: cover;
-    background-position: center;
-    width: 100%;
-    height: 250px;
-  }
+  background-image: url(../../assets/images/banner-my-account.jpg);
 }
 
 .heading-wrapper {
@@ -18,31 +11,17 @@
   width: fit-content;
 }
 
-
 h1 {
   color: $colour-secondary;
 }
 
-main {
-  @include make-container;
-  margin: 0 0;
-}
-
-div.my-account {
-  box-sizing: border-box;
+main > div {
   color: white;
   background-color: $colour-primary;
   width: 100%;
 
   @media #{$breakpoint-lg} {
-    padding-top: 0;
-    padding-right: 100px;
-    padding-left: 100px;
-    padding-bottom: 20px;
-    position: relative;
-    top: -125px;
-    width: 80%;
-    margin: auto;
+    width: 80%; // this seems to be needed, not sure why the identicle rule in auth_common.scss isn't working.
   }
 }
 
@@ -53,6 +32,13 @@ div.my-account {
   @media #{$breakpoint-lg} {
     max-width: 10em;
   }
+}
+
+#account-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 17px;
 }
 
 table#personal-details, table#paymentMethods {
@@ -106,8 +92,4 @@ table#paymentMethods td:last-child {
 
 .update-success {
   color: $colour-highlight;
-}
-
-.error {
-  color: $colour-secondary;
 }

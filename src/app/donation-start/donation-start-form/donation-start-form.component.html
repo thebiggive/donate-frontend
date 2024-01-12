@@ -81,12 +81,7 @@
 
           <h2 class="b-rt-0 b-m-0 b-bold">Tip Big Give</h2>
           <p *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
-            <span *ngIf="!alternateCopy">
-              Big Give is a registered charity (1136547), and since 2008, thanks to the generosity of people like you who leave a tip, we can continue providing a match funding platform for the charities and causes you care about.
-            </span>
-            <span *ngIf="alternateCopy">
-              Big Give is a registered charity (1136547) and since 2008 has been helping thousands of charities double their donations. Tips left by generous people like you go into our Anchor Match Fund to provide further match funding for our charity partners as well as helping us deliver our charitable mission. Doubling the difference.
-            </span>
+            Big Give is a registered charity (1136547) and since 2008 has been helping thousands of charities double their donations. Tips left by generous people like you go into our Anchor Match Fund to provide further match funding for our charity partners as well as helping us deliver our charitable mission. Doubling the difference.
           </p>
 
           <div *ngIf="campaign.feePercentage && creditPenceToUse === 0">
@@ -176,29 +171,15 @@
               <h3 class="b-rt-0 b-m-0 b-bold"><span class="span-hr"></span>How does Big Give use tips?</h3>
             </mat-expansion-panel-header>
 
-            <div *ngIf="!alternateCopy">
-              <p>
-                We don’t charge charities for using our platform; instead, we rely on the generosity of people who donate to leave a voluntary tip. This helps us to run our match funding campaigns and double the difference we can all make in the world.
-              </p>
-              <p><strong>Everything we make goes back into supporting charities. Your tips will be:</strong></p>
-              <ul>
-                <li>Doubling the difference onwards by providing match funding. Using additional funds raised from tips, charities will receive funding from Big Give’s Anchor Match Fund to help launch their campaigns.</li>
-                <li>Helping us maintain our website and support our team so we can keep working with your favourite charities for many years to come.</li>
-              </ul>
-              <p>Thank you! If you have any questions about tips, please contact us at hello@biggive.org.</p>
-            </div>
-
-            <div *ngIf="alternateCopy">
-              <p>
-                We believe giving is one of the most fulfilling things you can do. Whatever cause you support, we’re able to provide a platform that helps your gift make double the difference thanks to the generosity of people who leave a voluntary tip.
-              </p>
-              <p><strong>Everything we make goes back into supporting charities. Your tips will be:</strong></p>
-              <ul>
-                <li>Helping thousands of charities who make a huge difference in the areas they work in but do not have the access to funds or publicity of others. Your contributions help Big Give maintain a website that supports charities and gives them a voice.</li>
-                <li>Doubling donations in charity campaigns. Through tips, charities can receive funding from our Anchor Match Fund to help launch their campaigns.</li>
-              </ul>
-              <p>Thank you! If you have any questions about tips, please contact us at hello@biggive.org.</p>
-            </div>
+            <p>
+              We believe giving is one of the most fulfilling things you can do. Whatever cause you support, we’re able to provide a platform that helps your gift make double the difference thanks to the generosity of people who leave a voluntary tip.
+            </p>
+            <p><strong>Everything we make goes back into supporting charities. Your tips will be:</strong></p>
+            <ul>
+              <li>Helping thousands of charities who make a huge difference in the areas they work in but do not have the access to funds or publicity of others. Your contributions help Big Give maintain a website that supports charities and gives them a voice.</li>
+              <li>Doubling donations in charity campaigns. Through tips, charities can receive funding from our Anchor Match Fund to help launch their campaigns.</li>
+            </ul>
+            <p>Thank you! If you have any questions about tips, please contact us at hello@biggive.org.</p>
           </mat-expansion-panel>
         </div>
         <div aria-live="polite">

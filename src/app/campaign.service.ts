@@ -7,6 +7,7 @@ import { CampaignStats } from './campaign-stats.model';
 import { CampaignSummary } from './campaign-summary.model';
 import { environment } from '../environments/environment';
 import { SelectedType } from './search.service';
+import {HighlightCard} from "./home/HighlightCard";
 @Injectable({
   providedIn: 'root',
 })
@@ -198,6 +199,10 @@ export class CampaignService {
 
   getCampaignImpactStats() {
     return this.http.get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`);
+  }
+
+  getHomePageHighlightCards() {
+    return this.http.get<HighlightCard[]>(`${environment.apiUriPrefix}${this.apiPath}/highlight-service`);
   }
 }
 
