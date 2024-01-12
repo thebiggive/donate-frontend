@@ -13,6 +13,7 @@ import {RegisterComponent} from "./register/register.component";
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
+export const transferFundsPath = 'transfer-funds';
 
 
 const redirectIfAlreadyLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
@@ -64,7 +65,7 @@ const routes: Routes = [
       .then(c => c.HomeModule),
   },
   {
-    path: 'transfer-funds',
+    path: transferFundsPath,
     pathMatch: 'full',
     canActivate: [
       requireLoginWhenLoginPageLaunched,
