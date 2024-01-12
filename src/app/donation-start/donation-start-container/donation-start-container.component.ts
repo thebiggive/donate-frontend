@@ -105,8 +105,8 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
     });
   };
 
-  get canLogin() {
-    return !this.donor?.id;
+  get loggedInWithPassword() {
+    return !!this.donor?.has_password;
   }
 
   setDonation = (donation: Donation) => {

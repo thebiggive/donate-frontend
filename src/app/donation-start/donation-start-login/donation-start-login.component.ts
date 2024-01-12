@@ -15,7 +15,7 @@ export class DonationStartLoginComponent {
   @Input({ required: true }) creditPenceToUse: number;
   @Input({ required: true }) email?: string;
   @Input({ required: true }) personId: string | undefined;
-  @Input({ required: true }) canLogin: boolean;
+  @Input({ required: false }) loggedInWithPassword: boolean;
 
   @Input({ required: true }) private loginChangeEmitter: EventEmitter<boolean>;
 

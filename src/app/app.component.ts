@@ -40,7 +40,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   protected readonly flags = flags;
   protected readonly userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
   public currentUrlWithoutHash$: Observable<URL>;
-  
+
   private getPersonSubscription: Subscription;
   private loginStatusChangeSubscription: Subscription;
 
