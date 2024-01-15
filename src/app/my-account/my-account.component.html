@@ -105,13 +105,14 @@
           <td class="cardUpdateButton"
             *ngIf="method.card !== undefined"
           >
-            <a (click)="updateCard(method.id, method.card, method.billing_details)">
+<!--            href must be set to make link interactable with keyboard-->
+            <a href="javascript:void(0);" (click)="updateCard(method.id, method.card, method.billing_details)">
               Edit
             </a>
           </td>
 
           <td class="cardDeleteButton">
-            <a (click)="deleteMethod(method)">Delete</a>
+            <a href="javascript:void(0);" (click)="deleteMethod(method)">Delete</a>
           </td>
         </tr>
 
