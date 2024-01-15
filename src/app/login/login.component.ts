@@ -41,6 +41,9 @@ export class LoginComponent implements OnInit, OnDestroy{
   protected passwordResetError: undefined|string = undefined;
   protected readonly registerPath = registerPath;
 
+  /** Used to prevent displaying the page before all parts are ready **/
+  public pageInitialised = false;
+
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly identityService: IdentityService,
@@ -84,6 +87,8 @@ export class LoginComponent implements OnInit, OnDestroy{
     if (redirectParam && isAllowableRedirectPath(redirectParam)) {
       this.redirectPath = '/' + redirectParam;
     }
+
+    this.pageInitialised = true;
   }
 
   login(): void {
