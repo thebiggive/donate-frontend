@@ -6,10 +6,11 @@ import {CharityCampaignsResolver} from './charity-campaigns.resolver';
 import {campaignStatsResolver} from "./campaign-stats-resolver";
 import {highlightCardsResolver} from "./highlight-cards-resolver";
 import {isAllowableRedirectPath, LoginComponent} from "./login/login.component";
-import {inject} from "@angular/core";
+import {inject, PLATFORM_ID} from "@angular/core";
 import {IdentityService} from "./identity.service";
 import { flags } from './featureFlags';
 import {RegisterComponent} from "./register/register.component";
+import {isPlatformBrowser} from "@angular/common";
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -31,6 +32,11 @@ const redirectIfAlreadyLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
 };
 
 const requireLoginWhenLoginPageLaunched = (activatedRoute: ActivatedRouteSnapshot) => {
+  if (! isPlatformBrowser(inject(PLATFORM_ID))) {
+    // Pages that require auth should not be server side rendered - we do not have auth creds on the server side.
+    return false;
+  }
+
   const router = inject(Router);
   const isLoggedIn = inject(IdentityService).probablyHaveLoggedInPerson();
 
