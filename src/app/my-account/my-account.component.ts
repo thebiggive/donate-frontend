@@ -59,6 +59,19 @@ export class MyAccountComponent implements OnDestroy, OnInit {
     });
   }
 
+  protected get hasSavedPaymentMethods()
+  {
+    return this.paymentMethods !== undefined && this.paymentMethods.length > 0;
+  }
+
+  /**
+   * We only check for GBP balances for now, as we only support UK bank transfers rn
+   */
+  protected get hasDonationFunds()
+  {
+    return this.person.cash_balance?.gbp
+  }
+
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId) && this.savedCardsTimer) {
       clearTimeout(this.savedCardsTimer);
