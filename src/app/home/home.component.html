@@ -9,8 +9,9 @@
   ></biggive-hero-image>
 
   <div class="b-container">
-    <biggive-grid [columnCount]="highlightCardsToShow.length">
-      <biggive-basic-card *ngFor="let card of highlightCardsToShow"
+    <div class="highlight-card-list">
+      <div class="highlight-card-wrapper" *ngFor="let card of highlightCardsToShow">
+    <biggive-basic-card
                           [spaceBelow]='4'
                           [headingLevel]="2"
                           [buttonColourScheme]="'clear-primary'"
@@ -23,8 +24,8 @@
                           [buttonLabel]="card.button.text"
                           [buttonUrl]="card.button.href.toString()"
       />
-    </biggive-grid>
-
+      </div>
+    </div>
   </div>
 
   <biggive-page-section
