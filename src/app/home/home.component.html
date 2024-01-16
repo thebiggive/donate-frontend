@@ -9,21 +9,41 @@
   ></biggive-hero-image>
 
   <div class="b-container">
-    <biggive-grid [columnCount]="highlightCardsToShow.length">
-      <biggive-basic-card *ngFor="let card of highlightCardsToShow"
-                          [spaceBelow]='4'
-                          [headingLevel]="2"
-                          [buttonColourScheme]="'clear-primary'"
-                          [class]="'basic-card-padding'"
+    <!-- The grid layout works fine for 2 or three cards but not quite for a single card. Easier to treat single
+         card as a special case rather than changing the grid implemnation or replacing it entirely.
+         -->
+    <div class="single-highlight-card" *ngIf="highlightCardsToShow.length === 1; else highlightCardGrid">
+      <biggive-basic-card
+        [spaceBelow]='4'
+        [headingLevel]="2"
+        [buttonColourScheme]="'clear-primary'"
+        [class]="'basic-card-padding'"
 
-                          [iconColour]="card.iconColor"
-                          [backgroundImageUrl]="card.backgroundImageUrl.toString()"
-                          [mainTitle]="card.headerText"
-                          [subtitle]="card.bodyText"
-                          [buttonLabel]="card.button.text"
-                          [buttonUrl]="card.button.href.toString()"
+        [iconColour]="highlightCardsToShow[0]!.iconColor"
+        [backgroundImageUrl]="highlightCardsToShow[0]!.backgroundImageUrl.toString()"
+        [mainTitle]="highlightCardsToShow[0]!.headerText"
+        [subtitle]="highlightCardsToShow[0]!.bodyText"
+        [buttonLabel]="highlightCardsToShow[0]!.button.text"
+        [buttonUrl]="highlightCardsToShow[0]!.button.href.toString()"
       />
-    </biggive-grid>
+    </div>
+    <ng-template #highlightCardGrid>
+      <biggive-grid [columnCount]="highlightCardsToShow.length">
+        <biggive-basic-card *ngFor="let card of highlightCardsToShow"
+                            [spaceBelow]='4'
+                            [headingLevel]="2"
+                            [buttonColourScheme]="'clear-primary'"
+                            [class]="'basic-card-padding'"
+
+                            [iconColour]="card.iconColor"
+                            [backgroundImageUrl]="card.backgroundImageUrl.toString()"
+                            [mainTitle]="card.headerText"
+                            [subtitle]="card.bodyText"
+                            [buttonLabel]="card.button.text"
+                            [buttonUrl]="card.button.href.toString()"
+        />
+      </biggive-grid>
+    </ng-template>
 
   </div>
 
