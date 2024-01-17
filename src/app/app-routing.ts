@@ -8,7 +8,6 @@ import {highlightCardsResolver} from "./highlight-cards-resolver";
 import {isAllowableRedirectPath, LoginComponent} from "./login/login.component";
 import {inject, PLATFORM_ID} from "@angular/core";
 import {IdentityService} from "./identity.service";
-import { flags } from './featureFlags';
 import {RegisterComponent} from "./register/register.component";
 import {isPlatformBrowser} from "@angular/common";
 
@@ -41,8 +40,6 @@ const requireLoginWhenLoginPageLaunched = (activatedRoute: ActivatedRouteSnapsho
   const isLoggedIn = inject(IdentityService).probablyHaveLoggedInPerson();
 
   if ( isLoggedIn ) {
-    return true;
-  } else if (! flags.loginPageEnabled ) {
     return true;
   }
 
@@ -173,6 +170,22 @@ const routes: Routes = [
     loadChildren: () => import('./my-account/my-account.module')
       .then(c => c.MyAccountModule),
   },
+  {
+    path: registerPath,
+    pathMatch: 'full',
+    component: RegisterComponent,
+    canActivate: [
+      redirectIfAlreadyLoggedIn,
+    ],
+  },
+  {
+    path: 'login',
+    pathMatch: 'full',
+    component: LoginComponent,
+    canActivate: [
+      redirectIfAlreadyLoggedIn,
+    ],
+  },
   // This is effectively our 404 handler because we support any string as meta-campaign
   // slug. So check `CampaignResolver` for adjusting what happens if the slug doesn't
   // match a campaign.
@@ -186,29 +199,5 @@ const routes: Routes = [
       .then(c => c.MetaCampaignModule),
   },
 ];
-
-if (flags.loginPageEnabled ) {
-  routes.unshift(
-    {
-      path: 'login',
-      pathMatch: 'full',
-      component: LoginComponent,
-      canActivate: [
-        redirectIfAlreadyLoggedIn,
-      ],
-    },
-  );
-
-  routes.unshift(
-    {
-      path: registerPath,
-      pathMatch: 'full',
-      component: RegisterComponent,
-      canActivate: [
-        redirectIfAlreadyLoggedIn,
-      ],
-    },
-  );
-}
 
 export {routes};
