@@ -58,7 +58,6 @@ import {StripeService} from '../../stripe.service';
 import {getCurrencyMaxValidator} from '../../validators/currency-max';
 import {getCurrencyMinValidator} from '../../validators/currency-min';
 import {EMAIL_REGEXP} from '../../validators/patterns';
-import {ValidateBillingPostCode} from '../../validators/validate-billing-post-code';
 import {TimeLeftPipe} from "../../time-left.pipe";
 import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
@@ -698,6 +697,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (state.error) {
       this.stripeError = this.getStripeFriendlyError(state.error, 'card_change');
+      this.showErrorToast(this.stripeError);
       this.stripeResponseErrorCode = state.error.code;
     } else {
       this.stripeError = undefined; // Clear any previous card errors if number fixed.
@@ -801,13 +801,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       });
   }
 
-  async payWithStripe() {
+  payWithStripe = async () => {
     const hasCredit = this.creditPenceToUse > 0;
 
     const methodIsReady = this.stripePaymentElement || this.selectedSavedMethod || hasCredit;
 
     if (!this.donation || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
+      this.showErrorToast(this.stripeError);
       this.stripeResponseErrorCode = undefined;
       this.matomoTracker.trackEvent('donate_error', 'stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
       return;
@@ -834,6 +835,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
             errorMsg ?? '[No message]',
           );
           this.stripeError = 'Your donation has not been processed as it seems you have insufficient funds. Please refresh the page to see your remaining balance.';
+          this.showErrorToast(this.stripeError);
         },
       });
 
@@ -920,10 +922,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     // else Intent 'done' but not a successful status.
     this.matomoTracker.trackEvent('donate_error', 'stripe_intent_not_success', result.paymentIntent.status);
-    this.stripeError = `Status: ${result.paymentIntent.status}`;
+    this.stripeError = `Payment error - Status: ${result.paymentIntent.status}`;
+    this.showErrorToast(this.stripeError);
     this.stripeResponseErrorCode = undefined;
     this.submitting = false;
-  }
+  };
 
   get donationAmountField() {
     if (!this.donationForm) {
@@ -1269,10 +1272,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.isBillingPostcodePossiblyInvalid()) {
       this.stripeError = undefined;
       this.stripeResponseErrorCode = undefined;
-
-      // Reset Stripe validators so the ValidateBillingPostCode custom validator
-      // is removed, so billing postcode doesn't show as invalid after a change
-      this.addStripeCardBillingValidators();
     }
   }
 
@@ -1418,15 +1417,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   ) {
     this.submitting = false;
     this.stripeError = this.getStripeFriendlyError(error, context);
+    this.showErrorToast(this.stripeError);
     this.stripeResponseErrorCode = error?.code;
-    if (this.isBillingPostcodePossiblyInvalid()) {
-      this.paymentGroup.controls.billingPostcode!.setValidators([
-        Validators.required,
-        Validators.pattern(this.billingPostcodeRegExp),
-        ValidateBillingPostCode
-      ]);
-      this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
-    }
 
     this.jumpToStep('Payment details');
     this.goToFirstVisibleError();
@@ -2304,7 +2296,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.showErrorToast(this.paymentStepErrors);
       return;
     } else {
+      // Any errors still on the page at this point are from a previous attempt to pay. Clear them so they don't
+      // show up again in case the next attempt has the same problem.
       this.paymentStepErrors = "";
+      this.stripeError = undefined;
       this.next()
     }
   }
