@@ -17,6 +17,7 @@ import { minPasswordLength } from '../../environments/common';
 import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
+import {myAccountPath} from "../app-routing";
 
 @Component({
   selector: 'app-donation-complete',
@@ -50,6 +51,7 @@ export class DonationCompleteComponent implements OnInit {
   private person?: Person;
   private readonly retryBaseIntervalSeconds = 2;
   private tries = 0;
+  protected readonly myAccountPath = myAccountPath;
 
   faExclamationTriangle = faExclamationTriangle;
   isDataLoaded = false;
