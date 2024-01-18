@@ -83,7 +83,7 @@ export class PaymentReadinessTracker {
     const errors = this.getFormValidationErrors().map((error) => {
       const key = error.key as keyof typeof fieldNames;
 
-      const fieldName = fieldNames[key];
+      const fieldName = fieldNames[key] || key;
 
       switch (error.error) {
         case 'required':
@@ -92,7 +92,7 @@ export class PaymentReadinessTracker {
           return `Sorry, your ${fieldName} is not recognised - please enter a valid ${fieldName}.`;
         default:
           console.error(error);
-          return `Sorry, there is an error with the ${key} field.`;
+          return `Sorry, there is an error with the ${fieldName} field.`;
       }
     });
 
