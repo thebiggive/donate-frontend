@@ -30,9 +30,12 @@
 
         <p class="thank-you-text">
           Your generous donation of {{ donation.donationAmount | exactCurrency:donation.currencyCode }} has been made.
-          That’s worth {{ totalValue | exactCurrency:donation.currencyCode }} to {{ donation.charityName }},
-          You can check your remaining funds you have by going to <a href="/{{myAccountPath}}">My Account</a>
-          or when you go to make another donation.
+          That’s worth {{ totalValue | exactCurrency:donation.currencyCode }} to {{ donation.charityName }}.
+
+          <span *ngIf="donation.pspMethodType === 'customer_balance'">
+            You can check your remaining funds you have by going to <a href="/{{myAccountPath}}">My Account</a>
+            or when you go to make another donation.
+          </span>
         </p>
 
         <div class="cta" *ngIf="!registrationComplete">
