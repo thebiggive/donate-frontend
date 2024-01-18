@@ -11,11 +11,10 @@ import {RecaptchaComponent, RecaptchaModule} from "ng-recaptcha";
 import {IdentityService} from "../identity.service";
 import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
-import {myAccountPath} from "../app-routing";
-import {isAllowableRedirectPath} from "../login/login.component";
+import {transferFundsPath} from "../app-routing";
 
 @Component({
   selector: 'app-register',
@@ -29,18 +28,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
   protected processing = false;
   protected error?: string;
   registrationForm: FormGroup;
-  protected resetPasswordForm: FormGroup;
   protected recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   private readyToLogIn = false;
   protected errorHtml: SafeHtml | undefined;
-  private redirectPath: string = '/' + myAccountPath;
-
 
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly identityService: IdentityService,
     private readonly router: Router,
-    private readonly activatedRoute: ActivatedRoute,
     private sanitizer: DomSanitizer,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
@@ -66,11 +61,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
         Validators.pattern(EMAIL_REGEXP),
       ]],
     });
-
-    const redirectParam = this.activatedRoute.snapshot.queryParams.r as string|undefined;
-    if (redirectParam && isAllowableRedirectPath(redirectParam)) {
-      this.redirectPath = '/' + redirectParam;
-    }
   }
 
   register(): void {
@@ -132,7 +122,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         raw_password: this.registrationForm.value.password,
       }).subscribe({
         next: () => {
-          this.router.navigateByUrl(this.redirectPath);
+          this.router.navigateByUrl('/' + transferFundsPath);
         },
         error: (error) => {
           this.captcha.reset();

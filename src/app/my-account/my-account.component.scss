@@ -15,6 +15,10 @@ h1 {
   color: $colour-secondary;
 }
 
+a:link, a:visited, a:hover {
+  color: white;
+}
+
 main > div {
   color: white;
   background-color: $colour-primary;
@@ -34,10 +38,17 @@ main > div {
   }
 }
 
-#account-actions {
+.account-actions {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 17px;
+}
+
+.logout-row {
+  display: flex;
+  align-items: end;
+  justify-content: right;
   gap: 17px;
 }
 
