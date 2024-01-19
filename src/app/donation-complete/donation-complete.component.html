@@ -19,7 +19,7 @@
     <div aria-live="polite">
       <div *ngIf="complete">
         <div class="screenreader-only">
-          Thank you! Your generous donation has been made successfully.
+          Thank you! Your generous donation has been made.
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@
       <div class="thank-you">
         <h2>Thank you!</h2>
 
-        <p class="thank-you-text">Your generous donation has been made successfully</p>
+        <p class="thank-you-text">Your generous donation has been made.</p>
 
         <div class="cta" *ngIf="!registrationComplete">
           <div class="button-wrapper">
@@ -52,7 +52,9 @@
 
         <div aria-live="polite">
         <p *ngIf="registrationComplete" id="registrationCompleteText">
-          <strong>You are now registered<span *ngIf="loggedIn"> and logged in</span>.</strong> You can now donate faster
+          <strong>You are now registered<span *ngIf="loggedIn"> and logged in</span>.</strong></p>
+
+          <p>You can now donate faster
           using your chosen email address and password.
         </p>
         </div>
