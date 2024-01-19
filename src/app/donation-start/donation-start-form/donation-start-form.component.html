@@ -422,7 +422,9 @@
 
         </div>
 
-        <p *ngIf="stripeError" class="error" aria-live="polite">
+        <p *ngIf="stripeError" class="stripeError" aria-live="assertive">
+          <!-- We do not use the "error" css class because we don't want to scroll to this error automatically, since
+          it likely can't be fixed here and the donor will have to try making their payment again to make it go away. -->
           {{ stripeError }}
         </p>
 
@@ -576,7 +578,9 @@
             Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few minutes to try again.
           </p>
 
-          <p *ngIf="stripeError" class="error" aria-live="assertive">
+          <p *ngIf="stripeError" class="stripeError" aria-live="assertive">
+            <!-- We do not use the "error" css class because we don't want to scroll to this error automatically, since
+            it likely can't be fixed here and the donor will have to try making their payment again to make it go away. -->
             {{ stripeError }}
           </p>
 
