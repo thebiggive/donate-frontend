@@ -17,6 +17,7 @@ import { minPasswordLength } from '../../environments/common';
 import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
+import { myAccountPath } from '../app-routing';
 
 @Component({
   selector: 'app-donation-complete',
@@ -50,6 +51,7 @@ export class DonationCompleteComponent implements OnInit {
   private person?: Person;
   private readonly retryBaseIntervalSeconds = 2;
   private tries = 0;
+  protected readonly myAccountPath = myAccountPath;
 
   faExclamationTriangle = faExclamationTriangle;
   isDataLoaded = false;
@@ -71,6 +73,10 @@ export class DonationCompleteComponent implements OnInit {
 
     this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
       this.loggedIn = !!person && !!person.has_password;
+
+      if (person) {
+        this.person = person;
+      }
 
       this.isDataLoaded = true;
     });
@@ -98,6 +104,33 @@ export class DonationCompleteComponent implements OnInit {
       // refresh to try loading again when any server problem's resolved.
       () => this.timedOut = true,
     );
+  }
+
+  /**
+   * Returns undefined in case the person is not yet loaded from the backend so we don't know
+   * what their balance is. Compare exactly to false to see if they have a zero balance.
+   */
+  protected get hasDonationFunds()
+  {
+    const cashBalance = this.person?.cash_balance;
+    const gbpCashBalance = cashBalance?.gpb;
+    // I'm confused. When I inspect this in the debugger cashBalance is defined and copies as `{"gbp": 88600}` but gbpCashBalance is undefined.
+    // I must be doing something wrong in `cashBalance?.gpb` but that seems like a basic expression.
+
+    // @ts-ignore
+    const gbpCashBalancewithoutQmark = cashBalance.gpb;
+    // above is also undefined.
+
+    if (gbpCashBalance === undefined) {
+      return undefined;
+    }
+
+    return (gbpCashBalance > 0);
+  }
+
+  protected get cashBalanceInPounds(): number
+  {
+    return  (this.person?.cash_balance?.gbp || 0) / 100;
   }
 
   openSetPasswordDialog() {
@@ -195,9 +228,7 @@ export class DonationCompleteComponent implements OnInit {
 
         // Try to patch the person only if they're not already a finalised donor account,
         // e.g. they could have set a password then reloaded this page.
-        if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
-          this.registrationComplete = true;
-        } else {
+        if (! this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
           this.identityService.update(person)
             .subscribe({
               next: person => {
