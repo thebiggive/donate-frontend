@@ -10,21 +10,20 @@ import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { Credentials } from '../credentials.model';
 import { Donation } from '../donation.model';
-import { DonationThanksSetPasswordDialogComponent } from './donation-thanks-set-password-dialog.component';
+import { DonationCompleteSetPasswordDialogComponent } from './donation-complete-set-password-dialog.component';
 import { DonationService } from '../donation.service';
 import { environment } from '../../environments/environment';
 import { minPasswordLength } from '../../environments/common';
 import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
-import { myAccountPath } from '../app-routing';
 
 @Component({
-  selector: 'app-donation-thanks',
-  templateUrl: './donation-thanks.component.html',
-  styleUrls: ['./donation-thanks.component.scss'],
+  selector: 'app-donation-complete',
+  templateUrl: './donation-complete.component.html',
+  styleUrls: ['./donation-complete.component.scss'],
 })
-export class DonationThanksComponent implements OnInit {
+export class DonationCompleteComponent implements OnInit {
   @Input({ required: true }) private donationId: string;
   @ViewChild('captcha') captcha: RecaptchaComponent;
 
@@ -51,7 +50,6 @@ export class DonationThanksComponent implements OnInit {
   private person?: Person;
   private readonly retryBaseIntervalSeconds = 2;
   private tries = 0;
-  protected readonly myAccountPath = myAccountPath;
 
   faExclamationTriangle = faExclamationTriangle;
   isDataLoaded = false;
@@ -71,26 +69,12 @@ export class DonationThanksComponent implements OnInit {
 
     this.minPasswordLength = minPasswordLength;
 
-    this.identityService.getPerson().subscribe((person: Person|null) => {
+    this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
       this.loggedIn = !!person && !!person.has_password;
-
-      if (person) {
-        this.person = person;
-      }
 
       this.isDataLoaded = true;
     });
   }
-
-  protected get showRegistrationPrompt(): boolean
-  {
-    return !this.registrationComplete &&  // if they already registered they can't register again.
-      !this.loggedIn && // if they registered and logged in they can't register again
-      !!this.person // if we don't know who they are any more they can't register.
-                    // This is likely because they already registered but selected "don't log in",
-                    // then refreshed the page.
-  }
-
 
   /**
    * Must be public in order for re-tries to invoke it in an anonymous context.
@@ -116,35 +100,8 @@ export class DonationThanksComponent implements OnInit {
     );
   }
 
-  /**
-   * Returns undefined in case the person is not yet loaded from the backend so we don't know
-   * what their balance is. Compare exactly to false to see if they have a zero balance.
-   */
-  protected get hasDonationFunds()
-  {
-    const cashBalance = this.person?.cash_balance;
-
-    const gbpCashBalance = cashBalance?.gbp;
-
-    if (gbpCashBalance === undefined) {
-      return undefined;
-    }
-
-    return gbpCashBalance > 0;
-  }
-
-  protected get showNoFundsRemainingMessage(): boolean
-  {
-    return this.donation.pspMethodType === 'customer_balance' && this.hasDonationFunds === false
-  }
-
-  protected get cashBalanceInPounds(): number
-  {
-    return  (this.person?.cash_balance?.gbp || 0) / 100;
-  }
-
   openSetPasswordDialog() {
-    const passwordSetDialog = this.dialog.open(DonationThanksSetPasswordDialogComponent, {
+    const passwordSetDialog = this.dialog.open(DonationCompleteSetPasswordDialogComponent, {
       data: { person: this.person },
     });
     passwordSetDialog.afterClosed().subscribe(data => {
@@ -238,7 +195,9 @@ export class DonationThanksComponent implements OnInit {
 
         // Try to patch the person only if they're not already a finalised donor account,
         // e.g. they could have set a password then reloaded this page.
-        if (! this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
+        if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
+          this.registrationComplete = true;
+        } else {
           this.identityService.update(person)
             .subscribe({
               next: person => {

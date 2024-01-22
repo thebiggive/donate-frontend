@@ -140,8 +140,8 @@ const routes: Routes = [
   {
     path: 'thanks/:donationId',
     pathMatch: 'full',
-    loadChildren: () => import('./donation-thanks/donation-thanks.module')
-      .then(c => c.DonationThanksModule),
+    loadChildren: () => import('./donation-complete/donation-complete.module')
+      .then(c => c.DonationCompleteModule),
   },
   {
     path: ':campaignSlug/:fundSlug',

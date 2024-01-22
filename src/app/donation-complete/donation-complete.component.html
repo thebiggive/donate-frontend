@@ -19,7 +19,7 @@
     <div aria-live="polite">
       <div *ngIf="complete">
         <div class="screenreader-only">
-          Thank you! Your generous donation has been made.
+          Thank you! Your generous donation has been made successfully.
         </div>
       </div>
     </div>
@@ -28,9 +28,9 @@
       <div class="thank-you">
         <h2>Thank you!</h2>
 
-        <p class="thank-you-text">Your generous donation has been made.</p>
+        <p class="thank-you-text">Your generous donation has been made successfully</p>
 
-        <div class="cta" *ngIf="showRegistrationPrompt">
+        <div class="cta" *ngIf="!registrationComplete">
           <div class="button-wrapper">
             <biggive-button
               space-below="0"
@@ -51,14 +51,10 @@
         </div>
 
         <div aria-live="polite">
-          <div *ngIf="registrationComplete">
-            <p  id="registrationCompleteText">
-              <strong>You are now registered<span *ngIf="loggedIn"> and logged in</span>.</strong>
-            </p>
-            <p>
-              You can now donate faster using your chosen email address and password.
-            </p>
-          </div>
+        <p *ngIf="registrationComplete" id="registrationCompleteText">
+          <strong>You are now registered<span *ngIf="loggedIn"> and logged in</span>.</strong> You can now donate faster
+          using your chosen email address and password.
+        </p>
         </div>
 
         <div class="cta" *ngIf="registrationComplete && loggedIn">
@@ -71,16 +67,6 @@
           <fa-icon [icon]="faExclamationTriangle"></fa-icon>
           {{ registerErrorDescription }}
           <span [innerHtml]="registerErrorDescriptionHtml"></span>
-        </p>
-
-        <p *ngIf="showNoFundsRemainingMessage">
-          You now have <strong>{{ cashBalanceInPounds | exactCurrency:'GBP' }}</strong> donation
-          funds. Visit <a href="/{{myAccountPath}}">My Account</a> to top up.
-        </p>
-
-        <p *ngIf="hasDonationFunds">
-          You now have <strong>{{ cashBalanceInPounds | exactCurrency:'GBP'}}</strong> donation
-          funds. Make another donation to use the balance.
         </p>
       </div>
 
@@ -99,10 +85,8 @@
       <biggive-page-section *ngIf="donationIsLarge" colourScheme="primary" primaryFullBleed="true">
         <div id="thank-you-large-donation-wrapper">
           <p class="thank-you-large-donation-text">
-            Thank you for your incredible commitment to supporting this campaign; your donation will make a significant
-            difference. As a valued supporter, we're excited to share an exclusive opportunity with you – the chance to
-            become one of our match funding Champions. By leveraging your support as match funding, you could help this
-            charity and many others double the difference of their donations.
+            We are so grateful for your support. As you have donated so generously, you might be interested in finding out
+            more about becoming a match-funder.
           </p>
 
           <p class="thank-you-large-donation-text">
@@ -115,7 +99,7 @@
               colour-scheme="clear-white"
               is-past-campaign="false"
               is-future-campaign="false"
-              label="Learn more about joining our Champion community"
+              label="Find out more"
               open-in-new-tab="true"
               full-width="false"
               size="large"

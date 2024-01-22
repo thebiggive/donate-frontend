@@ -14,9 +14,9 @@ import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.com
 
 @Component({
   standalone: true,
-  selector: 'app-donation-thanks-set-password-dialog',
-  templateUrl: 'donation-thanks-set-password-dialog.html',
-  styleUrls: ['./donation-thanks-set-password-dialog.component.scss'],
+  selector: 'app-donation-complete-set-password-dialog',
+  templateUrl: 'donation-complete-set-password-dialog.html',
+  styleUrls: ['./donation-complete-set-password-dialog.component.scss'],
   imports: [
     ...allChildComponentImports,
     MatButtonModule,
@@ -29,7 +29,7 @@ import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.com
     PopupStandaloneComponent,
   ]
 })
-export class DonationThanksSetPasswordDialogComponent implements OnInit {
+export class DonationCompleteSetPasswordDialogComponent implements OnInit {
   form: FormGroup;
   minPasswordLength: number;
 
@@ -37,7 +37,7 @@ export class DonationThanksSetPasswordDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: {
       person: Person,
     },
-    private dialogRef: MatDialogRef<DonationThanksSetPasswordDialogComponent>,
+    private dialogRef: MatDialogRef<DonationCompleteSetPasswordDialogComponent>,
     private formBuilder: FormBuilder,
   ) {}
 
