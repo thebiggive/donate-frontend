@@ -71,7 +71,7 @@ export class DonationThanksComponent implements OnInit {
 
     this.minPasswordLength = minPasswordLength;
 
-    this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
+    this.identityService.getPerson().subscribe((person: Person|null) => {
       this.loggedIn = !!person && !!person.has_password;
 
       if (person) {
@@ -81,6 +81,16 @@ export class DonationThanksComponent implements OnInit {
       this.isDataLoaded = true;
     });
   }
+
+  protected get showRegistrationPrompt(): boolean
+  {
+    return !this.registrationComplete &&  // if they already registered they can't register again.
+      !this.loggedIn && // if they registered and logged in they can't register again
+      !!this.person // if we don't know who they are any more they can't register.
+                    // This is likely because they already registered but selected "don't log in",
+                    // then refreshed the page.
+  }
+
 
   /**
    * Must be public in order for re-tries to invoke it in an anonymous context.

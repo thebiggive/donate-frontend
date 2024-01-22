@@ -30,7 +30,7 @@
 
         <p class="thank-you-text">Your generous donation has been made.</p>
 
-        <div class="cta" *ngIf="!registrationComplete && !loggedIn">
+        <div class="cta" *ngIf="showRegistrationPrompt">
           <div class="button-wrapper">
             <biggive-button
               space-below="0"
