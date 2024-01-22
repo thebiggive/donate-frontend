@@ -71,7 +71,11 @@ export class DonationThanksComponent implements OnInit {
 
     this.minPasswordLength = minPasswordLength;
 
-    this.identityService.getPerson().subscribe((person: Person|null) => {
+    this.loadPerson();
+  }
+
+  private loadPerson = () => {
+    this.identityService.getPerson({refresh: true}).subscribe((person: Person | null) => {
       this.loggedIn = !!person && !!person.has_password;
 
       if (person) {
@@ -80,7 +84,7 @@ export class DonationThanksComponent implements OnInit {
 
       this.isDataLoaded = true;
     });
-  }
+  };
 
   protected get showRegistrationPrompt(): boolean
   {
@@ -284,6 +288,14 @@ export class DonationThanksComponent implements OnInit {
       // Re-save the donation with its new status so we don't offer to resume it if the donor
       // goes back to the same campaign.
       this.donationService.updateLocalDonation(donation);
+
+      if (donation.pspMethodType === 'customer_balance') {
+        // the donation will have affected the person's customer balance so wait to re-load the person before updating it:
+        const oneSecond = 1_000;
+        setTimeout(this.loadPerson, oneSecond);
+      } else {
+        this.loadPerson();
+      }
 
       return;
     }

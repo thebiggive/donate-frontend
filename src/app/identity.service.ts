@@ -95,9 +95,16 @@ export class IdentityService {
     )
   }
 
-  get(id: string, jwt: string, {withTipBalances = false}: {withTipBalances?: boolean} = {}): Observable<Person> {
+  get(id: string, jwt: string, {withTipBalances = false, refresh = false}: {withTipBalances?: boolean, refresh?: boolean} = {}): Observable<Person> {
+    var cacheBuster;
+    if (refresh) {
+      cacheBuster = "?cacheBust=" + (new Date()).getTime();
+    } else {
+      cacheBuster = '';
+    }
+
     return this.http.get<Person>(
-      `${environment.identityApiPrefix}${this.peoplePath}/${id}`,
+      `${environment.identityApiPrefix}${this.peoplePath}/${id}${cacheBuster}`,
       {
         headers: new HttpHeaders({ 'X-Tbg-Auth': jwt }),
         params: {
@@ -131,14 +138,14 @@ export class IdentityService {
     return this.get(idAndJWT.id, idAndJWT.jwt);
   }
 
-  getPerson(): Observable<null|Person> {
+  getPerson({ refresh = false }: {refresh?: boolean}): Observable<null|Person> {
     const idAndJWT = this.getIdAndJWT();
 
     if (!idAndJWT) {
       return of(null);
     }
 
-    return this.get(idAndJWT.id, idAndJWT.jwt);
+    return this.get(idAndJWT.id, idAndJWT.jwt, {refresh: refresh});
   }
 
   update(person: Person): Observable<Person> {
