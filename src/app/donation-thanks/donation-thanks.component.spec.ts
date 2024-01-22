@@ -10,13 +10,13 @@ import {InMemoryStorageService} from 'ngx-webstorage-service';
 import {of} from 'rxjs';
 
 import {TBG_DONATE_STORAGE} from '../donation.service';
-import {DonationCompleteComponent} from './donation-complete.component';
+import {DonationThanksComponent} from './donation-thanks.component';
 import {TBG_DONATE_ID_STORAGE} from '../identity.service';
 import {Donation} from "../donation.model";
 
-describe('DonationCompleteComponent', () => {
-  let component: DonationCompleteComponent;
-  let fixture: ComponentFixture<DonationCompleteComponent>;
+describe('DonationThanksComponent', () => {
+  let component: DonationThanksComponent;
+  let fixture: ComponentFixture<DonationThanksComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -36,7 +36,7 @@ describe('DonationCompleteComponent', () => {
         RouterTestingModule.withRoutes([
           {
             path: 'thanks/:donationId',
-            component: DonationCompleteComponent,
+            component: DonationThanksComponent,
           },
         ]),
       ],
@@ -52,7 +52,7 @@ describe('DonationCompleteComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DonationCompleteComponent);
+    fixture = TestBed.createComponent(DonationThanksComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

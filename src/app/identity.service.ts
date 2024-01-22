@@ -131,6 +131,16 @@ export class IdentityService {
     return this.get(idAndJWT.id, idAndJWT.jwt);
   }
 
+  getPerson(): Observable<null|Person> {
+    const idAndJWT = this.getIdAndJWT();
+
+    if (!idAndJWT) {
+      return of(null);
+    }
+
+    return this.get(idAndJWT.id, idAndJWT.jwt);
+  }
+
   update(person: Person): Observable<Person> {
     return this.http.put<Person>(
       `${environment.identityApiPrefix}${this.peoplePath}/${person.id}`,
