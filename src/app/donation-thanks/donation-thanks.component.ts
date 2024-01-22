@@ -10,7 +10,7 @@ import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { Credentials } from '../credentials.model';
 import { Donation } from '../donation.model';
-import { DonationCompleteSetPasswordDialogComponent } from './donation-complete-set-password-dialog.component';
+import { DonationThanksSetPasswordDialogComponent } from './donation-thanks-set-password-dialog.component';
 import { DonationService } from '../donation.service';
 import { environment } from '../../environments/environment';
 import { minPasswordLength } from '../../environments/common';
@@ -20,11 +20,11 @@ import { Person } from '../person.model';
 import { myAccountPath } from '../app-routing';
 
 @Component({
-  selector: 'app-donation-complete',
-  templateUrl: './donation-complete.component.html',
-  styleUrls: ['./donation-complete.component.scss'],
+  selector: 'app-donation-thanks',
+  templateUrl: './donation-thanks.component.html',
+  styleUrls: ['./donation-thanks.component.scss'],
 })
-export class DonationCompleteComponent implements OnInit {
+export class DonationThanksComponent implements OnInit {
   @Input({ required: true }) private donationId: string;
   @ViewChild('captcha') captcha: RecaptchaComponent;
 
@@ -134,7 +134,7 @@ export class DonationCompleteComponent implements OnInit {
   }
 
   openSetPasswordDialog() {
-    const passwordSetDialog = this.dialog.open(DonationCompleteSetPasswordDialogComponent, {
+    const passwordSetDialog = this.dialog.open(DonationThanksSetPasswordDialogComponent, {
       data: { person: this.person },
     });
     passwordSetDialog.afterClosed().subscribe(data => {
