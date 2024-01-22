@@ -74,12 +74,12 @@
         </p>
 
         <p *ngIf="hasDonationFunds === false">
-          You now have <strong>{{ ((cashBalanceInPounds || 0) / 100) | exactCurrency:'GBP' }}</strong> donation
+          You now have <strong>{{ cashBalanceInPounds | exactCurrency:'GBP' }}</strong> donation
           funds. Visit <a href="/{{myAccountPath}}">My Account</a> to top up.
         </p>
 
         <p *ngIf="hasDonationFunds">
-          You now have <strong>{{ ((cashBalanceInPounds || 0) / 100) | exactCurrency:'GBP' }}</strong> donation
+          You now have <strong>{{ cashBalanceInPounds | exactCurrency:'GBP'}}</strong> donation
           funds. Make another donation to use the balance.
         </p>
       </div>
