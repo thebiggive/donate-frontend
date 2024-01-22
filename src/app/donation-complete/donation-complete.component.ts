@@ -113,19 +113,14 @@ export class DonationCompleteComponent implements OnInit {
   protected get hasDonationFunds()
   {
     const cashBalance = this.person?.cash_balance;
-    const gbpCashBalance = cashBalance?.gpb;
-    // I'm confused. When I inspect this in the debugger cashBalance is defined and copies as `{"gbp": 88600}` but gbpCashBalance is undefined.
-    // I must be doing something wrong in `cashBalance?.gpb` but that seems like a basic expression.
 
-    // @ts-ignore
-    const gbpCashBalancewithoutQmark = cashBalance.gpb;
-    // above is also undefined.
+    const gbpCashBalance = cashBalance?.gbp;
 
     if (gbpCashBalance === undefined) {
       return undefined;
     }
 
-    return (gbpCashBalance > 0);
+    return gbpCashBalance > 0;
   }
 
   protected get cashBalanceInPounds(): number
