@@ -128,10 +128,14 @@ export class DonationThanksComponent implements OnInit {
   {
     const cashBalance = this.person?.cash_balance;
 
-    const gbpCashBalance = cashBalance?.gbp;
+    if (cashBalance === undefined) {
+      return undefined;
+    }
+
+    const gbpCashBalance = cashBalance.gbp;
 
     if (gbpCashBalance === undefined) {
-      return undefined;
+      return false; // stripe doesn't show us a zero balance.
     }
 
     return gbpCashBalance > 0;
