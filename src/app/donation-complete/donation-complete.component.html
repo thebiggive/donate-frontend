@@ -73,7 +73,7 @@
           <span [innerHtml]="registerErrorDescriptionHtml"></span>
         </p>
 
-        <p *ngIf="hasDonationFunds === false">
+        <p *ngIf="showNoFundsRemainingMessage">
           You now have <strong>{{ cashBalanceInPounds | exactCurrency:'GBP' }}</strong> donation
           funds. Visit <a href="/{{myAccountPath}}">My Account</a> to top up.
         </p>

@@ -123,6 +123,11 @@ export class DonationCompleteComponent implements OnInit {
     return gbpCashBalance > 0;
   }
 
+  protected get showNoFundsRemainingMessage(): boolean
+  {
+    return this.donation.pspMethodType === 'customer_balance' && this.hasDonationFunds === false
+  }
+
   protected get cashBalanceInPounds(): number
   {
     return  (this.person?.cash_balance?.gbp || 0) / 100;
