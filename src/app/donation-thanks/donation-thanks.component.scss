@@ -137,6 +137,9 @@ hr {
 }
 
 .thank-you-large-donation-text {
+    a {
+      color: white;
+    }
     line-height: 1.2em;
     padding: 0 0;
     @media #{$breakpoint-sm} {
@@ -274,11 +277,6 @@ div.clearfix {
       font-size: 1.4rem;
     }
   }
-}
-
-#join-community-cta {
-  margin-top: 1rem;
-  float: right;
 }
 
 #thank-you-large-donation-wrapper {
