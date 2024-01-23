@@ -137,6 +137,9 @@ hr {
 }
 
 .thank-you-large-donation-text {
+    a {
+      color: white;
+    }
     line-height: 1.2em;
     padding: 0 0;
     @media #{$breakpoint-sm} {
