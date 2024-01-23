@@ -16,7 +16,6 @@ const CCCloseDate = new Date('2023-12-05T12:00:00+00:00');
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  mainTitle = 'Matching Donations.\nMultiplying Impact.';
   stats: {
     totalRaisedFormatted: string,
     totalCountFormatted: string
