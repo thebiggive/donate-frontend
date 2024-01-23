@@ -31,6 +31,8 @@
         <p class="thank-you-text">Your generous donation has been made.</p>
 
         <div class="cta" *ngIf="showRegistrationPrompt">
+          <p>Interested in enhancing your giving experience? Create an account today and enjoy a faster, more streamlined donation journey with just a few clicks.</p>
+
           <div class="button-wrapper">
             <biggive-button
               space-below="0"
@@ -47,7 +49,6 @@
               (click)="openSetPasswordDialog()">
             </biggive-button>
           </div>
-          <p>This helps you to make doubling your donation easier.</p>
         </div>
 
         <div aria-live="polite">
