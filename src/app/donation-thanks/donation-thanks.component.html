@@ -31,6 +31,8 @@
         <p class="thank-you-text">Your generous donation has been made.</p>
 
         <div class="cta" *ngIf="showRegistrationPrompt">
+          <p>Interested in enhancing your giving experience? Create an account today and enjoy a faster, more streamlined donation journey with just a few clicks.</p>
+
           <div class="button-wrapper">
             <biggive-button
               space-below="0"
@@ -47,7 +49,6 @@
               (click)="openSetPasswordDialog()">
             </biggive-button>
           </div>
-          <p>This helps you to make doubling your donation easier.</p>
         </div>
 
         <div aria-live="polite">
@@ -74,13 +75,15 @@
         </p>
 
         <p *ngIf="showNoFundsRemainingMessage">
-          You now have <strong>{{ cashBalanceInPounds | exactCurrency:'GBP' }}</strong> donation
-          funds. Visit <a href="/{{myAccountPath}}">My Account</a> to top up.
+          Your donation funds balance is
+          <!-- we know this is £0 here but displaying it dynamically just in case we're wrong -->
+          <strong>{{ cashBalanceInPounds | exactCurrency:'GBP' }}</strong>.
+          Visit <a href="/{{myAccountPath}}">My Account</a> to top up.
         </p>
 
         <p *ngIf="hasDonationFunds">
-          You now have <strong>{{ cashBalanceInPounds | exactCurrency:'GBP'}}</strong> donation
-          funds. Make another donation to use the balance.
+          Your donation funds balance is <strong>{{ cashBalanceInPounds | exactCurrency:'GBP'}}</strong>.
+          Make another donation to use the balance.
         </p>
       </div>
 
@@ -89,7 +92,13 @@
       <div class="donation-summary">
         <p><strong>Hi {{ donation.firstName }},</strong></p>
         <p><strong>Your donation summary</strong></p>
-        <p>Your donation of <strong class="figure">{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</strong> has been made. That's worth <strong class="figure">{{ totalValue | exactCurrency:donation.currencyCode }}</strong> to {{ donation.charityName }}!</p>
+
+        <p>Your donation of
+          <strong class="figure">{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</strong>
+          is worth
+          <strong class="figure">{{ totalValue | exactCurrency:donation.currencyCode }}</strong>
+          to {{ donation.charityName }}!
+        </p>
 
 
         <br/>
@@ -103,10 +112,6 @@
             difference. As a valued supporter, we're excited to share an exclusive opportunity with you – the chance to
             become one of our match funding Champions. By leveraging your support as match funding, you could help this
             charity and many others double the difference of their donations.
-          </p>
-
-          <p class="thank-you-large-donation-text">
-            Our match funding partners are our Champions and make everything we do possible.
           </p>
 
           <p class="thank-you-large-donation-text">
