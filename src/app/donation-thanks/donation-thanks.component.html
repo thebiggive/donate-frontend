@@ -30,24 +30,27 @@
 
         <p class="thank-you-text">Your generous donation has been made.</p>
 
-        <div class="cta" *ngIf="showRegistrationPrompt">
-          <p>Interested in enhancing your giving experience? Create an account today and enjoy a faster, more streamlined donation journey with just a few clicks.</p>
+        <div *ngIf="showRegistrationPrompt">
+          <p>Interested in enhancing your giving experience? Create an account today and enjoy a faster, more
+            streamlined donation journey with just a few clicks.</p>
+          <div class="cta" *ngIf="showRegistrationPrompt">
 
-          <div class="button-wrapper">
-            <biggive-button
-              space-below="0"
-              colour-scheme="white"
-              is-past-campaign="false"
-              is-future-campaign="false"
-              label="Save my card details"
-              open-in-new-tab="false"
-              full-width="true"
-              size="medium"
-              rounded="false"
-              centered="false"
-              button-id="save-details-button"
-              (click)="openSetPasswordDialog()">
-            </biggive-button>
+            <div class="button-wrapper">
+              <biggive-button
+                space-below="0"
+                colour-scheme="white"
+                is-past-campaign="false"
+                is-future-campaign="false"
+                label="Save my card details"
+                open-in-new-tab="false"
+                full-width="true"
+                size="medium"
+                rounded="false"
+                centered="false"
+                button-id="save-details-button"
+                (click)="openSetPasswordDialog()">
+              </biggive-button>
+            </div>
           </div>
         </div>
 
