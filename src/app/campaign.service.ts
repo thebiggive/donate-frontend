@@ -7,7 +7,8 @@ import { CampaignStats } from './campaign-stats.model';
 import { CampaignSummary } from './campaign-summary.model';
 import { environment } from '../environments/environment';
 import { SelectedType } from './search.service';
-import {HighlightCard} from "./home/HighlightCard";
+import {HighlightCard, SfApiHighlightCard, SFAPIHighlightCardToHighlightCard} from "./home/HighlightCard";
+import {map} from "rxjs/operators";
 @Injectable({
   providedIn: 'root',
 })
@@ -201,8 +202,16 @@ export class CampaignService {
     return this.http.get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`);
   }
 
-  getHomePageHighlightCards() {
-    return this.http.get<HighlightCard[]>(`${environment.apiUriPrefix}${this.apiPath}/highlight-service`);
+  getHomePageHighlightCards(): Observable<HighlightCard[]> {
+    return this.http.get<SfApiHighlightCard[]>(`${environment.apiUriPrefix}${this.apiPath}/highlight-service`).pipe(
+      map((apiHighlightCards => apiHighlightCards.map(
+        card => SFAPIHighlightCardToHighlightCard(
+          environment.experienceUriPrefix,
+          environment.blogUriPrefix,
+          environment.donateGlobalUriPrefix,
+          card
+        ))))
+    );
   }
 }
 
