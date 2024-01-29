@@ -356,7 +356,7 @@ button.continue, .c-donate-button {
   text-align: center;
 }
 
-.error {
+.error, .stripeError {
   color: mat.get-color-from-palette($donate-warn);
   margin: 1rem 0;
 }

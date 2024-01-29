@@ -5,15 +5,15 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {RecaptchaComponent, RecaptchaModule} from 'ng-recaptcha';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
-import { DonationCompleteComponent } from './donation-complete.component';
-import {DonationCompleteRoutingModule} from './donation-complete-routing.module';
+import { DonationThanksComponent } from './donation-thanks.component';
+import {DonationThanksRoutingModule} from './donation-thanks-routing.module';
 import {ExactCurrencyPipe} from '../exact-currency.pipe';
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 @NgModule({
   imports: [
     ...allChildComponentImports,
-    DonationCompleteRoutingModule,
+    DonationThanksRoutingModule,
     ExactCurrencyPipe,
     MatButtonModule,
     MatDialogModule,
@@ -21,7 +21,7 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
     RecaptchaModule,
     FontAwesomeModule,
   ],
-  declarations: [DonationCompleteComponent],
+  declarations: [DonationThanksComponent],
   providers: [RecaptchaComponent]
 })
-export class DonationCompleteModule {}
+export class DonationThanksModule {}

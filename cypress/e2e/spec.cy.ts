@@ -13,7 +13,7 @@ describe('App boot fundamentals', () => {
   it('Shows our copy on the Donate home page', () => {
     cy.visit('/?noredirect');
 
-    cy.contains('Matching Donations.');
+    cy.contains('Hi. We’re Big Give');
     cy.contains('£500,000');
     cy.contains('raised for over 123,456 charity projects since 2008');
   })

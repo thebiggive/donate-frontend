@@ -10,6 +10,7 @@ orbs:
 
 jobs:
   test:
+    resource_class: large
     docker:
       - image: cimg/node:16.18-browsers
         auth:
@@ -49,7 +50,6 @@ jobs:
 
       - store_artifacts:
           path: cypress/screenshots
-
   deploy-staging-static:
     docker:
       # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app

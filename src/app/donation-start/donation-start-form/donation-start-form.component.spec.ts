@@ -64,7 +64,9 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     undefined as unknown as StripeService,
     undefined as unknown as DatePipe,
     undefined as unknown as TimeLeftPipe,
-    undefined as unknown as MatSnackBar,
+    {
+      open: () => {}
+    } as unknown as MatSnackBar,
   );
 
   const stubGroup = {

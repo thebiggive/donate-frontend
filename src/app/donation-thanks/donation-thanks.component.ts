@@ -10,20 +10,21 @@ import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { Credentials } from '../credentials.model';
 import { Donation } from '../donation.model';
-import { DonationCompleteSetPasswordDialogComponent } from './donation-complete-set-password-dialog.component';
+import { DonationThanksSetPasswordDialogComponent } from './donation-thanks-set-password-dialog.component';
 import { DonationService } from '../donation.service';
 import { environment } from '../../environments/environment';
 import { minPasswordLength } from '../../environments/common';
 import { IdentityService } from '../identity.service';
 import { PageMetaService } from '../page-meta.service';
 import { Person } from '../person.model';
+import { myAccountPath } from '../app-routing';
 
 @Component({
-  selector: 'app-donation-complete',
-  templateUrl: './donation-complete.component.html',
-  styleUrls: ['./donation-complete.component.scss'],
+  selector: 'app-donation-thanks',
+  templateUrl: './donation-thanks.component.html',
+  styleUrls: ['./donation-thanks.component.scss'],
 })
-export class DonationCompleteComponent implements OnInit {
+export class DonationThanksComponent implements OnInit {
   @Input({ required: true }) private donationId: string;
   @ViewChild('captcha') captcha: RecaptchaComponent;
 
@@ -50,6 +51,7 @@ export class DonationCompleteComponent implements OnInit {
   private person?: Person;
   private readonly retryBaseIntervalSeconds = 2;
   private tries = 0;
+  protected readonly myAccountPath = myAccountPath;
 
   faExclamationTriangle = faExclamationTriangle;
   isDataLoaded = false;
@@ -69,12 +71,30 @@ export class DonationCompleteComponent implements OnInit {
 
     this.minPasswordLength = minPasswordLength;
 
-    this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
+    this.loadPerson();
+  }
+
+  private loadPerson = () => {
+    this.identityService.getPerson({refresh: true}).subscribe((person: Person | null) => {
       this.loggedIn = !!person && !!person.has_password;
+
+      if (person) {
+        this.person = person;
+      }
 
       this.isDataLoaded = true;
     });
+  };
+
+  protected get showRegistrationPrompt(): boolean
+  {
+    return !this.registrationComplete &&  // if they already registered they can't register again.
+      !this.loggedIn && // if they registered and logged in they can't register again
+      !!this.person // if we don't know who they are any more they can't register.
+                    // This is likely because they already registered but selected "don't log in",
+                    // then refreshed the page.
   }
+
 
   /**
    * Must be public in order for re-tries to invoke it in an anonymous context.
@@ -100,8 +120,39 @@ export class DonationCompleteComponent implements OnInit {
     );
   }
 
+  /**
+   * Returns undefined in case the person is not yet loaded from the backend so we don't know
+   * what their balance is. Compare exactly to false to see if they have a zero balance.
+   */
+  protected get hasDonationFunds()
+  {
+    const cashBalance = this.person?.cash_balance;
+
+    if (cashBalance === undefined) {
+      return undefined;
+    }
+
+    const gbpCashBalance = cashBalance.gbp;
+
+    if (gbpCashBalance === undefined) {
+      return false; // stripe doesn't show us a zero balance.
+    }
+
+    return gbpCashBalance > 0;
+  }
+
+  protected get showNoFundsRemainingMessage(): boolean
+  {
+    return this.donation.pspMethodType === 'customer_balance' && this.hasDonationFunds === false
+  }
+
+  protected get cashBalanceInPounds(): number
+  {
+    return  (this.person?.cash_balance?.gbp || 0) / 100;
+  }
+
   openSetPasswordDialog() {
-    const passwordSetDialog = this.dialog.open(DonationCompleteSetPasswordDialogComponent, {
+    const passwordSetDialog = this.dialog.open(DonationThanksSetPasswordDialogComponent, {
       data: { person: this.person },
     });
     passwordSetDialog.afterClosed().subscribe(data => {
@@ -195,9 +246,7 @@ export class DonationCompleteComponent implements OnInit {
 
         // Try to patch the person only if they're not already a finalised donor account,
         // e.g. they could have set a password then reloaded this page.
-        if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
-          this.registrationComplete = true;
-        } else {
+        if (! this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
           this.identityService.update(person)
             .subscribe({
               next: person => {
@@ -243,6 +292,14 @@ export class DonationCompleteComponent implements OnInit {
       // Re-save the donation with its new status so we don't offer to resume it if the donor
       // goes back to the same campaign.
       this.donationService.updateLocalDonation(donation);
+
+      if (donation.pspMethodType === 'customer_balance') {
+        // the donation will have affected the person's customer balance so wait to re-load the person before updating it:
+        const oneSecond = 1_000;
+        setTimeout(this.loadPerson, oneSecond);
+      } else {
+        this.loadPerson();
+      }
 
       return;
     }

@@ -19,7 +19,7 @@
     <div aria-live="polite">
       <div *ngIf="complete">
         <div class="screenreader-only">
-          Thank you! Your generous donation has been made successfully.
+          Thank you! Your generous donation has been made.
         </div>
       </div>
     </div>
@@ -28,33 +28,41 @@
       <div class="thank-you">
         <h2>Thank you!</h2>
 
-        <p class="thank-you-text">Your generous donation has been made successfully</p>
+        <p class="thank-you-text">Your generous donation has been made.</p>
 
-        <div class="cta" *ngIf="!registrationComplete">
-          <div class="button-wrapper">
-            <biggive-button
-              space-below="0"
-              colour-scheme="white"
-              is-past-campaign="false"
-              is-future-campaign="false"
-              label="Save my card details"
-              open-in-new-tab="false"
-              full-width="true"
-              size="medium"
-              rounded="false"
-              centered="false"
-              button-id="save-details-button"
-              (click)="openSetPasswordDialog()">
-            </biggive-button>
+        <div *ngIf="showRegistrationPrompt">
+          <p>Interested in enhancing your giving experience? Create an account today and enjoy a faster, more
+            streamlined donation journey with just a few clicks.</p>
+          <div class="cta" *ngIf="showRegistrationPrompt">
+
+            <div class="button-wrapper">
+              <biggive-button
+                space-below="0"
+                colour-scheme="white"
+                is-past-campaign="false"
+                is-future-campaign="false"
+                label="Save my card details"
+                open-in-new-tab="false"
+                full-width="true"
+                size="medium"
+                rounded="false"
+                centered="false"
+                button-id="save-details-button"
+                (click)="openSetPasswordDialog()">
+              </biggive-button>
+            </div>
           </div>
-          <p>This helps you to make doubling your donation easier.</p>
         </div>
 
         <div aria-live="polite">
-        <p *ngIf="registrationComplete" id="registrationCompleteText">
-          <strong>You are now registered<span *ngIf="loggedIn"> and logged in</span>.</strong> You can now donate faster
-          using your chosen email address and password.
-        </p>
+          <div *ngIf="registrationComplete">
+            <p  id="registrationCompleteText">
+              <strong>You are now registered<span *ngIf="loggedIn"> and logged in</span>.</strong>
+            </p>
+            <p>
+              You can now donate faster using your chosen email address and password.
+            </p>
+          </div>
         </div>
 
         <div class="cta" *ngIf="registrationComplete && loggedIn">
@@ -68,6 +76,18 @@
           {{ registerErrorDescription }}
           <span [innerHtml]="registerErrorDescriptionHtml"></span>
         </p>
+
+        <p *ngIf="showNoFundsRemainingMessage">
+          Your donation funds balance is
+          <!-- we know this is £0 here but displaying it dynamically just in case we're wrong -->
+          <strong>{{ cashBalanceInPounds | exactCurrency:'GBP' }}</strong>.
+          Visit <a href="/{{myAccountPath}}">My Account</a> to top up.
+        </p>
+
+        <p *ngIf="hasDonationFunds">
+          Your donation funds balance is <strong>{{ cashBalanceInPounds | exactCurrency:'GBP'}}</strong>.
+          Make another donation to use the balance.
+        </p>
       </div>
 
       <hr aria-hidden="true">
@@ -75,7 +95,13 @@
       <div class="donation-summary">
         <p><strong>Hi {{ donation.firstName }},</strong></p>
         <p><strong>Your donation summary</strong></p>
-        <p>Your donation of <strong class="figure">{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</strong> has been made. That's worth <strong class="figure">{{ totalValue | exactCurrency:donation.currencyCode }}</strong> to {{ donation.charityName }}!</p>
+
+        <p>Your donation of
+          <strong class="figure">{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</strong>
+          is worth
+          <strong class="figure">{{ totalValue | exactCurrency:donation.currencyCode }}</strong>
+          to {{ donation.charityName }}!
+        </p>
 
 
         <br/>
@@ -85,30 +111,15 @@
       <biggive-page-section *ngIf="donationIsLarge" colourScheme="primary" primaryFullBleed="true">
         <div id="thank-you-large-donation-wrapper">
           <p class="thank-you-large-donation-text">
-            We are so grateful for your support. As you have donated so generously, you might be interested in finding out
-            more about becoming a match-funder.
+            Thank you for your incredible commitment to supporting this campaign; your donation will make a significant
+            difference. As a valued supporter, we're excited to share an exclusive opportunity with you – the chance to
+            become one of our match funding Champions. By leveraging your support as match funding, you could help this
+            charity and many others double the difference of their donations.
           </p>
 
           <p class="thank-you-large-donation-text">
-            Our match funding partners are our Champions and make everything we do possible.
+            <a target="_blank" href="https://biggive.org/funders/">Learn more about joining our Champion community</a>
           </p>
-
-          <div id="join-community-cta" class="button-wrapper">
-            <biggive-button
-              space-below="0"
-              colour-scheme="clear-white"
-              is-past-campaign="false"
-              is-future-campaign="false"
-              label="Find out more"
-              open-in-new-tab="true"
-              full-width="false"
-              size="large"
-              rounded="false"
-              centered="true"
-              url="https://biggive.org/funders/">
-            </biggive-button>
-          </div>
-          <div class="clearfix"></div>
         </div>
       </biggive-page-section>
       <div>

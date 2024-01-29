@@ -2,8 +2,8 @@
   <biggive-hero-image
     colour-scheme="primary"
     main-image="/assets/images/banner-general.jpg"
-    [mainTitle]="mainTitle"
-    teaser="Hi. We’re Big Give. We run match funding campaigns to make an extraordinary difference to the world’s big challenges."
+    main-title="Double the difference"
+    teaser="Hi. We’re Big Give. Our match funding campaigns offer a unique opportunity for you to double the difference you can make in the world for the causes close to your heart."
     main-image-align-horizontal="right"
     main-image-align-vertical="center"
   ></biggive-hero-image>
@@ -20,6 +20,7 @@
         [class]="'basic-card-padding'"
 
         [iconColour]="highlightCardsToShow[0]!.iconColor"
+        [backgroundColour]="highlightCardsToShow[0]!.iconColor"
         [backgroundImageUrl]="highlightCardsToShow[0]!.backgroundImageUrl.toString()"
         [mainTitle]="highlightCardsToShow[0]!.headerText"
         [subtitle]="highlightCardsToShow[0]!.bodyText"
@@ -36,6 +37,7 @@
                             [class]="'basic-card-padding'"
 
                             [iconColour]="card.iconColor"
+                            [backgroundColour]="card.iconColor"
                             [backgroundImageUrl]="card.backgroundImageUrl.toString()"
                             [mainTitle]="card.headerText"
                             [subtitle]="card.bodyText"
@@ -137,7 +139,7 @@
         video-url="https://player.vimeo.com/video/860172535"
         main-title="About Big Give"
         main-title-colour="white"
-        teaser="Simply put, we’re a Generosity Multiplier.  Big Give helps people match donations, multiply impact and make a lasting difference in the world together."
+        teaser="Imagine if your generous gift could have double the impact on the causes you care about. Well, that’s exactly why we exist. Whatever your passion, whatever cause you support, we can help double your donation to make double the difference."
         teaser-colour="white"
         button-url="https://biggive.org/our-story"
         button-label="Learn more about us"

@@ -54,6 +54,8 @@ hr {
   p {
     color: white;
     text-align: center;
+    margin-left: 5em;
+    margin-right: 5em;
 
     &.error {
       fa-icon {
@@ -63,7 +65,7 @@ hr {
 
     a {
       // if we didn't specify a colour this would be blue-on-blue and invisible.
-      color: $colour-secondary;
+      color: white;
     }
   }
 
@@ -137,6 +139,9 @@ hr {
 }
 
 .thank-you-large-donation-text {
+    a {
+      color: white;
+    }
     line-height: 1.2em;
     padding: 0 0;
     @media #{$breakpoint-sm} {
@@ -274,11 +279,6 @@ div.clearfix {
       font-size: 1.4rem;
     }
   }
-}
-
-#join-community-cta {
-  margin-top: 1rem;
-  float: right;
 }
 
 #thank-you-large-donation-wrapper {
