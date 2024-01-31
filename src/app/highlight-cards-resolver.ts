@@ -88,7 +88,7 @@ export const highlightCardsResolver: ResolveFn<readonly HighlightCard[] | null> 
           iconColor: 'primary',
           button: {
             text: "Explore now",
-            href: new URL('/explore/', environment.donateGlobalUriPrefix)
+            href: new URL('/explore', environment.donateGlobalUriPrefix)
           }
         },
         {
@@ -100,7 +100,7 @@ export const highlightCardsResolver: ResolveFn<readonly HighlightCard[] | null> 
           iconColor: 'primary',
           button: {
             text: "Explore now",
-            href: new URL('/explore/', environment.donateGlobalUriPrefix)
+            href: new URL('/explore', environment.donateGlobalUriPrefix)
           }
         },
       ];
