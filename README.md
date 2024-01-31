@@ -35,7 +35,10 @@ NPM. You may need to re-run after making changes in the component code.
 Note: make sure that you are checked out on the branch with your latest components updates before linking, to ensure that the changes are correctly shown
 in Angular post-linking.
 
-Notes: we also tried deleting node_modules and re-running the link command above, but doing so seemingly caused compilation errors. Npm update was tested too and sometimes fixed some of the compilation errors, but we are unsure why!
+If you wish to see changes made in components reflected in front end in near-real time, then run
+```shell
+(cd ../components && npm run build.watch) &
+````
 
 ## CI, e2e tests and Puppeteer
 

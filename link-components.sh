@@ -15,4 +15,5 @@ cd "$(dirname "$0")"
 # Need to do npm update to make sure we don't have an outdated package-lock file refering to old version of components
 (cd ../components/angular && npm update && npm run build && npm link)
 
-npm link @biggive/components-angular @biggive/components
+npm link @biggive/components-angular
+npm link @biggive/components
