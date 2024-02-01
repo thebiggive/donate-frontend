@@ -81,41 +81,28 @@
 
   <!-- using section here not biggive-page-section, so we go full width -->
   <section>
-    <biggive-grid
-      column-count="6"
-      [spaceBetween]="true">
-      <biggive-image
-        image-url="/assets/images/logo-the-passage-2023.png"
-        image-alt-text="The Passage - Everyone deserves a place to call home"
-        width="150"
-      >
-      </biggive-image>
-      <biggive-image
-        image-url="/assets/images/logo-dec.png"
-        image-alt-text="Disasters Emergency Committee"
-        width="150"
-      >
-      </biggive-image>
-      <biggive-image
-        image-url="/assets/images/logo-net.png"
-        image-alt-text="National Emergencies Trust"
-        width="150"
-      >
-      </biggive-image>
-      <biggive-image
-        image-url="/assets/images/logo-friends-of-the-earth.png"
-        image-alt-text="Friends of the Earth"
-        width="150"
-      >
-      </biggive-image>
-      <biggive-image
-        image-url="/assets/images/logo-borne.png"
-        image-alt-text="Borne - Research to prevent premature birth"
-        width="150"
-      >
-      </biggive-image>
+    <!-- for available swiper options see https://swiperjs.com/types/interfaces/types_swiper_options.SwiperOptions -->
+    <swiper-container
+      class="mySwiper"
+      space-between="30"
+      slides-per-view="auto"
+      pagination-clickable="true"
+      speed="500"
+      autoplay-delay="2500"
+      loop="true"
+      centered-slides="false"
+    >
+      <swiper-slide><img src="/assets/images/logo-the-passage-2023.png" alt="The Passage - Everyone deserves a place to call home" width="300"></swiper-slide>
 
-    </biggive-grid>
+      <swiper-slide><img src="/assets/images/logo-dec.png" alt="Disasters Emergency Committee" width="300"></swiper-slide>
+
+      <swiper-slide><img src="/assets/images/logo-net.png" alt="National Emergencies Trust" width="300"></swiper-slide>
+
+      <swiper-slide><img src="/assets/images/logo-friends-of-the-earth.png" alt="Friends Of The Earth" width="300"></swiper-slide>
+
+      <swiper-slide><img src="/assets/images/logo-borne.png" alt="Borne - Research to prevent premature birth" width="300"></swiper-slide>
+
+    </swiper-container>
 
     <div class="flex-wrapper">
       <div class="auto-margin">
