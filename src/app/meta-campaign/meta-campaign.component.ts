@@ -485,7 +485,13 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     const tickerItems = [];
     tickerItems.push({
       label: 'total match funds',
-      figure: this.currencyPipe.transform(this.fund?.totalAmount, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) as string,
+      figure: this.currencyPipe.transform(
+        // when SF Prod starts sending totalForTicker we can remove the reference to totalAmount.
+        this.fund?.totalForTicker || this.fund?.totalAmount,
+        this.campaign.currencyCode,
+        'symbol',
+        currencyPipeDigitsInfo
+      ) as string,
     });
     if (CampaignService.isOpenForDonations(this.campaign)) {
       tickerItems.push({
