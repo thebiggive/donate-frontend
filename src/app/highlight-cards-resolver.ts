@@ -3,12 +3,20 @@ import {ActivatedRouteSnapshot, ResolveFn} from '@angular/router';
 import {environment} from "../environments/environment";
 import {inject} from "@angular/core";
 import {CampaignService} from "./campaign.service";
+import {catchError} from "rxjs/operators";
+import {of} from "rxjs";
 
 export const highlightCardsResolver: ResolveFn<readonly HighlightCard[] | null> = (route: ActivatedRouteSnapshot) => {
   const campaignService = inject(CampaignService);
 
   if (route.queryParams.hasOwnProperty('highlightAPIEnabled') && environment.environmentId !== 'production') {
-    return campaignService.getHomePageHighlightCards();
+    return campaignService.getHomePageHighlightCards().pipe(
+      // If the HighlightCards API has any error we still want to show the rest of the homepage, so we catch the error
+      catchError(error => {
+        console.error("Error fetching hompepage highlight cards", error);
+        return of([]);
+      })
+    );
   }
 
     const Jan8th = new Date('2024-01-08T00:00:00+00:00');
