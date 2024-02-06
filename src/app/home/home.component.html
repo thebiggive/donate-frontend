@@ -272,18 +272,20 @@
   </biggive-page-section> -->
 
   <biggive-page-section>
-    <biggive-call-to-action
-      default-text-colour="primary"
-      main-title="Ready to get started? Explore our match funded campaigns."
-      main-title-size="2"
-      primary-button-label="Donate today"
-      primary-button-url="/explore"
-      primary-button-colour-scheme="primary"
-      secondary-button-label="Learn more about us"
-      secondary-button-url="https://biggive.org/our-story"
-      secondary-button-colour-scheme="clear-primary"
-      space-above="6"
-      space-below="6">
-    </biggive-call-to-action>
+    <div class='container text-colour-primary space-above-6 space-below-6'>
+      <div class="sleeve">
+        <div class="get-started-cta">
+          <h2 class='title heading-2'>Ready to get started? Explore our match funded campaigns.</h2>
+          <div class='slug heading-4'></div>
+          <div class='teaser'></div>
+          <div class="button-wrap">
+            <biggive-button colour-scheme="primary" url="/explore" label="Donate today"></biggive-button>
+          </div>
+          <div class="button-wrap">
+            <biggive-button colour-scheme="clear-primary" url="https://biggive.org/our-story" label="Learn more about us"></biggive-button>
+          </div>
+        </div>
+      </div>
+    </div>
   </biggive-page-section>
 </main>
