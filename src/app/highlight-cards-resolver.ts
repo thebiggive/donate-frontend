@@ -13,6 +13,7 @@ export const highlightCardsResolver: ResolveFn<readonly HighlightCard[] | null> 
 
     const Jan8th = new Date('2024-01-08T00:00:00+00:00');
     const Feb9th = new Date('2024-02-09T23:59:59+00:00');
+    const Feb16th = new Date('2024-02-16T23:59:59+00:00');
     const ArtsForImpactApplicationCloseDate = new Date('2023-12-16T00:00:00+00:00');
     const GMFApplicationCloseDate = new Date('2024-01-17T00:00:00+00:00');
 
@@ -21,9 +22,9 @@ export const highlightCardsResolver: ResolveFn<readonly HighlightCard[] | null> 
     const highlightCards: readonly HighlightCard[] = [
         {
           appearAt: Jan8th,
-          disappearAt: Feb9th,
+          disappearAt: Feb16th,
           headerText: 'Applications for Kind²Mind are now open!',
-          bodyText: 'Apply by February 9th 2024',
+          bodyText: 'Apply by February 16th 2024',
           iconColor: "brand-mhf-turquoise",
           backgroundImageUrl: new URL('/assets/images/turquoise-texture.jpg', environment.donateGlobalUriPrefix),
           button: {
