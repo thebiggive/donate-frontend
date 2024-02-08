@@ -87,9 +87,11 @@
       slides-per-view="auto"
       pagination-clickable="true"
       speed="500"
-      autoplay-delay="2500"
+      autoplay="false"
       loop="true"
       centered-slides="false"
+      navigation-next-el="#carousel-button-next"
+      navigation-prev-el="#carousel-button-prev"
     >
       <swiper-slide><img src="/assets/images/logo-the-passage-2023.png" alt="The Passage - Everyone deserves a place to call home" width="300"></swiper-slide>
 
@@ -108,6 +110,19 @@
       <swiper-slide><img src="/assets/images/logo-prisoners-of-conscience-supporting-people-who-defend-human-rights.png" alt="Prisoners Of Conscience: Supporting people who defend human rights" width="300"></swiper-slide>
 
       <swiper-slide><img src="/assets/images/logo-the-brain-tumour-charity.png" alt="The Brain Tumour Charity" width="300"></swiper-slide>
+
+      <div slot="container-end" class="charity-carousel-navigation">
+        <div id="carousel-button-prev" class="button next" title="Previous">
+          <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.29311 14.5703L1.73926 8.01646L8.29311 1.46261" stroke="#000000" stroke-width="2" />
+          </svg>
+        </div>
+        <div id="carousel-button-next" class="button prev" title="Next">
+          <svg width="9" height="16" viewBox="0 0 9 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0.739117 1.46094L7.29297 8.01479L0.739118 14.5686" stroke="#000000" stroke-width="2" />
+          </svg>
+        </div>
+      </div>
 
     </swiper-container>
 
