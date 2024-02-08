@@ -71,7 +71,7 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
     christmasChallenge: new URL('/assets/images/card-background-cc-lights.jpg', donateGlobalUriPrefix),
     summerGive:  new URL('/assets/images/colour-orange.png', donateGlobalUriPrefix),
     greenMatchFund:  new URL('/assets/images/card-background-gmf.jpg', donateGlobalUriPrefix),
-    womenGirls: new URL('/assets/images/turquoise-texture.jpg', donateGlobalUriPrefix),
+    womenGirls: new URL('/src/assets/images/wmg-purple-texture.jpg', donateGlobalUriPrefix),
     mentalHealthFund: new URL('/assets/images/turquoise-texture.jpg', donateGlobalUriPrefix),
     artsforImpact: new URL('/assets/images/red-coral-texture.png', donateGlobalUriPrefix)
   };
