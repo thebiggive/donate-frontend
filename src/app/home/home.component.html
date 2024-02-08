@@ -29,7 +29,7 @@
       />
     </div>
     <ng-template #highlightCardGrid>
-      <biggive-grid [columnCount]="highlightCardsToShow.length">
+      <biggive-grid [columnCount]="highlightCardsToShow.length" column-gap="3">
         <biggive-basic-card *ngFor="let card of highlightCardsToShow"
                             [spaceBelow]='4'
                             [headingLevel]="2"
@@ -79,8 +79,7 @@
     </div>
   </biggive-page-section>
 
-  <!-- using section here not biggive-page-section, so we go full width -->
-  <section>
+  <biggive-page-section>
     <!-- for available swiper options see https://swiperjs.com/types/interfaces/types_swiper_options.SwiperOptions -->
     <swiper-container
       class="mySwiper"
@@ -122,8 +121,7 @@
         </biggive-button>
       </div>
     </div>
-  </section>
-
+  </biggive-page-section>
 
   <biggive-page-section
     colour-scheme="primary"
