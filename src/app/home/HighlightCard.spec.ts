@@ -25,6 +25,30 @@ describe('highlightCard', () => {
     expect(highlightCardForHomepage.iconColor).toBe('brand-wgmf-purple');
   });
 
+  it('should use appropriate colour for emergency campaign', () => {
+    const cardFromApi: SfApiHighlightCard = {
+      campaignFamily: 'emergencyMatch',
+      appearAt: 'asap',
+      disappearAt: 'never',
+      headerText: "some header text",
+      bodyText: "some body text",
+      button: {text: "button text", href: 'https://biggive.org/some-path'}
+    } as const;
+
+    const donatePrefixForThisEnvironment = 'https://example.com';
+
+    const highlightCardForHomepage = SFAPIHighlightCardToHighlightCard(
+      'https://irrelevant.com',
+      'https://irrelevant.com',
+      donatePrefixForThisEnvironment,
+      cardFromApi
+    );
+
+    // todo - check what background we had for EMF cards in the past.
+    expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/emergency-card.png');
+    expect(highlightCardForHomepage.iconColor).toBe('brand-emf-yellow');
+  });
+
   it('should use blue primary colour by default', () => {
     const cardFromApi: SfApiHighlightCard = {
       campaignFamily: 'some-unknown-campaign-family' as campaignFamilyName,
