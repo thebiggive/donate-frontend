@@ -21,7 +21,7 @@ describe('highlightCard', () => {
       cardFromApi
     );
 
-    expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/turquoise-texture.jpg');
+    expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/wmg-purple-texture.jpg');
     expect(highlightCardForHomepage.iconColor).toBe('brand-wgmf-purple');
   });
 
