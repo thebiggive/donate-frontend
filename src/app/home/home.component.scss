@@ -49,43 +49,15 @@ swiper-slide {
   }
 }
 
+.mySwiper {
+  --swiper-pagination-color: #2C089B; // i.e. $colour-primary but for some reason refrencing the variable doesn't seem to work here.
+  --swiper-pagination-bullet-inactive-color: #333333; // i.e. $colour-grey
+}
+
 .charity-carousel-navigation {
   padding: 10px 0;
   text-align: center;
   display: flex;
   justify-content: center;
-  position: relative;
-  top: -30px;
   z-index: 1;
-  .button {
-    margin-left: 15px;
-    display: block;
-    width: 30px;
-    height: 30px;
-    padding: 2.5px 10px;
-    box-sizing: border-box;
-    background-color: #FFFFFF;
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.25);
-    border-radius: 50%;
-    cursor: pointer;
-    text-align: center;
-    svg {
-      width: 15px;
-      height: 15px;
-      position: relative;
-      top: 2.5px;
-    }
-    &.prev {
-      left: 0;
-      svg {
-        left: -3px;
-      }
-    }
-    &.next {
-      right: 0;
-      svg {
-        left: -1px;
-      }
-    }
-  }
 }
