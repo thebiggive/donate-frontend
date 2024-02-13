@@ -60,4 +60,8 @@ swiper-slide {
   display: flex;
   justify-content: center;
   z-index: 1;
+  gap: 7px;
+  .button {
+    cursor:pointer;
+  }
 }
