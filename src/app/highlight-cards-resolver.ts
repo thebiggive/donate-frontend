@@ -9,7 +9,7 @@ import {of} from "rxjs";
 export const highlightCardsResolver: ResolveFn<readonly HighlightCard[] | null> = (route: ActivatedRouteSnapshot) => {
   const campaignService = inject(CampaignService);
 
-  if (route.queryParams.hasOwnProperty('highlightAPIEnabled') && environment.environmentId !== 'production') {
+  if (route.queryParams.hasOwnProperty('highlightAPIEnabled')) {
     return campaignService.getHomePageHighlightCards().pipe(
       // If the HighlightCards API has any error we still want to show the rest of the homepage, so we catch the error
       catchError(error => {
