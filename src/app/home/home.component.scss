@@ -1,3 +1,5 @@
+@import '../../abstract';
+
 .auto-margin {
   margin: auto; //centres the button
 }
@@ -7,10 +9,59 @@
 }
 
 .basic-card-padding {
-  padding: 0 10px;
   box-sizing: border-box;
 }
 .single-highlight-card {
   max-width: 650px;
   margin: auto;
+}
+
+swiper-slide {
+  width: fit-content;
+}
+
+.get-started-cta {
+  margin-bottom: 60px;
+  margin-top: 60px;
+  text-align: center;
+  color: $colour-primary;
+  .slug {
+    margin: 0;
+    padding: 0;
+  }
+  h2 {
+    margin: 0 0 5px 0;
+    padding: 0;
+    margin-bottom: 60px;
+
+    font-size: 38px;
+    line-height: 45px;
+    font-weight: bold;
+  }
+  .subtitle {
+    margin: 0 0 5px 0;
+    padding: 0;
+  }
+  .teaser {
+    margin: 15px auto 15px auto;
+    max-width: 400px;
+    padding: 0;
+  }
+}
+
+.mySwiper {
+  --swiper-pagination-color: #2C089B; // i.e. $colour-primary but for some reason refrencing the variable doesn't seem to work here.
+  --swiper-pagination-bullet-inactive-color: #333333; // i.e. $colour-grey
+}
+
+.charity-carousel-navigation {
+  padding: 10px 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+  gap: 7px;
+  .button {
+    cursor:pointer;
+  }
 }

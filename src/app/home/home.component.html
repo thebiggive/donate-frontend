@@ -29,7 +29,7 @@
       />
     </div>
     <ng-template #highlightCardGrid>
-      <biggive-grid [columnCount]="highlightCardsToShow.length">
+      <biggive-grid [columnCount]="highlightCardsToShow.length" column-gap="3">
         <biggive-basic-card *ngFor="let card of highlightCardsToShow"
                             [spaceBelow]='4'
                             [headingLevel]="2"
@@ -79,43 +79,50 @@
     </div>
   </biggive-page-section>
 
-  <!-- using section here not biggive-page-section, so we go full width -->
-  <section>
-    <biggive-grid
-      column-count="6"
-      [spaceBetween]="true">
-      <biggive-image
-        image-url="/assets/images/logo-the-passage-2023.png"
-        image-alt-text="The Passage - Everyone deserves a place to call home"
-        width="150"
-      >
-      </biggive-image>
-      <biggive-image
-        image-url="/assets/images/logo-dec.png"
-        image-alt-text="Disasters Emergency Committee"
-        width="150"
-      >
-      </biggive-image>
-      <biggive-image
-        image-url="/assets/images/logo-net.png"
-        image-alt-text="National Emergencies Trust"
-        width="150"
-      >
-      </biggive-image>
-      <biggive-image
-        image-url="/assets/images/logo-friends-of-the-earth.png"
-        image-alt-text="Friends of the Earth"
-        width="150"
-      >
-      </biggive-image>
-      <biggive-image
-        image-url="/assets/images/logo-borne.png"
-        image-alt-text="Borne - Research to prevent premature birth"
-        width="150"
-      >
-      </biggive-image>
+  <biggive-page-section>
+    <!-- for available swiper options see https://swiperjs.com/types/interfaces/types_swiper_options.SwiperOptions -->
+    <swiper-container
+      class="mySwiper"
+      space-between="30"
+      slides-per-view="auto"
+      pagination-clickable="true"
+      speed="500"
+      autoplay="false"
+      loop="true"
+      centered-slides="false"
+      navigation-next-el="#carousel-button-next"
+      navigation-prev-el="#carousel-button-prev"
+    >
+      <swiper-slide><img src="/assets/images/logo-the-passage-2023.png" alt="The Passage - Everyone deserves a place to call home" width="300"></swiper-slide>
 
-    </biggive-grid>
+      <swiper-slide><img src="/assets/images/logo-dec.png" alt="Disasters Emergency Committee" width="300"></swiper-slide>
+
+      <swiper-slide><img src="/assets/images/logo-net.png" alt="National Emergencies Trust" width="300"></swiper-slide>
+
+      <swiper-slide><img src="/assets/images/logo-friends-of-the-earth.png" alt="Friends Of The Earth" width="300"></swiper-slide>
+
+      <swiper-slide><img src="/assets/images/logo-borne.png" alt="Borne - Research to prevent premature birth" width="300"></swiper-slide>
+
+      <swiper-slide><img src="/assets/images/logo-magic-breakfast-fuel-for-learning.png" alt="Magic Breakfast: Fuel for learning" width="300"></swiper-slide>
+
+      <swiper-slide><img src="/assets/images/logo-princes-trust.png" alt="Prince's Trust" width="300"></swiper-slide>
+
+      <swiper-slide><img src="/assets/images/logo-prisoners-of-conscience-supporting-people-who-defend-human-rights.png" alt="Prisoners Of Conscience: Supporting people who defend human rights" width="300"></swiper-slide>
+
+      <swiper-slide><img src="/assets/images/logo-the-brain-tumour-charity.png" alt="The Brain Tumour Charity" width="300"></swiper-slide>
+
+
+
+    </swiper-container>
+
+    <div class="charity-carousel-navigation">
+      <div role="button" id="carousel-button-prev" class="button next" >
+        <img width="35px" src="/assets/images/arrow-prev-with-circle.svg" alt="Previous"/>
+      </div>
+      <div role="button" id="carousel-button-next" class="button prev" title="Next">
+        <img width="35px" src="/assets/images/arrow-next-with-circle.svg" title="Next" />
+      </div>
+    </div>
 
     <div class="flex-wrapper">
       <div class="auto-margin">
@@ -127,8 +134,7 @@
         </biggive-button>
       </div>
     </div>
-  </section>
-
+  </biggive-page-section>
 
   <biggive-page-section
     colour-scheme="primary"
@@ -285,18 +291,20 @@
   </biggive-page-section> -->
 
   <biggive-page-section>
-    <biggive-call-to-action
-      default-text-colour="primary"
-      main-title="Ready to get started? Explore our match funded campaigns."
-      main-title-size="2"
-      primary-button-label="Donate today"
-      primary-button-url="/explore"
-      primary-button-colour-scheme="primary"
-      secondary-button-label="Learn more about us"
-      secondary-button-url="https://biggive.org/our-story"
-      secondary-button-colour-scheme="clear-primary"
-      space-above="6"
-      space-below="6">
-    </biggive-call-to-action>
+    <div class='container text-colour-primary space-above-6 space-below-6'>
+      <div class="sleeve">
+        <div class="get-started-cta">
+          <h2 class='title heading-2'>Ready to get started? Explore our match funded campaigns.</h2>
+          <div class='slug heading-4'></div>
+          <div class='teaser'></div>
+          <div class="button-wrap">
+            <biggive-button colour-scheme="primary" url="/explore" label="Donate today"></biggive-button>
+          </div>
+          <div class="button-wrap">
+            <biggive-button colour-scheme="clear-primary" url="https://biggive.org/our-story" label="Learn more about us"></biggive-button>
+          </div>
+        </div>
+      </div>
+    </div>
   </biggive-page-section>
 </main>

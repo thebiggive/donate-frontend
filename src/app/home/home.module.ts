@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { HomeComponent } from './home.component';
@@ -12,5 +12,6 @@ import { AsyncPipe } from '@angular/common';
     HomeRoutingModule,
   ],
   declarations: [HomeComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HomeModule {}

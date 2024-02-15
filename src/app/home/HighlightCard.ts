@@ -26,8 +26,14 @@ export type HighlightCard = {
   },
 }
 
-export type campaignFamilyName = 'christmasChallenge'|'summerGive'|'greenMatchFund'|'womenGirls'|'mentalHealthFund'|'artsforImpact';
-
+export type campaignFamilyName =
+  'christmasChallenge'
+  |'summerGive'
+  |'greenMatchFund'
+  |'womenGirls'
+  |'mentalHealthFund'
+  |'artsforImpact'
+  |'emergencyMatch';
 
 export type SfApiHighlightCard = Omit<HighlightCard, 'backgroundImageUrl'|'iconColor'|'button'> & {
   campaignFamily: campaignFamilyName
@@ -51,21 +57,23 @@ const replaceURLOrigin = (experienceUriPrefix: string, blogUriPrefix: string, do
 export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, blogUriPrefix: string, donateGlobalUriPrefix: string, sfApiHighlightCard: SfApiHighlightCard, ): HighlightCard => {
 
   const campaignFamilyColours: Record<campaignFamilyName, brandColour> = {
+    emergencyMatch: 'brand-emf-yellow',
     christmasChallenge: 'brand-cc-red',
     summerGive: 'brand-c4c-orange',
     greenMatchFund: 'brand-gmf-green',
     womenGirls: 'brand-wgmf-purple',
     mentalHealthFund: 'brand-mhf-turquoise',
-    artsforImpact: 'brand-afa-pink',
+    artsforImpact: 'brand-afa-pink'
   };
 
   const campaignFamilyBackgroundImages: Record<campaignFamilyName, URL> = {
+    emergencyMatch: new URL('/assets/images/emergency-card.png', donateGlobalUriPrefix),
     christmasChallenge: new URL('/assets/images/card-background-cc-lights.jpg', donateGlobalUriPrefix),
     summerGive:  new URL('/assets/images/colour-orange.png', donateGlobalUriPrefix),
     greenMatchFund:  new URL('/assets/images/card-background-gmf.jpg', donateGlobalUriPrefix),
-    womenGirls: new URL('/assets/images/turquoise-texture.jpg', donateGlobalUriPrefix),
+    womenGirls: new URL('/assets/images/wmg-purple-texture.jpg', donateGlobalUriPrefix),
     mentalHealthFund: new URL('/assets/images/turquoise-texture.jpg', donateGlobalUriPrefix),
-    artsforImpact: new URL('/assets/images/red-coral-texture.png', donateGlobalUriPrefix),
+    artsforImpact: new URL('/assets/images/red-coral-texture.png', donateGlobalUriPrefix)
   };
 
   return {
