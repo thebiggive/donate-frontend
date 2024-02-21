@@ -5,7 +5,7 @@ import {CampaignService} from "./campaign.service";
 import {catchError} from "rxjs/operators";
 import {of} from "rxjs";
 
-export const highlightCardsResolver: ResolveFn<readonly HighlightCard[] | null> = () => {
+export const highlightCardsResolver: ResolveFn<readonly HighlightCard[]> = () => {
   return inject(CampaignService).getHomePageHighlightCards().pipe(
     // If the HighlightCards API has any error we still want to show the rest of the homepage, so we catch the error
     catchError(error => {
