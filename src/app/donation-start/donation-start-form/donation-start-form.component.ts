@@ -63,6 +63,7 @@ import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
 import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation-tipping-slider.component";
 import {PaymentReadinessTracker} from "./PaymentReadinessTracker";
+import {requiredNotBlankValidator} from "../../validators/notBlank";
 
 declare var _paq: {
   push: (args: Array<string|object>) => void,
@@ -321,7 +322,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     } = {
       amounts: this.formBuilder.group({
         donationAmount: [null, [
-          Validators.required,
+          requiredNotBlankValidator,
           getCurrencyMinValidator(1), // min donation is £1
           getCurrencyMaxValidator(),
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
@@ -339,21 +340,21 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         homePostcode: [null], // See setConditionalValidators().
       }),
       marketing: this.formBuilder.group({
-        optInCharityEmail: [null, Validators.required],
-        optInTbgEmail: [null, Validators.required],
+        optInCharityEmail: [null, requiredNotBlankValidator],
+        optInTbgEmail: [null, requiredNotBlankValidator],
         optInChampionEmail: [null],
       }),
       payment: this.formBuilder.group({
         firstName: [null, [
           Validators.maxLength(40),
-          Validators.required,
+          requiredNotBlankValidator,
         ]],
         lastName: [null, [
           Validators.maxLength(80),
-          Validators.required,
+          requiredNotBlankValidator,
         ]],
         emailAddress: [null, [
-          Validators.required,
+          requiredNotBlankValidator,
           // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
           Validators.pattern(EMAIL_REGEXP),
         ]],
@@ -1901,7 +1902,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   private addUKValidators(): void {
-    this.giftAidGroup.controls.giftAid!.setValidators([Validators.required]);
+    this.giftAidGroup.controls.giftAid!.setValidators([requiredNotBlankValidator]);
     this.giftAidGroup.updateValueAndValidity();
   }
 
@@ -1958,7 +1959,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       // tip on donation when using a donor's credit balance.
       if (this.creditPenceToUse === 0) {
         this.amountsGroup.controls.tipAmount!.setValidators([
-          Validators.required,
+          requiredNotBlankValidator,
           // We allow spaces at start and end of amount inputs because people can easily paste them in
           // by mistake, and they don't do any harm. Maxlength in the HTML makes sure there can't be so much as
           // to stop the number being visible.
@@ -1969,7 +1970,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
       // Reduce the maximum to the credit balance if using donor credit and it's below the global max.
       this.amountsGroup.controls.donationAmount!.setValidators([
-        Validators.required,
+        requiredNotBlankValidator,
         getCurrencyMinValidator(1), // min donation is £1
         getCurrencyMaxValidator(maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse)),
         Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
@@ -2042,7 +2043,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.getHomePostcodeValidatorsWhenClaimingGiftAid(this.giftAidGroup.value.homeOutsideUK),
         );
         this.giftAidGroup.controls.homeAddress!.setValidators([
-          Validators.required,
+          requiredNotBlankValidator,
           Validators.maxLength(255),
         ]);
       } else {
@@ -2067,7 +2068,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     return [
-      Validators.required,
+      requiredNotBlankValidator,
       Validators.pattern(this.postcodeRegExp),
     ];
   }
@@ -2081,10 +2082,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   private addStripeCardBillingValidators() {
     this.paymentGroup.controls.billingCountry!.setValidators([
-      Validators.required,
+      requiredNotBlankValidator,
     ]);
     this.paymentGroup.controls.billingPostcode!.setValidators([
-      Validators.required,
+      requiredNotBlankValidator,
       Validators.pattern(this.billingPostcodeRegExp),
     ]);
     this.paymentGroup.controls.billingCountry!.updateValueAndValidity();
@@ -2221,7 +2222,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private setChampionOptInValidity() {
     if (this.showChampionOptIn) {
       this.marketingGroup.controls.optInChampionEmail!.setValidators([
-        Validators.required,
+        requiredNotBlankValidator,
       ]);
     }
   }
