@@ -38,7 +38,7 @@
     <div *ngIf="userAskedForResetLink">
       <mat-spinner *ngIf="resetPasswordSuccess === undefined" [diameter]="40" aria-label="Loading your details"></mat-spinner>
       <p *ngIf="resetPasswordSuccess">Please check your email and click on the password reset link received.</p>
-      <p *ngIf="resetPasswordSuccess === false" class="error">Sorry, we encountered a problem. Please <a href="https://community.biggive.org/s/contact-us" target="_blank">contact us</a> for help.</p>
+      <p *ngIf="resetPasswordSuccess === false" class="error">Sorry, we encountered a problem. Please <a href="https://biggive.org/faqs/" target="_blank">contact us</a> for help.</p>
       <mat-dialog-actions align="end" *ngIf="resetPasswordSuccess !== undefined">
         <button mat-raised-button mat-dialog-close cdkFocusInitial color="primary">Ok</button>
       </mat-dialog-actions>
