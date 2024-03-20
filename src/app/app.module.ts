@@ -7,7 +7,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { ComponentsModule } from '@biggive/components-angular';
-import { TransferHttpCacheModule } from '@nguniversal/common';
+import { TransferHttpCacheModule } from '@angular/ssr';
 import {RECAPTCHA_BASE_URL, RECAPTCHA_NONCE} from 'ng-recaptcha';
 import { MatomoModule } from 'ngx-matomo';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
