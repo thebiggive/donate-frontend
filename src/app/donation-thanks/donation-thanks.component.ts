@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import { MatDialog } from '@angular/material/dialog';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import { MatomoTracker } from 'ngx-matomo';
+import { MatomoTracker } from 'ngx-matomo-client';
 import { RecaptchaComponent } from 'ng-recaptcha';
 
 import { Campaign } from '../campaign.model';

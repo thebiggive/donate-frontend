@@ -10,7 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RecaptchaModule } from 'ng-recaptcha';
-import { MatomoModule } from 'ngx-matomo';
+import {NgxMatomoModule, provideMatomo, withRouter} from 'ngx-matomo-client';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { AppComponent } from './app.component';
@@ -28,12 +28,9 @@ describe('AppComponent', () => {
         MatIconModule,
         MatInputModule,
         MatListModule,
-        MatomoModule.forRoot({
+        NgxMatomoModule.forRoot({
           scriptUrl: `https://example.com/matomo.js`,
-          trackers: [],
-          routeTracking: {
-            enable: true,
-          }
+          trackers: [{siteId: '', trackerUrl: ''}],
         }),
         MatSelectModule,
         NoopAnimationsModule,
@@ -47,6 +44,7 @@ describe('AppComponent', () => {
         // Inject in-memory storage for tests, in place of local storage.
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
+        provideMatomo({ trackerUrl: '', siteId: ''}, withRouter()),
       ],
     }).compileComponents();
   }));
