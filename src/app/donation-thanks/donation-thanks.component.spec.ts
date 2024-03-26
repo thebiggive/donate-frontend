@@ -13,6 +13,7 @@ import {TBG_DONATE_STORAGE} from '../donation.service';
 import {DonationThanksComponent} from './donation-thanks.component';
 import {TBG_DONATE_ID_STORAGE} from '../identity.service';
 import {Donation} from "../donation.model";
+import {NgxMatomoModule} from "ngx-matomo-client";
 
 describe('DonationThanksComponent', () => {
   let component: DonationThanksComponent;
@@ -31,6 +32,10 @@ describe('DonationThanksComponent', () => {
           routeTracking: {
             enable: true,
           }
+        }),
+        NgxMatomoModule.forRoot({
+          siteId: '',
+          trackerUrl: '',
         }),
         MatProgressSpinnerModule,
         RouterTestingModule.withRoutes([

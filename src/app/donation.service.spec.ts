@@ -9,6 +9,7 @@ import { DonationCreatedResponse } from './donation-created-response.model';
 import { DonationService, TBG_DONATE_STORAGE } from './donation.service';
 import { DonationStatus } from './donation-status.type';
 import { environment } from '../environments/environment';
+import {NgxMatomoModule} from "ngx-matomo-client";
 
 describe('DonationService', () => {
   const getDummyDonation = (status: DonationStatus = 'Pending'): Donation => {
@@ -50,6 +51,10 @@ describe('DonationService', () => {
         routeTracking: {
           enable: true,
         }
+      }),
+      NgxMatomoModule.forRoot({
+        siteId: '',
+        trackerUrl: '',
       }),
       RouterTestingModule,
     ],

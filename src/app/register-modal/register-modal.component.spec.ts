@@ -10,6 +10,7 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { RegisterModalComponent } from './register-modal.component';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 import { ActivatedRoute } from '@angular/router';
+import {NgxMatomoModule} from "ngx-matomo-client";
 
 describe('RegisterModalComponent', () => {
   let component: RegisterModalComponent;
@@ -29,6 +30,10 @@ describe('RegisterModalComponent', () => {
           routeTracking: {
             enable: true,
           }
+        }),
+        NgxMatomoModule.forRoot({
+          siteId: '',
+          trackerUrl: '',
         }),
         NoopAnimationsModule,
         ReactiveFormsModule,

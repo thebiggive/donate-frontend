@@ -13,6 +13,7 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 import { ResetPasswordComponent } from './reset-password.component';
+import {NgxMatomoModule} from "ngx-matomo-client";
 
 
 
@@ -35,6 +36,10 @@ describe('ResetPasswordComponent', () => {
           routeTracking: {
             enable: true,
           }
+        }),
+        NgxMatomoModule.forRoot({
+          siteId: '',
+          trackerUrl: '',
         }),
         MatProgressSpinnerModule,
         NoopAnimationsModule,

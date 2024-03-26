@@ -12,6 +12,7 @@ import {DonationStartFormComponent} from "../donation-start-form/donation-start-
 import {TBG_DONATE_ID_STORAGE} from "../../identity.service";
 import {TBG_DONATE_STORAGE} from "../../donation.service";
 import {Campaign} from "../../campaign.model";
+import {NgxMatomoModule} from "ngx-matomo-client";
 
 // See https://medium.com/angular-in-depth/angular-unit-testing-viewchild-4525e0c7b756
 @Component({
@@ -44,6 +45,10 @@ describe('DonationStartContainer', () => {
           routeTracking: {
             enable: true,
           }
+        }),
+        NgxMatomoModule.forRoot({
+          siteId: '',
+          trackerUrl: '',
         }),
       ],
       providers: [

@@ -7,6 +7,7 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { IdentityService, TBG_DONATE_ID_STORAGE } from './identity.service';
 import { environment } from '../environments/environment';
 import { Person } from './person.model';
+import {NgxMatomoModule} from "ngx-matomo-client";
 
 describe('IdentityService', () => {
   const getDummyPerson = (): Person => {
@@ -26,6 +27,10 @@ describe('IdentityService', () => {
         routeTracking: {
           enable: true,
         }
+      }),
+      NgxMatomoModule.forRoot({
+        siteId: '',
+        trackerUrl: '',
       }),
       RouterTestingModule,
     ],

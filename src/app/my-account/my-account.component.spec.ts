@@ -11,6 +11,7 @@ import {DonationService, TBG_DONATE_STORAGE} from "../donation.service";
 import {IdentityService, TBG_DONATE_ID_STORAGE} from '../identity.service';
 import {MyAccountComponent} from "./my-account.component";
 import { ActivatedRoute } from '@angular/router';
+import {NgxMatomoModule} from "ngx-matomo-client";
 
 describe('MyAccountComponent', () => {
   let component: MyAccountComponent;
@@ -32,6 +33,10 @@ describe('MyAccountComponent', () => {
           routeTracking: {
             enable: true,
           }
+        }),
+        NgxMatomoModule.forRoot({
+          siteId: '',
+          trackerUrl: '',
         }),
       ],
       providers: [
