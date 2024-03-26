@@ -27,12 +27,6 @@ import {
 } from 'ngx-matomo-client';
 
 const matomoBaseUri = 'https://biggive.matomo.cloud';
-const matomoTrackers = environment.matomoSiteId ? [
-  {
-    trackerUrl: `${matomoBaseUri}/matomo.php`,
-    siteId: environment.matomoSiteId,
-  },
-] : [];
 
 @NgModule({
   declarations: [
