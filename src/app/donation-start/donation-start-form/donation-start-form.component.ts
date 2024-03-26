@@ -22,8 +22,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatStepper} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RecaptchaComponent} from 'ng-recaptcha';
-import {MatomoTracker} from 'ngx-matomo';
-import {MatomoTracker as MatomoClientTracker} from 'ngx-matomo-client';
+import {MatomoTracker} from 'ngx-matomo-client';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
   PaymentIntent,
@@ -250,7 +249,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private formBuilder: FormBuilder,
     private identityService: IdentityService,
     private matomoTracker: MatomoTracker,
-    private matomoClientTracker: MatomoClientTracker,
     private pageMeta: PageMetaService,
     private postcodeService: PostcodeService,
     @Inject(PLATFORM_ID) private platformId: Object,

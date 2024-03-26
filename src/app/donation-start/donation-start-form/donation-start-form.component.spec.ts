@@ -15,7 +15,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {RecaptchaModule} from 'ng-recaptcha';
-import {MatomoModule, MatomoTracker} from 'ngx-matomo';
+import {MatomoModule} from 'ngx-matomo';
 import {MatomoTracker as MatomoClientTracker, NgxMatomoModule} from 'ngx-matomo-client';
 import {InMemoryStorageService} from 'ngx-webstorage-service';
 import {of} from 'rxjs';
@@ -50,10 +50,6 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     undefined as unknown as ElementRef<any>,
     undefined as unknown as FormBuilder,
     mockIdentityService,
-    {
-      trackEvent: () => {
-      }
-    } as unknown as MatomoTracker,
     {
       trackEvent: () => {
       }
