@@ -25,13 +25,6 @@ describe('DonationThanksComponent', () => {
         HttpClientTestingModule,
         MatButtonModule,
         MatDialogModule,
-        MatomoModule.forRoot({
-          scriptUrl: `https://example.com/matomo.js`,
-          trackers: [],
-          routeTracking: {
-            enable: true,
-          }
-        }),
         NgxMatomoModule.forRoot({
           siteId: '',
           trackerUrl: '',
