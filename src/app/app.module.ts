@@ -7,7 +7,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule, RouterOutlet} from '@angular/router';
 import {ComponentsModule} from '@biggive/components-angular';
-import {TransferHttpCacheModule} from '@angular/ssr';
 import {RECAPTCHA_BASE_URL, RECAPTCHA_NONCE} from 'ng-recaptcha';
 import {LOCAL_STORAGE} from 'ngx-webstorage-service';
 
@@ -48,7 +47,6 @@ const matomoBaseUri = 'https://biggive.matomo.cloud';
       scrollPositionRestoration: 'enabled',
     }),
     RouterOutlet,
-    TransferHttpCacheModule,
   ],
   exports: [
     RouterModule,
