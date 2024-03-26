@@ -25,8 +25,6 @@ import {
   MatomoInitializationMode,
   NgxMatomoModule,
   NgxMatomoRouterModule,
-  provideMatomo,
-  withRouter
 } from 'ngx-matomo-client';
 
 const matomoBaseUri = 'https://biggive.matomo.cloud';
@@ -92,7 +90,6 @@ const matomoTrackers = environment.matomoSiteId ? [
       provide: RECAPTCHA_BASE_URL,
       useValue: 'https://recaptcha.net/recaptcha/api.js'  // using this URL instead of default google.com means we avoid google.com cookies.
     },
-    provideMatomo({ trackerUrl: `${matomoBaseUri}/matomo.php`, siteId: environment.matomoSiteId}, withRouter())
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
