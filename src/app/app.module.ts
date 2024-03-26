@@ -20,11 +20,7 @@ import {CharityCampaignsResolver} from './charity-campaigns.resolver';
 import {TBG_DONATE_STORAGE} from './donation.service';
 import {environment} from '../environments/environment';
 import {TBG_DONATE_ID_STORAGE} from './identity.service';
-import {
-  MatomoInitializationMode,
-  NgxMatomoModule,
-  NgxMatomoRouterModule,
-} from 'ngx-matomo-client';
+import {MatomoConsentMode, MatomoInitializationMode, NgxMatomoModule, NgxMatomoRouterModule,} from 'ngx-matomo-client';
 
 const matomoBaseUri = 'https://biggive.matomo.cloud';
 
@@ -42,6 +38,7 @@ const matomoBaseUri = 'https://biggive.matomo.cloud';
       siteId: environment.matomoSiteId,
       trackerUrl: `${matomoBaseUri}/matomo.js`,
       mode: MatomoInitializationMode.AUTO,
+      requireConsent: MatomoConsentMode.COOKIE,
     }),
     NgxMatomoRouterModule.forRoot({}),
     RouterModule.forRoot(routes, {
