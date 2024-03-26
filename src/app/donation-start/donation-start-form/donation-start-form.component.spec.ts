@@ -16,6 +16,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {RecaptchaModule} from 'ng-recaptcha';
 import {MatomoModule, MatomoTracker} from 'ngx-matomo';
+import {MatomoTracker as MatomoClientTracker, NgxMatomoModule} from 'ngx-matomo-client';
 import {InMemoryStorageService} from 'ngx-webstorage-service';
 import {of} from 'rxjs';
 
@@ -53,6 +54,10 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
       trackEvent: () => {
       }
     } as unknown as MatomoTracker,
+    {
+      trackEvent: () => {
+      }
+    } as unknown as MatomoClientTracker,
     undefined as unknown as PageMetaService,
     undefined as unknown as PostcodeService,
     {},
@@ -108,6 +113,10 @@ describe('DonationStartNewPrimaryComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
+        NgxMatomoModule.forRoot({
+          siteId: '',
+          trackerUrl: '',
+        }),
       ],
       providers: [
         TimeLeftPipe,
