@@ -9,7 +9,6 @@ import {RouterModule, RouterOutlet} from '@angular/router';
 import {ComponentsModule} from '@biggive/components-angular';
 import {TransferHttpCacheModule} from '@nguniversal/common';
 import {RECAPTCHA_BASE_URL, RECAPTCHA_NONCE} from 'ng-recaptcha';
-import {MatomoModule} from 'ngx-matomo';
 import {LOCAL_STORAGE} from 'ngx-webstorage-service';
 
 import {AppComponent} from './app.component';

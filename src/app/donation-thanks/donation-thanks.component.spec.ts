@@ -5,7 +5,6 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {ActivatedRoute} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import { MatomoModule } from 'ngx-matomo';
 import {InMemoryStorageService} from 'ngx-webstorage-service';
 import {of} from 'rxjs';
 

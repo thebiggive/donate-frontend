@@ -3,7 +3,6 @@ import {Component} from "@angular/core";
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import {ActivatedRoute} from "@angular/router";
-import { MatomoModule } from 'ngx-matomo';
 import {InMemoryStorageService} from "ngx-webstorage-service";
 import {of} from "rxjs";
 
@@ -39,13 +38,6 @@ describe('DonationStartContainer', () => {
       imports: [
         HttpClientTestingModule,
         MatDialogModule,
-        MatomoModule.forRoot({
-          scriptUrl: `https://example.com/matomo.js`,
-          trackers: [],
-          routeTracking: {
-            enable: true,
-          }
-        }),
         NgxMatomoModule.forRoot({
           siteId: '',
           trackerUrl: '',
