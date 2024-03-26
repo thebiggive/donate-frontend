@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
-import { NgxMatomoModule } from 'ngx-matomo-client';
+import { MatomoModule } from 'ngx-matomo';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { LoginModalComponent } from './login-modal.component';
@@ -23,9 +23,12 @@ describe('LoginModalComponent', () => {
         HttpClientTestingModule,
         MatButtonModule,
         MatDialogModule,
-        NgxMatomoModule.forRoot({
+        MatomoModule.forRoot({
           scriptUrl: `https://example.com/matomo.js`,
-          trackers: [{siteId: '', trackerUrl: ''}],
+          trackers: [],
+          routeTracking: {
+            enable: true,
+          }
         }),
         NoopAnimationsModule,
         ReactiveFormsModule,

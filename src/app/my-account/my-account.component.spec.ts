@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import {HttpClientModule} from "@angular/common/http";
 import {NO_ERRORS_SCHEMA} from "@angular/core";
 import {MatDialogModule} from "@angular/material/dialog";
-import { NgxMatomoModule } from 'ngx-matomo-client';
+import { MatomoModule } from 'ngx-matomo';
 import {InMemoryStorageService} from "ngx-webstorage-service";
 import {of} from "rxjs";
 import {PaymentMethod} from "@stripe/stripe-js";
@@ -26,9 +26,12 @@ describe('MyAccountComponent', () => {
       imports: [
         HttpClientModule,
         MatDialogModule,
-        NgxMatomoModule.forRoot({
+        MatomoModule.forRoot({
           scriptUrl: `https://example.com/matomo.js`,
-          trackers: [{siteId: '', trackerUrl: ''}],
+          trackers: [],
+          routeTracking: {
+            enable: true,
+          }
         }),
       ],
       providers: [

@@ -5,7 +5,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {ActivatedRoute} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import { NgxMatomoModule } from 'ngx-matomo-client';
+import { MatomoModule } from 'ngx-matomo';
 import {InMemoryStorageService} from 'ngx-webstorage-service';
 import {of} from 'rxjs';
 
@@ -25,9 +25,12 @@ describe('DonationThanksComponent', () => {
         HttpClientTestingModule,
         MatButtonModule,
         MatDialogModule,
-        NgxMatomoModule.forRoot({
+        MatomoModule.forRoot({
           scriptUrl: `https://example.com/matomo.js`,
-          trackers: [{siteId: '', trackerUrl: ''}],
+          trackers: [],
+          routeTracking: {
+            enable: true,
+          }
         }),
         MatProgressSpinnerModule,
         RouterTestingModule.withRoutes([

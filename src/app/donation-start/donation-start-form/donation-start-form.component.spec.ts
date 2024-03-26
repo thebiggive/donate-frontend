@@ -15,7 +15,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {RecaptchaModule} from 'ng-recaptcha';
-import {MatomoTracker} from 'ngx-matomo-client';
+import {MatomoModule, MatomoTracker} from 'ngx-matomo';
 import {InMemoryStorageService} from 'ngx-webstorage-service';
 import {of} from 'rxjs';
 
@@ -32,7 +32,6 @@ import {PostcodeService} from "../../postcode.service";
 import {StripeService} from "../../stripe.service";
 import {Donation} from "../../donation.model";
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {NgxMatomoModule} from "ngx-matomo-client";
 
 function makeDonationStartFormComponent(donationService: DonationService,) {
   const mockIdentityService = TestBed.inject(IdentityService);
@@ -109,10 +108,6 @@ describe('DonationStartNewPrimaryComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        NgxMatomoModule.forRoot({
-          scriptUrl: `https://example.com/matomo.js`,
-          trackers: [{siteId: '', trackerUrl: ''}],
-        }),
       ],
       providers: [
         TimeLeftPipe,
@@ -211,9 +206,13 @@ describe('DonationStartNewPrimaryComponent', () => {
         MatDialogModule,
         MatIconModule,
         MatInputModule,
-        NgxMatomoModule.forRoot({
+        MatomoModule.forRoot({
           scriptUrl: `https://example.com/matomo.js`,
-          trackers: [{siteId: '', trackerUrl: ''}],        }),
+          trackers: [],
+          routeTracking: {
+            enable: true,
+          }
+        }),
         MatRadioModule,
         MatProgressSpinnerModule,
         MatSelectModule,

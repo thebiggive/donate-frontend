@@ -22,7 +22,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatStepper} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RecaptchaComponent} from 'ng-recaptcha';
-import {MatomoTracker} from 'ngx-matomo-client';
+import {MatomoTracker} from 'ngx-matomo';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
   PaymentIntent,

@@ -9,7 +9,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { ComponentsModule } from '@biggive/components-angular';
 import { TransferHttpCacheModule } from '@nguniversal/common';
 import {RECAPTCHA_BASE_URL, RECAPTCHA_NONCE} from 'ng-recaptcha';
-import { NgxMatomoModule } from 'ngx-matomo-client';
+import { MatomoModule } from 'ngx-matomo';
 import { LOCAL_STORAGE } from 'ngx-webstorage-service';
 
 import { AppComponent } from './app.component';
@@ -42,9 +42,14 @@ const matomoTrackers = environment.matomoSiteId ? [
     BrowserModule,
     ComponentsModule,
     HttpClientModule,
-    NgxMatomoModule.forRoot({
+    // Matomo module always imported, but with 0 trackers set if site ID omitted for the env.
+    MatomoModule.forRoot({
       scriptUrl: `${matomoBaseUri}/matomo.js`,
       trackers: matomoTrackers,
+      routeTracking: {
+        enable: true,
+      },
+      requireCookieConsent: true,
     }),
     RouterModule.forRoot(routes, {
       bindToComponentInputs: true,
@@ -76,7 +81,7 @@ const matomoTrackers = environment.matomoSiteId ? [
       provide: RECAPTCHA_BASE_URL,
       useValue: 'https://recaptcha.net/recaptcha/api.js'  // using this URL instead of default google.com means we avoid google.com cookies.
     },
-    provideMatomo({ trackerUrl: `${matomoBaseUri}/matomo.php`, siteId: environment.matomoSiteId}, withRouter()),
+    provideMatomo({ trackerUrl: `${matomoBaseUri}/matomo.php`, siteId: environment.matomoSiteId}, withRouter())
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
