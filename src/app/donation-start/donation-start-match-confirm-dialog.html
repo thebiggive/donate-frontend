@@ -8,7 +8,9 @@
 
     <p>Donations received once the charity has hit its target may be used for the charity's general funds.</p>
 
-    <p *ngIf="data.surplusDonationInfo">{{ data.surplusDonationInfo }}</p>
+    @if (data.surplusDonationInfo) {
+      <p>{{ data.surplusDonationInfo }}</p>
+    }
 
   </mat-dialog-content>
 

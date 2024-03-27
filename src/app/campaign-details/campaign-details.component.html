@@ -1,33 +1,40 @@
 <main class="b-container">
-  <biggive-page-section *ngIf="campaignInPast">
-    <biggive-call-to-action
-      class="b-mt-40"
-      main-title="This campaign has now closed"
-      [subtitle]="'But ' + campaign.charity.name + ' may have others'"
-      primary-button-label="View all their campaigns"
-      [primaryButtonUrl]="'/charity/' + campaign.charity.id "
-    ></biggive-call-to-action>
-  </biggive-page-section>
+  @if (campaignInPast) {
+    <biggive-page-section>
+      <biggive-call-to-action
+        class="b-mt-40"
+        main-title="This campaign has now closed"
+        [subtitle]="'But ' + campaign.charity.name + ' may have others'"
+        primary-button-label="View all their campaigns"
+        [primaryButtonUrl]="'/charity/' + campaign.charity.id "
+      ></biggive-call-to-action>
+    </biggive-page-section>
+  }
 
   <div class="b-back-button">
     <biggive-formatted-text>
-      <a *ngIf="campaign.parentRef && fromFund" mat-icon-button [routerLink]="'/' + campaign.parentRef + '/' + campaign.championRef">
-        <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
-        All {{ campaign.championName }} campaigns<br>
-      </a>
-      <a
-        class=""
-        *ngIf="campaign.parentRef && !fromFund"
-        mat-icon-button
-        (click)="goBackToMetacampaign()"
-      >
-        <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
-        All participating campaigns
-      </a>
-      <a *ngIf="!campaign.parentRef" mat-icon-button routerLink="/explore">
-        <mat-icon class="" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
-        All campaigns
-      </a>
+      @if (campaign.parentRef && fromFund) {
+        <a mat-icon-button [routerLink]="'/' + campaign.parentRef + '/' + campaign.championRef">
+          <mat-icon class="listing-button__icon" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
+          All {{ campaign.championName }} campaigns<br>
+        </a>
+      }
+      @if (campaign.parentRef && !fromFund) {
+        <a
+          class=""
+          mat-icon-button
+          (click)="goBackToMetacampaign()"
+          >
+          <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
+          All participating campaigns
+        </a>
+      }
+      @if (!campaign.parentRef) {
+        <a mat-icon-button routerLink="/explore">
+          <mat-icon class="" aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
+          All campaigns
+        </a>
+      }
     </biggive-formatted-text>
   </div>
 
@@ -40,7 +47,7 @@
         [slug]="campaign.isMatched ? 'Match Funded' : null"
         [charityName]="campaign.charity.name"
         [charityLocation]="campaign.countries.length > 1 ? 'Multiple locations' : (campaign.countries[0] || null)"
-      >
+        >
       </biggive-branded-image>
 
       <biggive-heading
@@ -51,7 +58,7 @@
         size="3"
         align="left"
         [text]="campaign.title"
-      >
+        >
       </biggive-heading>
 
       <biggive-formatted-text
@@ -59,83 +66,91 @@
         <p>{{ campaign.summary }}</p>
       </biggive-formatted-text>
 
-      <biggive-social-icon
-        *ngIf="campaign.charity.website"
-        service="Web"
-        [labelPrefix]="campaign.charity.name"
-        [url]="campaign.charity.website"
-        background-colour="black"
-        icon-colour="white"
-        wide="true"
-      ></biggive-social-icon>
+      @if (campaign.charity.website) {
+        <biggive-social-icon
+          service="Web"
+          [labelPrefix]="campaign.charity.name"
+          [url]="campaign.charity.website"
+          background-colour="black"
+          icon-colour="white"
+          wide="true"
+        ></biggive-social-icon>
+      }
 
-      <biggive-social-icon
-        *ngIf="campaign.charity.facebook"
-        service="Facebook"
-        [labelPrefix]="campaign.charity.name"
-        [url]="campaign.charity.facebook"
-        background-colour="black"
-        icon-colour="white"
-        wide="true"
-      ></biggive-social-icon>
+      @if (campaign.charity.facebook) {
+        <biggive-social-icon
+          service="Facebook"
+          [labelPrefix]="campaign.charity.name"
+          [url]="campaign.charity.facebook"
+          background-colour="black"
+          icon-colour="white"
+          wide="true"
+        ></biggive-social-icon>
+      }
 
-      <biggive-social-icon
-        *ngIf="campaign.charity.twitter"
-        service="Twitter"
-        [labelPrefix]="campaign.charity.name"
-        [url]="campaign.charity.twitter"
-        background-colour="black"
-        icon-colour="white"
-        wide="true"
-      ></biggive-social-icon>
+      @if (campaign.charity.twitter) {
+        <biggive-social-icon
+          service="Twitter"
+          [labelPrefix]="campaign.charity.name"
+          [url]="campaign.charity.twitter"
+          background-colour="black"
+          icon-colour="white"
+          wide="true"
+        ></biggive-social-icon>
+      }
 
-      <biggive-social-icon
-        *ngIf="campaign.charity.linkedin"
-        service="LinkedIn"
-        [labelPrefix]="campaign.charity.name"
-        [url]="campaign.charity.linkedin"
-        background-colour="black"
-        icon-colour="white"
-        wide="true"
-      ></biggive-social-icon>
+      @if (campaign.charity.linkedin) {
+        <biggive-social-icon
+          service="LinkedIn"
+          [labelPrefix]="campaign.charity.name"
+          [url]="campaign.charity.linkedin"
+          background-colour="black"
+          icon-colour="white"
+          wide="true"
+        ></biggive-social-icon>
+      }
 
-      <biggive-social-icon
-        *ngIf="campaign.charity.instagram"
-        service="Instagram"
-        [labelPrefix]="campaign.charity.name"
-        [url]="campaign.charity.instagram"
-        background-colour="black"
-        icon-colour="white"
-        wide="true"
-      ></biggive-social-icon>
+      @if (campaign.charity.instagram) {
+        <biggive-social-icon
+          service="Instagram"
+          [labelPrefix]="campaign.charity.name"
+          [url]="campaign.charity.instagram"
+          background-colour="black"
+          icon-colour="white"
+          wide="true"
+        ></biggive-social-icon>
+      }
 
       <div id="campaign-highlights-beneficiaries-and-categories-mobile">
         <div class="button-wrapper">
-          <biggive-button
-            *ngIf="donateEnabled"
-            space-below="5"
-            colour-scheme="primary"
-            label="Donate now"
-            full-width="true"
-            size="medium"
-            rounded="false"
-            [url]="'/donate/' + campaign.id"
-          ></biggive-button>
+          @if (donateEnabled) {
+            <biggive-button
+              space-below="5"
+              colour-scheme="primary"
+              label="Donate now"
+              full-width="true"
+              size="medium"
+              rounded="false"
+              [url]="'/donate/' + campaign.id"
+            ></biggive-button>
+          }
         </div>
         <app-campaign-info [campaign]="campaign"></app-campaign-info>
       </div>
 
-      <div class="c-video" *ngIf="videoEmbedUrl">
-        <iframe
-          loading="lazy"
-          class="c-video__iframe b-w-100"
-          [src]="videoEmbedUrl"
-          frameborder="0"
-          allow="encrypted-media"
-          webkitallowfullscreen="true"
-          mozallowfullscreen="true"
+      @if (videoEmbedUrl) {
+        <div class="c-video">
+          <iframe
+            loading="lazy"
+            class="c-video__iframe b-w-100"
+            [src]="videoEmbedUrl"
+            frameborder="0"
+            allow="encrypted-media"
+            webkitallowfullscreen="true"
+            mozallowfullscreen="true"
           allowfullscreen="true"></iframe>
-      </div>
+        </div>
+      }
 
 
       <div class="c-tabs">
@@ -151,7 +166,7 @@
                 size="3"
                 align="left"
                 text="Situation"
-              >
+                >
               </biggive-heading>
 
               <biggive-formatted-text
@@ -167,7 +182,7 @@
                 size="3"
                 align="left"
                 text="Solution"
-              >
+                >
               </biggive-heading>
 
               <biggive-formatted-text
@@ -177,91 +192,106 @@
 
             </div>
 
-            <div class="c-additional" *ngIf="campaign.additionalImageUris.length > 0">
-              <img
-                *ngFor="let image of campaign.additionalImageUris"
-                [src]="image.uri | optimisedImage:850 | async"
-                class="c-additional__images"
-              >
-            </div>
+            @if (campaign.additionalImageUris.length > 0) {
+              <div class="c-additional">
+                @for (image of campaign.additionalImageUris; track image) {
+                  <img
+                    [src]="image.uri | optimisedImage:850 | async"
+                    class="c-additional__images"
+                    >
+                }
+              </div>
+            }
 
-            <ul class="c-quotes" *ngIf="campaign.quotes.length > 0">
-              <li *ngFor="let quote of campaign.quotes">
-
-
-                <biggive-quote
-                  space-below="4"
-                  default-text-colour="black"
-                  [quote]="quote.quote"
-                  [attribution]="quote.person"
-                >
-                </biggive-quote>
-              </li>
-            </ul>
+            @if (campaign.quotes.length > 0) {
+              <ul class="c-quotes">
+                @for (quote of campaign.quotes; track quote) {
+                  <li>
+                    <biggive-quote
+                      space-below="4"
+                      default-text-colour="black"
+                      [quote]="quote.quote"
+                      [attribution]="quote.person"
+                      >
+                    </biggive-quote>
+                  </li>
+                }
+              </ul>
+            }
           </mat-tab>
 
-          <mat-tab *ngIf="campaign.updates.length > 0" label="Updates">
-            <ul class="c-updates" *ngFor="let update of campaign.updates">
-              <li>
-                <biggive-formatted-text>
-                  <h4 class="b-semi-bold b-mb-0">{{ update.modifiedDate | date : 'longDate' }}</h4>
-                  <p class="c-updates__description">{{ update.content }}</p>
-                </biggive-formatted-text>
-              </li>
-            </ul>
-          </mat-tab>
+          @if (campaign.updates.length > 0) {
+            <mat-tab label="Updates">
+              @for (update of campaign.updates; track update) {
+                <ul class="c-updates">
+                  <li>
+                    <biggive-formatted-text>
+                      <h4 class="b-semi-bold b-mb-0">{{ update.modifiedDate | date : 'longDate' }}</h4>
+                      <p class="c-updates__description">{{ update.content }}</p>
+                    </biggive-formatted-text>
+                  </li>
+                </ul>
+              }
+            </mat-tab>
+          }
 
-          <mat-tab *ngIf="campaign.aims.length > 0" label="Aims">
-            <biggive-heading
-              space-above=6
-              space-below=0
-              colour="primary"
-              html-element="h3"
-              size="3"
-              align="left"
-              text="Campaign Aims"
-            >
-            </biggive-heading>
-
-            <ul class="c-aims" *ngFor="let aim of campaign.aims">
-              <li class="b-rt-0">{{ aim }}</li>
-            </ul>
-          </mat-tab>
-
-          <mat-tab *ngIf="campaign.budgetDetails.length > 0 || campaign.alternativeFundUse" label="Where's the money going?">
-
-            <biggive-heading
-              space-above=6
-              space-below=0
-              colour="primary"
-              html-element="h3"
-              size="3"
-              align="left"
-              text="Campaign Budget"
-            >
-            </biggive-heading>
-
-            <ul class="c-budget" *ngFor="let detail of campaign.budgetDetails">
-              <li class="c-budget__item">
-                <span class="c-budget__value b-semi-bold">{{ detail.amount | currency : campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo }}</span>
-                &ndash; {{ detail.description }}
-              </li>
-            </ul>
-
-            <div class="c-alternative-funds" *ngIf="campaign.alternativeFundUse">
+          @if (campaign.aims.length > 0) {
+            <mat-tab label="Aims">
               <biggive-heading
                 space-above=6
                 space-below=0
                 colour="primary"
-                html-element="h4"
-                size="4"
+                html-element="h3"
+                size="3"
                 align="left"
-                text="Understanding the Target"
-              >
+                text="Campaign Aims"
+                >
               </biggive-heading>
-              <p class="c-alternative-funds__description">{{ campaign.alternativeFundUse }}</p>
-            </div>
-          </mat-tab>
+              @for (aim of campaign.aims; track aim) {
+                <ul class="c-aims">
+                  <li class="b-rt-0">{{ aim }}</li>
+                </ul>
+              }
+            </mat-tab>
+          }
+
+          @if (campaign.budgetDetails.length > 0 || campaign.alternativeFundUse) {
+            <mat-tab label="Where's the money going?">
+              <biggive-heading
+                space-above=6
+                space-below=0
+                colour="primary"
+                html-element="h3"
+                size="3"
+                align="left"
+                text="Campaign Budget"
+                >
+              </biggive-heading>
+              @for (detail of campaign.budgetDetails; track detail) {
+                <ul class="c-budget">
+                  <li class="c-budget__item">
+                    <span class="c-budget__value b-semi-bold">{{ detail.amount | currency : campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo }}</span>
+                    &ndash; {{ detail.description }}
+                  </li>
+                </ul>
+              }
+              @if (campaign.alternativeFundUse) {
+                <div class="c-alternative-funds">
+                  <biggive-heading
+                    space-above=6
+                    space-below=0
+                    colour="primary"
+                    html-element="h4"
+                    size="4"
+                    align="left"
+                    text="Understanding the Target"
+                    >
+                  </biggive-heading>
+                  <p class="c-alternative-funds__description">{{ campaign.alternativeFundUse }}</p>
+                </div>
+              }
+            </mat-tab>
+          }
 
           <mat-tab label="Impact &amp; reporting">
             <div class="c-impact">
@@ -273,7 +303,7 @@
                 size="3"
                 align="left"
                 text="Impact"
-              >
+                >
               </biggive-heading>
               <p class="c-impact__description">{{ campaign.impactSummary }}</p>
 
@@ -285,7 +315,7 @@
                 size="3"
                 align="left"
                 text="Reporting"
-              >
+                >
               </biggive-heading>
               <p class="c-impact__description">{{ campaign.impactReporting }}</p>
             </div>
@@ -299,16 +329,17 @@
         <app-campaign-info [campaign]="campaign"></app-campaign-info>
 
         <div class="button-wrapper">
-          <biggive-button
-            *ngIf="donateEnabled"
-            space-above="5"
-            colour-scheme="primary"
-            label="Donate now"
-            full-width="true"
-            size="medium"
-            rounded="false"
-            [url]="'/donate/' + campaign.id"
-          ></biggive-button>
+          @if (donateEnabled) {
+            <biggive-button
+              space-above="5"
+              colour-scheme="primary"
+              label="Donate now"
+              full-width="true"
+              size="medium"
+              rounded="false"
+              [url]="'/donate/' + campaign.id"
+            ></biggive-button>
+          }
         </div>
       </div>
     </div>

@@ -1,10 +1,12 @@
 <main class="b-container">
-  <div *ngIf="reservationExpiryDate" class="c-timer">
-    <div class="centered">
-      <span class="b-rt-0">Your match funds are reserved for:&nbsp;</span>
-      <span class="b-rt-1 b-bold time-left">{{ reservationExpiryDate | timeLeft }}</span>
+  @if (reservationExpiryDate) {
+    <div class="c-timer">
+      <div class="centered">
+        <span class="b-rt-0">Your match funds are reserved for:&nbsp;</span>
+        <span class="b-rt-1 b-bold time-left">{{ reservationExpiryDate | timeLeft }}</span>
+      </div>
     </div>
-  </div>
+  }
   <div class="b-back-button">
     <a mat-icon-button [routerLink]="'/campaign/' + campaign.id">
       <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
@@ -23,42 +25,50 @@
         [loginChangeEmitter]="identityService.loginStatusChanged"
       ></app-donation-start-login>
 
-      <p *ngIf="!campaignOpenOnLoad">Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
+      @if (!campaignOpenOnLoad) {
+        <p>Donations open {{ campaign.startDate | date : 'h:mm a, d LLLL yyyy' }} to {{ campaign.endDate | date : 'h:mm a, d LLLL yyyy' }}</p>
+      }
 
       <!-- We don't want to let the form's ngInit run before ours completes, or we would have odd behaviour
-         around loading the logged in user - hence conditional on dataLoaded -->
-     <app-donation-start-form *ngIf="campaignOpenOnLoad"
-       #donation_start_form
-       [campaign]="campaign"
-       [donor]="donor"
-       [donationChangeCallBack]="setDonation"
-       [campaignOpenOnLoad]="campaignOpenOnLoad"
-     />
+      around loading the logged in user - hence conditional on dataLoaded -->
+      @if (campaignOpenOnLoad) {
+        <app-donation-start-form
+          #donation_start_form
+          [campaign]="campaign"
+          [donor]="donor"
+          [donationChangeCallBack]="setDonation"
+          [campaignOpenOnLoad]="campaignOpenOnLoad"
+          />
+      }
 
     </div>
     <div class="b-secondary-column">
       <!-- On this page, we agreed that this info is best to hide entirely on mobile. So
       this has no `mobile` counterpart but we still use the mixin that hides this on mobile. -->
-      <div
-        *ngIf="campaign"
-        id="campaign-highlights-beneficiaries-and-categories-desktop"
-      >
-        <div class="match-funded-badge-wrapper">
-          <div *ngIf="campaign.matchFundsRemaining > 0" class="match-funded-badge">
-            Match Funded
-          </div>
-        </div>
-        <div class="c-banner">
-          <img
-            class="c-banner__image b-w-100"
-            *ngIf="bannerUri"
-            [src]="bannerUri"
-            alt=""
-            role="presentation"
+      @if (campaign) {
+        <div
+          id="campaign-highlights-beneficiaries-and-categories-desktop"
           >
+          <div class="match-funded-badge-wrapper">
+            @if (campaign.matchFundsRemaining > 0) {
+              <div class="match-funded-badge">
+                Match Funded
+              </div>
+            }
+          </div>
+          <div class="c-banner">
+            @if (bannerUri) {
+              <img
+                class="c-banner__image b-w-100"
+                [src]="bannerUri"
+                alt=""
+                role="presentation"
+                >
+            }
+          </div>
+          <app-campaign-info [campaign]="campaign"></app-campaign-info>
         </div>
-        <app-campaign-info [campaign]="campaign"></app-campaign-info>
-      </div>
+      }
     </div>
   </div>
 </main>
