@@ -19,7 +19,13 @@ import {CharityCampaignsResolver} from './charity-campaigns.resolver';
 import {TBG_DONATE_STORAGE} from './donation.service';
 import {environment} from '../environments/environment';
 import {TBG_DONATE_ID_STORAGE} from './identity.service';
-import {MatomoConsentMode, MatomoInitializationMode, NgxMatomoModule, NgxMatomoRouterModule,} from 'ngx-matomo-client';
+import {
+  MatomoConsentMode,
+  MatomoInitializationMode,
+  MatomoModule, MatomoRouterModule,
+  NgxMatomoModule,
+  NgxMatomoRouterModule,
+} from 'ngx-matomo-client';
 
 const matomoBaseUri = 'https://biggive.matomo.cloud';
 
@@ -33,13 +39,13 @@ const matomoBaseUri = 'https://biggive.matomo.cloud';
     BrowserModule,
     ComponentsModule,
     HttpClientModule,
-    NgxMatomoModule.forRoot({
+    MatomoModule.forRoot({
       siteId: environment.matomoSiteId,
       trackerUrl: matomoBaseUri,
       mode: MatomoInitializationMode.AUTO,
       requireConsent: MatomoConsentMode.COOKIE,
     }),
-    NgxMatomoRouterModule.forRoot({}),
+    MatomoRouterModule.forRoot({}),
     RouterModule.forRoot(routes, {
       bindToComponentInputs: true,
       initialNavigation: 'enabledBlocking', // "This value is required for server-side rendering to work." https://angular.io/api/router/InitialNavigation
