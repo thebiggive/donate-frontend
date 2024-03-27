@@ -22,9 +22,7 @@ import {TBG_DONATE_ID_STORAGE} from './identity.service';
 import {
   MatomoConsentMode,
   MatomoInitializationMode,
-  MatomoModule, MatomoRouterModule,
-  NgxMatomoModule,
-  NgxMatomoRouterModule,
+  MatomoModule, MatomoRouterModule
 } from 'ngx-matomo-client';
 
 const matomoBaseUri = 'https://biggive.matomo.cloud';
