@@ -47,7 +47,7 @@ jobs:
       # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app
       # builds. Otherwise the two builds will have different output hashes and the dynamic app will reference
       # static files that don't exist.
-      - image: node:16.18
+      - image: node:20.11
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_ACCESS_TOKEN
@@ -91,7 +91,7 @@ jobs:
       # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app
       # builds. Otherwise the two builds will have different output hashes and the dynamic app will reference
       # static files that don't exist.
-      - image: node:16.18
+      - image: node:20.11
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_ACCESS_TOKEN
@@ -135,7 +135,7 @@ jobs:
       # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app
       # builds. Otherwise the two builds will have different output hashes and the dynamic app will reference
       # static files that don't exist.
-      - image: node:16.18
+      - image: node:20.11
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_ACCESS_TOKEN
