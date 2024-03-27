@@ -162,7 +162,7 @@ export class DonationThanksComponent implements OnInit {
     });
   }
 
-  loginCaptchaReturn(captchaResponse: string) {
+  loginCaptchaReturn(captchaResponse: string | null) {
     if (captchaResponse === null) {
       // This is expected after ~1 min when the code expires. At this point we should
       // never be executing the login again because if the captcha was set up at all then

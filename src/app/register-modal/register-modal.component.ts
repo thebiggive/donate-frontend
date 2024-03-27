@@ -66,7 +66,7 @@ export class RegisterModalComponent implements OnInit {
     this.registering = false;
   }
 
-  captchaReturn(captchaResponse: string) {
+  captchaReturn(captchaResponse: string | null) {
     if (captchaResponse === null) {
       // We had a code but now don't, e.g. after expiry at 1 minute. In this case
       // the trigger wasn't a register click so do nothing. A repeat register attempt will
