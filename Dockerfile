@@ -11,7 +11,8 @@ ARG FONTAWESOME_NPM_AUTH_TOKEN
 COPY .npmrc ./
 
 # Skip Puppeteer Chromium download. https://github.com/puppeteer/puppeteer/issues/2262#issuecomment-407405037
-RUN env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+RUN npm install
 
 # Now copy the app source
 COPY . .
