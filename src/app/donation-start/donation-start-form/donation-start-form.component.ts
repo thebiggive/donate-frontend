@@ -987,7 +987,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     )
   }
 
-  captchaIdentityReturn(captchaResponse: string) {
+  captchaIdentityReturn(captchaResponse: string | null) {
     if (captchaResponse === null) {
       // Ensure no other callback tries to use the old captcha code, and will re-execute
       // the catcha to get a new one as needed instead.

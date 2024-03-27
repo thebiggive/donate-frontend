@@ -7,7 +7,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule, RouterOutlet} from '@angular/router';
 import {ComponentsModule} from '@biggive/components-angular';
-import {TransferHttpCacheModule} from '@nguniversal/common';
 import {RECAPTCHA_BASE_URL, RECAPTCHA_NONCE} from 'ng-recaptcha';
 import {LOCAL_STORAGE} from 'ngx-webstorage-service';
 
@@ -20,7 +19,11 @@ import {CharityCampaignsResolver} from './charity-campaigns.resolver';
 import {TBG_DONATE_STORAGE} from './donation.service';
 import {environment} from '../environments/environment';
 import {TBG_DONATE_ID_STORAGE} from './identity.service';
-import {MatomoConsentMode, MatomoInitializationMode, NgxMatomoModule, NgxMatomoRouterModule,} from 'ngx-matomo-client';
+import {
+  MatomoConsentMode,
+  MatomoInitializationMode,
+  MatomoModule, MatomoRouterModule
+} from 'ngx-matomo-client';
 
 const matomoBaseUri = 'https://biggive.matomo.cloud';
 
@@ -34,13 +37,13 @@ const matomoBaseUri = 'https://biggive.matomo.cloud';
     BrowserModule,
     ComponentsModule,
     HttpClientModule,
-    NgxMatomoModule.forRoot({
+    ...(environment.matomoSiteId ? [MatomoModule.forRoot({
       siteId: environment.matomoSiteId,
       trackerUrl: matomoBaseUri,
       mode: MatomoInitializationMode.AUTO,
       requireConsent: MatomoConsentMode.COOKIE,
-    }),
-    NgxMatomoRouterModule.forRoot({}),
+    })] : []),
+    MatomoRouterModule.forRoot({}),
     RouterModule.forRoot(routes, {
       bindToComponentInputs: true,
       initialNavigation: 'enabledBlocking', // "This value is required for server-side rendering to work." https://angular.io/api/router/InitialNavigation
@@ -48,7 +51,6 @@ const matomoBaseUri = 'https://biggive.matomo.cloud';
       scrollPositionRestoration: 'enabled',
     }),
     RouterOutlet,
-    TransferHttpCacheModule,
   ],
   exports: [
     RouterModule,
