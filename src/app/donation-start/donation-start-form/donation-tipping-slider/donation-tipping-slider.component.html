@@ -1,19 +1,15 @@
-<div class="container space-below-0">
-  <div class="bar" #bar>
-    <div class="tooltip" #tooltip>
-      <span class="donation-value" #donationValue>{{currencyFormatted}}</span>
-      @if (currencyFormatted) {
-        <span>&nbsp;(</span>
-      }
-      <span class="percentage-value" #percentageValue>{{selectedPercentage}}</span>%@if (currencyFormatted) {
-      <span>)</span>
-    }
+  <div class="container space-below-0">
+    <div class="bar" #bar>
+              <div class="tooltip" #tooltip>
+                  <span class="donation-value" #donationValue>{{currencyFormatted}}</span>
+                <span *ngIf="currencyFormatted">&nbsp;(</span>
+                  <span class="percentage-value" #percentageValue>{{selectedPercentage}}</span>%<span *ngIf="currencyFormatted">)</span>
+              </div>
+      <div class="handle" #handle>
+      </div>
+    </div>
+    <div class="labels">
+      <div class="label-start">{{percentageStart}}%</div>
+      <div class="label-end">{{percentageEnd}}%</div>
+    </div>
   </div>
-  <div class="handle" #handle>
-  </div>
-</div>
-<div class="labels">
-  <div class="label-start">{{percentageStart}}%</div>
-  <div class="label-end">{{percentageEnd}}%</div>
-</div>
-</div>

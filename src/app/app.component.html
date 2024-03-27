@@ -1,44 +1,40 @@
-@if (currentUrlWithoutHash$ | async; as currentUrl) {
-  <div class="skip-to-content-link">
+  <div class="skip-to-content-link" *ngIf="currentUrlWithoutHash$ | async as currentUrl">
     <!--
-    Can't use a simple relative link for the URL because we have base href set of /d/ set in non-dev environments
-    which is needed for links to assets but would break this.
+          Can't use a simple relative link for the URL because we have base href set of /d/ set in non-dev environments
+          which is needed for links to assets but would break this.
     -->
     <a [href]="currentUrl.toString() + '#content'">Skip to content</a>
   </div>
-}
 
 
-@if (isDataLoaded) {
   <biggive-main-menu
+    *ngIf="isDataLoaded"
     [donateUrlPrefix]="donateUriPrefix"
     [blogUrlPrefix]="blogUriPrefix"
     [experienceUrlPrefix]="experienceUriPrefix"
     [isLoggedIn]="isLoggedIn"
     [myAccountflagEnabled]="true"
   ></biggive-main-menu>
-}
 
-<a id="content">
-  <!-- target for "skip to content" link -->
-</a>
-<router-outlet></router-outlet>
+  <a id="content">
+    <!-- target for "skip to content" link -->
+  </a>
+  <router-outlet></router-outlet>
 
-<biggive-footer
+  <biggive-footer
   [headingLevel]=3
   [usePresetFooter]="true"
   [blogUrlPrefix]="blogUriPrefix"
   [experienceUrlPrefix]="experienceUriPrefix"
 ></biggive-footer>
 
-<!-- We only render the following div if isPlatformBrowser, because if rendered on the server side it would flash up on page reload
-for a few hundred ms for people who have already made cookie preference selection who don't need to see it again. I found
-that was an issue on mobile, I couldn't see the issue on desktop browsers.
--->
-@if (isPlatformBrowser && (userHasExpressedCookiePreference$ | async) === false) {
-  <div
-    id="cookie-banner"
-    >
+  <!-- We only render the following div if isPlatformBrowser, because if rendered on the server side it would flash up on page reload
+       for a few hundred ms for people who have already made cookie preference selection who don't need to see it again. I found
+       that was an issue on mobile, I couldn't see the issue on desktop browsers.
+   -->
+<div
+  id="cookie-banner"
+  *ngIf="isPlatformBrowser && (userHasExpressedCookiePreference$ | async) === false"
+>
     <biggive-cookie-banner [blogUriPrefix]="environment.blogUriPrefix" />
-  </div>
-}
+</div>

@@ -6,12 +6,8 @@
 
     <p>Donation amount: <strong>{{ data.donation.donationAmount | exactCurrency:data.donation.currencyCode }}</strong></p>
 
-    @if (data.donation.matchReservedAmount > 0) {
-      <p>Match funds reserved: <strong>{{ data.donation.matchReservedAmount | exactCurrency:data.donation.currencyCode }}</strong></p>
-    }
-    @if (data.donation.matchReservedAmount === 0) {
-      <p>No match funds are reserved.</p>
-    }
+    <p *ngIf="data.donation.matchReservedAmount > 0">Match funds reserved: <strong>{{ data.donation.matchReservedAmount | exactCurrency:data.donation.currencyCode }}</strong></p>
+    <p *ngIf="data.donation.matchReservedAmount === 0">No match funds are reserved.</p>
 
     <p>Please confirm if you would rather proceed, or cancel this and provide new donation details.</p>
   </mat-dialog-content>

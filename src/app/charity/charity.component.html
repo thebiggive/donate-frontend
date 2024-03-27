@@ -1,46 +1,39 @@
 <main class="b-container">
   <div class="c-header">
-    @if (campaigns[0]) {
-      <h1 class="b-rh-1 b-bold">{{ campaigns[0].charity.name }} Campaigns</h1>
-    }
+    <h1 *ngIf="campaigns[0]" class="b-rh-1 b-bold">{{ campaigns[0].charity.name }} Campaigns</h1>
   </div>
 
   <div>
-    @if (campaigns.length === 0) {
-      <div>
-        <p class="error" aria-live="polite">
-          None yet! <a tabindex="0" routerLink="/">Find campaigns here</a>.
-        </p>
-      </div>
-    }
+    <div *ngIf="campaigns.length === 0">
+      <p class="error" aria-live="polite">
+        None yet! <a tabindex="0" routerLink="/">Find campaigns here</a>.
+      </p>
+    </div>
 
-    @if (campaigns) {
-      <biggive-grid
+    <biggive-grid
         slot="campaign-grid"
         column-count="3"
-        >
-        @for (campaign of campaigns; track campaign) {
-          <div>
-            <biggive-campaign-card
-              id="campaign-{{campaign.id}}"
-              [banner]="campaign.imageUri | optimisedImage:830 | async"
-              [campaignType]="campaign.isMatched ? 'Match Funded' : null"
-              [campaignTitle]="campaign.title"
-              [donateButtonUrl]="'/donate/' + campaign.id"
-              [moreInfoButtonUrl]="'/campaign/' + campaign.id"
-              [organisationName]="campaign.charity.name"
-              primary-figure-label="Match Funds Remaining"
-              [primaryFigureAmount]="campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
-              [progressBarCounter]="getPercentageRaised(campaign)"
-              secondary-figure-label="Total Funds Raised"
-              [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
-              [isFutureCampaign]="isInFuture(campaign)"
-              [isPastCampaign]="isInPast(campaign)"
-              [datetime]="getRelevantDateAsStr(campaign)">
-            </biggive-campaign-card>
-          </div>
-        }
+        *ngIf="campaigns"
+      >
+        <div *ngFor="let campaign of campaigns">
+          <biggive-campaign-card
+            id="campaign-{{campaign.id}}"
+            [banner]="campaign.imageUri | optimisedImage:830 | async"
+            [campaignType]="campaign.isMatched ? 'Match Funded' : null"
+            [campaignTitle]="campaign.title"
+            [donateButtonUrl]="'/donate/' + campaign.id"
+            [moreInfoButtonUrl]="'/campaign/' + campaign.id"
+            [organisationName]="campaign.charity.name"
+            primary-figure-label="Match Funds Remaining"
+            [primaryFigureAmount]="campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
+            [progressBarCounter]="getPercentageRaised(campaign)"
+            secondary-figure-label="Total Funds Raised"
+            [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
+            [isFutureCampaign]="isInFuture(campaign)"
+            [isPastCampaign]="isInPast(campaign)"
+            [datetime]="getRelevantDateAsStr(campaign)">
+          </biggive-campaign-card>
+        </div>
       </biggive-grid>
-    }
   </div>
 </main>

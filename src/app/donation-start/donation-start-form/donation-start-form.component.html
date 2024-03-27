@@ -1,202 +1,197 @@
-@if (showDebugInfo) {
-  <div
-    style="outline: solid green 1px; position: fixed; top: 200px; left: 50px; width: 400px; background: white"
+<div
+  *ngIf="showDebugInfo"
+  style="outline: solid green 1px; position: fixed; top: 200px; left: 50px; width: 400px; background: white"
+>
+  Selected saved method: {{selectedSavedMethod?.id}} {{selectedSavedMethod?.card?.last4}} <br/> Customer of method {{selectedSavedMethod?.customer}}
+  <br /><br>
+  Customer: Email: {{donor?.email_address}} <br/> ID: {{donor?.id}} <br/> Stripe ID {{donor?.stripe_customer_id}}
+  <br/><br>
+  Donation {{ donation?.donationAmount }}
+  <br>PSP customer ID: {{donation?.pspCustomerId}}
+</div>
+<form
+  class="c-donate-form"
+  (keydown.enter)="interceptSubmitAndProceedInstead($event)"
+  [formGroup]="donationForm"
+  *ngIf="campaignOpenOnLoad"
+>
+    <mat-vertical-stepper
+      id="stepper"
+      linear
+      #stepper
+      (selectionChange)="stepChanged($event)"
+      [@.disabled]
     >
-    Selected saved method: {{selectedSavedMethod?.id}} {{selectedSavedMethod?.card?.last4}} <br/> Customer of method {{selectedSavedMethod?.customer}}
-    <br /><br>
-    Customer: Email: {{donor?.email_address}} <br/> ID: {{donor?.id}} <br/> Stripe ID {{donor?.stripe_customer_id}}
-    <br/><br>
-    Donation {{ donation?.donationAmount }}
-    <br>PSP customer ID: {{donation?.pspCustomerId}}
-    </div>
-  }
-  @if (campaignOpenOnLoad) {
-    <form
-      class="c-donate-form"
-      (keydown.enter)="interceptSubmitAndProceedInstead($event)"
-      [formGroup]="donationForm"
+      <mat-step
+        formGroupName="amounts"
+        [stepControl]="amountsGroup"
+        [label]="yourDonationStepLabel"
+        class="c-your-donation"
       >
-      <mat-vertical-stepper
-        id="stepper"
-        linear
-        #stepper
-        (selectionChange)="stepChanged($event)"
-        [@.disabled]
-        >
-        <mat-step
-          formGroupName="amounts"
-          [stepControl]="amountsGroup"
-          [label]="yourDonationStepLabel"
-          class="c-your-donation"
-          >
-          @if (campaign.matchFundsRemaining > 0) {
-            <p class="c-your-donation__highlight">
-              Match funds are currently available!
-            </p>
-          }
-          <div class="donationInfoWrapper">
-            <div>
-              <p class="b-rt-0 b-m-0">You are supporting:</p>
-              <p class="b-rt-0 b-m-0 b-bold">{{ campaign.charity.name }}</p>
-            </div>
-            <div>
-              <p class="b-rt-0 b-m-0">for:</p>
-              <p class="b-rt-0 b-m-0 b-bold">{{ campaign.title }}</p>
-            </div>
+        <p *ngIf="campaign.matchFundsRemaining > 0" class="c-your-donation__highlight">
+          Match funds are currently available!
+        </p>
+
+        <div class="donationInfoWrapper">
+          <div>
+            <p class="b-rt-0 b-m-0">You are supporting:</p>
+            <p class="b-rt-0 b-m-0 b-bold">{{ campaign.charity.name }}</p>
           </div>
-          <div class="donation-input donation-input-main">
+          <div>
+            <p class="b-rt-0 b-m-0">for:</p>
+            <p class="b-rt-0 b-m-0 b-bold">{{ campaign.title }}</p>
+          </div>
+        </div>
+
+        <div class="donation-input donation-input-main">
             <biggive-text-input currency="{{campaign.currencyCode}}">
               <!-- If a charity name is more than about 20 chars it may not fit in the label space and would
-              make the input unusable
-              -->
-              @if (campaign.charity.name.length < 20) {
-                <label
-                  class="label-with-limited-space"
-                  slot="label"
-                  for="donationAmount"
-                  >
-                  Donation to {{campaign.charity.name}}
-                </label>
-              } @else {
-                <label slot="label" for="donationAmount">Donation to {{campaign.charity.name.slice(0, 17)}}…</label>
-              }
+                   make the input unusable
+               -->
+              <label
+                *ngIf="campaign.charity.name.length < 20; else donationLabelTruncated"
+                class="label-with-limited-space"
+                slot="label"
+                for="donationAmount"
+              >
+                Donation to {{campaign.charity.name}}
+              </label>
+              <ng-template #donationLabelTruncated>
+              <label slot="label" for="donationAmount">Donation to {{campaign.charity.name.slice(0, 17)}}…</label>
+              </ng-template>
               <input
                 maxlength="10"
                 formControlName="donationAmount" id="donationAmount" matInput
                 slot="input"
-                />
+              />
             </biggive-text-input>
-          </div>
-          @if (donationAmountField?.invalid && donationAmountField?.errors && (donationAmountField?.dirty || donationAmountField?.touched)) {
-            <div
-              class="error"
-              aria-live="polite"
-              >
-              {{ displayableAmountsStepErrors() }}
-            </div>
-          }
-          @if (creditPenceToUse === 0) {
-            <div>
-              <hr style="margin: 20px auto;">
-              <h2 class="b-rt-0 b-m-0 b-bold">Tip Big Give</h2>
-              @if (!campaign.feePercentage && creditPenceToUse === 0) {
-                <p>
-                  Big Give is a registered charity (1136547) and since 2008 has been helping thousands of charities double their donations. Tips left by generous people like you go into our Anchor Match Fund to provide further match funding for our charity partners as well as helping us deliver our charitable mission. Doubling the difference.
-                </p>
-              }
-              @if (campaign.feePercentage && creditPenceToUse === 0) {
-                <div>
-                  <mat-checkbox formControlName="coverFee" id="coverFee">
-                    Cover the {{ campaign.feePercentage}}% <a href="https://biggive.org/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> platform fee</a> for the &quot;{{ campaign.title }}&quot; campaign?
-                  </mat-checkbox>
-                </div>
-              }
-              @if (!campaign.feePercentage && creditPenceToUse === 0) {
-                <div style="text-align: center;">
-                  <!-- Question - what should the prompt text be. There is no equivilent on the slider version. Or should
-                  add it somewhere to the slider? -->
-                  @if (tipControlStyle === 'dropdown') {
-                    <div class="donation-input donation-input-main">
-                      <biggive-form-field-select
-                        [prompt]="'Donation to the Big Give Trust'"
-                        [options]="suggestedTipPercentages"
-                        [selectedValue]="this.showCustomTipInput ? 'Other' : tipPercentage"
-                        [backgroundColour]="'grey'"
-                        [selectionChanged]="updateTipAmountFromSelectedPercentage"
-                        [spaceBelow]="3"
-                        >
-                      </biggive-form-field-select>
-                    </div>
-                  }
-                  <div [style]="showCustomTipInput ? '' : 'display: none;'" class="donation-input donation-input-main">
-                    <biggive-text-input currency="{{campaign.currencyCode}}" >
-                      <label slot="label" for="tipAmount">Donation to the Big Give Trust</label>
-                      <input
-                        maxlength="10"
-                        formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status"
-                        slot="input"
-                        />
-                    </biggive-text-input>
-                    <p>Did you know Big Give is a charity, too? Tips help us provide a platform that doubles the difference of your donation to the causes closest to your heart. We truly appreciate any tip you can give - no matter the size.</p>
-                  </div>
-                  @if (tipAmountField?.invalid && tipAmountField?.errors && (tipAmountField?.dirty || tipAmountField?.touched)) {
-                    <div
-                      class="error"
-                      aria-live="polite"
-                      >
-                      Please enter how much you would like to donate to Big Give as a number of
-                      {{ currencySymbol }}, optionally with 2 decimals and up to {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }}.
-                    </div>
-                  }
-                  <!-- The text below is not shown if we have the slider because it would just repeat content that's already displayed on the slider itself -->
-                  @if (!customTip() && donationAmount && donationAmount > 0 && tipControlStyle !== 'slider') {
-                    <mat-hint>
-                      <p>{{ tipValue | exactCurrency:campaign.currencyCode }} donation to support Big Give</p>
-                    </mat-hint>
-                  }
-                  @if (customTip() && donationAmount && donationAmount > 0) {
-                    <mat-hint>
-                      {{ (tipAmount() > 0 && tipAmount() / donationAmount < 0.001) ? 'Less than 0.1%' : (tipAmount() / donationAmount) | percent:'1.0-1' }}
-                      of main donation
-                    </mat-hint>
-                  }
-                </div>
-              }
-              @if (tipControlStyle === 'slider') {
-                <app-donation-tipping-slider
-                  [style]="showCustomTipInput ? 'display: none;' : ''"
-                  #donationTippingSlider
-                  [percentageStart]="minimumTipPercentage"
-                  [percentageEnd]="maximumTipPercentage"
-                  [donationAmount]="donationAmount"
-                  [donationCurrency]="campaign.currencyCode"
-                  [onHandleMoved]="onDonationSliderMove"
-                  />
-              }
-              @if ((!showCustomTipInput && donationAmount) && tipControlStyle === 'slider') {
-                <span
-                  class="button"
-                  (click)="displayCustomTipInput()"
-                  >
-                  Other amount
-                </span>
-              }
-              <!-- TODO: this check sets an infinite loop, need to check the logic -->
-              @if (showCustomTipInput && tipControlStyle === 'slider') {
-                <span class="button" (click)="displayPercentageTipInput()" >
-                  Back to percentage tip
-                </span>
-              }
-              <mat-expansion-panel
-                (opened)="panelOpenState = true"
-                (closed)="panelOpenState = false"
-                >
-                <mat-expansion-panel-header>
-                  <h3 class="b-rt-0 b-m-0 b-bold"><span class="span-hr"></span>How does Big Give use tips?</h3>
-                </mat-expansion-panel-header>
-                <p>
-                  We believe giving is one of the most fulfilling things you can do. Whatever cause you support, we’re able to provide a platform that helps your gift make double the difference thanks to the generosity of people who leave a voluntary tip.
-                </p>
-                <p><strong>Everything we make goes back into supporting charities. Your tips will be:</strong></p>
-                <ul>
-                  <li>Helping thousands of charities who make a huge difference in the areas they work in but do not have the access to funds or publicity of others. Your contributions help Big Give maintain a website that supports charities and gives them a voice.</li>
-                  <li>Doubling donations in charity campaigns. Through tips, charities can receive funding from our Anchor Match Fund to help launch their campaigns.</li>
-                </ul>
-                <p>Thank you! If you have any questions about tips, please contact us at hello&#64;biggive.org.</p>
-              </mat-expansion-panel>
-            </div>
-          }
-          <div aria-live="polite">
-            @if (donationCreateError) {
-              <p class="error">
-                Sorry, we can't register your donation right now. Please try again in a moment
-                or <a href="https://biggive.org/faqs/" target="_blank">
-                <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
-              contact us</a>
-              if this message persists.
-            </p>
-          }
         </div>
+
+        <div
+          class="error"
+          aria-live="polite"
+          *ngIf="donationAmountField?.invalid && donationAmountField?.errors && (donationAmountField?.dirty || donationAmountField?.touched)"
+        >
+        {{ displayableAmountsStepErrors() }}
+        </div>
+
+        <div *ngIf="creditPenceToUse === 0">
+
+          <hr style="margin: 20px auto;">
+
+          <h2 class="b-rt-0 b-m-0 b-bold">Tip Big Give</h2>
+          <p *ngIf="!campaign.feePercentage && creditPenceToUse === 0">
+            Big Give is a registered charity (1136547) and since 2008 has been helping thousands of charities double their donations. Tips left by generous people like you go into our Anchor Match Fund to provide further match funding for our charity partners as well as helping us deliver our charitable mission. Doubling the difference.
+          </p>
+
+          <div *ngIf="campaign.feePercentage && creditPenceToUse === 0">
+            <mat-checkbox formControlName="coverFee" id="coverFee">
+              Cover the {{ campaign.feePercentage}}% <a href="https://biggive.org/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> platform fee</a> for the &quot;{{ campaign.title }}&quot; campaign?
+            </mat-checkbox>
+          </div>
+
+        <div *ngIf="!campaign.feePercentage && creditPenceToUse === 0" style="text-align: center;">
+
+
+          <!-- Question - what should the prompt text be. There is no equivilent on the slider version. Or should
+    add it somewhere to the slider? -->
+          <div class="donation-input donation-input-main" *ngIf="tipControlStyle === 'dropdown'">
+            <biggive-form-field-select
+              [prompt]="'Donation to the Big Give Trust'"
+              [options]="suggestedTipPercentages"
+              [selectedValue]="this.showCustomTipInput ? 'Other' : tipPercentage"
+              [backgroundColour]="'grey'"
+              [selectionChanged]="updateTipAmountFromSelectedPercentage"
+              [spaceBelow]="3"
+            >
+            </biggive-form-field-select>
+          </div>
+
+          <div [style]="showCustomTipInput ? '' : 'display: none;'" class="donation-input donation-input-main">
+
+            <biggive-text-input currency="{{campaign.currencyCode}}" >
+              <label slot="label" for="tipAmount">Donation to the Big Give Trust</label>
+              <input
+                maxlength="10"
+                formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status"
+                slot="input"
+              />
+            </biggive-text-input>
+
+            <p>Did you know Big Give is a charity, too? Tips help us provide a platform that doubles the difference of your donation to the causes closest to your heart. We truly appreciate any tip you can give - no matter the size.</p>
+          </div>
+
+          <div
+            class="error"
+            aria-live="polite"
+            *ngIf="tipAmountField?.invalid && tipAmountField?.errors && (tipAmountField?.dirty || tipAmountField?.touched)"
+          >
+            Please enter how much you would like to donate to Big Give as a number of
+            {{ currencySymbol }}, optionally with 2 decimals and up to {{ maximumDonationAmount | exactCurrency:campaign.currencyCode }}.
+          </div>
+
+          <!-- The text below is not shown if we have the slider because it would just repeat content that's already displayed on the slider itself -->
+          <mat-hint *ngIf="!customTip() && donationAmount && donationAmount > 0 && tipControlStyle !== 'slider'">
+            <p>{{ tipValue | exactCurrency:campaign.currencyCode }} donation to support Big Give</p>
+          </mat-hint>
+
+          <mat-hint *ngIf="customTip() && donationAmount && donationAmount > 0">
+              {{ (tipAmount() > 0 && tipAmount() / donationAmount < 0.001) ? 'Less than 0.1%' : (tipAmount() / donationAmount) | percent:'1.0-1' }}
+            of main donation
+            </mat-hint>
+          </div>
+
+          <app-donation-tipping-slider *ngIf="tipControlStyle === 'slider'"
+              [style]="showCustomTipInput ? 'display: none;' : ''"
+              #donationTippingSlider
+              [percentageStart]="minimumTipPercentage"
+              [percentageEnd]="maximumTipPercentage"
+              [donationAmount]="donationAmount"
+              [donationCurrency]="campaign.currencyCode"
+              [onHandleMoved]="onDonationSliderMove"
+            />
+
+            <span
+              class="button"
+              (click)="displayCustomTipInput()"
+              *ngIf="(!showCustomTipInput && donationAmount) && tipControlStyle === 'slider'"
+            >
+              Other amount
+            </span>
+            <!-- TODO: this check sets an infinite loop, need to check the logic -->
+            <span *ngIf="showCustomTipInput && tipControlStyle === 'slider'" class="button" (click)="displayPercentageTipInput()" >
+              Back to percentage tip
+            </span>
+
+          <mat-expansion-panel
+            (opened)="panelOpenState = true"
+            (closed)="panelOpenState = false"
+          >
+            <mat-expansion-panel-header>
+              <h3 class="b-rt-0 b-m-0 b-bold"><span class="span-hr"></span>How does Big Give use tips?</h3>
+            </mat-expansion-panel-header>
+
+            <p>
+              We believe giving is one of the most fulfilling things you can do. Whatever cause you support, we’re able to provide a platform that helps your gift make double the difference thanks to the generosity of people who leave a voluntary tip.
+            </p>
+            <p><strong>Everything we make goes back into supporting charities. Your tips will be:</strong></p>
+            <ul>
+              <li>Helping thousands of charities who make a huge difference in the areas they work in but do not have the access to funds or publicity of others. Your contributions help Big Give maintain a website that supports charities and gives them a voice.</li>
+              <li>Doubling donations in charity campaigns. Through tips, charities can receive funding from our Anchor Match Fund to help launch their campaigns.</li>
+            </ul>
+            <p>Thank you! If you have any questions about tips, please contact us at hello&#64;biggive.org.</p>
+          </mat-expansion-panel>
+        </div>
+        <div aria-live="polite">
+          <p class="error" *ngIf="donationCreateError">
+            Sorry, we can't register your donation right now. Please try again in a moment
+            or <a href="https://biggive.org/faqs/" target="_blank">
+              <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+                contact us</a>
+            if this message persists.
+          </p>
+        </div>
+
         <div style="text-align: center">
           <button style="width: 40%;"
             type="button"
@@ -205,116 +200,115 @@
             color="primary"
             (click)="progressToNonAmountsStep()"
           >Continue</button>
+      </div>
+      </mat-step>
+
+      <mat-step
+        *ngIf="campaign.currencyCode === 'GBP'"
+        formGroupName="giftAid"
+        [stepControl]="giftAidGroup"
+        label="Gift Aid"
+      >
+        <p class="b-mt-40 b-bold b-rt-0">Boost your donation by <span class="colour-primary">25p</span> of Gift Aid for every <span class="colour-primary">£1</span> you donate.</p>
+        <p class="b-grey b-rt-sm">I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of Gift Aid claimed on all my donations it is my responsibility to pay the difference.</p>
+        <p class="b-grey b-rt-sm">Gift Aid is a government scheme for UK charities to reclaim the tax you have paid and gain 25% more at no cost or hassle to you.</p>
+        <p><a [href]="termsUrl" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>Find out more about Gift Aid</a></p>
+
+        <mat-radio-group formControlName="giftAid">
+
+          <div class="binary-options">
+            <div class="binary-option">
+            <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="true">
+                <strong>Yes</strong>, I want to Gift Aid my donation to {{ campaign.charity.name }} and any additional gift I make to Big Give, including any donations made in the past 4 years or in the future
+            </mat-radio-button>
+            </div>
+
+            <div class="binary-option">
+            <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="false">
+                <strong>No</strong>, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed
+            </mat-radio-button>
+            </div>
+          </div>
+
+          <p class="error" *ngIf="triedToLeaveGiftAid && giftAidRequiredRadioError()" aria-live="polite">
+            {{giftAidRequiredRadioError()}}
+          </p>
+        </mat-radio-group>
+
+        <div id="giftAidAddressContainer" *ngIf="giftAidGroup.value.giftAid">
+          <div>
+            <biggive-text-input>
+              <label slot="label" for="homeAddress">Enter your home address</label>
+              <input
+                formControlName="homeAddress"
+                id="homeAddress"
+                matInput
+                slot="input"
+                autocomplete="off"
+                [matAutocomplete]="autoAddress"
+                [matAutocompleteDisabled]="!showAddressLookup"
+              />
+            </biggive-text-input>
+
+            <mat-autocomplete
+              #autoAddress="matAutocomplete"
+              [displayWith]="summariseAddressSuggestion"
+              (optionSelected)="addressChosen($event)"
+            >
+              <mat-option *ngFor="let suggestion of addressSuggestions" [value]="suggestion">
+                {{ suggestion.address }}
+              </mat-option>
+            </mat-autocomplete>
+
+            <mat-hint>
+              This is for your Gift Aid declaration to HMRC
+              <mat-spinner
+                *ngIf="loadingAddressSuggestions"
+                aria-label="Loading possible addresses"
+                color="primary"
+                diameter="15"
+                class="address-loading-spinner"
+              ></mat-spinner>
+            </mat-hint>
+          <div class="error" *ngIf="giftAidGroup.get('homeAddress')?.errors?.maxlength">Maximum 255 characters exceeded</div>
+        </div>
+        <div *ngIf="!giftAidGroup.value.homeOutsideUK">
+          <biggive-text-input>
+            <label slot="label" for="homePostcode">Enter your home postcode</label>
+            <input
+              autocomplete="postal-code"
+              formControlName="homePostcode"
+              id="homePostcode"
+              autocapitalize="characters"
+              matInput
+              slot="input"
+            />
+          </biggive-text-input>
+        </div>
+
+        <div class="homeOutsideUK-wrapper">
+          <mat-checkbox formControlName="homeOutsideUK" id="homeOutsideUK">
+            I live outside the UK
+          </mat-checkbox>
+        </div>
+      </div>
+
+        <div style="text-align: center">
+          <button
+            type="button"
+            class="continue b-w-100 b-rt-0"
+            mat-raised-button
+            color="primary"
+            (click)="progressFromStepGiftAid()"
+          >Continue</button>
         </div>
       </mat-step>
-      @if (campaign.currencyCode === 'GBP') {
-        <mat-step
-          formGroupName="giftAid"
-          [stepControl]="giftAidGroup"
-          label="Gift Aid"
-          >
-          <p class="b-mt-40 b-bold b-rt-0">Boost your donation by <span class="colour-primary">25p</span> of Gift Aid for every <span class="colour-primary">£1</span> you donate.</p>
-          <p class="b-grey b-rt-sm">I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of Gift Aid claimed on all my donations it is my responsibility to pay the difference.</p>
-          <p class="b-grey b-rt-sm">Gift Aid is a government scheme for UK charities to reclaim the tax you have paid and gain 25% more at no cost or hassle to you.</p>
-          <p><a [href]="termsUrl" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>Find out more about Gift Aid</a></p>
-          <mat-radio-group formControlName="giftAid">
-            <div class="binary-options">
-              <div class="binary-option">
-                <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="true">
-                  <strong>Yes</strong>, I want to Gift Aid my donation to {{ campaign.charity.name }} and any additional gift I make to Big Give, including any donations made in the past 4 years or in the future
-                </mat-radio-button>
-              </div>
-              <div class="binary-option">
-                <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="false">
-                  <strong>No</strong>, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed
-                </mat-radio-button>
-              </div>
-            </div>
-            @if (triedToLeaveGiftAid && giftAidRequiredRadioError()) {
-              <p class="error" aria-live="polite">
-                {{giftAidRequiredRadioError()}}
-              </p>
-            }
-          </mat-radio-group>
-          @if (giftAidGroup.value.giftAid) {
-            <div id="giftAidAddressContainer">
-              <div>
-                <biggive-text-input>
-                  <label slot="label" for="homeAddress">Enter your home address</label>
-                  <input
-                    formControlName="homeAddress"
-                    id="homeAddress"
-                    matInput
-                    slot="input"
-                    autocomplete="off"
-                    [matAutocomplete]="autoAddress"
-                    [matAutocompleteDisabled]="!showAddressLookup"
-                    />
-                </biggive-text-input>
-                <mat-autocomplete
-                  #autoAddress="matAutocomplete"
-                  [displayWith]="summariseAddressSuggestion"
-                  (optionSelected)="addressChosen($event)"
-                  >
-                  @for (suggestion of addressSuggestions; track suggestion) {
-                    <mat-option [value]="suggestion">
-                      {{ suggestion.address }}
-                    </mat-option>
-                  }
-                </mat-autocomplete>
-                <mat-hint>
-                  This is for your Gift Aid declaration to HMRC
-                  @if (loadingAddressSuggestions) {
-                    <mat-spinner
-                      aria-label="Loading possible addresses"
-                      color="primary"
-                      diameter="15"
-                      class="address-loading-spinner"
-                    ></mat-spinner>
-                  }
-                </mat-hint>
-                @if (giftAidGroup.get('homeAddress')?.errors?.maxlength) {
-                  <div class="error">Maximum 255 characters exceeded</div>
-                }
-              </div>
-              @if (!giftAidGroup.value.homeOutsideUK) {
-                <div>
-                  <biggive-text-input>
-                    <label slot="label" for="homePostcode">Enter your home postcode</label>
-                    <input
-                      autocomplete="postal-code"
-                      formControlName="homePostcode"
-                      id="homePostcode"
-                      autocapitalize="characters"
-                      matInput
-                      slot="input"
-                      />
-                  </biggive-text-input>
-                </div>
-              }
-              <div class="homeOutsideUK-wrapper">
-                <mat-checkbox formControlName="homeOutsideUK" id="homeOutsideUK">
-                  I live outside the UK
-                </mat-checkbox>
-              </div>
-            </div>
-          }
-          <div style="text-align: center">
-            <button
-              type="button"
-              class="continue b-w-100 b-rt-0"
-              mat-raised-button
-              color="primary"
-              (click)="progressFromStepGiftAid()"
-            >Continue</button>
-          </div>
-        </mat-step>
-      }
+
       <mat-step
         formGroupName="payment"
         [stepControl]="paymentGroup"
         label="Payment details"
-        >
+      >
         <p class="b-grey b-rt-sm" style="padding-top: 20px">
           <img src="/assets/images/powered-by-stripe-black.svg" alt="Powered by stripe" style="width: 12.7rem">
           <br />
@@ -322,78 +316,75 @@
         </p>
         <div class="payment-details">
           <div>
-            <biggive-text-input>
-              <label slot="label" for="firstName">First Name *</label>
-              <input slot="input" formControlName="firstName" id="firstName" autocomplete="given-name"  matInput>
-            </biggive-text-input>
-            @if (paymentGroup.get('firstName')?.errors?.maxlength) {
-              <div class="error">Maximum 40 characters exceeded</div>
-            }
+          <biggive-text-input>
+            <label slot="label" for="firstName">First Name *</label>
+            <input slot="input" formControlName="firstName" id="firstName" autocomplete="given-name"  matInput>
+          </biggive-text-input>
+          <div class="error" *ngIf="paymentGroup.get('firstName')?.errors?.maxlength">Maximum 40 characters exceeded</div>
           </div>
+
           <div>
             <biggive-text-input>
               <label slot="label" for="lastName">Last Name *</label>
               <input slot="input" formControlName="lastName" id="lastName" autocomplete="family-name" matInput>
-            </biggive-text-input>
-            @if (giftAidGroup.value.giftAid) {
-              <mat-hint>This is for Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
-            }
-            @if (!giftAidGroup.value.giftAid) {
-              <mat-hint>For smooth payment and identifying you if you have questions.</mat-hint>
-            }
-            @if (paymentGroup.get('lastName')?.errors?.maxlength) {
-              <div class="error">Maximum 80 characters exceeded</div>
-            }
+              </biggive-text-input>
+            <mat-hint *ngIf="giftAidGroup.value.giftAid">This is for Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
+            <mat-hint *ngIf="!giftAidGroup.value.giftAid">For smooth payment and identifying you if you have questions.</mat-hint>
+            <div class="error" *ngIf="paymentGroup.get('lastName')?.errors?.maxlength">Maximum 80 characters exceeded</div>
           </div>
+
           <div>
             <biggive-text-input>
               <label slot="label" for="emailAddress">Email Address *</label>
               <input slot="input" formControlName="emailAddress" id="emailAddress" type="email" autocapitalize="off"  autocomplete="email"  matInput>
             </biggive-text-input>
             <mat-hint>We'll send you a donation receipt and use this to
-            confirm it's you in case you have any queries.</mat-hint>
+              confirm it's you in case you have any queries.</mat-hint>
           </div>
+
           <div>
             <!-- Placeholder to occupy last part the row and stop previous field expanding -->
           </div>
+
         </div>
-        @if (creditPenceToUse > 0) {
-          <div>
-            <p id="useCreditsMessage" class="b-center">Your donation funds balance will be applied against this donation. No further funds will be taken.</p>
-          </div>
-        }
-        @if (creditPenceToUse === 0 && stripeSavedMethods.length > 0) {
+
+        <div *ngIf="creditPenceToUse > 0">
+          <p id="useCreditsMessage" class="b-center">Your donation funds balance will be applied against this donation. No further funds will be taken.</p>
+        </div>
+
+        <div
+          class="payment-method-options"
+          *ngIf="creditPenceToUse === 0 && stripeSavedMethods.length > 0"
+        >
           <div
-            class="payment-method-options"
+            *ngFor="let method of stripeSavedMethods; let i=index"
+            [hidden]="i > 0 && !showAllPaymentMethods"
+          >
+            <mat-checkbox
+
+              [checked]="method === selectedSavedMethod"
+              id="useSavedCard"
+              (change)="onUseSavedCardChange($event, method)"
             >
-            @for (method of stripeSavedMethods; track method; let i = $index) {
-              <div
-                [hidden]="i > 0 && !showAllPaymentMethods"
-                >
-                <mat-checkbox
-                  [checked]="method === selectedSavedMethod"
-                  id="useSavedCard"
-                  (change)="onUseSavedCardChange($event, method)"
-                  >
-                  @if (cardIconsService.hasCardIcon(method.card?.brand)) {
-                    <fa-icon
-                      [title]="method.card?.brand"
-                      [icon]="cardIconsService.getCardIcon(method.card?.brand)"
-                    ></fa-icon>
-                  }
-                  Use saved card ending {{ method.card?.last4 }}.
-                </mat-checkbox>
-                <br />
-                <a
-                  (click)="this.showAllPaymentMethods = true"
-                  [hidden]="this.showAllPaymentMethods || stripeSavedMethods.length <= 1"
-                  >
-                  (or pick another)
-                </a>
-              </div>
-            }
+              <fa-icon
+                *ngIf="cardIconsService.hasCardIcon(method.card?.brand)"
+                [title]="method.card?.brand"
+                [icon]="cardIconsService.getCardIcon(method.card?.brand)"
+              ></fa-icon>
+              Use saved card ending {{ method.card?.last4 }}.
+
+            </mat-checkbox>
+            <br />
+            <a
+              (click)="this.showAllPaymentMethods = true"
+              [hidden]="this.showAllPaymentMethods || stripeSavedMethods.length <= 1"
+            >
+              (or pick another)
+            </a>
+
           </div>
-        }
+        </div>
+
         <!-- We need the ElementRef to always be available for Stripe.js mounting as there are
         a few dynamic ways the input can become or cease to be relevant. So just CSS-hide the
         element when not needed, and always mount it. -->
@@ -403,15 +394,14 @@
               <span slot="label">Payment Method</span> <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe not us -->
               <div slot="input" class="sr-input sr-card-element" id="card-info" #cardInfo></div>
             </biggive-text-input>
-            @if (!donor) {
-              <div class="error" aria-live="polite">
-                <p>Payment fields require the "captcha" puzzle to be solved before we can show them safely.</p>
-              </div>
-            }
+            <div *ngIf="!donor" class="error" aria-live="polite">
+              <p>Payment fields require the "captcha" puzzle to be solved before we can show them safely.</p>
+            </div>
             <div>
               Your card information will be held for re-use if you set a password on the next page. It is held securely only with Stripe.
             </div>
           </div>
+
           <div>
             <biggive-form-field-select
               [prompt]="'Billing country'"
@@ -421,29 +411,30 @@
               [selectionChanged]="setSelectedCountry"
               [spaceBelow]="3"
               [selectedOptionColour]="'inherit'"
-              >
+            >
             </biggive-form-field-select>
           </div>
+
           <biggive-text-input>
             <label slot="label" for="billingPostcode">Billing postcode</label>
             <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)" autocapitalize="characters" autocomplete="postal-code">
           </biggive-text-input>
+
         </div>
-        @if (stripeError) {
-          <p class="stripeError" aria-live="assertive">
-            <!-- We do not use the "error" css class because we don't want to scroll to this error automatically, since
-            it likely can't be fixed here and the donor will have to try making their payment again to make it go away. -->
-            {{ stripeError }}
-          </p>
-        }
-        @if (paymentStepErrors) {
-          <p class="error">
-            <!-- No need for aria-live on this because the errors will have already been in an aria-live toast pop.
-            They are here in addition to all the donor to review them in detail.
-            -->
-            {{paymentStepErrors}}
-          </p>
-        }
+
+        <p *ngIf="stripeError" class="stripeError" aria-live="assertive">
+          <!-- We do not use the "error" css class because we don't want to scroll to this error automatically, since
+          it likely can't be fixed here and the donor will have to try making their payment again to make it go away. -->
+          {{ stripeError }}
+        </p>
+
+        <p class="error" *ngIf="paymentStepErrors">
+          <!-- No need for aria-live on this because the errors will have already been in an aria-live toast pop.
+               They are here in addition to all the donor to review them in detail.
+          -->
+          {{paymentStepErrors}}
+        </p>
+
         <div style="text-align: center">
           <button
             type="button"
@@ -454,11 +445,12 @@
           >Continue</button>
         </div>
       </mat-step>
+
       <mat-step
         formGroupName="marketing"
         [stepControl]="marketingGroup"
         label="Receive updates"
-        >
+      >
         <p class="binary-question-header b-bold b-rt-0" id="optInCharityEmail-label">Would you be happy to receive email updates from <span class="colour-primary">{{ campaign.charity.name }}</span>?</p>
         <mat-radio-group aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
           <div class="binary-options">
@@ -469,91 +461,80 @@
             </div>
             <div class="binary-option">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">
-                No, I would not like to receive emails from {{ campaign.charity.name }}
+                  No, I would not like to receive emails from {{ campaign.charity.name }}
               </mat-radio-button>
             </div>
           </div>
-          @if (triedToLeaveMarketing && errorMessagesForMarketingStep().optInCharityEmailRequired) {
-            <p class="error" aria-live="assertive">
-              {{errorMessagesForMarketingStep().optInCharityEmailRequired}}.
-            </p>
-          }
+          <p class="error" *ngIf="triedToLeaveMarketing && errorMessagesForMarketingStep().optInCharityEmailRequired" aria-live="assertive">
+            {{errorMessagesForMarketingStep().optInCharityEmailRequired}}.
+          </p>
         </mat-radio-group>
+
         <mat-hint>
-          @if (campaign.charity.optInStatement) {
-            <p class="no-margin-top b-rt-sm b-grey">{{ campaign.charity.optInStatement }}</p>
-          }
-          @if (marketingGroup.value.optInCharityEmail === false) {
-            <p
-              aria-live="polite"
-              class="no-margin-top b-rt-sm b-grey"
-              >
-              @if (giftAidGroup.value.giftAid) {
-                <span>We will pass on your details for Gift Aid processing purposes, but the charity will be informed that you do not wish to receive communications.</span>
-              }
-              Please note that you might continue to receive communications from the charity if you have already shared your details with them via other methods.
-            </p>
-          }
+          <p *ngIf="campaign.charity.optInStatement" class="no-margin-top b-rt-sm b-grey">{{ campaign.charity.optInStatement }}</p>
+
+          <p
+            *ngIf="marketingGroup.value.optInCharityEmail === false"
+            aria-live="polite"
+            class="no-margin-top b-rt-sm b-grey"
+          >
+            <span *ngIf="giftAidGroup.value.giftAid">We will pass on your details for Gift Aid processing purposes, but the charity will be informed that you do not wish to receive communications.</span>
+
+            Please note that you might continue to receive communications from the charity if you have already shared your details with them via other methods.
+          </p>
         </mat-hint>
+
         <p class="binary-question-header b-bold b-rt-0" id="optInTbgEmail-label">Would you be happy to receive emails from <span class="colour-primary">Big Give</span>?</p>
         <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
           <div class="binary-options">
             <div class="binary-option">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">
-                Yes, I'm happy to receive emails from Big Give
+                  Yes, I'm happy to receive emails from Big Give
               </mat-radio-button>
             </div>
             <div class="binary-option">
               <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">
-                No, I would not like to receive emails from Big Give
+                  No, I would not like to receive emails from Big Give
               </mat-radio-button>
             </div>
           </div>
-          @if (triedToLeaveMarketing && errorMessagesForMarketingStep().optInTbgEmailRequired) {
-            <p class="error" aria-live="assertive">
-              {{errorMessagesForMarketingStep().optInTbgEmailRequired}}
-            </p>
-          }
+          <p class="error" *ngIf="triedToLeaveMarketing && errorMessagesForMarketingStep().optInTbgEmailRequired" aria-live="assertive">
+            {{errorMessagesForMarketingStep().optInTbgEmailRequired}}
+          </p>
         </mat-radio-group>
-        @if (marketingGroup.value.optInTbgEmail === false) {
-          <mat-hint aria-live="polite">
+        <mat-hint *ngIf="marketingGroup.value.optInTbgEmail === false" aria-live="polite">
+          <p class="no-margin-top b-rt-sm b-grey">
+            By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
+          </p>
+        </mat-hint>
+
+        <div *ngIf="showChampionOptIn">
+          <p class="binary-question-header b-bold b-rt-0" id="optInChampionEmail-label">Would you be happy to receive emails from <span class="colour-primary">{{ campaign.championName }}</span>?</p>
+          <mat-radio-group aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
+            <mat-hint>{{ campaign.championOptInStatement }}.</mat-hint>
+            <div class="binary-options">
+              <div class="binary-option">
+                <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">
+                    Yes, I'm happy to receive emails from {{ campaign.championName }}
+                </mat-radio-button>
+              </div>
+              <div class="binary-option">
+                <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">
+                    No, I would not like to receive emails from {{ campaign.championName }}
+                </mat-radio-button>
+              </div>
+            </div>
+            <p class="error" *ngIf="triedToLeaveMarketing && errorMessagesForMarketingStep().optInChampionEmailRequired" aria-live="polite">
+              {{errorMessagesForMarketingStep().optInChampionEmailRequired}}
+            </p>
+          </mat-radio-group>
+          <mat-hint *ngIf="marketingGroup.value.optInChampionEmail === false" aria-live="polite">
             <p class="no-margin-top b-rt-sm b-grey">
-              By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
+                Please note that you might continue to receive communications from the champion if you have already shared your details with them via other methods.
             </p>
           </mat-hint>
-        }
-        @if (showChampionOptIn) {
-          <div>
-            <p class="binary-question-header b-bold b-rt-0" id="optInChampionEmail-label">Would you be happy to receive emails from <span class="colour-primary">{{ campaign.championName }}</span>?</p>
-            <mat-radio-group aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
-              <mat-hint>{{ campaign.championOptInStatement }}.</mat-hint>
-              <div class="binary-options">
-                <div class="binary-option">
-                  <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">
-                    Yes, I'm happy to receive emails from {{ campaign.championName }}
-                  </mat-radio-button>
-                </div>
-                <div class="binary-option">
-                  <mat-radio-button class="b-mr-2" labelPosition="after" [value]="false">
-                    No, I would not like to receive emails from {{ campaign.championName }}
-                  </mat-radio-button>
-                </div>
-              </div>
-              @if (triedToLeaveMarketing && errorMessagesForMarketingStep().optInChampionEmailRequired) {
-                <p class="error" aria-live="polite">
-                  {{errorMessagesForMarketingStep().optInChampionEmailRequired}}
-                </p>
-              }
-            </mat-radio-group>
-            @if (marketingGroup.value.optInChampionEmail === false) {
-              <mat-hint aria-live="polite">
-                <p class="no-margin-top b-rt-sm b-grey">
-                  Please note that you might continue to receive communications from the champion if you have already shared your details with them via other methods.
-                </p>
-              </mat-hint>
-            }
-          </div>
-        }
+        </div>
+
         <div style="text-align: center">
           <button
             type="button"
@@ -564,118 +545,107 @@
           >Continue</button>
         </div>
       </mat-step>
+
       <mat-step
         label="Confirm"
         class="c-make-your-donation"
-        >
+      >
         <p class="b-rt-0 b-m-0 b-mt-40">By clicking on the <span class="b-bold">Donate now</span> button, you agree to
-        Big Give's Terms and Conditions and Privacy Statement. <br/>
-        <a [href]="termsUrl" target="_blank">
-          <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
-          Read our Terms and Conditions,
-        </a>
-        <a [href]="privacyUrl" target="_blank">
-          <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
-        read our Privacy Statement.</a>
-      </p>
-      <div class="c-donation-summary">
-        @if (donationUpdateError) {
-          <p class="error" aria-live="assertive">
+          Big Give's Terms and Conditions and Privacy Statement. <br/>
+          <a [href]="termsUrl" target="_blank">
+            <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+              Read our Terms and Conditions,
+          </a>
+          <a [href]="privacyUrl" target="_blank">
+            <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+            read our Privacy Statement.</a>
+        </p>
+
+        <div class="c-donation-summary">
+          <p class="error" *ngIf="donationUpdateError" aria-live="assertive">
             Sorry, we can't submit your donation right now. Please try again in a moment
             or <a href="https://biggive.org/faqs/" target="_blank">
-            <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
-          contact us</a>
-          if this message persists.
-        </p>
-      }
-      @if (retrying) {
-        <p class="error" aria-live="polite">
-          It looks like our system is a bit busy, one moment please&hellip;
-        </p>
-      }
-      @if (noPsps) {
-        <p class="error" aria-live="assertive">
-          Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few minutes to try again.
-        </p>
-      }
-      @if (stripeError) {
-        <p class="stripeError" aria-live="assertive">
-          <!-- We do not use the "error" css class because we don't want to scroll to this error automatically, since
-          it likely can't be fixed here and the donor will have to try making their payment again to make it go away. -->
-          {{ stripeError }}
-        </p>
-      }
-      <p></p>
-      @if (donation) {
-        <table class="summary">
-          <tr class="donationAmount">
-            <td>Your donation to {{ campaign.charity.name }}</td>
-            <td>{{ donationAmount | exactCurrency:donation.currencyCode }}</td>
-          </tr>
-          @if (donation.matchedAmount > 0) {
-            <tr>
+              <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+                contact us</a>
+            if this message persists.
+          </p>
+
+          <p *ngIf="retrying" class="error" aria-live="polite">
+            It looks like our system is a bit busy, one moment please&hellip;
+          </p>
+
+          <p *ngIf="noPsps" class="error" aria-live="assertive">
+            Sorry, we are really busy and cannot take your donation right now. Please refresh the page in a few minutes to try again.
+          </p>
+
+          <p *ngIf="stripeError" class="stripeError" aria-live="assertive">
+            <!-- We do not use the "error" css class because we don't want to scroll to this error automatically, since
+            it likely can't be fixed here and the donor will have to try making their payment again to make it go away. -->
+            {{ stripeError }}
+          </p>
+
+          <p></p>
+
+          <table class="summary" *ngIf="donation">
+            <tr class="donationAmount">
+              <td>Your donation to {{ campaign.charity.name }}</td>
+              <td>{{ donationAmount | exactCurrency:donation.currencyCode }}</td>
+            </tr>
+            <tr *ngIf="donation.matchedAmount > 0">
               <td>Matched Amount</td>
               <td>{{ expectedMatchAmount() | exactCurrency:donation.currencyCode }}</td>
             </tr>
-          }
-          @if (giftAidAmount() > 0) {
-            <tr>
+            <tr *ngIf="giftAidAmount() > 0">
               <td>Gift Aid Amount</td>
               <td>{{ giftAidAmount() | exactCurrency:donation.currencyCode }}</td>
             </tr>
-          }
-          @if (feeCoverAmount() > 0) {
-            <tr>
+            <tr *ngIf="feeCoverAmount() > 0">
               <td>Platform fee</td>
               <td>{{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} </td>
             </tr>
-          }
-          <!-- If the donor is using credit we wouldn't be taking a tip at this point,
-          and if we are charging a campaign fee we wouldn't have asked for a tip
-          -->
-          @if (creditPenceToUse === 0 && !campaign.feePercentage) {
+
+            <!-- If the donor is using credit we wouldn't be taking a tip at this point,
+                   and if we are charging a campaign fee we wouldn't have asked for a tip
+                   -->
             <tr
-              >
+              *ngIf="creditPenceToUse === 0 && !campaign.feePercentage"
+            >
               <td>Tip Amount</td>
               <td>{{ donation.tipAmount | exactCurrency:donation.currencyCode }}</td>
             </tr>
-          }
-          <tr>
-            <td colspan="2"><hr></td>
-          </tr>
-          <tr class="total">
-            <td><div><strong>Total amount you will be charged</strong></div></td>
-            <td><strong>{{ donationAndExtrasAmount | exactCurrency:donation.currencyCode }}</strong></td>
-          </tr>
-        </table>
-      }
-      @if (!submitting) {
-        <button
-          (click)="submit()"
-          (keyup.enter)="submit()"
-          class="c-donate-button b-donate-button b-w-100 b-rt-1"
-          mat-raised-button
-          color="primary"
+
+            <tr>
+              <td colspan="2"><hr></td>
+            </tr>
+            <tr class="total">
+              <td><div><strong>Total amount you will be charged</strong></div></td>
+              <td><strong>{{ donationAndExtrasAmount | exactCurrency:donation.currencyCode }}</strong></td>
+            </tr>
+          </table>
+
+          <button
+            *ngIf="!submitting"
+            (click)="submit()"
+            (keyup.enter)="submit()"
+            class="c-donate-button b-donate-button b-w-100 b-rt-1"
+            mat-raised-button
+            color="primary"
           >
-          Donate now
-        </button>
-      }
-      <div aria-live="polite">
-        @if (submitting) {
-          <mat-spinner color="primary" diameter="30" aria-label="Processing your donation" ></mat-spinner>
-        }
-      </div>
-    </div>
-  </mat-step>
-</mat-vertical-stepper>
-<re-captcha
-  #idCaptcha
-  size="invisible"
-  errorMode="handled"
-  (resolved)="captchaIdentityReturn($event)"
-  (errored)="captchaIdentityError()"
-  siteKey="{{ recaptchaIdSiteKey }}"
-></re-captcha>
-</form>
-}
+            Donate now
+          </button>
+          <div aria-live="polite">
+            <mat-spinner *ngIf="submitting" color="primary" diameter="30" aria-label="Processing your donation" ></mat-spinner>
+          </div>
+        </div>
+      </mat-step>
+    </mat-vertical-stepper>
+    <re-captcha
+      #idCaptcha
+      size="invisible"
+      errorMode="handled"
+      (resolved)="captchaIdentityReturn($event)"
+      (errored)="captchaIdentityError()"
+      siteKey="{{ recaptchaIdSiteKey }}"
+    ></re-captcha>
+  </form>
 
