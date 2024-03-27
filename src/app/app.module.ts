@@ -39,12 +39,12 @@ const matomoBaseUri = 'https://biggive.matomo.cloud';
     BrowserModule,
     ComponentsModule,
     HttpClientModule,
-    MatomoModule.forRoot({
+    ...(environment.matomoSiteId ? [MatomoModule.forRoot({
       siteId: environment.matomoSiteId,
       trackerUrl: matomoBaseUri,
       mode: MatomoInitializationMode.AUTO,
       requireConsent: MatomoConsentMode.COOKIE,
-    }),
+    })] : []),
     MatomoRouterModule.forRoot({}),
     RouterModule.forRoot(routes, {
       bindToComponentInputs: true,

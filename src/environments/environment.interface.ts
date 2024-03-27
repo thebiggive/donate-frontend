@@ -27,7 +27,7 @@ export interface Environment {
   donationsApiPrefix: string,
   getSiteControlId: string,
   identityApiPrefix: string,
-  matomoSiteId: number
+  matomoSiteId: number | null
   matomoNonZeroTipGoalId: number | null, // Only tracks GBP campaigns; sends tip as value in £.
   matomoAbTest?: {
     name: string,
