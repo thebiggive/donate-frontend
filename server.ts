@@ -72,4 +72,4 @@ if (moduleFilename === __filename || moduleFilename.includes('iisnode')) {
   run();
 }
 
-export default bootstrap;
+export default AppServerModule;
