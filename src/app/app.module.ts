@@ -35,7 +35,7 @@ const matomoBaseUri = 'https://biggive.matomo.cloud';
     HttpClientModule,
     NgxMatomoModule.forRoot({
       siteId: environment.matomoSiteId,
-      trackerUrl: `${matomoBaseUri}/matomo.js`,
+      trackerUrl: matomoBaseUri,
       mode: MatomoInitializationMode.AUTO,
       requireConsent: MatomoConsentMode.COOKIE,
     }),
