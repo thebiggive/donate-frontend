@@ -57,9 +57,17 @@ function run(): void {
 
   // Start up the Node server
   const server = app();
-  server.listen(port, () => {
+  const liveServer = server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
+
+  /**
+   * ALBs are configured with 60s timeout and these should be longer.
+   * @link https://shuheikagawa.com/blog/2019/04/25/keep-alive-timeout/
+   * @link https://adamcrowder.net/posts/node-express-api-and-aws-alb-502/
+   */
+  liveServer.keepAliveTimeout = 65 * 1000;
+  liveServer.timeout = 70 * 1000;
 }
 
 // Webpack will replace 'require' with '__webpack_require__'
@@ -72,4 +80,4 @@ if (moduleFilename === __filename || moduleFilename.includes('iisnode')) {
   run();
 }
 
-export default AppServerModule;
+export * from './src/main.server';
