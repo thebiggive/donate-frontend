@@ -186,10 +186,10 @@
           "options": {},
           "configurations": {
             "production": {
-              "browserTarget": "donate-frontend:build:production"
+              "buildTarget": "donate-frontend:build:production"
             },
             "development": {
-              "browserTarget": "donate-frontend:build:development"
+              "buildTarget": "donate-frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -197,7 +197,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "donate-frontend:build"
+            "buildTarget": "donate-frontend:build"
           }
         },
         "test": {
@@ -289,7 +289,7 @@
           "defaultConfiguration": "production"
         },
         "serve-ssr": {
-          "builder": "@nguniversal/builders:ssr-dev-server",
+          "builder": "@angular-devkit/build-angular:ssr-dev-server",
           "options": {},
           "configurations": {
             "production": {

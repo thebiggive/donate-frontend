@@ -149,7 +149,7 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.loggingIn = false;
   }
 
-  captchaReturn(captchaResponse: string): void {
+  captchaReturn(captchaResponse: string | null): void {
     this.loginError = undefined;
     if (captchaResponse === null) {
       // We had a code but now don't, e.g. after expiry at 1 minute. In this case

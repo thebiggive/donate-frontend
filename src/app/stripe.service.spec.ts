@@ -1,7 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MatomoModule } from 'ngx-matomo';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { TBG_DONATE_STORAGE } from './donation.service';
@@ -14,13 +13,6 @@ describe('StripeService', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        MatomoModule.forRoot({
-          scriptUrl: `https://example.com/matomo.js`,
-          trackers: [],
-          routeTracking: {
-            enable: true,
-          }
-        }),
         RouterTestingModule,
       ],
       providers: [

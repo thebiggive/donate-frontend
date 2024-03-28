@@ -1,4 +1,4 @@
-FROM node:16.18
+FROM node:20.11
 
 WORKDIR /usr/src/app
 
@@ -11,8 +11,8 @@ ARG FONTAWESOME_NPM_AUTH_TOKEN
 COPY .npmrc ./
 
 # Skip Puppeteer Chromium download. https://github.com/puppeteer/puppeteer/issues/2262#issuecomment-407405037
-RUN npm config set puppeteer_skip_chromium_download true && \
-    npm install
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+RUN npm install
 
 # Now copy the app source
 COPY . .

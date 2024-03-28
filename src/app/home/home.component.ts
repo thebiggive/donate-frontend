@@ -1,7 +1,7 @@
 import {isPlatformBrowser} from "@angular/common";
 import {Component, Inject, OnInit, Optional, PLATFORM_ID} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {RESPONSE} from '@nguniversal/express-engine/tokens';
+import {RESPONSE} from '../../express.tokens';
 import { Response } from "express";
 
 import {PageMetaService} from '../page-meta.service';
