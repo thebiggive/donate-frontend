@@ -3,6 +3,7 @@ import {Component} from "@angular/core";
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import {ActivatedRoute} from "@angular/router";
+import { MatomoModule } from 'ngx-matomo';
 import {InMemoryStorageService} from "ngx-webstorage-service";
 import {of} from "rxjs";
 
@@ -11,7 +12,6 @@ import {DonationStartFormComponent} from "../donation-start-form/donation-start-
 import {TBG_DONATE_ID_STORAGE} from "../../identity.service";
 import {TBG_DONATE_STORAGE} from "../../donation.service";
 import {Campaign} from "../../campaign.model";
-import {NgxMatomoModule} from "ngx-matomo-client";
 
 // See https://medium.com/angular-in-depth/angular-unit-testing-viewchild-4525e0c7b756
 @Component({
@@ -38,9 +38,12 @@ describe('DonationStartContainer', () => {
       imports: [
         HttpClientTestingModule,
         MatDialogModule,
-        NgxMatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
+        MatomoModule.forRoot({
+          scriptUrl: `https://example.com/matomo.js`,
+          trackers: [],
+          routeTracking: {
+            enable: true,
+          }
         }),
       ],
       providers: [

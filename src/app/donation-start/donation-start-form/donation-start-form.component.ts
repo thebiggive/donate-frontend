@@ -22,7 +22,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatStepper} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RecaptchaComponent} from 'ng-recaptcha';
-import {MatomoTracker} from 'ngx-matomo-client';
+import {MatomoTracker} from 'ngx-matomo';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
   PaymentIntent,
@@ -987,7 +987,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     )
   }
 
-  captchaIdentityReturn(captchaResponse: string | null) {
+  captchaIdentityReturn(captchaResponse: string) {
     if (captchaResponse === null) {
       // Ensure no other callback tries to use the old captcha code, and will re-execute
       // the catcha to get a new one as needed instead.

@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import { MatDialog } from '@angular/material/dialog';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import { MatomoTracker } from 'ngx-matomo-client';
+import { MatomoTracker } from 'ngx-matomo';
 import { RecaptchaComponent } from 'ng-recaptcha';
 
 import { Campaign } from '../campaign.model';
@@ -162,7 +162,7 @@ export class DonationThanksComponent implements OnInit {
     });
   }
 
-  loginCaptchaReturn(captchaResponse: string | null) {
+  loginCaptchaReturn(captchaResponse: string) {
     if (captchaResponse === null) {
       // This is expected after ~1 min when the code expires. At this point we should
       // never be executing the login again because if the captcha was set up at all then
