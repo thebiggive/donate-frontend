@@ -10,7 +10,7 @@ import {Donation} from './donation.model';
 import {DonationCreatedResponse} from './donation-created-response.model';
 import {environment} from '../environments/environment';
 import {Person} from "./person.model";
-import {MatomoTracker} from 'ngx-matomo-client';
+import {MatomoTracker} from 'ngx-matomo';
 
 export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
 

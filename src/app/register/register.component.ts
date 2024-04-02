@@ -107,7 +107,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
    *
    * @param captchaResponse
    */
-  captchaReturn(captchaResponse: string | null) {
+  captchaReturn(captchaResponse: string) {
     if (captchaResponse === null) {
       // We had a code but now don't, e.g. after expiry at 1 minute. In this case
       // the trigger wasn't a register click so do nothing. A repeat register attempt will
