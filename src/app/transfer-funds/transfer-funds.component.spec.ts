@@ -12,12 +12,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MatomoModule } from 'ngx-matomo';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 import { TransferFundsComponent } from './transfer-funds.component';
+import {NgxMatomoModule} from "ngx-matomo-client";
 
 describe('TransferFundsComponent', () => {
   let component: TransferFundsComponent;
@@ -34,12 +34,9 @@ describe('TransferFundsComponent', () => {
         MatDialogModule,
         MatIconModule,
         MatInputModule,
-        MatomoModule.forRoot({
-          scriptUrl: `https://example.com/matomo.js`,
-          trackers: [],
-          routeTracking: {
-            enable: true,
-          }
+        NgxMatomoModule.forRoot({
+          siteId: '',
+          trackerUrl: '',
         }),
         MatRadioModule,
         MatProgressSpinnerModule,

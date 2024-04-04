@@ -1,7 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MatomoModule } from 'ngx-matomo';
 import {InMemoryStorageService, SESSION_STORAGE} from 'ngx-webstorage-service';
 
 import { Donation } from './donation.model';
@@ -9,6 +8,7 @@ import { DonationCreatedResponse } from './donation-created-response.model';
 import { DonationService, TBG_DONATE_STORAGE } from './donation.service';
 import { DonationStatus } from './donation-status.type';
 import { environment } from '../environments/environment';
+import {NgxMatomoModule} from "ngx-matomo-client";
 
 describe('DonationService', () => {
   const getDummyDonation = (status: DonationStatus = 'Pending'): Donation => {
@@ -44,12 +44,10 @@ describe('DonationService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       HttpClientTestingModule,
-      MatomoModule.forRoot({
-        scriptUrl: `https://example.com/matomo.js`,
-        trackers: [],
-        routeTracking: {
-          enable: true,
-        }
+
+      NgxMatomoModule.forRoot({
+        siteId: '',
+        trackerUrl: '',
       }),
       RouterTestingModule,
     ],
