@@ -144,8 +144,14 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     this.router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationStart),
     ).subscribe(
-      // we have seen TypeError: Cannot read properties of undefined (reading 'closeMobileMenuFromOutside'). So check headerEl is defined beofore reading the prop:
-      () => headerEl && headerEl.closeMobileMenuFromOutside()
+      () => {
+        if (! isPlatformBrowser(this.platformId)) {
+          return;
+        }
+
+        // we have seen TypeError: Cannot read properties of undefined (reading 'closeMobileMenuFromOutside'). So check headerEl is defined beofore reading the prop:
+        headerEl && headerEl.closeMobileMenuFromOutside();
+      }
     );
   }
 
