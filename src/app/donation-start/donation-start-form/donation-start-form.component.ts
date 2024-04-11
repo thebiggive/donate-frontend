@@ -87,6 +87,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   stripePaymentElement: StripePaymentElement | undefined;
   cardHandler = this.onStripeCardChange.bind(this);
   showChampionOptIn = false;
+  GmfAbTestVariant: 'A'|'B' = 'B';
 
   @Input({ required: true }) campaign: Campaign;
 
