@@ -265,11 +265,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.countryOptionsObject = COUNTRIES.map(country => ({label: country.country, value: country.iso2}))
     this.selectedCountryCode = this.defaultCountryCode;
 
-    this.tipControlStyle = (route.snapshot.queryParams?.tipControl?.toLowerCase() === 'slider')
-      ? 'slider' : 'dropdown'
+    const queryParams = route.snapshot.queryParams;
+
+    this.tipControlStyle = (queryParams?.tipControl?.toLowerCase() === 'slider')
+      ? 'slider' : 'dropdown';
 
     if (! environment.production) {
-      this.manuallySelectedABTestVariant = route.snapshot.queryParamMap.get('selectABTestVariant');
+      this.manuallySelectedABTestVariant = queryParams?.selectABTestVariant;
+      
       if (this.manuallySelectedABTestVariant == 'B') {
         this.GmfAbTestVariant = 'B';
       }
