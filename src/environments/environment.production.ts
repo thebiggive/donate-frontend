@@ -20,7 +20,7 @@ export const environment: Environment = {
   matomoAbTest: {
     name: "GmfTipCopy2024",
     variantName: "B",
-    startDate: '3024-10-05',
+    startDate: '3024/10/05 00:00:00 UTC', // todo set to real date when reasonably sure of approach
     endDate: undefined,
   },
   minimumCreditAmount: 500,

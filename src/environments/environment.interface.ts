@@ -32,7 +32,7 @@ export interface Environment {
   matomoAbTest?: {
     name: string,
     variantName: string, // The one that's not 'original'.
-    startDate: string,
+    startDate: string, // In 'YYYY/MM/DD HH:MM:SS UTC' format – can usually copy from 'Embed code' in Matomo UI view of test.
     endDate?: string, // Typically omit for dev/staging evaluation.
   },
   minimumCreditAmount: number,

@@ -280,6 +280,7 @@ export class DonationThanksComponent implements OnInit {
       this.matomoTracker.trackEvent('donate', 'thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
 
       if (donation.tipAmount > 0 && environment.matomoNonZeroTipGoalId && donation.currencyCode === 'GBP') {
+        this.matomoTracker.trackEvent('donate', 'non_zero_tip_finalised', `Donation to campaign ${donation.projectId}`, donation.tipAmount);
         this.matomoTracker.trackGoal(environment.matomoNonZeroTipGoalId, donation.tipAmount);
       }
 

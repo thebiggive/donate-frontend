@@ -26,9 +26,9 @@ export const environment: Environment = {
   matomoAbTest: {
   name: "GmfTipCopy2024",
     variantName: "B",
-    startDate: '3023-04-16',
+    startDate: '2024/04/16 13:20:00 UTC', // Start probably just before this goes out to Staging
     endDate: undefined,
-},
+  },
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
