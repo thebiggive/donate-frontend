@@ -27,7 +27,7 @@ export const environment: Environment = {
   name: "GmfTipCopy2024",
     variantName: "B",
     startDate: '3023-04-16',
-    endDate: null,
+    endDate: undefined,
 },
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
