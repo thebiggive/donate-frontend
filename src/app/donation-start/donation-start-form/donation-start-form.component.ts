@@ -131,7 +131,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     {value: '10', label: '10%'},
     {value: '12.5', label: '12.5%'},
     {value: '15', label: '15%'},
-    {value: 'Other', label: 'Other'} // send custom event if other selected
+    {value: 'Other', label: 'Other'}
   ] as const;
 
   noPsps = false;
@@ -272,7 +272,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (! environment.production) {
       this.manuallySelectedABTestVariant = queryParams?.selectABTestVariant;
-      
+
       if (this.manuallySelectedABTestVariant == 'B') {
         this.GmfAbTestVariant = 'B';
       }
