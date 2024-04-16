@@ -272,7 +272,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (! environment.production) {
       this.manuallySelectedABTestVariant = queryParams?.selectABTestVariant;
-      
+
       if (this.manuallySelectedABTestVariant == 'B') {
         this.GmfAbTestVariant = 'B';
       }
@@ -1923,6 +1923,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   public updateTipAmountFromSelectedPercentage = (tipPercentage: string) => {
     if (tipPercentage === 'Other') {
+      this.matomoTracker.trackEvent('donate', 'tip_other_selected', 'Tip Other Amount Selected')
       this.displayCustomTipInput();
       return;
     }

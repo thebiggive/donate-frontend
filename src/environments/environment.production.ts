@@ -18,10 +18,10 @@ export const environment: Environment = {
   matomoSiteId: 2,
   matomoNonZeroTipGoalId: 11,
   matomoAbTest: {
-    name: "GmfTipCopy",
+    name: "GmfTipCopy2024",
     variantName: "B",
     startDate: '3024-10-05',
-    endDate: null,
+    endDate: undefined,
   },
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
