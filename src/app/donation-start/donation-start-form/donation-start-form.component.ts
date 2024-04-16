@@ -131,7 +131,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     {value: '10', label: '10%'},
     {value: '12.5', label: '12.5%'},
     {value: '15', label: '15%'},
-    {value: 'Other', label: 'Other'}
+    {value: 'Other', label: 'Other'} // send custom event if other selected
   ] as const;
 
   noPsps = false;
@@ -1923,6 +1923,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   public updateTipAmountFromSelectedPercentage = (tipPercentage: string) => {
     if (tipPercentage === 'Other') {
+      this.matomoTracker.trackEvent('donate', 'tip_other_selected', 'Tip Other Amount Selected')
       this.displayCustomTipInput();
       return;
     }
