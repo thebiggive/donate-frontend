@@ -2,6 +2,7 @@ import {MatomoTracker} from "ngx-matomo";
 import {Injectable} from "@angular/core";
 import {Donation} from "./donation.model";
 import {Campaign} from "./campaign.model";
+import {environment} from "../environments/environment";
 import {agreesToAnalyticsAndTracking, CookiePreferences, CookiePreferenceService} from "./cookiePreference.service";
 
 @Injectable({
@@ -20,7 +21,22 @@ export class ConversionTrackingService {
 
 
   public convert(donation: Donation, campaign: Campaign) {
+    this.trackAnonymousEventsWithMatomo(donation);
     this.trackConversionWithMatomo(donation, campaign);
+  }
+
+  /**
+   * Send events, including the one we use to see non-zero tip A/B conversion, which DO NOT
+   * require PII or cookie consent. No-op when no A/B test running.
+   */
+  private trackAnonymousEventsWithMatomo(donation: Donation) {
+    const goalId = environment.matomoNonZeroTipGoalId;
+    if (donation.tipAmount <= 0 || !goalId) {
+      return;
+    }
+
+    this.matomoTracker.trackEvent('donate', 'non_zero_tip_finalised', `Donation to campaign ${donation.projectId}`, donation.tipAmount);
+    this.matomoTracker.trackGoal(goalId, donation.tipAmount);
   }
 
   private trackConversionWithMatomo(donation: Donation, campaign: Campaign) {
