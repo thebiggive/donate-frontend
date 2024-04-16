@@ -30,13 +30,11 @@ export class ConversionTrackingService {
    * require PII or cookie consent. No-op when no A/B test running.
    */
   private trackAnonymousEventsWithMatomo(donation: Donation) {
-    const goalId = environment.matomoNonZeroTipGoalId;
-    if (donation.tipAmount <= 0 || !goalId) {
-      return;
+    const tippedGoalId = environment.matomoNonZeroTipGoalId;
+    if (donation.tipAmount > 0 && tippedGoalId) {
+      this.matomoTracker.trackEvent('donate', 'non_zero_tip_finalised', `Donation to campaign ${donation.projectId}`, donation.tipAmount);
+    this.matomoTracker.trackGoal(tippedGoalId, donation.tipAmount);
     }
-
-    this.matomoTracker.trackEvent('donate', 'non_zero_tip_finalised', `Donation to campaign ${donation.projectId}`, donation.tipAmount);
-    this.matomoTracker.trackGoal(goalId, donation.tipAmount);
   }
 
   private trackConversionWithMatomo(donation: Donation, campaign: Campaign) {
