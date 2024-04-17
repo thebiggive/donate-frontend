@@ -1,6 +1,12 @@
 export type EnvironmentID ='development'|'regression'|'staging'|'production';
-
 // see also src/app/featureFlags.ts
+
+/*
+ * In 'YYYY/MM/DD HH:MM:SS UTC' format – can usually copy from 'Embed code' in Matomo UI view of test.
+ *
+ * note ${number} matches 1 OR MORE digits, so this isn't a foolproof format, but good enough to make it harder to make mistakes.
+ */
+type MatomoDate = `${number}${number}${number}${number}/${number}${number}/${number}${number} ${number}${number}:${number}${number}:${number}${number} UTC`
 
 export interface Environment {
   environmentId: EnvironmentID,
@@ -32,8 +38,8 @@ export interface Environment {
   matomoAbTest?: {
     name: string,
     variantName: string, // The one that's not 'original'.
-    startDate: string,
-    endDate?: string, // Typically omit for dev/staging evaluation.
+    startDate: MatomoDate,
+    endDate?: MatomoDate, // Typically omit for dev/staging evaluation.
   },
   minimumCreditAmount: number,
   maximumCreditAmount: number,

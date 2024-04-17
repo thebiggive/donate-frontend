@@ -23,7 +23,12 @@ export const environment: Environment = {
   identityApiPrefix: 'https://identity-staging.thebiggivetest.org.uk/v1',
   matomoSiteId: 4,
   matomoNonZeroTipGoalId: 1,
-  matomoAbTest: undefined,
+  matomoAbTest: {
+  name: "GmfTipCopy2024",
+    variantName: "B",
+    startDate: '2024/04/16 13:20:00 UTC', // Start probably just before this goes out to Staging
+    endDate: undefined,
+  },
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
