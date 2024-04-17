@@ -117,6 +117,28 @@
             </biggive-form-field-select>
           </div>
 
+          <div *ngIf="GmfAbTestVariant === 'B' && showCustomTipInput" style="text-align: left;">
+            <h3>A small tip makes a big difference. You will help us:</h3>
+            <ul>
+              <li>
+                <strong>Build our charity partners' digital skills and resilience</strong>
+                <br>
+                With your support, we can continue to provide free training and resources.
+              </li>
+              <li>
+                <strong>Provide innovative fundraising technology</strong>
+                <br>
+                Help us invest in cutting-edge tech and make it even easier to donate through Big Give.
+              </li>
+              <li>
+                <strong>Double the difference and then some!</strong>
+                <br>
+                We transform your tips into match funds. Since 2022, charities have received over £200,000 in match funding from Big Give.
+              </li>
+            </ul>
+            Even £1.50 makes a big difference. Thank you!
+          </div>
+
           <div [style]="showCustomTipInput ? '' : 'display: none;'" class="donation-input donation-input-main">
 
             <biggive-text-input currency="{{campaign.currencyCode}}" >
@@ -130,27 +152,6 @@
           </div>
           <p *ngIf="GmfAbTestVariant === 'A' && showCustomTipInput" >Did you know Big Give is a charity, too? Tips help us provide a platform that doubles the difference of your donation to the causes closest to your heart. We truly appreciate any tip you can give - no matter the size.
           </p>
-          <div *ngIf="GmfAbTestVariant === 'B' && showCustomTipInput" style="text-align: left;">
-              <h3>A small tip makes a big difference. You will help us:</h3>
-              <ul>
-                <li>
-                  <strong>Build our charity partners' digital skills and resilience</strong> 
-                  <br>
-                  With your support, we can continue to provide free training and resources.
-                </li>
-                <li>
-                  <strong>Provide innovative fundraising technology</strong>
-                  <br>
-                  Help us invest in cutting-edge tech and make it even easier to donate through Big Give.
-                </li>
-                <li>
-                  <strong>Double the difference and then some!</strong> 
-                <br>
-                We transform your tips into match funds. Since 2022, charities have received over £200,000 in match funding from Big Give.
-              </li>
-              </ul>
-              Even £1.50 makes a big difference. Thank you!
-          </div>
           <div
             class="error"
             aria-live="polite"
