@@ -24,6 +24,7 @@
   <biggive-footer
   [headingLevel]=3
   [usePresetFooter]="true"
+  [donateUrlPrefix]="donateUriPrefix"
   [blogUrlPrefix]="blogUriPrefix"
   [experienceUrlPrefix]="experienceUriPrefix"
 ></biggive-footer>
@@ -34,7 +35,12 @@
    -->
 <div
   id="cookie-banner"
-  *ngIf="isPlatformBrowser && (userHasExpressedCookiePreference$ | async) === false"
+  *ngIf="isPlatformBrowser &&
+  showingDedicatedCookiePreferencesPage || ((userHasExpressedCookiePreference$ | async) === false)"
 >
-    <biggive-cookie-banner [blogUriPrefix]="environment.blogUriPrefix" />
+    <biggive-cookie-banner
+      [previouslyAgreedCookiePreferences]="existingCookiePreferences | async"
+      [blogUriPrefix]="environment.blogUriPrefix"
+      [autoOpenPreferences]="showingDedicatedCookiePreferencesPage"
+    />
 </div>
