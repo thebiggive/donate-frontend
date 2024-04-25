@@ -15,7 +15,7 @@ export function maximumDonationAmount(currencyCode: string, creditPenceToUse: nu
 
 export const maximumDonationAmountForCardDonation = 25_000;
 export const maximumDonationAmountForFundedDonation = 200_000;
-  /**
+/**
  * Many properties on `Donation` are nullable, because they are set only:
  * * after the donation has been persisted in Salesforce (e.g. `status`, `createdTime`, ...); or
  * * after the donor has completed payment section (e.g. `countryCode`, `emailAddress`, ...); or

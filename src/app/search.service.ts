@@ -6,6 +6,7 @@ export type SelectedType = {
   country?: string,
   onlyMatching?: boolean,
   sortField?: string,
+  status?: string,
   term?: string,
 };
 
@@ -126,7 +127,7 @@ export class SearchService {
    *
    * @param routeParams object
    */
-  loadQueryParams(queryParams: any, defaultSort: string) {
+  loadQueryParams(queryParams: any, defaultSort: string, defaultStatusFilter?: string) {
     this.reset(defaultSort, true);
 
     if (Object.keys(queryParams).length > 0) {
@@ -145,6 +146,8 @@ export class SearchService {
     }
 
     this.updateSelectedSortLabel();
+
+    this.selected['status'] = defaultStatusFilter;
 
     this.changed.emit(false);
   }

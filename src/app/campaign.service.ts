@@ -180,6 +180,10 @@ export class CampaignService {
       params = params.append('term', searchQuery.term);
     }
 
+    if (searchQuery.status) {
+      params = params.append('status', searchQuery.status);
+    }
+
     return this.http.get<CampaignSummary[]>(`${environment.apiUriPrefix}${this.apiPath}/campaigns`, { params });
   }
 
@@ -231,5 +235,6 @@ export class SearchQuery implements SearchQueryInterface {
   public parentSlug?: string;
   public sortDirection?: string;
   public sortField?: string;
+  public status?: string;
   public term?: string;
 }

@@ -13,6 +13,8 @@ export class CampaignListResolver  {
       offset: 0,
       sortDirection: 'desc',
       sortField: 'matchFundsRemaining',
+      // This resolver used on Explore for now, so no need to worry about closed ones.
+      status: 'Active',
     };
 
     return this.campaignService.search(defaultListQuery);
