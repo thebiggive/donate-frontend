@@ -3,7 +3,7 @@ import {AfterViewInit, Component, HostListener, Inject, OnDestroy, OnInit, PLATF
 import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
 import {BiggiveMainMenu} from '@biggive/components-angular';
 import {MatomoTracker} from "ngx-matomo";
-import {filter, map} from 'rxjs/operators';
+import {filter, map, startWith} from 'rxjs/operators';
 
 import {DonationService} from './donation.service';
 import {GetSiteControlService} from './getsitecontrol.service';
@@ -12,6 +12,7 @@ import {IdentityService} from "./identity.service";
 import {environment} from "../environments/environment";
 import {flags} from "./featureFlags";
 import {
+  AgreedToCookieTypes,
   agreesToAnalyticsAndTracking,
   agreesToThirdParty,
   CookiePreferences,
@@ -39,10 +40,31 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   protected readonly environment = environment;
   protected readonly flags = flags;
   protected readonly userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
+
+  protected readonly existingCookiePreferences = this.cookiePreferenceService.userOptInToSomeCookies()
+    .pipe(startWith(undefined))
+    .pipe(map(this.convertCookiePreferencesForDisplay));
+  convertCookiePreferencesForDisplay(cookiePrefs: CookiePreferences): AgreedToCookieTypes {
+    switch (true){
+      case cookiePrefs === undefined:
+        return {analyticsAndTesting: false, thirdParty: false}
+      case cookiePrefs.agreedToAll:
+        return {analyticsAndTesting: true, thirdParty: true}
+      default:
+        if (cookiePrefs.agreedToAll) {
+          // this is impossible but Typescript doesn't seem to know that so I have to
+          // add this line to narrow the type.
+          throw new Error("hit code that should be unreachable");
+        }
+        return cookiePrefs.agreedToCookieTypes;
+    }
+  }
+
   public currentUrlWithoutHash$: Observable<URL>;
 
   private getPersonSubscription: Subscription;
   private loginStatusChangeSubscription: Subscription;
+  protected showingDedicatedCookiePreferencesPage: boolean;
 
   constructor(
     private identityService: IdentityService,
@@ -60,6 +82,8 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
       if (event instanceof NavigationEnd) {
         if (isPlatformBrowser(this.platformId)) {
           this.navigationService.saveNewUrl(event.urlAfterRedirects);
+
+          this.showingDedicatedCookiePreferencesPage = event.url === '/cookie-preferences'
         }
       }
     });
@@ -152,6 +176,13 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   @HostListener('cookieBannerAcceptAllSelected', ['$event'])
   onCookieBannerAcceptAllSelected(_event: CustomEvent) {
     this.cookiePreferenceService.agreeToAll();
+  }
+
+  @HostListener('preferenceModalClosed', ['$event'])
+  onCookieBannerPreferenceModalClosed(_event: CustomEvent) {
+    if (this.showingDedicatedCookiePreferencesPage) {
+      this.router.navigateByUrl('/')
+    }
   }
 
   @HostListener('cookieBannerSavePreferencesSelected', ['$event'])

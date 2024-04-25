@@ -4,14 +4,17 @@ import {CookieService} from "ngx-cookie-service";
 import {environment} from "../environments/environment";
 import {map} from "rxjs/operators";
 
+export type AgreedToCookieTypes = {
+  analyticsAndTesting: boolean,
+  thirdParty: boolean,
+};
+
 export type CookiePreferences =
     {agreedToAll: true} |
     {
       agreedToAll: false,
-      agreedToCookieTypes: {
-        analyticsAndTesting: boolean,
-        thirdParty: boolean,
-      }};
+      agreedToCookieTypes: AgreedToCookieTypes
+    };
 
 export const agreesToAnalyticsAndTracking = (prefs: CookiePreferences) => prefs.agreedToAll || prefs.agreedToCookieTypes.analyticsAndTesting;
 export const agreesToThirdParty = (prefs: CookiePreferences) => prefs.agreedToAll || prefs.agreedToCookieTypes.thirdParty;
@@ -51,7 +54,7 @@ export class CookiePreferenceService {
   }
 
   /**
-   * Returns an observable that emits void iff and when the user has agreed to accept cookies - either
+   * Returns an observable that emits CookiePreferences and when the user has agreed to accept cookies - either
    * on subscription if they agreed in the past and we saved a cookie, or later if they agree during this session.
    */
   userOptInToSomeCookies(): Observable<CookiePreferences>
