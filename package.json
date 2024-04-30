@@ -42,8 +42,8 @@
     "@angular/platform-browser-dynamic": "^16.1.4",
     "@angular/platform-server": "^16.1.4",
     "@angular/router": "^16.1.4",
-    "@biggive/components": "^202403261241.0.0",
-    "@biggive/components-angular": "^202403261241.0.0",
+    "@biggive/components": "^202404301101.0.0",
+    "@biggive/components-angular": "^202404301101.0.0",
     "@fortawesome/angular-fontawesome": "~0.13.0",
     "@fortawesome/fontawesome-svg-core": "^6.2.0",
     "@fortawesome/free-brands-svg-icons": "^6.2.0",
@@ -69,7 +69,7 @@
     "zone.js": "~0.13.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^16.1.4",
+    "@angular-devkit/build-angular": "^16.2.14",
     "@angular-eslint/builder": "^16.2.0",
     "@angular-eslint/eslint-plugin": "^16.2.0",
     "@angular-eslint/eslint-plugin-template": "^16.2.0",
