@@ -37,9 +37,10 @@
        -->
 <div
   id="cookie-banner"
-  *ngIf="environment.environmentId !== 'regression' &&
+  *ngIf=" showingDedicatedCookiePreferencesPage || (
+  (environment.environmentId !== 'regression') &&
   isPlatformBrowser &&
-  showingDedicatedCookiePreferencesPage || ((userHasExpressedCookiePreference$ | async) === false)"
+  (userHasExpressedCookiePreference$ | async) === false)"
 >
     <biggive-cookie-banner
       [previouslyAgreedCookiePreferences]="existingCookiePreferences | async"
