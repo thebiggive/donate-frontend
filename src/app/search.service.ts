@@ -69,7 +69,7 @@ export class SearchService {
       }
 
       // If search text changed and new search text is not blank, we want to re-sort by 'Relevance'. DON-558.
-      this.selected.sortField = 'Relevance';
+      this.selected.sortField = 'relevance';
     }
 
     this.changed.emit(true);
@@ -83,7 +83,8 @@ export class SearchService {
       case 'amountRaised':
         this.selectedSortLabel =  'Most raised';
         break;
-      case 'Relevance':
+      case 'relevance':
+      case 'Relevance': // historically we set this with a capital R.
         this.selectedSortLabel = 'Relevance';
         break;
       default:
