@@ -87,7 +87,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   stripePaymentElement: StripePaymentElement | undefined;
   cardHandler = this.onStripeCardChange.bind(this);
   showChampionOptIn = false;
-  GmfAbTestVariant: 'A'|'B' = 'A';
 
   @Input({ required: true }) campaign: Campaign;
 
@@ -239,7 +238,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private selectedPaymentMethodType: string | undefined;
   private paymentReadinessTracker: PaymentReadinessTracker;
   public paymentStepErrors: string = "";
-  private manuallySelectedABTestVariant: string | null = null;
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -269,14 +267,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.tipControlStyle = (queryParams?.tipControl?.toLowerCase() === 'slider')
       ? 'slider' : 'dropdown';
-
-    if (! environment.production) {
-      this.manuallySelectedABTestVariant = queryParams?.selectABTestVariant;
-
-      if (this.manuallySelectedABTestVariant == 'B') {
-        this.GmfAbTestVariant = 'B';
-      }
-    }
   }
 
   ngOnDestroy() {
@@ -312,10 +302,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
             {
                 name: environment.matomoAbTest.variantName,
                 activate: (_event: any) => {
-                  if (this.manuallySelectedABTestVariant) {
-                    return;
-                  }
-                  this.GmfAbTestVariant = 'B';
                   console.log('Copy B test variant active!');
                 }
             },
