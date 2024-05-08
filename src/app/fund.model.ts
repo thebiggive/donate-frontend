@@ -8,9 +8,7 @@ export type Fund = {
     id: string,
     type: string,
     name: string,
-    // totalForTicker is a new field SF should start sending in Feb 2024 - so we don't yet rely on it being present.
-    totalForTicker?: number,
-    totalAmount: number,
+    totalForTicker: number,
     amountRaised?: number,
     description?: string,
     logoUri?: string,
