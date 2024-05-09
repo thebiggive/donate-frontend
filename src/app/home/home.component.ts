@@ -13,7 +13,7 @@ const CCCloseDate = new Date('2023-12-05T12:00:00+00:00');
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  styleUrl: 'home.component.scss',
 })
 export class HomeComponent implements OnInit {
   stats: {

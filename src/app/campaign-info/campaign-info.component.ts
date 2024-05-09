@@ -17,7 +17,7 @@ const endPipeToken = 'timeLeftToEndPipe';
   selector: 'app-campaign-info',
   standalone: true,
   templateUrl: './campaign-info.component.html',
-  styleUrls: ['./campaign-info.component.scss'],
+  styleUrl: './campaign-info.component.scss',
   imports: [
     ...allChildComponentImports,
     FontAwesomeModule,

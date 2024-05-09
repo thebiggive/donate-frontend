@@ -16,7 +16,7 @@ import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.com
   standalone: true,
   selector: 'app-register-modal',
   templateUrl: 'register-modal.html',
-  styleUrls: ['./register-modal.component.scss'],
+  styleUrl: './register-modal.component.scss',
   imports: [
     ...allChildComponentImports,
     FormsModule,

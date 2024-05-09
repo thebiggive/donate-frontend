@@ -72,7 +72,7 @@ declare var _paq: {
 @Component({
   selector: 'app-donation-start-form',
   templateUrl: './donation-start-form.component.html',
-  styleUrls: ['./donation-start-form.component.scss'],
+  styleUrl: './donation-start-form.component.scss',
   providers: [
     TimeLeftPipe,
   ]

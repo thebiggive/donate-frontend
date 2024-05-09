@@ -7,7 +7,7 @@ import { LoginModalComponent } from '../../login-modal/login-modal.component';
 @Component({
   selector: 'app-donation-start-login',
   templateUrl: './donation-start-login.component.html',
-  styleUrls: ['./donation-start-login.component.scss']
+  styleUrl: './donation-start-login.component.scss'
 })
 export class DonationStartLoginComponent {
   @Input({ required: true }) loadAuthedPersonInfo: (dataId: string, dataJwt: string) => void;

@@ -14,7 +14,7 @@ import { SearchService } from '../search.service';
 @Component({
   selector: 'app-explore',
   templateUrl: './explore.component.html',
-  styleUrls: ['./explore.component.scss'],
+  styleUrl: 'explore.component.scss',
   providers: [DatePipe]
 })
 export class ExploreComponent implements OnDestroy, OnInit {
