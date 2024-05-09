@@ -33,7 +33,7 @@ import {getCurrencyMaxValidator} from '../validators/currency-max';
 @Component({
   selector: 'app-transfer-funds',
   templateUrl: './transfer-funds.component.html',
-  styleUrls: ['./transfer-funds.component.scss'],
+  styleUrl: './transfer-funds.component.scss',
 })
 export class TransferFundsComponent implements AfterContentInit, OnInit {
   addressSuggestions: GiftAidAddressSuggestion[] = [];

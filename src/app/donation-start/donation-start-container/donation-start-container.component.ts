@@ -12,7 +12,7 @@ import {ImageService} from "../../image.service";
 
 @Component({
   templateUrl: './donation-start-container.component.html',
-  styleUrls: ['./donation-start-container.component.scss']
+  styleUrl: './donation-start-container.component.scss'
 })
 export class DonationStartContainerComponent implements AfterViewInit, OnInit{
   campaign: Campaign;

@@ -16,7 +16,7 @@ import { TimeLeftPipe } from '../time-left.pipe';
   encapsulation: ViewEncapsulation.None,
   selector: 'app-campaign-details',
   templateUrl: './campaign-details.component.html',
-  styleUrls: ['./campaign-details.component.scss'],
+  styleUrl: './campaign-details.component.scss',
   providers: [
     TimeLeftPipe,
     DatePipe

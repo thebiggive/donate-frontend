@@ -21,7 +21,7 @@ import {transferFundsPath} from "../app-routing";
   standalone: true,
   imports: [CommonModule, ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatAutocompleteModule],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrl: 'register.component.scss'
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   @ViewChild('captcha') captcha: RecaptchaComponent;

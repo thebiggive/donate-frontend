@@ -17,7 +17,7 @@ import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.com
   standalone: true,
   selector: 'app-login-modal',
   templateUrl: 'login-modal.html',
-  styleUrls: ['./login-modal.component.scss'],
+  styleUrl: './login-modal.component.scss',
   imports: [
     ...allChildComponentImports,
     FormsModule,
