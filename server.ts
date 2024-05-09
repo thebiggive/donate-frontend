@@ -84,7 +84,9 @@ export function app(): express.Express {
           'js.stripe.com',
           'recaptcha.net',
           'www.gstatic.com',
-          'https://www.youtube.com/', // YT `/iframe_api` on home page needs this atm?
+          // Both video services' iframe embeds seem to need script access to not error with our current embed approach.
+          'https://player.vimeo.com',
+          'https://www.youtube.com/',
         ],
       },
     },
