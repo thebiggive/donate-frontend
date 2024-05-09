@@ -7,7 +7,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule, RouterOutlet} from '@angular/router';
 import {ComponentsModule} from '@biggive/components-angular';
-import {RECAPTCHA_BASE_URL, RECAPTCHA_NONCE} from 'ng-recaptcha';
+import {RECAPTCHA_LOADER_OPTIONS} from 'ng-recaptcha';
 import {LOCAL_STORAGE} from 'ngx-webstorage-service';
 
 import {AppComponent} from './app.component';
@@ -68,10 +68,16 @@ const matomoBaseUri = 'https://biggive.matomo.cloud';
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
-    { provide: RECAPTCHA_NONCE, useValue: environment.recaptchaNonce },
     {
-      provide: RECAPTCHA_BASE_URL,
-      useValue: 'https://recaptcha.net/recaptcha/api.js'  // using this URL instead of default google.com means we avoid google.com cookies.
+      provide: RECAPTCHA_LOADER_OPTIONS,
+      useValue: {
+        onBeforeLoad(_url: any) {
+          return {
+            baseUrl: 'https://recaptcha.net/recaptcha/api.js', // using this URL instead of default google.com means we avoid google.com cookies.
+            nonce: environment.recaptchaNonce,
+          };
+        },
+      },
     },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
