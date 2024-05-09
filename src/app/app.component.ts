@@ -126,13 +126,6 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
           this.matomoTracker.setCookieConsentGiven();
         }
       });
-
-      // Temporarily client-side redirect the previous non-global domain to the new one.
-      // Once most inbound links are updated, we can probably replace the app redirect
-      // with an infrastructure-level one a la parked domains.
-      if (window.location.host === 'donate.thebiggive.org.uk') {
-        window.location.host = 'donate.biggive.org';
-      }
     }
 
     // This service needs to be injected app-wide and this line is here, because

@@ -263,7 +263,6 @@ workflows:
             - deploy-staging-static
           post-steps:
             - slack/notify:
-                # Temporarily sending alarms to test alarm sending setup.
                 channel: deployments, staging-alarms
                 event: fail
                 template: basic_fail_1
