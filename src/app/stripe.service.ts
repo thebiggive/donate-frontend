@@ -36,7 +36,7 @@ export class StripeService {
       fonts: [
         {
           family: 'Euclid Triangle',
-          src: `url('${environment.donateGlobalUriPrefix}/d/EuclidTriangle-Regular.1d45abfd25720872.woff2') format('woff2')`,
+          src: `url('${environment.donateUriPrefix}/d/EuclidTriangle-Regular.1d45abfd25720872.woff2') format('woff2')`,
           weight: '400',
         },
       ],

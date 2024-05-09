@@ -13,7 +13,6 @@ export const environment: Environment = {
   creditTipsCampaign: 'a056900002LDXWgAAP',
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
-  donateGlobalUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   blogUriPrefix: 'https://wp-staging.thebiggivetest.org.uk',
   sharedCookieDomain: '.thebiggivetest.org.uk',

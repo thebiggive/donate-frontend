@@ -4,30 +4,30 @@ import { APP_BASE_HREF } from '@angular/common';
 import { enableProdMode } from '@angular/core';
 import { renderToString } from '@biggive/components/hydrate';
 import { setAssetPath } from '@biggive/components/dist/components';
-import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as compression from 'compression';
 import { createHash } from 'crypto';
+import { CommonEngine, CommonEngineRenderOptions } from '@angular/ssr';
 import * as express from 'express';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { Request, Response } from 'express';
-import { existsSync } from 'fs';
 import helmet from 'helmet';
 import * as morgan from 'morgan';
-import { join } from 'path';
 
 import { AppServerModule } from './src/main.server';
+import { REQUEST, RESPONSE } from './src/express.tokens';
 import { COUNTRY_CODE } from './src/app/country-code.token';
 import { environment } from './src/environments/environment';
 import { GetSiteControlService } from './src/app/getsitecontrol.service';
 
 const apiHost = (new URL(environment.apiUriPrefix)).host;
 const donationsApiHost = (new URL(environment.donationsApiPrefix)).host;
-const donateGlobalHost = (new URL(environment.donateGlobalUriPrefix)).host;
 const donateHost = (new URL(environment.donateUriPrefix)).host;
 const identityApiHost = (new URL(environment.identityApiPrefix)).host;
 const matomoUriBase = 'https://biggive.matomo.cloud';
 
 // The Express app is exported so that it can be used by serverless Functions.
-export function app() {
+export function app(): express.Express {
   // Faster server renders w/ Prod mode (dev mode never needed)
   enableProdMode();
 
@@ -71,7 +71,6 @@ export function app() {
           matomoUriBase,
         ],
         'script-src': [
-          donateGlobalHost,
           donateHost,
           matomoUriBase,
           `'unsafe-eval'`,
@@ -85,7 +84,9 @@ export function app() {
           'js.stripe.com',
           'recaptcha.net',
           'www.gstatic.com',
-          'https://www.youtube.com/', // YT `/iframe_api` on home page needs this atm?
+          // Both video services' iframe embeds seem to need script access to not error with our current embed approach.
+          'https://player.vimeo.com',
+          'https://www.youtube.com/',
         ],
       },
     },
@@ -93,13 +94,11 @@ export function app() {
   server.use(morgan('combined')); // Log requests to stdout in Apache-like format
 
   const distFolder = join(process.cwd(), 'dist/browser');
-  const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
+  const indexHtml = existsSync(join(distFolder, 'index.original.html'))
+    ? join(distFolder, 'index.original.html')
+    : join(distFolder, 'index.html');
 
-  // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
-  server.engine('html', ngExpressEngine({
-    bootstrap: AppServerModule,
-    inlineCriticalCss: false, // https://github.com/angular/universal/issues/2106#issuecomment-859720224
-  }));
+  const commonEngine = new CommonEngine();
 
   server.set('view engine', 'html');
   server.set('views', distFolder);
@@ -129,42 +128,51 @@ export function app() {
     maxAge: '1 day', // Assets should be served similarly but don't have name-hashes, so cache less.
   }));
 
-  // All regular routes use the Universal engine
-  server.get('*', async (req: Request, res: Response) => {
+  // All regular routes use the SSR engine
+  server.get('*', async (req: Request, res: Response, next) => {
+    const { protocol, originalUrl, headers } = req;
+
+    const renderOptions: CommonEngineRenderOptions = {
+      bootstrap: AppServerModule,
+      documentFilePath: indexHtml,
+      inlineCriticalCss: false,
+      url: `${protocol}://${headers.host}${originalUrl}`,
+      publicPath: distFolder,
+      providers: [
+        // Ensure we render with a supported base HREF, including behind an ALB and regardless of the
+        // base reported by CloudFront when talking to the origin.
+        // (Stock Angular SSR uses `req.baseUrl` but based on the previous note about CloudFront, from Angular Universal
+        // days, I suspect this will still not be reliable for us.)
+        { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix, },
+        { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
+        { provide: RESPONSE, useValue: res },
+        { provide: REQUEST, useValue: req }
+      ]
+    };
+
     // Note that the file output as `index.html` is actually dynamic. See `index` config keys in `angular.json`.
     // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
     // this key to work around `fileReplacements` ending index support in Angular 8.
-    res.render(indexHtml, { req, providers: [
-      // Ensure we render with a supported base HREF, including behind an ALB and regardless of the
-      // base reported by CloudFront when talking to the origin.
-      // (From later 2023 we should no longer need to maintain support for parallel base domains.)
-      { provide: APP_BASE_HREF, useValue: environment.donateGlobalUriPrefix, },
-      { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
-    ],
-  }, async (err: Error, html: string) => {
-      if (err) {
-        console.log(`Render error: ${err}`);
-        res.sendStatus(500);
-        return;
-      }
+    commonEngine.render(renderOptions)
+      .then(async (html) => {
+        setAssetPath(`${environment.donateUriPrefix}/assets`);
 
-      setAssetPath(`${environment.donateGlobalUriPrefix}/assets`);
+        const hydratedDoc = await renderToString(html, {
+          // Don't `removeScripts` like Ionic does: we need them to handover to browser JS runtime successfully!
+          prettyHtml: true,
+          removeHtmlComments: true,
+        });
 
-      const hydratedDoc = await renderToString(html, {
-        // Don't `removeScripts` like Ionic does: we need them to handover to browser JS runtime successfully!
-        prettyHtml: true,
-        removeHtmlComments: true,
-      });
-
-      res.send(hydratedDoc.html);
-    });
+        res.send(hydratedDoc.html);
+      })
+      .catch((err) => next(err));
   });
 
   return server;
 }
 
-function run() {
-  const port = process.env.PORT || 4000;
+function run(): void {
+  const port = process.env['SSR_PORT'] || 4000;
 
   // Start up the Node server
   const server = app();

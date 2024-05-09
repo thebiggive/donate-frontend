@@ -17,8 +17,7 @@ export interface Environment {
   creditDonationsEnabled: boolean
 
   /** Prefix for pages served by this Angular application */
-  donateGlobalUriPrefix: string,
-  donateUriPrefix: string, // Uses legacy host for redirects
+  donateUriPrefix: string,
 
   /** Prefix for pages served by WordPress */
   blogUriPrefix: string,
@@ -33,7 +32,7 @@ export interface Environment {
   donationsApiPrefix: string,
   getSiteControlId: string,
   identityApiPrefix: string,
-  matomoSiteId: number | null, // null for no Matomo tracking.
+  matomoSiteId: number | null
   matomoNonZeroTipGoalId: number | null, // Only tracks GBP campaigns; sends tip as value in £.
   matomoAbTest?: {
     name: string,

@@ -43,10 +43,10 @@ export type SfApiHighlightCard = Omit<HighlightCard, 'backgroundImageUrl'|'iconC
   }
 };
 
-const replaceURLOrigin = (experienceUriPrefix: string, blogUriPrefix: string, donateGlobalUriPrefix: string, urlFromApi: string): URL => {
+const replaceURLOrigin = (experienceUriPrefix: string, blogUriPrefix: string, donateUriPrefix: string, urlFromApi: string): URL => {
 
   const href = urlFromApi
-    .replace('https://donate.biggive.org', donateGlobalUriPrefix)
+    .replace('https://donate.biggive.org', donateUriPrefix)
     .replace('https://biggive.org', blogUriPrefix)
     .replace('https://community.biggive.org', experienceUriPrefix)
   ;
@@ -54,7 +54,7 @@ const replaceURLOrigin = (experienceUriPrefix: string, blogUriPrefix: string, do
   return new URL(href);
 }
 
-export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, blogUriPrefix: string, donateGlobalUriPrefix: string, sfApiHighlightCard: SfApiHighlightCard, ): HighlightCard => {
+export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, blogUriPrefix: string, donateUriPrefix: string, sfApiHighlightCard: SfApiHighlightCard, ): HighlightCard => {
 
   const campaignFamilyColours: Record<campaignFamilyName, brandColour> = {
     emergencyMatch: 'brand-emf-yellow',
@@ -67,13 +67,13 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
   };
 
   const campaignFamilyBackgroundImages: Record<campaignFamilyName, URL> = {
-    emergencyMatch: new URL('/assets/images/emergency-card.png', donateGlobalUriPrefix),
-    christmasChallenge: new URL('/assets/images/card-background-cc-lights.jpg', donateGlobalUriPrefix),
-    summerGive:  new URL('/assets/images/colour-orange.png', donateGlobalUriPrefix),
-    greenMatchFund:  new URL('/assets/images/card-background-gmf.jpg', donateGlobalUriPrefix),
-    womenGirls: new URL('/assets/images/wmg-purple-texture.jpg', donateGlobalUriPrefix),
-    mentalHealthFund: new URL('/assets/images/turquoise-texture.jpg', donateGlobalUriPrefix),
-    artsforImpact: new URL('/assets/images/red-coral-texture.png', donateGlobalUriPrefix)
+    emergencyMatch: new URL('/assets/images/emergency-card.png', donateUriPrefix),
+    christmasChallenge: new URL('/assets/images/card-background-cc-lights.jpg', donateUriPrefix),
+    summerGive:  new URL('/assets/images/colour-orange.png', donateUriPrefix),
+    greenMatchFund:  new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
+    womenGirls: new URL('/assets/images/wmg-purple-texture.jpg', donateUriPrefix),
+    mentalHealthFund: new URL('/assets/images/turquoise-texture.jpg', donateUriPrefix),
+    artsforImpact: new URL('/assets/images/red-coral-texture.png', donateUriPrefix)
   };
 
   return {
@@ -82,10 +82,10 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
     headerText: sfApiHighlightCard.headerText,
     bodyText: sfApiHighlightCard.bodyText,
     iconColor: campaignFamilyColours[sfApiHighlightCard.campaignFamily] || "primary",
-    backgroundImageUrl: campaignFamilyBackgroundImages[sfApiHighlightCard.campaignFamily] || new URL('/assets/images/blue-texture.jpg', donateGlobalUriPrefix),
+    backgroundImageUrl: campaignFamilyBackgroundImages[sfApiHighlightCard.campaignFamily] || new URL('/assets/images/blue-texture.jpg', donateUriPrefix),
     button: {
       text: sfApiHighlightCard.button.text,
-      href: replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateGlobalUriPrefix, sfApiHighlightCard.button.href),
+      href: replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href),
     }
   };
 };

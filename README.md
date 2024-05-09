@@ -52,18 +52,17 @@ To run style, unit and e2e tests together from your local, as CircleCI build che
 ### e2e tests
 
 The latest tagged [Puppeteer](https://www.npmjs.com/package/puppeteer) typically uses the latest available Chromium and updates do not follow
-semantic versioning. So for it to continue working, it currently needs to be pinned to a particular "feature release", e.g. `13.3.*` for Chromium 99.
+semantic versioning. So for it to continue working, it currently needs to be pinned to a particular "feature release", e.g. `22.8.*` for Chromium 124.
 
-We have also worked around some remaining Chromium compatibilty issues using the
+In the past we have worked around some Chromium compatibilty issues using the
 `puppeteer_skip_chromium_download` npm config flag, the `webdriver-manager` option
 override `versions.chrome` and the Angular e2e env var `PUPPETEER_CHROMIUM_REVISION`.
-These workarounds are needed in different runtime scenarios and we should probably review
-if all are still needed in all the contexts they are used.
+These don't seem to be needed right now.
 
-To deal with difficulty matching Chromium / ChromeDriver / Puppeteer versions, it may be helpful to review
+To deal with any difficulty matching Chromium / ChromeDriver / Puppeteer versions, it may be helpful to review
 [this page](https://how-to.dev/how-to-find-the-right-chromiumrevision-value-for-a-given-chromium-version).
 You might need to vary commands based on your platform, e.g. to check the Chrome release
-version for a locally downloaded `chromium` on MacOS:
+version for a locally downloaded `chromium` on macOS:
 
 `./node_modules/chromium/lib/chromium/chrome-mac/Chromium.app/Contents/MacOS/Chromium --version`
 
@@ -125,7 +124,8 @@ To test re-building the image (use FontAwesome token marked "Pro Package Token" 
 
     docker build --rm --build-arg BUILD_ENV=staging --build-arg FONTAWESOME_NPM_AUTH_TOKEN=**token** -t thebiggive/donate-frontend:staging .
 
-To prepare for CORS to work, you may need to update `environment.ts` to set `donateGlobalUriPrefix` to 'http://localhost:4000'.
+If you want to test *running* the staging image but locally, then for CORS to work you must (before building)
+update `environment.staging.ts` to set `donateUriPrefix` to 'http://localhost:4000'.
 
 To start it daemonised (in the background) and map to host port 4000 - assuming no running web server on that port:
 
@@ -153,8 +153,8 @@ CloudFront is configured to route requests to the right place based on these pre
 
 ### Server-side app
 
-The ECS app we deploy runs on Express with `@nguniversal/express-engine`, the typical way to serve
-Universal apps. There are a few configuration tweaks and middleware additions for our use case,
+The ECS app we deploy runs on Express with `@angular/ssr`, the typical (since Angular 17) way to serve
+SSR apps. There are a few configuration tweaks and middleware additions for our use case,
 which all live in [`server.ts`](./server.ts).
 
 #### Writing safe polymorphic code
@@ -162,7 +162,7 @@ which all live in [`server.ts`](./server.ts).
 Because TypeScript runs in both server and client contexts, we need to be very careful with JavaScript
 globals to avoid server-side render crashes and glitchier or broken page loads for search engines.
 
-See [Angular docs](https://angular.io/guide/universal#working-around-the-browser-apis) for
+See [Angular docs](https://angular.io/guide/ssr#working-around-the-browser-apis) for
 general guidance on this.
 
 In the few cases where we need to work with these browser APIs, we should check carefully that either:

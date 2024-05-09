@@ -10,12 +10,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RecaptchaModule } from 'ng-recaptcha';
-import { MatomoModule } from 'ngx-matomo';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { AppComponent } from './app.component';
 import { TBG_DONATE_STORAGE } from './donation.service';
 import { TBG_DONATE_ID_STORAGE } from './identity.service'
+import {NgxMatomoModule} from "ngx-matomo-client";
 
 describe('AppComponent', () => {
   beforeEach(waitForAsync(() => {
@@ -28,12 +28,9 @@ describe('AppComponent', () => {
         MatIconModule,
         MatInputModule,
         MatListModule,
-        MatomoModule.forRoot({
-          scriptUrl: `https://example.com/matomo.js`,
-          trackers: [],
-          routeTracking: {
-            enable: true,
-          }
+        NgxMatomoModule.forRoot({
+          siteId: '',
+          trackerUrl: '',
         }),
         MatSelectModule,
         NoopAnimationsModule,

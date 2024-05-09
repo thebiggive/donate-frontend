@@ -7,8 +7,7 @@ export const environment: Environment = {
   creditTipsCampaign: 'a056900002LDXWgAAP',
   apiUriPrefix: 'https://sf-api-production.thebiggive.org.uk',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
-  donateGlobalUriPrefix: 'https://donate.biggive.org',
-  donateUriPrefix: 'https://donate.thebiggive.org.uk',
+  donateUriPrefix: 'https://donate.biggive.org',
   experienceUriPrefix: 'https://community.biggive.org',
   blogUriPrefix: 'https://biggive.org',
   sharedCookieDomain: ".biggive.org",
