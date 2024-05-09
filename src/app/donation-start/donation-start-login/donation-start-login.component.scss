@@ -1,6 +1,4 @@
-@use '@angular/material' as mat;
 @import '../../../abstract';
-
 
 .id-info {
   @include make-card($box-shadow-hard);
