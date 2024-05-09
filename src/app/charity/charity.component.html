@@ -19,7 +19,7 @@
         slot="campaign-grid"
         column-count="3"
         >
-        @for (campaign of campaigns; track campaign) {
+        @for (campaign of campaigns; track $index) {
           <div>
             <biggive-campaign-card
               id="campaign-{{campaign.id}}"

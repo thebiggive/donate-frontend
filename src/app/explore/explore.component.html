@@ -31,7 +31,7 @@
           (scrolled)="onScroll()"
           [scrollWindow]="true"
           >
-          @for (campaign of campaigns; track campaign) {
+          @for (campaign of campaigns; track campaign.id) {
             <div>
               <biggive-campaign-card
                 [banner]="campaign.imageUri | optimisedImage:830 | async"

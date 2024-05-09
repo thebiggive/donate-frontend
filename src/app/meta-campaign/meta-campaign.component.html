@@ -53,7 +53,7 @@
           (scrolled)="onScroll()"
           [scrollWindow]="true"
           >
-          @for (campaign of children; track campaign) {
+          @for (campaign of children; track campaign.id) {
             <div>
               <biggive-campaign-card
                 id="campaign-{{campaign.id}}"
