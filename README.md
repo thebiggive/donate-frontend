@@ -153,8 +153,8 @@ CloudFront is configured to route requests to the right place based on these pre
 
 ### Server-side app
 
-The ECS app we deploy runs on Express with `@nguniversal/express-engine`, the typical way to serve
-Universal apps. There are a few configuration tweaks and middleware additions for our use case,
+The ECS app we deploy runs on Express with `@angular/ssr`, the typical (since Angular 17) way to serve
+SSR apps. There are a few configuration tweaks and middleware additions for our use case,
 which all live in [`server.ts`](./server.ts).
 
 #### Writing safe polymorphic code
@@ -162,7 +162,7 @@ which all live in [`server.ts`](./server.ts).
 Because TypeScript runs in both server and client contexts, we need to be very careful with JavaScript
 globals to avoid server-side render crashes and glitchier or broken page loads for search engines.
 
-See [Angular docs](https://angular.io/guide/universal#working-around-the-browser-apis) for
+See [Angular docs](https://angular.io/guide/ssr#working-around-the-browser-apis) for
 general guidance on this.
 
 In the few cases where we need to work with these browser APIs, we should check carefully that either:
