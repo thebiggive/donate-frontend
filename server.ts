@@ -62,6 +62,7 @@ export function app(): express.Express {
           'js.stripe.com',
           'player.vimeo.com',
           'recaptcha.net',
+          'www.recaptcha.net',
           'www.youtube.com',
         ],
         'img-src': [
