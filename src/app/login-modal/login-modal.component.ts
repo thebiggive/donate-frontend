@@ -72,7 +72,7 @@ export class LoginModalComponent implements OnInit {
     this.loggingIn = false;
   }
 
-  captchaReturn(captchaResponse: string): void {
+  captchaReturn(captchaResponse: string | null): void {
     if (captchaResponse === null) {
       // We had a code but now don't, e.g. after expiry at 1 minute. In this case
       // the trigger wasn't a login click so do nothing. A repeat login attempt will
