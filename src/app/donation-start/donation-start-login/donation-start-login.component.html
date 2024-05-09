@@ -1,16 +1,19 @@
 <main>
-    <div *ngIf="loggedInWithPassword else logIn" class="id-info">
+  @if (loggedInWithPassword) {
+    <div class="id-info">
       <p>Logged in as <strong>{{ email}}</strong></p>
       <p>We'll pre-fill some fields with your saved details, but you can change them if you need to.</p>
-      <p *ngIf="creditPenceToUse > 0">Your credit balance will be used and the donation value capped at {{ creditPenceToUse / 100 | exactCurrency:campaign.currencyCode }}</p>
+      @if (creditPenceToUse > 0) {
+        <p>Your credit balance will be used and the donation value capped at {{ creditPenceToUse / 100 | exactCurrency:campaign.currencyCode }}</p>
+      }
       <p>
         <button id="my-account-link" mat-raised-button routerLink="/my-account">My Account</button>
       </p>
     </div>
-  <ng-template #logIn>
-  <div class="id-info">
+  } @else {
+    <div class="id-info">
       <p><strong>You can donate faster if you've already made an account with us.</strong></p>
       <p><button mat-raised-button (click)="login()">Log in</button></p>
     </div>
-  </ng-template>
+  }
 </main>

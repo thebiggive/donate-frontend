@@ -1,74 +1,71 @@
-<app-popup-standalone *ngIf="card">
-<!--
-  *ngIf="card" above shouldn't be needed - we don't load the modal at all without a card, but it makes the `it('should create'`
-  test pass. Would be good to remove.
- -->
+@if (card) {
+  <app-popup-standalone>
+    <!--
+    *ngIf="card" above shouldn't be needed - we don't load the modal at all without a card, but it makes the `it('should create'`
+    test pass. Would be good to remove.
+    -->
     <h2 mat-dialog-title>Update {{card.brand.toUpperCase()}} ending {{card.last4}} </h2>
-
-  <mat-dialog-content class="mat-typography">
+    <mat-dialog-content class="mat-typography">
       <form [formGroup]="form">
-          <mat-form-field color="primary">
-            <mat-label for="expiryDate">Expiry (MM/YY) </mat-label>
+        <mat-form-field color="primary">
+          <mat-label for="expiryDate">Expiry (MM/YY) </mat-label>
+          <input
+            width="5"
+            matInput
+            type="text"
+            title="Expiry date as month and year, e.g. 12/23"
+            pattern="[0-9]{2}/[0-9]{2}"
+            id="expiryDate"
+            formControlName="expiryDate"
+            >
+        </mat-form-field>
+        <div>
+          <mat-form-field>
+            <mat-label for="billingCountry">Billing country</mat-label>
+            <mat-select
+              id="billingCountry-orig"
+              formControlName="billingCountry"
+              >
+              @for (country of COUNTRIES; track country) {
+                <mat-option
+                  [value]="country.iso2"
+                  >
+                  {{ country.country }}
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label for="postalCode">Postal Code</mat-label>
             <input
               width="5"
               matInput
               type="text"
-              title="Expiry date as month and year, e.g. 12/23"
-              pattern="[0-9]{2}/[0-9]{2}"
-              id="expiryDate"
-              formControlName="expiryDate"
-            >
+              title="Postal Code / Zip Code"
+              id="postalCode"
+              formControlName="postalCode"
+              >
           </mat-form-field>
-
-        <div>
-        <mat-form-field>
-          <mat-label for="billingCountry">Billing country</mat-label>
-          <mat-select
-            id="billingCountry-orig"
-            formControlName="billingCountry"
-          >
-            <mat-option
-              *ngFor="let country of COUNTRIES"
-              [value]="country.iso2"
-            >
-              {{ country.country }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-
-        <mat-form-field>
-        <mat-label for="postalCode">Postal Code</mat-label>
-        <input
-          width="5"
-          matInput
-          type="text"
-          title="Postal Code / Zip Code"
-          id="postalCode"
-          formControlName="postalCode"
-        >
-        </mat-form-field>
         </div>
       </form>
     </mat-dialog-content>
-
-  <mat-dialog-actions align="end">
-    <button
-      [disabled]="!form.valid"
-      mat-raised-button
-      mat-dialog-close="true"
-      color="accent"
-      type="submit"
-    >
-      OK
-    </button>
-
+    <mat-dialog-actions align="end">
+      <button
+        [disabled]="!form.valid"
+        mat-raised-button
+        mat-dialog-close="true"
+        color="accent"
+        type="submit"
+        >
+        OK
+      </button>
       <button
         mat-raised-button
         mat-dialog-close="null"
         color="accent"
-      >
+        >
         Cancel
       </button>
     </mat-dialog-actions>
-</app-popup-standalone>
+  </app-popup-standalone>
+}

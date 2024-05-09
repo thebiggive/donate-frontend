@@ -1,211 +1,231 @@
 <main class="b-container">
-  <div *ngIf="complete" id="banner-thank-you"></div>
+  @if (complete) {
+    <div id="banner-thank-you"></div>
+  }
 
-  <mat-spinner class="complete-spinner" *ngIf="!complete && !noAccess && !timedOut" color="primary"
-               diameter="30" aria-label="Loading donation details"></mat-spinner>
+  @if (!complete && !noAccess && !timedOut) {
+    <mat-spinner class="complete-spinner" color="primary"
+    diameter="30" aria-label="Loading donation details"></mat-spinner>
+  }
 
-  <div *ngIf="isDataLoaded">
-    <p *ngIf="noAccess" class="error">
-      We can only show your receipt in the tab where you donated, in order to keep your information secure. Don't worry
-      though, we'll email you a receipt within a few minutes confirming if your donation was processed.
-    </p>
-
-    <p *ngIf="timedOut" class="error" aria-live="assertive">
-      Your donation was not processed immediately &ndash; it may be that there is a short delay because we're very
-      busy. Please refresh this page to see the latest status. We'll also email your receipt within a few minutes when
-      your donation is processed.
-    </p>
-
-    <div aria-live="polite">
-      <div *ngIf="complete">
-        <div class="screenreader-only">
-          Thank you! Your generous donation has been made.
-        </div>
-      </div>
-    </div>
-    <div *ngIf="complete">
-
-      <div class="thank-you">
-        <h2>Thank you!</h2>
-
-        <p class="thank-you-text">Your generous donation has been made.</p>
-
-        <div *ngIf="showRegistrationPrompt">
-          <p>Interested in enhancing your giving experience? Create an account today and enjoy a faster, more
-            streamlined donation journey with just a few clicks.</p>
-          <div class="cta" *ngIf="showRegistrationPrompt">
-
-            <div class="button-wrapper">
-              <biggive-button
-                space-below="0"
-                colour-scheme="white"
-                is-past-campaign="false"
-                is-future-campaign="false"
-                label="Save my card details"
-                open-in-new-tab="false"
-                full-width="true"
-                size="medium"
-                rounded="false"
-                centered="false"
-                button-id="save-details-button"
-                (click)="openSetPasswordDialog()">
-              </biggive-button>
+  @if (isDataLoaded) {
+    <div>
+      @if (noAccess) {
+        <p class="error">
+          We can only show your receipt in the tab where you donated, in order to keep your information secure. Don't worry
+          though, we'll email you a receipt within a few minutes confirming if your donation was processed.
+        </p>
+      }
+      @if (timedOut) {
+        <p class="error" aria-live="assertive">
+          Your donation was not processed immediately &ndash; it may be that there is a short delay because we're very
+          busy. Please refresh this page to see the latest status. We'll also email your receipt within a few minutes when
+          your donation is processed.
+        </p>
+      }
+      <div aria-live="polite">
+        @if (complete) {
+          <div>
+            <div class="screenreader-only">
+              Thank you! Your generous donation has been made.
             </div>
           </div>
-        </div>
-
-        <div aria-live="polite">
-          <div *ngIf="registrationComplete">
-            <p  id="registrationCompleteText">
-              <strong>You are now registered<span *ngIf="loggedIn"> and logged in</span>.</strong>
-            </p>
-            <p>
-              You can now donate faster using your chosen email address and password.
-            </p>
+        }
+      </div>
+      @if (complete) {
+        <div>
+          <div class="thank-you">
+            <h2>Thank you!</h2>
+            <p class="thank-you-text">Your generous donation has been made.</p>
+            @if (showRegistrationPrompt) {
+              <div>
+                <p>Interested in enhancing your giving experience? Create an account today and enjoy a faster, more
+                streamlined donation journey with just a few clicks.</p>
+                @if (showRegistrationPrompt) {
+                  <div class="cta">
+                    <div class="button-wrapper">
+                      <biggive-button
+                        space-below="0"
+                        colour-scheme="white"
+                        is-past-campaign="false"
+                        is-future-campaign="false"
+                        label="Save my card details"
+                        open-in-new-tab="false"
+                        full-width="true"
+                        size="medium"
+                        rounded="false"
+                        centered="false"
+                        button-id="save-details-button"
+                        (click)="openSetPasswordDialog()">
+                      </biggive-button>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+            <div aria-live="polite">
+              @if (registrationComplete) {
+                <div>
+                  <p  id="registrationCompleteText">
+                    <strong>You are now registered@if (loggedIn) {
+                      <span> and logged in</span>
+                    }.</strong>
+                  </p>
+                  <p>
+                    You can now donate faster using your chosen email address and password.
+                  </p>
+                </div>
+              }
+            </div>
+            @if (registrationComplete && loggedIn) {
+              <div class="cta">
+                <div class="button-wrapper">
+                  <biggive-button colour-scheme="white" label="My Account" [url]="'/my-account'"/>
+                </div>
+              </div>
+            }
+            @if (registerError) {
+              <p class="error" aria-live="assertive">
+                <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+                {{ registerErrorDescription }}
+                <span [innerHtml]="registerErrorDescriptionHtml"></span>
+              </p>
+            }
+            @if (showNoFundsRemainingMessage) {
+              <p>
+                Your donation funds balance is
+                <!-- we know this is £0 here but displaying it dynamically just in case we're wrong -->
+                <strong>{{ cashBalanceInPounds | exactCurrency:'GBP' }}</strong>.
+                Visit <a href="/{{myAccountPath}}">My Account</a> to top up.
+              </p>
+            }
+            @if (hasDonationFunds) {
+              <p>
+                Your donation funds balance is <strong>{{ cashBalanceInPounds | exactCurrency:'GBP'}}</strong>.
+                Make another donation to use the balance.
+              </p>
+            }
           </div>
-        </div>
-
-        <div class="cta" *ngIf="registrationComplete && loggedIn">
-          <div class="button-wrapper">
-            <biggive-button colour-scheme="white" label="My Account" [url]="'/my-account'"/>
+          <hr aria-hidden="true">
+          <div class="donation-summary">
+            <p><strong>Hi {{ donation.firstName }},</strong></p>
+            <p><strong>Your donation summary</strong></p>
+            <p>Your donation of
+              <strong class="figure">{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</strong>
+              is worth
+              <strong class="figure">{{ totalValue | exactCurrency:donation.currencyCode }}</strong>
+              to {{ donation.charityName }}!
+            </p>
+            <br/>
+            @if (campaign?.thankYouMessage) {
+              <p id="charity-thank-you">{{ campaign?.thankYouMessage }}</p>
+            }
           </div>
-        </div>
-
-        <p *ngIf="registerError" class="error" aria-live="assertive">
-          <fa-icon [icon]="faExclamationTriangle"></fa-icon>
-          {{ registerErrorDescription }}
-          <span [innerHtml]="registerErrorDescriptionHtml"></span>
-        </p>
-
-        <p *ngIf="showNoFundsRemainingMessage">
-          Your donation funds balance is
-          <!-- we know this is £0 here but displaying it dynamically just in case we're wrong -->
-          <strong>{{ cashBalanceInPounds | exactCurrency:'GBP' }}</strong>.
-          Visit <a href="/{{myAccountPath}}">My Account</a> to top up.
-        </p>
-
-        <p *ngIf="hasDonationFunds">
-          Your donation funds balance is <strong>{{ cashBalanceInPounds | exactCurrency:'GBP'}}</strong>.
-          Make another donation to use the balance.
-        </p>
+          @if (donationIsLarge) {
+            <biggive-page-section colourScheme="primary" primaryFullBleed="true">
+              <div id="thank-you-large-donation-wrapper">
+                <p class="thank-you-large-donation-text">
+                  Thank you for your incredible commitment to supporting this campaign; your donation will make a significant
+                  difference. As a valued supporter, we're excited to share an exclusive opportunity with you – the chance to
+                  become one of our match funding Champions. By leveraging your support as match funding, you could help this
+                  charity and many others double the difference of their donations.
+                </p>
+                <p class="thank-you-large-donation-text">
+                  <a target="_blank" href="https://biggive.org/funders/">Learn more about joining our Champion community</a>
+                </p>
+              </div>
+            </biggive-page-section>
+          }
+          <div>
+            @if (!donationIsLarge) {
+              <hr aria-hidden="true">
+            }
+            @if (donationIsLarge) {
+              <div class="large-donation-spacer"></div>
+            }
+            <div class="receipt">
+              <p><strong>Your Receipt</strong></p>
+              <!-- Date time appears as e.g. "Sep 5, 2023, 2:54 PM" -->
+              <p>{{donation.createdTime | date: 'mediumDate'}}, {{donation.createdTime | date: 'shortTime'}}</p>
+              <br>
+                <table>
+                  <tr class="donationAmount">
+                    <td>Your donation</td>
+                    <td>{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</td>
+                  </tr>
+                  @if (donation.matchedAmount > 0) {
+                    <tr>
+                      <td>Matched Amount</td>
+                      <td>{{ donation.matchedAmount | exactCurrency:donation.currencyCode }}</td>
+                    </tr>
+                  }
+                  @if (giftAidAmount > 0) {
+                    <tr>
+                      <td>Gift Aid Amount</td>
+                      <td>{{ giftAidAmount | exactCurrency:donation.currencyCode }}</td>
+                    </tr>
+                  }
+                  @if (donation.tipAmount > 0) {
+                    <tr>
+                      <td>Tip Amount</td>
+                      <td>{{ donation.tipAmount | exactCurrency:donation.currencyCode }}</td>
+                    </tr>
+                  }
+                  <tr>
+                    <td colspan="2"><hr aria-hidden="true"></td>
+                  </tr>
+                  <tr class="receives">
+                    <td>Charity Receives</td>
+                    <td>{{ totalValue | exactCurrency:donation.currencyCode }}</td>
+                  </tr>
+                  <tr class="total">
+                    <td><strong>Total amount you have been charged</strong></td>
+                    <td><strong>{{ cardChargedAmount | exactCurrency:donation.currencyCode }}</strong></td>
+                  </tr>
+                </table>
+              </div>
+              <hr class="shorter" aria-hidden="true">
+            </div>
+            <div class="socials">
+              <p>Boost your impact by sharing on social media</p>
+              <div class="social-icons-wrapper">
+                <span class="separator"></span>
+                <biggive-social-icon
+                  service="Facebook"
+                  label-prefix="Share"
+                  url="https://www.facebook.com/sharer/sharer.php?u={{ encodedShareUrl }}" background-colour="tertiary"
+                  icon-colour="black"
+                  wide="true"
+                ></biggive-social-icon>
+                <span class="separator"></span>
+                <biggive-social-icon
+                  service="Twitter"
+                  label-prefix="Share"
+                  url="https://twitter.com/share?url={{ encodedShareUrl }}&text={{ encodedPrefilledText }}"
+                  background-colour="tertiary"
+                  icon-colour="black"
+                  wide="true"
+                ></biggive-social-icon>
+                <span class="separator"></span>
+                <biggive-social-icon
+                  service="LinkedIn"
+                  label-prefix="Share"
+                  url="https://www.linkedin.com/cws/share?url={{ encodedShareUrl }}"
+                  background-colour="tertiary"
+                  icon-colour="black"
+                  wide="true"
+                ></biggive-social-icon>
+              </div>
+              <a [routerLink]="'/campaign/' + campaign?.id">Back to campaign page</a>
+            </div>
+          </div>
+        }
+        <re-captcha
+          #captcha
+          size="invisible"
+          (resolved)="loginCaptchaReturn($event)"
+          siteKey="{{ recaptchaIdSiteKey }}"
+        ></re-captcha>
       </div>
-
-      <hr aria-hidden="true">
-
-      <div class="donation-summary">
-        <p><strong>Hi {{ donation.firstName }},</strong></p>
-        <p><strong>Your donation summary</strong></p>
-
-        <p>Your donation of
-          <strong class="figure">{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</strong>
-          is worth
-          <strong class="figure">{{ totalValue | exactCurrency:donation.currencyCode }}</strong>
-          to {{ donation.charityName }}!
-        </p>
-
-
-        <br/>
-        <p *ngIf="campaign?.thankYouMessage" id="charity-thank-you">{{ campaign?.thankYouMessage }}</p>
-      </div>
-
-      <biggive-page-section *ngIf="donationIsLarge" colourScheme="primary" primaryFullBleed="true">
-        <div id="thank-you-large-donation-wrapper">
-          <p class="thank-you-large-donation-text">
-            Thank you for your incredible commitment to supporting this campaign; your donation will make a significant
-            difference. As a valued supporter, we're excited to share an exclusive opportunity with you – the chance to
-            become one of our match funding Champions. By leveraging your support as match funding, you could help this
-            charity and many others double the difference of their donations.
-          </p>
-
-          <p class="thank-you-large-donation-text">
-            <a target="_blank" href="https://biggive.org/funders/">Learn more about joining our Champion community</a>
-          </p>
-        </div>
-      </biggive-page-section>
-      <div>
-        <hr *ngIf="!donationIsLarge" aria-hidden="true">
-        <div class="large-donation-spacer" *ngIf="donationIsLarge"></div>
-        <div class="receipt">
-          <p><strong>Your Receipt</strong></p>
-          <!-- Date time appears as e.g. "Sep 5, 2023, 2:54 PM" -->
-          <p>{{donation.createdTime | date: 'mediumDate'}}, {{donation.createdTime | date: 'shortTime'}}</p>
-          <br>
-
-          <table>
-            <tr class="donationAmount">
-              <td>Your donation</td>
-              <td>{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</td>
-            </tr>
-            <tr *ngIf="donation.matchedAmount > 0">
-              <td>Matched Amount</td>
-              <td>{{ donation.matchedAmount | exactCurrency:donation.currencyCode }}</td>
-            </tr>
-            <tr *ngIf="giftAidAmount > 0">
-              <td>Gift Aid Amount</td>
-              <td>{{ giftAidAmount | exactCurrency:donation.currencyCode }}</td>
-            </tr>
-            <tr *ngIf="donation.tipAmount > 0">
-              <td>Tip Amount</td>
-              <td>{{ donation.tipAmount | exactCurrency:donation.currencyCode }}</td>
-            </tr>
-            <tr>
-              <td colspan="2"><hr aria-hidden="true"></td>
-            </tr>
-            <tr class="receives">
-              <td>Charity Receives</td>
-              <td>{{ totalValue | exactCurrency:donation.currencyCode }}</td>
-            </tr>
-            <tr class="total">
-              <td><strong>Total amount you have been charged</strong></td>
-              <td><strong>{{ cardChargedAmount | exactCurrency:donation.currencyCode }}</strong></td>
-            </tr>
-          </table>
-
-        </div>
-
-        <hr class="shorter" aria-hidden="true">
-
-      </div>
-
-      <div class="socials">
-        <p>Boost your impact by sharing on social media</p>
-        <div class="social-icons-wrapper">
-          <span class="separator"></span>
-          <biggive-social-icon
-            service="Facebook"
-            label-prefix="Share"
-            url="https://www.facebook.com/sharer/sharer.php?u={{ encodedShareUrl }}" background-colour="tertiary"
-            icon-colour="black"
-            wide="true"
-          ></biggive-social-icon>
-          <span class="separator"></span>
-          <biggive-social-icon
-            service="Twitter"
-            label-prefix="Share"
-            url="https://twitter.com/share?url={{ encodedShareUrl }}&text={{ encodedPrefilledText }}"
-            background-colour="tertiary"
-            icon-colour="black"
-            wide="true"
-          ></biggive-social-icon>
-          <span class="separator"></span>
-          <biggive-social-icon
-            service="LinkedIn"
-            label-prefix="Share"
-            url="https://www.linkedin.com/cws/share?url={{ encodedShareUrl }}"
-            background-colour="tertiary"
-            icon-colour="black"
-            wide="true"
-          ></biggive-social-icon>
-        </div>
-
-        <a [routerLink]="'/campaign/' + campaign?.id">Back to campaign page</a>
-      </div>
-    </div>
-    <re-captcha
-      #captcha
-      size="invisible"
-      (resolved)="loginCaptchaReturn($event)"
-      siteKey="{{ recaptchaIdSiteKey }}"
-    ></re-captcha>
-  </div>
-</main>
+    }
+  </main>
