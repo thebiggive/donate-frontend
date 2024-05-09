@@ -51,11 +51,6 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
       case cookiePrefs.agreedToAll:
         return {analyticsAndTesting: true, thirdParty: true}
       default:
-        if (cookiePrefs.agreedToAll) {
-          // this is impossible but Typescript doesn't seem to know that so I have to
-          // add this line to narrow the type.
-          throw new Error("hit code that should be unreachable");
-        }
         return cookiePrefs.agreedToCookieTypes;
     }
   }
