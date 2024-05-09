@@ -22,7 +22,7 @@ import { myAccountPath } from '../app-routing';
 @Component({
   selector: 'app-donation-thanks',
   templateUrl: './donation-thanks.component.html',
-  styleUrls: ['./donation-thanks.component.scss'],
+  styleUrl: './donation-thanks.component.scss',
 })
 export class DonationThanksComponent implements OnInit {
   @Input({ required: true }) private donationId: string;

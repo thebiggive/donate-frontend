@@ -14,7 +14,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 @Component({
   selector: 'app-my-account',
   templateUrl: './my-account.component.html',
-  styleUrls: ['./my-account.component.scss'],
+  styleUrl: './my-account.component.scss',
   providers: [DatePipe]
 })
 export class MyAccountComponent implements OnDestroy, OnInit {

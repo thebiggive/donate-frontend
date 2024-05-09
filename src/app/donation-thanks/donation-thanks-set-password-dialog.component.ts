@@ -16,7 +16,7 @@ import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.com
   standalone: true,
   selector: 'app-donation-thanks-set-password-dialog',
   templateUrl: 'donation-thanks-set-password-dialog.html',
-  styleUrls: ['./donation-thanks-set-password-dialog.component.scss'],
+  styleUrl: './donation-thanks-set-password-dialog.component.scss',
   imports: [
     ...allChildComponentImports,
     MatButtonModule,

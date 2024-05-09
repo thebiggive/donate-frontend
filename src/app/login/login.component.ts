@@ -25,7 +25,7 @@ export function isAllowableRedirectPath(redirectParam: string) {
   standalone: true,
   imports: [CommonModule, ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatAutocompleteModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrl: 'login.component.scss'
 })
 export class LoginComponent implements OnInit, OnDestroy{
   @ViewChild('captcha') captcha: RecaptchaComponent;

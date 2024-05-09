@@ -36,7 +36,7 @@ const endPipeToken = 'timeLeftToEndPipe';
 @Component({
   selector: 'app-meta-campaign',
   templateUrl: './meta-campaign.component.html',
-  styleUrls: ['./meta-campaign.component.scss'],
+  styleUrl: './meta-campaign.component.scss',
   providers: [
     CurrencyPipe,
     // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
