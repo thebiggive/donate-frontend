@@ -30,7 +30,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
   public isLoggedIn: boolean = false;
 
-  public readonly donateUriPrefix = environment.donateGlobalUriPrefix;
+  public readonly donateUriPrefix = environment.donateUriPrefix;
   public readonly blogUriPrefix = environment.blogUriPrefix
 
   public readonly experienceUriPrefix = environment.experienceUriPrefix;
@@ -91,7 +91,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     this.currentUrlWithoutHash$ = router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationEnd),
       map((_event) => {
-        const url = new URL(environment.donateGlobalUriPrefix + router.url);
+        const url = new URL(environment.donateUriPrefix + router.url);
         url.hash = "";
         return url;
       })

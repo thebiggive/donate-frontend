@@ -77,7 +77,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   private smallestSignificantScrollPx = 250;
   private tickerUpdateTimer: any;
 
-  private readonly recentChildrenKey = `${environment.donateGlobalUriPrefix}/children/v2`; // Key is per-domain/env
+  private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v2`; // Key is per-domain/env
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
 
   beneficiaryOptions: string[] = [];

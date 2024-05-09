@@ -22,7 +22,6 @@ import { GetSiteControlService } from './src/app/getsitecontrol.service';
 
 const apiHost = (new URL(environment.apiUriPrefix)).host;
 const donationsApiHost = (new URL(environment.donationsApiPrefix)).host;
-const donateGlobalHost = (new URL(environment.donateGlobalUriPrefix)).host;
 const donateHost = (new URL(environment.donateUriPrefix)).host;
 const identityApiHost = (new URL(environment.identityApiPrefix)).host;
 const matomoUriBase = 'https://biggive.matomo.cloud';
@@ -72,7 +71,6 @@ export function app(): express.Express {
           matomoUriBase,
         ],
         'script-src': [
-          donateGlobalHost,
           donateHost,
           matomoUriBase,
           `'unsafe-eval'`,
@@ -143,7 +141,7 @@ export function app(): express.Express {
         // base reported by CloudFront when talking to the origin.
         // (Stock Angular SSR uses `req.baseUrl` but based on the previous note about CloudFront, from Angular Universal
         // days, I suspect this will still not be reliable for us.)
-        { provide: APP_BASE_HREF, useValue: environment.donateGlobalUriPrefix, },
+        { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix, },
         { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
         { provide: RESPONSE, useValue: res },
         { provide: REQUEST, useValue: req }
@@ -155,7 +153,7 @@ export function app(): express.Express {
     // this key to work around `fileReplacements` ending index support in Angular 8.
     commonEngine.render(renderOptions)
       .then(async (html) => {
-        setAssetPath(`${environment.donateGlobalUriPrefix}/assets`);
+        setAssetPath(`${environment.donateUriPrefix}/assets`);
 
         const hydratedDoc = await renderToString(html, {
           // Don't `removeScripts` like Ionic does: we need them to handover to browser JS runtime successfully!

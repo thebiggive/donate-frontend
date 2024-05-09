@@ -21,7 +21,7 @@ export class PageMetaService {
   ) {}
 
   setCommon(title: string, description: string, imageUri: string|null) {
-    const baseUri = environment.donateGlobalUriPrefix;
+    const baseUri = environment.donateUriPrefix;
     const canonicalUri = `${baseUri}${this.router.url}`;
     const links = this.dom.getElementsByTagName('link');
     // We patch the index 0 `<link />` from the source HTML. Appending a new element

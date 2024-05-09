@@ -17,8 +17,7 @@ export interface Environment {
   creditDonationsEnabled: boolean
 
   /** Prefix for pages served by this Angular application */
-  donateGlobalUriPrefix: string,
-  donateUriPrefix: string, // Uses legacy host for redirects
+  donateUriPrefix: string,
 
   /** Prefix for pages served by WordPress */
   blogUriPrefix: string,

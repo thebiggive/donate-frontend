@@ -21,7 +21,7 @@ export class DonationService {
   private readonly apiPath = '/donations';
   private readonly completeStatuses = ['Collected', 'Paid'];
   private readonly resumableStatuses = ['Pending', 'Reserved'];
-  private readonly storageKey = `${environment.donateGlobalUriPrefix}/v2`; // Key is per-domain/env
+  private readonly storageKey = `${environment.donateUriPrefix}/v2`; // Key is per-domain/env
 
   constructor(
     @Optional() @Inject(COUNTRY_CODE) private defaultCountryCode: string,

@@ -208,7 +208,7 @@ export class CampaignService {
         card => SFAPIHighlightCardToHighlightCard(
           environment.experienceUriPrefix,
           environment.blogUriPrefix,
-          environment.donateGlobalUriPrefix,
+          environment.donateUriPrefix,
           card
         ))))
     );

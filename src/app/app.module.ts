@@ -62,7 +62,7 @@ const matomoBaseUri = 'https://biggive.matomo.cloud';
     DatePipe,
     {
       provide: APP_BASE_HREF,
-      useValue: environment.donateGlobalUriPrefix,
+      useValue: environment.donateUriPrefix,
     },
     { provide: TBG_DONATE_ID_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },

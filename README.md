@@ -125,7 +125,7 @@ To test re-building the image (use FontAwesome token marked "Pro Package Token" 
 
     docker build --rm --build-arg BUILD_ENV=staging --build-arg FONTAWESOME_NPM_AUTH_TOKEN=**token** -t thebiggive/donate-frontend:staging .
 
-To prepare for CORS to work, you may need to update `environment.ts` to set `donateGlobalUriPrefix` to 'http://localhost:4000'.
+To prepare for CORS to work, you may need to update `environment.ts` to set `donateUriPrefix` to 'http://localhost:4000'.
 
 To start it daemonised (in the background) and map to host port 4000 - assuming no running web server on that port:
 

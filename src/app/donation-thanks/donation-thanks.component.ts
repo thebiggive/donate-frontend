@@ -338,7 +338,7 @@ export class DonationThanksComponent implements OnInit {
   }
 
   private setSocialShares(campaign: Campaign) {
-    const prefix = environment.donateGlobalUriPrefix;
+    const prefix = environment.donateUriPrefix;
     this.encodedShareUrl = encodeURIComponent(`${prefix}/campaign/${campaign.id}`);
     this.encodedPrefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
   }
