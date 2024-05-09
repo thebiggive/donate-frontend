@@ -19,8 +19,8 @@ describe('FundService', () => {
       id: 'asdfasdfasdfasdf12',
       type: 'championFund',
       name: 'Dummy unit test fund',
+      totalForTicker: 10_000,
       amountRaised: 204.67,
-      totalAmount: 150.00,
       description: 'Dummy unit test descriptoin of the Champion',
       logoUri: 'https://example.com/an-image.png',
     };

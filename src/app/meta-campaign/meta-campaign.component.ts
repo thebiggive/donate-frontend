@@ -478,7 +478,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   private setFundSpecificProps() {
-    this.tickerMainMessage = this.currencyPipe.transform(this.fund?.amountRaised, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
+    if (this.fund === undefined) {
+      throw new Error('Attempt to set fund specific props with no fund');
+    }
+
+    this.tickerMainMessage = this.currencyPipe.transform(this.fund.amountRaised, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
       ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
 
     const durationInDays = Math.floor((new Date(this.campaign.endDate).getTime() - new Date(this.campaign.startDate).getTime()) / 86400000);
@@ -486,8 +490,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     tickerItems.push({
       label: 'total match funds',
       figure: this.currencyPipe.transform(
-        // when SF Prod starts sending totalForTicker we can remove the reference to totalAmount.
-        this.fund?.totalForTicker || this.fund?.totalAmount,
+        this.fund.totalForTicker,
         this.campaign.currencyCode,
         'symbol',
         currencyPipeDigitsInfo
@@ -508,7 +511,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
     // Show fund name if applicable *and* there's no fund logo. If there's a logo
     // its content + alt text should do the equivalent job.
-    this.title = (!this.fund?.logoUri && this.fund?.name)
+    this.title = (!this.fund.logoUri && this.fund.name)
       ? `${this.campaign.title}: ${this.fund.name}`
       : this.campaign.title;
 
