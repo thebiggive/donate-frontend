@@ -194,7 +194,7 @@
 
             @if (campaign.additionalImageUris.length > 0) {
               <div class="c-additional">
-                @for (image of campaign.additionalImageUris; track image) {
+                @for (image of campaign.additionalImageUris; track $index) {
                   <img
                     [src]="image.uri | optimisedImage:850 | async"
                     class="c-additional__images"
@@ -205,7 +205,7 @@
 
             @if (campaign.quotes.length > 0) {
               <ul class="c-quotes">
-                @for (quote of campaign.quotes; track quote) {
+                @for (quote of campaign.quotes; track $index) {
                   <li>
                     <biggive-quote
                       space-below="4"
@@ -222,7 +222,7 @@
 
           @if (campaign.updates.length > 0) {
             <mat-tab label="Updates">
-              @for (update of campaign.updates; track update) {
+              @for (update of campaign.updates; track $index) {
                 <ul class="c-updates">
                   <li>
                     <biggive-formatted-text>
@@ -247,7 +247,7 @@
                 text="Campaign Aims"
                 >
               </biggive-heading>
-              @for (aim of campaign.aims; track aim) {
+              @for (aim of campaign.aims; track $index) {
                 <ul class="c-aims">
                   <li class="b-rt-0">{{ aim }}</li>
                 </ul>
@@ -267,7 +267,7 @@
                 text="Campaign Budget"
                 >
               </biggive-heading>
-              @for (detail of campaign.budgetDetails; track detail) {
+              @for (detail of campaign.budgetDetails; track $index) {
                 <ul class="c-budget">
                   <li class="c-budget__item">
                     <span class="c-budget__value b-semi-bold">{{ detail.amount | currency : campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo }}</span>

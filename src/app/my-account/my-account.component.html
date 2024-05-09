@@ -92,7 +92,7 @@
         </h3>
         @if (hasSavedPaymentMethods) {
           <table id="paymentMethods">
-            @for (method of paymentMethods; track method) {
+            @for (method of paymentMethods; track method.id) {
               <tr>
                 <td class="cardBrand">
                   <div class="cardBrand">{{(method.card?.brand || method.type).toUpperCase()}}</div>

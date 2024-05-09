@@ -26,7 +26,7 @@
               id="billingCountry-orig"
               formControlName="billingCountry"
               >
-              @for (country of COUNTRIES; track country) {
+              @for (country of COUNTRIES; track $index) {
                 <mat-option
                   [value]="country.iso2"
                   >

@@ -131,7 +131,7 @@
                     [displayWith]="summariseAddressSuggestion"
                     (optionSelected)="addressChosen($event)"
                     >
-                    @for (suggestion of addressSuggestions; track suggestion) {
+                    @for (suggestion of addressSuggestions; track suggestion.address) {
                       <mat-option [value]="suggestion">
                         {{ suggestion.address }}
                       </mat-option>

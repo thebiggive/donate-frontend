@@ -279,7 +279,7 @@
                         [displayWith]="summariseAddressSuggestion"
                         (optionSelected)="addressChosen($event)"
                         >
-                        @for (suggestion of addressSuggestions; track suggestion) {
+                        @for (suggestion of addressSuggestions; track suggestion.address) {
                           <mat-option [value]="suggestion">
                             {{ suggestion.address }}
                           </mat-option>
@@ -389,7 +389,7 @@
                 <div
                   class="payment-method-options"
                   >
-                  @for (method of stripeSavedMethods; track method; let i = $index) {
+                  @for (method of stripeSavedMethods; track method.id; let i = $index) {
                     <div
                       [hidden]="i > 0 && !showAllPaymentMethods"
                       >

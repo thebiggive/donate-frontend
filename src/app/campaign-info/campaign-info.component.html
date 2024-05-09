@@ -18,7 +18,7 @@
     <h5>Categories</h5>
     <hr>
       <div class="icons">
-        @for (category of campaign.categories; track category) {
+        @for (category of campaign.categories; track $index) {
           <li class="icon-wrapper">
             <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
             <span class="c-icon-title">
@@ -32,7 +32,7 @@
       <h5>Beneficiaries</h5>
       <hr>
         <ul class="icons">
-          @for (beneficiary of campaign.beneficiaries; track beneficiary) {
+          @for (beneficiary of campaign.beneficiaries; track $index) {
             <li class="icon-wrapper">
               <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
               <span class="c-icon-title">

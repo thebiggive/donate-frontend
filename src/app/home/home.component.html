@@ -30,7 +30,7 @@
         </div>
       } @else {
         <biggive-grid [columnCount]="highlightCardsToShow.length" column-gap="3">
-          @for (card of highlightCardsToShow; track card) {
+          @for (card of highlightCardsToShow; track $index) {
             <biggive-basic-card
               [spaceBelow]='4'
               [headingLevel]="2"
