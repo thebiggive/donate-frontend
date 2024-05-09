@@ -22,7 +22,7 @@ export const environment: Environment = {
   donationsApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
   identityApiPrefix: 'https://identity-regression.thebiggivetest.org.uk/v1',
-  matomoSiteId: null,
+  matomoSiteId: 4,
   matomoNonZeroTipGoalId: null,
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
