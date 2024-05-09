@@ -71,9 +71,10 @@ const matomoBaseUri = 'https://biggive.matomo.cloud';
     {
       provide: RECAPTCHA_LOADER_OPTIONS,
       useValue: {
-        onBeforeLoad(_url: URL) {
+        // see ng-recaptcha/README.md
+        onBeforeLoad(_url: URL): {url: URL, nonce: string} {
           return {
-            baseUrl: 'https://recaptcha.net/recaptcha/api.js', // using this URL instead of default google.com means we avoid google.com cookies.
+            url: new URL("https://www.recaptcha.net/recaptcha/api.js"), // using this URL instead of default google.com means we avoid google.com cookies.
             nonce: environment.recaptchaNonce,
           };
         },
