@@ -30,62 +30,68 @@
       </p>
 
       <ul>
-        <li> Set the amount you want to donate to the charities you want to support
+        <li>Set the amount you want to donate to the charities you want to support</li>
 
-        <li> Choose whether you would like to contribute towards Big Give’s platform fees and the Anchor Match Fund
+        <li>Choose whether you would like to contribute towards Big Give’s platform fees and the Anchor Match Fund</li>
 
-        <li> Choose whether Gift Aid can be claimed on your donation to Big Give
+        <li>Choose whether Gift Aid can be claimed on your donation to Big Give</li>
 
-        <li> Choose whether you would like to join Big Give’s mailing list
+        <li>Choose whether you would like to join Big Give’s mailing list</li>
       </ul>
 
-        <form
-          [formGroup]="registrationForm"
-          (keydown.enter)="register()"
-        >
+      <form
+        [formGroup]="registrationForm"
+        (keydown.enter)="register()"
+      >
 
-          <biggive-text-input spaceBelow="4">
-            <label slot="label" for="firstName">First Name *</label>
-            <input
-              slot="input"
-              matInput type="text" id="firstName" formControlName="firstName">
-          </biggive-text-input>
-          <biggive-text-input spaceBelow="4">
-            <label slot="label" for="lastName">Last Name *</label>
-            <input
-              slot="input"
-              matInput type="text" id="lastName" formControlName="lastName">
-          </biggive-text-input>
-          <biggive-text-input spaceBelow="4">
-            <label slot="label" for="emailAddress">Email address *</label>
-            <input
-              slot="input"
-              matInput type="email" id="emailAddress" formControlName="emailAddress" autocapitalize="off">
-          </biggive-text-input>
-          <biggive-text-input spaceBelow="4">
-            <label slot="label" for="password">Password *</label>
-            <input
-              slot="input"
-              matInput type="password" id="password" formControlName="password">
-          </biggive-text-input>
+        <biggive-text-input spaceBelow="4">
+          <label slot="label" for="firstName">First Name *</label>
+          <input
+            slot="input"
+            matInput type="text" id="firstName" formControlName="firstName">
+        </biggive-text-input>
+        <biggive-text-input spaceBelow="4">
+          <label slot="label" for="lastName">Last Name *</label>
+          <input
+            slot="input"
+            matInput type="text" id="lastName" formControlName="lastName">
+        </biggive-text-input>
+        <biggive-text-input spaceBelow="4">
+          <label slot="label" for="emailAddress">Email address *</label>
+          <input
+            slot="input"
+            matInput type="email" id="emailAddress" formControlName="emailAddress" autocapitalize="off">
+        </biggive-text-input>
+        <biggive-text-input spaceBelow="4">
+          <label slot="label" for="password">Password *</label>
+          <input
+            slot="input"
+            matInput type="password" id="password" formControlName="password">
+        </biggive-text-input>
 
-          <div aria-live="polite">
-            <p *ngIf="errorHtml" class="error" aria-live="assertive">
+        <div aria-live="polite">
+          @if (errorHtml) {
+            <p class="error" aria-live="assertive">
               Registration error: <span [innerHtml]="errorHtml"></span>
             </p>
-            <p *ngIf="error" class="error" aria-live="assertive">
+          }
+          @if (error) {
+            <p class="error" aria-live="assertive">
               {{ error }}
             </p>
+          }
+        </div>
+      </form>
+      <div class="actions">
+        <div id="register-button">
+          <div aria-live="polite">
+            @if (processing) {
+              <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
+            }
           </div>
-        </form>
-        <div class="actions">
-          <div id="register-button">
-            <div aria-live="polite">
-              <mat-spinner *ngIf="processing" color="primary" diameter="30" aria-label="Processing"></mat-spinner>
-            </div>
 
+          @if (!processing) {
             <biggive-button
-              *ngIf="! processing"
               space-above="5"
               spaceBelow="0"
               colour-scheme="primary"
@@ -96,8 +102,9 @@
               rounded="false"
               (click)="register()"
             />
-          </div>
+          }
         </div>
+      </div>
     </biggive-page-section>
   </div>
 </main>
