@@ -61,10 +61,9 @@ export function app(): express.Express {
           'fonts.gstatic.com',
           'js.stripe.com',
           'player.vimeo.com',
-          'www.youtube.com',
-        ],
-        'frame-src': [
+          'recaptcha.net',
           'www.recaptcha.net',
+          'www.youtube.com',
         ],
         'img-src': [
           `'self'`,
@@ -84,7 +83,7 @@ export function app(): express.Express {
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
           'js.stripe.com',
-          'www.recaptcha.net',
+          'recaptcha.net',
           'www.gstatic.com',
           // Both video services' iframe embeds seem to need script access to not error with our current embed approach.
           'https://player.vimeo.com',
