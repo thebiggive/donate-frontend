@@ -96,8 +96,8 @@ fund allocation. For data in Salesforce to be eventually consistent, it must als
 We want donations to work as widely as possible within the constraints set by our technology partners, unless doing so would compromise
 donors' security.
 
-Browsers we expect to work fully with this app are all modern mobile & desktop browsers kept up to date, including extended support release cycles. Where we want to communicate specific brands that should work
-we are likely best off mirroring [Stripe's appendix](https://stripe.com/docs/js/appendix/supported_browsers)
+Browsers we expect to work fully with this app are all modern mobile & desktop browsers kept up to date, including extended support 
+release cycles. Where we want to communicate specific brands that should work we are likely best off mirroring [Stripe's appendix](https://stripe.com/docs/js/appendix/supported_browsers)
 for Stripe.js, as we must depend on that library for donations.
 
 We no longer support any versions of Internet Explorer as Stripe dropped support from February 2022, meaning
