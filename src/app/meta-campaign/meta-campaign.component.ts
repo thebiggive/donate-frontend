@@ -149,18 +149,14 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     if (this.fundSlug) {
       fundKey = makeStateKey<Fund>(`fund-${this.fundSlug}`);
       this.fund = this.state.get<Fund | undefined>(fundKey, undefined);
-      if (this.fund) {
-        this.setFundSpecificProps(this.fund);
-      }
+      this.setFundSpecificProps();
     }
 
     if (!this.fund && this.fundSlug) {
       this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
         this.state.set<Fund>(fundKey, fund);
         this.fund = fund;
-        if (this.fund) {
-          this.setFundSpecificProps(this.fund);
-        }
+        this.setFundSpecificProps();
       });
     }
 
@@ -481,8 +477,12 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     }
   }
 
-  private setFundSpecificProps(fund: Fund) {
-    this.tickerMainMessage = this.currencyPipe.transform(fund.amountRaised, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
+  private setFundSpecificProps() {
+    if (this.fund === undefined) {
+      throw new Error('Attempt to set fund specific props with no fund');
+    }
+
+    this.tickerMainMessage = this.currencyPipe.transform(this.fund.amountRaised, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
       ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
 
     const durationInDays = Math.floor((new Date(this.campaign.endDate).getTime() - new Date(this.campaign.startDate).getTime()) / 86400000);
@@ -490,7 +490,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     tickerItems.push({
       label: 'total match funds',
       figure: this.currencyPipe.transform(
-        fund.totalForTicker,
+        this.fund.totalForTicker,
         this.campaign.currencyCode,
         'symbol',
         currencyPipeDigitsInfo
@@ -511,8 +511,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
     // Show fund name if applicable *and* there's no fund logo. If there's a logo
     // its content + alt text should do the equivalent job.
-    this.title = (!fund.logoUri && fund.name)
-      ? `${this.campaign.title}: ${fund.name}`
+    this.title = (!this.fund.logoUri && this.fund.name)
+      ? `${this.campaign.title}: ${this.fund.name}`
       : this.campaign.title;
 
     this.pageMeta.setCommon(
