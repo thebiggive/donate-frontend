@@ -166,7 +166,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.fundingOptions = [
       'Match Funded'
     ]
-    this.queryParamsSubscription = this.scrollToSearchWhenParamsChange()
+    this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
   }
 
   private scrollToSearchWhenParamsChange() {

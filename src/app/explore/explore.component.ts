@@ -67,7 +67,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
       'Match Funded'
     ];
 
-    this.queryParamsSubscription = this.scrollToSearchWhenParamsChange()
+    this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
   }
 
   private scrollToSearchWhenParamsChange() {
