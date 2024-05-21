@@ -87,6 +87,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   parentIsSharedFund: boolean;
 
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
+  private queryParamsSubscription: Subscription;
 
   constructor(
     private campaignService: CampaignService,
@@ -122,17 +123,10 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       clearTimeout(this.tickerUpdateTimer);
     }
 
-    if (this.routeChangeListener) {
-      this.routeChangeListener.unsubscribe();
-    }
-
-    if (this.routeParamSubscription) {
-      this.routeParamSubscription.unsubscribe();
-    }
-
-    if (this.searchServiceSubscription) {
-      this.searchServiceSubscription.unsubscribe();
-    }
+    this.routeChangeListener?.unsubscribe();
+    this.routeParamSubscription?.unsubscribe();
+    this.searchServiceSubscription?.unsubscribe();
+    this.queryParamsSubscription.unsubscribe();
   }
 
   ngOnInit() {
@@ -172,6 +166,19 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.fundingOptions = [
       'Match Funded'
     ]
+    this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
+  }
+
+  private scrollToSearchWhenParamsChange() {
+    return this.route.queryParams.subscribe((_params) => {
+      if (isPlatformBrowser(this.platformId)) {
+        const positionMarker = document.getElementById('SCROLL_POSITION_WHEN_PARAMS_CHANGE');
+
+        // Angular scrolls automatically, using setTimeout to delay this scroll to a later task so this gets to
+        // set the position the page is left in.
+        setTimeout(() => positionMarker?.scrollIntoView({}), 0);
+      }
+    });
   }
 
   ngAfterViewChecked() {

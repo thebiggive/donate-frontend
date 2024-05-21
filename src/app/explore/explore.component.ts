@@ -1,14 +1,14 @@
-import { DatePipe } from '@angular/common';
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import {DatePipe, isPlatformBrowser} from '@angular/common';
+import {Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
-import { currencyPipeDigitsInfo } from '../../environments/common';
-import { CampaignService, SearchQuery } from '../campaign.service';
-import { CampaignGroupsService } from '../campaign-groups.service';
-import { CampaignSummary } from '../campaign-summary.model';
-import { PageMetaService } from '../page-meta.service';
-import { SearchService } from '../search.service';
+import {currencyPipeDigitsInfo} from '../../environments/common';
+import {CampaignService, SearchQuery} from '../campaign.service';
+import {CampaignGroupsService} from '../campaign-groups.service';
+import {CampaignSummary} from '../campaign-summary.model';
+import {PageMetaService} from '../page-meta.service';
+import {SearchService} from '../search.service';
 
 /** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
@@ -33,6 +33,8 @@ export class ExploreComponent implements OnDestroy, OnInit {
   locationOptions: string[] = [];
   fundingOptions: string[] = [];
 
+  private queryParamsSubscription: Subscription;
+
   constructor(
     private campaignService: CampaignService,
     private datePipe: DatePipe,
@@ -40,16 +42,13 @@ export class ExploreComponent implements OnDestroy, OnInit {
     private router: Router,
     private pageMeta: PageMetaService,
     public searchService: SearchService,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
   ngOnDestroy() {
-    if (this.routeParamSubscription) {
-      this.routeParamSubscription.unsubscribe();
-    }
-
-    if (this.searchServiceSubscription) {
-      this.searchServiceSubscription.unsubscribe();
-    }
+    this.routeParamSubscription?.unsubscribe();
+    this.searchServiceSubscription?.unsubscribe();
+    this.queryParamsSubscription?.unsubscribe();
   }
 
   ngOnInit() {
@@ -67,6 +66,20 @@ export class ExploreComponent implements OnDestroy, OnInit {
     this.fundingOptions = [
       'Match Funded'
     ];
+
+    this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
+  }
+
+  private scrollToSearchWhenParamsChange() {
+    return this.route.queryParams.subscribe((_params) => {
+      if (isPlatformBrowser(this.platformId)) {
+        const positionMarker = document.getElementById('SCROLL_POSITION_WHEN_PARAMS_CHANGE');
+
+        // Angular scrolls automatically, using setTimeout to delay this scroll to a later task so this gets to
+        // set the position the page is left in.
+        setTimeout(() => positionMarker?.scrollIntoView({}), 0);
+      }
+    });
   }
 
   @HostListener('doSearchAndFilterUpdate', ['$event'])
