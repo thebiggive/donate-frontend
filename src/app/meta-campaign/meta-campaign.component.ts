@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
 import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
-import { Subscription } from 'rxjs';
+import {skip, Subscription} from 'rxjs';
 
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
@@ -170,7 +170,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   private scrollToSearchWhenParamsChange() {
-    return this.route.queryParams.subscribe((_params) => {
+    return this.route.queryParams.pipe(skip(1)).subscribe((_params) => {
       if (isPlatformBrowser(this.platformId)) {
         const positionMarker = document.getElementById('SCROLL_POSITION_WHEN_PARAMS_CHANGE');
 

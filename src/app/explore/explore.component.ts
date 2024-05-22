@@ -1,7 +1,7 @@
 import {DatePipe, isPlatformBrowser} from '@angular/common';
 import {Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Subscription} from 'rxjs';
+import {skip, Subscription} from 'rxjs';
 
 import {currencyPipeDigitsInfo} from '../../environments/common';
 import {CampaignService, SearchQuery} from '../campaign.service';
@@ -71,7 +71,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   private scrollToSearchWhenParamsChange() {
-    return this.route.queryParams.subscribe((_params) => {
+    return this.route.queryParams.pipe(skip(1)).subscribe((_params) => {
       if (isPlatformBrowser(this.platformId)) {
         const positionMarker = document.getElementById('SCROLL_POSITION_WHEN_PARAMS_CHANGE');
 
