@@ -109,17 +109,16 @@ export class SearchService {
       // Non-default selections should go to the page's query params. The "global default" sort
       // order should too iff there is a search term active, since the default sort in that
       // specific scenario is Relevance.
-      if (this.selected[key] !== defaults[key] || (key === 'sortField' && this.hasTermFilterApplied())) {
+      if (this.selected[key] !== defaults[key] || (key === 'sortField' && this.selected.term?.length > 0)) {
         queryParams[key] = String(this.selected[key]);
       }
     }
+    
+    if (this.selected.sortField === 'relevance' && this.selected.term?.length === 0) {
+      delete queryParams.sortField;
+    }
 
     return queryParams;
-  }
-
-  hasTermFilterApplied(): boolean {
-    const term = this.getQueryParams().term || '';
-    return (term.length > 0);
   }
 
   /**
