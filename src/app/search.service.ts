@@ -9,6 +9,15 @@ export type SelectedType = {
   term?: string,
 };
 
+const sortOptions = {
+  amountRaised: 'Most raised',
+  matchFundsRemaining: 'Match funds remaining',
+  relevance: 'Relevance',
+} as const;
+
+type camelCaseSortOption = keyof typeof sortOptions;
+type sortLabel = typeof sortOptions[camelCaseSortOption];
+
 @Injectable({
   providedIn: 'root',
 })
@@ -18,7 +27,7 @@ export class SearchService {
   changed: EventEmitter<boolean>; // Value indicates if an interactive UI change triggered this.
 
   nonDefaultsActive: boolean;
-  selectedSortLabel: 'Most raised' | 'Match funds remaining' | 'Relevance';
+  selectedSortLabel: sortLabel;
 
   constructor() {
     this.changed = new EventEmitter();
@@ -44,7 +53,7 @@ export class SearchService {
     filterBeneficiary: string;
     filterLocation: string;
     filterFunding: string;
-  }, defaultSort: string) {
+  }, defaultSort: camelCaseSortOption) {
     this.nonDefaultsActive = true;
     this.selected.beneficiary = customSearchEvent.filterBeneficiary ? customSearchEvent.filterBeneficiary : '';
     this.selected.category = customSearchEvent.filterCategory ? customSearchEvent.filterCategory : '';
@@ -58,7 +67,7 @@ export class SearchService {
     const previousSearchText = this.selected.term;
     // this helps for comparing the new search text with the previous, because 'null' and 'undefined' are changed to ''
     this.selected.term = blankSearchText ? '' : customSearchEvent.searchText;
-    this.selected.sortField = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
+    this.selected.sortField = SearchService.sortFieldToCamelCase(customSearchEvent.sortBy, defaultSort);
 
     this.updateSelectedSortLabel();
 
@@ -73,6 +82,17 @@ export class SearchService {
     }
 
     this.changed.emit(true);
+  }
+
+  private static sortFieldToCamelCase(sortBy: string, defaultSort: camelCaseSortOption): camelCaseSortOption {
+    let selected;
+
+    Object.keys(sortOptions).forEach((key: camelCaseSortOption) => {
+      if (sortBy === key || sortBy === sortOptions[key]) {
+        selected = key;
+    }});
+
+    return selected ?? defaultSort;
   }
 
   private updateSelectedSortLabel() {

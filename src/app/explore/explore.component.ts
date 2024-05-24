@@ -35,6 +35,11 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
   private queryParamsSubscription: Subscription;
 
+  /**
+   * Default sort when not in relevance mode because there's a search term.
+   */
+  readonly defaultSort = 'matchFundsRemaining';
+
   constructor(
     private campaignService: CampaignService,
     private datePipe: DatePipe,
@@ -84,7 +89,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
   @HostListener('doSearchAndFilterUpdate', ['$event'])
   onDoSearchAndFilterUpdate(event: CustomEvent) {
-    this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
+    this.searchService.doSearchAndFilterAndSort(event.detail, this.defaultSort);
   }
 
 
@@ -107,13 +112,6 @@ export class ExploreComponent implements OnDestroy, OnInit {
   };
 
   /**
-   * Default sort when not in relevance mode because there's a search term.
-   */
-  getDefaultSort(): 'matchFundsRemaining' {
-    return 'matchFundsRemaining';
-  }
-
-  /**
    * If we've filled the viewport plus a reasonable buffer, trigger a search with an increased offset.
    */
   more() {
@@ -132,7 +130,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   clear() {
-    this.searchService.reset(this.getDefaultSort(), false);
+    this.searchService.reset(this.defaultSort, false);
   }
 
   getPercentageRaised(childCampaign: CampaignSummary) {
@@ -178,7 +176,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
    */
   private loadQueryParamsAndRun() {
     this.routeParamSubscription = this.route.queryParams.subscribe(params => {
-      this.searchService.loadQueryParams(params, this.getDefaultSort());
+      this.searchService.loadQueryParams(params, this.defaultSort);
       this.run();
     });
 
@@ -196,7 +194,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
    */
   private setQueryParams() {
     this.router.navigate(['explore'], {
-      queryParams: this.searchService.getQueryParams(this.getDefaultSort()),
+      queryParams: this.searchService.getQueryParams(this.defaultSort),
     });
   }
 }
