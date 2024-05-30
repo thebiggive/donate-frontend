@@ -9,6 +9,15 @@ export type SelectedType = {
   term?: string,
 };
 
+const sortOptions = {
+  amountRaised: 'Most raised',
+  matchFundsRemaining: 'Match funds remaining',
+  relevance: 'Relevance',
+} as const;
+
+type camelCaseSortOption = keyof typeof sortOptions;
+type sortLabel = typeof sortOptions[camelCaseSortOption];
+
 @Injectable({
   providedIn: 'root',
 })
@@ -18,7 +27,7 @@ export class SearchService {
   changed: EventEmitter<boolean>; // Value indicates if an interactive UI change triggered this.
 
   nonDefaultsActive: boolean;
-  selectedSortLabel: 'Most raised' | 'Match funds remaining' | 'Relevance';
+  selectedSortLabel: sortLabel;
 
   constructor() {
     this.changed = new EventEmitter();
@@ -44,7 +53,7 @@ export class SearchService {
     filterBeneficiary: string;
     filterLocation: string;
     filterFunding: string;
-  }, defaultSort: string) {
+  }, defaultSort: camelCaseSortOption) {
     this.nonDefaultsActive = true;
     this.selected.beneficiary = customSearchEvent.filterBeneficiary ? customSearchEvent.filterBeneficiary : '';
     this.selected.category = customSearchEvent.filterCategory ? customSearchEvent.filterCategory : '';
@@ -58,7 +67,7 @@ export class SearchService {
     const previousSearchText = this.selected.term;
     // this helps for comparing the new search text with the previous, because 'null' and 'undefined' are changed to ''
     this.selected.term = blankSearchText ? '' : customSearchEvent.searchText;
-    this.selected.sortField = customSearchEvent.sortBy ? customSearchEvent.sortBy : defaultSort;
+    this.selected.sortField = SearchService.sortFieldToCamelCase(customSearchEvent.sortBy, defaultSort);
 
     this.updateSelectedSortLabel();
 
@@ -69,10 +78,21 @@ export class SearchService {
       }
 
       // If search text changed and new search text is not blank, we want to re-sort by 'Relevance'. DON-558.
-      this.selected.sortField = 'Relevance';
+      this.selected.sortField = 'relevance';
     }
 
     this.changed.emit(true);
+  }
+
+  private static sortFieldToCamelCase(sortBy: string, defaultSort: camelCaseSortOption): camelCaseSortOption {
+    let selected;
+
+    Object.keys(sortOptions).forEach((key: camelCaseSortOption) => {
+      if (sortBy === key || sortBy === sortOptions[key]) {
+        selected = key;
+    }});
+
+    return selected ?? defaultSort;
   }
 
   private updateSelectedSortLabel() {
@@ -83,7 +103,8 @@ export class SearchService {
       case 'amountRaised':
         this.selectedSortLabel =  'Most raised';
         break;
-      case 'Relevance':
+      case 'relevance':
+      case 'Relevance': // historically we set this with a capital R.
         this.selectedSortLabel = 'Relevance';
         break;
       default:
@@ -108,17 +129,16 @@ export class SearchService {
       // Non-default selections should go to the page's query params. The "global default" sort
       // order should too iff there is a search term active, since the default sort in that
       // specific scenario is Relevance.
-      if (this.selected[key] !== defaults[key] || (key === 'sortField' && this.hasTermFilterApplied())) {
+      if (this.selected[key] !== defaults[key] || (key === 'sortField' && this.selected.term?.length > 0)) {
         queryParams[key] = String(this.selected[key]);
       }
     }
+    
+    if (this.selected.sortField === 'relevance' && this.selected.term?.length === 0) {
+      delete queryParams.sortField;
+    }
 
     return queryParams;
-  }
-
-  hasTermFilterApplied(): boolean {
-    const term = this.getQueryParams().term || '';
-    return (term.length > 0);
   }
 
   /**

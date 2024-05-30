@@ -1,5 +1,5 @@
 import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
-import {CommonModule, isPlatformBrowser} from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {ComponentsModule} from "@biggive/components-angular";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDialogModule} from "@angular/material/dialog";
@@ -19,9 +19,9 @@ import {transferFundsPath} from "../app-routing";
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatAutocompleteModule],
+  imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatAutocompleteModule],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrl: 'register.component.scss'
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   @ViewChild('captcha') captcha: RecaptchaComponent;
@@ -107,7 +107,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
    *
    * @param captchaResponse
    */
-  captchaReturn(captchaResponse: string) {
+  captchaReturn(captchaResponse: string | null) {
     if (captchaResponse === null) {
       // We had a code but now don't, e.g. after expiry at 1 minute. In this case
       // the trigger wasn't a register click so do nothing. A repeat register attempt will

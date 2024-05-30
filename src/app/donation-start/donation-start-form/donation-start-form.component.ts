@@ -22,7 +22,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatStepper} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RecaptchaComponent} from 'ng-recaptcha';
-import {MatomoTracker} from 'ngx-matomo';
+import {MatomoTracker} from 'ngx-matomo-client';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
   PaymentIntent,
@@ -72,7 +72,7 @@ declare var _paq: {
 @Component({
   selector: 'app-donation-start-form',
   templateUrl: './donation-start-form.component.html',
-  styleUrls: ['./donation-start-form.component.scss'],
+  styleUrl: './donation-start-form.component.scss',
   providers: [
     TimeLeftPipe,
   ]
@@ -87,7 +87,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   stripePaymentElement: StripePaymentElement | undefined;
   cardHandler = this.onStripeCardChange.bind(this);
   showChampionOptIn = false;
-  GmfAbTestVariant: 'A'|'B' = 'A';
 
   @Input({ required: true }) campaign: Campaign;
 
@@ -239,7 +238,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private selectedPaymentMethodType: string | undefined;
   private paymentReadinessTracker: PaymentReadinessTracker;
   public paymentStepErrors: string = "";
-  private manuallySelectedABTestVariant: string | null = null;
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -269,14 +267,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.tipControlStyle = (queryParams?.tipControl?.toLowerCase() === 'slider')
       ? 'slider' : 'dropdown';
-
-    if (! environment.production) {
-      this.manuallySelectedABTestVariant = queryParams?.selectABTestVariant;
-
-      if (this.manuallySelectedABTestVariant == 'B') {
-        this.GmfAbTestVariant = 'B';
-      }
-    }
   }
 
   ngOnDestroy() {
@@ -312,10 +302,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
             {
                 name: environment.matomoAbTest.variantName,
                 activate: (_event: any) => {
-                  if (this.manuallySelectedABTestVariant) {
-                    return;
-                  }
-                  this.GmfAbTestVariant = 'B';
                   console.log('Copy B test variant active!');
                 }
             },
@@ -1002,7 +988,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     )
   }
 
-  captchaIdentityReturn(captchaResponse: string) {
+  captchaIdentityReturn(captchaResponse: string | null) {
     if (captchaResponse === null) {
       // Ensure no other callback tries to use the old captcha code, and will re-execute
       // the catcha to get a new one as needed instead.

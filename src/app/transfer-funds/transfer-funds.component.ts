@@ -4,7 +4,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSelectChange} from '@angular/material/select';
-import {MatomoTracker} from 'ngx-matomo';
+import {MatomoTracker} from 'ngx-matomo-client';
 import {EMPTY} from 'rxjs';
 import {debounceTime, distinctUntilChanged, startWith, switchMap} from 'rxjs/operators';
 
@@ -33,7 +33,7 @@ import {getCurrencyMaxValidator} from '../validators/currency-max';
 @Component({
   selector: 'app-transfer-funds',
   templateUrl: './transfer-funds.component.html',
-  styleUrls: ['./transfer-funds.component.scss'],
+  styleUrl: './transfer-funds.component.scss',
 })
 export class TransferFundsComponent implements AfterContentInit, OnInit {
   addressSuggestions: GiftAidAddressSuggestion[] = [];

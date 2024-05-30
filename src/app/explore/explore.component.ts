@@ -1,20 +1,20 @@
-import { DatePipe } from '@angular/common';
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import {DatePipe, isPlatformBrowser} from '@angular/common';
+import {Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {skip, Subscription} from 'rxjs';
 
-import { currencyPipeDigitsInfo } from '../../environments/common';
-import { CampaignService, SearchQuery } from '../campaign.service';
-import { CampaignGroupsService } from '../campaign-groups.service';
-import { CampaignSummary } from '../campaign-summary.model';
-import { PageMetaService } from '../page-meta.service';
-import { SearchService } from '../search.service';
+import {currencyPipeDigitsInfo} from '../../environments/common';
+import {CampaignService, SearchQuery} from '../campaign.service';
+import {CampaignGroupsService} from '../campaign-groups.service';
+import {CampaignSummary} from '../campaign-summary.model';
+import {PageMetaService} from '../page-meta.service';
+import {SearchService} from '../search.service';
 
 /** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
   selector: 'app-explore',
   templateUrl: './explore.component.html',
-  styleUrls: ['./explore.component.scss'],
+  styleUrl: 'explore.component.scss',
   providers: [DatePipe]
 })
 export class ExploreComponent implements OnDestroy, OnInit {
@@ -33,6 +33,13 @@ export class ExploreComponent implements OnDestroy, OnInit {
   locationOptions: string[] = [];
   fundingOptions: string[] = [];
 
+  private queryParamsSubscription: Subscription;
+
+  /**
+   * Default sort when not in relevance mode because there's a search term.
+   */
+  readonly defaultSort = 'matchFundsRemaining';
+
   constructor(
     private campaignService: CampaignService,
     private datePipe: DatePipe,
@@ -40,16 +47,13 @@ export class ExploreComponent implements OnDestroy, OnInit {
     private router: Router,
     private pageMeta: PageMetaService,
     public searchService: SearchService,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
   ngOnDestroy() {
-    if (this.routeParamSubscription) {
-      this.routeParamSubscription.unsubscribe();
-    }
-
-    if (this.searchServiceSubscription) {
-      this.searchServiceSubscription.unsubscribe();
-    }
+    this.routeParamSubscription?.unsubscribe();
+    this.searchServiceSubscription?.unsubscribe();
+    this.queryParamsSubscription?.unsubscribe();
   }
 
   ngOnInit() {
@@ -67,11 +71,25 @@ export class ExploreComponent implements OnDestroy, OnInit {
     this.fundingOptions = [
       'Match Funded'
     ];
+
+    this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
+  }
+
+  private scrollToSearchWhenParamsChange() {
+    return this.route.queryParams.pipe(skip(1)).subscribe((_params) => {
+      if (isPlatformBrowser(this.platformId)) {
+        const positionMarker = document.getElementById('SCROLL_POSITION_WHEN_PARAMS_CHANGE');
+
+        // Angular scrolls automatically, using setTimeout to delay this scroll to a later task so this gets to
+        // set the position the page is left in.
+        setTimeout(() => positionMarker?.scrollIntoView({}), 0);
+      }
+    });
   }
 
   @HostListener('doSearchAndFilterUpdate', ['$event'])
   onDoSearchAndFilterUpdate(event: CustomEvent) {
-    this.searchService.doSearchAndFilterAndSort(event.detail, this.getDefaultSort());
+    this.searchService.doSearchAndFilterAndSort(event.detail, this.defaultSort);
   }
 
 
@@ -94,13 +112,6 @@ export class ExploreComponent implements OnDestroy, OnInit {
   };
 
   /**
-   * Default sort when not in relevance mode because there's a search term.
-   */
-  getDefaultSort(): 'matchFundsRemaining' {
-    return 'matchFundsRemaining';
-  }
-
-  /**
    * If we've filled the viewport plus a reasonable buffer, trigger a search with an increased offset.
    */
   more() {
@@ -119,7 +130,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   clear() {
-    this.searchService.reset(this.getDefaultSort(), false);
+    this.searchService.reset(this.defaultSort, false);
   }
 
   getPercentageRaised(childCampaign: CampaignSummary) {
@@ -165,7 +176,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
    */
   private loadQueryParamsAndRun() {
     this.routeParamSubscription = this.route.queryParams.subscribe(params => {
-      this.searchService.loadQueryParams(params, this.getDefaultSort());
+      this.searchService.loadQueryParams(params, this.defaultSort);
       this.run();
     });
 
@@ -183,7 +194,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
    */
   private setQueryParams() {
     this.router.navigate(['explore'], {
-      queryParams: this.searchService.getQueryParams(this.getDefaultSort()),
+      queryParams: this.searchService.getQueryParams(this.defaultSort),
     });
   }
 }

@@ -2,7 +2,7 @@ import {APP_BASE_HREF, isPlatformBrowser} from '@angular/common';
 import {AfterViewInit, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
 import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
 import {BiggiveMainMenu} from '@biggive/components-angular';
-import {MatomoTracker} from "ngx-matomo";
+import {MatomoTracker} from "ngx-matomo-client";
 import {filter, map, startWith} from 'rxjs/operators';
 
 import {DonationService} from './donation.service';
@@ -23,14 +23,14 @@ import {Observable, Subscription} from "rxjs";
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ["./app.component.scss"]
+  styleUrl: 'app.component.scss',
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
 
   public isLoggedIn: boolean = false;
 
-  public readonly donateUriPrefix = environment.donateGlobalUriPrefix;
+  public readonly donateUriPrefix = environment.donateUriPrefix;
   public readonly blogUriPrefix = environment.blogUriPrefix
 
   public readonly experienceUriPrefix = environment.experienceUriPrefix;
@@ -51,11 +51,6 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
       case cookiePrefs.agreedToAll:
         return {analyticsAndTesting: true, thirdParty: true}
       default:
-        if (cookiePrefs.agreedToAll) {
-          // this is impossible but Typescript doesn't seem to know that so I have to
-          // add this line to narrow the type.
-          throw new Error("hit code that should be unreachable");
-        }
         return cookiePrefs.agreedToCookieTypes;
     }
   }
@@ -91,7 +86,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     this.currentUrlWithoutHash$ = router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationEnd),
       map((_event) => {
-        const url = new URL(environment.donateGlobalUriPrefix + router.url);
+        const url = new URL(environment.donateUriPrefix + router.url);
         url.hash = "";
         return url;
       })
@@ -126,13 +121,6 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
           this.matomoTracker.setCookieConsentGiven();
         }
       });
-
-      // Temporarily client-side redirect the previous non-global domain to the new one.
-      // Once most inbound links are updated, we can probably replace the app redirect
-      // with an infrastructure-level one a la parked domains.
-      if (window.location.host === 'donate.thebiggive.org.uk') {
-        window.location.host = 'donate.biggive.org';
-      }
     }
 
     // This service needs to be injected app-wide and this line is here, because

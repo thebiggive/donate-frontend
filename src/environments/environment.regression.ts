@@ -15,7 +15,6 @@ export const environment: Environment = {
   creditTipsCampaign: 'a053O00000J1ROLQA3',
   apiUriPrefix: 'https://sf-api-regression.thebiggivetest.org.uk',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
-  donateGlobalUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
   donateUriPrefix: 'https://donate-regression.thebiggivetest.org.uk',
   sharedCookieDomain: '.thebiggivetest.org.uk',
   blogUriPrefix: 'https://biggive.org',
@@ -23,7 +22,7 @@ export const environment: Environment = {
   donationsApiPrefix: 'https://matchbot-regression.thebiggivetest.org.uk/v1',
   getSiteControlId: '97792',
   identityApiPrefix: 'https://identity-regression.thebiggivetest.org.uk/v1',
-  matomoSiteId: null,
+  matomoSiteId: 4,
   matomoNonZeroTipGoalId: null,
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,

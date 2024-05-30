@@ -10,7 +10,7 @@ import { CampaignService } from '../campaign.service';
 @Component({
   selector: 'app-charity',
   templateUrl: './charity.component.html',
-  styleUrls: ['./charity.component.scss'],
+  styleUrl: 'charity.component.scss',
 })
 export class CharityComponent implements OnInit {
   campaigns: CampaignSummary[];

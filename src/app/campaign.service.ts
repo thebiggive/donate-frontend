@@ -115,7 +115,7 @@ export class CampaignService {
       query.fundSlug = fundSlug;
     }
 
-    if (selected.sortField === 'Relevance') {
+    if (selected.sortField?.toLowerCase() === 'relevance') {
       query.sortField = undefined; // Campaign API takes blank/default sort to be relevance.
       query.sortDirection = undefined;
     } else { // match funds left and amount raised both make most sense in 'desc' order
@@ -208,7 +208,7 @@ export class CampaignService {
         card => SFAPIHighlightCardToHighlightCard(
           environment.experienceUriPrefix,
           environment.blogUriPrefix,
-          environment.donateGlobalUriPrefix,
+          environment.donateUriPrefix,
           card
         ))))
     );

@@ -10,6 +10,11 @@
   ></biggive-hero-image>
   <biggive-page-section>
 
+    <div
+      style="position: absolute; margin-top: -6em;"
+      id="SCROLL_POSITION_WHEN_PARAMS_CHANGE"
+    ></div>
+
     <biggive-campaign-card-filter-grid
       [categoryOptions]="categoryOptions"
       [beneficiaryOptions]="beneficiaryOptions"
@@ -22,43 +27,50 @@
       [selectedFilterLocation]="searchService.selected.country ? searchService.selected.country : null"
       [selectedFilterFunding]="searchService.selected.onlyMatching ? 'Match Funded' : null">
 
-      <biggive-grid
-        slot="campaign-grid"
-        column-count="3"
-        *ngIf="campaigns"
-        infiniteScroll
-        [infiniteScrollThrottle]="500"
-        (scrolled)="onScroll()"
-        [scrollWindow]="true"
-      >
-        <div *ngFor="let campaign of campaigns">
-          <biggive-campaign-card
-            [banner]="campaign.imageUri | optimisedImage:830 | async"
-            [campaignType]="campaign.isMatched ? 'Match Funded' : null"
-            [campaignTitle]="campaign.title"
-            [donateButtonUrl]="'/donate/' + campaign.id"
-            [moreInfoButtonUrl]="'/campaign/' + campaign.id"
-            [organisationName]="campaign.charity.name"
-            primary-figure-label="Match Funds Remaining"
-            [primaryFigureAmount]="campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
-            [progressBarCounter]="getPercentageRaised(campaign)"
-            secondary-figure-label="Total Funds Raised"
-            [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
-            [isFutureCampaign]="isInFuture(campaign)"
-            [isPastCampaign]="isInPast(campaign)"
-            [datetime]="getRelevantDateAsStr(campaign)">
-          </biggive-campaign-card>
-        </div>
-      </biggive-grid>
+      @if (campaigns) {
+        <biggive-grid
+          slot="campaign-grid"
+          column-count="3"
+          infiniteScroll
+          [infiniteScrollThrottle]="500"
+          (scrolled)="onScroll()"
+          [scrollWindow]="true"
+          >
+          @for (campaign of campaigns; track campaign.id) {
+            <div>
+              <biggive-campaign-card
+                [banner]="campaign.imageUri | optimisedImage:830 | async"
+                [campaignType]="campaign.isMatched ? 'Match Funded' : null"
+                [campaignTitle]="campaign.title"
+                [donateButtonUrl]="'/donate/' + campaign.id"
+                [moreInfoButtonUrl]="'/campaign/' + campaign.id"
+                [organisationName]="campaign.charity.name"
+                primary-figure-label="Match Funds Remaining"
+                [primaryFigureAmount]="campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
+                [progressBarCounter]="getPercentageRaised(campaign)"
+                secondary-figure-label="Total Funds Raised"
+                [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
+                [isFutureCampaign]="isInFuture(campaign)"
+                [isPastCampaign]="isInPast(campaign)"
+                [datetime]="getRelevantDateAsStr(campaign)">
+              </biggive-campaign-card>
+            </div>
+          }
+        </biggive-grid>
+      }
     </biggive-campaign-card-filter-grid>
 
-    <mat-spinner *ngIf="loading" color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>
+    @if (loading) {
+      <mat-spinner color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>
+    }
 
-    <div *ngIf="campaigns.length === 0 && !loading">
-      <p class="error" aria-live="polite">
-        We can't find any campaigns matching this search but there are lots more to choose from.
-        <a tabindex="0" (click)="clear()">View all campaigns here</a>.
-      </p>
-    </div>
+    @if (campaigns.length === 0 && !loading) {
+      <div>
+        <p class="error" aria-live="polite">
+          We can't find any campaigns matching this search but there are lots more to choose from.
+          <a tabindex="0" (click)="clear()">View all campaigns here</a>.
+        </p>
+      </div>
+    }
   </biggive-page-section>
 </main>

@@ -8,44 +8,52 @@
     siteKey="{{ recaptchaIdSiteKey }}"
   ></re-captcha>
 
-  <div *ngIf="forgotPassword else logIn">
-
-    <h2 mat-dialog-title>Reset Password</h2>
-
-    <div *ngIf="!userAskedForResetLink">
-      <mat-dialog-content class="mat-typography">
-        <form [formGroup]="resetPasswordForm">
-          <mat-form-field class="b-w-100" color="primary">
-            <mat-label for="loginEmailAddress">Email address</mat-label>
-            <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off">
-          </mat-form-field>
-          <p class="b-rt-0">Please enter your email address.</p>
-        </form>
-      </mat-dialog-content>
-
-      <mat-dialog-actions align="end">
-        <button
-          id="reset-password-modal-submit"
-          mat-raised-button
-          [disabled]="!resetPasswordForm.valid || userAskedForResetLink"
-          (click)="resetPasswordClicked()"
-          color="primary"
-        >Reset Password</button>
-        <button mat-raised-button mat-dialog-close cdkFocusInitial color="accent">Cancel</button>
-      </mat-dialog-actions>
+  @if (forgotPassword) {
+    <div>
+      <h2 mat-dialog-title>Reset Password</h2>
+      @if (!userAskedForResetLink) {
+        <div>
+          <mat-dialog-content class="mat-typography">
+            <form [formGroup]="resetPasswordForm">
+              <mat-form-field class="b-w-100" color="primary">
+                <mat-label for="loginEmailAddress">Email address</mat-label>
+                <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off">
+              </mat-form-field>
+              <p class="b-rt-0">Please enter your email address.</p>
+            </form>
+          </mat-dialog-content>
+          <mat-dialog-actions align="end">
+            <button
+              id="reset-password-modal-submit"
+              mat-raised-button
+              [disabled]="!resetPasswordForm.valid || userAskedForResetLink"
+              (click)="resetPasswordClicked()"
+              color="primary"
+            >Reset Password</button>
+            <button mat-raised-button mat-dialog-close cdkFocusInitial color="accent">Cancel</button>
+          </mat-dialog-actions>
+        </div>
+      }
+      @if (userAskedForResetLink) {
+        <div>
+          @if (resetPasswordSuccess === undefined) {
+            <mat-spinner [diameter]="40" aria-label="Loading your details"></mat-spinner>
+          }
+          @if (resetPasswordSuccess) {
+            <p>Please check your email and click on the password reset link received.</p>
+          }
+          @if (resetPasswordSuccess === false) {
+            <p class="error">Sorry, we encountered a problem. Please <a href="https://biggive.org/faqs/" target="_blank">contact us</a> for help.</p>
+          }
+          @if (resetPasswordSuccess !== undefined) {
+            <mat-dialog-actions align="end">
+              <button mat-raised-button mat-dialog-close cdkFocusInitial color="primary">Ok</button>
+            </mat-dialog-actions>
+          }
+        </div>
+      }
     </div>
-
-    <div *ngIf="userAskedForResetLink">
-      <mat-spinner *ngIf="resetPasswordSuccess === undefined" [diameter]="40" aria-label="Loading your details"></mat-spinner>
-      <p *ngIf="resetPasswordSuccess">Please check your email and click on the password reset link received.</p>
-      <p *ngIf="resetPasswordSuccess === false" class="error">Sorry, we encountered a problem. Please <a href="https://biggive.org/faqs/" target="_blank">contact us</a> for help.</p>
-      <mat-dialog-actions align="end" *ngIf="resetPasswordSuccess !== undefined">
-        <button mat-raised-button mat-dialog-close cdkFocusInitial color="primary">Ok</button>
-      </mat-dialog-actions>
-    </div>
-  </div>
-
-  <ng-template #logIn>
+  } @else {
     <h2 mat-dialog-title>Log in</h2>
     <mat-dialog-content class="mat-typography">
       <form [formGroup]="loginForm">
@@ -53,18 +61,17 @@
           <mat-label for="loginEmailAddress">Email address</mat-label>
           <input matInput type="email" id="loginEmailAddress" formControlName="emailAddress" autocapitalize="off">
         </mat-form-field>
-
         <mat-form-field class="b-w-100" color="primary">
           <mat-label for="loginPassword">Password</mat-label>
           <input matInput type="password" id="loginPassword" formControlName="password">
         </mat-form-field>
-
-        <p *ngIf="loginError" class="error" aria-live="assertive">
-          Login error: {{ loginError }}
-        </p>
+        @if (loginError) {
+          <p class="error" aria-live="assertive">
+            Login error: {{ loginError }}
+          </p>
+        }
       </form>
     </mat-dialog-content>
-
     <mat-dialog-actions style="justify-content: space-between;">
       <a (click)="forgotPasswordClicked()">Forgot Password?</a>
       <div>
@@ -78,5 +85,6 @@
         <button mat-raised-button mat-dialog-close cdkFocusInitial color="accent">Cancel</button>
       </div>
     </mat-dialog-actions>
-  </ng-template>
+  }
+
 </app-popup-standalone>

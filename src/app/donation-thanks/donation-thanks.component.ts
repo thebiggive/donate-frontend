@@ -3,7 +3,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import { MatDialog } from '@angular/material/dialog';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import { MatomoTracker } from 'ngx-matomo';
+import { MatomoTracker } from 'ngx-matomo-client';
 import { RecaptchaComponent } from 'ng-recaptcha';
 
 import { Campaign } from '../campaign.model';
@@ -22,7 +22,7 @@ import { myAccountPath } from '../app-routing';
 @Component({
   selector: 'app-donation-thanks',
   templateUrl: './donation-thanks.component.html',
-  styleUrls: ['./donation-thanks.component.scss'],
+  styleUrl: './donation-thanks.component.scss',
 })
 export class DonationThanksComponent implements OnInit {
   @Input({ required: true }) private donationId: string;
@@ -162,7 +162,7 @@ export class DonationThanksComponent implements OnInit {
     });
   }
 
-  loginCaptchaReturn(captchaResponse: string) {
+  loginCaptchaReturn(captchaResponse: string | null) {
     if (captchaResponse === null) {
       // This is expected after ~1 min when the code expires. At this point we should
       // never be executing the login again because if the captcha was set up at all then
@@ -338,7 +338,7 @@ export class DonationThanksComponent implements OnInit {
   }
 
   private setSocialShares(campaign: Campaign) {
-    const prefix = environment.donateGlobalUriPrefix;
+    const prefix = environment.donateUriPrefix;
     this.encodedShareUrl = encodeURIComponent(`${prefix}/campaign/${campaign.id}`);
     this.encodedPrefilledText = encodeURIComponent('I just donated to this campaign, please support their good cause by making a donation.');
   }

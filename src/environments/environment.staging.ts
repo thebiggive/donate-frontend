@@ -13,7 +13,6 @@ export const environment: Environment = {
   creditTipsCampaign: 'a056900002LDXWgAAP',
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
-  donateGlobalUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   blogUriPrefix: 'https://wp-staging.thebiggivetest.org.uk',
   sharedCookieDomain: '.thebiggivetest.org.uk',
@@ -23,12 +22,7 @@ export const environment: Environment = {
   identityApiPrefix: 'https://identity-staging.thebiggivetest.org.uk/v1',
   matomoSiteId: 4,
   matomoNonZeroTipGoalId: 1,
-  matomoAbTest: {
-  name: "GmfTipCopy2024",
-    variantName: "B",
-    startDate: '2024/04/16 13:20:00 UTC', // Start probably just before this goes out to Staging
-    endDate: undefined,
-  },
+  matomoAbTest: undefined,
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',

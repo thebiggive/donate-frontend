@@ -1,27 +1,30 @@
-  <div class="skip-to-content-link" *ngIf="currentUrlWithoutHash$ | async as currentUrl">
+@if (currentUrlWithoutHash$ | async; as currentUrl) {
+  <div class="skip-to-content-link">
     <!--
-          Can't use a simple relative link for the URL because we have base href set of /d/ set in non-dev environments
-          which is needed for links to assets but would break this.
+    Can't use a simple relative link for the URL because we have base href set of /d/ set in non-dev environments
+    which is needed for links to assets but would break this.
     -->
     <a [href]="currentUrl.toString() + '#content'">Skip to content</a>
   </div>
+}
 
 
+@if (isDataLoaded) {
   <biggive-main-menu
-    *ngIf="isDataLoaded"
     [donateUrlPrefix]="donateUriPrefix"
     [blogUrlPrefix]="blogUriPrefix"
     [experienceUrlPrefix]="experienceUriPrefix"
     [isLoggedIn]="isLoggedIn"
     [myAccountflagEnabled]="true"
   ></biggive-main-menu>
+}
 
-  <a id="content">
-    <!-- target for "skip to content" link -->
-  </a>
-  <router-outlet></router-outlet>
+<a id="content">
+  <!-- target for "skip to content" link -->
+</a>
+<router-outlet></router-outlet>
 
-  <biggive-footer
+<biggive-footer
   [headingLevel]=3
   [usePresetFooter]="true"
   [donateUrlPrefix]="donateUriPrefix"
@@ -29,22 +32,23 @@
   [experienceUrlPrefix]="experienceUriPrefix"
 ></biggive-footer>
 
-  <!-- We only render the following div if isPlatformBrowser, because if rendered on the server side it would flash up on page reload
-       for a few hundred ms for people who have already made cookie preference selection who don't need to see it again. I found
-       that was an issue on mobile, I couldn't see the issue on desktop browsers.
-       We do not render it in regression test environment as it's hard to make the robot clever enough to
-       dismiss the banner when it needs to to click on stuff behind it.
-       -->
-<div
-  id="cookie-banner"
-  *ngIf=" showingDedicatedCookiePreferencesPage || (
+<!-- We only render the following div if isPlatformBrowser, because if rendered on the server side it would flash up on page reload
+for a few hundred ms for people who have already made cookie preference selection who don't need to see it again. I found
+that was an issue on mobile, I couldn't see the issue on desktop browsers.
+We do not render it in regression test environment as it's hard to make the robot clever enough to
+dismiss the banner when it needs to to click on stuff behind it.
+-->
+@if ( showingDedicatedCookiePreferencesPage || (
   (environment.environmentId !== 'regression') &&
   isPlatformBrowser &&
-  (userHasExpressedCookiePreference$ | async) === false)"
->
+  (userHasExpressedCookiePreference$ | async) === false)) {
+  <div
+    id="cookie-banner"
+    >
     <biggive-cookie-banner
       [previouslyAgreedCookiePreferences]="existingCookiePreferences | async"
       [blogUriPrefix]="environment.blogUriPrefix"
       [autoOpenPreferences]="showingDedicatedCookiePreferencesPage"
-    />
-</div>
+      />
+  </div>
+}

@@ -7,8 +7,7 @@ export const environment: Environment = {
   creditTipsCampaign: 'a056900002LDXWgAAP',
   apiUriPrefix: 'https://sf-api-production.thebiggive.org.uk',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
-  donateGlobalUriPrefix: 'https://donate.biggive.org',
-  donateUriPrefix: 'https://donate.thebiggive.org.uk',
+  donateUriPrefix: 'https://donate.biggive.org',
   experienceUriPrefix: 'https://community.biggive.org',
   blogUriPrefix: 'https://biggive.org',
   sharedCookieDomain: ".biggive.org",
@@ -17,12 +16,7 @@ export const environment: Environment = {
   identityApiPrefix: 'https://identity-production.thebiggive.org.uk/v1',
   matomoSiteId: 2,
   matomoNonZeroTipGoalId: 11,
-  matomoAbTest: {
-    name: "GmfTipCopy2024",
-    variantName: "B",
-    startDate: '2024/04/18 11:00:00 UTC',
-    endDate: '2024/04/25 11:35:00 UTC',
-  },
+  matomoAbTest: undefined,
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',

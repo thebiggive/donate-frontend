@@ -32,13 +32,17 @@
         <input matInput type="password" id="registerPassword" formControlName="password">
       </mat-form-field>
 
-      <p *ngIf="registerError" class="error" aria-live="assertive">
-        Registration error: {{ registerError }}
-      </p>
+      @if (registerError) {
+        <p class="error" aria-live="assertive">
+          Registration error: {{ registerError }}
+        </p>
+      }
 
-      <p *ngIf="registerErrorHtml" class="error" aria-live="assertive">
-        Registration error: <span [innerHtml]="registerErrorHtml"></span>
-      </p>
+      @if (registerErrorHtml) {
+        <p class="error" aria-live="assertive">
+          Registration error: <span [innerHtml]="registerErrorHtml"></span>
+        </p>
+      }
 
 
     </form>

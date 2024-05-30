@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
 import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
-import { Subscription } from 'rxjs';
+import {skip, Subscription} from 'rxjs';
 
 import { Campaign } from '../campaign.model';
 import { CampaignSummary } from '../campaign-summary.model';
@@ -36,7 +36,7 @@ const endPipeToken = 'timeLeftToEndPipe';
 @Component({
   selector: 'app-meta-campaign',
   templateUrl: './meta-campaign.component.html',
-  styleUrls: ['./meta-campaign.component.scss'],
+  styleUrl: './meta-campaign.component.scss',
   providers: [
     CurrencyPipe,
     // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
@@ -77,7 +77,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   private smallestSignificantScrollPx = 250;
   private tickerUpdateTimer: any;
 
-  private readonly recentChildrenKey = `${environment.donateGlobalUriPrefix}/children/v2`; // Key is per-domain/env
+  private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v2`; // Key is per-domain/env
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
 
   beneficiaryOptions: string[] = [];
@@ -87,6 +87,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   parentIsSharedFund: boolean;
 
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
+  private queryParamsSubscription: Subscription;
 
   constructor(
     private campaignService: CampaignService,
@@ -122,17 +123,10 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       clearTimeout(this.tickerUpdateTimer);
     }
 
-    if (this.routeChangeListener) {
-      this.routeChangeListener.unsubscribe();
-    }
-
-    if (this.routeParamSubscription) {
-      this.routeParamSubscription.unsubscribe();
-    }
-
-    if (this.searchServiceSubscription) {
-      this.searchServiceSubscription.unsubscribe();
-    }
+    this.routeChangeListener?.unsubscribe();
+    this.routeParamSubscription?.unsubscribe();
+    this.searchServiceSubscription?.unsubscribe();
+    this.queryParamsSubscription.unsubscribe();
   }
 
   ngOnInit() {
@@ -149,14 +143,18 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     if (this.fundSlug) {
       fundKey = makeStateKey<Fund>(`fund-${this.fundSlug}`);
       this.fund = this.state.get<Fund | undefined>(fundKey, undefined);
-      this.setFundSpecificProps();
+      if (this.fund) {
+        this.setFundSpecificProps(this.fund);
+      }
     }
 
     if (!this.fund && this.fundSlug) {
       this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
         this.state.set<Fund>(fundKey, fund);
         this.fund = fund;
-        this.setFundSpecificProps();
+        if (this.fund) {
+          this.setFundSpecificProps(this.fund);
+        }
       });
     }
 
@@ -168,6 +166,19 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.fundingOptions = [
       'Match Funded'
     ]
+    this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
+  }
+
+  private scrollToSearchWhenParamsChange() {
+    return this.route.queryParams.pipe(skip(1)).subscribe((_params) => {
+      if (isPlatformBrowser(this.platformId)) {
+        const positionMarker = document.getElementById('SCROLL_POSITION_WHEN_PARAMS_CHANGE');
+
+        // Angular scrolls automatically, using setTimeout to delay this scroll to a later task so this gets to
+        // set the position the page is left in.
+        setTimeout(() => positionMarker?.scrollIntoView({}), 0);
+      }
+    });
   }
 
   ngAfterViewChecked() {
@@ -477,8 +488,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     }
   }
 
-  private setFundSpecificProps() {
-    this.tickerMainMessage = this.currencyPipe.transform(this.fund?.amountRaised, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
+  private setFundSpecificProps(fund: Fund) {
+    this.tickerMainMessage = this.currencyPipe.transform(fund.amountRaised, this.campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
       ' raised' + (this.campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
 
     const durationInDays = Math.floor((new Date(this.campaign.endDate).getTime() - new Date(this.campaign.startDate).getTime()) / 86400000);
@@ -486,8 +497,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     tickerItems.push({
       label: 'total match funds',
       figure: this.currencyPipe.transform(
-        // when SF Prod starts sending totalForTicker we can remove the reference to totalAmount.
-        this.fund?.totalForTicker || this.fund?.totalAmount,
+        fund.totalForTicker,
         this.campaign.currencyCode,
         'symbol',
         currencyPipeDigitsInfo
@@ -508,8 +518,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
     // Show fund name if applicable *and* there's no fund logo. If there's a logo
     // its content + alt text should do the equivalent job.
-    this.title = (!this.fund?.logoUri && this.fund?.name)
-      ? `${this.campaign.title}: ${this.fund.name}`
+    this.title = (!fund.logoUri && fund.name)
+      ? `${this.campaign.title}: ${fund.name}`
       : this.campaign.title;
 
     this.pageMeta.setCommon(

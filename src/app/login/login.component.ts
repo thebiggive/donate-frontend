@@ -1,5 +1,5 @@
 import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
-import {CommonModule, isPlatformBrowser} from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {ComponentsModule} from "@biggive/components-angular";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDialogModule} from "@angular/material/dialog";
@@ -23,9 +23,9 @@ export function isAllowableRedirectPath(redirectParam: string) {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatAutocompleteModule],
+  imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatAutocompleteModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrl: 'login.component.scss'
 })
 export class LoginComponent implements OnInit, OnDestroy{
   @ViewChild('captcha') captcha: RecaptchaComponent;
@@ -149,7 +149,7 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.loggingIn = false;
   }
 
-  captchaReturn(captchaResponse: string): void {
+  captchaReturn(captchaResponse: string | null): void {
     this.loginError = undefined;
     if (captchaResponse === null) {
       // We had a code but now don't, e.g. after expiry at 1 minute. In this case
