@@ -2274,6 +2274,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   public loadPerson(person: Person, id: string, jwt: string) {
     this.donor = person; // Should mean donations are attached to the Stripe Customer.
+    this.paymentStepErrors = "";
 
     // Only tokens for Identity users with a password have enough access to load payment methods, use credit
     // balances and access personal data beyond the anonymous new Customer basics.

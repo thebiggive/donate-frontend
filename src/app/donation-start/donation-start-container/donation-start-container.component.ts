@@ -90,6 +90,13 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
 
     this.identityService.get(id, jwt).subscribe({
       next: (person: Person) => {
+        if (this.donor && this.donor !== person) {
+          // Implies we are changing authentication state, as we already had a person and now its a different one.
+          // Page state can be wrong at this point, so for simplicity we reload - otherwise errors relating to the
+          // previous (probably anon) logged in user could affect the donation journey of this user.
+          location.reload();
+        }
+
         this.donor = person; // Should mean donations are attached to the Stripe Customer.
         this.loggedInEmailAddress = person.email_address;
         this.donationStartForm.loadPerson(person, id, jwt);
