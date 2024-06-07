@@ -69,27 +69,27 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     } as unknown as MatSnackBar,
   );
 
-  const stubGroup = {
-    patchValue: () => {
-    },
-    controls: {
-      donationAmount: {
-        setValidators: () => {
-        }
-      },
-      billingCountry: {
-        setValidators: () => {
-        }, updateValueAndValidity: () => {
-        }
-      },
-      billingPostcode: {
-        setValidators: () => {
-        }, updateValueAndValidity: () => {
-        }
-      },
-    },
-    get: () => {
-    },
+  let stubControls: {[name: string]: {setValidators: () => void, updateValueAndValidity: () => void}} = {};
+  for (let formGroup of [
+    donationStartFormComponent.amountsGroup,
+    donationStartFormComponent.giftAidGroup,
+    donationStartFormComponent.paymentGroup
+  ]) {
+    // Get each field in each group and update its validity.
+    if (formGroup.controls) {
+      for (const control in formGroup.controls) {
+        stubControls[control] = {
+          setValidators: () => {},
+          updateValueAndValidity: () => {},
+        };
+      }
+    }
+  }
+
+  let stubGroup = {
+    get: () => {},
+    patchValue: () => {},
+    controls: stubControls,
   } as unknown as FormGroup<any>;
 
   donationStartFormComponent.amountsGroup = stubGroup;
@@ -104,7 +104,7 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
   return donationStartFormComponent;
 }
 
-describe('DonationStartNewPrimaryComponent', () => {
+describe('DonationStartForm', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [

@@ -1364,6 +1364,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.maximumDonationAmount = maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse);
       this.stripePaymentMethodReady = true;
       this.paymentReadinessTracker.donationFundsPrepared(this.creditPenceToUse);
+      this.setConditionalValidators();
 
       if (this.donation) {
         this.donation.pspMethodType = this.getPaymentMethodType();
@@ -2007,11 +2008,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     // Initial and post-auth validation of Gift Aid should depend upon the previous value
-    // of the opt-in and 'outside UK' checkboxes.
-    this.setGiftAidValidatorsForChoice(this.giftAidGroup.value.giftAid);
+    // of the opt-in and 'outside UK' checkboxes. If there's no value yet, initial validators
+    // should use `false`.
+    this.setGiftAidValidatorsForChoice(this.giftAidGroup.value?.giftAid ?? false);
 
     this.giftAidGroup.get('homeOutsideUK')?.valueChanges.subscribe(homeOutsideUK => {
       this.setGiftAidValidatorsForChoice(this.giftAidGroup.value.giftAid, homeOutsideUK);
+      this.updateAllValidities();
     });
 
     this.giftAidGroup.get('homePostcode')?.valueChanges.subscribe(homePostcode => {
@@ -2040,6 +2043,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
     this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
       this.setGiftAidValidatorsForChoice(giftAidChecked);
+      this.updateAllValidities();
     });
 
     if (this.creditPenceToUse > 0) {
@@ -2057,13 +2061,19 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * is safest to iterate over all individual fields calling this whenever the rules change.
    * This should mean that groups' and the whole form's validity statuses are also updated.
    *
+   * Typically, we want to nudge validity changes but *don't* expect the value to have been
+   * changed further to a patch that Angular already knows about. So emitting events is
+   * redundant. More than this, it's highly likely to break things because some of the patches
+   * are in listeners for changes – meaning that if we emit events, we'll end up in an infinite
+   * loop.
+   *
    * @link https://stackoverflow.com/a/54045398/2803757
    */
   private updateAllValidities() {
     for (let formGroup of [this.amountsGroup, this.giftAidGroup, this.paymentGroup]) {
       // Get each field in each group and update its validity.
       for (const control in formGroup.controls) {
-        formGroup.get(control)!.updateValueAndValidity();
+        formGroup.get(control)!.updateValueAndValidity({ emitEvent: false }); // See fn doc re events.
       }
     }
 
@@ -2312,6 +2322,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.prepareDonationCredits(person);
       this.prefillRarelyChangingFormValuesFromPerson(person);
       this.loadFirstSavedStripeCardIfAny(id, jwt);
+      // This is helpful when somebody logged in while on the page, to get the latest validation state
+      // for them. For example, if they previously had many errors on the payment group but we patched
+      // in their name etc., they may now have fewer.
       this.setConditionalValidators();
     }
   }
