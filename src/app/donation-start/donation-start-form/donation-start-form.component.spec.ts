@@ -1,7 +1,7 @@
 import {DatePipe} from '@angular/common';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
@@ -15,7 +15,7 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {RecaptchaModule} from 'ng-recaptcha';
-import {MatomoTracker as MatomoClientTracker, NgxMatomoModule} from 'ngx-matomo-client';
+import {MatomoTracker as MatomoClientTracker, MatomoModule} from 'ngx-matomo-client';
 import {InMemoryStorageService} from 'ngx-webstorage-service';
 import {of} from 'rxjs';
 
@@ -47,7 +47,7 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     undefined as unknown as MatDialog,
     donationService,
     undefined as unknown as ElementRef<any>,
-    undefined as unknown as FormBuilder,
+    new FormBuilder(),
     mockIdentityService,
     {
       trackEvent: () => {
@@ -69,35 +69,6 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     } as unknown as MatSnackBar,
   );
 
-  let stubControls: {[name: string]: {setValidators: () => void, updateValueAndValidity: () => void}} = {};
-  for (let formGroup of [
-    donationStartFormComponent.amountsGroup,
-    donationStartFormComponent.giftAidGroup,
-    donationStartFormComponent.paymentGroup
-  ]) {
-    // Get each field in each group and update its validity.
-    if (formGroup.controls) {
-      for (const control in formGroup.controls) {
-        stubControls[control] = {
-          setValidators: () => {},
-          updateValueAndValidity: () => {},
-        };
-      }
-    }
-  }
-
-  let stubGroup = {
-    get: () => {},
-    patchValue: () => {},
-    controls: stubControls,
-  } as unknown as FormGroup<any>;
-
-  donationStartFormComponent.amountsGroup = stubGroup;
-
-  donationStartFormComponent.giftAidGroup = stubGroup;
-
-  donationStartFormComponent.paymentGroup = stubGroup;
-
   donationStartFormComponent.campaign = {currencyCode: 'GBP'} as Campaign;
 
   donationStartFormComponent.donation = {} as Donation;
@@ -105,23 +76,6 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
 }
 
 describe('DonationStartForm', () => {
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        NgxMatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
-        }),
-      ],
-      providers: [
-        TimeLeftPipe,
-        DatePipe,
-        MatSnackBar
-      ],
-    })
-      .compileComponents();
-  }));
-
   let component: DonationStartFormComponent;
   let fixture: ComponentFixture<DonationStartFormComponent>;
 
@@ -204,12 +158,17 @@ describe('DonationStartForm', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
+        FormsModule,
         HttpClientTestingModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatCheckboxModule,
         MatDialogModule,
         MatIconModule,
         MatInputModule,
+        MatomoModule.forRoot({
+          siteId: '',
+          trackerUrl: '',
+        }),
         MatRadioModule,
         MatProgressSpinnerModule,
         MatSelectModule,
@@ -234,6 +193,7 @@ describe('DonationStartForm', () => {
             },
           },
         },
+        DatePipe,
         InMemoryStorageService,
         { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
@@ -480,7 +440,11 @@ describe('DonationStartForm', () => {
 
     const sut = makeDonationStartFormComponent(fakeDonationService);
 
-    sut.loadPerson({cash_balance: {gbp: 0}}, 'personID', 'jwt');
+    // Ensure form groups are ready, otherwise we get lots of errors from validation updates
+    // etc. on undefined elements.
+    await waitForAsync(() => {
+      sut.loadPerson({cash_balance: {gbp: 0}}, 'personID', 'jwt');
+    });
 
     await sut.payWithStripe();
 
