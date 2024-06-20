@@ -145,7 +145,6 @@ export class DonationService {
    */
   cancel(donation: Donation): Observable<Donation> {
     donation.status = 'Cancelled';
-
     return this.update(donation);
   }
 

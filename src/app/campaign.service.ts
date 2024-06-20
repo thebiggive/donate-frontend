@@ -156,7 +156,7 @@ export class CampaignService {
       params = params.append('fundSlug', searchQuery.fundSlug);
     }
 
-    if (searchQuery.onlyMatching) {
+    if (searchQuery.onlyMatching !== false) {
       params = params.append('onlyMatching', 'true');
     }
 

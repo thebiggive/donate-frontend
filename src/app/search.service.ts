@@ -41,7 +41,7 @@ export class SearchService {
       beneficiary: '',
       category: '',
       country: '',
-      onlyMatching: false,
+      onlyMatching: true,
       sortField: defaultSort,
       term: '',
     };
@@ -139,6 +139,7 @@ export class SearchService {
       delete queryParams.sortField;
     }
 
+
     return queryParams;
   }
 
@@ -152,7 +153,7 @@ export class SearchService {
       for (const key of Object.keys(queryParams)) {
         if (key === 'onlyMatching') {
           // convert URL query param string to boolean
-          this.selected[key] = (queryParams[key] === 'true');
+          this.selected[key] = (queryParams[key] !== 'false');
         } else {
           this.selected[key] = queryParams[key];
         }
