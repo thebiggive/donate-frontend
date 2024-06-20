@@ -1366,8 +1366,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.paymentReadinessTracker.donationFundsPrepared(this.creditPenceToUse);
       this.setConditionalValidators();
 
-      if (this.donation) {
-        this.donation.pspMethodType = this.getPaymentMethodType();
+      if (this.donation && this.donation.pspMethodType !== "customer_balance") {
+        // We can't convert card donation to a customer balance donation, and the donor should choose the amount
+        // bearing in mind what they have in the balance, so:
+        this.donationService.cancel(this.donation);
+        delete this.donation;
+        this.stepper.reset();
       }
     }
   }

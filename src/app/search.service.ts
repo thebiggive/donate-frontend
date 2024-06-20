@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import {Params} from "@angular/router";
 
 export type SelectedType = {
   beneficiary?: string,
@@ -133,7 +134,7 @@ export class SearchService {
         queryParams[key] = String(this.selected[key]);
       }
     }
-    
+
     if (this.selected.sortField === 'relevance' && this.selected.term?.length === 0) {
       delete queryParams.sortField;
     }
@@ -143,10 +144,8 @@ export class SearchService {
 
   /**
    * Apply search state from a route.
-   *
-   * @param routeParams object
    */
-  loadQueryParams(queryParams: any, defaultSort: string) {
+  loadQueryParams(queryParams: Params, defaultSort: string) {
     this.reset(defaultSort, true);
 
     if (Object.keys(queryParams).length > 0) {
