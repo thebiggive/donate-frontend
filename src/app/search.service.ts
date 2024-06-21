@@ -5,7 +5,6 @@ export type SelectedType = {
   beneficiary?: string,
   category?: string,
   country?: string,
-  onlyMatching?: boolean,
   sortField?: string,
   term?: string,
 };
@@ -41,7 +40,6 @@ export class SearchService {
       beneficiary: '',
       category: '',
       country: '',
-      onlyMatching: false,
       sortField: defaultSort,
       term: '',
     };
@@ -59,7 +57,6 @@ export class SearchService {
     this.selected.beneficiary = customSearchEvent.filterBeneficiary ? customSearchEvent.filterBeneficiary : '';
     this.selected.category = customSearchEvent.filterCategory ? customSearchEvent.filterCategory : '';
     this.selected.country = customSearchEvent.filterLocation ? customSearchEvent.filterLocation : '';
-    this.selected.onlyMatching = (customSearchEvent.filterFunding === 'Match Funded');
 
     const blankSearchText = (
       !customSearchEvent.searchText || customSearchEvent.searchText.trim() === ''
@@ -150,12 +147,7 @@ export class SearchService {
 
     if (Object.keys(queryParams).length > 0) {
       for (const key of Object.keys(queryParams)) {
-        if (key === 'onlyMatching') {
-          // convert URL query param string to boolean
-          this.selected[key] = (queryParams[key] === 'true');
-        } else {
-          this.selected[key] = queryParams[key];
-        }
+        this.selected[key] = queryParams[key];
 
         if (key !== 'sortField' && this.selected[key]) {
           this.nonDefaultsActive = true;
@@ -189,7 +181,6 @@ export class SearchService {
       this.selected.beneficiary ||
       this.selected.category ||
       this.selected.country ||
-      this.selected.onlyMatching ||
       this.selected.term,
     );
   }

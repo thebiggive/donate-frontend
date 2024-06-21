@@ -83,7 +83,6 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   beneficiaryOptions: string[] = [];
   categoryOptions: string[] = [];
   locationOptions: string[] = [];
-  fundingOptions: string[] = [];
   parentIsSharedFund: boolean;
 
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
@@ -163,9 +162,6 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     this.beneficiaryOptions = CampaignGroupsService.getBeneficiaryNames();
     this.categoryOptions = CampaignGroupsService.getCategoryNames();
     this.locationOptions = CampaignGroupsService.getCountries();
-    this.fundingOptions = [
-      'Match Funded'
-    ]
     this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
   }
 
