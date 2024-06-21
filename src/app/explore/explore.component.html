@@ -70,5 +70,14 @@
         </p>
       </div>
     }
+
+    @if (campaigns.length <=6 && ! searchService.selected.term && !loading && highlightCards.length > 0) {
+      <p>Can't find any campaigns to support? Find out what's next at Big Give</p>
+        <app-highlight-cards
+          [highlightCards]="highlightCards">
+        </app-highlight-cards>
+    }
+
   </biggive-page-section>
+
 </main>

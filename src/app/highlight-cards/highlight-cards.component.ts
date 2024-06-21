@@ -9,7 +9,6 @@ import {ComponentsModule} from "@biggive/components-angular";
     ComponentsModule
   ],
   templateUrl: './highlight-cards.component.html',
-  styleUrl: './highlight-cards.component.css'
 })
 export class HighlightCardsComponent {
   @Input({ required: true }) protected highlightCards: HighlightCard[];
