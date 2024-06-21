@@ -7,7 +7,7 @@ import { CampaignStats } from './campaign-stats.model';
 import { CampaignSummary } from './campaign-summary.model';
 import { environment } from '../environments/environment';
 import { SelectedType } from './search.service';
-import {HighlightCard, SfApiHighlightCard, SFAPIHighlightCardToHighlightCard} from "./home/HighlightCard";
+import {HighlightCard, SfApiHighlightCard, SFAPIHighlightCardToHighlightCard} from "./highlight-cards/HighlightCard";
 import {map} from "rxjs/operators";
 @Injectable({
   providedIn: 'root',
