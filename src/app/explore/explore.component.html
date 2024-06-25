@@ -62,7 +62,7 @@
       <mat-spinner color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>
     }
 
-    @if (campaigns.length === 0 && !loading) {
+    @if (campaigns.length === 0 && !loading && this.searched) {
       <div>
         <p class="error" aria-live="polite">
           We can't find any campaigns matching this search but there are lots more to choose from.
@@ -71,7 +71,7 @@
       </div>
     }
 
-    @if (campaigns.length <=6 && ! searchService.selected.term && !loading && highlightCards.length > 0) {
+    @if (campaigns.length <=6 && ! this.searched && !loading && highlightCards.length > 0) {
       <p>Can't find any campaigns to support? Find out what's next at Big Give</p>
         <app-highlight-cards
           [highlightCards]="highlightCards">
