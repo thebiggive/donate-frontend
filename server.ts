@@ -63,8 +63,7 @@ export function app(): express.Express {
           'player.vimeo.com',
           'recaptcha.net',
           'www.recaptcha.net',
-        ],
-        "frame-src": [
+          'www.youtube.com',
           'www.youtube-nocookie.com',
         ],
         'img-src': [
