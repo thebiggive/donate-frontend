@@ -86,7 +86,7 @@ export function app(): express.Express {
           'js.stripe.com',
           'recaptcha.net',
           'www.gstatic.com',
-          // Both Vimeo's iframe embeds seem to need script access to not error with our current embed approach.
+          // Vimeo's iframe embed seems to need script access to not error with our current embed approach.
           'https://player.vimeo.com',
         ],
       },
