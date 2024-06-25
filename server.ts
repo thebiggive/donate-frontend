@@ -64,7 +64,7 @@ export function app(): express.Express {
           'recaptcha.net',
           'www.recaptcha.net',
           'www.youtube.com',
-          'www.youtube-nocookie.com.com',
+          'www.youtube-nocookie.com',
         ],
         'img-src': [
           `'self'`,
