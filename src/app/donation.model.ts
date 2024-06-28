@@ -28,17 +28,17 @@ export interface Donation {
      * Unique ID for a charity Account assigned by Big Give, in Salesforce
      * case-insensitive format. 18 character string.
      */
-    charityId: string;
+    readonly charityId: string;
 
     /**
      * ISO 4217 code for the currency in which all monetary values are denominated.
      */
-    currencyCode: string;
+    readonly currencyCode: string;
 
     /**
      * Counted in major units of the relevant currency. Should be whole number.
      */
-    donationAmount: number;
+    readonly donationAmount: number;
 
     /**
      * Indicates whether donation was expected to be eligible for either full or partial matching
@@ -61,7 +61,7 @@ export interface Donation {
 
     optInChampionEmail?: boolean;
 
-    pspMethodType: 'card' | 'customer_balance';
+    readonly pspMethodType: 'card' | 'customer_balance';
 
     /**
      * Unique ID for a CCampaign / project assigned by Big Give, in Salesforce

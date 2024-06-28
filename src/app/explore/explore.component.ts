@@ -9,6 +9,7 @@ import {CampaignGroupsService} from '../campaign-groups.service';
 import {CampaignSummary} from '../campaign-summary.model';
 import {PageMetaService} from '../page-meta.service';
 import {SearchService} from '../search.service';
+import {HighlightCard} from "../highlight-cards/HighlightCard";
 
 /** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
@@ -31,7 +32,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
   beneficiaryOptions: string[] = [];
   categoryOptions: string[] = [];
   locationOptions: string[] = [];
-  fundingOptions: string[] = [];
+  protected highlightCards: HighlightCard[];
 
   private queryParamsSubscription: Subscription;
 
@@ -68,11 +69,9 @@ export class ExploreComponent implements OnDestroy, OnInit {
     this.beneficiaryOptions = CampaignGroupsService.getBeneficiaryNames();
     this.categoryOptions = CampaignGroupsService.getCategoryNames();
     this.locationOptions = CampaignGroupsService.getCountries();
-    this.fundingOptions = [
-      'Match Funded'
-    ];
 
     this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
+    this.highlightCards = this.route.snapshot.data.highlights;
   }
 
   private scrollToSearchWhenParamsChange() {

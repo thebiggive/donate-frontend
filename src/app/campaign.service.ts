@@ -7,7 +7,7 @@ import { CampaignStats } from './campaign-stats.model';
 import { CampaignSummary } from './campaign-summary.model';
 import { environment } from '../environments/environment';
 import { SelectedType } from './search.service';
-import {HighlightCard, SfApiHighlightCard, SFAPIHighlightCardToHighlightCard} from "./home/HighlightCard";
+import {HighlightCard, SfApiHighlightCard, SFAPIHighlightCardToHighlightCard} from "./highlight-cards/HighlightCard";
 import {map} from "rxjs/operators";
 @Injectable({
   providedIn: 'root',
@@ -130,7 +130,11 @@ export class CampaignService {
   }
 
   search(searchQuery: SearchQuery): Observable<CampaignSummary[]> {
-    let params = new HttpParams();
+    let params = new HttpParams(
+      // To-do: DON-713 Remove onlyMatching field once SF backend has been modified to always return
+      // only matched campaigns.
+      {fromObject: {onlyMatching: 'true'}}
+    );
 
     if (searchQuery.limit) {
       params = params.append('limit', searchQuery.limit.toString());
@@ -154,10 +158,6 @@ export class CampaignService {
 
     if (searchQuery.fundSlug) {
       params = params.append('fundSlug', searchQuery.fundSlug);
-    }
-
-    if (searchQuery.onlyMatching) {
-      params = params.append('onlyMatching', 'true');
     }
 
     if (searchQuery.parentId) {
@@ -226,7 +226,6 @@ export class SearchQuery implements SearchQueryInterface {
   public fundSlug?: string;
   public limit = 6;
   public offset?: number|undefined = 0;
-  public onlyMatching?: boolean;
   public parentId?: string;
   public parentSlug?: string;
   public sortDirection?: string;
