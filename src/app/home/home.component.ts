@@ -5,7 +5,7 @@ import {RESPONSE} from '../../express.tokens';
 import { Response } from "express";
 
 import {PageMetaService} from '../page-meta.service';
-import {HighlightCard} from "../highlight-cards/HighlightCard";
+import {HighlightCard} from "./HighlightCard";
 import {environment} from "../../environments/environment";
 
 const CCCloseDate = new Date('2023-12-05T12:00:00+00:00');
@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
    */
   protected mayBeAboutToRedirect: boolean = true;
 
-  protected highlightCards: HighlightCard[];
+  private highlightCards: HighlightCard[];
 
   public constructor(
     private pageMeta: PageMetaService,
@@ -85,5 +85,26 @@ export class HomeComponent implements OnInit {
     } else {
       this.mayBeAboutToRedirect = false;
     }
+  }
+
+  get highlightCardsToShow(): readonly HighlightCard[] {
+    return this.highlightCards.filter((card: HighlightCard) => {
+      const hasAppearDate = card.appearAt !== 'asap';
+      const hasDisappearDate = card.disappearAt !== 'never';
+
+      if (hasAppearDate && hasDisappearDate && card.appearAt >= card.disappearAt) {
+        throw new Error("disappear date must be after appear date: " + card);
+      }
+
+      if (hasAppearDate && card.appearAt > this.currentTime) {
+        return false;
+      }
+
+      if (hasDisappearDate && card.disappearAt <= this.currentTime) {
+        return false;
+      }
+
+      return true;
+    });
   }
 }

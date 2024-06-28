@@ -7,7 +7,6 @@ import { allChildComponentImports } from '../../allChildComponentImports';
 import { ExploreComponent } from './explore.component';
 import {ExploreRoutingModule} from './explore-routing.module';
 import {OptimisedImagePipe} from '../optimised-image.pipe';
-import {HighlightCardsComponent} from "../highlight-cards/highlight-cards.component";
 
 @NgModule({
   imports: [
@@ -17,7 +16,6 @@ import {HighlightCardsComponent} from "../highlight-cards/highlight-cards.compon
     InfiniteScrollModule,
     MatProgressSpinnerModule,
     OptimisedImagePipe,
-    HighlightCardsComponent,
   ],
   declarations: [
     ExploreComponent,

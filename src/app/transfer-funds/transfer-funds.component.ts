@@ -308,23 +308,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     return Number((amount || '0').replace('£', '').replace('$', ''));
   }
 
-  shouldShowGiftAidStep() {
-    if (
-      this.customTip() &&
-      this.amountsGroup.value.customTipAmount &&
-      this.sanitiseCurrency(this.amountsGroup.value.customTipAmount) === 0
-    )
-    {
-      return false;
-    }
-
-    if (this.donor?.pending_tip_balance?.gbp) {
-      return false;
-    }
-
-    return true;
-  }
-
   calculatedTipAmount() : number {
     const unsanitisedCreditAmount = this.amountsGroup.value.creditAmount;
 

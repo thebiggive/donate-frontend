@@ -64,7 +64,6 @@ export function app(): express.Express {
           'recaptcha.net',
           'www.recaptcha.net',
           'www.youtube.com',
-          'www.youtube-nocookie.com',
         ],
         'img-src': [
           `'self'`,
@@ -86,8 +85,9 @@ export function app(): express.Express {
           'js.stripe.com',
           'recaptcha.net',
           'www.gstatic.com',
-          // Vimeo's iframe embed seems to need script access to not error with our current embed approach.
+          // Both video services' iframe embeds seem to need script access to not error with our current embed approach.
           'https://player.vimeo.com',
+          'https://www.youtube.com/',
         ],
       },
     },
