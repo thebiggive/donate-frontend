@@ -43,9 +43,6 @@ describe('ExploreComponent', () => {
       ],
       providers: [
         { provide: ActivatedRoute, useValue: {
-          snapshot: {
-            data: {}
-          },
           queryParams: of({}), // Let `loadQueryParamsAndRun()` subscribe without crashing.
         } },
       ],

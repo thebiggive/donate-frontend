@@ -98,7 +98,7 @@
               <button mat-button matStepperNext>Next</button>
             </div>
           </mat-step>
-          @if (shouldShowGiftAidStep()) {
+          @if (!donor.pending_tip_balance?.gbp) {
             <mat-step
               formGroupName="giftAid"
               [stepControl]="giftAidGroup"
