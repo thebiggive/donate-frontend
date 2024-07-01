@@ -1,4 +1,4 @@
-import {HighlightCard} from "./home/HighlightCard";
+import {HighlightCard} from "./highlight-cards/HighlightCard";
 import {ResolveFn} from '@angular/router';
 import {inject} from "@angular/core";
 import {CampaignService} from "./campaign.service";

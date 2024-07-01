@@ -395,13 +395,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.maximumDonationAmount = maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse);
 
+    this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup)
+
     if (isPlatformBrowser(this.platformId)) {
       this.handleCampaignViewUpdates();
     }
-
-    this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup)
   }
-
 
   public setSelectedCountry = ((countryCode: string) => {
     this.selectedCountryCode = countryCode;
@@ -537,7 +536,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.donor = undefined;
     this.creditPenceToUse = 0;
     this.stripePaymentMethodReady = false;
-    this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup,);
+    this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup);
     this.donationForm.reset();
     this.identityService.clearJWT();
     this.destroyStripeElements();
@@ -1367,8 +1366,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.paymentReadinessTracker.donationFundsPrepared(this.creditPenceToUse);
       this.setConditionalValidators();
 
-      if (this.donation) {
-        this.donation.pspMethodType = this.getPaymentMethodType();
+      if (this.donation && this.donation.pspMethodType !== "customer_balance") {
+        // We can't convert card donation to a customer balance donation, and the donor should choose the amount
+        // bearing in mind what they have in the balance, so:
+        this.donationService.cancel(this.donation);
+        delete this.donation;
+        this.stepper.reset();
       }
     }
   }
@@ -2008,11 +2011,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.amountsGroup.get('tipPercentage')?.valueChanges.subscribe(this.updateTipAmountFromSelectedPercentage);
     }
 
+    // Initial and post-auth validation of Gift Aid should depend upon the previous value
+    // of the opt-in and 'outside UK' checkboxes. If there's no value yet, initial validators
+    // should use `false`.
+    this.setGiftAidValidatorsForChoice(this.giftAidGroup.value?.giftAid ?? false);
+
     this.giftAidGroup.get('homeOutsideUK')?.valueChanges.subscribe(homeOutsideUK => {
-      this.giftAidGroup.controls.homePostcode!.setValidators(
-        this.getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK),
-      );
-      this.giftAidGroup.controls.homePostcode!.updateValueAndValidity();
+      this.setGiftAidValidatorsForChoice(this.giftAidGroup.value.giftAid, homeOutsideUK);
+      this.updateAllValidities();
     });
 
     this.giftAidGroup.get('homePostcode')?.valueChanges.subscribe(homePostcode => {
@@ -2040,27 +2046,70 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
     this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
-      if (giftAidChecked) {
-        this.giftAidGroup.controls.homePostcode!.setValidators(
-          this.getHomePostcodeValidatorsWhenClaimingGiftAid(this.giftAidGroup.value.homeOutsideUK),
-        );
-        this.giftAidGroup.controls.homeAddress!.setValidators([
-          requiredNotBlankValidator,
-          Validators.maxLength(255),
-        ]);
-      } else {
-        this.giftAidGroup.controls.homePostcode!.setValidators([]);
-        this.giftAidGroup.controls.homeAddress!.setValidators([]);
-      }
-
-      this.giftAidGroup.controls.homePostcode!.updateValueAndValidity();
-      this.giftAidGroup.controls.homeAddress!.updateValueAndValidity();
+      this.setGiftAidValidatorsForChoice(giftAidChecked);
+      this.updateAllValidities();
     });
 
     if (this.creditPenceToUse > 0) {
       this.removeStripeCardBillingValidators();
     } else {
       this.addStripeCardBillingValidators();
+    }
+
+    this.updateAllValidities();
+  }
+
+  /**
+   * There are many reasons that data is patched or validation rules dynamically changed,
+   * and calling `updateValueAndValidity` "doesn't go *down* the tree, only up." So it
+   * is safest to iterate over all individual fields calling this whenever the rules change.
+   * This should mean that groups' and the whole form's validity statuses are also updated.
+   *
+   * Typically, we want to nudge validity changes but *don't* expect the value to have been
+   * changed further to a patch that Angular already knows about. So emitting events is
+   * redundant. More than this, it's highly likely to break things because some of the patches
+   * are in listeners for changes – meaning that if we emit events, we'll end up in an infinite
+   * loop.
+   *
+   * @link https://stackoverflow.com/a/54045398/2803757
+   */
+  private updateAllValidities() {
+    for (let formGroup of [this.amountsGroup, this.giftAidGroup, this.paymentGroup]) {
+      // Get each field in each group and update its validity.
+      for (const control in formGroup.controls) {
+        formGroup.get(control)!.updateValueAndValidity({ emitEvent: false }); // See fn doc re events.
+      }
+    }
+
+    // Any time there were previous errors, we want to update them (including clearing them
+    // if appropriate). This might happen e.g. if a donor started the form, then logged in.
+    // We don't want any of this the first time the section is encountered as it's distracting
+    // to see messages about missing fields before you first had a chance to fill them in.
+    if (this.paymentStepErrors !== '') {
+      if (this.readyToProgressFromPaymentStep) {
+        this.paymentStepErrors = '';
+      } else {
+        this.paymentStepErrors = this.paymentReadinessTracker.getErrorsBlockingProgress().join(' ');
+      }
+    }
+  }
+
+  /**
+   * @param giftAidChecked
+   * @param homeOutsideUK Set if *just* changed, otherwise we'll use the last persisted value.
+   */
+  private setGiftAidValidatorsForChoice(giftAidChecked: boolean, homeOutsideUK?: boolean) {
+    if (giftAidChecked) {
+      this.giftAidGroup.controls.homePostcode!.setValidators(
+        this.getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK ?? this.giftAidGroup.value.homeOutsideUK),
+      );
+      this.giftAidGroup.controls.homeAddress!.setValidators([
+        requiredNotBlankValidator,
+        Validators.maxLength(255),
+      ]);
+    } else {
+      this.giftAidGroup.controls.homePostcode!.setValidators([]);
+      this.giftAidGroup.controls.homeAddress!.setValidators([]);
     }
   }
 
@@ -2078,8 +2127,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private removeStripeCardBillingValidators() {
     this.paymentGroup.controls.billingCountry!.setValidators([]);
     this.paymentGroup.controls.billingPostcode!.setValidators([]);
-    this.paymentGroup.controls.billingCountry!.updateValueAndValidity();
-    this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
   }
 
   private addStripeCardBillingValidators() {
@@ -2090,8 +2137,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       requiredNotBlankValidator,
       Validators.pattern(this.billingPostcodeRegExp),
     ]);
-    this.paymentGroup.controls.billingCountry!.updateValueAndValidity();
-    this.paymentGroup.controls.billingPostcode!.updateValueAndValidity();
   }
 
   /**
@@ -2281,6 +2326,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.prepareDonationCredits(person);
       this.prefillRarelyChangingFormValuesFromPerson(person);
       this.loadFirstSavedStripeCardIfAny(id, jwt);
+      // This is helpful when somebody logged in while on the page, to get the latest validation state
+      // for them. For example, if they previously had many errors on the payment group but we patched
+      // in their name etc., they may now have fewer.
+      this.setConditionalValidators();
     }
   }
 
