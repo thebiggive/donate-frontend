@@ -157,6 +157,7 @@ const routes: Routes = [
     pathMatch: 'full',
     resolve: {
       campaigns: CampaignListResolver,
+      highlights: highlightCardsResolver
     },
     loadChildren: () => import('./explore/explore.module')
       .then(c => c.ExploreModule),
