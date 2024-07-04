@@ -276,6 +276,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     this.destroyStripeElements();
+
+    clearTimeout(this.donationRetryTimeout);
   }
 
   ngOnInit() {
