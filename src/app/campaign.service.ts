@@ -130,11 +130,7 @@ export class CampaignService {
   }
 
   search(searchQuery: SearchQuery): Observable<CampaignSummary[]> {
-    let params = new HttpParams(
-      // To-do: DON-713 Remove onlyMatching field once SF backend has been modified to always return
-      // only matched campaigns.
-      {fromObject: {onlyMatching: 'true'}}
-    );
+    let params = new HttpParams();
 
     if (searchQuery.limit) {
       params = params.append('limit', searchQuery.limit.toString());
