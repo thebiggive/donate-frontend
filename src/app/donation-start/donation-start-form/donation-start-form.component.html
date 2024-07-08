@@ -45,27 +45,22 @@
             </div>
           </div>
           <div class="donation-input donation-input-main">
+
             <biggive-text-input currency="{{campaign.currencyCode}}">
-              <!-- If a charity name is more than about 20 chars it may not fit in the label space and would
-              make the input unusable
-              -->
-              @if (campaign.charity.name.length < 20) {
-                <label
-                  class="label-with-limited-space"
-                  slot="label"
-                  for="donationAmount"
-                  >
-                  Donation to {{campaign.charity.name}}
-                </label>
-              } @else {
-                <label slot="label" for="donationAmount">Donation to {{campaign.charity.name.slice(0, 17)}}…</label>
-              }
+              <label
+                class="label-with-limited-space"
+                slot="label"
+                for="donationAmount"
+              >
+                Donation to {{campaign.charity.name}}
+              </label>
               <input
                 maxlength="10"
                 formControlName="donationAmount" id="donationAmount" matInput
                 slot="input"
-                />
+              />
             </biggive-text-input>
+
           </div>
           @if (donationAmountField?.invalid && donationAmountField?.errors && (donationAmountField?.dirty || donationAmountField?.touched)) {
             <div
