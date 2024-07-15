@@ -38,11 +38,7 @@ input {
 }
 
 .label-with-limited-space {
-  overflow: hidden;
   display: inline-block;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-
   max-width: 150px;
   @media #{$breakpoint-smallish} {
     max-width: 100%;

@@ -238,6 +238,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private selectedPaymentMethodType: string | undefined;
   private paymentReadinessTracker: PaymentReadinessTracker;
   public paymentStepErrors: string = "";
+  private donationRetryTimeout: number|undefined = undefined;
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -275,6 +276,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     this.destroyStripeElements();
+
+    clearTimeout(this.donationRetryTimeout);
   }
 
   ngOnInit() {
@@ -1561,6 +1564,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   private createDonationAndMaybePerson(): void {
+    clearTimeout(this.donationRetryTimeout);
     if (this.creatingDonation) { // Ensure only 1 trigger is doing this at a time.
       return;
     }
@@ -1675,7 +1679,19 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     });
   }
 
-  private newDonationError(response: any) {
+  private newDonationError(response: HttpErrorResponse) {
+    const retry_in_seconds = response.error.retry_in;
+
+    if (retry_in_seconds && retry_in_seconds <= 35 && ! this.donationRetryTimeout) {
+      // this means we were prevented from creating a donation by a rate limit. Its short enough that we can usefully
+      // retry. If the retry fails we show the user an error.
+      this.creatingDonation = false;
+      this.donation = undefined;
+
+      this.donationRetryTimeout = window.setTimeout(() => this.createDonationAndMaybePerson(), +retry_in_seconds * 1_000)
+      return;
+    }
+
     let errorMessage: string;
     if (response.message) {
       errorMessage = `Could not create new donation for campaign ${this.campaignId}: ${response.message}`;
