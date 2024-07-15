@@ -1565,7 +1565,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   private createDonationAndMaybePerson(): void {
     clearTimeout(this.donationRetryTimeout);
-    console.error("In createDonationAndMaybePerson - timeout cleared");
     if (this.creatingDonation) { // Ensure only 1 trigger is doing this at a time.
       return;
     }
