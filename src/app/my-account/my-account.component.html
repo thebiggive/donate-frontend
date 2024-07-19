@@ -10,59 +10,11 @@
           html-element="h1"
           size="1"
           align="center"
-          text="Your Account"
+          text="Your Donations"
         ></biggive-heading>
       </div>
-      <h2>Your Details</h2>
-      @if (person) {
-        <table id="personal-details">
-          <tr>
-            <td>Name</td>
-            <td>{{person.first_name}} {{person.last_name}}</td>
-          </tr>
-          <tr>
-            <td>Email</td>
-            <td>{{person.email_address}}</td>
-          </tr>
-          @if (person.home_address_line_1) {
-            <tr>
-              <td>Address</td>
-              <td>{{person.home_address_line_1}}
-                <br/>
-                {{person.home_postcode}}
-              </td>
-            </tr>
-          }
-        </table>
-      }
-    </biggive-page-section>
 
-    <biggive-page-section>
-
-      <div class="account-actions">
-        <biggive-button
-          space-above="5"
-          colour-scheme="white"
-          label="Explore Campaigns"
-          full-width="true"
-          size="medium"
-          url="/explore"
-          />
-
-        <biggive-button
-          space-above="5"
-          colour-scheme="white"
-          label="Transfer Donation Funds"
-          full-width="true"
-          size="medium"
-          url="/transfer-funds"
-          />
-      </div>
-    </biggive-page-section>
-
-    @if (person) {
       <biggive-page-section>
-        <h2>Your Payment Methods</h2>
         @if (hasDonationFunds) {
           <h3>Donation Funds</h3>
         }
@@ -87,67 +39,43 @@
             <mat-spinner color="accent" [diameter]="40" aria-label="Loading payment methods"></mat-spinner>
           </div>
         }
-        <h3>
-          Saved Cards
-        </h3>
         @if (hasSavedPaymentMethods) {
           <table id="paymentMethods">
-            @for (method of paymentMethods; track method.id) {
-              <tr>
-                <td class="cardBrand">
-                  <div class="cardBrand">{{(method.card?.brand || method.type).toUpperCase()}}</div>
-                  @if (method.card !== undefined) {
-                    <div>
-                      Card Ending: {{method.card.last4}}
-                    </div>
-                  }
-                  @if (method.card !== undefined) {
-                    <div class="cardExpiry">
-                      Expiry Date: {{method.card.exp_month.toString().padStart(2, "0")}}/{{method.card.exp_year}}
-                    </div>
-                  }
-                </td>
-                <td class="cardExpiry">
-                  @if (method.card !== undefined) {
-                    <div>
-                      Expiry Date: {{method.card.exp_month.toString().padStart(2, "0")}}/{{method.card.exp_year}}
-                    </div>
-                  }
-                </td>
-                @if (method.card !== undefined) {
-                  <td class="cardUpdateButton"
-                    >
-                    <!--            href must be set to make link interactable with keyboard-->
-                    <a href="javascript:void(0);" (click)="updateCard(method.id, method.card, method.billing_details)">
-                      Edit
-                    </a>
-                  </td>
-                }
-                <td class="cardDeleteButton">
-                  <a href="javascript:void(0);" (click)="deleteMethod(method)">Delete</a>
-                </td>
-              </tr>
-            }
+            <tr>
+            <th scope="col">Date</th>
+              <th scope="col">Campaign</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Reference</th>
+            </tr>
+
+            <tr>
+              <td>27 March 2024</td>
+              <td><a href="#">Harchester United - Make the dream real</a></td>
+              <td>£512.00</td>
+              <td>pi_3Oyz1sKkGuKkxwBN1gQ4ioXQ</td>
+            </tr>
+
+            <tr>
+              <td>19 July 2024</td>
+              <td><a href="#">AFC Richmond - Help us do something good</a></td>
+              <td>£200,000.00</td>
+              <td>pi_46345567345356342534673Q</td>
+            </tr>
+
+            <tr>
+              <td>1 January 2020</td>
+              <td><a href="#">Åshöjdens BK - Allsvenskan or Buster</a></td>
+              <td>£2.00</td>
+              <td>pi_457456347345457343453456</td>
+            </tr>
           </table>
-        }
-        @if (paymentMethods !== undefined && paymentMethods.length === 0) {
-          <div>
-            No saved cards
-          </div>
+
+          <p>
+            For full details of donations please see emails sent from hello&commat;biggive.org. We are unable to display any
+            donations you may have made without logging in on this page.
+          </p>
         }
       </biggive-page-section>
-    }
-
-    <div class="logout-row">
-      <biggive-button
-        space-above="5"
-        colour-scheme="white"
-        label="Log out"
-        full-width="true"
-        size="medium"
-        rounded="false"
-        (click)="logout()"
-        />
-    </div>
+    </biggive-page-section>
   </div>
 </main>
