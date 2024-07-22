@@ -24,7 +24,14 @@ main > div {
   width: 100%;
 
   @media #{$breakpoint-lg} {
-    width: 80%; // this seems to be needed, not sure why the identicle rule in auth_common.scss isn't working.
+    width: 80%; // this seems to be needed, not sure why the identical rule in auth_common.scss isn't working.
   }
+
+}
+
+// code above here mostly copied from my-account.component.scss
+
+biggive-page-section > table {
+  width: 100%;
 }
 

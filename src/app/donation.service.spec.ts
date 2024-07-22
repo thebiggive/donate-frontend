@@ -9,6 +9,7 @@ import { DonationService, TBG_DONATE_STORAGE } from './donation.service';
 import { DonationStatus } from './donation-status.type';
 import { environment } from '../environments/environment';
 import {NgxMatomoModule} from "ngx-matomo-client";
+import {TBG_DONATE_ID_STORAGE} from "./identity.service";
 
 describe('DonationService', () => {
   const getDummyDonation = (status: DonationStatus = 'Pending'): Donation => {
@@ -57,6 +58,7 @@ describe('DonationService', () => {
       // both storage places, and they will interfere with each other.
       { provide: TBG_DONATE_STORAGE, useClass: InMemoryStorageService },
       { provide: SESSION_STORAGE, useClass: InMemoryStorageService },
+      { provide: TBG_DONATE_ID_STORAGE, useClass: InMemoryStorageService},
       DonationService,
       InMemoryStorageService,
     ],

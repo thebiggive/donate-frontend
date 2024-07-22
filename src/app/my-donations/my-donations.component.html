@@ -4,10 +4,7 @@
     <biggive-page-section>
       <div class="heading-wrapper">
         <biggive-heading
-          space-above=0
-          space-below=1
           colour="tertiary"
-          html-element="h1"
           size="1"
           align="center"
           text="Your Donations"
@@ -16,37 +13,37 @@
     </biggive-page-section>
     <biggive-page-section>
 
-      <table>
-        <!-- Table contents only dummy data now. Todo replace with real donations fetch from matchbot API -->
-        <tr>
-          <th scope="col">Date</th>
-          <th scope="col">Campaign</th>
-          <th scope="col">Amount</th>
-          <th scope="col">Reference</th>
-        </tr>
+      @if (donations$ | async; as donations) {
+        @if (donations.length > 0) {
+          <table>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Charity</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Reference</th>
+            </tr>
 
-        <tr>
-          <td>27 March 2024</td>
-          <td><a href="#">Harchester United - Make the dream real</a></td>
-          <td>£512.00</td>
-          <td>pi_3Oyz1sKkGuKkxwBN1gQ4ioXQ</td>
-        </tr>
-
-        <tr>
-          <td>19 July 2024</td>
-          <td><a href="#">AFC Richmond - Help us do something good</a></td>
-          <td>£200,000.00</td>
-          <td>pi_46345567345356342534673Q</td>
-        </tr>
-
-        <tr>
-          <td>1 January 2020</td>
-          <td><a href="#">Åshöjdens BK - Allsvenskan or Buster</a></td>
-          <td>£2.00</td>
-          <td>pi_457456347345457343453456</td>
-        </tr>
-      </table>
-
+            @for (donation of donations; track donation.transactionId) {
+              <tr>
+                <td>{{ donation.createdTime | date: 'mediumDate' }}</td>
+                <td><a href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a></td>
+                <td>{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</td>
+                <td>{{ donation.transactionId }}</td>
+              </tr>
+            }
+          </table>
+        } @else {
+          <p>
+            No donations found for this account
+          </p>
+        }
+      } @else {
+        <div>
+          <mat-spinner color="accent" [diameter]="40" aria-label="Loading donations"></mat-spinner>
+        </div>
+      }
+    </biggive-page-section>
+    <biggive-page-section>
       <p>
         For full details of donations please see emails sent from hello&commat;biggive.org. We are unable to display any
         donations you may have made without logging in.
