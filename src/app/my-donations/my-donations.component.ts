@@ -49,4 +49,11 @@ export class MyDonationsComponent implements OnInit{
       }
     });
   }
+
+  displayMethodType(donation: Donation) {
+    switch (donation.pspMethodType) {
+      case "card": return "Card";
+      case "customer_balance": return "Donation Funds"
+    }
+  }
 }

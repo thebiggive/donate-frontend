@@ -20,6 +20,7 @@
               <th scope="col">Date</th>
               <th scope="col">Charity</th>
               <th scope="col">Amount</th>
+              <th scope="col">Method</th>
               <th scope="col">Reference</th>
             </tr>
 
@@ -28,6 +29,7 @@
                 <td>{{ donation.createdTime | date: 'mediumDate' }}</td>
                 <td><a href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a></td>
                 <td>{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</td>
+                <td>{{this.displayMethodType(donation)}}</td>
                 <td>{{ donation.transactionId }}</td>
               </tr>
             }
