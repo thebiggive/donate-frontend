@@ -1,0 +1,30 @@
+@import '../../abstract';
+@import "../../assets/scss/auth-common";
+
+#banner {
+  background-image: url(../../assets/images/banner-my-account.jpg);
+}
+
+.heading-wrapper {
+  margin: auto;
+  width: fit-content;
+}
+
+h1 {
+  color: $colour-secondary;
+}
+
+a:link, a:visited, a:hover {
+  color: white;
+}
+
+main > div {
+  color: white;
+  background-color: $colour-primary;
+  width: 100%;
+
+  @media #{$breakpoint-lg} {
+    width: 80%; // this seems to be needed, not sure why the identicle rule in auth_common.scss isn't working.
+  }
+}
+
