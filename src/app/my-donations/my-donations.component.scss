@@ -1,23 +1,8 @@
-@import '../../abstract';
 @import "../../assets/scss/auth-common";
 
 #banner {
   background-image: url(../../assets/images/banner-my-account.jpg);
 }
-
-.heading-wrapper {
-  margin: auto;
-  width: fit-content;
-}
-
-h1 {
-  color: $colour-secondary;
-}
-
-a:link, a:visited, a:hover {
-  color: white;
-}
-
 main > div {
   color: white;
   background-color: $colour-primary;
@@ -27,9 +12,10 @@ main > div {
     width: 80%; // this seems to be needed, not sure why the identical rule in auth_common.scss isn't working.
   }
 
+  a:link, a:visited, a:hover {
+    color: white;
+  }
 }
-
-// code above here mostly copied from my-account.component.scss
 
 biggive-page-section > table {
   width: 100%;
