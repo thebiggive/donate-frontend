@@ -1,5 +1,4 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {ComponentsModule} from "@biggive/components-angular";
 import {PageMetaService} from "../page-meta.service";
 import {IdentityService} from "../identity.service";
 import {DonationService} from "../donation.service";
