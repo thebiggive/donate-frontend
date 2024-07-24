@@ -1,23 +1,23 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {HttpErrorResponse} from '@angular/common/http';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
-import { MatDialog } from '@angular/material/dialog';
-import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import { MatomoTracker } from 'ngx-matomo-client';
-import { RecaptchaComponent } from 'ng-recaptcha';
+import {MatDialog} from '@angular/material/dialog';
+import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
+import {MatomoTracker} from 'ngx-matomo-client';
+import {RecaptchaComponent} from 'ng-recaptcha';
 
-import { Campaign } from '../campaign.model';
-import { CampaignService } from '../campaign.service';
-import { Credentials } from '../credentials.model';
-import { Donation } from '../donation.model';
-import { DonationThanksSetPasswordDialogComponent } from './donation-thanks-set-password-dialog.component';
-import { DonationService } from '../donation.service';
-import { environment } from '../../environments/environment';
-import { minPasswordLength } from '../../environments/common';
-import { IdentityService } from '../identity.service';
-import { PageMetaService } from '../page-meta.service';
-import { Person } from '../person.model';
-import { myAccountPath } from '../app-routing';
+import {Campaign} from '../campaign.model';
+import {CampaignService} from '../campaign.service';
+import {Credentials} from '../credentials.model';
+import {Donation, isLargeDonation} from '../donation.model';
+import {DonationThanksSetPasswordDialogComponent} from './donation-thanks-set-password-dialog.component';
+import {DonationService} from '../donation.service';
+import {environment} from '../../environments/environment';
+import {minPasswordLength} from '../../environments/common';
+import {IdentityService} from '../identity.service';
+import {PageMetaService} from '../page-meta.service';
+import {Person} from '../person.model';
+import {myAccountPath} from '../app-routing';
 
 @Component({
   selector: 'app-donation-thanks',
@@ -284,7 +284,7 @@ export class DonationThanksComponent implements OnInit {
       this.cardChargedAmount = donation.donationAmount + donation.feeCoverAmount + donation.tipAmount;
       this.giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;
       this.totalValue = donation.donationAmount + this.giftAidAmount + donation.matchedAmount;
-      this.donationIsLarge = donation.currencyCode === 'GBP' && donation.donationAmount >= 5_000;
+      this.donationIsLarge = isLargeDonation(donation);
       this.complete = true;
 
       // Re-save the donation with its new status so we don't offer to resume it if the donor

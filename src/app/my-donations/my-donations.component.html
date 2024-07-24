@@ -7,13 +7,13 @@
           colour="tertiary"
           size="1"
           align="center"
-          text="Your Donations"
+          text="Your Donation History"
         ></biggive-heading>
       </div>
     </biggive-page-section>
-    <biggive-page-section>
 
       @if (donations$ | async; as donations) {
+        <biggive-page-section>
         @if (donations.length > 0) {
           <table>
             <tr>
@@ -34,22 +34,45 @@
               </tr>
             }
           </table>
+
+          @if (atLeastOneDonationWasLarge | async) {
+            <p>
+              Thank you for your generous support. Every donation you have made has helped to make an extraordinary
+              difference. As a valued supporter, we would like to share an exclusive opportunity with you – the chance to
+              become one of our match funding Champions. By leveraging your support as match funding, you could continue
+              helping charities to double the impact of their donations.
+            </p>
+            <p>
+              <a href="https://biggive.org/funders/">Learn more about joining our Champion community</a> and
+              <a href="https://mailchi.mp/biggive/news">join our mailing list</a> to stay up to date on upcoming
+              campaigns.
+            </p>
+          } @else {
+            Thank you for your generous support. Every donation you have made has helped to make an extraordinary
+              difference. <a href="https://mailchi.mp/biggive/news">Join our mailing list</a> to stay up to date on
+              upcoming campaigns.
+          }
+
+          <p>
+            For detailed donation receipts, please check the emails sent from hello&#64;biggive.org. We are unable to
+            display any donations you may have made without logging in.
+          </p>
         } @else {
           <p>
-            No donations found for this account
+            No donations found for this account. <a href="/explore">Make your first donation</a> to see it here.
           </p>
+
+          <p><em>If you can’t find your previous donations, please get in touch with hello&#64;biggive.org and our team
+            is on hand to help. We are unable to display any donations you may have made without logging in.</em></p>
+
+            <p>You can also <a href="https://mailchi.mp/biggive/news">join our mailing list</a> to stay up to date on
+              upcoming campaigns.</p>
         }
+          </biggive-page-section>
       } @else {
         <div>
           <mat-spinner color="accent" [diameter]="40" aria-label="Loading donations"></mat-spinner>
         </div>
       }
-    </biggive-page-section>
-    <biggive-page-section>
-      <p>
-        For full details of donations please see emails sent from hello&#64;biggive.org. We are unable to display any
-        donations you may have made without logging in.
-      </p>
-    </biggive-page-section>
   </div>
 </main>
