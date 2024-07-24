@@ -10,12 +10,13 @@ import {Donation} from "../donation.model";
 import {AsyncPipe, DatePipe} from "@angular/common";
 import {ExactCurrencyPipe} from "../exact-currency.pipe";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {allChildComponentImports} from "../../allChildComponentImports";
 
 @Component({
   selector: 'app-my-donations',
   standalone: true,
   imports: [
-    ComponentsModule,
+    ...allChildComponentImports,
     AsyncPipe,
     ExactCurrencyPipe,
     DatePipe,
