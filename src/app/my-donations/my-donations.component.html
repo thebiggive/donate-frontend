@@ -1,0 +1,55 @@
+<div id="banner"></div>
+<main>
+  <div>
+    <biggive-page-section>
+      <div class="heading-wrapper">
+        <biggive-heading
+          colour="tertiary"
+          size="1"
+          align="center"
+          text="Your Donations"
+        ></biggive-heading>
+      </div>
+    </biggive-page-section>
+    <biggive-page-section>
+
+      @if (donations$ | async; as donations) {
+        @if (donations.length > 0) {
+          <table>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Charity</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Method</th>
+              <th scope="col">Reference</th>
+            </tr>
+
+            @for (donation of donations; track donation.transactionId) {
+              <tr>
+                <td>{{ donation.createdTime | date: 'mediumDate' }}</td>
+                <td><a href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a></td>
+                <td>{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</td>
+                <td>{{this.displayMethodType(donation)}}</td>
+                <td>{{ donation.transactionId }}</td>
+              </tr>
+            }
+          </table>
+        } @else {
+          <p>
+            No donations found for this account
+          </p>
+        }
+      } @else {
+        <div>
+          <mat-spinner color="accent" [diameter]="40" aria-label="Loading donations"></mat-spinner>
+        </div>
+      }
+    </biggive-page-section>
+    <biggive-page-section>
+      <p>
+        For full details of donations please see emails sent from hello&#64;biggive.org. We are unable to display any
+        donations you may have made without logging in.
+      </p>
+    </biggive-page-section>
+  </div>
+</main>

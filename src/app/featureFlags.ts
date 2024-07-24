@@ -1,8 +1,9 @@
 import {environment} from "../environments/environment";
 import {EnvironmentID} from "../environments/environment.interface";
 
-const flagsForEnvironment = (_environmentId: EnvironmentID) => {
+const flagsForEnvironment = (environmentId: EnvironmentID) => {
   return {
+    myDonationsEnabled: environmentId !== 'production',
   } as const;
 }
 
