@@ -5,12 +5,11 @@ import {DonationService} from "../donation.service";
 import {Person} from "../person.model";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs";
-import {Donation, isLargeDonation} from "../donation.model";
+import {Donation} from "../donation.model";
 import {AsyncPipe, DatePipe} from "@angular/common";
 import {ExactCurrencyPipe} from "../exact-currency.pipe";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {allChildComponentImports} from "../../allChildComponentImports";
-import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-my-donations',
@@ -28,7 +27,6 @@ import {map} from "rxjs/operators";
 export class MyDonationsComponent implements OnInit{
   private person: Person;
   protected donations$: Observable<Donation[]>;
-  protected atLeastOneDonationWasLarge: Observable<boolean>;
 
   constructor(
     private pageMeta: PageMetaService,
@@ -40,7 +38,7 @@ export class MyDonationsComponent implements OnInit{
 
   ngOnInit() {
     this.pageMeta.setCommon(
-      'Big Give - Your Donation History', '', null);
+      'Big Give - My donations', '', null);
 
     this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
       if (! person) {
@@ -48,7 +46,6 @@ export class MyDonationsComponent implements OnInit{
       } else {
         this.person = person;
         this.donations$ = this.donationService.getPastDonations(this.person.id);
-        this.atLeastOneDonationWasLarge = this.donations$.pipe(map((donations => donations.some(isLargeDonation))))
       }
     });
   }

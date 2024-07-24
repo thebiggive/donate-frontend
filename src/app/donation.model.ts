@@ -1,4 +1,4 @@
-import {DonationStatus} from './donation-status.type';
+import { DonationStatus } from './donation-status.type';
 
 export function maximumDonationAmount(currencyCode: string, creditPenceToUse: number): number {
   if (currencyCode !== 'GBP') {
@@ -135,8 +135,4 @@ export interface Donation {
      * ISO 8601 formatted datetime
      */
     updatedTime?: string;
-}
-
-export function isLargeDonation(donation: Donation) {
-  return donation.currencyCode === 'GBP' && donation.donationAmount >= 5_000;
 }
