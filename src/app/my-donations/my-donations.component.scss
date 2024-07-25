@@ -17,8 +17,22 @@ main > div {
   }
 }
 
-biggive-page-section > table {
-  width: 100%;
-  margin-bottom: 2em;
+div.donation-container {
+  display: flex;
+  justify-content: left;
+  column-gap: 10px;
+  flex-wrap: wrap;
 }
 
+div.donation {
+  background: white;
+  margin-bottom: 10px;
+  width: 190px;
+  color: $colour-primary;
+  padding-left: 10px;
+  overflow-wrap: break-word;
+  flex-basis: 27%;
+  a:link, a:visited, a:hover {
+    color: $colour-primary !important;
+  }
+}

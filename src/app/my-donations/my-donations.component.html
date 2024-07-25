@@ -13,25 +13,16 @@
     </biggive-page-section>
      <biggive-page-section>
         @if (donations.length > 0) {
-          <table>
-            <tr>
-              <th scope="col">Date</th>
-              <th scope="col">Charity</th>
-              <th scope="col">Amount</th>
-              <th scope="col">Method</th>
-              <th scope="col">Reference</th>
-            </tr>
 
+          <div class="donation-container">
             @for (donation of donations; track donation.transactionId) {
-              <tr>
-                <td>{{ donation.createdTime | date: 'mediumDate' }}</td>
-                <td><a href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a></td>
-                <td>{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</td>
-                <td>{{this.displayMethodType(donation)}}</td>
-                <td>{{ donation.transactionId }}</td>
-              </tr>
+                <div class="donation">
+                  <a href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a> - {{ donation.createdTime | date: 'mediumDate' }} <br/>
+                  {{ donation.donationAmount | exactCurrency:donation.currencyCode }} ({{this.displayMethodType(donation)}}) <br/>
+                  Reference: {{ donation.transactionId }}
+                </div>
             }
-          </table>
+          </div>
 
           @if (atLeastOneDonationWasLarge) {
             <p>
@@ -46,9 +37,11 @@
               campaigns.
             </p>
           } @else {
+            <p>
             Thank you for your generous support. Every donation you have made has helped to make an extraordinary
               difference. <a href="https://mailchi.mp/biggive/news">Join our mailing list</a> to stay up to date on
               upcoming campaigns.
+            </p>
           }
 
           <p>
