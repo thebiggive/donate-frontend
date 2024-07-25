@@ -1,16 +1,11 @@
-import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component,  OnInit} from '@angular/core';
 import {PageMetaService} from "../page-meta.service";
-import {IdentityService} from "../identity.service";
-import {DonationService} from "../donation.service";
-import {Person} from "../person.model";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Observable, of} from "rxjs";
+import {ActivatedRoute} from "@angular/router";
 import {Donation, isLargeDonation} from "../donation.model";
 import {AsyncPipe, DatePipe} from "@angular/common";
 import {ExactCurrencyPipe} from "../exact-currency.pipe";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {allChildComponentImports} from "../../allChildComponentImports";
-import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-my-donations',
