@@ -57,7 +57,20 @@
           size="medium"
           url="/transfer-funds"
           />
+
+        @if(flags.myDonationsEnabled) {
+          <biggive-button
+            space-above="5"
+            colour-scheme="white"
+            label="Your donations"
+            full-width="true"
+            size="medium"
+            url="/my-account/donations"
+          />
+          }
       </div>
+
+
     </biggive-page-section>
 
     @if (person) {

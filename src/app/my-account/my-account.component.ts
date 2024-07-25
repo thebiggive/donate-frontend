@@ -10,6 +10,7 @@ import {UpdateCardModalComponent} from "../update-card-modal/update-card-modal.c
 import {MatDialog} from "@angular/material/dialog";
 import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 import {HttpErrorResponse} from "@angular/common/http";
+import {flags} from "../featureFlags";
 
 @Component({
   selector: 'app-my-account',
@@ -26,6 +27,7 @@ export class MyAccountComponent implements OnDestroy, OnInit {
   protected readonly faExclamationTriangle = faExclamationTriangle;
 
   private savedCardsTimer: undefined | ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
+  protected readonly flags = flags;
 
   constructor(
     private pageMeta: PageMetaService,
