@@ -11,9 +11,7 @@
         ></biggive-heading>
       </div>
     </biggive-page-section>
-
-      @if (donations$ | async; as donations) {
-        <biggive-page-section>
+     <biggive-page-section>
         @if (donations.length > 0) {
           <table>
             <tr>
@@ -35,7 +33,7 @@
             }
           </table>
 
-          @if (atLeastOneDonationWasLarge | async) {
+          @if (atLeastOneDonationWasLarge) {
             <p>
               Thank you for your generous support. Every donation you have made has helped to make an extraordinary
               difference. As a valued supporter, we would like to share an exclusive opportunity with you – the chance to
@@ -69,10 +67,5 @@
               upcoming campaigns.</p>
         }
           </biggive-page-section>
-      } @else {
-        <div>
-          <mat-spinner color="accent" [diameter]="40" aria-label="Loading donations"></mat-spinner>
-        </div>
-      }
   </div>
 </main>
