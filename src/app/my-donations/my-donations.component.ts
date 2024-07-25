@@ -1,16 +1,11 @@
-import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component,  OnInit} from '@angular/core';
 import {PageMetaService} from "../page-meta.service";
-import {IdentityService} from "../identity.service";
-import {DonationService} from "../donation.service";
-import {Person} from "../person.model";
-import {Router} from "@angular/router";
-import {Observable} from "rxjs";
+import {ActivatedRoute} from "@angular/router";
 import {Donation, isLargeDonation} from "../donation.model";
 import {AsyncPipe, DatePipe} from "@angular/common";
 import {ExactCurrencyPipe} from "../exact-currency.pipe";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {allChildComponentImports} from "../../allChildComponentImports";
-import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-my-donations',
@@ -26,31 +21,21 @@ import {map} from "rxjs/operators";
   styleUrl: './my-donations.component.scss'
 })
 export class MyDonationsComponent implements OnInit{
-  private person: Person;
-  protected donations$: Observable<Donation[]>;
-  protected atLeastOneDonationWasLarge: Observable<boolean>;
+  protected donations: Donation[];
+  protected atLeastOneDonationWasLarge: boolean;
 
   constructor(
     private pageMeta: PageMetaService,
-    private identityService: IdentityService,
-    private donationService: DonationService,
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
     this.pageMeta.setCommon(
-      'Big Give - Your Donation History', '', null);
+      'Big Give - Your Donation History', '', null
+    );
 
-    this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
-      if (! person) {
-        this.router.navigate(['']);
-      } else {
-        this.person = person;
-        this.donations$ = this.donationService.getPastDonations(this.person.id);
-        this.atLeastOneDonationWasLarge = this.donations$.pipe(map((donations => donations.some(isLargeDonation))))
-      }
-    });
+    this.donations = this.route.snapshot.data.donations
+    this.atLeastOneDonationWasLarge = this.donations.some(isLargeDonation);
   }
 
   displayMethodType(donation: Donation) {

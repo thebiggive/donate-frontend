@@ -12,6 +12,7 @@ import {RegisterComponent} from "./register/register.component";
 import {isPlatformBrowser} from "@angular/common";
 import {flags} from "./featureFlags";
 import {MyDonationsComponent} from "./my-donations/my-donations.component";
+import {DonationService} from "./donation.service";
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -223,6 +224,9 @@ if (flags.myDonationsEnabled) {
   routes.unshift(
     {
       path: 'my-account/donations',
+      resolve: {
+        donations: () => inject(DonationService).getPastDonations(),
+      },
       pathMatch: 'full',
       component: MyDonationsComponent,
       canActivate: [
