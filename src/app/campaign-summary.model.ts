@@ -1,22 +1,18 @@
-export class CampaignSummary {
-  public percentRaised: number|string;
-
-  constructor(
-    public id: string,
-    public amountRaised: number,
-    public beneficiaries: string[],
-    public categories: string[],
-    public championName: string,
-    public charity: {id: string, name: string},
-    public currencyCode: string,
-    public defaultForCountries: string[],
-    public endDate: Date,
-    public imageUri: string,
-    public isMatched: boolean,
-    public matchFundsRemaining: number,
-    public startDate: Date,
-    public status: string,
-    public target: number,
-    public title: string,
-  ) {}
+export type CampaignSummary = {
+    percentRaised?: number|string;
+    id: string,
+    amountRaised: number,
+    beneficiaries: string[],
+    categories: string[],
+    championName: string,
+    charity: {id: string, name: string},
+    currencyCode: string,
+    endDate: Date,
+    imageUri: string,
+    isMatched: boolean,
+    matchFundsRemaining: number,
+    startDate: Date,
+    status: string,
+    target: number,
+    title: string,
 }
