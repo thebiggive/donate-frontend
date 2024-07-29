@@ -11,6 +11,8 @@ import {DonationCreatedResponse} from './donation-created-response.model';
 import {environment} from '../environments/environment';
 import {Person} from "./person.model";
 import {MatomoTracker} from 'ngx-matomo-client';
+import {map, switchMap} from "rxjs/operators";
+import {IdentityService} from "./identity.service";
 
 export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
 
@@ -26,6 +28,7 @@ export class DonationService {
   constructor(
     @Optional() @Inject(COUNTRY_CODE) private defaultCountryCode: string,
     private http: HttpClient,
+    private identityService: IdentityService,
     private matomoTracker: MatomoTracker,
     @Inject(PLATFORM_ID) private platformId: Object,
 
@@ -357,5 +360,22 @@ export class DonationService {
       },
       this.getAuthHttpOptions(donation),
     );
+  }
+
+  getPastDonations(
+  ): Observable<Donation[]> {
+    const jwt = this.identityService.getJWT();
+    const person$ = this.identityService.getLoggedInPerson();
+
+    return person$.pipe(switchMap((person) => {
+      if (! person) {
+        throw new Error("logged in person required");
+      }
+
+      return this.http.get<{ donations: Donation[] }>(
+        `${environment.donationsApiPrefix}/people/${person.id}/donations`,
+        this.getPersonAuthHttpOptions(jwt),
+      ).pipe(map((response) => response.donations));
+    }));
   }
 }

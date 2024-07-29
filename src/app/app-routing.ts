@@ -10,6 +10,9 @@ import {inject, PLATFORM_ID} from "@angular/core";
 import {IdentityService} from "./identity.service";
 import {RegisterComponent} from "./register/register.component";
 import {isPlatformBrowser} from "@angular/common";
+import {flags} from "./featureFlags";
+import {MyDonationsComponent} from "./my-donations/my-donations.component";
+import {DonationService} from "./donation.service";
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -30,7 +33,7 @@ const redirectIfAlreadyLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
   }
 };
 
-const requireLoginWhenLoginPageLaunched = (activatedRoute: ActivatedRouteSnapshot) => {
+const requireLogin = (activatedRoute: ActivatedRouteSnapshot) => {
   if (! isPlatformBrowser(inject(PLATFORM_ID))) {
     // Pages that require auth should not be server side rendered - we do not have auth creds on the server side.
     return false;
@@ -71,7 +74,7 @@ const routes: Routes = [
     path: transferFundsPath,
     pathMatch: 'full',
     canActivate: [
-      requireLoginWhenLoginPageLaunched,
+      requireLogin,
     ],
     loadChildren: () => import('./transfer-funds/transfer-funds.module')
       .then(c => c.TransferFundsModule),
@@ -166,7 +169,7 @@ const routes: Routes = [
     path: myAccountPath,
     pathMatch: 'full',
     canActivate: [
-      requireLoginWhenLoginPageLaunched,
+      requireLogin,
     ],
     loadChildren: () => import('./my-account/my-account.module')
       .then(c => c.MyAccountModule),
@@ -216,5 +219,21 @@ const routes: Routes = [
       .then(c => c.MetaCampaignModule),
   },
 ];
+
+if (flags.myDonationsEnabled) {
+  routes.unshift(
+    {
+      path: 'my-account/donations',
+      resolve: {
+        donations: () => inject(DonationService).getPastDonations(),
+      },
+      pathMatch: 'full',
+      component: MyDonationsComponent,
+      canActivate: [
+        requireLogin,
+      ],
+    },
+  );
+}
 
 export {routes};
