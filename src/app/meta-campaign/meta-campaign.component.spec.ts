@@ -16,7 +16,6 @@ import {InMemoryStorageService, StorageService} from 'ngx-webstorage-service';
 import {NEVER, of} from 'rxjs';
 
 import {Campaign} from '../campaign.model';
-import {CampaignSummary} from '../campaign-summary.model';
 import {TBG_DONATE_STORAGE} from '../donation.service';
 import {MetaCampaignComponent} from './meta-campaign.component';
 import {TimeLeftPipe} from '../time-left.pipe';
@@ -128,26 +127,28 @@ describe('MetaCampaignComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(MetaCampaignComponent);
     component = fixture.componentInstance;
-
     component.campaign = getDummyMasterCampaign();
     component.children = [
-      new CampaignSummary(
-        'testCampaignId',
-        123,
-        ['Other'],
-        ['Animals'],
-        'Test Champion',
-        { id: 'testCharityId', name: 'Test Charity' },
-        'GBP',
-        new Date(),
-        'https://example.com/image.png',
-        true,
-        400,
-        new Date(),
-        'Active',
-        1230,
-        'Test Campaign!',
-      ),
+      {
+        id: 'testCampaignId',
+        amountRaised: 123,
+        beneficiaries: ['Other'],
+        categories: ['Animals'],
+        championName: 'Test Champion',
+        charity: {
+          id: 'testCharityId',
+          name: 'Test Charity'
+        },
+        currencyCode: 'GBP',
+        endDate: new Date(),
+        imageUri: 'https://example.com/image.png',
+        isMatched: true,
+        matchFundsRemaining: 400,
+        startDate: new Date(),
+        status: 'Active',
+        target: 1230,
+        title: 'Test Campaign!',
+      }
     ];
 
     fixture.detectChanges();
