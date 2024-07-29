@@ -9,7 +9,6 @@ export class CampaignSummary {
     public championName: string,
     public charity: {id: string, name: string},
     public currencyCode: string,
-    public defaultForCountries: string[],
     public endDate: Date,
     public imageUri: string,
     public isMatched: boolean,
