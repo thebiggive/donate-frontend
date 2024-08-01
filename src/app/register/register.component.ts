@@ -115,15 +115,13 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.processing = true;
-    if (! this.friendlyCaptchaSolution) {
+    if (! this.flags.friendlyCaptchaEnabled) {
       this.captcha.reset();
       this.captcha.execute();
       return;
     }
 
     this.doRegistrationAndLogin()
-
-
   }
 
   captchaError() {
