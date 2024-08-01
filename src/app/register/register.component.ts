@@ -74,6 +74,11 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     if (! flags.friendlyCaptchaEnabled) {
       return;
     }
+
+    if (! isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     const widget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.friendlyCaptchaSolution = solution;
