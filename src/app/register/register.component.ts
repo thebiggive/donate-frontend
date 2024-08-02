@@ -29,6 +29,8 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
   @ViewChild('frccaptcha', { static: false })
   protected friendlyCaptcha: ElementRef<HTMLElement>;
+  friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
+
 
   protected processing = false;
   protected error?: string;

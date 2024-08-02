@@ -3,7 +3,7 @@ import {DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
 import {HttpErrorResponse} from '@angular/common/http';
 import {
   AfterContentChecked,
-  AfterContentInit,
+  AfterContentInit, AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -64,6 +64,8 @@ import {sanitiseCurrency} from "../sanitiseCurrency";
 import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation-tipping-slider.component";
 import {PaymentReadinessTracker} from "./PaymentReadinessTracker";
 import {requiredNotBlankValidator} from "../../validators/notBlank";
+import {flags} from "../../featureFlags";
+import {WidgetInstance} from "friendly-challenge";
 
 declare var _paq: {
   push: (args: Array<string|object>) => void,
@@ -77,7 +79,7 @@ declare var _paq: {
     TimeLeftPipe,
   ]
 })
-export class DonationStartFormComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit {
+export class DonationStartFormComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit {
   @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
@@ -105,6 +107,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   @Input() campaignOpenOnLoad = false;
 
   recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
+  friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
   creditPenceToUse = 0; // Set non-zero if logged in and Customer has a credit balance to spend. Caps donation amount too in that case.
   currencySymbol: string;
@@ -239,6 +242,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private paymentReadinessTracker: PaymentReadinessTracker;
   public paymentStepErrors: string = "";
   private donationRetryTimeout: number|undefined = undefined;
+
+  @ViewChild('frccaptcha', { static: false })
+  friendlyCaptcha: ElementRef<HTMLElement>|undefined;
+  protected shouldShowCaptcha: boolean = true;
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -403,6 +410,34 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (isPlatformBrowser(this.platformId)) {
       this.handleCampaignViewUpdates();
     }
+  }
+
+  ngAfterViewInit() {
+    if (! flags.friendlyCaptchaEnabled) {
+      return;
+    }
+
+    if (! isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    const friendlyCaptcha = this.friendlyCaptcha;
+
+    if (! friendlyCaptcha) {
+      // should always be loaded from the template, but not present in tests.
+      return;
+    }
+    const widget = new WidgetInstance(friendlyCaptcha.nativeElement, {
+      doneCallback: (solution) => {
+        this.idCaptchaCode = solution;
+        console.log('DONE: ', solution);
+      },
+      errorCallback: (b) => {
+        console.log('FAILED', b);
+      },
+    })
+
+    widget.start()
   }
 
   public setSelectedCountry = ((countryCode: string) => {
@@ -1115,6 +1150,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
+    if (!this.donation && (this.idCaptchaCode || this.donor) && this.donationAmount > 0) {
+      this.createDonationAndMaybePerson();
+    }
+
     this.next();
   }
 
@@ -1611,6 +1650,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     } else {
       const person: Person = {};
       person.captcha_code = this.idCaptchaCode;
+      person.captcha_type = flags.friendlyCaptchaEnabled ? 'friendly_captcha' : 'recaptcha';
       this.identityService.create(person).subscribe(
         (person: Person) => {
           // would like to move the line below inside `identityService.create` but that caused test errors when I tried
@@ -1646,6 +1686,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     this.markYourDonationStepIncomplete();
+
+    if (flags.friendlyCaptchaEnabled) {
+      return true;
+    }
 
     try {
       this.idCaptcha.reset();
@@ -2374,5 +2418,15 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   private getPaymentMethodType() {
     return (this.creditPenceToUse > 0) ? 'customer_balance' : 'card';
+  }
+
+  protected readonly flags = flags;
+
+  hideCaptcha() {
+    this.shouldShowCaptcha = false;
+  }
+
+  showCaptcha() {
+    this.shouldShowCaptcha = true;
   }
 }

@@ -516,3 +516,9 @@ mat-expansion-panel-header h3 {
   margin-top: 30px;
   position: absolute;
 }
+
+div.frc-captcha {
+  margin: auto;
+  background: none;
+  border: 2px solid $colour-primary;
+}

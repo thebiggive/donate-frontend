@@ -7,6 +7,7 @@
 import { Environment } from './environment.interface';
 
 export const environment: Environment = {
+  friendlyCaptchaSiteKey: "FCMIOJ2ARSHLBGAJ",
   environmentId: 'staging',
   production: false,
   productionLike: true,
