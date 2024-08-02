@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import {ComponentsModule} from "@biggive/components-angular";
 import {MatButtonModule} from "@angular/material/button";
@@ -15,6 +15,8 @@ import {Router} from "@angular/router";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {transferFundsPath} from "../app-routing";
+import {WidgetInstance} from "friendly-challenge";
+import {flags} from "../featureFlags";
 
 @Component({
   selector: 'app-register',
@@ -23,14 +25,19 @@ import {transferFundsPath} from "../app-routing";
   templateUrl: './register.component.html',
   styleUrl: 'register.component.scss'
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
+  @ViewChild('frccaptcha', { static: false })
+  protected friendlyCaptcha: ElementRef<HTMLElement>;
+
   protected processing = false;
   protected error?: string;
   registrationForm: FormGroup;
   protected recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   private readyToLogIn = false;
   protected errorHtml: SafeHtml | undefined;
+  private friendlyCaptchaSolution: string|undefined;
+  protected readonly flags = flags;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -63,6 +70,28 @@ export class RegisterComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngAfterViewInit() {
+    if (! flags.friendlyCaptchaEnabled) {
+      return;
+    }
+
+    if (! isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    const widget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
+      doneCallback: (solution) => {
+        this.friendlyCaptchaSolution = solution;
+        console.log('DONE: ', solution);
+      },
+      errorCallback: (b) => {
+        console.log('FAILED', b);
+      },
+    })
+
+    widget.start()
+  }
+
   register(): void {
     this.errorHtml = this.error = undefined;
 
@@ -91,8 +120,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
 
     this.processing = true;
-    this.captcha.reset();
-    this.captcha.execute();
+    if (! this.flags.friendlyCaptchaEnabled) {
+      this.captcha.reset();
+      this.captcha.execute();
+      return;
+    }
+
+    this.doRegistrationAndLogin()
   }
 
   captchaError() {
@@ -134,6 +168,10 @@ export class RegisterComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.doRegistrationAndLogin(captchaResponse);
+  }
+
+  private doRegistrationAndLogin(captchaResponse: string|undefined = undefined) {
     const extractErrorMessage = (error: {
       error: { error: { description?: string, htmlDescription?: string } },
       message?: string
@@ -147,8 +185,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
       }
     }
 
+    const captchaType = this.friendlyCaptchaSolution ? 'friendly_captcha' : 'recaptcha';
+    captchaResponse = this.friendlyCaptchaSolution ?? captchaResponse;
+
     this.identityService.create({
       captcha_code: captchaResponse,
+      captcha_type: captchaType,
       email_address: this.registrationForm.value.emailAddress,
       first_name: this.registrationForm.value.firstName,
       last_name: this.registrationForm.value.lastName,

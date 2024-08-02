@@ -9,6 +9,8 @@ export interface Person {
      */
     captcha_code?: string;
 
+    captcha_type?: 'friendly_captcha' | 'recaptcha';
+
     /**
      * Stores the credit available for the given Person
      */
