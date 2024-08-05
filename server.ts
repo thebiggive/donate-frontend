@@ -51,6 +51,7 @@ export function app(): express.Express {
           'api.getAddress.io',
           '*.getsitecontrol.com',
           'fonts.googleapis.com',
+          'api.friendlycaptcha.com',
         ],
         'default-src': [
           `'self'`,
