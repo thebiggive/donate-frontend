@@ -33,6 +33,18 @@ export function app(): express.Express {
 
   const server = express();
 
+  // will set both of these the same, see
+  // https://stackoverflow.com/questions/30023608/how-to-use-frame-src-and-child-src-in-firefox-and-other-browsers
+  const frameAndChildSrc = [
+    'js.stripe.com',
+    'blob:', // for friendly-captcha
+    'player.vimeo.com',
+    'recaptcha.net',
+    'www.recaptcha.net',
+    'www.youtube.com',
+    'www.youtube-nocookie.com',
+  ];
+
   // Middleware
   server.use(compression());
   // Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
@@ -94,9 +106,8 @@ export function app(): express.Express {
         'worker-src': [
           'blob:', // friendly-captcha
         ],
-        'child-src': [
-          'blob:', // friendly-captcha
-        ]
+        'frame-src': frameAndChildSrc,
+        'child-src': frameAndChildSrc
       },
     },
   }));
