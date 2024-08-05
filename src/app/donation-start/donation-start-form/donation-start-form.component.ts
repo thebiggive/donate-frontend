@@ -430,10 +430,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     const widget = new WidgetInstance(friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.idCaptchaCode = solution;
-        console.log('DONE: ', solution);
+        if (this.stepChangeBlockedByCaptcha) {
+          this.stepper.next();
+          this.stepChangeBlockedByCaptcha = false;
+        }
       },
-      errorCallback: (b) => {
-        console.log('FAILED', b);
+      errorCallback: (error: unknown) => {
+        this.showErrorToast("Sorry, there was an error with the anti-spam captcha check.");
+        console.error(error);
       },
     })
 
@@ -1688,6 +1692,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.markYourDonationStepIncomplete();
 
     if (flags.friendlyCaptchaEnabled) {
+      this.showErrorToast("Please wait, running captcha check to prevent spam")
       return true;
     }
 
