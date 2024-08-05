@@ -88,6 +88,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
       return;
     }
 
+    this.donationStartForm.hideCaptcha();
     this.identityService.get(id, jwt).subscribe({
       next: (person: Person) => {
         this.donor = person; // Should mean donations are attached to the Stripe Customer.
@@ -101,6 +102,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
       },
       error: (err) => {
         console.log('Could not load Person info: ', err)
+        this.donationStartForm.showCaptcha();
       },
     });
   };

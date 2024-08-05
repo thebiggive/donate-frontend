@@ -9,6 +9,8 @@ export type EnvironmentID ='development'|'regression'|'staging'|'production';
 type MatomoDate = `${number}${number}${number}${number}/${number}${number}/${number}${number} ${number}${number}:${number}${number}:${number}${number} UTC`
 
 export interface Environment {
+  /* Site key is not secret and can be shared across environments. Not to be confused with secret key */
+  friendlyCaptchaSiteKey: 'FCMIOJ2ARSHLBGAJ';
   environmentId: EnvironmentID,
   production: boolean,
   productionLike: boolean,
