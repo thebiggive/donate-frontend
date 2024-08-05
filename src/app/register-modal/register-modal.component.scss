@@ -1,7 +1,0 @@
-@use '@angular/material' as mat;
-@import '../../abstract';
-
-.error {
-  color: mat.get-color-from-palette($donate-warn);
-  margin: 1rem 0;
-}

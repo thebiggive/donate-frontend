@@ -19,10 +19,8 @@ import {FundingInstruction} from '../fundingInstruction.model';
 import {GiftAidAddressSuggestion} from '../gift-aid-address-suggestion.model';
 import {GiftAidAddress} from '../gift-aid-address.model';
 import {IdentityService} from '../identity.service';
-import {LoginModalComponent} from '../login-modal/login-modal.component';
 import {Person} from '../person.model';
 import {PostcodeService} from '../postcode.service';
-import {RegisterModalComponent} from '../register-modal/register-modal.component';
 import {getCurrencyMinValidator} from '../validators/currency-min';
 import {getCurrencyMaxValidator} from '../validators/currency-max';
 
@@ -242,24 +240,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
       this.createAndFinaliseTipDonation();
     }
-  }
-
-  showLoginDialog() {
-    const loginDialog = this.dialog.open(LoginModalComponent);
-    loginDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
-      if (data && data.id) {
-        this.loadAuthedPersonInfo(data.id, data.jwt);
-      }
-    });
-  }
-
-  showRegisterDialog() {
-    const registerDialog = this.dialog.open(RegisterModalComponent);
-    registerDialog.afterClosed().subscribe((data?: {id: string, jwt: string}) => {
-      if (data && data.id) {
-        this.loadAuthedPersonInfo(data.id, data.jwt);
-      }
-    });
   }
 
   customTip(): boolean {
