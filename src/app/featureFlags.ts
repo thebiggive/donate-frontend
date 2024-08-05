@@ -6,7 +6,7 @@ const flagsForEnvironment = (environmentId: EnvironmentID) => {
     myDonationsEnabled: environmentId !== 'production',
 
     // Friendly Captcha only in dev as we have to add support to identity service before enabling in staging.
-    friendlyCaptchaEnabled: environmentId === 'development',
+    friendlyCaptchaEnabled: environmentId !== 'production',
   } as const;
 }
 
