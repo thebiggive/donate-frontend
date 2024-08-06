@@ -81,6 +81,11 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       return;
     }
 
+    if (environment.environmentId === 'regression') {
+      this.friendlyCaptchaSolution = "dummy-captcha-code";
+      return;
+    }
+
     const widget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.friendlyCaptchaSolution = solution;

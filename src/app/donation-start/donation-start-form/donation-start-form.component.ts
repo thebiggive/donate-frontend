@@ -427,6 +427,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       // should always be loaded from the template, but not present in tests.
       return;
     }
+
+    if (environment.environmentId === 'regression') {
+      this.idCaptchaCode = "dummy-captcha-code";
+      return;
+    }
+
     const widget = new WidgetInstance(friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.idCaptchaCode = solution;
