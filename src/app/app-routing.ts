@@ -14,6 +14,7 @@ import {flags} from "./featureFlags";
 import {MyDonationsComponent} from "./my-donations/my-donations.component";
 import {DonationService} from "./donation.service";
 import {MyRegularGivingComponent} from "./my-regular-giving/my-regular-giving.component";
+import {MandateService} from "./mandate.service";
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -242,7 +243,7 @@ if (flags.regularGivingEnabled) {
     {
       path: 'my-account/regular-giving',
       resolve: {
-        mandates: () => [],
+        mandates: () => inject(MandateService).getActiveMandates(),
       },
       pathMatch: 'full',
       component: MyRegularGivingComponent,
