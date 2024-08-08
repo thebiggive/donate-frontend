@@ -13,6 +13,8 @@ import {isPlatformBrowser} from "@angular/common";
 import {flags} from "./featureFlags";
 import {MyDonationsComponent} from "./my-donations/my-donations.component";
 import {DonationService} from "./donation.service";
+import {MyRegularGivingComponent} from "./my-regular-giving/my-regular-giving.component";
+import {MandateService} from "./mandate.service";
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -229,6 +231,22 @@ if (flags.myDonationsEnabled) {
       },
       pathMatch: 'full',
       component: MyDonationsComponent,
+      canActivate: [
+        requireLogin,
+      ],
+    },
+  );
+}
+
+if (flags.regularGivingEnabled) {
+  routes.unshift(
+    {
+      path: 'my-account/regular-giving',
+      resolve: {
+        mandates: () => inject(MandateService).getActiveMandates(),
+      },
+      pathMatch: 'full',
+      component: MyRegularGivingComponent,
       canActivate: [
         requireLogin,
       ],

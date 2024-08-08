@@ -12,7 +12,7 @@ import {environment} from '../environments/environment';
 import {Person} from "./person.model";
 import {MatomoTracker} from 'ngx-matomo-client';
 import {map, switchMap} from "rxjs/operators";
-import {IdentityService} from "./identity.service";
+import {IdentityService, getPersonAuthHttpOptions} from "./identity.service";
 
 export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
 
@@ -176,7 +176,7 @@ export class DonationService {
 
     return this.http.get<{ data: PaymentMethod[] }>(
       `${environment.donationsApiPrefix}/people/${personId}/payment_methods${cacheBuster}`,
-      this.getPersonAuthHttpOptions(jwt),
+      getPersonAuthHttpOptions(jwt),
     );
   }
 
@@ -188,7 +188,7 @@ export class DonationService {
     return this.http.post<DonationCreatedResponse>(
       endpoint,
       donation,
-      this.getPersonAuthHttpOptions(jwt),
+      getPersonAuthHttpOptions(jwt),
     );
   }
 
@@ -272,18 +272,6 @@ export class DonationService {
     };
   }
 
-  private getPersonAuthHttpOptions(jwt?: string): { headers: HttpHeaders } {
-    if (!jwt) {
-      return { headers: new HttpHeaders({}) };
-    }
-
-    return {
-      headers: new HttpHeaders({
-        'X-Tbg-Auth': jwt,
-      }),
-    };
-  }
-
   private getLocalDonationCouplet(donationId: string): { donation: Donation, jwt: string } | undefined {
     const donations = this.getDonationCouplets().filter(donationItem => {
       return (donationItem.donation.donationId === donationId);
@@ -315,7 +303,7 @@ export class DonationService {
 
     return this.http.delete<{ data: PaymentMethod[] }>(
       `${environment.donationsApiPrefix}/people/${personId}/payment_methods/${paymentMethodId}`,
-      this.getPersonAuthHttpOptions(jwt),
+      getPersonAuthHttpOptions(jwt),
     );
   }
 
@@ -347,7 +335,7 @@ export class DonationService {
           name: `${person.first_name} ${person.last_name}`,
         }
       },
-      {headers: this.getPersonAuthHttpOptions(jwt).headers}
+      {headers: getPersonAuthHttpOptions(jwt).headers}
     );
   }
 
@@ -374,7 +362,7 @@ export class DonationService {
 
       return this.http.get<{ donations: Donation[] }>(
         `${environment.donationsApiPrefix}/people/${person.id}/donations`,
-        this.getPersonAuthHttpOptions(jwt),
+        getPersonAuthHttpOptions(jwt),
       ).pipe(map((response) => response.donations));
     }));
   }
