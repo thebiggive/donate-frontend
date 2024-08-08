@@ -1,0 +1,32 @@
+<div id="banner"></div>
+<main>
+  <div>
+    <biggive-page-section>
+      <div class="heading-wrapper">
+        <biggive-heading
+          colour="tertiary"
+          size="1"
+          align="center"
+          text="Your Regular Giving Mandates"
+        ></biggive-heading>
+      </div>
+    </biggive-page-section>
+     <biggive-page-section>
+        @if (mandates.length > 0) {
+
+          <div class="mandates-container">
+            @for (mandate of mandates; track mandate.id) {
+                <div class="mandate">
+                  <a href="/campaign/{{mandate.campaignId}}">{{ mandate.charityName }}</a> <br/>
+                  Reference: {{ mandate.id }}
+                </div>
+            }
+          </div>
+
+          <p>Placeholder mandates copy</p>
+        } @else {
+          <p>Placeholder mandates copy</p>
+        }
+          </biggive-page-section>
+  </div>
+</main>

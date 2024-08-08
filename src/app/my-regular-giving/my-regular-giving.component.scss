@@ -1,0 +1,39 @@
+@import "../../assets/scss/auth-common";
+
+#banner {
+  background-image: url(../../assets/images/banner-my-account.jpg);
+}
+main > div {
+  color: white;
+  background-color: $colour-primary;
+  width: 100%;
+
+  @media #{$breakpoint-lg} {
+    width: 80%; // this seems to be needed, not sure why the identical rule in auth_common.scss isn't working.
+  }
+
+  a:link, a:visited, a:hover {
+    color: white;
+  }
+}
+
+div.mandate-container {
+  display: flex;
+  justify-content: left;
+  column-gap: 10px;
+  flex-wrap: wrap;
+}
+
+div.mandate {
+  border-radius: 5px;
+  background: white;
+  margin-bottom: 10px;
+  width: 190px;
+  color: $colour-primary;
+  padding-left: 10px;
+  overflow-wrap: break-word;
+  flex-basis: 27%;
+  a:link, a:visited, a:hover {
+    color: $colour-primary !important;
+  }
+}
