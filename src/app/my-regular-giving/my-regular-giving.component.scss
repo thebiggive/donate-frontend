@@ -28,11 +28,10 @@ div.mandate {
   border-radius: 5px;
   background: white;
   margin-bottom: 10px;
-  width: 190px;
   color: $colour-primary;
   padding-left: 10px;
   overflow-wrap: break-word;
-  flex-basis: 27%;
+  flex-basis: 80%;
   a:link, a:visited, a:hover {
     color: $colour-primary !important;
   }

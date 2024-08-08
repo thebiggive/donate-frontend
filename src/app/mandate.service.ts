@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {map, switchMap} from "rxjs/operators";
 import {environment} from "../environments/environment";
-import {IdentityService} from "./identity.service";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {IdentityService, getPersonAuthHttpOptions } from "./identity.service";
+import {HttpClient} from "@angular/common/http";
 import {Mandate} from "./mandate.model";
 
 @Injectable({
@@ -13,21 +13,6 @@ export class MandateService {
     private http: HttpClient,
     private identityService: IdentityService,
   ) {
-  }
-
-  /**
-   * Copied from Donation Service - refactor if possible before merging
-   */
-  private getPersonAuthHttpOptions(jwt?: string): { headers: HttpHeaders } {
-    if (!jwt) {
-      return { headers: new HttpHeaders({}) };
-    }
-
-    return {
-      headers: new HttpHeaders({
-        'X-Tbg-Auth': jwt,
-      }),
-    };
   }
 
   getActiveMandates() {
@@ -41,7 +26,7 @@ export class MandateService {
 
       return this.http.get<{ mandates: Mandate[] }>(
         `${environment.donationsApiPrefix}/regular-giving/my-donation-mandates`,
-        this.getPersonAuthHttpOptions(jwt),
+        getPersonAuthHttpOptions(jwt),
       ).pipe(map((response) => response.mandates));
     }));
   }
