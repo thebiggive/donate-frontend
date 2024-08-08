@@ -1,6 +1,5 @@
 import {Injectable} from "@angular/core";
 import {map, switchMap} from "rxjs/operators";
-import {Donation} from "./donation.model";
 import {environment} from "../environments/environment";
 import {IdentityService} from "./identity.service";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
