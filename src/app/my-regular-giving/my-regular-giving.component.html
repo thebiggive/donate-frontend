@@ -13,21 +13,21 @@
     </biggive-page-section>
      <biggive-page-section>
         @if (mandates.length > 0) {
-
           <div class="mandates-container">
             @for (mandate of mandates; track mandate.id) {
                 <div class="mandate">
                   <a href="/campaign/{{mandate.campaignId}}">{{ mandate.charityName }}</a> <br/>
-                  Day of Month: {{ mandate.schedule.dayOfMonth }} <br/>
+                  Monthly payment day: {{ mandate.schedule.dayOfMonth }} <br/>
                   Active From: {{ mandate.schedule.activeFrom | date: 'mediumDate'}} <br/>
-                  Amount: {{ mandate.amount.amountInPence / 100 | exactCurrency:mandate.amount.currency }}
+                  Amount: {{ mandate.amount.amountInPence / 100 | exactCurrency:mandate.amount.currency }} <br />
+                  @if (mandate.giftAid) {
+                    Gift Aid applied
+                  }
                 </div>
             }
           </div>
-
-          <p>Placeholder mandates copy</p>
         } @else {
-          <p>Placeholder mandates copy</p>
+          <p>No regular giving mandates active</p>
         }
           </biggive-page-section>
   </div>
