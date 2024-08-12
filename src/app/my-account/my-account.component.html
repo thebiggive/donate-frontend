@@ -68,6 +68,17 @@
             url="/my-account/donations"
           />
           }
+
+        @if(flags.regularGivingEnabled) {
+          <biggive-button
+            space-above="5"
+            colour-scheme="white"
+            label="Your Regular Giving"
+            full-width="true"
+            size="medium"
+            url="/my-account/regular-giving"
+          />
+        }
       </div>
 
 
