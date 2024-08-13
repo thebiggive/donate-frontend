@@ -7,3 +7,9 @@
 form {
   margin-top: 2em;
 }
+
+div.frc-captcha {
+  margin: auto;
+  background: none;
+  border: 2px solid $colour-primary;
+}
