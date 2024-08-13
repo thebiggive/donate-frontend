@@ -33,6 +33,18 @@ export function app(): express.Express {
 
   const server = express();
 
+  // will set both of these the same, see
+  // https://stackoverflow.com/questions/30023608/how-to-use-frame-src-and-child-src-in-firefox-and-other-browsers
+  const frameAndChildSrc = [
+    'js.stripe.com',
+    'blob:', // for friendly-captcha
+    'player.vimeo.com',
+    'recaptcha.net',
+    'www.recaptcha.net',
+    'www.youtube.com',
+    'www.youtube-nocookie.com',
+  ];
+
   // Middleware
   server.use(compression());
   // Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
@@ -51,6 +63,7 @@ export function app(): express.Express {
           'api.getAddress.io',
           '*.getsitecontrol.com',
           'fonts.googleapis.com',
+          'api.friendlycaptcha.com',
         ],
         'default-src': [
           `'self'`,
@@ -88,7 +101,13 @@ export function app(): express.Express {
           'www.gstatic.com',
           // Vimeo's iframe embed seems to need script access to not error with our current embed approach.
           'https://player.vimeo.com',
+          'wasm-unsafe-eval','self', // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp
         ],
+        'worker-src': [
+          'blob:', // friendly-captcha
+        ],
+        'frame-src': frameAndChildSrc,
+        'child-src': frameAndChildSrc
       },
     },
   }));

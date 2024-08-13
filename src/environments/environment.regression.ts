@@ -9,6 +9,7 @@
 import { Environment } from './environment.interface';
 
 export const environment: Environment = {
+  friendlyCaptchaSiteKey: "FCMIOJ2ARSHLBGAJ",
   environmentId: "regression",
   production: false,
   productionLike: true,

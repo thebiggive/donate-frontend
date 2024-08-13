@@ -227,24 +227,6 @@
     </div>
   }
 
-  @if (!donor && !isLoading) {
-    <div>
-      <p>You must be logged in to transfer donation funds.</p>
-      <div class="auth-options">
-        <button
-          mat-raised-button
-          color="secondary"
-          (click)="showRegisterDialog()"
-        >Register</button>
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="showLoginDialog()"
-        >Log in</button>
-      </div>
-    </div>
-  }
-
   @if (donor && isPurchaseComplete) {
     <div>
       <h2>Transfer Instructions</h2>

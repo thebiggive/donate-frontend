@@ -239,3 +239,14 @@ export class IdentityService {
     };
   }
 }
+export function getPersonAuthHttpOptions(jwt?: string): { headers: HttpHeaders } {
+  if (!jwt) {
+    return { headers: new HttpHeaders({}) };
+  }
+
+  return {
+    headers: new HttpHeaders({
+      'X-Tbg-Auth': jwt,
+    }),
+  };
+}

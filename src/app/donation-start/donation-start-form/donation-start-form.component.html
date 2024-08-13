@@ -215,6 +215,7 @@
                   </p>
                 }
               </div>
+
               <div style="text-align: center">
                 <button style="width: 40%;"
                   type="button"
@@ -223,6 +224,15 @@
                   color="primary"
                   (click)="progressToNonAmountsStep()"
                 >Continue</button>
+
+                @if (shouldShowCaptcha && flags.friendlyCaptchaEnabled) {
+                  <div
+                    class="frc-captcha"
+                    [attr.data-sitekey]="friendlyCaptchaSiteKey"
+                    data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
+                    #frccaptcha
+                  ></div>
+                }
               </div>
             </mat-step>
             @if (campaign.currencyCode === 'GBP') {
@@ -686,6 +696,7 @@
           </div>
         </mat-step>
       </mat-vertical-stepper>
+      @if (! flags.friendlyCaptchaEnabled) {
       <re-captcha
         #idCaptcha
         size="invisible"
@@ -694,6 +705,7 @@
         (errored)="captchaIdentityError()"
         siteKey="{{ recaptchaIdSiteKey }}"
       ></re-captcha>
+      }
     </form>
   }
 
