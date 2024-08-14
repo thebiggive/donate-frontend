@@ -23,6 +23,17 @@ import {Mandate} from "../mandate.model";
 export class MyRegularGivingComponent implements OnInit{
   protected mandates: Mandate[];
 
+  /** @convert number to ordinal, e.g 1st, 2nd*/
+  protected ordinal = (d: number) => {
+    if (d > 3 && d < 21) return d + 'th';
+    switch (d % 10) {
+      case 1:  return d + "st";
+      case 2:  return d + "nd";
+      case 3:  return d + "rd";
+      default: return d + "th";
+    }
+  };
+
   constructor(
     private pageMeta: PageMetaService,
     private route: ActivatedRoute,
