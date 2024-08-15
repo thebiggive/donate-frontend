@@ -13,19 +13,20 @@
     </biggive-page-section>
      <biggive-page-section>
         @if (mandates.length > 0) {
-          <div class="mandates-container">
+          <biggive-grid columnCount="2">
             @for (mandate of mandates; track mandate.id) {
-                <div class="mandate">
-                  <a href="/campaign/{{mandate.campaignId}}">{{ mandate.charityName }}</a> <br/>
-                  Monthly payment day: {{ mandate.schedule.dayOfMonth }} <br/>
-                  Active From: {{ mandate.schedule.activeFrom | date: 'mediumDate'}} <br/>
-                  Amount: {{ mandate.amount.amountInPence / 100 | exactCurrency:mandate.amount.currency }} <br />
-                  @if (mandate.giftAid) {
-                    Gift Aid applied
-                  }
-                </div>
+              <biggive-basic-card
+                [icon]="false"
+                [textColour]="'primary'"
+                [mainImageUrl]="''"
+                [mainTitle]="mandate.charityName"
+                subtitle="{{(mandate.amount.amountInPence / 100) | exactCurrency:mandate.amount.currency }}, {{ordinal(mandate.schedule.dayOfMonth)}} of each month, {{mandate.giftAid ? 'with Gift Aid, ' : ''}} since {{ mandate.schedule.activeFrom | date: 'mediumDate'}}"
+                [buttonUrl]="'/campaign/' + mandate.campaignId"
+                [buttonAlign]="'center'"
+              >
+              </biggive-basic-card>
             }
-          </div>
+          </biggive-grid>
         } @else {
           <p>No regular giving mandates active</p>
         }

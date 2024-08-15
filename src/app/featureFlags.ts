@@ -5,8 +5,12 @@ const flagsForEnvironment = (environmentId: EnvironmentID) => {
   return {
     myDonationsEnabled: environmentId !== 'production',
 
-    // Friendly Captcha only in dev as we have to add support to identity service before enabling in staging.
-    friendlyCaptchaEnabled: environmentId !== 'production',
+    /** Should be removed and inlined soon, but keeping just while we're still testing out
+     * Friendly Captcha and still have Recaptcha on some pages, rather than planning to use it permanently.
+     *
+     * If and when we remove this we can also remove all the code about recaptcha.
+     */
+    friendlyCaptchaEnabled: true,
 
     regularGivingEnabled: environmentId !== 'production',
   } as const;
