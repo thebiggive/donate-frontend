@@ -36,10 +36,54 @@ export class StripeService {
       fonts: [
         {
           family: 'Euclid Triangle',
-          src: `url('${environment.donateUriPrefix}/d/EuclidTriangle-Regular.1d45abfd25720872.woff2') format('woff2')`,
+          // Doesn't work in local dev fast mode but should in SSR builds including live. If you need to test
+          // with fast feedback, swap in Staging's base URL.
+          // src: `url('${environment.donateUriPrefix}/d/EuclidTriangle-Regular.1d45abfd25720872.woff2') format('woff2')`,
+          src: `url('https://donate-staging.thebiggivetest.org.uk/d/EuclidTriangle-Regular.1d45abfd25720872.woff2') format('woff2')`,
+          display: 'swap',
           weight: '400',
         },
       ],
+      appearance: {
+        theme: 'flat',
+        variables: {
+          fontFamily: '"Euclid Triangle", sans-serif',
+          fontLineHeight: '1.5',
+          borderRadius: '0',
+          colorBackground: '#F6F8FA',
+          accessibleColorOnColorPrimary: '#262626'
+        },
+        rules: {
+          '.Block': {
+            backgroundColor: 'var(--colorBackground)',
+            boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 7px rgba(18, 42, 66, 0.04)',
+            padding: '12px'
+          },
+          '.Input': {
+            padding: '12px',
+            border: 'solid 1px #999',
+          },
+          '.Input:disabled, .Input--invalid:disabled': {
+            color: 'lightgray'
+          },
+          '.Tab': {
+            padding: '10px 12px 8px 12px',
+            border: 'none'
+          },
+          '.Tab:hover': {
+            border: 'none',
+            boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 7px rgba(18, 42, 66, 0.04)'
+          },
+          '.Tab--selected, .Tab--selected:focus, .Tab--selected:hover': {
+            border: 'none',
+            backgroundColor: '#fff',
+            boxShadow: '0 0 0 1.5px var(--colorPrimaryText), 0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 7px rgba(18, 42, 66, 0.04)'
+          },
+          '.Label': {
+            fontWeight: '500'
+          }
+        }
+      },
       mode: 'payment',
       currency: donation.currencyCode.toLowerCase(),
       amount: this.amountIncTipInMinorUnit(donation),
