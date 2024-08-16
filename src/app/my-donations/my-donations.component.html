@@ -16,11 +16,23 @@
 
           <div class="donation-container">
             @for (donation of donations; track donation.transactionId) {
+              <biggive-container-card
+                card-colour="tertiary"
+                background-colour="primary"
+              >
                 <div class="donation">
-                  <a href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a> - {{ donation.createdTime | date: 'mediumDate' }} <br/>
-                  {{ donation.donationAmount | exactCurrency:donation.currencyCode }} ({{this.displayMethodType(donation)}}) <br/>
-                  Reference: {{ donation.transactionId }}
+                  <p>{{this.displayMethodType(donation)}}</p>
+                  <h3><a href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a></h3>
+
+                  <ul>
+                    <li>Amount: {{ donation.donationAmount | exactCurrency:donation.currencyCode }}</li>
+                    <li>Tip to Big Give: {{ donation.tipAmount | exactCurrency:donation.currencyCode }}</li>
+                    <li><strong>Total paid: {{ totalCharged(donation) | exactCurrency:donation.currencyCode }}</strong></li>
+                    <li>Date: {{ donation.createdTime | date: 'mediumDate' }}</li>
+                    <li>Payment Reference: <span class="reference">{{ donation.transactionId }}</span></li>
+                  </ul>
                 </div>
+              </biggive-container-card>
             }
           </div>
 
