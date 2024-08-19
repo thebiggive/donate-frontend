@@ -14,7 +14,7 @@
      <biggive-page-section>
         @if (donations.length > 0) {
 
-          <div class="donation-container">
+          <biggive-grid columnCount="2">
             @for (donation of donations; track donation.transactionId) {
               <biggive-container-card
                 card-colour="tertiary"
@@ -34,7 +34,7 @@
                 </div>
               </biggive-container-card>
             }
-          </div>
+          </biggive-grid>
 
           @if (atLeastOneDonationWasLarge) {
             <p>
