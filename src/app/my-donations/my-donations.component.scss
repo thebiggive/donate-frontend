@@ -25,15 +25,18 @@ div.donation-container {
 }
 
 div.donation {
-  border-radius: 5px;
-  background: white;
-  margin-bottom: 10px;
-  width: 190px;
-  color: $colour-primary;
-  padding-left: 10px;
-  overflow-wrap: break-word;
-  flex-basis: 27%;
   a:link, a:visited, a:hover {
-    color: $colour-primary !important;
+    color: inherit !important;
+    text-decoration: none;
+  }
+  *:first-child {
+    margin-top: 0;
+  }
+  ul {
+    padding: 0;
+    list-style-type: none;
+  }
+  .reference {
+    font-size: 12px;
   }
 }
