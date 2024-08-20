@@ -71,10 +71,13 @@ export class ConversionTrackingService {
       );
     }
 
+    // replicates logic of \MatchBot\Domain\Donation::getAmountFractionalIncTip . Consider further DRYing in future.
+    const grandTotal = donation.donationAmount + donation.tipAmount + donation.feeCoverAmount;
+
     // "Tracks an Ecommerce order, including any eCommerce item previously added to the order."
     this.matomoTracker.trackEcommerceOrder(
       donation.donationId,
-      donation.donationAmount + donation.tipAmount + donation.feeCoverAmount,
+      grandTotal,
       donation.donationAmount,
     );
   }
