@@ -1011,6 +1011,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * Donation plus any tip and/or fee cover.
    */
   get donationAndExtrasAmount(): number {
+    // Replicates logic of \MatchBot\Domain\Donation::getAmountFractionalIncTip . Consider further DRYing in future.
     return this.donationAmount + this.tipAmount() + this.feeCoverAmount();
   }
 
