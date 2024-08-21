@@ -61,18 +61,8 @@ export class ConversionTrackingService {
         donation.tipAmount,
       );
     }
-
-    if (donation.feeCoverAmount > 0) {
-      this.matomoTracker.addEcommerceItem(
-        'fee-cover',
-        'Big Give platform fee cover',
-        'Processing fees',
-        donation.feeCoverAmount,
-      );
-    }
-
     // replicates logic of \MatchBot\Domain\Donation::getAmountFractionalIncTip . Consider further DRYing in future.
-    const grandTotal = donation.donationAmount + donation.tipAmount + donation.feeCoverAmount;
+    const grandTotal = donation.donationAmount + donation.tipAmount;
 
     // "Tracks an Ecommerce order, including any eCommerce item previously added to the order."
     this.matomoTracker.trackEcommerceOrder(

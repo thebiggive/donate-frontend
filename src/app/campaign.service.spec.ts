@@ -64,7 +64,6 @@ describe('CampaignService', () => {
       undefined,
       undefined,
       undefined,
-      undefined,
       false,
       undefined,
       undefined,

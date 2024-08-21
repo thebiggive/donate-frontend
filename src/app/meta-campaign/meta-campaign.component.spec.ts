@@ -73,7 +73,6 @@ describe('MetaCampaignComponent', () => {
     undefined,
     undefined,
     undefined,
-    undefined,
     false,
     undefined,
     undefined,

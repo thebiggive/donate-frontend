@@ -23,12 +23,9 @@ export function updateDonationFromForm
     donation.lastName = paymentGroup.value.lastName;
   }
 
-  donation.feeCoverAmount = sanitiseCurrency(amountsGroup.value.feeCoverAmount);
-
   donation.giftAid = giftAidGroup.value.giftAid;
 
-  // In alternative fee model, 'tip' is donor fee cover so not Gift Aid eligible.
-  donation.tipGiftAid = campaign.feePercentage ? false : giftAidGroup.value.giftAid;
+  donation.tipGiftAid = giftAidGroup.value.giftAid;
 
   donation.optInCharityEmail = marketingGroup.value.optInCharityEmail;
   donation.optInTbgEmail = marketingGroup.value.optInTbgEmail;

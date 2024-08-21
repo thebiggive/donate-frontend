@@ -132,7 +132,6 @@ describe('DonationStartContainer', () => {
       undefined,
       undefined,
       undefined,
-      undefined,
       false,
       undefined,
       undefined,
