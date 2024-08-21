@@ -68,7 +68,6 @@ describe('DonationThanksComponent', () => {
       currencyCode: currencyCode,
       donationAmount: donationAmount,
       donationMatched: false,
-      feeCoverAmount: 0,
       matchReservedAmount: 0,
       matchedAmount: 0,
       pspMethodType: 'card',

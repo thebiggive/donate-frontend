@@ -88,7 +88,6 @@ describe('CampaignDetailsComponent', () => {
       undefined,
       undefined,
       undefined,
-      undefined,
       false,
       undefined,
       undefined,

@@ -338,8 +338,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           getCurrencyMaxValidator(),
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
         ]],
-        coverFee: [false],
-        feeCoverAmount: [null],
         tipPercentage: [this.tipPercentage], // See setConditionalValidators().
         tipAmount: [null], // See setConditionalValidators()
       }),
@@ -1012,7 +1010,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    */
   get donationAndExtrasAmount(): number {
     // Replicates logic of \MatchBot\Domain\Donation::getAmountFractionalIncTip . Consider further DRYing in future.
-    return this.donationAmount + this.tipAmount() + this.feeCoverAmount();
+    return this.donationAmount + this.tipAmount();
   }
 
   captchaIdentityError() {
@@ -1070,10 +1068,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     return this.donation.matchReservedAmount;
-  }
-
-  feeCoverAmount(): number {
-    return sanitiseCurrency(this.amountsGroup.value.feeCoverAmount);
   }
 
   giftAidAmount(): number {
@@ -1642,7 +1636,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       currencyCode: this.campaign.currencyCode || 'GBP',
       donationAmount: this.donationAmount,
       donationMatched: this.campaign.isMatched,
-      feeCoverAmount: sanitiseCurrency(this.amountsGroup.value.feeCoverAmount),
       matchedAmount: 0, // Only set >0 after donation completed
       matchReservedAmount: 0, // Only set >0 after initial donation create API response
       pspMethodType: this.getPaymentMethodType(),
@@ -2004,84 +1997,55 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // Do not add a validator on `tipPercentage` because as a dropdown it always
     // has a value anyway, and this complicates repopulating the form when e.g.
     // reusing an existing donation.
-    if (this.campaign.feePercentage) {
-      // On the alternative fee model, we need to listen for coverFee
-      // checkbox changes and don't have a tip percentage dropdown.
-      this.amountsGroup.get('coverFee')?.valueChanges.subscribe(coverFee => {
-        let feeCoverAmount = '0.00';
-        // % should always be non-null when checkbox available, but re-assert
-        // that here to keep type checks happy.
-        if (coverFee && this.campaign.feePercentage) {
-          // Keep value consistent with format of manual string inputs.
-          feeCoverAmount = this.getTipOrFeeAmount(this.campaign.feePercentage, this.donationAmount);
+    //
+    // We need to listen for tip percentage
+    // field changes and don't have a cover fee checkbox. We don't ask for a
+    // tip on donation when using a donor's credit balance.
+    if (this.creditPenceToUse === 0) {
+      this.amountsGroup.controls.tipAmount!.setValidators([
+        requiredNotBlankValidator,
+        // We allow spaces at start and end of amount inputs because people can easily paste them in
+        // by mistake, and they don't do any harm. Maxlength in the HTML makes sure there can't be so much as
+        // to stop the number being visible.
+        Validators.pattern('^\\s*[£$]?[0-9]+?(\\.[0-9]{1,2})?\\s*$'),
+        getCurrencyMaxValidator(),
+      ]);
+    }
+
+    // Reduce the maximum to the credit balance if using donor credit and it's below the global max.
+    this.amountsGroup.controls.donationAmount!.setValidators([
+      requiredNotBlankValidator,
+      getCurrencyMinValidator(1), // min donation is £1
+      getCurrencyMaxValidator(maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse)),
+      Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
+    ]);
+    this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
+      const updatedValues: {
+        tipPercentage?: number | string,
+        tipAmount?: string
+      } = {};
+
+      donationAmount = sanitiseCurrency(donationAmount);
+
+      if (!this.tipPercentageChanged) {
+        let newDefault = this.tipPercentage;
+        if (donationAmount >= 1000) {
+          newDefault = 7.5;
+        } else if (donationAmount >= 300) {
+          newDefault = 10;
+        } else if (donationAmount >= 100) {
+          newDefault = 12.5;
         }
 
-        this.amountsGroup.patchValue({ feeCoverAmount });
-      });
-
-      this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
-        if (!this.campaign.feePercentage) {
-          return;
-        }
-
-        const feeCoverAmount = this.amountsGroup.get('coverFee')?.value
-          ? this.getTipOrFeeAmount(this.campaign.feePercentage, sanitiseCurrency(donationAmount))
-          : '0.00';
-
-        this.amountsGroup.patchValue({ feeCoverAmount });
-      });
-    } else {
-      // On the default fee model, we need to listen for tip percentage
-      // field changes and don't have a cover fee checkbox. We don't ask for a
-      // tip on donation when using a donor's credit balance.
-      if (this.creditPenceToUse === 0) {
-        this.amountsGroup.controls.tipAmount!.setValidators([
-          requiredNotBlankValidator,
-          // We allow spaces at start and end of amount inputs because people can easily paste them in
-          // by mistake, and they don't do any harm. Maxlength in the HTML makes sure there can't be so much as
-          // to stop the number being visible.
-          Validators.pattern('^\\s*[£$]?[0-9]+?(\\.[0-9]{1,2})?\\s*$'),
-          getCurrencyMaxValidator(),
-        ]);
+        updatedValues.tipPercentage = newDefault;
+        updatedValues.tipAmount = this.getTipOrFeeAmount(newDefault, donationAmount);
+      } else if (this.amountsGroup.get('tipPercentage')?.value !== 'Other') {
+        updatedValues.tipAmount = this.getTipOrFeeAmount(this.amountsGroup.get('tipPercentage')?.value, donationAmount);
       }
 
-      // Reduce the maximum to the credit balance if using donor credit and it's below the global max.
-      this.amountsGroup.controls.donationAmount!.setValidators([
-        requiredNotBlankValidator,
-        getCurrencyMinValidator(1), // min donation is £1
-        getCurrencyMaxValidator(maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse)),
-        Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
-      ]);
-
-      this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
-        const updatedValues: {
-          tipPercentage?: number | string,
-          tipAmount?: string
-        } = {};
-
-        donationAmount = sanitiseCurrency(donationAmount);
-
-        if (!this.tipPercentageChanged) {
-          let newDefault = this.tipPercentage;
-          if (donationAmount >= 1000) {
-            newDefault = 7.5;
-          } else if (donationAmount >= 300) {
-            newDefault = 10;
-          } else if (donationAmount >= 100) {
-            newDefault = 12.5;
-          }
-
-          updatedValues.tipPercentage = newDefault;
-          updatedValues.tipAmount = this.getTipOrFeeAmount(newDefault, donationAmount);
-        } else if (this.amountsGroup.get('tipPercentage')?.value !== 'Other') {
-          updatedValues.tipAmount = this.getTipOrFeeAmount(this.amountsGroup.get('tipPercentage')?.value, donationAmount);
-        }
-
-        this.amountsGroup.patchValue(updatedValues);
-      });
-
-      this.amountsGroup.get('tipPercentage')?.valueChanges.subscribe(this.updateTipAmountFromSelectedPercentage);
-    }
+      this.amountsGroup.patchValue(updatedValues);
+    });
+    this.amountsGroup.get('tipPercentage')?.valueChanges.subscribe(this.updateTipAmountFromSelectedPercentage);
 
     // Initial and post-auth validation of Gift Aid should depend upon the previous value
     // of the opt-in and 'outside UK' checkboxes. If there's no value yet, initial validators
