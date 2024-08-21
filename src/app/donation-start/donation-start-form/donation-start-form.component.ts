@@ -1087,9 +1087,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return this.donationAmount + this.giftAidAmount() + this.expectedMatchAmount();
   }
 
-  scrollTo(el: Element): void {
+  /**
+   * If `el` is a focusable input, it is usually a good idea to `focus()` it after calling
+   * this to help with correction, especially for screen readers.
+   */
+  scrollTo(el: HTMLElement): void {
     if (el) {
-       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }
 
@@ -1556,6 +1560,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     const firstElInStepWithAngularError = stepJustDone.querySelector('.ng-invalid.ng-touched[formControlName]');
     if (firstElInStepWithAngularError && !this.closeAncestorsHaveDisplayNone(firstElInStepWithAngularError)) {
       this.scrollTo(firstElInStepWithAngularError);
+      firstElInStepWithAngularError.focus();
       return true;
     }
 
