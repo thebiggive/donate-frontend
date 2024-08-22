@@ -72,16 +72,16 @@ jobs:
 
       - run: npm run build:staging
 
+      - aws-cli/setup:
+          aws_access_key_id: AWS_ACCESS_KEY_ID
+          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+
       - aws-s3/sync:
           from: dist/browser
           to: 's3://tbg-staging-donate-static/d'
           arguments: |
             --acl public-read \
             --cache-control "max-age=31536000"
-          auth:
-            - aws-cli/setup:
-              aws_access_key_id: AWS_ACCESS_KEY_ID
-              aws_secret_access_key: AWS_SECRET_ACCESS_KEY
 
       - aws-s3/sync:
           from: dist/browser/assets
@@ -89,10 +89,6 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
-          auth:
-            - aws-cli/setup:
-              aws_access_key_id: AWS_ACCESS_KEY_ID
-              aws_secret_access_key: AWS_SECRET_ACCESS_KEY
 
   deploy-regression-static:
     docker:
@@ -123,16 +119,16 @@ jobs:
 
       - run: npm run build:regression
 
+      - aws-cli/setup:
+          aws_access_key_id: AWS_ACCESS_KEY_ID
+          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+
       - aws-s3/sync:
           from: dist/browser
           to: 's3://tbg-regression-donate-static/d'
           arguments: |
             --acl public-read \
             --cache-control "max-age=31536000"
-          auth:
-            - aws-cli/setup:
-              aws_access_key_id: AWS_ACCESS_KEY_ID
-              aws_secret_access_key: AWS_SECRET_ACCESS_KEY
 
       - aws-s3/sync:
           from: dist/browser/assets
@@ -140,10 +136,6 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
-          auth:
-            - aws-cli/setup:
-              aws_access_key_id: AWS_ACCESS_KEY_ID
-              aws_secret_access_key: AWS_SECRET_ACCESS_KEY
 
   deploy-production-static:
     docker:
@@ -174,16 +166,16 @@ jobs:
 
       - run: npm run build:production
 
+      - aws-cli/setup:
+          aws_access_key_id: AWS_ACCESS_KEY_ID
+          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+
       - aws-s3/sync:
           from: dist/browser
           to: 's3://tbg-production-donate-static/d'
           arguments: |
             --acl public-read \
             --cache-control "max-age=31536000"
-          auth:
-            - aws-cli/setup:
-              aws_access_key_id: AWS_ACCESS_KEY_ID
-              aws_secret_access_key: AWS_SECRET_ACCESS_KEY
 
       - aws-s3/sync:
           from: dist/browser/assets
@@ -191,10 +183,6 @@ jobs:
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
-          auth:
-            - aws-cli/setup:
-              aws_access_key_id: AWS_ACCESS_KEY_ID
-              aws_secret_access_key: AWS_SECRET_ACCESS_KEY
 
   build-ecr:
     machine:
