@@ -41,20 +41,21 @@
           <biggive-grid columnCount="2">
             @for (donation of donations; track donation.transactionId) {
               <biggive-container-card
-                card-colour="tertiary"
+                card-colour="white"
                 background-colour="primary"
               >
                 <div class="donation">
-                  <p>{{this.displayMethodType(donation)}}</p>
-                  <h3><a href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a></h3>
-
-                  <ul>
-                    <li>Amount: {{ donation.donationAmount | exactCurrency:donation.currencyCode }}</li>
-                    <li>Tip to Big Give: {{ donation.tipAmount | exactCurrency:donation.currencyCode }}</li>
-                    <li><strong>Total paid: {{ donation.totalPaid | exactCurrency:donation.currencyCode }}</strong></li>
-                    <li>Date: {{ donation.createdTime | date: 'mediumDate' }}</li>
-                    <li>Payment Reference: <span class="reference">{{ donation.transactionId }}</span></li>
-                  </ul>
+                  <div style="flex-grow: 1">
+                    <p>{{this.displayMethodType(donation)}}</p>
+                    <h3><a href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a></h3>
+                  </div>
+                    <ul style="margin-top: auto">
+                      <li>Amount: {{ donation.donationAmount | exactCurrency:donation.currencyCode }}</li>
+                      <li>Tip to Big Give: {{ donation.tipAmount | exactCurrency:donation.currencyCode }}</li>
+                      <li><strong>Total paid: {{ donation.totalPaid | exactCurrency:donation.currencyCode }}</strong></li>
+                      <li>Date: {{ donation.createdTime | date: 'mediumDate' }}</li>
+                      <li>Payment Reference: <span class="reference">{{ donation.transactionId }}</span></li>
+                    </ul>
                 </div>
               </biggive-container-card>
             }
