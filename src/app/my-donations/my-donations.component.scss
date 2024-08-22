@@ -23,7 +23,7 @@ div.donation-container {
   column-gap: 10px;
   flex-wrap: wrap;
 }
-// for the amount align accross cards we need to set content-wrap height to 100% in the components
+
 div.donation {
   display: flex;
   height: 100%;
@@ -35,10 +35,12 @@ div.donation {
   }
   *:first-child {
     margin-top: 0;
+    flex-grow: 1;
   }
   ul {
     padding: 0;
     list-style-type: none;
+    margin-top: auto;
   }
   .reference {
     word-wrap: break-word;

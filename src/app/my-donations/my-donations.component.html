@@ -45,11 +45,11 @@
                 background-colour="primary"
               >
                 <div class="donation">
-                  <div style="flex-grow: 1">
+                  <div>
                     <p>{{this.displayMethodType(donation)}}</p>
                     <h3><a href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a></h3>
                   </div>
-                    <ul style="margin-top: auto">
+                    <ul>
                       <li>Amount: {{ donation.donationAmount | exactCurrency:donation.currencyCode }}</li>
                       @if(shouldShowTipForDonation(donation)) {
                         <li>Tip to Big Give: {{ donation.tipAmount | exactCurrency:donation.currencyCode }}</li>
