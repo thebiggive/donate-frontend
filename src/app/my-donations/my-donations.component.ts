@@ -44,4 +44,12 @@ export class MyDonationsComponent implements OnInit{
       case "customer_balance": return "Donation Funds payment"
     }
   }
+
+  /**
+   * We expect tip amounts for customer balance donations to always be zero, if they are in fact zero no need
+   * to display them.
+   */
+  shouldShowTipForDonation(donation: CompleteDonation) {
+    return donation.tipAmount !== 0 || donation.pspMethodType !== 'customer_balance';
+  }
 }
