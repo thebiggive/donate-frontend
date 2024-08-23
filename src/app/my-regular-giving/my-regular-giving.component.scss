@@ -17,22 +17,14 @@ main > div {
   }
 }
 
-div.mandate-container {
-  display: flex;
-  justify-content: left;
-  column-gap: 10px;
-  flex-wrap: wrap;
-}
-
 div.mandate {
-  border-radius: 5px;
-  background: white;
-  margin-bottom: 10px;
-  color: $colour-primary;
-  padding-left: 10px;
-  overflow-wrap: break-word;
-  flex-basis: 80%;
-  a:link, a:visited, a:hover {
-    color: $colour-primary !important;
-  }
+    a:link, a:visited, a:hover {
+      color: inherit !important;
+      text-decoration: none;
+    }
+    ul {
+      padding: 0;
+      list-style-type: none;
+      margin-top: auto;
+    }
 }
