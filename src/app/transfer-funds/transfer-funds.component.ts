@@ -424,7 +424,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       // IMPORTANT: donationAmount set as the tip value
       donationAmount: donationAmount,
       donationMatched: this.campaign.isMatched, // this should always be false
-      feeCoverAmount: 0,
       giftAid: this.giftAidGroup.value.giftAid,
       matchedAmount: 0, // Tips are always unmatched
       matchReservedAmount: 0, // Tips are always unmatched

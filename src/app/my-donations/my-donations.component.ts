@@ -1,7 +1,7 @@
 import {Component,  OnInit} from '@angular/core';
 import {PageMetaService} from "../page-meta.service";
 import {ActivatedRoute} from "@angular/router";
-import {Donation, isLargeDonation} from "../donation.model";
+import {CompleteDonation, Donation, isLargeDonation} from "../donation.model";
 import {AsyncPipe, DatePipe} from "@angular/common";
 import {ExactCurrencyPipe} from "../exact-currency.pipe";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
@@ -21,7 +21,7 @@ import {allChildComponentImports} from "../../allChildComponentImports";
   styleUrl: './my-donations.component.scss'
 })
 export class MyDonationsComponent implements OnInit{
-  protected donations: Donation[];
+  protected donations: CompleteDonation[];
   protected atLeastOneDonationWasLarge: boolean;
 
   constructor(
@@ -34,7 +34,7 @@ export class MyDonationsComponent implements OnInit{
       'Big Give - Your Donation History', '', null
     );
 
-    this.donations = this.route.snapshot.data.donations
+    this.donations = this.route.snapshot.data.donations;
     this.atLeastOneDonationWasLarge = this.donations.some(isLargeDonation);
   }
 
@@ -43,5 +43,13 @@ export class MyDonationsComponent implements OnInit{
       case "card": return "Card payment";
       case "customer_balance": return "Donation Funds payment"
     }
+  }
+
+  /**
+   * We expect tip amounts for customer balance donations to always be zero, if they are in fact zero no need
+   * to display them.
+   */
+  shouldShowTipForDonation(donation: CompleteDonation) {
+    return donation.tipAmount !== 0 || donation.pspMethodType !== 'customer_balance';
   }
 }

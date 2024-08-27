@@ -11,7 +11,7 @@ import {of} from 'rxjs';
 import {TBG_DONATE_STORAGE} from '../donation.service';
 import {DonationThanksComponent} from './donation-thanks.component';
 import {TBG_DONATE_ID_STORAGE} from '../identity.service';
-import {Donation} from "../donation.model";
+import {CompleteDonation} from "../donation.model";
 import {NgxMatomoModule} from "ngx-matomo-client";
 
 describe('DonationThanksComponent', () => {
@@ -58,8 +58,9 @@ describe('DonationThanksComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  function donationOf(donationAmount: number, currencyCode: string): Donation {
+  function donationOf(donationAmount: number, currencyCode: string): CompleteDonation {
     return {
+      totalPaid: donationAmount,
       firstName: 'first name',
       lastName: 'last name',
       emailAddress: 'email address',
@@ -67,7 +68,6 @@ describe('DonationThanksComponent', () => {
       currencyCode: currencyCode,
       donationAmount: donationAmount,
       donationMatched: false,
-      feeCoverAmount: 0,
       matchReservedAmount: 0,
       matchedAmount: 0,
       pspMethodType: 'card',

@@ -1,4 +1,4 @@
-import {DonationStatus} from './donation-status.type';
+import {completeStatuses, DonationStatus} from './donation-status.type';
 
 export function maximumDonationAmount(currencyCode: string, creditPenceToUse: number): number {
   if (currencyCode !== 'GBP') {
@@ -99,8 +99,6 @@ export interface Donation {
 
     emailAddress?: string;
 
-    feeCoverAmount: number;
-
     firstName?: string;
 
     lastName?: string;
@@ -135,6 +133,14 @@ export interface Donation {
      * ISO 8601 formatted datetime
      */
     updatedTime?: string;
+}
+
+export interface CompleteDonation extends Donation {
+  /**
+   * Total amount paid to Big Give by the donor.
+   */
+  totalPaid: number;
+  status: typeof completeStatuses[number]
 }
 
 export function isLargeDonation(donation: Donation) {

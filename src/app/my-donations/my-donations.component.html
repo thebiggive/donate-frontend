@@ -13,17 +13,6 @@
     </biggive-page-section>
      <biggive-page-section>
         @if (donations.length > 0) {
-
-          <div class="donation-container">
-            @for (donation of donations; track donation.transactionId) {
-                <div class="donation">
-                  <a href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a> - {{ donation.createdTime | date: 'mediumDate' }} <br/>
-                  {{ donation.donationAmount | exactCurrency:donation.currencyCode }} ({{this.displayMethodType(donation)}}) <br/>
-                  Reference: {{ donation.transactionId }}
-                </div>
-            }
-          </div>
-
           @if (atLeastOneDonationWasLarge) {
             <p>
               Thank you for your generous support. Every donation you have made has helped to make an extraordinary
@@ -38,7 +27,7 @@
             </p>
           } @else {
             <p>
-            Thank you for your generous support. Every donation you have made has helped to make an extraordinary
+              Thank you for your generous support. Every donation you have made has helped to make an extraordinary
               difference. <a href="https://mailchi.mp/biggive/news">Join our mailing list</a> to stay up to date on
               upcoming campaigns.
             </p>
@@ -48,6 +37,31 @@
             For detailed donation receipts, please check the emails sent from hello&#64;biggive.org. We are unable to
             display any donations you may have made without logging in.
           </p>
+
+          <biggive-grid columnCount="2">
+            @for (donation of donations; track donation.transactionId) {
+              <biggive-container-card
+                card-colour="white"
+                background-colour="primary"
+              >
+                <div class="donation">
+                  <div>
+                    <p>{{this.displayMethodType(donation)}}</p>
+                    <h3><a href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a></h3>
+                  </div>
+                    <ul>
+                      <li>Amount: {{ donation.donationAmount | exactCurrency:donation.currencyCode }}</li>
+                      @if(shouldShowTipForDonation(donation)) {
+                        <li>Tip to Big Give: {{ donation.tipAmount | exactCurrency:donation.currencyCode }}</li>
+                      }
+                      <li><strong>Total paid: {{ donation.totalPaid | exactCurrency:donation.currencyCode }}</strong></li>
+                      <li>Date: {{ donation.createdTime | date: 'mediumDate' }}</li>
+                      <li>Payment Reference: <span class="reference">{{ donation.transactionId }}</span></li>
+                    </ul>
+                </div>
+              </biggive-container-card>
+            }
+          </biggive-grid>
         } @else {
           <p>
             No donations found for this account. <a href="/explore">Make your first donation</a> to see it here.

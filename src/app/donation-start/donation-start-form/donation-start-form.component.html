@@ -74,21 +74,14 @@
             <div>
               <hr style="margin: 20px auto;">
               <h2 class="b-rt-0 b-m-0 b-bold">Support Big Give</h2>
-              @if (!campaign.feePercentage && creditPenceToUse === 0) {
+              @if (creditPenceToUse === 0) {
                 <p>
                   Tips to Big Give (registered charity number 1136547) enable us to deliver our charitable mission
                   and help us provide match funds to our charity partners. We truly appreciate any tip you
                   can give - no matter the size.
                 </p>
               }
-              @if (campaign.feePercentage && creditPenceToUse === 0) {
-                <div>
-                  <mat-checkbox formControlName="coverFee" id="coverFee">
-                    Cover the {{ campaign.feePercentage}}% <a href="https://biggive.org/our-fees" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon> platform fee</a> for the &quot;{{ campaign.title }}&quot; campaign?
-                  </mat-checkbox>
-                </div>
-              }
-              @if (!campaign.feePercentage && creditPenceToUse === 0) {
+              @if (creditPenceToUse === 0) {
                 <div style="text-align: center;">
                   <!-- Question - what should the prompt text be. There is no equivilent on the slider version. Or should
                   add it somewhere to the slider? -->
@@ -652,16 +645,10 @@
                     <td>{{ giftAidAmount() | exactCurrency:donation.currencyCode }}</td>
                   </tr>
                 }
-                @if (feeCoverAmount() > 0) {
-                  <tr>
-                    <td>Platform fee</td>
-                    <td>{{ feeCoverAmount() | exactCurrency:campaign.currencyCode }} </td>
-                  </tr>
-                }
                 <!-- If the donor is using credit we wouldn't be taking a tip at this point,
                 and if we are charging a campaign fee we wouldn't have asked for a tip
                 -->
-                @if (creditPenceToUse === 0 && !campaign.feePercentage) {
+                @if (creditPenceToUse === 0) {
                   <tr
                     >
                     <td>Tip Amount</td>

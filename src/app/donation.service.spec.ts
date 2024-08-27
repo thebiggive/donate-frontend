@@ -24,7 +24,6 @@ describe('DonationService', () => {
       donationAmount: 1234.56,
       donationMatched: true,
       emailAddress: 'test@example.com',
-      feeCoverAmount: 0,
       firstName: 'Louis',
       giftAid: true,
       lastName: 'Theroux',

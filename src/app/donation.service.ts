@@ -6,13 +6,14 @@ import {Observable, of} from 'rxjs';
 import {PaymentIntent, PaymentMethod} from '@stripe/stripe-js';
 
 import {COUNTRY_CODE} from './country-code.token';
-import {Donation} from './donation.model';
+import {CompleteDonation, Donation} from './donation.model';
 import {DonationCreatedResponse} from './donation-created-response.model';
 import {environment} from '../environments/environment';
 import {Person} from "./person.model";
 import {MatomoTracker} from 'ngx-matomo-client';
 import {map, switchMap} from "rxjs/operators";
 import {IdentityService, getPersonAuthHttpOptions} from "./identity.service";
+import {completeStatuses, DonationStatus, resumableStatuses} from "./donation-status.type";
 
 export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
 
@@ -21,8 +22,6 @@ export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE
 })
 export class DonationService {
   private readonly apiPath = '/donations';
-  private readonly completeStatuses = ['Collected', 'Paid'];
-  private readonly resumableStatuses = ['Pending', 'Reserved'];
   private readonly storageKey = `${environment.donateUriPrefix}/v2`; // Key is per-domain/env
 
   constructor(
@@ -77,7 +76,7 @@ export class DonationService {
   isResumable(donation: Donation, paymentMethodType: 'card' | 'customer_balance'): boolean {
     return (
       donation.status !== undefined &&
-      this.resumableStatuses.includes(donation.status) &&
+      (resumableStatuses as readonly DonationStatus[]).includes(donation.status) &&
       donation.pspMethodType === paymentMethodType
     );
   }
@@ -135,8 +134,8 @@ export class DonationService {
    * Indicates whether a donation is considered successful and fully processed. This is not always 'final' - donations
    * can be refunded and exit the Collected status.
    */
-  isComplete(donation: Donation): boolean {
-    return (donation.status !== undefined && this.completeStatuses.includes(donation.status));
+  isComplete(donation: Donation): donation is CompleteDonation {
+    return (donation.status !== undefined && (completeStatuses as readonly DonationStatus[]).includes(donation.status));
   }
 
   /**
@@ -351,7 +350,7 @@ export class DonationService {
   }
 
   getPastDonations(
-  ): Observable<Donation[]> {
+  ): Observable<CompleteDonation[]> {
     const jwt = this.identityService.getJWT();
     const person$ = this.identityService.getLoggedInPerson();
 
@@ -360,7 +359,7 @@ export class DonationService {
         throw new Error("logged in person required");
       }
 
-      return this.http.get<{ donations: Donation[] }>(
+      return this.http.get<{ donations: CompleteDonation[] }>(
         `${environment.donationsApiPrefix}/people/${person.id}/donations`,
         getPersonAuthHttpOptions(jwt),
       ).pipe(map((response) => response.donations));

@@ -29,7 +29,7 @@ export class DonationThanksComponent implements OnInit {
   @ViewChild('captcha') captcha: RecaptchaComponent;
 
   campaign?: Campaign;
-  cardChargedAmount: number;
+  totalPaid: number;
   complete = false;
   donation: Donation;
   encodedShareUrl: string;
@@ -281,7 +281,7 @@ export class DonationThanksComponent implements OnInit {
       // redirect here, usually at most once per donation.
       this.matomoTracker.trackEvent('donate', 'thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
 
-      this.cardChargedAmount = donation.donationAmount + donation.feeCoverAmount + donation.tipAmount;
+      this.totalPaid = donation.totalPaid;
       this.giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;
       this.totalValue = donation.donationAmount + this.giftAidAmount + donation.matchedAmount;
       this.donationIsLarge = isLargeDonation(donation);
