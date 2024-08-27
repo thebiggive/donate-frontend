@@ -30,7 +30,7 @@
                     <li>Total with gift aid {{(1.25 * mandate.amount.amountInPence / 100) | exactCurrency:mandate.amount.currency }}</li>
                   }
                   <li>Payment collection day: {{mandate.schedule.dayOfMonth}} </li>
-<!--                  <li>Next expected payment date: {{ 'todo fill this in with date to be calculated in matchbot'}}</li>-->
+                  <li>Next expected payment date: {{ mandate.schedule.expectedNextPaymentDate | date: 'mediumDate'}}</li>
                   <li>Active from: {{ mandate.schedule.activeFrom | date: 'mediumDate'}}</li>
                 </ul>
                 </div>
