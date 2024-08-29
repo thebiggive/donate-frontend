@@ -220,23 +220,18 @@ const routes: Routes = [
     loadChildren: () => import('./meta-campaign/meta-campaign.module')
       .then(c => c.MetaCampaignModule),
   },
-];
-
-if (flags.myDonationsEnabled) {
-  routes.unshift(
-    {
-      path: 'my-account/donations',
-      resolve: {
-        donations: () => inject(DonationService).getPastDonations(),
-      },
-      pathMatch: 'full',
-      component: MyDonationsComponent,
-      canActivate: [
-        requireLogin,
-      ],
+  {
+    path: 'my-account/donations',
+    resolve: {
+      donations: () => inject(DonationService).getPastDonations(),
     },
-  );
-}
+    pathMatch: 'full',
+    component: MyDonationsComponent,
+    canActivate: [
+      requireLogin,
+    ],
+  },
+];
 
 if (flags.regularGivingEnabled) {
   routes.unshift(
