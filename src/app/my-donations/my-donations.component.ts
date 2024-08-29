@@ -1,4 +1,4 @@
-import {Component,  OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PageMetaService} from "../page-meta.service";
 import {ActivatedRoute} from "@angular/router";
 import {CompleteDonation, Donation, isLargeDonation} from "../donation.model";
@@ -22,7 +22,7 @@ import {allChildComponentImports} from "../../allChildComponentImports";
 })
 export class MyDonationsComponent implements OnInit{
   protected donations: CompleteDonation[];
-  protected atLeastOneDonationWasLarge: boolean;
+  protected atLeastOneLargeRecentDonation: boolean;
 
   constructor(
     private pageMeta: PageMetaService,
@@ -35,7 +35,23 @@ export class MyDonationsComponent implements OnInit{
     );
 
     this.donations = this.route.snapshot.data.donations;
-    this.atLeastOneDonationWasLarge = this.donations.some(isLargeDonation);
+
+
+    this.atLeastOneLargeRecentDonation = this.donations
+      .filter(donationIsRecent)
+      .some(isLargeDonation);
+
+    function donationIsRecent(donation: Donation) {
+      if (typeof donation.createdTime === 'undefined') {
+        console.error("No created time set for donation");
+        return false;
+      }
+
+      const twoYearsAgo = new Date();
+      twoYearsAgo.setFullYear(new Date().getFullYear() - 2);
+
+      return new Date(donation.createdTime) > twoYearsAgo;
+    }
   }
 
   displayMethodType(donation: Donation) {
