@@ -55,6 +55,15 @@
                         <li>Tip to Big Give: {{ donation.tipAmount | exactCurrency:donation.currencyCode }}</li>
                       }
                       <li><strong>Total paid: {{ donation.totalPaid | exactCurrency:donation.currencyCode }}</strong></li>
+                      @if (donation.matchedAmount > 0) {
+                        <li>Matched Amount: {{donation.matchedAmount | exactCurrency:donation.currencyCode }}</li>
+                      }
+                      @if (donation.giftAidAmount > 0) {
+                        <li>Gift Aid Amount: {{donation.giftAidAmount | exactCurrency:donation.currencyCode }}</li>
+                      }
+                      <li>Charity recieves: {{donation.totalValue | exactCurrency:donation.currencyCode }}</li>
+                    </ul>
+                    <ul>
                       <li>Date: {{ donation.createdTime | date: 'mediumDate' }}</li>
                       <li>Payment Reference: <span class="reference">{{ donation.transactionId }}</span></li>
                     </ul>
