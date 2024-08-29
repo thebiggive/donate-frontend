@@ -69,10 +69,10 @@ input {
 }
 
 main > div {
+  @include make-container;
   box-sizing: border-box;
   color: $colour-primary;
   background-color: $colour-background;
-  width: 100%;
 
   @media #{$breakpoint-lg} {
     padding-top: 0;
@@ -81,7 +81,6 @@ main > div {
     padding-bottom: 20px;
     position: relative;
     top: -125px;
-    width: 80%;
     margin: auto;
   }
 }
