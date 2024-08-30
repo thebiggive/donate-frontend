@@ -73,6 +73,7 @@ main > div {
   box-sizing: border-box;
   color: $colour-primary;
   background-color: $colour-background;
+  margin-bottom: 125px;
 
   @media #{$breakpoint-lg} {
     padding-top: 0;
