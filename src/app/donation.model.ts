@@ -143,6 +143,27 @@ export interface CompleteDonation extends Donation {
   status: typeof completeStatuses[number]
 }
 
+/**
+ * A complete donation with some additional properties that for now are computed in browser rather than sent from
+ * matchbot. May be removed soon if calculations are moved to matchbot, where results can be saved to db.
+ */
+export interface EnrichedDonation extends CompleteDonation {
+  /** How much the charity will (or did) recieve in total */
+  totalValue: number;
+  giftAidAmount: number;
+}
+
 export function isLargeDonation(donation: Donation) {
   return donation.currencyCode === 'GBP' && donation.donationAmount >= 5_000;
+}
+
+export function withComputedProperties(donation: CompleteDonation): EnrichedDonation
+{
+  // calculations here duplicate those in thanks page. Consider moving to matchbot soon.
+  const giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;
+  return {
+    ...donation,
+    giftAidAmount: giftAidAmount,
+    totalValue: donation.donationAmount + giftAidAmount + donation.matchedAmount,
+  };
 }

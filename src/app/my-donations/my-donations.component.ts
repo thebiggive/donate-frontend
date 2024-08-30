@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {PageMetaService} from "../page-meta.service";
 import {ActivatedRoute} from "@angular/router";
-import {CompleteDonation, Donation, isLargeDonation} from "../donation.model";
+import {CompleteDonation, Donation, EnrichedDonation, isLargeDonation, withComputedProperties} from "../donation.model";
 import {AsyncPipe, DatePipe} from "@angular/common";
 import {ExactCurrencyPipe} from "../exact-currency.pipe";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
@@ -21,7 +21,7 @@ import {allChildComponentImports} from "../../allChildComponentImports";
   styleUrl: './my-donations.component.scss'
 })
 export class MyDonationsComponent implements OnInit{
-  protected donations: CompleteDonation[];
+  protected donations: EnrichedDonation[];
   protected atLeastOneLargeRecentDonation: boolean;
 
   constructor(
@@ -34,12 +34,13 @@ export class MyDonationsComponent implements OnInit{
       'Big Give - Your Donation History', '', null
     );
 
-    this.donations = this.route.snapshot.data.donations;
+    this.donations = this.route.snapshot.data.donations.map(withComputedProperties);
 
 
     this.atLeastOneLargeRecentDonation = this.donations
       .filter(donationIsRecent)
-      .some(isLargeDonation);
+      .some(isLargeDonation)
+    ;
 
     function donationIsRecent(donation: Donation) {
       if (typeof donation.createdTime === 'undefined') {

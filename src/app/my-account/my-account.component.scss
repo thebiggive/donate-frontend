@@ -21,11 +21,6 @@ a:link, a:visited, a:hover {
 main > div {
   color: white;
   background-color: $colour-primary;
-  width: 100%;
-
-  @media #{$breakpoint-lg} {
-    width: 80%; // this seems to be needed, not sure why the identicle rule in auth_common.scss isn't working.
-  }
 }
 
 #logout {
