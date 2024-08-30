@@ -149,6 +149,17 @@ const routes: Routes = [
       .then(c => c.DonationThanksModule),
   },
   {
+    path: 'my-account/donations',
+    resolve: {
+      donations: () => inject(DonationService).getPastDonations(),
+    },
+    pathMatch: 'full',
+    component: MyDonationsComponent,
+    canActivate: [
+      requireLogin,
+    ],
+  },
+  {
     path: ':campaignSlug/:fundSlug',
     pathMatch: 'full',
     resolve: {
@@ -221,22 +232,6 @@ const routes: Routes = [
       .then(c => c.MetaCampaignModule),
   },
 ];
-
-if (flags.myDonationsEnabled) {
-  routes.unshift(
-    {
-      path: 'my-account/donations',
-      resolve: {
-        donations: () => inject(DonationService).getPastDonations(),
-      },
-      pathMatch: 'full',
-      component: MyDonationsComponent,
-      canActivate: [
-        requireLogin,
-      ],
-    },
-  );
-}
 
 if (flags.regularGivingEnabled) {
   routes.unshift(
