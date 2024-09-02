@@ -6,11 +6,6 @@
 main > div {
   color: white;
   background-color: $colour-primary;
-  width: 100%;
-
-  @media #{$breakpoint-lg} {
-    width: 80%; // this seems to be needed, not sure why the identical rule in auth_common.scss isn't working.
-  }
 
   a:link, a:visited, a:hover {
     color: white;

@@ -6,7 +6,8 @@ export interface Mandate {
   "schedule": {
     "type": "monthly",
     "dayOfMonth": number,
-    "activeFrom": string
+    "activeFrom": string,
+    "expectedNextPaymentDate": string
   },
   giftAid: boolean,
   "amount": {

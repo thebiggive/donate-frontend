@@ -13,10 +13,10 @@
     </biggive-page-section>
      <biggive-page-section>
         @if (donations.length > 0) {
-          @if (atLeastOneDonationWasLarge) {
+          @if (atLeastOneLargeRecentDonation) {
             <p>
               Thank you for your generous support. Every donation you have made has helped to make an extraordinary
-              difference. As a valued supporter, we would like to share an exclusive opportunity with you – the chance to
+              difference. As a valued supporter, we would like to share an opportunity with you – the chance to
               become one of our match funding Champions. By leveraging your support as match funding, you could continue
               helping charities to double the impact of their donations.
             </p>
@@ -55,6 +55,15 @@
                         <li>Tip to Big Give: {{ donation.tipAmount | exactCurrency:donation.currencyCode }}</li>
                       }
                       <li><strong>Total paid: {{ donation.totalPaid | exactCurrency:donation.currencyCode }}</strong></li>
+                      @if (donation.matchedAmount > 0) {
+                        <li>Matched Amount: {{donation.matchedAmount | exactCurrency:donation.currencyCode }}</li>
+                      }
+                      @if (donation.giftAidAmount > 0) {
+                        <li>Gift Aid Amount: {{donation.giftAidAmount | exactCurrency:donation.currencyCode }}</li>
+                      }
+                      <li>Charity receives: {{donation.totalValue | exactCurrency:donation.currencyCode }}</li>
+                    </ul>
+                    <ul>
                       <li>Date: {{ donation.createdTime | date: 'mediumDate' }}</li>
                       <li>Payment Reference: <span class="reference">{{ donation.transactionId }}</span></li>
                     </ul>
@@ -68,7 +77,7 @@
           </p>
 
           <p><em>If you can’t find your previous donations, please get in touch with hello&#64;biggive.org and our team
-            is on hand to help. We are unable to display any donations you may have made without logging in.</em></p>
+            is on hand to help. Only donations that you made as a logged-in user will be displayed here.</em></p>
 
             <p>You can also <a href="https://mailchi.mp/biggive/news">join our mailing list</a> to stay up to date on
               upcoming campaigns.</p>
