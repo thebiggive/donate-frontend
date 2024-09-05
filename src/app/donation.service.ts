@@ -127,7 +127,7 @@ export class DonationService {
 
     const jwt = couplet.jwt;
     this.removeLocalDonation(donation);
-    this.saveDonation(donation, jwt);
+    this.saveDonation({donation, jwt});
   }
 
   /**
@@ -203,7 +203,11 @@ export class DonationService {
     );
   }
 
-  saveDonation(donation: Donation, jwt: string) {
+  public get stripeSessionSecret(): string|undefined {
+    return this.sessionStorage.get('stripe-session-secret') as undefined;
+  }
+
+  saveDonation({donation, jwt, stripeSessionSecret}: DonationCreatedResponse) {
     // Salesforce doesn't add this until after the async persist so we need to set it
     // locally in order to later determine which donations are new and eligible for reuse.
     // Note that updates call this too so this must check for existing values and not
@@ -211,6 +215,11 @@ export class DonationService {
     if (!donation.createdTime) {
       donation.createdTime = (new Date()).toISOString();
     }
+
+        if (stripeSessionSecret) {
+           this.sessionStorage.set('stripe-session-secret', stripeSessionSecret);
+    }
+
 
     const donationCouplets = this.getDonationCouplets();
     donationCouplets.push({ donation, jwt });
