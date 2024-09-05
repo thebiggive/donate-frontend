@@ -584,7 +584,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.stripePaymentMethodReady = false;
     this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup);
     this.donationForm.reset();
-    this.identityService.clearJWT();
+    this.identityService.logout();
     this.destroyStripeElements();
 
     // We should probably reinstate `this.idCaptcha.reset();` here iff we replace the full

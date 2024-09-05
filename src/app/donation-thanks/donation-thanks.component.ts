@@ -211,7 +211,7 @@ export class DonationThanksComponent implements OnInit {
           this.captcha.execute(); // Leads to loginCaptchaReturn() assuming the captcha succeeds.
         } else {
           // Otherwise we should remove even the temporary ID token.
-          this.identityService.clearJWT();
+          this.identityService.logout();
         }
       },
       error: (error: HttpErrorResponse) => {

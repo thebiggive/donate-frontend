@@ -14,8 +14,11 @@ import {MatomoTracker} from 'ngx-matomo-client';
 import {map, switchMap} from "rxjs/operators";
 import {IdentityService, getPersonAuthHttpOptions} from "./identity.service";
 import {completeStatuses, DonationStatus, resumableStatuses} from "./donation-status.type";
+import {CookieService} from "ngx-cookie-service";
 
 export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
+
+export const STRIPE_SESSION_SECRET_COOKIE_NAME = 'stripe-session-secret';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +35,7 @@ export class DonationService {
     @Inject(PLATFORM_ID) private platformId: Object,
 
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
+    private cookieService: CookieService,
 
     /**
      * @todo - after a version of this that includes the `sessionStorage` property above has been deployed for
@@ -204,7 +208,12 @@ export class DonationService {
   }
 
   public get stripeSessionSecret(): string|undefined {
-    return this.sessionStorage.get('stripe-session-secret') as undefined;
+    const secret = this.cookieService.get(STRIPE_SESSION_SECRET_COOKIE_NAME);
+    if (secret == '') {
+      return undefined;
+    }
+
+    return secret;
   }
 
   saveDonation({donation, jwt, stripeSessionSecret}: DonationCreatedResponse) {
@@ -216,10 +225,10 @@ export class DonationService {
       donation.createdTime = (new Date()).toISOString();
     }
 
-        if (stripeSessionSecret) {
-           this.sessionStorage.set('stripe-session-secret', stripeSessionSecret);
+    if (stripeSessionSecret) {
+      const daysTilExpiry = 1;
+      this.cookieService.set(STRIPE_SESSION_SECRET_COOKIE_NAME, stripeSessionSecret, daysTilExpiry, '/');
     }
-
 
     const donationCouplets = this.getDonationCouplets();
     donationCouplets.push({ donation, jwt });

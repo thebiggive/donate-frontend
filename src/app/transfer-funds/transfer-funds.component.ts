@@ -335,7 +335,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
     this.isPurchaseComplete = false;
     this.creditForm.reset();
-    this.identityService.clearJWT();
+    this.identityService.logout();
     window.location.href = "/";
   }
 
