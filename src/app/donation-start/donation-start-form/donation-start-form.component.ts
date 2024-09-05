@@ -903,7 +903,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     let paymentMethodResult;
     let paymentMethod;
-    if (this.selectedSavedMethod) {
+    if (this.selectedSavedMethod && false) {
       paymentMethod = this.selectedSavedMethod;
     } else {
       paymentMethodResult = await this.stripeService.prepareMethodFromPaymentElement(this.donation, <StripeElements>this.stripeElements);
