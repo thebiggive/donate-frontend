@@ -27,7 +27,7 @@ export class StripeService {
     this.stripe = await loadStripe(environment.psps.stripe.publishableKey);
   }
 
-  stripeElements(donation: Donation, campaign: Campaign) {
+  stripeElements(donation: Donation, campaign: Campaign, customerSessionClientSecret: string | undefined) {
     if (!this.stripe) {
       throw new Error('Stripe not ready');
     }
@@ -46,6 +46,7 @@ export class StripeService {
       setup_future_usage: 'on_session',
       on_behalf_of: campaign.charity.stripeAccountId,
       paymentMethodCreation: 'manual',
+      customerSessionClientSecret,
     });
   }
 

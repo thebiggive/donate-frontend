@@ -584,7 +584,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.stripePaymentMethodReady = false;
     this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup);
     this.donationForm.reset();
-    this.identityService.clearJWT();
+    this.identityService.logout();
     this.destroyStripeElements();
 
     // We should probably reinstate `this.idCaptcha.reset();` here iff we replace the full
@@ -1295,6 +1295,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   };
 
   onUseSavedCardChange(event: MatCheckboxChange, paymentMethod: PaymentMethod) {
+    if (flags.stripeElementCardChoice) {
+      throw new Error("un use saved card called with stripe element choice enabled");
+    }
+
     // For now, we assume unticking happens before card entry, so we can just set the validity flag to false.
     // Ideally, we would later track `card`'s validity separately so that going back up the page, ticking this
     // then unticking it leaves the card box valid without having to modify it. But this is rare and
@@ -1336,7 +1340,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.stripeElements) {
       this.stripeService.updateAmount(this.stripeElements, this.donation);
     } else {
-      this.stripeElements = this.stripeService.stripeElements(this.donation, this.campaign);
+      this.stripeElements = this.stripeService.stripeElements(
+        this.donation,
+        this.campaign,
+        flags.stripeElementCardChoice ? this.donationService.stripeSessionSecret : undefined
+      );
     }
 
     if (this.stripePaymentElement) {
@@ -1781,7 +1789,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    this.donationService.saveDonation(response.donation, response.jwt);
+    this.donationService.saveDonation(response);
     this.donation = response.donation; // Simplify update() while we're on this page.
     this.donationChangeCallBack(this.donation)
 
@@ -2366,7 +2374,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.identityService.isTokenForFinalisedUser(jwt)) {
       this.prepareDonationCredits(person);
       this.prefillRarelyChangingFormValuesFromPerson(person);
-      this.loadFirstSavedStripeCardIfAny(id, jwt);
+      if (! flags.stripeElementCardChoice) {
+        this.loadFirstSavedStripeCardIfAny(id, jwt);
+      }
       // This is helpful when somebody logged in while on the page, to get the latest validation state
       // for them. For example, if they previously had many errors on the payment group but we patched
       // in their name etc., they may now have fewer.

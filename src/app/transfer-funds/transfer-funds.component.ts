@@ -335,7 +335,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
     this.isPurchaseComplete = false;
     this.creditForm.reset();
-    this.identityService.clearJWT();
+    this.identityService.logout();
     window.location.href = "/";
   }
 
@@ -478,7 +478,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       return;
     }
 
-    this.donationService.saveDonation(response.donation, response.jwt);
+    this.donationService.saveDonation(response);
     this.donationService.finaliseCashBalancePurchase(response.donation).subscribe((donation) => {
       this.donation = donation;
     });
