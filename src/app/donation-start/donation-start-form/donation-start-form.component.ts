@@ -1336,7 +1336,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.stripeElements) {
       this.stripeService.updateAmount(this.stripeElements, this.donation);
     } else {
-      this.stripeElements = this.stripeService.stripeElements(this.donation, this.campaign);
+      this.stripeElements = this.stripeService.stripeElements(this.donation, this.campaign, this.donationService.stripeSessionSecret);
     }
 
     if (this.stripePaymentElement) {
@@ -1781,7 +1781,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    this.donationService.saveDonation(response.donation, response.jwt);
+    this.donationService.saveDonation(response);
     this.donation = response.donation; // Simplify update() while we're on this page.
     this.donationChangeCallBack(this.donation)
 
@@ -1930,7 +1930,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.donationCreateError = false;
     this.donationUpdateError = false;
 
-    if (this.stripeSavedMethods.length < 1) {
+    if (this.stripeSavedMethods.length < 1 || true) {
       this.selectedSavedMethod = undefined;
       this.paymentReadinessTracker.clearSavedPaymentMethod();
     }
@@ -2281,7 +2281,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
                 billingCountry: this.defaultCountryCode,
               });
             }
-            this.selectedSavedMethod = this.stripeSavedMethods.length > 0 ? this.stripeSavedMethods[0] : undefined;
+          //  this.selectedSavedMethod = this.stripeSavedMethods.length > 0 ? this.stripeSavedMethods[0] : undefined;
             if (this.selectedSavedMethod) {
               this.paymentReadinessTracker.selectedSavedPaymentMethod();
             }

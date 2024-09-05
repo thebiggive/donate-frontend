@@ -383,7 +383,7 @@
                   <p id="useCreditsMessage" class="b-center">Your donation funds balance will be applied against this donation. No further funds will be taken.</p>
                 </div>
               }
-              @if (creditPenceToUse === 0 && stripeSavedMethods.length > 0) {
+              @if (creditPenceToUse === 0 && stripeSavedMethods.length > 0 && false) {
                 <div
                   class="payment-method-options"
                   >
@@ -418,7 +418,7 @@
               <!-- We need the ElementRef to always be available for Stripe.js mounting as there are
               a few dynamic ways the input can become or cease to be relevant. So just CSS-hide the
               element when not needed, and always mount it. -->
-              <div class="payment-details" [style.display]="!selectedSavedMethod && creditPenceToUse === 0 ? 'block' : 'none'">
+              <div class="payment-details" [style.display]="creditPenceToUse === 0 ? 'block' : 'none'">
                 <div class="sr-combo-inputs-row">
                   <biggive-text-input>
                     <span slot="label">Payment Method</span> <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe not us -->
