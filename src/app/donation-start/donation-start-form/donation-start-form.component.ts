@@ -751,6 +751,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.stripeResponseErrorCode = undefined;
     }
 
+    const isCard = state.value?.type === 'card';
+    const isSavedPaymentMethod = state.value?.hasOwnProperty('payment_method');
+    this.showCardReuseMessage = (isCard && ! isSavedPaymentMethod && ! this.donor?.has_password)
+      || ! flags.stripeElementCardChoice;
+
     // Jump back if we get an out of band message back that the card is *not* valid/ready.
     // Don't jump forward when the card *is* valid, as the donor might have been
     // intending to edit something else in the `payment` step; let them click Next.
@@ -2412,6 +2417,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   protected readonly flags = flags;
+  protected showCardReuseMessage = false;
 
   hideCaptcha() {
     this.shouldShowCaptcha = false;

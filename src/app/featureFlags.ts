@@ -15,8 +15,11 @@ const flagsForEnvironment = (environmentId: EnvironmentID) => {
     /**
      * Replaces our own custom display of saved cards that are fetch from Identity, with saved cards
      * inside the stripe payment element on the donation page.
+     *
+     * Only on dev env. Removed from staging because adding a new card doesn't work and will require adapting matchbot
+     * to accept a confirmationTokenId instead of paymentMethodId
      */
-    stripeElementCardChoice: environmentId === 'development' || environmentId === 'staging',
+    stripeElementCardChoice: environmentId === 'development',
   } as const;
 }
 

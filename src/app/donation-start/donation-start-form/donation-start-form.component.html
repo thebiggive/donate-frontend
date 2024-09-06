@@ -430,7 +430,9 @@
                     </div>
                   }
                   <div>
-                    Your card information will be held for re-use if you set a password on the next page. It is held securely only with Stripe.
+                    @if (showCardReuseMessage) {
+                      Your card information will be held for re-use only if you set a password on the next page. It is held securely only with Stripe.
+                    }
                   </div>
                 </div>
                 <div>
