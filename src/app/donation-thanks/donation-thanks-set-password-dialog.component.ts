@@ -11,6 +11,7 @@ import { RecaptchaModule } from 'ng-recaptcha';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Person } from '../person.model';
 import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.component";
+import {flags} from "../featureFlags";
 
 @Component({
   standalone: true,
@@ -32,6 +33,7 @@ import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.com
 export class DonationThanksSetPasswordDialogComponent implements OnInit {
   form: FormGroup;
   minPasswordLength: number;
+  protected readonly flags = flags;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {
