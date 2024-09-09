@@ -1,5 +1,10 @@
 import {Injectable} from '@angular/core';
-import {loadStripe, PaymentMethodResult, Stripe, StripeElements} from '@stripe/stripe-js';
+import {
+  ConfirmationTokenResult,
+  loadStripe,
+  Stripe,
+  StripeElements
+} from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
 import {Donation} from './donation.model';
@@ -54,14 +59,14 @@ export class StripeService {
     elements.update({amount: this.amountIncTipInMinorUnit(donation)});
   }
 
-  async prepareMethodFromPaymentElement(donation: Donation, elements: StripeElements): Promise<PaymentMethodResult> {
+  async prepareConfirmationTokenFromPaymentElement(donation: Donation, elements: StripeElements): Promise<ConfirmationTokenResult> {
     if (! this.stripe) {
       throw new Error("Stripe not ready");
     }
 
     const {error: submitError} = await elements.submit();
     if (submitError) {
-      return {error: submitError, paymentMethod: undefined}
+      return {error: submitError, confirmationToken: undefined}
     }
 
     // If we want to not show billing details inside the Stripe payment element we have to pass billing details
@@ -76,8 +81,8 @@ export class StripeService {
         }
     };
 
-    return await this.stripe.createPaymentMethod(
-      {elements: elements, params: paymentMethodData}
+    return await this.stripe.createConfirmationToken(
+      {elements: elements, params: {payment_method_data: paymentMethodData}}
     );
   }
 
