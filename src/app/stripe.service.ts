@@ -48,7 +48,6 @@ export class StripeService {
       mode: 'payment',
       currency: donation.currencyCode.toLowerCase(),
       amount: this.amountIncTipInMinorUnit(donation),
-      setup_future_usage: 'on_session',
       on_behalf_of: campaign.charity.stripeAccountId,
       paymentMethodCreation: 'manual',
       customerSessionClientSecret,
