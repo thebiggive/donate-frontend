@@ -25,6 +25,8 @@ import {RecaptchaComponent} from 'ng-recaptcha';
 import {MatomoTracker} from 'ngx-matomo-client';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
+  ConfirmationToken,
+  ConfirmationTokenResult,
   PaymentIntent,
   PaymentMethod,
   StripeElementChangeEvent,
@@ -906,18 +908,19 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       throw new Error("Missing stripe elements");
     }
 
-    let paymentMethodResult;
-    let paymentMethod;
+    let confirmationTokenResult: ConfirmationTokenResult | undefined;
+    let confirmationToken: ConfirmationToken | undefined;
+    let paymentMethod: PaymentMethod | undefined;
     if (this.selectedSavedMethod) {
       paymentMethod = this.selectedSavedMethod;
     } else {
-      paymentMethodResult = await this.stripeService.prepareMethodFromPaymentElement(this.donation, <StripeElements>this.stripeElements);
-      paymentMethod = paymentMethodResult.paymentMethod;
+      confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(this.donation, <StripeElements>this.stripeElements);
+      confirmationToken = confirmationTokenResult.confirmationToken;
     }
 
-    if (paymentMethod) {
+    if (confirmationToken || paymentMethod) {
       try {
-        result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, paymentMethod));
+        result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, {confirmationToken, paymentMethod}));
       } catch (httpError) {
         this.matomoTracker.trackEvent(
           'donate_error',
@@ -947,7 +950,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         }
       } // Else there's a `paymentMethod` which is already successful or errored » both handled later.
     } else {
-      result = {error: paymentMethodResult?.error};
+      result = {error: confirmationTokenResult?.error};
     }
 
     if (!result || result.error) {
