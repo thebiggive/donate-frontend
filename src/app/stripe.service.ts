@@ -38,11 +38,7 @@ export class StripeService {
       throw new Error('Stripe not ready');
     }
 
-    /** if we don't specify payment methods here Stripe will add their Link.com product, which we
-    don't want right now. Simply setting methods in our Stripe settings doesn't seem to work as it depends on the
-     setup of each connected Charity's account.
-     */
-    const payment_method_types = ['card'];
+    // setup_future_usage: 'on_session'
 
     const elementOptions: StripeElementsOptionsMode = {
       fonts: [
@@ -57,7 +53,6 @@ export class StripeService {
       amount: this.amountIncTipInMinorUnit(donation),
       on_behalf_of: campaign.charity.stripeAccountId,
       paymentMethodCreation: 'manual',
-      payment_method_types,
       customerSessionClientSecret,
     };
 
