@@ -3,12 +3,13 @@ import {
   ConfirmationTokenResult,
   loadStripe,
   Stripe,
-  StripeElements
+  StripeElements, StripeElementsOptionsMode
 } from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
 import {Donation} from './donation.model';
 import {Campaign} from "./campaign.model";
+import {flags} from "./featureFlags";
 
 @Injectable({
   providedIn: 'root',
@@ -37,7 +38,9 @@ export class StripeService {
       throw new Error('Stripe not ready');
     }
 
-    return this.stripe.elements({
+    // setup_future_usage: 'on_session'
+
+    const elementOptions: StripeElementsOptionsMode = {
       fonts: [
         {
           family: 'Euclid Triangle',
@@ -51,7 +54,13 @@ export class StripeService {
       on_behalf_of: campaign.charity.stripeAccountId,
       paymentMethodCreation: 'manual',
       customerSessionClientSecret,
-    });
+    };
+
+    if (! flags.stripeElementCardChoice) {
+      elementOptions.setup_future_usage = 'on_session';
+    }
+
+    return this.stripe.elements(elementOptions);
   }
 
   updateAmount(elements: StripeElements, donation: Donation) {
