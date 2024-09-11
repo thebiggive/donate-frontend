@@ -3,10 +3,12 @@ import {
   ConfirmationTokenResult,
   loadStripe,
   Stripe,
-  StripeElements, StripeElementsOptionsMode
+  StripeElements,
+  StripeElementsOptionsMode
 } from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
+import {environment as stagingEnvironment} from '../environments/environment.staging';
 import {Donation} from './donation.model';
 import {Campaign} from "./campaign.model";
 import {flags} from "./featureFlags";
@@ -40,14 +42,17 @@ export class StripeService {
 
     // setup_future_usage: 'on_session'
 
+    let fontOrigin: string = environment.donateUriPrefix;
+
+    if (environment.environmentId === 'development') {
+      // Stripe can't fetch the font from local dev env, so we use the staging URL instead.
+       fontOrigin = stagingEnvironment.donateUriPrefix;
+    }
     const elementOptions: StripeElementsOptionsMode = {
       fonts: [
         {
           family: 'Euclid Triangle',
-          // Doesn't work in local dev fast mode but should in SSR builds including live. If you need to test
-          // with fast feedback, swap in Staging's base URL.
-          // src: `url('${environment.donateUriPrefix}/d/EuclidTriangle-Regular.1d45abfd25720872.woff2') format('woff2')`,
-          src: `url('https://donate-staging.thebiggivetest.org.uk/d/EuclidTriangle-Regular.1d45abfd25720872.woff2') format('woff2')`,
+          src: `url('${fontOrigin}/d/EuclidTriangle-Regular.1d45abfd25720872.woff2') format('woff2')`,
           display: 'swap',
           weight: '400',
         },
