@@ -64,7 +64,7 @@
                       <li>Charity receives: {{donation.totalValue | exactCurrency:donation.currencyCode }}</li>
                     </ul>
                     <ul>
-                      <li>Date: {{ donation.createdTime | date: 'mediumDate' }}</li>
+                      <li>Date: {{ donation.collectedTime | date: 'mediumDate' }}</li>
                       <li>Payment Reference: <span class="reference">{{ donation.transactionId }}</span></li>
                     </ul>
                 </div>
