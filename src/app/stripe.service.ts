@@ -40,14 +40,14 @@ export class StripeService {
       throw new Error('Stripe not ready');
     }
 
-    // setup_future_usage: 'on_session'
-
     let fontOrigin: string = environment.donateUriPrefix;
 
     if (environment.environmentId === 'development') {
       // Stripe can't fetch the font from local dev env, so we use the staging URL instead.
        fontOrigin = stagingEnvironment.donateUriPrefix;
     }
+
+    const colorPrimaryBlue = '#2C089B';  // matches our $colour-primary
     const elementOptions: StripeElementsOptionsMode = {
       fonts: [
         {
@@ -63,7 +63,9 @@ export class StripeService {
           fontFamily: '"Euclid Triangle", sans-serif',
           fontLineHeight: '1.5',
           borderRadius: '0',
-          colorBackground: '#F6F8FA',
+          colorPrimary: colorPrimaryBlue,
+          colorBackground: '#F6F6F6', // matches our $colour-background
+          colorDanger: '#bb2222', // matches angular native and our snackbar
           accessibleColorOnColorPrimary: '#262626'
         },
         rules: {
@@ -74,27 +76,31 @@ export class StripeService {
           },
           '.Input': {
             padding: '12px',
-            border: 'solid 1px #999',
+            border: 'solid 1px black',
           },
           '.Input:disabled, .Input--invalid:disabled': {
             color: 'lightgray'
           },
           '.Tab': {
             padding: '10px 12px 8px 12px',
-            border: 'none'
+            backgroundColor: '#fff',
+            transition: "background .15s ease, outline .15s ease, box-shadow .15s ease",
           },
           '.Tab:hover': {
-            border: 'none',
-            boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 7px rgba(18, 42, 66, 0.04)'
+            backgroundColor: '#fff',
           },
           '.Tab--selected, .Tab--selected:focus, .Tab--selected:hover': {
-            border: 'none',
             backgroundColor: '#fff',
-            boxShadow: '0 0 0 1.5px var(--colorPrimaryText), 0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 7px rgba(18, 42, 66, 0.04)'
+            outline: "2px solid #2C089B",
           },
-          '.Label': {
-            fontWeight: '500'
-          }
+          '.CheckboxInput, .CheckboxInput--checked': {
+            backgroundColor: 'inherit',
+            outline: "solid 1px black",
+          },
+          '.Label, .CheckboxLabel': {
+            fontWeight: '500',
+            color: colorPrimaryBlue,
+          },
         }
       },
       mode: 'payment',
