@@ -106,6 +106,18 @@ export class StripeService {
             fontWeight: '500',
             color: colorPrimaryBlue,
           },
+          '.PickerItem': {
+            outline: "1px solid #8A8A8A",
+          },
+          '.PickerItem--selected, .PickerItem--highlight': {
+            outline: "none",
+          },
+          '.PickerItem--highlight, .PickerItem--highlight:hover': {
+            boxShadow: 'none',
+          },
+          '.PickerItem:hover, .PickerItem--highlight:hover': {
+            boxShadow: '0 0 1px rgba(0,0,0,.15), 0 2px 4px rgba(0, 0, 0, 0.05), 0 1px 8px rgba(0, 0, 0, 0.03)',
+          },
         }
       },
       mode: 'payment',
