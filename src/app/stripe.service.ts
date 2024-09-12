@@ -9,7 +9,6 @@ import {
 import {environment} from '../environments/environment';
 import {Donation} from './donation.model';
 import {Campaign} from "./campaign.model";
-import {flags} from "./featureFlags";
 
 @Injectable({
   providedIn: 'root',

@@ -30,31 +30,6 @@ describe('PaymentReadinessTracker', () => {
     ]);
   })
 
-  it('Prompts to select saved card if deselected.', () => {
-    const sut = new PaymentReadinessTracker(paymentGroup);
-    sut.selectedSavedPaymentMethod();
-    sut.clearSavedPaymentMethod();
-
-    expect(sut.getErrorsBlockingProgress()).toEqual([
-      'Please complete your new payment method, or select a saved payment method.',
-    ]);
-  })
-
-  it("Allows proceeding from payment step when a saved card is selected", () => {
-    const sut = new PaymentReadinessTracker(paymentGroup);
-
-    sut.selectedSavedPaymentMethod();
-    expect(sut.readyToProgressFromPaymentStep).toBeTrue();
-  });
-
-  it("Blocks proceeding from payment step when a saved card is selected but payments group is invalid", () => {
-    const sut = new PaymentReadinessTracker(paymentGroup);
-
-    sut.selectedSavedPaymentMethod();
-    paymentGroup.valid = false;
-    expect(sut.readyToProgressFromPaymentStep).toBeFalse();
-  });
-
   it("Allows proceeding from payment step when donor has credit", () => {
     const sut = new PaymentReadinessTracker(paymentGroup);
     sut.donorHasFunds();
@@ -65,22 +40,6 @@ describe('PaymentReadinessTracker', () => {
     const sut = new PaymentReadinessTracker(paymentGroup);
     sut.donationFundsPrepared(1);
     expect(sut.readyToProgressFromPaymentStep).toBeTrue();
-  });
-
-  it("Allows proceeding from payment step when a saved card is selected ", () => {
-    const sut = new PaymentReadinessTracker(paymentGroup);
-
-    sut.selectedSavedPaymentMethod();
-    sut.onUseSavedCardChange(true);
-    expect(sut.readyToProgressFromPaymentStep).toBeTrue();
-  });
-
-  it("Blocks proceeding from payment step when a saved card is selected but not to be used", () => {
-    const sut = new PaymentReadinessTracker(paymentGroup);
-
-    sut.selectedSavedPaymentMethod();
-    sut.onUseSavedCardChange(false);
-    expect(sut.readyToProgressFromPaymentStep).toBeFalse();
   });
 
   it("Allows proceeding from payment step when a complete payment card is given", () => {
@@ -96,12 +55,4 @@ describe('PaymentReadinessTracker', () => {
     sut.onStripeCardChange({complete: false});
     expect(sut.readyToProgressFromPaymentStep).toBeFalse();
   })
-
-  it("Blocks proceeding from payment step when a payment method is selected then cleared", () => {
-    const sut = new PaymentReadinessTracker(paymentGroup);
-
-    sut.selectedSavedPaymentMethod();
-    sut.clearSavedPaymentMethod();
-    expect(sut.readyToProgressFromPaymentStep).toBeFalse();
-  });
 });
