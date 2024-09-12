@@ -66,7 +66,8 @@ export class StripeService {
           colorPrimary: colorPrimaryBlue,
           colorBackground: '#F6F6F6', // matches our $colour-background
           colorDanger: '#bb2222', // matches angular native and our snackbar
-          accessibleColorOnColorPrimary: '#262626'
+          accessibleColorOnColorPrimary: '#262626',
+          focusOutline: '1px solid #FF7272', // matches our $colour-tertiary-coral
         },
         rules: {
           '.Block': {
@@ -76,7 +77,7 @@ export class StripeService {
           },
           '.Input': {
             padding: '12px',
-            border: 'solid 1px black',
+            border: 'solid 1px #8A8A8A', // matches our $colour-grey-medium
           },
           '.Input:disabled, .Input--invalid:disabled': {
             color: 'lightgray'
@@ -92,6 +93,10 @@ export class StripeService {
           '.Tab--selected, .Tab--selected:focus, .Tab--selected:hover': {
             backgroundColor: '#fff',
             outline: "2px solid #2C089B",
+          },
+          '.TabIcon--selected': {
+            fill: '#FF7272', // icon is SVG so only fill has effect, but leaving in color too for good measure
+            color: '#FF7272', // and in case Stripe introduces a text element here in future.
           },
           '.CheckboxInput, .CheckboxInput--checked': {
             backgroundColor: 'inherit',
