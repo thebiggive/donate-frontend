@@ -109,7 +109,10 @@ export class StripeService {
           '.PickerItem': {
             outline: "1px solid #8A8A8A",
           },
-          '.PickerItem--selected, .PickerItem--highlight': {
+          '.PickerItem--highlight': {
+            outline: "1px solid #FF7272",
+          },
+          '.PickerItem--selected': {
             outline: "none",
           },
           '.PickerItem--highlight, .PickerItem--highlight:hover': {
