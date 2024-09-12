@@ -92,7 +92,7 @@ export class MyAccountComponent implements OnDestroy, OnInit {
   }
 
   logout() {
-    this.identityService.clearJWT();
+    this.identityService.logout();
     this.router.navigate(['']);
   }
 

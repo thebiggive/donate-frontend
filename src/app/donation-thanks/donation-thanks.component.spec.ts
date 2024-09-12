@@ -60,6 +60,7 @@ describe('DonationThanksComponent', () => {
 
   function donationOf(donationAmount: number, currencyCode: string): CompleteDonation {
     return {
+      collectedTime: "collected-time-not-used-here",
       totalPaid: donationAmount,
       firstName: 'first name',
       lastName: 'last name',

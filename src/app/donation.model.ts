@@ -92,6 +92,11 @@ export interface Donation {
     createdTime?: string;
 
     /**
+     * ISO 8601 formatted datetime
+     */
+    collectedTime?: string
+
+    /**
      * Unique ID for a donation, in Salesforce case-insensitive format. 18 character string.
      * Assigned earlier than PSP's `transactionId`.
      */
@@ -141,6 +146,11 @@ export interface CompleteDonation extends Donation {
    */
   totalPaid: number;
   status: typeof completeStatuses[number]
+
+  /**
+   * ISO 8601 formatted datetime
+   */
+  collectedTime: string
 }
 
 /**

@@ -65,6 +65,7 @@ describe('MyAccountComponent', () => {
           name: null,
         },
         card: {
+          networks: null,
           checks: null,
           country: null,
           exp_month: 5,

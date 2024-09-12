@@ -153,7 +153,7 @@ describe('DonationService', () => {
   it('should save local donation data and find the donation by ID', () => {
     const service: DonationService = TestBed.inject(DonationService);
     const inputDonation = getDummyDonation();
-    service.saveDonation(inputDonation, 'fakeheader.fakebody.fakesig');
+    service.saveDonation({donation: inputDonation, jwt: 'fakeheader.fakebody.fakesig'});
 
     if (inputDonation.donationId) {
       expect(service.getDonation(inputDonation.donationId)).toEqual(inputDonation);
@@ -185,7 +185,7 @@ describe('DonationService', () => {
       const service: DonationService = TestBed.inject(DonationService);
       const inputDonation = getDummyDonation();
 
-      service.saveDonation(inputDonation, 'fakeheader.fakebody.fakesig');
+      service.saveDonation({donation: inputDonation, jwt: 'fakeheader.fakebody.fakesig'});
 
       service.getProbablyResumableDonation('11I400000009Sds3e3', 'card').subscribe(outputDonation => {
         expect(outputDonation).toBe(inputDonation);
@@ -208,7 +208,7 @@ describe('DonationService', () => {
 
   it('should return undefined for resumable donations with unknown project ID', () => {
     const service: DonationService = TestBed.inject(DonationService);
-    service.saveDonation(getDummyDonation(), 'fakeheader.fakebody.fakesig');
+    service.saveDonation({donation: getDummyDonation(), jwt: 'fakeheader.fakebody.fakesig'});
     service.getProbablyResumableDonation('notARealProjectId', 'card').subscribe(donation => {
       expect(donation).toBeUndefined();
     }, () => {

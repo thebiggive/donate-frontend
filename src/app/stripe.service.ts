@@ -1,9 +1,15 @@
 import {Injectable} from '@angular/core';
-import {loadStripe, PaymentMethodResult, Stripe, StripeElements} from '@stripe/stripe-js';
+import {
+  ConfirmationTokenResult,
+  loadStripe,
+  Stripe,
+  StripeElements, StripeElementsOptionsMode
+} from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
 import {Donation} from './donation.model';
 import {Campaign} from "./campaign.model";
+import {flags} from "./featureFlags";
 
 @Injectable({
   providedIn: 'root',
@@ -27,12 +33,14 @@ export class StripeService {
     this.stripe = await loadStripe(environment.psps.stripe.publishableKey);
   }
 
-  stripeElements(donation: Donation, campaign: Campaign) {
+  stripeElements(donation: Donation, campaign: Campaign, customerSessionClientSecret: string | undefined) {
     if (!this.stripe) {
       throw new Error('Stripe not ready');
     }
 
-    return this.stripe.elements({
+    // setup_future_usage: 'on_session'
+
+    const elementOptions: StripeElementsOptionsMode = {
       fonts: [
         {
           family: 'Euclid Triangle',
@@ -43,24 +51,30 @@ export class StripeService {
       mode: 'payment',
       currency: donation.currencyCode.toLowerCase(),
       amount: this.amountIncTipInMinorUnit(donation),
-      setup_future_usage: 'on_session',
       on_behalf_of: campaign.charity.stripeAccountId,
       paymentMethodCreation: 'manual',
-    });
+      customerSessionClientSecret,
+    };
+
+    if (! flags.stripeElementCardChoice) {
+      elementOptions.setup_future_usage = 'on_session';
+    }
+
+    return this.stripe.elements(elementOptions);
   }
 
   updateAmount(elements: StripeElements, donation: Donation) {
     elements.update({amount: this.amountIncTipInMinorUnit(donation)});
   }
 
-  async prepareMethodFromPaymentElement(donation: Donation, elements: StripeElements): Promise<PaymentMethodResult> {
+  async prepareConfirmationTokenFromPaymentElement(donation: Donation, elements: StripeElements): Promise<ConfirmationTokenResult> {
     if (! this.stripe) {
       throw new Error("Stripe not ready");
     }
 
     const {error: submitError} = await elements.submit();
     if (submitError) {
-      return {error: submitError, paymentMethod: undefined}
+      return {error: submitError, confirmationToken: undefined}
     }
 
     // If we want to not show billing details inside the Stripe payment element we have to pass billing details
@@ -75,8 +89,8 @@ export class StripeService {
         }
     };
 
-    return await this.stripe.createPaymentMethod(
-      {elements: elements, params: paymentMethodData}
+    return await this.stripe.createConfirmationToken(
+      {elements: elements, params: {payment_method_data: paymentMethodData}}
     );
   }
 
