@@ -56,10 +56,6 @@ export class StripeService {
       customerSessionClientSecret,
     };
 
-    if (! flags.stripeElementCardChoice) {
-      elementOptions.setup_future_usage = 'on_session';
-    }
-
     return this.stripe.elements(elementOptions);
   }
 

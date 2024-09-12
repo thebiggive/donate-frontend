@@ -16,7 +16,7 @@ const flagsForEnvironment = (environmentId: EnvironmentID) => {
      * Replaces our own custom display of saved cards that are fetch from Identity, with saved cards
      * inside the stripe payment element on the donation page.
      */
-    stripeElementCardChoice: environmentId === 'development' || environmentId === 'staging',
+    stripeElementCardChoice: true,
   } as const;
 }
 

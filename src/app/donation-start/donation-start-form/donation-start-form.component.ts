@@ -755,8 +755,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const isCard = state.value?.type === 'card';
     const isSavedPaymentMethod = state.value?.hasOwnProperty('payment_method');
-    this.showCardReuseMessage = (isCard && ! isSavedPaymentMethod && ! this.donor?.has_password)
-      || ! flags.stripeElementCardChoice;
+    this.showCardReuseMessage = isCard && ! isSavedPaymentMethod && ! this.donor?.has_password;
 
     // Jump back if we get an out of band message back that the card is *not* valid/ready.
     // Don't jump forward when the card *is* valid, as the donor might have been
@@ -1303,9 +1302,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   };
 
   onUseSavedCardChange(event: MatCheckboxChange, paymentMethod: PaymentMethod) {
-    if (flags.stripeElementCardChoice) {
-      throw new Error("un use saved card called with stripe element choice enabled");
-    }
+    throw new Error("un use saved card called with stripe element choice enabled");
 
     // For now, we assume unticking happens before card entry, so we can just set the validity flag to false.
     // Ideally, we would later track `card`'s validity separately so that going back up the page, ticking this
@@ -1351,7 +1348,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.stripeElements = this.stripeService.stripeElements(
         this.donation,
         this.campaign,
-        flags.stripeElementCardChoice ? this.donationService.stripeSessionSecret : undefined
+        this.donationService.stripeSessionSecret
       );
     }
 
@@ -2382,9 +2379,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.identityService.isTokenForFinalisedUser(jwt)) {
       this.prepareDonationCredits(person);
       this.prefillRarelyChangingFormValuesFromPerson(person);
-      if (! flags.stripeElementCardChoice) {
-        this.loadFirstSavedStripeCardIfAny(id, jwt);
-      }
+
       // This is helpful when somebody logged in while on the page, to get the latest validation state
       // for them. For example, if they previously had many errors on the payment group but we patched
       // in their name etc., they may now have fewer.
