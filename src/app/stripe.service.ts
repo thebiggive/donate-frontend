@@ -92,7 +92,7 @@ export class StripeService {
           },
           '.Tab--selected, .Tab--selected:focus, .Tab--selected:hover': {
             backgroundColor: '#fff',
-            outline: "2px solid #2C089B",
+            outline: "2px solid #FF7272",
           },
           '.TabIcon--selected': {
             fill: '#FF7272', // icon is SVG so only fill has effect, but leaving in color too for good measure
