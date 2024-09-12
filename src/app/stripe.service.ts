@@ -9,7 +9,6 @@ import {
 import {environment} from '../environments/environment';
 import {Donation} from './donation.model';
 import {Campaign} from "./campaign.model";
-import {flags} from "./featureFlags";
 
 @Injectable({
   providedIn: 'root',
@@ -55,10 +54,6 @@ export class StripeService {
       paymentMethodCreation: 'manual',
       customerSessionClientSecret,
     };
-
-    if (! flags.stripeElementCardChoice) {
-      elementOptions.setup_future_usage = 'on_session';
-    }
 
     return this.stripe.elements(elementOptions);
   }
