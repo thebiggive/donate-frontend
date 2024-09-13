@@ -16,7 +16,6 @@ import {
 } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {MatCheckboxChange} from '@angular/material/checkbox';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatStepper} from '@angular/material/stepper';
@@ -158,8 +157,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   stripePaymentMethodReady = false;
   stripeError?: string;
-  stripeSavedMethods: PaymentMethod[] = [];
-  selectedSavedMethod: PaymentMethod | undefined;
   submitting = false;
   termsUrl = 'https://biggive.org/terms-and-conditions';
   // Track 'Next' clicks so we know when to show missing radio button error messages.
@@ -755,8 +752,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const isCard = state.value?.type === 'card';
     const isSavedPaymentMethod = state.value?.hasOwnProperty('payment_method');
-    this.showCardReuseMessage = (isCard && ! isSavedPaymentMethod && ! this.donor?.has_password)
-      || ! flags.stripeElementCardChoice;
+    this.showCardReuseMessage = isCard && ! isSavedPaymentMethod && ! this.donor?.has_password;
 
     // Jump back if we get an out of band message back that the card is *not* valid/ready.
     // Don't jump forward when the card *is* valid, as the donor might have been
@@ -858,7 +854,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   payWithStripe = async () => {
     const hasCredit = this.creditPenceToUse > 0;
 
-    const methodIsReady = this.stripePaymentElement || this.selectedSavedMethod || hasCredit;
+    const methodIsReady = this.stripePaymentElement || hasCredit;
 
     if (!this.donation || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
@@ -904,19 +900,15 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       { error: StripeError } |
       undefined;
 
-    if (!this.stripeElements && !this.selectedSavedMethod) {
+    if (!this.stripeElements) {
       throw new Error("Missing stripe elements");
     }
 
     let confirmationTokenResult: ConfirmationTokenResult | undefined;
     let confirmationToken: ConfirmationToken | undefined;
     let paymentMethod: PaymentMethod | undefined;
-    if (this.selectedSavedMethod) {
-      paymentMethod = this.selectedSavedMethod;
-    } else {
-      confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(this.donation, <StripeElements>this.stripeElements);
-      confirmationToken = confirmationTokenResult.confirmationToken;
-    }
+    confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(this.donation, <StripeElements>this.stripeElements);
+    confirmationToken = confirmationTokenResult.confirmationToken;
 
     if (confirmationToken || paymentMethod) {
       try {
@@ -1138,7 +1130,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.stepper.next();
       return;
     }
-    this.stripePaymentMethodReady = !!this.selectedSavedMethod || this.stripeManualCardInputValid || this.creditPenceToUse > 0;
+    this.stripePaymentMethodReady = this.stripeManualCardInputValid || this.creditPenceToUse > 0;
 
     const promptingForCaptcha = this.promptForCaptcha();
 
@@ -1302,29 +1294,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return message;
   };
 
-  onUseSavedCardChange(event: MatCheckboxChange, paymentMethod: PaymentMethod) {
-    if (flags.stripeElementCardChoice) {
-      throw new Error("un use saved card called with stripe element choice enabled");
-    }
-
-    // For now, we assume unticking happens before card entry, so we can just set the validity flag to false.
-    // Ideally, we would later track `card`'s validity separately so that going back up the page, ticking this
-    // then unticking it leaves the card box valid without having to modify it. But this is rare and
-    // work-around-able, so for now it's not worth the refactoring time.
-    const checked = event.checked;
-    this.stripePaymentMethodReady = checked || this.stripeManualCardInputValid;
-    this.paymentReadinessTracker.onUseSavedCardChange(checked);
-
-    if (checked) {
-      this.selectedSavedMethod = paymentMethod;
-      this.updateFormWithBillingDetails(this.selectedSavedMethod);
-      this.paymentReadinessTracker.selectedSavedPaymentMethod();
-    } else {
-      this.selectedSavedMethod = undefined;
-      this.prepareStripeElements();
-    }
-  }
-
   onBillingPostCodeChanged(_: Event) {
     // If previous payment attempt failed due to incorrect post code
     // and the post code has just been changed again, clear stripeError
@@ -1351,7 +1320,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.stripeElements = this.stripeService.stripeElements(
         this.donation,
         this.campaign,
-        flags.stripeElementCardChoice ? this.donationService.stripeSessionSecret : undefined
+        this.donationService.stripeSessionSecret
       );
     }
 
@@ -1454,22 +1423,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       firstName: person.first_name,
       lastName: person.last_name,
       emailAddress: person.email_address,
-    });
-  }
-
-  private loadFirstSavedStripeCardIfAny(id: string, jwt: string) {
-    this.donationService.getPaymentMethods(id, jwt).subscribe((response: { data: PaymentMethod[] }) => {
-      if (response.data.length > 0) {
-        this.stripePaymentMethodReady = true;
-        this.stripeSavedMethods = response.data;
-
-        // not null assertion is justified because we know the data length is > 0. Seems TS isn't smart enough to
-        // notice that.
-        const firstPaymentMethod = response.data[0]!;
-        this.selectedSavedMethod = firstPaymentMethod;
-        this.paymentReadinessTracker.selectedSavedPaymentMethod();
-        this.updateFormWithBillingDetails(firstPaymentMethod);
-      }
     });
   }
 
@@ -1946,10 +1899,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.donationCreateError = false;
     this.donationUpdateError = false;
 
-    if (this.stripeSavedMethods.length < 1) {
-      this.selectedSavedMethod = undefined;
-      this.paymentReadinessTracker.clearSavedPaymentMethod();
-    }
     this.retrying = false;
     this.submitting = false;
 
@@ -2297,11 +2246,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
                 billingCountry: this.defaultCountryCode,
               });
             }
-            this.selectedSavedMethod = this.stripeSavedMethods.length > 0 ? this.stripeSavedMethods[0] : undefined;
-            if (this.selectedSavedMethod) {
-              this.paymentReadinessTracker.selectedSavedPaymentMethod();
-            }
-
             if (this.donor?.id) {
               const jwt = this.identityService.getJWT() as string;
               this.identityService.get(this.donor?.id, jwt).subscribe((person: Person) => {
@@ -2382,9 +2326,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.identityService.isTokenForFinalisedUser(jwt)) {
       this.prepareDonationCredits(person);
       this.prefillRarelyChangingFormValuesFromPerson(person);
-      if (! flags.stripeElementCardChoice) {
-        this.loadFirstSavedStripeCardIfAny(id, jwt);
-      }
+
       // This is helpful when somebody logged in while on the page, to get the latest validation state
       // for them. For example, if they previously had many errors on the payment group but we patched
       // in their name etc., they may now have fewer.

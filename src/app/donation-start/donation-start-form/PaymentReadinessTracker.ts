@@ -7,16 +7,6 @@
  */
 export class PaymentReadinessTracker {
   /**
-   * The selected saved payment method, if any. In this class we only care whether it's defined or not.
-   */
-  private selectedSavedMethod: unknown = undefined;
-
-  /**
-   * Does the donor want to use that method?
-   */
-  private useSavedCard: boolean = false;
-
-  /**
    * Does the stripe payment element have a complete card, selected wallet or equivalent?
    */
   private paymentElementIsComplete: boolean = false;
@@ -57,8 +47,7 @@ export class PaymentReadinessTracker {
    * be displayed to them so they can fix.
    */
   public getErrorsBlockingProgress(): string[] {
-    const usingSavedCard = !!this.selectedSavedMethod && this.useSavedCard;
-    const atLeastOneWayOfPayingIsReady = this.donorFunds || usingSavedCard || this.paymentElementIsComplete;
+    const atLeastOneWayOfPayingIsReady = this.donorFunds || this.paymentElementIsComplete;
 
     let paymentErrors: string[] = [];
     if (!atLeastOneWayOfPayingIsReady) {
@@ -117,12 +106,6 @@ export class PaymentReadinessTracker {
     return errors;
   }
 
-  selectedSavedPaymentMethod() {
-    this.selectedSavedMethod = true;
-    this.useSavedCard = true;
-    this.hasASavedCard = true;
-  }
-
   donorHasFunds() {
     this.donorFunds = true;
   }
@@ -131,15 +114,7 @@ export class PaymentReadinessTracker {
     this.paymentElementIsComplete = state.complete;
   }
 
-  onUseSavedCardChange(useSavedCard: boolean) {
-    this.useSavedCard = useSavedCard;
-  }
-
   donationFundsPrepared(fundPenceToUse: number) {
     this.donorFunds = fundPenceToUse > 0;
-  }
-
-  clearSavedPaymentMethod() {
-    this.selectedSavedMethod = undefined;
   }
 }
