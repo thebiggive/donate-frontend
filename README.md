@@ -15,7 +15,8 @@ To run the app locally:
 * clone it from GitHub
 * `export FONTAWESOME_NPM_AUTH_TOKEN=<token id>`
 * `npm install`
-* `npm run start`
+* `npm run start` 
+* (or `npm run start-with-backend` to also start your local `matchbot` and `identity` servers assuming they're in sibling directories to this project)
 
 The app should be running at [localhost:4200](http://localhost:4200).
 
