@@ -28,7 +28,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v6-dependencies-with-chrome-{{ checksum "package-lock.json" }}
+            - v5-dependencies-with-chrome-{{ checksum "package-lock.json" }}
 
       - run: npm install --quiet
 
@@ -37,7 +37,7 @@ jobs:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: v6-dependencies-with-chrome-{{ checksum "package-lock.json" }}
+          key: v5-dependencies-with-chrome-{{ checksum "package-lock.json" }}
 
       - run: npm run ci
 
@@ -61,14 +61,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - v6-dependencies-{{ checksum "package-lock.json" }}
+            - v5-dependencies-{{ checksum "package-lock.json" }}
       - run: env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install --quiet
       - save_cache:
           paths:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: v6-dependencies-{{ checksum "package-lock.json" }}
+          key: v5-dependencies-{{ checksum "package-lock.json" }}
 
       - run: npm run build:staging
 
@@ -104,14 +104,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - v6-dependencies-{{ checksum "package-lock.json" }}
+            - v5-dependencies-{{ checksum "package-lock.json" }}
       - run: env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install --quiet
       - save_cache:
           paths:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: v6-dependencies-{{ checksum "package-lock.json" }}
+          key: v5-dependencies-{{ checksum "package-lock.json" }}
 
       - run: npm run build:regression
 
@@ -147,14 +147,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - v6-dependencies-{{ checksum "package-lock.json" }}
+            - v5-dependencies-{{ checksum "package-lock.json" }}
       - run: env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install --quiet
       - save_cache:
           paths:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: v6-dependencies-{{ checksum "package-lock.json" }}
+          key: v5-dependencies-{{ checksum "package-lock.json" }}
 
       - run: npm run build:production
 
