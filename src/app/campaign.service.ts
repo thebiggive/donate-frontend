@@ -118,6 +118,9 @@ export class CampaignService {
     if (selected.sortField?.toLowerCase() === 'relevance') {
       query.sortField = undefined; // Campaign API takes blank/default sort to be relevance.
       query.sortDirection = undefined;
+    } else if (selected.sortField === 'leastRaised') {
+      query.sortDirection = 'asc';
+      query.sortField = 'amountRaised';
     } else { // match funds left and amount raised both make most sense in 'desc' order
       query.sortDirection = 'desc';
     }
