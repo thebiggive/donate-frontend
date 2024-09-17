@@ -245,6 +245,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha: ElementRef<HTMLElement>|undefined;
   protected shouldShowCaptcha: boolean = true;
+  protected isSavedPaymentMethodSelected: boolean = false;
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -730,7 +731,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * According to stripe docs https://stripe.com/docs/js/element/events/on_change?type=paymentElement the change event has
    * a value key as expected here. I'm not sure why that isn't included in the TS StripeElementChangeEvent interface.
    */
-  async onStripeCardChange(state: StripeElementChangeEvent & ({value: {type: string} | undefined})) {
+  async onStripeCardChange(state: StripeElementChangeEvent & ({value: {type: string, payment_method?: PaymentMethod} | undefined})) {
     this.addStripeCardBillingValidators();
 
     // Re-evaluate stripe card billing validators after being set above.
@@ -751,8 +752,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     const isCard = state.value?.type === 'card';
-    const isSavedPaymentMethod = state.value?.hasOwnProperty('payment_method');
-    this.showCardReuseMessage = isCard && ! isSavedPaymentMethod && ! this.donor?.has_password;
+    const selectedSavedPaymentMethod = state.value?.payment_method
+    this.showCardReuseMessage = isCard && ! selectedSavedPaymentMethod && ! this.donor?.has_password;
+
+    this.isSavedPaymentMethodSelected = !!selectedSavedPaymentMethod;
+    if (selectedSavedPaymentMethod) {
+      this.updateFormWithBillingDetails(selectedSavedPaymentMethod);
+    }
 
     // Jump back if we get an out of band message back that the card is *not* valid/ready.
     // Don't jump forward when the card *is* valid, as the donor might have been
