@@ -1,3 +1,4 @@
+import {isPlatformBrowser} from "@angular/common";
 import {Component, Inject, OnInit, Optional, PLATFORM_ID} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RESPONSE} from '../../express.tokens';
@@ -5,6 +6,9 @@ import { Response } from "express";
 
 import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "../highlight-cards/HighlightCard";
+import {environment} from "../../environments/environment";
+
+const CCCloseDate = new Date('2023-12-05T12:00:00+00:00');
 
 @Component({
   selector: 'app-home',
@@ -16,6 +20,8 @@ export class HomeComponent implements OnInit {
     totalRaisedFormatted: string,
     totalCountFormatted: string
   };
+
+  private currentTime = new Date();
 
   /**
    * Prevents the user seeing the content if we're about to redirect them to a different page.
@@ -42,5 +48,42 @@ export class HomeComponent implements OnInit {
     );
     this.stats = this.route.snapshot.data.stats;
     this.highlightCards = this.route.snapshot.data.highlights;
+    const queryParams = this.route.snapshot.queryParams;
+
+    if (environment.environmentId !== 'production') {
+      if (queryParams?.simulatedDate) {
+        const simulatedDate = new Date(queryParams.simulatedDate);
+        if (isNaN(simulatedDate.getTime())) {
+          alert("cant parse simulated date given");
+          throw new Error("Invalid date");
+        }
+        this.currentTime = simulatedDate;
+      }
+    }
+
+    // start the redirect 12 hours in advance of CC open:
+    const startRedirectingToCCAt = new Date('2023-11-28T00:00:00+00:00');
+
+    // end the redirect exactly at the time CC closes.
+    if (
+      !queryParams.hasOwnProperty('noredirect') &&
+      this.currentTime >= startRedirectingToCCAt &&
+      this.currentTime < CCCloseDate
+      ) {
+        const redirectSlugIncSlash = '/christmas-challenge-2023';
+        if (isPlatformBrowser(this.platformId)) {
+          this.router.navigate(
+            [redirectSlugIncSlash],
+            {
+              replaceUrl: true, // As we are redirecting immediately it would be confusing to leave a page the user hasn't seen in their history.
+
+            }
+          );
+        } else {
+          this.response.redirect(302, redirectSlugIncSlash);
+        }
+    } else {
+      this.mayBeAboutToRedirect = false;
+    }
   }
 }
