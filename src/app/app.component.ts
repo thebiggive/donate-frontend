@@ -19,6 +19,7 @@ import {
   CookiePreferenceService
 } from "./cookiePreference.service";
 import {Observable, Subscription} from "rxjs";
+import {gitCommitId} from "../git-commit";
 
 @Component({
   selector: 'app-root',
@@ -182,4 +183,6 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     this.isLoggedIn = this.identityService.probablyHaveLoggedInPerson();
     this.isDataLoaded = true;
   }
+
+  protected readonly gitCommitId = gitCommitId;
 }
