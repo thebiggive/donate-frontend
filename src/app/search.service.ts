@@ -12,6 +12,7 @@ export type SelectedType = {
 const sortOptions = {
   amountRaised: 'Most raised',
   matchFundsRemaining: 'Match funds remaining',
+  closeToTarget: 'Close to campaign target',
   relevance: 'Relevance',
 } as const;
 
@@ -96,14 +97,17 @@ export class SearchService {
   private updateSelectedSortLabel() {
     switch(this.selected.sortField) {
       case 'matchFundsRemaining':
-        this.selectedSortLabel  = 'Match funds remaining';
+        this.selectedSortLabel  = sortOptions.matchFundsRemaining;
         break;
       case 'amountRaised':
-        this.selectedSortLabel =  'Most raised';
+        this.selectedSortLabel =  sortOptions.amountRaised;
+        break;
+      case 'closeToTarget':
+        this.selectedSortLabel =  sortOptions.closeToTarget;
         break;
       case 'relevance':
       case 'Relevance': // historically we set this with a capital R.
-        this.selectedSortLabel = 'Relevance';
+        this.selectedSortLabel = sortOptions.relevance;
         break;
       default:
         console.log('No active sort field name match');

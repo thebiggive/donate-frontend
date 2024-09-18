@@ -121,6 +121,9 @@ export class CampaignService {
     } else if (selected.sortField === 'leastRaised') {
       query.sortDirection = 'asc';
       query.sortField = 'amountRaised';
+    } else if (selected.sortField === 'closeToTarget') {
+      query.sortDirection = 'desc';
+      query.sortField = 'closeToTarget';
     } else { // match funds left and amount raised both make most sense in 'desc' order
       query.sortDirection = 'desc';
     }
