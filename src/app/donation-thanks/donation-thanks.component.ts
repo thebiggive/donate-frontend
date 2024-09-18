@@ -281,7 +281,12 @@ export class DonationThanksComponent implements OnInit {
       // `trackGoal()` for that.
       // See also `ConversionTrackingService.convert()` which is called just before
       // redirect here, usually at most once per donation.
-      this.matomoTracker.trackEvent('donate', 'thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
+      this.matomoTracker.trackEvent(
+        'donate',
+        'thank_you_fully_loaded',
+        `Donation to campaign ${donation.projectId}`,
+        donation.donationAmount
+      );
 
       this.totalPaid = donation.totalPaid;
       this.giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;
