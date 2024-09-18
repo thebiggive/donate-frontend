@@ -24,7 +24,7 @@
 </a>
 <router-outlet></router-outlet>
 @if(environment.environmentId !== 'production') {
-  <em>Code version id: {{gitCommitId}}</em>
+  <em>Code version {{gitCommitId}}</em>
 }
 <biggive-footer
   [headingLevel]=3
