@@ -23,9 +23,7 @@
   <!-- target for "skip to content" link -->
 </a>
 <router-outlet></router-outlet>
-@if(environment.environmentId !== 'production') {
-  <em>Code version {{gitCommitId}}</em>
-}
+
 <biggive-footer
   [headingLevel]=3
   [usePresetFooter]="true"

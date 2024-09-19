@@ -32,7 +32,6 @@
     "useDefineForClassFields": false
   },
   "files": [
-    "src/git-commit.ts",
     "src/main.ts",
     "src/polyfills.ts"
   ],
