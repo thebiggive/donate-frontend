@@ -47,5 +47,3 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-
-/src/git-commit.ts

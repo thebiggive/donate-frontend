@@ -16,7 +16,6 @@
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "e2e": "ng e2e",
-    "preinstall": "mkdir -p src; echo \"export const gitCommitId: string = '`git log -1 --format=%h`';\" > src/git-commit.ts",
     "build": "ng build",
     "build:staging": "ng build --configuration staging",
     "build:regression": "ng build --configuration regression",
