@@ -1989,13 +1989,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       getCurrencyMaxValidator(maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse)),
       Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
     ]);
-    this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
+    this.amountsGroup.get('donationAmount')?.valueChanges.subscribe((donationAmountInput: string) => {
       const updatedValues: {
         tipPercentage?: number | string,
         tipAmount?: string
       } = {};
 
-      donationAmount = sanitiseCurrency(donationAmount);
+      const donationAmount = sanitiseCurrency(donationAmountInput);
 
       if (!this.tipPercentageChanged) {
         let newDefault = this.tipPercentage;
@@ -2027,7 +2027,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.updateAllValidities();
     });
 
-    this.giftAidGroup.get('homePostcode')?.valueChanges.subscribe(homePostcode => {
+    this.giftAidGroup.get('homePostcode')?.valueChanges.subscribe((homePostcode: string | null) => {
       if (homePostcode !== null) {
         const homePostcodeAsIs = homePostcode;
 
