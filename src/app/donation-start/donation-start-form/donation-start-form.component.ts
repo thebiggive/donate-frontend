@@ -368,6 +368,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         ]],
         billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
         billingPostcode: [null],  // See setConditionalValidators().
+        saveCardForReuse: [false],
       }),
       // T&Cs agreement is implicit through submitting the form.
     };
@@ -752,7 +753,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const isCard = state.value?.type === 'card';
     const isSavedPaymentMethod = state.value?.hasOwnProperty('payment_method');
-    this.showCardReuseMessage = isCard && ! isSavedPaymentMethod && ! this.donor?.has_password;
+    this.showCardReuseCheckBox = isCard && ! isSavedPaymentMethod && !!this.donor?.has_password;
 
     // Jump back if we get an out of band message back that the card is *not* valid/ready.
     // Don't jump forward when the card *is* valid, as the donor might have been
@@ -910,9 +911,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(this.donation, <StripeElements>this.stripeElements);
     confirmationToken = confirmationTokenResult.confirmationToken;
 
+    const saveCardForReuse = !!this.paymentGroup.value.saveCardForReuse;
+
     if (confirmationToken || paymentMethod) {
       try {
-        result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, {confirmationToken, paymentMethod}));
+        result = await firstValueFrom(
+          this.donationService.confirmCardPayment(this.donation, {confirmationToken, paymentMethod, saveCardForReuse})
+        );
       } catch (httpError) {
         this.matomoTracker.trackEvent(
           'donate_error',
@@ -2362,7 +2367,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   protected readonly flags = flags;
-  protected showCardReuseMessage = false;
+  protected showCardReuseCheckBox = false;
 
   hideCaptcha() {
     this.shouldShowCaptcha = false;

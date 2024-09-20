@@ -396,8 +396,14 @@
                     </div>
                   }
                   <div>
-                    @if (showCardReuseMessage) {
-                      Your card will only be saved for reuse if you set a password on the next page.
+                    @if (showCardReuseCheckBox) {
+                      <mat-checkbox
+                        id="saveCardForReuse"
+                        formControlName="saveCardForReuse"
+                        [checked]="true"
+                      >
+                        Save card for reuse
+                      </mat-checkbox>
                     }
                   </div>
                 </div>

@@ -356,13 +356,14 @@ export class DonationService {
     );
   }
 
-  confirmCardPayment(donation: Donation, {confirmationToken, paymentMethod}: {confirmationToken?: ConfirmationToken, paymentMethod?: PaymentMethod}):
+  confirmCardPayment(donation: Donation, {confirmationToken, paymentMethod, saveCardForReuse}: {confirmationToken?: ConfirmationToken, paymentMethod?: PaymentMethod, saveCardForReuse: boolean}):
     Observable<{ paymentIntent: { status: PaymentIntent.Status; client_secret: string } }>
   {
     return this.http.post<{paymentIntent: {status: PaymentIntent.Status, client_secret: string}}>(
       `${environment.donationsApiPrefix}/donations/${donation.donationId}/confirm`, {
         stripePaymentMethodId: paymentMethod?.id,
         stripeConfirmationTokenId: confirmationToken?.id,
+        saveCardForReuse
       },
       this.getAuthHttpOptions(donation),
     );

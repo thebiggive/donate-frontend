@@ -435,7 +435,7 @@ describe('DonationStartForm', () => {
       sut.loadPerson({cash_balance: {gbp: 0}}, 'personID', 'jwt');
     });
 
-    await sut.payWithStripe();
+    await sut.payWithStripe({saveCardForReuse});
 
     expect(finaliseCashBalancePurchaseCalled).toBe(false)
   });
