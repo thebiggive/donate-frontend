@@ -56,6 +56,42 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
     artsforImpact: 'brand-afa-pink'
   };
 
+  const backgroundImageUrl = backgroundImage(sfApiHighlightCard, donateUriPrefix);
+  
+  return {
+    headerText: sfApiHighlightCard.headerText,
+    bodyText: sfApiHighlightCard.bodyText,
+    iconColor: iconColor(sfApiHighlightCard, campaignFamilyColours),
+    backgroundImageUrl,
+    button: {
+      text: sfApiHighlightCard.button.text,
+      href: replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href),
+    }
+  };
+};
+
+function iconColor(sfApiHighlightCard: SfApiHighlightCard, campaignFamilyColours: Record<campaignFamilyName, brandColour>) {
+  const defaultColor = "primary";
+
+  if (sfApiHighlightCard.campaignFamily == null) {
+    return defaultColor;
+  }
+
+  return campaignFamilyColours[sfApiHighlightCard.campaignFamily] || defaultColor;
+}
+
+function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix: string) {
+      
+  const defaultBackground = new URL('/assets/images/blue-texture.jpg', donateUriPrefix);
+
+  if (sfApiHighlightCard.cardStyle === 'JOIN_MAILING_LIST') {
+    return new URL('/assets/images/join-mailing-list.png', donateUriPrefix);
+  }
+
+  if (sfApiHighlightCard.campaignFamily == null) {
+    return defaultBackground;
+  }
+
   const campaignFamilyBackgroundImages: Record<campaignFamilyName, URL> = {
     emergencyMatch: new URL('/assets/images/emergency-card.png', donateUriPrefix),
     christmasChallenge: new URL('/assets/images/card-background-cc-lights.jpg', donateUriPrefix),
@@ -66,21 +102,6 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
     artsforImpact: new URL('/assets/images/red-coral-texture.png', donateUriPrefix)
   };
 
-  // first bit covers for the case where campaignFamily is null the second part is for catching new campaign family that hasn't defined color yet
-  const iconColor = (sfApiHighlightCard.campaignFamily ? campaignFamilyColours[sfApiHighlightCard.campaignFamily] : "primary") || "primary";
-  const backgroundImageUrl = (sfApiHighlightCard.campaignFamily 
-  ? campaignFamilyBackgroundImages[sfApiHighlightCard.campaignFamily] 
-  : new URL('/assets/images/blue-texture.jpg', donateUriPrefix))
-  || new URL('/assets/images/blue-texture.jpg', donateUriPrefix);
-  
-  return {
-    headerText: sfApiHighlightCard.headerText,
-    bodyText: sfApiHighlightCard.bodyText,
-    iconColor,
-    backgroundImageUrl,
-    button: {
-      text: sfApiHighlightCard.button.text,
-      href: replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href),
-    }
-  };
-};
+  return campaignFamilyBackgroundImages[sfApiHighlightCard.campaignFamily] || defaultBackground;
+}
+
