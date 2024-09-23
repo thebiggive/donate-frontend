@@ -69,10 +69,10 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
     headerText: sfApiHighlightCard.headerText,
     bodyText: sfApiHighlightCard.bodyText,
     iconColor: campaignFamilyColours[sfApiHighlightCard.campaignFamily] || "primary",
-    backgroundImageUrl: campaignFamilyBackgroundImages[sfApiHighlightCard.campaignFamily] || 
+    backgroundImageUrl: campaignFamilyBackgroundImages[sfApiHighlightCard.campaignFamily] || (
                         sfApiHighlightCard.headerText == 'Join our mailing list.'
                         ? new URL('/assets/images/join-mailing-list.png', donateUriPrefix)
-                        : new URL('/assets/images/blue-texture.jpg', donateUriPrefix),
+                        : new URL('/assets/images/blue-texture.jpg', donateUriPrefix)),
     button: {
       text: sfApiHighlightCard.button.text,
       href: replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href),
