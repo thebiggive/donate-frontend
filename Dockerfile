@@ -1,4 +1,5 @@
 FROM node:20.13.1
+RUN node --version
 
 WORKDIR /usr/src/app
 
