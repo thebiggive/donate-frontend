@@ -59,9 +59,10 @@ jobs:
     steps:
       - checkout
 
-      - restore_cache:
-          keys:
-            - v5-dependencies-{{ checksum "package-lock.json" }}
+# commented out use of cache in case related to issue DON-1073
+#      - restore_cache:
+#          keys:
+#            - v5-dependencies-{{ checksum "package-lock.json" }}
       - run: env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install --quiet
       - save_cache:
           paths:
@@ -187,7 +188,8 @@ jobs:
                 aws_access_key_id: AWS_ACCESS_KEY_ID
                 aws_secret_access_key: AWS_SECRET_ACCESS_KEY
           # cache-from format is e.g. 123.dkr.ecr.eu-west-1.amazonaws.com/thebiggive-donate:staging
-          extra_build_args: '--build-arg BUILD_ENV=<< parameters.env >> --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN} --cache-from "${AWS_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>"'
+          # Temporarily removed caching on next line in case related to DON-1073. (was           extra_build_args: '--build-arg BUILD_ENV=<< parameters.env >> --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN} --cache-from "${AWS_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>"' )
+          extra_build_args: '--build-arg BUILD_ENV=<< parameters.env >> --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN}'
           repo: '${AWS_ECR_REPO_NAME}'
           region: '${AWS_REGION}'
           tag: '<< parameters.env >>,<< parameters.env >>-${CIRCLE_SHA1}'
