@@ -157,7 +157,7 @@ export class DonationThanksComponent implements OnInit {
     const passwordSetDialog = this.dialog.open(DonationThanksSetPasswordDialogComponent, {
       data: { person: this.person },
     });
-    passwordSetDialog.afterClosed().subscribe(data => {
+    passwordSetDialog.afterClosed().subscribe((data: {password?: string, stayLoggedIn?: boolean}) => {
       if (data.password) {
         this.setPassword(data.password, data.stayLoggedIn || false);
       }
@@ -217,7 +217,7 @@ export class DonationThanksComponent implements OnInit {
         }
       },
       error: (error: HttpErrorResponse) => {
-        const htmlErrorDescription = error.error?.error?.htmlDescription;
+        const htmlErrorDescription = error.error?.error?.htmlDescription as string|undefined;
         if (error.error?.error?.type === "DUPLICATE_EMAIL_ADDRESS_WITH_PASSWORD") {
           this.registerErrorDescription = "Your password could not be set. There is already a password set for your email address.";
         } else if (htmlErrorDescription) {

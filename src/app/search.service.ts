@@ -23,7 +23,7 @@ type sortLabel = typeof sortOptions[camelCaseSortOption];
   providedIn: 'root',
 })
 export class SearchService {
-  selected: {[key: string]: any}; // SelectedType but allowing string key lookups.
+  selected: {[key: string]: string|boolean} & {term?: string}; // SelectedType but allowing string key lookups.
 
   changed: EventEmitter<boolean>; // Value indicates if an interactive UI change triggered this.
 
@@ -127,16 +127,18 @@ export class SearchService {
   getQueryParams(defaultSort = ''): {[key: string]: string} {
     const defaults: {[key: string]: any} = SearchService.selectedDefaults(defaultSort);
     const queryParams: {[key: string]: any} = {};
+    const length = this.selected.term?.length || 0;
+
     for (const key in this.selected) {
       // Non-default selections should go to the page's query params. The "global default" sort
       // order should too iff there is a search term active, since the default sort in that
       // specific scenario is Relevance.
-      if (this.selected[key] !== defaults[key] || (key === 'sortField' && this.selected.term?.length > 0)) {
+      if (this.selected[key] !== defaults[key] || (key === 'sortField' && length > 0)) {
         queryParams[key] = String(this.selected[key]);
       }
     }
 
-    if (this.selected.sortField === 'relevance' && this.selected.term?.length === 0) {
+    if (this.selected.sortField === 'relevance' && length === 0) {
       delete queryParams.sortField;
     }
 

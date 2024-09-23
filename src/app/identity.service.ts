@@ -97,7 +97,7 @@ export class IdentityService {
   }
 
   get(id: string, jwt: string, {withTipBalances = false, refresh = false}: {withTipBalances?: boolean, refresh?: boolean} = {}): Observable<Person> {
-    var cacheBuster;
+    var cacheBuster: string;
     if (refresh) {
       cacheBuster = "?cacheBust=" + (new Date()).getTime();
     } else {

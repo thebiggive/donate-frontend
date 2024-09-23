@@ -60,7 +60,7 @@ export class CampaignService {
   }
 
   static getRelevantDate(campaign: Campaign|CampaignSummary): Date|undefined {
-    let dateToUse;
+    let dateToUse: Date|undefined;
 
     if (this.isInFuture(campaign)) {
       dateToUse = campaign.startDate;
