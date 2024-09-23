@@ -5,6 +5,7 @@ describe('highlightCard', () => {
   it('should convert a highlight card from the SF API to one we can display', () => {
     const cardFromApi: SfApiHighlightCard = {
       campaignFamily: 'womenGirls',
+      cardStyle: 'DONATE_NOW',
       headerText: "some header text",
       bodyText: "some body text",
       button: {text: "button text", href:'https://biggive.org/some-path'}
@@ -26,6 +27,7 @@ describe('highlightCard', () => {
   it('should use appropriate colour for emergency campaign', () => {
     const cardFromApi: SfApiHighlightCard = {
       campaignFamily: 'emergencyMatch',
+      cardStyle: 'DONATE_NOW',
       headerText: "some header text",
       bodyText: "some body text",
       button: {text: "button text", href: 'https://biggive.org/some-path'}
@@ -48,6 +50,7 @@ describe('highlightCard', () => {
   it('should use blue primary colour by default', () => {
     const cardFromApi: SfApiHighlightCard = {
       campaignFamily: 'some-unknown-campaign-family' as campaignFamilyName,
+      cardStyle: 'DONATE_NOW',
       headerText: "some header text",
       bodyText: "some body text",
       button: {text: "button text", href: 'https://biggive.org/some-path'}
@@ -73,6 +76,7 @@ describe('highlightCard', () => {
         text: "irrelevant"
       },
       campaignFamily: 'christmasChallenge', // irrelevant
+      cardStyle: 'DONATE_NOW',
       headerText: "irrelevant",
       bodyText: "irrelevant",
     } as const;

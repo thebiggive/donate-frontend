@@ -25,7 +25,8 @@ export type campaignFamilyName =
   |'emergencyMatch';
 
 export type SfApiHighlightCard = Omit<HighlightCard, 'backgroundImageUrl'|'iconColor'|'button'> & {
-  campaignFamily: campaignFamilyName
+  campaignFamily: campaignFamilyName | null
+  cardStyle: 'DONATE_NOW' | 'SEE_RESULTS' | 'APPLY_NOW' | 'SAVE_THE_DATE' | 'JOIN_MAILING_LIST' | 'REGISTER_INTEREST' | 'EXPLORE',
   button: {
     text: string,
     href: string
@@ -65,14 +66,18 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
     artsforImpact: new URL('/assets/images/red-coral-texture.png', donateUriPrefix)
   };
 
+  // first bit covers for the case where campaignFamily is null the second part is for catching new campaign family that hasn't defined color yet
+  const iconColor = (sfApiHighlightCard.campaignFamily ? campaignFamilyColours[sfApiHighlightCard.campaignFamily] : "primary") || "primary";
+  const backgroundImageUrl = (sfApiHighlightCard.campaignFamily 
+  ? campaignFamilyBackgroundImages[sfApiHighlightCard.campaignFamily] 
+  : new URL('/assets/images/blue-texture.jpg', donateUriPrefix))
+  || new URL('/assets/images/blue-texture.jpg', donateUriPrefix);
+  
   return {
     headerText: sfApiHighlightCard.headerText,
     bodyText: sfApiHighlightCard.bodyText,
-    iconColor: campaignFamilyColours[sfApiHighlightCard.campaignFamily] || "primary",
-    backgroundImageUrl: campaignFamilyBackgroundImages[sfApiHighlightCard.campaignFamily] || (
-                        sfApiHighlightCard.headerText == 'Join our mailing list.'
-                        ? new URL('/assets/images/join-mailing-list.png', donateUriPrefix)
-                        : new URL('/assets/images/blue-texture.jpg', donateUriPrefix)),
+    iconColor,
+    backgroundImageUrl,
     button: {
       text: sfApiHighlightCard.button.text,
       href: replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href),
