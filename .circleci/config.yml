@@ -70,6 +70,7 @@ jobs:
             - /home/circleci/.cache/puppeteer
           key: v5-dependencies-{{ checksum "package-lock.json" }}
 
+      - run: node --version
       - run: npm run build:staging
 
       - aws-cli/setup:
