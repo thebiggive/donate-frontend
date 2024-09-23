@@ -1,7 +1,6 @@
 import {campaignFamilyName, SfApiHighlightCard, SFAPIHighlightCardToHighlightCard} from "./HighlightCard";
 
 describe('highlightCard', () => {
-
   it('should convert a highlight card from the SF API to one we can display', () => {
     const cardFromApi: SfApiHighlightCard = {
       campaignFamily: 'womenGirls',
