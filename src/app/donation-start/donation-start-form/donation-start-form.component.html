@@ -401,22 +401,22 @@
                     }
                   </div>
                 </div>
-                <div>
-                  <biggive-form-field-select
-                    [prompt]="'Billing country'"
-                    [options]="countryOptionsObject"
-                    [selectedValue]="selectedCountryCode"
-                    [backgroundColour]="'grey'"
-                    [selectionChanged]="setSelectedCountry"
-                    [spaceBelow]="3"
-                    [selectedOptionColour]="'inherit'"
-                    >
-                  </biggive-form-field-select>
+                <div [style.display]="isSavedPaymentMethodSelected ? 'none' : 'block'">
+                    <biggive-form-field-select
+                      [prompt]="'Billing country'"
+                      [options]="countryOptionsObject"
+                      [selectedValue]="selectedCountryCode"
+                      [backgroundColour]="'grey'"
+                      [selectionChanged]="setSelectedCountry"
+                      [spaceBelow]="3"
+                      [selectedOptionColour]="'inherit'"
+                      >
+                    </biggive-form-field-select>
+                  <biggive-text-input>
+                    <label slot="label" for="billingPostcode">Billing postcode</label>
+                    <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)" autocapitalize="characters" autocomplete="postal-code">
+                  </biggive-text-input>
                 </div>
-                <biggive-text-input>
-                  <label slot="label" for="billingPostcode">Billing postcode</label>
-                  <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)" autocapitalize="characters" autocomplete="postal-code">
-                </biggive-text-input>
               </div>
               @if (stripeError) {
                 <p class="stripeError" aria-live="assertive">
