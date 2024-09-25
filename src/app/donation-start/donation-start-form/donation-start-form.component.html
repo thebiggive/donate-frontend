@@ -116,7 +116,9 @@
                                 We transform your tips into match funds. Since 2022, charities have received over £200,000 in match funding from Big Give.
                               </li>
                             </ul>
+                            @if (this.zeroTipTextABTestVariant === 'A') {
                             Even £1.50 makes a big difference. Thank you!
+                            }
                           </div>
                         }
                         <div [style]="showCustomTipInput ? '' : 'display: none;'" class="donation-input donation-input-main">
@@ -141,7 +143,11 @@
                         <!-- The text below is not shown if we have the slider because it would just repeat content that's already displayed on the slider itself -->
                         @if (!customTip() && donationAmount && donationAmount > 0 && tipControlStyle !== 'slider') {
                           <mat-hint>
+                            @if (tipAmountField?.valid && zeroTipTextABTestVariant === 'B' && tipValue === 0) {
+                              Even £1 makes a big difference to Big Give
+                            } @else if (tipAmountField?.valid) {
                             <p>{{ tipValue | exactCurrency:campaign.currencyCode }} donation to support Big Give</p>
+                            }
                           </mat-hint>
                         }
                         @if (customTip() && donationAmount && donationAmount > 0) {
