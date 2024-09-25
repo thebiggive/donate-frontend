@@ -81,6 +81,13 @@ declare var _paq: {
   ]
 })
 export class DonationStartFormComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit {
+  /**
+   * If donor gives a GA declaration relating to a core donation only but not a tip to BG then the wording they saw
+   * will not have covered GA on a tip as well. So if this is true and they go back and add a tip we will need to
+   * re-prompt them to declare for gift aid.
+   */
+  private giftAidCheckedForZeroTip: boolean = false;
+
   @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
@@ -399,6 +406,17 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.amountsGroup.get('tipAmount')?.valueChanges.subscribe((tipAmount: string) => {
       this.tipValue = sanitiseCurrency(tipAmount?.trim());
+
+      if (this.tipValue && this.tipValue > 0 && this.giftAidCheckedForZeroTip) {
+        // The gifit aid wording for a zero tip doesn't cover GA for the tip, so we reset the form control now and
+        // let the donor redeclare.
+        this.giftAidGroup.get('giftAid')?.reset();
+        this.giftAidCheckedForZeroTip = false;
+        this.triedToLeaveGiftAid = false;
+      } else {
+        const gaValue: boolean|null = this.giftAidGroup.get('giftAid')?.value;
+        this.giftAidCheckedForZeroTip = this.tipValue === 0 && !!gaValue;
+      }
     });
 
     this.maximumDonationAmount = maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse);
@@ -2057,9 +2075,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     });
 
     // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
-    this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
-      this.setGiftAidValidatorsForChoice(giftAidChecked);
+    this.giftAidGroup.get('giftAid')?.valueChanges.subscribe((giftAidChecked: boolean | null) => {
+      this.setGiftAidValidatorsForChoice(!!giftAidChecked);
       this.updateAllValidities();
+
+      if (giftAidChecked && this.tipValue === 0) {
+        this.giftAidCheckedForZeroTip = true;
+      }
     });
 
     if (this.creditPenceToUse > 0) {

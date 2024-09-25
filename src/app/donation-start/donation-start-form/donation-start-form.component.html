@@ -240,7 +240,11 @@
                   <div class="binary-options">
                     <div class="binary-option">
                       <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="true">
-                        <strong>Yes</strong>, I want to Gift Aid my donation to {{ campaign.charity.name }} and any associated tip to Big Give.
+                        @if (this.tipValue) {
+                          <strong>Yes</strong>, I want to Gift Aid my donation to {{ campaign.charity.name }} and the tip to Big Give.
+                        } @else {
+                          <strong>Yes</strong>, I want to Gift Aid my donation to {{ campaign.charity.name }}.
+                        }
                       </mat-radio-button>
                     </div>
                     <div class="binary-option">
