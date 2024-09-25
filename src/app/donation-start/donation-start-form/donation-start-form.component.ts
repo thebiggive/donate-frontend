@@ -253,6 +253,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   friendlyCaptcha: ElementRef<HTMLElement>|undefined;
   protected shouldShowCaptcha: boolean = true;
   protected isSavedPaymentMethodSelected: boolean = false;
+  protected zeroTipTextABTestVariant: 'A'|'B' = 'A';
+  private manuallySelectedABTestVariant: string | null = null;
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -282,6 +284,16 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.tipControlStyle = (queryParams?.tipControl?.toLowerCase() === 'slider')
       ? 'slider' : 'dropdown';
+
+
+    if (! environment.production) {
+      this.manuallySelectedABTestVariant = queryParams?.selectABTestVariant;
+    }
+
+
+    if (this.manuallySelectedABTestVariant == 'B') {
+      this.zeroTipTextABTestVariant = 'B';
+    }
   }
 
   ngOnDestroy() {
@@ -311,14 +323,19 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           variations: [
             {
                 name: 'original',
-                activate: (_event: any) => {
+                activate: (_event: unknown) => {
                   // No change from the original form.
                   console.log('Original test variant active!');
+                  this.zeroTipTextABTestVariant = 'A';
                 }
             },
             {
                 name: environment.matomoAbTest.variantName,
-                activate: (_event: any) => {
+                activate: (_event: unknown) => {
+                  if (this.manuallySelectedABTestVariant) {
+                    return;
+                  }
+                  this.zeroTipTextABTestVariant = 'B';
                   console.log('Copy B test variant active!');
                 }
             },
