@@ -28,7 +28,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - node20.13.1-dependencies-with-chrome-{{ checksum "package-lock.json" }}
+            - dependencies-with-chrome-{{ checksum "package-lock.json" }}-{{ checksum "src/app/node-version.spec.mjs"}}
 
       - run: npm install --quiet
 
@@ -37,7 +37,9 @@ jobs:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: node20.13.1-dependencies-with-chrome-{{ checksum "package-lock.json" }}
+          key: dependencies-with-chrome-{{ checksum "package-lock.json" }}-{{ checksum "src/app/node-version.spec.mjs"}}
+
+      - run: node --test src/app/node-version.spec.mjs
 
       - run: npm run ci
 
@@ -62,14 +64,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - node20.13.1-dependencies-{{ checksum "package-lock.json" }}
+            - dependencies-{{ checksum "package-lock.json" }}-{{ checksum "src/app/node-version.spec.mjs"}}
       - run: env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install --quiet
       - save_cache:
           paths:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: node20.13.1-dependencies-{{ checksum "package-lock.json" }}
+          key: dependencies-{{ checksum "package-lock.json" }}{{ checksum "src/app/node-version.spec.mjs"}}
 
       - run: node --version
       - run: npm run build:staging
@@ -107,14 +109,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - node20.13.1-dependencies-{{ checksum "package-lock.json" }}
+            - dependencies-{{ checksum "package-lock.json" }}-{{ checksum "src/app/node-version.spec.mjs"}}
       - run: env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install --quiet
       - save_cache:
           paths:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: node20.13.1-dependencies-{{ checksum "package-lock.json" }}
+          key: dependencies-{{ checksum "package-lock.json" }}-{{ checksum "src/app/node-version.spec.mjs"}}
 
       - run: npm run build:regression
 
@@ -151,14 +153,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - node20.13.1-dependencies-{{ checksum "package-lock.json" }}
+            - dependencies-{{ checksum "package-lock.json" }}-{{ checksum "src/app/node-version.spec.mjs"}}
       - run: env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install --quiet
       - save_cache:
           paths:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: node20.13.1-dependencies-{{ checksum "package-lock.json" }}
+          key: dependencies-{{ checksum "package-lock.json" }}-{{ checksum "src/app/node-version.spec.mjs"}}
 
       - run: npm run build:production
 
