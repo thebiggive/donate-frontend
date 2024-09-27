@@ -13,8 +13,8 @@ const modulePath = dirname(fileURLToPath(import.meta.url));
 
 const expectedNodeVersion = '20.13.1';
 
-function assertAllNodeMentionsAreExpectedVersion(circleConfig) {
-  const nodeMentions = [...circleConfig.matchAll(/node:[0-9\\.]+/g)];
+function assertAllNodeMentionsAreExpectedVersion(fileContent) {
+  const nodeMentions = [...fileContent.matchAll(/node:[0-9\\.]+/g)];
   assert(nodeMentions.length > 0);
   nodeMentions.forEach(match => {
     assert.equal(match[0], `node:${expectedNodeVersion}`);
