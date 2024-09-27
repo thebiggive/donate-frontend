@@ -63,7 +63,7 @@
                 },
                 "fonts": true
               },
-              "outputHashing": "none",
+              "outputHashing": "all",
               "sourceMap": {
                 "scripts": true,
                 "styles": false,
@@ -105,7 +105,7 @@
                 },
                 "fonts": true
               },
-              "outputHashing": "none",
+              "outputHashing": "all",
               "sourceMap": {
                 "scripts": true,
                 "styles": false,
@@ -147,7 +147,7 @@
                 },
                 "fonts": true
               },
-              "outputHashing": "none",
+              "outputHashing": "all",
               "sourceMap": {
                 "scripts": true,
                 "styles": false,
@@ -246,7 +246,7 @@
               "scripts": true,
               "styles": false
             },
-            "outputHashing": "none",
+            "outputHashing": "media",
             "sourceMap": {
               "scripts": true,
               "styles": false,

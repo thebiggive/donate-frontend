@@ -2,18 +2,18 @@ version: 2.1
 
 orbs:
   aws-cli: circleci/aws-cli@5.0.0
-  aws-ecr: circleci/aws-ecr@9.3.1
+  aws-ecr: circleci/aws-ecr@9.3.3
   aws-ecs: circleci/aws-ecs@4.1.0
   aws-s3: circleci/aws-s3@4.0.0
   browser-tools: circleci/browser-tools@1.4.8
   jira: circleci/jira@2.1.0
-  slack: circleci/slack@4.13.3
+  slack: circleci/slack@4.14.0
 
 jobs:
   test:
     resource_class: large
     docker:
-      - image: cimg/node:20.13-browsers
+      - image: cimg/node:20.13.1-browsers
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_ACCESS_TOKEN
@@ -28,7 +28,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v5-dependencies-with-chrome-{{ checksum "package-lock.json" }}
+            - node20.13.1-dependencies-with-chrome-{{ checksum "package-lock.json" }}
 
       - run: npm install --quiet
 
@@ -37,7 +37,7 @@ jobs:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: v5-dependencies-with-chrome-{{ checksum "package-lock.json" }}
+          key: node20.13.1-dependencies-with-chrome-{{ checksum "package-lock.json" }}
 
       - run: npm run ci
 
@@ -47,7 +47,8 @@ jobs:
     docker:
       # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app
       # builds. Otherwise the two builds will have different output hashes and the dynamic app will reference
-      # static files that don't exist.
+      # static files that don't exist. Always specify a 3-part version, even if it's x.x.0.
+      # Remember to increment cache keys when upgrading Node too.
       - image: node:20.13.1
         auth:
           username: $DOCKER_HUB_USERNAME
@@ -61,14 +62,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - v5-dependencies-{{ checksum "package-lock.json" }}
+            - node20.13.1-dependencies-{{ checksum "package-lock.json" }}
       - run: env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install --quiet
       - save_cache:
           paths:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: v5-dependencies-{{ checksum "package-lock.json" }}
+          key: node20.13.1-dependencies-{{ checksum "package-lock.json" }}
 
       - run: node --version
       - run: npm run build:staging
@@ -91,7 +92,8 @@ jobs:
     docker:
       # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app
       # builds. Otherwise the two builds will have different output hashes and the dynamic app will reference
-      # static files that don't exist.
+      # static files that don't exist. Always specify a 3-part version, even if it's x.x.0.
+      # Remember to increment cache keys when upgrading Node too.
       - image: node:20.13.1
         auth:
           username: $DOCKER_HUB_USERNAME
@@ -105,14 +107,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - v5-dependencies-{{ checksum "package-lock.json" }}
+            - node20.13.1-dependencies-{{ checksum "package-lock.json" }}
       - run: env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install --quiet
       - save_cache:
           paths:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: v5-dependencies-{{ checksum "package-lock.json" }}
+          key: node20.13.1-dependencies-{{ checksum "package-lock.json" }}
 
       - run: npm run build:regression
 
@@ -134,7 +136,8 @@ jobs:
     docker:
       # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app
       # builds. Otherwise the two builds will have different output hashes and the dynamic app will reference
-      # static files that don't exist.
+      # static files that don't exist. Always specify a 3-part version, even if it's x.x.0.
+      # Remember to increment cache keys when upgrading Node too.
       - image: node:20.13.1
         auth:
           username: $DOCKER_HUB_USERNAME
@@ -148,14 +151,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - v5-dependencies-{{ checksum "package-lock.json" }}
+            - node20.13.1-dependencies-{{ checksum "package-lock.json" }}
       - run: env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install --quiet
       - save_cache:
           paths:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: v5-dependencies-{{ checksum "package-lock.json" }}
+          key: node20.13.1-dependencies-{{ checksum "package-lock.json" }}
 
       - run: npm run build:production
 
@@ -174,6 +177,7 @@ jobs:
           arguments: '--acl public-read --cache-control "max-age=86400"'
 
   build-ecr:
+    resource_class: large
     machine:
       enabled: true
       docker_layer_caching: true

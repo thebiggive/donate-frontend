@@ -1,3 +1,5 @@
+# Ensure updates are mirrored in `.circleci/config.yml`.
+# Always specify a 3-part version, even if it's x.x.0.
 FROM node:20.13.1
 RUN node --version
 
