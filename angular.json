@@ -63,7 +63,7 @@
                 },
                 "fonts": true
               },
-              "outputHashing": "default",
+              "outputHashing": "all",
               "sourceMap": {
                 "scripts": true,
                 "styles": false,
@@ -105,7 +105,7 @@
                 },
                 "fonts": true
               },
-              "outputHashing": "default",
+              "outputHashing": "all",
               "sourceMap": {
                 "scripts": true,
                 "styles": false,
@@ -147,7 +147,7 @@
                 },
                 "fonts": true
               },
-              "outputHashing": "default",
+              "outputHashing": "all",
               "sourceMap": {
                 "scripts": true,
                 "styles": false,
