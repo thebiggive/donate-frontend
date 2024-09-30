@@ -7,15 +7,12 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {RecaptchaComponent, RecaptchaModule} from "ng-recaptcha";
-import {Credentials} from "../credentials.model";
 import {IdentityService} from "../identity.service";
 import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {registerPath} from "../app-routing";
-import {flags} from "../featureFlags";
 import {WidgetInstance} from "friendly-challenge";
 
 export function isAllowableRedirectPath(redirectParam: string) {
@@ -25,13 +22,11 @@ export function isAllowableRedirectPath(redirectParam: string) {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatAutocompleteModule],
+  imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule],
   templateUrl: './login.component.html',
   styleUrl: 'login.component.scss'
 })
 export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
-  @ViewChild('captcha') captcha: RecaptchaComponent | undefined;
-
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha: ElementRef<HTMLElement>|undefined;
 
@@ -39,15 +34,15 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   protected loggingIn = false;
   protected loginError?: string;
   loginForm: FormGroup;
-  protected userAskedForResetLink = false;
   protected resetPasswordForm: FormGroup;
   protected resetPasswordSuccess: boolean|undefined = undefined;
-  protected recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
   private redirectPath: string = '/my-account';
   protected passwordResetError: undefined|string = undefined;
   protected readonly registerPath = registerPath;
+
+  protected userAskedForResetLink: boolean = false;
 
   /** Used to prevent displaying the page before all parts are ready **/
   public pageInitialised = false;
@@ -148,18 +143,30 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
       return;
     }
 
-    this.loggingIn = true;
+
    if (!this.captchaCode) {
       this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
       this.loggingIn = false;
       return;
     }
-    this.doLogin({
+
+    this.identityService.login({
       captcha_code: this.captchaCode,
       captcha_type: 'friendly_captcha',
       email_address: this.loginForm.value.emailAddress,
       raw_password: this.loginForm.value.password,
+    }).subscribe({
+      next: (_response: { id: string, jwt: string }) => {
+        this.router.navigateByUrl(this.redirectPath);
+      },
+      error: (error) => {
+        const errorDescription = error.error.error.description;
+        this.loginError = errorDescription || error.message || 'Unknown error';
+
+        this.loggingIn = false;
+      }
     });
+    this.loggingIn = true;
   }
 
   resetPasswordClicked(): void {
@@ -180,66 +187,15 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
       return;
     }
 
-    this.userAskedForResetLink = true;
     if (! this.captchaCode) {
       this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
       return;
     }
-   this.doLogin({
-     captcha_code: this.captchaCode,
-     captcha_type: 'friendly_captcha',
-     email_address: this.loginForm.value.emailAddress,
-     raw_password: this.loginForm.value.password,
-   });
-  }
 
-  captchaError() {
-    this.loginError = 'Captcha error – please try again';
-    this.loggingIn = false;
-  }
-
-  captchaReturn(captchaResponse: string | null): void {
-    this.loginError = undefined;
-    if (captchaResponse === null) {
-      // We had a code but now don't, e.g. after expiry at 1 minute. In this case
-      // the trigger wasn't a login click so do nothing. A repeat login attempt will
-      // re-execute the captcha in `login()`.
-      return;
-    }
-
-    if (this.loggingIn) {
-      const captcha_code = captchaResponse;
-      const captcha_type = 'recaptcha';
-      this.doLogin({
-        captcha_code,
-        captcha_type,
-        email_address: this.loginForm.value.emailAddress,
-        raw_password: this.loginForm.value.password,
-      });
-    }
-
-    else if (this.userAskedForResetLink) {
-      this.identityService.getResetPasswordToken(this.resetPasswordForm.value.emailAddress, captchaResponse).subscribe({
-        next: _ => this.resetPasswordSuccess = true,
-        error: _ => this.resetPasswordSuccess = false,
-      });
-    }
-  }
-
-  private doLogin(credentials: Credentials) {
-    this.identityService.login(credentials).subscribe({
-      next: (_response: { id: string, jwt: string }) => {
-        this.router.navigateByUrl(this.redirectPath);
-      },
-      error: (error) => {
-        this.captcha?.reset();
-        const errorDescription = error.error.error.description;
-        this.loginError = errorDescription || error.message || 'Unknown error';
-
-        this.loggingIn = false;
-      }
+    this.userAskedForResetLink = true;
+    this.identityService.getResetPasswordToken(this.resetPasswordForm.value.emailAddress, this.captchaCode).subscribe({
+      next: _ => this.resetPasswordSuccess = true,
+      error: _ => this.resetPasswordSuccess = false,
     });
   }
-
-  protected readonly flags = flags;
 }
