@@ -149,23 +149,17 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     }
 
     this.loggingIn = true;
-
-    if (flags.friendlyCaptchaEnabled) {
-      if (!this.captchaCode) {
-        this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
-        this.loggingIn = false;
-        return;
-      }
-      this.doLogin({
-        captcha_code: this.captchaCode,
-        captcha_type: 'friendly_captcha',
-        email_address: this.loginForm.value.emailAddress,
-        raw_password: this.loginForm.value.password,
-      });
-    } else {
-      this.captcha?.reset();
-      this.captcha?.execute();
+   if (!this.captchaCode) {
+      this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
+      this.loggingIn = false;
+      return;
     }
+    this.doLogin({
+      captcha_code: this.captchaCode,
+      captcha_type: 'friendly_captcha',
+      email_address: this.loginForm.value.emailAddress,
+      raw_password: this.loginForm.value.password,
+    });
   }
 
   resetPasswordClicked(): void {
@@ -187,21 +181,16 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     }
 
     this.userAskedForResetLink = true;
-    if (flags.friendlyCaptchaEnabled) {
-      if (! this.captchaCode) {
-        this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
-        return;
-      }
-     this.doLogin({
-       captcha_code: this.captchaCode,
-       captcha_type: 'friendly_captcha',
-       email_address: this.loginForm.value.emailAddress,
-       raw_password: this.loginForm.value.password,
-     });
-    } else {
-      this.captcha?.reset();
-      this.captcha?.execute();
+    if (! this.captchaCode) {
+      this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
+      return;
     }
+   this.doLogin({
+     captcha_code: this.captchaCode,
+     captcha_type: 'friendly_captcha',
+     email_address: this.loginForm.value.emailAddress,
+     raw_password: this.loginForm.value.password,
+   });
   }
 
   captchaError() {

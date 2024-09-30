@@ -222,7 +222,7 @@
                   (click)="progressToNonAmountsStep()"
                 >Continue</button>
 
-                @if (shouldShowCaptcha && flags.friendlyCaptchaEnabled) {
+                @if (shouldShowCaptcha) {
                   <div
                     class="frc-captcha"
                     [attr.data-sitekey]="friendlyCaptchaSiteKey"
@@ -661,16 +661,6 @@
           </div>
         </mat-step>
       </mat-vertical-stepper>
-      @if (! flags.friendlyCaptchaEnabled) {
-      <re-captcha
-        #idCaptcha
-        size="invisible"
-        errorMode="handled"
-        (resolved)="captchaIdentityReturn($event)"
-        (errored)="captchaIdentityError()"
-        siteKey="{{ recaptchaIdSiteKey }}"
-      ></re-captcha>
-      }
     </form>
   }
 
