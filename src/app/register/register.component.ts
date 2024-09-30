@@ -159,6 +159,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.readyToLogIn) {
       this.identityService.login({
         captcha_code: captchaResponse,
+        captcha_type: 'recaptcha',
         email_address: this.registrationForm.value.emailAddress,
         raw_password: this.registrationForm.value.password,
       }).subscribe({
