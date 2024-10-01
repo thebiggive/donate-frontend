@@ -9,6 +9,7 @@ export interface Person {
      */
     captcha_code?: string;
 
+    // @todo DON-1072 : Remove this from the model when id service defaults to using friendly_captcha
     captcha_type?: 'friendly_captcha';
 
     /**

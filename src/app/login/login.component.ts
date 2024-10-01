@@ -152,7 +152,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
 
     this.identityService.login({
       captcha_code: this.captchaCode,
-      captcha_type: 'friendly_captcha',
       email_address: this.loginForm.value.emailAddress,
       raw_password: this.loginForm.value.password,
     }).subscribe({

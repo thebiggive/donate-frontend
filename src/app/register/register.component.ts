@@ -138,7 +138,6 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.identityService.create({
       captcha_code: captchaResponse ,
-      captcha_type: 'friendly_captcha',
       email_address: this.registrationForm.value.emailAddress,
       first_name: this.registrationForm.value.firstName,
       last_name: this.registrationForm.value.lastName,
@@ -179,7 +178,6 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.identityService.login({
       captcha_code: captchaResponse,
-      captcha_type: 'friendly_captcha',
       email_address: this.registrationForm.value.emailAddress,
       raw_password: this.registrationForm.value.password,
     }).subscribe({

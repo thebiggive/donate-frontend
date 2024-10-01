@@ -93,7 +93,6 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
 
     const credentials: Credentials = {
       captcha_code: this.captchaCode,
-      captcha_type: 'friendly_captcha',
       email_address: this.loginForm.value.emailAddress,
       raw_password: this.loginForm.value.password,
     };
