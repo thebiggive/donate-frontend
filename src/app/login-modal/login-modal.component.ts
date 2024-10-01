@@ -41,7 +41,7 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   private captchaCode: string | undefined;
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha: ElementRef<HTMLElement>;
-  private recaptchWidget: WidgetInstance | undefined;
+  private friendlyCaptchaWidget: WidgetInstance | undefined;
 
   constructor(
     private dialogRef: MatDialogRef<LoginModalComponent>,
@@ -71,7 +71,7 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    this.recaptchWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
+    this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.captchaCode = solution;
       },
@@ -81,7 +81,7 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
       },
     })
 
-    await this.recaptchWidget.start()
+    await this.friendlyCaptchaWidget.start()
   }
   login(): void {
     this.loggingIn = true;
@@ -101,7 +101,7 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
       this.dialogRef.close(response);
       this.loggingIn = false;
     }, (error) => {
-      this.recaptchWidget?.reset();
+      this.friendlyCaptchaWidget?.reset();
       const errorDescription = error.error.error.description;
       this.loginError = errorDescription || error.message || 'Unknown error';
       this.loggingIn = false;
