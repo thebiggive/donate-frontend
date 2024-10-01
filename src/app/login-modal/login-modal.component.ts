@@ -4,7 +4,6 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {RecaptchaComponent, RecaptchaModule} from 'ng-recaptcha';
 
 import {allChildComponentImports} from '../../allChildComponentImports';
 import {Credentials} from '../credentials.model';
@@ -27,13 +26,10 @@ import {WidgetInstance} from "friendly-challenge";
     MatInputModule,
     MatProgressSpinnerModule,
     ReactiveFormsModule,
-    RecaptchaModule,
     PopupStandaloneComponent,
   ],
 })
 export class LoginModalComponent implements OnInit, AfterViewInit {
-  @ViewChild('captcha') captcha: RecaptchaComponent;
-
   loginForm: FormGroup;
   loggingIn = false;
   loginError?: string;
@@ -41,11 +37,11 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   resetPasswordForm: FormGroup;
   resetPasswordSuccess: boolean|undefined = undefined;
   userAskedForResetLink = false;
-  recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   protected readonly friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
   private captchaCode: string | undefined;
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha: ElementRef<HTMLElement>;
+  private recaptchWidget: WidgetInstance | undefined;
 
   constructor(
     private dialogRef: MatDialogRef<LoginModalComponent>,
@@ -75,7 +71,7 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    const widget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
+    this.recaptchWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.captchaCode = solution;
       },
@@ -85,7 +81,7 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
       },
     })
 
-    await widget.start()
+    await this.recaptchWidget.start()
   }
   login(): void {
     this.loggingIn = true;
@@ -106,7 +102,7 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
       this.dialogRef.close(response);
       this.loggingIn = false;
     }, (error) => {
-      this.captcha.reset();
+      this.recaptchWidget?.reset();
       const errorDescription = error.error.error.description;
       this.loginError = errorDescription || error.message || 'Unknown error';
       this.loggingIn = false;
