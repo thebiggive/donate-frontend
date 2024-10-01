@@ -14,7 +14,6 @@ import {MatStepperModule} from '@angular/material/stepper';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {RecaptchaModule} from 'ng-recaptcha';
 import {MatomoTracker as MatomoClientTracker, MatomoModule} from 'ngx-matomo-client';
 import {InMemoryStorageService} from 'ngx-webstorage-service';
 import {of} from 'rxjs';
@@ -174,7 +173,6 @@ describe('DonationStartForm', () => {
         MatStepperModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-        RecaptchaModule,
         RouterTestingModule.withRoutes([
           {
             path: 'donate/:campaignId',

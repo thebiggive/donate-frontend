@@ -20,7 +20,6 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatStepper} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
-import {RecaptchaComponent} from 'ng-recaptcha';
 import {MatomoTracker} from 'ngx-matomo-client';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
@@ -88,7 +87,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    */
   private giftAidCheckedForZeroTip: boolean = false;
 
-  @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
 
@@ -114,7 +112,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    */
   @Input() campaignOpenOnLoad = false;
 
-  recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
   creditPenceToUse = 0; // Set non-zero if logged in and Customer has a credit balance to spend. Caps donation amount too in that case.
@@ -175,7 +172,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   /**
    * Tracks internally whether (Person +) Donation setup is in flight. This is important to prevent duplicates, because multiple
-   * time-variable triggers including user-initiated stepper step changes and async, invisible reCAPTCHA returns can cause us
+   * time-variable triggers including user-initiated stepper step changes and async, invisible captcha returns can cause us
    * to decide we are ready to set these things up.
    */
   private creatingDonation = false;
@@ -1048,15 +1045,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   get donationAndExtrasAmount(): number {
     // Replicates logic of \MatchBot\Domain\Donation::getAmountFractionalIncTip . Consider further DRYing in future.
     return this.donationAmount + this.tipAmount();
-  }
-
-  captchaIdentityError() {
-    // Not passing event as it will "most often (if not always) be empty". https://github.com/DethAriel/ng-recaptcha#events
-    this.matomoTracker.trackEvent('identity_error', 'person_captcha_failed', 'reCAPTCHA hit errored() callback');
-    this.creatingDonation = false;
-    this.donationCreateError = true;
-    this.showDonationCreateError();
-    this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
   }
 
   /**
