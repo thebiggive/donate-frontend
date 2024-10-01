@@ -1,13 +1,4 @@
 <app-popup-standalone>
-  <re-captcha
-    #captcha
-    size="invisible"
-    errorMode="handled"
-    (resolved)="captchaReturn($event)"
-    (errored)="captchaError()"
-    siteKey="{{ recaptchaIdSiteKey }}"
-  ></re-captcha>
-
   @if (forgotPassword) {
     <div>
       <h2 mat-dialog-title>Reset Password</h2>
@@ -71,6 +62,7 @@
           </p>
         }
       </form>
+
     </mat-dialog-content>
     <mat-dialog-actions style="justify-content: space-between;">
       <a (click)="forgotPasswordClicked()">Forgot Password?</a>
@@ -86,5 +78,10 @@
       </div>
     </mat-dialog-actions>
   }
-
+  <div
+    class="frc-captcha"
+    [attr.data-sitekey]="friendlyCaptchaSiteKey"
+    data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
+    #frccaptcha
+  ></div>
 </app-popup-standalone>

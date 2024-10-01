@@ -12,15 +12,6 @@
           text="Donor Registration"
         ></biggive-heading>
       </div>
-      <re-captcha
-        #captcha
-        size="invisible"
-        errorMode="handled"
-        (resolved)="captchaReturn($event)"
-        (errored)="captchaError()"
-        siteKey="{{ recaptchaIdSiteKey }}"
-      ></re-captcha>
-
       <p>
         Registering for a Donor Account is quick and easy.
       </p>

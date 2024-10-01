@@ -13,8 +13,6 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatSelectModule} from '@angular/material/select';
 import {MatStepperModule} from '@angular/material/stepper';
 import {ReactiveFormsModule} from '@angular/forms';
-import {RecaptchaModule} from 'ng-recaptcha';
-
 import { allChildComponentImports } from '../../../allChildComponentImports';
 import { CampaignInfoComponent } from '../../campaign-info/campaign-info.component';
 import {ExactCurrencyPipe} from '../../exact-currency.pipe';
@@ -48,7 +46,6 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     MatExpansionModule,
     PercentPipe,
     ReactiveFormsModule,
-    RecaptchaModule,
     TimeLeftPipe,
     CampaignDetailsModule,
     MatSnackBarModule

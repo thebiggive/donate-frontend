@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   loginForm: FormGroup;
   protected resetPasswordForm: FormGroup;
   protected resetPasswordSuccess: boolean|undefined = undefined;
-  friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
+  protected readonly friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
   private redirectPath: string = '/my-account';
   protected passwordResetError: undefined|string = undefined;
@@ -106,7 +106,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
 
     const widget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
-        this.captchaCode = solution + "no";
+        this.captchaCode = solution;
       },
       errorCallback: (error: unknown) => {
         this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
@@ -152,7 +152,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
 
     this.identityService.login({
       captcha_code: this.captchaCode,
-      captcha_type: 'friendly_captcha',
       email_address: this.loginForm.value.emailAddress,
       raw_password: this.loginForm.value.password,
     }).subscribe({
