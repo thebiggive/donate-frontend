@@ -33,7 +33,6 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   protected processing = false;
   protected error?: string;
   registrationForm: FormGroup;
-  protected recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   private readyToLogIn = false;
   protected errorHtml: SafeHtml | undefined;
   private friendlyCaptchaSolution: string|undefined;
@@ -137,11 +136,9 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
 
-    captchaResponse = this.friendlyCaptchaSolution ?? captchaResponse;
-
     this.identityService.create({
-      captcha_code: captchaResponse,
-      captcha_type: 'recaptcha',
+      captcha_code: captchaResponse ,
+      captcha_type: 'friendly_captcha',
       email_address: this.registrationForm.value.emailAddress,
       first_name: this.registrationForm.value.firstName,
       last_name: this.registrationForm.value.lastName,
