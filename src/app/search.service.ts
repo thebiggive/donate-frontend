@@ -11,6 +11,7 @@ export type SelectedType = {
 
 const sortOptions = {
   amountRaised: 'Most raised',
+  leastRaised: 'Least raised',
   matchFundsRemaining: 'Match funds remaining',
   closeToTarget: 'Close to campaign target',
   relevance: 'Relevance',
@@ -104,6 +105,9 @@ export class SearchService {
         break;
       case 'closeToTarget':
         this.selectedSortLabel =  sortOptions.closeToTarget;
+        break;
+      case 'leastRaised':
+        this.selectedSortLabel =  sortOptions.leastRaised;
         break;
       case 'relevance':
       case 'Relevance': // historically we set this with a capital R.
