@@ -264,5 +264,11 @@
     #campaign-highlights-beneficiaries-and-categories-desktop {
       display: block;
     }
-  }  
+  }
+}
+
+div.frc-captcha {
+  margin: auto;
+  background: none;
+  border: 2px solid $colour-primary;
 }
