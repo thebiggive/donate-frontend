@@ -85,14 +85,8 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
   }
   login(): void {
     this.loggingIn = true;
-    if (!this.captchaCode) {
-      this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
-      this.loggingIn = false;
-      return;
-    }
-
     const credentials: Credentials = {
-      captcha_code: this.captchaCode,
+      captcha_code: this.captchaCode || '',
       email_address: this.loginForm.value.emailAddress,
       raw_password: this.loginForm.value.password,
     };
