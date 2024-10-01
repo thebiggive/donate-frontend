@@ -172,7 +172,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   /**
    * Tracks internally whether (Person +) Donation setup is in flight. This is important to prevent duplicates, because multiple
-   * time-variable triggers including user-initiated stepper step changes and async, invisible captcha returns can cause us
+   * time-variable triggers including user-initiated stepper step changes and async captcha returns can cause us
    * to decide we are ready to set these things up.
    */
   private creatingDonation = false;
