@@ -14,14 +14,6 @@
             text="Donor Login"
           ></biggive-heading>
         </div>
-        <re-captcha
-          #captcha
-          size="invisible"
-          errorMode="handled"
-          (resolved)="captchaReturn($event)"
-          (errored)="captchaError()"
-          siteKey="{{ recaptchaIdSiteKey }}"
-        ></re-captcha>
         @if (forgotPassword) {
           <div>
             <h2 mat-dialog-title>Reset Password</h2>
@@ -132,11 +124,18 @@
                   />
               }
             </div>
+
             <div>
               <!-- Empty placeholder to mirror div for "forgot password link" on other side and keep login button centred. -->
             </div>
           </div>
         }
+        <div
+          class="frc-captcha"
+          [attr.data-sitekey]="friendlyCaptchaSiteKey"
+          data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
+          #frccaptcha
+        ></div>
         <hr style="margin: 20px auto;">
         <a href="{{'/' + registerPath}}">Create new Donation Funds account</a>
       </biggive-page-section>

@@ -73,10 +73,6 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (! flags.friendlyCaptchaEnabled) {
-      return;
-    }
-
     if (! isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -127,12 +123,6 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.processing = true;
-    if (! this.flags.friendlyCaptchaEnabled) {
-      this.captcha.reset();
-      this.captcha.execute();
-      return;
-    }
-
     this.doRegistrationAndLogin()
   }
 
@@ -159,6 +149,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.readyToLogIn) {
       this.identityService.login({
         captcha_code: captchaResponse,
+        captcha_type: 'recaptcha',
         email_address: this.registrationForm.value.emailAddress,
         raw_password: this.registrationForm.value.password,
       }).subscribe({

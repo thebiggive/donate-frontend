@@ -1,5 +1,5 @@
-import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import {AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {isPlatformBrowser} from '@angular/common';
 import {ComponentsModule} from "@biggive/components-angular";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDialogModule} from "@angular/material/dialog";
@@ -7,14 +7,13 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {RecaptchaComponent, RecaptchaModule} from "ng-recaptcha";
-import {Credentials} from "../credentials.model";
 import {IdentityService} from "../identity.service";
 import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {registerPath} from "../app-routing";
+import {WidgetInstance} from "friendly-challenge";
 
 export function isAllowableRedirectPath(redirectParam: string) {
   return ! redirectParam.match(/[^a-zA-Z0-9\-_\/]/);
@@ -23,26 +22,31 @@ export function isAllowableRedirectPath(redirectParam: string) {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, RecaptchaModule, MatAutocompleteModule],
+  imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule],
   templateUrl: './login.component.html',
   styleUrl: 'login.component.scss'
 })
-export class LoginComponent implements OnInit, OnDestroy{
-  @ViewChild('captcha') captcha: RecaptchaComponent;
+export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
+  @ViewChild('frccaptcha', { static: false })
+  friendlyCaptcha: ElementRef<HTMLElement>|undefined;
+
   protected forgotPassword = false;
   protected loggingIn = false;
   protected loginError?: string;
   loginForm: FormGroup;
-  protected userAskedForResetLink = false;
   protected resetPasswordForm: FormGroup;
   protected resetPasswordSuccess: boolean|undefined = undefined;
-  protected recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
+  friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
+
   private redirectPath: string = '/my-account';
   protected passwordResetError: undefined|string = undefined;
   protected readonly registerPath = registerPath;
 
+  protected userAskedForResetLink: boolean = false;
+
   /** Used to prevent displaying the page before all parts are ready **/
   public pageInitialised = false;
+  private captchaCode: string | undefined;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -91,6 +95,29 @@ export class LoginComponent implements OnInit, OnDestroy{
     this.pageInitialised = true;
   }
 
+  ngAfterViewInit() {
+    if (! isPlatformBrowser(this.platformId)) {
+      return
+    }
+
+    if (! this.friendlyCaptcha) {
+      return;
+    }
+
+    const widget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
+      doneCallback: (solution) => {
+        this.captchaCode = solution + "no";
+      },
+      errorCallback: (error: unknown) => {
+        this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
+        console.error(error);
+      },
+    })
+
+    widget.start()
+  }
+
+
   login(): void {
     if (! this.loginForm.valid) {
 
@@ -116,9 +143,30 @@ export class LoginComponent implements OnInit, OnDestroy{
       return;
     }
 
+
+   if (!this.captchaCode) {
+      this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
+      this.loggingIn = false;
+      return;
+    }
+
+    this.identityService.login({
+      captcha_code: this.captchaCode,
+      captcha_type: 'friendly_captcha',
+      email_address: this.loginForm.value.emailAddress,
+      raw_password: this.loginForm.value.password,
+    }).subscribe({
+      next: (_response: { id: string, jwt: string }) => {
+        this.router.navigateByUrl(this.redirectPath);
+      },
+      error: (error) => {
+        const errorDescription = error.error.error.description;
+        this.loginError = errorDescription || error.message || 'Unknown error';
+
+        this.loggingIn = false;
+      }
+    });
     this.loggingIn = true;
-    this.captcha.reset();
-    this.captcha.execute();
   }
 
   resetPasswordClicked(): void {
@@ -139,50 +187,15 @@ export class LoginComponent implements OnInit, OnDestroy{
       return;
     }
 
-    this.userAskedForResetLink = true;
-    this.captcha.reset();
-    this.captcha.execute();
-  }
-
-  captchaError() {
-    this.loginError = 'Captcha error – please try again';
-    this.loggingIn = false;
-  }
-
-  captchaReturn(captchaResponse: string | null): void {
-    this.loginError = undefined;
-    if (captchaResponse === null) {
-      // We had a code but now don't, e.g. after expiry at 1 minute. In this case
-      // the trigger wasn't a login click so do nothing. A repeat login attempt will
-      // re-execute the captcha in `login()`.
+    if (! this.captchaCode) {
+      this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
       return;
     }
 
-    if (this.loggingIn) {
-      const credentials: Credentials = {
-        captcha_code: captchaResponse,
-        email_address: this.loginForm.value.emailAddress,
-        raw_password: this.loginForm.value.password,
-      };
-
-      this.identityService.login(credentials).subscribe({
-        next: (_response: { id: string, jwt: string }) => {
-          this.router.navigateByUrl(this.redirectPath);
-        },
-        error: (error) => {
-          this.captcha.reset();
-          const errorDescription = error.error.error.description;
-          this.loginError = errorDescription || error.message || 'Unknown error';
-
-          this.loggingIn = false;
-      }});
-    }
-
-    else if (this.userAskedForResetLink) {
-      this.identityService.getResetPasswordToken(this.resetPasswordForm.value.emailAddress, captchaResponse).subscribe({
-        next: _ => this.resetPasswordSuccess = true,
-        error: _ => this.resetPasswordSuccess = false,
-      });
-    }
+    this.userAskedForResetLink = true;
+    this.identityService.getResetPasswordToken(this.resetPasswordForm.value.emailAddress, this.captchaCode).subscribe({
+      next: _ => this.resetPasswordSuccess = true,
+      error: _ => this.resetPasswordSuccess = false,
+    });
   }
 }

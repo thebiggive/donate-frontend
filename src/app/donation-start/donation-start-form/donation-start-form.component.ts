@@ -446,10 +446,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   ngAfterViewInit() {
-    if (! flags.friendlyCaptchaEnabled) {
-      return;
-    }
-
     if (! isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -1669,7 +1665,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     } else {
       const person: Person = {};
       person.captcha_code = this.idCaptchaCode;
-      person.captcha_type = flags.friendlyCaptchaEnabled ? 'friendly_captcha' : 'recaptcha';
+      person.captcha_type = 'friendly_captcha';
       this.identityService.create(person).subscribe(
         (person: Person) => {
           // would like to move the line below inside `identityService.create` but that caused test errors when I tried
@@ -1706,25 +1702,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.markYourDonationStepIncomplete();
 
-    if (flags.friendlyCaptchaEnabled) {
-      this.showErrorToast("Please wait, running captcha check to prevent spam")
-      return true;
-    }
-
-    try {
-      this.idCaptcha.reset();
-    } catch (e) {
-      // The donor may be having connection problems, and we've seen reCAPTCHA behave weirdly if the
-      // @ViewChild doesn't have a working, mounted element here. To avoid wasting donors' time and
-      // failing later, track so we can measure frequency and attempt a full reset – which currently
-      // includes a page reload.
-      this.matomoTracker.trackEvent('identity_error', 'person_captcha_reset_failed', e.message);
-      this.reset();
-      return true; // Make sure callers treat this as "not ready", while we finish reloading.
-    }
-
-    this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
-
+    this.showErrorToast("Please wait, running captcha check to prevent spam")
     return true;
   }
 

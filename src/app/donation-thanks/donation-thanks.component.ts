@@ -176,6 +176,7 @@ export class DonationThanksComponent implements OnInit {
       email_address: this.donation.emailAddress as string,
       raw_password: this.person?.raw_password as string,
       captcha_code: captchaResponse,
+      captcha_type: 'recaptcha',
     };
 
     this.identityService.login(credentials).subscribe({

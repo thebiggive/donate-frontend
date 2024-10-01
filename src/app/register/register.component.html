@@ -83,15 +83,13 @@
         </div>
       </form>
       <div class="actions">
-        @if (flags.friendlyCaptchaEnabled) {
-          <!-- Sitekey below is shared between environments and necessarily exposed in FE, so should be fine to hard-code -->
-          <div
-            class="frc-captcha"
-            [attr.data-sitekey]="friendlyCaptchaSiteKey"
-            data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
-            #frccaptcha
-          ></div>
-        }
+        <!-- Sitekey below is shared between environments and necessarily exposed in FE, so should be fine to hard-code -->
+        <div
+          class="frc-captcha"
+          [attr.data-sitekey]="friendlyCaptchaSiteKey"
+          data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
+          #frccaptcha
+        ></div>
         <div id="register-button">
           <div aria-live="polite">
             @if (processing) {
