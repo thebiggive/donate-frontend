@@ -221,12 +221,12 @@
             </div>
           </div>
         }
-        <re-captcha
-          #captcha
-          size="invisible"
-          (resolved)="loginCaptchaReturn($event)"
-          siteKey="{{ recaptchaIdSiteKey }}"
-        ></re-captcha>
+      <div
+        class="frc-captcha"
+        [attr.data-sitekey]="friendlyCaptchaSiteKey"
+        data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
+        #frccaptcha
+      ></div>
       </div>
     }
   </main>

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {RecaptchaComponent, RecaptchaModule} from 'ng-recaptcha';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { DonationThanksComponent } from './donation-thanks.component';
@@ -18,10 +17,9 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
     MatButtonModule,
     MatDialogModule,
     MatProgressSpinnerModule,
-    RecaptchaModule,
     FontAwesomeModule,
   ],
   declarations: [DonationThanksComponent],
-  providers: [RecaptchaComponent]
+  providers: []
 })
 export class DonationThanksModule {}
