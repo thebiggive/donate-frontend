@@ -91,11 +91,8 @@ jobs:
       - run:
           name: "Copy files out of docker image to allow syncing to S3"
           command: >-
-            docker create --name frontend-buildx IMAGE_NAME
             mkdir /tmp/build
-            docker cp frontend-buildx:/ /tmp/build
-            docker rm -f dummy
-
+            docker cp DLC_builder:/ /tmp/build
 
       - aws-cli/setup:
           aws_access_key_id: AWS_ACCESS_KEY_ID
