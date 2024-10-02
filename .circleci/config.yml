@@ -76,13 +76,13 @@ jobs:
             AWS_ECR_EVAL_PATH: "."
             AWS_ECR_STR_DOCKERFILE: Dockerfile
             AWS_ECR_STR_PROFILE_NAME: default
-            AWS_ECR_STR_ACCOUNT_ID: "${AWS_ACCOUNT_ID}"
-            AWS_ECR_STR_REGION: "${AWS_DEFAULT_REGION}"
+            AWS_ECR_STR_ACCOUNT_ID: ${AWS_ACCOUNT_ID}
+            AWS_ECR_STR_REGION: ${AWS_DEFAULT_REGION}
             AWS_ECR_STR_PLATFORM: "linux/amd64"
-            AWS_ECR_BOOL_PUBLIC_REGISTRY: "${AWS_ECR_PUBLIC_REGISTRY_ALIAS}"
+            AWS_ECR_BOOL_PUBLIC_REGISTRY: ${AWS_ECR_PUBLIC_REGISTRY_ALIAS}
             AWS_ECR_BOOL_PUSH_IMAGE: false
             AWS_ECR_STR_LIFECYCLE_POLICY_PATH: ""
-            AWS_ECR_STR_PUBLIC_REGISTRY_ALIAS: "${AWS_ECR_PUBLIC_REGISTRY_ALIAS}"
+            AWS_ECR_STR_PUBLIC_REGISTRY_ALIAS: ${AWS_ECR_PUBLIC_REGISTRY_ALIAS}
             AWS_ECR_EVAL_BUILD_PATH: "."
             AWS_ECR_STR_AWS_DOMAIN: "amazonaws.com"
           command: ./scripts/docker-buildx.sh
