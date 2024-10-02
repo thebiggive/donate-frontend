@@ -55,14 +55,14 @@ jobs:
 
       - restore_cache:
           keys:
-            - dependencies-{{ checksum "package-lock.json" }}-{{ checksum "src/app/node-version.spec.mjs"}}
+            - dependencies2-{{ checksum "package-lock.json" }}-{{ checksum "src/app/node-version.spec.mjs"}}
       - run: env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install --quiet
       - save_cache:
           paths:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: dependencies-{{ checksum "package-lock.json" }}{{ checksum "src/app/node-version.spec.mjs"}}
+          key: dependencies2-{{ checksum "package-lock.json" }}{{ checksum "src/app/node-version.spec.mjs"}}
 
       - run: node --version
 
