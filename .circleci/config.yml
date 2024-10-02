@@ -75,26 +75,27 @@ jobs:
 
       - run: node --version
 
-      - name: Build Docker Image with buildx to pull out for S3
-        environment:
-          AWS_ECR_STR_TAG: << parameters.tag >>
-          AWS_ECR_BOOL_SKIP_WHEN_TAGS_EXIST: <<parameters.skip_when_tags_exist>>
-          AWS_ECR_STR_REPO: << parameters.repo >>
-          AWS_ECR_STR_EXTRA_BUILD_ARGS: <<parameters.extra_build_args>>
-          AWS_ECR_EVAL_PATH: <<parameters.path>>
-          AWS_ECR_STR_DOCKERFILE: <<parameters.dockerfile>>
-          AWS_ECR_STR_PROFILE_NAME: <<parameters.profile_name>>
-          AWS_ECR_STR_ACCOUNT_ID: <<parameters.account_id>>
-          AWS_ECR_STR_REGION: <<parameters.region>>
-          AWS_ECR_STR_PLATFORM: <<parameters.platform>>
-          AWS_ECR_BOOL_PUBLIC_REGISTRY: <<parameters.public_registry>>
-          AWS_ECR_BOOL_PUSH_IMAGE: <<parameters.push_image>>
-          AWS_ECR_STR_LIFECYCLE_POLICY_PATH: <<parameters.lifecycle_policy_path>>
-          AWS_ECR_STR_PUBLIC_REGISTRY_ALIAS: <<parameters.public_registry_alias>>
-          AWS_ECR_EVAL_BUILD_PATH: <<parameters.build_path>>
-          AWS_ECR_STR_AWS_DOMAIN: <<parameters.aws_domain>>
-        command: <<include(scripts/docker_buildx.sh)>>
-        no_output_timeout: <<parameters.no_output_timeout>>
+      - run:
+          name: build-docker-image-with-buildx-for-se
+          environment:
+            AWS_ECR_STR_TAG: 'staging,staging-${CIRCLE_SHA1}'
+            AWS_ECR_BOOL_SKIP_WHEN_TAGS_EXIST: false
+            AWS_ECR_STR_REPO: ${AWS_ECR_REPO_NAME}
+            AWS_ECR_STR_EXTRA_BUILD_ARGS: ""
+            AWS_ECR_EVAL_PATH: "."
+            AWS_ECR_STR_DOCKERFILE: Dockerfile
+            AWS_ECR_STR_PROFILE_NAME: default
+            AWS_ECR_STR_ACCOUNT_ID: "${AWS_ACCOUNT_ID}"
+            AWS_ECR_STR_REGION: "${AWS_DEFAULT_REGION}"
+            AWS_ECR_STR_PLATFORM: "linux/amd64"
+            AWS_ECR_BOOL_PUBLIC_REGISTRY: "${AWS_ECR_PUBLIC_REGISTRY_ALIAS}"
+            AWS_ECR_BOOL_PUSH_IMAGE: false
+            AWS_ECR_STR_LIFECYCLE_POLICY_PATH: ""
+            AWS_ECR_STR_PUBLIC_REGISTRY_ALIAS: "${AWS_ECR_PUBLIC_REGISTRY_ALIAS}"
+            AWS_ECR_EVAL_BUILD_PATH: "."
+            AWS_ECR_STR_AWS_DOMAIN: "amazonaws.com"
+          command: scripts/docker_buildx.sh
+          no_output_timeout: "10m"
 
       - aws-cli/setup:
           aws_access_key_id: AWS_ACCESS_KEY_ID
