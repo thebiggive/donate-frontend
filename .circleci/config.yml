@@ -69,7 +69,7 @@ jobs:
       - run:
           name: build-docker-image-with-buildx-for-se
           environment:
-            AWS_ECR_STR_TAG: "staging,staging-${CIRCLE_SHA1}"
+            AWS_ECR_STR_TAG: ""
             AWS_ECR_BOOL_SKIP_WHEN_TAGS_EXIST: false
             AWS_ECR_STR_REPO: ${AWS_ECR_REPO_NAME}
             AWS_ECR_STR_EXTRA_BUILD_ARGS: ""
@@ -79,10 +79,10 @@ jobs:
             AWS_ECR_STR_ACCOUNT_ID: ${AWS_ACCOUNT_ID}
             AWS_ECR_STR_REGION: ${AWS_DEFAULT_REGION}
             AWS_ECR_STR_PLATFORM: "linux/amd64"
-            AWS_ECR_BOOL_PUBLIC_REGISTRY: ${AWS_ECR_PUBLIC_REGISTRY_ALIAS}
+            AWS_ECR_BOOL_PUBLIC_REGISTRY: ""
             AWS_ECR_BOOL_PUSH_IMAGE: false
             AWS_ECR_STR_LIFECYCLE_POLICY_PATH: ""
-            AWS_ECR_STR_PUBLIC_REGISTRY_ALIAS: ${AWS_ECR_PUBLIC_REGISTRY_ALIAS}
+            AWS_ECR_STR_PUBLIC_REGISTRY_ALIAS: ""
             AWS_ECR_EVAL_BUILD_PATH: "."
             AWS_ECR_STR_AWS_DOMAIN: "amazonaws.com"
           command: ./scripts/docker-buildx.sh
