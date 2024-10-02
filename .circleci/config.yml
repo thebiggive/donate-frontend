@@ -69,7 +69,7 @@ jobs:
       - run:
           name: build-docker-image-with-buildx-for-se
           environment:
-            AWS_ECR_STR_TAG: 'staging,staging-${CIRCLE_SHA1}'
+            AWS_ECR_STR_TAG: "staging,staging-${CIRCLE_SHA1}"
             AWS_ECR_BOOL_SKIP_WHEN_TAGS_EXIST: false
             AWS_ECR_STR_REPO: ${AWS_ECR_REPO_NAME}
             AWS_ECR_STR_EXTRA_BUILD_ARGS: ""
