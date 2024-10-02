@@ -74,7 +74,27 @@ jobs:
           key: dependencies-{{ checksum "package-lock.json" }}{{ checksum "src/app/node-version.spec.mjs"}}
 
       - run: node --version
-      - run: npm run build:staging
+
+      - name: Build Docker Image with buildx to pull out for S3
+        environment:
+          AWS_ECR_STR_TAG: << parameters.tag >>
+          AWS_ECR_BOOL_SKIP_WHEN_TAGS_EXIST: <<parameters.skip_when_tags_exist>>
+          AWS_ECR_STR_REPO: << parameters.repo >>
+          AWS_ECR_STR_EXTRA_BUILD_ARGS: <<parameters.extra_build_args>>
+          AWS_ECR_EVAL_PATH: <<parameters.path>>
+          AWS_ECR_STR_DOCKERFILE: <<parameters.dockerfile>>
+          AWS_ECR_STR_PROFILE_NAME: <<parameters.profile_name>>
+          AWS_ECR_STR_ACCOUNT_ID: <<parameters.account_id>>
+          AWS_ECR_STR_REGION: <<parameters.region>>
+          AWS_ECR_STR_PLATFORM: <<parameters.platform>>
+          AWS_ECR_BOOL_PUBLIC_REGISTRY: <<parameters.public_registry>>
+          AWS_ECR_BOOL_PUSH_IMAGE: <<parameters.push_image>>
+          AWS_ECR_STR_LIFECYCLE_POLICY_PATH: <<parameters.lifecycle_policy_path>>
+          AWS_ECR_STR_PUBLIC_REGISTRY_ALIAS: <<parameters.public_registry_alias>>
+          AWS_ECR_EVAL_BUILD_PATH: <<parameters.build_path>>
+          AWS_ECR_STR_AWS_DOMAIN: <<parameters.aws_domain>>
+        command: <<include(scripts/docker_buildx.sh)>>
+        no_output_timeout: <<parameters.no_output_timeout>>
 
       - aws-cli/setup:
           aws_access_key_id: AWS_ACCESS_KEY_ID
@@ -266,6 +286,7 @@ workflows:
             branches:
               only:
                 - develop
+                - DON-1073-build-s3-with-buildx
           context:
             - docker-hub-creds
             - ecs-deploys # Includes AWS_REGION
