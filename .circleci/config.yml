@@ -46,18 +46,9 @@ jobs:
       - store_artifacts:
           path: cypress/screenshots
   deploy-staging-static:
-    docker:
-      # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app
-      # builds. Otherwise the two builds will have different output hashes and the dynamic app will reference
-      # static files that don't exist. Always specify a 3-part version, even if it's x.x.0.
-      # Remember to increment cache keys when upgrading Node too.
-      - image: node:20.13.1
-        auth:
-          username: $DOCKER_HUB_USERNAME
-          password: $DOCKER_HUB_ACCESS_TOKEN
-
-    # This must also match `Dockerfile` to avoid risking out of sync static + ECS builds.
-    working_directory: /usr/src/app
+    machine:
+      image: ubuntu-2204:current
+      docker_layer_caching: false
 
     steps:
       - checkout
