@@ -94,7 +94,7 @@ jobs:
             AWS_ECR_STR_PUBLIC_REGISTRY_ALIAS: "${AWS_ECR_PUBLIC_REGISTRY_ALIAS}"
             AWS_ECR_EVAL_BUILD_PATH: "."
             AWS_ECR_STR_AWS_DOMAIN: "amazonaws.com"
-          command: scripts/docker_buildx.sh
+          command: ./scripts/docker-buildx.sh
           no_output_timeout: "10m"
 
       - aws-cli/setup:
