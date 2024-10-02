@@ -72,7 +72,7 @@ jobs:
             AWS_ECR_STR_TAG: ""
             AWS_ECR_BOOL_SKIP_WHEN_TAGS_EXIST: false
             AWS_ECR_STR_REPO: ${AWS_ECR_REPO_NAME}
-            AWS_ECR_STR_EXTRA_BUILD_ARGS: ""
+            AWS_ECR_STR_EXTRA_BUILD_ARGS: '--build-arg BUILD_ENV=staging --build-arg FONTAWESOME_NPM_AUTH_TOKEN=${FONTAWESOME_NPM_AUTH_TOKEN}"'
             AWS_ECR_EVAL_PATH: "."
             AWS_ECR_STR_DOCKERFILE: Dockerfile
             AWS_ECR_STR_PROFILE_NAME: default
@@ -87,6 +87,15 @@ jobs:
             AWS_ECR_STR_AWS_DOMAIN: "amazonaws.com"
           command: ./scripts/docker-buildx.sh
           no_output_timeout: "10m"
+
+      - run:
+          name: "Copy files out of docker image to allow syncing to S3"
+          command: >-
+            docker create --name frontend-buildx IMAGE_NAME
+            mkdir /tmp/build
+            docker cp frontend-buildx:/ /tmp/build
+            docker rm -f dummy
+
 
       - aws-cli/setup:
           aws_access_key_id: AWS_ACCESS_KEY_ID
