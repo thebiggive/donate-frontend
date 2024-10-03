@@ -30,7 +30,7 @@ RUN npm run build:ssr:${BUILD_ENV}
 EXPOSE 4000
 
 # Behave like a UK visitor when doing e.g. server-side rendering of Date Pipes.
-ENV TZ 'Europe/London'
+ENV TZ='Europe/London'
 
 # Serve with Server-Side Rendering support
 CMD [ "npm", "run", "serve:ssr" ]
