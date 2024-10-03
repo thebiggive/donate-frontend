@@ -91,7 +91,6 @@ jobs:
       - run:
           name: "Copy files out of docker image to allow syncing to S3"
           command: >-
-            mkdir ~/build-from-buildx
             docker cp buildx_buildkit_dlc_builder0:/ ~/build-from-buildx
 
       - aws-cli/setup:
