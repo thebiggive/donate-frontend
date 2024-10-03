@@ -67,7 +67,7 @@ jobs:
       - run: node --version
 
       - run:
-          name: build-docker-image-with-buildx-for-se
+          name: build-docker-image-with-buildx-for-s3
           environment:
             AWS_ECR_STR_TAG: ""
             AWS_ECR_BOOL_SKIP_WHEN_TAGS_EXIST: false
