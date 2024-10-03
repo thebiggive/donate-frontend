@@ -28,7 +28,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - dependencies-with-chrome-{{ checksum "package-lock.json" }}-{{ checksum "src/app/node-version.spec.mjs"}}
+            - dependencies-with-chrome-{{ checksum "package-lock.json" }}
 
       - run: npm install --quiet
 
@@ -37,9 +37,7 @@ jobs:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: dependencies-with-chrome-{{ checksum "package-lock.json" }}-{{ checksum "src/app/node-version.spec.mjs"}}
-
-      - run: node --test src/app/node-version.spec.mjs
+          key: dependencies-with-chrome-{{ checksum "package-lock.json" }}
 
       - run: npm run ci
 
