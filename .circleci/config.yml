@@ -74,6 +74,7 @@ jobs:
       - aws-cli/setup:
           aws_access_key_id: AWS_ACCESS_KEY_ID
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+
       - aws-s3/sync: # Sync dist/browser to S3 with 1 year lifetime
           from: /usr/src/app/dist/browser
           to: 's3://tbg-<< parameters.env >>-donate-static/d'
