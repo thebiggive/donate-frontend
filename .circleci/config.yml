@@ -159,7 +159,7 @@ jobs:
       env:
         type: string
     docker:
-      - image: "${AWS_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>"
+      - image: "${AWS_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>-${CIRCLE_SHA1}"
     steps:
       - aws-cli/setup:
           aws_access_key_id: AWS_ACCESS_KEY_ID
