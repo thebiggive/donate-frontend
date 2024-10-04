@@ -284,10 +284,6 @@ input {
   padding: 0; // We rely on containing element margin, and don't want vendor-dependent extra padding.
 };
 
-input:focus {
-  box-shadow: 0 1px 0 $colour-secondary;
-}
-
 #giftAidAddressContainer {
   margin-top: 60px;
 }
