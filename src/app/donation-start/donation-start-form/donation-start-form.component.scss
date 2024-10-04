@@ -285,9 +285,6 @@ input {
 };
 
 input:focus {
-  // box shadow because we don't want to move other elements around when this is focus (so not a border that would
-  // occupy space) and as the input is already visually wrapped in a box around it we don't want a to add lines
-  // on all sides (so not an outline)
   box-shadow: 0 1px 0 $colour-secondary;
 }
 
