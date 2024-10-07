@@ -2,18 +2,6 @@
   <div class="c-form-container">
     <div class="b-primary-column">
       <biggive-page-section>
-      <biggive-heading
-        space-above=0
-        space-below=3
-        colour="black"
-        html-element="h1"
-        size="1"
-        align="left"
-        text="Regular giving to {{campaign.charity.name}} for {{campaign.title}}"
-      >
-      </biggive-heading>
-      </biggive-page-section>
-      <biggive-page-section>
         <form
           class="c-regular-giving-form"
           (keydown.enter)="interceptSubmitAndProceedInstead($event)"
@@ -30,6 +18,17 @@
               formGroupName="amounts"
               label="Your regular donation"
               class="c-your-donation">
+
+              <div class="donationInfoWrapper">
+                <div>
+                  <p class="b-rt-0 b-m-0">You are supporting:</p>
+                  <p class="b-rt-0 b-m-0 b-bold">{{ campaign.charity.name }}</p>
+                </div>
+                <div>
+                  <p class="b-rt-0 b-m-0">for:</p>
+                  <p class="b-rt-0 b-m-0 b-bold">{{ campaign.title }}</p>
+                </div>
+              </div>
 
               <div class="donation-input donation-input-main">
 
