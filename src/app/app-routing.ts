@@ -1,4 +1,4 @@
-import {ActivatedRouteSnapshot, Router, Routes} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivateFn, Router, Routes} from '@angular/router';
 
 import {CampaignListResolver} from './campaign-list.resolver';
 import {CampaignResolver} from './campaign.resolver';
@@ -15,6 +15,7 @@ import {MyDonationsComponent} from "./my-donations/my-donations.component";
 import {DonationService} from "./donation.service";
 import {MyRegularGivingComponent} from "./my-regular-giving/my-regular-giving.component";
 import {MandateService} from "./mandate.service";
+import {RegularGivingComponent} from "./regular-giving/regular-giving.component";
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -35,7 +36,7 @@ const redirectIfAlreadyLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
   }
 };
 
-const requireLogin = (activatedRoute: ActivatedRouteSnapshot) => {
+const requireLogin: CanActivateFn = (_activatedRouteSnapshot, routerStateSnapshot) => {
   if (! isPlatformBrowser(inject(PLATFORM_ID))) {
     // Pages that require auth should not be server side rendered - we do not have auth creds on the server side.
     return false;
@@ -51,7 +52,8 @@ const requireLogin = (activatedRoute: ActivatedRouteSnapshot) => {
   // on successful login the login page redirects back to My Account by default.
   // If we need to redirect to any other pages in future, we can take an ActivatedRouteSnapshot param here
   // and pass it to the login page as an 'r' query param.
-  const redirectPath = activatedRoute?.routeConfig?.path;
+
+  const redirectPath = routerStateSnapshot.url
   if (redirectPath) {
     const query = new URLSearchParams({r: redirectPath})
     const url = '/login?' + query.toString();
@@ -247,6 +249,20 @@ if (flags.regularGivingEnabled) {
       ],
     },
   );
+
+  routes.unshift(
+    {
+      path: 'regular-giving/:campaignId',
+      pathMatch: 'full',
+      component: RegularGivingComponent,
+      canActivate: [
+        requireLogin,
+      ],
+      resolve: {
+        campaign: CampaignResolver,
+      },
+    },
+  )
 }
 
 export {routes};
