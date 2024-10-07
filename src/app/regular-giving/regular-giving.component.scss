@@ -1,0 +1,35 @@
+@import '../../abstract';
+
+@include vary-campaign-info-layout();
+
+// code below duplicated from donation-start-container.component.scss
+// consider refactoring to remove duplication.
+.c-form-container {
+  display: flex;
+  flex-direction: column;
+
+  @media #{$breakpoint-lg} {
+    flex-direction: row;
+  }
+}
+
+.match-funded-badge-wrapper {
+  position  : block;
+  width     : 100%;
+  height    : 100%;
+  text-align: center;
+}
+
+.match-funded-badge {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  background: $colour-highlight;
+  color: $colour-black;
+  width  : 140px;
+  padding: 0.3rem 0.5rem;
+  margin-bottom: 1rem !important;
+  font-size: 1rem;
+  font-weight: bold;
+  top: 30px;
+}
