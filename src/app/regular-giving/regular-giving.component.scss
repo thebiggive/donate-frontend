@@ -75,3 +75,44 @@ input {
   width: 100%;
   padding: 0; // We rely on containing element margin, and don't want vendor-dependent extra padding.
 };
+
+:host ::ng-deep .mat-step-header {
+  // ng-deep is deprecated, but I'm not sure how else to apply our style choices inside the stepper.
+  background-color: white;
+  font-weight: bold;
+  margin-top: 15px;
+  padding: 16px 24px;
+
+  .mat-step-text-label {
+    font-weight: bold;
+  }
+
+  .mat-step-icon {
+    color: $colour-black;
+    background-color: transparent !important;
+    border-radius: 0;
+
+    // Borders on three sides like this with the right and
+    // left transparent creates an equilateral triangle.
+    // (left + right) * 86% = bottom
+    // from https://css-tricks.com/snippets/css/css-triangle/
+    width: 0;
+    height: 0;
+    border-left: 17px solid transparent;
+    border-right: 17px solid transparent;
+    border-bottom: 29.2px solid $colour-highlight;
+
+    .mat-step-icon-content {
+      margin-top: 17px;
+    }
+  }
+}
+
+:host ::ng-deep .mat-stepper-vertical-line::before {
+  display: none;
+}
+
+:host ::ng-deep .mat-vertical-content-container {
+  // no need for the margin since we don't have the vertical line.
+  margin-left: 0;
+}
