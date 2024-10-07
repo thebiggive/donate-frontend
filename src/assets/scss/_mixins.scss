@@ -268,7 +268,8 @@
 }
 
 @mixin friendly-captcha {
-  div.frc-captcha {
+  // Content can be filled in after div is rendered, displaying a border when the div is empty would be confusing
+  div.frc-captcha:not(:empty) {
     margin: auto;
     background: none;
     border: 2px solid $colour-primary;
