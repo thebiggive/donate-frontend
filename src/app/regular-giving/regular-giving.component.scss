@@ -3,7 +3,10 @@
 @include vary-campaign-info-layout();
 
 // code below duplicated from donation-start-container.component.scss
-// consider refactoring to remove duplication.
+// consider refactoring to remove duplication. However not dedupling just yet as we may want
+// to make changes specific to this usage - e.g. do we want to show a match funded banner or not,
+// given that we need to explain a more specific message for regular giving that the first donations
+// will be match funded and later ones will not be.
 .c-form-container {
   display: flex;
   flex-direction: column;
@@ -33,3 +36,42 @@
   font-weight: bold;
   top: 30px;
 }
+
+.mat-stepper-horizontal, .mat-stepper-vertical {
+  background: none;
+  box-shadow: $box-shadow-soft;
+  @include b-rt-0;
+}
+
+.donation-input.donation-input-main {
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 400px;
+  clear: both;
+
+  input {
+    text-align: right;
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: bolder;
+
+    @media (max-width: 370px) {
+      // on very narrow screens we need to give space for the prompt text above the input.
+      margin-top: 30px;
+    }
+  }
+}
+
+input {
+  @include b-rt-0;
+}
+
+input {
+  outline: none;
+  border: none;
+  background-color: $colour-background;
+  width: 100%;
+  padding: 0; // We rely on containing element margin, and don't want vendor-dependent extra padding.
+};
