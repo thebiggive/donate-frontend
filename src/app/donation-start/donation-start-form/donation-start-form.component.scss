@@ -284,6 +284,16 @@ input {
   padding: 0; // We rely on containing element margin, and don't want vendor-dependent extra padding.
 };
 
+// I we would like to apply the :focus-visible-within pseduo-class but that doesn't exist. See
+// https://larsmagnus.co/blog/focus-visible-within-the-missing-pseudo-class
+mat-expansion-panel:has(:focus-visible){
+  outline: 1px solid $colour-secondary;
+}
+
+button:focus-visible {
+  outline: 1px solid $colour-secondary;
+}
+
 #giftAidAddressContainer {
   margin-top: 60px;
 }
