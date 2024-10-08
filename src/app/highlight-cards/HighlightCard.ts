@@ -25,7 +25,8 @@ export type campaignFamilyName =
   |'emergencyMatch';
 
 export type SfApiHighlightCard = Omit<HighlightCard, 'backgroundImageUrl'|'iconColor'|'button'> & {
-  campaignFamily: campaignFamilyName
+  campaignFamily: campaignFamilyName | null
+  cardStyle: 'DONATE_NOW' | 'SEE_RESULTS' | 'APPLY_NOW' | 'SAVE_THE_DATE' | 'JOIN_MAILING_LIST' | 'REGISTER_INTEREST' | 'EXPLORE',
   button: {
     text: string,
     href: string
@@ -55,6 +56,42 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
     artsforImpact: 'brand-afa-pink'
   };
 
+  const backgroundImageUrl = backgroundImage(sfApiHighlightCard, donateUriPrefix);
+  
+  return {
+    headerText: sfApiHighlightCard.headerText,
+    bodyText: sfApiHighlightCard.bodyText,
+    iconColor: iconColor(sfApiHighlightCard, campaignFamilyColours),
+    backgroundImageUrl,
+    button: {
+      text: sfApiHighlightCard.button.text,
+      href: replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href),
+    }
+  };
+};
+
+function iconColor(sfApiHighlightCard: SfApiHighlightCard, campaignFamilyColours: Record<campaignFamilyName, brandColour>) {
+  const defaultColor = "primary";
+
+  if (sfApiHighlightCard.campaignFamily == null) {
+    return defaultColor;
+  }
+
+  return campaignFamilyColours[sfApiHighlightCard.campaignFamily] || defaultColor;
+}
+
+function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix: string) {
+      
+  const defaultBackground = new URL('/assets/images/blue-texture.jpg', donateUriPrefix);
+
+  if (sfApiHighlightCard.cardStyle === 'JOIN_MAILING_LIST') {
+    return new URL('/assets/images/join-mailing-list.png', donateUriPrefix);
+  }
+
+  if (sfApiHighlightCard.campaignFamily == null) {
+    return defaultBackground;
+  }
+
   const campaignFamilyBackgroundImages: Record<campaignFamilyName, URL> = {
     emergencyMatch: new URL('/assets/images/emergency-card.png', donateUriPrefix),
     christmasChallenge: new URL('/assets/images/card-background-cc-lights.jpg', donateUriPrefix),
@@ -65,14 +102,6 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
     artsforImpact: new URL('/assets/images/red-coral-texture.png', donateUriPrefix)
   };
 
-  return {
-    headerText: sfApiHighlightCard.headerText,
-    bodyText: sfApiHighlightCard.bodyText,
-    iconColor: campaignFamilyColours[sfApiHighlightCard.campaignFamily] || "primary",
-    backgroundImageUrl: campaignFamilyBackgroundImages[sfApiHighlightCard.campaignFamily] || new URL('/assets/images/blue-texture.jpg', donateUriPrefix),
-    button: {
-      text: sfApiHighlightCard.button.text,
-      href: replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href),
-    }
-  };
-};
+  return campaignFamilyBackgroundImages[sfApiHighlightCard.campaignFamily] || defaultBackground;
+}
+

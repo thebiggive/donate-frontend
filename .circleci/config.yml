@@ -1,19 +1,19 @@
 version: 2.1
 
 orbs:
-  aws-cli: circleci/aws-cli@5.0.0
-  aws-ecr: circleci/aws-ecr@9.3.1
+  aws-cli: circleci/aws-cli@5.1.0
+  aws-ecr: circleci/aws-ecr@9.3.4
   aws-ecs: circleci/aws-ecs@4.1.0
   aws-s3: circleci/aws-s3@4.0.0
   browser-tools: circleci/browser-tools@1.4.8
   jira: circleci/jira@2.1.0
-  slack: circleci/slack@4.13.3
+  slack: circleci/slack@4.14.0
 
 jobs:
   test:
     resource_class: large
     docker:
-      - image: cimg/node:20.13-browsers
+      - image: cimg/node:20.13.1-browsers
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_ACCESS_TOKEN
@@ -28,7 +28,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v5-dependencies-with-chrome-{{ checksum "package-lock.json" }}
+            - dependencies-with-chrome-{{ checksum "package-lock.json" }}
 
       - run: npm install --quiet
 
@@ -37,142 +37,15 @@ jobs:
             - node_modules
             - /home/circleci/.cache/Cypress
             - /home/circleci/.cache/puppeteer
-          key: v5-dependencies-with-chrome-{{ checksum "package-lock.json" }}
+          key: dependencies-with-chrome-{{ checksum "package-lock.json" }}
 
       - run: npm run ci
 
       - store_artifacts:
           path: cypress/screenshots
-  deploy-staging-static:
-    docker:
-      # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app
-      # builds. Otherwise the two builds will have different output hashes and the dynamic app will reference
-      # static files that don't exist.
-      - image: node:20.13
-        auth:
-          username: $DOCKER_HUB_USERNAME
-          password: $DOCKER_HUB_ACCESS_TOKEN
-
-    # This must also match `Dockerfile` to avoid risking out of sync static + ECS builds.
-    working_directory: /usr/src/app
-
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v5-dependencies-{{ checksum "package-lock.json" }}
-      - run: env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install --quiet
-      - save_cache:
-          paths:
-            - node_modules
-            - /home/circleci/.cache/Cypress
-            - /home/circleci/.cache/puppeteer
-          key: v5-dependencies-{{ checksum "package-lock.json" }}
-
-      - run: npm run build:staging
-
-      - aws-cli/setup:
-          aws_access_key_id: AWS_ACCESS_KEY_ID
-          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-
-      - aws-s3/sync:
-          from: dist/browser
-          to: 's3://tbg-staging-donate-static/d'
-          arguments: '--acl public-read --cache-control "max-age=31536000"'
-
-      - aws-s3/sync:
-          from: dist/browser/assets
-          to: 's3://tbg-staging-donate-static/assets'
-          arguments: '--acl public-read --cache-control "max-age=86400"'
-
-  deploy-regression-static:
-    docker:
-      # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app
-      # builds. Otherwise the two builds will have different output hashes and the dynamic app will reference
-      # static files that don't exist.
-      - image: node:20.13
-        auth:
-          username: $DOCKER_HUB_USERNAME
-          password: $DOCKER_HUB_ACCESS_TOKEN
-
-    # This must also match `Dockerfile` to avoid risking out of sync static + ECS builds.
-    working_directory: /usr/src/app
-
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v5-dependencies-{{ checksum "package-lock.json" }}
-      - run: env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install --quiet
-      - save_cache:
-          paths:
-            - node_modules
-            - /home/circleci/.cache/Cypress
-            - /home/circleci/.cache/puppeteer
-          key: v5-dependencies-{{ checksum "package-lock.json" }}
-
-      - run: npm run build:regression
-
-      - aws-cli/setup:
-          aws_access_key_id: AWS_ACCESS_KEY_ID
-          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-
-      - aws-s3/sync:
-          from: dist/browser
-          to: 's3://tbg-regression-donate-static/d'
-          arguments: '--acl public-read --cache-control "max-age=31536000"'
-
-      - aws-s3/sync:
-          from: dist/browser/assets
-          to: 's3://tbg-regression-donate-static/assets'
-          arguments: '--acl public-read --cache-control "max-age=86400"'
-
-  deploy-production-static:
-    docker:
-      # This image's base Node version must match that used in `Dockerfile`, which is the basis for ECS app
-      # builds. Otherwise the two builds will have different output hashes and the dynamic app will reference
-      # static files that don't exist.
-      - image: node:20.13
-        auth:
-          username: $DOCKER_HUB_USERNAME
-          password: $DOCKER_HUB_ACCESS_TOKEN
-
-    # This must also match `Dockerfile` to avoid risking out of sync static + ECS builds.
-    working_directory: /usr/src/app
-
-    steps:
-      - checkout
-
-      - restore_cache:
-          keys:
-            - v5-dependencies-{{ checksum "package-lock.json" }}
-      - run: env PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install --quiet
-      - save_cache:
-          paths:
-            - node_modules
-            - /home/circleci/.cache/Cypress
-            - /home/circleci/.cache/puppeteer
-          key: v5-dependencies-{{ checksum "package-lock.json" }}
-
-      - run: npm run build:production
-
-      - aws-cli/setup:
-          aws_access_key_id: AWS_ACCESS_KEY_ID
-          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-
-      - aws-s3/sync:
-          from: dist/browser
-          to: 's3://tbg-production-donate-static/d'
-          arguments: '--acl public-read --cache-control "max-age=31536000"'
-
-      - aws-s3/sync:
-          from: dist/browser/assets
-          to: 's3://tbg-production-donate-static/assets'
-          arguments: '--acl public-read --cache-control "max-age=86400"'
 
   build-ecr:
+    resource_class: large
     machine:
       enabled: true
       docker_layer_caching: true
@@ -191,6 +64,27 @@ jobs:
           region: '${AWS_REGION}'
           tag: '<< parameters.env >>,<< parameters.env >>-${CIRCLE_SHA1}'
 
+  copy-ecr-static-to-s3:
+    parameters:
+      env:
+        type: string
+    docker:
+      - image: "${AWS_ECR_ACCOUNT_URL}/${AWS_ECR_REPO_NAME}:<< parameters.env >>-${CIRCLE_SHA1}"
+    steps:
+      - aws-cli/setup:
+          aws_access_key_id: AWS_ACCESS_KEY_ID
+          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+
+      - aws-s3/sync: # Sync dist/browser to S3 with 1 year lifetime
+          from: /usr/src/app/dist/browser
+          to: 's3://tbg-<< parameters.env >>-donate-static/d'
+          arguments: '--acl public-read --cache-control "max-age=31536000"'
+
+      - aws-s3/sync: # Sync dist/browser/assets to S3 with 1 day lifetime
+          from: /usr/src/app/dist/browser/assets
+          to: 's3://tbg-<< parameters.env >>-donate-static/assets'
+          arguments: '--acl public-read --cache-control "max-age=86400"'
+
 workflows:
   commit:
     jobs:
@@ -207,23 +101,30 @@ workflows:
 
   deploy-regression:
     jobs:
-      - deploy-regression-static:
+      - build-ecr:
           filters:
             branches:
               only:
                 - develop
-          context:
-            - docker-hub-creds
-            - ecs-deploys # Includes AWS_REGION
-      - build-ecr:
           env: regression
           name: "Build Regression ECR image"
           context:
             - docker-hub-creds
             - ecs-deploys
             - slack
-          requires:
-            - deploy-regression-static
+          post-steps:
+            - slack/notify:
+                channel: deployments, regression-alarms
+                event: fail
+                template: basic_fail_1
+                mentions: <@here>
+      - copy-ecr-static-to-s3:
+          env: regression
+          name: "Copy Regression ECR static to S3"
+          requires: ["Build Regression ECR image"]
+          context:
+            - ecs-deploys
+            - slack
           post-steps:
             - slack/notify:
                 channel: deployments, regression-alarms
@@ -239,8 +140,7 @@ workflows:
           context:
             - ecs-deploys
             - slack
-          requires:
-            - "Build Regression ECR image"
+          requires: ["Copy Regression ECR static to S3"]
           region: AWS_REGION
           family: 'tbg-regression-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
           cluster: 'tbg-regression-${AWS_REGION}'
@@ -254,24 +154,30 @@ workflows:
 
   deploy-staging:
     jobs:
-      - deploy-staging-static:
+      - build-ecr:
           filters:
             branches:
               only:
                 - develop
-          context:
-            - docker-hub-creds
-            - ecs-deploys # Includes AWS_REGION
-            - slack
-      - build-ecr:
           env: staging
           name: "Build Staging ECR image"
           context:
             - docker-hub-creds
             - ecs-deploys
             - slack
-          requires:
-            - deploy-staging-static
+          post-steps:
+            - slack/notify:
+                channel: deployments, staging-alarms
+                event: fail
+                template: basic_fail_1
+                mentions: <@here>
+      - copy-ecr-static-to-s3:
+          env: staging
+          name: "Copy Staging ECR static to S3"
+          requires: ["Build Staging ECR image"]
+          context:
+            - ecs-deploys
+            - slack
           post-steps:
             - slack/notify:
                 channel: deployments, staging-alarms
@@ -288,8 +194,7 @@ workflows:
             - ecs-deploys
             - jira
             - slack
-          requires:
-            - "Build Staging ECR image"
+          requires: ["Copy Staging ECR static to S3"]
           region: AWS_REGION
           family: 'tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
           cluster: 'tbg-staging-${AWS_REGION}'
@@ -325,23 +230,30 @@ workflows:
 
   deploy-production:
     jobs:
-      - deploy-production-static:
+      - build-ecr:
           filters:
             branches:
               only:
                 - main
-          context:
-            - docker-hub-creds
-            - ecs-deploys # Includes AWS_REGION
-      - build-ecr:
           env: production
           name: "Build Production ECR image"
           context:
             - docker-hub-creds
             - ecs-deploys
             - slack
-          requires:
-            - deploy-production-static
+          post-steps:
+            - slack/notify:
+                channel: deployments, production-alarms
+                event: fail
+                template: basic_fail_1
+                mentions: <@here>
+      - copy-ecr-static-to-s3:
+          env: production
+          name: "Copy Production ECR static to S3"
+          requires: ["Build Production ECR image"]
+          context:
+            - ecs-deploys
+            - slack
           post-steps:
             - slack/notify:
                 channel: deployments, production-alarms
@@ -358,8 +270,7 @@ workflows:
             - ecs-deploys
             - jira
             - slack
-          requires:
-            - "Build Production ECR image"
+          requires: ["Copy Production ECR static to S3"]
           region: AWS_REGION
           family: 'tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
           cluster: 'tbg-production-${AWS_REGION}'

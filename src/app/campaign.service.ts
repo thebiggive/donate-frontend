@@ -60,7 +60,7 @@ export class CampaignService {
   }
 
   static getRelevantDate(campaign: Campaign|CampaignSummary): Date|undefined {
-    let dateToUse;
+    let dateToUse: Date|undefined;
 
     if (this.isInFuture(campaign)) {
       dateToUse = campaign.startDate;
@@ -118,6 +118,12 @@ export class CampaignService {
     if (selected.sortField?.toLowerCase() === 'relevance') {
       query.sortField = undefined; // Campaign API takes blank/default sort to be relevance.
       query.sortDirection = undefined;
+    } else if (selected.sortField === 'leastRaised') {
+      query.sortDirection = 'asc';
+      query.sortField = 'amountRaised';
+    } else if (selected.sortField === 'closeToTarget') {
+      query.sortDirection = 'asc';
+      query.sortField = 'matchFundsRemaining';
     } else { // match funds left and amount raised both make most sense in 'desc' order
       query.sortDirection = 'desc';
     }

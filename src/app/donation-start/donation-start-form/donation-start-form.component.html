@@ -116,7 +116,9 @@
                                 We transform your tips into match funds. Since 2022, charities have received over £200,000 in match funding from Big Give.
                               </li>
                             </ul>
+                            @if (this.zeroTipTextABTestVariant === 'A') {
                             Even £1.50 makes a big difference. Thank you!
+                            }
                           </div>
                         }
                         <div [style]="showCustomTipInput ? '' : 'display: none;'" class="donation-input donation-input-main">
@@ -141,7 +143,11 @@
                         <!-- The text below is not shown if we have the slider because it would just repeat content that's already displayed on the slider itself -->
                         @if (!customTip() && donationAmount && donationAmount > 0 && tipControlStyle !== 'slider') {
                           <mat-hint>
+                            @if (tipAmountField?.valid && zeroTipTextABTestVariant === 'B' && tipValue === 0) {
+                              Even £1 makes a big difference to Big Give
+                            } @else if (tipAmountField?.valid) {
                             <p>{{ tipValue | exactCurrency:campaign.currencyCode }} donation to support Big Give</p>
+                            }
                           </mat-hint>
                         }
                         @if (customTip() && donationAmount && donationAmount > 0) {
@@ -216,7 +222,7 @@
                   (click)="progressToNonAmountsStep()"
                 >Continue</button>
 
-                @if (shouldShowCaptcha && flags.friendlyCaptchaEnabled) {
+                @if (shouldShowCaptcha) {
                   <div
                     class="frc-captcha"
                     [attr.data-sitekey]="friendlyCaptchaSiteKey"
@@ -240,7 +246,11 @@
                   <div class="binary-options">
                     <div class="binary-option">
                       <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="true">
-                        <strong>Yes</strong>, I want to Gift Aid my donation to {{ campaign.charity.name }} and any additional gift I make to Big Give, including any donations made in the past 4 years or in the future
+                        @if (this.tipValue) {
+                          <strong>Yes</strong>, I want to Gift Aid my donation to {{ campaign.charity.name }} and the tip to Big Give.
+                        } @else {
+                          <strong>Yes</strong>, I want to Gift Aid my donation to {{ campaign.charity.name }}.
+                        }
                       </mat-radio-button>
                     </div>
                     <div class="binary-option">
@@ -397,26 +407,26 @@
                   }
                   <div>
                     @if (showCardReuseMessage) {
-                      Your card information will be held for re-use only if you set a password on the next page. It is held securely only with Stripe.
+                      Your card will only be saved for reuse if you set a password on the next page.
                     }
                   </div>
                 </div>
-                <div>
-                  <biggive-form-field-select
-                    [prompt]="'Billing country'"
-                    [options]="countryOptionsObject"
-                    [selectedValue]="selectedCountryCode"
-                    [backgroundColour]="'grey'"
-                    [selectionChanged]="setSelectedCountry"
-                    [spaceBelow]="3"
-                    [selectedOptionColour]="'inherit'"
-                    >
-                  </biggive-form-field-select>
+                <div [style.display]="isSavedPaymentMethodSelected ? 'none' : 'block'">
+                    <biggive-form-field-select
+                      [prompt]="'Billing country'"
+                      [options]="countryOptionsObject"
+                      [selectedValue]="selectedCountryCode"
+                      [backgroundColour]="'grey'"
+                      [selectionChanged]="setSelectedCountry"
+                      [spaceBelow]="3"
+                      [selectedOptionColour]="'inherit'"
+                      >
+                    </biggive-form-field-select>
+                  <biggive-text-input>
+                    <label slot="label" for="billingPostcode">Billing postcode</label>
+                    <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)" autocapitalize="characters" autocomplete="postal-code">
+                  </biggive-text-input>
                 </div>
-                <biggive-text-input>
-                  <label slot="label" for="billingPostcode">Billing postcode</label>
-                  <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)" autocapitalize="characters" autocomplete="postal-code">
-                </biggive-text-input>
               </div>
               @if (stripeError) {
                 <p class="stripeError" aria-live="assertive">
@@ -651,16 +661,6 @@
           </div>
         </mat-step>
       </mat-vertical-stepper>
-      @if (! flags.friendlyCaptchaEnabled) {
-      <re-captcha
-        #idCaptcha
-        size="invisible"
-        errorMode="handled"
-        (resolved)="captchaIdentityReturn($event)"
-        (errored)="captchaIdentityError()"
-        siteKey="{{ recaptchaIdSiteKey }}"
-      ></re-captcha>
-      }
     </form>
   }
 

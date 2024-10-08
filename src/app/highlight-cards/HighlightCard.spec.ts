@@ -1,10 +1,10 @@
 import {campaignFamilyName, SfApiHighlightCard, SFAPIHighlightCardToHighlightCard} from "./HighlightCard";
 
 describe('highlightCard', () => {
-
   it('should convert a highlight card from the SF API to one we can display', () => {
     const cardFromApi: SfApiHighlightCard = {
       campaignFamily: 'womenGirls',
+      cardStyle: 'DONATE_NOW',
       headerText: "some header text",
       bodyText: "some body text",
       button: {text: "button text", href:'https://biggive.org/some-path'}
@@ -26,6 +26,7 @@ describe('highlightCard', () => {
   it('should use appropriate colour for emergency campaign', () => {
     const cardFromApi: SfApiHighlightCard = {
       campaignFamily: 'emergencyMatch',
+      cardStyle: 'DONATE_NOW',
       headerText: "some header text",
       bodyText: "some body text",
       button: {text: "button text", href: 'https://biggive.org/some-path'}
@@ -48,6 +49,7 @@ describe('highlightCard', () => {
   it('should use blue primary colour by default', () => {
     const cardFromApi: SfApiHighlightCard = {
       campaignFamily: 'some-unknown-campaign-family' as campaignFamilyName,
+      cardStyle: 'DONATE_NOW',
       headerText: "some header text",
       bodyText: "some body text",
       button: {text: "button text", href: 'https://biggive.org/some-path'}
@@ -73,6 +75,7 @@ describe('highlightCard', () => {
         text: "irrelevant"
       },
       campaignFamily: 'christmasChallenge', // irrelevant
+      cardStyle: 'DONATE_NOW',
       headerText: "irrelevant",
       bodyText: "irrelevant",
     } as const;
@@ -117,4 +120,26 @@ describe('highlightCard', () => {
 
     expect(highlightCardForHomepage.button.href.href).toBe('https://example-experience.com/some-path');
   });
+
+  it('should set the backround for Join Mailing List card', () => {
+    const cardFromApi: SfApiHighlightCard = {
+      campaignFamily: null,
+      cardStyle: 'JOIN_MAILING_LIST',
+      headerText: "some header text",
+      bodyText: "some body text",
+      button: {text: "button text", href: 'https://biggive.org/some-path'}
+    } as const;
+
+    const donatePrefixForThisEnvironment = 'https://example.com';
+
+    const highlightCardForHomepage = SFAPIHighlightCardToHighlightCard(
+      'https://irrelevant.com',
+      'https://irrelevant.com',
+      donatePrefixForThisEnvironment,
+      cardFromApi
+    );
+
+    expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/join-mailing-list.png');
+    expect(highlightCardForHomepage.iconColor).toBe('primary');
+    });
 });

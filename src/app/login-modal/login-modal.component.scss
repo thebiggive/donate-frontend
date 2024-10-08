@@ -5,3 +5,5 @@
   color: mat.get-color-from-palette($donate-warn);
   margin: 1rem 0;
 }
+
+@include friendly-captcha();

@@ -1,4 +1,7 @@
-FROM node:20.13
+# Ensure updates are mirrored in `.circleci/config.yml`.
+# Always specify a 3-part version, even if it's x.x.0.
+FROM node:20.13.1
+RUN node --version
 
 WORKDIR /usr/src/app
 
@@ -27,7 +30,7 @@ RUN npm run build:ssr:${BUILD_ENV}
 EXPOSE 4000
 
 # Behave like a UK visitor when doing e.g. server-side rendering of Date Pipes.
-ENV TZ 'Europe/London'
+ENV TZ='Europe/London'
 
 # Serve with Server-Side Rendering support
 CMD [ "npm", "run", "serve:ssr" ]

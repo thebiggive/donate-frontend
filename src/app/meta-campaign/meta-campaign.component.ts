@@ -62,7 +62,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   public tickerMainMessage: string;
   public title: string; // Includes fund info if applicable.
 
-  private autoScrollTimer: any; // State update setTimeout reference, for client side scroll to previous position.
+  private autoScrollTimer: number | undefined; // State update setTimeout reference, for client side scroll to previous position.
   private campaignId: string;
   private offset = 0;
   private routeChangeListener: Subscription;
@@ -75,7 +75,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   // scrolling back to the previous metacampaign position, so to be safe we use the highest
   // scroll Y we've seen without intervention, plus a ~25% buffer.
   private smallestSignificantScrollPx = 250;
-  private tickerUpdateTimer: any;
+  private tickerUpdateTimer: number;
 
   private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v2`; // Key is per-domain/env
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
@@ -394,7 +394,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       // use a too-low Y position when lots of cards were shown and we didn't have a delay, both with `scrollToAnchor()`
       // and manual calculation + `scrollToPosition()`.
 
-      this.autoScrollTimer = setTimeout(() => {
+      this.autoScrollTimer = window.setTimeout(() => {
         if (this.shouldAutoScroll) {
           this.scroller.scrollToPosition([0, scrollY]);
           this.autoScrollTimer = undefined;
@@ -472,13 +472,13 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     }
 
     if (this.tickerUpdateTimer) {
-      clearTimeout(this.tickerUpdateTimer);
+      window.clearTimeout(this.tickerUpdateTimer);
     }
 
     // Load data just once, but refresh e.g. time left to launch summary once
     // per second.
     if (isPlatformBrowser(this.platformId) && !this.fundSlug) {
-      this.tickerUpdateTimer = setTimeout(() => {
+      this.tickerUpdateTimer = window.setTimeout(() => {
         this.setTickerParams()
       }, 1000);
     }

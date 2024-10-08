@@ -246,7 +246,7 @@
               "scripts": true,
               "styles": false
             },
-            "outputHashing": "none",
+            "outputHashing": "media",
             "sourceMap": {
               "scripts": true,
               "styles": false,

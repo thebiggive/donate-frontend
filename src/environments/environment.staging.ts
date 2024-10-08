@@ -23,7 +23,12 @@ export const environment: Environment = {
   identityApiPrefix: 'https://identity-staging.thebiggivetest.org.uk/v1',
   matomoSiteId: 4,
   matomoNonZeroTipGoalId: 1,
-  matomoAbTest: undefined,
+  matomoAbTest: {
+    name: "zeroTipTextAB",
+    variantName: "B",
+    startDate: '2024/09/25 00:00:00 UTC',
+    endDate: undefined,
+  },
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
@@ -34,9 +39,6 @@ export const environment: Environment = {
       publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
-  // https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
-  recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
-  recaptchaIdentitySiteKey: '6LfisFAgAAAAAOPEarzMPQ2gln_0Q-RENbD3bHzd',
   reservationMinutes: 30,
   showDebugInfo: false,
 };

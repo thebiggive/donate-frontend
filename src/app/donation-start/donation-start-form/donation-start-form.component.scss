@@ -517,8 +517,4 @@ mat-expansion-panel-header h3 {
   position: absolute;
 }
 
-div.frc-captcha {
-  margin: auto;
-  background: none;
-  border: 2px solid $colour-primary;
-}
+@include friendly-captcha();

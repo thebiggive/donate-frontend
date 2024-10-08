@@ -36,7 +36,7 @@ main > div {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 17px;
 }
 
@@ -46,7 +46,7 @@ main > div {
 
 .logout-row {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: right;
   gap: 17px;
 }

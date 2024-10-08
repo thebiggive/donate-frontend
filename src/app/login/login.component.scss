@@ -1,5 +1,11 @@
 @import "../../assets/scss/auth-common";
 
+
 #banner {
   background-image: url(../../assets/images/grey-header.jpg);
+}
+
+@include friendly-captcha();
+div.frc-captcha {
+  margin-top: 2em;
 }

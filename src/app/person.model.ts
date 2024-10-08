@@ -9,7 +9,8 @@ export interface Person {
      */
     captcha_code?: string;
 
-    captcha_type?: 'friendly_captcha' | 'recaptcha';
+    // @todo DON-1072 : Remove this from the model when id service defaults to using friendly_captcha
+    captcha_type?: 'friendly_captcha';
 
     /**
      * Stores the credit available for the given Person

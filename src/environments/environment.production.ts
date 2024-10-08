@@ -28,9 +28,6 @@ export const environment: Environment = {
       publishableKey: 'pk_live_51GxbdTKkGuKkxwBN1KsxsHMC8MrSeooSxBRETK6zoUYZSkKsjSLLryXE3vPIQm5jM6uV1Lsdvr9GoYB1dShkSELQ00xffCRBIi',
     },
   },
-  // https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
-  recaptchaNonce: 'tgpRzQu1tQMPXlyDgt1hoRK2GKw=',
-  recaptchaIdentitySiteKey: '6Lc9uFAgAAAAADPHW12p_oJ3QxcNA3xglajo5hl2',
   reservationMinutes: 30,
   showDebugInfo: false,
 };

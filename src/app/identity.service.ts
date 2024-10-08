@@ -45,7 +45,8 @@ export class IdentityService {
   login(credentials: Credentials): Observable<{ id: string, jwt: string}> {
     return this.http.post<{ id: string, jwt: string }>(
       `${environment.identityApiPrefix}${this.loginPath}`,
-      credentials,
+      // @todo:1072: Remove captcha_type when identity defaults to friendy_captcha
+      {...credentials, captcha_type: 'friendly_captcha'},
     ).pipe(tap({
       next: (response)  => {
         this.saveJWT(response.id, response.jwt);
@@ -97,7 +98,7 @@ export class IdentityService {
   }
 
   get(id: string, jwt: string, {withTipBalances = false, refresh = false}: {withTipBalances?: boolean, refresh?: boolean} = {}): Observable<Person> {
-    var cacheBuster;
+    var cacheBuster: string;
     if (refresh) {
       cacheBuster = "?cacheBust=" + (new Date()).getTime();
     } else {

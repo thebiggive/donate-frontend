@@ -20,7 +20,6 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatStepper} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
-import {RecaptchaComponent} from 'ng-recaptcha';
 import {MatomoTracker} from 'ngx-matomo-client';
 import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
 import {
@@ -81,7 +80,13 @@ declare var _paq: {
   ]
 })
 export class DonationStartFormComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit {
-  @ViewChild('idCaptcha') idCaptcha: RecaptchaComponent;
+  /**
+   * If donor gives a GA declaration relating to a core donation only but not a tip to BG then the wording they saw
+   * will not have covered GA on a tip as well. So if this is true and they go back and add a tip we will need to
+   * re-prompt them to declare for gift aid.
+   */
+  private giftAidCheckedForZeroTip: boolean = false;
+
   @ViewChild('cardInfo') cardInfo: ElementRef;
   @ViewChild('stepper') private stepper: MatStepper;
 
@@ -107,7 +112,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    */
   @Input() campaignOpenOnLoad = false;
 
-  recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
   creditPenceToUse = 0; // Set non-zero if logged in and Customer has a credit balance to spend. Caps donation amount too in that case.
@@ -168,7 +172,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   /**
    * Tracks internally whether (Person +) Donation setup is in flight. This is important to prevent duplicates, because multiple
-   * time-variable triggers including user-initiated stepper step changes and async, invisible reCAPTCHA returns can cause us
+   * time-variable triggers including user-initiated stepper step changes and async captcha returns can cause us
    * to decide we are ready to set these things up.
    */
   private creatingDonation = false;
@@ -245,6 +249,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   @ViewChild('frccaptcha', { static: false })
   friendlyCaptcha: ElementRef<HTMLElement>|undefined;
   protected shouldShowCaptcha: boolean = true;
+  protected isSavedPaymentMethodSelected: boolean = false;
+  protected zeroTipTextABTestVariant: 'A'|'B' = 'A';
+  private manuallySelectedABTestVariant: string | null = null;
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -274,6 +281,16 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.tipControlStyle = (queryParams?.tipControl?.toLowerCase() === 'slider')
       ? 'slider' : 'dropdown';
+
+
+    if (! environment.production) {
+      this.manuallySelectedABTestVariant = queryParams?.selectABTestVariant;
+    }
+
+
+    if (this.manuallySelectedABTestVariant == 'B') {
+      this.zeroTipTextABTestVariant = 'B';
+    }
   }
 
   ngOnDestroy() {
@@ -303,14 +320,19 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           variations: [
             {
                 name: 'original',
-                activate: (_event: any) => {
+                activate: (_event: unknown) => {
                   // No change from the original form.
                   console.log('Original test variant active!');
+                  this.zeroTipTextABTestVariant = 'A';
                 }
             },
             {
                 name: environment.matomoAbTest.variantName,
-                activate: (_event: any) => {
+                activate: (_event: unknown) => {
+                  if (this.manuallySelectedABTestVariant) {
+                    return;
+                  }
+                  this.zeroTipTextABTestVariant = 'B';
                   console.log('Copy B test variant active!');
                 }
             },
@@ -398,6 +420,17 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.amountsGroup.get('tipAmount')?.valueChanges.subscribe((tipAmount: string) => {
       this.tipValue = sanitiseCurrency(tipAmount?.trim());
+
+      if (this.tipValue && this.tipValue > 0 && this.giftAidCheckedForZeroTip) {
+        // The gifit aid wording for a zero tip doesn't cover GA for the tip, so we reset the form control now and
+        // let the donor redeclare.
+        this.giftAidGroup.get('giftAid')?.reset();
+        this.giftAidCheckedForZeroTip = false;
+        this.triedToLeaveGiftAid = false;
+      } else {
+        const gaValue: boolean|null = this.giftAidGroup.get('giftAid')?.value;
+        this.giftAidCheckedForZeroTip = this.tipValue === 0 && !!gaValue;
+      }
     });
 
     this.maximumDonationAmount = maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse);
@@ -410,10 +443,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   ngAfterViewInit() {
-    if (! flags.friendlyCaptchaEnabled) {
-      return;
-    }
-
     if (! isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -730,7 +759,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * According to stripe docs https://stripe.com/docs/js/element/events/on_change?type=paymentElement the change event has
    * a value key as expected here. I'm not sure why that isn't included in the TS StripeElementChangeEvent interface.
    */
-  async onStripeCardChange(state: StripeElementChangeEvent & ({value: {type: string} | undefined})) {
+  async onStripeCardChange(state: StripeElementChangeEvent & ({value: {type: string, payment_method?: PaymentMethod} | undefined})) {
     this.addStripeCardBillingValidators();
 
     // Re-evaluate stripe card billing validators after being set above.
@@ -751,8 +780,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     const isCard = state.value?.type === 'card';
-    const isSavedPaymentMethod = state.value?.hasOwnProperty('payment_method');
-    this.showCardReuseMessage = isCard && ! isSavedPaymentMethod && ! this.donor?.has_password;
+    const selectedSavedPaymentMethod = state.value?.payment_method
+    this.showCardReuseMessage = isCard && ! selectedSavedPaymentMethod && ! this.donor?.has_password;
+
+    this.isSavedPaymentMethodSelected = !!selectedSavedPaymentMethod;
+    if (selectedSavedPaymentMethod) {
+      this.updateFormWithBillingDetails(selectedSavedPaymentMethod);
+    }
 
     // Jump back if we get an out of band message back that the card is *not* valid/ready.
     // Don't jump forward when the card *is* valid, as the donor might have been
@@ -1011,15 +1045,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   get donationAndExtrasAmount(): number {
     // Replicates logic of \MatchBot\Domain\Donation::getAmountFractionalIncTip . Consider further DRYing in future.
     return this.donationAmount + this.tipAmount();
-  }
-
-  captchaIdentityError() {
-    // Not passing event as it will "most often (if not always) be empty". https://github.com/DethAriel/ng-recaptcha#events
-    this.matomoTracker.trackEvent('identity_error', 'person_captcha_failed', 'reCAPTCHA hit errored() callback');
-    this.creatingDonation = false;
-    this.donationCreateError = true;
-    this.showDonationCreateError();
-    this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
   }
 
   /**
@@ -1628,7 +1653,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     } else {
       const person: Person = {};
       person.captcha_code = this.idCaptchaCode;
-      person.captcha_type = flags.friendlyCaptchaEnabled ? 'friendly_captcha' : 'recaptcha';
+      person.captcha_type = 'friendly_captcha';
       this.identityService.create(person).subscribe(
         (person: Person) => {
           // would like to move the line below inside `identityService.create` but that caused test errors when I tried
@@ -1665,25 +1690,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.markYourDonationStepIncomplete();
 
-    if (flags.friendlyCaptchaEnabled) {
-      this.showErrorToast("Please wait, running captcha check to prevent spam")
-      return true;
-    }
-
-    try {
-      this.idCaptcha.reset();
-    } catch (e) {
-      // The donor may be having connection problems, and we've seen reCAPTCHA behave weirdly if the
-      // @ViewChild doesn't have a working, mounted element here. To avoid wasting donors' time and
-      // failing later, track so we can measure frequency and attempt a full reset – which currently
-      // includes a page reload.
-      this.matomoTracker.trackEvent('identity_error', 'person_captcha_reset_failed', e.message);
-      this.reset();
-      return true; // Make sure callers treat this as "not ready", while we finish reloading.
-    }
-
-    this.idCaptcha.execute(); // Prepare for a Person create which needs an Identity captcha.
-
+    this.showErrorToast("Please wait, running captcha check to prevent spam")
     return true;
   }
 
@@ -1989,13 +1996,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       getCurrencyMaxValidator(maximumDonationAmount(this.campaign.currencyCode, this.creditPenceToUse)),
       Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
     ]);
-    this.amountsGroup.get('donationAmount')?.valueChanges.subscribe(donationAmount => {
+    this.amountsGroup.get('donationAmount')?.valueChanges.subscribe((donationAmountInput: string) => {
       const updatedValues: {
         tipPercentage?: number | string,
         tipAmount?: string
       } = {};
 
-      donationAmount = sanitiseCurrency(donationAmount);
+      const donationAmount = sanitiseCurrency(donationAmountInput);
 
       if (!this.tipPercentageChanged) {
         let newDefault = this.tipPercentage;
@@ -2027,7 +2034,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.updateAllValidities();
     });
 
-    this.giftAidGroup.get('homePostcode')?.valueChanges.subscribe(homePostcode => {
+    this.giftAidGroup.get('homePostcode')?.valueChanges.subscribe((homePostcode: string | null) => {
       if (homePostcode !== null) {
         const homePostcodeAsIs = homePostcode;
 
@@ -2051,9 +2058,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     });
 
     // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
-    this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
-      this.setGiftAidValidatorsForChoice(giftAidChecked);
+    this.giftAidGroup.get('giftAid')?.valueChanges.subscribe((giftAidChecked: boolean | null) => {
+      this.setGiftAidValidatorsForChoice(!!giftAidChecked);
       this.updateAllValidities();
+
+      if (giftAidChecked && this.tipValue === 0) {
+        this.giftAidCheckedForZeroTip = true;
+      }
     });
 
     if (this.creditPenceToUse > 0) {

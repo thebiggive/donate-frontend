@@ -1,4 +1,4 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -10,7 +10,8 @@ import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { TimeLeftPipe } from '../time-left.pipe';
 
-const openPipeToken = 'TimeLeftToOpenPipe';
+const integerPipeToken = 'integerPipe';
+const openPipeToken = 'timeLeftToOpenPipe';
 const endPipeToken = 'timeLeftToEndPipe';
 
 @Component({
@@ -24,6 +25,7 @@ const endPipeToken = 'timeLeftToEndPipe';
   ],
   providers: [
     CurrencyPipe,
+    {provide: integerPipeToken, useClass: DecimalPipe},
     // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
     {provide: openPipeToken, useClass: TimeLeftPipe},
     {provide: endPipeToken, useClass: TimeLeftPipe},
@@ -46,6 +48,7 @@ export class CampaignInfoComponent implements OnInit {
     private currencyPipe: CurrencyPipe,
     public datePipe: DatePipe,
     private route: ActivatedRoute,
+    @Inject(integerPipeToken) public integerPipe: DecimalPipe,
     @Inject(openPipeToken) public timeLeftToOpenPipe: TimeLeftPipe,
     @Inject(endPipeToken) public timeLeftToEndPipe: TimeLeftPipe,
   ) {

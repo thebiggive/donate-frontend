@@ -39,8 +39,6 @@ export function app(): express.Express {
     'js.stripe.com',
     'blob:', // for friendly-captcha
     'player.vimeo.com',
-    'recaptcha.net',
-    'www.recaptcha.net',
     'www.youtube.com',
     'www.youtube-nocookie.com',
   ];
@@ -74,8 +72,6 @@ export function app(): express.Express {
           'fonts.gstatic.com',
           'js.stripe.com',
           'player.vimeo.com',
-          'recaptcha.net',
-          'www.recaptcha.net',
           'www.youtube.com',
           'www.youtube-nocookie.com',
         ],
@@ -91,13 +87,11 @@ export function app(): express.Express {
           `'unsafe-eval'`,
           `'unsafe-inline'`,
           `'nonce-OT22mYwcUVPp' *.facebook.net`, // Meta Pixel. https://josephpinder.com/blog/facebook-pixel-is-slowing-down-your-website-and-how-to-fix-it-securely
-          `'nonce-${environment.recaptchaNonce}'`,
           `'sha256-wNvBKHC/AcXH+tcTOtnmNx/Ag5exRdBFD8iL9UUQ8es='`, // Unsupported browser inline script.
           `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
           'api.getAddress.io',
           '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
           'js.stripe.com',
-          'recaptcha.net',
           'www.gstatic.com',
           // Vimeo's iframe embed seems to need script access to not error with our current embed approach.
           'https://player.vimeo.com',

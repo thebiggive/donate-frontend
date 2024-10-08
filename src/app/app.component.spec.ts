@@ -9,7 +9,6 @@ import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { RecaptchaModule } from 'ng-recaptcha';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { AppComponent } from './app.component';
@@ -35,7 +34,6 @@ describe('AppComponent', () => {
         MatSelectModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-        RecaptchaModule,
         RouterTestingModule,
       ],
       providers: [

@@ -52,10 +52,6 @@ export interface Environment {
       publishableKey: string
     },
   },
-  // https://developers.google.com/recaptcha/docs/faq#im-using-content-security-policy-csp-on-my-website.-how-can-i-configure-it-to-work-with-recaptcha
-  recaptchaNonce: string,
-  // https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do
-  recaptchaIdentitySiteKey: string,
   reservationMinutes: number,
   showDebugInfo: boolean,
 }

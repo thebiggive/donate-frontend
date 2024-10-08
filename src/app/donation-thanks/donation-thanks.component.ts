@@ -1,10 +1,9 @@
 import {HttpErrorResponse} from '@angular/common/http';
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {MatDialog} from '@angular/material/dialog';
 import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
 import {MatomoTracker} from 'ngx-matomo-client';
-import {RecaptchaComponent} from 'ng-recaptcha';
 
 import {Campaign} from '../campaign.model';
 import {CampaignService} from '../campaign.service';
@@ -19,6 +18,7 @@ import {PageMetaService} from '../page-meta.service';
 import {Person} from '../person.model';
 import {myAccountPath} from '../app-routing';
 import {flags} from "../featureFlags";
+import {WidgetInstance} from "friendly-challenge";
 
 @Component({
   selector: 'app-donation-thanks',
@@ -27,7 +27,6 @@ import {flags} from "../featureFlags";
 })
 export class DonationThanksComponent implements OnInit {
   @Input({ required: true }) private donationId: string;
-  @ViewChild('captcha') captcha: RecaptchaComponent;
 
   campaign?: Campaign;
   totalPaid: number;
@@ -39,7 +38,6 @@ export class DonationThanksComponent implements OnInit {
   minPasswordLength: number;
   noAccess = false;
   encodedPrefilledText: string;
-  recaptchaIdSiteKey = environment.recaptchaIdentitySiteKey;
   registerError?: string;
   registerErrorDescription?: string = undefined;
   registerErrorDescriptionHtml?: SafeHtml = undefined;
@@ -54,9 +52,16 @@ export class DonationThanksComponent implements OnInit {
   private tries = 0;
   protected readonly myAccountPath = myAccountPath;
   protected readonly flags = flags;
+  protected readonly friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
+
+  @ViewChild('frccaptcha', { static: false })
+  protected friendlyCaptcha: ElementRef<HTMLElement>;
+  private friendlyCaptchaWidget: WidgetInstance | undefined;
+  private friendlyCaptchaSolution: string | undefined;
 
   faExclamationTriangle = faExclamationTriangle;
   isDataLoaded = false;
+
   constructor(
     private campaignService: CampaignService,
     public dialog: MatDialog,
@@ -153,19 +158,31 @@ export class DonationThanksComponent implements OnInit {
     return  (this.person?.cash_balance?.gbp || 0) / 100;
   }
 
-  openSetPasswordDialog() {
+  async openSetPasswordDialog() {
     const passwordSetDialog = this.dialog.open(DonationThanksSetPasswordDialogComponent, {
       data: { person: this.person },
     });
-    passwordSetDialog.afterClosed().subscribe(data => {
+    passwordSetDialog.afterClosed().subscribe((data: {password?: string, stayLoggedIn?: boolean}) => {
       if (data.password) {
         this.setPassword(data.password, data.stayLoggedIn || false);
       }
     });
+
+    if (! this.friendlyCaptchaWidget) {
+      this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
+        doneCallback: (solution) => {
+          this.friendlyCaptchaSolution = solution;
+        },
+        errorCallback: () => {
+        },
+      });
+
+      await this.friendlyCaptchaWidget.start()
+    }
   }
 
-  loginCaptchaReturn(captchaResponse: string | null) {
-    if (captchaResponse === null) {
+  login() {
+    if (! this.friendlyCaptchaSolution) {
       // This is expected after ~1 min when the code expires. At this point we should
       // never be executing the login again because if the captcha was set up at all then
       // we auto-logged-in with the password the donor just chose.
@@ -175,7 +192,7 @@ export class DonationThanksComponent implements OnInit {
     const credentials: Credentials = {
       email_address: this.donation.emailAddress as string,
       raw_password: this.person?.raw_password as string,
-      captcha_code: captchaResponse,
+      captcha_code: this.friendlyCaptchaSolution,
     };
 
     this.identityService.login(credentials).subscribe({
@@ -210,14 +227,14 @@ export class DonationThanksComponent implements OnInit {
 
         // We should only auto-login (and therefore execute the captcha) if the donor requested a persistent session.
         if (stayLoggedIn) {
-          this.captcha.execute(); // Leads to loginCaptchaReturn() assuming the captcha succeeds.
+          this.login()
         } else {
           // Otherwise we should remove even the temporary ID token.
           this.identityService.logout();
         }
       },
       error: (error: HttpErrorResponse) => {
-        const htmlErrorDescription = error.error?.error?.htmlDescription;
+        const htmlErrorDescription = error.error?.error?.htmlDescription as string|undefined;
         if (error.error?.error?.type === "DUPLICATE_EMAIL_ADDRESS_WITH_PASSWORD") {
           this.registerErrorDescription = "Your password could not be set. There is already a password set for your email address.";
         } else if (htmlErrorDescription) {
@@ -281,7 +298,12 @@ export class DonationThanksComponent implements OnInit {
       // `trackGoal()` for that.
       // See also `ConversionTrackingService.convert()` which is called just before
       // redirect here, usually at most once per donation.
-      this.matomoTracker.trackEvent('donate', 'thank_you_fully_loaded', `Donation to campaign ${donation.projectId}`);
+      this.matomoTracker.trackEvent(
+        'donate',
+        'thank_you_fully_loaded',
+        `Donation to campaign ${donation.projectId}`,
+        donation.donationAmount
+      );
 
       this.totalPaid = donation.totalPaid;
       this.giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;
