@@ -119,7 +119,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.processing = true;
-    this.doRegistrationAndLogin()
+    this.doRegistrationAndLogin(this.friendlyCaptchaSolution);
   }
 
   private doRegistrationAndLogin(captchaResponse: string|undefined = undefined) {
@@ -150,7 +150,9 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
 
           this.identityService.update(initialPerson).subscribe({
             next: () => {
-              this.login(captchaResponse);
+              // We can't re-use a captcha code twice, so auto-login won't work right now. For now we just
+              // redirect to the login form
+              window.location.href = "/login";
             },
             error: (error) => {
               extractErrorMessage(error);
