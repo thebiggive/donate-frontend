@@ -61,6 +61,74 @@
 
             </mat-step>
             <mat-step
+              formGroupName="amounts"
+              label="Your details"
+              class="c-your-donation">
+
+              <p>
+                The details below are set in <a href="/my-account">your account</a> and will be used for these
+                donations. They are not editable.
+                If these details are wrong please <a href="#" (click)="logout()">log out of this account and </a> create a new
+                account if necassary, or contact Big Give.
+              </p>
+
+              <biggive-text-input>
+                <label
+                  class="label-with-limited-space"
+                  slot="label"
+                  for="donationAmount"
+                >
+                  First Name
+                </label>
+                <input
+                  readonly="readonly"
+                  value="{{donor.first_name}}"
+                  slot="input"
+                />
+              </biggive-text-input>
+
+              <biggive-text-input>
+                <label
+                  class="label-with-limited-space"
+                  slot="label"
+                  for="donationAmount"
+                >
+                  Last Name
+                </label>
+                <input
+                  readonly="readonly"
+                  value="{{donor.last_name}}"
+                  slot="input"
+                />
+              </biggive-text-input>
+
+              <biggive-text-input>
+                <label
+                  class="label-with-limited-space"
+                  slot="label"
+                  for="donationAmount"
+                >
+                  Email Address
+                </label>
+                <input
+                  readonly="readonly"
+                  value="{{donor.email_address}}"
+                  slot="input"
+                />
+              </biggive-text-input>
+
+              <div style="text-align: center">
+                <button style="width: 40%;"
+                        type="button"
+                        class="continue b-w-100 b-rt-0"
+                        mat-raised-button
+                        color="primary"
+                        (click)="next()"
+                >Continue</button>
+              </div>
+
+            </mat-step>
+            <mat-step
               label="Confirm"
               class="c-make-your-donation"
             >
