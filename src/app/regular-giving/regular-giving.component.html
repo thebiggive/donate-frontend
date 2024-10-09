@@ -61,17 +61,12 @@
 
             </mat-step>
             <mat-step
-              formGroupName="amounts"
-              label="Your details"
-              class="c-your-donation">
-
+              label="Confirm"
+              class="c-make-your-donation"
+            >
               <p>
-                The details below are set in <a href="/my-account">your account</a> and will be used for these
-                donations. They are not editable.
-                If these details are wrong please <a href="#" (click)="logout()">log out of this account and </a> create a new
-                account if necassary, or contact Big Give.
+                Your details
               </p>
-
               <table id="personal-details">
                 <tr>
                   <td>Name</td>
@@ -83,21 +78,6 @@
                 </tr>
               </table>
 
-              <div style="text-align: center">
-                <button style="width: 40%;"
-                        type="button"
-                        class="continue b-w-100 b-rt-0"
-                        mat-raised-button
-                        color="primary"
-                        (click)="next()"
-                >Continue</button>
-              </div>
-
-            </mat-step>
-            <mat-step
-              label="Confirm"
-              class="c-make-your-donation"
-            >
               <p class="b-rt-0 b-m-0 b-mt-40">By clicking on the <span class="b-bold">Start regular giving now</span> button, you agree to
                 Big Give's Terms and Conditions and Privacy Statement. <br/>
                 <a [href]="termsUrl" target="_blank">
