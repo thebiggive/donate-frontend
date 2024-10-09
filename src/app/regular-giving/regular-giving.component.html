@@ -72,50 +72,16 @@
                 account if necassary, or contact Big Give.
               </p>
 
-              <biggive-text-input>
-                <label
-                  class="label-with-limited-space"
-                  slot="label"
-                  for="donationAmount"
-                >
-                  First Name
-                </label>
-                <input
-                  readonly="readonly"
-                  value="{{donor.first_name}}"
-                  slot="input"
-                />
-              </biggive-text-input>
-
-              <biggive-text-input>
-                <label
-                  class="label-with-limited-space"
-                  slot="label"
-                  for="donationAmount"
-                >
-                  Last Name
-                </label>
-                <input
-                  readonly="readonly"
-                  value="{{donor.last_name}}"
-                  slot="input"
-                />
-              </biggive-text-input>
-
-              <biggive-text-input>
-                <label
-                  class="label-with-limited-space"
-                  slot="label"
-                  for="donationAmount"
-                >
-                  Email Address
-                </label>
-                <input
-                  readonly="readonly"
-                  value="{{donor.email_address}}"
-                  slot="input"
-                />
-              </biggive-text-input>
+              <table id="personal-details">
+                <tr>
+                  <td>Name</td>
+                  <td>{{donor.first_name}} {{donor.last_name}}</td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td>{{donor.email_address}}</td>
+                </tr>
+              </table>
 
               <div style="text-align: center">
                 <button style="width: 40%;"
