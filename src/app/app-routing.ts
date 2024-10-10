@@ -1,4 +1,4 @@
-import {ActivatedRouteSnapshot, CanActivateFn, Router, Routes} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivateFn, ResolveFn, Router, Routes} from '@angular/router';
 
 import {CampaignListResolver} from './campaign-list.resolver';
 import {CampaignResolver} from './campaign.resolver';
@@ -16,6 +16,8 @@ import {DonationService} from "./donation.service";
 import {MyRegularGivingComponent} from "./my-regular-giving/my-regular-giving.component";
 import {MandateService} from "./mandate.service";
 import {RegularGivingComponent} from "./regular-giving/regular-giving.component";
+import {Person} from "./person.model";
+import {firstValueFrom} from "rxjs";
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -62,6 +64,13 @@ const requireLogin: CanActivateFn = (_activatedRouteSnapshot, routerStateSnapsho
   return router.parseUrl('/login');
 
 };
+
+const LoggedInPersonResolver: ResolveFn<Person | null> = async () => {
+  const identityService = inject(IdentityService);
+
+  const person$ = identityService.getLoggedInPerson();
+  return await firstValueFrom(person$);
+}
 
 const routes: Routes = [
   {
@@ -260,6 +269,7 @@ if (flags.regularGivingEnabled) {
       ],
       resolve: {
         campaign: CampaignResolver,
+        donor: LoggedInPersonResolver,
       },
     },
   )

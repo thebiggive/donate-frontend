@@ -64,6 +64,20 @@
               label="Confirm"
               class="c-make-your-donation"
             >
+              <p>
+                Your details
+              </p>
+              <table id="personal-details">
+                <tr>
+                  <td>Name</td>
+                  <td>{{donor.first_name}} {{donor.last_name}}</td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td>{{donor.email_address}}</td>
+                </tr>
+              </table>
+
               <p class="b-rt-0 b-m-0 b-mt-40">By clicking on the <span class="b-bold">Start regular giving now</span> button, you agree to
                 Big Give's Terms and Conditions and Privacy Statement. <br/>
                 <a [href]="termsUrl" target="_blank">
