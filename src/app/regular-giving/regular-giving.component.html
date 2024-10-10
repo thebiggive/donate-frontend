@@ -1,0 +1,122 @@
+<main class="b-container">
+  <div class="c-form-container">
+    <div class="b-primary-column">
+      <biggive-page-section>
+        <form
+          class="c-regular-giving-form"
+          (keydown.enter)="interceptSubmitAndProceedInstead($event)"
+          [formGroup]="mandateForm"
+        >
+          <mat-vertical-stepper
+            id="stepper"
+            linear
+            #stepper
+            (selectionChange)="stepChanged($event)"
+            [@.disabled]
+          >
+            <mat-step
+              formGroupName="amounts"
+              label="Your regular donation"
+              class="c-your-donation">
+
+              <div class="donationInfoWrapper">
+                <div>
+                  <p class="b-rt-0 b-m-0">You are supporting:</p>
+                  <p class="b-rt-0 b-m-0 b-bold">{{ campaign.charity.name }}</p>
+                </div>
+                <div>
+                  <p class="b-rt-0 b-m-0">for:</p>
+                  <p class="b-rt-0 b-m-0 b-bold">{{ campaign.title }}</p>
+                </div>
+              </div>
+
+              <div class="donation-input donation-input-main">
+
+                <biggive-text-input currency="{{campaign.currencyCode}}">
+                  <label
+                    class="label-with-limited-space"
+                    slot="label"
+                    for="donationAmount"
+                  >
+                    Monthly donation to {{campaign.charity.name}}
+                  </label>
+                  <input
+                    maxlength="10"
+                    formControlName="donationAmount" id="donationAmount" matInput
+                    slot="input"
+                  />
+                </biggive-text-input>
+              </div>
+              <p>This amount will be taken from your account today and once every month in future</p>
+
+              <div style="text-align: center">
+                <button style="width: 40%;"
+                        type="button"
+                        class="continue b-w-100 b-rt-0"
+                        mat-raised-button
+                        color="primary"
+                        (click)="next()"
+                >Continue</button>
+              </div>
+
+            </mat-step>
+            <mat-step
+              label="Confirm"
+              class="c-make-your-donation"
+            >
+              <p class="b-rt-0 b-m-0 b-mt-40">By clicking on the <span class="b-bold">Start regular giving now</span> button, you agree to
+                Big Give's Terms and Conditions and Privacy Statement. <br/>
+                <a [href]="termsUrl" target="_blank">
+                  <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+                  Read our Terms and Conditions,
+                </a>
+                <a [href]="privacyUrl" target="_blank">
+                  <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+                  read our Privacy Statement.</a>
+              </p>
+              <p>(todo: add link to regular giving terms & conditions)</p>
+
+              <button
+                (click)="submit()"
+                (keyup.enter)="submit()"
+                class="c-donate-button b-donate-button b-w-100 b-rt-1"
+                mat-raised-button
+                color="primary"
+              >
+                Start regular giving now
+              </button>
+            </mat-step>
+          </mat-vertical-stepper>
+        </form>
+      </biggive-page-section>
+    </div>
+    <div class="b-secondary-column">
+      <!-- On this page, we agreed that this info is best to hide entirely on mobile. So
+      this has no `mobile` counterpart but we still use the mixin that hides this on mobile. -->
+        <div
+          id="campaign-highlights-beneficiaries-and-categories-desktop"
+        >
+          <div class="match-funded-badge-wrapper">
+            @if (campaign.matchFundsRemaining > 0) {
+              <div class="match-funded-badge">
+                Match Funded
+              </div>
+            }
+          </div>
+          @if (bannerUri$ | async; as bannerUri) {
+          <div class="c-banner">
+            @if (bannerUri) {
+              <img
+                class="c-banner__image b-w-100"
+                [src]="bannerUri"
+                alt=""
+                role="presentation"
+              >
+            }
+          </div>
+          }
+          <app-campaign-info [campaign]="campaign"></app-campaign-info>
+        </div>
+    </div>
+  </div>
+</main>
