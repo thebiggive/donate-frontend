@@ -10,6 +10,12 @@ orbs:
   slack: circleci/slack@4.14.0
 
 jobs:
+  checkout:
+    machine:
+      enabled: true
+    steps:
+      - checkout
+
   test:
     resource_class: large
     docker:
@@ -131,6 +137,7 @@ workflows:
                 event: fail
                 template: basic_fail_1
                 mentions: <@here>
+      - checkout
       - aws-ecs/deploy_service_update:
           name: "Deploy Regression ECS with new image"
           auth:
@@ -184,6 +191,7 @@ workflows:
                 event: fail
                 template: basic_fail_1
                 mentions: <@here>
+      - checkout
       - aws-ecs/deploy_service_update:
           name: "Deploy Staging ECS with new image"
           auth:
@@ -260,6 +268,7 @@ workflows:
                 event: fail
                 template: basic_fail_1
                 mentions: <@here>
+      - checkout
       - aws-ecs/deploy_service_update:
           name: "Deploy Production ECS with new image"
           auth:
