@@ -246,6 +246,8 @@ export class DonationThanksComponent implements OnInit {
 
         this.registerError = error.message;
         this.matomoTracker.trackEvent('identity_error', 'person_password_set_failed', `${error.status}: ${error.message}`);
+        this.friendlyCaptchaWidget?.reset();
+        this.friendlyCaptchaWidget?.start();
       },
     });
   }

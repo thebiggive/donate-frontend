@@ -95,6 +95,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     this.pageInitialised = true;
   }
 
+  private friendlyCaptchaWiget: WidgetInstance;
+
   ngAfterViewInit() {
     if (! isPlatformBrowser(this.platformId)) {
       return
@@ -104,7 +106,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
       return;
     }
 
-    const widget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
+    this.friendlyCaptchaWiget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.captchaCode = solution;
       },
@@ -112,9 +114,9 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
         this.loginError = "Sorry, there was an error with the anti-spam captcha check.";
         console.error(error);
       },
-    })
+    });
 
-    widget.start()
+    this.friendlyCaptchaWiget.start()
   }
 
 
@@ -158,11 +160,14 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
       next: (_response: { id: string, jwt: string }) => {
         this.router.navigateByUrl(this.redirectPath);
       },
-      error: (error) => {
+      error: async (error) => {
         const errorDescription = error.error.error.description;
         this.loginError = errorDescription || error.message || 'Unknown error';
-
         this.loggingIn = false;
+
+        this.captchaCode = undefined;
+        this.friendlyCaptchaWiget.reset();
+        await this.friendlyCaptchaWiget.start();
       }
     });
     this.loggingIn = true;
