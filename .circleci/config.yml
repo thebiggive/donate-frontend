@@ -147,7 +147,7 @@ workflows:
           context:
             - ecs-deploys
             - slack
-          requires: ["Copy Regression ECR static to S3"]
+          requires: ["checkout", "Copy Regression ECR static to S3"]
           region: AWS_REGION
           family: 'tbg-regression-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
           cluster: 'tbg-regression-${AWS_REGION}'
@@ -202,7 +202,7 @@ workflows:
             - ecs-deploys
             - jira
             - slack
-          requires: ["Copy Staging ECR static to S3"]
+          requires: ["checkout", "Copy Staging ECR static to S3"]
           region: AWS_REGION
           family: 'tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
           cluster: 'tbg-staging-${AWS_REGION}'
@@ -279,7 +279,7 @@ workflows:
             - ecs-deploys
             - jira
             - slack
-          requires: ["Copy Production ECR static to S3"]
+          requires: ["checkout", "Copy Production ECR static to S3"]
           region: AWS_REGION
           family: 'tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
           cluster: 'tbg-production-${AWS_REGION}'
