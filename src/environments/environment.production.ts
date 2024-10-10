@@ -17,7 +17,12 @@ export const environment: Environment = {
   identityApiPrefix: 'https://identity-production.thebiggive.org.uk/v1',
   matomoSiteId: 2,
   matomoNonZeroTipGoalId: 11,
-  matomoAbTest: undefined,
+  matomoAbTest: {
+    name: 'zeroTipTextAB_wgmf_2024',
+    variantName: 'B',
+    startDate: '2024/10/10 11:00:00 UTC',
+    endDate: '2024/10/17 11:00:00 UTC',
+  },
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
   postcodeLookupKey: 'gq9-k9zYakORdv2uoY_yVw33182',
