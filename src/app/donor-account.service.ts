@@ -22,7 +22,7 @@ export class DonorAccountService {
     }
 
     return this.http.post(
-      `${environment.donationsApiPrefix}/${donor.id}/donor-account`,
+      `${environment.donationsApiPrefix}/people/${donor.id}/donor-account`,
       {
         emailAddress: donor.email_address,
         donorName: {
