@@ -5,7 +5,8 @@
   background-image: url(../../assets/images/grey-header.jpg);
 }
 
-@include friendly-captcha();
-div.frc-captcha {
-  margin-top: 2em;
+div.actions {
+  margin-bottom: 1em;
 }
+
+@include friendly-captcha();
