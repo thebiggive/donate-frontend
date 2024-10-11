@@ -506,12 +506,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
               'cancel_auto',
               `Donation cancelled due to donor authentication change`,
             );
-
+            this.destroyStripeElements();
             if (this.donation) {
               // We already know the requested amount, so no need to jump back.
               this.clearDonation(this.donation, {clearAllRecord: true, jumpToStart: false});
             }
             this.createDonationAndMaybePerson();
+            this.prepareStripeElements();
           });
           return;
         }
