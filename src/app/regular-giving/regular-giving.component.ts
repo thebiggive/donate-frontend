@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Campaign} from "../campaign.model";
 import {ComponentsModule} from "@biggive/components-angular";
 import {CampaignInfoComponent} from "../campaign-info/campaign-info.component";
@@ -13,6 +13,8 @@ import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatIcon} from "@angular/material/icon";
+import {Person} from "../person.model";
+import {IdentityService} from "../identity.service";
 
 @Component({
   selector: 'app-regular-giving',
@@ -39,16 +41,25 @@ export class RegularGivingComponent implements OnInit {
   @ViewChild('stepper') private stepper: MatStepper;
   readonly termsUrl = 'https://biggive.org/terms-and-conditions';
   readonly privacyUrl = 'https://biggive.org/privacy';
+  protected donor: Person;
 
   constructor(
     private route: ActivatedRoute,
     private imageService: ImageService,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
+    private identityService: IdentityService,
+    private router: Router,
   ) {
   }
 
   ngOnInit() {
+    const donor: Person | null = this.route.snapshot.data.donor;
+    if (! donor) {
+      throw new Error("Must be logged in to see regular giving page");
+    }
+    this.donor = donor
+
     this.campaign = this.route.snapshot.data.campaign;
     this.bannerUri$ = this.imageService.getImageUri(this.campaign.bannerUri, 830);
     this.mandateForm = this.formBuilder.group([]);
@@ -64,6 +75,11 @@ export class RegularGivingComponent implements OnInit {
   }
 
   async stepChanged(_event: StepperSelectionEvent) {
+  }
+
+  logout() {
+    this.identityService.logout();
+    this.router.navigate(['']);
   }
 
   submit() {
