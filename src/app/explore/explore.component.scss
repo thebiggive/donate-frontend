@@ -2,7 +2,7 @@
 @import '../../abstract';
 
 .error {
-  color: mat.get-color-from-palette($donate-warn);
+  color: mat.m2-get-color-from-palette($donate-warn);
   max-width: $full-copy-max-width;
   text-align: center;
   margin: 1rem auto;
