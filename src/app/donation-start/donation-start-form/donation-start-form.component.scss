@@ -287,7 +287,7 @@ input {
 // I we would like to apply the :focus-visible-within pseduo-class but that doesn't exist. See
 // https://larsmagnus.co/blog/focus-visible-within-the-missing-pseudo-class
 mat-expansion-panel:has(:focus-visible){
-  outline: 1px solid $colour-secondary;
+  box-shadow: 0 8px 8px -7px $colour-secondary !important;
 }
 
 button:focus-visible {
