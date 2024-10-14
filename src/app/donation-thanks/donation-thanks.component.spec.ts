@@ -1,4 +1,4 @@
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -13,6 +13,7 @@ import {DonationThanksComponent} from './donation-thanks.component';
 import {TBG_DONATE_ID_STORAGE} from '../identity.service';
 import {CompleteDonation} from "../donation.model";
 import {NgxMatomoModule} from "ngx-matomo-client";
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('DonationThanksComponent', () => {
   let component: DonationThanksComponent;
@@ -20,30 +21,29 @@ describe('DonationThanksComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [],
-      imports: [
-        HttpClientTestingModule,
-        MatButtonModule,
+    declarations: [],
+    imports: [MatButtonModule,
         MatDialogModule,
         NgxMatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
+            siteId: '',
+            trackerUrl: '',
         }),
         MatProgressSpinnerModule,
         RouterTestingModule.withRoutes([
-          {
-            path: 'thanks/:donationId',
-            component: DonationThanksComponent,
-          },
-        ]),
-      ],
-      providers: [
-        { provide: ActivatedRoute, useValue: { params: of({donationId: 'myTestDonationId'})}},
+            {
+                path: 'thanks/:donationId',
+                component: DonationThanksComponent,
+            },
+        ])],
+    providers: [
+        { provide: ActivatedRoute, useValue: { params: of({ donationId: 'myTestDonationId' }) } },
         InMemoryStorageService,
         { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-      ],
-    });
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+});
 
     TestBed.compileComponents();
   }));

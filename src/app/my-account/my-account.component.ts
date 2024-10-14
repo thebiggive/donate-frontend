@@ -9,7 +9,7 @@ import {DonationService} from "../donation.service";
 import {UpdateCardModalComponent} from "../update-card-modal/update-card-modal.component";
 import {MatDialog} from "@angular/material/dialog";
 import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
-import {HttpErrorResponse} from "@angular/common/http";
+import { HttpErrorResponse } from "@angular/common/http";
 import {flags} from "../featureFlags";
 
 @Component({

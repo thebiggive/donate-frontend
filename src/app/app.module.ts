@@ -1,5 +1,5 @@
 import {APP_BASE_HREF, AsyncPipe, DatePipe} from '@angular/common';
-import {HttpClientModule} from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {MAT_CHECKBOX_DEFAULT_OPTIONS} from '@angular/material/checkbox';
 import {MAT_RADIO_DEFAULT_OPTIONS} from '@angular/material/radio';
@@ -26,49 +26,43 @@ import {
 
 const matomoBaseUri = 'https://biggive.matomo.cloud';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-  ],
-  imports: [
-    AsyncPipe,
-    BrowserAnimationsModule,
-    BrowserModule,
-    ComponentsModule,
-    HttpClientModule,
-    ...(environment.matomoSiteId ? [MatomoModule.forRoot({
-      siteId: environment.matomoSiteId,
-      trackerUrl: matomoBaseUri,
-      mode: MatomoInitializationMode.AUTO,
-      requireConsent: MatomoConsentMode.COOKIE,
-    })] : []),
-    MatomoRouterModule.forRoot({}),
-    RouterModule.forRoot(routes, {
-      bindToComponentInputs: true,
-      initialNavigation: 'enabledBlocking', // "This value is required for server-side rendering to work." https://angular.io/api/router/InitialNavigation
-      onSameUrlNavigation: 'reload', // Allows Explore & home logo links to clear search filters in ExploreComponent
-      scrollPositionRestoration: 'enabled',
-    }),
-    RouterOutlet,
-  ],
-  exports: [
-    RouterModule,
-  ],
-  providers: [
-    CampaignListResolver,
-    CampaignResolver,
-    CharityCampaignsResolver,
-    DatePipe,
-    {
-      provide: APP_BASE_HREF,
-      useValue: environment.donateUriPrefix,
-    },
-    { provide: TBG_DONATE_ID_STORAGE, useExisting: LOCAL_STORAGE },
-    { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
-    { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
-    { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+    ],
+    exports: [
+        RouterModule,
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    bootstrap: [AppComponent], imports: [AsyncPipe,
+        BrowserAnimationsModule,
+        BrowserModule,
+        ComponentsModule,
+        ...(environment.matomoSiteId ? [MatomoModule.forRoot({
+                siteId: environment.matomoSiteId,
+                trackerUrl: matomoBaseUri,
+                mode: MatomoInitializationMode.AUTO,
+                requireConsent: MatomoConsentMode.COOKIE,
+            })] : []),
+        MatomoRouterModule.forRoot({}),
+        RouterModule.forRoot(routes, {
+            bindToComponentInputs: true,
+            initialNavigation: 'enabledBlocking', // "This value is required for server-side rendering to work." https://angular.io/api/router/InitialNavigation
+            onSameUrlNavigation: 'reload', // Allows Explore & home logo links to clear search filters in ExploreComponent
+            scrollPositionRestoration: 'enabled',
+        }),
+        RouterOutlet], providers: [
+        CampaignListResolver,
+        CampaignResolver,
+        CharityCampaignsResolver,
+        DatePipe,
+        {
+            provide: APP_BASE_HREF,
+            useValue: environment.donateUriPrefix,
+        },
+        { provide: TBG_DONATE_ID_STORAGE, useExisting: LOCAL_STORAGE },
+        { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
+        { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
+        { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: 'primary' } },
+        provideHttpClient(withInterceptorsFromDi()),
+    ] })
 export class AppModule { }

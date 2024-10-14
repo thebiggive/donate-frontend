@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -14,6 +14,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { of } from 'rxjs';
 
 import { ExploreComponent } from './explore.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ExploreComponent', () => {
   let component: ExploreComponent;
@@ -21,11 +22,8 @@ describe('ExploreComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-      ],
-      imports: [
-        AsyncPipe,
-        HttpClientTestingModule,
+    declarations: [],
+    imports: [AsyncPipe,
         InfiniteScrollModule,
         MatDialogModule,
         MatIconModule,
@@ -35,21 +33,22 @@ describe('ExploreComponent', () => {
         NoopAnimationsModule,
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([
-          {
-            path: 'search',
-            component: ExploreComponent,
-          },
-        ]),
-      ],
-      providers: [
+            {
+                path: 'search',
+                component: ExploreComponent,
+            },
+        ])],
+    providers: [
         { provide: ActivatedRoute, useValue: {
-          snapshot: {
-            data: {}
-          },
-          queryParams: of({}), // Let `loadQueryParamsAndRun()` subscribe without crashing.
-        } },
-      ],
-    })
+                snapshot: {
+                    data: {}
+                },
+                queryParams: of({}), // Let `loadQueryParamsAndRun()` subscribe without crashing.
+            } },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
     .compileComponents();
   }));
 

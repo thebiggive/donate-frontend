@@ -1,4 +1,4 @@
-import {HttpClientTestingModule} from "@angular/common/http/testing";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
 import {Component} from "@angular/core";
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -12,6 +12,7 @@ import {TBG_DONATE_ID_STORAGE} from "../../identity.service";
 import {TBG_DONATE_STORAGE} from "../../donation.service";
 import {Campaign} from "../../campaign.model";
 import {NgxMatomoModule} from "ngx-matomo-client";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 
 // See https://medium.com/angular-in-depth/angular-unit-testing-viewchild-4525e0c7b756
 @Component({
@@ -31,33 +32,32 @@ describe('DonationStartContainer', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         DonationStartContainerComponent,
         DonationStartFormStubComponent,
-      ],
-      imports: [
-        HttpClientTestingModule,
-        MatDialogModule,
+    ],
+    imports: [MatDialogModule,
         NgxMatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
-        }),
-      ],
-      providers: [
+            siteId: '',
+            trackerUrl: '',
+        })],
+    providers: [
         {
-          provide: ActivatedRoute,
-          useValue: {
-            queryParams: of({}),
-            snapshot: {
-              data: { campaign: getDummyCampaign('testCampaignIdForStripe') },
+            provide: ActivatedRoute,
+            useValue: {
+                queryParams: of({}),
+                snapshot: {
+                    data: { campaign: getDummyCampaign('testCampaignIdForStripe') },
+                },
             },
-          },
         },
         InMemoryStorageService,
         { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-      ],
-    })
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(DonationStartContainerComponent);
