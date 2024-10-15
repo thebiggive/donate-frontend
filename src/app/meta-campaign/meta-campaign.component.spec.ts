@@ -21,7 +21,7 @@ import {
   Router,
   RouterModule,
 } from "@angular/router";
-import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { InfiniteScrollDirective } from "ngx-infinite-scroll";
 import { InMemoryStorageService, StorageService } from "ngx-webstorage-service";
 import { NEVER, of } from "rxjs";
 
@@ -104,7 +104,7 @@ describe("MetaCampaignComponent", () => {
       imports: [
         AsyncPipe,
         CommonModule,
-        InfiniteScrollModule,
+        InfiniteScrollDirective,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatIconModule,
         MatInputModule,
