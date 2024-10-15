@@ -1,7 +1,7 @@
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {InfiniteScrollModule} from 'ngx-infinite-scroll';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { ExploreComponent } from './explore.component';
@@ -14,7 +14,7 @@ import {HighlightCardsComponent} from "../highlight-cards/highlight-cards.compon
     ...allChildComponentImports,
     AsyncPipe,
     ExploreRoutingModule,
-    InfiniteScrollModule,
+    InfiniteScrollDirective,
     MatProgressSpinnerModule,
     OptimisedImagePipe,
     HighlightCardsComponent,

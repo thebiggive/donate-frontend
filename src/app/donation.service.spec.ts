@@ -1,54 +1,66 @@
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { inject, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import {InMemoryStorageService, SESSION_STORAGE} from 'ngx-webstorage-service';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from "@angular/common/http/testing";
+import { inject, TestBed } from "@angular/core/testing";
+import {
+  InMemoryStorageService,
+  SESSION_STORAGE,
+} from "ngx-webstorage-service";
 
-import { Donation } from './donation.model';
-import { DonationCreatedResponse } from './donation-created-response.model';
-import { DonationService, TBG_DONATE_STORAGE } from './donation.service';
-import { DonationStatus } from './donation-status.type';
-import { environment } from '../environments/environment';
-import {NgxMatomoModule} from "ngx-matomo-client";
-import {TBG_DONATE_ID_STORAGE} from "./identity.service";
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { Donation } from "./donation.model";
+import { DonationCreatedResponse } from "./donation-created-response.model";
+import { DonationService, TBG_DONATE_STORAGE } from "./donation.service";
+import { DonationStatus } from "./donation-status.type";
+import { environment } from "../environments/environment";
+import { MatomoModule } from "ngx-matomo-client";
+import { TBG_DONATE_ID_STORAGE } from "./identity.service";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
+import { RouterModule } from "@angular/router";
 
-describe('DonationService', () => {
-  const getDummyDonation = (status: DonationStatus = 'Pending'): Donation => {
+describe("DonationService", () => {
+  const getDummyDonation = (status: DonationStatus = "Pending"): Donation => {
     return {
-      billingPostalAddress: '123 Main St, london, N1 1AA',
-      charityName: 'My Test Charity',
-      countryCode: 'GB',
-      createdTime: (new Date()).toISOString(),
-      charityId: '21I400000009Sds3e4',
-      currencyCode: 'GBP',
-      donationId: '01I400000009Sds3e2',
+      billingPostalAddress: "123 Main St, london, N1 1AA",
+      charityName: "My Test Charity",
+      countryCode: "GB",
+      createdTime: new Date().toISOString(),
+      charityId: "21I400000009Sds3e4",
+      currencyCode: "GBP",
+      donationId: "01I400000009Sds3e2",
       donationAmount: 1234.56,
       donationMatched: true,
-      emailAddress: 'test@example.com',
-      firstName: 'Louis',
+      emailAddress: "test@example.com",
+      firstName: "Louis",
       giftAid: true,
-      lastName: 'Theroux',
+      lastName: "Theroux",
       matchedAmount: 0,
       matchReservedAmount: 500.01,
       optInCharityEmail: true,
       optInTbgEmail: false,
-      pspMethodType: 'card',
-      projectId: '11I400000009Sds3e3',
-      psp: 'stripe',
+      pspMethodType: "card",
+      projectId: "11I400000009Sds3e3",
+      psp: "stripe",
       status,
       tipAmount: 2.75,
-      transactionId: 'd290f1ee-6c54-4b01-90e6-d701748f0851',
-      updatedTime: (new Date()).toISOString(),
+      transactionId: "d290f1ee-6c54-4b01-90e6-d701748f0851",
+      updatedTime: new Date().toISOString(),
     };
   };
 
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [NgxMatomoModule.forRoot({
-            siteId: '',
-            trackerUrl: '',
+  beforeEach(() =>
+    TestBed.configureTestingModule({
+      imports: [
+        MatomoModule.forRoot({
+          siteId: "",
+          trackerUrl: "",
         }),
-        RouterTestingModule],
-    providers: [
+        RouterModule.forRoot([]),
+      ],
+      providers: [
         // Inject in-memory storage for tests, in place of local storage and session storage.
         // We need to use 'useClass', not 'useExisting' here otherwise we would use the same object in tests to represent
         // both storage places, and they will interfere with each other.
@@ -59,49 +71,54 @@ describe('DonationService', () => {
         InMemoryStorageService,
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}));
+      ],
+    })
+  );
 
-  it('should be created', () => {
+  it("should be created", () => {
     const service: DonationService = TestBed.inject(DonationService);
     expect(service).toBeTruthy();
   });
 
   // Test service injection loosely based on https://alligator.io/angular/testing-httpclient/
-  it(
-    'should complete a create() with mocked service',
-    inject(
-      [HttpTestingController],
-      (
-        httpMock: HttpTestingController,
-      ) => {
-        const service: DonationService = TestBed.inject(DonationService);
-        const donation = getDummyDonation();
+  it("should complete a create() with mocked service", inject(
+    [HttpTestingController],
+    (httpMock: HttpTestingController) => {
+      const service: DonationService = TestBed.inject(DonationService);
+      const donation = getDummyDonation();
 
-        service.create(donation).subscribe(result => {
-          expect(result.jwt).toEqual('mockJwtheader.mockJwtBody.mockJwtSignature');
+      service.create(donation).subscribe(
+        (result) => {
+          expect(result.jwt).toEqual(
+            "mockJwtheader.mockJwtBody.mockJwtSignature"
+          );
           expect(result.donation.donationAmount).toEqual(1234.56);
           expect(result.donation.matchReservedAmount).toEqual(500.01);
           expect(result.donation.tipAmount).toEqual(2.75);
-          expect(result.donation.transactionId).toEqual('d290f1ee-6c54-4b01-90e6-d701748f0851');
-        }, () => {
+          expect(result.donation.transactionId).toEqual(
+            "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          );
+        },
+        () => {
           expect(false).toBe(true); // Always fail if observable errors
-        });
+        }
+      );
 
-        const mockPost = httpMock.expectOne(`${environment.donationsApiPrefix}/donations`);
-        expect(mockPost.request.method).toEqual('POST');
-        expect(mockPost.cancelled).toBeFalsy();
-        expect(mockPost.request.responseType).toEqual('json');
-        const donationCreatedResponse = new DonationCreatedResponse(
-          donation,
-          'mockJwtheader.mockJwtBody.mockJwtSignature',
-        );
-        mockPost.flush(donationCreatedResponse);
+      const mockPost = httpMock.expectOne(
+        `${environment.donationsApiPrefix}/donations`
+      );
+      expect(mockPost.request.method).toEqual("POST");
+      expect(mockPost.cancelled).toBeFalsy();
+      expect(mockPost.request.responseType).toEqual("json");
+      const donationCreatedResponse = new DonationCreatedResponse(
+        donation,
+        "mockJwtheader.mockJwtBody.mockJwtSignature"
+      );
+      mockPost.flush(donationCreatedResponse);
 
-        httpMock.verify();
-      },
-    ),
-  );
+      httpMock.verify();
+    }
+  ));
 
   // TODO the HTTP mock conditions on this test are flaky. To get builds passing reliably while we
   // prepare for CC19, it is temporarily commented out. We should work out why the mocks are
@@ -149,69 +166,89 @@ describe('DonationService', () => {
   //   ),
   // );
 
-  it('should save local donation data and find the donation by ID', () => {
+  it("should save local donation data and find the donation by ID", () => {
     const service: DonationService = TestBed.inject(DonationService);
     const inputDonation = getDummyDonation();
-    service.saveDonation({donation: inputDonation, jwt: 'fakeheader.fakebody.fakesig'});
+    service.saveDonation({
+      donation: inputDonation,
+      jwt: "fakeheader.fakebody.fakesig",
+    });
 
     if (inputDonation.donationId) {
-      expect(service.getDonation(inputDonation.donationId)).toEqual(inputDonation);
+      expect(service.getDonation(inputDonation.donationId)).toEqual(
+        inputDonation
+      );
     } else {
       expect(false).toBeTrue(); // Donation ID unexpectedly undefined
     }
   });
 
-  it('should correctly determine when a donation is complete', () => {
+  it("should correctly determine when a donation is complete", () => {
     const service: DonationService = TestBed.inject(DonationService);
     const donation: Donation = getDummyDonation();
-    donation.status = 'Paid';
+    donation.status = "Paid";
 
     expect(service.isComplete(donation)).toBe(true);
   });
 
-  it('should correctly determine when a donation is incomplete', () => {
+  it("should correctly determine when a donation is incomplete", () => {
     const service: DonationService = TestBed.inject(DonationService);
     const donation: Donation = getDummyDonation();
-    donation.status = 'Refunded';
+    donation.status = "Refunded";
 
     expect(service.isComplete(donation)).toBe(false);
   });
 
-  it('should find a resumable donation by project ID',
-    inject([HttpTestingController], (
-      httpMock: HttpTestingController,
-    ) => {
+  it("should find a resumable donation by project ID", inject(
+    [HttpTestingController],
+    (httpMock: HttpTestingController) => {
       const service: DonationService = TestBed.inject(DonationService);
       const inputDonation = getDummyDonation();
 
-      service.saveDonation({donation: inputDonation, jwt: 'fakeheader.fakebody.fakesig'});
-
-      service.getProbablyResumableDonation('11I400000009Sds3e3', 'card').subscribe(outputDonation => {
-        expect(outputDonation).toBe(inputDonation);
-      }, () => {
-        expect(false).toBe(true); // Always fail on observable error
+      service.saveDonation({
+        donation: inputDonation,
+        jwt: "fakeheader.fakebody.fakesig",
       });
+
+      service
+        .getProbablyResumableDonation("11I400000009Sds3e3", "card")
+        .subscribe(
+          (outputDonation) => {
+            expect(outputDonation).toBe(inputDonation);
+          },
+          () => {
+            expect(false).toBe(true); // Always fail on observable error
+          }
+        );
 
       // After it finds a local match, getProbablyResumableDonation() will hit the server for the latest copy via
       // `DonationService.get()`.
-      const mockGet = httpMock.expectOne(
-        (request) => request.url.startsWith(`${environment.donationsApiPrefix}/donations/${inputDonation.donationId}`)
+      const mockGet = httpMock.expectOne((request) =>
+        request.url.startsWith(
+          `${environment.donationsApiPrefix}/donations/${inputDonation.donationId}`
+        )
       );
-      expect(mockGet.request.method).toBe('GET');
+      expect(mockGet.request.method).toBe("GET");
       expect(mockGet.cancelled).toBeFalsy();
-      expect(mockGet.request.responseType).toEqual('json');
+      expect(mockGet.request.responseType).toEqual("json");
       mockGet.flush(inputDonation);
       httpMock.verify();
-    }),
-  );
+    }
+  ));
 
-  it('should return undefined for resumable donations with unknown project ID', () => {
+  it("should return undefined for resumable donations with unknown project ID", () => {
     const service: DonationService = TestBed.inject(DonationService);
-    service.saveDonation({donation: getDummyDonation(), jwt: 'fakeheader.fakebody.fakesig'});
-    service.getProbablyResumableDonation('notARealProjectId', 'card').subscribe(donation => {
-      expect(donation).toBeUndefined();
-    }, () => {
-      expect(false).toBe(true); // Always fail on observable error
+    service.saveDonation({
+      donation: getDummyDonation(),
+      jwt: "fakeheader.fakebody.fakesig",
     });
+    service.getProbablyResumableDonation("notARealProjectId", "card").subscribe(
+      (donation) => {
+        expect(donation).toBeUndefined();
+      },
+      () => {
+        expect(false).toBe(true); // Always fail on observable error
+      }
+    );
   });
 });

@@ -1,30 +1,33 @@
-import { AsyncPipe } from '@angular/common';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSelectModule } from '@angular/material/select';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { of } from 'rxjs';
+import { AsyncPipe } from "@angular/common";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ReactiveFormsModule } from "@angular/forms";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatSelectModule } from "@angular/material/select";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { ActivatedRoute, RouterModule } from "@angular/router";
+import { InfiniteScrollDirective } from "ngx-infinite-scroll";
+import { of } from "rxjs";
 
-import { ExploreComponent } from './explore.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { ExploreComponent } from "./explore.component";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 
-describe('ExploreComponent', () => {
+describe("ExploreComponent", () => {
   let component: ExploreComponent;
   let fixture: ComponentFixture<ExploreComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-    declarations: [],
-    imports: [AsyncPipe,
-        InfiniteScrollModule,
+      declarations: [],
+      imports: [
+        AsyncPipe,
+        InfiniteScrollDirective,
         MatDialogModule,
         MatIconModule,
         MatInputModule,
@@ -32,24 +35,27 @@ describe('ExploreComponent', () => {
         MatSelectModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-        RouterTestingModule.withRoutes([
-            {
-                path: 'search',
-                component: ExploreComponent,
+        RouterModule.forRoot([
+          {
+            path: "search",
+            component: ExploreComponent,
+          },
+        ]),
+      ],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              data: {},
             },
-        ])],
-    providers: [
-        { provide: ActivatedRoute, useValue: {
-                snapshot: {
-                    data: {}
-                },
-                queryParams: of({}), // Let `loadQueryParamsAndRun()` subscribe without crashing.
-            } },
+            queryParams: of({}), // Let `loadQueryParamsAndRun()` subscribe without crashing.
+          },
+        },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
-    .compileComponents();
+      ],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -58,7 +64,7 @@ describe('ExploreComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });

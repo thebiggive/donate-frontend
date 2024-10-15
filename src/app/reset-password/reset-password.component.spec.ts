@@ -6,16 +6,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
+import { RouterModule } from '@angular/router';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 import { ResetPasswordComponent } from './reset-password.component';
-import {NgxMatomoModule} from "ngx-matomo-client";
+import {MatomoModule} from "ngx-matomo-client";
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-
-
 
 describe('ResetPasswordComponent', () => {
   let component: ResetPasswordComponent;
@@ -30,14 +28,14 @@ describe('ResetPasswordComponent', () => {
         MatButtonModule,
         MatDialogModule,
         MatInputModule,
-        NgxMatomoModule.forRoot({
+        MatomoModule.forRoot({
           siteId: '',
           trackerUrl: '',
         }),
         MatProgressSpinnerModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-        RouterTestingModule.withRoutes([
+        RouterModule.forRoot([
           {
             path: 'reset-password',
             component: ResetPasswordComponent,

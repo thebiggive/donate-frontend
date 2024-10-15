@@ -7,24 +7,25 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { Campaign } from '../campaign.model';
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { TimeLeftPipe } from '../time-left.pipe';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
 describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
   let fixture: ComponentFixture<CampaignDetailsComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-    declarations: [
+    void TestBed.configureTestingModule({
+      declarations: [
         CampaignDetailsComponent,
-    ],
-    imports: [CommonModule,
+      ],
+      imports: [
+        CommonModule,
         CurrencyPipe,
         MatButtonModule,
         MatIconModule,
@@ -33,14 +34,14 @@ describe('CampaignDetailsComponent', () => {
         MatTabsModule,
         NoopAnimationsModule,
         OptimisedImagePipe,
-        RouterTestingModule],
-    providers: [
+        RouterModule.forRoot([]),
+      ],
+      providers: [
         TimeLeftPipe,
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-})
-    .compileComponents();
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

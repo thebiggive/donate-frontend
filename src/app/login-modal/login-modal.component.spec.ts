@@ -9,7 +9,7 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { LoginModalComponent } from './login-modal.component';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
-import {NgxMatomoModule} from "ngx-matomo-client";
+import {MatomoModule} from "ngx-matomo-client";
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('LoginModalComponent', () => {
@@ -22,7 +22,7 @@ describe('LoginModalComponent', () => {
     imports: [FormsModule,
         MatButtonModule,
         MatDialogModule,
-        NgxMatomoModule.forRoot({
+        MatomoModule.forRoot({
             siteId: '',
             trackerUrl: '',
         }),
