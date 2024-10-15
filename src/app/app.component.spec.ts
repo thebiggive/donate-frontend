@@ -1,52 +1,57 @@
-import {APP_BASE_HREF, AsyncPipe} from '@angular/common';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { TestBed, waitForAsync } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatSelectModule } from '@angular/material/select';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
-import { InMemoryStorageService } from 'ngx-webstorage-service';
+import { APP_BASE_HREF, AsyncPipe } from "@angular/common";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { TestBed, waitForAsync } from "@angular/core/testing";
+import { ReactiveFormsModule } from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatListModule } from "@angular/material/list";
+import { MatSelectModule } from "@angular/material/select";
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { RouterModule } from "@angular/router";
+import { NgxMatomoModule } from "ngx-matomo-client";
+import { InMemoryStorageService } from "ngx-webstorage-service";
 
-import { AppComponent } from './app.component';
-import { TBG_DONATE_STORAGE } from './donation.service';
-import { TBG_DONATE_ID_STORAGE } from './identity.service'
-import {NgxMatomoModule} from "ngx-matomo-client";
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { AppComponent } from "./app.component";
+import { TBG_DONATE_STORAGE } from "./donation.service";
+import { TBG_DONATE_ID_STORAGE } from "./identity.service";
 
-describe('AppComponent', () => {
+describe("AppComponent", () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-    declarations: [AppComponent],
-    imports: [AsyncPipe,
+      declarations: [AppComponent],
+      imports: [
+        AsyncPipe,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatIconModule,
         MatInputModule,
         MatListModule,
         NgxMatomoModule.forRoot({
-            siteId: '',
-            trackerUrl: '',
+          siteId: "",
+          trackerUrl: "",
         }),
         MatSelectModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-        RouterTestingModule],
-    providers: [
-        { provide: APP_BASE_HREF, useValue: 'http://some.test.localhost' },
+        RouterModule.forRoot([]),
+      ],
+      providers: [
+        { provide: APP_BASE_HREF, useValue: "http://some.test.localhost" },
         InMemoryStorageService,
         // Inject in-memory storage for tests, in place of local storage.
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
-    ]
-}).compileComponents();
+      ],
+    }).compileComponents();
   }));
 
-  it('should create the app', () => {
+  it("should create the app", () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();

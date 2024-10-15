@@ -12,8 +12,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatSelectModule} from '@angular/material/select';
 import {MatStepperModule} from '@angular/material/stepper';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {ActivatedRoute, Router} from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import {MatomoTracker as MatomoClientTracker, MatomoModule} from 'ngx-matomo-client';
 import {InMemoryStorageService} from 'ngx-webstorage-service';
 import {of} from 'rxjs';
@@ -172,7 +171,7 @@ describe('DonationStartForm', () => {
         MatStepperModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-        RouterTestingModule.withRoutes([
+        RouterModule.forRoot([
             {
                 path: 'donate/:campaignId',
                 component: DonationStartFormComponent,

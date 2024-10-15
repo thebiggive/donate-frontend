@@ -1,3 +1,4 @@
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -11,23 +12,20 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
+import { RouterModule } from '@angular/router';
+import {NgxMatomoModule} from "ngx-matomo-client";
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 import { TransferFundsComponent } from './transfer-funds.component';
-import {NgxMatomoModule} from "ngx-matomo-client";
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('TransferFundsComponent', () => {
   let component: TransferFundsComponent;
   let fixture: ComponentFixture<TransferFundsComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-      ],
+    void TestBed.configureTestingModule({
       imports: [
         FormsModule,
         MatButtonModule,
@@ -45,7 +43,7 @@ describe('TransferFundsComponent', () => {
         MatStepperModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-        RouterTestingModule.withRoutes([
+        RouterModule.forRoot([
           {
             path: 'transfer-funds',
             component: TransferFundsComponent,
