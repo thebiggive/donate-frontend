@@ -12,7 +12,7 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 import { ResetPasswordComponent } from './reset-password.component';
-import {NgxMatomoModule} from "ngx-matomo-client";
+import {MatomoModule} from "ngx-matomo-client";
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ResetPasswordComponent', () => {
@@ -28,7 +28,7 @@ describe('ResetPasswordComponent', () => {
         MatButtonModule,
         MatDialogModule,
         MatInputModule,
-        NgxMatomoModule.forRoot({
+        MatomoModule.forRoot({
           siteId: '',
           trackerUrl: '',
         }),

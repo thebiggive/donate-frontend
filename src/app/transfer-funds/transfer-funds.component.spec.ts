@@ -13,7 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import {NgxMatomoModule} from "ngx-matomo-client";
+import {MatomoModule} from "ngx-matomo-client";
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { TBG_DONATE_STORAGE } from '../donation.service';
@@ -33,7 +33,7 @@ describe('TransferFundsComponent', () => {
         MatDialogModule,
         MatIconModule,
         MatInputModule,
-        NgxMatomoModule.forRoot({
+        MatomoModule.forRoot({
           siteId: '',
           trackerUrl: '',
         }),

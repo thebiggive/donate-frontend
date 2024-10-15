@@ -11,7 +11,7 @@ import { TBG_DONATE_STORAGE } from "../donation.service";
 import { DonationThanksComponent } from "./donation-thanks.component";
 import { TBG_DONATE_ID_STORAGE } from "../identity.service";
 import { CompleteDonation } from "../donation.model";
-import { NgxMatomoModule } from "ngx-matomo-client";
+import { MatomoModule } from "ngx-matomo-client";
 import {
   provideHttpClient,
   withInterceptorsFromDi,
@@ -27,7 +27,7 @@ describe("DonationThanksComponent", () => {
       imports: [
         MatButtonModule,
         MatDialogModule,
-        NgxMatomoModule.forRoot({
+        MatomoModule.forRoot({
           siteId: "",
           trackerUrl: "",
         }),

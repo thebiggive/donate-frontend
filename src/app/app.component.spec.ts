@@ -13,7 +13,7 @@ import { MatListModule } from "@angular/material/list";
 import { MatSelectModule } from "@angular/material/select";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule } from "@angular/router";
-import { NgxMatomoModule } from "ngx-matomo-client";
+import { MatomoModule } from "ngx-matomo-client";
 import { InMemoryStorageService } from "ngx-webstorage-service";
 
 import { AppComponent } from "./app.component";
@@ -30,7 +30,7 @@ describe("AppComponent", () => {
         MatIconModule,
         MatInputModule,
         MatListModule,
-        NgxMatomoModule.forRoot({
+        MatomoModule.forRoot({
           siteId: "",
           trackerUrl: "",
         }),
