@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { HomeComponent } from './home.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -18,24 +19,23 @@ describe('HomeComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         HomeComponent,
-      ],
-      imports: [
-        AsyncPipe,
-        HttpClientTestingModule,
+    ],
+    imports: [AsyncPipe,
         MatIconModule,
         MatInputModule,
         MatProgressSpinnerModule,
         MatSelectModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-        RouterTestingModule,
-      ],
-      providers: [
-        { provide: ActivatedRoute, useValue: { snapshot: { queryParams: {}, data: { campaigns: [],  highlights: []}} } },
-      ],
-    })
+        RouterTestingModule],
+    providers: [
+        { provide: ActivatedRoute, useValue: { snapshot: { queryParams: {}, data: { campaigns: [], highlights: [] } } } },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
     .compileComponents();
   }));
 

@@ -2,7 +2,7 @@
 @import '../../abstract';
 
 #loggedInHeader {
-    background-color: mat.get-color-from-palette($donate-primary);
+    background-color: mat.m2-get-color-from-palette($donate-primary);
     color: white;
     margin: 0px;
     padding: 10px 2rem;
@@ -26,7 +26,7 @@
 }
 
 button[mat-button] {
-    background-color: mat.get-color-from-palette($donate-primary);
+    background-color: mat.m2-get-color-from-palette($donate-primary);
     color: white;
     box-shadow: $box-shadow-hard;
 }
@@ -40,7 +40,7 @@ button[mat-button] {
 }
 
 .error {
-    color: mat.get-color-from-palette($donate-warn);
+    color: mat.m2-get-color-from-palette($donate-warn);
     font-size: 1rem; // slightly smaller text
     margin: 0;
 }

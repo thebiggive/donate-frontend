@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {map, switchMap} from "rxjs/operators";
 import {environment} from "../environments/environment";
 import {IdentityService, getPersonAuthHttpOptions } from "./identity.service";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {Mandate} from "./mandate.model";
 
 @Injectable({

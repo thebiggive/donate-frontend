@@ -1,5 +1,5 @@
 import {AsyncPipe, CommonModule, CurrencyPipe, DatePipe, ViewportScroller} from '@angular/common';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {TransferState} from "@angular/core";
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -26,6 +26,7 @@ import {NavigationService} from "../navigation.service";
 import {PageMetaService} from "../page-meta.service";
 import {ChangeDetectorRef, EventEmitter} from "@angular/core";
 import {SearchService} from "../search.service";
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('MetaCampaignComponent', () => {
   let component: MetaCampaignComponent;
@@ -85,13 +86,11 @@ describe('MetaCampaignComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         MetaCampaignComponent,
-      ],
-      imports: [
-        AsyncPipe,
+    ],
+    imports: [AsyncPipe,
         CommonModule,
-        HttpClientTestingModule,
         InfiniteScrollModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatIconModule,
@@ -101,25 +100,26 @@ describe('MetaCampaignComponent', () => {
         NoopAnimationsModule,
         OptimisedImagePipe,
         ReactiveFormsModule,
-        RouterTestingModule,
-      ],
-      providers: [
+        RouterTestingModule],
+    providers: [
         {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({}), // Let constructor pipe params without crashing.
-            queryParams: of({}), // Let `loadQueryParamsAndRun()` subscribe without crashing.
-            snapshot: {
-              data: { campaign: getDummyMasterCampaign() },
+            provide: ActivatedRoute,
+            useValue: {
+                params: of({}), // Let constructor pipe params without crashing.
+                queryParams: of({}), // Let `loadQueryParamsAndRun()` subscribe without crashing.
+                snapshot: {
+                    data: { campaign: getDummyMasterCampaign() },
+                },
             },
-          },
         },
         // Inject in-memory storage for tests, in place of local storage.
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         InMemoryStorageService,
         TimeLeftPipe,
-      ],
-    })
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+})
     .compileComponents();
   }));
 

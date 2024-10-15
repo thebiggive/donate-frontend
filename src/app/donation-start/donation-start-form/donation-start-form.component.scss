@@ -245,7 +245,7 @@ input {
 
     @media only screen and (max-width: 650px) {
       display: block;
-      color: mat.get-color-from-palette($donate-primary);
+      color: mat.m2-get-color-from-palette($donate-primary);
       font-size: 10px;
       text-align: center;
       margin-top: 0;
@@ -353,7 +353,7 @@ button.continue, .c-donate-button {
 }
 
 .error, .stripeError {
-  color: mat.get-color-from-palette($donate-warn);
+  color: mat.m2-get-color-from-palette($donate-warn);
   margin: 1rem 0;
 }
 

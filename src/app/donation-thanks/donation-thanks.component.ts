@@ -1,4 +1,4 @@
-import {HttpErrorResponse} from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {MatDialog} from '@angular/material/dialog';

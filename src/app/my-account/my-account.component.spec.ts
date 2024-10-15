@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import {HttpClientModule} from "@angular/common/http";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import {NO_ERRORS_SCHEMA} from "@angular/core";
 import {MatDialogModule} from "@angular/material/dialog";
 import {InMemoryStorageService} from "ngx-webstorage-service";
@@ -19,25 +19,23 @@ describe('MyAccountComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
+    declarations: [
         MyAccountComponent,
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-      imports: [
-        HttpClientModule,
-        MatDialogModule,
+    ],
+    schemas: [NO_ERRORS_SCHEMA],
+    imports: [MatDialogModule,
         NgxMatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
-        }),
-      ],
-      providers: [
+            siteId: '',
+            trackerUrl: '',
+        })],
+    providers: [
         { provide: ActivatedRoute, useValue: {} }, // Needed for ngx-matomo not to crash.
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
-      ]
-    })
+        provideHttpClient(withInterceptorsFromDi()),
+    ]
+})
       .compileComponents();
   }));
 

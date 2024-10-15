@@ -1,4 +1,4 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import {InMemoryStorageService, SESSION_STORAGE} from 'ngx-webstorage-service';
@@ -10,6 +10,7 @@ import { DonationStatus } from './donation-status.type';
 import { environment } from '../environments/environment';
 import {NgxMatomoModule} from "ngx-matomo-client";
 import {TBG_DONATE_ID_STORAGE} from "./identity.service";
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('DonationService', () => {
   const getDummyDonation = (status: DonationStatus = 'Pending'): Donation => {
@@ -42,26 +43,24 @@ describe('DonationService', () => {
   };
 
   beforeEach(() => TestBed.configureTestingModule({
-    imports: [
-      HttpClientTestingModule,
-
-      NgxMatomoModule.forRoot({
-        siteId: '',
-        trackerUrl: '',
-      }),
-      RouterTestingModule,
-    ],
+    imports: [NgxMatomoModule.forRoot({
+            siteId: '',
+            trackerUrl: '',
+        }),
+        RouterTestingModule],
     providers: [
-      // Inject in-memory storage for tests, in place of local storage and session storage.
-      // We need to use 'useClass', not 'useExisting' here otherwise we would use the same object in tests to represent
-      // both storage places, and they will interfere with each other.
-      { provide: TBG_DONATE_STORAGE, useClass: InMemoryStorageService },
-      { provide: SESSION_STORAGE, useClass: InMemoryStorageService },
-      { provide: TBG_DONATE_ID_STORAGE, useClass: InMemoryStorageService},
-      DonationService,
-      InMemoryStorageService,
-    ],
-  }));
+        // Inject in-memory storage for tests, in place of local storage and session storage.
+        // We need to use 'useClass', not 'useExisting' here otherwise we would use the same object in tests to represent
+        // both storage places, and they will interfere with each other.
+        { provide: TBG_DONATE_STORAGE, useClass: InMemoryStorageService },
+        { provide: SESSION_STORAGE, useClass: InMemoryStorageService },
+        { provide: TBG_DONATE_ID_STORAGE, useClass: InMemoryStorageService },
+        DonationService,
+        InMemoryStorageService,
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}));
 
   it('should be created', () => {
     const service: DonationService = TestBed.inject(DonationService);
