@@ -1,5 +1,5 @@
 import { provideHttpClientTesting } from "@angular/common/http/testing";
-import { Component } from "@angular/core";
+import {Component, CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatDialogModule } from "@angular/material/dialog";
 import { ActivatedRoute } from "@angular/router";
@@ -38,6 +38,7 @@ describe("DonationStartContainer", () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [
         DonationStartContainerComponent,
         DonationStartFormStubComponent,

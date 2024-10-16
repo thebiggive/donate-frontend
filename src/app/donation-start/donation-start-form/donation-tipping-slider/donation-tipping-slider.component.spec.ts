@@ -1,5 +1,5 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-import {NgZone, Renderer2} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgZone, Renderer2} from '@angular/core';
 
 import {DonationTippingSliderComponent} from './donation-tipping-slider.component';
 import {ViewportRuler} from "@angular/cdk/scrolling";
@@ -14,6 +14,7 @@ describe('DonationTippingSliderComponent', () => {
 
   it('should create', async () => {
     await TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [ DonationTippingSliderComponent ]
     })
     .compileComponents();

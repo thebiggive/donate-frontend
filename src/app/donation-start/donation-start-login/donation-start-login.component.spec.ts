@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { DonationStartLoginComponent } from './donation-start-login.component';
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe('DonationStartLoginComponent', () => {
   let component: DonationStartLoginComponent;
@@ -9,6 +10,7 @@ describe('DonationStartLoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [ DonationStartLoginComponent ],
       imports: [MatDialogModule]
     })

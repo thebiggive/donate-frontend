@@ -14,6 +14,7 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from "@angular/common/http";
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe("HomeComponent", () => {
   let component: HomeComponent;
@@ -21,6 +22,7 @@ describe("HomeComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [HomeComponent],
       imports: [
         AsyncPipe,

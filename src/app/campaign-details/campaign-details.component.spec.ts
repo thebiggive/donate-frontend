@@ -14,6 +14,7 @@ import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { TimeLeftPipe } from '../time-left.pipe';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
@@ -21,6 +22,7 @@ describe('CampaignDetailsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [
         CampaignDetailsComponent,
       ],
