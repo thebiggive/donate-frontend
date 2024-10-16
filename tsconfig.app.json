@@ -33,7 +33,8 @@
   },
   "files": [
     "src/main.ts",
-    "src/polyfills.ts"
+    "src/polyfills.ts",
+    "server.ts",
   ],
   "include": [
     "src/**/*.d.ts",
