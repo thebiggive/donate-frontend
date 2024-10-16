@@ -1,5 +1,9 @@
 @use '@angular/material' as mat;
 
+// suppressing warnings about duplicate styles:
+// https://github.com/angular/components/blob/main/guides/duplicate-theming-styles.md
+mat.$theme-ignore-duplication-warnings: true;
+
 $tbg-primary: (
   100: #2C089B,
   200: #2C089B,
