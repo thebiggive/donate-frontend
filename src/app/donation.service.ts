@@ -1,5 +1,5 @@
 import {isPlatformServer} from '@angular/common';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {Inject, Injectable, InjectionToken, makeStateKey, Optional, PLATFORM_ID, TransferState,} from '@angular/core';
 import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
 import {Observable, of} from 'rxjs';

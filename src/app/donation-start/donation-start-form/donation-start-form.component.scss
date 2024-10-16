@@ -245,7 +245,7 @@ input {
 
     @media only screen and (max-width: 650px) {
       display: block;
-      color: mat.get-color-from-palette($donate-primary);
+      color: mat.m2-get-color-from-palette($donate-primary);
       font-size: 10px;
       text-align: center;
       margin-top: 0;
@@ -283,6 +283,16 @@ input {
   width: 100%;
   padding: 0; // We rely on containing element margin, and don't want vendor-dependent extra padding.
 };
+
+// I we would like to apply the :focus-visible-within pseduo-class but that doesn't exist. See
+// https://larsmagnus.co/blog/focus-visible-within-the-missing-pseudo-class
+mat-expansion-panel:has(:focus-visible){
+  box-shadow: 0 8px 8px -7px $colour-secondary !important;
+}
+
+button:focus-visible {
+  outline: 1px solid $colour-secondary;
+}
 
 #giftAidAddressContainer {
   margin-top: 60px;
@@ -353,7 +363,7 @@ button.continue, .c-donate-button {
 }
 
 .error, .stripeError {
-  color: mat.get-color-from-palette($donate-warn);
+  color: mat.m2-get-color-from-palette($donate-warn);
   margin: 1rem 0;
 }
 

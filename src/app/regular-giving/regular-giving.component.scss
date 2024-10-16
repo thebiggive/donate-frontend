@@ -117,21 +117,9 @@ input {
   margin-left: 0;
 }
 
-div.donationInfoWrapper {
-  display: flex;
-  justify-content: space-between;
+div.youAreSupporting {
   margin-top: 10px;
   margin-bottom: 40px;
-  flex-direction: column;
-  gap: 40px;
-
-  div {
-    flex-basis: 40%;
-  }
-
-  @media #{$breakpoint-md} {
-    flex-direction: row;
-  }
 }
 
 table#personal-details, table#paymentMethods {

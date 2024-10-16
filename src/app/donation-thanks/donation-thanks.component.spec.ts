@@ -1,20 +1,23 @@
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {MatButtonModule} from '@angular/material/button';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {ActivatedRoute} from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
-import {InMemoryStorageService} from 'ngx-webstorage-service';
-import {of} from 'rxjs';
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDialogModule } from "@angular/material/dialog";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { ActivatedRoute, RouterModule } from "@angular/router";
+import { InMemoryStorageService } from "ngx-webstorage-service";
+import { of } from "rxjs";
 
-import {TBG_DONATE_STORAGE} from '../donation.service';
-import {DonationThanksComponent} from './donation-thanks.component';
-import {TBG_DONATE_ID_STORAGE} from '../identity.service';
-import {CompleteDonation} from "../donation.model";
-import {NgxMatomoModule} from "ngx-matomo-client";
+import { TBG_DONATE_STORAGE } from "../donation.service";
+import { DonationThanksComponent } from "./donation-thanks.component";
+import { TBG_DONATE_ID_STORAGE } from "../identity.service";
+import { CompleteDonation } from "../donation.model";
+import { MatomoModule } from "ngx-matomo-client";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 
-describe('DonationThanksComponent', () => {
+describe("DonationThanksComponent", () => {
   let component: DonationThanksComponent;
   let fixture: ComponentFixture<DonationThanksComponent>;
 
@@ -22,26 +25,30 @@ describe('DonationThanksComponent', () => {
     TestBed.configureTestingModule({
       declarations: [],
       imports: [
-        HttpClientTestingModule,
         MatButtonModule,
         MatDialogModule,
-        NgxMatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
+        MatomoModule.forRoot({
+          siteId: "",
+          trackerUrl: "",
         }),
         MatProgressSpinnerModule,
-        RouterTestingModule.withRoutes([
+        RouterModule.forRoot([
           {
-            path: 'thanks/:donationId',
+            path: "thanks/:donationId",
             component: DonationThanksComponent,
           },
         ]),
       ],
       providers: [
-        { provide: ActivatedRoute, useValue: { params: of({donationId: 'myTestDonationId'})}},
+        {
+          provide: ActivatedRoute,
+          useValue: { params: of({ donationId: "myTestDonationId" }) },
+        },
         InMemoryStorageService,
         { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
     });
 
@@ -54,32 +61,35 @@ describe('DonationThanksComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 
-  function donationOf(donationAmount: number, currencyCode: string): CompleteDonation {
+  function donationOf(
+    donationAmount: number,
+    currencyCode: string
+  ): CompleteDonation {
     return {
       collectedTime: "collected-time-not-used-here",
       totalPaid: donationAmount,
-      firstName: 'first name',
-      lastName: 'last name',
-      emailAddress: 'email address',
+      firstName: "first name",
+      lastName: "last name",
+      emailAddress: "email address",
       charityId: "",
       currencyCode: currencyCode,
       donationAmount: donationAmount,
       donationMatched: false,
       matchReservedAmount: 0,
       matchedAmount: 0,
-      pspMethodType: 'card',
+      pspMethodType: "card",
       projectId: "",
       psp: "stripe",
       tipAmount: 0,
-      status: "Paid"
+      status: "Paid",
     };
   }
 
-  it('Considers donation of £5k to be large', () => {
+  it("Considers donation of £5k to be large", () => {
     // Calling private setDonation method for test. Not a fan of doing this, but I couldn't work out how to get the
     // async stuff to happen to make this happen via a call to checkDonation in the test.
     // @ts-ignore private visibility error
@@ -88,28 +98,28 @@ describe('DonationThanksComponent', () => {
     expect(component.donationIsLarge).toBeTrue();
   });
 
-  it('Considers donation of under £5k to be not large', () => {
+  it("Considers donation of under £5k to be not large", () => {
     // @ts-ignore private visibility error
     component.setDonation(donationOf(4999, "GBP"));
 
     expect(component.donationIsLarge).toBeFalse();
   });
 
-  it('Considers donation of €5k to be not large', () => {
+  it("Considers donation of €5k to be not large", () => {
     // @ts-ignore private visibility error
     component.setDonation(donationOf(5000, "EUR"));
 
     expect(component.donationIsLarge).toBeFalse();
   });
 
-  it('Considers donation of under €5k to be not large', () => {
+  it("Considers donation of under €5k to be not large", () => {
     // @ts-ignore private visibility error
     component.setDonation(donationOf(4999, "EUR"));
 
     expect(component.donationIsLarge).toBeFalse();
   });
 
-  it('Calculates backoff time in ms', () => {
+  it("Calculates backoff time in ms", () => {
     expect(component.calculateExponentialBackoffMs(0)).toEqual(2_000);
     expect(component.calculateExponentialBackoffMs(1)).toEqual(4_000);
     expect(component.calculateExponentialBackoffMs(2)).toEqual(8_000);

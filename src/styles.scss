@@ -8,9 +8,9 @@
 @import './assets/scss/overwrite-mat';
 
 html {
-  font-family: mat.font-family($app-typography);
-  font-size: mat.font-size($app-typography, body-2);
-  line-height: mat.line-height($app-typography, body-2);
+  font-family: mat.m2-font-family($app-typography);
+  font-size: mat.m2-font-size($app-typography, body-2);
+  line-height: mat.m2-line-height($app-typography, body-2);
 }
 
 body {
@@ -29,7 +29,7 @@ li {
 }
 
 a {
-  color: mat.get-color-from-palette($donate-primary);
+  color: mat.m2-get-color-from-palette($donate-primary);
   cursor: pointer;
 }
 

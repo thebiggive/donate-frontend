@@ -1,7 +1,7 @@
 import {AsyncPipe, CurrencyPipe, DatePipe} from '@angular/common';
 import { NgModule } from '@angular/core';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {InfiniteScrollModule} from 'ngx-infinite-scroll';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { InfiniteScrollDirective } from 'ngx-infinite-scroll';
 
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { MetaCampaignComponent } from './meta-campaign.component';
@@ -14,7 +14,7 @@ import {TimeLeftPipe} from '../time-left.pipe';
     ...allChildComponentImports,
     AsyncPipe,
     CurrencyPipe,
-    InfiniteScrollModule,
+    InfiniteScrollDirective,
     MatProgressSpinnerModule,
     MetaCampaignRoutingModule,
     OptimisedImagePipe,

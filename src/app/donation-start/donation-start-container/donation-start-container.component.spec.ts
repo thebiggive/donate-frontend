@@ -1,31 +1,38 @@
-import {HttpClientTestingModule} from "@angular/common/http/testing";
-import {Component} from "@angular/core";
-import {ComponentFixture, TestBed} from '@angular/core/testing';
-import { MatDialogModule } from '@angular/material/dialog';
-import {ActivatedRoute} from "@angular/router";
-import {InMemoryStorageService} from "ngx-webstorage-service";
-import {of} from "rxjs";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
+import { Component } from "@angular/core";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { MatDialogModule } from "@angular/material/dialog";
+import { ActivatedRoute } from "@angular/router";
+import { InMemoryStorageService } from "ngx-webstorage-service";
+import { of } from "rxjs";
 
-import {DonationStartContainerComponent} from "./donation-start-container.component";
-import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
-import {TBG_DONATE_ID_STORAGE} from "../../identity.service";
-import {TBG_DONATE_STORAGE} from "../../donation.service";
-import {Campaign} from "../../campaign.model";
-import {NgxMatomoModule} from "ngx-matomo-client";
+import { DonationStartContainerComponent } from "./donation-start-container.component";
+import { DonationStartFormComponent } from "../donation-start-form/donation-start-form.component";
+import { TBG_DONATE_ID_STORAGE } from "../../identity.service";
+import { TBG_DONATE_STORAGE } from "../../donation.service";
+import { Campaign } from "../../campaign.model";
+import { MatomoModule } from "ngx-matomo-client";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 
 // See https://medium.com/angular-in-depth/angular-unit-testing-viewchild-4525e0c7b756
 @Component({
-  selector: 'app-donation-start-form',
-  template: '',
+  selector: "app-donation-start-form",
+  template: "",
   providers: [
-    { provide: DonationStartFormComponent, useClass: DonationStartFormStubComponent },
+    {
+      provide: DonationStartFormComponent,
+      useClass: DonationStartFormStubComponent,
+    },
   ],
 })
 class DonationStartFormStubComponent {
   resumeDonationsIfPossible() {}
 }
 
-describe('DonationStartContainer', () => {
+describe("DonationStartContainer", () => {
   let component: DonationStartContainerComponent;
   let fixture: ComponentFixture<DonationStartContainerComponent>;
 
@@ -36,11 +43,10 @@ describe('DonationStartContainer', () => {
         DonationStartFormStubComponent,
       ],
       imports: [
-        HttpClientTestingModule,
         MatDialogModule,
-        NgxMatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
+        MatomoModule.forRoot({
+          siteId: "",
+          trackerUrl: "",
         }),
       ],
       providers: [
@@ -49,16 +55,17 @@ describe('DonationStartContainer', () => {
           useValue: {
             queryParams: of({}),
             snapshot: {
-              data: { campaign: getDummyCampaign('testCampaignIdForStripe') },
+              data: { campaign: getDummyCampaign("testCampaignIdForStripe") },
             },
           },
         },
         InMemoryStorageService,
         { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
       ],
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DonationStartContainerComponent);
     component = fixture.componentInstance;
@@ -67,7 +74,7 @@ describe('DonationStartContainer', () => {
 
   it(`should call Identity.getIdAndJWT()`, () => {
     // This leads to conditional Person-loading logic afterwards, where applicable.
-    spyOn(component.identityService, 'getIdAndJWT');
+    spyOn(component.identityService, "getIdAndJWT");
     component.ngAfterViewInit();
     expect(component).toBeTruthy();
     expect(component.identityService.getIdAndJWT).toHaveBeenCalled();
@@ -76,59 +83,62 @@ describe('DonationStartContainer', () => {
   const getDummyCampaign = (campaignId: string) => {
     return new Campaign(
       campaignId,
-      ['Aim 1'],
-      200.00,
+      ["Aim 1"],
+      200.0,
       [
         {
-          uri: 'https://example.com/some-additional-image.png',
+          uri: "https://example.com/some-additional-image.png",
           order: 100,
         },
       ],
-      'https://example.com/some-banner.png',
-      ['Other'],
+      "https://example.com/some-banner.png",
+      ["Other"],
       [
         {
-          description: 'budget line 1',
+          description: "budget line 1",
           amount: 2000.01,
         },
       ],
-      ['Animals'],
-      'Big Give Match Fund',
+      ["Animals"],
+      "Big Give Match Fund",
       {
-        id: '0011r00002HHAprAAH',
-        name: 'Awesome Charity',
-        optInStatement: 'Opt in statement.',
-        regulatorNumber: '123456',
-        regulatorRegion: 'Scotland',
-        stripeAccountId: campaignId === 'testCampaignIdForStripe' ? 'testStripeAcctId' : undefined,
-        website: 'https://www.awesomecharity.co.uk',
+        id: "0011r00002HHAprAAH",
+        name: "Awesome Charity",
+        optInStatement: "Opt in statement.",
+        regulatorNumber: "123456",
+        regulatorRegion: "Scotland",
+        stripeAccountId:
+          campaignId === "testCampaignIdForStripe"
+            ? "testStripeAcctId"
+            : undefined,
+        website: "https://www.awesomecharity.co.uk",
       },
-      ['United Kingdom'],
-      'GBP',
+      ["United Kingdom"],
+      "GBP",
       4,
-      new Date('2050-01-01T00:00:00'),
-      'Impact reporting plan',
-      'Impact overview',
+      new Date("2050-01-01T00:00:00"),
+      "Impact reporting plan",
+      "Impact overview",
       true,
-      987.00,
-      988.00,
+      987.0,
+      988.0,
       false,
-      'The situation',
+      "The situation",
       [
         {
-          quote: 'Some quote',
-          person: 'Someones quote',
+          quote: "Some quote",
+          person: "Someones quote",
         },
       ],
       true,
-      'The solution',
+      "The solution",
       new Date(),
-      'Active',
-      'Some long summary',
-      'Some title',
+      "Active",
+      "Some long summary",
+      "Some title",
       [],
       false,
-      'Some information about what happens if funds are not used',
+      "Some information about what happens if funds are not used",
       undefined,
       undefined,
       undefined,
@@ -142,9 +152,9 @@ describe('DonationStartContainer', () => {
       2000.01,
       undefined,
       {
-        provider: 'youtube',
-        key: '1G_Abc2delF',
-      },
+        provider: "youtube",
+        key: "1G_Abc2delF",
+      }
     );
   };
 });

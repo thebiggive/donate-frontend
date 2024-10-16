@@ -90,10 +90,11 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
 
     this.donationStartForm.hideCaptcha();
     this.identityService.get(id, jwt).subscribe({
-      next: (person: Person) => {
+      next: async (person: Person) => {
         this.donor = person; // Should mean donations are attached to the Stripe Customer.
         this.loggedInEmailAddress = person.email_address;
-        this.donationStartForm.loadPerson(person, id, jwt);
+        // `await` to ensure that credit balance is set before checking for resumable donations.
+        await this.donationStartForm.loadPerson(person, id, jwt);
         this.donationStartForm.resumeDonationsIfPossible();
 
         if (this.identityService.isTokenForFinalisedUser(jwt)) {
