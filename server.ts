@@ -107,7 +107,7 @@ export function app(): express.Express {
   }));
   server.use(morgan('combined')); // Log requests to stdout in Apache-like format
 
-  const distFolder = join(process.cwd(), 'dist/browser');
+  const distFolder = join(process.cwd(), 'dist/browser') as unknown;
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
     ? join(distFolder, 'index.original.html')
     : join(distFolder, 'index.html');
