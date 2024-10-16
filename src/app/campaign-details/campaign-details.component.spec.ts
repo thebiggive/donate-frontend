@@ -1,5 +1,5 @@
 import { CommonModule, CurrencyPipe } from '@angular/common';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,26 +7,26 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { Campaign } from '../campaign.model';
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { TimeLeftPipe } from '../time-left.pipe';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
 
 describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
   let fixture: ComponentFixture<CampaignDetailsComponent>;
 
   beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+    void TestBed.configureTestingModule({
       declarations: [
         CampaignDetailsComponent,
       ],
       imports: [
         CommonModule,
         CurrencyPipe,
-        HttpClientTestingModule,
         MatButtonModule,
         MatIconModule,
         MatProgressSpinnerModule,
@@ -34,13 +34,14 @@ describe('CampaignDetailsComponent', () => {
         MatTabsModule,
         NoopAnimationsModule,
         OptimisedImagePipe,
-        RouterTestingModule,
+        RouterModule.forRoot([]),
       ],
       providers: [
         TimeLeftPipe,
-      ],
-    })
-    .compileComponents();
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+      ]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

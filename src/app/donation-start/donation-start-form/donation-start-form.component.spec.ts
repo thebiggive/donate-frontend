@@ -1,5 +1,5 @@
 import {DatePipe} from '@angular/common';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
@@ -12,8 +12,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatSelectModule} from '@angular/material/select';
 import {MatStepperModule} from '@angular/material/stepper';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {ActivatedRoute, Router} from '@angular/router';
-import {RouterTestingModule} from '@angular/router/testing';
+import {ActivatedRoute, Router, RouterModule} from '@angular/router';
 import {MatomoTracker as MatomoClientTracker, MatomoModule} from 'ngx-matomo-client';
 import {InMemoryStorageService} from 'ngx-webstorage-service';
 import {of} from 'rxjs';
@@ -31,6 +30,7 @@ import {PostcodeService} from "../../postcode.service";
 import {StripeService} from "../../stripe.service";
 import {Donation} from "../../donation.model";
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 function makeDonationStartFormComponent(donationService: DonationService,) {
   const mockIdentityService = TestBed.inject(IdentityService);
@@ -155,17 +155,15 @@ describe('DonationStartForm', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        HttpClientTestingModule,
+    imports: [FormsModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatCheckboxModule,
         MatDialogModule,
         MatIconModule,
         MatInputModule,
         MatomoModule.forRoot({
-          siteId: '',
-          trackerUrl: '',
+            siteId: '',
+            trackerUrl: '',
         }),
         MatRadioModule,
         MatProgressSpinnerModule,
@@ -173,29 +171,30 @@ describe('DonationStartForm', () => {
         MatStepperModule,
         NoopAnimationsModule,
         ReactiveFormsModule,
-        RouterTestingModule.withRoutes([
-          {
-            path: 'donate/:campaignId',
-            component: DonationStartFormComponent,
-          },
-        ]),
-      ],
-      providers: [
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            queryParams: of({}),
-            snapshot: {
-              data: { campaign: getDummyCampaign('testCampaignIdForStripe') },
+        RouterModule.forRoot([
+            {
+                path: 'donate/:campaignId',
+                component: DonationStartFormComponent,
             },
-          },
+        ])],
+    providers: [
+        {
+            provide: ActivatedRoute,
+            useValue: {
+                queryParams: of({}),
+                snapshot: {
+                    data: { campaign: getDummyCampaign('testCampaignIdForStripe') },
+                },
+            },
         },
         DatePipe,
         InMemoryStorageService,
         { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-      ],
-    }).compileComponents();
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting(),
+    ]
+}).compileComponents();
   }));
 
   beforeEach(() => {

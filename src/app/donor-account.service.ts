@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import {environment} from "../environments/environment";
 import {Person} from "./person.model";
 import {IdentityService} from "./identity.service";
@@ -22,7 +22,7 @@ export class DonorAccountService {
     }
 
     return this.http.post(
-      `${environment.donationsApiPrefix}/${donor.id}/donor-account`,
+      `${environment.donationsApiPrefix}/people/${donor.id}/donor-account`,
       {
         emailAddress: donor.email_address,
         donorName: {
