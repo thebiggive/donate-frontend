@@ -19,6 +19,7 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 import { TransferFundsComponent } from './transfer-funds.component';
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe('TransferFundsComponent', () => {
   let component: TransferFundsComponent;
@@ -26,6 +27,7 @@ describe('TransferFundsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
         FormsModule,
         MatButtonModule,
@@ -62,6 +64,7 @@ describe('TransferFundsComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 }).compileComponents();

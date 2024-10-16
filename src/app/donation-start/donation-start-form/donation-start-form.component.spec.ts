@@ -23,7 +23,7 @@ import {IdentityService, TBG_DONATE_ID_STORAGE} from '../../identity.service';
 import {TimeLeftPipe} from "../../time-left.pipe";
 import {DonationStartFormComponent} from "./donation-start-form.component";
 import {CardIconsService} from "../../card-icons.service";
-import {ChangeDetectorRef, ElementRef} from "@angular/core";
+import {ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, ElementRef} from "@angular/core";
 import {ConversionTrackingService} from "../../conversionTracking.service";
 import {PageMetaService} from "../../page-meta.service";
 import {PostcodeService} from "../../postcode.service";
@@ -155,6 +155,7 @@ describe('DonationStartForm', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [FormsModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatCheckboxModule,
