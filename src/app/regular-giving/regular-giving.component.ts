@@ -6,7 +6,7 @@ import {CampaignInfoComponent} from "../campaign-info/campaign-info.component";
 import {ImageService} from "../image.service";
 import {Observable} from "rxjs";
 import {AsyncPipe} from "@angular/common";
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatStep, MatStepper} from "@angular/material/stepper";
 import {StepperSelectionEvent} from "@angular/cdk/stepper";
 import {MatInput} from "@angular/material/input";
@@ -15,6 +15,12 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
 import {IdentityService} from "../identity.service";
+import {RegularGivingService} from "../regularGiving.service";
+import { Mandate } from '../mandate.model';
+import {myRegularGivingPath} from "../app-routing";
+import {requiredNotBlankValidator} from "../validators/notBlank";
+import {getCurrencyMinValidator} from "../validators/currency-min";
+import {getCurrencyMaxValidator} from "../validators/currency-max";
 
 @Component({
   selector: 'app-regular-giving',
@@ -49,6 +55,7 @@ export class RegularGivingComponent implements OnInit {
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private identityService: IdentityService,
+    private regularGivingService: RegularGivingService,
     private router: Router,
   ) {
   }
@@ -62,7 +69,16 @@ export class RegularGivingComponent implements OnInit {
 
     this.campaign = this.route.snapshot.data.campaign;
     this.bannerUri$ = this.imageService.getImageUri(this.campaign.bannerUri, 830);
-    this.mandateForm = this.formBuilder.group([]);
+    this.mandateForm = this.formBuilder.group({
+        donationAmount: ['', [
+          requiredNotBlankValidator,
+          getCurrencyMinValidator(1), // for now min & max are hard-coded, will change to be based on a field on
+                                      // the campaign.
+          getCurrencyMaxValidator(500),
+          Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
+        ]],
+      }
+    );
   }
 
   interceptSubmitAndProceedInstead(event: Event) {
@@ -70,25 +86,70 @@ export class RegularGivingComponent implements OnInit {
     this.next();
   }
 
+  stepChanged(_event: StepperSelectionEvent) {
+    // no-op for now.
+  }
+
   next() {
     this.stepper.next();
   }
 
-  async stepChanged(_event: StepperSelectionEvent) {
-  }
-
-  logout() {
-    this.identityService.logout();
-    this.router.navigate(['']);
-  }
-
   submit() {
-    const message = "Sorry we haven't built the system for you to actually start a regular donation just yet. Try again later";
+    const invalid = this.mandateForm.invalid;
+    if (invalid) {
+      let errorMessage = 'Form error: ';
+      if (this.mandateForm.get('donationAmount')?.hasError('required')) {
+        errorMessage += "Monthly donation amount is required";
+      }
+      this.showError(errorMessage);
+      return;
+    }
+
+    const donationAmountPounds = +this.mandateForm.value.donationAmount;
+    const amountInPence = donationAmountPounds * 100;
+
+    /**
+     * @todo consider if we need to send this from FE - if we're not displaying it to donor better for matchbot to
+     *       generate it.*/
+    const dayOfMonth = Math.min(new Date().getDate(), 28);
+
+    console.log(invalid)
+    if (invalid) {
+      this.showError("Form is not filled in correctly yet");
+      this.showError(JSON.stringify(this.mandateForm.errors))
+      return;
+    }
+
+
+    this.regularGivingService.startMandate({
+      amountInPence,
+      dayOfMonth,
+      campaignId: this.campaign.id,
+      currency: "GBP",
+      giftAid: false
+    }).subscribe({
+    next: (mandate: Mandate) => {
+      const prefix = "Regular giving mandate created: (todo - make 'thanks' page with polling for updates and/or make " +
+        "the mandate come back activated so it will show on my regular giving page) ";
+
+      alert(prefix + JSON.stringify(mandate));
+      this.router.navigateByUrl(myRegularGivingPath);
+    },
+      error: (error: Error) => {
+      console.error(error);
+      const message = error.message
+        this.showError(message);
+      }
+    })
+  }
+
+  private showError(message: string) {
     this.snackBar.open(
       message,
       undefined,
       {
-        // formula for duration from https://ux.stackexchange.com/a/85898/7211
+        // formula for duration from https://ux.stackexchange.com/a/85898/7211 , as used on one-off donation page.
+        // todo DRY up.
         duration: Math.min(Math.max(message.length * 50, 2_000), 7_000),
         panelClass: 'snack-bar',
       }
