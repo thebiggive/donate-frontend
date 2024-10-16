@@ -41,6 +41,7 @@ module.exports = function (config) {
       }
     },
     singleRun: true,
-    restartOnFileChange: false
+    restartOnFileChange: false,
+    proxies: {'/matomo.js': ''}
   });
 };
