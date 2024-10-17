@@ -14,7 +14,6 @@ import {MatButton} from "@angular/material/button";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
-import {IdentityService} from "../identity.service";
 import {RegularGivingService} from "../regularGiving.service";
 import { Mandate } from '../mandate.model';
 import {myRegularGivingPath} from "../app-routing";
@@ -54,7 +53,6 @@ export class RegularGivingComponent implements OnInit {
     private imageService: ImageService,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
-    private identityService: IdentityService,
     private regularGivingService: RegularGivingService,
     private router: Router,
   ) {
@@ -119,7 +117,6 @@ export class RegularGivingComponent implements OnInit {
       this.showError(JSON.stringify(this.mandateForm.errors))
       return;
     }
-
 
     this.regularGivingService.startMandate({
       amountInPence,
