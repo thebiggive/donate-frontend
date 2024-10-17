@@ -29,8 +29,8 @@ import {PageMetaService} from "../../page-meta.service";
 import {PostcodeService} from "../../postcode.service";
 import {StripeService} from "../../stripe.service";
 import {Donation} from "../../donation.model";
-import {MatSnackBar} from '@angular/material/snack-bar';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {Toast} from "../../toast.service";
 
 function makeDonationStartFormComponent(donationService: DonationService,) {
   const mockIdentityService = TestBed.inject(IdentityService);
@@ -64,8 +64,8 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     undefined as unknown as DatePipe,
     undefined as unknown as TimeLeftPipe,
     {
-      open: () => {}
-    } as unknown as MatSnackBar,
+      showError: () => {},
+    } as unknown as Toast,
   );
 
   donationStartFormComponent.campaign = {currencyCode: 'GBP'} as Campaign;

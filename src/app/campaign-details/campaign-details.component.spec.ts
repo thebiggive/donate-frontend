@@ -4,7 +4,6 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -32,7 +31,6 @@ describe('CampaignDetailsComponent', () => {
         MatButtonModule,
         MatIconModule,
         MatProgressSpinnerModule,
-        MatSnackBarModule,
         MatTabsModule,
         NoopAnimationsModule,
         OptimisedImagePipe,

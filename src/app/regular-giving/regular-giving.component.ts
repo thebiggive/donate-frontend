@@ -11,16 +11,15 @@ import {MatStep, MatStepper} from "@angular/material/stepper";
 import {StepperSelectionEvent} from "@angular/cdk/stepper";
 import {MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
-import {IdentityService} from "../identity.service";
 import {RegularGivingService} from "../regularGiving.service";
 import { Mandate } from '../mandate.model';
 import {myRegularGivingPath} from "../app-routing";
 import {requiredNotBlankValidator} from "../validators/notBlank";
 import {getCurrencyMinValidator} from "../validators/currency-min";
 import {getCurrencyMaxValidator} from "../validators/currency-max";
+import {Toast} from "../toast.service";
 
 @Component({
   selector: 'app-regular-giving',
@@ -53,8 +52,7 @@ export class RegularGivingComponent implements OnInit {
     private route: ActivatedRoute,
     private imageService: ImageService,
     private formBuilder: FormBuilder,
-    private snackBar: MatSnackBar,
-    private identityService: IdentityService,
+    private toast: Toast,
     private regularGivingService: RegularGivingService,
     private router: Router,
   ) {
@@ -101,7 +99,7 @@ export class RegularGivingComponent implements OnInit {
       if (this.mandateForm.get('donationAmount')?.hasError('required')) {
         errorMessage += "Monthly donation amount is required";
       }
-      this.showError(errorMessage);
+      this.toast.showError(errorMessage);
       return;
     }
 
@@ -112,14 +110,6 @@ export class RegularGivingComponent implements OnInit {
      * @todo consider if we need to send this from FE - if we're not displaying it to donor better for matchbot to
      *       generate it.*/
     const dayOfMonth = Math.min(new Date().getDate(), 28);
-
-    console.log(invalid)
-    if (invalid) {
-      this.showError("Form is not filled in correctly yet");
-      this.showError(JSON.stringify(this.mandateForm.errors))
-      return;
-    }
-
 
     this.regularGivingService.startMandate({
       amountInPence,
@@ -138,21 +128,8 @@ export class RegularGivingComponent implements OnInit {
       error: (error: Error) => {
       console.error(error);
       const message = error.message
-        this.showError(message);
+        this.toast.showError(message);
       }
     })
-  }
-
-  private showError(message: string) {
-    this.snackBar.open(
-      message,
-      undefined,
-      {
-        // formula for duration from https://ux.stackexchange.com/a/85898/7211 , as used on one-off donation page.
-        // todo DRY up.
-        duration: Math.min(Math.max(message.length * 50, 2_000), 7_000),
-        panelClass: 'snack-bar',
-      }
-    );
   }
 }
