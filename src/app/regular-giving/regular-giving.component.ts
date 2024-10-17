@@ -111,13 +111,6 @@ export class RegularGivingComponent implements OnInit {
      *       generate it.*/
     const dayOfMonth = Math.min(new Date().getDate(), 28);
 
-    console.log(invalid)
-    if (invalid) {
-      this.toast.showError("Form is not filled in correctly yet");
-      this.toast.showError(JSON.stringify(this.mandateForm.errors))
-      return;
-    }
-
     this.regularGivingService.startMandate({
       amountInPence,
       dayOfMonth,
