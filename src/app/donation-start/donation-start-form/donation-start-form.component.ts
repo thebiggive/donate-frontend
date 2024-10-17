@@ -17,7 +17,6 @@ import {
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatStepper} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatomoTracker} from 'ngx-matomo-client';
@@ -66,6 +65,7 @@ import {PaymentReadinessTracker} from "./PaymentReadinessTracker";
 import {requiredNotBlankValidator} from "../../validators/notBlank";
 import {flags} from "../../featureFlags";
 import {WidgetInstance} from "friendly-challenge";
+import {Toast} from "../../toast.service";
 
 declare var _paq: {
   push: (args: Array<string|object>) => void,
@@ -271,7 +271,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private stripeService: StripeService,
     public datePipe: DatePipe,
     public timeLeftPipe: TimeLeftPipe,
-    private snackBar: MatSnackBar,
+    private toast: Toast
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
     this.countryOptionsObject = COUNTRIES.map(country => ({label: country.country, value: country.iso2}))
@@ -468,7 +468,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         }
       },
       errorCallback: (error: unknown) => {
-        this.showErrorToast("Sorry, there was an error with the anti-spam captcha check.");
+        this.toast.showError("Sorry, there was an error with the anti-spam captcha check.");
         console.error(error);
       },
     })
@@ -658,7 +658,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (event.selectedIndex > 0 && !this.donor && this.idCaptchaCode == undefined) {
       if (event.selectedIndex >= this.paymentStepIndex) {
         // Try to help explain why they're blocked in cases of persistent later step heading clicks etc.
-        this.showErrorToast("Sorry, you must complete the puzzle to proceed; this is a security measure to protects donors' cards");
+        this.toast.showError("Sorry, you must complete the puzzle to proceed; this is a security measure to protects donors' cards");
         // Immediate step jumps seem to be disallowed
         setTimeout(() => {
           this.jumpToStep(this.yourDonationStepLabel);
@@ -773,7 +773,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (state.error) {
       this.stripeError = this.getStripeFriendlyError(state.error, 'card_change');
-      this.showErrorToast(this.stripeError);
+      this.toast.showError(this.stripeError);
       this.stripeResponseErrorCode = state.error.code;
     } else {
       this.stripeError = undefined; // Clear any previous card errors if number fixed.
@@ -811,7 +811,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.donation && this.donationForm.invalid) {
       // Form invalid but submitted may mean enter was pressed inside Stripe.js. Best action
       // is to simply not submit yet.
-      this.showErrorToast('Please complete the remaining fields to submit your donation.');
+      this.toast.showError('Please complete the remaining fields to submit your donation.');
       this.matomoTracker.trackEvent(
         'donate_error',
         'submit_while_invalid',
@@ -825,7 +825,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
       const errorMessage = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
 
-      this.showErrorToast(errorMessage);
+      this.toast.showError(errorMessage);
 
       this.stripeError = errorMessage;
 
@@ -852,7 +852,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // Can't proceed if campaign info not looked up yet or no usable PSP
     if (!this.donation || !this.campaign || !this.campaign.charity.id || !this.psp) {
       this.donationUpdateError = true;
-      this.showErrorToast("Sorry, we can't submit your donation right now.");
+      this.toast.showError("Sorry, we can't submit your donation right now.");
       return;
     }
 
@@ -881,7 +881,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         this.matomoTracker.trackEvent('donate_error', 'donation_update_failed', errorMessageForTracking);
         this.retrying = false;
         this.donationUpdateError = true;
-        this.showErrorToast("Sorry, we can't submit your donation right now.");
+        this.toast.showError("Sorry, we can't submit your donation right now.");
         this.submitting = false;
       });
   }
@@ -893,7 +893,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (!this.donation || !methodIsReady) {
       this.stripeError = 'Missing data from previous step – please refresh and try again';
-      this.showErrorToast(this.stripeError);
+      this.toast.showError(this.stripeError);
       this.stripeResponseErrorCode = undefined;
       this.matomoTracker.trackEvent('donate_error', 'stripe_pay_missing_secret', `Donation ID: ${this.donation?.donationId}`);
       return;
@@ -920,7 +920,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
             errorMsg ?? '[No message]',
           );
           this.stripeError = 'Your donation has not been processed as it seems you have insufficient funds. Please refresh the page to see your remaining balance.';
-          this.showErrorToast(this.stripeError);
+          this.toast.showError(this.stripeError);
         },
       });
 
@@ -1005,7 +1005,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // else Intent 'done' but not a successful status.
     this.matomoTracker.trackEvent('donate_error', 'stripe_intent_not_success', result.paymentIntent.status);
     this.stripeError = `Payment error - Status: ${result.paymentIntent.status}`;
-    this.showErrorToast(this.stripeError);
+    this.toast.showError(this.stripeError);
     this.stripeResponseErrorCode = undefined;
     this.submitting = false;
   };
@@ -1054,7 +1054,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * either help donors directly or if they might usefully quote it to us in a support case.
    */
   showDonationCreateError() {
-    this.showErrorToast(
+    this.toast.showError(
         "Sorry, we can't register your donation right now. Please try again in a moment or contact " +
         " us if this message persists."
     )
@@ -1180,7 +1180,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   progressToNonAmountsStep() {
     const control = this.donationForm.controls['amounts'];
     if(! control!.valid) {
-      this.showErrorToast(this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount or tip amount');
+      this.toast.showError(this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount or tip amount');
 
       return;
     }
@@ -1190,22 +1190,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     this.next();
-  }
-
-  /**
-   * Displays a message on screen to let a donor know why they can't progress from the current step. Message should be
-   * an explanation, e.g. because they need to fill in a certain field or what they have entered isn't usable.
-   */
-  private showErrorToast(message: string) {
-    this.snackBar.open(
-      message,
-      undefined,
-      {
-        // formula for duration from https://ux.stackexchange.com/a/85898/7211
-        duration: Math.min(Math.max(message.length * 50, 2_000), 7_000),
-        panelClass: 'snack-bar',
-      }
-    );
   }
 
   progressFromStepGiftAid(): void {
@@ -1232,7 +1216,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     if (errorMessages.length > 0) {
-      this.showErrorToast(errorMessages.join(". "));
+      this.toast.showError(errorMessages.join(". "));
       return;
     }
 
@@ -1243,7 +1227,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.triedToLeaveMarketing = true;
     const errorMessages = Object.values(this.errorMessagesForMarketingStep()).filter(Boolean)
     if (errorMessages.length > 0) {
-      this.showErrorToast(errorMessages.join(" "));
+      this.toast.showError(errorMessages.join(" "));
       return;
     }
 
@@ -1468,7 +1452,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   ) {
     this.submitting = false;
     this.stripeError = this.getStripeFriendlyError(error, context);
-    this.showErrorToast(this.stripeError);
+    this.toast.showError(this.stripeError);
     this.stripeResponseErrorCode = error?.code;
 
     this.jumpToStep('Payment details');
@@ -1588,7 +1572,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     if (this.campaign.hidden) {
-      this.showErrorToast(campaignHiddenMessage);
+      this.toast.showError(campaignHiddenMessage);
     }
   }
 
@@ -1691,7 +1675,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.markYourDonationStepIncomplete();
 
-    this.showErrorToast("Please wait, running captcha check to prevent spam")
+    this.toast.showError("Please wait, running captcha check to prevent spam")
     return true;
   }
 
@@ -2358,7 +2342,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   continueFromPaymentStep() {
     if (! this.readyToProgressFromPaymentStep) {
       this.paymentStepErrors = this.paymentReadinessTracker.getErrorsBlockingProgress().join(" ");
-      this.showErrorToast(this.paymentStepErrors);
+      this.toast.showError(this.paymentStepErrors);
       return;
     } else {
       // Any errors still on the page at this point are from a previous attempt to pay. Clear them so they don't

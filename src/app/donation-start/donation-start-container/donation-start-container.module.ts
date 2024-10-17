@@ -24,7 +24,6 @@ import { DonationStartContainerRoutingModule } from './donation-start-routing.mo
 import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
 import {MatExpansionModule} from '@angular/material/expansion';
 import { DonationTippingSliderComponent } from '../donation-start-form/donation-tipping-slider/donation-tipping-slider.component';
-import {MatSnackBarModule} from "@angular/material/snack-bar";
 @NgModule({
   imports: [
     ...allChildComponentImports,
@@ -48,7 +47,6 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
     ReactiveFormsModule,
     TimeLeftPipe,
     CampaignDetailsModule,
-    MatSnackBarModule
   ],
   declarations: [
     DonationStartContainerComponent,
