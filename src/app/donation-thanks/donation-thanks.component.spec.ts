@@ -16,6 +16,7 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from "@angular/common/http";
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe("DonationThanksComponent", () => {
   let component: DonationThanksComponent;
@@ -23,6 +24,7 @@ describe("DonationThanksComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [],
       imports: [
         MatButtonModule,

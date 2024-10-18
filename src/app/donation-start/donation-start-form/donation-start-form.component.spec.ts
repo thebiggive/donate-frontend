@@ -23,14 +23,14 @@ import {IdentityService, TBG_DONATE_ID_STORAGE} from '../../identity.service';
 import {TimeLeftPipe} from "../../time-left.pipe";
 import {DonationStartFormComponent} from "./donation-start-form.component";
 import {CardIconsService} from "../../card-icons.service";
-import {ChangeDetectorRef, ElementRef} from "@angular/core";
+import {ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, ElementRef} from "@angular/core";
 import {ConversionTrackingService} from "../../conversionTracking.service";
 import {PageMetaService} from "../../page-meta.service";
 import {PostcodeService} from "../../postcode.service";
 import {StripeService} from "../../stripe.service";
 import {Donation} from "../../donation.model";
-import {MatSnackBar} from '@angular/material/snack-bar';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {Toast} from "../../toast.service";
 
 function makeDonationStartFormComponent(donationService: DonationService,) {
   const mockIdentityService = TestBed.inject(IdentityService);
@@ -64,8 +64,8 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     undefined as unknown as DatePipe,
     undefined as unknown as TimeLeftPipe,
     {
-      open: () => {}
-    } as unknown as MatSnackBar,
+      showError: () => {},
+    } as unknown as Toast,
   );
 
   donationStartFormComponent.campaign = {currencyCode: 'GBP'} as Campaign;
@@ -155,6 +155,7 @@ describe('DonationStartForm', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [FormsModule,
         MatButtonModule, // Not required but makes test DOM layout more realistic
         MatCheckboxModule,

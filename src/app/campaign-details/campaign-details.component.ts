@@ -1,6 +1,5 @@
 import { DatePipe, isPlatformBrowser, Location } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
@@ -10,6 +9,7 @@ import { CampaignService } from '../campaign.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 import { TimeLeftPipe } from '../time-left.pipe';
+import {Toast} from "../toast.service";
 
 @Component({
   // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
@@ -42,7 +42,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
-    private snackBar: MatSnackBar,
+    private toast: Toast,
     public timeLeftPipe: TimeLeftPipe,
   ) {
     route.queryParams.forEach((params: Params) => {
@@ -111,14 +111,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     }
 
     if (campaign.hidden) {
-      this.snackBar.open(
-        campaignHiddenMessage,
-        undefined,
-        {
-          duration: 7_000,
-          panelClass: 'snack-bar',
-        }
-      );
+      this.toast.showError(campaignHiddenMessage);
     }
   }
 }

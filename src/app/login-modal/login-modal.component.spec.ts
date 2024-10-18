@@ -11,6 +11,7 @@ import { LoginModalComponent } from './login-modal.component';
 import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 import {MatomoModule} from "ngx-matomo-client";
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe('LoginModalComponent', () => {
   let component: LoginModalComponent;
@@ -18,6 +19,7 @@ describe('LoginModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     declarations: [],
     imports: [FormsModule,
         MatButtonModule,

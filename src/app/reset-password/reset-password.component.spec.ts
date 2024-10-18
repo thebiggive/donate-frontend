@@ -14,6 +14,7 @@ import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 import { ResetPasswordComponent } from './reset-password.component';
 import {MatomoModule} from "ngx-matomo-client";
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe('ResetPasswordComponent', () => {
   let component: ResetPasswordComponent;
@@ -21,6 +22,7 @@ describe('ResetPasswordComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [
       ],
       imports: [
@@ -54,6 +56,7 @@ describe('ResetPasswordComponent', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 }).compileComponents();

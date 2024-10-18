@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, PLATFORM_ID } from '@angular/core';
+import {ChangeDetectorRef, PLATFORM_ID} from '@angular/core';
 import { TestBed, waitForAsync } from '@angular/core/testing';
 
 import { TimeLeftPipe } from './time-left.pipe';

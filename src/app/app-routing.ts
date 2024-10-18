@@ -22,7 +22,7 @@ import {firstValueFrom} from "rxjs";
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
 export const transferFundsPath = 'transfer-funds';
-
+export const myRegularGivingPath = 'my-account/regular-giving';
 
 const redirectIfAlreadyLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
   const router = inject(Router);
@@ -247,7 +247,7 @@ const routes: Routes = [
 if (flags.regularGivingEnabled) {
   routes.unshift(
     {
-      path: 'my-account/regular-giving',
+      path: myRegularGivingPath,
       resolve: {
         mandates: () => inject(MandateService).getActiveMandates(),
       },

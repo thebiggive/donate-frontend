@@ -6,7 +6,7 @@ import {
   ViewportScroller,
 } from "@angular/common";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
-import { TransferState } from "@angular/core";
+import {CUSTOM_ELEMENTS_SCHEMA, TransferState} from "@angular/core";
 import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
@@ -100,6 +100,7 @@ describe("MetaCampaignComponent", () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [MetaCampaignComponent],
       imports: [
         AsyncPipe,

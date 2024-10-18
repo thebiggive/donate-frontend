@@ -4,7 +4,6 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -14,6 +13,7 @@ import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { TimeLeftPipe } from '../time-left.pipe';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe('CampaignDetailsComponent', () => {
   let component: CampaignDetailsComponent;
@@ -21,6 +21,7 @@ describe('CampaignDetailsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     void TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [
         CampaignDetailsComponent,
       ],
@@ -30,7 +31,6 @@ describe('CampaignDetailsComponent', () => {
         MatButtonModule,
         MatIconModule,
         MatProgressSpinnerModule,
-        MatSnackBarModule,
         MatTabsModule,
         NoopAnimationsModule,
         OptimisedImagePipe,

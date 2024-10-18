@@ -6,6 +6,7 @@ import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {NoopAnimationsModule} from "@angular/platform-browser/animations";
 import {InMemoryStorageService} from "ngx-webstorage-service";
 import {TBG_DONATE_ID_STORAGE} from "../identity.service";
+import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe('UpdateCardModalComponent', () => {
   let component: UpdateCardModalComponent;
@@ -13,6 +14,7 @@ describe('UpdateCardModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [],
       imports: [
         FormsModule,
