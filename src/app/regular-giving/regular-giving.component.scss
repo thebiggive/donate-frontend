@@ -1,7 +1,5 @@
 @import '../../abstract';
 
-@include vary-campaign-info-layout();
-
 // code below duplicated from donation-start-container.component.scss
 // consider refactoring to remove duplication. However not dedupling just yet as we may want
 // to make changes specific to this usage - e.g. do we want to show a match funded banner or not,
