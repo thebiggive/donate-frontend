@@ -18,10 +18,10 @@ export const environment: Environment = {
   matomoSiteId: 2,
   matomoNonZeroTipGoalId: 11,
   matomoAbTest: {
-    name: 'zeroTipTextAB_wgmf_2024',
+    name: 'zeroTipText_winter_2024',
     variantName: 'B',
-    startDate: '2024/10/10 11:00:00 UTC',
-    endDate: '2024/10/17 11:00:00 UTC',
+    startDate: '2024/10/22 16:00:00 UTC',
+    endDate: '2024/12/10 12:30:00 UTC',
   },
   minimumCreditAmount: 500,
   maximumCreditAmount: 500_000,
