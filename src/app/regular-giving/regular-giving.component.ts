@@ -3,8 +3,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {Campaign} from "../campaign.model";
 import {ComponentsModule} from "@biggive/components-angular";
 import {CampaignInfoComponent} from "../campaign-info/campaign-info.component";
-import {ImageService} from "../image.service";
-import {Observable} from "rxjs";
 import {AsyncPipe} from "@angular/common";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatStep, MatStepper} from "@angular/material/stepper";
@@ -41,7 +39,6 @@ import {Toast} from "../toast.service";
 })
 export class RegularGivingComponent implements OnInit {
   protected campaign: Campaign;
-  protected bannerUri$: Observable<string | null>;
   mandateForm: FormGroup;
   @ViewChild('stepper') private stepper: MatStepper;
   readonly termsUrl = 'https://biggive.org/terms-and-conditions';
@@ -50,7 +47,6 @@ export class RegularGivingComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private imageService: ImageService,
     private formBuilder: FormBuilder,
     private toast: Toast,
     private regularGivingService: RegularGivingService,
@@ -66,7 +62,6 @@ export class RegularGivingComponent implements OnInit {
     this.donor = donor
 
     this.campaign = this.route.snapshot.data.campaign;
-    this.bannerUri$ = this.imageService.getImageUri(this.campaign.bannerUri, 830);
     this.mandateForm = this.formBuilder.group({
         donationAmount: ['', [
           requiredNotBlankValidator,
