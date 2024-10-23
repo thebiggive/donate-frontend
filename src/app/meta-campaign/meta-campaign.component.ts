@@ -88,6 +88,18 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
   private queryParamsSubscription: Subscription;
 
+  /**
+   * Select salesforce IDs of any campaigns that have a rectangular hero image. The campaign's bannerURI
+   * must first be selected to ensure it's suitable for use as a background behind all elements of the hero image
+   * component
+   *
+   * Example ID commented out. This is a short term solution, longer term I expect we'll switch all campaigns to
+   * rectangle images or change the design futher.
+   */
+  protected readonly campaignIdsWithRectangleImage: string[] = [
+   // 'a056900002RXrXtAAL',
+  ];
+
   constructor(
     private campaignService: CampaignService,
     private currencyPipe: CurrencyPipe,
