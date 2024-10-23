@@ -93,12 +93,11 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
    * must first be selected to ensure it's suitable for use as a background behind all elements of the hero image
    * component
    *
-   * Example ID commented out. This is a short term solution, longer term I expect we'll switch all campaigns to
-   * rectangle images or change the design futher.
+   * For now enabled for one campaign in non-prod for testing only. Campaign IDs are the same in full and prod.
    */
-  protected readonly campaignIdsWithRectangleImage: string[] = [
-   // 'a056900002RXrXtAAL',
-  ];
+  protected readonly campaignIdsWithRectangleImage: string[] = environment.environmentId !== 'production' ?
+    ['a056900002RXrXtAAL'] :
+    [];
 
   constructor(
     private campaignService: CampaignService,
