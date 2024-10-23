@@ -27,7 +27,7 @@
     [mainImage]="campaign.bannerUri | optimisedImage:2000 | async"
     [mainImageShape]="campaignIdsWithRectangleImage.includes(campaign.id) ? 'rectangle' : 'triangle'"
     [teaser]="fund && fund.description ? fund.description : campaign.summary"
-    colour-scheme="primary"
+    [colourScheme]="campaignIdsWithRectangleImage.includes(campaign.id) ? 'white' : 'primary'"
     main-image-align-horizontal="right"
   ></biggive-hero-image>
 
