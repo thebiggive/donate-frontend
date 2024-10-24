@@ -93,7 +93,7 @@ function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix
   }
 
   const campaignFamilyBackgroundImages: Record<campaignFamilyName, URL> = {
-    emergencyMatch: new URL('/assets/images/emergency-card.png', donateUriPrefix),
+    emergencyMatch: new URL('/assets/images/emergency-card.webp', donateUriPrefix),
     christmasChallenge: new URL('/assets/images/card-background-cc-lights.jpg', donateUriPrefix),
     summerGive:  new URL('/assets/images/colour-orange.png', donateUriPrefix),
     greenMatchFund:  new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
