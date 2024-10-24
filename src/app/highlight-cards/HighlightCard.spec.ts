@@ -139,7 +139,7 @@ describe('highlightCard', () => {
       cardFromApi
     );
 
-    expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/join-mailing-list.png');
+    expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/join-mailing-list.webp');
     expect(highlightCardForHomepage.iconColor).toBe('primary');
     });
 });

@@ -57,7 +57,7 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
   };
 
   const backgroundImageUrl = backgroundImage(sfApiHighlightCard, donateUriPrefix);
-  
+
   return {
     headerText: sfApiHighlightCard.headerText,
     bodyText: sfApiHighlightCard.bodyText,
@@ -81,11 +81,11 @@ function iconColor(sfApiHighlightCard: SfApiHighlightCard, campaignFamilyColours
 }
 
 function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix: string) {
-      
+
   const defaultBackground = new URL('/assets/images/blue-texture.jpg', donateUriPrefix);
 
   if (sfApiHighlightCard.cardStyle === 'JOIN_MAILING_LIST') {
-    return new URL('/assets/images/join-mailing-list.png', donateUriPrefix);
+    return new URL('/assets/images/join-mailing-list.webp', donateUriPrefix);
   }
 
   if (sfApiHighlightCard.campaignFamily == null) {
