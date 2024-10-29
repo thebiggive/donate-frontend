@@ -2,7 +2,7 @@ import 'zone.js/node';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { enableProdMode } from '@angular/core';
-import { renderToString } from '@biggive/components/hydrate';
+import {hydrateDocument, HydrateDocumentOptions, renderToString} from '@biggive/components/hydrate';
 import { setAssetPath } from '@biggive/components/dist/components';
 import * as compression from 'compression';
 import { createHash } from 'crypto';
@@ -171,11 +171,12 @@ export function app(): express.Express {
       .then(async (html) => {
         setAssetPath(`${environment.donateUriPrefix}/assets`);
 
-        const hydratedDoc = await renderToString(html, {
+        const options: HydrateDocumentOptions = {
           // Don't `removeScripts` like Ionic does: we need them to handover to browser JS runtime successfully!
-          prettyHtml: true,
-          removeHtmlComments: true,
-        });
+          // removeScripts is false by default so no need to set explicilty.
+        }
+
+        const hydratedDoc = await hydrateDocument(html, options);
 
         res.send(hydratedDoc.html);
       })
