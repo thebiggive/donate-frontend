@@ -40,6 +40,17 @@ export function app(): express.Express {
   // Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
   // https://github.com/helmetjs/helmet#reference
 
+  // frame-src and child-src do very nearly the same thing, specifying both the same.
+  const frameAndChildSrc = [
+    'https://*.js.stripe.com',
+    'https://js.stripe.com',
+    'https://hooks.stripe.com',
+    'blob:', // for friendly-captcha
+    'player.vimeo.com',
+    'www.youtube.com',
+    'www.youtube-nocookie.com',
+  ];
+
   server.use(helmet({
     contentSecurityPolicy: {
       directives: {
@@ -64,9 +75,6 @@ export function app(): express.Express {
           identityApiHost,
           'fonts.googleapis.com',
           'fonts.gstatic.com',
-          'player.vimeo.com',
-          'www.youtube.com',
-          'www.youtube-nocookie.com',
         ],
         'img-src': [
           `'self'`,
@@ -95,22 +103,8 @@ export function app(): express.Express {
         'worker-src': [
           'blob:', // friendly-captcha
         ],
-        'frame-src': [
-          'https://*.js.stripe.com',
-          'https://js.stripe.com',
-          'https://hooks.stripe.com',
-          'blob:', // for friendly-captcha
-          'player.vimeo.com',
-          'www.youtube.com',
-          'www.youtube-nocookie.com',
-        ],
-        'child-src': [
-          'js.stripe.com',
-          'blob:', // for friendly-captcha
-          'player.vimeo.com',
-          'www.youtube.com',
-          'www.youtube-nocookie.com',
-        ]
+        'frame-src': frameAndChildSrc,
+        'child-src': frameAndChildSrc,
       },
     },
   }));
