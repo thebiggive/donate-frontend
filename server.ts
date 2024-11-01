@@ -82,6 +82,7 @@ export function app(): express.Express {
           matomoUriBase,
         ],
         'script-src': [
+          `'self'`,
           donateHost,
           matomoUriBase,
           `'unsafe-eval'`,
