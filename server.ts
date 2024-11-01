@@ -20,10 +20,7 @@ import {COUNTRY_CODE} from './src/app/country-code.token';
 import {environment} from './src/environments/environment';
 import {GetSiteControlService} from './src/app/getsitecontrol.service';
 
-const apiHost = (new URL(environment.apiUriPrefix)).host;
-const donationsApiHost = (new URL(environment.donationsApiPrefix)).host;
 const donateHost = (new URL(environment.donateUriPrefix)).host;
-const identityApiHost = (new URL(environment.identityApiPrefix)).host;
 const matomoUriBase = 'https://biggive.matomo.cloud';
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -57,9 +54,9 @@ export function app(): express.Express {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
         'connect-src': [
           'wss:', // For GetSiteControl. wss:// is for secure-only WebSockets.
-          apiHost,
-          donationsApiHost,
-          identityApiHost,
+          (new URL(environment.apiUriPrefix)).host,
+          (new URL(environment.donationsApiPrefix)).host,
+          (new URL(environment.identityApiPrefix)).host,
           matomoUriBase,
           'www.facebook.com', // Required for Meta Pixel in some browsers. https://josephpinder.com/blog/facebook-pixel-is-slowing-down-your-website-and-how-to-fix-it-securely
           'api.getAddress.io',
@@ -69,9 +66,6 @@ export function app(): express.Express {
         ],
         'default-src': [
           `'self'`,
-          apiHost,
-          donationsApiHost,
-          identityApiHost,
         ],
         'font-src': [
           `'self'`,
