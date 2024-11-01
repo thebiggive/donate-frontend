@@ -73,6 +73,7 @@ export function app(): express.Express {
         ],
         'style-src': [
           `'self'`,
+          `'unsafe-inline'`,
           'fonts.googleapis.com'
         ],
         'img-src': [
