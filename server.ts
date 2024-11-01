@@ -1,29 +1,26 @@
 import 'zone.js/node';
 
-import { APP_BASE_HREF } from '@angular/common';
-import { enableProdMode } from '@angular/core';
-import { renderToString } from '@biggive/components/hydrate';
-import { setAssetPath } from '@biggive/components/dist/components';
+import {APP_BASE_HREF} from '@angular/common';
+import {enableProdMode} from '@angular/core';
+import {renderToString} from '@biggive/components/hydrate';
+import {setAssetPath} from '@biggive/components/dist/components';
 import * as compression from 'compression';
-import { createHash } from 'crypto';
-import { CommonEngine, CommonEngineRenderOptions } from '@angular/ssr';
+import {createHash} from 'crypto';
+import {CommonEngine, CommonEngineRenderOptions} from '@angular/ssr';
 import * as express from 'express';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
-import { Request, Response } from 'express';
+import {Request, Response} from 'express';
+import {existsSync} from 'node:fs';
+import {join} from 'node:path';
 import helmet from 'helmet';
 import * as morgan from 'morgan';
 
-import { AppServerModule } from './src/main.server';
-import { REQUEST, RESPONSE } from './src/express.tokens';
-import { COUNTRY_CODE } from './src/app/country-code.token';
-import { environment } from './src/environments/environment';
-import { GetSiteControlService } from './src/app/getsitecontrol.service';
+import {AppServerModule} from './src/main.server';
+import {REQUEST, RESPONSE} from './src/express.tokens';
+import {COUNTRY_CODE} from './src/app/country-code.token';
+import {environment} from './src/environments/environment';
+import {GetSiteControlService} from './src/app/getsitecontrol.service';
 
-const apiHost = (new URL(environment.apiUriPrefix)).host;
-const donationsApiHost = (new URL(environment.donationsApiPrefix)).host;
 const donateHost = (new URL(environment.donateUriPrefix)).host;
-const identityApiHost = (new URL(environment.identityApiPrefix)).host;
 const matomoUriBase = 'https://biggive.matomo.cloud';
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -35,45 +32,48 @@ export function app(): express.Express {
 
   // will set both of these the same, see
   // https://stackoverflow.com/questions/30023608/how-to-use-frame-src-and-child-src-in-firefox-and-other-browsers
+  // Middleware
+  server.use(compression());
+  // Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
+  // https://github.com/helmetjs/helmet#reference
+
+  // frame-src and child-src do very nearly the same thing, specifying both the same.
   const frameAndChildSrc = [
-    'js.stripe.com',
+    'https://*.js.stripe.com',
+    'https://js.stripe.com',
+    'https://hooks.stripe.com',
     'blob:', // for friendly-captcha
     'player.vimeo.com',
     'www.youtube.com',
     'www.youtube-nocookie.com',
   ];
 
-  // Middleware
-  server.use(compression());
-  // Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
-  // https://github.com/helmetjs/helmet#reference
   server.use(helmet({
     contentSecurityPolicy: {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
         'connect-src': [
           'wss:', // For GetSiteControl. wss:// is for secure-only WebSockets.
-          apiHost,
-          donationsApiHost,
-          identityApiHost,
+          (new URL(environment.apiUriPrefix)).host,
+          (new URL(environment.donationsApiPrefix)).host,
+          (new URL(environment.identityApiPrefix)).host,
           matomoUriBase,
           'www.facebook.com', // Required for Meta Pixel in some browsers. https://josephpinder.com/blog/facebook-pixel-is-slowing-down-your-website-and-how-to-fix-it-securely
           'api.getAddress.io',
           '*.getsitecontrol.com',
-          'fonts.googleapis.com',
           'api.friendlycaptcha.com',
+          'https://api.stripe.com',
         ],
         'default-src': [
           `'self'`,
-          apiHost,
-          donationsApiHost,
-          identityApiHost,
-          'fonts.googleapis.com',
+        ],
+        'font-src': [
+          `'self'`,
           'fonts.gstatic.com',
-          'js.stripe.com',
-          'player.vimeo.com',
-          'www.youtube.com',
-          'www.youtube-nocookie.com',
+        ],
+        'style-src': [
+          `'self'`,
+          'fonts.googleapis.com'
         ],
         'img-src': [
           `'self'`,
@@ -96,12 +96,14 @@ export function app(): express.Express {
           // Vimeo's iframe embed seems to need script access to not error with our current embed approach.
           'https://player.vimeo.com',
           `'wasm-unsafe-eval'`,`'self'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp
+          'https://*.js.stripe.com',
+          'https://js.stripe.com',
         ],
         'worker-src': [
           'blob:', // friendly-captcha
         ],
         'frame-src': frameAndChildSrc,
-        'child-src': frameAndChildSrc
+        'child-src': frameAndChildSrc,
       },
     },
   }));
