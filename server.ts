@@ -64,7 +64,6 @@ export function app(): express.Express {
           'www.facebook.com', // Required for Meta Pixel in some browsers. https://josephpinder.com/blog/facebook-pixel-is-slowing-down-your-website-and-how-to-fix-it-securely
           'api.getAddress.io',
           '*.getsitecontrol.com',
-          'fonts.googleapis.com',
           'api.friendlycaptcha.com',
           'https://api.stripe.com',
         ],
@@ -73,8 +72,14 @@ export function app(): express.Express {
           apiHost,
           donationsApiHost,
           identityApiHost,
-          'fonts.googleapis.com',
+        ],
+        'font-src': [
+          `'self'`,
           'fonts.gstatic.com',
+        ],
+        'style-src': [
+          `'self'`,
+          'fonts.googleapis.com'
         ],
         'img-src': [
           `'self'`,
