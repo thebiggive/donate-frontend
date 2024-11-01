@@ -97,17 +97,12 @@ export function app(): express.Express {
           'www.gstatic.com',
           // Vimeo's iframe embed seems to need script access to not error with our current embed approach.
           'https://player.vimeo.com',
-          /**
-           * DON-1080 - temporarily commented out to see effect while I check effect and look for more secure alternatives.
-           *
-            * `'wasm-unsafe-eval'`,`'self'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp
-            */
+          `'wasm-unsafe-eval'`,`'self'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp
           'https://*.js.stripe.com',
           'https://js.stripe.com',
         ],
         'worker-src': [
-          // DON-1080 - temporarily commented out to see effect while I check effect and look for more secure alternatives.
-          // 'blob:', // friendly-captcha
+          'blob:', // friendly-captcha
         ],
         'frame-src': frameAndChildSrc,
         'child-src': frameAndChildSrc,
