@@ -65,7 +65,7 @@ export function app(): express.Express {
           'https://api.stripe.com',
         ],
         'default-src': [
-          `'self'`,
+          `'none'`
         ],
         'font-src': [
           `'self'`,
