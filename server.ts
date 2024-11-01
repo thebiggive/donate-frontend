@@ -65,7 +65,7 @@ export function app(): express.Express {
           'https://api.stripe.com',
         ],
         'default-src': [
-          `'self'`,
+          `'none'`
         ],
         'font-src': [
           `'self'`,
@@ -73,6 +73,7 @@ export function app(): express.Express {
         ],
         'style-src': [
           `'self'`,
+          `'unsafe-inline'`,
           'fonts.googleapis.com'
         ],
         'img-src': [
@@ -82,6 +83,7 @@ export function app(): express.Express {
           matomoUriBase,
         ],
         'script-src': [
+          `'self'`,
           donateHost,
           matomoUriBase,
           `'unsafe-eval'`,
