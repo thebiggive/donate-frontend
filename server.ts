@@ -74,7 +74,8 @@ export function app(): express.Express {
         'style-src': [
           `'self'`,
           `'unsafe-inline'`,
-          'fonts.googleapis.com'
+          'fonts.googleapis.com',
+          'data:',
         ],
         'img-src': [
           `'self'`,
