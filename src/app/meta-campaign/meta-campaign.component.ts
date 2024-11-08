@@ -96,8 +96,13 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
    * For now enabled for one campaign in non-prod for testing only. Campaign IDs are the same in full and prod.
    */
   protected readonly campaignIdsWithRectangleImage: string[] = environment.environmentId !== 'production' ?
-    ['a056900002RXrXtAAL'] :
-    [];
+    [
+      'a056900002RXrXtAAL',
+      'a056900002SEVVPAA5', // Christmas Challenge 2024
+    ] :
+    [
+      'a056900002SEVVPAA5', // Christmas Challenge 2024
+    ];
 
   constructor(
     private campaignService: CampaignService,
