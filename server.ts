@@ -70,6 +70,7 @@ export function app(): express.Express {
         'font-src': [
           `'self'`,
           'fonts.gstatic.com',
+          'data:',
         ],
         'style-src': [
           `'self'`,
