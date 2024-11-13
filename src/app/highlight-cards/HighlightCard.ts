@@ -57,7 +57,7 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
   };
 
   const backgroundImageUrl = backgroundImage(sfApiHighlightCard, donateUriPrefix);
-  
+
   return {
     headerText: sfApiHighlightCard.headerText,
     bodyText: sfApiHighlightCard.bodyText,
@@ -81,11 +81,11 @@ function iconColor(sfApiHighlightCard: SfApiHighlightCard, campaignFamilyColours
 }
 
 function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix: string) {
-      
+
   const defaultBackground = new URL('/assets/images/blue-texture.jpg', donateUriPrefix);
 
   if (sfApiHighlightCard.cardStyle === 'JOIN_MAILING_LIST') {
-    return new URL('/assets/images/join-mailing-list.png', donateUriPrefix);
+    return new URL('/assets/images/join-mailing-list.webp', donateUriPrefix);
   }
 
   if (sfApiHighlightCard.campaignFamily == null) {
@@ -93,7 +93,7 @@ function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix
   }
 
   const campaignFamilyBackgroundImages: Record<campaignFamilyName, URL> = {
-    emergencyMatch: new URL('/assets/images/emergency-card.png', donateUriPrefix),
+    emergencyMatch: new URL('/assets/images/emergency-card.webp', donateUriPrefix),
     christmasChallenge: new URL('/assets/images/card-background-cc-lights.jpg', donateUriPrefix),
     summerGive:  new URL('/assets/images/colour-orange.png', donateUriPrefix),
     greenMatchFund:  new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),

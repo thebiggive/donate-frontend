@@ -42,7 +42,7 @@ describe('highlightCard', () => {
     );
 
     // todo - check what background we had for EMF cards in the past.
-    expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/emergency-card.png');
+    expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/emergency-card.webp');
     expect(highlightCardForHomepage.iconColor).toBe('brand-emf-yellow');
   });
 
@@ -139,7 +139,7 @@ describe('highlightCard', () => {
       cardFromApi
     );
 
-    expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/join-mailing-list.png');
+    expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/join-mailing-list.webp');
     expect(highlightCardForHomepage.iconColor).toBe('primary');
     });
 });
