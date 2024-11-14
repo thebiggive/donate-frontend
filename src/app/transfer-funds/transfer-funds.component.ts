@@ -23,6 +23,7 @@ import {Person} from '../person.model';
 import {PostcodeService} from '../postcode.service';
 import {getCurrencyMinValidator} from '../validators/currency-min';
 import {getCurrencyMaxValidator} from '../validators/currency-max';
+import {Toast} from '../toast.service';
 
 /**
  * Support for topping up Stripe customer_balance via bank transfer. Only
@@ -39,6 +40,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   isPurchaseComplete = false;
   isOptedIntoGiftAid = false;
   currency = '£';
+  /** The Big Give campaign which receives any on-topup tips. */
   campaign: Campaign;
   donation?: Donation;
   creditForm: FormGroup;
@@ -67,16 +69,12 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     private matomoTracker: MatomoTracker,
     @Inject(PLATFORM_ID) private platformId: Object,
     private postcodeService: PostcodeService,
+    private toast: Toast,
   ) {}
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      const idAndJWT = this.identityService.getIdAndJWT();
-      if (idAndJWT !== undefined) {
-        if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
-          this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
-        }
-      }
+      this.loadPerson();
     }
 
     const formGroups: {
@@ -339,6 +337,16 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     window.location.href = "/";
   }
 
+  // TODO enforce whole number rule for donation amount / fix float by rounding.
+
+  cancelPendingTips() {
+    this.donationService.cancelDonationFundsToCampaign(environment.creditTipsCampaign).subscribe(() => {
+      // Theoretically this could be multiple tips, but in practice almost always 0 or 1, so singular is the less confusing copy.
+      this.toast.showSuccess('Pending tip cancelled. To continue, enter a new tip amount to support Big Give when you transfer, or 0.');
+      this.loadPerson();
+    });
+  }
+
   /**
    * Amount in existing committed tips to be fulfilled, in minor units (i.e. pence),
    * currently just for GBP / UK bank transfers. 0 if donor's not yet loaded.
@@ -349,6 +357,15 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
   get donorHasPendingTipBalance(): boolean {
     return this.pendingTipBalance > 0;
+  }
+
+  private loadPerson() {
+    const idAndJWT = this.identityService.getIdAndJWT();
+    if (idAndJWT !== undefined) {
+      if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
+        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+      }
+    }
   }
 
   private loadAuthedPersonInfo(id: string, jwt: string) {
