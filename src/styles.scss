@@ -31,6 +31,7 @@ li {
 a {
   color: mat.m2-get-color-from-palette($donate-primary);
   cursor: pointer;
+  text-decoration: underline;
 }
 
 // this had to be styled at the root https://stackoverflow.com/a/71023336/6514933
