@@ -61,7 +61,7 @@
                     </mat-form-field>
                     @if (customTipAmountField?.errors && customTipAmountField?.invalid && (customTipAmountField?.dirty || customTipAmountField?.touched)) {
                       <p class="error">
-                        Custom tips can range from {{ 0 | exactCurrency:currency }} and {{ maximumDonationAmount | exactCurrency:currency }} inclusive.
+                        Donation Funds tips can range from {{ 0 | exactCurrency:currency }} and {{ maximumDonationAmount | exactCurrency:currency }} inclusive and must be a whole number of pounds.
                       </p>
                     }
                   </div>
