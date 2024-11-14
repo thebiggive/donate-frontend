@@ -303,6 +303,10 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     return true;
   }
 
+  /**
+   * In whole currency unit, e.g. pounds. Always a whole number because Donation Fund tips are in fact donations / payment intents to BG,
+   * and we don't support partial pounds for those for now.
+   */
   calculatedTipAmount() : number {
     const unsanitisedCreditAmount = this.amountsGroup.value.creditAmount;
 
@@ -320,7 +324,8 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
     const creditAmount: number = this.sanitiseCurrency(unsanitisedCreditAmount);
     const tipPercentage: number = this.amountsGroup.value.tipPercentage;
-    return (creditAmount * (tipPercentage / 100));
+
+    return Math.floor(creditAmount * (tipPercentage / 100));
   }
 
   logout() {
@@ -336,8 +341,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     this.identityService.logout();
     window.location.href = "/";
   }
-
-  // TODO enforce whole number rule for donation amount / fix float by rounding.
 
   cancelPendingTips() {
     this.donationService.cancelDonationFundsToCampaign(environment.creditTipsCampaign).subscribe(() => {
