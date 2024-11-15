@@ -30,6 +30,10 @@
             @if (donorHasPendingTipBalance) {
               <div>
                 <p>Thanks for tipping Big Give {{ (pendingTipBalance / 100) | exactCurrency:"GBP" }} </p>
+
+                <p>Need to change this before you make your transfer? You can
+                  <a (click)="cancelPendingTips()">cancel the pending tip</a> and
+                  then optionally make a new one.</p>
               </div>
             }
             <!-- All tip bits are shown iff the pending bank-funded tip balance in GBP is £0 or undefined -->
@@ -38,7 +42,7 @@
                 <p><strong>Tip Big Give</strong></p>
                 <p class="tip-text">Big Give has a 0% platform fee. That means we're able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
                 <mat-form-field >
-                  <mat-label>Tip amount (%)</mat-label>
+                  <mat-label>Tip amount (approx. %)</mat-label>
                   <mat-select formControlName="tipPercentage" required="true" (selectionChange)="onTipSelectorChanged($event)">
                     <mat-option [value]="2.5">2.5%</mat-option>
                     <mat-option [value]="5">5%</mat-option>
@@ -57,7 +61,7 @@
                     </mat-form-field>
                     @if (customTipAmountField?.errors && customTipAmountField?.invalid && (customTipAmountField?.dirty || customTipAmountField?.touched)) {
                       <p class="error">
-                        Custom tips can range from {{ 0 | exactCurrency:currency }} and {{ maximumDonationAmount | exactCurrency:currency }} inclusive.
+                        Donation Funds tips can range from {{ 0 | exactCurrency:currency }} and {{ maximumDonationAmount | exactCurrency:currency }} inclusive and must be a whole number of pounds.
                       </p>
                     }
                   </div>

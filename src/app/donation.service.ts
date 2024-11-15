@@ -368,8 +368,7 @@ export class DonationService {
     );
   }
 
-  getPastDonations(
-  ): Observable<CompleteDonation[]> {
+  getPastDonations(): Observable<CompleteDonation[]> {
     const jwt = this.identityService.getJWT();
     const person$ = this.identityService.getLoggedInPerson();
 
@@ -380,6 +379,23 @@ export class DonationService {
 
       return this.http.get<{ donations: CompleteDonation[] }>(
         `${environment.donationsApiPrefix}/people/${person.id}/donations`,
+        getPersonAuthHttpOptions(jwt),
+      ).pipe(map((response) => response.donations));
+    }));
+  }
+
+  cancelDonationFundsToCampaign(campaignId: string): Observable<Donation[]> {
+    const jwt = this.identityService.getJWT();
+    const person$ = this.identityService.getLoggedInPerson();
+
+    return person$.pipe(switchMap((person) => {
+      if (!person) {
+        throw new Error("logged in person required");
+      }
+
+      return this.http.request<{ donations: Donation[] }>(
+        'DELETE',
+        `${environment.donationsApiPrefix}/people/${person.id}/donations?campaignId=${campaignId}&paymentMethodType=customer_balance`,
         getPersonAuthHttpOptions(jwt),
       ).pipe(map((response) => response.donations));
     }));
