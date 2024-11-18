@@ -8,8 +8,6 @@ import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "../highlight-cards/HighlightCard";
 import {environment} from "../../environments/environment";
 
-const CCCloseDate = new Date('2023-12-05T12:00:00+00:00');
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -65,6 +63,8 @@ export class HomeComponent implements OnInit {
     const startRedirectingToCCAt = new Date('2024-12-03T00:00:00+00:00');
 
     // end the redirect exactly at the time CC closes.
+    const CCCloseDate = new Date('2024-12-10T12:00:00+00:00');
+
     if (
       !queryParams.hasOwnProperty('noredirect') &&
       this.currentTime >= startRedirectingToCCAt &&
