@@ -86,8 +86,6 @@ jobs:
           arguments: '--acl public-read --cache-control "max-age=86400"'
 
   notify:
-    context:
-      - slack
     parameters:
       env:
         type: string
@@ -132,6 +130,12 @@ workflows:
                 pipeline_number: << pipeline.number >>
                 job_type: build
                 environment_type: development
+      - notify:
+          context:
+            - slack
+          # temporarily notifying slack on every commit until we can see the notification working.
+          requires: ["test"]
+          env: testing
 
   deploy-regression:
     jobs:
