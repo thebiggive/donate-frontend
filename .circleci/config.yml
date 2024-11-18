@@ -103,23 +103,10 @@ jobs:
           job_type: deployment
           environment: << parameters.env >>
           environment_type: << parameters.env >>
-      - slack/notify:
-          channel: deployments
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*<< parameters.env >>: Donate frontend deployed!* All visitors should see the updated app version within 30 minutes."
-                    }
-                  ]
-                }
-              ]
-            }
-
+      - run:
+          name: Notify Slack
+          command: |
+            curl -H "Content-type: application/json" --data '{"channel":"deployments","blocks":[{"type":"section","text":{"type":"mrkdwn","text":"$CIRCLE_BRANCH Donate frontend deployed!* All visitors should see the updated app version within 30 minutes"}}]}' -H "Authorization: Bearer $SLACK_ACCESS_TOKEN" -X POST https://slack.com/api/chat.postMessage
 workflows:
   commit:
     jobs:
