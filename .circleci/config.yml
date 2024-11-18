@@ -86,6 +86,8 @@ jobs:
           arguments: '--acl public-read --cache-control "max-age=86400"'
 
   notify:
+    context:
+      - slack
     parameters:
       env:
         type: string
@@ -143,7 +145,6 @@ workflows:
           context:
             - docker-hub-creds
             - ecs-deploys
-            - slack
           post-steps:
             - slack/notify:
                 channel: deployments, regression-alarms
