@@ -89,10 +89,12 @@ jobs:
     parameters:
       env:
         type: string
-    resource_class: small
-    machine:
-      enabled: true
-      docker_layer_caching: true
+    resource_class: large
+    docker:
+      - image: cimg/node:20.13.1-browsers
+        auth:
+          username: $DOCKER_HUB_USERNAME
+          password: $DOCKER_HUB_ACCESS_TOKEN
     steps:
       - jira/notify:
           pipeline_id: << pipeline.id >>
