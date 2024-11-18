@@ -123,6 +123,7 @@ workflows:
       - notify:
           context:
             - slack
+            - jira
           # temporarily notifying slack on every commit until we can see the notification working.
           requires: ["test"]
           env: testing
@@ -235,6 +236,9 @@ workflows:
       - notify:
           requires: ["Deploy Staging ECS with new image"]
           env: staging
+          context:
+            - slack
+            - jira
 
   deploy-production:
     jobs:
@@ -291,3 +295,6 @@ workflows:
       - notify:
           requires: ["Deploy Production ECS with new image"]
           env: staging
+          context:
+            - slack
+            - jira
