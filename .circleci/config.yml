@@ -200,6 +200,7 @@ workflows:
           cluster: 'tbg-staging-${AWS_REGION}'
           container_image_name_updates: 'container=donate,tag=staging-${CIRCLE_SHA1}'
           post-steps:
+            - checkout # I think this is needed by the slack orb and maybe also Jira
             - jira/notify:
                 pipeline_id: << pipeline.id >>
                 pipeline_number: << pipeline.number >>
@@ -276,6 +277,7 @@ workflows:
           cluster: 'tbg-production-${AWS_REGION}'
           container_image_name_updates: "container=donate,tag=production-${CIRCLE_SHA1}"
           post-steps:
+            - checkout # I think this is needed by the slack orb and maybe also Jira
             - jira/notify:
                 pipeline_id: << pipeline.id >>
                 pipeline_number: << pipeline.number >>
