@@ -89,13 +89,17 @@ jobs:
     parameters:
       env:
         type: string
+    resource_class: small
+    machine:
+      enabled: true
+      docker_layer_caching: true
     steps:
       - jira/notify:
           pipeline_id: << pipeline.id >>
           pipeline_number: << pipeline.number >>
           job_type: deployment
-          environment: << parameters.env >
-          environment_type: << parameters.env >
+          environment: << parameters.env >>
+          environment_type: << parameters.env >>
       - slack/notify:
           channel: deployments
           custom: |
@@ -235,6 +239,7 @@ workflows:
                 mentions: <@here>
       - notify:
           requires: ["Deploy Staging ECS with new image"]
+          env: staging
 
   deploy-production:
     jobs:
@@ -290,3 +295,4 @@ workflows:
                 template: basic_fail_1
       - notify:
           requires: ["Deploy Production ECS with new image"]
+          env: staging
