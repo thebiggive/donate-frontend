@@ -85,6 +85,38 @@ jobs:
           to: 's3://tbg-<< parameters.env >>-donate-static/assets'
           arguments: '--acl public-read --cache-control "max-age=86400"'
 
+  notify:
+    parameters:
+      env:
+        type: string
+    resource_class: small
+    machine:
+      enabled: true
+      docker_layer_caching: true
+    steps:
+      - jira/notify:
+          pipeline_id: << pipeline.id >>
+          pipeline_number: << pipeline.number >>
+          job_type: deployment
+          environment: << parameters.env >>
+          environment_type: << parameters.env >>
+      - slack/notify:
+          channel: deployments
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*<< parameters.env >>: Donate frontend deployed!* All visitors should see the updated app version within 30 minutes."
+                    }
+                  ]
+                }
+              ]
+            }
+
 workflows:
   commit:
     jobs:
@@ -200,34 +232,14 @@ workflows:
           cluster: 'tbg-staging-${AWS_REGION}'
           container_image_name_updates: 'container=donate,tag=staging-${CIRCLE_SHA1}'
           post-steps:
-            - checkout # I think this is needed by the slack orb and maybe also Jira
-            - jira/notify:
-                pipeline_id: << pipeline.id >>
-                pipeline_number: << pipeline.number >>
-                job_type: deployment
-                environment: Staging
-                environment_type: staging
-            - slack/notify:
-                channel: deployments
-                custom: |
-                  {
-                    "blocks": [
-                      {
-                        "type": "section",
-                        "fields": [
-                          {
-                            "type": "mrkdwn",
-                            "text": "*Staging: Donate frontend deployed!* All visitors should see the updated app version within 30 minutes."
-                          }
-                        ]
-                      }
-                    ]
-                  }
             - slack/notify:
                 channel: deployments, staging-alarms,
                 event: fail
                 template: basic_fail_1
                 mentions: <@here>
+      - notify:
+          requires: ["Deploy Staging ECS with new image"]
+          env: staging
 
   deploy-production:
     jobs:
@@ -277,30 +289,10 @@ workflows:
           cluster: 'tbg-production-${AWS_REGION}'
           container_image_name_updates: "container=donate,tag=production-${CIRCLE_SHA1}"
           post-steps:
-            - checkout # I think this is needed by the slack orb and maybe also Jira
-            - jira/notify:
-                pipeline_id: << pipeline.id >>
-                pipeline_number: << pipeline.number >>
-                job_type: deployment
-                environment: Production
-                environment_type: production
-            - slack/notify:
-                channel: deployments
-                custom: |
-                  {
-                    "blocks": [
-                      {
-                        "type": "section",
-                        "fields": [
-                          {
-                            "type": "mrkdwn",
-                            "text": "*Production: Donate frontend deployed!* All visitors should see the updated app version within 30 minutes."
-                          }
-                        ]
-                      }
-                    ]
-                  }
             - slack/notify:
                 event: fail
                 channel: deployments, production-alarms
                 template: basic_fail_1
+      - notify:
+          requires: ["Deploy Production ECS with new image"]
+          env: staging
