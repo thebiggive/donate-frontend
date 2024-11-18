@@ -200,7 +200,14 @@ workflows:
           cluster: 'tbg-staging-${AWS_REGION}'
           container_image_name_updates: 'container=donate,tag=staging-${CIRCLE_SHA1}'
           post-steps:
-            - checkout # I think this is needed by the slack orb and maybe also Jira
+            - slack/notify:
+                channel: deployments, staging-alarms,
+                event: fail
+                template: basic_fail_1
+                mentions: <@here>
+      - notify:
+          requires: ["Deploy Staging ECS with new image"]
+          steps:
             - jira/notify:
                 pipeline_id: << pipeline.id >>
                 pipeline_number: << pipeline.number >>
@@ -223,11 +230,7 @@ workflows:
                       }
                     ]
                   }
-            - slack/notify:
-                channel: deployments, staging-alarms,
-                event: fail
-                template: basic_fail_1
-                mentions: <@here>
+
 
   deploy-production:
     jobs:
@@ -277,7 +280,13 @@ workflows:
           cluster: 'tbg-production-${AWS_REGION}'
           container_image_name_updates: "container=donate,tag=production-${CIRCLE_SHA1}"
           post-steps:
-            - checkout # I think this is needed by the slack orb and maybe also Jira
+            - slack/notify:
+                event: fail
+                channel: deployments, production-alarms
+                template: basic_fail_1
+      - notify:
+          requires: ["Deploy Production ECS with new image"]
+          steps:
             - jira/notify:
                 pipeline_id: << pipeline.id >>
                 pipeline_number: << pipeline.number >>
@@ -300,7 +309,3 @@ workflows:
                       }
                     ]
                   }
-            - slack/notify:
-                event: fail
-                channel: deployments, production-alarms
-                template: basic_fail_1
