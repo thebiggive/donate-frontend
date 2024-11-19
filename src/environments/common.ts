@@ -7,4 +7,4 @@ export const campaignHiddenMessage = 'This campaign is temporarily unable to acc
  * @link https://angular.io/api/common/CurrencyPipe#parameters
  */
 export const currencyPipeDigitsInfo = '1.0-0';
-export const minPasswordLength = 10;
+export const minPasswordLength = 12;
