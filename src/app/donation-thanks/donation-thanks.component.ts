@@ -123,7 +123,13 @@ export class DonationThanksComponent implements OnInit {
       // Get error may occur e.g. after a DB reset; unlikely recoverable within the
       // page view so treat it like a timeout. Error message encourages donors to
       // refresh to try loading again when any server problem's resolved.
-      () => this.timedOut = true,
+      (error: HttpErrorResponse) => {
+        if (error.status == 401) {
+          this.noAccess = true;
+        } else {
+          this.timedOut = true;
+        }
+      },
     );
   }
 
