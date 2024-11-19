@@ -123,7 +123,7 @@ workflows:
           context:
             - slack
             - jira
-          # temporarily notifying slack on every commit until we can see the notification working.
+          # temporarily deployment-notificationing slack on every commit until we can see the notification working.
           requires: ["test"]
           env: testing
 
@@ -232,7 +232,7 @@ workflows:
                 event: fail
                 template: basic_fail_1
                 mentions: <@here>
-      - notify:
+      - deployment-notification:
           requires: ["Deploy Staging ECS with new image"]
           env: staging
           context:
@@ -291,7 +291,7 @@ workflows:
                 event: fail
                 channel: deployments, production-alarms
                 template: basic_fail_1
-      - notify:
+      - deployment-notification:
           requires: ["Deploy Production ECS with new image"]
           env: staging
           context:
