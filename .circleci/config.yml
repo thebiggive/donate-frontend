@@ -103,10 +103,9 @@ jobs:
           job_type: deployment
           environment: << parameters.env >>
           environment_type: << parameters.env >>
-      - run: echo "export COMMIT_MESSAGE=\"$(git log --format=oneline -n 1 $CIRCLE_SHA1)\"" >> ~/.bashrc
       - run:
           name: Notify Slack
-          command: ./message-slack.mjs
+          command: COMMIT_MESSAGE=\"$(git log --format=oneline -n 1 $CIRCLE_SHA1)\" ./message-slack.mjs
 workflows:
   commit:
     jobs:
