@@ -2,6 +2,8 @@
 
 const env = process.env;
 
+const shortCommitHash = env.CIRCLE_SHA1.substring(0, 7);
+
 const response = await fetch('https://slack.com/api/chat.postMessage', {
   method: 'POST',
   headers: {
@@ -15,7 +17,8 @@ const response = await fetch('https://slack.com/api/chat.postMessage', {
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": `*${env.CIRCLE_BRANCH}: Donate frontend deployed!* All visitors should see the updated app version within 30 minutes. Git commit ${env.CIRCLE_SHA1} `
+          "text": `*${env.CIRCLE_BRANCH}: Donate frontend deployed!* All visitors should see the updated app version within 30 minutes.
+          Commit: [https://github.com/thebiggive/donate-frontend/commit/${shortCommitHash}](${shortCommitHash}) `
         }
       }]
     }),
