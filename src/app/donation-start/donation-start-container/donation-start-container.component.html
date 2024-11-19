@@ -6,6 +6,9 @@
         <span class="b-rt-1 b-bold time-left">{{ reservationExpiryDate | timeLeft }}</span>
       </div>
     </div>
+    <div style="height: 4em">
+      <!-- timer has fixed position so would occlude the content below without this empty div to push it down-->
+    </div>
   }
   <div class="b-back-button">
     <a mat-icon-button [routerLink]="'/campaign/' + campaign.id">
