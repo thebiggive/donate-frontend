@@ -18,7 +18,7 @@ const response = await fetch('https://slack.com/api/chat.postMessage', {
         "text": {
           "type": "mrkdwn",
           "text": `*${env.CIRCLE_BRANCH}: Donate frontend deployed!* All visitors should see the updated app version within 30 minutes.\n` +
-            `Commit: <https://github.com/thebiggive/donate-frontend/commit/${shortCommitHash}|${shortCommitHash} ${env.COMMIT_MESSAGE}> `
+            `<https://github.com/thebiggive/donate-frontend/commit/${shortCommitHash}|${shortCommitHash}: ${env.COMMIT_MESSAGE}>`
         }
       }]
     }),

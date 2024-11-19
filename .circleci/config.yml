@@ -105,7 +105,7 @@ jobs:
           environment_type: << parameters.env >>
       - run:
           name: Notify Slack
-          command: COMMIT_MESSAGE=\"$(git log --format=oneline -n 1 $CIRCLE_SHA1)\" ./message-slack.mjs
+          command: COMMIT_MESSAGE=\"$(git show -s --format=%s $CIRCLE_SHA1)\" ./message-slack.mjs
 workflows:
   commit:
     jobs:
