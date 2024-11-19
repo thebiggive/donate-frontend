@@ -85,7 +85,7 @@ jobs:
           to: 's3://tbg-<< parameters.env >>-donate-static/assets'
           arguments: '--acl public-read --cache-control "max-age=86400"'
 
-  notify:
+  deployment-notification:
     parameters:
       env:
         type: string
@@ -119,12 +119,12 @@ workflows:
                 pipeline_number: << pipeline.number >>
                 job_type: build
                 environment_type: development
-      - notify:
+      - deployment-notification:
           context:
             - slack
             - jira
           # temporarily deployment-notificationing slack on every commit until we can see the notification working.
-          requires: ["test"]
+#          requires: ["test"]
           env: testing
 
   deploy-regression:
