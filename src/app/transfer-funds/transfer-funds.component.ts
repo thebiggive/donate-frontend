@@ -1,6 +1,6 @@
 import {isPlatformBrowser} from '@angular/common';
 import {AfterContentInit, Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSelectChange} from '@angular/material/select';
@@ -83,14 +83,19 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       marketing: FormGroup,
     } = {
       amounts: this.formBuilder.group({
-        creditAmount: [null, [
-          Validators.required,
-          getCurrencyMinValidator(environment.minimumCreditAmount), // overrides the min amount to value from env file
-          getCurrencyMaxValidator(environment.maximumCreditAmount),
-          Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
-        ]],
-        tipPercentage: [this.initialTipSuggestedPercentage],
-        customTipAmount: [null, [
+        creditAmount: new FormControl(
+          null, {
+            validators: [
+              Validators.required,
+              getCurrencyMinValidator(environment.minimumCreditAmount), // overrides the min amount to value from env file
+              getCurrencyMaxValidator(environment.maximumCreditAmount),
+              Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
+            ],
+            updateOn: "blur",
+          }),
+        tipPercentage: new FormControl(this.initialTipSuggestedPercentage, {updateOn: "blur"}),
+        customTipAmount: new FormControl(null, {
+          validators: [
           // Explicitly enforce minimum custom tip amount of £0. This is already covered by the regexp
           // validation rule below, but it's good to add the explicit check for future-proofness
           getCurrencyMinValidator(), // no override, so custom tip amount min is £0 (default)
@@ -99,7 +104,9 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
           // See MAT-266 and the Slack thread linked in its description for more context.
           getCurrencyMaxValidator(maximumDonationAmountForFundedDonation),
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
-        ]],
+          ],
+          updateOn: "blur",
+        }),
       }),
       giftAid: this.formBuilder.group({
         giftAid: [null],

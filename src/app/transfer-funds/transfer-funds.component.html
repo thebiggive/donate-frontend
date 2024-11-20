@@ -24,7 +24,8 @@
             </mat-form-field>
             @if (creditAmountField?.errors && creditAmountField?.invalid && (creditAmountField?.dirty || creditAmountField?.touched)) {
               <p class="error">
-                Must be between {{ minimumCreditAmount | exactCurrency:currency }} and {{ maximumCreditAmount | exactCurrency:currency }} inclusive.
+                Please enter a whole number of pounds between {{ minimumCreditAmount | exactCurrency:currency }} and
+                {{ maximumCreditAmount | exactCurrency:currency }} inclusive.
               </p>
             }
             @if (donorHasPendingTipBalance) {
