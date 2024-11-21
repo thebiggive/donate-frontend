@@ -29,7 +29,7 @@
     "link-components": "./link-components.sh",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "supportedBrowsers": "(echo module.exports = && browserslist-useragent-regexp --allowHigherVersions) > src/supportedBrowsers.js"
+    "supportedBrowsers": "(echo export const supportedBrowsers: RegExp = && browserslist-useragent-regexp --allowHigherVersions) > src/supportedBrowsers.ts"
   },
   "dependencies": {
     "@angular/animations": "^18.2.8",
