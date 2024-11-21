@@ -7,8 +7,6 @@ import { Response } from "express";
 import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "../highlight-cards/HighlightCard";
 import {environment} from "../../environments/environment";
-import {supportedBrowsers} from "../../supportedBrowsers";
-import {detect} from "detect-browser";
 
 @Component({
   selector: 'app-home',
@@ -20,7 +18,6 @@ export class HomeComponent implements OnInit {
     totalRaisedFormatted: string,
     totalCountFormatted: string
   };
-  browserSupportedMessage?: string;
 
   private currentTime = new Date();
 
@@ -43,12 +40,6 @@ export class HomeComponent implements OnInit {
 
 
   ngOnInit() {
-    // detect supported browser or inform user, https://dev.to/aakashgoplani/manage-list-of-supported-browsers-for-your-application-in-angular-4b47
-    const browserIsSupported = supportedBrowsers.test(navigator.userAgent);
-    if (! browserIsSupported) {
-      this.browserSupportedMessage = `Your current browser ${detect()?.name} version ${detect()?.version} is not supported`;
-    }
-
     this.pageMeta.setCommon(
       'Big Give',
       'Big Give – discover campaigns and donate',
@@ -96,6 +87,4 @@ export class HomeComponent implements OnInit {
       this.mayBeAboutToRedirect = false;
     }
   }
-
-  protected readonly supportedBrowsers = supportedBrowsers;
 }

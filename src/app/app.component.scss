@@ -31,3 +31,13 @@ biggive-main-menu {
 .skip-to-content-link:focus-within {
   transform: translateY(0%);
 }
+
+.browser-unsupported-message {
+  background-color: $colour-secondary;
+  padding: 10px;
+  margin: 10px 0px;
+  div {
+    margin: auto;
+    max-width: 500px;
+  }
+}
