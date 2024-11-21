@@ -149,6 +149,7 @@
   .mat-mdc-icon-button {
     width: 100%;
     font-weight: 400;
+    font-size: 18px; // overriding larger default size of .mat-mdc-icon-button
   }
 
   .mat-icon {
