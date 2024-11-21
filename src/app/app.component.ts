@@ -19,6 +19,8 @@ import {
   CookiePreferenceService
 } from "./cookiePreference.service";
 import {Observable, Subscription} from "rxjs";
+import {supportedBrowsers} from "../supportedBrowsers";
+import {detect} from "detect-browser";
 
 @Component({
   selector: 'app-root',
@@ -28,6 +30,7 @@ import {Observable, Subscription} from "rxjs";
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
 
+  protected browserSupportedMessage?: string;
   public isLoggedIn: boolean = false;
 
   public readonly donateUriPrefix = environment.donateUriPrefix;
@@ -115,6 +118,12 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
   ngOnInit() {
     if (this.isPlatformBrowser) {
+      // detect supported browser or inform user, https://dev.to/aakashgoplani/manage-list-of-supported-browsers-for-your-application-in-angular-4b47
+      const browserIsSupported = supportedBrowsers.test(navigator.userAgent);
+      if (! browserIsSupported) {
+        this.browserSupportedMessage = `Your current browser: ${detect()?.name} ${detect()?.version} is not supported. Please try another browser.`;
+      }
+
       this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {
         if (agreesToThirdParty(preferences)) {
           this.getSiteControlService.init();

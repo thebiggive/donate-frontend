@@ -38,6 +38,7 @@ export class HomeComponent implements OnInit {
   ) {
   }
 
+
   ngOnInit() {
     this.pageMeta.setCommon(
       'Big Give',

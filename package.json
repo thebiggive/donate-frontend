@@ -28,7 +28,8 @@
     "serve:ssr": "node dist/server/main.js",
     "link-components": "./link-components.sh",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "supportedBrowsers": "(echo export const supportedBrowsers: RegExp = && browserslist-useragent-regexp --allowHigherVersions) > src/supportedBrowsers.ts"
   },
   "dependencies": {
     "@angular/animations": "^18.2.8",
@@ -51,7 +52,9 @@
     "@fortawesome/pro-duotone-svg-icons": "^6.6.0",
     "@fortawesome/pro-solid-svg-icons": "^6.6.0",
     "@stripe/stripe-js": "^4.4.0",
+    "browserslist-useragent-regexp": "^4.1.3",
     "compression": "^1.7.4",
+    "detect-browser": "^5.3.0",
     "express": "^4.21.1",
     "friendly-challenge": "^0.9.16",
     "helmet": "^7.1.0",
