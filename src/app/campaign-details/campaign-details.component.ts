@@ -107,7 +107,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     if (campaign.video && campaign.video.provider === 'youtube') {
       this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube-nocookie.com/embed/${campaign.video.key}`);
     } else if (campaign.video && campaign.video.provider === 'vimeo') {
-      this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://player.vimeo.com/video/${campaign.video.key}`);
+      this.videoEmbedUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`https://player.vimeo.com/video/${campaign.video.key}?dnt=1`); // dnt = do not track
     }
 
     if (campaign.hidden) {
