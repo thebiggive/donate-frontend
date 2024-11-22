@@ -16,6 +16,7 @@
         Registering for a Donor Account is quick and easy.
       </p>
 
+      @if (redirectPath === transferFundsPath) {
       <p>
         When you have registered, you will be shown the Transfer Funds page. Here, you can:
       </p>
@@ -29,6 +30,7 @@
 
         <li>Choose whether you would like to join Big Give’s mailing list</li>
       </ul>
+      }
 
       <form
         [formGroup]="registrationForm"
