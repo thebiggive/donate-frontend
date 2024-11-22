@@ -36,7 +36,7 @@
                 </div>
                 <div class="actions">
                   <div>
-                    <a (click)="this.forgotPassword = false" style="text-decoration: underline">Return to Login page</a>
+                    <a (click)="this.forgotPassword = false">Return to Login page</a>
                   </div>
                   <div id="reset-password-button">
                     @if (! userAskedForResetLink) {
@@ -102,7 +102,7 @@
           </form>
           <div class="actions">
             <div>
-              <a (click)="this.forgotPassword = true" style="text-decoration: underline">Forgot Password?</a>
+              <a (click)="this.forgotPassword = true">Forgot Password?</a>
             </div>
             <div id="login-button">
               <div aria-live="polite">

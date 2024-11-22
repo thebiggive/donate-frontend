@@ -7,7 +7,6 @@ orbs:
   aws-s3: circleci/aws-s3@4.0.0
   browser-tools: circleci/browser-tools@1.4.8
   jira: circleci/jira@2.1.0
-  slack: circleci/slack@4.14.0
 
 jobs:
   test:
@@ -85,6 +84,27 @@ jobs:
           to: 's3://tbg-<< parameters.env >>-donate-static/assets'
           arguments: '--acl public-read --cache-control "max-age=86400"'
 
+  deployment-notification:
+    parameters:
+      env:
+        type: string
+    resource_class: large
+    docker:
+      - image: cimg/node:20.13.1-browsers
+        auth:
+          username: $DOCKER_HUB_USERNAME
+          password: $DOCKER_HUB_ACCESS_TOKEN
+    steps:
+      - checkout
+      - jira/notify:
+          pipeline_id: << pipeline.id >>
+          pipeline_number: << pipeline.number >>
+          job_type: deployment
+          environment: << parameters.env >>
+          environment_type: << parameters.env >>
+      - run:
+          name: Notify Slack
+          command: COMMIT_MESSAGE=\"$(git show -s --format=%s $CIRCLE_SHA1)\" ./message-slack.mjs
 workflows:
   commit:
     jobs:
@@ -111,26 +131,12 @@ workflows:
           context:
             - docker-hub-creds
             - ecs-deploys
-            - slack
-          post-steps:
-            - slack/notify:
-                channel: deployments, regression-alarms
-                event: fail
-                template: basic_fail_1
-                mentions: <@here>
       - copy-ecr-static-to-s3:
           env: regression
           name: "Copy Regression ECR static to S3"
           requires: ["Build Regression ECR image"]
           context:
             - ecs-deploys
-            - slack
-          post-steps:
-            - slack/notify:
-                channel: deployments, regression-alarms
-                event: fail
-                template: basic_fail_1
-                mentions: <@here>
       - aws-ecs/deploy_service_update:
           name: "Deploy Regression ECS with new image"
           auth:
@@ -139,18 +145,11 @@ workflows:
                 aws_secret_access_key: AWS_SECRET_ACCESS_KEY
           context:
             - ecs-deploys
-            - slack
           requires: ["Copy Regression ECR static to S3"]
           region: AWS_REGION
           family: 'tbg-regression-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
           cluster: 'tbg-regression-${AWS_REGION}'
           container_image_name_updates: 'container=donate,tag=regression-${CIRCLE_SHA1}'
-          post-steps:
-            - slack/notify:
-                channel: deployments, regression-alarms
-                event: fail
-                template: basic_fail_1
-                mentions: <@here>
 
   deploy-staging:
     jobs:
@@ -164,26 +163,12 @@ workflows:
           context:
             - docker-hub-creds
             - ecs-deploys
-            - slack
-          post-steps:
-            - slack/notify:
-                channel: deployments, staging-alarms
-                event: fail
-                template: basic_fail_1
-                mentions: <@here>
       - copy-ecr-static-to-s3:
           env: staging
           name: "Copy Staging ECR static to S3"
           requires: ["Build Staging ECR image"]
           context:
             - ecs-deploys
-            - slack
-          post-steps:
-            - slack/notify:
-                channel: deployments, staging-alarms
-                event: fail
-                template: basic_fail_1
-                mentions: <@here>
       - aws-ecs/deploy_service_update:
           name: "Deploy Staging ECS with new image"
           auth:
@@ -193,40 +178,17 @@ workflows:
           context:
             - ecs-deploys
             - jira
-            - slack
           requires: ["Copy Staging ECR static to S3"]
           region: AWS_REGION
           family: 'tbg-staging-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
           cluster: 'tbg-staging-${AWS_REGION}'
           container_image_name_updates: 'container=donate,tag=staging-${CIRCLE_SHA1}'
-          post-steps:
-            - jira/notify:
-                pipeline_id: << pipeline.id >>
-                pipeline_number: << pipeline.number >>
-                job_type: deployment
-                environment: Staging
-                environment_type: staging
-            - slack/notify:
-                channel: deployments
-                custom: |
-                  {
-                    "blocks": [
-                      {
-                        "type": "section",
-                        "fields": [
-                          {
-                            "type": "mrkdwn",
-                            "text": "*Staging: Donate frontend deployed!* All visitors should see the updated app version within 30 minutes."
-                          }
-                        ]
-                      }
-                    ]
-                  }
-            - slack/notify:
-                channel: deployments, staging-alarms,
-                event: fail
-                template: basic_fail_1
-                mentions: <@here>
+      - deployment-notification:
+          requires: ["Deploy Staging ECS with new image"]
+          env: staging
+          context:
+            - slack
+            - jira
 
   deploy-production:
     jobs:
@@ -240,26 +202,12 @@ workflows:
           context:
             - docker-hub-creds
             - ecs-deploys
-            - slack
-          post-steps:
-            - slack/notify:
-                channel: deployments, production-alarms
-                event: fail
-                template: basic_fail_1
-                mentions: <@here>
       - copy-ecr-static-to-s3:
           env: production
           name: "Copy Production ECR static to S3"
           requires: ["Build Production ECR image"]
           context:
             - ecs-deploys
-            - slack
-          post-steps:
-            - slack/notify:
-                channel: deployments, production-alarms
-                event: fail
-                template: basic_fail_1
-                mentions: <@here>
       - aws-ecs/deploy_service_update:
           name: "Deploy Production ECS with new image"
           auth:
@@ -269,36 +217,14 @@ workflows:
           context:
             - ecs-deploys
             - jira
-            - slack
           requires: ["Copy Production ECR static to S3"]
           region: AWS_REGION
           family: 'tbg-production-${AWS_REGION}-${AWS_ECS_SERVICE_SUFFIX}'
           cluster: 'tbg-production-${AWS_REGION}'
           container_image_name_updates: "container=donate,tag=production-${CIRCLE_SHA1}"
-          post-steps:
-            - jira/notify:
-                pipeline_id: << pipeline.id >>
-                pipeline_number: << pipeline.number >>
-                job_type: deployment
-                environment: Production
-                environment_type: production
-            - slack/notify:
-                channel: deployments
-                custom: |
-                  {
-                    "blocks": [
-                      {
-                        "type": "section",
-                        "fields": [
-                          {
-                            "type": "mrkdwn",
-                            "text": "*Production: Donate frontend deployed!* All visitors should see the updated app version within 30 minutes."
-                          }
-                        ]
-                      }
-                    ]
-                  }
-            - slack/notify:
-                event: fail
-                channel: deployments, production-alarms
-                template: basic_fail_1
+      - deployment-notification:
+          requires: ["Deploy Production ECS with new image"]
+          env: staging
+          context:
+            - slack
+            - jira

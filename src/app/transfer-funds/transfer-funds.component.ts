@@ -1,6 +1,6 @@
 import {isPlatformBrowser} from '@angular/common';
 import {AfterContentInit, Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSelectChange} from '@angular/material/select';
@@ -23,6 +23,7 @@ import {Person} from '../person.model';
 import {PostcodeService} from '../postcode.service';
 import {getCurrencyMinValidator} from '../validators/currency-min';
 import {getCurrencyMaxValidator} from '../validators/currency-max';
+import {Toast} from '../toast.service';
 
 /**
  * Support for topping up Stripe customer_balance via bank transfer. Only
@@ -39,6 +40,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   isPurchaseComplete = false;
   isOptedIntoGiftAid = false;
   currency = '£';
+  /** The Big Give campaign which receives any on-topup tips. */
   campaign: Campaign;
   donation?: Donation;
   creditForm: FormGroup;
@@ -67,16 +69,12 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     private matomoTracker: MatomoTracker,
     @Inject(PLATFORM_ID) private platformId: Object,
     private postcodeService: PostcodeService,
+    private toast: Toast,
   ) {}
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      const idAndJWT = this.identityService.getIdAndJWT();
-      if (idAndJWT !== undefined) {
-        if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
-          this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
-        }
-      }
+      this.loadPerson();
     }
 
     const formGroups: {
@@ -85,14 +83,19 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       marketing: FormGroup,
     } = {
       amounts: this.formBuilder.group({
-        creditAmount: [null, [
-          Validators.required,
-          getCurrencyMinValidator(environment.minimumCreditAmount), // overrides the min amount to value from env file
-          getCurrencyMaxValidator(environment.maximumCreditAmount),
-          Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
-        ]],
-        tipPercentage: [this.initialTipSuggestedPercentage],
-        customTipAmount: [null, [
+        creditAmount: new FormControl(
+          null, {
+            validators: [
+              Validators.required,
+              getCurrencyMinValidator(environment.minimumCreditAmount), // overrides the min amount to value from env file
+              getCurrencyMaxValidator(environment.maximumCreditAmount),
+              Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
+            ],
+            updateOn: "blur",
+          }),
+        tipPercentage: new FormControl(this.initialTipSuggestedPercentage, {updateOn: "blur"}),
+        customTipAmount: new FormControl(null, {
+          validators: [
           // Explicitly enforce minimum custom tip amount of £0. This is already covered by the regexp
           // validation rule below, but it's good to add the explicit check for future-proofness
           getCurrencyMinValidator(), // no override, so custom tip amount min is £0 (default)
@@ -101,7 +104,9 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
           // See MAT-266 and the Slack thread linked in its description for more context.
           getCurrencyMaxValidator(maximumDonationAmountForFundedDonation),
           Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
-        ]],
+          ],
+          updateOn: "blur",
+        }),
       }),
       giftAid: this.formBuilder.group({
         giftAid: [null],
@@ -305,6 +310,10 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     return true;
   }
 
+  /**
+   * In whole currency unit, e.g. pounds. Always a whole number because Donation Fund tips are in fact donations / payment intents to BG,
+   * and we don't support partial pounds for those for now.
+   */
   calculatedTipAmount() : number {
     const unsanitisedCreditAmount = this.amountsGroup.value.creditAmount;
 
@@ -322,7 +331,8 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
     const creditAmount: number = this.sanitiseCurrency(unsanitisedCreditAmount);
     const tipPercentage: number = this.amountsGroup.value.tipPercentage;
-    return (creditAmount * (tipPercentage / 100));
+
+    return Math.floor(creditAmount * (tipPercentage / 100));
   }
 
   logout() {
@@ -339,6 +349,14 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     window.location.href = "/";
   }
 
+  cancelPendingTips() {
+    this.donationService.cancelDonationFundsToCampaign(environment.creditTipsCampaign).subscribe(() => {
+      // Theoretically this could be multiple tips, but in practice almost always 0 or 1, so singular is the less confusing copy.
+      this.toast.showSuccess('Pending tip cancelled. To continue, enter a new tip amount to support Big Give when you transfer, or 0.');
+      this.loadPerson();
+    });
+  }
+
   /**
    * Amount in existing committed tips to be fulfilled, in minor units (i.e. pence),
    * currently just for GBP / UK bank transfers. 0 if donor's not yet loaded.
@@ -349,6 +367,15 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
   get donorHasPendingTipBalance(): boolean {
     return this.pendingTipBalance > 0;
+  }
+
+  private loadPerson() {
+    const idAndJWT = this.identityService.getIdAndJWT();
+    if (idAndJWT !== undefined) {
+      if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
+        this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
+      }
+    }
   }
 
   private loadAuthedPersonInfo(id: string, jwt: string) {
@@ -492,5 +519,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       errorMessage = `Could not create new donation for campaign ${this.campaign.id}: HTTP code ${response.status}`;
     }
     this.matomoTracker.trackEvent('donate_error', 'credit_tip_donation_create_failed', errorMessage);
+    this.toast.showError('Could not prepare your tip; please try again later or contact us to investigate');
   }
 }

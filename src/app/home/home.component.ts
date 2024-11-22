@@ -8,8 +8,6 @@ import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "../highlight-cards/HighlightCard";
 import {environment} from "../../environments/environment";
 
-const CCCloseDate = new Date('2023-12-05T12:00:00+00:00');
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -40,6 +38,7 @@ export class HomeComponent implements OnInit {
   ) {
   }
 
+
   ngOnInit() {
     this.pageMeta.setCommon(
       'Big Give',
@@ -62,15 +61,17 @@ export class HomeComponent implements OnInit {
     }
 
     // start the redirect 12 hours in advance of CC open:
-    const startRedirectingToCCAt = new Date('2023-11-28T00:00:00+00:00');
+    const startRedirectingToCCAt = new Date('2024-12-03T00:00:00+00:00');
 
     // end the redirect exactly at the time CC closes.
+    const CCCloseDate = new Date('2024-12-10T12:00:00+00:00');
+
     if (
       !queryParams.hasOwnProperty('noredirect') &&
       this.currentTime >= startRedirectingToCCAt &&
       this.currentTime < CCCloseDate
       ) {
-        const redirectSlugIncSlash = '/christmas-challenge-2023';
+        const redirectSlugIncSlash = '/christmas-challenge-2024';
         if (isPlatformBrowser(this.platformId)) {
           this.router.navigate(
             [redirectSlugIncSlash],
