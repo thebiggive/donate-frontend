@@ -493,6 +493,10 @@
                     Please note that you might continue to receive communications from the charity if you have already shared your details with them via other methods.
                   </p>
                 }
+                @if (marketingGroup.value.optInCharityEmail) {
+                  <p aria-live="polite" class="no-margin-top b-rt-sm b-grey">
+                    As you are providing personal information to {{ campaign.charity.name }}, please make sure you read and agree to their privacy statement.</p>
+                }
               </mat-hint>
               <p class="binary-question-header b-bold b-rt-0" id="optInTbgEmail-label">Would you be happy to receive emails from <span class="colour-primary">Big Give</span>?</p>
               <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
