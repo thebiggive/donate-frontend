@@ -671,6 +671,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
+    if (!this.donation && (this.idCaptchaCode || this.donor) && this.donationAmount > 0) {
+      this.createDonationAndMaybePerson();
+    }
+
     // We need to allow enough time for the Stepper's animation to get the window to
     // its final position for this step, before this scroll position update can be reliably
     // helpful.
@@ -1183,10 +1187,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       this.toast.showError(this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount or tip amount');
 
       return;
-    }
-
-    if (!this.donation && (this.idCaptchaCode || this.donor) && this.donationAmount > 0) {
-      this.createDonationAndMaybePerson();
     }
 
     this.next();
