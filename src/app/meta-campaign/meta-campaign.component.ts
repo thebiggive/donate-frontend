@@ -381,9 +381,15 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
    * Update the browser's query params when a sort or filter is applied.
    */
   private setQueryParams() {
-    this.router.navigate([], {
-      queryParams: this.searchService.getQueryParams(this.getDefaultSort()),
-    });
+    const nextQueryParams = this.searchService.getQueryParams(this.getDefaultSort());
+    if (JSON.stringify(this.route.snapshot.queryParams) === JSON.stringify(nextQueryParams)) {
+      // Don't navigate at all if no change in query params. This saves us from inconsistencies
+      // later such as scroll adjustment kicking in only when the router params actually changed,
+      // and saves giving the browser needless work to do.
+      return;
+    }
+
+    this.router.navigate([], { queryParams: nextQueryParams });
   }
 
   private listenForRouteChanges() {
