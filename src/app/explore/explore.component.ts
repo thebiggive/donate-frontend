@@ -192,7 +192,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
    * Update the browser's query params when a sort or filter is applied.
    */
   private setQueryParams() {
-    const nextQueryParams = this.searchService.getQueryParams(this.getDefaultSort());
+    const nextQueryParams = this.searchService.getQueryParams(this.defaultSort);
     if (JSON.stringify(this.route.snapshot.queryParams) === JSON.stringify(nextQueryParams)) {
       // Don't navigate at all if no change in query params. This saves us from inconsistencies
       // later such as scroll adjustment kicking in only when the router params actually changed,
