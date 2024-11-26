@@ -10,7 +10,7 @@
       [mainMessage]="tickerMainMessage"
       >
       <div slot="ticker-items">
-        @for (tickerItem of tickerItems; track tickerItem) {
+        @for (tickerItem of tickerItems; track tickerItem.label) {
           <biggive-totalizer-ticker-item
             [figure]="tickerItem.figure"
             [label]="tickerItem.label">
