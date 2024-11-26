@@ -79,8 +79,9 @@ export class ExploreComponent implements OnDestroy, OnInit {
       if (isPlatformBrowser(this.platformId)) {
         const positionMarker = document.getElementById('SCROLL_POSITION_WHEN_PARAMS_CHANGE');
 
-        // Angular scrolls automatically, using setTimeout to delay this scroll to a later task so this gets to
-        // set the position the page is left in.
+        // Angular routing changes scroll position (possibly while trying to restore a previous known position). Using setTimeout to
+        // then scroll to the new best position for this use case (the search form and top of results) after that work has happened,
+        // whenever the search filters change substantively.
         setTimeout(() => positionMarker?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
       }
     });
