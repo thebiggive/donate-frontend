@@ -186,9 +186,10 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       if (isPlatformBrowser(this.platformId)) {
         const positionMarker = document.getElementById('SCROLL_POSITION_WHEN_PARAMS_CHANGE');
 
-        // Angular scrolls automatically, using setTimeout to delay this scroll to a later task so this gets to
-        // set the position the page is left in.
-        setTimeout(() => positionMarker?.scrollIntoView({}), 0);
+        // Angular routing changes scroll position (possibly while trying to restore a previous known position). Using setTimeout to
+        // then scroll to the new best position for this use case (the search form and top of results) after that work has happened,
+        // whenever the search filters change substantively.
+        setTimeout(() => positionMarker?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
       }
     });
   }
@@ -381,9 +382,15 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
    * Update the browser's query params when a sort or filter is applied.
    */
   private setQueryParams() {
-    this.router.navigate([], {
-      queryParams: this.searchService.getQueryParams(this.getDefaultSort()),
-    });
+    const nextQueryParams = this.searchService.getQueryParams(this.getDefaultSort());
+    if (JSON.stringify(this.route.snapshot.queryParams) === JSON.stringify(nextQueryParams)) {
+      // Don't navigate at all if no change in query params. This saves us from inconsistencies
+      // later such as scroll adjustment kicking in only when the router params actually changed,
+      // and saves giving the browser needless work to do.
+      return;
+    }
+
+    this.router.navigate([], { queryParams: nextQueryParams });
   }
 
   private listenForRouteChanges() {
