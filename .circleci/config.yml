@@ -88,6 +88,8 @@ jobs:
     parameters:
       env:
         type: string
+      env_type:
+        type: string
     resource_class: large
     docker:
       - image: cimg/node:20.13.1-browsers
@@ -101,7 +103,7 @@ jobs:
           pipeline_number: << pipeline.number >>
           job_type: deployment
           environment: << parameters.env >>
-          environment_type: << parameters.env >>
+          environment_type: << parameters.env_type >>
       - run:
           name: Notify Slack
           command: COMMIT_MESSAGE=\"$(git show -s --format=%s $CIRCLE_SHA1)\" ./message-slack.mjs
@@ -186,6 +188,7 @@ workflows:
       - deployment-notification:
           requires: ["Deploy Staging ECS with new image"]
           env: staging
+          env_type: staging
           context:
             - slack
             - jira
@@ -224,7 +227,8 @@ workflows:
           container_image_name_updates: "container=donate,tag=production-${CIRCLE_SHA1}"
       - deployment-notification:
           requires: ["Deploy Production ECS with new image"]
-          env: staging
+          env: production
+          env_type: production
           context:
             - slack
             - jira
