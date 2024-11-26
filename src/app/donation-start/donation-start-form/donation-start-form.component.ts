@@ -585,7 +585,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     for (const stepperHeader of stepperHeaders) {
       stepperHeader.addEventListener('click', (clickEvent: any) => {
         if (this.stepper.selectedIndex > 0) {
-          this.progressToNonAmountsStep(); // Handles amount error if needed, like Continue button does.
+          this.validateAmountsCreateDonorDonationIfPossible(); // Handles amount error if needed, like Continue button does.
           return;
         }
 
@@ -1180,18 +1180,24 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * against a scenario where one might get 'stuck' without seeing the amount error that explains why.
    */
   progressToNonAmountsStep() {
+    const success = this.validateAmountsCreateDonorDonationIfPossible();
+
+    success && this.next();
+  }
+
+  private validateAmountsCreateDonorDonationIfPossible(): boolean {
     const control = this.donationForm.controls['amounts'];
-    if(! control!.valid) {
+    if (!control!.valid) {
       this.toast.showError(this.displayableAmountsStepErrors() || 'Sorry, there was an error with the donation amount or tip amount');
 
-      return;
+      return false;
     }
 
     if (!this.donation && (this.idCaptchaCode || this.donor) && this.donationAmount > 0) {
       this.createDonationAndMaybePerson();
     }
 
-    this.next();
+    return true;
   }
 
   progressFromStepGiftAid(): void {
