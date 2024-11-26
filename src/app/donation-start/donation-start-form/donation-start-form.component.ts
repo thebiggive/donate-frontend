@@ -584,11 +584,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     const stepperHeaders = stepper.getElementsByClassName('mat-step-header');
     for (const stepperHeader of stepperHeaders) {
       stepperHeader.addEventListener('click', (clickEvent: any) => {
-        if (clickEvent.target.index > 0) {
+        if (this.stepper.selectedIndex > 0) {
           this.progressToNonAmountsStep(); // Handles amount error if needed, like Continue button does.
           return;
         }
 
+        // usages of clickEvent.target may be wrong - wouldn't type check if we typed clickEvent as PointerEvent
+        // instead of Any. But not changing right now as could create regression and doesn't relate to any known bug.
         if (clickEvent.target.innerText.includes('Your details') && this.stepper.selected?.label === 'Gift Aid') {
           this.triedToLeaveGiftAid = true;
         }
