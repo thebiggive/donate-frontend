@@ -18,4 +18,5 @@ Firefox > 89
 Chrome > 84
 # First working version of Safari starting from MacOS High Sierra, Windows 7 and on Linux
 Safari > 14
-
+# Support for mobile IOS users
+iOS >= 15.4
