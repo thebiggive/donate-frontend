@@ -47,6 +47,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   /** Used to prevent displaying the page before all parts are ready **/
   public pageInitialised = false;
   private captchaCode: string | undefined;
+  protected registerLink: string;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -89,8 +90,10 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
 
     // allowed chars in URL to redirect to: a-z, A-Z, 0-9, - _ /
     if (redirectParam && isAllowableRedirectPath(redirectParam)) {
-      this.redirectPath = '/' + redirectParam;
+      this.redirectPath = '/' + redirectParam.replace(/^\/+/, ''); // strips any leading slashes
     }
+
+    this.registerLink = `/${registerPath}?r=` + encodeURIComponent(this.redirectPath);
 
     this.pageInitialised = true;
   }
