@@ -188,7 +188,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
 
         // Angular scrolls automatically, using setTimeout to delay this scroll to a later task so this gets to
         // set the position the page is left in.
-        setTimeout(() => positionMarker?.scrollIntoView({}), 0);
+        setTimeout(() => positionMarker?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
       }
     });
   }
