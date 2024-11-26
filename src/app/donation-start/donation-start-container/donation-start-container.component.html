@@ -38,7 +38,7 @@
         <app-donation-start-form
           #donation_start_form
           [campaign]="campaign"
-          [donor]="donor"
+          [donor]="signal(donor)"
           [donationChangeCallBack]="setDonation"
           [campaignOpenOnLoad]="campaignOpenOnLoad"
           />

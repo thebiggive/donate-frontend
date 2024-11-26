@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, signal, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 
 import {Campaign} from "../../campaign.model";
@@ -116,4 +116,5 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
     this.donation = donation;
     this.updateReservationExpiryTime();
   }
+  protected readonly signal = signal;
 }

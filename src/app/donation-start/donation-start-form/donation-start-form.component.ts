@@ -12,7 +12,7 @@ import {
   OnDestroy,
   OnInit,
   PLATFORM_ID,
-  ViewChild,
+  ViewChild, WritableSignal,
 } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
@@ -200,7 +200,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
   private stepChangeBlockedByCaptcha = false;
-  @Input({ required: true }) donor: Person | undefined;
+  @Input({ required: true }) donor: WritableSignal<Person | undefined>;
 
   /**
    * Keys are ISO2 codes, values are names.
@@ -497,7 +497,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         }
 
         // We have a resumable donation and aren't processing an error
-        if (this.donor && this.donor.stripe_customer_id !== existingDonation.pspCustomerId) {
+        if (this.donor && this.donor()?.stripe_customer_id !== existingDonation.pspCustomerId) {
           // We can't resume a donation that has a different customer ID on it. Probably user logged in
           // after creating the donation.
           this.donationService.cancel(existingDonation).subscribe(() => {
@@ -610,7 +610,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   reset = () => {
-    this.donor = undefined;
+    this.donor.set(undefined);
     this.creditPenceToUse = 0;
     this.stripePaymentMethodReady = false;
     this.paymentReadinessTracker = new PaymentReadinessTracker(this.paymentGroup);
@@ -736,7 +736,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       ) {
         // Typically an Identity captcha call has already been set off and its callback will create the donation.
         // But if we get here without a donation and with a code ready, we should create the donation now.
-        if (!this.creatingDonation && this.donor) {
+        if (!this.creatingDonation && this.donor()) {
           this.createDonationAndMaybePerson();
         }
       }
@@ -784,7 +784,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const isCard = state.value?.type === 'card';
     const selectedSavedPaymentMethod = state.value?.payment_method
-    this.showCardReuseMessage = isCard && ! selectedSavedPaymentMethod && ! this.donor?.has_password;
+    this.showCardReuseMessage = isCard && ! selectedSavedPaymentMethod && ! this.donor()?.has_password;
 
     this.isSavedPaymentMethodSelected = !!selectedSavedPaymentMethod;
     if (selectedSavedPaymentMethod) {
@@ -1193,7 +1193,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return false;
     }
 
-    if (!this.donation && (this.idCaptchaCode || this.donor) && this.donationAmount > 0) {
+    if (!this.donation && (this.idCaptchaCode || this.donor()) && this.donationAmount > 0) {
       this.createDonationAndMaybePerson();
     }
 
@@ -1636,12 +1636,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       tipAmount: sanitiseCurrency(this.amountsGroup.value.tipAmount?.trim()),
     };
 
-    if (this.donor?.id) {
+    if (this.donor()?.id) {
       donation.pspCustomerId = this.identityService.getPspId();
     }
 
     // Person already set up on page load.
-    if (this.donor?.id) {
+    if (this.donor()?.id) {
       this.createDonation(donation);
     } else {
       const person: Person = {};
@@ -1651,7 +1651,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         (person: Person) => {
           // would like to move the line below inside `identityService.create` but that caused test errors when I tried
           this.identityService.saveJWT(person.id as string, person.completion_jwt as string);
-          this.donor = person;
+          this.donor.set(person);
           donation.pspCustomerId = person.stripe_customer_id;
           this.createDonation(donation);
         },
@@ -1695,7 +1695,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // server is having problem it's probably more helpful to fail immediately than
     // to wait until they're ~10 seconds into further data entry before jumping
     // back to the start.
-    this.donationService.create(donation, this.donor?.id, this.identityService.getJWT())
+    this.donationService.create(donation, this.donor()?.id, this.identityService.getJWT())
     .subscribe({
       next: this.newDonationSuccess.bind(this),
       error: this.newDonationError.bind(this),
@@ -2250,13 +2250,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
                 billingCountry: this.defaultCountryCode,
               });
             }
-            if (this.donor?.id) {
+            if (this.donor()?.id) {
               const jwt = this.identityService.getJWT() as string;
-              this.identityService.get(this.donor?.id, jwt).subscribe((person: Person) => {
-                if (! this.donor?.id) {
+              this.identityService.get(this.donor()!.id!, jwt).subscribe((person: Person) => {
+                if (! this.donor()?.id) {
                   throw new Error("Person identifier went away");
                 }
-                this.loadPerson(person, this.donor.id, jwt)
+                this.loadPerson(person, this.donor()!.id!, jwt)
               });
             }
           },
@@ -2323,7 +2323,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   public loadPerson(person: Person, id: string, jwt: string) {
-    this.donor = person; // Should mean donations are attached to the Stripe Customer.
+    this.donor.set(person); // Should mean donations are attached to the Stripe Customer.
 
     // Only tokens for Identity users with a password have enough access to load payment methods, use credit
     // balances and access personal data beyond the anonymous new Customer basics.

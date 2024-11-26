@@ -2,7 +2,7 @@
   <div
     style="outline: solid green 1px; position: fixed; top: 200px; left: 50px; width: 400px; background: white"
     >
-    Customer: Email: {{donor?.email_address}} <br/> ID: {{donor?.id}} <br/> Stripe ID {{donor?.stripe_customer_id}}
+    Customer: Email: {{donor()?.email_address}} <br/> ID: {{donor()?.id}} <br/> Stripe ID {{donor()?.stripe_customer_id}}
     <br/><br>
     Donation {{ donation?.donationAmount }}
     <br>PSP customer ID: {{donation?.pspCustomerId}}

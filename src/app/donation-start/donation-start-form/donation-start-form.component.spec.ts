@@ -23,7 +23,7 @@ import {IdentityService, TBG_DONATE_ID_STORAGE} from '../../identity.service';
 import {TimeLeftPipe} from "../../time-left.pipe";
 import {DonationStartFormComponent} from "./donation-start-form.component";
 import {CardIconsService} from "../../card-icons.service";
-import {ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, ElementRef} from "@angular/core";
+import {ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, ElementRef, signal} from "@angular/core";
 import {ConversionTrackingService} from "../../conversionTracking.service";
 import {PageMetaService} from "../../page-meta.service";
 import {PostcodeService} from "../../postcode.service";
@@ -201,6 +201,7 @@ describe('DonationStartForm', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DonationStartFormComponent);
     component = fixture.componentInstance;
+    component.donor = signal(undefined);
     component.campaign = getDummyCampaign('testCampaignIdForStripe');
     // Don't `fixture.detectChanges()` here, so tests can vary their route-resolved campaign.
   });
