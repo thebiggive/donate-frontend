@@ -14,6 +14,9 @@
             text="Donor Login"
           ></biggive-heading>
         </div>
+        @if (isNewRegistration) {
+          <p class="welcome-to-big-give">Welcome to Big Give! You are now registered as a donor. Please log in to continue.</p>
+        }
         @if (forgotPassword) {
           <div>
             <h2 mat-dialog-title>Reset Password</h2>
@@ -137,7 +140,7 @@
           #frccaptcha
         ></div>
         <hr style="margin: 20px auto;">
-        <a href="{{'/' + registerPath}}">Create new Donation Funds account</a>
+        <a href="{{registerLink}}">Create new donation account</a>
       </biggive-page-section>
     </div>
   </main>

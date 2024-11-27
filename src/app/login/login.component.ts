@@ -19,6 +19,13 @@ export function isAllowableRedirectPath(redirectParam: string) {
   return ! redirectParam.match(/[^a-zA-Z0-9\-_\/]/);
 }
 
+export type LoginNavigationState = {
+  /**
+   * True if we came here as a redirect from the registration form.
+   */
+  newAccountRegistration?: boolean
+}
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -47,6 +54,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   /** Used to prevent displaying the page before all parts are ready **/
   public pageInitialised = false;
   private captchaCode: string | undefined;
+  protected registerLink: string;
+  protected isNewRegistration: boolean = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -55,6 +64,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     private readonly router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
+    const state: LoginNavigationState = <LoginNavigationState>this.router.getCurrentNavigation()?.extras.state;
+    this.isNewRegistration = !!state?.newAccountRegistration;
   }
 
   ngOnDestroy() {
@@ -89,8 +100,10 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
 
     // allowed chars in URL to redirect to: a-z, A-Z, 0-9, - _ /
     if (redirectParam && isAllowableRedirectPath(redirectParam)) {
-      this.redirectPath = '/' + redirectParam;
+      this.redirectPath = '/' + redirectParam.replace(/^\/+/, ''); // strips any leading slashes
     }
+
+    this.registerLink = `/${registerPath}?r=` + encodeURIComponent(this.redirectPath);
 
     this.pageInitialised = true;
   }

@@ -11,8 +11,10 @@ import {
   PLATFORM_ID,
   StateKey,
   TransferState,
+  ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
+import { BiggiveCampaignCardFilterGrid } from '@biggive/components-angular';
 import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
 import {skip, Subscription} from 'rxjs';
 
@@ -46,6 +48,8 @@ const endPipeToken = 'timeLeftToEndPipe';
   ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
+  @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid: BiggiveCampaignCardFilterGrid;
+
   // Campaign ID may be passed instead
   @Input({ required: false }) private campaignSlug: string;
   // Passed only on the fund-filtered view of this page.
@@ -63,6 +67,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   public title: string; // Includes fund info if applicable.
 
   private autoScrollTimer: number | undefined; // State update setTimeout reference, for client side scroll to previous position.
+  private blurredSinceLastMajorScroll = false;
   private campaignId: string;
   private offset = 0;
   private routeChangeListener: Subscription;
@@ -186,9 +191,10 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       if (isPlatformBrowser(this.platformId)) {
         const positionMarker = document.getElementById('SCROLL_POSITION_WHEN_PARAMS_CHANGE');
 
-        // Angular scrolls automatically, using setTimeout to delay this scroll to a later task so this gets to
-        // set the position the page is left in.
-        setTimeout(() => positionMarker?.scrollIntoView({}), 0);
+        // Angular routing changes scroll position (possibly while trying to restore a previous known position). Using setTimeout to
+        // then scroll to the new best position for this use case (the search form and top of results) after that work has happened,
+        // whenever the search filters change substantively.
+        setTimeout(() => positionMarker?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
       }
     });
   }
@@ -201,12 +207,21 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   onScroll() {
-    if (this.scroller.getScrollPosition()[1] < this.smallestSignificantScrollPx) {
+    const scrollPositionY = this.scroller.getScrollPosition()[1];
+    if (scrollPositionY < this.smallestSignificantScrollPx) {
+      // If we're now near the top, reset any previous input blurring as it might be helpful to blur again.
+      this.blurredSinceLastMajorScroll = false;
+
       // On return with internal app nav, automatic position seems to be [0,59]
       // or so as of Nov '22. So we want only larger scrolls to be picked up as
       // donor intervention and to turn off auto-scroll + trigger loading of
       // additional campaigns.
       return;
+    }
+
+    if (!this.blurredSinceLastMajorScroll) {
+      this.cardGrid && this.cardGrid.unfocusInputs();
+      this.blurredSinceLastMajorScroll = true;
     }
 
     this.shouldAutoScroll = false;
@@ -381,15 +396,22 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
    * Update the browser's query params when a sort or filter is applied.
    */
   private setQueryParams() {
-    this.router.navigate([], {
-      queryParams: this.searchService.getQueryParams(this.getDefaultSort()),
-    });
+    const nextQueryParams = this.searchService.getQueryParams(this.getDefaultSort());
+    if (JSON.stringify(this.route.snapshot.queryParams) === JSON.stringify(nextQueryParams)) {
+      // Don't navigate at all if no change in query params. This saves us from inconsistencies
+      // later such as scroll adjustment kicking in only when the router params actually changed,
+      // and saves giving the browser needless work to do.
+      return;
+    }
+
+    this.router.navigate([], { queryParams: nextQueryParams });
   }
 
   private listenForRouteChanges() {
     this.routeChangeListener = this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
-        this.navigationService.saveLastScrollY(this.scroller.getScrollPosition()[1]);
+        const scrollPositionY = this.scroller.getScrollPosition()[1];
+        this.navigationService.saveLastScrollY(scrollPositionY);
 
         if (isPlatformBrowser(this.platformId) && this.autoScrollTimer) {
           window.clearTimeout(this.autoScrollTimer);

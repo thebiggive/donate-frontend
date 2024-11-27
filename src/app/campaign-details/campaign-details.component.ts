@@ -33,6 +33,11 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
 
   private timer: any; // State update setTimeout reference, for client side when donations open soon
 
+  ngOnInit() {
+    this.campaign = this.route.snapshot.data.campaign;
+    this.setSecondaryProps(this.campaign);
+  }
+
   constructor(
     private datePipe: DatePipe,
     private location: Location,
@@ -50,11 +55,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
         this.fromFund = true;
       }
     });
-  }
-
-  ngOnInit() {
-    this.campaign = this.route.snapshot.data.campaign;
-    this.setSecondaryProps(this.campaign);
   }
 
   ngOnDestroy() {

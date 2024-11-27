@@ -1,6 +1,7 @@
-import {DatePipe, isPlatformBrowser} from '@angular/common';
-import {Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
+import {DatePipe, isPlatformBrowser, ViewportScroller} from '@angular/common';
+import {Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import { BiggiveCampaignCardFilterGrid } from '@biggive/components-angular';
 import {skip, Subscription} from 'rxjs';
 
 import {currencyPipeDigitsInfo} from '../../environments/common';
@@ -19,15 +20,19 @@ import {HighlightCard} from "../highlight-cards/HighlightCard";
   providers: [DatePipe]
 })
 export class ExploreComponent implements OnDestroy, OnInit {
+  @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid: BiggiveCampaignCardFilterGrid;
+
   campaigns: CampaignSummary[];
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
   loading = false; // Server render gets initial result set; set true when filters change.
   /** Whether any non-default search logic besides an order change has been applied. */
   searched = false;
 
+  private blurredSinceLastMajorScroll = false;
   private offset = 0;
   private routeParamSubscription: Subscription;
   private searchServiceSubscription: Subscription;
+  private readonly smallestSignificantScrollPx = 250;
 
   beneficiaryOptions: string[] = [];
   categoryOptions: string[] = [];
@@ -47,6 +52,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private pageMeta: PageMetaService,
+    private scroller: ViewportScroller,
     public searchService: SearchService,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
@@ -79,9 +85,10 @@ export class ExploreComponent implements OnDestroy, OnInit {
       if (isPlatformBrowser(this.platformId)) {
         const positionMarker = document.getElementById('SCROLL_POSITION_WHEN_PARAMS_CHANGE');
 
-        // Angular scrolls automatically, using setTimeout to delay this scroll to a later task so this gets to
-        // set the position the page is left in.
-        setTimeout(() => positionMarker?.scrollIntoView({}), 0);
+        // Angular routing changes scroll position (possibly while trying to restore a previous known position). Using setTimeout to
+        // then scroll to the new best position for this use case (the search form and top of results) after that work has happened,
+        // whenever the search filters change substantively.
+        setTimeout(() => positionMarker?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
       }
     });
   }
@@ -123,6 +130,18 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   onScroll() {
+    const scrollPositionY = this.scroller.getScrollPosition()[1];
+    if (scrollPositionY < this.smallestSignificantScrollPx) {
+      // If we're now near the top, reset any previous input blurring as it might be helpful to blur again.
+      this.blurredSinceLastMajorScroll = false;
+      return;
+    }
+
+    if (!this.blurredSinceLastMajorScroll) {
+      this.cardGrid && this.cardGrid.unfocusInputs();
+      this.blurredSinceLastMajorScroll = true;
+    }
+
     if (this.moreMightExist()) {
       this.more();
     }
@@ -192,8 +211,14 @@ export class ExploreComponent implements OnDestroy, OnInit {
    * Update the browser's query params when a sort or filter is applied.
    */
   private setQueryParams() {
-    this.router.navigate(['explore'], {
-      queryParams: this.searchService.getQueryParams(this.defaultSort),
-    });
+    const nextQueryParams = this.searchService.getQueryParams(this.defaultSort);
+    if (JSON.stringify(this.route.snapshot.queryParams) === JSON.stringify(nextQueryParams)) {
+      // Don't navigate at all if no change in query params. This saves us from inconsistencies
+      // later such as scroll adjustment kicking in only when the router params actually changed,
+      // and saves giving the browser needless work to do.
+      return;
+    }
+
+    this.router.navigate(['explore'], { queryParams: nextQueryParams });
   }
 }

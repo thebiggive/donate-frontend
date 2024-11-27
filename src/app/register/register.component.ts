@@ -10,12 +10,13 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {IdentityService} from "../identity.service";
 import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {transferFundsPath} from "../app-routing";
 import {WidgetInstance} from "friendly-challenge";
 import {flags} from "../featureFlags";
+import {isAllowableRedirectPath, LoginNavigationState} from "../login/login.component";
 
 @Component({
   selector: 'app-register',
@@ -28,6 +29,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('frccaptcha', { static: false })
   protected friendlyCaptcha: ElementRef<HTMLElement>;
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
+  protected readonly transferFundsPath = transferFundsPath;
 
 
   protected processing = false;
@@ -38,6 +40,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   private friendlyCaptchaSolution: string|undefined;
   protected readonly flags = flags;
   private friendlyCaptchaWidget: WidgetInstance;
+  protected redirectPath: string = 'my-account';
 
 
   constructor(
@@ -45,6 +48,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly identityService: IdentityService,
     private readonly router: Router,
     private sanitizer: DomSanitizer,
+    private readonly activatedRoute: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
   }
@@ -69,6 +73,13 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
         Validators.pattern(EMAIL_REGEXP),
       ]],
     });
+
+    const redirectParam = this.activatedRoute.snapshot.queryParams.r as string|undefined;
+
+    // allowed chars in URL to redirect to: a-z, A-Z, 0-9, - _ /
+    if (redirectParam && isAllowableRedirectPath(redirectParam)) {
+      this.redirectPath = redirectParam.replace(/^\/+/, ''); // strips any leading slashes;
+    }
   }
 
   async ngAfterViewInit() {
@@ -152,7 +163,10 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
             next: () => {
               // We can't re-use a captcha code twice, so auto-login won't work right now. For now we just
               // redirect to the login form
-              window.location.href = "/login";
+              const state: LoginNavigationState = {newAccountRegistration: true};
+              this.router.navigateByUrl("/login" + '?r=' + encodeURIComponent(this.redirectPath), {
+                state: state
+              })
             },
             error: (error) => {
               extractErrorMessage(error);
