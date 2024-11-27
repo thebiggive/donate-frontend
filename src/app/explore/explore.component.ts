@@ -130,7 +130,8 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   onScroll() {
-    if (this.scroller.getScrollPosition()[1] < this.smallestSignificantScrollPx) {
+    const scrollPositionY = this.scroller.getScrollPosition()[1];
+    if (scrollPositionY < this.smallestSignificantScrollPx) {
       this.blurredSinceLastMajorScroll = false;
       return;
     }
