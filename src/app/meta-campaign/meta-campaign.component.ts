@@ -11,8 +11,10 @@ import {
   PLATFORM_ID,
   StateKey,
   TransferState,
+  ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from '@angular/router';
+import { BiggiveCampaignCardFilterGrid } from '@biggive/components-angular';
 import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
 import {skip, Subscription} from 'rxjs';
 
@@ -46,6 +48,8 @@ const endPipeToken = 'timeLeftToEndPipe';
   ],
 })
 export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnInit {
+  @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid: BiggiveCampaignCardFilterGrid;
+
   // Campaign ID may be passed instead
   @Input({ required: false }) private campaignSlug: string;
   // Passed only on the fund-filtered view of this page.
@@ -63,6 +67,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   public title: string; // Includes fund info if applicable.
 
   private autoScrollTimer: number | undefined; // State update setTimeout reference, for client side scroll to previous position.
+  private blurredSinceLastMajorScroll = false;
   private campaignId: string;
   private offset = 0;
   private routeChangeListener: Subscription;
@@ -202,12 +207,21 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   onScroll() {
-    if (this.scroller.getScrollPosition()[1] < this.smallestSignificantScrollPx) {
+    const scrollPositionY = this.scroller.getScrollPosition()[1];
+    if (scrollPositionY < this.smallestSignificantScrollPx) {
+      // If we're now near the top, reset any previous input blurring as it might be helpful to blur again.
+      this.blurredSinceLastMajorScroll = false;
+
       // On return with internal app nav, automatic position seems to be [0,59]
       // or so as of Nov '22. So we want only larger scrolls to be picked up as
       // donor intervention and to turn off auto-scroll + trigger loading of
       // additional campaigns.
       return;
+    }
+
+    if (!this.blurredSinceLastMajorScroll) {
+      this.cardGrid && this.cardGrid.unfocusInputs();
+      this.blurredSinceLastMajorScroll = true;
     }
 
     this.shouldAutoScroll = false;
@@ -396,7 +410,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   private listenForRouteChanges() {
     this.routeChangeListener = this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
-        this.navigationService.saveLastScrollY(this.scroller.getScrollPosition()[1]);
+        const scrollPositionY = this.scroller.getScrollPosition()[1];
+        this.navigationService.saveLastScrollY(scrollPositionY);
 
         if (isPlatformBrowser(this.platformId) && this.autoScrollTimer) {
           window.clearTimeout(this.autoScrollTimer);
