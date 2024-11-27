@@ -19,6 +19,13 @@ export function isAllowableRedirectPath(redirectParam: string) {
   return ! redirectParam.match(/[^a-zA-Z0-9\-_\/]/);
 }
 
+export type LoginNavigationState = {
+  /**
+   * True if we came here as a redirect from the registration form.
+   */
+  newAccountRegistration?: boolean
+}
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -48,6 +55,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   public pageInitialised = false;
   private captchaCode: string | undefined;
   protected registerLink: string;
+  protected isNewRegistration: boolean = false;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -56,6 +64,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     private readonly router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
+    const state: LoginNavigationState = <LoginNavigationState>this.router.getCurrentNavigation()?.extras.state;
+    this.isNewRegistration = !!state?.newAccountRegistration;
   }
 
   ngOnDestroy() {

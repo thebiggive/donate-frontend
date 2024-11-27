@@ -16,7 +16,7 @@ import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {transferFundsPath} from "../app-routing";
 import {WidgetInstance} from "friendly-challenge";
 import {flags} from "../featureFlags";
-import {isAllowableRedirectPath} from "../login/login.component";
+import {isAllowableRedirectPath, LoginNavigationState} from "../login/login.component";
 
 @Component({
   selector: 'app-register',
@@ -163,8 +163,10 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
             next: () => {
               // We can't re-use a captcha code twice, so auto-login won't work right now. For now we just
               // redirect to the login form
-              const newPath = "/login" + '?r=' + encodeURIComponent(this.redirectPath);
-              window.location.href = newPath;
+              const state: LoginNavigationState = {newAccountRegistration: true};
+              this.router.navigateByUrl("/login" + '?r=' + encodeURIComponent(this.redirectPath), {
+                state: state
+              })
             },
             error: (error) => {
               extractErrorMessage(error);
