@@ -132,6 +132,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
   onScroll() {
     const scrollPositionY = this.scroller.getScrollPosition()[1];
     if (scrollPositionY < this.smallestSignificantScrollPx) {
+      // If we're now near the top, reset any previous input blurring as it might be helpful to blur again.
       this.blurredSinceLastMajorScroll = false;
       return;
     }

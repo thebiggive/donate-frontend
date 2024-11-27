@@ -209,7 +209,9 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   onScroll() {
     const scrollPositionY = this.scroller.getScrollPosition()[1];
     if (scrollPositionY < this.smallestSignificantScrollPx) {
+      // If we're now near the top, reset any previous input blurring as it might be helpful to blur again.
       this.blurredSinceLastMajorScroll = false;
+
       // On return with internal app nav, automatic position seems to be [0,59]
       // or so as of Nov '22. So we want only larger scrolls to be picked up as
       // donor intervention and to turn off auto-scroll + trigger loading of
