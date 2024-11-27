@@ -207,7 +207,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   onScroll() {
-    if (this.scroller.getScrollPosition()[1] < this.smallestSignificantScrollPx) {
+    const scrollPositionY = this.scroller.getScrollPosition()[1];
+    if (scrollPositionY < this.smallestSignificantScrollPx) {
       this.blurredSinceLastMajorScroll = false;
       // On return with internal app nav, automatic position seems to be [0,59]
       // or so as of Nov '22. So we want only larger scrolls to be picked up as
@@ -407,7 +408,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   private listenForRouteChanges() {
     this.routeChangeListener = this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
-        this.navigationService.saveLastScrollY(this.scroller.getScrollPosition()[1]);
+        const scrollPositionY = this.scroller.getScrollPosition()[1];
+        this.navigationService.saveLastScrollY(scrollPositionY);
 
         if (isPlatformBrowser(this.platformId) && this.autoScrollTimer) {
           window.clearTimeout(this.autoScrollTimer);
