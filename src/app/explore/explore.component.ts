@@ -32,7 +32,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
   private offset = 0;
   private routeParamSubscription: Subscription;
   private searchServiceSubscription: Subscription;
-  private smallestSignificantScrollPx = 250;
+  private readonly smallestSignificantScrollPx = 250;
 
   beneficiaryOptions: string[] = [];
   categoryOptions: string[] = [];
