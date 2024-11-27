@@ -1,6 +1,7 @@
-import {DatePipe, isPlatformBrowser} from '@angular/common';
-import {Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
+import {DatePipe, isPlatformBrowser, ViewportScroller} from '@angular/common';
+import {Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import { BiggiveCampaignCardFilterGrid } from '@biggive/components-angular';
 import {skip, Subscription} from 'rxjs';
 
 import {currencyPipeDigitsInfo} from '../../environments/common';
@@ -19,15 +20,19 @@ import {HighlightCard} from "../highlight-cards/HighlightCard";
   providers: [DatePipe]
 })
 export class ExploreComponent implements OnDestroy, OnInit {
+  @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid: BiggiveCampaignCardFilterGrid;
+
   campaigns: CampaignSummary[];
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
   loading = false; // Server render gets initial result set; set true when filters change.
   /** Whether any non-default search logic besides an order change has been applied. */
   searched = false;
 
+  private blurredSinceLastMajorScroll = false;
   private offset = 0;
   private routeParamSubscription: Subscription;
   private searchServiceSubscription: Subscription;
+  private smallestSignificantScrollPx = 250;
 
   beneficiaryOptions: string[] = [];
   categoryOptions: string[] = [];
@@ -47,6 +52,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private pageMeta: PageMetaService,
+    private scroller: ViewportScroller,
     public searchService: SearchService,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
@@ -124,6 +130,16 @@ export class ExploreComponent implements OnDestroy, OnInit {
   }
 
   onScroll() {
+    if (this.scroller.getScrollPosition()[1] < this.smallestSignificantScrollPx) {
+      this.blurredSinceLastMajorScroll = false;
+      return;
+    }
+
+    if (!this.blurredSinceLastMajorScroll) {
+      this.cardGrid && this.cardGrid.unfocusInputs();
+      this.blurredSinceLastMajorScroll = true;
+    }
+
     if (this.moreMightExist()) {
       this.more();
     }
