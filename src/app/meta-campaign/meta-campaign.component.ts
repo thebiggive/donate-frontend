@@ -184,12 +184,17 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   private scrollToSearchWhenParamsChange() {
     return this.route.queryParams.pipe(skip(1)).subscribe((_params) => {
       if (isPlatformBrowser(this.platformId)) {
+        console.log('setting up scroll to search when params change based on new route');
+
         const positionMarker = document.getElementById('SCROLL_POSITION_WHEN_PARAMS_CHANGE');
 
         // Angular routing changes scroll position (possibly while trying to restore a previous known position). Using setTimeout to
         // then scroll to the new best position for this use case (the search form and top of results) after that work has happened,
         // whenever the search filters change substantively.
-        setTimeout(() => positionMarker?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+        setTimeout(() => {
+          console.log('scrolling to search form');
+          positionMarker?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 200);
       }
     });
   }
@@ -399,6 +404,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
         this.navigationService.saveLastScrollY(this.scroller.getScrollPosition()[1]);
 
         if (isPlatformBrowser(this.platformId) && this.autoScrollTimer) {
+          console.log('clearing autoscroll timer');
           window.clearTimeout(this.autoScrollTimer);
           this.autoScrollTimer = undefined;
         }
@@ -416,9 +422,12 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       // We need to allow enough time for the card layout to be in place. Firefox & Chrome both seemed to consistently
       // use a too-low Y position when lots of cards were shown and we didn't have a delay, both with `scrollToAnchor()`
       // and manual calculation + `scrollToPosition()`.
+      console.log('setting autoscroll timer');
 
       this.autoScrollTimer = window.setTimeout(() => {
+        console.log('considering auto scroll');
         if (this.shouldAutoScroll) {
+          console.log('** auto scrolling! **');
           this.scroller.scrollToPosition([0, scrollY]);
           this.autoScrollTimer = undefined;
         }
