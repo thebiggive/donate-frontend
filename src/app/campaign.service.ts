@@ -1,14 +1,15 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
-import { Campaign } from './campaign.model';
-import { CampaignStats } from './campaign-stats.model';
-import { CampaignSummary } from './campaign-summary.model';
-import { environment } from '../environments/environment';
-import { SelectedType } from './search.service';
-import {HighlightCard, SfApiHighlightCard, SFAPIHighlightCardToHighlightCard} from "./highlight-cards/HighlightCard";
+import {Campaign} from './campaign.model';
+import {CampaignStats} from './campaign-stats.model';
+import {CampaignSummary} from './campaign-summary.model';
+import {environment} from '../environments/environment';
+import {SelectedType} from './search.service';
+import {HighlightCard, SfApiHighlightCard, SFHighlightCardsToFEHighlightCards} from "./highlight-cards/HighlightCard";
 import {map} from "rxjs/operators";
+
 @Injectable({
   providedIn: 'root',
 })
@@ -206,13 +207,7 @@ export class CampaignService {
 
   getHomePageHighlightCards(): Observable<HighlightCard[]> {
     return this.http.get<SfApiHighlightCard[]>(`${environment.apiUriPrefix}${this.apiPath}/highlight-service`).pipe(
-      map((apiHighlightCards => apiHighlightCards.map(
-        card => SFAPIHighlightCardToHighlightCard(
-          environment.experienceUriPrefix,
-          environment.blogUriPrefix,
-          environment.donateUriPrefix,
-          card
-        ))))
+      map(SFHighlightCardsToFEHighlightCards)
     );
   }
 }
@@ -234,3 +229,4 @@ export class SearchQuery implements SearchQueryInterface {
   public sortField?: string;
   public term?: string;
 }
+

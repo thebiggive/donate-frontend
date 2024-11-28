@@ -1,4 +1,5 @@
-import { brandColour } from "@biggive/components/dist/types/globals/brand-colour"
+import {brandColour} from "@biggive/components/dist/types/globals/brand-colour"
+import {environment} from "../../environments/environment";
 
 export type HighlightCard = {
   backgroundImageUrl: URL,
@@ -105,3 +106,10 @@ function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix
   return campaignFamilyBackgroundImages[sfApiHighlightCard.campaignFamily] || defaultBackground;
 }
 
+export const SFHighlightCardsToFEHighlightCards = ((apiHighlightCards: SfApiHighlightCard[]) => apiHighlightCards.map(
+  card => SFAPIHighlightCardToHighlightCard(
+    environment.experienceUriPrefix,
+    environment.blogUriPrefix,
+    environment.donateUriPrefix,
+    card
+  )));

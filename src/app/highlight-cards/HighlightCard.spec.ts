@@ -1,4 +1,10 @@
-import {campaignFamilyName, SfApiHighlightCard, SFAPIHighlightCardToHighlightCard} from "./HighlightCard";
+import {
+  campaignFamilyName,
+  SfApiHighlightCard,
+  SFAPIHighlightCardToHighlightCard,
+  SFHighlightCardsToFEHighlightCards
+} from "./HighlightCard";
+import {brandColour} from "@biggive/components/dist/types/globals/brand-colour";
 
 describe('highlightCard', () => {
   it('should convert a highlight card from the SF API to one we can display', () => {
@@ -142,4 +148,40 @@ describe('highlightCard', () => {
     expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/join-mailing-list.webp');
     expect(highlightCardForHomepage.iconColor).toBe('primary');
     });
+});
+
+describe('SFHighlightCardsToFEHighlightCards', () => {
+  it('Keeps cards in the order given', () => {
+    const exampleSFCardList: SfApiHighlightCard[] = [
+      {
+        campaignFamily: 'emergencyMatch',
+        cardStyle: 'DONATE_NOW',
+        headerText:  "header",
+        bodyText: "Emergency card body",
+        button: {text: "button text", href: 'https://biggive.org/some-path'}
+      },
+      {
+        campaignFamily: 'christmasChallenge',
+        cardStyle: 'DONATE_NOW',
+        headerText:  "header",
+        bodyText: "Christmas card body",
+        button: {text: "button text", href: 'https://biggive.org/some-path'}
+      },
+      {
+        campaignFamily: 'greenMatchFund',
+        cardStyle: 'DONATE_NOW',
+        headerText:  "header",
+        bodyText: "Green card body",
+        button: {text: "button text", href: 'https://biggive.org/some-path'}
+      },
+    ] as const;
+
+    const FECards = SFHighlightCardsToFEHighlightCards(exampleSFCardList);
+
+    expect(FECards.map((card) => card.bodyText)).toEqual([
+      'Emergency card body',
+      'Christmas card body',
+      'Green card body',
+    ]);
+  })
 });
