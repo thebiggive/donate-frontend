@@ -2,7 +2,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 
 import { Campaign } from './campaign.model';
-import { CampaignService } from './campaign.service';
+import {CampaignService} from './campaign.service';
 import { environment } from '../environments/environment';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
@@ -182,3 +182,5 @@ describe('CampaignService', () => {
     expect(CampaignService.percentRaisedOfCampaignOrParent(campaign)).toBe(50);
   });
 });
+
+
