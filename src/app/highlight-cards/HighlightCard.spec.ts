@@ -4,7 +4,6 @@ import {
   SFAPIHighlightCardToHighlightCard,
   SFHighlightCardsToFEHighlightCards
 } from "./HighlightCard";
-import {brandColour} from "@biggive/components/dist/types/globals/brand-colour";
 
 describe('highlightCard', () => {
   it('should convert a highlight card from the SF API to one we can display', () => {
@@ -113,6 +112,18 @@ describe('highlightCard', () => {
     expect(highlightCardForHomepage.button.href.href).toBe('https://example-blog.com/some-path');
   });
 
+  it('should replace CC24 link with metacampaign page', () => {
+    const cardFromApi = cardLinkingTo("https://example-blog.com/christmas-challenge/");
+
+    const highlightCardForHomepage = SFAPIHighlightCardToHighlightCard(
+      'https://example-experience.com',
+      'https://example-blog.com',
+      'https://example-donate.com',
+      cardFromApi
+    );
+
+    expect(highlightCardForHomepage.button.href.href).toBe('https://example-donate.com/christmas-challenge-2024');
+  });
 
   it('should replace experience origins with origin for relevant environment', () => {
     const cardFromApi = cardLinkingTo("https://community.biggive.org/some-path");

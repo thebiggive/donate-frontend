@@ -59,6 +59,13 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
 
   const backgroundImageUrl = backgroundImage(sfApiHighlightCard, donateUriPrefix);
 
+  let href = replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href);
+
+  // temp fix for 2024. Will need to think of something better and probably move this logic to SF for next year.
+  if (href.pathname.includes('christmas-challenge')) {
+    href = new URL(donateUriPrefix + '/christmas-challenge-2024');
+  }
+
   return {
     headerText: sfApiHighlightCard.headerText,
     bodyText: sfApiHighlightCard.bodyText,
@@ -66,7 +73,7 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
     backgroundImageUrl,
     button: {
       text: sfApiHighlightCard.button.text,
-      href: replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href),
+      href: href,
     }
   };
 };
@@ -107,12 +114,8 @@ function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix
 }
 
 export function SFHighlightCardsToFEHighlightCards(apiHighlightCards: SfApiHighlightCard[]): HighlightCard[] {
-  function isChristmasChallenge(b: Omit<HighlightCard, "backgroundImageUrl" | "iconColor" | "button"> & {
-    campaignFamily: campaignFamilyName | null;
-    cardStyle: "DONATE_NOW" | "SEE_RESULTS" | "APPLY_NOW" | "SAVE_THE_DATE" | "JOIN_MAILING_LIST" | "REGISTER_INTEREST" | "EXPLORE";
-    button: { text: string; href: string }
-  }) {
-    return b.campaignFamily === "christmasChallenge";
+  function isChristmasChallenge(card: SfApiHighlightCard) {
+    return card.campaignFamily === "christmasChallenge";
   }
 
   // Array.prototype.sort is specified as being stable since (or ECMAScript 2019). I don't think we support any browsers

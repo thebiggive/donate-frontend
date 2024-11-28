@@ -5,7 +5,6 @@ import { Campaign } from './campaign.model';
 import {CampaignService} from './campaign.service';
 import { environment } from '../environments/environment';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import {SfApiHighlightCard, SFHighlightCardsToFEHighlightCards} from "./highlight-cards/HighlightCard";
 
 describe('CampaignService', () => {
   const getDummyCampaign = () => {
