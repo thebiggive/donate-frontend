@@ -162,7 +162,7 @@ describe('highlightCard', () => {
 });
 
 describe('SFHighlightCardsToFEHighlightCards', () => {
-  it('Keeps cards in the order given', () => {
+  it('Sorts Christmas to the top', () => {
     const exampleSFCardList: SfApiHighlightCard[] = [
       {
         campaignFamily: 'emergencyMatch',
