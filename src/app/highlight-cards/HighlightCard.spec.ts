@@ -179,8 +179,8 @@ describe('SFHighlightCardsToFEHighlightCards', () => {
     const FECards = SFHighlightCardsToFEHighlightCards(exampleSFCardList);
 
     expect(FECards.map((card) => card.bodyText)).toEqual([
-      'Emergency card body',
       'Christmas card body',
+      'Emergency card body',
       'Green card body',
     ]);
   })
