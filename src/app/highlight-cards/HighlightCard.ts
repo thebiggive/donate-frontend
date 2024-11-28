@@ -1,4 +1,5 @@
-import { brandColour } from "@biggive/components/dist/types/globals/brand-colour"
+import {brandColour} from "@biggive/components/dist/types/globals/brand-colour"
+import {environment} from "../../environments/environment";
 
 export type HighlightCard = {
   backgroundImageUrl: URL,
@@ -58,6 +59,13 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
 
   const backgroundImageUrl = backgroundImage(sfApiHighlightCard, donateUriPrefix);
 
+  let href = replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href);
+
+  // temp fix for 2024. Will need to think of something better and probably move this logic to SF for next year.
+  if (href.pathname.includes('christmas-challenge')) {
+    href = new URL(donateUriPrefix + '/christmas-challenge-2024');
+  }
+
   return {
     headerText: sfApiHighlightCard.headerText,
     bodyText: sfApiHighlightCard.bodyText,
@@ -65,7 +73,7 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
     backgroundImageUrl,
     button: {
       text: sfApiHighlightCard.button.text,
-      href: replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href),
+      href: href,
     }
   };
 };
@@ -105,3 +113,22 @@ function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix
   return campaignFamilyBackgroundImages[sfApiHighlightCard.campaignFamily] || defaultBackground;
 }
 
+export function SFHighlightCardsToFEHighlightCards(apiHighlightCards: SfApiHighlightCard[]): HighlightCard[] {
+  function isChristmasChallenge(card: SfApiHighlightCard) {
+    return card.campaignFamily === "christmasChallenge";
+  }
+
+  // Array.prototype.sort is specified as being stable since (or ECMAScript 2019). I don't think we support any browsers
+  // too old to have that, and we can cope with the possibility of none CC cards being in the wrong order in very old
+  const cardsSortedCCFirst = apiHighlightCards.sort((a, b) => {
+    return +isChristmasChallenge(b) - +isChristmasChallenge(a);
+  });
+
+  return cardsSortedCCFirst.map(
+  card => SFAPIHighlightCardToHighlightCard(
+    environment.experienceUriPrefix,
+    environment.blogUriPrefix,
+    environment.donateUriPrefix,
+    card
+  ))
+}
