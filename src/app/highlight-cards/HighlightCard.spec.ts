@@ -113,6 +113,10 @@ describe('highlightCard', () => {
   });
 
   it('should replace CC24 link with metacampaign page', () => {
+    if (new Date() > new Date('2025-02-01')) {
+      pending('Implementation was only made for 2024');
+    }
+
     const cardFromApi = cardLinkingTo("https://example-blog.com/christmas-challenge/");
 
     const highlightCardForHomepage = SFAPIHighlightCardToHighlightCard(

@@ -62,7 +62,7 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
   let href = replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href);
 
   // temp fix for 2024. Will need to think of something better and probably move this logic to SF for next year.
-  if (href.pathname.includes('christmas-challenge')) {
+  if (href.pathname.includes('christmas-challenge') && (new Date() < new Date('2025-02-01')))  {
     href = new URL(donateUriPrefix + '/christmas-challenge-2024');
   }
 
