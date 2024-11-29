@@ -11,6 +11,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 import { HttpErrorResponse } from "@angular/common/http";
 import {flags} from "../featureFlags";
+import {HighlightCard} from "../highlight-cards/HighlightCard";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-my-account',
@@ -28,6 +30,59 @@ export class MyAccountComponent implements OnDestroy, OnInit {
 
   private savedCardsTimer: undefined | ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
   protected readonly flags = flags;
+
+  protected readonly actions: HighlightCard[] = [
+    {
+      backgroundImageUrl: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png'),
+      iconColor: 'primary',
+      headerText: 'Explore Campaigns',
+      bodyText: '',
+      button: {
+        text: '',
+        href: new URL(environment.donateUriPrefix + '/explore')
+      }
+    },
+    {
+      backgroundImageUrl: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png'),
+      iconColor: 'secondary',
+      headerText: 'Transfer Donation Funds',
+      bodyText: '',
+      button: {
+        text: '',
+        href: new URL(environment.donateUriPrefix + '/transfer-funds')
+      }
+    },
+    // {
+    //   backgroundImageUrl: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png'),
+    //   iconColor: 'tertiary',
+    //   headerText: 'Your donations',
+    //   bodyText: '',
+    //   button: {
+    //     text: '',
+    //     href: new URL(environment.donateUriPrefix + '/my-account/donations')
+    //   }
+    // },
+    // ...(flags.regularGivingEnabled ? [{
+    //   backgroundImageUrl: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png'),
+    //   iconColor: 'tertiary',
+    //   headerText: 'Your Regular Giving',
+    //   bodyText: '',
+    //   button: {
+    //     text: '',
+    //     href: new URL(environment.donateUriPrefix + '/my-account/regular-giving')
+    //   }
+    // }] as const : []),
+    {
+      backgroundImageUrl: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png'),
+      iconColor: 'tertiary',
+      headerText: 'Your payment methods',
+      bodyText: 'In the 1790s there was a shortage of official coinage because prices had risen.',
+      button: {
+        text: '',
+        href: new URL(environment.donateUriPrefix + '/my-account/donations')
+      }
+    },
+  ] as const;
 
   constructor(
     private pageMeta: PageMetaService,
