@@ -12,6 +12,7 @@ export class Campaign {
     public budgetDetails: Array<{amount: number, description: string}>,
     public categories: string[],
     public championName: string,
+    public isRegularGiving: boolean | undefined,
     public charity: {
       id: string,
       name: string,
