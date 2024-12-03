@@ -67,6 +67,7 @@ export class HomeComponent implements OnInit {
     const CCCloseDate = new Date('2024-12-10T12:00:00+00:00');
 
     if (
+      environment.environmentId !== 'regression' &&
       !queryParams.hasOwnProperty('noredirect') &&
       this.currentTime >= startRedirectingToCCAt &&
       this.currentTime < CCCloseDate
