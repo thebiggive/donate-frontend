@@ -194,6 +194,7 @@ export class CampaignGroupsService {
    */
   static getCountries(): string[] {
     return [
+      'United Kingdom',
       'Afghanistan',
       'Aland Islands',
       'Albania',
@@ -421,7 +422,6 @@ export class CampaignGroupsService {
       'Uganda',
       'Ukraine',
       'United Arab Emirates',
-      'United Kingdom',
       'United States',
       'Uruguay',
       'Uzbekistan',
