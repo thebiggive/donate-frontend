@@ -92,6 +92,28 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
   public tickerItems: { label: string, figure: string }[] = [];
   private tickerUpdateTimer: number;
+  public tickerMainMessage: string;
+  private shouldAutoScroll: boolean;
+
+  private routeChangeListener: Subscription;
+  private autoScrollTimer: number | undefined; // State update setTimeout reference, for client side scroll to previous position.
+
+
+  /**
+   * Select salesforce IDs of any campaigns that have a rectangular hero image. The campaign's bannerURI
+   * must first be selected to ensure it's suitable for use as a background behind all elements of the hero image
+   * component
+   *
+   * For now enabled for one campaign in non-prod for testing only. Campaign IDs are the same in full and prod.
+   */
+  protected readonly campaignIdsWithRectangleImage: string[] = environment.environmentId !== 'production' ?
+    [
+      'a056900002RXrXtAAL',
+      'a056900002SEVVPAA5', // Christmas Challenge 2024
+    ] :
+    [
+      'a056900002SEVVPAA5', // Christmas Challenge 2024
+    ];
 
   constructor(
     private campaignService: CampaignService,
@@ -120,25 +142,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.searchServiceSubscription?.unsubscribe();
     this.queryParamsSubscription?.unsubscribe();
     this.routeChangeListener?.unsubscribe();
-
   }
-
-
-  /**
-   * Select salesforce IDs of any campaigns that have a rectangular hero image. The campaign's bannerURI
-   * must first be selected to ensure it's suitable for use as a background behind all elements of the hero image
-   * component
-   *
-   * For now enabled for one campaign in non-prod for testing only. Campaign IDs are the same in full and prod.
-   */
-  protected readonly campaignIdsWithRectangleImage: string[] = environment.environmentId !== 'production' ?
-    [
-      'a056900002RXrXtAAL',
-      'a056900002SEVVPAA5', // Christmas Challenge 2024
-    ] :
-    [
-      'a056900002SEVVPAA5', // Christmas Challenge 2024
-    ];
 
   ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
@@ -172,16 +176,11 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       this.setTickerParams(this.campaign);
     }
 
-
     this.beneficiaryOptions = CampaignGroupsService.getBeneficiaryNames();
     this.categoryOptions = CampaignGroupsService.getCategoryNames();
     this.locationOptions = CampaignGroupsService.getCountries();
     this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
-
   }
-
-  public tickerMainMessage: string;
-
 
   private setFundSpecificProps(fund: Fund, campaign: Campaign) {
     this.tickerMainMessage = this.currencyPipe.transform(fund.amountRaised, campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
@@ -254,8 +253,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     });
   }
 
-  private shouldAutoScroll: boolean;
-
   ngAfterViewChecked() {
     if (isPlatformBrowser(this.platformId) && this.shouldAutoScroll) {
       // Update scroll to previous position in this scenario, unless the donor scrolls in the first 1s themselves and we turn off `shouldAutoScroll`.
@@ -282,7 +279,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   onDoSearchAndFilterUpdate(event: CustomEvent) {
     this.searchService.doSearchAndFilterAndSort(event.detail, this.defaultSort);
   }
-
 
   @HostListener('doCardGeneralClick', ['$event'])
   onDoCardGeneralClick(event: CustomEvent) {
@@ -399,13 +395,11 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     });
   }
 
-
   private normaliseQueryForRecentChildrenComparison(query: SearchQuery): string {
     delete query.offset;
 
     return JSON.stringify(query); // We don't want to get into object key / true equality comparisons, so just JSON it.
   }
-
 
   private run() {
     this.searched = this.searchService.nonDefaultsActive;
@@ -490,9 +484,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
     this.router.navigate(['explore'], { queryParams: nextQueryParams });
   }
-
-  private routeChangeListener: Subscription;
-  private autoScrollTimer: number | undefined; // State update setTimeout reference, for client side scroll to previous position.
 
   private listenForRouteChanges() {
     this.routeChangeListener = this.router.events.subscribe(event => {
@@ -599,5 +590,4 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       }, 1000);
     }
   }
-
 }
