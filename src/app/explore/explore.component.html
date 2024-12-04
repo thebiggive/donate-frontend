@@ -105,7 +105,7 @@
       </div>
     }
 
-    @if (individualCampaigns.length <=6 && ! this.searched && !loading && highlightCards.length > 0) {
+    @if (individualCampaigns.length <=6 && ! this.searched && !loading && highlightCards && highlightCards.length > 0) {
       <p>Can't find any campaigns to support? Find out what's next at Big Give</p>
         <app-highlight-cards
           [highlightCards]="highlightCards">

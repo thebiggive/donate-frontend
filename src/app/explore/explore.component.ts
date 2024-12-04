@@ -76,14 +76,13 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   beneficiaryOptions: string[] = [];
   categoryOptions: string[] = [];
   locationOptions: string[] = [];
-  protected highlightCards: HighlightCard[];
+  protected highlightCards: HighlightCard[] | undefined;
 
   private queryParamsSubscription: Subscription;
   public fund?: Fund;
   private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v2`; // Key is per-domain/env
   public filterError = false;
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
-
 
   /**
    * Default sort when not in relevance mode because there's a search term.
