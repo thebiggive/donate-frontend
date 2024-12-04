@@ -2,7 +2,7 @@
   @if(!campaign.isRegularGiving) {
       <div>
           <p class="error">
-            Sorry, campaign {{ campaign.id }} is not a regular giving campaign.</p>
+            Sorry, campaign {{ campaign.title }} is not a regular giving campaign.</p>
           <p>To make a one-off donation to {{ campaign.charity.name }} please visit the regular <a href="/campaign/{{campaign.id}}">campaign page</a>.
           </p>
       </div>
