@@ -10,7 +10,6 @@ import { DonationStartContainerComponent } from "./donation-start-container.comp
 import { DonationStartFormComponent } from "../donation-start-form/donation-start-form.component";
 import { TBG_DONATE_ID_STORAGE } from "../../identity.service";
 import { TBG_DONATE_STORAGE } from "../../donation.service";
-import { Campaign } from "../../campaign.model";
 import { MatomoModule } from "ngx-matomo-client";
 import {
   provideHttpClient,
