@@ -308,10 +308,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
       /**
        * For some reason awaiting this promise makes tests fail with
-       * "Cannot read properties of undefined (reading 'setValue')". Not sure why, so I'm voiding it instead
-       * to keep the behaviour from before we had the no-floating-promises rule.
+       * "Cannot read properties of undefined (reading 'setValue')". Not sure why, but we can send any error to the
+       * console at least.
        */
-      void this.stripeService.init();
+      this.stripeService.init().catch(console.error);
 
       // ngx-matomo sets up window._paq internally, and doesn't have
       // A/B test methods, so we work with the global ourselves.
