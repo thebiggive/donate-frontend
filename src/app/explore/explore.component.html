@@ -19,15 +19,15 @@
     </biggive-totalizer>
   }
 
-  @if (campaign) {
+  @if (metaCampaign) {
     <biggive-hero-image
       [logo]="fund?.logoUri"
       [logoAltText]="fund?.name"
       [mainTitle]="title"
-      [mainImage]="campaign.bannerUri | optimisedImage:2000 | async"
-      [mainImageShape]="campaignIdsWithRectangleImage.includes(campaign.id) ? 'rectangle' : 'triangle'"
-      [teaser]="fund && fund.description ? fund.description : campaign.summary"
-      [colourScheme]="campaignIdsWithRectangleImage.includes(campaign.id) ? 'white' : 'primary'"
+      [mainImage]="metaCampaign.bannerUri | optimisedImage:2000 | async"
+      [mainImageShape]="campaignIdsWithRectangleImage.includes(metaCampaign.id) ? 'rectangle' : 'triangle'"
+      [teaser]="fund && fund.description ? fund.description : metaCampaign.summary"
+      [colourScheme]="campaignIdsWithRectangleImage.includes(metaCampaign.id) ? 'white' : 'primary'"
       main-image-align-horizontal="right"
     ></biggive-hero-image>
   } @else {
@@ -77,10 +77,10 @@
                 [moreInfoButtonUrl]="'/campaign/' + campaign.id"
                 [organisationName]="campaign.charity.name"
                 primary-figure-label="Match Funds Remaining"
-                [primaryFigureAmount]="parentIsSharedFund ? null : (campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
+                [primaryFigureAmount]="this.metaCampaign?.usesSharedFunds ? null : (campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
                 [progressBarCounter]="getPercentageRaised(campaign)"
                 secondary-figure-label="Total Funds Raised"
-                [secondaryFigureAmount]="parentIsSharedFund ? null : (campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
+                [secondaryFigureAmount]="this.metaCampaign?.usesSharedFunds ? null : (campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
                 [isFutureCampaign]="isInFuture(campaign)"
                 [isPastCampaign]="isInPast(campaign)"
                 [datetime]="getRelevantDateAsStr(campaign)">

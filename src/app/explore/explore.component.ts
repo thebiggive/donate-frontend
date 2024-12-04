@@ -51,10 +51,11 @@ const endPipeToken = 'timeLeftToEndPipe';
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid: BiggiveCampaignCardFilterGrid;
 
-  public campaign: Campaign | undefined;
-  private campaignId: string | undefined;
-  parentIsSharedFund: boolean | undefined;
-  public title: string  = 'Big Give'; // Includes fund info if applicable.
+  /**
+   * This component is used both for pages about specific meta-campagins, and for the general 'explore' page.
+   * This will be undefined in the latter case.
+   */
+  protected metaCampaign: Campaign | undefined;
 
   individualCampaigns: CampaignSummary[];
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
@@ -146,92 +147,99 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.routeChangeListener?.unsubscribe();
   }
 
+  protected get title() {
+    if (! this.metaCampaign) {
+      return 'Big Give';
+    }
+
+    if (! this.fund) {
+      return this.metaCampaign?.title;
+    }
+
+    // Show fund name if applicable *and* there's no fund logo. If there's a logo
+    // its content + alt text should do the equivalent job.
+    return (!this.fund.logoUri && this.fund.name)
+      ? `${this.metaCampaign.title}: ${this.fund.name}`
+      : this.metaCampaign.title;
+  }
+
   ngOnInit() {
-    this.campaign = this.route.snapshot.data.campaign;
-    this.campaignId = this.campaign?.id;
-    this.parentIsSharedFund = this.campaign?.usesSharedFunds;
-    this.title = this.campaign?.title || 'Big Give';
+    this.metaCampaign = this.route.snapshot.data.campaign;
 
     this.listenForRouteChanges();
 
-    this.setSecondaryPropsAndRun(this.campaign);
+    this.setSecondaryPropsAndRun(this.metaCampaign);
 
     let fundKey: StateKey<Fund>;
-    if (this.fundSlug && this.campaign) {
+    if (this.fundSlug && this.metaCampaign) {
       fundKey = makeStateKey<Fund>(`fund-${this.fundSlug}`);
       this.fund = this.state.get<Fund | undefined>(fundKey, undefined);
       if (this.fund) {
-        this.setFundSpecificProps(this.fund, this.campaign);
+        this.setFundSpecificProps(this.fund, this.metaCampaign);
       }
-    }
-
-    if (!this.fund && this.fundSlug && this.campaign) {
-      this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
-        this.state.set<Fund>(fundKey, fund);
-        this.fund = fund;
-        if (this.fund) {
-          this.setFundSpecificProps(this.fund, this.campaign!);
-        }
-      });
-    }
-    if (this.campaign) {
-      this.setTickerParams(this.campaign);
     }
 
     this.beneficiaryOptions = CampaignGroupsService.getBeneficiaryNames();
     this.categoryOptions = CampaignGroupsService.getCategoryNames();
     this.locationOptions = CampaignGroupsService.getCountries();
     this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
+
+    if (!this.fund && this.fundSlug && this.metaCampaign) {
+      this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
+        this.state.set<Fund>(fundKey, fund);
+        this.fund = fund;
+        if (this.fund) {
+          this.setFundSpecificProps(this.fund, this.metaCampaign!);
+        }
+      });
+    }
+    if (this.metaCampaign) {
+      this.setTickerParams(this.metaCampaign);
+    }
   }
 
-  private setFundSpecificProps(fund: Fund, campaign: Campaign) {
-    this.tickerMainMessage = this.currencyPipe.transform(fund.amountRaised, campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
-      ' raised' + (campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
+  private setFundSpecificProps(fund: Fund, metaCampaign: Campaign) {
+    this.tickerMainMessage = this.currencyPipe.transform(fund.amountRaised, metaCampaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
+      ' raised' + (metaCampaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
 
     const tickerItems = [];
     tickerItems.push({
       label: 'total match funds',
       figure: this.currencyPipe.transform(
         fund.totalForTicker,
-        campaign.currencyCode,
+        metaCampaign.currencyCode,
         'symbol',
         currencyPipeDigitsInfo
       ) as string,
     });
-    if (CampaignService.isOpenForDonations(campaign)) {
+    if (CampaignService.isOpenForDonations(metaCampaign)) {
       tickerItems.push({
         label: 'remaining',
-        figure: this.timeLeftToEndPipe.transform(campaign.endDate),
+        figure: this.timeLeftToEndPipe.transform(metaCampaign.endDate),
       });
     } else {
       tickerItems.push({
         label: 'days duration',
-        figure: CampaignService.campaignDurationInDays(campaign).toString(),
+        figure: CampaignService.campaignDurationInDays(metaCampaign).toString(),
       });
     }
     this.tickerItems = tickerItems;
 
-    // Show fund name if applicable *and* there's no fund logo. If there's a logo
-    // its content + alt text should do the equivalent job.
-    this.title = (!fund.logoUri && fund.name)
-      ? `${campaign.title}: ${fund.name}`
-      : campaign.title;
-
-    this.setPageMetadata(campaign);
+    this.setPageMetadata(metaCampaign);
   }
 
-  private setSecondaryPropsAndRun(campaign: Campaign | undefined) {
+  private setSecondaryPropsAndRun(metaCampaign: Campaign | undefined) {
     this.searchService.reset(this.getDefaultSort(), true); // Needs `campaign` to determine sort order.
     this.loadQueryParamsAndRun();
-    this.setPageMetadata(campaign);
+    this.setPageMetadata(metaCampaign);
   }
 
-  private setPageMetadata(campaign?: Campaign) {
-    if (campaign) {
+  private setPageMetadata(metaCampaign?: Campaign) {
+    if (metaCampaign) {
       this.pageMeta.setCommon(
         this.title,
-        campaign.summary || 'A match funded campaign with Big Give',
-        campaign.bannerUri,
+        metaCampaign.summary || 'A match funded campaign with Big Give',
+        metaCampaign.bannerUri,
       );
     } else {
       this.pageMeta.setCommon(
@@ -334,7 +342,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   getPercentageRaised(childCampaign: CampaignSummary) {
-    if (this.campaign?.usesSharedFunds) {
+    if (this.metaCampaign?.usesSharedFunds) {
       // No progressbar on child cards when parent is e.g. a shared fund emergency appeal.
       return null;
     }
@@ -352,12 +360,12 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     const query = this.campaignService.buildQuery(
       this.searchService.selected,
       this.offset,
-      this.campaignId,
+      this.metaCampaign?.id,
       this.campaignSlug,
       this.fundSlug,
     );
 
-    if (this.campaignId) {
+    if (this.metaCampaign) {
       this.doCampaignSearch(query as SearchQuery, false);
     }
   }
@@ -399,7 +407,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.searched = this.searchService.nonDefaultsActive;
 
     this.offset = 0;
-    const query = this.campaignService.buildQuery(this.searchService.selected, 0, this.campaignId, this.campaignSlug, this.fundSlug);
+    const query = this.campaignService.buildQuery(this.searchService.selected, 0, this.metaCampaign?.id, this.campaignSlug, this.fundSlug);
     this.individualCampaigns = [];
     this.loading = true;
 
@@ -503,22 +511,22 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    */
   getDefaultSort(): 'amountRaised' | 'matchFundsRemaining' {
     // Most Raised for completed Master Campaigns; Match Funds Remaining for others.
-    return (this.campaign && new Date(this.campaign.endDate) < new Date()) ? 'amountRaised' : 'matchFundsRemaining';
+    return (this.metaCampaign && new Date(this.metaCampaign.endDate) < new Date()) ? 'amountRaised' : 'matchFundsRemaining';
   }
 
-  private setTickerParams(campaign: Campaign) {
+  private setTickerParams(metaCampaign: Campaign) {
     // Does not necessarily imply 0 raised. We occasionally open child campaigns before their parents, so it
     // is possible for the parent `campaign` here to raise more than 0 before it formally opens.
-    const campaignInFuture = CampaignService.isInFuture(campaign);
+    const campaignInFuture = CampaignService.isInFuture(metaCampaign);
 
-    const campaignOpen = CampaignService.isOpenForDonations(campaign);
+    const campaignOpen = CampaignService.isOpenForDonations(metaCampaign);
     if (!this.fund) {
       if (!campaignInFuture) {
-        const showGiftAid = campaign.currencyCode === 'GBP' && campaign.amountRaised > 0;
-        this.tickerMainMessage = this.currencyPipe.transform(campaign.amountRaised, campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
+        const showGiftAid = metaCampaign.currencyCode === 'GBP' && metaCampaign.amountRaised > 0;
+        this.tickerMainMessage = this.currencyPipe.transform(metaCampaign.amountRaised, metaCampaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
           ' raised' + (showGiftAid ? ' inc. Gift Aid' : '');
       } else {
-        this.tickerMainMessage = 'Opens in ' + this.timeLeftToOpenPipe.transform(campaign.startDate);
+        this.tickerMainMessage = 'Opens in ' + this.timeLeftToOpenPipe.transform(metaCampaign.startDate);
       }
     }
 
@@ -529,41 +537,41 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         tickerItems.push(...[
           {
             label: 'remaining',
-            figure: this.timeLeftToEndPipe.transform(campaign.endDate),
+            figure: this.timeLeftToEndPipe.transform(metaCampaign.endDate),
           },
           {
             label: 'match funds remaining',
-            figure: this.currencyPipe.transform(campaign.matchFundsRemaining, campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) as string,
+            figure: this.currencyPipe.transform(metaCampaign.matchFundsRemaining, metaCampaign.currencyCode, 'symbol', currencyPipeDigitsInfo) as string,
           },
         ]);
       } else {
         tickerItems.push({
           label: 'days duration',
-          figure: CampaignService.campaignDurationInDays(campaign).toString(),
+          figure: CampaignService.campaignDurationInDays(metaCampaign).toString(),
         });
       }
 
-      if (campaign.campaignCount && campaign.campaignCount > 1) {
+      if (metaCampaign.campaignCount && metaCampaign.campaignCount > 1) {
         tickerItems.push(
           {
             label: 'participating charities',
-            figure: campaign.campaignCount.toLocaleString(),
+            figure: metaCampaign.campaignCount.toLocaleString(),
           }
         )
       }
 
-      if (campaign.donationCount > 0) {
+      if (metaCampaign.donationCount > 0) {
         tickerItems.push(
           {
             label: 'donations',
-            figure: campaign.donationCount.toLocaleString(),
+            figure: metaCampaign.donationCount.toLocaleString(),
           }
         )
       }
 
       tickerItems.push({
         label: 'total match funds',
-        figure: this.currencyPipe.transform(campaign.matchFundsTotal, campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) as string,
+        figure: this.currencyPipe.transform(metaCampaign.matchFundsTotal, metaCampaign.currencyCode, 'symbol', currencyPipeDigitsInfo) as string,
       });
     }
 
@@ -580,7 +588,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     // per second.
     if (isPlatformBrowser(this.platformId) && !this.fundSlug) {
       this.tickerUpdateTimer = window.setTimeout(() => {
-        this.setTickerParams(campaign)
+        this.setTickerParams(metaCampaign)
       }, 1000);
     }
   }
