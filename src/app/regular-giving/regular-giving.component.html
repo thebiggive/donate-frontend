@@ -1,5 +1,13 @@
 <main class="b-container">
-  <div class="c-form-container">
+  @if(!campaign.isRegularGiving) {
+      <div>
+          <p class="error">
+            Sorry, campaign {{ campaign.id }} is not a regular giving campaign.</p>
+          <p>To make a one-off donation to {{ campaign.charity.name }} please visit the regular <a href="/campaign/{{campaign.id}}">campaign page</a>.
+          </p>
+      </div>
+  } @else {
+    <div class="c-form-container">
       <biggive-page-section>
         <form
           class="c-regular-giving-form"
@@ -17,10 +25,10 @@
               label="Your regular donation"
               class="c-your-donation">
 
-                <div class="youAreSupporting">
-                  <p class="b-rt-0 b-m-0">You are supporting:</p>
-                  <p class="b-rt-0 b-m-0 b-bold">{{ campaign.charity.name }}</p>
-                </div>
+              <div class="youAreSupporting">
+                <p class="b-rt-0 b-m-0">You are supporting:</p>
+                <p class="b-rt-0 b-m-0 b-bold">{{ campaign.charity.name }}</p>
+              </div>
 
               <div class="donation-input donation-input-main">
 
@@ -95,5 +103,6 @@
           </mat-vertical-stepper>
         </form>
       </biggive-page-section>
-  </div>
+    </div>
+  }
 </main>
