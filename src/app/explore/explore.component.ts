@@ -24,7 +24,7 @@ import {CampaignSummary} from '../campaign-summary.model';
 import {PageMetaService} from '../page-meta.service';
 import {SearchService} from '../search.service';
 import {HighlightCard} from "../highlight-cards/HighlightCard";
-import {Campaign, campaignDurationInDays} from "../campaign.model";
+import {Campaign} from "../campaign.model";
 import {Fund} from "../fund.model";
 import {NavigationService} from "../navigation.service";
 import {FundService} from "../fund.service";
@@ -98,6 +98,9 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   private routeChangeListener: Subscription;
   private autoScrollTimer: number | undefined; // State update setTimeout reference, for client side scroll to previous position.
 
+  protected isInFuture = CampaignService.isInFuture;
+
+  protected isInPast = CampaignService.isInPast;
 
   /**
    * Select salesforce IDs of any campaigns that have a rectangular hero image. The campaign's bannerURI
@@ -204,7 +207,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     } else {
       tickerItems.push({
         label: 'days duration',
-        figure: campaignDurationInDays(campaign).toString(),
+        figure: CampaignService.campaignDurationInDays(campaign).toString(),
       });
     }
     this.tickerItems = tickerItems;
@@ -283,14 +286,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   @HostListener('doCardGeneralClick', ['$event'])
   onDoCardGeneralClick(event: CustomEvent) {
     this.router.navigateByUrl(event.detail.url);
-  }
-
-  isInFuture(campaign: CampaignSummary) {
-    return CampaignService.isInFuture(campaign);
-  }
-
-  isInPast(campaign: CampaignSummary) {
-    return CampaignService.isInPast(campaign);
   }
 
   getRelevantDateAsStr(campaign: CampaignSummary) {
@@ -545,7 +540,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       } else {
         tickerItems.push({
           label: 'days duration',
-          figure: campaignDurationInDays(campaign).toString(),
+          figure: CampaignService.campaignDurationInDays(campaign).toString(),
         });
       }
 
