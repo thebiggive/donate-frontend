@@ -1,13 +1,46 @@
 <main>
-  <biggive-hero-image
-    slug="Explore Campaigns"
-    slug-colour="primary"
-    main-title="The leading online match funding platform"
-    main-image="/assets/images/banner-explore.jpg"
-    colour-scheme="primary"
-    main-image-align-horizontal="right"
-    main-image-align-vertical="center"
-  ></biggive-hero-image>
+  @if (tickerMainMessage || tickerItems.length > 0) {
+    <biggive-totalizer
+      primary-colour="primary"
+      primary-text-colour="white"
+      secondary-colour="secondary"
+      secondary-text-colour="black"
+      include-gift-aid="true"
+      [mainMessage]="tickerMainMessage"
+    >
+      <div slot="ticker-items">
+        @for (tickerItem of tickerItems; track tickerItem.label) {
+          <biggive-totalizer-ticker-item
+            [figure]="tickerItem.figure"
+            [label]="tickerItem.label">
+          </biggive-totalizer-ticker-item>
+        }
+      </div>
+    </biggive-totalizer>
+  }
+
+  @if (campaign) {
+    <biggive-hero-image
+      [logo]="fund?.logoUri"
+      [logoAltText]="fund?.name"
+      [mainTitle]="title"
+      [mainImage]="campaign.bannerUri | optimisedImage:2000 | async"
+      [mainImageShape]="campaignIdsWithRectangleImage.includes(campaign.id) ? 'rectangle' : 'triangle'"
+      [teaser]="fund && fund.description ? fund.description : campaign.summary"
+      [colourScheme]="campaignIdsWithRectangleImage.includes(campaign.id) ? 'white' : 'primary'"
+      main-image-align-horizontal="right"
+    ></biggive-hero-image>
+  } @else {
+    <biggive-hero-image
+      slug="Explore Campaigns"
+      slug-colour="primary"
+      main-title="The leading online match funding platform"
+      main-image="/assets/images/banner-explore.jpg"
+      colour-scheme="primary"
+      main-image-align-horizontal="right"
+      main-image-align-vertical="center"
+    ></biggive-hero-image>
+  }
   <biggive-page-section>
 
     <div
@@ -25,7 +58,7 @@
       [selectedFilterCategory]="searchService.selected.category ? searchService.selected.category : null"
       [selectedFilterLocation]="searchService.selected.country ? searchService.selected.country : null">
 
-      @if (campaigns) {
+      @if (individualCampaigns) {
         <biggive-grid
           slot="campaign-grid"
           column-count="3"
@@ -34,7 +67,7 @@
           (scrolled)="onScroll()"
           [scrollWindow]="true"
           >
-          @for (campaign of campaigns; track campaign.id) {
+          @for (campaign of individualCampaigns; track campaign.id) {
             <div>
               <biggive-campaign-card
                 [banner]="campaign.imageUri | optimisedImage:830 | async"
@@ -44,13 +77,14 @@
                 [moreInfoButtonUrl]="'/campaign/' + campaign.id"
                 [organisationName]="campaign.charity.name"
                 primary-figure-label="Match Funds Remaining"
-                [primaryFigureAmount]="campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
+                [primaryFigureAmount]="parentIsSharedFund ? null : (campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
                 [progressBarCounter]="getPercentageRaised(campaign)"
                 secondary-figure-label="Total Funds Raised"
-                [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
+                [secondaryFigureAmount]="parentIsSharedFund ? null : (campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
                 [isFutureCampaign]="isInFuture(campaign)"
                 [isPastCampaign]="isInPast(campaign)"
                 [datetime]="getRelevantDateAsStr(campaign)">
+                id="campaign-{{campaign.id}}"
               </biggive-campaign-card>
             </div>
           }
@@ -62,7 +96,7 @@
       <mat-spinner color="primary" diameter="30" aria-label="Loading campaigns"></mat-spinner>
     }
 
-    @if (campaigns.length === 0 && !loading && this.searched) {
+    @if (individualCampaigns.length === 0 && !loading && this.searched) {
       <div>
         <p class="error" aria-live="polite">
           We can't find any campaigns matching this search but there are lots more to choose from.
@@ -71,11 +105,22 @@
       </div>
     }
 
-    @if (campaigns.length <=6 && ! this.searched && !loading && highlightCards.length > 0) {
+    @if (individualCampaigns.length <=6 && ! this.searched && !loading && highlightCards.length > 0) {
       <p>Can't find any campaigns to support? Find out what's next at Big Give</p>
         <app-highlight-cards
           [highlightCards]="highlightCards">
         </app-highlight-cards>
+    }
+
+    @if (filterError) {
+      <div tabindex="0">
+        <!--  We want this error to happen as part of route resolving.    -->
+        <p class="error" aria-live="assertive">
+          Could not load the campaign. You might have followed a broken link or lost connectivity.<br />
+          Not to worry, you can
+          <a routerLink="/">browse all active campaigns here</a>!
+        </p>
+      </div>
     }
 
   </biggive-page-section>
