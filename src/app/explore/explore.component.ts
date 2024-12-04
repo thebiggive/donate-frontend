@@ -24,7 +24,7 @@ import {CampaignSummary} from '../campaign-summary.model';
 import {PageMetaService} from '../page-meta.service';
 import {SearchService} from '../search.service';
 import {HighlightCard} from "../highlight-cards/HighlightCard";
-import {Campaign} from "../campaign.model";
+import {Campaign, campaignDurationInDays} from "../campaign.model";
 import {Fund} from "../fund.model";
 import {NavigationService} from "../navigation.service";
 import {FundService} from "../fund.service";
@@ -187,7 +187,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.tickerMainMessage = this.currencyPipe.transform(fund.amountRaised, campaign.currencyCode, 'symbol', currencyPipeDigitsInfo) +
       ' raised' + (campaign.currencyCode === 'GBP' ? ' inc. Gift Aid' : '');
 
-    const durationInDays = Math.floor((new Date(campaign.endDate).getTime() - new Date(campaign.startDate).getTime()) / 86400000);
     const tickerItems = [];
     tickerItems.push({
       label: 'total match funds',
@@ -206,7 +205,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     } else {
       tickerItems.push({
         label: 'days duration',
-        figure: durationInDays.toString(),
+        figure: campaignDurationInDays(campaign).toString(),
       });
     }
     this.tickerItems = tickerItems;
@@ -217,18 +216,16 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       ? `${campaign.title}: ${fund.name}`
       : campaign.title;
 
-    this.pageMeta.setCommon(
-      this.title,
-      campaign.summary || 'A match funded campaign with Big Give',
-      campaign.bannerUri,
-    );
+    this.setPageMetadata(campaign);
   }
-
 
   private setSecondaryPropsAndRun(campaign: Campaign | undefined) {
     this.searchService.reset(this.getDefaultSort(), true); // Needs `campaign` to determine sort order.
     this.loadQueryParamsAndRun();
+    this.setPageMetadata(campaign);
+  }
 
+  private setPageMetadata(campaign?: Campaign) {
     if (campaign) {
       this.pageMeta.setCommon(
         this.title,
@@ -237,7 +234,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       );
     } else {
       this.pageMeta.setCommon(
-        'Big Give',
+        this.title,
         'Big Give – discover campaigns and donate',
         'https://images-production.thebiggive.org.uk/0011r00002IMRknAAH/CCampaign%20Banner/db3faeb1-d20d-4747-bb80-1ae9286336a3.jpg',
       );
@@ -530,8 +527,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     const campaignInFuture = CampaignService.isInFuture(campaign);
 
     const campaignOpen = CampaignService.isOpenForDonations(campaign);
-    const durationInDays = Math.floor((new Date(campaign.endDate).getTime() - new Date(campaign.startDate).getTime()) / 86400000);
-
     if (!this.fund) {
       if (!campaignInFuture) {
         const showGiftAid = campaign.currencyCode === 'GBP' && campaign.amountRaised > 0;
@@ -559,7 +554,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       } else {
         tickerItems.push({
           label: 'days duration',
-          figure: durationInDays.toString(),
+          figure: campaignDurationInDays(campaign).toString(),
         });
       }
 

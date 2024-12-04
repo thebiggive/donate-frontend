@@ -62,3 +62,7 @@ export class Campaign {
     public video?: {provider: string, key: string},
   ) {}
 }
+
+export function campaignDurationInDays(campaign: Campaign) {
+  return Math.floor((new Date(campaign.endDate).getTime() - new Date(campaign.startDate).getTime()) / 86400000);
+}

@@ -126,12 +126,12 @@ describe("ExploreComponent", () => {
   function makeComponentWithCampaign(campaign: Campaign) {
     const noop = () => {};
 
-    const timeLeftToOpenPipe = new TimeLeftPipe("browser", {
+    const pipe = new TimeLeftPipe("browser", {
       markForCheck: noop,
     } as unknown as ChangeDetectorRef);
-    const timeLeftToClosePipe = new TimeLeftPipe("browser", {
-      markForCheck: noop,
-    } as unknown as ChangeDetectorRef);
+    const timeLeftToOpenPipe = pipe;
+    const timeLeftToClosePipe = pipe;
+
     const currencyPipe = new CurrencyPipe("en-GB", "GBP");
 
     const stubRoute = { queryParams: NEVER } as unknown as ActivatedRoute;
