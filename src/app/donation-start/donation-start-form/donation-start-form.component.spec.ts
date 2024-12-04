@@ -153,7 +153,7 @@ describe('DonationStartForm', () => {
     );
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [FormsModule,
@@ -195,8 +195,8 @@ describe('DonationStartForm', () => {
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
     ]
-}).compileComponents();
-  }));
+});
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DonationStartFormComponent);

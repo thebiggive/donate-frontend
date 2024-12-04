@@ -7,7 +7,7 @@ import {
 } from "@angular/common";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
 import {CUSTOM_ELEMENTS_SCHEMA, TransferState} from "@angular/core";
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed} from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -98,7 +98,7 @@ describe("MetaCampaignComponent", () => {
       15000
     );
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [MetaCampaignComponent],
@@ -134,8 +134,8 @@ describe("MetaCampaignComponent", () => {
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
       ],
-    }).compileComponents();
-  }));
+    });
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(MetaCampaignComponent);
