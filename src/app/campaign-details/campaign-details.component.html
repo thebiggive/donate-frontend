@@ -1,5 +1,13 @@
 <main class="b-container">
-  @if (campaignInPast) {
+  @if(campaign.isRegularGiving) {
+    <div>
+      <p class="error">
+        Sorry, <b>{{ campaign.title }}</b> is a regular giving campaign.</p>
+      <p>If you wish to set up a regular donation, please login to your donor account and visit the regular giving <a href="/regular-giving/{{campaign.id}}">campaign page</a>.
+      </p>
+    </div>
+  } @else {
+    @if (campaignInPast) {
     <biggive-page-section>
       <biggive-call-to-action
         class="b-mt-40"
@@ -11,7 +19,7 @@
     </biggive-page-section>
   }
 
-  <div class="b-back-button">
+    <div class="b-back-button">
     <biggive-formatted-text>
       @if (campaign.parentRef && fromFund) {
         <a mat-icon-button [routerLink]="'/' + campaign.parentRef + '/' + campaign.championRef">
@@ -38,7 +46,7 @@
     </biggive-formatted-text>
   </div>
 
-  <div class="c-details-container">
+    <div class="c-details-container">
     <div class="b-primary-column">
       <biggive-branded-image
         space-below="4"
@@ -344,4 +352,5 @@
       </div>
     </div>
   </div>
+  }
 </main>
