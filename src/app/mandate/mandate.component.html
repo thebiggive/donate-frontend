@@ -1,1 +1,139 @@
-<p>mandate works!</p>
+<main class="b-container">
+  @if (complete) {
+    <div id="banner-thank-you"></div>
+  }
+
+<!--  @if (!complete && !noAccess && !timedOut) {-->
+    <mat-spinner class="complete-spinner" color="primary"
+                 diameter="30" aria-label="Loading donation details"></mat-spinner>
+<!--  }-->
+
+<!--  @if (isDataLoaded) {-->
+    <div>
+      @if (false) {
+        <p class="error">
+          Sorry, you don't have access to this page. To keep your information secure we only allow viewing this
+          page temporarily after making a donation. To see donation details please check your email for a donation
+          receipt.</p>
+        <p>If you have set a donor account password you may also
+          view your <a href="/my-account/donations">donation history</a>.
+        </p>
+      }
+      @if (false) {
+        <p class="error" aria-live="assertive">
+          Your donation was not processed immediately &ndash; it may be that there is a short delay because we're very
+          busy. Please refresh this page to see the latest status. We'll also email your receipt within a few minutes when
+          your donation is processed.
+        </p>
+      }
+      <div aria-live="polite">
+        @if (complete) {
+          <div>
+            <div class="screenreader-only">
+              Thank you! Your generous donation has been made.
+            </div>
+          </div>
+        }
+      </div>
+      @if (complete) {
+        <div>
+          <div class="thank-you">
+            <h2>Thank you!</h2>
+            <p class="thank-you-text">Your generous donation has been made.</p>
+          </div>
+          <hr aria-hidden="true">
+          <div class="donation-summary">
+            <p><strong>Hi {{ donation.firstName }},</strong></p>
+            <p><strong>Your donation summary</strong></p>
+            <p>Your donation of
+              <strong class="figure">{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</strong>
+              is worth
+              <strong class="figure">{{ totalValue | exactCurrency:donation.currencyCode }}</strong>
+              to {{ donation.charityName }}!
+            </p>
+            <br/>
+            @if (campaign?.thankYouMessage) {
+              <p id="charity-thank-you">{{ campaign?.thankYouMessage }}</p>
+            }
+          </div>
+          <div>
+            <div class="receipt">
+              <p><strong>Your Receipt</strong></p>
+              <!-- Date time appears as e.g. "Sep 5, 2023, 2:54 PM" -->
+              <p>{{donation.createdTime | date: 'mediumDate'}}, {{donation.createdTime | date: 'shortTime'}}</p>
+              <br>
+              <table>
+                <tr class="donationAmount">
+                  <td>Your donation</td>
+                  <td>{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</td>
+                </tr>
+                @if (donation.matchedAmount > 0) {
+                  <tr>
+                    <td>Matched Amount</td>
+                    <td>{{ donation.matchedAmount | exactCurrency:donation.currencyCode }}</td>
+                  </tr>
+                }
+                @if (giftAidAmount > 0) {
+                  <tr>
+                    <td>Gift Aid Amount</td>
+                    <td>{{ giftAidAmount | exactCurrency:donation.currencyCode }}</td>
+                  </tr>
+                }
+                @if (donation.tipAmount > 0) {
+                  <tr>
+                    <td>Tip Amount</td>
+                    <td>{{ donation.tipAmount | exactCurrency:donation.currencyCode }}</td>
+                  </tr>
+                }
+                <tr>
+                  <td colspan="2"><hr aria-hidden="true"></td>
+                </tr>
+                <tr class="receives">
+                  <td>Charity Receives</td>
+                  <td>{{ totalValue | exactCurrency:donation.currencyCode }}</td>
+                </tr>
+                <tr class="total">
+                  <td><strong>Total amount you have been charged</strong></td>
+                  <td><strong>{{ totalPaid | exactCurrency:donation.currencyCode }}</strong></td>
+                </tr>
+              </table>
+            </div>
+            <hr class="shorter" aria-hidden="true">
+          </div>
+          <div class="socials">
+            <p>Boost your impact by sharing on social media</p>
+            <div class="social-icons-wrapper">
+              <span class="separator"></span>
+              <biggive-social-icon
+                service="Facebook"
+                label-prefix="Share"
+                url="https://www.facebook.com/sharer/sharer.php?u={{ encodedShareUrl }}" background-colour="tertiary"
+                icon-colour="black"
+                wide="true"
+              ></biggive-social-icon>
+              <span class="separator"></span>
+              <biggive-social-icon
+                service="Twitter"
+                label-prefix="Share"
+                url="https://x.com/intent/post?url={{ encodedShareUrl }}&text={{ encodedPrefilledText }}"
+                background-colour="tertiary"
+                icon-colour="black"
+                wide="true"
+              ></biggive-social-icon>
+              <span class="separator"></span>
+              <biggive-social-icon
+                service="LinkedIn"
+                label-prefix="Share"
+                url="https://www.linkedin.com/cws/share?url={{ encodedShareUrl }}"
+                background-colour="tertiary"
+                icon-colour="black"
+                wide="true"
+              ></biggive-social-icon>
+            </div>
+<!--            <a [routerLink]="'/campaign/' + campaign?.id">Back to campaign page</a>-->
+          </div>
+        </div>
+      }
+    </div>
+<!--  }-->
+</main>
