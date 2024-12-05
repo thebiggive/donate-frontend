@@ -100,8 +100,8 @@ export class ExploreComponent implements OnDestroy, OnInit {
 
 
   @HostListener('doCardGeneralClick', ['$event'])
-  onDoCardGeneralClick(event: CustomEvent) {
-    this.router.navigateByUrl(event.detail.url);
+  async onDoCardGeneralClick(event: CustomEvent) {
+    await this.router.navigateByUrl(event.detail.url);
   }
 
   isInFuture(campaign: CampaignSummary) {
@@ -129,7 +129,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
     }
   }
 
-  onScroll() {
+  async onScroll() {
     const scrollPositionY = this.scroller.getScrollPosition()[1];
     if (scrollPositionY < this.smallestSignificantScrollPx) {
       // If we're now near the top, reset any previous input blurring as it might be helpful to blur again.
@@ -138,7 +138,7 @@ export class ExploreComponent implements OnDestroy, OnInit {
     }
 
     if (!this.blurredSinceLastMajorScroll) {
-      this.cardGrid && this.cardGrid.unfocusInputs();
+      this.cardGrid && await this.cardGrid.unfocusInputs();
       this.blurredSinceLastMajorScroll = true;
     }
 
@@ -219,6 +219,6 @@ export class ExploreComponent implements OnDestroy, OnInit {
       return;
     }
 
-    this.router.navigate(['explore'], { queryParams: nextQueryParams });
+    void this.router.navigate(['explore'], { queryParams: nextQueryParams });
   }
 }

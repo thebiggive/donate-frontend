@@ -93,6 +93,7 @@
     "browser-sync": "^3.0.0",
     "cypress": "^13.2.0",
     "eslint": "^8.57.0",
+    "eslint-plugin-no-floating-promise": "^2.0.0",
     "jasmine-core": "^3.99.1",
     "jasmine-spec-reporter": "~7.0.0",
     "karma": "^6.4.2",

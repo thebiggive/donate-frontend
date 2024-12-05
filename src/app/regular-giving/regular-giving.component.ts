@@ -122,12 +122,12 @@ export class RegularGivingComponent implements OnInit {
       currency: "GBP",
       giftAid: false
     }).subscribe({
-    next: (mandate: Mandate) => {
+    next: async (mandate: Mandate) => {
       const prefix = "Regular giving mandate created: (todo - make 'thanks' page with polling for updates and/or make " +
         "the mandate come back activated so it will show on my regular giving page) ";
 
       alert(prefix + JSON.stringify(mandate));
-      this.router.navigateByUrl(myRegularGivingPath);
+      await this.router.navigateByUrl(myRegularGivingPath);
     },
       error: (error: Error) => {
       console.error(error);

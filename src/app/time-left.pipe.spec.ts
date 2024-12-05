@@ -1,20 +1,18 @@
 import {ChangeDetectorRef, PLATFORM_ID} from '@angular/core';
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed} from '@angular/core/testing';
 
 import { TimeLeftPipe } from './time-left.pipe';
 
 describe('TimeLeftPipe', () => {
   let pipe: TimeLeftPipe;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
       ],
     });
-
-    TestBed.compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     const cdRefMock: ChangeDetectorRef = {

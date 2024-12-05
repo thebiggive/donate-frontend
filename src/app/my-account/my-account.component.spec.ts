@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, waitForAsync } from "@angular/core/testing";
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 import {
   provideHttpClient,
   withInterceptorsFromDi,
@@ -20,7 +20,7 @@ describe("MyAccountComponent", () => {
   let fixture: ComponentFixture<MyAccountComponent>;
   let element: HTMLElement;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [MyAccountComponent],
       schemas: [NO_ERRORS_SCHEMA],
@@ -38,8 +38,8 @@ describe("MyAccountComponent", () => {
         { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         provideHttpClient(withInterceptorsFromDi()),
       ],
-    }).compileComponents();
-  }));
+    });
+  });
 
   beforeEach(() => {
     const mockIdentityService = TestBed.inject(IdentityService);

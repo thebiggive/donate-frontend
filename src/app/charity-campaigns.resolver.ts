@@ -24,7 +24,7 @@ export class CharityCampaignsResolver  {
         console.log(`CharityCampaignsResolver load error: "${error.message}"`);
         // Because it happens server side & before resolution, `replaceUrl` seems not to
         // work, so just fall back to serving the Explore content on the requested path.
-        this.router.navigateByUrl('/explore');
+        void this.router.navigateByUrl('/explore');
         return EMPTY;
       }));
   }

@@ -134,8 +134,8 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   @HostListener('doCardGeneralClick', ['$event'])
-  onDoCardGeneralClick(event: CustomEvent) {
-    this.router.navigateByUrl(event.detail.url);
+  async onDoCardGeneralClick(event: CustomEvent) {
+    await this.router.navigateByUrl(event.detail.url);
   }
 
   ngOnDestroy() {
@@ -206,7 +206,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     }
   }
 
-  onScroll() {
+  async onScroll() {
     const scrollPositionY = this.scroller.getScrollPosition()[1];
     if (scrollPositionY < this.smallestSignificantScrollPx) {
       // If we're now near the top, reset any previous input blurring as it might be helpful to blur again.
@@ -220,7 +220,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
     }
 
     if (!this.blurredSinceLastMajorScroll) {
-      this.cardGrid && this.cardGrid.unfocusInputs();
+      this.cardGrid && await this.cardGrid.unfocusInputs();
       this.blurredSinceLastMajorScroll = true;
     }
 
@@ -377,12 +377,12 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       this.run();
     });
 
-    this.searchServiceSubscription = this.searchService.changed.subscribe((interactive: boolean) => {
+    this.searchServiceSubscription = this.searchService.changed.subscribe(async (interactive: boolean) => {
       if (!interactive) {
         return;
       }
 
-      this.setQueryParams(); // Trigger a route change which in turn causes a `run()`.
+      await this.setQueryParams(); // Trigger a route change which in turn causes a `run()`.
     });
   }
 
@@ -395,7 +395,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
   /**
    * Update the browser's query params when a sort or filter is applied.
    */
-  private setQueryParams() {
+  private async setQueryParams() {
     const nextQueryParams = this.searchService.getQueryParams(this.getDefaultSort());
     if (JSON.stringify(this.route.snapshot.queryParams) === JSON.stringify(nextQueryParams)) {
       // Don't navigate at all if no change in query params. This saves us from inconsistencies
@@ -404,7 +404,7 @@ export class MetaCampaignComponent implements AfterViewChecked, OnDestroy, OnIni
       return;
     }
 
-    this.router.navigate([], { queryParams: nextQueryParams });
+    await this.router.navigate([], { queryParams: nextQueryParams });
   }
 
   private listenForRouteChanges() {
