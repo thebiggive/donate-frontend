@@ -4,7 +4,7 @@ import {DatePipe} from "@angular/common";
 import {ExactCurrencyPipe} from "../exact-currency.pipe";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {Campaign} from "../campaign.model";
+import {Mandate} from "../mandate.model";
 
 @Component({
   selector: 'app-mandate',
@@ -17,16 +17,35 @@ import {Campaign} from "../campaign.model";
     MatProgressSpinner
   ],
   templateUrl: './mandate.component.html',
-  styleUrl: './mandate.component.css'
+  styleUrl: './mandate.component.scss'
 })
 export class MandateComponent {
+  personId = 'donor-id';
   complete = true;
   encodedShareUrl = '';
   encodedPrefilledText: string = '';
   donation: any = {};
-  totalValue: 0;
+  totalValue: number = 20;
   campaign: any = {}
   giftAidAmount: number = 0;
   totalPaid: 0;
+  mandate: Mandate = {
+  id: 'f7037101-b555-4482-afff-43145fac78bb',
+  campaignId: 'a056900002TPVz5AAH',
+  charityName: '0011r00002Hoe8lAAB',
+  status: 'active',
+  "schedule": {
+    "type": "monthly",
+    "dayOfMonth": 1,
+    "activeFrom": '2024-12-06 11:00:17',
+    "expectedNextPaymentDate": '2025-01-01 11:00:17'
+  },
+  giftAid: false,
+  "amount": {
+    "amountInPence": 10,
+    "currency": "GBP"
+  },
+}
+
 
 }

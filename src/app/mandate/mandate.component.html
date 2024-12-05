@@ -4,8 +4,8 @@
   }
 
 <!--  @if (!complete && !noAccess && !timedOut) {-->
-    <mat-spinner class="complete-spinner" color="primary"
-                 diameter="30" aria-label="Loading donation details"></mat-spinner>
+<!--    <mat-spinner class="complete-spinner" color="primary"-->
+<!--                 diameter="30" aria-label="Loading donation details"></mat-spinner>-->
 <!--  }-->
 
 <!--  @if (isDataLoaded) {-->
@@ -30,7 +30,7 @@
         @if (complete) {
           <div>
             <div class="screenreader-only">
-              Thank you! Your generous donation has been made.
+              Thank you! Your generous regular donation has been set up.
             </div>
           </div>
         }
@@ -39,52 +39,59 @@
         <div>
           <div class="thank-you">
             <h2>Thank you!</h2>
-            <p class="thank-you-text">Your generous donation has been made.</p>
+            <p class="thank-you-text">Your generous regular donation has been set up.</p>
           </div>
           <hr aria-hidden="true">
           <div class="donation-summary">
-            <p><strong>Hi {{ donation.firstName }},</strong></p>
+<!--            <p><strong>Hi {{ donation.firstName }},</strong></p>-->
             <p><strong>Your donation summary</strong></p>
             <p>Your donation of
-              <strong class="figure">{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</strong>
+              <strong class="figure">{{ mandate.amount.amountInPence + ' ' + mandate.amount.currency }}</strong>
               is worth
-              <strong class="figure">{{ totalValue | exactCurrency:donation.currencyCode }}</strong>
-              to {{ donation.charityName }}!
+              <strong class="figure">{{ totalValue + ' ' + mandate.amount.currency }}
+              each month!</strong>
             </p>
             <br/>
-            @if (campaign?.thankYouMessage) {
-              <p id="charity-thank-you">{{ campaign?.thankYouMessage }}</p>
-            }
+<!--            @if (mandate?.thankYouMessage) {-->
+<!--              <p id="charity-thank-you">{{ mandate?.thankYouMessage }}</p>-->
+<!--            }-->
           </div>
           <div>
             <div class="receipt">
-              <p><strong>Your Receipt</strong></p>
+              <p><strong>Your Regular Donation Schedule</strong></p>
               <!-- Date time appears as e.g. "Sep 5, 2023, 2:54 PM" -->
-              <p>{{donation.createdTime | date: 'mediumDate'}}, {{donation.createdTime | date: 'shortTime'}}</p>
-              <br>
               <table>
+                <tr>
+                  <td>Active from</td>
+                  <td>{{ mandate.schedule.activeFrom | date: 'shortTime'}} {{ mandate.schedule.activeFrom | date: 'mediumDate'}}</td>
+                </tr>
+                <tr>
+                  <td>Day of month</td>
+                  <td>{{ mandate.schedule.dayOfMonth | date: 'shortTime'}} {{ mandate.schedule.dayOfMonth | date: 'mediumDate'}}</td>
+                </tr>
+                <td></td>
                 <tr class="donationAmount">
                   <td>Your donation</td>
-                  <td>{{ donation.donationAmount | exactCurrency:donation.currencyCode }}</td>
+                  <td>{{ mandate.amount.amountInPence }}  {{ mandate.amount.currency }}</td>
                 </tr>
-                @if (donation.matchedAmount > 0) {
+<!--                @if (donation.matchedAmount > 0) {-->
                   <tr>
                     <td>Matched Amount</td>
-                    <td>{{ donation.matchedAmount | exactCurrency:donation.currencyCode }}</td>
+                    <td>{{ mandate.amount.amountInPence }} {{ mandate.amount.currency }}</td>
                   </tr>
-                }
-                @if (giftAidAmount > 0) {
-                  <tr>
-                    <td>Gift Aid Amount</td>
-                    <td>{{ giftAidAmount | exactCurrency:donation.currencyCode }}</td>
-                  </tr>
-                }
-                @if (donation.tipAmount > 0) {
-                  <tr>
-                    <td>Tip Amount</td>
-                    <td>{{ donation.tipAmount | exactCurrency:donation.currencyCode }}</td>
-                  </tr>
-                }
+<!--                }-->
+<!--                @if (giftAidAmount > 0) {-->
+<!--                  <tr>-->
+<!--                    <td>Gift Aid Amount</td>-->
+<!--                    <td>{{ giftAidAmount | exactCurrency:donation.currencyCode }}</td>-->
+<!--                  </tr>-->
+<!--                }-->
+<!--                @if (donation.tipAmount > 0) {-->
+<!--                  <tr>-->
+<!--                    <td>Tip Amount</td>-->
+<!--                    <td>{{ donation.tipAmount | exactCurrency:donation.currencyCode }}</td>-->
+<!--                  </tr>-->
+<!--                }-->
                 <tr>
                   <td colspan="2"><hr aria-hidden="true"></td>
                 </tr>
@@ -94,7 +101,7 @@
                 </tr>
                 <tr class="total">
                   <td><strong>Total amount you have been charged</strong></td>
-                  <td><strong>{{ totalPaid | exactCurrency:donation.currencyCode }}</strong></td>
+                  <td><strong>{{ mandate.amount.amountInPence | exactCurrency:donation.currencyCode }}</strong></td>
                 </tr>
               </table>
             </div>

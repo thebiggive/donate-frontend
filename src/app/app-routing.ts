@@ -282,7 +282,12 @@ if (flags.regularGivingEnabled) {
     canActivate: [
       requireLogin,
     ],
-    resolve: {},
+    resolve: {
+      /**
+       * need similar method but for one mandate
+       */
+      //mandates: () => inject(MandateService).getActiveMandate(),
+    },
   })
 }
 
