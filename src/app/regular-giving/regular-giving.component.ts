@@ -68,7 +68,6 @@ export class RegularGivingComponent implements OnInit {
     this.campaign = this.route.snapshot.data.campaign;
 
     if ( !this.campaign.isRegularGiving ) {
-      this.router.navigate(['/my-account']);
       throw new Error("Campaign " + this.campaign.id + " is not a regular giving campaign");
       return;
     }
