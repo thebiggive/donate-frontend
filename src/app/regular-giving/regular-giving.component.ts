@@ -59,9 +59,18 @@ export class RegularGivingComponent implements OnInit {
     if (! donor) {
       throw new Error("Must be logged in to see regular giving page");
     }
-    this.donor = donor
+    this.donor = donor;
+
+    if ( !this.campaign.isRegularGiving ) {
+      throw new Error("Campaign " + this.campaign.id + " is not a regular giving campaign");
+    }
 
     this.campaign = this.route.snapshot.data.campaign;
+
+    if ( !this.campaign.isRegularGiving ) {
+      throw new Error("Campaign " + this.campaign.id + " is not a regular giving campaign");
+    }
+
     this.mandateForm = this.formBuilder.group({
         donationAmount: ['', [
           requiredNotBlankValidator,
