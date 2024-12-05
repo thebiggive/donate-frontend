@@ -452,7 +452,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     }
 
     // Else need to load children newly in browser.
-    // this.doCampaignSearch(query as SearchQuery, true); // Clear existing children
+    this.doCampaignSearch(query as SearchQuery, true); // Clear existing children
 
   }
 
