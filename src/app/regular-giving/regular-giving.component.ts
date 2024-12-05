@@ -69,7 +69,6 @@ export class RegularGivingComponent implements OnInit {
 
     if ( !this.campaign.isRegularGiving ) {
       throw new Error("Campaign " + this.campaign.id + " is not a regular giving campaign");
-      return;
     }
 
     this.mandateForm = this.formBuilder.group({
