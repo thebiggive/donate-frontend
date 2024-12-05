@@ -305,7 +305,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      this.stripeService.init();
+
+      /**
+       * For some reason awaiting this promise makes tests fail with
+       * "Cannot read properties of undefined (reading 'setValue')". Not sure why, but we can send any error to the
+       * console at least.
+       */
+      this.stripeService.init().catch(console.error);
 
       // ngx-matomo sets up window._paq internally, and doesn't have
       // A/B test methods, so we work with the global ourselves.
@@ -442,7 +448,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
-  ngAfterViewInit() {
+  async ngAfterViewInit() {
     if (! isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -473,7 +479,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       },
     })
 
-    widget.start()
+    await widget.start()
   }
 
   public setSelectedCountry = ((countryCode: string) => {
@@ -870,7 +876,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       )
       .subscribe(async (donation: Donation) => {
         if (donation.psp === 'stripe') {
-          this.payWithStripe();
+          await this.payWithStripe();
         }
       }, response => {
         let errorMessageForTracking: string;
@@ -904,13 +910,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (hasCredit) {
       // Settlement is via the Customer's cash balance, with no client-side provision of a Payment Method.
       this.donationService.finaliseCashBalancePurchase(this.donation).subscribe({
-        next: (donation) => {
+        next: async (donation) => {
           this.matomoTracker.trackEvent(
             'donate',
             'stripe_customer_balance_payment_success',
             `Stripe Intent expected to auto-confirm for donation ${donation.donationId} to campaign ${donation.projectId}`,
           );
-          this.exitPostDonationSuccess(donation, 'donation-funds');
+          await this.exitPostDonationSuccess(donation, 'donation-funds');
         },
         error: (response: HttpErrorResponse) => {
           // I think this is the path to a detailed message in MatchBot `ActionError`s.
@@ -970,7 +976,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           error,
         } = await this.stripeService.handleNextAction(result.paymentIntent!.client_secret);
         if (!error) {
-          this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
+          await this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
           return;
         } else {
           // Next action (e.g. 3D Secure) was run by Stripe.js, and failed.
@@ -1000,7 +1006,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     // See https://stripe.com/docs/payments/intents
     if (['succeeded', 'processing'].includes(result.paymentIntent.status)) {
-      this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
+      await this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
       return;
     }
 
@@ -2279,7 +2285,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
   }
 
-  private exitPostDonationSuccess(donation: Donation, stripe_donation_method: string|undefined) {
+  private async exitPostDonationSuccess(donation: Donation, stripe_donation_method: string|undefined) {
 
     const stripeMethod = stripe_donation_method || 'undefined';
 
@@ -2295,7 +2301,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.conversionTrackingService.convert(donation, this.campaign);
 
     this.cancelExpiryWarning();
-    this.router.navigate(['thanks', donation.donationId], {
+    await this.router.navigate(['thanks', donation.donationId], {
       replaceUrl: true,
     });
   }

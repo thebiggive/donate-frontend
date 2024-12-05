@@ -67,13 +67,14 @@ export class HomeComponent implements OnInit {
     const CCCloseDate = new Date('2024-12-10T12:00:00+00:00');
 
     if (
+      environment.environmentId !== 'regression' &&
       !queryParams.hasOwnProperty('noredirect') &&
       this.currentTime >= startRedirectingToCCAt &&
       this.currentTime < CCCloseDate
       ) {
         const redirectSlugIncSlash = '/christmas-challenge-2024';
         if (isPlatformBrowser(this.platformId)) {
-          this.router.navigate(
+          void this.router.navigate(
             [redirectSlugIncSlash],
             {
               replaceUrl: true, // As we are redirecting immediately it would be confusing to leave a page the user hasn't seen in their history.
