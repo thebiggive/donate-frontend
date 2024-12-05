@@ -184,6 +184,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.locationOptions = CampaignGroupsService.getCountries();
     this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
 
+    this.highlightCards = this.route.snapshot.data.highlights;
+
     if (!this.fund && this.fundSlug && this.metaCampaign) {
       this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
         this.state.set<Fund>(fundKey, fund);
