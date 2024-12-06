@@ -48,8 +48,7 @@
             <p>Your donation of
               <strong class="figure">{{ mandate.amount.amountInPence + ' ' + mandate.amount.currency }}</strong>
               is worth
-              <strong class="figure">{{ totalValue + ' ' + mandate.amount.currency }}
-              each month!</strong>
+              <strong class="figure">{{ totalValue + ' ' + mandate.amount.currency  + ' ' + mandate.matchingPeriodText }}!</strong>
             </p>
             <br/>
 <!--            @if (mandate?.thankYouMessage) {-->
@@ -63,11 +62,11 @@
               <table>
                 <tr>
                   <td>Active from</td>
-                  <td>{{ mandate.schedule.activeFrom | date: 'shortTime'}} {{ mandate.schedule.activeFrom | date: 'mediumDate'}}</td>
+                  <td>{{ mandate.schedule.activeFrom | date: 'mediumDate'}}</td>
                 </tr>
                 <tr>
                   <td>Day of month</td>
-                  <td>{{ mandate.schedule.dayOfMonth | date: 'shortTime'}} {{ mandate.schedule.dayOfMonth | date: 'mediumDate'}}</td>
+                  <td>{{ mandate.schedule.dayOfMonth }}</td>
                 </tr>
                 <td></td>
                 <tr class="donationAmount">

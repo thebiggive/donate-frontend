@@ -26,13 +26,13 @@ export class MandateComponent {
   encodedPrefilledText: string = '';
   donation: any = {};
   totalValue: number = 20;
-  campaign: any = {}
   giftAidAmount: number = 0;
   totalPaid: 0;
   mandate: Mandate = {
   id: 'f7037101-b555-4482-afff-43145fac78bb',
   campaignId: 'a056900002TPVz5AAH',
   charityName: '0011r00002Hoe8lAAB',
+  matchingPeriodText: 'for the next three months',
   status: 'active',
   "schedule": {
     "type": "monthly",
