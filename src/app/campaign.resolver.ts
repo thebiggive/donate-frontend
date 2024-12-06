@@ -26,7 +26,7 @@ export class CampaignResolver  {
       console.log(`CampaignResolver skipping load attempt for junk slug: "${campaignSlug}"`);
       // Because it happens server side & before resolution, `replaceUrl` seems not to
       // work, so just fall back to serving the Home content on the requested path.
-      this.router.navigateByUrl('/');
+      void this.router.navigateByUrl('/');
       return EMPTY;
     }
 
@@ -42,7 +42,7 @@ export class CampaignResolver  {
       this.campaignService.search(query as SearchQuery).subscribe({
         next: () => {},
         error: () => {
-          this.router.navigateByUrl(`/${campaignSlug}`);
+          void this.router.navigateByUrl(`/${campaignSlug}`);
         },
       });
     }
@@ -68,7 +68,7 @@ export class CampaignResolver  {
         console.log(`CampaignResolver load error: "${error.message}"`);
         // Because it happens server side & before resolution, `replaceUrl` seems not to
         // work, so just fall back to serving the Home content on the requested path.
-        this.router.navigateByUrl('/');
+        void this.router.navigateByUrl('/');
         return EMPTY;
       }));
 

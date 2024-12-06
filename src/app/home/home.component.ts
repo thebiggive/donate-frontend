@@ -74,7 +74,7 @@ export class HomeComponent implements OnInit {
       ) {
         const redirectSlugIncSlash = '/christmas-challenge-2024';
         if (isPlatformBrowser(this.platformId)) {
-          this.router.navigate(
+          void this.router.navigate(
             [redirectSlugIncSlash],
             {
               replaceUrl: true, // As we are redirecting immediately it would be confusing to leave a page the user hasn't seen in their history.

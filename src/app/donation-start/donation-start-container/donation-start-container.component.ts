@@ -34,12 +34,12 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
   ) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.campaign = this.route.snapshot.data.campaign;
 
     // auto redirect back to campaign page if donations not open according to date *or* status.
     if (!CampaignService.isOpenForDonations(this.campaign)) {
-      this.router.navigateByUrl(`/campaign/${this.campaign.id}`, { replaceUrl: true });
+      await this.router.navigateByUrl(`/campaign/${this.campaign.id}`, { replaceUrl: true });
       return;
     }
 

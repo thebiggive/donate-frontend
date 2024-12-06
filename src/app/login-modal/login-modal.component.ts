@@ -94,9 +94,9 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
     this.identityService.login(credentials).subscribe((response: { id: string, jwt: string }) => {
       this.dialogRef.close(response);
       this.loggingIn = false;
-    }, (error) => {
+    }, async (error) => {
       this.friendlyCaptchaWidget?.reset();
-      this.friendlyCaptchaWidget?.start();
+      await this.friendlyCaptchaWidget?.start();
       const errorDescription = error.error.error.description;
       this.loginError = errorDescription || error.message || 'Unknown error';
       this.loggingIn = false;

@@ -78,82 +78,83 @@ describe('DonationStartForm', () => {
   let component: DonationStartFormComponent;
   let fixture: ComponentFixture<DonationStartFormComponent>;
 
-  const getDummyCampaign = (campaignId: string) => {
-    return new Campaign(
-      campaignId,
-        ['Aim 1'],
-        200.00,
-        [
-          {
-            uri: 'https://example.com/some-additional-image.png',
-            order: 100,
-          },
-        ],
-        'https://example.com/some-banner.png',
-        ['Other'],
-        [
-          {
-            description: 'budget line 1',
-            amount: 2000.01,
-          },
-        ],
-        ['Animals'],
-        'Big Give Match Fund',
+  const getDummyCampaign = (campaignId: string) : Campaign => {
+    return {
+      id: campaignId,
+      aims: ['Aim 1'],
+      amountRaised: 200.00,
+      additionalImageUris: [
         {
-          id: '0011r00002HHAprAAH',
-          name: 'Awesome Charity',
-          optInStatement: 'Opt in statement.',
-          regulatorNumber: '123456',
-          regulatorRegion: 'Scotland',
-          stripeAccountId: campaignId === 'testCampaignIdForStripe' ? 'testStripeAcctId' : undefined,
-          website: 'https://www.awesomecharity.co.uk',
+          uri: 'https://example.com/some-additional-image.png',
+          order: 100,
         },
-        ['United Kingdom'],
-        'GBP',
-        4,
-        new Date('2050-01-01T00:00:00'),
-        'Impact reporting plan',
-        'Impact overview',
-        true,
-        987.00,
-        988.00,
-        false,
-        'The situation',
-        [
-          {
-            quote: 'Some quote',
-            person: 'Someones quote',
-          },
-        ],
-        true,
-        'The solution',
-        new Date(),
-        'Active',
-        'Some long summary',
-        'Some title',
-        [],
-        false,
-        'Some information about what happens if funds are not used',
-        undefined,
-        undefined,
-        undefined,
-        false,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        2000.01,
-        undefined,
+    ],
+    bannerUri: 'https://example.com/some-banner.png',
+    beneficiaries: ['Other'],
+      budgetDetails: [
         {
-          provider: 'youtube',
-          key: '1G_Abc2delF',
+          description: 'budget line 1',
+          amount: 2000.01,
         },
-    );
+      ],
+      categories: ['Animals'],
+      championName: 'Big Give Match Fund',
+      isRegularGiving: false,
+      charity: {
+        id: '0011r00002HHAprAAH',
+        name: 'Awesome Charity',
+        optInStatement: 'Opt in statement.',
+        regulatorNumber: '123456',
+        regulatorRegion: 'Scotland',
+        stripeAccountId: campaignId === 'testCampaignIdForStripe' ? 'testStripeAcctId' : undefined,
+        website: 'https://www.awesomecharity.co.uk',
+      },
+      countries: ['United Kingdom'],
+      currencyCode: 'GBP',
+      donationCount: 4,
+      endDate: new Date('2050-01-01T00:00:00'),
+      impactReporting: 'Impact reporting plan',
+      impactSummary: 'Impact overview',
+      isMatched: true,
+      matchFundsRemaining: 987.00,
+      matchFundsTotal: 988.00,
+      parentUsesSharedFunds: false,
+      problem: 'The situation',
+      quotes: [
+        {
+          quote: 'Some quote',
+          person: 'Someones quote',
+        },
+      ],
+      ready: true,
+      solution: 'The solution',
+      startDate: new Date(),
+      status: 'Active',
+      summary: 'Some long summary',
+      title: 'Some title',
+      updates: [],
+      usesSharedFunds: false,
+      alternativeFundUse: 'Some information about what happens if funds are not used',
+      campaignCount: undefined,
+      championOptInStatement: undefined,
+      championRef: undefined,
+      hidden: false,
+      logoUri: undefined,
+      parentAmountRaised: undefined,
+      parentDonationCount: undefined,
+      parentRef: undefined,
+      parentTarget: undefined,
+      surplusDonationInfo: undefined,
+      target: 2000.01,
+      thankYouMessage: undefined,
+      video: {
+        provider: 'youtube',
+        key: '1G_Abc2delF',
+      },
+  };
   };
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [FormsModule,
@@ -195,8 +196,8 @@ describe('DonationStartForm', () => {
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
     ]
-}).compileComponents();
-  }));
+});
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DonationStartFormComponent);

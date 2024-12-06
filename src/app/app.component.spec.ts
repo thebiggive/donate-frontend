@@ -4,7 +4,7 @@ import {
   withInterceptorsFromDi,
 } from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
-import { TestBed, waitForAsync } from "@angular/core/testing";
+import { TestBed } from "@angular/core/testing";
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -22,7 +22,7 @@ import { TBG_DONATE_ID_STORAGE } from "./identity.service";
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe("AppComponent", () => {
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [AppComponent],
@@ -50,8 +50,8 @@ describe("AppComponent", () => {
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),
       ],
-    }).compileComponents();
-  }));
+    });
+  });
 
   it("should create the app", () => {
     const fixture = TestBed.createComponent(AppComponent);

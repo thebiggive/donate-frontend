@@ -160,18 +160,18 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
           initialPerson.raw_password = this.registrationForm.value.password;
 
           this.identityService.update(initialPerson).subscribe({
-            next: () => {
+            next: async () => {
               // We can't re-use a captcha code twice, so auto-login won't work right now. For now we just
               // redirect to the login form
               const state: LoginNavigationState = {newAccountRegistration: true};
-              this.router.navigateByUrl("/login" + '?r=' + encodeURIComponent(this.redirectPath), {
+              await this.router.navigateByUrl("/login" + '?r=' + encodeURIComponent(this.redirectPath), {
                 state: state
               })
             },
-            error: (error) => {
+            error: async (error) => {
               extractErrorMessage(error);
               this.friendlyCaptchaWidget.reset()
-              this.friendlyCaptchaWidget.start();
+              await this.friendlyCaptchaWidget.start();
               this.processing = false;
               this.friendlyCaptcha.nativeElement
             }
@@ -197,8 +197,8 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       email_address: this.registrationForm.value.emailAddress,
       raw_password: this.registrationForm.value.password,
     }).subscribe({
-      next: () => {
-        this.router.navigateByUrl('/' + transferFundsPath);
+      next: async () => {
+        await this.router.navigateByUrl('/' + transferFundsPath);
       },
       error: (error) => {
         this.error = 'Auto login: ' + (error.error.description !== undefined ? error.error.description : error.message) || 'Unknown error';

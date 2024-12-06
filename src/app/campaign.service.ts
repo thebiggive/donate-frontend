@@ -74,6 +74,10 @@ export class CampaignService {
     return dateToUse;
   }
 
+  static campaignDurationInDays(campaign: Campaign): number {
+    return Math.floor((new Date(campaign.endDate).getTime() - new Date(campaign.startDate).getTime()) / 86400000);
+  }
+
   static percentRaisedOfIndividualCampaign(campaign: (Campaign | CampaignSummary)) {
     if (!campaign.target) {
       return undefined;

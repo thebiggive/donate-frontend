@@ -47,9 +47,9 @@ export class MyAccountComponent implements OnDestroy, OnInit {
       'https://images-production.thebiggive.org.uk/0011r00002IMRknAAH/CCampaign%20Banner/db3faeb1-d20d-4747-bb80-1ae9286336a3.jpg',
     );
 
-    this.identityService.getLoggedInPerson().subscribe((person: Person|null) => {
+    this.identityService.getLoggedInPerson().subscribe(async (person: Person|null) => {
       if (! person) {
-        this.router.navigate(['']);
+        await this.router.navigate(['']);
       } else {
         this.person = person;
         this.loadPaymentMethods();
@@ -93,7 +93,7 @@ export class MyAccountComponent implements OnDestroy, OnInit {
 
   logout() {
     this.identityService.logout();
-    this.router.navigate(['']);
+    void this.router.navigate(['']);
   }
 
   deleteMethod(method: PaymentMethod) {

@@ -135,8 +135,8 @@ const routes: Routes = [
     resolve: {
       campaign: CampaignResolver,
     },
-    loadChildren: () => import('./meta-campaign/meta-campaign.module')
-      .then(c => c.MetaCampaignModule),
+    loadChildren: () => import('./explore/explore.module')
+      .then(c => c.ExploreModule),
   },
   {
     path: 'metacampaign/:campaignId/:fundSlug',
@@ -144,8 +144,8 @@ const routes: Routes = [
     resolve: {
       campaign: CampaignResolver,
     },
-    loadChildren: () => import('./meta-campaign/meta-campaign.module')
-      .then(c => c.MetaCampaignModule),
+    loadChildren: () => import('./explore/explore.module')
+      .then(c => c.ExploreModule),
   },
   {
     path: 'reset-password',
@@ -176,8 +176,8 @@ const routes: Routes = [
     resolve: {
       campaign: CampaignResolver,
     },
-    loadChildren: () => import('./meta-campaign/meta-campaign.module')
-      .then(c => c.MetaCampaignModule),
+    loadChildren: () => import('./explore/explore.module')
+      .then(c => c.ExploreModule),
   },
   {
     path: 'explore',
@@ -239,8 +239,8 @@ const routes: Routes = [
     resolve: {
       campaign: CampaignResolver,
     },
-    loadChildren: () => import('./meta-campaign/meta-campaign.module')
-      .then(c => c.MetaCampaignModule),
+    loadChildren: () => import('./explore/explore.module')
+      .then(c => c.ExploreModule),
   },
 ];
 

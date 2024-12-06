@@ -1,6 +1,6 @@
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -25,7 +25,7 @@ describe('TransferFundsComponent', () => {
   let component: TransferFundsComponent;
   let fixture: ComponentFixture<TransferFundsComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     void TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
@@ -58,16 +58,14 @@ describe('TransferFundsComponent', () => {
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
       ],
     });
+  });
 
-    TestBed.compileComponents();
-  }));
-
-  beforeEach(async () => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-}).compileComponents();
+    });
 
     fixture = TestBed.createComponent(TransferFundsComponent);
     component = fixture.componentInstance;

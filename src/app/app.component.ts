@@ -179,9 +179,9 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   @HostListener('preferenceModalClosed', ['$event'])
-  onCookieBannerPreferenceModalClosed(_event: CustomEvent) {
+  async onCookieBannerPreferenceModalClosed(_event: CustomEvent) {
     if (this.showingDedicatedCookiePreferencesPage) {
-      this.router.navigateByUrl('/')
+      await this.router.navigateByUrl('/')
     }
   }
 

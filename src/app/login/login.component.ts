@@ -110,7 +110,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
 
   private friendlyCaptchaWiget: WidgetInstance;
 
-  ngAfterViewInit() {
+  async ngAfterViewInit() {
     if (! isPlatformBrowser(this.platformId)) {
       return
     }
@@ -129,7 +129,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
       },
     });
 
-    this.friendlyCaptchaWiget.start()
+    await this.friendlyCaptchaWiget.start()
   }
 
 
@@ -170,8 +170,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
       email_address: this.loginForm.value.emailAddress,
       raw_password: this.loginForm.value.password,
     }).subscribe({
-      next: (_response: { id: string, jwt: string }) => {
-        this.router.navigateByUrl(this.redirectPath);
+      next: async (_response: { id: string, jwt: string }) => {
+        await this.router.navigateByUrl(this.redirectPath);
       },
       error: async (error) => {
         const errorDescription = error.error.error.description;
