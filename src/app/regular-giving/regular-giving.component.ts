@@ -64,7 +64,7 @@ export class RegularGivingComponent implements OnInit {
     this.campaign = this.route.snapshot.data.campaign;
 
     if ( !this.campaign.isRegularGiving ) {
-     // throw new Error("Campaign " + this.campaign.id + " is not a regular giving campaign");
+     throw new Error("Campaign " + this.campaign.id + " is not a regular giving campaign");
     }
 
     this.mandateForm = this.formBuilder.group({
