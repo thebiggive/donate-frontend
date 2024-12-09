@@ -48,7 +48,7 @@
             <p>Your donation of
               <strong class="figure">{{ mandate.donationAmount.amountInPence + ' ' + mandate.donationAmount.currency }}</strong>
               is worth
-              <strong class="figure">{{ totalValue + ' ' + mandate.matchedAmount.currency  + ' ' + mandate.matchingPeriodText }}!</strong>
+              <strong class="figure">{{ mandate.donationAmount.amountInPence + mandate.matchedAmount.amountInPence + ' ' + mandate.matchedAmount.currency  + ' for the next ' + mandate.numberOfMatchedDonations + ' months!'}}</strong>
             </p>
             <br/>
 <!--            @if (mandate?.thankYouMessage) {-->
@@ -95,7 +95,7 @@
                 </tr>
                 <tr class="receives">
                   <td>Charity Receives</td>
-                  <td>{{ totalValue | exactCurrency:donation.currencyCode }}</td>
+                  <td>{{ mandate.donationAmount.amountInPence + mandate.matchedAmount.amountInPence + ' ' + mandate.matchedAmount.currency }}</td>
                 </tr>
                 <tr class="total">
                   <td><strong>Total amount you have been charged</strong></td>
