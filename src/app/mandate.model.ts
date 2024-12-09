@@ -9,9 +9,14 @@ export interface Mandate {
     "activeFrom": string,
     "expectedNextPaymentDate": string
   },
+  numberOfMatchedDonations: string,
   giftAid: boolean,
-  "amount": {
+  donationAmount: {
     "amountInPence": number,
     "currency": "GBP"
   },
+  matchedAmount: {
+    "amountInPence": number,
+    "currency": "GBP"
+  }
 }

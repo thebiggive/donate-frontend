@@ -22,12 +22,12 @@
                 <div class="mandate">
                   <h3><a href="{{'/campaign/' + mandate.campaignId}}">{{ mandate.charityName }}</a></h3>
                 <ul>
-                  <li>Amount: {{(mandate.amount.amountInPence / 100) | exactCurrency:mandate.amount.currency }}</li>
+                  <li>Amount: {{(mandate.donationAmount.amountInPence / 100) | exactCurrency:mandate.donationAmount.currency }}</li>
                   <!-- Todo: Move GA calculations below to matchbot, consider whether to also show total with match
                               funds when the next donation will be matched. -->
-                  <li>Gift Aid Value: {{(0.25 * mandate.amount.amountInPence / 100) | exactCurrency:mandate.amount.currency }}</li>
+                  <li>Gift Aid Value: {{(0.25 * mandate.donationAmount.amountInPence / 100) | exactCurrency:mandate.donationAmount.currency }}</li>
                   @if (mandate.giftAid) {
-                    <li>Total with gift aid {{(1.25 * mandate.amount.amountInPence / 100) | exactCurrency:mandate.amount.currency }}</li>
+                    <li>Total with gift aid {{(1.25 * mandate.donationAmount.amountInPence / 100) | exactCurrency:mandate.donationAmount.currency }}</li>
                   }
                   <li>Payment collection day: {{mandate.schedule.dayOfMonth}} </li>
                   <li>Next expected payment date: {{ mandate.schedule.expectedNextPaymentDate | date: 'mediumDate'}}</li>
