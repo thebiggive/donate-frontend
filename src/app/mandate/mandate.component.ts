@@ -5,6 +5,7 @@ import {ExactCurrencyPipe} from "../exact-currency.pipe";
 // import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 // import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {Mandate} from "../mandate.model";
+import {Donation} from "../donation.model";
 
 @Component({
   selector: 'app-mandate',
@@ -20,15 +21,15 @@ import {Mandate} from "../mandate.model";
   styleUrl: './mandate.component.scss'
 })
 export class MandateComponent {
-  personId = 'donor-id';
-  complete = true;
-  encodedShareUrl = '';
+  personId: string = 'donor-id';
+  complete: boolean = true;
+  encodedShareUrl: string = '';
   encodedPrefilledText: string = '';
-  donation: any = {};
+  donation: Donation;
   totalValue: number = 20;
   //giftAidAmount: number = 0;
   // TODO: we might want to keep the total donated amount as part of the regular giving mandate
-  // totalPaid: 0;
+  // totalPaid: number = 0;
   mandate: Mandate = {
   id: 'f7037101-b555-4482-afff-43145fac78bb',
   campaignId: 'a056900002TPVz5AAH',
