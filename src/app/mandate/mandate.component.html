@@ -2,7 +2,7 @@
   @if (complete) {
     <div id="banner-thank-you"></div>
   }
-
+<!--TODO : display a spinner when data is loading -->
 <!--  @if (!complete && !noAccess && !timedOut) {-->
 <!--    <mat-spinner class="complete-spinner" color="primary"-->
 <!--                 diameter="30" aria-label="Loading donation details"></mat-spinner>-->
@@ -73,12 +73,11 @@
                   <td>Your donation</td>
                   <td>{{ mandate.amount.amountInPence }}  {{ mandate.amount.currency }}</td>
                 </tr>
-<!--                @if (donation.matchedAmount > 0) {-->
                   <tr>
                     <td>Matched Amount</td>
                     <td>{{ mandate.amount.amountInPence }} {{ mandate.amount.currency }}</td>
                   </tr>
-<!--                }-->
+<!--  TODO: display gift Aid and tip amount on the template (format copied from one-off cmpaign thank you page -->
 <!--                @if (giftAidAmount > 0) {-->
 <!--                  <tr>-->
 <!--                    <td>Gift Aid Amount</td>-->
