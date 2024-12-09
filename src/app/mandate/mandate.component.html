@@ -2,13 +2,6 @@
   @if (complete) {
     <div id="banner-thank-you"></div>
   }
-<!--TODO : display a spinner when data is loading -->
-<!--  @if (!complete && !noAccess && !timedOut) {-->
-<!--    <mat-spinner class="complete-spinner" color="primary"-->
-<!--                 diameter="30" aria-label="Loading donation details"></mat-spinner>-->
-<!--  }-->
-
-<!--  @if (isDataLoaded) {-->
     <div>
       @if (false) {
         <p class="error">
@@ -43,7 +36,6 @@
           </div>
           <hr aria-hidden="true">
           <div class="donation-summary">
-<!--            <p><strong>Hi {{ donation.firstName }},</strong></p>-->
             <p><strong>Your donation summary</strong></p>
             <p>Your donation of
               <strong class="figure">{{ mandate.donationAmount.amountInPence + ' ' + mandate.donationAmount.currency }}</strong>
@@ -58,7 +50,7 @@
           <div>
             <div class="receipt">
               <p><strong>Your Regular Donation Schedule</strong></p>
-              <!-- Date time appears as e.g. "Sep 5, 2023, 2:54 PM" -->
+              <!-- Date time appears as e.g. "Sep 5, 2023" -->
               <table>
                 <tr>
                   <td>Active from</td>
