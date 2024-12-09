@@ -46,9 +46,9 @@
 <!--            <p><strong>Hi {{ donation.firstName }},</strong></p>-->
             <p><strong>Your donation summary</strong></p>
             <p>Your donation of
-              <strong class="figure">{{ mandate.amount.amountInPence + ' ' + mandate.amount.currency }}</strong>
+              <strong class="figure">{{ mandate.donationAmount.amountInPence + ' ' + mandate.donationAmount.currency }}</strong>
               is worth
-              <strong class="figure">{{ totalValue + ' ' + mandate.amount.currency  + ' ' + mandate.matchingPeriodText }}!</strong>
+              <strong class="figure">{{ totalValue + ' ' + mandate.matchedAmount.currency  + ' ' + mandate.matchingPeriodText }}!</strong>
             </p>
             <br/>
 <!--            @if (mandate?.thankYouMessage) {-->
@@ -71,11 +71,11 @@
                 <td></td>
                 <tr class="donationAmount">
                   <td>Your donation</td>
-                  <td>{{ mandate.amount.amountInPence }}  {{ mandate.amount.currency }}</td>
+                  <td>{{ mandate.donationAmount.amountInPence }}  {{ mandate.donationAmount.currency }}</td>
                 </tr>
                   <tr>
                     <td>Matched Amount</td>
-                    <td>{{ mandate.amount.amountInPence }} {{ mandate.amount.currency }}</td>
+                    <td>{{ mandate.matchedAmount.amountInPence }} {{ mandate.matchedAmount.currency }}</td>
                   </tr>
 <!--  TODO: display gift Aid and tip amount on the template (format copied from one-off cmpaign thank you page -->
 <!--                @if (giftAidAmount > 0) {-->
@@ -99,7 +99,7 @@
                 </tr>
                 <tr class="total">
                   <td><strong>Total amount you have been charged</strong></td>
-                  <td><strong>{{ mandate.amount.amountInPence | exactCurrency:donation.currencyCode }}</strong></td>
+                  <td><strong>{{ mandate.donationAmount.amountInPence | exactCurrency:donation.currencyCode }}</strong></td>
                 </tr>
               </table>
             </div>

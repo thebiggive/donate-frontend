@@ -31,23 +31,25 @@ export class MandateComponent {
   // TODO: we might want to keep the total donated amount as part of the regular giving mandate
   // totalPaid: number = 0;
   mandate: Mandate = {
-  id: 'f7037101-b555-4482-afff-43145fac78bb',
-  campaignId: 'a056900002TPVz5AAH',
-  charityName: '0011r00002Hoe8lAAB',
-  matchingPeriodText: 'for the next three months',
-  status: 'active',
-  "schedule": {
-    "type": "monthly",
-    "dayOfMonth": 1,
-    "activeFrom": '2024-12-06 11:00:17',
-    "expectedNextPaymentDate": '2025-01-01 11:00:17'
+    id: 'f7037101-b555-4482-afff-43145fac78bb',
+    campaignId: 'a056900002TPVz5AAH',
+    charityName: '0011r00002Hoe8lAAB',
+    matchingPeriodText: 'for the next three months',
+    status: 'active',
+    "schedule": {
+      "type": "monthly",
+      "dayOfMonth": 1,
+      "activeFrom": '2024-12-06 11:00:17',
+      "expectedNextPaymentDate": '2025-01-01 11:00:17'
   },
-  giftAid: false,
-  "amount": {
-    "amountInPence": 10,
-    "currency": "GBP"
-  },
-}
-
-
+    donationAmount: {
+      "amountInPence": 10,
+      "currency": "GBP"
+    },
+    matchedAmount: {
+      "amountInPence": 30,
+      "currency": "GBP"
+    },
+    giftAid: false,
+  }
 }
