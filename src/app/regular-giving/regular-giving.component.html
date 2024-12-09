@@ -1,12 +1,12 @@
 <main class="b-container">
-<!--  @if(!campaign.isRegularGiving) {-->
+  @if(!campaign.isRegularGiving) {
       <div>
           <p class="error">
             Sorry, campaign {{ campaign.title }} is not a regular giving campaign.</p>
           <p>To make a one-off donation to {{ campaign.charity.name }} please visit the regular <a href="/campaign/{{campaign.id}}">campaign page</a>.
           </p>
       </div>
-<!--  } @else {-->
+  } @else {
     <div class="c-form-container">
       <biggive-page-section>
         <form
@@ -104,5 +104,5 @@
         </form>
       </biggive-page-section>
     </div>
-<!--  }-->
+  }
 </main>
