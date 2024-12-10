@@ -26,10 +26,11 @@ export class MandateComponent {
   encodedShareUrl: string = '';
   encodedPrefilledText: string = '';
   donation: Donation;
-  //giftAidAmount: number = 0;
-  // TODO: we might want to keep the total donated amount as part of the regular giving mandate
+
+  // giftAidAmount: number = 0;
+  // @todo-regular-giving : we might want to keep the total donated amount as part of the regular giving mandate
   // totalPaid: number = 0;
-  /** @todo-regular-giving : replace this with a mandate fetched from matchbot *//
+  // @todo-regular-giving : replace this with a mandate fetched from matchbot
   mandate: Mandate = {
     id: 'f7037101-b555-4482-afff-43145fac78bb',
     campaignId: 'a056900002TPVz5AAH',
