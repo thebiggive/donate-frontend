@@ -286,7 +286,10 @@ if (flags.regularGivingEnabled) {
       /**
        * need similar method but for one mandate
        */
-      //mandates: () => inject(MandateService).getActiveMandate(),
+      // mandates: () => {
+      //   inject(MandateService).getActiveMandate(mandateId),
+      // }
+
     },
   })
 }
