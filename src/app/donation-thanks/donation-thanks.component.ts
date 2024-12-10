@@ -239,7 +239,7 @@ export class DonationThanksComponent implements OnInit {
           this.identityService.logout();
         }
       },
-      error: (error: HttpErrorResponse) => {
+      error: async (error: HttpErrorResponse) => {
         const htmlErrorDescription = error.error?.error?.htmlDescription as string|undefined;
         if (error.error?.error?.type === "DUPLICATE_EMAIL_ADDRESS_WITH_PASSWORD") {
           this.registerErrorDescription = "Your password could not be set. There is already a password set for your email address.";
@@ -253,7 +253,7 @@ export class DonationThanksComponent implements OnInit {
         this.registerError = error.message;
         this.matomoTracker.trackEvent('identity_error', 'person_password_set_failed', `${error.status}: ${error.message}`);
         this.friendlyCaptchaWidget?.reset();
-        this.friendlyCaptchaWidget?.start();
+        await this.friendlyCaptchaWidget?.start();
       },
     });
   }

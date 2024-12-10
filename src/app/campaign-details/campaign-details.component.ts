@@ -54,7 +54,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       if (params.fromFund) {
         this.fromFund = true;
       }
-    });
+    }).catch(console.error);
   }
 
   ngOnDestroy() {
@@ -64,7 +64,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  goBackToMetacampaign() {
+  async goBackToMetacampaign() {
     const url = `/${this.campaign.parentRef}`;
 
     if (this.navigationService.isLastUrl(url)) {
@@ -72,7 +72,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.router.navigateByUrl(url);
+    await this.router.navigateByUrl(url);
   }
 
   private setSecondaryProps(campaign: Campaign) {

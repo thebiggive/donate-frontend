@@ -10,7 +10,6 @@ import { DonationStartContainerComponent } from "./donation-start-container.comp
 import { DonationStartFormComponent } from "../donation-start-form/donation-start-form.component";
 import { TBG_DONATE_ID_STORAGE } from "../../identity.service";
 import { TBG_DONATE_STORAGE } from "../../donation.service";
-import { Campaign } from "../../campaign.model";
 import { MatomoModule } from "ngx-matomo-client";
 import {
   provideHttpClient,
@@ -82,27 +81,28 @@ describe("DonationStartContainer", () => {
   });
 
   const getDummyCampaign = (campaignId: string) => {
-    return new Campaign(
-      campaignId,
-      ["Aim 1"],
-      200.0,
-      [
+    return {
+      id: campaignId,
+      aims: ["Aim 1"],
+      amountRaised: 200.0,
+      additionalImageUris: [
         {
           uri: "https://example.com/some-additional-image.png",
           order: 100,
         },
       ],
-      "https://example.com/some-banner.png",
-      ["Other"],
-      [
+      bannerUri: "https://example.com/some-banner.png",
+      beneficiaries: ["Other"],
+      budgetDetails: [
         {
           description: "budget line 1",
           amount: 2000.01,
         },
       ],
-      ["Animals"],
-      "Big Give Match Fund",
-      {
+      categories: ["Animals"],
+      championName: "Big Give Match Fund",
+      isRegularGiving: false,
+      charity: {
         id: "0011r00002HHAprAAH",
         name: "Awesome Charity",
         optInStatement: "Opt in statement.",
@@ -114,48 +114,48 @@ describe("DonationStartContainer", () => {
             : undefined,
         website: "https://www.awesomecharity.co.uk",
       },
-      ["United Kingdom"],
-      "GBP",
-      4,
-      new Date("2050-01-01T00:00:00"),
-      "Impact reporting plan",
-      "Impact overview",
-      true,
-      987.0,
-      988.0,
-      false,
-      "The situation",
-      [
+      countries: ["United Kingdom"],
+      currencyCode: "GBP",
+      donationCount: 4,
+      endDate: new Date("2050-01-01T00:00:00"),
+      impactReporting: "Impact reporting plan",
+      impactSummary: "Impact overview",
+      isMatched: true,
+      matchFundsRemaining: 987.0,
+      matchFundsTotal: 988.0,
+      parentUsesSharedFunds: false,
+      problem: "The situation",
+      quotes: [
         {
           quote: "Some quote",
           person: "Someones quote",
         },
       ],
-      true,
-      "The solution",
-      new Date(),
-      "Active",
-      "Some long summary",
-      "Some title",
-      [],
-      false,
-      "Some information about what happens if funds are not used",
-      undefined,
-      undefined,
-      undefined,
-      false,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      2000.01,
-      undefined,
-      {
+      ready: true,
+      solution: "The solution",
+      startDate: new Date(),
+      status: "Active",
+      summary: "Some long summary",
+      title: "Some title",
+      updates: [],
+      usesSharedFunds: false,
+      alternativeFundUse: "Some information about what happens if funds are not used",
+      campaignCount: undefined,
+      championOptInStatement: undefined,
+      championRef: undefined,
+      hidden: false,
+      logoUri: undefined,
+      parentAmountRaised: undefined,
+      parentDonationCount: undefined,
+      parentRef: undefined,
+      parentTarget: undefined,
+      surplusDonationInfo: undefined,
+      target: 2000.01,
+      thankYouMessage: undefined,
+      video: {
         provider: "youtube",
         key: "1G_Abc2delF",
       }
-    );
+    };
   };
 });

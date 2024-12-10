@@ -1,18 +1,17 @@
-import { TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ImageService } from './image.service';
 
 import { OptimisedImagePipe } from './optimised-image.pipe';
 
 describe('OptimisedImagePipe', () => {
   let pipe: OptimisedImagePipe;
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         ImageService,
       ],
     });
-    TestBed.compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     pipe = new OptimisedImagePipe(TestBed.inject(ImageService));

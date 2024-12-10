@@ -49,7 +49,7 @@ export class ResetPasswordComponent implements OnInit {
           }
         );
         if (!this.token) {
-          this.router.navigate(['']);
+          void this.router.navigate(['']);
         }
       }
     );
