@@ -1,0 +1,237 @@
+@import '../../abstract';
+
+mat-spinner.complete-spinner {
+  margin: 3rem auto;
+}
+
+#banner-thank-you {
+  background-image: url(../../assets/images/banner-thank-you.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: none;
+  height: 250px;
+  width: 100%;
+}
+
+hr {
+  width: 80%;
+  @media #{$breakpoint-sm} {
+    margin: 40px auto;
+  }
+  @media #{$breakpoint-lg} {
+    margin: 60px auto;
+  }
+  color: #868686;
+}
+
+.thank-you {
+  background-color: $colour-primary;
+  padding: 75px 0;
+  position: relative;
+  top: -125px;
+  width: 80%;
+  margin: auto auto -125px auto;
+
+  h2 {
+    margin-top: 0;
+    color: $colour-secondary;
+    text-align: center;
+
+    @media #{$breakpoint-sm} {
+      font-size: 2rem;
+    }
+    @media #{$breakpoint-md} {
+      font-size: 2.5rem;
+    }
+    @media #{$breakpoint-lg} {
+      font-size: 3rem;
+    }
+    @media #{$breakpoint-xl} {
+      font-size: 4rem;
+    }
+  }
+
+  p {
+    color: white;
+    text-align: center;
+    margin-left: 5em;
+    margin-right: 5em;
+
+    &.error {
+      fa-icon {
+        color: $colour-secondary;
+      }
+    }
+
+    a {
+      // if we didn't specify a colour this would be blue-on-blue and invisible.
+      color: white;
+    }
+  }
+
+  .thank-you-text {
+    font-weight: 500;
+    @media #{$breakpoint-sm} {
+      font-size: 1rem;
+    }
+    @media #{$breakpoint-md} {
+      font-size: 1.2rem;
+    }
+    @media #{$breakpoint-lg} {
+      font-size: 1.5rem;
+    }
+    @media #{$breakpoint-xl} {
+      font-size: 2rem;
+    }
+  }
+
+  p.error {
+    max-width: 80%;
+    margin: auto;
+    fa-icon {
+      color: $colour-highlight;
+    }
+    a {
+      // this color style doesn't seem to have any affect - not sure why not. For now I've set the color
+      // as an inline style in the HTML sent from the Identity server. Not ideal.
+      color: inherit;
+    }
+  }
+}
+
+.donation-summary {
+  @media #{$breakpoint-md} {
+    text-align: center;
+  }
+  width: 80%;
+  margin-right: auto;
+  margin-left: auto;
+
+  p {
+    margin: 2rem 0;
+    @media #{$breakpoint-sm} {
+      font-size: 1rem;
+    }
+    @media #{$breakpoint-md} {
+      font-size: 1.1rem;
+    }
+    @media #{$breakpoint-lg} {
+      font-size: 1.2rem;
+    }
+    @media #{$breakpoint-xl} {
+      font-size: 1.5rem;
+    }
+    strong {
+      &.figure {
+        color: $colour-primary;
+      }
+    }
+  }
+}
+
+hr.shorter {
+  width: 80%;
+}
+
+div.large-donation-spacer {
+  min-height: 40px;
+}
+
+div.clearfix {
+  clear: both;
+}
+
+.receipt {
+  max-width: min(580px, 80%);
+  margin: auto;
+
+  table {
+    width: 100%;
+    border-spacing: 0 1em;
+    tr {
+      td {
+        @media #{$breakpoint-sm} {
+          font-size: 1rem;
+        }
+        @media #{$breakpoint-md} {
+          font-size: 1.1rem;
+        }
+        @media #{$breakpoint-lg} {
+          font-size: 1.2rem;
+        }
+        @media #{$breakpoint-xl} {
+          font-size: 1.4rem;
+        }
+      }
+    }
+  }
+  hr {
+    margin: 0;
+    width: 100%;
+  }
+  .receives {
+    td {
+      background-color: $colour-highlight;
+      padding: 5px;
+    }
+  }
+  .total {
+    color: $colour-primary;
+  }
+}
+
+.socials {
+  display: grid;
+  margin-bottom: 50px;
+  p {
+    text-align: center;
+    max-width: 220px;
+    margin: auto;
+  }
+
+  .social-icons-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-right: 0;
+    margin-left: 0;
+    margin-bottom: 40px;
+
+    span.separator {
+      width: 30px
+    }
+  }
+
+  a {
+    margin: auto;
+  }
+
+  a, p {
+    @media #{$breakpoint-sm} {
+      font-size: 1rem;
+    }
+    @media #{$breakpoint-md} {
+      font-size: 1.1rem;
+    }
+    @media #{$breakpoint-lg} {
+      font-size: 1.2rem;
+    }
+    @media #{$breakpoint-xl} {
+      font-size: 1.4rem;
+    }
+  }
+}
+
+.screenreader-only {
+  // additional content for screen readers that is not required for visual presentations.
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@include friendly-captcha();

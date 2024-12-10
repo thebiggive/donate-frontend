@@ -18,6 +18,7 @@ import {MandateService} from "./mandate.service";
 import {RegularGivingComponent} from "./regular-giving/regular-giving.component";
 import {Person} from "./person.model";
 import {firstValueFrom} from "rxjs";
+import {MandateComponent} from "./mandate/mandate.component";
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -273,6 +274,24 @@ if (flags.regularGivingEnabled) {
       },
     },
   )
+
+  routes.unshift({
+    path: `${myRegularGivingPath}/:mandateId`,
+    pathMatch: 'full',
+    component: MandateComponent,
+    canActivate: [
+      requireLogin,
+    ],
+    resolve: {
+      /**
+       * need similar method but for one mandate
+       */
+      // mandates: () => {
+      //   inject(MandateService).getActiveMandate(mandateId),
+      // }
+
+    },
+  })
 }
 
 export {routes};

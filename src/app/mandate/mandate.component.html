@@ -1,0 +1,114 @@
+<main class="b-container">
+
+  <div id="banner-thank-you"></div>
+
+  <div>
+    <div aria-live="polite">
+      <div>
+        <div class="screenreader-only">
+          Thank you! Your generous regular donation has been set up.
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="thank-you">
+        <h2>Thank you!</h2>
+        <p class="thank-you-text">Your generous regular donation has been set up.</p>
+      </div>
+      <hr aria-hidden="true">
+      <div class="donation-summary">
+        <p><strong>Your donation summary</strong></p>
+        <p>Your donation of
+          <strong
+            class="figure">{{ mandate.donationAmount.amountInPence / 100 | exactCurrency:mandate.donationAmount.currency }}</strong>
+          is worth
+          <strong
+            class="figure">{{ ((mandate.donationAmount.amountInPence + mandate.matchedAmount.amountInPence) / 100 | exactCurrency:mandate.donationAmount.currency) + ' for the first ' + mandate.numberOfMatchedDonations + ' months!' }}</strong>
+        </p>
+        <br/>
+        <!--            @todo-regular-giving: consider adding thank you message in matchbot / SF-->
+        <!--            @if (mandate?.thankYouMessage) {-->
+        <!--              <p id="charity-thank-you">{{ mandate?.thankYouMessage }}</p>-->
+        <!--            }-->
+      </div>
+      <div>
+        <div class="receipt">
+          <p><strong>Your Regular Donation Schedule</strong></p>
+          <!-- Date time appears as e.g. "Sep 5, 2023" -->
+          <table>
+            <tr>
+              <td>Active from</td>
+              <td>{{ mandate.schedule.activeFrom | date: 'mediumDate' }}</td>
+            </tr>
+            <tr>
+              <td>Day of month</td>
+              <td>{{ mandate.schedule.dayOfMonth }}</td>
+            </tr>
+            <td></td>
+            <tr class="donationAmount">
+              <td>Your donation</td>
+              <td>{{ mandate.donationAmount.amountInPence / 100 | exactCurrency:mandate.donationAmount.currency }}</td>
+            </tr>
+            <tr>
+              <td>Matched Amount (for the first {{ mandate.numberOfMatchedDonations }} months)</td>
+              <td>{{ mandate.matchedAmount.amountInPence / 100 | exactCurrency:mandate.donationAmount.currency }}</td>
+            </tr>
+            <!--  @todo-regular-giving: consider displaying gift Aid and tip amount on the template (format copied from one-off cmpaign thank you page -->
+            <!--                @if (giftAidAmount > 0) {-->
+            <!--                  <tr>-->
+            <!--                    <td>Gift Aid Amount</td>-->
+            <!--                    <td>{{ giftAidAmount | exactCurrency:donation.currencyCode }}</td>-->
+            <!--                  </tr>-->
+            <!--                }-->
+            <tr>
+              <td colspan="2">
+                <hr aria-hidden="true">
+              </td>
+            </tr>
+            <!--                @todo-regular-giving: use giftAid value sent from matchbot (possibly also the matched amounts calculations -->
+            <tr class="receives">
+              <td>Charity Receives (Matched Donations)</td>
+              <td>{{ (mandate.donationAmount.amountInPence + mandate.matchedAmount.amountInPence) / 100 + ' ' | exactCurrency:mandate.donationAmount.currency }}</td>
+            </tr>
+            <tr class="receives">
+              <td>Charity Receives (Unmatched Donations)</td>
+              <td>{{ mandate.donationAmount.amountInPence / 100 + ' ' | exactCurrency:mandate.donationAmount.currency }}</td>
+            </tr>
+          </table>
+        </div>
+        <hr class="shorter" aria-hidden="true">
+      </div>
+      <div class="socials">
+        <p>Boost your impact by sharing on social media</p>
+        <div class="social-icons-wrapper">
+          <span class="separator"></span>
+          <biggive-social-icon
+            service="Facebook"
+            label-prefix="Share"
+            url="https://www.facebook.com/sharer/sharer.php?u={{ encodedShareUrl }}" background-colour="tertiary"
+            icon-colour="black"
+            wide="true"
+          ></biggive-social-icon>
+          <span class="separator"></span>
+          <biggive-social-icon
+            service="Twitter"
+            label-prefix="Share"
+            url="https://x.com/intent/post?url={{ encodedShareUrl }}&text={{ encodedPrefilledText }}"
+            background-colour="tertiary"
+            icon-colour="black"
+            wide="true"
+          ></biggive-social-icon>
+          <span class="separator"></span>
+          <biggive-social-icon
+            service="LinkedIn"
+            label-prefix="Share"
+            url="https://www.linkedin.com/cws/share?url={{ encodedShareUrl }}"
+            background-colour="tertiary"
+            icon-colour="black"
+            wide="true"
+          ></biggive-social-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
