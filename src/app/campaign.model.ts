@@ -41,7 +41,7 @@ export interface Campaign {
     ready: boolean;
     solution: string;
     startDate: Date;
-    status: 'Active' | 'Expired' | 'Preview' | 'Pending';
+    status: 'Active' | 'Expired' | 'Preview';
     summary: string;
     title: string;
     updates: Array<{content: string, modifiedDate: Date}>;

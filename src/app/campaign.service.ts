@@ -22,16 +22,8 @@ export class CampaignService {
     private http: HttpClient,
   ) {}
 
-  static isPendingOrNotReady(campaign: Campaign): boolean {
-    return campaign.status === 'Pending' || !campaign.ready;
-  }
-
   static isOpenForDonations(campaign: Campaign): boolean {
-    if (campaign.hidden) {
-      return false;
-    }
-
-    if (this.isPendingOrNotReady(campaign)) {
+    if (campaign.hidden || !campaign.ready) {
       return false;
     }
 

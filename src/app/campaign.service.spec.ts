@@ -154,15 +154,6 @@ describe('CampaignService', () => {
     expect(CampaignService.isInFuture(campaign)).toBe(false);
   });
 
-  it ('should not allow donation attempts to Pending campaigns', () => {
-    const campaign = getDummyCampaign();
-    campaign.startDate = new Date((new Date()).getTime() + 86400000);
-    campaign.endDate = new Date((new Date()).getTime() + 86400001);
-    campaign.status = 'Pending';
-
-    expect(CampaignService.isOpenForDonations(campaign)).toBe(false);
-  });
-
   it ('should return the % raised for itself when its parent does not use shared funds', () => {
     const campaign = getDummyCampaign();
     campaign.parentUsesSharedFunds = false;
