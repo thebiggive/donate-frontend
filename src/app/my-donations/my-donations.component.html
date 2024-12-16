@@ -52,7 +52,7 @@
                       <a href="{{myRegularGivingPath + '/' + donation.mandate.uuid}}">Regular giving since {{donation.mandate.activeFrom  | date: 'mediumDate'}}</a>
                     }
                     </p>
-                    <h3><a class="charityName" href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a></h3>
+                    <h3>{{ donation.charityName }}</h3>
                   </div>
                     <ul>
                       <li>Amount: {{ donation.donationAmount | exactCurrency:donation.currencyCode }}</li>

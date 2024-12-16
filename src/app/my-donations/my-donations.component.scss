@@ -27,10 +27,6 @@ div.donation {
   height: 100%;
   justify-content: space-between;
   flex-direction: column;
-  a.charityName:link, a.charityName:visited, a.charityName:hover {
-    color: inherit !important;
-    text-decoration: none;
-  }
   *:first-child {
     margin-top: 0;
     flex-grow: 1;
