@@ -77,7 +77,6 @@ const LoggedInPersonResolver: ResolveFn<Person | null> = async () => {
 const mandateResolver: ResolveFn<Mandate> = async (route: ActivatedRouteSnapshot) => {
   const mandateService = inject(MandateService);
   const mandateId = route.paramMap.get('mandateId');
-  console.log({mandateId});
   if (!mandateId) {
     throw new Error('mandateId param missing in route');
   }
@@ -288,7 +287,7 @@ if (flags.regularGivingEnabled) {
   )
 
   routes.unshift({
-    path: 'my-account/regular-giving/:mandateId',
+    path: `${myRegularGivingPath}/:mandateId`,
     pathMatch: 'full',
     component: MandateComponent,
     canActivate: [
