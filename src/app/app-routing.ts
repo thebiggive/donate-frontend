@@ -19,6 +19,7 @@ import {RegularGivingComponent} from "./regular-giving/regular-giving.component"
 import {Person} from "./person.model";
 import {firstValueFrom} from "rxjs";
 import {MandateComponent} from "./mandate/mandate.component";
+import {Mandate} from "./mandate.model";
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -71,6 +72,16 @@ const LoggedInPersonResolver: ResolveFn<Person | null> = async () => {
 
   const person$ = identityService.getLoggedInPerson();
   return await firstValueFrom(person$);
+}
+
+const mandateResolver: ResolveFn<Mandate> = async (route: ActivatedRouteSnapshot) => {
+  const mandateService = inject(MandateService);
+  const mandateId = route.paramMap.get('mandateId');
+  if (!mandateId) {
+    throw new Error('mandateId param missing in route');
+  }
+  const mandate$ = mandateService.getActiveMandate(mandateId);
+  return await firstValueFrom(mandate$);
 }
 
 const routes: Routes = [
@@ -283,13 +294,7 @@ if (flags.regularGivingEnabled) {
       requireLogin,
     ],
     resolve: {
-      /**
-       * need similar method but for one mandate
-       */
-      // mandates: () => {
-      //   inject(MandateService).getActiveMandate(mandateId),
-      // }
-
+        mandate:  mandateResolver,
     },
   })
 }

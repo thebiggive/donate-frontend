@@ -4,7 +4,6 @@ import {environment} from "../environments/environment";
 import {IdentityService, getPersonAuthHttpOptions } from "./identity.service";
 import { HttpClient } from "@angular/common/http";
 import {Mandate} from "./mandate.model";
-import {Campaign} from "./campaign.model";
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +31,7 @@ export class MandateService {
     }));
   }
 
-  getActiveMandate(regularGivingCampaignId: Campaign) {
+  getActiveMandate(mandateId: string) {
     const jwt = this.identityService.getJWT();
     const person$ = this.identityService.getLoggedInPerson();
 
@@ -42,7 +41,7 @@ export class MandateService {
       }
 
       return this.http.get<{ mandate: Mandate }>(
-        `${environment.donationsApiPrefix}/regular-giving/my-donation-mandate/${regularGivingCampaignId}`,
+        `${environment.donationsApiPrefix}/regular-giving/my-donation-mandates/${mandateId}`,
         getPersonAuthHttpOptions(jwt),
       ).pipe(map((response) => response.mandate));
     }));
