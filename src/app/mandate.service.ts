@@ -4,7 +4,6 @@ import {environment} from "../environments/environment";
 import {IdentityService, getPersonAuthHttpOptions } from "./identity.service";
 import { HttpClient } from "@angular/common/http";
 import {Mandate} from "./mandate.model";
-import {Campaign} from "./campaign.model";
 
 @Injectable({
   providedIn: 'root',

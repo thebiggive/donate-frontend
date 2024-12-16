@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {ComponentsModule} from "@biggive/components-angular";
 import {DatePipe} from "@angular/common";
 import {Mandate} from "../mandate.model";
-import {Donation} from "../donation.model";
 import {ExactCurrencyPipe} from "../exact-currency.pipe";
 import {ActivatedRoute} from "@angular/router";
 
@@ -18,11 +17,9 @@ import {ActivatedRoute} from "@angular/router";
   styleUrl: './mandate.component.scss'
 })
 export class MandateComponent implements OnInit {
-  complete: boolean = true;
-  encodedShareUrl: string = '';
-  encodedPrefilledText: string = '';
-  donation: Donation;
-  mandate: Mandate;
+  protected encodedShareUrl: string = '';
+  protected encodedPrefilledText: string = '';
+  protected mandate: Mandate;
 
   constructor(
     private route: ActivatedRoute
