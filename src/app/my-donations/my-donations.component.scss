@@ -6,7 +6,10 @@
 main > div {
   color: white;
   background-color: $colour-primary;
+}
 
+p:not(biggive-container-card *) {
+  // biggive-container-cards have white backgrounds so white links in there would be invisible.
   a:link, a:visited, a:hover {
     color: white;
   }
@@ -24,10 +27,6 @@ div.donation {
   height: 100%;
   justify-content: space-between;
   flex-direction: column;
-  a:link, a:visited, a:hover {
-    color: inherit !important;
-    text-decoration: none;
-  }
   *:first-child {
     margin-top: 0;
     flex-grow: 1;

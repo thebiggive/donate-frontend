@@ -6,6 +6,7 @@ import {AsyncPipe, DatePipe} from "@angular/common";
 import {ExactCurrencyPipe} from "../exact-currency.pipe";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {allChildComponentImports} from "../../allChildComponentImports";
+import {myRegularGivingPath} from "../app-routing";
 
 @Component({
   selector: 'app-my-donations',
@@ -23,6 +24,7 @@ import {allChildComponentImports} from "../../allChildComponentImports";
 export class MyDonationsComponent implements OnInit{
   protected donations: EnrichedDonation[];
   protected atLeastOneLargeRecentDonation: boolean;
+  protected readonly myRegularGivingPath = myRegularGivingPath;
 
   constructor(
     private pageMeta: PageMetaService,

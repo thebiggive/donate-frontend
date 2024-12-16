@@ -46,8 +46,13 @@
               >
                 <div class="donation">
                   <div>
-                    <p>{{this.displayMethodType(donation)}}</p>
-                    <h3><a href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a></h3>
+                    <p>{{this.displayMethodType(donation)}}
+                    @if (donation.mandate) {
+                      <br />
+                      <a href="{{myRegularGivingPath + '/' + donation.mandate.uuid}}">Regular giving since {{donation.mandate.activeFrom  | date: 'mediumDate'}}</a>
+                    }
+                    </p>
+                    <h3>{{ donation.charityName }}</h3>
                   </div>
                     <ul>
                       <li>Amount: {{ donation.donationAmount | exactCurrency:donation.currencyCode }}</li>
