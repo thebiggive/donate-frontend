@@ -357,6 +357,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   private loadMoreForCurrentSearch() {
+    console.log("in loadmoreForCurrentSearch");
     this.offset += CampaignService.perPage;
     this.loading = true;
     const query = this.campaignService.buildQuery(
@@ -367,9 +368,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       this.fundSlug,
     );
 
-    if (this.metaCampaign) {
-      this.doCampaignSearch(query as SearchQuery, false);
-    }
+    this.doCampaignSearch(query as SearchQuery, false);
   }
 
   /**
@@ -378,7 +377,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   private doCampaignSearch(query: SearchQuery, clearExisting: boolean) {
     this.campaignService.search(query as SearchQuery).subscribe({
       next: (campaignSummaries) => {
-        // Success
         this.individualCampaigns = clearExisting ? campaignSummaries : [...this.individualCampaigns, ...campaignSummaries];
         this.loading = false;
 
@@ -396,7 +394,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
         }
       },
       error: () => {
-        this.filterError = true; // Error, should only be thrown if the callout SF API returns an error
+        this.filterError = true;
         this.loading = false;
       }
     });
