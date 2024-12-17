@@ -376,26 +376,29 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * Also saves results for imminent future navigation to the same meta-campaign + filters.
    */
   private doCampaignSearch(query: SearchQuery, clearExisting: boolean) {
-    this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
-      // Success
-      this.individualCampaigns = clearExisting ? campaignSummaries : [...this.individualCampaigns, ...campaignSummaries];
-      this.loading = false;
+    this.campaignService.search(query as SearchQuery).subscribe({
+      next: (campaignSummaries) => {
+        // Success
+        this.individualCampaigns = clearExisting ? campaignSummaries : [...this.individualCampaigns, ...campaignSummaries];
+        this.loading = false;
 
-      if (isPlatformBrowser(this.platformId)) {
-        // Save children so we can go 'back' here in the browser and maintain scroll position.
-        // Only an exact query match should reinstate the same child campaigns on load.
-        const recentChildrenData = {
-          query: this.normaliseQueryForRecentChildrenComparison(query),
-          offset: this.offset,
-          children: this.individualCampaigns,
-          time: Date.now(), // ms
-        };
+        if (isPlatformBrowser(this.platformId)) {
+          // Save children so we can go 'back' here in the browser and maintain scroll position.
+          // Only an exact query match should reinstate the same child campaigns on load.
+          const recentChildrenData = {
+            query: this.normaliseQueryForRecentChildrenComparison(query),
+            offset: this.offset,
+            children: this.individualCampaigns,
+            time: Date.now(), // ms
+          };
 
-        this.sessionStorage.set(this.recentChildrenKey, recentChildrenData);
+          this.sessionStorage.set(this.recentChildrenKey, recentChildrenData);
+        }
+      },
+      error: () => {
+        this.filterError = true; // Error, should only be thrown if the callout SF API returns an error
+        this.loading = false;
       }
-    }, () => {
-      this.filterError = true; // Error, should only be thrown if the callout SF API returns an error
-      this.loading = false;
     });
   }
 
@@ -486,8 +489,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       return;
     }
 
-    void this.router.navigate(['explore'], { queryParams: nextQueryParams });
-  }
+    void this.router.navigate([], { queryParams: nextQueryParams });  }
 
   private listenForRouteChanges() {
     this.routeChangeListener = this.router.events.subscribe(event => {
