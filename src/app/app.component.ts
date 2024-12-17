@@ -178,6 +178,12 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     this.cookiePreferenceService.agreeToAll();
   }
 
+  @HostListener('logoutClicked', ['$event'])
+  onLogoutClicked(_event: CustomEvent) {
+    this.identityService.logout();
+    void this.router.navigate(['']);
+  }
+
   @HostListener('preferenceModalClosed', ['$event'])
   async onCookieBannerPreferenceModalClosed(_event: CustomEvent) {
     if (this.showingDedicatedCookiePreferencesPage) {
