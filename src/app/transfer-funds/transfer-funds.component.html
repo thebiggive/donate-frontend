@@ -1,11 +1,4 @@
 <main>
-  @if (donor) {
-    <div id="loggedInHeader">
-      <p>Logged in as {{ donor.first_name }} {{donor.last_name}}</p>
-      <button id="my-account-link" mat-raised-button routerLink="/my-account">My Account</button>
-      <button mat-raised-button (click)="logout()">Log out</button>
-    </div>
-  }
   <div class="b-container">
     <h3 class="b-rh-1 b-bold">Transfer Donation Funds</h3>
 
