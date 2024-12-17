@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {EventEmitter, Inject, Injectable, InjectionToken} from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import {CookieService} from 'ngx-cookie-service';
@@ -20,6 +20,10 @@ export const TBG_DONATE_ID_STORAGE = new InjectionToken<StorageService>('TBG_DON
   providedIn: 'root',
 })
 export class IdentityService {
+  /** Cookie to share with WP which needs to know whether we're logged in as a donor to be able to show the
+   * correct menu variant but does not need access to the actual session cookie that holds the JWT.
+   */
+  private readonly isLoggedInCookieName = 'IS_LOGGED_IN';
   private readonly cookieName = 'SESSION';
   private readonly loginPath = '/auth';
   private readonly peoplePath = '/people';
@@ -160,10 +164,12 @@ export class IdentityService {
 
   logout() {
     this.cookieService.delete(this.cookieName);
+    this.cookieService.delete(this.isLoggedInCookieName);
     this.cookieService.delete(STRIPE_SESSION_SECRET_COOKIE_NAME);
 
     // delete didn't seem to work reliably, so also directly setting an empty cookie that expires in the past here:
     this.cookieService.set(this.cookieName, '', new Date('1970-01-01'), '/')
+    this.cookieService.set(this.isLoggedInCookieName, '', new Date('1970-01-01'), '/');
     this.cookieService.set(STRIPE_SESSION_SECRET_COOKIE_NAME, '', new Date('1970-01-01'), '/')
     this.storage.remove(this.storageKey);
     this.loginStatusChanged.emit(false);
@@ -208,6 +214,17 @@ export class IdentityService {
   saveJWT(id: string, jwt: string) {
     const daysTilExpiry = 1;
     this.cookieService.set(this.cookieName, JSON.stringify({id, jwt}), daysTilExpiry, '/');
+    this.cookieService.set(this.isLoggedInCookieName, 'true', daysTilExpiry, '/', this.domainSharedWithWordpress());
+  }
+
+  private domainSharedWithWordpress() {
+    const hostname = new URL(environment.donateUriPrefix).hostname;
+    const parts = hostname.split('.');
+    parts.shift();
+
+    // length will be zero when domain is localhost. In other cases we have a shared domain above that
+    // with our WordPress site.
+    return parts.length === 0 ? hostname : parts.join('.');
   }
 
   getFundingInstructions(id: string, jwt: string): Observable<FundingInstruction> {
