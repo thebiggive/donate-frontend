@@ -41,7 +41,8 @@ export interface Campaign {
     ready: boolean;
     solution: string;
     startDate: Date;
-    status: 'Active' | 'Expired' | 'Preview' | 'Pending';
+    // More on Campaign status semantics defined in Salesforce `docs/campaign-status-definitions`.
+    status: 'Active' | 'Expired' | 'Preview';
     summary: string;
     title: string;
     updates: Array<{content: string, modifiedDate: Date}>;
