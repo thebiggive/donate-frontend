@@ -357,7 +357,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   private loadMoreForCurrentSearch() {
-    console.log("in loadmoreForCurrentSearch");
     this.offset += CampaignService.perPage;
     this.loading = true;
     const query = this.campaignService.buildQuery(
