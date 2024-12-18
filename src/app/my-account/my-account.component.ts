@@ -11,6 +11,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 import { HttpErrorResponse } from "@angular/common/http";
 import {flags} from "../featureFlags";
+import { HighlightCard } from '../highlight-cards/HighlightCard';
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-my-account',
@@ -29,6 +31,8 @@ export class MyAccountComponent implements OnDestroy, OnInit {
   private savedCardsTimer: undefined | ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
   protected readonly flags = flags;
 
+  protected readonly actions: HighlightCard[];
+
   constructor(
     private pageMeta: PageMetaService,
     public dialog: MatDialog,
@@ -38,6 +42,42 @@ export class MyAccountComponent implements OnDestroy, OnInit {
     private router: Router,
   ) {
     this.identityService = identityService;
+
+    this.actions = [
+      {
+        backgroundImageUrl: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png'),
+        iconColor: 'secondary',
+        headerText: 'Transfer Donation Funds',
+        bodyText: '',
+        button: {
+          text: '',
+          href: new URL(environment.donateUriPrefix + '/transfer-funds')
+        }
+      },
+      {
+        backgroundImageUrl: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png'),
+        iconColor: 'secondary',
+        headerText: 'Your donations',
+        bodyText: '',
+        button: {
+          text: '',
+          href: new URL(environment.donateUriPrefix + '/my-account/donations')
+        }
+      },
+    ];
+    if (flags.regularGivingEnabled) {
+      this.actions.push(
+        {
+          backgroundImageUrl: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png'),
+          iconColor: 'secondary',
+          headerText: 'Your Regular Giving',
+          bodyText: '',
+          button: {
+            text: '',
+            href: new URL(environment.donateUriPrefix + '/my-account/regular-giving')
+          }
+      })
+    }
   }
 
   ngOnInit() {

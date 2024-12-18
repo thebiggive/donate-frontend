@@ -10,6 +10,7 @@ import { ExactCurrencyPipe } from "../exact-currency.pipe";
 import { OptimisedImagePipe } from "../optimised-image.pipe";
 import { MyAccountRoutingModule } from "./my-account-routing.module";
 import { MyAccountComponent } from "./my-account.component";
+import {HighlightCardsComponent} from "../highlight-cards/highlight-cards.component";
 
 @NgModule({
   imports: [
@@ -22,6 +23,7 @@ import { MyAccountComponent } from "./my-account.component";
     MatButtonModule,
     MatDialogModule,
     FontAwesomeModule,
+    HighlightCardsComponent,
   ],
   declarations: [MyAccountComponent],
   providers: [DatePipe],
