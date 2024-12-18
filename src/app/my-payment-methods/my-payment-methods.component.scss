@@ -1,0 +1,66 @@
+@import "../../assets/scss/auth-common";
+
+#banner {
+  background-image: url(../../assets/images/banner-my-account.jpg);
+}
+main > div {
+  color: white;
+  background-color: $colour-primary;
+
+  a:link, a:visited, a:hover {
+    color: white;
+  }
+}
+
+table#paymentMethods {
+  width: 100%;
+  td {
+    padding-bottom: 15px;
+    @media #{$breakpoint-lg} {
+      min-width: 150px;
+    }
+    vertical-align: bottom;
+  }
+
+  td.cardUpdateButton {
+    text-align: right;
+  }
+
+  td.cardUpdateButton, td.cardDeleteButton {
+    display: flex;
+    @media #{$breakpoint-xl} {
+      display: table-cell;
+    }
+  }
+
+  td.cardUpdateButton {
+    padding-bottom: 0;
+    @media #{$breakpoint-xl} {
+      padding-bottom: 15px;
+    }
+  }
+
+  td.cardExpiry {
+    display: none;
+    @media #{$breakpoint-lg} {
+      display: table-cell;
+    }
+  }
+
+  div.cardBrand {
+    font-weight: bold;
+  }
+  div.cardExpiry {
+    @media #{$breakpoint-lg} {
+      display: none;
+    }
+  }
+}
+
+table#paymentMethods td:last-child {
+  text-align: right;
+}
+
+.update-success {
+  color: $colour-highlight;
+}

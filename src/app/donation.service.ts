@@ -2,7 +2,7 @@ import {isPlatformServer} from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {Inject, Injectable, InjectionToken, makeStateKey, Optional, PLATFORM_ID, TransferState,} from '@angular/core';
 import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
-import {Observable, of} from 'rxjs';
+import {firstValueFrom, Observable, of} from 'rxjs';
 import {ConfirmationToken, PaymentIntent, PaymentMethod} from '@stripe/stripe-js';
 
 import {COUNTRY_CODE} from './country-code.token';
@@ -170,17 +170,24 @@ export class DonationService {
     );
   }
 
-  getPaymentMethods(
-    personId?: string,
-    jwt?: string,
-    {cacheBust}: { cacheBust?: boolean} = {cacheBust: false}
-  ): Observable<{ data: PaymentMethod[] }> {
+  async getPaymentMethods(
+    {cacheBust}: { cacheBust?: boolean } = {cacheBust: false}
+  ): Promise<PaymentMethod[]> {
+    const jwt = this.identityService.getJWT();
+    const person = await firstValueFrom(this.identityService.getLoggedInPerson());
+
+    if (!person) {
+      throw new Error("logged in person required");
+    }
+
     const cacheBuster = cacheBust ? ("?t=" + new Date().getTime()) : '';
 
-    return this.http.get<{ data: PaymentMethod[] }>(
-      `${environment.donationsApiPrefix}/people/${personId}/payment_methods${cacheBuster}`,
+    const response = await firstValueFrom(this.http.get<{ data: PaymentMethod[] }>(
+      `${environment.donationsApiPrefix}/people/${person.id}/payment_methods${cacheBuster}`,
       getPersonAuthHttpOptions(jwt),
-    );
+    ));
+
+    return response.data;
   }
 
   create(donation: Donation, personId?: string, jwt?: string): Observable<DonationCreatedResponse> {
