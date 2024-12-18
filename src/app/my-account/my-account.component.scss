@@ -23,15 +23,6 @@ main > div {
   background-color: $colour-primary;
 }
 
-#logout {
-  width: 80%;
-  text-align: center;
-  margin: auto;
-  @media #{$breakpoint-lg} {
-    max-width: 10em;
-  }
-}
-
 .account-actions {
   display: flex;
   flex-wrap: wrap;
@@ -42,13 +33,6 @@ main > div {
 
 .account-actions biggive-button {
   flex: 0 0 auto;
-}
-
-.logout-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: right;
-  gap: 17px;
 }
 
 table#personal-details, table#paymentMethods {

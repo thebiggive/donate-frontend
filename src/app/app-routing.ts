@@ -218,6 +218,19 @@ const routes: Routes = [
       redirectIfAlreadyLoggedIn,
     ],
   },
+  /** For use when donor clicks logout in the menu on the wordpress site **/
+  {
+    component: LoginComponent, // Angular requires we set a component but it will never be used as `canActivate` always
+                               // redirects.
+    path: 'logout',
+    pathMatch: 'full',
+    canActivate: [
+      async () => {
+        inject(IdentityService).logout();
+        await inject(Router).navigate(['/'], {replaceUrl: true});
+      },
+    ],
+  },
   {
     path: 'login',
     pathMatch: 'full',

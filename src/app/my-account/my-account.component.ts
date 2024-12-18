@@ -91,11 +91,6 @@ export class MyAccountComponent implements OnDestroy, OnInit {
       );
   }
 
-  logout() {
-    this.identityService.logout();
-    void this.router.navigate(['']);
-  }
-
   deleteMethod(method: PaymentMethod) {
     this.paymentMethods = undefined;
 
