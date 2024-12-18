@@ -45,20 +45,24 @@ export class MyAccountComponent implements OnDestroy, OnInit {
 
     this.actions = [
       {
-        backgroundImageUrl: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png'),
-        iconColor: 'secondary',
+        background: {
+          color: 'brand-mhf-turquoise',
+          image: new URL(environment.donateUriPrefix + '/assets/images/turquoise-texture.jpg')
+        },
         headerText: 'Transfer Donation Funds',
-        bodyText: '',
+        bodyText: 'Use a bank transfer to make donations to charities on our platform.',
         button: {
           text: '',
           href: new URL(environment.donateUriPrefix + '/transfer-funds')
         }
       },
       {
-        backgroundImageUrl: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png'),
-        iconColor: 'secondary',
+        background: {
+          color: 'brand-c4c-orange',
+          image: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png')
+        },
         headerText: 'Your donations',
-        bodyText: '',
+        bodyText: 'View all the donations you\'ve made while logged in',
         button: {
           text: '',
           href: new URL(environment.donateUriPrefix + '/my-account/donations')
@@ -68,10 +72,12 @@ export class MyAccountComponent implements OnDestroy, OnInit {
     if (flags.regularGivingEnabled) {
       this.actions.push(
         {
-          backgroundImageUrl: new URL(environment.donateUriPrefix + '/assets/images/red-coral-texture.png'),
-          iconColor: 'secondary',
+          background: {
+            color: 'brand-afa-pink',
+            image: new URL(environment.donateUriPrefix + '/assets/images/peach-texture.jpg')
+          },
           headerText: 'Your Regular Giving',
-          bodyText: '',
+          bodyText: 'View and manage your regular giving mandates',
           button: {
             text: '',
             href: new URL(environment.donateUriPrefix + '/my-account/regular-giving')
