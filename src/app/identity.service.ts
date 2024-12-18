@@ -214,7 +214,9 @@ export class IdentityService {
   saveJWT(id: string, jwt: string) {
     const daysTilExpiry = 1;
     this.cookieService.set(this.cookieName, JSON.stringify({id, jwt}), daysTilExpiry, '/');
-    this.cookieService.set(this.isLoggedInCookieName, 'true', daysTilExpiry, '/', this.domainSharedWithWordpress());
+    if (this.probablyHaveLoggedInPerson()) {
+      this.cookieService.set(this.isLoggedInCookieName, 'true', daysTilExpiry, '/', this.domainSharedWithWordpress());
+    }
   }
 
   private domainSharedWithWordpress() {
