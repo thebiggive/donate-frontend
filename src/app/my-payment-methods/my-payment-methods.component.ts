@@ -11,6 +11,8 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {DonationService} from "../donation.service";
 import {IdentityService} from "../identity.service";
 import {MatDialog} from "@angular/material/dialog";
+import {FaIconComponent} from "@fortawesome/angular-fontawesome";
+import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-my-payment-methods',
@@ -18,7 +20,8 @@ import {MatDialog} from "@angular/material/dialog";
   imports: [
     ComponentsModule,
     ExactCurrencyPipe,
-    MatProgressSpinner
+    MatProgressSpinner,
+    FaIconComponent
   ],
   templateUrl: './my-payment-methods.component.html',
   styleUrl: './my-payment-methods.component.scss'
@@ -29,8 +32,8 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
 
   private savedCardsTimer: undefined | ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
 
-  registerErrorDescription: string | undefined;
-  registerSuccessMessage: string | undefined;
+  protected registerErrorDescription: string | undefined;
+  protected registerSuccessMessage: string | undefined;
   constructor(
     private donationService: DonationService,
     private identityService: IdentityService,
@@ -151,4 +154,6 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
       clearTimeout(this.savedCardsTimer);
     }
   }
+
+  protected readonly faExclamationTriangle = faExclamationTriangle;
 }

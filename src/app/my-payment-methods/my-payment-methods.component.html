@@ -11,6 +11,17 @@
         ></biggive-heading>
       </div>
         <h2>Your Payment Methods</h2>
+      @if (registerErrorDescription) {
+        <p class="error" aria-live="assertive">
+          <fa-icon [icon]="faExclamationTriangle"></fa-icon>
+          {{ registerErrorDescription }}
+        </p>
+      }
+      @if (registerSuccessMessage) {
+        <p class="update-success" aria-live="assertive">
+          {{ registerSuccessMessage }}
+        </p>
+      }
           <h3>Donation Funds</h3>
           <div>
             @if (hasDonationFunds) {
