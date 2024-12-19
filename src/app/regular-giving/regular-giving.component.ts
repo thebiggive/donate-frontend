@@ -61,11 +61,11 @@ export class RegularGivingComponent implements OnInit {
     }
     this.donor = donor;
 
+    this.campaign = this.route.snapshot.data.campaign;
+
     if ( !this.campaign.isRegularGiving ) {
       console.error("Campaign " + this.campaign.id + " is not a regular giving campaign");
     }
-
-    this.campaign = this.route.snapshot.data.campaign;
 
     this.mandateForm = this.formBuilder.group({
         donationAmount: ['', [
