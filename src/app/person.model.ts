@@ -24,6 +24,11 @@ export interface Person {
     pending_tip_balance?: { [currencyCode: string]: number };
 
     /**
+     * The total of donor fund form-created succeeded tips for the given Person, set up in the past 10 days, counted in minor-currency units i.e. pence
+     */
+    recently_confirmed_tips_total?: { [currencyCode: string]: number };
+
+    /**
      * These 3 expected on first update.
      */
     email_address?: string;
