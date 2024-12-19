@@ -507,4 +507,12 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     this.matomoTracker.trackEvent('donate_error', 'credit_tip_donation_create_failed', errorMessage);
     this.toast.showError('Could not prepare your tip; please try again later or contact us to investigate');
   }
+
+  /**
+   * We only check for GBP balances for now, as we only support UK bank transfers rn
+   */
+  protected get hasDonationFunds()
+  {
+    return this.donor?.cash_balance?.gbp;
+  }
 }

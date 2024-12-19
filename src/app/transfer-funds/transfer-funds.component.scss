@@ -8,6 +8,12 @@
     margin-bottom: 2rem;
 }
 
+.existing-balance-info {
+    @include make-card($box-shadow-hard);
+    padding: 1rem;
+    margin-bottom: 3rem;
+}
+
 .mat-stepper-vertical {
     margin-top: 8px;
 }
