@@ -65,9 +65,6 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
   };
 
   async loadPaymentMethods() {
-    // not so keen on the component using the donation service and the identity service together like this
-    // would rather call one service and have it do everything for us. Not sure what service would be best to put
-    // this code in.
     this.paymentMethods = await this.donationService.getPaymentMethods({cacheBust: true})
   }
 
