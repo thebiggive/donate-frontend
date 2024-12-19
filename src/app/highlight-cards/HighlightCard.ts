@@ -2,12 +2,16 @@ import {brandColour} from "@biggive/components/dist/types/globals/brand-colour"
 import {environment} from "../../environments/environment";
 
 export type HighlightCard = {
-  backgroundImageUrl: URL,
+  background: {
+    // colour appears 'behind' the image, only seen if image doesn't load or during loading.
+    color?: brandColour;
+    image: URL
+  },
   // There is ambiguity in the components library about whether brand-6 is grey or turquoise. Best to avoid using brand-6 and
   // use brand-mhf-turquoise instead.
   // See https://github.com/thebiggive/donate-frontend/pull/1076#issuecomment-1523472452
   // For other colour details see https://github.com/thebiggive/components/blob/develop/src/globals/brand-colour.ts
-  iconColor: brandColour,
+  icon?: {color: brandColour},
   headerText: string,
   bodyText: string,
   button: {
@@ -25,7 +29,7 @@ export type campaignFamilyName =
   |'artsforImpact'
   |'emergencyMatch';
 
-export type SfApiHighlightCard = Omit<HighlightCard, 'backgroundImageUrl'|'iconColor'|'button'> & {
+export type SfApiHighlightCard = Omit<HighlightCard, 'background'|'icon'|'button'> & {
   campaignFamily: campaignFamilyName | null
   cardStyle: 'DONATE_NOW' | 'SEE_RESULTS' | 'APPLY_NOW' | 'SAVE_THE_DATE' | 'JOIN_MAILING_LIST' | 'REGISTER_INTEREST' | 'EXPLORE',
   button: {
@@ -66,11 +70,12 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
     href = new URL(donateUriPrefix + '/christmas-challenge-2024');
   }
 
+  const color = iconColor(sfApiHighlightCard, campaignFamilyColours);
   return {
     headerText: sfApiHighlightCard.headerText,
     bodyText: sfApiHighlightCard.bodyText,
-    iconColor: iconColor(sfApiHighlightCard, campaignFamilyColours),
-    backgroundImageUrl,
+    icon: {color},
+    background: {image: backgroundImageUrl, color },
     button: {
       text: sfApiHighlightCard.button.text,
       href: href,

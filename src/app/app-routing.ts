@@ -20,6 +20,7 @@ import {Person} from "./person.model";
 import {firstValueFrom} from "rxjs";
 import {MandateComponent} from "./mandate/mandate.component";
 import {Mandate} from "./mandate.model";
+import {MyPaymentMethodsComponent} from "./my-payment-methods/my-payment-methods.component";
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -178,6 +179,20 @@ const routes: Routes = [
     },
     pathMatch: 'full',
     component: MyDonationsComponent,
+    canActivate: [
+      requireLogin,
+    ],
+  },
+  {
+    path: 'my-account/payment-methods',
+    pathMatch: 'full',
+    resolve: {
+      person: async () => await firstValueFrom(inject(IdentityService).getLoggedInPerson()),
+      paymentMethods: async () => {
+        return await inject(DonationService).getPaymentMethods();
+      },
+    },
+    component: MyPaymentMethodsComponent,
     canActivate: [
       requireLogin,
     ],
