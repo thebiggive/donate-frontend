@@ -38,8 +38,14 @@
                   and then optionally make a new one.
               </div>
             }
+            @if (donorHasRecentlyTipped) {
+              <div>
+                <p>Thank you for tipping Big Give {{ (recentlyConfirmedTipsTotal / 100) | exactCurrency:"GBP" }} </p>
+                <p>This was confirmed from your balance when you transferred funds.</p>
+              </div>
+            }
             <!-- All tip bits are shown iff the pending bank-funded tip balance in GBP is £0 or undefined -->
-            @if (!donor.pending_tip_balance?.gbp) {
+            @if (!donorHasPendingTipBalance && !donorHasRecentlyTipped) {
               <div>
                 <p><strong>Tip Big Give</strong></p>
                 <p class="tip-text">Big Give has a 0% platform fee. That means we're able to continue offering our services thanks to donors who leave an optional tip amount here:</p>
