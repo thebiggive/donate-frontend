@@ -31,7 +31,7 @@
             }
             @if (donorHasPendingTipBalance) {
               <div>
-                <p>Thank you for choosing to tip Big Give {{ (pendingTipBalance / 100) | exactCurrency:"GBP" }} </p>
+                <p>Thank you for choosing to tip Big Give {{ (pendingTipBalance / 100) | exactCurrency:"GBP" }}.</p>
 
                 <p>We will collect this tip when you make your bank transfer. Need to change this? You can
                   <a (click)="cancelPendingTips()">cancel the tip</a>
@@ -40,8 +40,7 @@
             }
             @if (donorHasRecentlyTipped) {
               <div>
-                <p>Thank you for tipping Big Give {{ (recentlyConfirmedTipsTotal / 100) | exactCurrency:"GBP" }} </p>
-                <p>This was confirmed from your balance when you transferred funds.</p>
+                <p>Thank you for tipping Big Give {{ (recentlyConfirmedTipsTotal / 100) | exactCurrency:"GBP" }}. This was confirmed from your balance when you transferred funds.</p>
               </div>
             }
             <!-- All tip bits are shown iff the pending bank-funded tip balance in GBP is £0 or undefined -->
