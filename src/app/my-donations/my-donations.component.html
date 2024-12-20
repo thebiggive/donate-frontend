@@ -46,12 +46,7 @@
               >
                 <div class="donation">
                   <div>
-                    <p>{{this.displayMethodType(donation)}}
-                    @if (donation.mandate) {
-                      <br />
-                      <a href="{{myRegularGivingPath + '/' + donation.mandate.uuid}}">Regular giving since {{donation.mandate.activeFrom  | date: 'mediumDate'}}</a>
-                    }
-                    </p>
+                    <p>{{this.displayMethodType(donation)}}</p>
                     <h3>{{ donation.charityName }}</h3>
                   </div>
                     <ul>
@@ -73,6 +68,11 @@
                       <li>Payment Reference: <span class="reference">{{ donation.transactionId }}</span></li>
                     </ul>
                 </div>
+                @if (donation.mandate) {
+                  <div class="mandate">
+                    <a href="{{myRegularGivingPath + '/' + donation.mandate.uuid}}">See Mandate</a>
+                  </div>
+                }
               </biggive-container-card>
             }
           </biggive-grid>

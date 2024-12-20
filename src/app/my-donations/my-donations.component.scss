@@ -15,6 +15,10 @@ p:not(biggive-container-card *) {
   }
 }
 
+.mandate {
+  text-align: right;
+}
+
 div.donation-container {
   display: flex;
   justify-content: left;
