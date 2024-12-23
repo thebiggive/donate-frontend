@@ -9,7 +9,7 @@ import {isAllowableRedirectPath, LoginComponent} from "./login/login.component";
 import {inject, PLATFORM_ID} from "@angular/core";
 import {IdentityService} from "./identity.service";
 import {RegisterComponent} from "./register/register.component";
-import {isPlatformBrowser} from "@angular/common";
+import {isPlatformServer} from "@angular/common";
 import {flags} from "./featureFlags";
 import {MyDonationsComponent} from "./my-donations/my-donations.component";
 import {DonationService} from "./donation.service";
@@ -27,7 +27,14 @@ export const myAccountPath = 'my-account';
 export const transferFundsPath = 'transfer-funds';
 export const myRegularGivingPath = 'my-account/regular-giving';
 
-const redirectIfAlreadyLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
+const redirectIfAlreadyLoggedIn: CanActivateFn = (snapshot: ActivatedRouteSnapshot) => {
+  if (isPlatformServer(inject(PLATFORM_ID))) {
+    // Pages that require auth should not be server side rendered - we do not have auth creds on the server side.
+    // Returning false should defer the decision about in-browser rendering to the client.
+    // https://medium.com/@nijotigajo/handling-local-storage-in-angular-with-server-side-rendering-ssr-eaa6a0f11717
+    return false;
+  }
+
   const router = inject(Router);
   const requestedRedirect = snapshot.queryParams.r;
   const isLoggedIn = inject(IdentityService).probablyHaveLoggedInPerson();
@@ -42,8 +49,8 @@ const redirectIfAlreadyLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
 };
 
 const requireLogin: CanActivateFn = (_activatedRouteSnapshot, routerStateSnapshot) => {
-  if (! isPlatformBrowser(inject(PLATFORM_ID))) {
-    // Pages that require auth should not be server side rendered - we do not have auth creds on the server side.
+  if (isPlatformServer(inject(PLATFORM_ID))) {
+    // No tokens -> Defer the decision about in-browser rendering to the client.
     return false;
   }
 
@@ -65,7 +72,16 @@ const requireLogin: CanActivateFn = (_activatedRouteSnapshot, routerStateSnapsho
     return router.parseUrl(url);
   }
   return router.parseUrl('/login');
+};
 
+const handleLogout: CanActivateFn = () => {
+  if (isPlatformServer(inject(PLATFORM_ID))) {
+    // No tokens -> Defer the decision about in-browser rendering to the client.
+    return false;
+  }
+
+  inject(IdentityService).logout();
+  return inject(Router).parseUrl('/');
 };
 
 const LoggedInPersonResolver: ResolveFn<Person | null> = async () => {
@@ -235,15 +251,12 @@ const routes: Routes = [
   },
   /** For use when donor clicks logout in the menu on the wordpress site **/
   {
-    component: LoginComponent, // Angular requires we set a component but it will never be used as `canActivate` always
-                               // redirects.
+    component: LoginComponent, // Angular requires we set a component but it will never be used client-side as      
+                                    // `canActivate` always redirects there.
     path: 'logout',
     pathMatch: 'full',
     canActivate: [
-      async () => {
-        inject(IdentityService).logout();
-        await inject(Router).navigate(['/'], {replaceUrl: true});
-      },
+      handleLogout,
     ],
   },
   {
