@@ -44,6 +44,9 @@
                 card-colour="white"
                 background-colour="primary"
               >
+                @if (donation.mandate) {
+                  <div class="badge">Regular Giving</div>
+                }
                 <div class="donation">
                   <div>
                     <p>{{this.displayMethodType(donation)}}</p>
