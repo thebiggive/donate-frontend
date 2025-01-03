@@ -36,7 +36,7 @@ import {EMPTY, firstValueFrom} from 'rxjs';
 import {Campaign} from '../../campaign.model';
 import {CardIconsService} from '../../card-icons.service';
 import {campaignHiddenMessage} from '../../../environments/common';
-import {COUNTRIES} from '../../countries';
+import {countryOptions} from '../../countries';
 import {Donation, maximumDonationAmount} from '../../donation.model';
 import {DonationCreatedResponse} from '../../donation-created-response.model';
 import {DonationService} from '../../donation.service';
@@ -202,10 +202,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private stepChangeBlockedByCaptcha = false;
   @Input({ required: true }) donor: Person | undefined;
 
-  /**
-   * Keys are ISO2 codes, values are names.
-   */
-  public countryOptionsObject: Array<{label: string, value: string}>;
   public tipControlStyle: 'dropdown'|'slider';
 
   private tipAmountFromSlider: number;
@@ -252,6 +248,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   protected isSavedPaymentMethodSelected: boolean = false;
   protected zeroTipTextABTestVariant: 'A'|'B' = 'A';
   private manuallySelectedABTestVariant: string | null = null;
+  protected countryOptionsObject = countryOptions;
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -274,7 +271,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private toast: Toast
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
-    this.countryOptionsObject = COUNTRIES.map(country => ({label: country.country, value: country.iso2}))
     this.selectedCountryCode = this.defaultCountryCode;
 
     const queryParams = route.snapshot.queryParams;

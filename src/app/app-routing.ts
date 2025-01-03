@@ -21,6 +21,8 @@ import {firstValueFrom} from "rxjs";
 import {MandateComponent} from "./mandate/mandate.component";
 import {Mandate} from "./mandate.model";
 import {MyPaymentMethodsComponent} from "./my-payment-methods/my-payment-methods.component";
+import {DonorAccountService} from "./donor-account.service";
+import {DonorAccount} from "./donorAccount.model";
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -90,6 +92,11 @@ const LoggedInPersonResolver: ResolveFn<Person | null> = async () => {
   const person$ = identityService.getLoggedInPerson();
   return await firstValueFrom(person$);
 }
+
+const DonorAccountResolver: () => Promise<DonorAccount | null> = async () => {
+  const loggedInDonorAccount$ = inject(DonorAccountService).getLoggedInDonorAccount();
+  return await firstValueFrom(loggedInDonorAccount$);
+};
 
 const mandateResolver: ResolveFn<Mandate> = async (route: ActivatedRouteSnapshot) => {
   const mandateService = inject(MandateService);
@@ -251,7 +258,7 @@ const routes: Routes = [
   },
   /** For use when donor clicks logout in the menu on the wordpress site **/
   {
-    component: LoginComponent, // Angular requires we set a component but it will never be used client-side as      
+    component: LoginComponent, // Angular requires we set a component but it will never be used client-side as
                                     // `canActivate` always redirects there.
     path: 'logout',
     pathMatch: 'full',
@@ -323,6 +330,7 @@ if (flags.regularGivingEnabled) {
       resolve: {
         campaign: CampaignResolver,
         donor: LoggedInPersonResolver,
+        donorAccount: DonorAccountResolver,
       },
     },
   )

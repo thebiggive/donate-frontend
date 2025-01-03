@@ -3,9 +3,9 @@
  * runtime processing and (primarily) to fix the performance impact of using a CommonJS
  * module. ("Warning: /usr/src/app/src/app/donation-start/donation-start.component.ts depends on
  * 'country-code-lookup'. CommonJS or AMD dependencies can cause optimization bailouts.)"
- * 
+ *
  * One-time code used to sort and map the `countries`:
- * 
+ *
  * let countryOptions = countries.sort((cA, cB)  => cA.country.localeCompare(cB.country))
  *   .map(country => {
  *     return {
@@ -1020,3 +1020,9 @@ export const COUNTRIES: { country: string, iso2: string }[] = [
     "iso2": "ZW"
   }
 ]
+
+/**
+ * Keys are ISO2 codes, values are names.
+ */
+export const countryOptions: { label: string; value: string }[] =
+  COUNTRIES.map(country => ({label: country.country, value: country.iso2}));
