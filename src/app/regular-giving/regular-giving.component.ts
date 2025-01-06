@@ -20,6 +20,7 @@ import {getCurrencyMaxValidator} from "../validators/currency-max";
 import {Toast} from "../toast.service";
 import {DonorAccount} from "../donorAccount.model";
 import {countryOptions} from "../countries";
+import {PageMetaService} from "../page-meta.service";
 
 @Component({
   selector: 'app-regular-giving',
@@ -56,6 +57,7 @@ export class RegularGivingComponent implements OnInit {
     private toast: Toast,
     private regularGivingService: RegularGivingService,
     private router: Router,
+    private pageMeta: PageMetaService,
   ) {
   }
 
@@ -72,6 +74,12 @@ export class RegularGivingComponent implements OnInit {
     if ( !this.campaign.isRegularGiving ) {
       console.error("Campaign " + this.campaign.id + " is not a regular giving campaign");
     }
+
+    this.pageMeta.setCommon(
+      `Regular Giving for ${this.campaign.charity.name}`,
+      `Regular Giving for ${this.campaign.charity.name}`,
+      this.campaign.bannerUri,
+    );
 
     this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
 
