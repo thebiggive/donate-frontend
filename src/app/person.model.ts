@@ -1,3 +1,12 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { DonorAccount} from "./donorAccount.model";
+
+/**
+ * Donor account details as accessed via in Identity service. This is similar to the DonorAccount details held in Matchbot,
+ * but several fields are only available here, e.g. cash_balance, has_password etc
+ *
+ * @see {DonorAccount}
+ */
 export interface Person {
     /**
      * UUID. Set on creation.

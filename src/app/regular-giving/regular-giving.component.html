@@ -61,6 +61,43 @@
 
             </mat-step>
             <mat-step
+              label="Your Payment Information"
+              class="c-make-your-donation"
+            >
+              <p> <!-- hack to take up space until I find a better way -->
+
+                <!-- @todo-regular-giving - make each or all payment detail fields read-only if already set on
+                     donor account - if donors want to edit them direct them to do so on the My Account page,
+                     to make clear that it will affect existing mandates as well as the new one -->
+
+              <biggive-form-field-select
+                [prompt]="'Billing country'"
+                [options]="countryOptionsObject"
+                [selectedValue]="selectedBillingCountryCode"
+                [backgroundColour]="'grey'"
+                [selectionChanged]="setSelectedCountry"
+                [spaceBelow]="3"
+                [selectedOptionColour]="'inherit'"
+              >
+              </biggive-form-field-select>
+
+              <biggive-text-input>
+                <label slot="label" for="billingPostcode">Billing postcode</label>
+                <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)" autocapitalize="characters" autocomplete="postal-code">
+              </biggive-text-input>
+
+              <div style="text-align: center">
+                <button style="width: 40%;"
+                        type="button"
+                        class="continue b-w-100 b-rt-0"
+                        mat-raised-button
+                        color="primary"
+                        (click)="next()"
+                >Continue</button>
+              </div>
+
+            </mat-step>
+            <mat-step
               label="Confirm"
               class="c-make-your-donation"
             >

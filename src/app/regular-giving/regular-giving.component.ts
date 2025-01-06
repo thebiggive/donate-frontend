@@ -18,6 +18,8 @@ import {requiredNotBlankValidator} from "../validators/notBlank";
 import {getCurrencyMinValidator} from "../validators/currency-min";
 import {getCurrencyMaxValidator} from "../validators/currency-max";
 import {Toast} from "../toast.service";
+import {DonorAccount} from "../donorAccount.model";
+import {countryOptions} from "../countries";
 
 @Component({
   selector: 'app-regular-giving',
@@ -44,6 +46,9 @@ export class RegularGivingComponent implements OnInit {
   readonly termsUrl = 'https://biggive.org/terms-and-conditions';
   readonly privacyUrl = 'https://biggive.org/privacy';
   protected donor: Person;
+  protected donorAccount: DonorAccount;
+  protected countryOptionsObject = countryOptions;
+  public selectedBillingCountryCode: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -60,12 +65,15 @@ export class RegularGivingComponent implements OnInit {
       throw new Error("Must be logged in to see regular giving page");
     }
     this.donor = donor;
+    this.donorAccount = this.route.snapshot.data.donorAccount
 
     this.campaign = this.route.snapshot.data.campaign;
 
     if ( !this.campaign.isRegularGiving ) {
       console.error("Campaign " + this.campaign.id + " is not a regular giving campaign");
     }
+
+    this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
 
     this.mandateForm = this.formBuilder.group({
         donationAmount: ['', [
@@ -75,6 +83,9 @@ export class RegularGivingComponent implements OnInit {
           getCurrencyMaxValidator(500),
           Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
         ]],
+      billingPostcode: [this.donorAccount.billingPostCode,
+        [] // @todo-regular-giving - add postcode validation as in donation-start-form
+      ],
       }
     );
   }
@@ -106,6 +117,9 @@ export class RegularGivingComponent implements OnInit {
     const donationAmountPounds = +this.mandateForm.value.donationAmount;
     const amountInPence = donationAmountPounds * 100;
 
+    const billingPostcode = this.mandateForm.value.billingPostcode;
+    const billingCountry = this.selectedBillingCountryCode;
+
     /**
      * @todo consider if we need to send this from FE - if we're not displaying it to donor better for matchbot to
      *       generate it.*/
@@ -116,7 +130,9 @@ export class RegularGivingComponent implements OnInit {
       dayOfMonth,
       campaignId: this.campaign.id,
       currency: "GBP",
-      giftAid: false
+      giftAid: false,
+      billingPostcode,
+      billingCountry,
     }).subscribe({
     next: async (mandate: Mandate) => {
       await this.router.navigateByUrl(`${myRegularGivingPath}/${mandate.id}`);
@@ -128,4 +144,16 @@ export class RegularGivingComponent implements OnInit {
       }
     })
   }
+
+  protected setSelectedCountry = ((countryCode: string) => {
+    this.selectedBillingCountryCode = countryCode;
+    this.mandateForm.patchValue({
+      billingCountry: countryCode,
+    });
+  })
+
+  protected onBillingPostCodeChanged(_: Event) {
+    // no-op for now, but @todo-regular-giving we may need to do some validation as we don the ad-hoc donation page.
+  }
+
 }
