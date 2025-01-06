@@ -1,9 +1,10 @@
 import {StepperSelectionEvent} from '@angular/cdk/stepper';
 import {DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
+import {HttpErrorResponse} from '@angular/common/http';
 import {
   AfterContentChecked,
-  AfterContentInit, AfterViewInit,
+  AfterContentInit,
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -1337,7 +1338,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.stripeElements) {
       this.stripeService.updateAmount(this.stripeElements, this.donation);
     } else {
-      this.stripeElements = this.stripeService.stripeElements(
+      this.stripeElements = this.stripeService.stripeElementsForDonation(
         this.donation,
         this.campaign,
         this.donationService.stripeSessionSecret
@@ -1349,31 +1350,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    this.stripePaymentElement = this.stripeElements.create(
-        "payment",
-        {
-          wallets: {
-            applePay: 'auto',
-            googlePay: 'auto'
-          },
-          terms: {
-            // We have our own terms copy for the future payment in donation-start-form.component.html
-            card: "never",
-            applePay: "never",
-            googlePay: "never",
-          },
-          fields: {
-            billingDetails: {
-              address: {
-                // We have our own input fields for country and postal code - we will pass these to stripe on payment confirmation.
-                country: "never",
-                postalCode: "never",
-              }
-            },
-          },
-          business: {name: "Big Give"},
-        }
-    );
+    const stripeElements = this.stripeElements;
+    this.stripePaymentElement = StripeService.createStripeElement(stripeElements);
 
     if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
