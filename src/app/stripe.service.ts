@@ -44,19 +44,25 @@ export class StripeService {
       amount: this.amountIncTipInMinorUnit(donation)
     };
 
-    return this.stripeElements(money, campaign, customerSessionClientSecret);
+    return this.stripeElements(money, 'on_session', campaign, customerSessionClientSecret);
   }
 
   /**
    *
    * @param money . Amount must be in minor units, e.g. pence
+   * @param futureUsage
    * @param campaign
    * @param customerSessionClientSecret
    */
-  stripeElements(money: {
+  stripeElements(
+    money: {
     currency: string;
     amount: number
-  }, campaign: Campaign, customerSessionClientSecret: string | undefined) {
+  },
+    futureUsage: "off_session" | "on_session",
+    campaign: Campaign,
+    customerSessionClientSecret: string | undefined
+  ) {
     if (!this.stripe) {
       throw new Error('Stripe not ready');
     }
@@ -148,7 +154,7 @@ export class StripeService {
       mode: 'payment',
       amount: money.amount,
       currency: money.currency.toLowerCase(),
-      setupFutureUsage: 'on_session',
+      setupFutureUsage: futureUsage,
       on_behalf_of: campaign.charity.stripeAccountId,
       paymentMethodCreation: 'manual',
       customerSessionClientSecret,
