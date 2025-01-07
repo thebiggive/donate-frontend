@@ -170,9 +170,9 @@ export class RegularGivingComponent implements OnInit {
     next: async (mandate: Mandate) => {
       await this.router.navigateByUrl(`${myRegularGivingPath}/${mandate.id}`);
     },
-      error: (error: Error) => {
+      error: (error: {error: {error: {description?: string} }}) => {
       console.error(error);
-      const message = error.message
+      const message = error.error.error.description ?? 'Sorry, something went wrong';
         this.toast.showError(message);
       }
     })
