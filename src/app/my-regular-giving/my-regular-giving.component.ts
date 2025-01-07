@@ -41,7 +41,7 @@ export class MyRegularGivingComponent implements OnInit{
 
   ngOnInit() {
     this.pageMeta.setCommon(
-      'Big Give - Your Regular Giving Mandates', '', null
+      'Your Regular Giving Mandates', 'Donations you make to support charities each month', null
     );
 
     this.mandates = this.route.snapshot.data.mandates;

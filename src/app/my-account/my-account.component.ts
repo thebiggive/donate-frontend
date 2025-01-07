@@ -79,8 +79,8 @@ export class MyAccountComponent implements OnInit {
 
   ngOnInit() {
     this.pageMeta.setCommon(
-      'Big Give - My account',
-      'Big Give – discover campaigns and donate',
+      'My account',
+      'Manage your Big Give account',
       'https://images-production.thebiggive.org.uk/0011r00002IMRknAAH/CCampaign%20Banner/db3faeb1-d20d-4747-bb80-1ae9286336a3.jpg',
     );
 

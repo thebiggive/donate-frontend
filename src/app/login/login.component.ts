@@ -8,6 +8,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {IdentityService} from "../identity.service";
+import {PageMetaService} from '../page-meta.service';
 import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -60,6 +61,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly identityService: IdentityService,
+    private readonly pageMeta: PageMetaService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -75,6 +77,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   ngOnInit() {
+    this.pageMeta.setCommon('Login', 'Login to your Big Give account', null);
+
     if (isPlatformBrowser(this.platformId)) {
       document.body.classList.add('primary-colour');
     }
