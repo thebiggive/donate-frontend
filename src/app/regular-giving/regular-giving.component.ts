@@ -59,7 +59,7 @@ export class RegularGivingComponent implements OnInit {
   public readonly labelYourPaymentInformation = "Your Payment Information";
 
   @ViewChild('cardInfo') protected cardInfo: ElementRef;
-  private stripeCustomerSession: StripeCustomerSession;
+  private stripeCustomerSession: StripeCustomerSession | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -112,7 +112,12 @@ export class RegularGivingComponent implements OnInit {
     this.stripeService.init().catch(console.error);
 
     this.donationService.createCustomerSessionForRegularGiving({campaign: this.campaign})
-      .then((session) => this.stripeCustomerSession = session)
+      .then((session) => {
+        this.stripeCustomerSession = session;
+        if (! this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
+          this.prepareStripeElements();
+        }
+      })
       .catch(console.error);
   }
 
@@ -189,6 +194,14 @@ export class RegularGivingComponent implements OnInit {
   }
 
   private prepareStripeElements() {
+    if (! this.selectedBillingCountryCode) {
+      return;
+    }
+
+    if (!this.stripeCustomerSession) {
+      return;
+    }
+
     if (this.stripeElements) {
       this.stripeElements.update({amount: this.getDonationAmountPounds() * 100})
     } else {
