@@ -61,7 +61,7 @@
 
             </mat-step>
             <mat-step
-              label="Your Payment Information"
+              [label]=this.labelYourPaymentInformation
               class="c-make-your-donation"
             >
               <p> <!-- hack to take up space until I find a better way -->
@@ -69,6 +69,21 @@
                 <!-- @todo-regular-giving - make each or all payment detail fields read-only if already set on
                      donor account - if donors want to edit them direct them to do so on the My Account page,
                      to make clear that it will affect existing mandates as well as the new one -->
+
+                @if (donorAccount.regularGivingPaymentMethod) {
+                  <!-- @todo-regular-giving: show existing payment method here, and/or on account page -->
+                  <p>
+                    Your existing regular giving payment method will be used for these donations.
+                    To change this please visit your account page
+                  </p>
+                } @else {
+                  <biggive-text-input>
+                    <span slot="label">Payment Method</span> <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe not us -->
+                    <div slot="input" class="sr-input sr-card-element" id="card-info" #cardInfo></div>
+                  </biggive-text-input>
+                }
+
+                <p>
 
               <biggive-form-field-select
                 [prompt]="'Billing country'"

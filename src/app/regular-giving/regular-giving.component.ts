@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Campaign} from "../campaign.model";
 import {ComponentsModule} from "@biggive/components-angular";
@@ -20,6 +20,10 @@ import {getCurrencyMaxValidator} from "../validators/currency-max";
 import {Toast} from "../toast.service";
 import {DonorAccount} from "../donorAccount.model";
 import {countryOptions} from "../countries";
+import {PageMetaService} from "../page-meta.service";
+import {StripeService} from "../stripe.service";
+import {StripeElements, StripePaymentElement} from "@stripe/stripe-js";
+import {DonationService, StripeCustomerSession} from "../donation.service";
 
 @Component({
   selector: 'app-regular-giving',
@@ -48,7 +52,14 @@ export class RegularGivingComponent implements OnInit {
   protected donor: Person;
   protected donorAccount: DonorAccount;
   protected countryOptionsObject = countryOptions;
-  public selectedBillingCountryCode: string;
+  protected selectedBillingCountryCode: string;
+  private stripeElements: StripeElements | undefined;
+  private stripePaymentElement: StripePaymentElement | undefined;
+
+  public readonly labelYourPaymentInformation = "Your Payment Information";
+
+  @ViewChild('cardInfo') protected cardInfo: ElementRef;
+  private stripeCustomerSession: StripeCustomerSession | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -56,6 +67,9 @@ export class RegularGivingComponent implements OnInit {
     private toast: Toast,
     private regularGivingService: RegularGivingService,
     private router: Router,
+    private pageMeta: PageMetaService,
+    private stripeService: StripeService,
+    private donationService: DonationService,
   ) {
   }
 
@@ -73,6 +87,12 @@ export class RegularGivingComponent implements OnInit {
       console.error("Campaign " + this.campaign.id + " is not a regular giving campaign");
     }
 
+    this.pageMeta.setCommon(
+      `Regular Giving for ${this.campaign.charity.name}`,
+      `Regular Giving for ${this.campaign.charity.name}`,
+      this.campaign.bannerUri,
+    );
+
     this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
 
     this.mandateForm = this.formBuilder.group({
@@ -88,18 +108,31 @@ export class RegularGivingComponent implements OnInit {
       ],
       }
     );
+
+    this.stripeService.init().catch(console.error);
+
+    this.donationService.createCustomerSessionForRegularGiving({campaign: this.campaign})
+      .then((session) => {
+        this.stripeCustomerSession = session;
+        if (! this.stripeElements && this.stepper.selected?.label === this.labelYourPaymentInformation) {
+          this.prepareStripeElements();
+        }
+      })
+      .catch(console.error);
   }
 
-  interceptSubmitAndProceedInstead(event: Event) {
+  async interceptSubmitAndProceedInstead(event: Event) {
     event.preventDefault();
-    this.next();
+    await this.next();
   }
 
-  stepChanged(_event: StepperSelectionEvent) {
-    // no-op for now.
+  stepChanged(event: StepperSelectionEvent) {
+    if (event.selectedStep.label === this.labelYourPaymentInformation) {
+      this.prepareStripeElements();
+    }
   }
 
-  next() {
+  async next() {
     this.stepper.next();
   }
 
@@ -114,7 +147,7 @@ export class RegularGivingComponent implements OnInit {
       return;
     }
 
-    const donationAmountPounds = +this.mandateForm.value.donationAmount;
+    const donationAmountPounds = this.getDonationAmountPounds();
     const amountInPence = donationAmountPounds * 100;
 
     const billingPostcode = this.mandateForm.value.billingPostcode;
@@ -145,6 +178,10 @@ export class RegularGivingComponent implements OnInit {
     })
   }
 
+  private getDonationAmountPounds(): number {
+    return +this.mandateForm.value.donationAmount;
+  }
+
   protected setSelectedCountry = ((countryCode: string) => {
     this.selectedBillingCountryCode = countryCode;
     this.mandateForm.patchValue({
@@ -156,4 +193,40 @@ export class RegularGivingComponent implements OnInit {
     // no-op for now, but @todo-regular-giving we may need to do some validation as we don the ad-hoc donation page.
   }
 
+  private prepareStripeElements() {
+    if (! this.selectedBillingCountryCode) {
+      return;
+    }
+
+    if (!this.stripeCustomerSession) {
+      return;
+    }
+
+    if (this.stripeElements) {
+      this.stripeElements.update({amount: this.getDonationAmountPounds() * 100})
+    } else {
+      this.stripeElements = this.stripeService.stripeElements(
+        {
+          amount: this.getDonationAmountPounds() * 100,
+          currency: this.campaign.currencyCode
+        },
+        'off_session',
+        this.campaign,
+        this.stripeCustomerSession.stripeSessionSecret
+      );
+    }
+
+    if (this.stripePaymentElement) {
+      // Payment element was already ready & we presume mounted.
+      return;
+    }
+
+    const stripeElements = this.stripeElements;
+    this.stripePaymentElement = StripeService.createStripeElement(stripeElements);
+
+    if (this.cardInfo && this.stripePaymentElement) {
+      this.stripePaymentElement.mount(this.cardInfo.nativeElement);
+      this.stripePaymentElement.on('change', () => {}); // @todo-regular-giving: implement card change handler
+    }
+  }
 }

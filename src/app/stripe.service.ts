@@ -34,7 +34,35 @@ export class StripeService {
     this.stripe = await loadStripe(environment.psps.stripe.publishableKey);
   }
 
-  stripeElements(donation: Donation, campaign: Campaign, customerSessionClientSecret: string | undefined) {
+  public stripeElementsForDonation(donation: Donation, campaign: Campaign, customerSessionClientSecret: string | undefined) {
+    if (!this.stripe) {
+      throw new Error('Stripe not ready');
+    }
+
+    const money = {
+      currency: donation.currencyCode,
+      amount: this.amountIncTipInMinorUnit(donation)
+    };
+
+    return this.stripeElements(money, 'on_session', campaign, customerSessionClientSecret);
+  }
+
+  /**
+   *
+   * @param money . Amount must be in minor units, e.g. pence
+   * @param futureUsage
+   * @param campaign
+   * @param customerSessionClientSecret
+   */
+  public stripeElements(
+    money: {
+    currency: string;
+    amount: number
+  },
+    futureUsage: "off_session" | "on_session",
+    campaign: Campaign,
+    customerSessionClientSecret: string | undefined
+  ) {
     if (!this.stripe) {
       throw new Error('Stripe not ready');
     }
@@ -43,10 +71,11 @@ export class StripeService {
 
     if (environment.environmentId === 'development') {
       // Stripe can't fetch the font from local dev env, so we use the staging URL instead.
-       fontOrigin = stagingEnvironment.donateUriPrefix;
+      fontOrigin = stagingEnvironment.donateUriPrefix;
     }
 
     const colorPrimaryBlue = '#2C089B';  // matches our $colour-primary
+
     const elementOptions: StripeElementsOptionsMode = {
       fonts: [
         {
@@ -123,9 +152,9 @@ export class StripeService {
         }
       },
       mode: 'payment',
-      currency: donation.currencyCode.toLowerCase(),
-      amount: this.amountIncTipInMinorUnit(donation),
-      setupFutureUsage: 'on_session',
+      amount: money.amount,
+      currency: money.currency.toLowerCase(),
+      setupFutureUsage: futureUsage,
       on_behalf_of: campaign.charity.stripeAccountId,
       paymentMethodCreation: 'manual',
       customerSessionClientSecret,
@@ -164,6 +193,35 @@ export class StripeService {
       {elements: elements, params: {payment_method_data: paymentMethodData}}
     );
   }
+
+  public static createStripeElement(stripeElements: StripeElements) {
+    return stripeElements.create(
+      "payment",
+      {
+        wallets: {
+          applePay: 'auto',
+          googlePay: 'auto'
+        },
+        terms: {
+          // We have our own terms copy for the future payment in donation-start-form.component.html
+          card: "never",
+          applePay: "never",
+          googlePay: "never",
+        },
+        fields: {
+          billingDetails: {
+            address: {
+              // We have our own input fields for country and postal code - we will pass these to stripe on payment confirmation.
+              country: "never",
+              postalCode: "never",
+            }
+          },
+        },
+        business: {name: "Big Give"},
+      }
+    );
+  }
+
 
   async handleNextAction(clientSecret: string) {
     if (! this.stripe) {
