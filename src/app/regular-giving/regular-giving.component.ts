@@ -111,7 +111,7 @@ export class RegularGivingComponent implements OnInit {
 
     this.stripeService.init().catch(console.error);
 
-    this.donationService.createCustomerSessionForRegularGiving()
+    this.donationService.createCustomerSessionForRegularGiving({campaign: this.campaign})
       .then((session) => this.stripeCustomerSession = session)
       .catch(console.error);
   }
