@@ -34,7 +34,7 @@ export class StripeService {
     this.stripe = await loadStripe(environment.psps.stripe.publishableKey);
   }
 
-  stripeElementsForDonation(donation: Donation, campaign: Campaign, customerSessionClientSecret: string | undefined) {
+  public stripeElementsForDonation(donation: Donation, campaign: Campaign, customerSessionClientSecret: string | undefined) {
     if (!this.stripe) {
       throw new Error('Stripe not ready');
     }
@@ -54,7 +54,7 @@ export class StripeService {
    * @param campaign
    * @param customerSessionClientSecret
    */
-  stripeElements(
+  public stripeElements(
     money: {
     currency: string;
     amount: number

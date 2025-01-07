@@ -205,10 +205,15 @@ export class RegularGivingComponent implements OnInit {
     if (this.stripeElements) {
       this.stripeElements.update({amount: this.getDonationAmountPounds() * 100})
     } else {
-      this.stripeElements = this.stripeService.stripeElements({
-        amount: this.getDonationAmountPounds() * 100,
-        currency: this.campaign.currencyCode
-      }, 'off_session', this.campaign, this.stripeCustomerSession.stripeSessionSecret);
+      this.stripeElements = this.stripeService.stripeElements(
+        {
+          amount: this.getDonationAmountPounds() * 100,
+          currency: this.campaign.currencyCode
+        },
+        'off_session',
+        this.campaign,
+        this.stripeCustomerSession.stripeSessionSecret
+      );
     }
 
     if (this.stripePaymentElement) {
