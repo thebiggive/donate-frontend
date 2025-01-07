@@ -6,10 +6,37 @@
 main > div {
   color: white;
   background-color: $colour-primary;
+}
 
+p:not(biggive-container-card *) {
+  // biggive-container-cards have white backgrounds so white links in there would be invisible.
   a:link, a:visited, a:hover {
     color: white;
   }
+}
+
+.mandate {
+  text-align: right;
+}
+
+.badge {
+  // styling based on .campaign-type at
+  // https://github.com/thebiggive/components/blob/73c40589240c513d6bfe9b151c74075537adc708/src/components/biggive-campaign-card/biggive-campaign-card.scss#L40
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-weight: bold;
+  color: $colour-black;
+  background-color: $colour-highlight; // green
+  width: fit-content;
+  margin: auto;
+  padding-top: 20px; // 15px of this is to match the padding of a parent element from the container-card component,
+                     // without it the badge would be half invisible above the top of the card
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-bottom: 5px;
 }
 
 div.donation-container {
@@ -24,10 +51,6 @@ div.donation {
   height: 100%;
   justify-content: space-between;
   flex-direction: column;
-  a:link, a:visited, a:hover {
-    color: inherit !important;
-    text-decoration: none;
-  }
   *:first-child {
     margin-top: 0;
     flex-grow: 1;

@@ -1,3 +1,12 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { DonorAccount} from "./donorAccount.model";
+
+/**
+ * Donor account details as accessed via in Identity service. This is similar to the DonorAccount details held in Matchbot,
+ * but several fields are only available here, e.g. cash_balance, has_password etc
+ *
+ * @see {DonorAccount}
+ */
 export interface Person {
     /**
      * UUID. Set on creation.
@@ -22,6 +31,11 @@ export interface Person {
      * by bank transfers
      */
     pending_tip_balance?: { [currencyCode: string]: number };
+
+    /**
+     * The total of donor fund form-created succeeded tips for the given Person, set up in the past 10 days, counted in minor-currency units i.e. pence
+     */
+    recently_confirmed_tips_total?: { [currencyCode: string]: number };
 
     /**
      * These 3 expected on first update.

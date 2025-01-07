@@ -1,24 +1,17 @@
 @use '@angular/material' as mat;
 @import '../../abstract';
 
-#loggedInHeader {
-    background-color: mat.m2-get-color-from-palette($donate-primary);
-    color: white;
-    margin: 0px;
-    padding: 10px 2rem;
-    display: flex;
-    justify-content: flex-end;
-
-    p {
-        margin: 0 1rem 0 0;
-    }
-}
-
 .auth-options {
     display: flex;
     justify-content: space-between;
     max-width: 15rem;
     margin-bottom: 2rem;
+}
+
+.existing-balance-info {
+    @include make-card($box-shadow-hard);
+    padding: 1rem;
+    margin-bottom: 3rem;
 }
 
 .mat-stepper-vertical {

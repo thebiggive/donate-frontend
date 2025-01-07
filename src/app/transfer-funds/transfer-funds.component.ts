@@ -303,7 +303,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       return false;
     }
 
-    if (this.donor?.pending_tip_balance?.gbp) {
+    if (this.donorHasPendingTipBalance || this.donorHasRecentlyTipped) {
       return false;
     }
 
@@ -335,20 +335,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     return Math.floor(creditAmount * (tipPercentage / 100));
   }
 
-  logout() {
-    this.donor = undefined;
-    this.isLoading = false;
-
-    this.accountHolderName = undefined;
-    this.accountNumber = undefined;
-    this.sortCode = undefined;
-
-    this.isPurchaseComplete = false;
-    this.creditForm.reset();
-    this.identityService.logout();
-    window.location.href = "/";
-  }
-
   cancelPendingTips() {
     this.donationService.cancelDonationFundsToCampaign(environment.creditTipsCampaign).subscribe(() => {
       // Theoretically this could be multiple tips, but in practice almost always 0 or 1, so singular is the less confusing copy.
@@ -369,6 +355,14 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     return this.pendingTipBalance > 0;
   }
 
+  get recentlyConfirmedTipsTotal(): number {
+    return this.donor?.recently_confirmed_tips_total?.gbp || 0;
+  }
+
+  get donorHasRecentlyTipped(): boolean {
+    return this.recentlyConfirmedTipsTotal > 0;
+  }
+
   private loadPerson() {
     const idAndJWT = this.identityService.getIdAndJWT();
     if (idAndJWT !== undefined) {
@@ -387,7 +381,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
       this.setConditionalValidators();
 
-      if (this.donorHasPendingTipBalance) {
+      if (this.donorHasPendingTipBalance || this.donorHasRecentlyTipped) {
         this.amountsGroup.patchValue({
           customTipAmount: 0,
           tipPercentage: 0,
@@ -436,7 +430,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
     // If user didn't tip, OR if an existing tip's detected but we somehow have tip numbers
     // set, do not create a new tip.
-    if (donationAmount <= 0 || this.donorHasPendingTipBalance) {
+    if (donationAmount <= 0 || this.donorHasPendingTipBalance || this.donorHasRecentlyTipped) {
       return;
     }
 
@@ -520,5 +514,13 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     }
     this.matomoTracker.trackEvent('donate_error', 'credit_tip_donation_create_failed', errorMessage);
     this.toast.showError('Could not prepare your tip; please try again later or contact us to investigate');
+  }
+
+  /**
+   * We only check for GBP balances for now, as we only support UK bank transfers rn
+   */
+  protected get hasDonationFunds()
+  {
+    return this.donor?.cash_balance?.gbp;
   }
 }

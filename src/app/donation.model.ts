@@ -22,6 +22,16 @@ export const maximumDonationAmountForFundedDonation = 200_000;
  * * after the donation is fully processed and webhook returned (e.g. `matchedAmount`).
  */
 export interface Donation {
+    /**
+     * The regular giving agreement relating to this donation, if any. Optional property because production
+     * matchbot doesn't yet send it. Not a full representation of the mandate, just enough to be able to render
+     * a link to it etc.
+     */
+    mandate?: {
+      'uuid': string,
+      'activeFrom': string,
+    },
+
     autoConfirmFromCashBalance?: boolean;
 
     /**

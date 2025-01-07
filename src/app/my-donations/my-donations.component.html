@@ -44,10 +44,13 @@
                 card-colour="white"
                 background-colour="primary"
               >
+                @if (donation.mandate) {
+                  <div class="badge">Regular Giving</div>
+                }
                 <div class="donation">
                   <div>
                     <p>{{this.displayMethodType(donation)}}</p>
-                    <h3><a href="/campaign/{{donation.projectId}}">{{ donation.charityName }}</a></h3>
+                    <h3>{{ donation.charityName }}</h3>
                   </div>
                     <ul>
                       <li>Amount: {{ donation.donationAmount | exactCurrency:donation.currencyCode }}</li>
@@ -68,6 +71,11 @@
                       <li>Payment Reference: <span class="reference">{{ donation.transactionId }}</span></li>
                     </ul>
                 </div>
+                @if (donation.mandate) {
+                  <div class="mandate">
+                    <a href="{{myRegularGivingPath + '/' + donation.mandate.uuid}}">See Mandate</a>
+                  </div>
+                }
               </biggive-container-card>
             }
           </biggive-grid>

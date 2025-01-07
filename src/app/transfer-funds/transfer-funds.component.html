@@ -1,13 +1,14 @@
 <main>
-  @if (donor) {
-    <div id="loggedInHeader">
-      <p>Logged in as {{ donor.first_name }} {{donor.last_name}}</p>
-      <button id="my-account-link" mat-raised-button routerLink="/my-account">My Account</button>
-      <button mat-raised-button (click)="logout()">Log out</button>
-    </div>
-  }
   <div class="b-container">
     <h3 class="b-rh-1 b-bold">Transfer Donation Funds</h3>
+
+    @if (hasDonationFunds) {
+      <div class="existing-balance-info">
+        <p>Existing available balance: <strong>{{ ((donor?.cash_balance?.gbp || 0) / 100) | exactCurrency:'GBP' }}</strong></p>
+        <p>Ready to donate to charities? <a routerLink="/explore">Explore campaigns</a> &ndash; your Funds will be used for logged in donations automatically.</p>
+        <p>Want to add more to your balance first? Continue with the form below to get bank details for another transfer.</p>
+      </div>
+    }
 
     @if (donor && !isLoading && !isPurchaseComplete) {
       <form [formGroup]="creditForm">
@@ -30,15 +31,20 @@
             }
             @if (donorHasPendingTipBalance) {
               <div>
-                <p>Thank you for choosing to tip Big Give {{ (pendingTipBalance / 100) | exactCurrency:"GBP" }} </p>
+                <p>Thank you for choosing to tip Big Give {{ (pendingTipBalance / 100) | exactCurrency:"GBP" }}.</p>
 
                 <p>We will collect this tip when you make your bank transfer. Need to change this? You can
                   <a (click)="cancelPendingTips()">cancel the tip</a>
                   and then optionally make a new one.
               </div>
             }
+            @if (donorHasRecentlyTipped) {
+              <div>
+                <p>Thank you for tipping Big Give {{ (recentlyConfirmedTipsTotal / 100) | exactCurrency:"GBP" }}. This was confirmed from your balance when you transferred funds.</p>
+              </div>
+            }
             <!-- All tip bits are shown iff the pending bank-funded tip balance in GBP is £0 or undefined -->
-            @if (!donor.pending_tip_balance?.gbp) {
+            @if (!donorHasPendingTipBalance && !donorHasRecentlyTipped) {
               <div>
                 <p><strong>Tip Big Give</strong></p>
                 <p class="tip-text">Big Give has a 0% platform fee. That means we're able to continue offering our services thanks to donors who leave an optional tip amount here:</p>

@@ -6,6 +6,19 @@ import {HttpClient} from "@angular/common/http";
 import {environment} from "../environments/environment";
 
 
+type StartMandateParams = {
+  amountInPence: number,
+  currency: 'GBP',
+  dayOfMonth: number,
+  campaignId: string,
+  giftAid: boolean,
+  /** ISO-2 code for country. Must match that on the DonorAccount if the latter is non-null */
+  billingCountry: string,
+
+  /** Must match postcode on the DonorAccount if the latter is non-null */
+  billingPostcode: string,
+};
+
 @Injectable({
   providedIn: 'root',
 })
@@ -15,7 +28,7 @@ export class RegularGivingService {
     private identityService: IdentityService,
   ) {}
 
-  startMandate(mandate: { amountInPence: number, currency: 'GBP', dayOfMonth: number, campaignId: string, giftAid: boolean }): Observable<Mandate> {
+  startMandate(mandate: StartMandateParams): Observable<Mandate> {
     const IDAndJWT = this.identityService.getIdAndJWT();
     if (!IDAndJWT) {
       throw new Error("Missing ID and JWT, can't create mandate");

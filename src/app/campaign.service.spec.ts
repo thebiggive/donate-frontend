@@ -7,28 +7,29 @@ import { environment } from '../environments/environment';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('CampaignService', () => {
-  const getDummyCampaign = () => {
-    return new Campaign(
-      'a051r00001EywjpAAB',
-      ['Aim 1'],
-      200.00,
-      [
+  const getDummyCampaign = () : Campaign => {
+    return {
+      id: 'a051r00001EywjpAAB',
+      aims: ['Aim 1'],
+      amountRaised: 200.00,
+      additionalImageUris: [
         {
           uri: 'https://example.com/some-additional-image.png',
           order: 100,
         },
-      ],
-      'https://example.com/some-banner.png',
-      ['Other'],
-      [
+  ],
+      bannerUri: 'https://example.com/some-banner.png',
+      beneficiaries: ['Other'],
+      budgetDetails: [
         {
           description: 'budget line 1',
           amount: 2000.01,
         },
       ],
-      ['Animals'],
-      'Big Give Match Fund',
-      {
+      categories: ['Animals'],
+      championName: 'Big Give Match Fund',
+      isRegularGiving: false,
+      charity: {
         id: '0011r00002HHAprAAH',
         name: 'Awesome Charity',
         optInStatement: 'Opt in statement.',
@@ -36,49 +37,49 @@ describe('CampaignService', () => {
         regulatorNumber: '123456',
         regulatorRegion: 'Scotland',
       },
-      ['United Kingdom'],
-      'GBP',
-      4,
-      new Date(),
-      'Impact reporting plan',
-      'Impact overview',
-      true,
-      987.00,
-      988.00,
-      false,
-      'The situation',
-      [
+      countries: ['United Kingdom'],
+      currencyCode: 'GBP',
+      donationCount: 4,
+      endDate: new Date(),
+      impactReporting: 'Impact reporting plan',
+      impactSummary: 'Impact overview',
+      isMatched: true,
+      matchFundsRemaining: 987.00,
+      matchFundsTotal: 988.00,
+      parentUsesSharedFunds: false,
+      problem: 'The situation',
+      quotes: [
         {
           quote: 'Some quote',
           person: 'Someones quote',
         },
       ],
-      true,
-      'The solution',
-      new Date(),
-      'Active',
-      'Some long summary',
-      'Some title',
-      [],
-      false,
-      'Some information about what happens if funds are not used',
-      undefined,
-      undefined,
-      undefined,
-      false,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      2000.01,
-      undefined,
-      {
+      ready: true,
+      solution: 'The solution',
+      startDate: new Date(),
+      status: 'Active',
+      summary: 'Some long summary',
+      title: 'Some title',
+      updates: [],
+      usesSharedFunds: false,
+      alternativeFundUse: 'Some information about what happens if funds are not used',
+      campaignCount: undefined,
+      championOptInStatement: undefined,
+      championRef: undefined,
+      hidden: false,
+      logoUri: undefined,
+      parentAmountRaised: undefined,
+      parentDonationCount: undefined,
+      parentRef: undefined,
+      parentTarget: undefined,
+      surplusDonationInfo: undefined,
+      target: 2000.01,
+      thankYouMessage: undefined,
+      video: {
         provider: 'youtube',
         key: '1G_Abc2delF',
-      },
-    );
+      }
+    }
   };
 
   beforeEach(() => TestBed.configureTestingModule({
@@ -151,15 +152,6 @@ describe('CampaignService', () => {
 
     expect(CampaignService.isOpenForDonations(campaign)).toBe(false);
     expect(CampaignService.isInFuture(campaign)).toBe(false);
-  });
-
-  it ('should not allow donation attempts to Pending campaigns', () => {
-    const campaign = getDummyCampaign();
-    campaign.startDate = new Date((new Date()).getTime() + 86400000);
-    campaign.endDate = new Date((new Date()).getTime() + 86400001);
-    campaign.status = 'Pending';
-
-    expect(CampaignService.isOpenForDonations(campaign)).toBe(false);
   });
 
   it ('should return the % raised for itself when its parent does not use shared funds', () => {

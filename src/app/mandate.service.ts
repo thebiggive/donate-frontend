@@ -30,4 +30,20 @@ export class MandateService {
       ).pipe(map((response) => response.mandates));
     }));
   }
+
+  getActiveMandate(mandateId: string) {
+    const jwt = this.identityService.getJWT();
+    const person$ = this.identityService.getLoggedInPerson();
+
+    return person$.pipe(switchMap((person) => {
+      if (! person) {
+        throw new Error("logged in person required");
+      }
+
+      return this.http.get<{ mandate: Mandate }>(
+        `${environment.donationsApiPrefix}/regular-giving/my-donation-mandates/${mandateId}`,
+        getPersonAuthHttpOptions(jwt),
+      ).pipe(map((response) => response.mandate));
+    }));
+  }
 }

@@ -24,8 +24,8 @@ describe('highlightCard', () => {
       cardFromApi
     );
 
-    expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/wmg-purple-texture.jpg');
-    expect(highlightCardForHomepage.iconColor).toBe('brand-wgmf-purple');
+    expect(highlightCardForHomepage.background.image.href).toBe('https://example.com/assets/images/wmg-purple-texture.jpg');
+    expect(highlightCardForHomepage.icon?.color).toBe('brand-wgmf-purple');
   });
 
   it('should use appropriate colour for emergency campaign', () => {
@@ -47,8 +47,8 @@ describe('highlightCard', () => {
     );
 
     // todo - check what background we had for EMF cards in the past.
-    expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/emergency-card.webp');
-    expect(highlightCardForHomepage.iconColor).toBe('brand-emf-yellow');
+    expect(highlightCardForHomepage.background.image.href).toBe('https://example.com/assets/images/emergency-card.webp');
+    expect(highlightCardForHomepage.icon?.color).toBe('brand-emf-yellow');
   });
 
   it('should use blue primary colour by default', () => {
@@ -69,8 +69,8 @@ describe('highlightCard', () => {
       cardFromApi
     );
 
-    expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/blue-texture.jpg');
-    expect(highlightCardForHomepage.iconColor).toBe('primary');
+    expect(highlightCardForHomepage.background.image.href).toBe('https://example.com/assets/images/blue-texture.jpg');
+    expect(highlightCardForHomepage.icon?.color).toBe('primary');
   });
 
   function cardLinkingTo(href: string): SfApiHighlightCard {
@@ -160,8 +160,8 @@ describe('highlightCard', () => {
       cardFromApi
     );
 
-    expect(highlightCardForHomepage.backgroundImageUrl.href).toBe('https://example.com/assets/images/join-mailing-list.webp');
-    expect(highlightCardForHomepage.iconColor).toBe('primary');
+    expect(highlightCardForHomepage.background.image.href).toBe('https://example.com/assets/images/join-mailing-list.webp');
+    expect(highlightCardForHomepage.icon?.color).toBe('primary');
     });
 });
 

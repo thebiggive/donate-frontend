@@ -1,64 +1,64 @@
 /**
  * @link https://app.swaggerhub.com/apis/Noel/TBG-Campaigns/#/Campaign
  */
-export class Campaign {
-  constructor(
-    public id: string,
-    public aims: string[],
-    public amountRaised: number,
-    public additionalImageUris: Array<{uri: string, order: number}>,
-    public bannerUri: string,
-    public beneficiaries: string[],
-    public budgetDetails: Array<{amount: number, description: string}>,
-    public categories: string[],
-    public championName: string,
-    public charity: {
-      id: string,
-      name: string,
-      optInStatement: string,
-      facebook?: string,
-      instagram?: string,
-      linkedin?: string,
-      logoUri?: string,
-      regulatorNumber: string,
-      regulatorRegion: string,
-      stripeAccountId?: string,
-      twitter?: string,
-      website: string,
-    },
-    public countries: string[],
-    public currencyCode: 'GBP' | 'USD',
-    public donationCount: number,
-    public endDate: Date,
-    public impactReporting: string,
-    public impactSummary: string,
-    public isMatched: boolean,
-    public matchFundsRemaining: number,
-    public matchFundsTotal: number,
-    public parentUsesSharedFunds: boolean,
-    public problem: string,
-    public quotes: Array<{person: string, quote: string}>,
-    public ready: boolean,
-    public solution: string,
-    public startDate: Date,
-    public status: 'Active' | 'Expired' | 'Preview' | 'Pending',
-    public summary: string = '',
-    public title: string,
-    public updates: Array<{content: string, modifiedDate: Date}>,
-    public usesSharedFunds: boolean,
-    public alternativeFundUse?: string,
-    public campaignCount?: number,
-    public championOptInStatement?: string,
-    public championRef?: string,
-    public hidden = false,
-    public logoUri?: string,
-    public parentAmountRaised?: number,
-    public parentDonationCount?: number,
-    public parentRef?: string,
-    public parentTarget?: number,
-    public surplusDonationInfo?: string,
-    public target?: number,
-    public thankYouMessage?: string,
-    public video?: {provider: string, key: string},
-  ) {}
+export interface Campaign {
+    id: string;
+    aims: string[];
+    amountRaised: number;
+    additionalImageUris: Array<{uri: string, order: number}>;
+    bannerUri: string;
+    beneficiaries: string[];
+    budgetDetails: Array<{amount: number, description: string}>;
+    categories: string[];
+    championName: string;
+    isRegularGiving: boolean | undefined;
+    charity: {
+      id: string;
+      name: string;
+      optInStatement: string;
+      facebook?: string;
+      instagram?: string;
+      linkedin?: string;
+      logoUri?: string;
+      regulatorNumber: string;
+      regulatorRegion: string;
+      stripeAccountId?: string;
+      twitter?: string;
+      website: string;
+    };
+    countries: string[];
+    currencyCode: 'GBP' | 'USD';
+    donationCount: number;
+    endDate: Date;
+    impactReporting: string;
+    impactSummary: string;
+    isMatched: boolean;
+    matchFundsRemaining: number;
+    matchFundsTotal: number;
+    parentUsesSharedFunds: boolean;
+    problem: string;
+    quotes: Array<{person: string, quote: string}>;
+    ready: boolean;
+    solution: string;
+    startDate: Date;
+    // More on Campaign status semantics defined in Salesforce `docs/campaign-status-definitions`.
+    status: 'Active' | 'Expired' | 'Preview';
+    summary: string;
+    title: string;
+    updates: Array<{content: string, modifiedDate: Date}>;
+    usesSharedFunds: boolean;
+    alternativeFundUse?: string;
+    campaignCount?: number;
+    championOptInStatement?: string;
+    championRef?: string;
+    hidden: boolean;
+    logoUri?: string;
+    parentAmountRaised?: number;
+    parentDonationCount?: number;
+    parentRef?: string;
+    parentTarget?: number;
+    surplusDonationInfo?: string;
+    target?: number;
+    thankYouMessage?: string
+    video?: {provider: string, key: string};
 }

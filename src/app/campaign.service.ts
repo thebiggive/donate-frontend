@@ -22,16 +22,8 @@ export class CampaignService {
     private http: HttpClient,
   ) {}
 
-  static isPendingOrNotReady(campaign: Campaign): boolean {
-    return campaign.status === 'Pending' || !campaign.ready;
-  }
-
   static isOpenForDonations(campaign: Campaign): boolean {
-    if (campaign.hidden) {
-      return false;
-    }
-
-    if (this.isPendingOrNotReady(campaign)) {
+    if (campaign.hidden || !campaign.ready) {
       return false;
     }
 
@@ -72,6 +64,10 @@ export class CampaignService {
     }
 
     return dateToUse;
+  }
+
+  static campaignDurationInDays(campaign: Campaign): number {
+    return Math.floor((new Date(campaign.endDate).getTime() - new Date(campaign.startDate).getTime()) / 86400000);
   }
 
   static percentRaisedOfIndividualCampaign(campaign: (Campaign | CampaignSummary)) {

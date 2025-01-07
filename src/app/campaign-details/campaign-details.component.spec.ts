@@ -7,7 +7,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-import { Campaign } from '../campaign.model';
 import { CampaignDetailsComponent } from './campaign-details.component';
 import { OptimisedImagePipe } from '../optimised-image.pipe';
 import { TimeLeftPipe } from '../time-left.pipe';
@@ -47,17 +46,18 @@ describe('CampaignDetailsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(CampaignDetailsComponent);
     component = fixture.componentInstance;
-    component.campaign = new Campaign(
-      'testCampaignId',
-      ['Aim 1'],
-      123,
-      [],
-      'https://example.com/banner.png',
-      ['Other'],
-      [],
-      ['Animals'],
-      'Some Champion',
-      {
+    component.campaign = {
+      id: 'testCampaignId',
+      aims: ['Aim 1'],
+      amountRaised: 123,
+      additionalImageUris: [],
+      bannerUri: 'https://example.com/banner.png',
+      beneficiaries: ['Other'],
+      budgetDetails: [],
+      categories: ['Animals'],
+      championName: 'Some Champion',
+      isRegularGiving: false,
+      charity: {
         id: 'testCharityId',
         name: 'Test Charity',
         optInStatement: 'Opt in statement.',
@@ -65,44 +65,44 @@ describe('CampaignDetailsComponent', () => {
         regulatorNumber: '123456',
         regulatorRegion: 'Scotland',
       },
-      ['United Kingdom'],
-      'GBP',
-      4,
-      new Date(),
-      'Impact reporting plan',
-      'Impact overview',
-      true,
-      987,
-      988,
-      false,
-      'The situation',
-      [],
-      true,
-      'The solution',
-      new Date(),
-      'Active',
-      'Test campaign description',
-      'Test Campaign!',
-      [],
-      false,
-      'Some information about what happens if funds are not used',
-      undefined,
-      undefined,
-      undefined,
-      false,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      1234,
-      undefined,
-      {
+      countries: ['United Kingdom'],
+      currencyCode: 'GBP',
+      donationCount: 4,
+      endDate: new Date(),
+      impactReporting: 'Impact reporting plan',
+      impactSummary: 'Impact overview',
+      isMatched: true,
+      matchFundsRemaining: 987,
+      matchFundsTotal: 988,
+      parentUsesSharedFunds: false,
+      problem: 'The situation',
+      quotes: [],
+      ready: true,
+      solution: 'The solution',
+      startDate: new Date(),
+      status: 'Active',
+      summary: 'Test campaign description',
+      title: 'Test Campaign!',
+      updates: [],
+      usesSharedFunds: false,
+      alternativeFundUse: 'Some information about what happens if funds are not used',
+      campaignCount: undefined,
+      championOptInStatement: undefined,
+      championRef: undefined,
+      hidden: false,
+      logoUri: undefined,
+      parentAmountRaised: undefined,
+      parentDonationCount: undefined,
+      parentRef: undefined,
+      parentTarget: undefined,
+      surplusDonationInfo: undefined,
+      target: 1234,
+      thankYouMessage: undefined,
+      video: {
         provider: 'youtube',
         key: 'someFakeKey',
       },
-    );
+  };
     // For now, *don't* detect changes as ngOnInit() will clear out the fixed `campaign` trying to
     // read a value from the state transfer service. TODO it would be better to mock an HTTP response
     // instead so the data is loaded in a more realistic way.

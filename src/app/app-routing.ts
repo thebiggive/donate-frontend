@@ -9,7 +9,7 @@ import {isAllowableRedirectPath, LoginComponent} from "./login/login.component";
 import {inject, PLATFORM_ID} from "@angular/core";
 import {IdentityService} from "./identity.service";
 import {RegisterComponent} from "./register/register.component";
-import {isPlatformBrowser} from "@angular/common";
+import {isPlatformServer} from "@angular/common";
 import {flags} from "./featureFlags";
 import {MyDonationsComponent} from "./my-donations/my-donations.component";
 import {DonationService} from "./donation.service";
@@ -18,13 +18,25 @@ import {MandateService} from "./mandate.service";
 import {RegularGivingComponent} from "./regular-giving/regular-giving.component";
 import {Person} from "./person.model";
 import {firstValueFrom} from "rxjs";
+import {MandateComponent} from "./mandate/mandate.component";
+import {Mandate} from "./mandate.model";
+import {MyPaymentMethodsComponent} from "./my-payment-methods/my-payment-methods.component";
+import {DonorAccountService} from "./donor-account.service";
+import {DonorAccount} from "./donorAccount.model";
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
 export const transferFundsPath = 'transfer-funds';
 export const myRegularGivingPath = 'my-account/regular-giving';
 
-const redirectIfAlreadyLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
+const redirectIfAlreadyLoggedIn: CanActivateFn = (snapshot: ActivatedRouteSnapshot) => {
+  if (isPlatformServer(inject(PLATFORM_ID))) {
+    // Pages that require auth should not be server side rendered - we do not have auth creds on the server side.
+    // Returning false should defer the decision about in-browser rendering to the client.
+    // https://medium.com/@nijotigajo/handling-local-storage-in-angular-with-server-side-rendering-ssr-eaa6a0f11717
+    return false;
+  }
+
   const router = inject(Router);
   const requestedRedirect = snapshot.queryParams.r;
   const isLoggedIn = inject(IdentityService).probablyHaveLoggedInPerson();
@@ -39,8 +51,8 @@ const redirectIfAlreadyLoggedIn = (snapshot: ActivatedRouteSnapshot) => {
 };
 
 const requireLogin: CanActivateFn = (_activatedRouteSnapshot, routerStateSnapshot) => {
-  if (! isPlatformBrowser(inject(PLATFORM_ID))) {
-    // Pages that require auth should not be server side rendered - we do not have auth creds on the server side.
+  if (isPlatformServer(inject(PLATFORM_ID))) {
+    // No tokens -> Defer the decision about in-browser rendering to the client.
     return false;
   }
 
@@ -62,7 +74,16 @@ const requireLogin: CanActivateFn = (_activatedRouteSnapshot, routerStateSnapsho
     return router.parseUrl(url);
   }
   return router.parseUrl('/login');
+};
 
+const handleLogout: CanActivateFn = () => {
+  if (isPlatformServer(inject(PLATFORM_ID))) {
+    // No tokens -> Defer the decision about in-browser rendering to the client.
+    return false;
+  }
+
+  inject(IdentityService).logout();
+  return inject(Router).parseUrl('/');
 };
 
 const LoggedInPersonResolver: ResolveFn<Person | null> = async () => {
@@ -70,6 +91,21 @@ const LoggedInPersonResolver: ResolveFn<Person | null> = async () => {
 
   const person$ = identityService.getLoggedInPerson();
   return await firstValueFrom(person$);
+}
+
+const DonorAccountResolver: () => Promise<DonorAccount | null> = async () => {
+  const loggedInDonorAccount$ = inject(DonorAccountService).getLoggedInDonorAccount();
+  return await firstValueFrom(loggedInDonorAccount$);
+};
+
+const mandateResolver: ResolveFn<Mandate> = async (route: ActivatedRouteSnapshot) => {
+  const mandateService = inject(MandateService);
+  const mandateId = route.paramMap.get('mandateId');
+  if (!mandateId) {
+    throw new Error('mandateId param missing in route');
+  }
+  const mandate$ = mandateService.getActiveMandate(mandateId);
+  return await firstValueFrom(mandate$);
 }
 
 const routes: Routes = [
@@ -135,8 +171,8 @@ const routes: Routes = [
     resolve: {
       campaign: CampaignResolver,
     },
-    loadChildren: () => import('./meta-campaign/meta-campaign.module')
-      .then(c => c.MetaCampaignModule),
+    loadChildren: () => import('./explore/explore.module')
+      .then(c => c.ExploreModule),
   },
   {
     path: 'metacampaign/:campaignId/:fundSlug',
@@ -144,8 +180,8 @@ const routes: Routes = [
     resolve: {
       campaign: CampaignResolver,
     },
-    loadChildren: () => import('./meta-campaign/meta-campaign.module')
-      .then(c => c.MetaCampaignModule),
+    loadChildren: () => import('./explore/explore.module')
+      .then(c => c.ExploreModule),
   },
   {
     path: 'reset-password',
@@ -171,13 +207,27 @@ const routes: Routes = [
     ],
   },
   {
+    path: 'my-account/payment-methods',
+    pathMatch: 'full',
+    resolve: {
+      person: async () => await firstValueFrom(inject(IdentityService).getLoggedInPerson()),
+      paymentMethods: async () => {
+        return await inject(DonationService).getPaymentMethods();
+      },
+    },
+    component: MyPaymentMethodsComponent,
+    canActivate: [
+      requireLogin,
+    ],
+  },
+  {
     path: ':campaignSlug/:fundSlug',
     pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
     },
-    loadChildren: () => import('./meta-campaign/meta-campaign.module')
-      .then(c => c.MetaCampaignModule),
+    loadChildren: () => import('./explore/explore.module')
+      .then(c => c.ExploreModule),
   },
   {
     path: 'explore',
@@ -204,6 +254,16 @@ const routes: Routes = [
     component: RegisterComponent,
     canActivate: [
       redirectIfAlreadyLoggedIn,
+    ],
+  },
+  /** For use when donor clicks logout in the menu on the wordpress site **/
+  {
+    component: LoginComponent, // Angular requires we set a component but it will never be used client-side as
+                                    // `canActivate` always redirects there.
+    path: 'logout',
+    pathMatch: 'full',
+    canActivate: [
+      handleLogout,
     ],
   },
   {
@@ -239,8 +299,8 @@ const routes: Routes = [
     resolve: {
       campaign: CampaignResolver,
     },
-    loadChildren: () => import('./meta-campaign/meta-campaign.module')
-      .then(c => c.MetaCampaignModule),
+    loadChildren: () => import('./explore/explore.module')
+      .then(c => c.ExploreModule),
   },
 ];
 
@@ -270,9 +330,22 @@ if (flags.regularGivingEnabled) {
       resolve: {
         campaign: CampaignResolver,
         donor: LoggedInPersonResolver,
+        donorAccount: DonorAccountResolver,
       },
     },
   )
+
+  routes.unshift({
+    path: `${myRegularGivingPath}/:mandateId`,
+    pathMatch: 'full',
+    component: MandateComponent,
+    canActivate: [
+      requireLogin,
+    ],
+    resolve: {
+        mandate:  mandateResolver,
+    },
+  })
 }
 
 export {routes};
