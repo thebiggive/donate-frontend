@@ -2,7 +2,6 @@ import {Injectable} from "@angular/core";
 import {Observable, of} from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import {environment} from "../environments/environment";
-import {Person} from "./person.model";
 import {IdentityService} from "./identity.service";
 import {DonorAccount} from "./donorAccount.model";
 import {switchMap} from "rxjs/operators";
@@ -15,25 +14,6 @@ export class DonorAccountService {
     private http: HttpClient,
     private identityService: IdentityService,
   ) {
-  }
-
-  createAccount(donor: Person): Observable<unknown> {
-    const jwt = this.identityService.getJWT();
-    if (!jwt) {
-      throw new Error("Missing JWT, can't create donor account");
-    }
-
-    return this.http.post(
-      `${environment.donationsApiPrefix}/people/${donor.id}/donor-account`,
-      {
-        emailAddress: donor.email_address,
-        donorName: {
-          firstName: donor.first_name,
-          lastName: donor.last_name,
-        }
-      },
-      {headers: new HttpHeaders({'X-Tbg-Auth': jwt})}
-    );
   }
 
   /**
