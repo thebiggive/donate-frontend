@@ -23,6 +23,7 @@ import {countryOptions} from "../countries";
 import {PageMetaService} from "../page-meta.service";
 import {StripeService} from "../stripe.service";
 import {StripeElements, StripePaymentElement} from "@stripe/stripe-js";
+import {DonationService, StripeCustomerSession} from "../donation.service";
 
 @Component({
   selector: 'app-regular-giving',
@@ -58,6 +59,7 @@ export class RegularGivingComponent implements OnInit {
   public readonly labelYourPaymentInformation = "Your Payment Information";
 
   @ViewChild('cardInfo') protected cardInfo: ElementRef;
+  private stripeCustomerSession: StripeCustomerSession;
 
   constructor(
     private route: ActivatedRoute,
@@ -67,6 +69,7 @@ export class RegularGivingComponent implements OnInit {
     private router: Router,
     private pageMeta: PageMetaService,
     private stripeService: StripeService,
+    private donationService: DonationService,
   ) {
   }
 
@@ -107,6 +110,10 @@ export class RegularGivingComponent implements OnInit {
     );
 
     this.stripeService.init().catch(console.error);
+
+    this.donationService.createCustomerSessionForRegularGiving()
+      .then((session) => this.stripeCustomerSession = session)
+      .catch(console.error);
   }
 
   async interceptSubmitAndProceedInstead(event: Event) {
@@ -188,7 +195,7 @@ export class RegularGivingComponent implements OnInit {
       this.stripeElements = this.stripeService.stripeElements(
         {amount: this.getDonationAmountPounds() * 100, currency: this.campaign.currencyCode},
         this.campaign,
-        'client-secret', // todo-regular-giving - fill in client secret. Requires adding code to matchbot to generate a client secret.
+        this.stripeCustomerSession.stripeSessionSecret,
       );
     }
 

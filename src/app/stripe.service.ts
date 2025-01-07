@@ -55,7 +55,7 @@ export class StripeService {
    */
   stripeElements(money: {
     currency: string;
-    amount: any
+    amount: number
   }, campaign: Campaign, customerSessionClientSecret: string | undefined) {
     if (!this.stripe) {
       throw new Error('Stripe not ready');

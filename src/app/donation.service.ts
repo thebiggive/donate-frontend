@@ -20,6 +20,8 @@ export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE
 
 export const STRIPE_SESSION_SECRET_COOKIE_NAME = 'stripe-session-secret';
 
+export type StripeCustomerSession = { stripeSessionSecret: string };
+
 @Injectable({
   providedIn: 'root',
 })
@@ -173,12 +175,7 @@ export class DonationService {
   async getPaymentMethods(
     {cacheBust}: { cacheBust?: boolean } = {cacheBust: false}
   ): Promise<PaymentMethod[]> {
-    const jwt = this.identityService.getJWT();
-    const person = await firstValueFrom(this.identityService.getLoggedInPerson());
-
-    if (!person) {
-      throw new Error("logged in person required");
-    }
+    const {jwt, person} = await this.getLoggedInUser();
 
     const cacheBuster = cacheBust ? ("?t=" + new Date().getTime()) : '';
 
@@ -188,6 +185,17 @@ export class DonationService {
     ));
 
     return response.data;
+  }
+
+  private async getLoggedInUser() {
+    const jwt = this.identityService.getJWT();
+    const person = await firstValueFrom(this.identityService.getLoggedInPerson());
+
+    if (!person) {
+      throw new Error("logged in person required");
+    }
+
+    return {jwt, person};
   }
 
   create(donation: Donation, personId?: string, jwt?: string): Observable<DonationCreatedResponse> {
@@ -406,5 +414,16 @@ export class DonationService {
         getPersonAuthHttpOptions(jwt),
       ).pipe(map((response) => response.donations));
     }));
+  }
+
+
+  async createCustomerSessionForRegularGiving(): Promise<StripeCustomerSession> {
+    const {jwt, person} = await this.getLoggedInUser();
+
+    return firstValueFrom(this.http.post(
+      `${environment.donationsApiPrefix}/people/${person.id}/create-customer-session`,
+      {},
+      getPersonAuthHttpOptions(jwt),
+    ) as Observable<StripeCustomerSession>);
   }
 }
