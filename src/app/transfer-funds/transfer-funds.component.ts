@@ -238,11 +238,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
         this.accountHolderName = response.bank_transfer.financial_addresses[0]!.sort_code.account_holder_name;
       });
 
-      this.donorAccountService.createAccount(this.donor).subscribe({
-        next: () => {console.log("Account created")},
-        error () {}, // no need to do anything, possibly matchbot just doesn't have the account creation route yet.
-      });
-
       this.createAndFinaliseTipDonation();
     }
   }
