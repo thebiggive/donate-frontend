@@ -2,8 +2,6 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Campaign} from "../campaign.model";
 import {ComponentsModule} from "@biggive/components-angular";
-import {CampaignInfoComponent} from "../campaign-info/campaign-info.component";
-import {AsyncPipe} from "@angular/common";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatStep, MatStepper} from "@angular/material/stepper";
 import {StepperSelectionEvent} from "@angular/cdk/stepper";
@@ -12,7 +10,7 @@ import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
 import {RegularGivingService} from "../regularGiving.service";
-import { Mandate } from '../mandate.model';
+import {Mandate} from '../mandate.model';
 import {myRegularGivingPath} from "../app-routing";
 import {requiredNotBlankValidator} from "../validators/notBlank";
 import {getCurrencyMinValidator} from "../validators/currency-min";
@@ -22,23 +20,23 @@ import {DonorAccount} from "../donorAccount.model";
 import {countryOptions} from "../countries";
 import {PageMetaService} from "../page-meta.service";
 import {StripeService} from "../stripe.service";
-import {StripeElements, StripePaymentElement} from "@stripe/stripe-js";
+import {ConfirmationToken, StripeElements, StripePaymentElement} from "@stripe/stripe-js";
 import {DonationService, StripeCustomerSession} from "../donation.service";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-regular-giving',
   standalone: true,
   imports: [
     ComponentsModule,
-    CampaignInfoComponent,
-    AsyncPipe,
     FormsModule,
     MatStep,
     MatStepper,
     ReactiveFormsModule,
     MatInput,
     MatButton,
-    MatIcon
+    MatIcon,
+    MatProgressSpinner
   ],
   templateUrl: './regular-giving.component.html',
   styleUrl: './regular-giving.component.scss'
@@ -60,6 +58,7 @@ export class RegularGivingComponent implements OnInit {
 
   @ViewChild('cardInfo') protected cardInfo: ElementRef;
   private stripeCustomerSession: StripeCustomerSession | undefined;
+  protected submitting: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -136,7 +135,7 @@ export class RegularGivingComponent implements OnInit {
     this.stepper.next();
   }
 
-  submit() {
+  async submit() {
     const invalid = this.mandateForm.invalid;
     if (invalid) {
       let errorMessage = 'Form error: ';
@@ -147,25 +146,43 @@ export class RegularGivingComponent implements OnInit {
       return;
     }
 
-    const donationAmountPounds = this.getDonationAmountPounds();
-    const amountInPence = donationAmountPounds * 100;
+    const billingPostcode: string = this.mandateForm.value.billingPostcode;
+    const billingCountry: string = this.selectedBillingCountryCode;
 
-    const billingPostcode = this.mandateForm.value.billingPostcode;
-    const billingCountry = this.selectedBillingCountryCode;
+    let confirmationToken: ConfirmationToken | undefined;
+    if (!this.stripeElements && !this.donorAccount.regularGivingPaymentMethod) {
+      throw new Error('Missing both stripe elements and on-file payment method, cannot setup regular giving mandate.');
+    }
+
+    this.submitting = true;
+
+    if (this.stripeElements && !this.donorAccount.regularGivingPaymentMethod) {
+      const confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(
+        {billingPostalAddress: billingPostcode, countryCode: billingCountry},
+        this.stripeElements
+      );
+
+      confirmationToken = confirmationTokenResult.confirmationToken;
+    }
+    if (!this.donorAccount.regularGivingPaymentMethod && !confirmationToken) {
+      this.submitting = false;
+      throw new Error("Stripe Confirmation token is missing");
+    }
 
     /**
-     * @todo consider if we need to send this from FE - if we're not displaying it to donor better for matchbot to
+     * @todo-regular-giving consider if we need to send this from FE - if we're not displaying it to donor better for matchbot to
      *       generate it.*/
     const dayOfMonth = Math.min(new Date().getDate(), 28);
 
     this.regularGivingService.startMandate({
-      amountInPence,
+      amountInPence: this.getDonationAmountPence(),
       dayOfMonth,
       campaignId: this.campaign.id,
       currency: "GBP",
       giftAid: false,
       billingPostcode,
       billingCountry,
+      stripeConfirmationTokenId: confirmationToken?.id
     }).subscribe({
     next: async (mandate: Mandate) => {
       await this.router.navigateByUrl(`${myRegularGivingPath}/${mandate.id}`);
@@ -178,8 +195,8 @@ export class RegularGivingComponent implements OnInit {
     })
   }
 
-  private getDonationAmountPounds(): number {
-    return +this.mandateForm.value.donationAmount;
+  private getDonationAmountPence(): number {
+    return 100 * this.mandateForm.value.donationAmount;
   }
 
   protected setSelectedCountry = ((countryCode: string) => {
@@ -203,11 +220,11 @@ export class RegularGivingComponent implements OnInit {
     }
 
     if (this.stripeElements) {
-      this.stripeElements.update({amount: this.getDonationAmountPounds() * 100})
+      this.stripeElements.update({amount: this.getDonationAmountPence()})
     } else {
       this.stripeElements = this.stripeService.stripeElements(
         {
-          amount: this.getDonationAmountPounds() * 100,
+          amount: this.getDonationAmountPence(),
           currency: this.campaign.currencyCode
         },
         'off_session',

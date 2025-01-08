@@ -167,7 +167,10 @@ export class StripeService {
     elements.update({amount: this.amountIncTipInMinorUnit(donation)});
   }
 
-  async prepareConfirmationTokenFromPaymentElement(donation: Donation, elements: StripeElements): Promise<ConfirmationTokenResult> {
+  async prepareConfirmationTokenFromPaymentElement(
+    {countryCode, billingPostalAddress}: {countryCode: string, billingPostalAddress: string},
+    elements: StripeElements
+  ): Promise<ConfirmationTokenResult> {
     if (! this.stripe) {
       throw new Error("Stripe not ready");
     }
@@ -183,8 +186,8 @@ export class StripeService {
       billing_details:
         {
           address: {
-            country: donation.countryCode,
-            postal_code: donation.billingPostalAddress
+            country: countryCode,
+            postal_code: billingPostalAddress
           },
         }
     };

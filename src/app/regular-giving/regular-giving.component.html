@@ -1,11 +1,12 @@
 <main class="b-container">
-  @if(!campaign.isRegularGiving) {
-      <div>
-          <p class="error">
-            Sorry, campaign {{ campaign.title }} is not a regular giving campaign.</p>
-          <p>To make a one-off donation to {{ campaign.charity.name }} please visit the regular <a href="/campaign/{{campaign.id}}">campaign page</a>.
-          </p>
-      </div>
+  @if (!campaign.isRegularGiving) {
+    <div>
+      <p class="error">
+        Sorry, campaign {{ campaign.title }} is not a regular giving campaign.</p>
+      <p>To make a one-off donation to {{ campaign.charity.name }} please visit the regular <a
+        href="/campaign/{{campaign.id}}">campaign page</a>.
+      </p>
+    </div>
   } @else {
     <div class="c-form-container">
       <biggive-page-section>
@@ -38,7 +39,7 @@
                     slot="label"
                     for="donationAmount"
                   >
-                    Monthly donation to {{campaign.charity.name}}
+                    Monthly donation to {{ campaign.charity.name }}
                   </label>
                   <input
                     maxlength="10"
@@ -56,7 +57,8 @@
                         mat-raised-button
                         color="primary"
                         (click)="next()"
-                >Continue</button>
+                >Continue
+                </button>
               </div>
 
             </mat-step>
@@ -72,34 +74,40 @@
 
                 @if (donorAccount.regularGivingPaymentMethod) {
                   <!-- @todo-regular-giving: show existing payment method here, and/or on account page -->
-                  <p>
-                    Your existing regular giving payment method will be used for these donations.
+                  <p style="border: 2px solid blue; background: pink">
+                    Your existing regular giving payment method {{ donorAccount.regularGivingPaymentMethod }}
+                    will be used for these donations.
                     To change this please visit your account page
+
+                    (todo-regular-giving: replace this paragraph with an element showing details of the saved method)
                   </p>
                 } @else {
                   <biggive-text-input>
-                    <span slot="label">Payment Method</span> <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe not us -->
+                    <span slot="label">Payment Method</span>
+                    <!-- no label because we don't have a labelable form element - the card form is supplied by Stripe not us -->
                     <div slot="input" class="sr-input sr-card-element" id="card-info" #cardInfo></div>
                   </biggive-text-input>
-                }
 
-                <p>
+                  <p>
 
-              <biggive-form-field-select
-                [prompt]="'Billing country'"
-                [options]="countryOptionsObject"
-                [selectedValue]="selectedBillingCountryCode"
-                [backgroundColour]="'grey'"
-                [selectionChanged]="setSelectedCountry"
-                [spaceBelow]="3"
-                [selectedOptionColour]="'inherit'"
-              >
-              </biggive-form-field-select>
+                    <biggive-form-field-select
+                      [prompt]="'Billing country'"
+                      [options]="countryOptionsObject"
+                      [selectedValue]="selectedBillingCountryCode"
+                      [backgroundColour]="'grey'"
+                      [selectionChanged]="setSelectedCountry"
+                      [spaceBelow]="3"
+                      [selectedOptionColour]="'inherit'"
+                    >
+                    </biggive-form-field-select>
 
-              <biggive-text-input>
-                <label slot="label" for="billingPostcode">Billing postcode</label>
-                <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)" autocapitalize="characters" autocomplete="postal-code">
-              </biggive-text-input>
+                    <biggive-text-input>
+                      <label slot="label" for="billingPostcode">Billing postcode</label>
+                      <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput
+                             (change)="onBillingPostCodeChanged($event)" autocapitalize="characters"
+                             autocomplete="postal-code">
+                    </biggive-text-input>
+                    }
 
               <div style="text-align: center">
                 <button style="width: 40%;"
@@ -108,7 +116,8 @@
                         mat-raised-button
                         color="primary"
                         (click)="next()"
-                >Continue</button>
+                >Continue
+                </button>
               </div>
 
             </mat-step>
@@ -122,15 +131,16 @@
               <table id="personal-details">
                 <tr>
                   <td>Name</td>
-                  <td>{{donor.first_name}} {{donor.last_name}}</td>
+                  <td>{{ donor.first_name }} {{ donor.last_name }}</td>
                 </tr>
                 <tr>
                   <td>Email</td>
-                  <td>{{donor.email_address}}</td>
+                  <td>{{ donor.email_address }}</td>
                 </tr>
               </table>
 
-              <p class="b-rt-0 b-m-0 b-mt-40">By clicking on the <span class="b-bold">Start regular giving now</span> button, you agree to
+              <p class="b-rt-0 b-m-0 b-mt-40">By clicking on the <span class="b-bold">Start regular giving now</span>
+                button, you agree to
                 Big Give's Terms and Conditions and Privacy Statement. <br/>
                 <a [href]="termsUrl" target="_blank">
                   <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
@@ -142,15 +152,24 @@
               </p>
               <p>(todo: add link to regular giving terms & conditions)</p>
 
-              <button
-                (click)="submit()"
-                (keyup.enter)="submit()"
-                class="c-donate-button b-donate-button b-w-100 b-rt-1"
-                mat-raised-button
-                color="primary"
-              >
-                Start regular giving now
-              </button>
+              @if (!submitting) {
+                <button
+                  (click)="submit()"
+                  (keyup.enter)="submit()"
+                  class="c-donate-button b-donate-button b-w-100 b-rt-1"
+                  mat-raised-button
+                  color="primary"
+                >
+                  Start regular giving now
+                </button>
+              } @else {
+                <div aria-live="polite">
+                  @if (submitting) {
+                    <mat-spinner color="primary" diameter="30"
+                                 aria-label="Processing your regular giving mandate"></mat-spinner>
+                  }
+                </div>
+              }
             </mat-step>
           </mat-vertical-stepper>
         </form>
