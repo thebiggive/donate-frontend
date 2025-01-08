@@ -33,7 +33,7 @@ export class MyDonationsComponent implements OnInit{
 
   ngOnInit() {
     this.pageMeta.setCommon(
-      'Big Give - Your Donation History', '', null
+      'Your Donation History', 'Your Big Give donations', null
     );
 
     this.donations = this.route.snapshot.data.donations.map(withComputedProperties);

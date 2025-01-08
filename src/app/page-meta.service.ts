@@ -31,6 +31,10 @@ export class PageMetaService {
     const link = links[0];
     link.setAttribute('href', canonicalUri);
 
+    if (!title.includes('Big Give')) {
+      title = `${title} – Big Give`;
+    }
+
     this.title.setTitle(title);
     this.meta.updateTag( { property: 'og:title', content: title } );
     this.meta.updateTag( { property: 'twitter:title', content: title } );
