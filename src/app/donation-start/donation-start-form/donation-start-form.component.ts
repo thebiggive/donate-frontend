@@ -947,7 +947,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     let confirmationTokenResult: ConfirmationTokenResult | undefined;
     let confirmationToken: ConfirmationToken | undefined;
     let paymentMethod: PaymentMethod | undefined;
-    confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(this.donation, <StripeElements>this.stripeElements);
+    confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(
+      {countryCode: this.donation.countryCode!, billingPostalAddress: this.donation.billingPostalAddress!},
+      this.stripeElements
+    );
     confirmationToken = confirmationTokenResult.confirmationToken;
 
     if (confirmationToken || paymentMethod) {
