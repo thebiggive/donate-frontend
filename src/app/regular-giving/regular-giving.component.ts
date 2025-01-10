@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Campaign} from "../campaign.model";
 import {ComponentsModule} from "@biggive/components-angular";
@@ -24,6 +24,11 @@ import {ConfirmationToken, StripeElements, StripePaymentElement} from "@stripe/s
 import {DonationService, StripeCustomerSession} from "../donation.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
+// for now min & max are hard-coded, will change to be based on a field on
+// the campaign.
+const maxAmount = 500;
+const minAmount = 1;
+
 @Component({
   selector: 'app-regular-giving',
   standalone: true,
@@ -41,7 +46,7 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
   templateUrl: './regular-giving.component.html',
   styleUrl: './regular-giving.component.scss'
 })
-export class RegularGivingComponent implements OnInit {
+export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected campaign: Campaign;
   mandateForm: FormGroup;
   @ViewChild('stepper') private stepper: MatStepper;
@@ -59,6 +64,8 @@ export class RegularGivingComponent implements OnInit {
   @ViewChild('cardInfo') protected cardInfo: ElementRef;
   private stripeCustomerSession: StripeCustomerSession | undefined;
   protected submitting: boolean = false;
+
+  protected amountErrorMessage: string | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -97,9 +104,8 @@ export class RegularGivingComponent implements OnInit {
     this.mandateForm = this.formBuilder.group({
         donationAmount: ['', [
           requiredNotBlankValidator,
-          getCurrencyMinValidator(1), // for now min & max are hard-coded, will change to be based on a field on
-                                      // the campaign.
-          getCurrencyMaxValidator(500),
+          getCurrencyMinValidator(minAmount),
+          getCurrencyMaxValidator(maxAmount),
           Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
         ]],
       billingPostcode: [this.donorAccount.billingPostCode,
@@ -118,6 +124,23 @@ export class RegularGivingComponent implements OnInit {
         }
       })
       .catch(console.error);
+  }
+
+  ngAfterViewInit() {
+    // It seems the stepper doesn't provide a nice way to let us intercept each request to change step. Monkey-patching
+    // the select function which is called when the user clicks a step heading, to let us check that all previous
+    // steps have been completed correctly, and then either proceed to the chosen step or display an error message.
+
+    // Based on https://stackoverflow.com/a/62787311/2526181 - I'm not 100% sure why it's wrapped in setTimeout but
+    // maybe returning immediately from ngAfterViewInit improves performance.
+
+    setTimeout(() => {
+      this.stepper.steps.forEach((step, stepIndex) => {
+        step.select = () => {
+          this.selectStep(stepIndex);
+        };
+      });
+    });
   }
 
   async interceptSubmitAndProceedInstead(event: Event) {
@@ -245,5 +268,39 @@ export class RegularGivingComponent implements OnInit {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
       this.stripePaymentElement.on('change', () => {}); // @todo-regular-giving: implement card change handler
     }
+  }
+
+  protected selectStep(stepIndex: number) {
+
+    const donationAmountErrors = this.mandateForm.controls.donationAmount!.errors;
+
+    if (donationAmountErrors) {
+      console.error(donationAmountErrors);
+      for (const [key] of Object.entries(donationAmountErrors)) {
+        switch (key) {
+          case 'required':
+            this.amountErrorMessage = "Please enter your monthly donation amount";
+            break;
+          case 'pattern':
+            this.amountErrorMessage = `Please enter a whole number of £ without commas`;
+            break;
+          case 'max':
+          case 'min':
+            this.amountErrorMessage = `Please select an amount between £${minAmount} and £${maxAmount}`;
+            break;
+          default:
+            this.amountErrorMessage = 'Unexpected donation amount error';
+            console.error({donationAmountErrors});
+            break;
+        }
+      }
+      this.toast.showError(this.amountErrorMessage!);
+
+      return;
+    } else {
+      this.amountErrorMessage = undefined;
+    }
+
+    this.stepper.selected = this.stepper.steps.get(stepIndex);
   }
 }
