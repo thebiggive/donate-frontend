@@ -118,6 +118,15 @@
                     </biggive-text-input>
                     }
 
+                @if (paymentInfoErrorMessage) {
+                  <div
+                    class="error"
+                    aria-live="polite"
+                  >
+                    {{ paymentInfoErrorMessage }}
+                  </div>
+                }
+
               <div style="text-align: center">
                 <button style="width: 40%;"
                         type="button"
@@ -159,7 +168,7 @@
                   <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
                   read our Privacy Statement.</a>
               </p>
-              <p>(todo: add link to regular giving terms & conditions)</p>
+              <p>(todo-regular-giving: add link to regular giving terms & conditions)</p>
 
               @if (!submitting) {
                 <button

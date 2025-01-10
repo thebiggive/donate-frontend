@@ -19,10 +19,17 @@ import {Toast} from "../toast.service";
 import {DonorAccount} from "../donorAccount.model";
 import {countryOptions} from "../countries";
 import {PageMetaService} from "../page-meta.service";
-import {StripeService} from "../stripe.service";
-import {ConfirmationToken, StripeElements, StripePaymentElement} from "@stripe/stripe-js";
+import {getStripeFriendlyError, StripeService} from "../stripe.service";
+import {
+  ConfirmationToken,
+  PaymentMethod,
+  StripeElementChangeEvent,
+  StripeElements,
+  StripePaymentElement
+} from "@stripe/stripe-js";
 import {DonationService, StripeCustomerSession} from "../donation.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {billingPostcodeRegExp} from "../postcode.service";
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -66,6 +73,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected submitting: boolean = false;
 
   protected amountErrorMessage: string | undefined;
+  private stripePaymentMethodReady: boolean = false;
+  protected stripeError: string | undefined;
+  private cardHandler = this.onStripeCardChange.bind(this);
+  protected paymentInfoErrorMessage: string | undefined;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -109,7 +121,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
           Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
         ]],
       billingPostcode: [this.donorAccount.billingPostCode,
-        [] // @todo-regular-giving - add postcode validation as in donation-start-form
+        [
+          requiredNotBlankValidator,
+          Validators.pattern(billingPostcodeRegExp),
+        ]
       ],
       }
     );
@@ -261,21 +276,61 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const stripeElements = this.stripeElements;
-    this.stripePaymentElement = StripeService.createStripeElement(stripeElements);
+    this.stripePaymentElement = StripeService.createStripeElement(this.stripeElements);
 
     if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
-      this.stripePaymentElement.on('change', () => {}); // @todo-regular-giving: implement card change handler
+      this.stripePaymentElement.on('change', this.cardHandler);
+    }
+  }
+
+  /**
+   * Adapted from similar function in DonationStartFormComponent. There may be parts to DRY up but the pages are differen
+   *
+   */
+  async onStripeCardChange(state: StripeElementChangeEvent & ({value: {type: string, payment_method?: PaymentMethod} | undefined})) {
+    this.stripePaymentMethodReady = state.complete;
+
+    if (state.error) {
+      this.stripeError = getStripeFriendlyError(state.error, 'card_change');
+      this.toast.showError(this.stripeError);
+    } else {
+      this.stripeError = undefined;
+    }
+
+    // Jump back if we get an out of band message back that the card is *not* valid/ready.
+    // Don't jump forward when the card *is* valid, as the donor might have been
+    // intending to edit something else in the `payment` step; let them click Next.
+
+    if (!this.stripePaymentMethodReady || !this.stripePaymentElement || !this.stripeElements) {
+      if (this.stepper.selectedIndex > 1) {
+        this.stepper.selectedIndex = 1;
+      }
+
+      return;
     }
   }
 
   protected selectStep(stepIndex: number) {
+    let errorFound = this.validateAmountStep();
 
+    if (stepIndex > 1) {
+      errorFound = this.validatePaymentInformationStep() || errorFound;
+    }
+
+    if (! errorFound) {
+      this.stepper.selected = this.stepper.steps.get(stepIndex);
+    }
+  }
+
+  /**
+   * Checks if the amount step is completed correctly, and shows the user an error message if not.
+   */
+  private validateAmountStep() {
+    let errorFound = false;
     const donationAmountErrors = this.mandateForm.controls.donationAmount!.errors;
 
     if (donationAmountErrors) {
-      console.error(donationAmountErrors);
       for (const [key] of Object.entries(donationAmountErrors)) {
         switch (key) {
           case 'required':
@@ -296,11 +351,45 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       }
       this.toast.showError(this.amountErrorMessage!);
 
-      return;
+      errorFound = true;
     } else {
       this.amountErrorMessage = undefined;
     }
+    return errorFound;
+  }
 
-    this.stepper.selected = this.stepper.steps.get(stepIndex);
+  /**
+   * Checks if the payment information step is completed correctly, and shows the user an error message if not.
+   */
+  private validatePaymentInformationStep(): boolean {
+    this.paymentInfoErrorMessage = undefined;
+
+    if (!this.stripePaymentMethodReady && ! this.donorAccount.regularGivingPaymentMethod) {
+      this.paymentInfoErrorMessage = "Please complete your payment method details";
+    } else if (this.stripeError) {
+     this.paymentInfoErrorMessage = this.stripeError;
+    }
+
+    const postcodeErrors = this.mandateForm.controls.billingPostcode!.errors;
+    if (postcodeErrors) {
+      for (const [key] of Object.entries(postcodeErrors)) {
+        switch (key) {
+          case 'required':
+           this.paymentInfoErrorMessage = "Please enter a billing postcode";
+            break;
+          case 'pattern':
+           this.paymentInfoErrorMessage = "Sorry, your billing postcode is not recognised - please enter a valid billing postcode";
+            break;
+          default:
+           this.paymentInfoErrorMessage = "Unexpected billing postcode error";
+            console.error({postcodeErrors});
+            break;
+        }
+      }
+    }
+
+    this.paymentInfoErrorMessage && this.toast.showError(this.paymentInfoErrorMessage);
+
+    return !!this.paymentInfoErrorMessage;
   }
 }
