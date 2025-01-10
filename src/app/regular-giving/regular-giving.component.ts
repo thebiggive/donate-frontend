@@ -78,6 +78,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   private cardHandler = this.onStripeCardChange.bind(this);
   protected paymentInfoErrorMessage: string | undefined;
 
+  /**
+   * Error generated on submission at end of form
+   */
+  protected submitErrorMessage: string | undefined;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -212,6 +217,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
      *       generate it.*/
     const dayOfMonth = Math.min(new Date().getDate(), 28);
 
+    this.submitErrorMessage = undefined;
+
     this.regularGivingService.startMandate({
       amountInPence: this.getDonationAmountPence(),
       dayOfMonth,
@@ -222,13 +229,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       billingCountry,
       stripeConfirmationTokenId: confirmationToken?.id
     }).subscribe({
-    next: async (mandate: Mandate) => {
-      await this.router.navigateByUrl(`${myRegularGivingPath}/${mandate.id}`);
+      next: async (mandate: Mandate) => {
+        await this.router.navigateByUrl(`${myRegularGivingPath}/${mandate.id}`);
     },
       error: (error: {error: {error: {description?: string} }}) => {
-      console.error(error);
-      const message = error.error.error.description ?? 'Sorry, something went wrong';
+        const message = error.error.error.description ?? 'Sorry, something went wrong';
+
+        this.submitErrorMessage = message;
         this.toast.showError(message);
+        this.submitting = false;
       }
     })
   }

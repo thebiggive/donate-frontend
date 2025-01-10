@@ -170,6 +170,15 @@
               </p>
               <p>(todo-regular-giving: add link to regular giving terms & conditions)</p>
 
+              @if (submitErrorMessage) {
+                <div
+                  class="error"
+                  aria-live="polite"
+                >
+                  {{ submitErrorMessage }}
+                </div>
+              }
+
               @if (!submitting) {
                 <button
                   (click)="submit()"
