@@ -112,18 +112,23 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     this.pageInitialised = true;
   }
 
-  private friendlyCaptchaWiget: WidgetInstance;
+  private friendlyCaptchaWidget: WidgetInstance;
 
   async ngAfterViewInit() {
     if (! isPlatformBrowser(this.platformId)) {
       return
     }
 
+    if (environment.environmentId === 'regression') {
+      this.captchaCode = 'dummy-captcha-code';
+      return;
+    }
+
     if (! this.friendlyCaptcha) {
       return;
     }
 
-    this.friendlyCaptchaWiget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
+    this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.captchaCode = solution;
       },
@@ -133,7 +138,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
       },
     });
 
-    await this.friendlyCaptchaWiget.start()
+    await this.friendlyCaptchaWidget.start()
   }
 
 
@@ -183,8 +188,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
         this.loggingIn = false;
 
         this.captchaCode = undefined;
-        this.friendlyCaptchaWiget.reset();
-        await this.friendlyCaptchaWiget.start();
+        this.friendlyCaptchaWidget.reset();
+        await this.friendlyCaptchaWidget.start();
       }
     });
     this.loggingIn = true;
