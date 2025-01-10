@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-
 /**
- * Support scroll resoration when using custom 'back' links e.g. to MetacampaignComponent.
+ * Support scroll resoration when using custom 'back' links e.g. to ExploreComponent showing campaign.
  */
 @Injectable({
   providedIn: 'root',

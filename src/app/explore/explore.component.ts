@@ -35,7 +35,6 @@ import {SESSION_STORAGE, StorageService} from "ngx-webstorage-service";
 const openPipeToken = 'TimeLeftToOpenPipe';
 const endPipeToken = 'timeLeftToEndPipe';
 
-/** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
   selector: 'app-explore',
   templateUrl: './explore.component.html',

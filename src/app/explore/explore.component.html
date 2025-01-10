@@ -1,5 +1,5 @@
 <main>
-  @if (tickerMainMessage || tickerItems.length > 0) {
+  @if ((tickerMainMessage || tickerItems.length > 0) && ! metaCampaign?.isRegularGiving) {
     <biggive-totalizer
       primary-colour="primary"
       primary-text-colour="white"
@@ -67,26 +67,52 @@
           (scrolled)="onScroll()"
           [scrollWindow]="true"
           >
-          @for (campaign of individualCampaigns; track campaign.id) {
-            <div>
-              <biggive-campaign-card
-                [banner]="campaign.imageUri | optimisedImage:830 | async"
-                [campaignType]="campaign.isMatched ? 'Match Funded' : null"
-                [campaignTitle]="campaign.title"
-                [donateButtonUrl]="'/donate/' + campaign.id"
-                [moreInfoButtonUrl]="'/campaign/' + campaign.id"
-                [organisationName]="campaign.charity.name"
-                primary-figure-label="Match Funds Remaining"
-                [primaryFigureAmount]="this.metaCampaign?.usesSharedFunds ? null : (campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
-                [progressBarCounter]="getPercentageRaised(campaign)"
-                secondary-figure-label="Total Funds Raised"
-                [secondaryFigureAmount]="this.metaCampaign?.usesSharedFunds ? null : (campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
-                [isFutureCampaign]="isInFuture(campaign)"
-                [isPastCampaign]="isInPast(campaign)"
-                [datetime]="getRelevantDateAsStr(campaign)">
-                id="campaign-{{campaign.id}}"
-              </biggive-campaign-card>
-            </div>
+          @if (this.metaCampaign?.isRegularGiving) {
+            <!-- We assume that we show regular giving campaigns only iff we are looking at a regular giving
+            metacampaign page -->
+            @for (campaign of individualCampaigns; track campaign.id) {
+              <div>
+                <biggive-campaign-card
+                  [banner]="campaign.imageUri | optimisedImage:830 | async"
+                  [campaignType]="campaign.isMatched ? 'Match Funded' : null"
+                  [campaignTitle]="campaign.title"
+                  [donateButtonUrl]="'/regular-giving/' + campaign.id"
+                  [donateButtonLabel]="'Donate monthly'"
+                  [moreInfoButtonUrl]="'/charity/' + campaign.charity.id"
+                  [organisationName]="campaign.charity.name"
+                  [progressBarCounter]="getPercentageRaised(campaign)"
+                  primary-figure-label="Total Funds Raised"
+                  [primaryFigureAmount]="this.metaCampaign?.usesSharedFunds ? null : (campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
+                  [isFutureCampaign]="isInFuture(campaign)"
+                  [isPastCampaign]="isInPast(campaign)"
+                  [datetime]="getRelevantDateAsStr(campaign)">
+                  id="campaign-{{campaign.id}}"
+                </biggive-campaign-card>
+              </div>
+            }
+          } @else {
+            @for (campaign of individualCampaigns; track campaign.id) {
+              <div>
+                <biggive-campaign-card
+                  [banner]="campaign.imageUri | optimisedImage:830 | async"
+                  [campaignType]="campaign.isMatched ? 'Match Funded' : null"
+                  [campaignTitle]="campaign.title"
+                  [donateButtonUrl]="('/donate/' + campaign.id) "
+                  [donateButtonLabel]="'Donate now'"
+                  [moreInfoButtonUrl]="'/campaign/' + campaign.id"
+                  [organisationName]="campaign.charity.name"
+                  primary-figure-label="Match Funds Remaining"
+                  [primaryFigureAmount]="this.metaCampaign?.usesSharedFunds ? null : (campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
+                  [progressBarCounter]="getPercentageRaised(campaign)"
+                  secondary-figure-label="Total Funds Raised"
+                  [secondaryFigureAmount]="this.metaCampaign?.usesSharedFunds ? null : (campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
+                  [isFutureCampaign]="isInFuture(campaign)"
+                  [isPastCampaign]="isInPast(campaign)"
+                  [datetime]="getRelevantDateAsStr(campaign)">
+                  id="campaign-{{campaign.id}}"
+                </biggive-campaign-card>
+              </div>
+            }
           }
         </biggive-grid>
       }
