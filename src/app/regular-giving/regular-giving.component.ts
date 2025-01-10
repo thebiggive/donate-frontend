@@ -294,8 +294,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Adapted from similar function in DonationStartFormComponent. There may be parts to DRY up but the pages are differen
-   *
+   * Adapted from similar function in DonationStartFormComponent. There may be parts to DRY up but the pages are
+   * different.
    */
   async onStripeCardChange(state: StripeElementChangeEvent & ({value: {type: string, payment_method?: PaymentMethod} | undefined})) {
     this.stripePaymentMethodReady = state.complete;
