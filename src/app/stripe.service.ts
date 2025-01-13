@@ -4,7 +4,7 @@ import {
   loadStripe,
   Stripe,
   StripeElements,
-  StripeElementsOptionsMode
+  StripeElementsOptionsMode, StripeError
 } from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
@@ -240,4 +240,54 @@ export class StripeService {
     // use round not floor to avoid issues like returning 114 as the sum of £1 and £0.15
     return Math.round((donation.tipAmount + donation.donationAmount) * 100);
   }
+}
+
+
+export function getStripeFriendlyError(
+  error: StripeError | {message: string, code: string, decline_code?: string, description?: string} | undefined,
+  context: 'method_setup'| 'card_change'| 'confirm',
+): string {
+
+
+  let prefix = '';
+  switch (context) {
+    case 'method_setup':
+      prefix = 'Payment setup failed: ';
+      break;
+    case 'card_change':
+      prefix = 'Payment method update failed: ';
+      break;
+    case 'confirm':
+      prefix = 'Payment processing failed: ';
+  }
+
+  if (! error || (! error.message && ! error.code)) {
+    if (error && error.hasOwnProperty('description')) {
+      // @ts-ignore - not sure why TS doesn't recognise that it must have a description because I just checked
+      // with hasOwnProperty.
+      return `${prefix}${error!.description}`;
+    }
+    return `${prefix}Sorry, we encountered an error. Please try again in a moment or contact us if this message persists.`;
+  }
+
+  let friendlyError = error.message;
+
+  let customMessage = false;
+  if (error.code === 'card_declined' && error.decline_code === 'generic_decline') {
+    // Probably a custom Radar rule -> relatively likely to be an incorrect postcode.
+    friendlyError = `The payment was declined. Please ensure details provided (including postcode) match your card. Contact your bank or hello@biggive.org if the problem persists.`;
+    customMessage = true;
+  }
+
+  if (error.code === 'card_declined' && error.decline_code === 'invalid_amount') {
+    // We've seen e.g. HSBC in Nov '23 decline large donations with this code.
+    friendlyError = 'The payment was declined. You might need to contact your bank before making a donation of this amount.';
+    customMessage = true;
+  }
+
+  if (customMessage && context === 'confirm') {
+    prefix = ''; // Don't show extra context info in the most common `context`, when showing our already-long custom copy.
+  }
+
+  return `${prefix}${friendlyError}`;
 }

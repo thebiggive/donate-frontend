@@ -50,13 +50,22 @@
               </div>
               <p>This amount will be taken from your account today and once every month in future</p>
 
+              @if (amountErrorMessage) {
+              <div
+                class="error"
+                aria-live="polite"
+              >
+                {{ this.amountErrorMessage }}
+              </div>
+              }
+
               <div style="text-align: center">
                 <button style="width: 40%;"
                         type="button"
                         class="continue b-w-100 b-rt-0"
                         mat-raised-button
                         color="primary"
-                        (click)="next()"
+                        (click)="this.selectStep(1)"
                 >Continue
                 </button>
               </div>
@@ -109,13 +118,22 @@
                     </biggive-text-input>
                     }
 
+                @if (paymentInfoErrorMessage) {
+                  <div
+                    class="error"
+                    aria-live="polite"
+                  >
+                    {{ paymentInfoErrorMessage }}
+                  </div>
+                }
+
               <div style="text-align: center">
                 <button style="width: 40%;"
                         type="button"
                         class="continue b-w-100 b-rt-0"
                         mat-raised-button
                         color="primary"
-                        (click)="next()"
+                        (click)="this.selectStep(2)"
                 >Continue
                 </button>
               </div>
@@ -150,7 +168,16 @@
                   <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
                   read our Privacy Statement.</a>
               </p>
-              <p>(todo: add link to regular giving terms & conditions)</p>
+              <p>(todo-regular-giving: add link to regular giving terms & conditions)</p>
+
+              @if (submitErrorMessage) {
+                <div
+                  class="error"
+                  aria-live="polite"
+                >
+                  {{ submitErrorMessage }}
+                </div>
+              }
 
               @if (!submitting) {
                 <button

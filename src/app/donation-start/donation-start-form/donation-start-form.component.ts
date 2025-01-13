@@ -52,9 +52,9 @@ import {IdentityService} from '../../identity.service';
 import {ConversionTrackingService} from '../../conversionTracking.service';
 import {PageMetaService} from '../../page-meta.service';
 import {Person} from '../../person.model';
-import {PostcodeService} from '../../postcode.service';
+import {billingPostcodeRegExp, postcodeFormatHelpRegExp, postcodeRegExp, PostcodeService} from '../../postcode.service';
 import {retryStrategy} from '../../observable-retry';
-import {StripeService} from '../../stripe.service';
+import {getStripeFriendlyError, StripeService} from '../../stripe.service';
 import {getCurrencyMaxValidator} from '../../validators/currency-max';
 import {getCurrencyMinValidator} from '../../validators/currency-min';
 import {EMAIL_REGEXP} from '../../validators/patterns';
@@ -186,17 +186,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   tipPercentage = 15;
   tipValue: number | undefined;
-  /**
-   * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
-   * input was valid (even if differently formatted). Loosely based on https://stackoverflow.com/a/10701634/2803757
-   * with an additional tweak to allow (and trim) surrounding spaces.
-   */
-  private postcodeFormatHelpRegExp = new RegExp('^\\s*([A-Z]{1,2}\\d{1,2}[A-Z]?)\\s*(\\d[A-Z]{2})\\s*$');
-  // Based on the simplified pattern suggestions in https://stackoverflow.com/a/51885364/2803757
-  private postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{2}|GIR 0A{2})$');
-
-  // Intentionally looser to support most countries' formats.
-  private billingPostcodeRegExp = new RegExp('^[0-9a-zA-Z -]{2,8}$');
 
   private idCaptchaCode?: string;
   private stripeResponseErrorCode?: string; // stores error codes returned by Stripe after callout
@@ -777,7 +766,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.paymentReadinessTracker.onStripeCardChange(state);
 
     if (state.error) {
-      this.stripeError = this.getStripeFriendlyError(state.error, 'card_change');
+      this.stripeError = getStripeFriendlyError(state.error, 'card_change');
       this.toast.showError(this.stripeError);
       this.stripeResponseErrorCode = state.error.code;
     } else {
@@ -1439,68 +1428,15 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   private handleStripeError(
     error: StripeError | {message: string, code: string, decline_code?: string} | undefined,
-    context: string,
+    context: 'method_setup'| 'card_change'| 'confirm',
   ) {
     this.submitting = false;
-    this.stripeError = this.getStripeFriendlyError(error, context);
+    this.stripeError = getStripeFriendlyError(error, context);
     this.toast.showError(this.stripeError);
     this.stripeResponseErrorCode = error?.code;
 
     this.jumpToStep('Payment details');
     this.goToFirstVisibleError();
-  }
-
-  /**
-   * @param error
-   * @param context 'method_setup', 'card_change' or 'confirm'.
-   */
-  private getStripeFriendlyError(
-    error: StripeError | {message: string, code: string, decline_code?: string, description?: string} | undefined,
-    context: string,
-  ): string {
-
-
-    let prefix = '';
-    switch (context) {
-      case 'method_setup':
-        prefix = 'Payment setup failed: ';
-        break;
-      case 'card_change':
-        prefix = 'Payment method update failed: ';
-        break;
-      case 'confirm':
-        prefix = 'Payment processing failed: ';
-    }
-
-    if (! error || (! error.message && ! error.code)) {
-      if (error && error.hasOwnProperty('description')) {
-        // @ts-ignore - not sure why TS doesn't recognise that it must have a description because I just checked
-        // with hasOwnProperty.
-        return `${prefix}${error!.description}`;
-      }
-      return `${prefix}Sorry, we encountered an error. Please try again in a moment or contact us if this message persists.`;
-    }
-
-    let friendlyError = error.message;
-
-    let customMessage = false;
-    if (error.code === 'card_declined' && error.decline_code === 'generic_decline') {
-      // Probably a custom Radar rule -> relatively likely to be an incorrect postcode.
-      friendlyError = `The payment was declined. Please ensure details provided (including postcode) match your card. Contact your bank or hello@biggive.org if the problem persists.`;
-      customMessage = true;
-    }
-
-    if (error.code === 'card_declined' && error.decline_code === 'invalid_amount') {
-      // We've seen e.g. HSBC in Nov '23 decline large donations with this code.
-      friendlyError = 'The payment was declined. You might need to contact your bank before making a donation of this amount.';
-      customMessage = true;
-    }
-
-    if (customMessage && context === 'confirm') {
-      prefix = ''; // Don't show extra context info in the most common `context`, when showing our already-long custom copy.
-    }
-
-    return `${prefix}${friendlyError}`;
   }
 
   private isBillingPostcodePossiblyInvalid() {
@@ -2016,7 +1952,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
         // Uppercase it in-place, then we can use patterns that assume upper case.
         homePostcode = homePostcode.toUpperCase();
-        var parts = homePostcode.match(this.postcodeFormatHelpRegExp);
+        var parts = homePostcode.match(postcodeFormatHelpRegExp);
         if (parts === null) {
           // If the input doesn't even match the much looser pattern here, it's going to fail
           // the validator check in a moment and there's nothing we can/should do with it
@@ -2113,7 +2049,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     return [
       requiredNotBlankValidator,
-      Validators.pattern(this.postcodeRegExp),
+      Validators.pattern(postcodeRegExp),
     ];
   }
 
@@ -2128,7 +2064,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     ]);
     this.paymentGroup.controls.billingPostcode!.setValidators([
       requiredNotBlankValidator,
-      Validators.pattern(this.billingPostcodeRegExp),
+      Validators.pattern(billingPostcodeRegExp),
     ]);
   }
 
