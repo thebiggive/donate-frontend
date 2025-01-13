@@ -43,7 +43,7 @@ export class HomeComponent implements OnInit {
     this.pageMeta.setCommon(
       'Big Give',
       'Big Give – discover campaigns and donate',
-      'https://images-production.thebiggive.org.uk/0011r00002IMRknAAH/CCampaign%20Banner/db3faeb1-d20d-4747-bb80-1ae9286336a3.jpg',
+      '/assets/images/social-banner.png',
     );
     this.stats = this.route.snapshot.data.stats;
     this.highlightCards = this.route.snapshot.data.highlights;
