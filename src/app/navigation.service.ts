@@ -29,4 +29,15 @@ export class NavigationService {
   saveLastScrollY(scrollY: number): void {
     this.lastScrollY = scrollY;
   }
+
+  static isAllowableRedirectPath(redirectParam: string) {
+    return ! redirectParam.match(/[^a-zA-Z0-9\-_\/]/);
+  }
+
+  /**
+   * Ensures the path starts with exactly one leading /
+   */
+  static normaliseRedirectPath(path: string) {
+    return '/' + path.replace(/^\/+/, '');
+  }
 }

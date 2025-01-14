@@ -16,8 +16,9 @@ import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {transferFundsPath} from "../app-routing";
 import {WidgetInstance} from "friendly-challenge";
 import {flags} from "../featureFlags";
-import {isAllowableRedirectPath, LoginNavigationState, normaliseRedirectPath} from "../login/login.component";
+import type {LoginNavigationState} from "../login/login.component";
 import {PageMetaService} from '../page-meta.service';
+import {NavigationService} from "../navigation.service";
 
 @Component({
   selector: 'app-register',
@@ -82,8 +83,8 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     const redirectParam = this.activatedRoute.snapshot.queryParams.r as string|undefined;
 
     // allowed chars in URL to redirect to: a-z, A-Z, 0-9, - _ /
-    if (redirectParam && isAllowableRedirectPath(redirectParam)) {
-      this.redirectPath = normaliseRedirectPath(redirectParam);
+    if (redirectParam && NavigationService.isAllowableRedirectPath(redirectParam)) {
+      this.redirectPath = NavigationService.normaliseRedirectPath(redirectParam);
     }
 
     this.loginLink = `/login/?r=` + encodeURIComponent(this.redirectPath);

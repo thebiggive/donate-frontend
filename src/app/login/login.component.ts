@@ -15,23 +15,13 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {registerPath} from "../app-routing";
 import {WidgetInstance} from "friendly-challenge";
-
-export function isAllowableRedirectPath(redirectParam: string) {
-  return ! redirectParam.match(/[^a-zA-Z0-9\-_\/]/);
-}
+import {NavigationService} from "../navigation.service";
 
 export type LoginNavigationState = {
   /**
    * True if we came here as a redirect from the registration form.
    */
   newAccountRegistration?: boolean
-}
-
-/**
- * Ensures the path starts with exactly one leading /
- */
-export function normaliseRedirectPath(path: string) {
-  return '/' + path.replace(/^\/+/, '');
 }
 
 @Component({
@@ -110,8 +100,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     const redirectParam = this.activatedRoute.snapshot.queryParams.r as string|undefined;
 
     // allowed chars in URL to redirect to: a-z, A-Z, 0-9, - _ /
-    if (redirectParam && isAllowableRedirectPath(redirectParam)) {
-      this.redirectPath = normaliseRedirectPath(redirectParam);
+    if (redirectParam && NavigationService.isAllowableRedirectPath(redirectParam)) {
+      this.redirectPath = NavigationService.normaliseRedirectPath(redirectParam);
     }
 
     this.registerLink = `/${registerPath}?r=` + encodeURIComponent(this.redirectPath);
