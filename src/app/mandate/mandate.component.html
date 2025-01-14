@@ -33,30 +33,30 @@
       </div>
       <div>
         <div class="receipt">
-          <p><strong>Your Regular Donation Schedule</strong></p>
           <!-- Date time appears as e.g. "Sep 5, 2023" -->
           <table>
+            <caption>Your Regular Donation Schedule</caption>
             <tr>
-              <td>Active from</td>
-              <td>{{ mandate.schedule.activeFrom | date: 'mediumDate' }}</td>
+              <th scope="row">Active from</th>
+              <td id="regularActiveFrom">{{ mandate.schedule.activeFrom | date: 'mediumDate' }}</td>
             </tr>
             <tr>
-              <td>Day of month</td>
-              <td>{{ mandate.schedule.dayOfMonth }}</td>
+              <th scope="row">Day of month</th>
+              <td id="regularDayOfMonth">{{ mandate.schedule.dayOfMonth }}</td>
             </tr>
             <td></td>
             <tr class="donationAmount">
-              <td>Your donation</td>
+              <th scope="row">Your donation</th>
               <td>{{ mandate.donationAmount.amountInPence / 100 | exactCurrency:mandate.donationAmount.currency }}</td>
             </tr>
             <tr>
-              <td>Matched Amount (for the first {{ mandate.numberOfMatchedDonations }} months)</td>
+              <th scope="row">Matched Amount (for the first {{ mandate.numberOfMatchedDonations }} months)</th>
               <td>{{ mandate.matchedAmount.amountInPence / 100 | exactCurrency:mandate.donationAmount.currency }}</td>
             </tr>
             <!--  @todo-regular-giving: consider displaying gift Aid and tip amount on the template (format copied from one-off cmpaign thank you page -->
             <!--                @if (giftAidAmount > 0) {-->
             <!--                  <tr>-->
-            <!--                    <td>Gift Aid Amount</td>-->
+            <!--                    <th scope="row">Gift Aid Amount</th>-->
             <!--                    <td>{{ giftAidAmount | exactCurrency:donation.currencyCode }}</td>-->
             <!--                  </tr>-->
             <!--                }-->
@@ -67,11 +67,11 @@
             </tr>
             <!--                @todo-regular-giving: use giftAid value sent from matchbot (possibly also the matched amounts calculations -->
             <tr class="receives">
-              <td>Charity Receives (Matched Donations)</td>
+              <th scope="row">Charity Receives (Matched Donations)</th>
               <td>{{ (mandate.donationAmount.amountInPence + mandate.matchedAmount.amountInPence) / 100 + ' ' | exactCurrency:mandate.donationAmount.currency }}</td>
             </tr>
             <tr class="receives">
-              <td>Charity Receives (Unmatched Donations)</td>
+              <th scope="row">Charity Receives (Unmatched Donations)</th>
               <td>{{ mandate.donationAmount.amountInPence / 100 + ' ' | exactCurrency:mandate.donationAmount.currency }}</td>
             </tr>
           </table>
