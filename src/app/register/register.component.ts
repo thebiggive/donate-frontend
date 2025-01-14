@@ -42,6 +42,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   protected readonly flags = flags;
   private friendlyCaptchaWidget: WidgetInstance;
   protected redirectPath: string = 'my-account';
+  protected loginLink: string;
 
 
   constructor(
@@ -84,6 +85,8 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     if (redirectParam && isAllowableRedirectPath(redirectParam)) {
       this.redirectPath = redirectParam.replace(/^\/+/, ''); // strips any leading slashes;
     }
+
+    this.loginLink = `/login/?r=` + encodeURIComponent(this.redirectPath);
   }
 
   async ngAfterViewInit() {

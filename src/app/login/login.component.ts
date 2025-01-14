@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   protected resetPasswordSuccess: boolean|undefined = undefined;
   protected readonly friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
-  private redirectPath: string = '/my-account';
+  protected redirectPath: string = '/my-account';
   protected passwordResetError: undefined|string = undefined;
   protected readonly registerPath = registerPath;
 

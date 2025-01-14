@@ -12,9 +12,14 @@
           text="Donor Registration"
         ></biggive-heading>
       </div>
+      @if (redirectPath.startsWith('regular-giving')) {
+        <p>Please register for a a Big Give donation account to set up your regular giving agreement.</p>
+        <p>You will be able to log-in in future to see your regular or cancel the agreement.</p>
+      } @else {
       <p>
         Registering for a Donor Account is quick and easy.
       </p>
+      }
 
       @if (redirectPath === transferFundsPath) {
       <p>
@@ -105,6 +110,8 @@
           }
         </div>
       </div>
+      <hr style="margin: 20px auto;">
+      Already have an account? <a href="{{loginLink}}">Login here</a>
     </biggive-page-section>
   </div>
 </main>
