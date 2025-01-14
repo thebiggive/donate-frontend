@@ -15,10 +15,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {registerPath} from "../app-routing";
 import {WidgetInstance} from "friendly-challenge";
-
-export function isAllowableRedirectPath(redirectParam: string) {
-  return ! redirectParam.match(/[^a-zA-Z0-9\-_\/]/);
-}
+import {NavigationService} from "../navigation.service";
 
 export type LoginNavigationState = {
   /**
@@ -46,7 +43,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   protected resetPasswordSuccess: boolean|undefined = undefined;
   protected readonly friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
-  private redirectPath: string = '/my-account';
+  protected redirectPath: string = '/my-account';
   protected passwordResetError: undefined|string = undefined;
   protected readonly registerPath = registerPath;
 
@@ -103,8 +100,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     const redirectParam = this.activatedRoute.snapshot.queryParams.r as string|undefined;
 
     // allowed chars in URL to redirect to: a-z, A-Z, 0-9, - _ /
-    if (redirectParam && isAllowableRedirectPath(redirectParam)) {
-      this.redirectPath = '/' + redirectParam.replace(/^\/+/, ''); // strips any leading slashes
+    if (redirectParam && NavigationService.isAllowableRedirectPath(redirectParam)) {
+      this.redirectPath = NavigationService.normaliseRedirectPath(redirectParam);
     }
 
     this.registerLink = `/${registerPath}?r=` + encodeURIComponent(this.redirectPath);

@@ -5,7 +5,7 @@ import {CampaignResolver} from './campaign.resolver';
 import {CharityCampaignsResolver} from './charity-campaigns.resolver';
 import {campaignStatsResolver} from "./campaign-stats-resolver";
 import {highlightCardsResolver} from "./highlight-cards-resolver";
-import {isAllowableRedirectPath, LoginComponent} from "./login/login.component";
+import {LoginComponent} from "./login/login.component";
 import {inject, PLATFORM_ID} from "@angular/core";
 import {IdentityService} from "./identity.service";
 import {RegisterComponent} from "./register/register.component";
@@ -23,6 +23,7 @@ import {Mandate} from "./mandate.model";
 import {MyPaymentMethodsComponent} from "./my-payment-methods/my-payment-methods.component";
 import {DonorAccountService} from "./donor-account.service";
 import {DonorAccount} from "./donorAccount.model";
+import {NavigationService} from "./navigation.service";
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -44,7 +45,7 @@ const redirectIfAlreadyLoggedIn: CanActivateFn = (snapshot: ActivatedRouteSnapsh
   if (! isLoggedIn) {
     return true;
   } else {
-    const redirectPath = (requestedRedirect && isAllowableRedirectPath(requestedRedirect)) ?
+    const redirectPath = (requestedRedirect && NavigationService.isAllowableRedirectPath(requestedRedirect)) ?
       `/${requestedRedirect}` : '/' + myAccountPath
     return router.parseUrl(redirectPath);
   }
