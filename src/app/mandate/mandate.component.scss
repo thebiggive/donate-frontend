@@ -148,20 +148,25 @@ div.clearfix {
   table {
     width: 100%;
     border-spacing: 0 1em;
-    tr {
-      td {
-        @media #{$breakpoint-sm} {
-          font-size: 1rem;
-        }
-        @media #{$breakpoint-md} {
-          font-size: 1.1rem;
-        }
-        @media #{$breakpoint-lg} {
-          font-size: 1.2rem;
-        }
-        @media #{$breakpoint-xl} {
-          font-size: 1.4rem;
-        }
+
+    caption {
+      margin-bottom: 1rem;
+    }
+
+    caption, th, td {
+      text-align: left;
+
+      @media #{$breakpoint-sm} {
+        font-size: 1rem;
+      }
+      @media #{$breakpoint-md} {
+        font-size: 1.1rem;
+      }
+      @media #{$breakpoint-lg} {
+        font-size: 1.2rem;
+      }
+      @media #{$breakpoint-xl} {
+        font-size: 1.4rem;
       }
     }
   }
@@ -170,7 +175,7 @@ div.clearfix {
     width: 100%;
   }
   .receives {
-    td {
+    th, td {
       background-color: $colour-highlight;
       padding: 5px;
     }
