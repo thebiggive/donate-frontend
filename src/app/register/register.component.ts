@@ -16,7 +16,7 @@ import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {transferFundsPath} from "../app-routing";
 import {WidgetInstance} from "friendly-challenge";
 import {flags} from "../featureFlags";
-import {isAllowableRedirectPath, LoginNavigationState} from "../login/login.component";
+import {isAllowableRedirectPath, LoginNavigationState, normaliseRedirectPath} from "../login/login.component";
 import {PageMetaService} from '../page-meta.service';
 
 @Component({
@@ -83,7 +83,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
 
     // allowed chars in URL to redirect to: a-z, A-Z, 0-9, - _ /
     if (redirectParam && isAllowableRedirectPath(redirectParam)) {
-      this.redirectPath = redirectParam.replace(/^\/+/, ''); // strips any leading slashes;
+      this.redirectPath = normaliseRedirectPath(redirectParam);
     }
 
     this.loginLink = `/login/?r=` + encodeURIComponent(this.redirectPath);
