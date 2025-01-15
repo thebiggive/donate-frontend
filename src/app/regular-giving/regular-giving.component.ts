@@ -230,8 +230,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       stripeConfirmationTokenId: confirmationToken?.id
     }).subscribe({
       next: async (mandate: Mandate) => {
-        await this.router.navigateByUrl(`${myRegularGivingPath}/${mandate.id}`);
-    },
+        await this.router.navigateByUrl(`/${myRegularGivingPath}/${mandate.id}`);
+      },
       error: (error: {error: {error: {description?: string} }}) => {
         const message = error.error.error.description ?? 'Sorry, something went wrong';
 
