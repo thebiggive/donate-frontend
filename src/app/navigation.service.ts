@@ -34,9 +34,10 @@ export class NavigationService {
   }
 
   /**
-   * Gets the appropriate redirect path if any. Updates `possibleRedirectSignal` value as a side effect.
+   * Gets the appropriate redirect path if any. Updates `possibleRedirectSignal` value as a side effect - will
+   * be either the path the Christmas Challenge Donate page or null.
    */
-  getPotentialRedirectPath(highlightCards: HighlightCard[]): string|null {
+  getPotentialRedirectPathAndUpdateSignal(highlightCards: HighlightCard[]): string|null {
     let redirectPath: string|null = null;
     highlightCards.forEach(card => {
       // CC 'Donate Today' or 'Donate Now' cards mean there should be a full page redirect from Home (unless donor clicked

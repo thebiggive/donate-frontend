@@ -28,7 +28,7 @@ describe('NavigationService', () => {
 
     const cards = SFHighlightCardsToFEHighlightCards(sfCardList);
 
-    expect(service.getPotentialRedirectPath(cards)).toBeNull();
+    expect(service.getPotentialRedirectPathAndUpdateSignal(cards)).toBeNull();
   });
 
   it('should indicate that nothing can redirect if no highlight cards have heading Donate...', () => {
@@ -44,7 +44,7 @@ describe('NavigationService', () => {
 
     const cards = SFHighlightCardsToFEHighlightCards(sfCardList);
 
-    expect(service.getPotentialRedirectPath(cards)).toBeNull();
+    expect(service.getPotentialRedirectPathAndUpdateSignal(cards)).toBeNull();
   });
 
   it('should indicate that something can redirect if a CC highlight card has heading Donate...', () => {
@@ -68,6 +68,6 @@ describe('NavigationService', () => {
 
     const cards = SFHighlightCardsToFEHighlightCards(sfCardList);
 
-    expect(service.getPotentialRedirectPath(cards)).toBe('/cc-path');
+    expect(service.getPotentialRedirectPathAndUpdateSignal(cards)).toBe('/cc-path');
   });
 });

@@ -145,7 +145,7 @@ describe("ExploreComponent", () => {
     const dummyDatePipe = {} as DatePipe;
     const dummyFundService = {} as FundService;
     const dummyNavigationService = {
-      getPotentialRedirectPath: () => null,
+      getPotentialRedirectPathAndUpdateSignal: () => null,
     } as unknown as NavigationService;
     const dummyPageMeta = { setCommon: noop } as unknown as PageMetaService;
     const dummyPLATFORM_ID = {} as Object;

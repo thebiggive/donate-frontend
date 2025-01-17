@@ -187,7 +187,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
     this.highlightCards = this.route.snapshot.data.highlights;
     // Call for the main menu update side effect to possibly add `?noredirect`.
-    void this.navigationService.getPotentialRedirectPath(this.highlightCards);
+    void this.navigationService.getPotentialRedirectPathAndUpdateSignal(this.highlightCards);
 
     if (!this.fund && this.fundSlug && this.metaCampaign) {
       this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {

@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
     this.stats = this.route.snapshot.data.stats;
     this.highlightCards = this.route.snapshot.data.highlights;
     const queryParams = this.route.snapshot.queryParams;
-    const redirectPath = this.navigationService.getPotentialRedirectPath(this.highlightCards);
+    const redirectPath = this.navigationService.getPotentialRedirectPathAndUpdateSignal(this.highlightCards);
 
     if (
       environment.environmentId !== 'regression' &&
