@@ -39,7 +39,7 @@ export class NavigationService {
   getPotentialRedirectPath(highlightCards: HighlightCard[]): string|null {
     let redirectPath: string|null = null;
     highlightCards.forEach(card => {
-      // CC 'Donate Today' or 'Donate Now' cards mean there should be a full page redirect (unless donor clicked
+      // CC 'Donate Today' or 'Donate Now' cards mean there should be a full page redirect from Home (unless donor clicked
       // the logo specifically to avoid that).
       if (card.campaignFamily === 'christmasChallenge' && card.button.text.startsWith('Donate ')) {
         redirectPath = card.button.href.pathname;
