@@ -34,7 +34,7 @@ export class NavigationService {
   }
 
   /**
-   * Gets the appropriate redirect path if any. Updates `possibleRedirectSignal` value as a side effect if non-null.
+   * Gets the appropriate redirect path if any. Updates `possibleRedirectSignal` value as a side effect.
    */
   getPotentialRedirectPath(highlightCards: HighlightCard[]): string|null {
     let redirectPath: string|null = null;
