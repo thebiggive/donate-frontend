@@ -171,6 +171,7 @@ const routes: Routes = [
     pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
+      highlights: highlightCardsResolver,
     },
     loadChildren: () => import('./explore/explore.module')
       .then(c => c.ExploreModule),
@@ -180,6 +181,7 @@ const routes: Routes = [
     pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
+      highlights: highlightCardsResolver,
     },
     loadChildren: () => import('./explore/explore.module')
       .then(c => c.ExploreModule),
@@ -226,6 +228,7 @@ const routes: Routes = [
     pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
+      highlights: highlightCardsResolver,
     },
     loadChildren: () => import('./explore/explore.module')
       .then(c => c.ExploreModule),
@@ -299,6 +302,7 @@ const routes: Routes = [
     pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
+      highlights: highlightCardsResolver,
     },
     loadChildren: () => import('./explore/explore.module')
       .then(c => c.ExploreModule),

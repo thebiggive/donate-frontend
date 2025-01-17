@@ -1,5 +1,5 @@
-import {APP_BASE_HREF, isPlatformBrowser} from '@angular/common';
-import {AfterViewInit, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {isPlatformBrowser} from '@angular/common';
+import {AfterViewInit, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild, WritableSignal} from '@angular/core';
 import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
 import {BiggiveMainMenu} from '@biggive/components-angular';
 import {MatomoTracker} from "ngx-matomo-client";
@@ -60,13 +60,14 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
   public currentUrlWithoutHash$: Observable<URL>;
 
+  public isPlatformBrowser: boolean;
+  public someCampaignHasHomePageRedirect: WritableSignal<boolean> = signal(false);
   private getPersonSubscription: Subscription;
   private loginStatusChangeSubscription: Subscription;
   protected showingDedicatedCookiePreferencesPage: boolean;
 
   constructor(
     private identityService: IdentityService,
-    @Inject(APP_BASE_HREF) private baseHref: string,
     private donationService: DonationService,
     private getSiteControlService: GetSiteControlService,
     private navigationService: NavigationService,
@@ -75,6 +76,10 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     private matomoTracker: MatomoTracker,
     private router: Router,
   ) {
+    this.isPlatformBrowser = isPlatformBrowser(this.platformId);
+
+    navigationService.setPossibleRedirectSignal(this.someCampaignHasHomePageRedirect);
+
     // https://www.amadousall.com/angular-routing-how-to-display-a-loading-indicator-when-navigating-between-routes/
     this.router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationEnd) {
@@ -112,9 +117,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     // no-op
     // @to-do: Either restore and fix, or remove this function entirely and remove the event emitter it depends on
     // from https://github.com/thebiggive/components/blob/cf6175ea0272eac2219e87db78389df0eeb87ca8/src/components/biggive-button/biggive-button.tsx#L15
-  }
-
-  public isPlatformBrowser = isPlatformBrowser(this.platformId);
+  }  
 
   ngOnInit() {
     if (this.isPlatformBrowser) {

@@ -76,7 +76,9 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   beneficiaryOptions: string[] = [];
   categoryOptions: string[] = [];
   locationOptions: string[] = [];
-  protected highlightCards: HighlightCard[] | undefined;
+  // While only /explore may render the cards, all Explore component routes now provide the resolver for these. It's used
+  // to determine whether the menu needs a `?noredirect`, via NavigationService.
+  protected highlightCards: HighlightCard[];
 
   private queryParamsSubscription: Subscription;
   public fund?: Fund;
@@ -184,6 +186,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
 
     this.highlightCards = this.route.snapshot.data.highlights;
+    // Call for the main menu update side effect to possibly add `?noredirect`.
+    void this.navigationService.getPotentialRedirectPathAndUpdateSignal(this.highlightCards);
 
     if (!this.fund && this.fundSlug && this.metaCampaign) {
       this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
