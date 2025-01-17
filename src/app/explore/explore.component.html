@@ -68,7 +68,7 @@
           [scrollWindow]="true"
           >
             @for (campaign of individualCampaigns; track campaign.id) {
-              <div>
+              <div style="height: 100%;">
                 <app-campaign-card
                   [campaign]="campaign"
                   [useSharedFunds]="!! this.metaCampaign?.usesSharedFunds"
