@@ -11,7 +11,7 @@ export interface Campaign {
     budgetDetails: Array<{amount: number, description: string}>;
     categories: string[];
     championName: string;
-    isRegularGiving: boolean;
+    isRegularGiving: boolean | undefined;
     charity: {
       id: string;
       name: string;
