@@ -2,7 +2,7 @@ import { provideHttpClientTesting } from "@angular/common/http/testing";
 import {Component, CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { MatDialogModule } from "@angular/material/dialog";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { InMemoryStorageService } from "ngx-webstorage-service";
 import { of } from "rxjs";
 
@@ -48,6 +48,7 @@ describe("DonationStartContainer", () => {
           siteId: "",
           trackerUrl: "",
         }),
+        RouterLink,
       ],
       providers: [
         {

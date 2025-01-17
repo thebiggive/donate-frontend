@@ -57,7 +57,9 @@ describe("ExploreComponent", () => {
           provide: ActivatedRoute,
           useValue: {
             snapshot: {
-              data: {},
+              data: {
+                highlights: [],
+              },
             },
             queryParams: of({}), // Let `loadQueryParamsAndRun()` subscribe without crashing.
           },
@@ -142,7 +144,9 @@ describe("ExploreComponent", () => {
     const dummyCampaignService = {} as CampaignService;
     const dummyDatePipe = {} as DatePipe;
     const dummyFundService = {} as FundService;
-    const dummyNavigationService = {} as NavigationService;
+    const dummyNavigationService = {
+      getPotentialRedirectPath: () => null,
+    } as unknown as NavigationService;
     const dummyPageMeta = { setCommon: noop } as unknown as PageMetaService;
     const dummyPLATFORM_ID = {} as Object;
     const dummyRouter = { events: NEVER } as unknown as Router;
