@@ -8,6 +8,7 @@ import { ExploreComponent } from './explore.component';
 import {ExploreRoutingModule} from './explore-routing.module';
 import {OptimisedImagePipe} from '../optimised-image.pipe';
 import {HighlightCardsComponent} from "../highlight-cards/highlight-cards.component";
+import {CampaignCardComponent} from "../campaign-card/campaign-card.component";
 
 @NgModule({
   imports: [
@@ -18,6 +19,8 @@ import {HighlightCardsComponent} from "../highlight-cards/highlight-cards.compon
     MatProgressSpinnerModule,
     OptimisedImagePipe,
     HighlightCardsComponent,
+    HighlightCardsComponent,
+    CampaignCardComponent,
   ],
   declarations: [
     ExploreComponent,
