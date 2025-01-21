@@ -53,7 +53,7 @@
               <th scope="row">Matched Amount (for the first {{ mandate.numberOfMatchedDonations }} months)</th>
               <td>{{ mandate.matchedAmount.amountInPence / 100 | exactCurrency:mandate.donationAmount.currency }}</td>
             </tr>
-            <!--  @todo-regular-giving: consider displaying gift Aid and tip amount on the template (format copied from one-off cmpaign thank you page -->
+            <!--  @todo-regular-giving-DON-1008: consider displaying gift Aid and tip amount on the template (format copied from one-off cmpaign thank you page -->
             <!--                @if (giftAidAmount > 0) {-->
             <!--                  <tr>-->
             <!--                    <th scope="row">Gift Aid Amount</th>-->
@@ -65,7 +65,7 @@
                 <hr aria-hidden="true">
               </td>
             </tr>
-            <!--                @todo-regular-giving: use giftAid value sent from matchbot (possibly also the matched amounts calculations -->
+            <!--                @todo-regular-giving-DON-1008: use giftAid value sent from matchbot (possibly also the matched amounts calculations -->
             <tr class="receives">
               <th scope="row">Charity Receives (Matched Donations)</th>
               <td>{{ (mandate.donationAmount.amountInPence + mandate.matchedAmount.amountInPence) / 100 + ' ' | exactCurrency:mandate.donationAmount.currency }}</td>

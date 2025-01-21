@@ -77,18 +77,18 @@
             >
               <p> <!-- hack to take up space until I find a better way -->
 
-                <!-- @todo-regular-giving - make each or all payment detail fields read-only if already set on
+                <!-- @todo-regular-giving-DON-1021 - make each or all payment detail fields read-only if already set on
                      donor account - if donors want to edit them direct them to do so on the My Account page,
                      to make clear that it will affect existing mandates as well as the new one -->
 
                 @if (donorAccount.regularGivingPaymentMethod) {
-                  <!-- @todo-regular-giving: show existing payment method here, and/or on account page -->
+                  <!-- @todo-regular-giving-DON-1021: show existing payment method here, and/or on account page -->
                   <p style="border: 2px solid blue; background: pink">
                     Your existing regular giving payment method {{ donorAccount.regularGivingPaymentMethod }}
                     will be used for these donations.
                     To change this please visit your account page
 
-                    (todo-regular-giving: replace this paragraph with an element showing details of the saved method)
+                    (todo-regular-giving-DON-1021: replace this paragraph with an element showing details of the saved method)
                   </p>
                 } @else {
                   <biggive-text-input>
@@ -168,7 +168,7 @@
                   <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
                   read our Privacy Statement.</a>
               </p>
-              <p>(todo-regular-giving: add link to regular giving terms & conditions)</p>
+              <p>(todo-regular-giving-OPS-766: add link to regular giving terms & conditions)</p>
 
               @if (submitErrorMessage) {
                 <div
