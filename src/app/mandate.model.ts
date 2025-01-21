@@ -11,21 +11,12 @@ export interface Mandate {
     "activeFrom": string,
     "expectedNextPaymentDate": string
   },
-  /**
-   * @todo-regular-giving: this property doesn't exist in matchbot yet
-   */
   numberOfMatchedDonations: number,
   giftAid: boolean,
-  /**
-   * @todo-regular-giving: this property needs renaming in matchbot
-   */
   donationAmount: {
     "amountInPence": number,
     "currency": "GBP"
   },
-  /**
-   * @todo-regular-giving: this property doesn't exist in matchbot yet
-   */
   matchedAmount: {
     "amountInPence": number,
     "currency": "GBP"
