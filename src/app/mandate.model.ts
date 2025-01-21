@@ -3,7 +3,7 @@ export interface Mandate {
   campaignId: string,
   charityName: string,
   status: 'active'|'pending',
-  // @todo-regular-giving : we might want to keep the total donated amount as part of the regular giving mandate
+  // @todo-regular-giving-DON-1008 : we might want to keep the total donated amount as part of the regular giving mandate
   // giftAidAmount: number = 0;
   "schedule": {
     "type": "monthly",
