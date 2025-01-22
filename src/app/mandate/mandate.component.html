@@ -48,8 +48,8 @@
               <td id="regularActiveFrom">{{ mandate.schedule.activeFrom | date: 'mediumDate' }}</td>
             </tr>
             <tr>
-              <th scope="row">Day of month</th>
-              <td id="regularDayOfMonth">{{ mandate.schedule.dayOfMonth }}</td>
+              <th scope="row">Payment schedule</th>
+              <td id="regularDayOfMonth">Monthly on day #{{ mandate.schedule.dayOfMonth }}</td>
             </tr>
             <td></td>
             <tr class="donationAmount">
