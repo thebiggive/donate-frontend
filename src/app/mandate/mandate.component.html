@@ -23,7 +23,14 @@
             class="figure">{{ mandate.donationAmount.amountInPence / 100 | exactCurrency:mandate.donationAmount.currency }}</strong>
           is worth
           <strong
-            class="figure">{{ ((mandate.donationAmount.amountInPence + mandate.matchedAmount.amountInPence) / 100 | exactCurrency:mandate.donationAmount.currency) + ' for the first ' + mandate.numberOfMatchedDonations + ' months!' }}</strong>
+            class="figure">
+            {{ ((mandate.donationAmount.amountInPence + mandate.matchedAmount.amountInPence) / 100 | exactCurrency:mandate.donationAmount.currency)}}</strong>
+            to {{mandate.charityName}}
+            for the first
+          <strong
+            class="figure">
+            {{mandate.numberOfMatchedDonations + ' months!' }}
+          </strong>
         </p>
         <br/>
         <!--            @todo-regular-giving: consider adding thank you message in matchbot / SF-->
