@@ -7,6 +7,7 @@ import { Response } from "express";
 import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "../highlight-cards/HighlightCard";
 import {environment} from "../../environments/environment";
+import {NavigationService} from "../navigation.service";
 
 @Component({
   selector: 'app-home',
@@ -19,8 +20,6 @@ export class HomeComponent implements OnInit {
     totalCountFormatted: string
   };
 
-  private currentTime = new Date();
-
   /**
    * Prevents the user seeing the content if we're about to redirect them to a different page.
    * As suggested at https://stackoverflow.com/a/58962726/2526181
@@ -30,6 +29,7 @@ export class HomeComponent implements OnInit {
   protected highlightCards: HighlightCard[];
 
   public constructor(
+    private navigationService: NavigationService,
     private pageMeta: PageMetaService,
     private route: ActivatedRoute,
     private router: Router,
@@ -43,46 +43,27 @@ export class HomeComponent implements OnInit {
     this.pageMeta.setCommon(
       'Big Give',
       'Big Give – discover campaigns and donate',
-      'https://images-production.thebiggive.org.uk/0011r00002IMRknAAH/CCampaign%20Banner/db3faeb1-d20d-4747-bb80-1ae9286336a3.jpg',
+      '/assets/images/social-banner.png',
     );
     this.stats = this.route.snapshot.data.stats;
     this.highlightCards = this.route.snapshot.data.highlights;
     const queryParams = this.route.snapshot.queryParams;
-
-    if (environment.environmentId !== 'production') {
-      if (queryParams?.simulatedDate) {
-        const simulatedDate = new Date(queryParams.simulatedDate);
-        if (isNaN(simulatedDate.getTime())) {
-          alert("cant parse simulated date given");
-          throw new Error("Invalid date");
-        }
-        this.currentTime = simulatedDate;
-      }
-    }
-
-    // start the redirect 12 hours in advance of CC open:
-    const startRedirectingToCCAt = new Date('2024-12-03T00:00:00+00:00');
-
-    // end the redirect exactly at the time CC closes.
-    const CCCloseDate = new Date('2024-12-10T12:00:00+00:00');
+    const redirectPath = this.navigationService.getPotentialRedirectPathAndUpdateSignal(this.highlightCards);
 
     if (
       environment.environmentId !== 'regression' &&
       !queryParams.hasOwnProperty('noredirect') &&
-      this.currentTime >= startRedirectingToCCAt &&
-      this.currentTime < CCCloseDate
-      ) {
-        const redirectSlugIncSlash = '/christmas-challenge-2024';
+      redirectPath !== null
+    ) {
         if (isPlatformBrowser(this.platformId)) {
           void this.router.navigate(
-            [redirectSlugIncSlash],
+            [redirectPath],
             {
               replaceUrl: true, // As we are redirecting immediately it would be confusing to leave a page the user hasn't seen in their history.
-
             }
           );
         } else {
-          this.response.redirect(302, redirectSlugIncSlash);
+          this.response.redirect(302, redirectPath);
         }
     } else {
       this.mayBeAboutToRedirect = false;

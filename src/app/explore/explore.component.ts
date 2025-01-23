@@ -35,7 +35,6 @@ import {SESSION_STORAGE, StorageService} from "ngx-webstorage-service";
 const openPipeToken = 'TimeLeftToOpenPipe';
 const endPipeToken = 'timeLeftToEndPipe';
 
-/** @todo Reduce overlap duplication w/ MetaCampaignComponent - see https://www.typescriptlang.org/docs/handbook/mixins.html */
 @Component({
   selector: 'app-explore',
   templateUrl: './explore.component.html',
@@ -77,7 +76,9 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   beneficiaryOptions: string[] = [];
   categoryOptions: string[] = [];
   locationOptions: string[] = [];
-  protected highlightCards: HighlightCard[] | undefined;
+  // While only /explore may render the cards, all Explore component routes now provide the resolver for these. It's used
+  // to determine whether the menu needs a `?noredirect`, via NavigationService.
+  protected highlightCards: HighlightCard[];
 
   private queryParamsSubscription: Subscription;
   public fund?: Fund;
@@ -185,6 +186,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
 
     this.highlightCards = this.route.snapshot.data.highlights;
+    // Call for the main menu update side effect to possibly add `?noredirect`.
+    void this.navigationService.getPotentialRedirectPathAndUpdateSignal(this.highlightCards);
 
     if (!this.fund && this.fundSlug && this.metaCampaign) {
       this.fundService.getOneBySlug(this.fundSlug).subscribe(fund => {
@@ -247,7 +250,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       this.pageMeta.setCommon(
         this.title,
         'Big Give – discover campaigns and donate',
-        'https://images-production.thebiggive.org.uk/0011r00002IMRknAAH/CCampaign%20Banner/db3faeb1-d20d-4747-bb80-1ae9286336a3.jpg',
+        '/assets/images/social-banner.png',
       );
     }
   }

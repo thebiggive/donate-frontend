@@ -2,6 +2,7 @@ import {brandColour} from "@biggive/components/dist/types/globals/brand-colour"
 import {environment} from "../../environments/environment";
 
 export type HighlightCard = {
+  campaignFamily?: campaignFamilyName | null, // SF may return null; some Donate code leaves it undefined for now
   background: {
     // colour appears 'behind' the image, only seen if image doesn't load or during loading.
     color?: brandColour;
@@ -30,7 +31,6 @@ export type campaignFamilyName =
   |'emergencyMatch';
 
 export type SfApiHighlightCard = Omit<HighlightCard, 'background'|'icon'|'button'> & {
-  campaignFamily: campaignFamilyName | null
   cardStyle: 'DONATE_NOW' | 'SEE_RESULTS' | 'APPLY_NOW' | 'SAVE_THE_DATE' | 'JOIN_MAILING_LIST' | 'REGISTER_INTEREST' | 'EXPLORE',
   button: {
     text: string,
@@ -65,13 +65,9 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
 
   let href = replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href);
 
-  // temp fix for 2024. Will need to think of something better and probably move this logic to SF for next year.
-  if (href.pathname.includes('christmas-challenge') && (new Date() < new Date('2025-02-01')))  {
-    href = new URL(donateUriPrefix + '/christmas-challenge-2024');
-  }
-
   const color = iconColor(sfApiHighlightCard, campaignFamilyColours);
   return {
+    campaignFamily: sfApiHighlightCard.campaignFamily,
     headerText: sfApiHighlightCard.headerText,
     bodyText: sfApiHighlightCard.bodyText,
     icon: {color},

@@ -15,7 +15,7 @@
           ></biggive-heading>
         </div>
         @if (isNewRegistration) {
-          <p class="welcome-to-big-give">Welcome to Big Give! You are now registered as a donor. Please log in to continue.</p>
+          <p id="registrationCompleteText">Welcome to Big Give! You are now registered as a donor. Please log in to continue.</p>
         }
         @if (forgotPassword) {
           <div>
@@ -79,6 +79,10 @@
             </div>
           </div>
         } @else {
+          @if (redirectPath.startsWith('/regular-giving')) {
+            <p>Please log-in or <a href="{{registerLink}}">register</a> for a Big Give donation account to set up your regular giving agreement.</p>
+            <p>You will be able to log-in any time to see your donations or cancel the agreement.</p>
+          }
           <form
             [formGroup]="loginForm"
             (keydown.enter)="login()"

@@ -15,10 +15,13 @@ import {map, switchMap} from "rxjs/operators";
 import {IdentityService, getPersonAuthHttpOptions} from "./identity.service";
 import {completeStatuses, DonationStatus, resumableStatuses} from "./donation-status.type";
 import {CookieService} from "ngx-cookie-service";
+import {Campaign} from "./campaign.model";
 
 export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
 
 export const STRIPE_SESSION_SECRET_COOKIE_NAME = 'stripe-session-secret';
+
+export type StripeCustomerSession = { stripeSessionSecret: string };
 
 @Injectable({
   providedIn: 'root',
@@ -173,12 +176,7 @@ export class DonationService {
   async getPaymentMethods(
     {cacheBust}: { cacheBust?: boolean } = {cacheBust: false}
   ): Promise<PaymentMethod[]> {
-    const jwt = this.identityService.getJWT();
-    const person = await firstValueFrom(this.identityService.getLoggedInPerson());
-
-    if (!person) {
-      throw new Error("logged in person required");
-    }
+    const {jwt, person} = await this.getLoggedInUser();
 
     const cacheBuster = cacheBust ? ("?t=" + new Date().getTime()) : '';
 
@@ -188,6 +186,17 @@ export class DonationService {
     ));
 
     return response.data;
+  }
+
+  private async getLoggedInUser() {
+    const jwt = this.identityService.getJWT();
+    const person = await firstValueFrom(this.identityService.getLoggedInPerson());
+
+    if (!person) {
+      throw new Error("logged in person required");
+    }
+
+    return {jwt, person};
   }
 
   create(donation: Donation, personId?: string, jwt?: string): Observable<DonationCreatedResponse> {
@@ -406,5 +415,20 @@ export class DonationService {
         getPersonAuthHttpOptions(jwt),
       ).pipe(map((response) => response.donations));
     }));
+  }
+
+
+  /**
+   * @param campaign: Campaign that the donor is considering donating to. Optional, will instruct matchbot to fetch
+   * fetch this campaign from SF in preparation for a donation or mandate.
+   */
+  async createCustomerSessionForRegularGiving({campaign}: {campaign?: Campaign}): Promise<StripeCustomerSession> {
+    const {jwt, person} = await this.getLoggedInUser();
+
+    return firstValueFrom(this.http.post(
+      `${environment.donationsApiPrefix}/people/${person.id}/create-customer-session`,
+      {campaignId: campaign?.id},
+      getPersonAuthHttpOptions(jwt),
+    ) as Observable<StripeCustomerSession>);
   }
 }

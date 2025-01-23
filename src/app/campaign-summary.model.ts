@@ -1,5 +1,6 @@
 export type CampaignSummary = {
     percentRaised?: number|string;
+    isRegularGiving: boolean;
     id: string,
     amountRaised: number,
     beneficiaries: string[],

@@ -8,16 +8,14 @@ import {MatInputModule} from "@angular/material/input";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {IdentityService} from "../identity.service";
+import {PageMetaService} from '../page-meta.service';
 import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {registerPath} from "../app-routing";
 import {WidgetInstance} from "friendly-challenge";
-
-export function isAllowableRedirectPath(redirectParam: string) {
-  return ! redirectParam.match(/[^a-zA-Z0-9\-_\/]/);
-}
+import {NavigationService} from "../navigation.service";
 
 export type LoginNavigationState = {
   /**
@@ -45,7 +43,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   protected resetPasswordSuccess: boolean|undefined = undefined;
   protected readonly friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
-  private redirectPath: string = '/my-account';
+  protected redirectPath: string = '/my-account';
   protected passwordResetError: undefined|string = undefined;
   protected readonly registerPath = registerPath;
 
@@ -60,6 +58,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly identityService: IdentityService,
+    private readonly pageMeta: PageMetaService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -75,6 +74,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   ngOnInit() {
+    this.pageMeta.setCommon('Login', 'Login to your Big Give account', null);
+
     if (isPlatformBrowser(this.platformId)) {
       document.body.classList.add('primary-colour');
     }
@@ -99,8 +100,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     const redirectParam = this.activatedRoute.snapshot.queryParams.r as string|undefined;
 
     // allowed chars in URL to redirect to: a-z, A-Z, 0-9, - _ /
-    if (redirectParam && isAllowableRedirectPath(redirectParam)) {
-      this.redirectPath = '/' + redirectParam.replace(/^\/+/, ''); // strips any leading slashes
+    if (redirectParam && NavigationService.isAllowableRedirectPath(redirectParam)) {
+      this.redirectPath = NavigationService.normaliseRedirectPath(redirectParam);
     }
 
     this.registerLink = `/${registerPath}?r=` + encodeURIComponent(this.redirectPath);
@@ -108,18 +109,23 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     this.pageInitialised = true;
   }
 
-  private friendlyCaptchaWiget: WidgetInstance;
+  private friendlyCaptchaWidget: WidgetInstance;
 
   async ngAfterViewInit() {
     if (! isPlatformBrowser(this.platformId)) {
       return
     }
 
+    if (environment.environmentId === 'regression') {
+      this.captchaCode = 'dummy-captcha-code';
+      return;
+    }
+
     if (! this.friendlyCaptcha) {
       return;
     }
 
-    this.friendlyCaptchaWiget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
+    this.friendlyCaptchaWidget = new WidgetInstance(this.friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.captchaCode = solution;
       },
@@ -129,7 +135,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
       },
     });
 
-    await this.friendlyCaptchaWiget.start()
+    await this.friendlyCaptchaWidget.start()
   }
 
 
@@ -179,8 +185,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
         this.loggingIn = false;
 
         this.captchaCode = undefined;
-        this.friendlyCaptchaWiget.reset();
-        await this.friendlyCaptchaWiget.start();
+        this.friendlyCaptchaWidget.reset();
+        await this.friendlyCaptchaWidget.start();
       }
     });
     this.loggingIn = true;

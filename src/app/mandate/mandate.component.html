@@ -23,7 +23,14 @@
             class="figure">{{ mandate.donationAmount.amountInPence / 100 | exactCurrency:mandate.donationAmount.currency }}</strong>
           is worth
           <strong
-            class="figure">{{ ((mandate.donationAmount.amountInPence + mandate.matchedAmount.amountInPence) / 100 | exactCurrency:mandate.donationAmount.currency) + ' for the first ' + mandate.numberOfMatchedDonations + ' months!' }}</strong>
+            class="figure">
+            {{ ((mandate.donationAmount.amountInPence + mandate.matchedAmount.amountInPence) / 100 | exactCurrency:mandate.donationAmount.currency)}}</strong>
+            to {{mandate.charityName}}
+            for the first
+          <strong
+            class="figure">
+            {{mandate.numberOfMatchedDonations + ' months!' }}
+          </strong>
         </p>
         <br/>
         <!--            @todo-regular-giving: consider adding thank you message in matchbot / SF-->
@@ -33,30 +40,30 @@
       </div>
       <div>
         <div class="receipt">
-          <p><strong>Your Regular Donation Schedule</strong></p>
           <!-- Date time appears as e.g. "Sep 5, 2023" -->
           <table>
+            <caption>Your Regular Donation Schedule</caption>
             <tr>
-              <td>Active from</td>
-              <td>{{ mandate.schedule.activeFrom | date: 'mediumDate' }}</td>
+              <th scope="row">Active from</th>
+              <td id="regularActiveFrom">{{ mandate.schedule.activeFrom | date: 'mediumDate' }}</td>
             </tr>
             <tr>
-              <td>Day of month</td>
-              <td>{{ mandate.schedule.dayOfMonth }}</td>
+              <th scope="row">Payment schedule</th>
+              <td id="regularDayOfMonth">Monthly on day #{{ mandate.schedule.dayOfMonth }}</td>
             </tr>
             <td></td>
             <tr class="donationAmount">
-              <td>Your donation</td>
+              <th scope="row">Your donation</th>
               <td>{{ mandate.donationAmount.amountInPence / 100 | exactCurrency:mandate.donationAmount.currency }}</td>
             </tr>
             <tr>
-              <td>Matched Amount (for the first {{ mandate.numberOfMatchedDonations }} months)</td>
+              <th scope="row">Matched amount</th>
               <td>{{ mandate.matchedAmount.amountInPence / 100 | exactCurrency:mandate.donationAmount.currency }}</td>
             </tr>
-            <!--  @todo-regular-giving: consider displaying gift Aid and tip amount on the template (format copied from one-off cmpaign thank you page -->
+            <!--  @todo-regular-giving-DON-1008: consider displaying gift Aid and tip amount on the template (format copied from one-off cmpaign thank you page -->
             <!--                @if (giftAidAmount > 0) {-->
             <!--                  <tr>-->
-            <!--                    <td>Gift Aid Amount</td>-->
+            <!--                    <th scope="row">Gift Aid Amount</th>-->
             <!--                    <td>{{ giftAidAmount | exactCurrency:donation.currencyCode }}</td>-->
             <!--                  </tr>-->
             <!--                }-->
@@ -65,13 +72,14 @@
                 <hr aria-hidden="true">
               </td>
             </tr>
-            <!--                @todo-regular-giving: use giftAid value sent from matchbot (possibly also the matched amounts calculations -->
+            <!-- @todo-regular-giving-DON-1008: show giftAid value sent from matchbot -->
+            <!-- @todo-regular-giving-DON-1003: Add extra rows when necessary below to show partially matched donations when we allow them -->
             <tr class="receives">
-              <td>Charity Receives (Matched Donations)</td>
+              <th scope="row">Months 1-3, charity receives</th>
               <td>{{ (mandate.donationAmount.amountInPence + mandate.matchedAmount.amountInPence) / 100 + ' ' | exactCurrency:mandate.donationAmount.currency }}</td>
             </tr>
             <tr class="receives">
-              <td>Charity Receives (Unmatched Donations)</td>
+              <th scope="row">From month 4, charity receives</th>
               <td>{{ mandate.donationAmount.amountInPence / 100 + ' ' | exactCurrency:mandate.donationAmount.currency }}</td>
             </tr>
           </table>

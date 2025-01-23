@@ -1,5 +1,5 @@
 <main>
-  @if (tickerMainMessage || tickerItems.length > 0) {
+  @if ((tickerMainMessage || tickerItems.length > 0) && ! metaCampaign?.isRegularGiving) {
     <biggive-totalizer
       primary-colour="primary"
       primary-text-colour="white"
@@ -67,27 +67,32 @@
           (scrolled)="onScroll()"
           [scrollWindow]="true"
           >
-          @for (campaign of individualCampaigns; track campaign.id) {
-            <div>
-              <biggive-campaign-card
-                [banner]="campaign.imageUri | optimisedImage:830 | async"
-                [campaignType]="campaign.isMatched ? 'Match Funded' : null"
-                [campaignTitle]="campaign.title"
-                [donateButtonUrl]="'/donate/' + campaign.id"
-                [moreInfoButtonUrl]="'/campaign/' + campaign.id"
-                [organisationName]="campaign.charity.name"
-                primary-figure-label="Match Funds Remaining"
-                [primaryFigureAmount]="this.metaCampaign?.usesSharedFunds ? null : (campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
-                [progressBarCounter]="getPercentageRaised(campaign)"
-                secondary-figure-label="Total Funds Raised"
-                [secondaryFigureAmount]="this.metaCampaign?.usesSharedFunds ? null : (campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
-                [isFutureCampaign]="isInFuture(campaign)"
-                [isPastCampaign]="isInPast(campaign)"
-                [datetime]="getRelevantDateAsStr(campaign)">
-                id="campaign-{{campaign.id}}"
-              </biggive-campaign-card>
-            </div>
-          }
+            @for (campaign of individualCampaigns; track campaign.id) {
+              <div>
+                  <!-- note the primary figure amount below in case of regular giving has to be a non-empty string to
+                  make the component
+                       reserve space for it to keep the layout consistent. Once we're happy with this layout
+                       consider editing component code to allow this to happen in a more intuitive way -->
+                  <biggive-campaign-card
+                    [banner]="campaign.imageUri | optimisedImage:830 | async"
+                    [campaignType]="campaign.isMatched ? 'Match Funded' : null"
+                    [campaignTitle]="campaign.title"
+                    [donateButtonUrl]="campaign.isRegularGiving ? '/regular-giving/' + campaign.id : '/donate/' + campaign.id"
+                    [donateButtonLabel]="campaign.isRegularGiving ? 'Donate monthly' : 'Donate now'"
+                    [moreInfoButtonUrl]="campaign.isRegularGiving ? '/charity/' + campaign.charity.id : '/campaign/' + campaign.id"
+                    [organisationName]="campaign.charity.name"
+                    [primaryFigureLabel]="campaign.isRegularGiving ? '' : 'Match Funds Remaining'"
+                    [primaryFigureAmount]="(this.metaCampaign?.usesSharedFunds || campaign.isRegularGiving) ? ' ' : (campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
+                    [progressBarCounter]="campaign.isRegularGiving ? null : getPercentageRaised(campaign)"
+                    secondary-figure-label="Total Funds Raised"
+                    [secondaryFigureAmount]="this.metaCampaign?.usesSharedFunds ? null : (campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo)"
+                    [isFutureCampaign]="isInFuture(campaign)"
+                    [isPastCampaign]="isInPast(campaign)"
+                    [datetime]="getRelevantDateAsStr(campaign)">
+                    id="campaign-{{campaign.id}}"
+                  </biggive-campaign-card>
+              </div>
+            }
         </biggive-grid>
       }
     </biggive-campaign-card-filter-grid>

@@ -4,7 +4,7 @@ import {
   loadStripe,
   Stripe,
   StripeElements,
-  StripeElementsOptionsMode
+  StripeElementsOptionsMode, StripeError
 } from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
@@ -34,7 +34,35 @@ export class StripeService {
     this.stripe = await loadStripe(environment.psps.stripe.publishableKey);
   }
 
-  stripeElements(donation: Donation, campaign: Campaign, customerSessionClientSecret: string | undefined) {
+  public stripeElementsForDonation(donation: Donation, campaign: Campaign, customerSessionClientSecret: string | undefined) {
+    if (!this.stripe) {
+      throw new Error('Stripe not ready');
+    }
+
+    const money = {
+      currency: donation.currencyCode,
+      amount: this.amountIncTipInMinorUnit(donation)
+    };
+
+    return this.stripeElements(money, 'on_session', campaign, customerSessionClientSecret);
+  }
+
+  /**
+   *
+   * @param money . Amount must be in minor units, e.g. pence
+   * @param futureUsage
+   * @param campaign
+   * @param customerSessionClientSecret
+   */
+  public stripeElements(
+    money: {
+    currency: string;
+    amount: number
+  },
+    futureUsage: "off_session" | "on_session",
+    campaign: Campaign,
+    customerSessionClientSecret: string | undefined
+  ) {
     if (!this.stripe) {
       throw new Error('Stripe not ready');
     }
@@ -43,10 +71,11 @@ export class StripeService {
 
     if (environment.environmentId === 'development') {
       // Stripe can't fetch the font from local dev env, so we use the staging URL instead.
-       fontOrigin = stagingEnvironment.donateUriPrefix;
+      fontOrigin = stagingEnvironment.donateUriPrefix;
     }
 
     const colorPrimaryBlue = '#2C089B';  // matches our $colour-primary
+
     const elementOptions: StripeElementsOptionsMode = {
       fonts: [
         {
@@ -123,9 +152,9 @@ export class StripeService {
         }
       },
       mode: 'payment',
-      currency: donation.currencyCode.toLowerCase(),
-      amount: this.amountIncTipInMinorUnit(donation),
-      setupFutureUsage: 'on_session',
+      amount: money.amount,
+      currency: money.currency.toLowerCase(),
+      setupFutureUsage: futureUsage,
       on_behalf_of: campaign.charity.stripeAccountId,
       paymentMethodCreation: 'manual',
       customerSessionClientSecret,
@@ -138,7 +167,10 @@ export class StripeService {
     elements.update({amount: this.amountIncTipInMinorUnit(donation)});
   }
 
-  async prepareConfirmationTokenFromPaymentElement(donation: Donation, elements: StripeElements): Promise<ConfirmationTokenResult> {
+  async prepareConfirmationTokenFromPaymentElement(
+    {countryCode, billingPostalAddress}: {countryCode: string, billingPostalAddress: string},
+    elements: StripeElements
+  ): Promise<ConfirmationTokenResult> {
     if (! this.stripe) {
       throw new Error("Stripe not ready");
     }
@@ -154,8 +186,8 @@ export class StripeService {
       billing_details:
         {
           address: {
-            country: donation.countryCode,
-            postal_code: donation.billingPostalAddress
+            country: countryCode,
+            postal_code: billingPostalAddress
           },
         }
     };
@@ -164,6 +196,35 @@ export class StripeService {
       {elements: elements, params: {payment_method_data: paymentMethodData}}
     );
   }
+
+  public static createStripeElement(stripeElements: StripeElements) {
+    return stripeElements.create(
+      "payment",
+      {
+        wallets: {
+          applePay: 'auto',
+          googlePay: 'auto'
+        },
+        terms: {
+          // We have our own terms copy for the future payment in donation-start-form.component.html
+          card: "never",
+          applePay: "never",
+          googlePay: "never",
+        },
+        fields: {
+          billingDetails: {
+            address: {
+              // We have our own input fields for country and postal code - we will pass these to stripe on payment confirmation.
+              country: "never",
+              postalCode: "never",
+            }
+          },
+        },
+        business: {name: "Big Give"},
+      }
+    );
+  }
+
 
   async handleNextAction(clientSecret: string) {
     if (! this.stripe) {
@@ -179,4 +240,54 @@ export class StripeService {
     // use round not floor to avoid issues like returning 114 as the sum of £1 and £0.15
     return Math.round((donation.tipAmount + donation.donationAmount) * 100);
   }
+}
+
+
+export function getStripeFriendlyError(
+  error: StripeError | {message: string, code: string, decline_code?: string, description?: string} | undefined,
+  context: 'method_setup'| 'card_change'| 'confirm',
+): string {
+
+
+  let prefix = '';
+  switch (context) {
+    case 'method_setup':
+      prefix = 'Payment setup failed: ';
+      break;
+    case 'card_change':
+      prefix = 'Payment method update failed: ';
+      break;
+    case 'confirm':
+      prefix = 'Payment processing failed: ';
+  }
+
+  if (! error || (! error.message && ! error.code)) {
+    if (error && error.hasOwnProperty('description')) {
+      // @ts-ignore - not sure why TS doesn't recognise that it must have a description because I just checked
+      // with hasOwnProperty.
+      return `${prefix}${error!.description}`;
+    }
+    return `${prefix}Sorry, we encountered an error. Please try again in a moment or contact us if this message persists.`;
+  }
+
+  let friendlyError = error.message;
+
+  let customMessage = false;
+  if (error.code === 'card_declined' && error.decline_code === 'generic_decline') {
+    // Probably a custom Radar rule -> relatively likely to be an incorrect postcode.
+    friendlyError = `The payment was declined. Please ensure details provided (including postcode) match your card. Contact your bank or hello@biggive.org if the problem persists.`;
+    customMessage = true;
+  }
+
+  if (error.code === 'card_declined' && error.decline_code === 'invalid_amount') {
+    // We've seen e.g. HSBC in Nov '23 decline large donations with this code.
+    friendlyError = 'The payment was declined. You might need to contact your bank before making a donation of this amount.';
+    customMessage = true;
+  }
+
+  if (customMessage && context === 'confirm') {
+    prefix = ''; // Don't show extra context info in the most common `context`, when showing our already-long custom copy.
+  }
+
+  return `${prefix}${friendlyError}`;
 }

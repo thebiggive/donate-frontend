@@ -15,7 +15,7 @@ export interface DonorAccount {
 
     fullName: string;
     stripeCustomerId: string;
-    regularGivingPaymentMethod: string;
+    regularGivingPaymentMethod: null | string;
     billingPostCode: string;
     billingCountryCode: string;
 }

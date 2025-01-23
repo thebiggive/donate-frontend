@@ -1,3 +1,4 @@
+@use '@angular/material' as mat;
 @import '../../abstract';
 
 // code below duplicated from donation-start-container.component.scss
@@ -129,4 +130,9 @@ table#personal-details, table#paymentMethods {
     }
     vertical-align: bottom;
   }
+}
+
+.error, .stripeError {
+  color: mat.m2-get-color-from-palette($donate-warn);
+  margin: 1rem 0;
 }

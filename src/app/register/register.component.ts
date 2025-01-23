@@ -16,7 +16,9 @@ import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {transferFundsPath} from "../app-routing";
 import {WidgetInstance} from "friendly-challenge";
 import {flags} from "../featureFlags";
-import {isAllowableRedirectPath, LoginNavigationState} from "../login/login.component";
+import type {LoginNavigationState} from "../login/login.component";
+import {PageMetaService} from '../page-meta.service';
+import {NavigationService} from "../navigation.service";
 
 @Component({
   selector: 'app-register',
@@ -41,11 +43,13 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   protected readonly flags = flags;
   private friendlyCaptchaWidget: WidgetInstance;
   protected redirectPath: string = 'my-account';
+  protected loginLink: string;
 
 
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly identityService: IdentityService,
+    private readonly pageMeta: PageMetaService,
     private readonly router: Router,
     private sanitizer: DomSanitizer,
     private readonly activatedRoute: ActivatedRoute,
@@ -60,6 +64,8 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    this.pageMeta.setCommon('Register', 'Register for a Big Give account', null);
+
     if (isPlatformBrowser(this.platformId)) {
       document.body.classList.add('primary-colour');
     }
@@ -77,9 +83,11 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     const redirectParam = this.activatedRoute.snapshot.queryParams.r as string|undefined;
 
     // allowed chars in URL to redirect to: a-z, A-Z, 0-9, - _ /
-    if (redirectParam && isAllowableRedirectPath(redirectParam)) {
-      this.redirectPath = redirectParam.replace(/^\/+/, ''); // strips any leading slashes;
+    if (redirectParam && NavigationService.isAllowableRedirectPath(redirectParam)) {
+      this.redirectPath = NavigationService.normaliseRedirectPath(redirectParam);
     }
+
+    this.loginLink = `/login/?r=` + encodeURIComponent(this.redirectPath);
   }
 
   async ngAfterViewInit() {
