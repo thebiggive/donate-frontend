@@ -69,6 +69,11 @@ export class MyDonationsComponent implements OnInit{
    * to display them.
    */
   shouldShowTipForDonation(donation: CompleteDonation) {
-    return donation.tipAmount !== 0 || donation.pspMethodType !== 'customer_balance';
+    // We don't show zero tips for customer balance donations or regular giving donations because we don't ask donors
+    // for tips on those types of donations - so they should always have zero tips. But in case there somehow is a tip
+    // on one we would show it here.
+    const isTippableDonationType = donation.pspMethodType !== 'customer_balance' && !!donation.mandate;
+
+    return donation.tipAmount !== 0 || isTippableDonationType;
   }
 }
