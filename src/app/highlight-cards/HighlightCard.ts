@@ -115,17 +115,7 @@ function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix
 }
 
 export function SFHighlightCardsToFEHighlightCards(apiHighlightCards: SfApiHighlightCard[]): HighlightCard[] {
-  function isChristmasChallenge(card: SfApiHighlightCard) {
-    return card.campaignFamily === "christmasChallenge";
-  }
-
-  // Array.prototype.sort is specified as being stable since (or ECMAScript 2019). I don't think we support any browsers
-  // too old to have that, and we can cope with the possibility of none CC cards being in the wrong order in very old
-  const cardsSortedCCFirst = apiHighlightCards.sort((a, b) => {
-    return +isChristmasChallenge(b) - +isChristmasChallenge(a);
-  });
-
-  return cardsSortedCCFirst.map(
+  return apiHighlightCards.map(
   card => SFAPIHighlightCardToHighlightCard(
     environment.experienceUriPrefix,
     environment.blogUriPrefix,
