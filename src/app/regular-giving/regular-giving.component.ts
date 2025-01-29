@@ -5,7 +5,7 @@ import {ComponentsModule} from "@biggive/components-angular";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatStep, MatStepper} from "@angular/material/stepper";
 import {StepperSelectionEvent} from "@angular/cdk/stepper";
-import {MatInput} from "@angular/material/input";
+import {MatHint, MatInput} from "@angular/material/input";
 import {MatButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
@@ -30,6 +30,7 @@ import {
 import {DonationService, StripeCustomerSession} from "../donation.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {billingPostcodeRegExp} from "../postcode.service";
+import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -48,7 +49,10 @@ const minAmount = 1;
     MatInput,
     MatButton,
     MatIcon,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatHint,
+    MatRadioButton,
+    MatRadioGroup
   ],
   templateUrl: './regular-giving.component.html',
   styleUrl: './regular-giving.component.scss'
@@ -65,6 +69,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected selectedBillingCountryCode: string;
   private stripeElements: StripeElements | undefined;
   private stripePaymentElement: StripePaymentElement | undefined;
+  protected triedToLeaveMarketing = false;
 
   public readonly labelYourPaymentInformation = "Your Payment Information";
 
@@ -131,6 +136,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
           Validators.pattern(billingPostcodeRegExp),
         ]
       ],
+      optInCharityEmail: [null, requiredNotBlankValidator],
+      optInTbgEmail: [null, requiredNotBlankValidator],
       }
     );
 
@@ -145,6 +152,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       })
       .catch(console.error);
   }
+
+  public errorMessagesForMarketingStep: any = () => ({});
 
   ngAfterViewInit() {
     // It seems the stepper doesn't provide a nice way to let us intercept each request to change step. Monkey-patching
@@ -330,6 +339,16 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     if (! errorFound) {
       this.stepper.selected = this.stepper.steps.get(stepIndex);
     }
+  }
+
+  protected get optInCharityEmail(): boolean | undefined
+  {
+    return this.mandateForm.value.optInCharityEmail;
+  }
+
+  protected get optInTbgEmail(): boolean | undefined
+  {
+    return this.mandateForm.value.optInTbgEmail;
   }
 
   /**
