@@ -29,6 +29,9 @@ export interface Campaign {
     countries: string[];
     currencyCode: 'GBP' | 'USD';
     donationCount: number;
+    /**
+     * Note type declared is wrong in some or all cases - may be a string e.g. `2025-01-29T12:30:00.000Z` not date Object.
+     **/
     endDate: Date;
     impactReporting: string;
     impactSummary: string;
@@ -40,6 +43,10 @@ export interface Campaign {
     quotes: Array<{person: string, quote: string}>;
     ready: boolean;
     solution: string;
+
+    /**
+     * Note type declared is wrong in some or all cases - may be a string e.g. `2025-01-29T12:30:00.000Z` not date Object.
+     **/
     startDate: Date;
     // More on Campaign status semantics defined in Salesforce `docs/campaign-status-definitions`.
     status: 'Active' | 'Expired' | 'Preview';
