@@ -86,11 +86,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   public filterError = false;
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
 
-  /**
-   * Default sort when not in relevance mode because there's a search term.
-   */
-  defaultSort: 'matchFundsRemaining' | 'amountRaised' = 'matchFundsRemaining';
-
   public tickerItems: { label: string, figure: string }[] = [];
   private tickerUpdateTimer: number;
   public tickerMainMessage: string;
@@ -234,7 +229,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   private setSecondaryPropsAndRun(metaCampaign: Campaign | undefined) {
-    this.defaultSort = this.getDefaultSort();
     this.searchService.reset(this.defaultSort, true); // Needs `campaign` to determine sort order.
     this.loadQueryParamsAndRun();
     this.setPageMetadata(metaCampaign);
@@ -505,7 +499,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
       }
 
       if (event instanceof NavigationEnd && event.url === '/') {
-        this.searchService.reset(this.getDefaultSort(), false);
+        this.searchService.reset(this.defaultSort, false);
         this.run();
       }
     });
@@ -514,8 +508,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   /**
    * Default sort when not in relevance mode because there's a search term.
    */
-  getDefaultSort(): 'amountRaised' | 'matchFundsRemaining' {
-    const isCompletedMetaCampaign = this.metaCampaign && this.metaCampaign.endDate < new Date();
+  get defaultSort(): 'amountRaised' | 'matchFundsRemaining' {
+    const isCompletedMetaCampaign = this.metaCampaign && new Date(this.metaCampaign.endDate as unknown as string) < new Date();
 
     return isCompletedMetaCampaign ? 'amountRaised' : 'matchFundsRemaining';
   }
