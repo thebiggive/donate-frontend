@@ -89,7 +89,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   /**
    * Default sort when not in relevance mode because there's a search term.
    */
-  readonly defaultSort = 'matchFundsRemaining';
+  defaultSort: 'matchFundsRemaining' | 'amountRaised' = 'matchFundsRemaining';
 
   public tickerItems: { label: string, figure: string }[] = [];
   private tickerUpdateTimer: number;
@@ -234,7 +234,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   private setSecondaryPropsAndRun(metaCampaign: Campaign | undefined) {
-    this.searchService.reset(this.getDefaultSort(), true); // Needs `campaign` to determine sort order.
+    this.defaultSort = this.getDefaultSort();
+    this.searchService.reset(this.defaultSort, true); // Needs `campaign` to determine sort order.
     this.loadQueryParamsAndRun();
     this.setPageMetadata(metaCampaign);
   }
@@ -514,8 +515,9 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * Default sort when not in relevance mode because there's a search term.
    */
   getDefaultSort(): 'amountRaised' | 'matchFundsRemaining' {
-    // Most Raised for completed Master Campaigns; Match Funds Remaining for others.
-    return (this.metaCampaign && new Date(this.metaCampaign.endDate) < new Date()) ? 'amountRaised' : 'matchFundsRemaining';
+    const isCompletedMetaCampaign = this.metaCampaign && this.metaCampaign.endDate < new Date();
+
+    return isCompletedMetaCampaign ? 'amountRaised' : 'matchFundsRemaining';
   }
 
   private setTickerParams(metaCampaign: Campaign) {
