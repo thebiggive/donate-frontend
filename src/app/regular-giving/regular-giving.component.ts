@@ -30,6 +30,8 @@ import {
 import {DonationService, StripeCustomerSession} from "../donation.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {billingPostcodeRegExp} from "../postcode.service";
+import {FaIconComponent, FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {CampaignGroupsService} from "../campaign-groups.service";
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -48,7 +50,9 @@ const minAmount = 1;
     MatInput,
     MatButton,
     MatIcon,
-    MatProgressSpinner
+    MatProgressSpinner,
+    FontAwesomeModule,
+    FaIconComponent
   ],
   templateUrl: './regular-giving.component.html',
   styleUrl: './regular-giving.component.scss'
@@ -400,5 +404,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     this.paymentInfoErrorMessage && this.toast.showError(this.paymentInfoErrorMessage);
 
     return !!this.paymentInfoErrorMessage;
+  }
+
+  getBeneficiaryIcon(beneficiary: string) {
+    return CampaignGroupsService.getBeneficiaryIcon(beneficiary);
+  }
+
+  getCategoryIcon(category: string) {
+    return CampaignGroupsService.getCategoryIcon(category);
   }
 }
