@@ -157,9 +157,9 @@
                     </mat-radio-button>
                   </div>
                 </div>
-                @if (triedToLeaveMarketing && errorMessagesForMarketingStep().optInCharityEmailRequired) {
+                @if (optInCharityEmailError) {
                   <p class="error" aria-live="assertive">
-                    {{errorMessagesForMarketingStep().optInCharityEmailRequired}}.
+                    {{optInCharityEmailError}}
                   </p>
                 }
               </mat-radio-group>
@@ -194,9 +194,9 @@
                     </mat-radio-button>
                   </div>
                 </div>
-                @if (triedToLeaveMarketing && errorMessagesForMarketingStep().optInTbgEmailRequired) {
+                @if (optInTBGEmailError) {
                   <p class="error" aria-live="assertive">
-                    {{errorMessagesForMarketingStep().optInTbgEmailRequired}}
+                    {{optInTBGEmailError}}
                   </p>
                 }
               </mat-radio-group>
@@ -207,6 +207,17 @@
                   </p>
                 </mat-hint>
               }
+
+              <div style="text-align: center">
+                <button style="width: 40%;"
+                        type="button"
+                        class="continue b-w-100 b-rt-0"
+                        mat-raised-button
+                        color="primary"
+                        (click)="this.selectStep(3)"
+                >Continue
+                </button>
+              </div>
 
             </mat-step>
             <mat-step

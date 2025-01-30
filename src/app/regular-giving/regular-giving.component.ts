@@ -69,7 +69,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected selectedBillingCountryCode: string;
   private stripeElements: StripeElements | undefined;
   private stripePaymentElement: StripePaymentElement | undefined;
-  protected triedToLeaveMarketing = false;
 
   public readonly labelYourPaymentInformation = "Your Payment Information";
 
@@ -87,6 +86,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    * Error generated on submission at end of form
    */
   protected submitErrorMessage: string | undefined;
+  protected optInTBGEmailError: string | undefined;
+  protected optInCharityEmailError: string | undefined;
 
 
   constructor(
@@ -152,8 +153,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       })
       .catch(console.error);
   }
-
-  public errorMessagesForMarketingStep: any = () => ({});
 
   ngAfterViewInit() {
     // It seems the stepper doesn't provide a nice way to let us intercept each request to change step. Monkey-patching
@@ -338,6 +337,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       errorFound = this.validatePaymentInformationStep() || errorFound;
     }
 
+    if (stepIndex > 2) {
+      errorFound = this.validateUpdatesStep() || errorFound;
+    }
+
     if (! errorFound) {
       this.stepper.selected = this.stepper.steps.get(stepIndex);
     }
@@ -388,7 +391,31 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     return errorFound;
   }
 
-  /**
+  private validateUpdatesStep(): boolean {
+    let errorFound = false;
+
+    if (typeof this.optInTbgEmail !== 'boolean') {
+      this.optInTBGEmailError = 'Please choose whether you wish to receive updates from Big Give.';
+      errorFound = true;
+    } else {
+      this.optInTBGEmailError = undefined;
+    }
+
+    if (typeof this.optInCharityEmail !== 'boolean') {
+      this.optInCharityEmailError = `Please choose whether you wish to receive updates from ${this.campaign.charity.name}.`;
+      errorFound = true;
+    } else {
+      this.optInCharityEmailError = undefined;
+    }
+
+    const combinedErrors = [this.optInCharityEmailError, this.optInTBGEmailError].filter(Boolean).join(' ');
+    combinedErrors && this.toast.showError(combinedErrors);
+
+    return errorFound;
+  }
+
+
+    /**
    * Checks if the payment information step is completed correctly, and shows the user an error message if not.
    */
   private validatePaymentInformationStep(): boolean {
