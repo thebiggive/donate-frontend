@@ -509,7 +509,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    * Default sort when not in relevance mode because there's a search term.
    */
   get defaultSort(): 'amountRaised' | 'matchFundsRemaining' {
-    const isCompletedMetaCampaign = this.metaCampaign && new Date(this.metaCampaign.endDate as unknown as string) < new Date();
+    const isCompletedMetaCampaign = this.metaCampaign && new Date(this.metaCampaign.endDate) < new Date();
 
     return isCompletedMetaCampaign ? 'amountRaised' : 'matchFundsRemaining';
   }

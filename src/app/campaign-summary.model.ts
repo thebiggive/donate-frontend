@@ -10,17 +10,17 @@ export type CampaignSummary = {
     currencyCode: string,
 
   /**
-   * Note type declared is wrong in some or all cases - may be a string e.g. `2025-01-29T12:30:00.000Z` not date Object.
+   * ISO 8601 formatted datetime
    **/
-    endDate: Date,
+    endDate: string,
     imageUri: string,
     isMatched: boolean,
     matchFundsRemaining: number,
 
   /**
-   * Note type declared is wrong in some or all cases - may be a string e.g. `2025-01-29T12:30:00.000Z` not date Object.
+   * ISO 8601 formatted datetime
    **/
-    startDate: Date,
+    startDate: string,
     status: string,
     target: number,
     title: string,

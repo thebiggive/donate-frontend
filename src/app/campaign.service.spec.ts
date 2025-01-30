@@ -40,7 +40,7 @@ describe('CampaignService', () => {
       countries: ['United Kingdom'],
       currencyCode: 'GBP',
       donationCount: 4,
-      endDate: new Date(),
+      endDate: new Date().toISOString(),
       impactReporting: 'Impact reporting plan',
       impactSummary: 'Impact overview',
       isMatched: true,
@@ -56,7 +56,7 @@ describe('CampaignService', () => {
       ],
       ready: true,
       solution: 'The solution',
-      startDate: new Date(),
+      startDate: new Date().toISOString(),
       status: 'Active',
       summary: 'Some long summary',
       title: 'Some title',
@@ -106,8 +106,8 @@ describe('CampaignService', () => {
 
   it ('should allow donation attempts to any campaign with status Active, regardless of its dates', () => {
     const campaign = getDummyCampaign();
-    campaign.startDate = new Date((new Date()).getTime() - 86400000);
-    campaign.endDate = new Date((new Date()).getTime() - 86400000);
+    campaign.startDate = new Date((new Date()).getTime() - 86400000).toISOString();
+    campaign.endDate = new Date((new Date()).getTime() - 86400000).toISOString();
     campaign.status = 'Active';
 
     expect(CampaignService.isOpenForDonations(campaign)).toBe(true);
@@ -116,8 +116,8 @@ describe('CampaignService', () => {
 
   it ('should block donation attempts to any hidden campaign', () => {
     const campaign = getDummyCampaign();
-    campaign.startDate = new Date((new Date()).getTime() - 86400000);
-    campaign.endDate = new Date((new Date()).getTime() + 86400000);
+    campaign.startDate = new Date((new Date()).getTime() - 86400000).toISOString();
+    campaign.endDate = new Date((new Date()).getTime() + 86400000).toISOString();
     campaign.status = 'Active';
     campaign.hidden = true;
 
@@ -126,8 +126,8 @@ describe('CampaignService', () => {
 
   it ('should allow donation attempts to any campaign in active date range, even if Status gets stuck in Preview', () => {
     const campaign = getDummyCampaign();
-    campaign.startDate = new Date((new Date()).getTime() - 86400000);
-    campaign.endDate = new Date((new Date()).getTime() + 86400000);
+    campaign.startDate = new Date((new Date()).getTime() - 86400000).toISOString();
+    campaign.endDate = new Date((new Date()).getTime() + 86400000).toISOString();
     campaign.status = 'Preview';
 
     expect(CampaignService.isOpenForDonations(campaign)).toBe(true);
@@ -136,8 +136,8 @@ describe('CampaignService', () => {
 
   it ('should not allow donation attempts to Preview campaigns with future start dates', () => {
     const campaign = getDummyCampaign();
-    campaign.startDate = new Date((new Date()).getTime() + 86400000);
-    campaign.endDate = new Date((new Date()).getTime() + 86400001);
+    campaign.startDate = new Date((new Date()).getTime() + 86400000).toISOString();
+    campaign.endDate = new Date((new Date()).getTime() + 86400001).toISOString();
     campaign.status = 'Preview';
 
     expect(CampaignService.isOpenForDonations(campaign)).toBe(false);
@@ -146,8 +146,8 @@ describe('CampaignService', () => {
 
   it ('should allow not allow donation attempts to Expired campaigns with past end dates', () => {
     const campaign = getDummyCampaign();
-    campaign.startDate = new Date((new Date()).getTime() - 86400000);
-    campaign.endDate = new Date((new Date()).getTime() - 1000);
+    campaign.startDate = new Date((new Date()).getTime() - 86400000).toISOString();
+    campaign.endDate = new Date((new Date()).getTime() - 1000).toISOString();
     campaign.status = 'Expired';
 
     expect(CampaignService.isOpenForDonations(campaign)).toBe(false);
