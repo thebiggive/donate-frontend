@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @import '../../abstract';
+@include binary-options();
 
 // code below duplicated from donation-start-container.component.scss
 // consider refactoring to remove duplication. However not dedupling just yet as we may want
@@ -130,6 +131,10 @@ table#personal-details, table#paymentMethods {
     }
     vertical-align: bottom;
   }
+}
+
+.colour-primary {
+  color: $colour-primary;
 }
 
 .error, .stripeError {
