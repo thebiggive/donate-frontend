@@ -236,7 +236,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       giftAid: false,
       billingPostcode,
       billingCountry,
-      stripeConfirmationTokenId: confirmationToken?.id
+      stripeConfirmationTokenId: confirmationToken?.id,
+      charityComms: !!this.optInCharityEmail,
+      tbgComms: !!this.optInTbgEmail,
     }).subscribe({
       next: async (mandate: Mandate) => {
         await this.router.navigateByUrl(`/${myRegularGivingPath}/${mandate.id}`);
