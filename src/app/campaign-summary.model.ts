@@ -8,11 +8,19 @@ export type CampaignSummary = {
     championName: string,
     charity: {id: string, name: string},
     currencyCode: string,
-    endDate: Date,
+
+  /**
+   * ISO 8601 formatted datetime
+   **/
+    endDate: string,
     imageUri: string,
     isMatched: boolean,
     matchFundsRemaining: number,
-    startDate: Date,
+
+  /**
+   * ISO 8601 formatted datetime
+   **/
+    startDate: string,
     status: string,
     target: number,
     title: string,

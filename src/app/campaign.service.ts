@@ -56,11 +56,11 @@ export class CampaignService {
     let dateToUse: Date|undefined;
 
     if (this.isInFuture(campaign)) {
-      dateToUse = campaign.startDate;
+      dateToUse = new Date(campaign.startDate);
     }
 
     else if (this.isInPast(campaign)) {
-      dateToUse = campaign.endDate;
+      dateToUse = new Date(campaign.endDate);
     }
 
     return dateToUse;

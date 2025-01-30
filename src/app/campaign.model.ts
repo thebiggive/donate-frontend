@@ -29,7 +29,10 @@ export interface Campaign {
     countries: string[];
     currencyCode: 'GBP' | 'USD';
     donationCount: number;
-    endDate: Date;
+    /**
+     * ISO 8601 formatted datetime
+     **/
+    endDate: string;
     impactReporting: string;
     impactSummary: string;
     isMatched: boolean;
@@ -40,7 +43,11 @@ export interface Campaign {
     quotes: Array<{person: string, quote: string}>;
     ready: boolean;
     solution: string;
-    startDate: Date;
+
+    /**
+     * ISO 8601 formatted datetime
+     **/
+    startDate: string;
     // More on Campaign status semantics defined in Salesforce `docs/campaign-status-definitions`.
     status: 'Active' | 'Expired' | 'Preview';
     summary: string;
