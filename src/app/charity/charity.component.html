@@ -33,7 +33,7 @@
               [campaignTitle]="campaign.title"
               [donateButtonUrl]="campaign.isRegularGiving ? '/regular-giving/' + campaign.id :  '/donate/' + campaign.id"
               [donateButtonLabel]="campaign.isRegularGiving ? 'Donate monthly' : 'Donate now'"
-              [moreInfoButtonUrl]="campaign.isRegularGiving ? '/charity/' + campaign.charity.id : '/campaign/' + campaign.id"
+              [moreInfoButtonUrl]="'/campaign/' + campaign.id"
               [organisationName]="campaign.charity.name"
               [primaryFigureLabel]="campaign.isRegularGiving ? '' : 'Match Funds Remaining'"
               [primaryFigureAmount]="campaign.isRegularGiving ? ' ' : campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"

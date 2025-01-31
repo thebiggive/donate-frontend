@@ -88,7 +88,7 @@ describe("ExploreComponent", () => {
       title: "Some Campaign",
       amountRaised: 0,
       currencyCode: "GBP",
-      startDate: new Date(),
+      startDate: new Date().toISOString(),
     } as Campaign;
     const sut = makeComponentWithCampaign(campaign);
     sut.ngOnInit();
@@ -101,7 +101,7 @@ describe("ExploreComponent", () => {
       title: "Some Campaign",
       amountRaised: 1,
       currencyCode: "GBP",
-      startDate: new Date(),
+      startDate: new Date().toISOString(),
     } as Campaign;
     const sut = makeComponentWithCampaign(campaign);
     sut.ngOnInit();
@@ -118,7 +118,7 @@ describe("ExploreComponent", () => {
       title: "Some Campaign",
       amountRaised: 1,
       currencyCode: "GBP",
-      startDate: dayAftertommorow,
+      startDate: dayAftertommorow.toISOString(),
     } as Campaign;
     const sut = makeComponentWithCampaign(campaign);
     sut.ngOnInit();

@@ -1,5 +1,7 @@
 @use '@angular/material' as mat;
 @import '../../abstract';
+@include binary-options();
+@include beneficiaries-and-categories();
 
 // code below duplicated from donation-start-container.component.scss
 // consider refactoring to remove duplication. However not dedupling just yet as we may want
@@ -132,37 +134,15 @@ table#personal-details, table#paymentMethods {
   }
 }
 
+.colour-primary {
+  color: $colour-primary;
+}
+
 .error, .stripeError {
   color: mat.m2-get-color-from-palette($donate-warn);
   margin: 1rem 0;
 }
 
-// The categories and beneficiaries section
-
-h5 {
-  font-size: 1rem;
+.b-back-button {
+  @include make-back-button;
 }
-
-.icon-container {
-  margin-bottom: 30px;
-}
-
-.icons {
-  @include format-icon-container;
-}
-
-.icon-wrapper {
-  @include format-icon-list-item;
-
-  fa-icon.ng-fa-icon {
-    color: $colour-primary; // #2C089B
-    font-size: 40px;
-    min-width: 4rem;
-    text-align: center;
-  }
-
-  .c-icon-title {
-    @include format-icon-title;
-  }
-}
-

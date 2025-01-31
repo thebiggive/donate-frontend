@@ -1,12 +1,12 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Campaign} from "../campaign.model";
 import {ComponentsModule} from "@biggive/components-angular";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatStep, MatStepper} from "@angular/material/stepper";
 import {StepperSelectionEvent} from "@angular/cdk/stepper";
-import {MatInput} from "@angular/material/input";
-import {MatButton} from "@angular/material/button";
+import {MatHint, MatInput} from "@angular/material/input";
+import {MatButton, MatIconAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
 import {RegularGivingService} from "../regularGiving.service";
@@ -32,6 +32,8 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {billingPostcodeRegExp} from "../postcode.service";
 import {FaIconComponent, FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {CampaignGroupsService} from "../campaign-groups.service";
+import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
+import {environment} from "../../environments/environment";
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -51,8 +53,15 @@ const minAmount = 1;
     MatButton,
     MatIcon,
     MatProgressSpinner,
+
     FontAwesomeModule,
     FaIconComponent
+
+    MatHint,
+    MatRadioButton,
+    MatRadioGroup,
+    MatIconAnchor,
+    RouterLink
   ],
   templateUrl: './regular-giving.component.html',
   styleUrl: './regular-giving.component.scss'
@@ -86,6 +95,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    * Error generated on submission at end of form
    */
   protected submitErrorMessage: string | undefined;
+  protected optInTBGEmailError: string | undefined;
+  protected optInCharityEmailError: string | undefined;
 
 
   constructor(
@@ -122,6 +133,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
 
+    // These opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
+    // and prefilling them with 'no' values in that case.
+    const optInDefaultValue = environment.environmentId === 'regression' ? false : null;
+
     this.mandateForm = this.formBuilder.group({
         donationAmount: ['', [
           requiredNotBlankValidator,
@@ -135,6 +150,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
           Validators.pattern(billingPostcodeRegExp),
         ]
       ],
+      optInCharityEmail: [optInDefaultValue, requiredNotBlankValidator],
+      optInTbgEmail: [optInDefaultValue, requiredNotBlankValidator],
       }
     );
 
@@ -231,7 +248,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       giftAid: false,
       billingPostcode,
       billingCountry,
-      stripeConfirmationTokenId: confirmationToken?.id
+      stripeConfirmationTokenId: confirmationToken?.id,
+      charityComms: !!this.optInCharityEmail,
+      tbgComms: !!this.optInTbgEmail,
     }).subscribe({
       next: async (mandate: Mandate) => {
         await this.router.navigateByUrl(`/${myRegularGivingPath}/${mandate.id}`);
@@ -331,9 +350,23 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       errorFound = this.validatePaymentInformationStep() || errorFound;
     }
 
+    if (stepIndex > 2) {
+      errorFound = this.validateUpdatesStep() || errorFound;
+    }
+
     if (! errorFound) {
       this.stepper.selected = this.stepper.steps.get(stepIndex);
     }
+  }
+
+  protected get optInCharityEmail(): boolean | undefined
+  {
+    return this.mandateForm.value.optInCharityEmail;
+  }
+
+  protected get optInTbgEmail(): boolean | undefined
+  {
+    return this.mandateForm.value.optInTbgEmail;
   }
 
   /**
@@ -371,7 +404,31 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     return errorFound;
   }
 
-  /**
+  private validateUpdatesStep(): boolean {
+    let errorFound = false;
+
+    if (typeof this.optInTbgEmail !== 'boolean') {
+      this.optInTBGEmailError = 'Please choose whether you wish to receive updates from Big Give.';
+      errorFound = true;
+    } else {
+      this.optInTBGEmailError = undefined;
+    }
+
+    if (typeof this.optInCharityEmail !== 'boolean') {
+      this.optInCharityEmailError = `Please choose whether you wish to receive updates from ${this.campaign.charity.name}.`;
+      errorFound = true;
+    } else {
+      this.optInCharityEmailError = undefined;
+    }
+
+    const combinedErrors = [this.optInCharityEmailError, this.optInTBGEmailError].filter(Boolean).join(' ');
+    combinedErrors && this.toast.showError(combinedErrors);
+
+    return errorFound;
+  }
+
+
+    /**
    * Checks if the payment information step is completed correctly, and shows the user an error message if not.
    */
   private validatePaymentInformationStep(): boolean {

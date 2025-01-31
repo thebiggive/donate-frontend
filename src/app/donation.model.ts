@@ -168,7 +168,7 @@ export interface CompleteDonation extends Donation {
  * matchbot. May be removed soon if calculations are moved to matchbot, where results can be saved to db.
  */
 export interface EnrichedDonation extends CompleteDonation {
-  /** How much the charity will (or did) recieve in total */
+  /** How much the charity will (or did) receive in total */
   totalValue: number;
   giftAidAmount: number;
 }
