@@ -466,11 +466,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     return !!this.paymentInfoErrorMessage;
   }
 
-  getBeneficiaryIcon(beneficiary: string) {
-    return CampaignGroupsService.getBeneficiaryIcon(beneficiary);
-  }
+  protected getBeneficiaryIcon = CampaignGroupsService.getBeneficiaryIcon;
 
-  getCategoryIcon(category: string) {
-    return CampaignGroupsService.getCategoryIcon(category);
-  }
+  protected getCategoryIcon = CampaignGroupsService.getCategoryIcon;
 }
