@@ -8,6 +8,12 @@
       </p>
     </div>
   } @else {
+    <div class="b-back-button">
+      <a mat-icon-button [routerLink]="'/campaign/' + campaign.id">
+        <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
+        Back to campaign
+      </a>
+    </div>
     <div class="c-form-container">
       <biggive-page-section>
         <form

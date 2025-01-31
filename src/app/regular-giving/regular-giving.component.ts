@@ -1,12 +1,12 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Campaign} from "../campaign.model";
 import {ComponentsModule} from "@biggive/components-angular";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatStep, MatStepper} from "@angular/material/stepper";
 import {StepperSelectionEvent} from "@angular/cdk/stepper";
 import {MatHint, MatInput} from "@angular/material/input";
-import {MatButton} from "@angular/material/button";
+import {MatButton, MatIconAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
 import {RegularGivingService} from "../regularGiving.service";
@@ -52,7 +52,9 @@ const minAmount = 1;
     MatProgressSpinner,
     MatHint,
     MatRadioButton,
-    MatRadioGroup
+    MatRadioGroup,
+    MatIconAnchor,
+    RouterLink
   ],
   templateUrl: './regular-giving.component.html',
   styleUrl: './regular-giving.component.scss'
