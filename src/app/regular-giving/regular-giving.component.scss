@@ -141,3 +141,7 @@ table#personal-details, table#paymentMethods {
   color: mat.m2-get-color-from-palette($donate-warn);
   margin: 1rem 0;
 }
+
+.b-back-button {
+  @include make-back-button;
+}

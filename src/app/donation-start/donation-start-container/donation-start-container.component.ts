@@ -43,6 +43,13 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
       return;
     }
 
+    if (this.campaign.isRegularGiving) {
+      // No reason for people to be on this ad-hoc donations page in that case - redirect to campaign page so
+      // they can follow the link to login and donate monthly.
+      await this.router.navigateByUrl(`/campaign/${this.campaign.id}`, { replaceUrl: true });
+      return;
+    }
+
     this.campaignOpenOnLoad = this.campaignIsOpen();
     this.imageService.getImageUri(this.campaign.bannerUri, 830).subscribe(uri => this.bannerUri = uri);
   }
