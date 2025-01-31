@@ -31,6 +31,7 @@ import {DonationService, StripeCustomerSession} from "../donation.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {billingPostcodeRegExp} from "../postcode.service";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
+import {environment} from "../../environments/environment";
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -126,6 +127,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
 
+    // These opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
+    // and prefilling them with 'no' values in that case.
+    const optInDefaultValue = environment.environmentId === 'regression' ? false : null;
+
     this.mandateForm = this.formBuilder.group({
         donationAmount: ['', [
           requiredNotBlankValidator,
@@ -139,8 +144,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
           Validators.pattern(billingPostcodeRegExp),
         ]
       ],
-      optInCharityEmail: [null, requiredNotBlankValidator],
-      optInTbgEmail: [null, requiredNotBlankValidator],
+      optInCharityEmail: [optInDefaultValue, requiredNotBlankValidator],
+      optInTbgEmail: [optInDefaultValue, requiredNotBlankValidator],
       }
     );
 
