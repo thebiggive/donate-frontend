@@ -28,6 +28,7 @@ export type campaignFamilyName =
   |'womenGirls'
   |'mentalHealthFund'
   |'artsforImpact'
+  |'smallCharity'
   |'emergencyMatch';
 
 export type SfApiHighlightCard = Omit<HighlightCard, 'background'|'icon'|'button'> & {
@@ -58,7 +59,8 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
     greenMatchFund: 'brand-gmf-green',
     womenGirls: 'brand-wgmf-purple',
     mentalHealthFund: 'brand-mhf-turquoise',
-    artsforImpact: 'brand-afa-pink'
+    artsforImpact: 'brand-afa-pink',
+    smallCharity: 'brand-scw-magenta',
   };
 
   const backgroundImageUrl = backgroundImage(sfApiHighlightCard, donateUriPrefix);
@@ -108,7 +110,8 @@ function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix
     greenMatchFund:  new URL('/assets/images/card-background-gmf.jpg', donateUriPrefix),
     womenGirls: new URL('/assets/images/wmg-purple-texture.jpg', donateUriPrefix),
     mentalHealthFund: new URL('/assets/images/turquoise-texture.jpg', donateUriPrefix),
-    artsforImpact: new URL('/assets/images/red-coral-texture.png', donateUriPrefix)
+    artsforImpact: new URL('/assets/images/red-coral-texture.png', donateUriPrefix),
+    smallCharity: new URL('/assets/images/small-charity-background.png', donateUriPrefix),
   };
 
   return campaignFamilyBackgroundImages[sfApiHighlightCard.campaignFamily] || defaultBackground;
