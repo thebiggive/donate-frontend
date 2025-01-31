@@ -28,10 +28,10 @@ type StartMandateParams = {
    */
   stripeConfirmationTokenId?: string,
 
-  /** Whether the Donor wants to recieve marketing emails from Big Give */
+  /** Whether the Donor wants to receive marketing emails from Big Give */
   tbgComms: boolean,
 
-  /** Whether the Donor wants to recieve marketing emails from the charity they donate to with this mandate */
+  /** Whether the Donor wants to receive marketing emails from the charity they donate to with this mandate */
   charityComms: boolean,
 };
 
