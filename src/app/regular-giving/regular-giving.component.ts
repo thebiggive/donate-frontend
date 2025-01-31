@@ -33,8 +33,6 @@ import {billingPostcodeRegExp} from "../postcode.service";
 import {FaIconComponent, FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {CampaignGroupsService} from "../campaign-groups.service";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
-import {FaIconComponent, FontAwesomeModule} from "@fortawesome/angular-fontawesome";
-import {CampaignGroupsService} from "../campaign-groups.service";
 import {environment} from "../../environments/environment";
 
 // for now min & max are hard-coded, will change to be based on a field on
@@ -57,8 +55,7 @@ const minAmount = 1;
     MatProgressSpinner,
 
     FontAwesomeModule,
-    FaIconComponent
-
+    FaIconComponent,
     MatHint,
     MatRadioButton,
     MatRadioGroup,

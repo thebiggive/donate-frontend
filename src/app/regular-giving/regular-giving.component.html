@@ -38,33 +38,37 @@
               </div>
 
               <div class="icon-container">
-                <h5>Categories</h5>
-                <hr>
-                <div class="icons">
-                  @for (category of campaign.categories; track $index) {
-                    <li class="icon-wrapper">
-                      <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
-                      <span class="c-icon-title">
+                <div>
+                  <h5>Categories</h5>
+                  <hr>
+                  <div class="icons">
+                    @for (category of campaign.categories; track $index) {
+                      <li class="icon-wrapper">
+                        <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
+                        <span class="c-icon-title">
               <!-- add zero width space to allow line break -->
-                        {{ category.split('/').join('/\u200B') }}
+                          {{ category.split('/').join('/\u200B') }}
             </span>
-                    </li>
-                  }
+                      </li>
+                    }
+                  </div>
                 </div>
 
-                <h5>Beneficiaries</h5>
-                <hr>
-                <ul class="icons">
-                  @for (beneficiary of campaign.beneficiaries; track $index) {
-                    <li class="icon-wrapper">
-                      <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
-                      <span class="c-icon-title">
+                <div>
+                  <h5>Beneficiaries</h5>
+                  <hr>
+                  <ul class="icons">
+                    @for (beneficiary of campaign.beneficiaries; track $index) {
+                      <li class="icon-wrapper">
+                        <fa-icon [title]="beneficiary" [icon]="getBeneficiaryIcon(beneficiary)"></fa-icon>
+                        <span class="c-icon-title">
                 <!-- add zero width space to allow line break -->
-                        {{ beneficiary.split('/').join('/\u200B') }}
+                          {{ beneficiary.split('/').join('/\u200B') }}
               </span>
-                    </li>
-                  }
-                </ul>
+                      </li>
+                    }
+                  </ul>
+                </div>
               </div>
 
               <div class="donation-input donation-input-main">
