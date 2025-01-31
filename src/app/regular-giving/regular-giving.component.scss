@@ -6,12 +6,28 @@
 div.summary-and-beneficiaries {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  flex-basis: 1;
+  justify-content: center;
+  gap: 20px;
 
   @media only screen and (max-width: 750px) {
     flex-direction: column;
   }
 }
+
+div.icon-container, div.container {
+  width: 100%;
+  flex: 1;
+}
+
+biggive-formatted-text {
+  width: 50%;
+  max-width: 100% !important;
+}
+
+//hr {
+//  width: max-content;
+//}
 
 biggive-formatted-text {
   max-width: 50%;
