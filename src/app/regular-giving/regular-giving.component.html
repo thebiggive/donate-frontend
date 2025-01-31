@@ -37,24 +37,14 @@
                 <p class="b-rt-0 b-m-0 b-bold">{{ campaign.charity.name }}</p>
               </div>
 
-              <div class="icon-container">
-                <div>
-                  <h5>Categories</h5>
+              <div class="summary-and-beneficiaries">
+                <biggive-formatted-text
+                  default-text-colour="black">
+                  <h5>Problem summary</h5>
                   <hr>
-                  <div class="icons">
-                    @for (category of campaign.categories; track $index) {
-                      <li class="icon-wrapper">
-                        <fa-icon [title]="category" [icon]="getCategoryIcon(category)"></fa-icon>
-                        <span class="c-icon-title">
-              <!-- add zero width space to allow line break -->
-                          {{ category.split('/').join('/\u200B') }}
-            </span>
-                      </li>
-                    }
-                  </div>
-                </div>
-
-                <div>
+                  <p>{{ campaign.problem }}</p>
+                </biggive-formatted-text>
+                <div class="icon-container">
                   <h5>Beneficiaries</h5>
                   <hr>
                   <ul class="icons">
@@ -70,6 +60,7 @@
                   </ul>
                 </div>
               </div>
+
 
               <div class="donation-input donation-input-main">
 

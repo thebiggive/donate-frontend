@@ -3,15 +3,18 @@
 @include binary-options();
 @include beneficiaries-and-categories();
 
-div.icon-container {
+div.summary-and-beneficiaries {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  max-width: 60%;
 
   @media only screen and (max-width: 750px) {
     flex-direction: column;
   }
+}
+
+biggive-formatted-text {
+  max-width: 50%;
 }
 
 // code below duplicated from donation-start-container.component.scss
