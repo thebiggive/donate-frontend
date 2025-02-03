@@ -153,6 +153,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       optInCharityEmail: [booleansDefaultValue, requiredNotBlankValidator],
       optInTbgEmail: [booleansDefaultValue, requiredNotBlankValidator],
       giftAid: [booleansDefaultValue, requiredNotBlankValidator],
+      homeOutsideUK: [null]
       }
     );
 
@@ -293,9 +294,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected loadingAddressSuggestions = false;
 
   protected giftAidErrorMessage: string | undefined = undefined;
-  protected homeOutsideUK: boolean = false;
 
 
+  protected get homeOutsideUK(): boolean {
+     return this.mandateForm.value.homeOutsideUK;
+  }
 
   protected onBillingPostCodeChanged(_: Event) {
     // no-op for now, but @todo-regular-giving we may need to do some validation as we don the ad-hoc donation page.
