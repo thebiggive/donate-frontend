@@ -99,11 +99,16 @@
                       </mat-radio-button>
                     </div>
                   </div>
-<!--                  @if (triedToLeaveGiftAid && giftAidRequiredRadioError()) {-->
-<!--                    <p class="error" aria-live="polite">-->
-<!--                      {{giftAidRequiredRadioError()}}-->
-<!--                    </p>-->
-<!--                  }-->
+                  <div aria-live="polite">
+                    <div
+                      class="error"
+                    >
+                      @if (giftAidErrorMessage) {
+                        {{ giftAidErrorMessage }}
+                      }
+                    </div>
+                  </div>
+
                 </mat-radio-group>
                 @if (giftAid) {
                   <div id="giftAidAddressContainer">
@@ -142,9 +147,6 @@
                           ></mat-spinner>
                         }
                       </mat-hint>
-                      @if (giftAidErrorMessage) {
-                        <div class="error">Maximum 255 characters exceeded</div>
-                      }
                     </div>
                     @if (!homeOutsideUK) {
                       <div>

@@ -497,7 +497,17 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     return !!this.paymentInfoErrorMessage;
   }
 
-  private validateGiftAidStep()  {
-    return false;
+  private validateGiftAidStep(): boolean  {
+    let errorFound = false;
+    if (typeof this.giftAid !== 'boolean') {
+      this.giftAidErrorMessage = 'Please choose whether you wish to claim Gift Aid.';
+      errorFound = true;
+    } else {
+      this.giftAidErrorMessage = undefined;
+    }
+
+    this.giftAidErrorMessage && this.toast.showError(this.giftAidErrorMessage);
+
+    return errorFound;
   }
 }
