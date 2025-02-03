@@ -56,14 +56,13 @@
               </div>
               <p>This amount will be taken from your account today and once every month in future</p>
 
-              @if (amountErrorMessage) {
-              <div
-                class="error"
-                aria-live="polite"
-              >
-                {{ this.amountErrorMessage }}
+              <div aria-live="polite" >
+                @if (amountErrorMessage) {
+                  <div class="error">
+                    {{ this.amountErrorMessage }}
+                  </div>
+                }
               </div>
-              }
 
               <div style="text-align: center">
                 <button style="width: 40%;"
@@ -231,14 +230,15 @@
                     </biggive-text-input>
                     }
 
-                @if (paymentInfoErrorMessage) {
-                  <div
-                    class="error"
-                    aria-live="polite"
-                  >
+              <div aria-live="polite">
+                <div
+                  class="error"
+                >
+                  @if (paymentInfoErrorMessage) {
                     {{ paymentInfoErrorMessage }}
-                  </div>
-                }
+                  }
+                </div>
+              </div>
 
               <div style="text-align: center">
                 <button style="width: 40%;"
@@ -270,28 +270,29 @@
                     </mat-radio-button>
                   </div>
                 </div>
-                @if (optInCharityEmailError) {
-                  <p class="error" aria-live="assertive">
-                    {{optInCharityEmailError}}
-                  </p>
-                }
+                  <div aria-live="polite">
+                    @if (optInCharityEmailError) {
+                      <p class="error">{{optInCharityEmailError}}</p>
+                    }
+                  </div>
               </mat-radio-group>
               <mat-hint>
                 @if (campaign.charity.optInStatement) {
                   <p class="no-margin-top b-rt-sm b-grey">{{ campaign.charity.optInStatement }}</p>
                 }
+                <div aria-live="polite">
                 @if (optInCharityEmail === false) {
                   <p
-                    aria-live="polite"
                     class="no-margin-top b-rt-sm b-grey"
                   >
                     Please note that you might continue to receive communications from the charity if you have already shared your details with them via other methods.
                   </p>
                 }
                 @if (optInCharityEmail) {
-                  <p aria-live="polite" class="no-margin-top b-rt-sm b-grey">
+                  <p class="no-margin-top b-rt-sm b-grey">
                     As you are providing personal information to {{ campaign.charity.name }}, please make sure you read and agree to their privacy statement.</p>
                 }
+                </div>
               </mat-hint>
               <p class="binary-question-header b-bold b-rt-0" id="optInTbgEmail-label">Would you be happy to receive emails from <span class="colour-primary">Big Give</span>?</p>
               <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
@@ -307,19 +308,23 @@
                     </mat-radio-button>
                   </div>
                 </div>
+                <div aria-live="polite">
                 @if (optInTBGEmailError) {
-                  <p class="error" aria-live="assertive">
+                  <p class="error">
                     {{optInTBGEmailError}}
                   </p>
                 }
+                </div>
               </mat-radio-group>
-              @if (optInTbgEmail === false) {
-                <mat-hint aria-live="polite">
-                  <p class="no-margin-top b-rt-sm b-grey">
-                    By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
-                  </p>
-                </mat-hint>
-              }
+              <div aria-live="polite">
+                @if (optInTbgEmail === false) {
+                  <mat-hint>
+                    <p class="no-margin-top b-rt-sm b-grey">
+                      By selecting 'no', we will no longer be able to email you about opportunities to double your donation.
+                    </p>
+                  </mat-hint>
+                }
+              </div>
 
               <p></p>
 
@@ -366,15 +371,17 @@
               </p>
               <p>(todo-regular-giving-OPS-766: add link to regular giving terms & conditions)</p>
 
-              @if (submitErrorMessage) {
-                <div
-                  class="error"
-                  aria-live="polite"
-                >
-                  {{ submitErrorMessage }}
-                </div>
-              }
+              <div aria-live="polite">
+                  @if (submitErrorMessage) {
+                    <div
+                      class="error"
+                    >
+                      {{ submitErrorMessage }}
+                    </div>
+                  }
+              </div>
 
+              <div aria-live="polite">
               @if (!submitting) {
                 <button
                   (click)="submit()"
@@ -386,13 +393,14 @@
                   Start regular giving now
                 </button>
               } @else {
-                <div aria-live="polite">
+                <div>
                   @if (submitting) {
                     <mat-spinner color="primary" diameter="30"
                                  aria-label="Processing your regular giving mandate"></mat-spinner>
                   }
                 </div>
               }
+              </div>
             </mat-step>
           </mat-vertical-stepper>
         </form>
