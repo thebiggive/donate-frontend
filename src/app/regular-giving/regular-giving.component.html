@@ -71,10 +71,117 @@
                         class="continue b-w-100 b-rt-0"
                         mat-raised-button
                         color="primary"
-                        (click)="this.selectStep(1)"
+                        (click)="this.continue()"
                 >Continue
                 </button>
               </div>
+
+            </mat-step>
+            <mat-step
+              label="Gift Aid"
+            >
+                <p class="b-mt-40 b-bold b-rt-0">Boost your donation by <span class="colour-primary">25p</span> of Gift Aid for every <span class="colour-primary">£1</span> you donate.</p>
+              <p style="color: red; font-weight: bold">
+                Warning: GA choices entered in this section do not yet do anything. GA system for regular giving needs further implementation here and in matchbot.
+              </p>
+                <p class="b-grey b-rt-sm">I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of Gift Aid claimed on all my donations it is my responsibility to pay the difference.</p>
+                <p class="b-grey b-rt-sm">Gift Aid is a government scheme for UK charities to reclaim the tax you have paid and gain 25% more at no cost or hassle to you.</p>
+                <p><a [href]="termsUrl" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>Find out more about Gift Aid</a></p>
+                <mat-radio-group formControlName="giftAid">
+                  <div class="binary-options">
+                    <div class="binary-option">
+                      <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="true">
+                        <strong>Yes</strong>, I want to Gift Aid my donation to {{ campaign.charity.name }}.
+                      </mat-radio-button>
+                    </div>
+                    <div class="binary-option">
+                      <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="false">
+                        <strong>No</strong>, I do not meet the criteria for Gift Aid to be claimed, or do not want Gift Aid claimed
+                      </mat-radio-button>
+                    </div>
+                  </div>
+<!--                  @if (triedToLeaveGiftAid && giftAidRequiredRadioError()) {-->
+<!--                    <p class="error" aria-live="polite">-->
+<!--                      {{giftAidRequiredRadioError()}}-->
+<!--                    </p>-->
+<!--                  }-->
+                </mat-radio-group>
+                @if (giftAid) {
+                  <div id="giftAidAddressContainer">
+                    <div>
+                      <biggive-text-input>
+                        <label slot="label" for="homeAddress">Enter your home address</label>
+                        <input
+                          formControlName="homeAddress"
+                          id="homeAddress"
+                          matInput
+                          slot="input"
+                          autocomplete="off"
+                          [matAutocomplete]="autoAddress"
+                          [matAutocompleteDisabled]="!showAddressLookup"
+                        />
+                      </biggive-text-input>
+                      <mat-autocomplete
+                        #autoAddress="matAutocomplete"
+                        [displayWith]="summariseAddressSuggestion"
+                        (optionSelected)="addressChosen($event)"
+                      >
+                        @for (suggestion of addressSuggestions; track suggestion.address) {
+                          <mat-option [value]="suggestion">
+                            {{ suggestion.address }}
+                          </mat-option>
+                        }
+                      </mat-autocomplete>
+                      <mat-hint>
+                        This is for your Gift Aid declaration to HMRC
+                        @if (loadingAddressSuggestions) {
+                          <mat-spinner
+                            aria-label="Loading possible addresses"
+                            color="primary"
+                            diameter="15"
+                            class="address-loading-spinner"
+                          ></mat-spinner>
+                        }
+                      </mat-hint>
+                      @if (giftAidErrorMessage) {
+                        <div class="error">Maximum 255 characters exceeded</div>
+                      }
+                    </div>
+                    @if (!homeOutsideUK) {
+                      <div>
+                        <biggive-text-input>
+                          <label slot="label" for="homePostcode">Enter your home postcode</label>
+                          <input
+                            autocomplete="postal-code"
+                            formControlName="homePostcode"
+                            id="homePostcode"
+                            autocapitalize="characters"
+                            matInput
+                            slot="input"
+                          />
+                        </biggive-text-input>
+                      </div>
+                    }
+                    <div class="homeOutsideUK-wrapper">
+                      <mat-checkbox formControlName="homeOutsideUK" id="homeOutsideUK">
+                        I live outside the UK
+                      </mat-checkbox>
+                    </div>
+                  </div>
+                }
+
+              <p></p>
+
+                <div style="text-align: center">
+                  <button
+                    type="button"
+                    class="continue b-w-100 b-rt-0"
+                    mat-raised-button
+                    color="primary"
+                    (click)="this.continue()"
+                  >Continue</button>
+                </div>
+
 
             </mat-step>
             <mat-step
@@ -139,7 +246,7 @@
                         class="continue b-w-100 b-rt-0"
                         mat-raised-button
                         color="primary"
-                        (click)="this.selectStep(2)"
+                        (click)="this.continue()"
                 >Continue
                 </button>
               </div>
@@ -222,7 +329,7 @@
                         class="continue b-w-100 b-rt-0"
                         mat-raised-button
                         color="primary"
-                        (click)="this.selectStep(3)"
+                        (click)="this.continue()"
                 >Continue
                 </button>
               </div>

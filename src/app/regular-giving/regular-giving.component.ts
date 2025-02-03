@@ -32,6 +32,8 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {billingPostcodeRegExp} from "../postcode.service";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {environment} from "../../environments/environment";
+import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
+import {MatCheckbox} from "@angular/material/checkbox";
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -55,7 +57,11 @@ const minAmount = 1;
     MatRadioButton,
     MatRadioGroup,
     MatIconAnchor,
-    RouterLink
+    RouterLink,
+    MatAutocomplete,
+    MatAutocompleteTrigger,
+    MatCheckbox,
+    MatOption
   ],
   templateUrl: './regular-giving.component.html',
   styleUrl: './regular-giving.component.scss'
@@ -129,7 +135,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     // These opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
     // and prefilling them with 'no' values in that case.
-    const optInDefaultValue = environment.environmentId === 'regression' ? false : null;
+    const booleansDefaultValue = environment.environmentId === 'regression' ? false : null;
 
     this.mandateForm = this.formBuilder.group({
         donationAmount: ['', [
@@ -144,8 +150,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
           Validators.pattern(billingPostcodeRegExp),
         ]
       ],
-      optInCharityEmail: [optInDefaultValue, requiredNotBlankValidator],
-      optInTbgEmail: [optInDefaultValue, requiredNotBlankValidator],
+      optInCharityEmail: [booleansDefaultValue, requiredNotBlankValidator],
+      optInTbgEmail: [booleansDefaultValue, requiredNotBlankValidator],
+      giftAid: [booleansDefaultValue, requiredNotBlankValidator],
       }
     );
 
@@ -270,6 +277,26 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     });
   })
 
+  protected get giftAid(): boolean | undefined
+  {
+    return this.mandateForm.value.giftAid;
+  }
+
+  protected showAddressLookup = true;
+
+  protected summariseAddressSuggestion: any = () => '';
+
+  protected addressChosen: any = () => '';
+
+  protected addressSuggestions: any = [];
+
+  protected loadingAddressSuggestions = false;
+
+  protected giftAidErrorMessage: string | undefined = undefined;
+  protected homeOutsideUK: boolean = false;
+
+
+
   protected onBillingPostCodeChanged(_: Event) {
     // no-op for now, but @todo-regular-giving we may need to do some validation as we don the ad-hoc donation page.
   }
@@ -337,14 +364,27 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     }
   }
 
-  protected selectStep(stepIndex: number) {
+  protected continue(): void {
+    const nextStepIndex = this.stepper.selectedIndex + 1;
+    if (nextStepIndex > this.stepper.steps.length - 1) {
+      throw new Error("Cannot continue past last step");
+    }
+
+    this.selectStep(nextStepIndex);
+  }
+
+  private selectStep(stepIndex: number) {
     let errorFound = this.validateAmountStep();
 
     if (stepIndex > 1) {
-      errorFound = this.validatePaymentInformationStep() || errorFound;
+      errorFound = this.validateGiftAidStep() || errorFound;
     }
 
     if (stepIndex > 2) {
+      errorFound = this.validatePaymentInformationStep() || errorFound;
+    }
+
+    if (stepIndex > 3) {
       errorFound = this.validateUpdatesStep() || errorFound;
     }
 
@@ -455,5 +495,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     this.paymentInfoErrorMessage && this.toast.showError(this.paymentInfoErrorMessage);
 
     return !!this.paymentInfoErrorMessage;
+  }
+
+  private validateGiftAidStep()  {
+    return false;
   }
 }
