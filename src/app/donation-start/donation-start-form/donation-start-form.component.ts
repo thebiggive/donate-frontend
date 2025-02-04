@@ -21,7 +21,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatomoTracker} from 'ngx-matomo-client';
-import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
+import {retryWhen, tap} from 'rxjs/operators';
 import {
   ConfirmationToken,
   ConfirmationTokenResult,
@@ -32,7 +32,7 @@ import {
   StripeError,
   StripePaymentElement,
 } from '@stripe/stripe-js';
-import {EMPTY, firstValueFrom} from 'rxjs';
+import {firstValueFrom} from 'rxjs';
 
 import {Campaign} from '../../campaign.model';
 import {CardIconsService} from '../../card-icons.service';
@@ -46,13 +46,12 @@ import {DonationStartMatchingExpiredDialogComponent} from '../donation-start-mat
 import {DonationStartOfferReuseDialogComponent} from '../donation-start-offer-reuse-dialog.component';
 import {environment} from '../../../environments/environment';
 import {ExactCurrencyPipe} from '../../exact-currency.pipe';
-import {GiftAidAddress} from '../../gift-aid-address.model';
 import {GiftAidAddressSuggestion} from '../../gift-aid-address-suggestion.model';
 import {IdentityService} from '../../identity.service';
 import {ConversionTrackingService} from '../../conversionTracking.service';
 import {PageMetaService} from '../../page-meta.service';
 import {Person} from '../../person.model';
-import {billingPostcodeRegExp, postcodeFormatHelpRegExp, postcodeRegExp, PostcodeService} from '../../postcode.service';
+import {AddressService, billingPostcodeRegExp, postcodeFormatHelpRegExp, postcodeRegExp} from '../../address.service';
 import {retryStrategy} from '../../observable-retry';
 import {getStripeFriendlyError, StripeService} from '../../stripe.service';
 import {getCurrencyMaxValidator} from '../../validators/currency-max';
@@ -152,7 +151,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
   loadingAddressSuggestions = false;
   privacyUrl = 'https://biggive.org/privacy';
-  showAddressLookup: boolean;
 
   // Kind of a subset of `stripePaymentMethodReady`, which tracks just the Payment Element Stripe.js element based
   // on the `complete` property of the callback event. Doesn't cover saved cards, or donation credit.
@@ -251,7 +249,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private identityService: IdentityService,
     private matomoTracker: MatomoTracker,
     private pageMeta: PageMetaService,
-    private postcodeService: PostcodeService,
+    private addressService: AddressService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,
@@ -518,38 +516,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    this.showAddressLookup =
-      this.psp === 'stripe' &&
-      !! environment.postcodeLookupKey &&
-      !! environment.postcodeLookupUri;
-
-    if (!this.showAddressLookup) {
-      return;
-    }
-
-    const observable = this.giftAidGroup.get('homeAddress')?.valueChanges.pipe(
-      startWith(''),
-      // https://stackoverflow.com/a/51470735/2803757
-      debounceTime(400),
-      distinctUntilChanged(),
-      // switchMap *seems* like the best operator to swap out the Observable on the value change
-      // itself and swap in the observable on a lookup. But I'm not an expert with RxJS! I think/
-      // hope this may also cancel previous outstanding lookup resolutions that are in flight?
-      // https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap
-      switchMap((initialAddress: any) => {
-        if (!initialAddress) {
-          return EMPTY;
+    this.addressService.suggestAddresses({
+        homeAddressFormControl: this.giftAidGroup.get('homeAddress')!,
+        loadingAddressSuggestionCallback: () => {this.loadingAddressSuggestions = true;},
+        foundAddressSuggestionCallback: (suggestions: GiftAidAddressSuggestion[]) => {
+          this.loadingAddressSuggestions = false;
+          this.addressSuggestions = suggestions;
         }
-
-        this.loadingAddressSuggestions = true;
-        return this.postcodeService.getSuggestions(initialAddress);
-      }),
-    ) || EMPTY;
-
-    observable.subscribe(suggestions => {
-      this.loadingAddressSuggestions = false;
-      this.addressSuggestions = suggestions;
-    });
+      });
 
     this.amountsGroup?.patchValue({tipAmount: this.tipAmountFromSlider});
     this.tipAmountField?.setValue(this.tipAmountFromSlider);
@@ -617,35 +591,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     location.reload();
   }
 
-  summariseAddressSuggestion(suggestion: GiftAidAddressSuggestion | string | undefined): string {
-    // Patching the `giftAidGroup` seems to lead to a re-evaluation via this method, even if we use
-    // `{emit: false}`. So it seems like the only safe way for the slightly hacky autocomplete return
-    // approach of returning an object, then resolving from it, to work, is to explicitly check which
-    // type this field has got before re-summarising it.
-    if (typeof suggestion === 'string') {
-      return suggestion;
-    }
-
-    return suggestion?.address || '';
-  }
-
   addressChosen(event: MatAutocompleteSelectedEvent) {
-    // Autocomplete's value.url should be an address we can /get.
-    this.postcodeService.get(event.option.value.url).subscribe((address: GiftAidAddress) => {
-      const addressParts = [address.line_1];
-      if (address.line_2) {
-        addressParts.push(address.line_2);
-      }
-      addressParts.push(address.town_or_city);
-
-      this.giftAidGroup.patchValue({
-        homeAddress: addressParts.join(', '),
-        homeBuildingNumber: address.building_number,
-        homePostcode: address.postcode,
-      });
-    }, error => {
-      console.log('Postcode resolve error', error);
-    });
+    this.addressService.loadAddress(event, (address) => this.giftAidGroup.patchValue(address));
   }
 
   async stepChanged(event: StepperSelectionEvent) {
@@ -2286,6 +2233,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   protected readonly flags = flags;
   protected showCardReuseMessage = false;
+  protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
 
   hideCaptcha() {
     this.shouldShowCaptcha = false;

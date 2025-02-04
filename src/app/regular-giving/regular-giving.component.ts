@@ -29,9 +29,17 @@ import {
 } from "@stripe/stripe-js";
 import {DonationService, StripeCustomerSession} from "../donation.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {billingPostcodeRegExp} from "../postcode.service";
+import {AddressService, billingPostcodeRegExp, HomeAddress} from "../address.service";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {environment} from "../../environments/environment";
+import {
+  MatAutocomplete,
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
+  MatOption
+} from "@angular/material/autocomplete";
+import {MatCheckbox} from "@angular/material/checkbox";
+import {GiftAidAddressSuggestion} from "../gift-aid-address-suggestion.model";
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -55,7 +63,11 @@ const minAmount = 1;
     MatRadioButton,
     MatRadioGroup,
     MatIconAnchor,
-    RouterLink
+    RouterLink,
+    MatAutocomplete,
+    MatAutocompleteTrigger,
+    MatCheckbox,
+    MatOption
   ],
   templateUrl: './regular-giving.component.html',
   styleUrl: './regular-giving.component.scss'
@@ -92,6 +104,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected optInTBGEmailError: string | undefined;
   protected optInCharityEmailError: string | undefined;
 
+  /**
+   * Optional home address, used for Gift Aid purposes.
+   */
+  protected homeAddress: HomeAddress | undefined;
+  protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
 
   constructor(
     private route: ActivatedRoute,
@@ -102,6 +119,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     private pageMeta: PageMetaService,
     private stripeService: StripeService,
     private donationService: DonationService,
+    private addressService: AddressService,
   ) {
   }
 
@@ -129,7 +147,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     // These opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
     // and prefilling them with 'no' values in that case.
-    const optInDefaultValue = environment.environmentId === 'regression' ? false : null;
+    const booleansDefaultValue = environment.environmentId === 'regression' ? false : null;
 
     this.mandateForm = this.formBuilder.group({
         donationAmount: ['', [
@@ -144,10 +162,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
           Validators.pattern(billingPostcodeRegExp),
         ]
       ],
-      optInCharityEmail: [optInDefaultValue, requiredNotBlankValidator],
-      optInTbgEmail: [optInDefaultValue, requiredNotBlankValidator],
-      }
-    );
+      optInCharityEmail: [booleansDefaultValue, requiredNotBlankValidator],
+      optInTbgEmail: [booleansDefaultValue, requiredNotBlankValidator],
+      giftAid: [booleansDefaultValue, requiredNotBlankValidator],
+      homeOutsideUK: [null],
+      homeAddress: [null],
+      homePostcode: [null],
+      });
 
     this.stripeService.init().catch(console.error);
 
@@ -159,6 +180,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
         }
       })
       .catch(console.error);
+
+    this.addressService.suggestAddresses({
+      homeAddressFormControl: this.mandateForm.get('homeAddress')!,
+      loadingAddressSuggestionCallback: () => {this.loadingAddressSuggestions = true;},
+      foundAddressSuggestionCallback: (suggestions: GiftAidAddressSuggestion[]) => {
+        this.loadingAddressSuggestions = false;
+        this.addressSuggestions = suggestions;
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -239,12 +269,14 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       dayOfMonth,
       campaignId: this.campaign.id,
       currency: "GBP",
-      giftAid: false,
+      giftAid: !!this.giftAid,
       billingPostcode,
       billingCountry,
       stripeConfirmationTokenId: confirmationToken?.id,
       charityComms: !!this.optInCharityEmail,
       tbgComms: !!this.optInTbgEmail,
+      homeAddress: this.homeAddressFormValue,
+      homePostcode: this.homePostcode,
     }).subscribe({
       next: async (mandate: Mandate) => {
         await this.router.navigateByUrl(`/${myRegularGivingPath}/${mandate.id}`);
@@ -269,6 +301,24 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       billingCountry: countryCode,
     });
   })
+
+  protected get giftAid(): boolean | undefined
+  {
+    return this.mandateForm.value.giftAid;
+  }
+
+  protected addressSuggestions: GiftAidAddressSuggestion[] = [];
+  protected loadingAddressSuggestions = false;
+
+  protected giftAidErrorMessage: string | undefined = undefined;
+
+  protected get homeOutsideUK(): boolean {
+     return !!this.mandateForm.value.homeOutsideUK;
+  }
+
+  protected get homePostcode(): string | null {
+    return this.mandateForm.value.homePostcode;
+  }
 
   protected onBillingPostCodeChanged(_: Event) {
     // no-op for now, but @todo-regular-giving we may need to do some validation as we don the ad-hoc donation page.
@@ -337,14 +387,27 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     }
   }
 
-  protected selectStep(stepIndex: number) {
+  protected continue(): void {
+    const nextStepIndex = this.stepper.selectedIndex + 1;
+    if (nextStepIndex > this.stepper.steps.length - 1) {
+      throw new Error("Cannot continue past last step");
+    }
+
+    this.selectStep(nextStepIndex);
+  }
+
+  private selectStep(stepIndex: number) {
     let errorFound = this.validateAmountStep();
 
     if (stepIndex > 1) {
-      errorFound = this.validatePaymentInformationStep() || errorFound;
+      errorFound = this.validateGiftAidStep() || errorFound;
     }
 
     if (stepIndex > 2) {
+      errorFound = this.validatePaymentInformationStep() || errorFound;
+    }
+
+    if (stepIndex > 3) {
       errorFound = this.validateUpdatesStep() || errorFound;
     }
 
@@ -361,6 +424,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected get optInTbgEmail(): boolean | undefined
   {
     return this.mandateForm.value.optInTbgEmail;
+  }
+
+  protected get homeAddressFormValue(): string
+  {
+    return AddressService.summariseAddressSuggestion(this.mandateForm.value.homeAddress);
   }
 
   /**
@@ -455,5 +523,33 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     this.paymentInfoErrorMessage && this.toast.showError(this.paymentInfoErrorMessage);
 
     return !!this.paymentInfoErrorMessage;
+  }
+
+  private validateGiftAidStep(): boolean  {
+    const errors: string[] = [];
+    if (typeof this.giftAid !== 'boolean') {
+      errors.push('Please choose whether you wish to claim Gift Aid.');
+    }
+
+    if (this.giftAid && !this.homeAddressFormValue) {
+      errors.push('Please enter or select your home address if you wish to claim gift aid.');
+    }
+
+    if (this.giftAid && ! this.homeOutsideUK && !this.homePostcode) {
+      errors.push('Please enter your home postcode to claim Gift Aid if you are in the UK.');
+    }
+
+    this.giftAidErrorMessage = errors.join(' ');
+
+    this.giftAidErrorMessage && this.toast.showError(this.giftAidErrorMessage);
+
+    return errors.length > 0;
+  }
+
+  addressChosen(event: MatAutocompleteSelectedEvent) {
+    this.addressService.loadAddress(event, (address) => {
+      this.mandateForm.patchValue({homePostcode: address.homePostcode});
+      this.homeAddress = address;
+    });
   }
 }

@@ -145,3 +145,7 @@ table#personal-details, table#paymentMethods {
 .b-back-button {
   @include make-back-button;
 }
+
+#giftAidAddressContainer {
+  margin-top: 60px;
+}
