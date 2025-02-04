@@ -29,7 +29,7 @@ import {
 } from "@stripe/stripe-js";
 import {DonationService, StripeCustomerSession} from "../donation.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {billingPostcodeRegExp} from "../postcode.service";
+import {billingPostcodeRegExp} from "../address.service";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {environment} from "../../environments/environment";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";

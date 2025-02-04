@@ -1,18 +1,18 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { PostcodeService } from './postcode.service';
+import { AddressService } from './address.service';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('PostcodeService', () => {
-  let service: PostcodeService;
+  let service: AddressService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
     imports: [],
     providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
 });
-    service = TestBed.inject(PostcodeService);
+    service = TestBed.inject(AddressService);
   });
 
   it('should be created', () => {

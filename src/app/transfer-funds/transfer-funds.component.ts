@@ -20,7 +20,7 @@ import {GiftAidAddressSuggestion} from '../gift-aid-address-suggestion.model';
 import {GiftAidAddress} from '../gift-aid-address.model';
 import {IdentityService} from '../identity.service';
 import {Person} from '../person.model';
-import {PostcodeService} from '../postcode.service';
+import {AddressService} from '../address.service';
 import {getCurrencyMinValidator} from '../validators/currency-min';
 import {getCurrencyMaxValidator} from '../validators/currency-max';
 import {Toast} from '../toast.service';
@@ -68,7 +68,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     private identityService: IdentityService,
     private matomoTracker: MatomoTracker,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private postcodeService: PostcodeService,
+    private postcodeService: AddressService,
     private toast: Toast,
   ) {}
 

@@ -26,7 +26,7 @@ import {CardIconsService} from "../../card-icons.service";
 import {ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, ElementRef} from "@angular/core";
 import {ConversionTrackingService} from "../../conversionTracking.service";
 import {PageMetaService} from "../../page-meta.service";
-import {PostcodeService} from "../../postcode.service";
+import {AddressService} from "../../address.service";
 import {StripeService} from "../../stripe.service";
 import {Donation} from "../../donation.model";
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
@@ -53,7 +53,7 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
       }
     } as unknown as MatomoClientTracker,
     undefined as unknown as PageMetaService,
-    undefined as unknown as PostcodeService,
+    undefined as unknown as AddressService,
     {},
     {snapshot: {}} as unknown as ActivatedRoute,
     {

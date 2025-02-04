@@ -52,7 +52,7 @@ import {IdentityService} from '../../identity.service';
 import {ConversionTrackingService} from '../../conversionTracking.service';
 import {PageMetaService} from '../../page-meta.service';
 import {Person} from '../../person.model';
-import {billingPostcodeRegExp, postcodeFormatHelpRegExp, postcodeRegExp, PostcodeService} from '../../postcode.service';
+import {billingPostcodeRegExp, postcodeFormatHelpRegExp, postcodeRegExp, AddressService} from '../../address.service';
 import {retryStrategy} from '../../observable-retry';
 import {getStripeFriendlyError, StripeService} from '../../stripe.service';
 import {getCurrencyMaxValidator} from '../../validators/currency-max';
@@ -251,7 +251,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private identityService: IdentityService,
     private matomoTracker: MatomoTracker,
     private pageMeta: PageMetaService,
-    private postcodeService: PostcodeService,
+    private postcodeService: AddressService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,

@@ -22,7 +22,7 @@ export const billingPostcodeRegExp = new RegExp('^[0-9a-zA-Z -]{2,8}$');
 @Injectable({
   providedIn: 'root',
 })
-export class PostcodeService {
+export class AddressService {
   constructor(private http: HttpClient) {}
 
   getSuggestions(partialAddress: string): Observable<GiftAidAddressSuggestion[]> {
