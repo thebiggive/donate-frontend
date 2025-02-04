@@ -36,7 +36,7 @@ export class AddressService {
     return this.http.get<GiftAidAddressSuggestion[]>(uri).pipe(
       map((response: any) => response.suggestions),
       catchError((error) => {
-        console.log('PostcodeService.getSuggestions() error', error);
+        console.log('AddressService.getSuggestions() error', error);
         return EMPTY;
       }),
     );

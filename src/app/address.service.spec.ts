@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { AddressService } from './address.service';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-describe('PostcodeService', () => {
+describe('AddressService', () => {
   let service: AddressService;
 
   beforeEach(() => {
