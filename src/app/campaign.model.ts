@@ -33,16 +33,16 @@ export interface Campaign {
      * ISO 8601 formatted datetime
      **/
     endDate: string;
-    impactReporting: string;
-    impactSummary: string;
+    impactReporting: string | null;
+    impactSummary: string | null;
     isMatched: boolean;
     matchFundsRemaining: number;
     matchFundsTotal: number;
     parentUsesSharedFunds: boolean;
-    problem: string;
+    problem: string | null;
     quotes: Array<{person: string, quote: string}>;
     ready: boolean;
-    solution: string;
+    solution: string | null;
 
     /**
      * ISO 8601 formatted datetime
