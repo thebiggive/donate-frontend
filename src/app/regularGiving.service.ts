@@ -15,6 +15,8 @@ type StartMandateParams = {
   dayOfMonth: number,
   campaignId: string,
   giftAid: boolean,
+  homeAddress: string | null,
+  homePostcode: string | null,
   /** ISO-2 code for country. Must match that on the DonorAccount if the latter is non-null */
   billingCountry: string,
 

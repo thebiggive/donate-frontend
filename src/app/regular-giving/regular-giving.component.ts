@@ -270,12 +270,14 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       dayOfMonth,
       campaignId: this.campaign.id,
       currency: "GBP",
-      giftAid: false,
+      giftAid: !!this.giftAid,
       billingPostcode,
       billingCountry,
       stripeConfirmationTokenId: confirmationToken?.id,
       charityComms: !!this.optInCharityEmail,
       tbgComms: !!this.optInTbgEmail,
+      homeAddress: this.homeAddressFormValue,
+      homePostcode: this.homePostcode,
     }).subscribe({
       next: async (mandate: Mandate) => {
         await this.router.navigateByUrl(`/${myRegularGivingPath}/${mandate.id}`);
@@ -315,8 +317,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
      return !!this.mandateForm.value.homeOutsideUK;
   }
 
-  protected get homePostcode(): boolean {
-    return !!this.mandateForm.value.homePostcode;
+  protected get homePostcode(): string | null {
+    return this.mandateForm.value.homePostcode;
   }
 
   protected onBillingPostCodeChanged(_: Event) {
@@ -427,7 +429,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
   protected get homeAddressFormValue(): string
   {
-    return this.mandateForm.value.optInTbgEmail;
+    return AddressService.summariseAddressSuggestion(this.mandateForm.value.homeAddress);
   }
 
   /**
