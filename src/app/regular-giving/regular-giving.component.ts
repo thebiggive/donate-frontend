@@ -306,13 +306,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     return this.mandateForm.value.giftAid;
   }
 
-  /// note - test with simulated address lookup outage, update runbook.
-
-  /*********************************************************************************
-   * @todo-regular giving - replace placeholder properties below with real         **
-   * functionality for address lookup. If possible share code with
-   * DonationStartFormComponent where these were copied from. */
-  /**/                                                                             /**/
   protected addressSuggestions: GiftAidAddressSuggestion[] = [];
   protected loadingAddressSuggestions = false;
 
@@ -537,6 +530,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   }
 
   addressChosen(event: MatAutocompleteSelectedEvent) {
-    this.addressService.loadAddress(event, (address) => this.homeAddress = address);
+    this.addressService.loadAddress(event, (address) => {
+      this.mandateForm.patchValue({homePostcode: address.homePostcode});
+      this.homeAddress = address;
+    });
   }
 }
