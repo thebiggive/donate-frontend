@@ -312,7 +312,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected giftAidErrorMessage: string | undefined = undefined;
 
   protected get homeOutsideUK(): boolean {
-     return this.mandateForm.value.homeOutsideUK;
+     return !!this.mandateForm.value.homeOutsideUK;
+  }
+
+  protected get homePostcode(): boolean {
+    return !!this.mandateForm.value.homePostcode;
   }
 
   protected onBillingPostCodeChanged(_: Event) {
@@ -421,6 +425,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     return this.mandateForm.value.optInTbgEmail;
   }
 
+  protected get homeAddressFormValue(): string
+  {
+    return this.mandateForm.value.optInTbgEmail;
+  }
+
   /**
    * Checks if the amount step is completed correctly, and shows the user an error message if not.
    */
@@ -516,17 +525,24 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   }
 
   private validateGiftAidStep(): boolean  {
-    let errorFound = false;
+    const errors: string[] = [];
     if (typeof this.giftAid !== 'boolean') {
-      this.giftAidErrorMessage = 'Please choose whether you wish to claim Gift Aid.';
-      errorFound = true;
-    } else {
-      this.giftAidErrorMessage = undefined;
+      errors.push('Please choose whether you wish to claim Gift Aid.');
     }
+
+    if (this.giftAid && !this.homeAddressFormValue) {
+      errors.push('Please enter or select your home address if you wish to claim gift aid.');
+    }
+
+    if (this.giftAid && ! this.homeOutsideUK && !this.homePostcode) {
+      errors.push('Please enter your home postcode to claim Gift Aid if you are in the UK.');
+    }
+
+    this.giftAidErrorMessage = errors.join(' ');
 
     this.giftAidErrorMessage && this.toast.showError(this.giftAidErrorMessage);
 
-    return errorFound;
+    return errors.length > 0;
   }
 
   addressChosen(event: MatAutocompleteSelectedEvent) {
