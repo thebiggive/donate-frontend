@@ -591,18 +591,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     location.reload();
   }
 
-  summariseAddressSuggestion(suggestion: GiftAidAddressSuggestion | string | undefined): string {
-    // Patching the `giftAidGroup` seems to lead to a re-evaluation via this method, even if we use
-    // `{emit: false}`. So it seems like the only safe way for the slightly hacky autocomplete return
-    // approach of returning an object, then resolving from it, to work, is to explicitly check which
-    // type this field has got before re-summarising it.
-    if (typeof suggestion === 'string') {
-      return suggestion;
-    }
-
-    return suggestion?.address || '';
-  }
-
   addressChosen(event: MatAutocompleteSelectedEvent) {
     this.addressService.loadAddress(event, (address) => this.giftAidGroup.patchValue(address));
   }
@@ -2245,6 +2233,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   protected readonly flags = flags;
   protected showCardReuseMessage = false;
+  protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
 
   hideCaptcha() {
     this.shouldShowCaptcha = false;

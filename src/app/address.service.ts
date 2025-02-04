@@ -101,5 +101,16 @@ export class AddressService {
     observable.subscribe(foundAddressSuggestionCallback);
   }
 
+  public static summariseAddressSuggestion(suggestion: GiftAidAddressSuggestion | string | undefined): string {
+    // Patching a `giftAidGroup` seems to lead to a re-evaluation via this method, even if we use
+    // `{emit: false}`. So it seems like the only safe way for the slightly hacky autocomplete return
+    // approach of returning an object, then resolving from it, to work, is to explicitly check which
+    // type this field has got before re-summarising it.
+    if (typeof suggestion === 'string') {
+      return suggestion;
+    }
+
+    return suggestion?.address || '';
+  }
 
 }

@@ -109,6 +109,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    * Optional home address, used for Gift Aid purposes.
    */
   protected homeAddress: HomeAddress | undefined;
+  protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
 
   constructor(
     private route: ActivatedRoute,
@@ -305,21 +306,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     return this.mandateForm.value.giftAid;
   }
 
+  /// note - test with simulated address lookup outage, update runbook.
+
   /*********************************************************************************
    * @todo-regular giving - replace placeholder properties below with real         **
    * functionality for address lookup. If possible share code with
    * DonationStartFormComponent where these were copied from. */
   /**/                                                                             /**/
-  protected summariseAddressSuggestion: any = () => '';
-  /**/                                                                             /**/
-
-  /**/                                                                             /**/
-  protected addressSuggestions: any = [];
-  /**/                                                                             /**/
+  protected addressSuggestions: GiftAidAddressSuggestion[] = [];
   protected loadingAddressSuggestions = false;
-  /* End of placeholder properties /*                                               /**/
-  /************************************************************************************/
-
 
   protected giftAidErrorMessage: string | undefined = undefined;
 
