@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { EMPTY, Observable } from 'rxjs';
-import { catchError, map  } from 'rxjs/operators';
+import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap} from 'rxjs/operators';
 
 import { environment } from '../environments/environment';
 import { GiftAidAddress } from './gift-aid-address.model';
 import { GiftAidAddressSuggestion } from './gift-aid-address-suggestion.model';
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
 import {HomeAddress} from "./address-suggestions";
+import {AbstractControl} from "@angular/forms";
 
 /**
  * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
@@ -70,5 +71,35 @@ export class AddressService {
       console.log('Postcode resolve error', error);
     });
   }
+
+  public suggestAddresses (
+    {homeAddressFormControl, loadingAddressSuggestionCallback, foundAddressSuggestionCallback}: {
+      homeAddressFormControl: AbstractControl,
+      loadingAddressSuggestionCallback: () => void,
+      foundAddressSuggestionCallback: (suggestions: GiftAidAddressSuggestion[]) => void
+    }
+  ) {
+    const observable = homeAddressFormControl.valueChanges.pipe(
+      startWith(''),
+      // https://stackoverflow.com/a/51470735/2803757
+      debounceTime(400),
+      distinctUntilChanged(),
+      // switchMap *seems* like the best operator to swap out the Observable on the value change
+      // itself and swap in the observable on a lookup. But I'm not an expert with RxJS! I think/
+      // hope this may also cancel previous outstanding lookup resolutions that are in flight?
+      // https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap
+      switchMap((initialAddress: string | false) => {
+        if (!initialAddress) {
+          return EMPTY;
+        }
+
+        loadingAddressSuggestionCallback();
+        return this.getSuggestions(initialAddress);
+      }),
+    ) || EMPTY;
+
+    observable.subscribe(foundAddressSuggestionCallback);
+  }
+
 
 }

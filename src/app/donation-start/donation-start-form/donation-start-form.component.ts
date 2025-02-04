@@ -21,7 +21,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatomoTracker} from 'ngx-matomo-client';
-import {debounceTime, distinctUntilChanged, retryWhen, startWith, switchMap, tap} from 'rxjs/operators';
+import {retryWhen, tap} from 'rxjs/operators';
 import {
   ConfirmationToken,
   ConfirmationTokenResult,
@@ -32,7 +32,7 @@ import {
   StripeError,
   StripePaymentElement,
 } from '@stripe/stripe-js';
-import {EMPTY, firstValueFrom} from 'rxjs';
+import {firstValueFrom} from 'rxjs';
 
 import {Campaign} from '../../campaign.model';
 import {CardIconsService} from '../../card-icons.service';
@@ -66,7 +66,6 @@ import {requiredNotBlankValidator} from "../../validators/notBlank";
 import {flags} from "../../featureFlags";
 import {WidgetInstance} from "friendly-challenge";
 import {Toast} from "../../toast.service";
-import {HomeAddress} from "../../address-suggestions";
 
 declare var _paq: {
   push: (args: Array<string|object>) => void,
@@ -517,29 +516,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    const observable = this.giftAidGroup.get('homeAddress')?.valueChanges.pipe(
-      startWith(''),
-      // https://stackoverflow.com/a/51470735/2803757
-      debounceTime(400),
-      distinctUntilChanged(),
-      // switchMap *seems* like the best operator to swap out the Observable on the value change
-      // itself and swap in the observable on a lookup. But I'm not an expert with RxJS! I think/
-      // hope this may also cancel previous outstanding lookup resolutions that are in flight?
-      // https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap
-      switchMap((initialAddress: any) => {
-        if (!initialAddress) {
-          return EMPTY;
+    this.addressService.suggestAddresses({
+        homeAddressFormControl: this.giftAidGroup.get('homeAddress')!,
+        loadingAddressSuggestionCallback: () => {this.loadingAddressSuggestions = true;},
+        foundAddressSuggestionCallback: (suggestions: GiftAidAddressSuggestion[]) => {
+          this.loadingAddressSuggestions = false;
+          this.addressSuggestions = suggestions;
         }
-
-        this.loadingAddressSuggestions = true;
-        return this.addressService.getSuggestions(initialAddress);
-      }),
-    ) || EMPTY;
-
-    observable.subscribe(suggestions => {
-      this.loadingAddressSuggestions = false;
-      this.addressSuggestions = suggestions;
-    });
+      });
 
     this.amountsGroup?.patchValue({tipAmount: this.tipAmountFromSlider});
     this.tipAmountField?.setValue(this.tipAmountFromSlider);
