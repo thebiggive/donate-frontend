@@ -46,9 +46,6 @@ import {GiftAidAddressSuggestion} from "../gift-aid-address-suggestion.model";
 const maxAmount = 500;
 const minAmount = 1;
 
-/**
- *   /// note - test with simulated address lookup outage, update runbook.
- */
 @Component({
   selector: 'app-regular-giving',
   standalone: true,
