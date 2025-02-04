@@ -152,7 +152,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   expiryWarning?: ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
   loadingAddressSuggestions = false;
   privacyUrl = 'https://biggive.org/privacy';
-  showAddressLookup: boolean;
 
   // Kind of a subset of `stripePaymentMethodReady`, which tracks just the Payment Element Stripe.js element based
   // on the `complete` property of the callback event. Doesn't cover saved cards, or donation credit.
@@ -515,15 +514,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
   ngAfterContentInit() {
     if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
-    this.showAddressLookup =
-      this.psp === 'stripe' &&
-      !! environment.postcodeLookupKey &&
-      !! environment.postcodeLookupUri;
-
-    if (!this.showAddressLookup) {
       return;
     }
 

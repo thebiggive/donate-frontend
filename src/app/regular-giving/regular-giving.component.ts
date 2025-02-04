@@ -287,7 +287,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    * @todo-regular giving - replace placeholder properties below with real         **
    * functionality for address lookup. If possible share code with
    * DonationStartFormComponent where these were copied from. */
-  protected showAddressLookup = true;
   /**/                                                                             /**/
   protected summariseAddressSuggestion: any = () => '';
   /**/                                                                             /**/
