@@ -1,13 +1,12 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { EMPTY, Observable } from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {EMPTY, Observable} from 'rxjs';
 import {catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap} from 'rxjs/operators';
 
-import { environment } from '../environments/environment';
-import { GiftAidAddress } from './gift-aid-address.model';
-import { GiftAidAddressSuggestion } from './gift-aid-address-suggestion.model';
+import {environment} from '../environments/environment';
+import {GiftAidAddress} from './gift-aid-address.model';
+import {GiftAidAddressSuggestion} from './gift-aid-address-suggestion.model';
 import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
-import {HomeAddress} from "./address-suggestions";
 import {AbstractControl} from "@angular/forms";
 
 /**
@@ -21,6 +20,8 @@ export const postcodeRegExp = new RegExp('^([A-Z][A-HJ-Y]?\\d[A-Z\\d]? \\d[A-Z]{
 
 // Intentionally looser to support most countries' formats.
 export const billingPostcodeRegExp = new RegExp('^[0-9a-zA-Z -]{2,8}$');
+
+export type HomeAddress = { homeAddress: string, homeBuildingNumber: string, homePostcode: string };
 
 @Injectable({
   providedIn: 'root',

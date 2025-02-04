@@ -29,7 +29,7 @@ import {
 } from "@stripe/stripe-js";
 import {DonationService, StripeCustomerSession} from "../donation.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {AddressService, billingPostcodeRegExp} from "../address.service";
+import {AddressService, billingPostcodeRegExp, HomeAddress} from "../address.service";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {environment} from "../../environments/environment";
 import {
@@ -39,7 +39,6 @@ import {
   MatOption
 } from "@angular/material/autocomplete";
 import {MatCheckbox} from "@angular/material/checkbox";
-import {HomeAddress} from "../address-suggestions";
 import {GiftAidAddressSuggestion} from "../gift-aid-address-suggestion.model";
 
 // for now min & max are hard-coded, will change to be based on a field on
@@ -47,6 +46,9 @@ import {GiftAidAddressSuggestion} from "../gift-aid-address-suggestion.model";
 const maxAmount = 500;
 const minAmount = 1;
 
+/**
+ *   /// note - test with simulated address lookup outage, update runbook.
+ */
 @Component({
   selector: 'app-regular-giving',
   standalone: true,
