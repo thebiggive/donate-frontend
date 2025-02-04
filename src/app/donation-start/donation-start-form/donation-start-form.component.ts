@@ -46,13 +46,12 @@ import {DonationStartMatchingExpiredDialogComponent} from '../donation-start-mat
 import {DonationStartOfferReuseDialogComponent} from '../donation-start-offer-reuse-dialog.component';
 import {environment} from '../../../environments/environment';
 import {ExactCurrencyPipe} from '../../exact-currency.pipe';
-import {GiftAidAddress} from '../../gift-aid-address.model';
 import {GiftAidAddressSuggestion} from '../../gift-aid-address-suggestion.model';
 import {IdentityService} from '../../identity.service';
 import {ConversionTrackingService} from '../../conversionTracking.service';
 import {PageMetaService} from '../../page-meta.service';
 import {Person} from '../../person.model';
-import {billingPostcodeRegExp, postcodeFormatHelpRegExp, postcodeRegExp, AddressService} from '../../address.service';
+import {AddressService, billingPostcodeRegExp, postcodeFormatHelpRegExp, postcodeRegExp} from '../../address.service';
 import {retryStrategy} from '../../observable-retry';
 import {getStripeFriendlyError, StripeService} from '../../stripe.service';
 import {getCurrencyMaxValidator} from '../../validators/currency-max';
@@ -67,6 +66,7 @@ import {requiredNotBlankValidator} from "../../validators/notBlank";
 import {flags} from "../../featureFlags";
 import {WidgetInstance} from "friendly-challenge";
 import {Toast} from "../../toast.service";
+import {HomeAddress} from "../../address-suggestions";
 
 declare var _paq: {
   push: (args: Array<string|object>) => void,
@@ -630,22 +630,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   addressChosen(event: MatAutocompleteSelectedEvent) {
-    // Autocomplete's value.url should be an address we can /get.
-    this.postcodeService.get(event.option.value.url).subscribe((address: GiftAidAddress) => {
-      const addressParts = [address.line_1];
-      if (address.line_2) {
-        addressParts.push(address.line_2);
-      }
-      addressParts.push(address.town_or_city);
-
-      this.giftAidGroup.patchValue({
-        homeAddress: addressParts.join(', '),
-        homeBuildingNumber: address.building_number,
-        homePostcode: address.postcode,
-      });
-    }, error => {
-      console.log('Postcode resolve error', error);
-    });
+    this.postcodeService.loadAddress(event, (address) => this.giftAidGroup.patchValue(address));
   }
 
   async stepChanged(event: StepperSelectionEvent) {

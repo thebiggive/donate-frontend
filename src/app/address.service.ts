@@ -6,6 +6,8 @@ import { catchError, map  } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { GiftAidAddress } from './gift-aid-address.model';
 import { GiftAidAddressSuggestion } from './gift-aid-address-suggestion.model';
+import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
+import {HomeAddress} from "./address-suggestions";
 
 /**
  * Used just to take raw input and put together an all-caps, spaced UK postcode, assuming the
@@ -41,4 +43,32 @@ export class AddressService {
   get(addressUrl: string): Observable<GiftAidAddress> {
     return this.http.get<GiftAidAddress>(`${environment.postcodeLookupUri}${addressUrl}?api-key=${environment.postcodeLookupKey}`);
   }
+
+
+  /**
+   * Loads selected address from the postcode look up service and returns it to the callback
+   *
+   * @param event event's value.url should be an address we can /get.
+   * @param callback Callback function to update the address when fetched
+   */
+  public loadAddress(event: MatAutocompleteSelectedEvent, callback: (address: HomeAddress) => void) {
+    this.get(event.option.value.url).subscribe((address: GiftAidAddress) => {
+      const addressParts = [address.line_1];
+      if (address.line_2) {
+        addressParts.push(address.line_2);
+      }
+      addressParts.push(address.town_or_city);
+
+      const anAddress: HomeAddress = {
+        homeAddress: addressParts.join(', '),
+        homeBuildingNumber: address.building_number,
+        homePostcode: address.postcode,
+      } as const;
+
+      callback(anAddress);
+    }, error => {
+      console.log('Postcode resolve error', error);
+    });
+  }
+
 }
