@@ -40,6 +40,7 @@ import {
 } from "@angular/material/autocomplete";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {HomeAddress} from "../address-suggestions";
+import {GiftAidAddressSuggestion} from "../gift-aid-address-suggestion.model";
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -104,6 +105,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected optInTBGEmailError: string | undefined;
   protected optInCharityEmailError: string | undefined;
 
+  /**
+   * Optional home address, used for Gift Aid purposes.
+   */
+  protected homeAddress: HomeAddress | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -160,9 +165,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       optInCharityEmail: [booleansDefaultValue, requiredNotBlankValidator],
       optInTbgEmail: [booleansDefaultValue, requiredNotBlankValidator],
       giftAid: [booleansDefaultValue, requiredNotBlankValidator],
-      homeOutsideUK: [null]
-      }
-    );
+      homeOutsideUK: [null],
+      homeAddress: [null],
+      homePostcode: [null],
+      });
 
     this.stripeService.init().catch(console.error);
 
@@ -174,6 +180,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
         }
       })
       .catch(console.error);
+
+    this.addressService.suggestAddresses({
+      homeAddressFormControl: this.mandateForm.get('homeAddress')!,
+      loadingAddressSuggestionCallback: () => {this.loadingAddressSuggestions = true;},
+      foundAddressSuggestionCallback: (suggestions: GiftAidAddressSuggestion[]) => {
+        this.loadingAddressSuggestions = false;
+        this.addressSuggestions = suggestions;
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -297,7 +312,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   /**/                                                                             /**/
   protected summariseAddressSuggestion: any = () => '';
   /**/                                                                             /**/
-  protected addressChosen: any = () => '';
+
   /**/                                                                             /**/
   protected addressSuggestions: any = [];
   /**/                                                                             /**/
@@ -307,7 +322,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
 
   protected giftAidErrorMessage: string | undefined = undefined;
-
 
   protected get homeOutsideUK(): boolean {
      return this.mandateForm.value.homeOutsideUK;
@@ -525,5 +539,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     this.giftAidErrorMessage && this.toast.showError(this.giftAidErrorMessage);
 
     return errorFound;
+  }
+
+  addressChosen(event: MatAutocompleteSelectedEvent) {
+    this.addressService.loadAddress(event, (address) => this.homeAddress = address);
   }
 }
