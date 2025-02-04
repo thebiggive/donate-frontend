@@ -250,7 +250,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private identityService: IdentityService,
     private matomoTracker: MatomoTracker,
     private pageMeta: PageMetaService,
-    private postcodeService: AddressService,
+    private addressService: AddressService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,
@@ -532,7 +532,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         }
 
         this.loadingAddressSuggestions = true;
-        return this.postcodeService.getSuggestions(initialAddress);
+        return this.addressService.getSuggestions(initialAddress);
       }),
     ) || EMPTY;
 
@@ -620,7 +620,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   addressChosen(event: MatAutocompleteSelectedEvent) {
-    this.postcodeService.loadAddress(event, (address) => this.giftAidGroup.patchValue(address));
+    this.addressService.loadAddress(event, (address) => this.giftAidGroup.patchValue(address));
   }
 
   async stepChanged(event: StepperSelectionEvent) {

@@ -29,11 +29,17 @@ import {
 } from "@stripe/stripe-js";
 import {DonationService, StripeCustomerSession} from "../donation.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {billingPostcodeRegExp} from "../address.service";
+import {AddressService, billingPostcodeRegExp} from "../address.service";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {environment} from "../../environments/environment";
-import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
+import {
+  MatAutocomplete,
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
+  MatOption
+} from "@angular/material/autocomplete";
 import {MatCheckbox} from "@angular/material/checkbox";
+import {HomeAddress} from "../address-suggestions";
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -108,6 +114,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     private pageMeta: PageMetaService,
     private stripeService: StripeService,
     private donationService: DonationService,
+    private addressService: AddressService,
   ) {
   }
 
