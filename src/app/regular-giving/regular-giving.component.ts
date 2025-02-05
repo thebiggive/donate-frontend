@@ -145,7 +145,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
 
-    // These opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
+    // As on donation start form, these opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
     // and prefilling them with 'no' values in that case.
     const booleansDefaultValue = environment.environmentId === 'regression' ? false : null;
 
