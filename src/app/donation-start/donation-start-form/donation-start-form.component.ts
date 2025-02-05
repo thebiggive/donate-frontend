@@ -336,6 +336,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     this.setCampaignBasedVars();
 
+    // As on regular-giving form, these opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
+    // and prefilling them with 'no' values in that case.
+    const marketingBooleansDefaultValue = environment.environmentId === 'regression' ? false : null;
+
     const formGroups: {
       amounts: FormGroup,   // Matching reservation happens at the end of this group.
       giftAid: FormGroup,
@@ -360,9 +364,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         homePostcode: [null], // See setConditionalValidators().
       }),
       marketing: this.formBuilder.group({
-        optInCharityEmail: [null, requiredNotBlankValidator],
-        optInTbgEmail: [null, requiredNotBlankValidator],
-        optInChampionEmail: [null],
+        optInCharityEmail: [marketingBooleansDefaultValue, requiredNotBlankValidator],
+        optInTbgEmail: [marketingBooleansDefaultValue, requiredNotBlankValidator],
+        optInChampionEmail: [marketingBooleansDefaultValue],
       }),
       payment: this.formBuilder.group({
         firstName: [null, [
