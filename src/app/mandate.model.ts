@@ -18,6 +18,10 @@ export interface Mandate {
   giftAid: boolean,
   donationAmount: Money,
   matchedAmount: Money,
-  totalCharityReceivesPerInitial: Money,
   giftAidAmount: Money,
+  /** Includes main amount & GA but not matching */
+  totalIncGiftAid: Money,
+
+  /** Includes main amount & GA & matching of the first donation(s) */
+  totalCharityReceivesPerInitial: Money,
 }
