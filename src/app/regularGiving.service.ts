@@ -5,13 +5,18 @@ import {getPersonAuthHttpOptions, IdentityService} from "./identity.service";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../environments/environment";
 
-
+/**
+ * Details of a desired new regular giving mandate sent to Matchbot to create it. Deseralized on the matchbot side
+ * to class MandateCreate: https://github.com/thebiggive/matchbot/blob/main/src/Application/HttpModels/MandateCreate.php
+ */
 type StartMandateParams = {
   amountInPence: number,
   currency: 'GBP',
   dayOfMonth: number,
   campaignId: string,
   giftAid: boolean,
+  homeAddress: string | null,
+  homePostcode: string | null,
   /** ISO-2 code for country. Must match that on the DonorAccount if the latter is non-null */
   billingCountry: string,
 
@@ -24,6 +29,12 @@ type StartMandateParams = {
    * a mandate.
    */
   stripeConfirmationTokenId?: string,
+
+  /** Whether the Donor wants to receive marketing emails from Big Give */
+  tbgComms: boolean,
+
+  /** Whether the Donor wants to receive marketing emails from the charity they donate to with this mandate */
+  charityComms: boolean,
 };
 
 @Injectable({

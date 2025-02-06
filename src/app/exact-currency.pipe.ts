@@ -27,7 +27,7 @@ export class ExactCurrencyPipe implements PipeTransform {
     // Donor inputs get passed to this pipe directly, so we need to ensure non-numeric
     // input can't crash the app.
     value = Number(value);
-    if (isNaN(value)) {
+    if (! Number.isFinite(value)) {
       return undefined;
     }
 

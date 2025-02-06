@@ -1,12 +1,12 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Campaign} from "../campaign.model";
 import {ComponentsModule} from "@biggive/components-angular";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatStep, MatStepper} from "@angular/material/stepper";
 import {StepperSelectionEvent} from "@angular/cdk/stepper";
-import {MatInput} from "@angular/material/input";
-import {MatButton} from "@angular/material/button";
+import {MatHint, MatInput} from "@angular/material/input";
+import {MatButton, MatIconAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
 import {RegularGivingService} from "../regularGiving.service";
@@ -29,12 +29,23 @@ import {
 } from "@stripe/stripe-js";
 import {DonationService, StripeCustomerSession} from "../donation.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {billingPostcodeRegExp} from "../postcode.service";
+import {AddressService, billingPostcodeRegExp, HomeAddress} from "../address.service";
+import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
+import {environment} from "../../environments/environment";
+import {
+  MatAutocomplete,
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
+  MatOption
+} from "@angular/material/autocomplete";
+import {MatCheckbox} from "@angular/material/checkbox";
+import {GiftAidAddressSuggestion} from "../gift-aid-address-suggestion.model";
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
 const maxAmount = 500;
 const minAmount = 1;
+const paymentStepIndex = 2;
 
 @Component({
   selector: 'app-regular-giving',
@@ -48,7 +59,16 @@ const minAmount = 1;
     MatInput,
     MatButton,
     MatIcon,
-    MatProgressSpinner
+    MatProgressSpinner,
+    MatHint,
+    MatRadioButton,
+    MatRadioGroup,
+    MatIconAnchor,
+    RouterLink,
+    MatAutocomplete,
+    MatAutocompleteTrigger,
+    MatCheckbox,
+    MatOption
   ],
   templateUrl: './regular-giving.component.html',
   styleUrl: './regular-giving.component.scss'
@@ -82,7 +102,14 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    * Error generated on submission at end of form
    */
   protected submitErrorMessage: string | undefined;
+  protected optInTBGEmailError: string | undefined;
+  protected optInCharityEmailError: string | undefined;
 
+  /**
+   * Optional home address, used for Gift Aid purposes.
+   */
+  protected homeAddress: HomeAddress | undefined;
+  protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
 
   constructor(
     private route: ActivatedRoute,
@@ -93,6 +120,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     private pageMeta: PageMetaService,
     private stripeService: StripeService,
     private donationService: DonationService,
+    private addressService: AddressService,
   ) {
   }
 
@@ -118,6 +146,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
 
+    // As on donation start form, these opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
+    // and prefilling them with 'no' values in that case.
+    const booleansDefaultValue = environment.environmentId === 'regression' ? false : null;
+
     this.mandateForm = this.formBuilder.group({
         donationAmount: ['', [
           requiredNotBlankValidator,
@@ -131,8 +163,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
           Validators.pattern(billingPostcodeRegExp),
         ]
       ],
-      }
-    );
+      optInCharityEmail: [booleansDefaultValue, requiredNotBlankValidator],
+      optInTbgEmail: [booleansDefaultValue, requiredNotBlankValidator],
+      giftAid: [booleansDefaultValue, requiredNotBlankValidator],
+      homeOutsideUK: [null],
+      homeAddress: [null],
+      homePostcode: [null],
+      });
 
     this.stripeService.init().catch(console.error);
 
@@ -144,6 +181,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
         }
       })
       .catch(console.error);
+
+    this.addressService.suggestAddresses({
+      homeAddressFormControl: this.mandateForm.get('homeAddress')!,
+      loadingAddressSuggestionCallback: () => {this.loadingAddressSuggestions = true;},
+      foundAddressSuggestionCallback: (suggestions: GiftAidAddressSuggestion[]) => {
+        this.loadingAddressSuggestions = false;
+        this.addressSuggestions = suggestions;
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -224,10 +270,14 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       dayOfMonth,
       campaignId: this.campaign.id,
       currency: "GBP",
-      giftAid: false,
+      giftAid: !!this.giftAid,
       billingPostcode,
       billingCountry,
-      stripeConfirmationTokenId: confirmationToken?.id
+      stripeConfirmationTokenId: confirmationToken?.id,
+      charityComms: !!this.optInCharityEmail,
+      tbgComms: !!this.optInTbgEmail,
+      homeAddress: this.homeAddressFormValue,
+      homePostcode: this.homePostcode,
     }).subscribe({
       next: async (mandate: Mandate) => {
         await this.router.navigateByUrl(`/${myRegularGivingPath}/${mandate.id}`);
@@ -252,6 +302,24 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       billingCountry: countryCode,
     });
   })
+
+  protected get giftAid(): boolean | undefined
+  {
+    return this.mandateForm.value.giftAid;
+  }
+
+  protected addressSuggestions: GiftAidAddressSuggestion[] = [];
+  protected loadingAddressSuggestions = false;
+
+  protected giftAidErrorMessage: string | undefined = undefined;
+
+  protected get homeOutsideUK(): boolean {
+     return !!this.mandateForm.value.homeOutsideUK;
+  }
+
+  protected get homePostcode(): string | null {
+    return this.mandateForm.value.homePostcode;
+  }
 
   protected onBillingPostCodeChanged(_: Event) {
     // no-op for now, but @todo-regular-giving we may need to do some validation as we don the ad-hoc donation page.
@@ -312,24 +380,56 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     // intending to edit something else in the `payment` step; let them click Next.
 
     if (!this.stripePaymentMethodReady || !this.stripePaymentElement || !this.stripeElements) {
-      if (this.stepper.selectedIndex > 1) {
-        this.stepper.selectedIndex = 1;
+      if (this.stepper.selectedIndex > paymentStepIndex) {
+        this.stepper.selectedIndex = paymentStepIndex;
       }
 
       return;
     }
   }
 
-  protected selectStep(stepIndex: number) {
+  protected continue(): void {
+    const nextStepIndex = this.stepper.selectedIndex + 1;
+    if (nextStepIndex > this.stepper.steps.length - 1) {
+      throw new Error("Cannot continue past last step");
+    }
+
+    this.selectStep(nextStepIndex);
+  }
+
+  private selectStep(stepIndex: number) {
     let errorFound = this.validateAmountStep();
 
     if (stepIndex > 1) {
+      errorFound = this.validateGiftAidStep() || errorFound;
+    }
+
+    if (stepIndex > 2) {
       errorFound = this.validatePaymentInformationStep() || errorFound;
+    }
+
+    if (stepIndex > 3) {
+      errorFound = this.validateUpdatesStep() || errorFound;
     }
 
     if (! errorFound) {
       this.stepper.selected = this.stepper.steps.get(stepIndex);
     }
+  }
+
+  protected get optInCharityEmail(): boolean | undefined
+  {
+    return this.mandateForm.value.optInCharityEmail;
+  }
+
+  protected get optInTbgEmail(): boolean | undefined
+  {
+    return this.mandateForm.value.optInTbgEmail;
+  }
+
+  protected get homeAddressFormValue(): string
+  {
+    return AddressService.summariseAddressSuggestion(this.mandateForm.value.homeAddress);
   }
 
   /**
@@ -367,7 +467,31 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     return errorFound;
   }
 
-  /**
+  private validateUpdatesStep(): boolean {
+    let errorFound = false;
+
+    if (typeof this.optInTbgEmail !== 'boolean') {
+      this.optInTBGEmailError = 'Please choose whether you wish to receive updates from Big Give.';
+      errorFound = true;
+    } else {
+      this.optInTBGEmailError = undefined;
+    }
+
+    if (typeof this.optInCharityEmail !== 'boolean') {
+      this.optInCharityEmailError = `Please choose whether you wish to receive updates from ${this.campaign.charity.name}.`;
+      errorFound = true;
+    } else {
+      this.optInCharityEmailError = undefined;
+    }
+
+    const combinedErrors = [this.optInCharityEmailError, this.optInTBGEmailError].filter(Boolean).join(' ');
+    combinedErrors && this.toast.showError(combinedErrors);
+
+    return errorFound;
+  }
+
+
+    /**
    * Checks if the payment information step is completed correctly, and shows the user an error message if not.
    */
   private validatePaymentInformationStep(): boolean {
@@ -400,5 +524,33 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     this.paymentInfoErrorMessage && this.toast.showError(this.paymentInfoErrorMessage);
 
     return !!this.paymentInfoErrorMessage;
+  }
+
+  private validateGiftAidStep(): boolean  {
+    const errors: string[] = [];
+    if (typeof this.giftAid !== 'boolean') {
+      errors.push('Please choose whether you wish to claim Gift Aid.');
+    }
+
+    if (this.giftAid && !this.homeAddressFormValue) {
+      errors.push('Please enter or select your home address if you wish to claim gift aid.');
+    }
+
+    if (this.giftAid && ! this.homeOutsideUK && !this.homePostcode) {
+      errors.push('Please enter your home postcode to claim Gift Aid if you are in the UK.');
+    }
+
+    this.giftAidErrorMessage = errors.join(' ');
+
+    this.giftAidErrorMessage && this.toast.showError(this.giftAidErrorMessage);
+
+    return errors.length > 0;
+  }
+
+  addressChosen(event: MatAutocompleteSelectedEvent) {
+    this.addressService.loadAddress(event, (address) => {
+      this.mandateForm.patchValue({homePostcode: address.homePostcode});
+      this.homeAddress = address;
+    });
   }
 }

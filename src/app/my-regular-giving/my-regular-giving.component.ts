@@ -1,21 +1,18 @@
 import {Component,  OnInit} from '@angular/core';
 import {PageMetaService} from "../page-meta.service";
 import {ActivatedRoute} from "@angular/router";
-import {AsyncPipe, DatePipe} from "@angular/common";
-import {ExactCurrencyPipe} from "../exact-currency.pipe";
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {DatePipe} from "@angular/common";
 import {allChildComponentImports} from "../../allChildComponentImports";
 import {Mandate} from "../mandate.model";
+import {MoneyPipe} from "../money.pipe";
 
 @Component({
   selector: 'app-my-mandates',
   standalone: true,
   imports: [
     ...allChildComponentImports,
-    AsyncPipe,
-    ExactCurrencyPipe,
     DatePipe,
-    MatProgressSpinner
+    MoneyPipe
   ],
   templateUrl: './my-regular-giving.component.html',
   styleUrl: './my-regular-giving.component.scss'

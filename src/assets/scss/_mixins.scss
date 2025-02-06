@@ -276,3 +276,44 @@
     border: 2px solid $colour-primary;
   }
 }
+
+@mixin binary-options {
+
+  .binary-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    flex-direction: column;
+
+    @media ($breakpoint-md) {
+      flex-direction: row;
+    }
+  }
+
+  p.binary-question-header {
+    margin-top: 30px;
+  }
+
+  div.binary-option {
+    flex-basis: 50%;
+    background-color: $colour-card-background;
+    box-shadow: $box-shadow-soft;
+    border-radius: 4px;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    // no need for padding-top as form element inside has a top margin
+
+    position: relative;
+
+    ::ng-deep label {
+      padding-left: 40px;
+    }
+
+    ::ng-deep .mdc-radio {
+      position: absolute;
+      top: 8px;
+    }
+  }
+}

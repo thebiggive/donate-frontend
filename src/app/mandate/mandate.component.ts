@@ -4,6 +4,7 @@ import {DatePipe} from "@angular/common";
 import {Mandate} from "../mandate.model";
 import {ExactCurrencyPipe} from "../exact-currency.pipe";
 import {ActivatedRoute} from "@angular/router";
+import {MoneyPipe} from "../money.pipe";
 
 @Component({
   selector: 'app-mandate',
@@ -11,7 +12,8 @@ import {ActivatedRoute} from "@angular/router";
   imports: [
     ComponentsModule,
     DatePipe,
-    ExactCurrencyPipe
+    ExactCurrencyPipe,
+    MoneyPipe
   ],
   templateUrl: './mandate.component.html',
   styleUrl: './mandate.component.scss'

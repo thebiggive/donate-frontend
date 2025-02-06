@@ -20,7 +20,7 @@ import {GiftAidAddressSuggestion} from '../gift-aid-address-suggestion.model';
 import {GiftAidAddress} from '../gift-aid-address.model';
 import {IdentityService} from '../identity.service';
 import {Person} from '../person.model';
-import {PostcodeService} from '../postcode.service';
+import {AddressService} from '../address.service';
 import {getCurrencyMinValidator} from '../validators/currency-min';
 import {getCurrencyMaxValidator} from '../validators/currency-max';
 import {Toast} from '../toast.service';
@@ -68,7 +68,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     private identityService: IdentityService,
     private matomoTracker: MatomoTracker,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private postcodeService: PostcodeService,
+    private addressService: AddressService,
     private toast: Toast,
   ) {}
 
@@ -182,7 +182,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
         }
 
         this.loadingAddressSuggestions = true;
-        return this.postcodeService.getSuggestions(initialAddress);
+        return this.addressService.getSuggestions(initialAddress);
       }),
     ) || EMPTY;
 
@@ -206,7 +206,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
   addressChosen(event: MatAutocompleteSelectedEvent) {
     // Autocomplete's value.url should be an address we can /get.
-    this.postcodeService.get(event.option.value.url).subscribe((address: GiftAidAddress) => {
+    this.addressService.get(event.option.value.url).subscribe((address: GiftAidAddress) => {
       const addressParts = [address.line_1];
       if (address.line_2) {
         addressParts.push(address.line_2);

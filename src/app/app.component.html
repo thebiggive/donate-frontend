@@ -23,7 +23,7 @@
     [blogUrlPrefix]="blogUriPrefix"
     [experienceUrlPrefix]="experienceUriPrefix"
     [isLoggedIn]="isLoggedIn"
-    [myAccountFlagEnabled]="true"
+    [smallCharityWeekEnabled]="environment.environmentId !== 'production'"
     [someCampaignHasHomePageRedirect]="someCampaignHasHomePageRedirect()"
   ></biggive-main-menu>
 }
@@ -39,6 +39,7 @@
   [donateUrlPrefix]="donateUriPrefix"
   [blogUrlPrefix]="blogUriPrefix"
   [experienceUrlPrefix]="experienceUriPrefix"
+  [smallCharityWeekEnabled]="environment.environmentId !== 'production'"
 ></biggive-footer>
 
 <!-- We only render the following div if isPlatformBrowser, because if rendered on the server side it would flash up on page reload

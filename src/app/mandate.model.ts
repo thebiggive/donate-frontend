@@ -1,10 +1,13 @@
+export type Money = {
+  "amountInPence": number,
+  "currency": "GBP"
+};
+
 export interface Mandate {
   id: string,
   campaignId: string,
   charityName: string,
   status: 'active'|'pending',
-  // @todo-regular-giving-DON-1008 : we might want to keep the total donated amount as part of the regular giving mandate
-  // giftAidAmount: number = 0;
   "schedule": {
     "type": "monthly",
     "dayOfMonth": number,
@@ -13,12 +16,12 @@ export interface Mandate {
   },
   numberOfMatchedDonations: number,
   giftAid: boolean,
-  donationAmount: {
-    "amountInPence": number,
-    "currency": "GBP"
-  },
-  matchedAmount: {
-    "amountInPence": number,
-    "currency": "GBP"
-  }
+  donationAmount: Money,
+  matchedAmount: Money,
+  giftAidAmount: Money,
+  /** Includes main amount & GA but not matching */
+  totalIncGiftAid: Money,
+
+  /** Includes main amount & GA & matching of the first donation(s) */
+  totalCharityReceivesPerInitial: Money,
 }
