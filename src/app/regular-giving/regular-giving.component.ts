@@ -45,6 +45,7 @@ import {GiftAidAddressSuggestion} from "../gift-aid-address-suggestion.model";
 // the campaign.
 const maxAmount = 500;
 const minAmount = 1;
+const paymentStepIndex = 2;
 
 @Component({
   selector: 'app-regular-giving',
@@ -379,8 +380,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     // intending to edit something else in the `payment` step; let them click Next.
 
     if (!this.stripePaymentMethodReady || !this.stripePaymentElement || !this.stripeElements) {
-      if (this.stepper.selectedIndex > 1) {
-        this.stepper.selectedIndex = 1;
+      if (this.stepper.selectedIndex > paymentStepIndex) {
+        this.stepper.selectedIndex = paymentStepIndex;
       }
 
       return;
