@@ -1,0 +1,6 @@
+@import '../../abstract';
+
+main {
+  @include make-container;
+  margin: 0 0;
+}

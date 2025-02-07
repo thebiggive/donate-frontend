@@ -21,6 +21,7 @@ import {firstValueFrom} from "rxjs";
 import {MandateComponent} from "./mandate/mandate.component";
 import {Mandate} from "./mandate.model";
 import {MyPaymentMethodsComponent} from "./my-payment-methods/my-payment-methods.component";
+import {NotFoundComponent} from "./not-found/not-found.component";
 import {DonorAccountService} from "./donor-account.service";
 import {DonorAccount} from "./donorAccount.model";
 import {NavigationService} from "./navigation.service";
@@ -294,7 +295,7 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module')
       .then(c => c.HomeModule),
   },
-  // This is effectively our 404 handler because we support any string as meta-campaign
+  // This is effectively our non-/ 404 handler because we support any string as meta-campaign
   // slug. So check `CampaignResolver` for adjusting what happens if the slug doesn't
   // match a campaign.
   {
@@ -307,6 +308,11 @@ const routes: Routes = [
     loadChildren: () => import('./explore/explore.module')
       .then(c => c.ExploreModule),
   },
+  // And this is our final 404 handler which actually says 'not found'; used for e.g. legacy /project/X/Y format paths.
+  {
+    path: '**',
+    component: NotFoundComponent,
+  }
 ];
 
 if (flags.regularGivingEnabled) {
