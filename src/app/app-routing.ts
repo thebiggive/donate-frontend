@@ -295,8 +295,8 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module')
       .then(c => c.HomeModule),
   },
-  // This is effectively our non-/ 404 handler because we support any string as meta-campaign
-  // slug. So check `CampaignResolver` for adjusting what happens if the slug doesn't
+  // This is effectively our no-or-one-forward-slashes 404 handler because we support any string as meta-campaign
+  // slug (and optionally another as fund slug). So check `CampaignResolver` for adjusting what happens if the slug doesn't
   // match a campaign.
   {
     path: ':campaignSlug',
