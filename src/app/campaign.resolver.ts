@@ -31,6 +31,12 @@ export class CampaignResolver  {
     }
 
     if (campaignId) {
+      if (campaignId.match(new RegExp('[./]+'))) {
+        console.log(`CampaignResolver skipping load attempt for junk id: "${campaignId}"`);
+        void this.router.navigateByUrl('/');
+        return EMPTY;
+      }
+
       return this.loadWithStateCache(
         campaignId,
         (identifier: string) => this.campaignService.getOneById(identifier),
