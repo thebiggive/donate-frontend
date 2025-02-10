@@ -8,16 +8,15 @@ import { ExactCurrencyPipe } from '../exact-currency.pipe';
 import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.component";
 
 @Component({
-  standalone: true,
-  selector: 'app-donation-start-offer-reuse-dialog',
-  templateUrl: 'donation-start-offer-reuse-dialog.html',
-  imports: [
-    ...allChildComponentImports,
-    ExactCurrencyPipe,
-    MatButtonModule,
-    MatDialogModule,
-    PopupStandaloneComponent,
-  ],
+    selector: 'app-donation-start-offer-reuse-dialog',
+    templateUrl: 'donation-start-offer-reuse-dialog.html',
+    imports: [
+        ...allChildComponentImports,
+        ExactCurrencyPipe,
+        MatButtonModule,
+        MatDialogModule,
+        PopupStandaloneComponent,
+    ]
 })
 export class DonationStartOfferReuseDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: { donation: Donation }) { }

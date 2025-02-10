@@ -11,10 +11,11 @@ import { HighlightCard } from '../highlight-cards/HighlightCard';
 import {environment} from "../../environments/environment";
 
 @Component({
-  selector: 'app-my-account',
-  templateUrl: './my-account.component.html',
-  styleUrl: './my-account.component.scss',
-  providers: [DatePipe]
+    selector: 'app-my-account',
+    templateUrl: './my-account.component.html',
+    styleUrl: './my-account.component.scss',
+    providers: [DatePipe],
+    standalone: false
 })
 export class MyAccountComponent implements OnInit {
   public person: Person;

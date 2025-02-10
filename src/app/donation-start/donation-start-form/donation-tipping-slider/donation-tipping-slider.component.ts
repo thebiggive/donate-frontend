@@ -14,9 +14,10 @@ import {
 import {ViewportRuler} from "@angular/cdk/scrolling";
 
 @Component({
-  selector: 'app-donation-tipping-slider',
-  templateUrl: './donation-tipping-slider.component.html',
-  styleUrl: './donation-tipping-slider.component.scss'
+    selector: 'app-donation-tipping-slider',
+    templateUrl: './donation-tipping-slider.component.html',
+    styleUrl: './donation-tipping-slider.component.scss',
+    standalone: false
 })
 export class DonationTippingSliderComponent implements OnInit, AfterContentInit, OnChanges, OnDestroy {
 

@@ -21,11 +21,10 @@ import {PageMetaService} from '../page-meta.service';
 import {NavigationService} from "../navigation.service";
 
 @Component({
-  selector: 'app-register',
-  standalone: true,
-  imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule],
-  templateUrl: './register.component.html',
-  styleUrl: 'register.component.scss'
+    selector: 'app-register',
+    imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule],
+    templateUrl: './register.component.html',
+    styleUrl: 'register.component.scss'
 })
 export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('frccaptcha', { static: false })

@@ -21,9 +21,10 @@ import {flags} from "../featureFlags";
 import {WidgetInstance} from "friendly-challenge";
 
 @Component({
-  selector: 'app-donation-thanks',
-  templateUrl: './donation-thanks.component.html',
-  styleUrl: './donation-thanks.component.scss',
+    selector: 'app-donation-thanks',
+    templateUrl: './donation-thanks.component.html',
+    styleUrl: './donation-thanks.component.scss',
+    standalone: false
 })
 export class DonationThanksComponent implements OnInit {
   @Input({ required: true }) private donationId: string;

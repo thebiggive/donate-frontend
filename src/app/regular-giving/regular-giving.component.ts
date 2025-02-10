@@ -48,30 +48,29 @@ const minAmount = 1;
 const paymentStepIndex = 2;
 
 @Component({
-  selector: 'app-regular-giving',
-  standalone: true,
-  imports: [
-    ComponentsModule,
-    FormsModule,
-    MatStep,
-    MatStepper,
-    ReactiveFormsModule,
-    MatInput,
-    MatButton,
-    MatIcon,
-    MatProgressSpinner,
-    MatHint,
-    MatRadioButton,
-    MatRadioGroup,
-    MatIconAnchor,
-    RouterLink,
-    MatAutocomplete,
-    MatAutocompleteTrigger,
-    MatCheckbox,
-    MatOption
-  ],
-  templateUrl: './regular-giving.component.html',
-  styleUrl: './regular-giving.component.scss'
+    selector: 'app-regular-giving',
+    imports: [
+        ComponentsModule,
+        FormsModule,
+        MatStep,
+        MatStepper,
+        ReactiveFormsModule,
+        MatInput,
+        MatButton,
+        MatIcon,
+        MatProgressSpinner,
+        MatHint,
+        MatRadioButton,
+        MatRadioGroup,
+        MatIconAnchor,
+        RouterLink,
+        MatAutocomplete,
+        MatAutocompleteTrigger,
+        MatCheckbox,
+        MatOption
+    ],
+    templateUrl: './regular-giving.component.html',
+    styleUrl: './regular-giving.component.scss'
 })
 export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected campaign: Campaign;

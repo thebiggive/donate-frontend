@@ -15,16 +15,15 @@ import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
-  selector: 'app-my-payment-methods',
-  standalone: true,
-  imports: [
-    ComponentsModule,
-    ExactCurrencyPipe,
-    MatProgressSpinner,
-    FaIconComponent
-  ],
-  templateUrl: './my-payment-methods.component.html',
-  styleUrl: './my-payment-methods.component.scss'
+    selector: 'app-my-payment-methods',
+    imports: [
+        ComponentsModule,
+        ExactCurrencyPipe,
+        MatProgressSpinner,
+        FaIconComponent
+    ],
+    templateUrl: './my-payment-methods.component.html',
+    styleUrl: './my-payment-methods.component.scss'
 })
 export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
   protected paymentMethods: PaymentMethod[] | undefined;

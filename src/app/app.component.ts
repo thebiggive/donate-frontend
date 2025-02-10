@@ -23,9 +23,10 @@ import {supportedBrowsers} from "../supportedBrowsers";
 import {detect} from "detect-browser";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: 'app.component.scss',
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrl: 'app.component.scss',
+    standalone: false
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;

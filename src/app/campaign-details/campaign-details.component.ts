@@ -12,15 +12,16 @@ import { TimeLeftPipe } from '../time-left.pipe';
 import {Toast} from "../toast.service";
 
 @Component({
-  // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
-  encapsulation: ViewEncapsulation.None,
-  selector: 'app-campaign-details',
-  templateUrl: './campaign-details.component.html',
-  styleUrl: './campaign-details.component.scss',
-  providers: [
-    TimeLeftPipe,
-    DatePipe
-  ],
+    // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
+    encapsulation: ViewEncapsulation.None,
+    selector: 'app-campaign-details',
+    templateUrl: './campaign-details.component.html',
+    styleUrl: './campaign-details.component.scss',
+    providers: [
+        TimeLeftPipe,
+        DatePipe
+    ],
+    standalone: false
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   campaign: Campaign;
