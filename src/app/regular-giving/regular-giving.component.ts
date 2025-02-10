@@ -235,7 +235,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    const billingPostcode: string = this.mandateForm.value.billingPostcode;
     const billingCountry: string = this.selectedBillingCountryCode;
 
     let confirmationToken: ConfirmationToken | undefined;
@@ -247,7 +246,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     if (this.stripeElements && !this.donorAccount.regularGivingPaymentMethod) {
       const confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(
-        {billingPostalAddress: billingPostcode, countryCode: billingCountry},
+        {billingPostalAddress: this.billingPostCode, countryCode: billingCountry},
         this.stripeElements
       );
 
@@ -271,7 +270,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       campaignId: this.campaign.id,
       currency: "GBP",
       giftAid: !!this.giftAid,
-      billingPostcode,
+      billingPostcode: this.billingPostCode,
       billingCountry,
       stripeConfirmationTokenId: confirmationToken?.id,
       charityComms: !!this.optInCharityEmail,
@@ -290,6 +289,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
         this.submitting = false;
       }
     })
+  }
+
+  private get billingPostCode(): string {
+    return this.mandateForm.value.billingPostcode;
   }
 
   private getDonationAmountPence(): number {
@@ -398,23 +401,29 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   }
 
   private selectStep(stepIndex: number) {
-    let errorFound = this.validateAmountStep();
-
-    if (stepIndex > 1) {
-      errorFound = this.validateGiftAidStep() || errorFound;
+    if (this.validateAmountStep()) {
+      return;
     }
 
-    if (stepIndex > 2) {
-      errorFound = this.validatePaymentInformationStep() || errorFound;
+    if (stepIndex > 1 && this.validateAmountStep()) {
+      return;
     }
 
-    if (stepIndex > 3) {
-      errorFound = this.validateUpdatesStep() || errorFound;
+    if (stepIndex > 2 && this.validateAmountStep()) {
+      return;
     }
 
-    if (! errorFound) {
-      this.stepper.selected = this.stepper.steps.get(stepIndex);
+    if (stepIndex > 3 && this.validateUpdatesStep()) {
+      return;
     }
+
+    if (this.giftAid && this.homePostcode?.trim() && ! this.billingPostCode.trim()) {
+      this.mandateForm.patchValue({
+        billingPostcode: this.homePostcode,
+      });
+    }
+
+    this.stepper.selected = this.stepper.steps.get(stepIndex);
   }
 
   protected get optInCharityEmail(): boolean | undefined
