@@ -21,11 +21,6 @@
         >
         @for (campaign of campaigns; track $index) {
           <div>
-            <!-- @todo-regular-giving - update components to make moreInfoButton optional and remove in the case of
-                 regular giving here. Currently it points to this charity page we're already displaying.
-
-                 Alternatively make campaign info pages support regular giving campaigns.
-            -->
             <biggive-campaign-card
               id="campaign-{{campaign.id}}"
               [banner]="campaign.imageUri | optimisedImage:830 | async"
@@ -36,7 +31,7 @@
               [moreInfoButtonUrl]="'/campaign/' + campaign.id"
               [organisationName]="campaign.charity.name"
               [primaryFigureLabel]="campaign.isRegularGiving ? '' : 'Match Funds Remaining'"
-              [primaryFigureAmount]="campaign.isRegularGiving ? ' ' : campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
+              [primaryFigureAmount]="campaign.isRegularGiving ? null : campaign.matchFundsRemaining | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
               [progressBarCounter]="getPercentageRaised(campaign)"
               secondary-figure-label="Total Funds Raised"
               [secondaryFigureAmount]="campaign.amountRaised | currency: campaign.currencyCode : 'symbol' : currencyPipeDigitsInfo"
