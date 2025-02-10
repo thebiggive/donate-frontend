@@ -79,6 +79,10 @@
                        and replace the tag below with a simple <biggive-campaign-card [campaign]="campaign">. Would require perhaps some changes at SF so we don't have to pass
                        the metacmpaign, or processing the campaign data in FE before it gets to here. Could also consider moving the `campaign-card` component out of
                        components library and into this repo for to make it easier to work on if we're not likely to use it anywhere else.
+
+                       Logic for primary figure amount is particularly confusing - we have to pass null here if the campaign is an emergency match fund campaign
+                       as it doesn't make sense to display any primary figure or secondary figure, but the only way to know in FE at present that it's an emergency campaign
+                       is by the fact that it uses match funds and *isn't* regular giving. If it is regular giving we pass a space to take up space in the layout without being visible.
                        -->
                   <biggive-campaign-card
                     [banner]="campaign.imageUri | optimisedImage:830 | async"
