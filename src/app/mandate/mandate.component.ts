@@ -7,16 +7,15 @@ import {ActivatedRoute} from "@angular/router";
 import {MoneyPipe} from "../money.pipe";
 
 @Component({
-  selector: 'app-mandate',
-  standalone: true,
-  imports: [
-    ComponentsModule,
-    DatePipe,
-    ExactCurrencyPipe,
-    MoneyPipe
-  ],
-  templateUrl: './mandate.component.html',
-  styleUrl: './mandate.component.scss'
+    selector: 'app-mandate',
+    imports: [
+        ComponentsModule,
+        DatePipe,
+        ExactCurrencyPipe,
+        MoneyPipe
+    ],
+    templateUrl: './mandate.component.html',
+    styleUrl: './mandate.component.scss'
 })
 export class MandateComponent implements OnInit {
   protected encodedShareUrl: string = '';

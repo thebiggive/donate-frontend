@@ -14,20 +14,19 @@ import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.com
 import {WidgetInstance} from "friendly-challenge";
 
 @Component({
-  standalone: true,
-  selector: 'app-login-modal',
-  templateUrl: 'login-modal.html',
-  styleUrl: './login-modal.component.scss',
-  imports: [
-    ...allChildComponentImports,
-    FormsModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-    ReactiveFormsModule,
-    PopupStandaloneComponent,
-  ],
+    selector: 'app-login-modal',
+    templateUrl: 'login-modal.html',
+    styleUrl: './login-modal.component.scss',
+    imports: [
+        ...allChildComponentImports,
+        FormsModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+        ReactiveFormsModule,
+        PopupStandaloneComponent,
+    ]
 })
 export class LoginModalComponent implements OnInit, AfterViewInit {
   loginForm: FormGroup;

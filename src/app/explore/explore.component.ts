@@ -36,16 +36,17 @@ const openPipeToken = 'TimeLeftToOpenPipe';
 const endPipeToken = 'timeLeftToEndPipe';
 
 @Component({
-  selector: 'app-explore',
-  templateUrl: './explore.component.html',
-  styleUrl: 'explore.component.scss',
-  providers: [
-    CurrencyPipe,
-    // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
-    {provide: openPipeToken, useClass: TimeLeftPipe},
-    {provide: endPipeToken, useClass: TimeLeftPipe},
-    DatePipe,
-  ],
+    selector: 'app-explore',
+    templateUrl: './explore.component.html',
+    styleUrl: 'explore.component.scss',
+    providers: [
+        CurrencyPipe,
+        // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
+        { provide: openPipeToken, useClass: TimeLeftPipe },
+        { provide: endPipeToken, useClass: TimeLeftPipe },
+        DatePipe,
+    ],
+    standalone: false
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid: BiggiveCampaignCardFilterGrid;
