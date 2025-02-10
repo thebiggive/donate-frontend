@@ -31,7 +31,8 @@
     "types": [
       "node"
     ],
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "allowSyntheticDefaultImports": true,
   },
   "files": [
     "src/main.ts",
