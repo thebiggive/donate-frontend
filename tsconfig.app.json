@@ -28,12 +28,16 @@
     "strictNullChecks": true,
     "noUncheckedIndexedAccess": true,
     "target": "ES2022",
-    "types": [],
+    "types": [
+      "node"
+    ],
     "useDefineForClassFields": false
   },
   "files": [
     "src/main.ts",
-    "src/polyfills.ts"
+    "src/polyfills.ts",
+    "src/main.server.ts",
+    "src/server.ts"
   ],
   "include": [
     "src/**/*.d.ts"

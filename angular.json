@@ -15,12 +15,15 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/browser",
+            "outputPath": {
+              "base": "dist"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "src/polyfills.ts"
+            ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
@@ -37,11 +40,15 @@
             ],
             "scripts": [],
             "namedChunks": true,
-            "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": true,
             "sourceMap": true,
-            "optimization": false
+            "optimization": false,
+            "browser": "src/main.ts",
+            "server": "src/main.server.ts",
+            "prerender": true,
+            "ssr": {
+              "entry": "src/server.ts"
+            }
           },
           "configurations": {
             "production": {
@@ -71,9 +78,7 @@
                 "vendor": true
               },
               "namedChunks": true,
-              "vendorChunk": true,
               "extractLicenses": true,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -113,9 +118,7 @@
                 "vendor": true
               },
               "namedChunks": true,
-              "vendorChunk": true,
               "extractLicenses": true,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -155,9 +158,7 @@
                 "vendor": true
               },
               "namedChunks": true,
-              "vendorChunk": true,
               "extractLicenses": true,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -171,9 +172,7 @@
               ]
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
@@ -235,81 +234,6 @@
               "devServerTarget": "donate-frontend:serve:production"
             }
           }
-        },
-        "server": {
-          "builder": "@angular-devkit/build-angular:server",
-          "options": {
-            "outputPath": "dist/server",
-            "main": "server.ts",
-            "tsConfig": "tsconfig.server.json",
-            "optimization": {
-              "scripts": true,
-              "styles": false
-            },
-            "outputHashing": "media",
-            "sourceMap": {
-              "scripts": true,
-              "styles": false,
-              "hidden": true,
-              "vendor": true
-            },
-            "namedChunks": false,
-            "extractLicenses": true,
-            "buildOptimizer": true
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.production.ts"
-                }
-              ]
-            },
-            "regression": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.regression.ts"
-                }
-              ]
-            },
-            "staging": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.staging.ts"
-                }
-              ]
-            },
-            "development": {
-              "vendorChunk": true
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "serve-ssr": {
-          "builder": "@angular-devkit/build-angular:ssr-dev-server",
-          "options": {},
-          "configurations": {
-            "production": {
-              "browserTarget": "donate-frontend:build:production",
-              "serverTarget": "donate-frontend:server:production"
-            },
-            "staging": {
-              "serverTarget": "donate-frontend:server:staging",
-              "browserTarget": "donate-frontend:build:staging"
-            },
-            "regression": {
-              "serverTarget": "donate-frontend:server:regression",
-              "browserTarget": "donate-frontend:build:regression"
-            },
-            "development": {
-              "serverTarget": "donate-frontend:server:development",
-              "browserTarget": "donate-frontend:build:development"
-            }
-          },
-          "defaultConfiguration": "production"
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
