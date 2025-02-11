@@ -246,7 +246,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     if (this.stripeElements && !this.donorAccount.regularGivingPaymentMethod) {
       const confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(
-        {billingPostalAddress: this.billingPostCode, countryCode: billingCountry},
+        {billingPostalAddress: this.billingPostCode + '', countryCode: billingCountry},
         this.stripeElements
       );
 
@@ -291,7 +291,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     })
   }
 
-  private get billingPostCode(): string {
+  private get billingPostCode(): string | null{
     return this.mandateForm.value.billingPostcode;
   }
 
@@ -417,7 +417,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (this.giftAid && this.homePostcode?.trim() && ! this.billingPostCode.trim()) {
+    if (this.giftAid && this.homePostcode?.trim() && ! this.billingPostCode?.trim()) {
       this.mandateForm.patchValue({
         billingPostcode: this.homePostcode,
       });
