@@ -29,7 +29,7 @@ import {
 } from "@stripe/stripe-js";
 import {DonationService, StripeCustomerSession} from "../donation.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {AddressService, billingPostcodeRegExp, HomeAddress} from "../address.service";
+import {AddressService, billingPostcodeRegExp, HomeAddress, postcodeRegExp} from "../address.service";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {environment} from "../../environments/environment";
 import {
@@ -159,10 +159,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
         ]],
       billingPostcode: [this.donorAccount.billingPostCode,
         [
-          // @todo-regular-billing: Restore validators below, but making sure any errors from them are properly
-          //  displayed to user. They were invisible at time of commenting out.
-          // requiredNotBlankValidator,
-          // Validators.pattern(billingPostcodeRegExp),
+          requiredNotBlankValidator,
+          Validators.pattern(billingPostcodeRegExp),
         ]
       ],
       optInCharityEmail: [booleansDefaultValue, requiredNotBlankValidator],
@@ -229,11 +227,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   async submit() {
     const invalid = this.mandateForm.invalid;
     if (invalid) {
-      console.error({rawValue: this.mandateForm.getRawValue()});
-      console.error({errors: this.mandateForm.errors});
       let errorMessage = 'Form error: ';
       if (this.mandateForm.get('donationAmount')?.hasError('required')) {
         errorMessage += "Monthly donation amount is required";
+      } else {
+        errorMessage = "Sorry, we encountered an unexpected form error. Please try again or contact Big Give for assistance."
       }
       this.toast.showError(errorMessage);
       return;
@@ -551,6 +549,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     if (this.giftAid && ! this.homeOutsideUK && !this.homePostcode) {
       errors.push('Please enter your home postcode to claim Gift Aid if you are in the UK.');
+    }
+
+    if (this.giftAid && ! this.homeOutsideUK && ! this.homePostcode?.match(postcodeRegExp)) {
+      errors.push("Please enter a UK postcode");
     }
 
     this.giftAidErrorMessage = errors.join(' ');
