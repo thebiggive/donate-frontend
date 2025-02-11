@@ -159,8 +159,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
         ]],
       billingPostcode: [this.donorAccount.billingPostCode,
         [
-          requiredNotBlankValidator,
-          Validators.pattern(billingPostcodeRegExp),
+          // @todo-regular-billing: Restore validators below, but making sure any errors from them are properly
+          //  displayed to user. They were invisible at time of commenting out.
+          // requiredNotBlankValidator,
+          // Validators.pattern(billingPostcodeRegExp),
         ]
       ],
       optInCharityEmail: [booleansDefaultValue, requiredNotBlankValidator],
@@ -227,6 +229,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   async submit() {
     const invalid = this.mandateForm.invalid;
     if (invalid) {
+      console.error({rawValue: this.mandateForm.getRawValue()});
+      console.error({errors: this.mandateForm.errors});
       let errorMessage = 'Form error: ';
       if (this.mandateForm.get('donationAmount')?.hasError('required')) {
         errorMessage += "Monthly donation amount is required";
@@ -405,11 +409,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (stepIndex > 1 && this.validateAmountStep()) {
+    if (stepIndex > 1 && this.validateGiftAidStep()) {
       return;
     }
 
-    if (stepIndex > 2 && this.validateAmountStep()) {
+    if (stepIndex > 2 && this.validatePaymentInformationStep()) {
       return;
     }
 
