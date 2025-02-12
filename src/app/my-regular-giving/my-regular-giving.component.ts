@@ -1,4 +1,4 @@
-import {Component,  OnInit} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, OnInit} from '@angular/core';
 import {PageMetaService} from "../page-meta.service";
 import {ActivatedRoute} from "@angular/router";
 import {DatePipe} from "@angular/common";
@@ -14,7 +14,8 @@ import {MoneyPipe} from "../money.pipe";
         MoneyPipe
     ],
     templateUrl: './my-regular-giving.component.html',
-    styleUrl: './my-regular-giving.component.scss'
+    styleUrl: './my-regular-giving.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MyRegularGivingComponent implements OnInit{
   protected mandates: Mandate[];

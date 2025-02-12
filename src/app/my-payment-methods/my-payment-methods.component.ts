@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, PLATFORM_ID, OnDestroy} from '@angular/core';
+import {Component, Inject, OnInit, PLATFORM_ID, OnDestroy, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {ComponentsModule} from "@biggive/components-angular";
 import {PaymentMethod} from "@stripe/stripe-js";
 import {ActivatedRoute} from "@angular/router";
@@ -23,7 +23,8 @@ import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
         FaIconComponent
     ],
     templateUrl: './my-payment-methods.component.html',
-    styleUrl: './my-payment-methods.component.scss'
+    styleUrl: './my-payment-methods.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
   protected paymentMethods: PaymentMethod[] | undefined;

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Campaign} from "../campaign.model";
 import {ComponentsModule} from "@biggive/components-angular";
@@ -70,7 +70,8 @@ const paymentStepIndex = 2;
         MatOption
     ],
     templateUrl: './regular-giving.component.html',
-    styleUrl: './regular-giving.component.scss'
+    styleUrl: './regular-giving.component.scss',
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected campaign: Campaign;

@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, Inject, Input, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
@@ -15,20 +15,22 @@ const openPipeToken = 'timeLeftToOpenPipe';
 const endPipeToken = 'timeLeftToEndPipe';
 
 @Component({
-    selector: 'app-campaign-info',
-    templateUrl: './campaign-info.component.html',
-    styleUrl: './campaign-info.component.scss',
-    imports: [
-        ...allChildComponentImports,
-        FontAwesomeModule,
-    ],
-    providers: [
-        CurrencyPipe,
-        { provide: integerPipeToken, useClass: DecimalPipe },
-        // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
-        { provide: openPipeToken, useClass: TimeLeftPipe },
-        { provide: endPipeToken, useClass: TimeLeftPipe },
-    ]
+  selector: 'app-campaign-info',
+  templateUrl: './campaign-info.component.html',
+  styleUrl: './campaign-info.component.scss',
+  imports: [
+      ...allChildComponentImports,
+      FontAwesomeModule,
+  ],
+  providers: [
+      CurrencyPipe,
+      { provide: integerPipeToken, useClass: DecimalPipe },
+      // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
+      { provide: openPipeToken, useClass: TimeLeftPipe },
+      { provide: endPipeToken, useClass: TimeLeftPipe },
+  ],
+  standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class CampaignInfoComponent implements OnInit {
   additionalImageUris: Array<string|null> = [];

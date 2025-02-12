@@ -1,12 +1,12 @@
 import {StepperSelectionEvent} from '@angular/cdk/stepper';
-import {DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
+import {DatePipe, getCurrencySymbol, isPlatformBrowser, PercentPipe} from '@angular/common';
 import {HttpErrorResponse} from '@angular/common/http';
 import {
   AfterContentChecked,
   AfterContentInit,
   AfterViewInit,
   ChangeDetectorRef,
-  Component,
+  Component, CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
   Inject,
   Input,
@@ -15,10 +15,10 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {MatDialog} from '@angular/material/dialog';
-import {MatStepper} from '@angular/material/stepper';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatAutocompleteModule, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {MatStepper, MatStepperModule} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatomoTracker} from 'ngx-matomo-client';
 import {retryWhen, tap} from 'rxjs/operators';
@@ -66,19 +66,51 @@ import {requiredNotBlankValidator} from "../../validators/notBlank";
 import {flags} from "../../featureFlags";
 import {WidgetInstance} from "friendly-challenge";
 import {Toast} from "../../toast.service";
+import { allChildComponentImports } from 'src/allChildComponentImports';
+import { CampaignInfoComponent } from 'src/app/campaign-info/campaign-info.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatOptionModule} from '@angular/material/core';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatSelectModule} from '@angular/material/select';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 declare var _paq: {
   push: (args: Array<string|object>) => void,
 };
 
 @Component({
-    selector: 'app-donation-start-form',
-    templateUrl: './donation-start-form.component.html',
-    styleUrl: './donation-start-form.component.scss',
-    providers: [
-        TimeLeftPipe,
-    ],
-    standalone: false
+  selector: 'app-donation-start-form',
+  templateUrl: './donation-start-form.component.html',
+  styleUrl: './donation-start-form.component.scss',
+  providers: [
+    TimeLeftPipe,
+  ],
+  standalone: true,
+  imports: [
+    ...allChildComponentImports,
+    ExactCurrencyPipe,
+    FontAwesomeModule,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatInputModule,
+    MatOptionModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatStepperModule,
+    PercentPipe,
+    ReactiveFormsModule,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DonationStartFormComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit {
   /**

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, OnInit} from '@angular/core';
 import {PageMetaService} from "../page-meta.service";
 import {ActivatedRoute} from "@angular/router";
 import {CompleteDonation, Donation, EnrichedDonation, isLargeDonation, withComputedProperties} from "../donation.model";
@@ -12,13 +12,12 @@ import {myRegularGivingPath} from "../app-routing";
     selector: 'app-my-donations',
     imports: [
         ...allChildComponentImports,
-        AsyncPipe,
         ExactCurrencyPipe,
         DatePipe,
-        MatProgressSpinner
     ],
     templateUrl: './my-donations.component.html',
-    styleUrl: './my-donations.component.scss'
+    styleUrl: './my-donations.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MyDonationsComponent implements OnInit{
   protected donations: EnrichedDonation[];

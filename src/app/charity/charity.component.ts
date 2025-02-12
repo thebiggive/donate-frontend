@@ -1,17 +1,24 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, OnInit} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { currencyPipeDigitsInfo } from '../../environments/common';
 import { CampaignSummary } from '../campaign-summary.model';
 import { PageMetaService } from '../page-meta.service';
 import { CampaignService } from '../campaign.service';
+import {allChildComponentImports} from '../../allChildComponentImports';
+import {OptimisedImagePipe} from '../optimised-image.pipe';
 
 @Component({
-    selector: 'app-charity',
-    templateUrl: './charity.component.html',
-    styleUrl: 'charity.component.scss',
-    standalone: false
+  selector: 'app-charity',
+  templateUrl: './charity.component.html',
+  styleUrl: 'charity.component.scss',
+  standalone: true,
+  imports: [
+    ...allChildComponentImports,
+    OptimisedImagePipe,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class CharityComponent implements OnInit {
   campaigns: CampaignSummary[];

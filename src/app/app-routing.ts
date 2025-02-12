@@ -25,6 +25,15 @@ import {NotFoundComponent} from "./not-found/not-found.component";
 import {DonorAccountService} from "./donor-account.service";
 import {DonorAccount} from "./donorAccount.model";
 import {NavigationService} from "./navigation.service";
+import {MyAccountComponent} from './my-account/my-account.component';
+import {ExploreComponent} from './explore/explore.component';
+import {DonationThanksComponent} from './donation-thanks/donation-thanks.component';
+import {CharityComponent} from './charity/charity.component';
+import {CampaignDetailsComponent} from './campaign-details/campaign-details.component';
+import {DonationStartContainerComponent} from './donation-start/donation-start-container/donation-start-container.component';
+import {ResetPasswordComponent} from './reset-password/reset-password.component';
+import {HomeComponent} from './home/home.component';
+import {TransferFundsComponent} from './transfer-funds/transfer-funds.component';
 
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
@@ -114,21 +123,19 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
+    component: HomeComponent,
     resolve: {
       stats: campaignStatsResolver,
       highlights: highlightCardsResolver
     },
-    loadChildren: () => import('./home/home.module')
-      .then(c => c.HomeModule),
   },
   {
     path: transferFundsPath,
     pathMatch: 'full',
+    component: TransferFundsComponent,
     canActivate: [
       requireLogin,
     ],
-    loadChildren: () => import('./transfer-funds/transfer-funds.module')
-      .then(c => c.TransferFundsModule),
   },
   {
     path: 'buy-credits',
@@ -138,29 +145,26 @@ const routes: Routes = [
   {
     path: 'campaign/:campaignId',
     pathMatch: 'full',
+    component: CampaignDetailsComponent,
     resolve: {
       campaign: CampaignResolver,
     },
-    loadChildren: () => import('./campaign-details/campaign-details.module')
-      .then(c => c.CampaignDetailsModule),
   },
   {
     path: 'charity/:charityId',
     pathMatch: 'full',
+    component: CharityComponent,
     resolve: {
       campaigns: CharityCampaignsResolver,
     },
-    loadChildren: () => import('./charity/charity.module')
-      .then(c => c.CharityModule),
   },
   {
     path: 'donate/:campaignId',
     pathMatch: 'full',
+    component: DonationStartContainerComponent,
     resolve: {
       campaign: CampaignResolver,
     },
-    loadChildren: () => import('./donation-start/donation-start-container/donation-start-container.module')
-      .then(c => c.DonationStartContainerModule),
   },
   {
     path: 'donate-new-stepper/:campaignId',
@@ -170,34 +174,30 @@ const routes: Routes = [
   {
     path: 'metacampaign/:campaignId',
     pathMatch: 'full',
+    component: ExploreComponent,
     resolve: {
       campaign: CampaignResolver,
       highlights: highlightCardsResolver,
     },
-    loadChildren: () => import('./explore/explore.module')
-      .then(c => c.ExploreModule),
   },
   {
     path: 'metacampaign/:campaignId/:fundSlug',
     pathMatch: 'full',
+    component: ExploreComponent,
     resolve: {
       campaign: CampaignResolver,
       highlights: highlightCardsResolver,
     },
-    loadChildren: () => import('./explore/explore.module')
-      .then(c => c.ExploreModule),
   },
   {
     path: 'reset-password',
     pathMatch: 'full',
-    loadChildren: () => import('./reset-password/reset-password.module')
-      .then(c => c.ResetPasswordModule),
+    component: ResetPasswordComponent,
   },
   {
     path: 'thanks/:donationId',
     pathMatch: 'full',
-    loadChildren: () => import('./donation-thanks/donation-thanks.module')
-      .then(c => c.DonationThanksModule),
+    component: DonationThanksComponent,
   },
   {
     path: 'my-account/donations',
@@ -227,31 +227,28 @@ const routes: Routes = [
   {
     path: ':campaignSlug/:fundSlug',
     pathMatch: 'full',
+    component: ExploreComponent,
     resolve: {
       campaign: CampaignResolver,
       highlights: highlightCardsResolver,
     },
-    loadChildren: () => import('./explore/explore.module')
-      .then(c => c.ExploreModule),
   },
   {
     path: 'explore',
     pathMatch: 'full',
+    component: ExploreComponent,
     resolve: {
       campaigns: CampaignListResolver,
       highlights: highlightCardsResolver
     },
-    loadChildren: () => import('./explore/explore.module')
-      .then(c => c.ExploreModule),
   },
   {
     path: myAccountPath,
     pathMatch: 'full',
+    component: MyAccountComponent,
     canActivate: [
       requireLogin,
     ],
-    loadChildren: () => import('./my-account/my-account.module')
-      .then(c => c.MyAccountModule),
   },
   {
     path: registerPath,
@@ -285,6 +282,7 @@ const routes: Routes = [
     // app component will pick up to trigger auto opening the cookie preferences modal.
     path: 'cookie-preferences',
     pathMatch: 'full',
+    component: HomeComponent,
     resolve: {
       stats: campaignStatsResolver,
       highlights: highlightCardsResolver
@@ -292,8 +290,6 @@ const routes: Routes = [
     data: {
       showCookiePreferences: true,
     },
-    loadChildren: () => import('./home/home.module')
-      .then(c => c.HomeModule),
   },
   // This is effectively our no-or-one-forward-slashes 404 handler because we support any string as meta-campaign
   // slug (and optionally another as fund slug). So check `CampaignResolver` for adjusting what happens if the slug doesn't
@@ -301,12 +297,11 @@ const routes: Routes = [
   {
     path: ':campaignSlug',
     pathMatch: 'full',
+    component: ExploreComponent,
     resolve: {
       campaign: CampaignResolver,
       highlights: highlightCardsResolver,
     },
-    loadChildren: () => import('./explore/explore.module')
-      .then(c => c.ExploreModule),
   },
   // And this is our final 404 handler which actually says 'not found'; used for e.g. legacy /project/X/Y format paths.
   {

@@ -1,4 +1,14 @@
-import {AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild
+} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
 import {ComponentsModule} from "@biggive/components-angular";
 import {MatButtonModule} from "@angular/material/button";
@@ -28,7 +38,8 @@ export type LoginNavigationState = {
     selector: 'app-login',
     imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule],
     templateUrl: './login.component.html',
-    styleUrl: 'login.component.scss'
+    styleUrl: 'login.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   @ViewChild('frccaptcha', { static: false })

@@ -1,9 +1,9 @@
 import {isPlatformBrowser} from '@angular/common';
 import {AfterContentInit, Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {MatDialog} from '@angular/material/dialog';
-import {MatSelectChange} from '@angular/material/select';
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatAutocompleteModule, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {MatSelectChange, MatSelectModule} from '@angular/material/select';
 import {MatomoTracker} from 'ngx-matomo-client';
 import {EMPTY} from 'rxjs';
 import {debounceTime, distinctUntilChanged, startWith, switchMap} from 'rxjs/operators';
@@ -24,16 +24,40 @@ import {AddressService} from '../address.service';
 import {getCurrencyMinValidator} from '../validators/currency-min';
 import {getCurrencyMaxValidator} from '../validators/currency-max';
 import {Toast} from '../toast.service';
+import {allChildComponentImports} from '../../allChildComponentImports';
+import {ExactCurrencyPipe} from '../exact-currency.pipe';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatInputModule} from '@angular/material/input';
+import {MatOptionModule} from '@angular/material/core';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatStepperModule} from '@angular/material/stepper';
 
 /**
  * Support for topping up Stripe customer_balance via bank transfer. Only
  * available for GBP campaigns and UK donors for now.
  */
 @Component({
-    selector: 'app-transfer-funds',
-    templateUrl: './transfer-funds.component.html',
-    styleUrl: './transfer-funds.component.scss',
-    standalone: false
+  selector: 'app-transfer-funds',
+  templateUrl: './transfer-funds.component.html',
+  styleUrl: './transfer-funds.component.scss',
+  standalone: true,
+  imports: [
+    ...allChildComponentImports,
+    ExactCurrencyPipe,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatInputModule,
+    MatOptionModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatStepperModule,
+    ReactiveFormsModule,
+  ],
 })
 export class TransferFundsComponent implements AfterContentInit, OnInit {
   addressSuggestions: GiftAidAddressSuggestion[] = [];

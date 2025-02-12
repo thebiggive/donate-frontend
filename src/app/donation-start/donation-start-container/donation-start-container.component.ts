@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 
 import {Campaign} from "../../campaign.model";
@@ -9,11 +9,20 @@ import {IdentityService} from "../../identity.service";
 import {environment} from "../../../environments/environment";
 import {DonationStartFormComponent} from "../donation-start-form/donation-start-form.component";
 import {ImageService} from "../../image.service";
+import {allChildComponentImports} from '../../../allChildComponentImports';
+import {DatePipe} from '@angular/common';
+import {TimeLeftPipe} from '../../time-left.pipe';
 
 @Component({
-    templateUrl: './donation-start-container.component.html',
-    styleUrl: './donation-start-container.component.scss',
-    standalone: false
+  templateUrl: './donation-start-container.component.html',
+  styleUrl: './donation-start-container.component.scss',
+  standalone: true,
+  imports: [
+    ...allChildComponentImports,
+    DatePipe,
+    TimeLeftPipe,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DonationStartContainerComponent implements AfterViewInit, OnInit{
   campaign: Campaign;

@@ -1,7 +1,7 @@
-import {CurrencyPipe, DatePipe, isPlatformBrowser, ViewportScroller} from '@angular/common';
+import {AsyncPipe, CurrencyPipe, DatePipe, isPlatformBrowser, ViewportScroller} from '@angular/common';
 import {
   AfterViewChecked,
-  Component,
+  Component, CUSTOM_ELEMENTS_SCHEMA,
   HostListener,
   Inject,
   Input,
@@ -31,22 +31,36 @@ import {FundService} from "../fund.service";
 import {TimeLeftPipe} from "../time-left.pipe";
 import {environment} from "../../environments/environment";
 import {SESSION_STORAGE, StorageService} from "ngx-webstorage-service";
+import {allChildComponentImports} from '../../allChildComponentImports';
+import {InfiniteScrollDirective} from 'ngx-infinite-scroll';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {OptimisedImagePipe} from '../optimised-image.pipe';
+import {HighlightCardsComponent} from '../highlight-cards/highlight-cards.component';
 
 const openPipeToken = 'TimeLeftToOpenPipe';
 const endPipeToken = 'timeLeftToEndPipe';
 
 @Component({
-    selector: 'app-explore',
-    templateUrl: './explore.component.html',
-    styleUrl: 'explore.component.scss',
-    providers: [
-        CurrencyPipe,
-        // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
-        { provide: openPipeToken, useClass: TimeLeftPipe },
-        { provide: endPipeToken, useClass: TimeLeftPipe },
-        DatePipe,
-    ],
-    standalone: false
+  selector: 'app-explore',
+  templateUrl: './explore.component.html',
+  styleUrl: 'explore.component.scss',
+  providers: [
+      CurrencyPipe,
+      // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
+      { provide: openPipeToken, useClass: TimeLeftPipe },
+      { provide: endPipeToken, useClass: TimeLeftPipe },
+      DatePipe,
+  ],
+  standalone: true,
+  imports: [
+    ...allChildComponentImports,
+    AsyncPipe,
+    InfiniteScrollDirective,
+    MatProgressSpinnerModule,
+    OptimisedImagePipe,
+    HighlightCardsComponent,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid: BiggiveCampaignCardFilterGrid;

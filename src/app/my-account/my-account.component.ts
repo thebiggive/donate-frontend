@@ -1,21 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, OnInit} from '@angular/core';
 import {PageMetaService} from '../page-meta.service';
-import {DatePipe} from '@angular/common';
+import {AsyncPipe, DatePipe} from '@angular/common';
 import {IdentityService} from "../identity.service";
 import {Person} from "../person.model";
 import {Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 import {flags} from "../featureFlags";
 import { HighlightCard } from '../highlight-cards/HighlightCard';
 import {environment} from "../../environments/environment";
+import {allChildComponentImports} from '../../allChildComponentImports';
+import {ExactCurrencyPipe} from '../exact-currency.pipe';
+import {MyAccountRoutingModule} from './my-account-routing.module';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {OptimisedImagePipe} from '../optimised-image.pipe';
+import {MatButtonModule} from '@angular/material/button';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {HighlightCardsComponent} from '../highlight-cards/highlight-cards.component';
 
 @Component({
     selector: 'app-my-account',
     templateUrl: './my-account.component.html',
     styleUrl: './my-account.component.scss',
     providers: [DatePipe],
-    standalone: false
+    standalone: true,
+    imports: [
+      FontAwesomeModule,
+      HighlightCardsComponent,
+      MatButtonModule,
+      MatDialogModule,
+      MatProgressSpinnerModule,
+      MyAccountRoutingModule,
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MyAccountComponent implements OnInit {
   public person: Person;

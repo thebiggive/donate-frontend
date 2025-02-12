@@ -1,5 +1,5 @@
-import {isPlatformBrowser} from "@angular/common";
-import {Component, Inject, OnInit, Optional, PLATFORM_ID} from '@angular/core';
+import {AsyncPipe, isPlatformBrowser} from '@angular/common';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, Inject, OnInit, Optional, PLATFORM_ID} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RESPONSE} from '../../express.tokens';
 import { Response } from "express";
@@ -8,12 +8,19 @@ import {PageMetaService} from '../page-meta.service';
 import {HighlightCard} from "../highlight-cards/HighlightCard";
 import {environment} from "../../environments/environment";
 import {NavigationService} from "../navigation.service";
+import {allChildComponentImports} from '../../allChildComponentImports';
+import {HighlightCardsComponent} from '../highlight-cards/highlight-cards.component';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrl: 'home.component.scss',
-    standalone: false
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrl: 'home.component.scss',
+  standalone: true,
+  imports: [
+    ...allChildComponentImports,
+    HighlightCardsComponent,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HomeComponent implements OnInit {
   stats: {

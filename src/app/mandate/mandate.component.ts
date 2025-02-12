@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, OnInit} from '@angular/core';
 import {ComponentsModule} from "@biggive/components-angular";
 import {DatePipe} from "@angular/common";
 import {Mandate} from "../mandate.model";
@@ -11,11 +11,11 @@ import {MoneyPipe} from "../money.pipe";
     imports: [
         ComponentsModule,
         DatePipe,
-        ExactCurrencyPipe,
         MoneyPipe
     ],
     templateUrl: './mandate.component.html',
-    styleUrl: './mandate.component.scss'
+    styleUrl: './mandate.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MandateComponent implements OnInit {
   protected encodedShareUrl: string = '';

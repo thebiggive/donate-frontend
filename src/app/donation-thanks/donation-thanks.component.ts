@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {faExclamationTriangle} from '@fortawesome/free-solid-svg-icons';
 import {MatomoTracker} from 'ngx-matomo-client';
 
@@ -19,12 +19,26 @@ import {Person} from '../person.model';
 import {myAccountPath} from '../app-routing';
 import {flags} from "../featureFlags";
 import {WidgetInstance} from "friendly-challenge";
+import {allChildComponentImports} from '../../allChildComponentImports';
+import {ExactCurrencyPipe} from '../exact-currency.pipe';
+import {MatButtonModule} from '@angular/material/button';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
 @Component({
-    selector: 'app-donation-thanks',
-    templateUrl: './donation-thanks.component.html',
-    styleUrl: './donation-thanks.component.scss',
-    standalone: false
+  selector: 'app-donation-thanks',
+  templateUrl: './donation-thanks.component.html',
+  styleUrl: './donation-thanks.component.scss',
+  standalone: true,
+  imports: [
+    ...allChildComponentImports,
+    ExactCurrencyPipe,
+    MatButtonModule,
+    MatDialogModule,
+    MatProgressSpinnerModule,
+    FontAwesomeModule,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DonationThanksComponent implements OnInit {
   @Input({ required: true }) private donationId: string;

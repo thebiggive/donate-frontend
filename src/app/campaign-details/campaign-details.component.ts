@@ -1,5 +1,5 @@
-import { DatePipe, isPlatformBrowser, Location } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
+import {CurrencyPipe, DatePipe, isPlatformBrowser, Location} from '@angular/common';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewEncapsulation} from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
@@ -10,18 +10,41 @@ import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
 import { TimeLeftPipe } from '../time-left.pipe';
 import {Toast} from "../toast.service";
+import {allChildComponentImports} from '../../allChildComponentImports';
+import {CampaignInfoComponent} from '../campaign-info/campaign-info.component';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatTabsModule} from '@angular/material/tabs';
+import {OptimisedImagePipe} from '../optimised-image.pipe';
 
 @Component({
-    // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
-    encapsulation: ViewEncapsulation.None,
-    selector: 'app-campaign-details',
-    templateUrl: './campaign-details.component.html',
-    styleUrl: './campaign-details.component.scss',
-    providers: [
-        TimeLeftPipe,
-        DatePipe
-    ],
-    standalone: false
+  // https://stackoverflow.com/questions/45940965/angular-material-customize-tab
+  encapsulation: ViewEncapsulation.None,
+  selector: 'app-campaign-details',
+  templateUrl: './campaign-details.component.html',
+  styleUrl: './campaign-details.component.scss',
+  providers: [
+      TimeLeftPipe,
+      DatePipe
+  ],
+  standalone: true,
+  imports: [
+    ...allChildComponentImports,
+    CampaignInfoComponent,
+    CurrencyPipe,
+    FontAwesomeModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatTabsModule,
+    OptimisedImagePipe,
+    TimeLeftPipe,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
   campaign: Campaign;

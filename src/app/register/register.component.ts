@@ -1,4 +1,14 @@
-import {AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild
+} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
 import {ComponentsModule} from "@biggive/components-angular";
 import {MatButtonModule} from "@angular/material/button";
@@ -24,7 +34,8 @@ import {NavigationService} from "../navigation.service";
     selector: 'app-register',
     imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule],
     templateUrl: './register.component.html',
-    styleUrl: 'register.component.scss'
+    styleUrl: 'register.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('frccaptcha', { static: false })
