@@ -20,8 +20,8 @@ type StartMandateParams = {
   /** ISO-2 code for country. Must match that on the DonorAccount if the latter is non-null */
   billingCountry: string,
 
-  /** Must match postcode on the DonorAccount if the latter is non-null */
-  billingPostcode: string,
+  /** Must be null or match postcode on the DonorAccount if the latter is non-null */
+  billingPostcode: string | null,
 
   /** Should only be set if the donor previously had no payment
    * method selected on their account for regular-giving use, as the payment method is common to all regular giving

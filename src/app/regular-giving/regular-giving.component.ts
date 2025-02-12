@@ -29,7 +29,7 @@ import {
 } from "@stripe/stripe-js";
 import {DonationService, StripeCustomerSession} from "../donation.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {AddressService, billingPostcodeRegExp, HomeAddress} from "../address.service";
+import {AddressService, billingPostcodeRegExp, HomeAddress, postcodeRegExp} from "../address.service";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {environment} from "../../environments/environment";
 import {
@@ -230,6 +230,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       let errorMessage = 'Form error: ';
       if (this.mandateForm.get('donationAmount')?.hasError('required')) {
         errorMessage += "Monthly donation amount is required";
+      } else {
+        errorMessage = "Sorry, we encountered an unexpected form error. Please try again or contact Big Give for assistance."
       }
       this.toast.showError(errorMessage);
       return;
@@ -246,7 +248,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     if (this.stripeElements && !this.donorAccount.regularGivingPaymentMethod) {
       const confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(
-        {billingPostalAddress: this.billingPostCode, countryCode: billingCountry},
+        {billingPostalAddress: this.billingPostCode + '', countryCode: billingCountry},
         this.stripeElements
       );
 
@@ -291,7 +293,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     })
   }
 
-  private get billingPostCode(): string {
+  private get billingPostCode(): string | null{
     return this.mandateForm.value.billingPostcode;
   }
 
@@ -405,11 +407,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (stepIndex > 1 && this.validateAmountStep()) {
+    if (stepIndex > 1 && this.validateGiftAidStep()) {
       return;
     }
 
-    if (stepIndex > 2 && this.validateAmountStep()) {
+    if (stepIndex > 2 && this.validatePaymentInformationStep()) {
       return;
     }
 
@@ -417,7 +419,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (this.giftAid && this.homePostcode?.trim() && ! this.billingPostCode.trim()) {
+    if (this.giftAid && this.homePostcode?.trim() && ! this.billingPostCode?.trim()) {
       this.mandateForm.patchValue({
         billingPostcode: this.homePostcode,
       });
@@ -547,6 +549,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     if (this.giftAid && ! this.homeOutsideUK && !this.homePostcode) {
       errors.push('Please enter your home postcode to claim Gift Aid if you are in the UK.');
+    }
+
+    if (this.giftAid && ! this.homeOutsideUK && ! this.homePostcode?.match(postcodeRegExp)) {
+      errors.push("Please enter a UK postcode");
     }
 
     this.giftAidErrorMessage = errors.join(' ');
