@@ -67,7 +67,7 @@ export class MyAccountComponent implements OnInit {
             color: 'brand-afa-pink',
             image: new URL(environment.donateUriPrefix + '/assets/images/peach-texture.jpg')
           },
-          headerText: "Your Regular\u00A0Giving", // u00A0 = non-breaking space. We prefer the break after "Your".
+          headerText: "Your Regular Giving",
           bodyText: 'View and manage your regular giving mandates',
           button: {
             text: '',
