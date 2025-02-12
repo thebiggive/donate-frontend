@@ -51,7 +51,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   minimumCreditAmount = environment.minimumCreditAmount;
   maximumCreditAmount = environment.maximumCreditAmount;
   maximumDonationAmount = maximumDonationAmountForFundedDonation;
-  showAddressLookup: boolean = true;
   sortCode?: string;
   accountNumber?: string;
   accountHolderName?: string;
