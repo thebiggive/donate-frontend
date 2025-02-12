@@ -1,5 +1,5 @@
 import {isPlatformServer} from '@angular/common';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Inject, Injectable, InjectionToken, makeStateKey, Optional, PLATFORM_ID, TransferState,} from '@angular/core';
 import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
 import {firstValueFrom, Observable, of} from 'rxjs';
@@ -12,14 +12,12 @@ import {environment} from '../environments/environment';
 import {Person} from "./person.model";
 import {MatomoTracker} from 'ngx-matomo-client';
 import {map, switchMap} from "rxjs/operators";
-import {IdentityService, getPersonAuthHttpOptions} from "./identity.service";
+import {getPersonAuthHttpOptions, IdentityService, STRIPE_SESSION_SECRET_COOKIE_NAME} from "./identity.service";
 import {completeStatuses, DonationStatus, resumableStatuses} from "./donation-status.type";
 import {CookieService} from "ngx-cookie-service";
 import {Campaign} from "./campaign.model";
 
 export const TBG_DONATE_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_STORAGE');
-
-export const STRIPE_SESSION_SECRET_COOKIE_NAME = 'stripe-session-secret';
 
 export type StripeCustomerSession = { stripeSessionSecret: string };
 

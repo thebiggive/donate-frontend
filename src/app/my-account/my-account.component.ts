@@ -1,19 +1,16 @@
 import {Component, CUSTOM_ELEMENTS_SCHEMA, OnInit} from '@angular/core';
 import {PageMetaService} from '../page-meta.service';
-import {AsyncPipe, DatePipe} from '@angular/common';
+import {DatePipe} from '@angular/common';
 import {IdentityService} from "../identity.service";
 import {Person} from "../person.model";
 import {Router} from "@angular/router";
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 import {flags} from "../featureFlags";
-import { HighlightCard } from '../highlight-cards/HighlightCard';
+import {HighlightCard} from '../highlight-cards/HighlightCard';
 import {environment} from "../../environments/environment";
-import {allChildComponentImports} from '../../allChildComponentImports';
-import {ExactCurrencyPipe} from '../exact-currency.pipe';
 import {MyAccountRoutingModule} from './my-account-routing.module';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {OptimisedImagePipe} from '../optimised-image.pipe';
 import {MatButtonModule} from '@angular/material/button';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {HighlightCardsComponent} from '../highlight-cards/highlight-cards.component';
@@ -111,3 +108,5 @@ export class MyAccountComponent implements OnInit {
     });
   }
 }
+
+export const myAccountPath = 'my-account';

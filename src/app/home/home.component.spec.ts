@@ -23,7 +23,9 @@ describe("HomeComponent", () => {
   beforeEach(waitForAsync(async () => {
     await TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [HomeComponent],
+      declarations: [
+        // HomeComponent
+      ],
       imports: [
         AsyncPipe,
         MatIconModule,

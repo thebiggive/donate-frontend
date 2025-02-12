@@ -20,7 +20,6 @@ describe("MyAccountComponent", () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [MyAccountComponent],
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         MatomoModule.forRoot({

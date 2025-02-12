@@ -544,3 +544,5 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     return this.donor?.cash_balance?.gbp;
   }
 }
+
+export const transferFundsPath = 'transfer-funds';

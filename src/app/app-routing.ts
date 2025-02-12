@@ -5,8 +5,8 @@ import {CampaignResolver} from './campaign.resolver';
 import {CharityCampaignsResolver} from './charity-campaigns.resolver';
 import {campaignStatsResolver} from "./campaign-stats-resolver";
 import {highlightCardsResolver} from "./highlight-cards-resolver";
-import {LoginComponent} from "./login/login.component";
-import {inject, PLATFORM_ID} from "@angular/core";
+import {LoginComponent, registerPath} from "./login/login.component";
+import {forwardRef, inject, PLATFORM_ID} from "@angular/core";
 import {IdentityService} from "./identity.service";
 import {RegisterComponent} from "./register/register.component";
 import {isPlatformServer} from "@angular/common";
@@ -15,7 +15,7 @@ import {MyDonationsComponent} from "./my-donations/my-donations.component";
 import {DonationService} from "./donation.service";
 import {MyRegularGivingComponent} from "./my-regular-giving/my-regular-giving.component";
 import {MandateService} from "./mandate.service";
-import {RegularGivingComponent} from "./regular-giving/regular-giving.component";
+import {myRegularGivingPath, RegularGivingComponent} from "./regular-giving/regular-giving.component";
 import {Person} from "./person.model";
 import {firstValueFrom} from "rxjs";
 import {MandateComponent} from "./mandate/mandate.component";
@@ -25,20 +25,17 @@ import {NotFoundComponent} from "./not-found/not-found.component";
 import {DonorAccountService} from "./donor-account.service";
 import {DonorAccount} from "./donorAccount.model";
 import {NavigationService} from "./navigation.service";
-import {MyAccountComponent} from './my-account/my-account.component';
+import {MyAccountComponent, myAccountPath} from './my-account/my-account.component';
 import {ExploreComponent} from './explore/explore.component';
 import {DonationThanksComponent} from './donation-thanks/donation-thanks.component';
 import {CharityComponent} from './charity/charity.component';
 import {CampaignDetailsComponent} from './campaign-details/campaign-details.component';
-import {DonationStartContainerComponent} from './donation-start/donation-start-container/donation-start-container.component';
+import {
+  DonationStartContainerComponent
+} from './donation-start/donation-start-container/donation-start-container.component';
 import {ResetPasswordComponent} from './reset-password/reset-password.component';
 import {HomeComponent} from './home/home.component';
-import {TransferFundsComponent} from './transfer-funds/transfer-funds.component';
-
-export const registerPath = 'register';
-export const myAccountPath = 'my-account';
-export const transferFundsPath = 'transfer-funds';
-export const myRegularGivingPath = 'my-account/regular-giving';
+import {TransferFundsComponent, transferFundsPath} from './transfer-funds/transfer-funds.component';
 
 const redirectIfAlreadyLoggedIn: CanActivateFn = (snapshot: ActivatedRouteSnapshot) => {
   if (isPlatformServer(inject(PLATFORM_ID))) {
@@ -197,7 +194,7 @@ const routes: Routes = [
   {
     path: 'thanks/:donationId',
     pathMatch: 'full',
-    component: DonationThanksComponent,
+    component: forwardRef(() => DonationThanksComponent),
   },
   {
     path: 'my-account/donations',

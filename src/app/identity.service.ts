@@ -12,9 +12,10 @@ import {environment} from '../environments/environment';
 import {IdentityJWT} from './identity-jwt.model';
 import {Person} from './person.model';
 import {FundingInstruction} from './fundingInstruction.model';
-import {STRIPE_SESSION_SECRET_COOKIE_NAME} from "./donation.service";
 
 export const TBG_DONATE_ID_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_ID_STORAGE');
+
+export const STRIPE_SESSION_SECRET_COOKIE_NAME = 'stripe-session-secret';
 
 @Injectable({
   providedIn: 'root',

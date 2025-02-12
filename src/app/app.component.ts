@@ -1,5 +1,6 @@
 import {isPlatformBrowser} from '@angular/common';
-import {AfterViewInit, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild, WritableSignal} from '@angular/core';
+import {AfterViewInit, Component, HostListener,
+  inject, Inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild, WritableSignal} from '@angular/core';
 import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
 import {BiggiveMainMenu} from '@biggive/components-angular';
 import {MatomoTracker} from "ngx-matomo-client";
@@ -118,7 +119,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     // no-op
     // @to-do: Either restore and fix, or remove this function entirely and remove the event emitter it depends on
     // from https://github.com/thebiggive/components/blob/cf6175ea0272eac2219e87db78389df0eeb87ca8/src/components/biggive-button/biggive-button.tsx#L15
-  }  
+  }
 
   ngOnInit() {
     if (this.isPlatformBrowser) {

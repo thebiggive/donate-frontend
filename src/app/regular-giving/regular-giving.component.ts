@@ -11,7 +11,6 @@ import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
 import {RegularGivingService} from "../regularGiving.service";
 import {Mandate} from '../mandate.model';
-import {myRegularGivingPath} from "../app-routing";
 import {requiredNotBlankValidator} from "../validators/notBlank";
 import {getCurrencyMinValidator} from "../validators/currency-min";
 import {getCurrencyMaxValidator} from "../validators/currency-max";
@@ -46,6 +45,8 @@ import {GiftAidAddressSuggestion} from "../gift-aid-address-suggestion.model";
 const maxAmount = 500;
 const minAmount = 1;
 const paymentStepIndex = 2;
+
+export const myRegularGivingPath = 'my-account/regular-giving';
 
 @Component({
     selector: 'app-regular-giving',

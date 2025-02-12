@@ -22,7 +22,6 @@ describe('CampaignDetailsComponent', () => {
     void TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [
-        CampaignDetailsComponent,
       ],
       imports: [
         CommonModule,

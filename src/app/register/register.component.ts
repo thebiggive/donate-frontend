@@ -23,12 +23,12 @@ import {EMAIL_REGEXP} from "../validators/patterns";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
-import {transferFundsPath} from "../app-routing";
 import {WidgetInstance} from "friendly-challenge";
 import {flags} from "../featureFlags";
 import type {LoginNavigationState} from "../login/login.component";
 import {PageMetaService} from '../page-meta.service';
 import {NavigationService} from "../navigation.service";
+import {transferFundsPath} from "../transfer-funds/transfer-funds.component";
 
 @Component({
     selector: 'app-register',

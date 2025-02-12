@@ -16,7 +16,6 @@ import {minPasswordLength} from '../../environments/common';
 import {IdentityService} from '../identity.service';
 import {PageMetaService} from '../page-meta.service';
 import {Person} from '../person.model';
-import {myAccountPath} from '../app-routing';
 import {flags} from "../featureFlags";
 import {WidgetInstance} from "friendly-challenge";
 import {allChildComponentImports} from '../../allChildComponentImports';
@@ -24,6 +23,7 @@ import {ExactCurrencyPipe} from '../exact-currency.pipe';
 import {MatButtonModule} from '@angular/material/button';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {myAccountPath} from "../my-account/my-account.component";
 
 @Component({
   selector: 'app-donation-thanks',

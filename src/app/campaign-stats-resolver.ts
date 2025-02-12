@@ -1,15 +1,16 @@
 import {ActivatedRouteSnapshot, ResolveFn} from '@angular/router';
-import {first, ReplaySubject} from 'rxjs';
+import {first, Observable, of, ReplaySubject} from 'rxjs';
 import {CampaignStats} from './campaign-stats.model';
 import {CampaignService} from "./campaign.service";
 import {inject} from "@angular/core";
 
-type FormattedCampaignStats = {
+export type FormattedCampaignStats = {
   totalRaisedFormatted: string,
   totalCountFormatted: string
 };
 
-export const campaignStatsResolver: ResolveFn<FormattedCampaignStats | null> = (_route: ActivatedRouteSnapshot) => {
+export const campaignStatsResolver: ResolveFn<FormattedCampaignStats | null> = (_route: ActivatedRouteSnapshot): Observable<FormattedCampaignStats | null> => {
+  return of(null);
 
   const formatTotalRaised = (totalRaised: number): string => ("£" + totalRaised.toLocaleString('en-GB'));
 

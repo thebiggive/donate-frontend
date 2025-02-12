@@ -10,6 +10,7 @@ import {environment} from "../../environments/environment";
 import {NavigationService} from "../navigation.service";
 import {allChildComponentImports} from '../../allChildComponentImports';
 import {HighlightCardsComponent} from '../highlight-cards/highlight-cards.component';
+import {FormattedCampaignStats} from "../campaign-stats-resolver";
 
 @Component({
   selector: 'app-home',
@@ -23,10 +24,7 @@ import {HighlightCardsComponent} from '../highlight-cards/highlight-cards.compon
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HomeComponent implements OnInit {
-  stats: {
-    totalRaisedFormatted: string,
-    totalCountFormatted: string
-  };
+  stats: FormattedCampaignStats | null;
 
   /**
    * Prevents the user seeing the content if we're about to redirect them to a different page.

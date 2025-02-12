@@ -40,7 +40,6 @@ describe("DonationStartContainer", () => {
     await TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [
-        DonationStartContainerComponent,
         DonationStartFormStubComponent,
       ],
       imports: [

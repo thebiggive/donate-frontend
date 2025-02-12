@@ -23,7 +23,6 @@ import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
-import {registerPath} from "../app-routing";
 import {WidgetInstance} from "friendly-challenge";
 import {NavigationService} from "../navigation.service";
 
@@ -33,6 +32,8 @@ export type LoginNavigationState = {
    */
   newAccountRegistration?: boolean
 }
+
+export const registerPath = 'register';
 
 @Component({
     selector: 'app-login',
