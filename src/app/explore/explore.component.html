@@ -85,6 +85,7 @@
                        is by the fact that it uses match funds and *isn't* regular giving. If it is regular giving we pass a space to take up space in the layout without being visible.
                        -->
                   <biggive-campaign-card
+                    id="campaign-{{campaign.id}}"
                     [banner]="campaign.imageUri | optimisedImage:830 | async"
                     [campaignType]="campaign.isMatched ? 'Match Funded' : null"
                     [campaignTitle]="campaign.title"
@@ -100,7 +101,6 @@
                     [isFutureCampaign]="isInFuture(campaign)"
                     [isPastCampaign]="isInPast(campaign)"
                     [datetime]="getRelevantDateAsStr(campaign)">
-                    id="campaign-{{campaign.id}}"
                   </biggive-campaign-card>
               </div>
             }
