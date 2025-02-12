@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IdentityService } from '../identity.service';
 import { minPasswordLength } from 'src/environments/common';
 import {allChildComponentImports} from '../../allChildComponentImports';
-import {BiggiveHeading, BiggiveTextInput} from '@biggive/components-angular';
+import {BiggiveHeading} from '@biggive/components-angular';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';

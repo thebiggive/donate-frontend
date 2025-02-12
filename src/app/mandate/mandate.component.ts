@@ -2,7 +2,6 @@ import {Component, CUSTOM_ELEMENTS_SCHEMA, OnInit} from '@angular/core';
 import {ComponentsModule} from "@biggive/components-angular";
 import {DatePipe} from "@angular/common";
 import {Mandate} from "../mandate.model";
-import {ExactCurrencyPipe} from "../exact-currency.pipe";
 import {ActivatedRoute} from "@angular/router";
 import {MoneyPipe} from "../money.pipe";
 

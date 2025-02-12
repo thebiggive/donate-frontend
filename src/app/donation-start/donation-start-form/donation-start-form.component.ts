@@ -67,7 +67,6 @@ import {flags} from "../../featureFlags";
 import {WidgetInstance} from "friendly-challenge";
 import {Toast} from "../../toast.service";
 import { allChildComponentImports } from 'src/allChildComponentImports';
-import { CampaignInfoComponent } from 'src/app/campaign-info/campaign-info.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';

@@ -1,4 +1,4 @@
-import {AsyncPipe, isPlatformBrowser} from '@angular/common';
+import {isPlatformBrowser} from '@angular/common';
 import {Component, CUSTOM_ELEMENTS_SCHEMA, Inject, OnInit, Optional, PLATFORM_ID} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RESPONSE} from '../../express.tokens';

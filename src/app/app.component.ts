@@ -1,6 +1,6 @@
 import {isPlatformBrowser} from '@angular/common';
 import {AfterViewInit, Component, HostListener,
-  inject, Inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild, WritableSignal} from '@angular/core';
+  Inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild, WritableSignal} from '@angular/core';
 import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
 import {BiggiveMainMenu} from '@biggive/components-angular';
 import {MatomoTracker} from "ngx-matomo-client";
