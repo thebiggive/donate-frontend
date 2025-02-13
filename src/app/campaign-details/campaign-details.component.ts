@@ -8,7 +8,6 @@ import { Campaign } from '../campaign.model';
 import { CampaignService } from '../campaign.service';
 import { NavigationService } from '../navigation.service';
 import { PageMetaService } from '../page-meta.service';
-import { TimeLeftPipe } from '../time-left.pipe';
 import {Toast} from "../toast.service";
 import {allChildComponentImports} from '../../allChildComponentImports';
 import {CampaignInfoComponent} from '../campaign-info/campaign-info.component';
@@ -27,8 +26,7 @@ import {OptimisedImagePipe} from '../optimised-image.pipe';
   templateUrl: './campaign-details.component.html',
   styleUrl: './campaign-details.component.scss',
   providers: [
-      TimeLeftPipe,
-      DatePipe
+    DatePipe
   ],
   standalone: true,
   imports: [
@@ -42,7 +40,6 @@ import {OptimisedImagePipe} from '../optimised-image.pipe';
     MatProgressSpinnerModule,
     MatTabsModule,
     OptimisedImagePipe,
-    TimeLeftPipe,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -72,7 +69,6 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     private router: Router,
     private sanitizer: DomSanitizer,
     private toast: Toast,
-    public timeLeftPipe: TimeLeftPipe,
   ) {
     route.queryParams.forEach((params: Params) => {
       if (params.fromFund) {

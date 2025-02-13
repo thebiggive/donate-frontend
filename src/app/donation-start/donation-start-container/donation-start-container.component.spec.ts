@@ -8,7 +8,6 @@ import { of } from "rxjs";
 
 import { DonationStartContainerComponent } from "./donation-start-container.component";
 import { DonationStartFormComponent } from "../donation-start-form/donation-start-form.component";
-import { TBG_DONATE_ID_STORAGE } from "../../identity.service";
 import { TBG_DONATE_STORAGE } from "../../donation.service";
 import { MatomoModule } from "ngx-matomo-client";
 import {
@@ -61,7 +60,6 @@ describe("DonationStartContainer", () => {
           },
         },
         InMemoryStorageService,
-        { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),

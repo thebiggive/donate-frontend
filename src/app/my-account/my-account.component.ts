@@ -9,7 +9,6 @@ import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 import {flags} from "../featureFlags";
 import {HighlightCard} from '../highlight-cards/HighlightCard';
 import {environment} from "../../environments/environment";
-import {MyAccountRoutingModule} from './my-account-routing.module';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatButtonModule} from '@angular/material/button';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
@@ -27,7 +26,6 @@ import {HighlightCardsComponent} from '../highlight-cards/highlight-cards.compon
       MatButtonModule,
       MatDialogModule,
       MatProgressSpinnerModule,
-      MyAccountRoutingModule,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

@@ -1,12 +1,36 @@
+import { APP_BASE_HREF, AsyncPipe, DatePipe } from "@angular/common";
+import {
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
+import { MAT_CHECKBOX_DEFAULT_OPTIONS } from "@angular/material/checkbox";
+import { MAT_RADIO_DEFAULT_OPTIONS } from "@angular/material/radio";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import {RouterOutlet} from '@angular/router';
+import {BiggiveCookieBanner, BiggiveFooter, ComponentsModule} from '@biggive/components-angular';
+import {LOCAL_STORAGE, StorageService} from 'ngx-webstorage-service';
+
+import { routes } from "./app-routing";
+import { CampaignListResolver } from "./campaign-list.resolver";
+import { CampaignResolver } from "./campaign.resolver";
+import { CharityCampaignsResolver } from "./charity-campaigns.resolver";
+// import { environment } from "../environments/environment";
+import {MatomoModule, MatomoRouterModule, provideMatomo} from 'ngx-matomo-client';
+
+
+
+
 import {isPlatformBrowser} from '@angular/common';
-import {AfterViewInit, Component, HostListener,
-  Inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild, WritableSignal} from '@angular/core';
+import {
+  AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, HostListener,
+  Inject, Injectable, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild, WritableSignal
+} from '@angular/core';
 import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
 import {BiggiveMainMenu} from '@biggive/components-angular';
 import {MatomoTracker} from "ngx-matomo-client";
 import {filter, map, startWith} from 'rxjs/operators';
 
-import {DonationService} from './donation.service';
+import {DonationService, TBG_DONATE_STORAGE} from './donation.service';
 import {GetSiteControlService} from './getsitecontrol.service';
 import {NavigationService} from './navigation.service';
 import {IdentityService} from "./identity.service";
@@ -22,12 +46,58 @@ import {
 import {Observable, Subscription} from "rxjs";
 import {supportedBrowsers} from "../supportedBrowsers";
 import {detect} from "detect-browser";
+import {allChildComponentImports} from '../allChildComponentImports';
+
+const matomoBaseUri = "https://biggive.matomo.cloud";
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrl: 'app.component.scss',
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrl: 'app.component.scss',
+  standalone: true,
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [
+    ...allChildComponentImports,
+    AsyncPipe,
+    // TODO figure out how to load this the standalone way; crashes if uncommented due to browser being loaded first(?)
+    // BrowserAnimationsModule,
+    // ComponentsModule,
+    // TODO matomo loading back
+    // ...(environment.matomoSiteId
+    //   ? [provideMatomo({
+    //       siteId: environment.matomoSiteId,
+    //       trackerUrl: matomoBaseUri,
+    //       mode: 'auto',
+    //       requireConsent: 'cookie',
+    //     })]
+    //   : []
+    // ),
+    //     MatomoModule.forRoot({
+    //       siteId: environment.matomoSiteId,
+    //       trackerUrl: matomoBaseUri,
+    //       mode: 'auto',
+    //       requireConsent: 'cookie',
+    //     }),
+    //   // ]
+    //   // : []
+    // // ),
+    // MatomoRouterModule.forRoot({}),
+    RouterOutlet,
+  ],
+  providers: [
+    CampaignListResolver,
+    CampaignResolver,
+    CharityCampaignsResolver,
+    ComponentsModule,
+    DatePipe,
+    {
+      provide: APP_BASE_HREF,
+      useValue: environment.donateUriPrefix,
+    },
+    { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
+    { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: "primary" } },
+    { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: "primary" } },
+  ],
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
@@ -75,6 +145,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     private navigationService: NavigationService,
     private cookiePreferenceService: CookiePreferenceService,
     @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
     private matomoTracker: MatomoTracker,
     private router: Router,
   ) {
@@ -122,6 +193,8 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnInit() {
+    console.log('running ngOnInit');
+
     if (this.isPlatformBrowser) {
       // detect supported browser or inform user, https://dev.to/aakashgoplani/manage-list-of-supported-browsers-for-your-application-in-angular-4b47
       const browserIsSupported = supportedBrowsers.test(navigator.userAgent);
@@ -169,13 +242,26 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngAfterViewInit() {
+    console.log('app ngAfterViewInit');
+
     const headerEl = this.header;
     this.router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationStart),
-    ).subscribe(
-      // we have seen TypeError: Cannot read properties of undefined (reading 'closeMobileMenuFromOutside'). So check headerEl is defined beofore reading the prop:
-      () => headerEl && headerEl.closeMobileMenuFromOutside()
-    );
+    ).subscribe({
+      next: // we have seen TypeError: Cannot read properties of undefined (reading 'closeMobileMenuFromOutside'). So check headerEl is defined beofore reading the prop:
+        (value) => {
+          console.log('next folling nav start event', value);
+
+          // This causes a TypeError inside apply somewhere in ng zone runOutsideAngular. TODO work out why;
+          // reinstate equivalent?
+          // headerEl && headerEl.closeMobileMenuFromOutside();
+        },
+      error: (err) => {
+        console.error('error following nav start event', err);
+      }
+    });
+
+    console.log('app ngAfterViewInit done');
   }
 
   @HostListener('cookieBannerAcceptAllSelected', ['$event'])
@@ -202,7 +288,9 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   private updatePersonInfo() {
+    console.log('running updatePersonInfo');
     this.isLoggedIn = this.identityService.probablyHaveLoggedInPerson();
     this.isDataLoaded = true;
+    console.log('data is now loaded');
   }
 }

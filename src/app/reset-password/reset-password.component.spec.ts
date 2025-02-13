@@ -10,7 +10,6 @@ import { RouterModule } from '@angular/router';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { TBG_DONATE_STORAGE } from '../donation.service';
-import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 import { ResetPasswordComponent } from './reset-password.component';
 import {MatomoModule} from "ngx-matomo-client";
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
@@ -46,7 +45,6 @@ describe('ResetPasswordComponent', () => {
       ],
       providers: [
         InMemoryStorageService,
-        { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
       ],
     });

@@ -4,7 +4,7 @@ import {CampaignListResolver} from './campaign-list.resolver';
 import {CampaignResolver} from './campaign.resolver';
 import {CharityCampaignsResolver} from './charity-campaigns.resolver';
 import {campaignStatsResolver} from "./campaign-stats-resolver";
-import {highlightCardsResolver} from "./highlight-cards-resolver";
+import {HighlightCardsResolver} from "./highlight-cards.resolver";
 import {LoginComponent, registerPath} from "./login/login.component";
 import {forwardRef, inject, PLATFORM_ID} from "@angular/core";
 import {IdentityService} from "./identity.service";
@@ -94,19 +94,19 @@ const handleLogout: CanActivateFn = () => {
   return inject(Router).parseUrl('/');
 };
 
-const LoggedInPersonResolver: ResolveFn<Person | null> = async () => {
+export const LoggedInPersonResolver: ResolveFn<Person | null> = async () => {
   const identityService = inject(IdentityService);
 
   const person$ = identityService.getLoggedInPerson();
   return await firstValueFrom(person$);
 }
 
-const DonorAccountResolver: () => Promise<DonorAccount | null> = async () => {
+export const DonorAccountResolver: () => Promise<DonorAccount | null> = async () => {
   const loggedInDonorAccount$ = inject(DonorAccountService).getLoggedInDonorAccount();
   return await firstValueFrom(loggedInDonorAccount$);
 };
 
-const mandateResolver: ResolveFn<Mandate> = async (route: ActivatedRouteSnapshot) => {
+export const mandateResolver: ResolveFn<Mandate> = async (route: ActivatedRouteSnapshot) => {
   const mandateService = inject(MandateService);
   const mandateId = route.paramMap.get('mandateId');
   if (!mandateId) {
@@ -122,8 +122,8 @@ const routes: Routes = [
     pathMatch: 'full',
     component: HomeComponent,
     resolve: {
-      stats: campaignStatsResolver,
-      highlights: highlightCardsResolver
+      // stats: campaignStatsResolver,
+      highlights: HighlightCardsResolver,
     },
   },
   {
@@ -174,7 +174,7 @@ const routes: Routes = [
     component: ExploreComponent,
     resolve: {
       campaign: CampaignResolver,
-      highlights: highlightCardsResolver,
+      highlights: HighlightCardsResolver,
     },
   },
   {
@@ -183,7 +183,7 @@ const routes: Routes = [
     component: ExploreComponent,
     resolve: {
       campaign: CampaignResolver,
-      highlights: highlightCardsResolver,
+      highlights: HighlightCardsResolver,
     },
   },
   {
@@ -227,7 +227,7 @@ const routes: Routes = [
     component: ExploreComponent,
     resolve: {
       campaign: CampaignResolver,
-      highlights: highlightCardsResolver,
+      highlights: HighlightCardsResolver,
     },
   },
   {
@@ -236,7 +236,7 @@ const routes: Routes = [
     component: ExploreComponent,
     resolve: {
       campaigns: CampaignListResolver,
-      highlights: highlightCardsResolver
+      highlights: HighlightCardsResolver,
     },
   },
   {
@@ -282,7 +282,7 @@ const routes: Routes = [
     component: HomeComponent,
     resolve: {
       stats: campaignStatsResolver,
-      highlights: highlightCardsResolver
+      highlights: HighlightCardsResolver,
     },
     data: {
       showCookiePreferences: true,
@@ -297,7 +297,7 @@ const routes: Routes = [
     component: ExploreComponent,
     resolve: {
       campaign: CampaignResolver,
-      highlights: highlightCardsResolver,
+      highlights: HighlightCardsResolver,
     },
   },
   // And this is our final 404 handler which actually says 'not found'; used for e.g. legacy /project/X/Y format paths.

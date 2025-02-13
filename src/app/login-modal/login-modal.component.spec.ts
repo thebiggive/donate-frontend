@@ -8,7 +8,6 @@ import { ActivatedRoute } from '@angular/router';
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { LoginModalComponent } from './login-modal.component';
-import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 import {MatomoModule} from "ngx-matomo-client";
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
@@ -33,8 +32,6 @@ describe('LoginModalComponent', () => {
     providers: [
         { provide: ActivatedRoute, useValue: {} }, // Needed for ngx-matomo not to crash.
         InMemoryStorageService,
-        // Inject in-memory storage for tests, in place of local storage.
-        { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: MatDialogRef, useValue: {} },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),

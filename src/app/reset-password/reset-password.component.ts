@@ -17,7 +17,6 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
   standalone: true,
   imports: [
     ...allChildComponentImports,
-    BiggiveHeading,
     MatButtonModule,
     MatInputModule,
     MatProgressSpinnerModule,
