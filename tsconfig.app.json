@@ -36,9 +36,7 @@
   },
   "files": [
     "src/main.ts",
-    "src/polyfills.ts",
-    "src/main.server.ts",
-    "src/server.ts"
+    "src/polyfills.ts"
   ],
   "include": [
     "src/**/*.d.ts"
