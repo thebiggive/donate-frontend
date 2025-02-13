@@ -73,12 +73,14 @@ $donate-theme: mat.m2-define-light-theme((
   density: 0,
 ));
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 // Include styles only for core + the components we use. SSR currently preloads the lot so it's important to keep
 // this as light (for page weight) as we can.
 // See https://github.com/angular/components/blob/master/guides/theming.md#theming-only-certain-components
-@include mat.core-theme($donate-theme);
+@include mat.elevation-classes();
+@include mat.app-background();
 
 @include mat.autocomplete-theme($donate-theme);
 @include mat.button-theme($donate-theme);
