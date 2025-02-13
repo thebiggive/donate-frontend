@@ -1,3 +1,4 @@
+@use '../../abstract' as abstract;
 // Write all class styling inside elements where possible
 @use '@angular/material' as mat;
 
@@ -10,7 +11,7 @@ mat-spinner {
 }
 
 .mdc-button__label {
-  @include b-rt-sm;
+  @include abstract.b-rt-sm;
 }
 
 .mdc-form-field {
@@ -26,7 +27,7 @@ mat-spinner {
 
 .donation-input {
   .mat-mdc-text-field-wrapper {
-    border: 2px mat.m2-get-color-from-palette($donate-primary) solid;
+    border: 2px mat.m2-get-color-from-palette(abstract.$donate-primary) solid;
     border-radius: 10px; // Fixed px, so fields with different font sizes have aligned round corners.
     margin-bottom: 0.5rem; // Gap between custom border style and active input underline.
   }

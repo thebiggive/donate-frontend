@@ -1,6 +1,7 @@
 @use '@angular/material' as mat;
-@import '../../abstract';
-@include binary-options();
+@use '../../abstract' as abstract;
+
+@include abstract.binary-options();
 
 // code below duplicated from donation-start-container.component.scss
 // consider refactoring to remove duplication. However not dedupling just yet as we may want
@@ -11,13 +12,12 @@
   display: flex;
   flex-direction: column;
 
-  @media #{$breakpoint-lg} {
+  @media #{abstract.$breakpoint-lg} {
     flex-direction: row;
   }
 }
 
 .match-funded-badge-wrapper {
-  position  : block;
   width     : 100%;
   height    : 100%;
   text-align: center;
@@ -27,8 +27,8 @@
   position: relative;
   display: inline-block;
   text-align: center;
-  background: $colour-highlight;
-  color: $colour-black;
+  background: abstract.$colour-highlight;
+  color: abstract.$colour-black;
   width  : 140px;
   padding: 0.3rem 0.5rem;
   margin-bottom: 1rem !important;
@@ -39,8 +39,8 @@
 
 .mat-stepper-horizontal, .mat-stepper-vertical {
   background: none;
-  box-shadow: $box-shadow-soft;
-  @include b-rt-0;
+  box-shadow: abstract.$box-shadow-soft;
+  @include abstract.b-rt-0;
 }
 
 .donation-input.donation-input-main {
@@ -65,13 +65,13 @@
 }
 
 input {
-  @include b-rt-0;
+  @include abstract.b-rt-0;
 }
 
 input {
   outline: none;
   border: none;
-  background-color: $colour-background;
+  background-color: abstract.$colour-background;
   width: 100%;
   padding: 0; // We rely on containing element margin, and don't want vendor-dependent extra padding.
 };
@@ -88,7 +88,7 @@ input {
   }
 
   .mat-step-icon {
-    color: $colour-black;
+    color: abstract.$colour-black;
     background-color: transparent !important;
     border-radius: 0;
 
@@ -100,7 +100,7 @@ input {
     height: 0;
     border-left: 17px solid transparent;
     border-right: 17px solid transparent;
-    border-bottom: 29.2px solid $colour-highlight;
+    border-bottom: 29.2px solid abstract.$colour-highlight;
 
     .mat-step-icon-content {
       margin-top: 17px;
@@ -126,7 +126,7 @@ table#personal-details, table#paymentMethods {
   width: 100%;
   td {
     padding-bottom: 15px;
-    @media #{$breakpoint-lg} {
+    @media #{abstract.$breakpoint-lg} {
       min-width: 150px;
     }
     vertical-align: bottom;
@@ -134,16 +134,16 @@ table#personal-details, table#paymentMethods {
 }
 
 .colour-primary {
-  color: $colour-primary;
+  color: abstract.$colour-primary;
 }
 
 .error, .stripeError {
-  color: mat.m2-get-color-from-palette($donate-warn);
+  color: mat.m2-get-color-from-palette(abstract.$donate-warn);
   margin: 1rem 0;
 }
 
 .b-back-button {
-  @include make-back-button;
+  @include abstract.make-back-button;
 }
 
 #giftAidAddressContainer {

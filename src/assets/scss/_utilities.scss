@@ -1,28 +1,31 @@
+@use './_mixins' as mixins;
+@use './_variables' as vars;
+
 //Containers
 .b-container {
-  @include make-container;
+  @include mixins.make-container;
 }
 .b-container-sm {
-  @include make-container-sm;
+  @include mixins.make-container-sm;
 }
 
 // Columns
 .b-primary-column {
-  @include make-primary-column;
+  @include mixins.make-primary-column;
   margin-bottom: 50px;
 }
 .b-secondary-column {
-  @include make-secondary-column;
+  @include mixins.make-secondary-column;
 }
 
 // Responsive headings
 .b-rh-1 {
-  @include b-rt-3;
-  color: $colour-black;
+  @include mixins.b-rt-3;
+  color: vars.$colour-black;
 }
 .b-rh-2 {
-  @include b-rt-2;
-  color: $colour-black;
+  @include mixins.b-rt-2;
+  color: vars.$colour-black;
 }
 
 // Font weights
@@ -64,7 +67,7 @@
 }
 
 .b-grey {
-  color: $colour-grey;
+  color: vars.$colour-grey;
 }
 
 .b-uppercase {

@@ -1,4 +1,5 @@
-@import "../../assets/scss/auth-common";
+@use "../../abstract" as abstract;
+@use "../../assets/scss/auth-common";
 
 #banner {
   background-image: url(../../assets/images/grey-header.jpg);
@@ -8,4 +9,4 @@ form {
   margin-top: 2em;
 }
 
-@include friendly-captcha();
+@include abstract.friendly-captcha();

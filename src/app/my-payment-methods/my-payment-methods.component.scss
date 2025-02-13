@@ -1,11 +1,12 @@
-@import "../../assets/scss/auth-common";
+@use '../../abstract' as abstract;
+@use "../../assets/scss/auth-common";
 
 #banner {
   background-image: url(../../assets/images/banner-my-account.jpg);
 }
 main > div {
   color: white;
-  background-color: $colour-primary;
+  background-color: abstract.$colour-primary;
 
   a:link, a:visited, a:hover {
     color: white;
@@ -16,7 +17,7 @@ table#paymentMethods {
   width: 100%;
   td {
     padding-bottom: 15px;
-    @media #{$breakpoint-lg} {
+    @media #{abstract.$breakpoint-lg} {
       min-width: 150px;
     }
     vertical-align: bottom;
@@ -28,21 +29,21 @@ table#paymentMethods {
 
   td.cardUpdateButton, td.cardDeleteButton {
     display: flex;
-    @media #{$breakpoint-xl} {
+    @media #{abstract.$breakpoint-xl} {
       display: table-cell;
     }
   }
 
   td.cardUpdateButton {
     padding-bottom: 0;
-    @media #{$breakpoint-xl} {
+    @media #{abstract.$breakpoint-xl} {
       padding-bottom: 15px;
     }
   }
 
   td.cardExpiry {
     display: none;
-    @media #{$breakpoint-lg} {
+    @media #{abstract.$breakpoint-lg} {
       display: table-cell;
     }
   }
@@ -51,7 +52,7 @@ table#paymentMethods {
     font-weight: bold;
   }
   div.cardExpiry {
-    @media #{$breakpoint-lg} {
+    @media #{abstract.$breakpoint-lg} {
       display: none;
     }
   }
@@ -62,5 +63,5 @@ table#paymentMethods td:last-child {
 }
 
 .update-success {
-  color: $colour-highlight;
+  color: abstract.$colour-highlight;
 }

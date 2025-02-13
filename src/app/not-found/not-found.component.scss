@@ -1,6 +1,6 @@
-@import '../../abstract';
+@use '../../abstract' as abstract;
 
 main {
-  @include make-container;
+  @include abstract.make-container;
   margin: 0 0;
 }

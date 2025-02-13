@@ -1,11 +1,12 @@
 @use '@angular/material' as mat;
-@import '../../../abstract';
-@include binary-options();
+@use '../../../abstract' as abstract;
+
+@include abstract.binary-options();
 
 .mat-stepper-horizontal, .mat-stepper-vertical {
   background: none;
-  box-shadow: $box-shadow-soft;
-  @include b-rt-0;
+  box-shadow: abstract.$box-shadow-soft;
+  @include abstract.b-rt-0;
 }
 
 :host ::ng-deep div.mdc-form-field {
@@ -28,20 +29,20 @@ div.mdc-form-field label {
 
   font-size: 17px !important; ;
   line-height: 20px;
-  @media #{$breakpoint-lg} {
+  @media #{abstract.$breakpoint-lg} {
     font-size: 20px !important;
     line-height: 27px;
   }
 }
 
 input {
-  @include b-rt-0;
+  @include abstract.b-rt-0;
 }
 
 .label-with-limited-space {
   display: inline-block;
   max-width: 150px;
-  @media #{$breakpoint-smallish} {
+  @media #{abstract.$breakpoint-smallish} {
     max-width: 100%;
   }
 }
@@ -65,7 +66,7 @@ input {
   }
 
   .mat-step-icon {
-    color: $colour-black;
+    color: abstract.$colour-black;
     background-color: transparent !important;
     border-radius: 0;
 
@@ -77,7 +78,7 @@ input {
     height: 0;
     border-left: 17px solid transparent;
     border-right: 17px solid transparent;
-    border-bottom: 29.2px solid $colour-highlight;
+    border-bottom: 29.2px solid abstract.$colour-highlight;
 
     .mat-step-icon-content {
       margin-top: 17px;
@@ -110,7 +111,7 @@ div.donationInfoWrapper {
     flex-basis: 40%;
   }
 
-  @media #{$breakpoint-md} {
+  @media #{abstract.$breakpoint-md} {
     flex-direction: row;
   }
 }
@@ -141,11 +142,11 @@ input:disabled {
 }
 
 .b-rt-0 {
-  @include b-rt-0;
+  @include abstract.b-rt-0;
 }
 
 .b-rt-1 {
-  @include b-rt-1;
+  @include abstract.b-rt-1;
 }
 
 .mat-mdc-form-field {
@@ -198,8 +199,8 @@ input {
 }
 
 .c-your-donation__highlight {
-  background: $colour-highlight;
-  color: $colour-black;
+  background: abstract.$colour-highlight;
+  color: abstract.$colour-black;
   padding: 0.5rem;
   display: block;
   text-align: center;
@@ -246,7 +247,7 @@ input {
 
     @media only screen and (max-width: 650px) {
       display: block;
-      color: mat.m2-get-color-from-palette($donate-primary);
+      color: mat.m2-get-color-from-palette(abstract.$donate-primary);
       font-size: 10px;
       text-align: center;
       margin-top: 0;
@@ -280,7 +281,7 @@ input {
 input {
   outline: none;
   border: none;
-  background-color: $colour-background;
+  background-color: abstract.$colour-background;
   width: 100%;
   padding: 0; // We rely on containing element margin, and don't want vendor-dependent extra padding.
 };
@@ -288,11 +289,11 @@ input {
 // I we would like to apply the :focus-visible-within pseduo-class but that doesn't exist. See
 // https://larsmagnus.co/blog/focus-visible-within-the-missing-pseudo-class
 mat-expansion-panel:has(:focus-visible){
-  box-shadow: 0 8px 8px -7px $colour-secondary !important;
+  box-shadow: 0 8px 8px -7px abstract.$colour-secondary !important;
 }
 
 button:focus-visible {
-  outline: 1px solid $colour-secondary;
+  outline: 1px solid abstract.$colour-secondary;
 }
 
 #giftAidAddressContainer {
@@ -323,7 +324,7 @@ button.continue, .c-donate-button {
 }
 
 .c-donate-button {
-  @include make-donate-button;
+  @include abstract.make-donate-button;
 
 }
 
@@ -336,7 +337,7 @@ button.continue, .c-donate-button {
   padding: 1rem 0;
 
   li {
-    @include b-rt-sm;
+    @include abstract.b-rt-sm;
 
     .mat-icon {
       vertical-align: middle;
@@ -360,7 +361,7 @@ button.continue, .c-donate-button {
 }
 
 .error, .stripeError {
-  color: mat.m2-get-color-from-palette($donate-warn);
+  color: mat.m2-get-color-from-palette(abstract.$donate-warn);
   margin: 1rem 0;
 }
 
@@ -376,7 +377,7 @@ button.continue, .c-donate-button {
   text-align: right;
   margin-top: 3rem;
 
-  @media #{$breakpoint-md} {
+  @media #{abstract.$breakpoint-md} {
     margin-top: inherit;
   }
 }
@@ -385,7 +386,7 @@ div.match-funded-badge {
   width: 15em;
   height: 2em;
   text-align: center;
-  background-color: $colour-highlight;
+  background-color: abstract.$colour-highlight;
   font-weight: bold;
   position: absolute;
   margin-left: auto;
@@ -423,7 +424,7 @@ mat-expansion-panel {
 }
 
 .colour-primary {
-  color: $colour-primary;
+  color: abstract.$colour-primary;
 }
 
 div.payment-details {
@@ -458,12 +459,12 @@ table.summary {
 }
 .receives {
   td {
-    background-color: $colour-highlight;
+    background-color: abstract.$colour-highlight;
     padding: 5px;
   }
 }
 .total {
-  color: $colour-primary;
+  color: abstract.$colour-primary;
 }
 
 h3 {
@@ -486,4 +487,4 @@ mat-expansion-panel-header h3 {
   position: absolute;
 }
 
-@include friendly-captcha();
+@include abstract.friendly-captcha();

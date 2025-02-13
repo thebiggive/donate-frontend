@@ -1,35 +1,35 @@
-@import '../../abstract';
+@use '../../abstract' as abstract;
 
-@include vary-campaign-info-layout();
+@include abstract.vary-campaign-info-layout();
 
 h1 {
-  @media #{$breakpoint-sm} {
+  @media #{abstract.$breakpoint-sm} {
     font-size: 30px;
     line-height: 30px;
   }
-  @media #{$breakpoint-md} {
+  @media #{abstract.$breakpoint-md} {
     font-size: 40px;
     line-height: 40px;
   }
-  @media #{$breakpoint-lg} {
+  @media #{abstract.$breakpoint-lg} {
     font-size: 50px;
     line-height: 50px;
   }
 }
 
 .b-back-button {
-  @include make-back-button;
+  @include abstract.make-back-button;
 }
 
 .b-rt-0 {
-  @include b-rt-0;
+  @include abstract.b-rt-0;
 }
 
 .c-details-container {
   display: flex;
   flex-direction: column;
 
-  @media #{$breakpoint-lg} {
+  @media #{abstract.$breakpoint-lg} {
     flex-direction: row;
   }
 }
@@ -56,7 +56,7 @@ h1 {
 }
 
 .c-quotes__blockquote {
-  border-left: solid 2px $colour-black;
+  border-left: solid 2px abstract.$colour-black;
   padding-left: 2rem;
   margin: 0 0 0 2rem;
   white-space: pre-wrap;
@@ -75,10 +75,10 @@ h1 {
 .c-video__iframe {
   height: 235px;
   padding-top: 1rem;
-  @media #{$breakpoint-lg} {
+  @media #{abstract.$breakpoint-lg} {
     height: 300px;
   }
-  @media #{$breakpoint-xl} {
+  @media #{abstract.$breakpoint-xl} {
     height: 400px;
   }
 }

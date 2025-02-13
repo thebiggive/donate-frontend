@@ -1,12 +1,12 @@
-@import '../../../abstract';
+@use '../../../abstract';
 
 .id-info {
-  @include make-card($box-shadow-hard);
+  @include abstract.make-card(abstract.$box-shadow-hard);
   text-align: center;
   margin-top: 1rem;
   padding: 0.25rem 1rem 1rem 1rem;
 }
 
 button#my-account-link {
-    margin-right: 1em;
- }
+  margin-right: 1em;
+}

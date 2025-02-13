@@ -1,4 +1,4 @@
-@import '../../abstract';
+@use '../../abstract' as abstract;
 
 h5 {
     font-size: 1rem;
@@ -9,20 +9,20 @@ h5 {
 }
 
 .icons {
-    @include format-icon-container;
+    @include abstract.format-icon-container;
 }
 
 .icon-wrapper {
-    @include format-icon-list-item;
+    @include abstract.format-icon-list-item;
 
     fa-icon.ng-fa-icon {
-        color: $colour-primary; // #2C089B
+        color: abstract.$colour-primary; // #2C089B
         font-size: 40px;
         min-width: 4rem;
         text-align: center;
     }
 
     .c-icon-title {
-        @include format-icon-title;
+        @include abstract.format-icon-title;
     }
 }
