@@ -9,17 +9,16 @@ import {allChildComponentImports} from "../../allChildComponentImports";
 import {myRegularGivingPath} from "../app-routing";
 
 @Component({
-  selector: 'app-my-donations',
-  standalone: true,
-  imports: [
-    ...allChildComponentImports,
-    AsyncPipe,
-    ExactCurrencyPipe,
-    DatePipe,
-    MatProgressSpinner
-  ],
-  templateUrl: './my-donations.component.html',
-  styleUrl: './my-donations.component.scss'
+    selector: 'app-my-donations',
+    imports: [
+        ...allChildComponentImports,
+        AsyncPipe,
+        ExactCurrencyPipe,
+        DatePipe,
+        MatProgressSpinner
+    ],
+    templateUrl: './my-donations.component.html',
+    styleUrl: './my-donations.component.scss'
 })
 export class MyDonationsComponent implements OnInit{
   protected donations: EnrichedDonation[];

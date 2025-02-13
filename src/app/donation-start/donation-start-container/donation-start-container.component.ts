@@ -11,8 +11,9 @@ import {DonationStartFormComponent} from "../donation-start-form/donation-start-
 import {ImageService} from "../../image.service";
 
 @Component({
-  templateUrl: './donation-start-container.component.html',
-  styleUrl: './donation-start-container.component.scss'
+    templateUrl: './donation-start-container.component.html',
+    styleUrl: './donation-start-container.component.scss',
+    standalone: false
 })
 export class DonationStartContainerComponent implements AfterViewInit, OnInit{
   campaign: Campaign;

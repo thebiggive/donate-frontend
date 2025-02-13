@@ -30,9 +30,10 @@ import {Toast} from '../toast.service';
  * available for GBP campaigns and UK donors for now.
  */
 @Component({
-  selector: 'app-transfer-funds',
-  templateUrl: './transfer-funds.component.html',
-  styleUrl: './transfer-funds.component.scss',
+    selector: 'app-transfer-funds',
+    templateUrl: './transfer-funds.component.html',
+    styleUrl: './transfer-funds.component.scss',
+    standalone: false
 })
 export class TransferFundsComponent implements AfterContentInit, OnInit {
   addressSuggestions: GiftAidAddressSuggestion[] = [];

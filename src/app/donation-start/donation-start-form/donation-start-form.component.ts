@@ -72,12 +72,13 @@ declare var _paq: {
 };
 
 @Component({
-  selector: 'app-donation-start-form',
-  templateUrl: './donation-start-form.component.html',
-  styleUrl: './donation-start-form.component.scss',
-  providers: [
-    TimeLeftPipe,
-  ]
+    selector: 'app-donation-start-form',
+    templateUrl: './donation-start-form.component.html',
+    styleUrl: './donation-start-form.component.scss',
+    providers: [
+        TimeLeftPipe,
+    ],
+    standalone: false
 })
 export class DonationStartFormComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit {
   /**

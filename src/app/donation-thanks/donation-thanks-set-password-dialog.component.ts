@@ -13,20 +13,19 @@ import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.com
 import {flags} from "../featureFlags";
 
 @Component({
-  standalone: true,
-  selector: 'app-donation-thanks-set-password-dialog',
-  templateUrl: 'donation-thanks-set-password-dialog.html',
-  styleUrl: './donation-thanks-set-password-dialog.component.scss',
-  imports: [
-    ...allChildComponentImports,
-    MatButtonModule,
-    MatDialogModule,
-    MatIconModule,
-    MatInputModule,
-    MatRadioModule,
-    ReactiveFormsModule,
-    PopupStandaloneComponent,
-  ]
+    selector: 'app-donation-thanks-set-password-dialog',
+    templateUrl: 'donation-thanks-set-password-dialog.html',
+    styleUrl: './donation-thanks-set-password-dialog.component.scss',
+    imports: [
+        ...allChildComponentImports,
+        MatButtonModule,
+        MatDialogModule,
+        MatIconModule,
+        MatInputModule,
+        MatRadioModule,
+        ReactiveFormsModule,
+        PopupStandaloneComponent,
+    ]
 })
 export class DonationThanksSetPasswordDialogComponent implements OnInit {
   form: FormGroup;

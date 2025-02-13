@@ -25,11 +25,10 @@ export type LoginNavigationState = {
 }
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule],
-  templateUrl: './login.component.html',
-  styleUrl: 'login.component.scss'
+    selector: 'app-login',
+    imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule],
+    templateUrl: './login.component.html',
+    styleUrl: 'login.component.scss'
 })
 export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   @ViewChild('frccaptcha', { static: false })
