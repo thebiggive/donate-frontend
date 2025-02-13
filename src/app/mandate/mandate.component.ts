@@ -11,7 +11,6 @@ import {MoneyPipe} from "../money.pipe";
     imports: [
         ComponentsModule,
         DatePipe,
-        ExactCurrencyPipe,
         MoneyPipe
     ],
     templateUrl: './mandate.component.html',

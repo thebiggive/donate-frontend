@@ -12,10 +12,8 @@ import {myRegularGivingPath} from "../app-routing";
     selector: 'app-my-donations',
     imports: [
         ...allChildComponentImports,
-        AsyncPipe,
         ExactCurrencyPipe,
         DatePipe,
-        MatProgressSpinner
     ],
     templateUrl: './my-donations.component.html',
     styleUrl: './my-donations.component.scss'
