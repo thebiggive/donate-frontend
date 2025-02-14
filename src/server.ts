@@ -4,7 +4,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine, isMainModule } from '@angular/ssr/node';
 import {renderToString} from '@biggive/components/hydrate';
 import {setAssetPath} from '@biggive/components/dist/components';
-import express from 'express';
+import express, {Request, Response} from 'express';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -33,13 +33,30 @@ const commonEngine = new CommonEngine();
 /**
  * Serve static files from /browser
  */
-app.get(
-  '**',
-  express.static(browserDistFolder, {
-    maxAge: '1y',
-    index: 'index.html'
-  }),
-);
+app.get('/robots.txt', (req: Request, res: Response) => {
+  res.type('text/plain');
+  if (environment.production) {
+    res.send('User-agent: *\nAllow: /');
+  } else {
+    res.send('User-agent: *\nDisallow: /');
+  }
+});
+
+app.get('/.well-known/apple-developer-merchantid-domain-association', (req: Request, res: Response) => {
+  res.sendFile(`${browserDistFolder}/assets/stripe-apple-developer-merchantid-domain-association`, {
+    maxAge: '7 days',
+  });
+});
+
+// Serve static files requested via /d/ from dist/browser/d - when deployed, S3 serves these up to CloudFront.
+app.use('/d', express.static(browserDistFolder, {
+  immutable: true, // Everything in here should be named with an immutable hash.
+  maxAge: '1 year',
+}));
+
+app.use('/assets', express.static(`${browserDistFolder}/assets`, {
+  maxAge: '1 day', // Assets should be served similarly but don't have name-hashes, so cache less.
+}));
 
 /**
  * Handle all other requests by rendering the Angular application.
@@ -56,7 +73,7 @@ app.get('**', (req, res, next) => {
       documentFilePath: indexHtml,
       url: `${protocol}://${headers.host}${originalUrl}`,
       publicPath: browserDistFolder,
-      providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+      providers: [{ provide: APP_BASE_HREF, useValue: environment.donateUriPrefix }],
     })
     .then(async (html) => {
       setAssetPath(`${environment.donateUriPrefix}/assets`);
