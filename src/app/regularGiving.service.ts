@@ -4,6 +4,7 @@ import {Mandate} from "./mandate.model";
 import {getPersonAuthHttpOptions, IdentityService} from "./identity.service";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../environments/environment";
+import {map, switchMap} from "rxjs/operators";
 
 /**
  * Details of a desired new regular giving mandate sent to Matchbot to create it. Deseralized on the matchbot side
@@ -57,5 +58,38 @@ export class RegularGivingService {
       mandate,
       getPersonAuthHttpOptions(IDAndJWT.jwt),
     ) as Observable<Mandate>;
+  }
+
+
+  getActiveMandates() {
+    const jwt = this.identityService.getJWT();
+    const person$ = this.identityService.getLoggedInPerson();
+
+    return person$.pipe(switchMap((person) => {
+      if (! person) {
+        throw new Error("logged in person required");
+      }
+
+      return this.http.get<{ mandates: Mandate[] }>(
+        `${environment.donationsApiPrefix}/regular-giving/my-donation-mandates`,
+        getPersonAuthHttpOptions(jwt),
+      ).pipe(map((response) => response.mandates));
+    }));
+  }
+
+  getActiveMandate(mandateId: string) {
+    const jwt = this.identityService.getJWT();
+    const person$ = this.identityService.getLoggedInPerson();
+
+    return person$.pipe(switchMap((person) => {
+      if (! person) {
+        throw new Error("logged in person required");
+      }
+
+      return this.http.get<{ mandate: Mandate }>(
+        `${environment.donationsApiPrefix}/regular-giving/my-donation-mandates/${mandateId}`,
+        getPersonAuthHttpOptions(jwt),
+      ).pipe(map((response) => response.mandate));
+    }));
   }
 }
