@@ -25,7 +25,7 @@ COPY . .
 ARG BUILD_ENV
 
 # Build client bundle and prepare for Server-Side Rendering
-RUN npm run build:ssr:${BUILD_ENV}
+RUN npm run build:${BUILD_ENV}
 
 EXPOSE 4000
 

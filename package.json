@@ -16,15 +16,12 @@
     "build:staging": "ng build --configuration staging",
     "build:regression": "ng build --configuration regression",
     "build:production": "ng build --configuration production",
-    "build:ssr:production": "npm run build:production && ng run donate-frontend:server:production",
-    "build:ssr:regression": "npm run build:regression && ng run donate-frontend:server:regression",
-    "build:ssr:staging": "npm run build:staging && ng run donate-frontend:server:staging",
     "ci": "npm run lint && npm run test-ci && npm run e2e && npm run build:staging",
     "link-components": "./link-components.sh",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "supportedBrowsers": "(echo export const supportedBrowsers: RegExp = && browserslist-useragent-regexp --allowHigherVersions) > src/supportedBrowsers.ts",
-    "serve:ssr:donate-frontend": "node dist/server/server.mjs"
+    "serve:ssr": "node dist/donate-frontend/server/server.mjs"
   },
   "dependencies": {
     "@angular/animations": "^19.1.6",
