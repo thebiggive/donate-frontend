@@ -19,7 +19,7 @@ import {of} from 'rxjs';
 
 import {Campaign} from '../../campaign.model';
 import {DonationService, TBG_DONATE_STORAGE} from '../../donation.service';
-import {IdentityService, TBG_DONATE_ID_STORAGE} from '../../identity.service';
+import {IdentityService} from '../../identity.service';
 import {TimeLeftPipe} from "../../time-left.pipe";
 import {DonationStartFormComponent} from "./donation-start-form.component";
 import {CardIconsService} from "../../card-icons.service";
@@ -190,8 +190,8 @@ describe('DonationStartForm', () => {
             },
         },
         DatePipe,
+        TimeLeftPipe,
         InMemoryStorageService,
-        { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),

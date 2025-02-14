@@ -17,7 +17,6 @@ import {MatomoModule} from "ngx-matomo-client";
 import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { TBG_DONATE_STORAGE } from '../donation.service';
-import { TBG_DONATE_ID_STORAGE } from '../identity.service';
 import { TransferFundsComponent } from './transfer-funds.component';
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
@@ -54,7 +53,6 @@ describe('TransferFundsComponent', () => {
       ],
       providers: [
         InMemoryStorageService,
-        { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
       ],
     });

@@ -8,7 +8,7 @@ import { InMemoryStorageService } from "ngx-webstorage-service";
 import { of } from "rxjs";
 
 import { TBG_DONATE_STORAGE } from "../donation.service";
-import { IdentityService, TBG_DONATE_ID_STORAGE } from "../identity.service";
+import { IdentityService } from "../identity.service";
 import { MyAccountComponent } from "./my-account.component";
 import { ActivatedRoute } from "@angular/router";
 import { MatomoModule } from "ngx-matomo-client";
@@ -32,7 +32,6 @@ describe("MyAccountComponent", () => {
         { provide: ActivatedRoute, useValue: {} }, // Needed for ngx-matomo not to crash.
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-        { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         provideHttpClient(withInterceptorsFromDi()),
       ],
     });

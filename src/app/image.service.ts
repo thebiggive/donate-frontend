@@ -1,6 +1,9 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
+import ModernizrAPI = __Modernizr.ModernizrAPI;
+
+declare const Modernizr: ModernizrAPI;
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +22,7 @@ export class ImageService {
     const imageUri = `${originalImageUri}?width=${width}`;
 
     // Return immediately if we already checked for webp support on this run.
-    if (this.webp === true) {
+    if (this.webp) {
       return of(`${imageUri}&format=webp`);
     } else if (this.webp === false) {
       return of(imageUri);

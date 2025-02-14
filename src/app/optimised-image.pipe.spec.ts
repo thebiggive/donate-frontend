@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ImageService } from './image.service';
-
 import { OptimisedImagePipe } from './optimised-image.pipe';
+import '../assets/custom-libs/modernizr.js';
 
 describe('OptimisedImagePipe', () => {
   let pipe: OptimisedImagePipe;

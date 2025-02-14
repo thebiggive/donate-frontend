@@ -5,7 +5,6 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {NoopAnimationsModule} from "@angular/platform-browser/animations";
 import {InMemoryStorageService} from "ngx-webstorage-service";
-import {TBG_DONATE_ID_STORAGE} from "../identity.service";
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe('UpdateCardModalComponent', () => {
@@ -25,8 +24,6 @@ describe('UpdateCardModalComponent', () => {
       ],
       providers: [
         InMemoryStorageService,
-        // Inject in-memory storage for tests, in place of local storage.
-        { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: MatDialogRef, useValue: {} },
       ],
     })
