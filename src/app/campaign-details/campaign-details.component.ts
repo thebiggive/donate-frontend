@@ -24,7 +24,7 @@ import {Toast} from "../toast.service";
     standalone: false
 })
 export class CampaignDetailsComponent implements OnInit, OnDestroy {
-  campaign: Campaign;
+  campaign!: Campaign;
   campaignInPast = false;
   donateEnabled = true;
   fromFund = false;

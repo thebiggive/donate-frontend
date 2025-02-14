@@ -14,7 +14,7 @@ import { CampaignService } from '../campaign.service';
     standalone: false
 })
 export class CharityComponent implements OnInit {
-  campaigns: CampaignSummary[];
+  campaigns!: CampaignSummary[];
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
 
   constructor(

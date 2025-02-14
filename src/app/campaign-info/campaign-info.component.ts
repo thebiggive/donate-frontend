@@ -32,16 +32,16 @@ const endPipeToken = 'timeLeftToEndPipe';
 })
 export class CampaignInfoComponent implements OnInit {
   additionalImageUris: Array<string|null> = [];
-  @Input({ required: true }) campaign: Campaign;
-  campaignOpen: boolean;
-  campaignFinished: boolean;
-  campaignRaised: string; // Formatted
-  campaignTarget: string; // Formatted
+  @Input({ required: true }) campaign!: Campaign;
+  campaignOpen!: boolean;
+  campaignFinished!: boolean;
+  campaignRaised!: string; // Formatted
+  campaignTarget!: string; // Formatted
   /**
    * The count of donations to the parent campaign if it shares funds, or to this
    * specific campaign otherwise.
    */
-  donationCount: number;
+  donationCount!: number;
 
   constructor(
     private currencyPipe: CurrencyPipe,

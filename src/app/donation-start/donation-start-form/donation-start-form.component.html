@@ -141,7 +141,7 @@
                           </div>
                         }
                         <!-- The text below is not shown if we have the slider because it would just repeat content that's already displayed on the slider itself -->
-                        @if (!customTip() && donationAmount && donationAmount > 0 && tipControlStyle !== 'slider') {
+                        @if (!customTip() && donationAmount && donationAmount > 0) {
                           <mat-hint>
                             @if (tipAmountField?.valid && zeroTipTextABTestVariant === 'B' && tipValue === 0) {
                               Even £1 makes a big difference to Big Give
@@ -157,31 +157,6 @@
                           </mat-hint>
                         }
                       </div>
-                    }
-                    @if (tipControlStyle === 'slider') {
-                      <app-donation-tipping-slider
-                        [style]="showCustomTipInput ? 'display: none;' : ''"
-                        #donationTippingSlider
-                        [percentageStart]="minimumTipPercentage"
-                        [percentageEnd]="maximumTipPercentage"
-                        [donationAmount]="donationAmount"
-                        [donationCurrency]="campaign.currencyCode"
-                        [onHandleMoved]="onDonationSliderMove"
-                        />
-                    }
-                    @if ((!showCustomTipInput && donationAmount) && tipControlStyle === 'slider') {
-                      <span
-                        class="button"
-                        (click)="displayCustomTipInput()"
-                        >
-                        Other amount
-                      </span>
-                    }
-                    <!-- TODO: this check sets an infinite loop, need to check the logic -->
-                    @if (showCustomTipInput && tipControlStyle === 'slider') {
-                      <span class="button" (click)="displayPercentageTipInput()" >
-                        Back to percentage tip
-                      </span>
                     }
                     <mat-expansion-panel
                       (opened)="panelOpenState = true"

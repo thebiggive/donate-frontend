@@ -17,7 +17,7 @@ import {MoneyPipe} from "../money.pipe";
     styleUrl: './my-regular-giving.component.scss'
 })
 export class MyRegularGivingComponent implements OnInit{
-  protected mandates: Mandate[];
+  protected mandates!: Mandate[];
 
   /** @convert number to ordinal, e.g 1st, 2nd*/
   protected ordinal = (d: number) => {

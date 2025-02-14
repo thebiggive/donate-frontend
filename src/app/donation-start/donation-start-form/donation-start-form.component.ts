@@ -15,10 +15,10 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatAutocompleteModule, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatDialog} from '@angular/material/dialog';
-import {MatStepper} from '@angular/material/stepper';
+import {MatStepper, MatStepperModule} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatomoTracker} from 'ngx-matomo-client';
 import {retryWhen, tap} from 'rxjs/operators';
@@ -60,12 +60,19 @@ import {EMAIL_REGEXP} from '../../validators/patterns';
 import {TimeLeftPipe} from "../../time-left.pipe";
 import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
-import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation-tipping-slider.component";
 import {PaymentReadinessTracker} from "./PaymentReadinessTracker";
 import {requiredNotBlankValidator} from "../../validators/notBlank";
 import {flags} from "../../featureFlags";
 import {WidgetInstance} from "friendly-challenge";
 import {Toast} from "../../toast.service";
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatIconModule} from '@angular/material/icon';
+import {MatInputModule} from '@angular/material/input';
+import {MatRadioModule} from '@angular/material/radio';
+import {allChildComponentImports} from '../../../allChildComponentImports';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatOptionModule} from '@angular/material/core';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 declare var _paq: {
   push: (args: Array<string|object>) => void,
@@ -75,10 +82,23 @@ declare var _paq: {
     selector: 'app-donation-start-form',
     templateUrl: './donation-start-form.component.html',
     styleUrl: './donation-start-form.component.scss',
-    providers: [
-        TimeLeftPipe,
+    // TODO I made this standalone as it seemed not to be getting the container module's deps any more, but that
+    // might have just been because of a stray now-deleted import. Consider reversing course.
+    imports: [
+      ...allChildComponentImports,
+      ExactCurrencyPipe,
+      FormsModule,
+      ReactiveFormsModule,
+      MatAutocompleteModule,
+      MatCheckboxModule,
+      MatExpansionModule,
+      MatIconModule,
+      MatInputModule,
+      MatOptionModule,
+      MatProgressSpinnerModule,
+      MatRadioModule,
+      MatStepperModule,
     ],
-    standalone: false
 })
 export class DonationStartFormComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit {
   /**
@@ -88,8 +108,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    */
   private giftAidCheckedForZeroTip: boolean = false;
 
-  @ViewChild('cardInfo') cardInfo: ElementRef;
-  @ViewChild('stepper') private stepper: MatStepper;
+  @ViewChild('cardInfo') cardInfo!: ElementRef;
+  @ViewChild('stepper') private stepper!: MatStepper;
 
   alternateCopy = false; // Varies tip copy for A/B test.
 
@@ -97,7 +117,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   cardHandler = this.onStripeCardChange.bind(this);
   showChampionOptIn = false;
 
-  @Input({ required: true }) campaign: Campaign;
+  @Input({ required: true }) campaign!: Campaign;
 
   /**
    * Called when the donation object is set or deleted. **NOT** called when properties of the object are changed.
@@ -116,15 +136,15 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
   creditPenceToUse = 0; // Set non-zero if logged in and Customer has a credit balance to spend. Caps donation amount too in that case.
-  currencySymbol: string;
+  currencySymbol!: string;
 
-  donationForm: FormGroup;
-  amountsGroup: FormGroup;
-  giftAidGroup: FormGroup;
-  paymentGroup: FormGroup;
-  marketingGroup: FormGroup;
+  donationForm!: FormGroup;
+  amountsGroup!: FormGroup;
+  giftAidGroup!: FormGroup;
+  paymentGroup!: FormGroup;
+  marketingGroup!: FormGroup;
 
-  maximumDonationAmount: number;
+  maximumDonationAmount!: number;
   maximumTipPercentage = 30 as const;
 
   showDebugInfo = environment.showDebugInfo;
@@ -143,7 +163,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   ] as const;
 
   noPsps = false;
-  psp: 'stripe';
+  psp!: 'stripe';
   retrying = false;
   addressSuggestions: GiftAidAddressSuggestion[] = [];
   donationCreateError = false;
@@ -168,7 +188,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   triedToLeaveMarketing = false;
   showAllPaymentMethods: boolean = false;
 
-  protected campaignId: string;
+  protected campaignId!: string;
 
   /**
    * Tracks internally whether (Person +) Donation setup is in flight. This is important to prevent duplicates, because multiple
@@ -191,14 +211,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private stepChangeBlockedByCaptcha = false;
   @Input({ required: true }) donor: Person | undefined;
 
-  public tipControlStyle: 'dropdown'|'slider';
-
-  private tipAmountFromSlider: number;
+  public tipControlStyle: 'dropdown';
 
   panelOpenState = false;
   showCustomTipInput = false;
-  // will be undefined if the drop-down is in use instead of the slider.
-  @ViewChild('donationTippingSlider') tippingSlider: DonationTippingSliderComponent | undefined;
 
   yourDonationStepLabel = 'Your donation' as const;
 
@@ -219,15 +235,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     const tipValueRounded = tipValue.toFixed(2);
     this.tipValue = Number(tipValueRounded);
 
-    this.tippingSlider?.setTipAmount(this.tipValue);
-
     this.amountsGroup.get('tipAmount')?.setValue(tipValueRounded);
     this.showCustomTipInput = false;
   }
 
   private stripeElements: StripeElements | undefined;
   private selectedPaymentMethodType: string | undefined;
-  private paymentReadinessTracker: PaymentReadinessTracker;
+  private paymentReadinessTracker!: PaymentReadinessTracker;
   public paymentStepErrors: string = "";
   private donationRetryTimeout: number|undefined = undefined;
 
@@ -264,8 +278,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const queryParams = route.snapshot.queryParams;
 
-    this.tipControlStyle = (queryParams?.tipControl?.toLowerCase() === 'slider')
-      ? 'slider' : 'dropdown';
+    this.tipControlStyle = 'dropdown';
 
 
     if (! environment.production) {
@@ -529,9 +542,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.addressSuggestions = suggestions;
         }
       });
-
-    this.amountsGroup?.patchValue({tipAmount: this.tipAmountFromSlider});
-    this.tipAmountField?.setValue(this.tipAmountFromSlider);
   }
 
   ngAfterContentChecked() {
@@ -901,10 +911,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         this.matomoTracker.trackEvent(
           'donate_error',
           'stripe_confirm_failed',
-          httpError.error?.error?.code,
+          (httpError as HttpErrorResponse).error?.error?.code,
         );
 
-        this.handleStripeError(httpError.error?.error, 'confirm');
+        this.handleStripeError((httpError as HttpErrorResponse).error?.error, 'confirm');
 
         return;
       }
@@ -1299,6 +1309,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
+      // @ts-ignore Not sure why only 'loaderstart' sig is recognised now.
       this.stripePaymentElement.on('change', this.cardHandler);
     }
   }
@@ -2207,15 +2218,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       // in their name etc., they may now have fewer.
       this.setConditionalValidators();
     }
-  }
-
-  onDonationSliderMove = (tipPercentage: number, tipAmount: number) => {
-    this.tipAmountFromSlider = tipAmount;
-    this.tipValue = tipAmount;
-  }
-
-  updateTipAmount = () => {
-    this.tipAmountField?.setValue(this.tipValue);
   }
 
   continueFromPaymentStep() {
