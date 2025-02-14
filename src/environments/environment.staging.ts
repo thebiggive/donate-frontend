@@ -10,7 +10,7 @@ export const environment: Environment = {
   friendlyCaptchaSiteKey: "FCMIOJ2ARSHLBGAJ",
   environmentId: 'staging',
   production: false,
-  productionLike: false,
+  productionLike: true,
   creditTipsCampaign: 'a056900002LDXWgAAP',
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.

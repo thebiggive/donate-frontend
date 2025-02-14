@@ -1,5 +1,16 @@
-import {isPlatformBrowser} from '@angular/common';
-import {AfterViewInit, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild, WritableSignal} from '@angular/core';
+import {DOCUMENT, isPlatformBrowser} from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  HostListener,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  signal,
+  ViewChild,
+  WritableSignal
+} from '@angular/core';
 import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
 import {BiggiveMainMenu} from '@biggive/components-angular';
 import {MatomoTracker} from "ngx-matomo-client";
@@ -42,22 +53,22 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   public isDataLoaded = false;
 
   protected readonly environment = environment;
-  protected readonly flags = flags;
-  protected readonly userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
+  // protected readonly flags = flags;
+  // // protected readonly userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
 
-  protected readonly existingCookiePreferences = this.cookiePreferenceService.userOptInToSomeCookies()
-    .pipe(startWith(undefined))
-    .pipe(map(this.convertCookiePreferencesForDisplay));
-  convertCookiePreferencesForDisplay(cookiePrefs: CookiePreferences): AgreedToCookieTypes {
-    switch (true){
-      case cookiePrefs === undefined:
-        return {analyticsAndTesting: false, thirdParty: false}
-      case cookiePrefs.agreedToAll:
-        return {analyticsAndTesting: true, thirdParty: true}
-      default:
-        return cookiePrefs.agreedToCookieTypes;
-    }
-  }
+  // protected readonly existingCookiePreferences = this.cookiePreferenceService.userOptInToSomeCookies()
+  //   .pipe(startWith(undefined))
+  //   .pipe(map(this.convertCookiePreferencesForDisplay));
+  // convertCookiePreferencesForDisplay(cookiePrefs: CookiePreferences): AgreedToCookieTypes {
+  //   switch (true){
+  //     case cookiePrefs === undefined:
+  //       return {analyticsAndTesting: false, thirdParty: false}
+  //     case cookiePrefs.agreedToAll:
+  //       return {analyticsAndTesting: true, thirdParty: true}
+  //     default:
+  //       return cookiePrefs.agreedToCookieTypes;
+  //   }
+  // }
 
   public currentUrlWithoutHash$: Observable<URL>;
 
@@ -68,11 +79,12 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   protected showingDedicatedCookiePreferencesPage: boolean;
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     private identityService: IdentityService,
     private donationService: DonationService,
     private getSiteControlService: GetSiteControlService,
     private navigationService: NavigationService,
-    private cookiePreferenceService: CookiePreferenceService,
+    // private cookiePreferenceService: CookiePreferenceService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private matomoTracker: MatomoTracker,
     private router: Router,
@@ -87,7 +99,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         if (isPlatformBrowser(this.platformId)) {
           this.navigationService.saveNewUrl(event.urlAfterRedirects);
 
-          this.showingDedicatedCookiePreferencesPage = event.url === '/cookie-preferences'
+          // this.showingDedicatedCookiePreferencesPage = event.url === '/cookie-preferences'
         }
       }
     });
@@ -118,25 +130,25 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     // no-op
     // @to-do: Either restore and fix, or remove this function entirely and remove the event emitter it depends on
     // from https://github.com/thebiggive/components/blob/cf6175ea0272eac2219e87db78389df0eeb87ca8/src/components/biggive-button/biggive-button.tsx#L15
-  }  
+  }
 
   ngOnInit() {
     if (this.isPlatformBrowser) {
       // detect supported browser or inform user, https://dev.to/aakashgoplani/manage-list-of-supported-browsers-for-your-application-in-angular-4b47
-      const browserIsSupported = supportedBrowsers.test(navigator.userAgent);
-      if (! browserIsSupported) {
-        this.browserSupportedMessage = `Your current browser: ${detect()?.name} ${detect()?.version} is not supported. Please try another browser.`;
-      }
+      // const browserIsSupported = supportedBrowsers.test(navigator.userAgent);
+      // if (! browserIsSupported) {
+      //   this.browserSupportedMessage = `Your current browser: ${detect()?.name} ${detect()?.version} is not supported. Please try another browser.`;
+      // }
 
-      this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {
-        if (agreesToThirdParty(preferences)) {
-          this.getSiteControlService.init();
-        }
-
-        if (agreesToAnalyticsAndTracking(preferences)) {
-          this.matomoTracker.setCookieConsentGiven();
-        }
-      });
+      // this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {
+      //   if (agreesToThirdParty(preferences)) {
+      //     this.getSiteControlService.init();
+      //   }
+      //
+      //   if (agreesToAnalyticsAndTracking(preferences)) {
+      //     this.matomoTracker.setCookieConsentGiven();
+      //   }
+      // });
     }
 
     // This service needs to be injected app-wide and this line is here, because
@@ -177,10 +189,10 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     );
   }
 
-  @HostListener('cookieBannerAcceptAllSelected', ['$event'])
-  onCookieBannerAcceptAllSelected(_event: CustomEvent) {
-    this.cookiePreferenceService.agreeToAll();
-  }
+  // @HostListener('cookieBannerAcceptAllSelected', ['$event'])
+  // onCookieBannerAcceptAllSelected(_event: CustomEvent) {
+  //   this.cookiePreferenceService.agreeToAll();
+  // }
 
   @HostListener('logoutClicked', ['$event'])
   onLogoutClicked(_event: CustomEvent) {
@@ -188,17 +200,17 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     void this.router.navigate(['']);
   }
 
-  @HostListener('preferenceModalClosed', ['$event'])
-  async onCookieBannerPreferenceModalClosed(_event: CustomEvent) {
-    if (this.showingDedicatedCookiePreferencesPage) {
-      await this.router.navigateByUrl('/')
-    }
-  }
+  // @HostListener('preferenceModalClosed', ['$event'])
+  // async onCookieBannerPreferenceModalClosed(_event: CustomEvent) {
+  //   if (this.showingDedicatedCookiePreferencesPage) {
+  //     await this.router.navigateByUrl('/')
+  //   }
+  // }
 
-  @HostListener('cookieBannerSavePreferencesSelected', ['$event'])
-  onCookieBannerSavePreferencesSelected(event: CustomEvent) {
-    this.cookiePreferenceService.storePreferences({agreedToAll: false, agreedToCookieTypes: event.detail});
-  }
+  // @HostListener('cookieBannerSavePreferencesSelected', ['$event'])
+  // onCookieBannerSavePreferencesSelected(event: CustomEvent) {
+  //   this.cookiePreferenceService.storePreferences({agreedToAll: false, agreedToCookieTypes: event.detail});
+  // }
 
   private updatePersonInfo() {
     this.isLoggedIn = this.identityService.probablyHaveLoggedInPerson();

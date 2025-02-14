@@ -1,14 +1,14 @@
-import { APP_BASE_HREF, AsyncPipe, DatePipe } from "@angular/common";
+import {APP_BASE_HREF, AsyncPipe, CommonModule, DatePipe} from '@angular/common';
 import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from "@angular/common/http";
-import {CUSTOM_ELEMENTS_SCHEMA, Injectable, NgModule} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, Injectable, NgModule, provideExperimentalZonelessChangeDetection} from '@angular/core';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from "@angular/material/checkbox";
 import { MAT_RADIO_DEFAULT_OPTIONS } from "@angular/material/radio";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { RouterModule, RouterOutlet } from "@angular/router";
+import {RouterLink, RouterModule, RouterOutlet} from '@angular/router';
 import { ComponentsModule } from "@biggive/components-angular";
 import { LOCAL_STORAGE } from "ngx-webstorage-service";
 
@@ -25,7 +25,6 @@ import { MatomoModule, MatomoRouterModule} from "ngx-matomo-client";
 
 const matomoBaseUri = "https://biggive.matomo.cloud";
 
-@Injectable({providedIn: 'root'})
 @NgModule({
   declarations: [AppComponent],
   exports: [RouterModule],
@@ -35,6 +34,7 @@ const matomoBaseUri = "https://biggive.matomo.cloud";
     AsyncPipe,
     BrowserAnimationsModule,
     BrowserModule,
+    CommonModule,
     ComponentsModule,
     ...(environment.matomoSiteId
       ? [
@@ -47,6 +47,7 @@ const matomoBaseUri = "https://biggive.matomo.cloud";
         ]
       : []),
     MatomoRouterModule.forRoot({}),
+    RouterLink,
     RouterModule.forRoot(routes, {
       bindToComponentInputs: true,
       initialNavigation: "enabledBlocking", // "This value is required for server-side rendering to work." https://angular.io/api/router/InitialNavigation
@@ -68,6 +69,7 @@ const matomoBaseUri = "https://biggive.matomo.cloud";
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: "primary" } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: "primary" } },
+    provideExperimentalZonelessChangeDetection(),
     provideHttpClient(withInterceptorsFromDi()),
   ],
 })

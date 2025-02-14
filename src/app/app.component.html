@@ -42,23 +42,3 @@
   [smallCharityWeekEnabled]="environment.environmentId !== 'production'"
 ></biggive-footer>
 
-<!-- We only render the following div if isPlatformBrowser, because if rendered on the server side it would flash up on page reload
-for a few hundred ms for people who have already made cookie preference selection who don't need to see it again. I found
-that was an issue on mobile, I couldn't see the issue on desktop browsers.
-We do not render it in regression test environment as it's hard to make the robot clever enough to
-dismiss the banner when it needs to to click on stuff behind it.
--->
-@if ( showingDedicatedCookiePreferencesPage || (
-  (environment.environmentId !== 'regression') &&
-  isPlatformBrowser &&
-  (userHasExpressedCookiePreference$ | async) === false)) {
-  <div
-    id="cookie-banner"
-    >
-    <biggive-cookie-banner
-      [previouslyAgreedCookiePreferences]="existingCookiePreferences | async"
-      [blogUriPrefix]="environment.blogUriPrefix"
-      [autoOpenPreferences]="showingDedicatedCookiePreferencesPage"
-      />
-  </div>
-}

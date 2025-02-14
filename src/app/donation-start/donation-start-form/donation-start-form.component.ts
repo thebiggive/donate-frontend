@@ -60,7 +60,6 @@ import {EMAIL_REGEXP} from '../../validators/patterns';
 import {TimeLeftPipe} from "../../time-left.pipe";
 import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
-import {DonationTippingSliderComponent} from "./donation-tipping-slider/donation-tipping-slider.component";
 import {PaymentReadinessTracker} from "./PaymentReadinessTracker";
 import {requiredNotBlankValidator} from "../../validators/notBlank";
 import {flags} from "../../featureFlags";
@@ -191,14 +190,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private stepChangeBlockedByCaptcha = false;
   @Input({ required: true }) donor: Person | undefined;
 
-  public tipControlStyle: 'dropdown'|'slider';
-
-  private tipAmountFromSlider: number;
+  public tipControlStyle: 'dropdown';
 
   panelOpenState = false;
   showCustomTipInput = false;
-  // will be undefined if the drop-down is in use instead of the slider.
-  @ViewChild('donationTippingSlider') tippingSlider: DonationTippingSliderComponent | undefined;
 
   yourDonationStepLabel = 'Your donation' as const;
 
@@ -218,8 +213,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const tipValueRounded = tipValue.toFixed(2);
     this.tipValue = Number(tipValueRounded);
-
-    this.tippingSlider?.setTipAmount(this.tipValue);
 
     this.amountsGroup.get('tipAmount')?.setValue(tipValueRounded);
     this.showCustomTipInput = false;
@@ -264,8 +257,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const queryParams = route.snapshot.queryParams;
 
-    this.tipControlStyle = (queryParams?.tipControl?.toLowerCase() === 'slider')
-      ? 'slider' : 'dropdown';
+    this.tipControlStyle = 'dropdown';
 
 
     if (! environment.production) {
@@ -529,9 +521,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.addressSuggestions = suggestions;
         }
       });
-
-    this.amountsGroup?.patchValue({tipAmount: this.tipAmountFromSlider});
-    this.tipAmountField?.setValue(this.tipAmountFromSlider);
   }
 
   ngAfterContentChecked() {
@@ -2207,15 +2196,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       // in their name etc., they may now have fewer.
       this.setConditionalValidators();
     }
-  }
-
-  onDonationSliderMove = (tipPercentage: number, tipAmount: number) => {
-    this.tipAmountFromSlider = tipAmount;
-    this.tipValue = tipAmount;
-  }
-
-  updateTipAmount = () => {
-    this.tipAmountField?.setValue(this.tipValue);
   }
 
   continueFromPaymentStep() {

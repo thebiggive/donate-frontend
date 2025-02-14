@@ -1,4 +1,4 @@
-import 'zone.js/node';
+// import 'zone.js/node';
 
 import {APP_BASE_HREF} from '@angular/common';
 import {enableProdMode} from '@angular/core';
@@ -19,6 +19,7 @@ import {REQUEST, RESPONSE} from './src/express.tokens';
 import {COUNTRY_CODE} from './src/app/country-code.token';
 import {environment} from './src/environments/environment';
 import {GetSiteControlService} from './src/app/getsitecontrol.service';
+import {provideServerRendering} from '@angular/platform-server';
 
 const donateHost = (new URL(environment.donateUriPrefix)).host;
 const matomoUriBase = 'https://biggive.matomo.cloud';
@@ -33,6 +34,8 @@ export function app(): express.Express {
   // enableProdMode();
 
   const server = express();
+
+  console.log('ROOT COPY app() CALLED 2');
 
   // will set both of these the same, see
   // https://stackoverflow.com/questions/30023608/how-to-use-frame-src-and-child-src-in-firefox-and-other-browsers
@@ -123,8 +126,12 @@ export function app(): express.Express {
 
   const commonEngine = new CommonEngine();
 
+  console.log('ROOT COPY app() CALLED 3, made commonengine');
+
   server.set('view engine', 'html');
   server.set('views', distFolder);
+
+  console.log('ROOT COPY app() CALLED 4, set view engine and views');
 
   // server.get('/robots.txt', (req: Request, res: Response) => {
   //   res.type('text/plain');
@@ -151,9 +158,15 @@ export function app(): express.Express {
     maxAge: '1 day', // Assets should be served similarly but don't have name-hashes, so cache less.
   }));
 
+  console.log('ROOT COPY app() CALLED 5, set up static file serving');
+
   // All regular routes use the SSR engine
   server.get('*', async (req: Request, res: Response, next) => {
+    console.log('ROOT COPY app() CALLED 6, get * started');
+
     const { protocol, originalUrl, headers } = req;
+
+    console.log('ROOT COPY app() CALLED 7, got bits, original url is', originalUrl);
 
     const renderOptions: CommonEngineRenderOptions = {
       bootstrap: AppServerModule,
@@ -167,11 +180,13 @@ export function app(): express.Express {
         // (Stock Angular SSR uses `req.baseUrl` but based on the previous note about CloudFront, from Angular Universal
         // days, I suspect this will still not be reliable for us.)
         { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix, },
-        // { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
-        // { provide: RESPONSE, useValue: res },
-        // { provide: REQUEST, useValue: req }
+        { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
+        { provide: RESPONSE, useValue: res },
+        { provide: REQUEST, useValue: req }
       ]
     };
+
+    console.log('ROOT COPY app() CALLED 8, made render options');
 
     // Note that the file output as `index.html` is actually dynamic. See `index` config keys in `angular.json`.
     // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
@@ -189,7 +204,10 @@ export function app(): express.Express {
       //   res.send(hydratedDoc.html);
       // })
       .then((html) => res.send(html))
-      .catch((err) => next(err));
+      .catch((err) => {
+        console.log('ROOT COPY app() CALLED 9, render error', err);
+        next(err)
+      });
   });
 
   return server;

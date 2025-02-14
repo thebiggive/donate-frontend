@@ -11,9 +11,17 @@ import { environment } from './environments/environment';
 
 setAssetPath(`${environment.donateUriPrefix}/assets`);
 
+console.log('in main.ts before dom thing');
+
 globalThis.document.addEventListener('DOMContentLoaded', () => {
+  console.log('may attempt browser bootstrap');
+
   platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
+
+  console.log('did attempt browser bootstrap');
 });
 
 register();
+
+console.log('end of main.ts');
