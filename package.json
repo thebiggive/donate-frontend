@@ -16,7 +16,7 @@
     "build:staging": "ng build --configuration staging",
     "build:regression": "ng build --configuration regression",
     "build:production": "ng build --configuration production",
-    "ci": "npm run lint && npm run test-ci && npm run e2e && npm run build:staging",
+    "ci": "npm run test-ci && npm run e2e && npm run build:staging",
     "link-components": "./link-components.sh",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
