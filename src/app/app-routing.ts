@@ -14,7 +14,7 @@ import {flags} from "./featureFlags";
 import {MyDonationsComponent} from "./my-donations/my-donations.component";
 import {DonationService} from "./donation.service";
 import {MyRegularGivingComponent} from "./my-regular-giving/my-regular-giving.component";
-import {MandateService} from "./mandate.service";
+import {RegularGivingService} from "./regularGiving.service";
 import {RegularGivingComponent} from "./regular-giving/regular-giving.component";
 import {Person} from "./person.model";
 import {firstValueFrom} from "rxjs";
@@ -101,12 +101,12 @@ const DonorAccountResolver: () => Promise<DonorAccount | null> = async () => {
 };
 
 const mandateResolver: ResolveFn<Mandate> = async (route: ActivatedRouteSnapshot) => {
-  const mandateService = inject(MandateService);
+  const regularGivingService = inject(RegularGivingService);
   const mandateId = route.paramMap.get('mandateId');
   if (!mandateId) {
     throw new Error('mandateId param missing in route');
   }
-  const mandate$ = mandateService.getActiveMandate(mandateId);
+  const mandate$ = regularGivingService.getActiveMandate(mandateId);
   return await firstValueFrom(mandate$);
 }
 
@@ -320,7 +320,7 @@ if (flags.regularGivingEnabled) {
     {
       path: myRegularGivingPath,
       resolve: {
-        mandates: () => inject(MandateService).getActiveMandates(),
+        mandates: () => inject(RegularGivingService).getActiveMandates(),
       },
       pathMatch: 'full',
       component: MyRegularGivingComponent,
