@@ -5,9 +5,9 @@ import { register } from 'swiper/element/bundle';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-if (environment.productionLike) {
-  enableProdMode();
-}
+// if (environment.productionLike) {
+//   enableProdMode();
+// }
 
 setAssetPath(`${environment.donateUriPrefix}/assets`);
 

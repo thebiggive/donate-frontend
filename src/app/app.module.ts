@@ -3,7 +3,7 @@ import {
   provideHttpClient,
   withInterceptorsFromDi,
 } from "@angular/common/http";
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
+import {CUSTOM_ELEMENTS_SCHEMA, Injectable, NgModule} from '@angular/core';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from "@angular/material/checkbox";
 import { MAT_RADIO_DEFAULT_OPTIONS } from "@angular/material/radio";
 import { BrowserModule } from "@angular/platform-browser";
@@ -25,6 +25,7 @@ import { MatomoModule, MatomoRouterModule} from "ngx-matomo-client";
 
 const matomoBaseUri = "https://biggive.matomo.cloud";
 
+@Injectable({providedIn: 'root'})
 @NgModule({
   declarations: [AppComponent],
   exports: [RouterModule],
