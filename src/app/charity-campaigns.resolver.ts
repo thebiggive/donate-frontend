@@ -6,7 +6,9 @@ import { EMPTY, Observable, of } from 'rxjs';
 import { CampaignSummary } from './campaign-summary.model';
 import { catchError } from 'rxjs/operators';
 
-@Injectable()
+@Injectable(
+  {providedIn: 'root'}
+)
 export class CharityCampaignsResolver  {
   constructor(private campaignService: CampaignService, private router: Router) {}
 

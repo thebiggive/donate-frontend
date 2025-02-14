@@ -3,7 +3,9 @@ import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { CampaignService } from './campaign.service';
 
-@Injectable()
+@Injectable(
+  {providedIn: 'root'}
+)
 export class CampaignListResolver  {
   constructor(private campaignService: CampaignService) {}
 

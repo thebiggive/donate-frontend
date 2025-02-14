@@ -16,7 +16,7 @@
     "experimentalDecorators": true,
     "lib": [
       "dom",
-      "es2018"
+      "ES2022"
     ],
     "module": "es2020",
     "moduleResolution": "node",

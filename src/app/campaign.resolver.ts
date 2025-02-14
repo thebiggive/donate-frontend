@@ -7,7 +7,9 @@ import { Campaign } from './campaign.model';
 import {CampaignService, SearchQuery} from './campaign.service';
 import {SearchService} from "./search.service";
 
-@Injectable()
+@Injectable(
+  {providedIn: 'root'}
+)
 export class CampaignResolver  {
   constructor(
     public campaignService: CampaignService,

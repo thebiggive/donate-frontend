@@ -22,6 +22,11 @@ import { TBG_DONATE_STORAGE } from "./donation.service";
 import { environment } from "../environments/environment";
 import { TBG_DONATE_ID_STORAGE } from "./identity.service";
 import { MatomoModule, MatomoRouterModule} from "ngx-matomo-client";
+import {MandateResolver} from './mandate.resolver';
+import {CampaignStatsResolver} from './campaign-stats-resolver';
+import {PastDonationsResolver} from './past-donations.resolver';
+import {PaymentMethodsResolver} from './payment-methods.resolver';
+import {HighlightCardsResolver} from './highlight-cards-resolver';
 
 const matomoBaseUri = "https://biggive.matomo.cloud";
 
@@ -57,7 +62,12 @@ const matomoBaseUri = "https://biggive.matomo.cloud";
   providers: [
     CampaignListResolver,
     CampaignResolver,
+    CampaignStatsResolver,
     CharityCampaignsResolver,
+    HighlightCardsResolver,
+    MandateResolver,
+    PastDonationsResolver,
+    PaymentMethodsResolver,
     DatePipe,
     {
       provide: APP_BASE_HREF,
