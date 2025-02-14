@@ -1,9 +1,15 @@
+// TODO bring back all our previous server customisations!
+
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine, isMainModule } from '@angular/ssr/node';
+import {renderToString} from '@biggive/components/hydrate';
+import {setAssetPath} from '@biggive/components/dist/components';
 import express from 'express';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
 import bootstrap from './main.server';
+import {environment} from './environments/environment';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -41,6 +47,9 @@ app.get(
 app.get('**', (req, res, next) => {
   const { protocol, originalUrl, baseUrl, headers } = req;
 
+  // Note that the file output as `index.html` is actually dynamic. See `index` config keys in `angular.json`.
+  // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
+  // this key to work around `fileReplacements` ending index support in Angular 8.
   commonEngine
     .render({
       bootstrap,
@@ -49,7 +58,16 @@ app.get('**', (req, res, next) => {
       publicPath: browserDistFolder,
       providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
     })
-    .then((html) => res.send(html))
+    .then(async (html) => {
+      setAssetPath(`${environment.donateUriPrefix}/assets`);
+      const hydratedDoc = await renderToString(html, {
+        // Don't `removeScripts` like Ionic does: we need them to handover to browser JS runtime successfully!
+        prettyHtml: true,
+        removeHtmlComments: true,
+      });
+
+      res.send(hydratedDoc.html);
+    })
     .catch((err) => next(err));
 });
 
