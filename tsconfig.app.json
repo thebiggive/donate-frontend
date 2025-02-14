@@ -1,42 +1,15 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
-  "angularCompilerOptions": {
-    "extendedDiagnostics": {
-      "defaultCategory": "warning"
-    },
-    "fullTemplateTypeCheck": true,
-    "strictTemplates": true
-  },
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "lib": [
-      "dom",
-      "ES2022"
-    ],
-    "module": "es2020",
-    "moduleResolution": "node",
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noFallthroughCasesInSwitch": true,
-    "paths": { "@angular/*": [ "./node_modules/@angular/*" ] },
-    "importHelpers": true,
-    "strictNullChecks": true,
-    "noUncheckedIndexedAccess": true,
-    "target": "ES2022",
+    "outDir": "./out-tsc/app",
     "types": [
       "node"
-    ],
-    "useDefineForClassFields": false
+    ]
   },
   "files": [
     "src/main.ts",
-    "src/polyfills.ts",
     "src/main.server.ts",
     "src/server.ts"
   ],

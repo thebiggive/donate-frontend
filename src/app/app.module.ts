@@ -20,7 +20,6 @@ import { CampaignResolver } from "./campaign.resolver";
 import { CharityCampaignsResolver } from "./charity-campaigns.resolver";
 import { TBG_DONATE_STORAGE } from "./donation.service";
 import { environment } from "../environments/environment";
-import { TBG_DONATE_ID_STORAGE } from "./identity.service";
 import { MatomoModule, MatomoRouterModule} from "ngx-matomo-client";
 import {MandateResolver} from './mandate.resolver';
 import {CampaignStatsResolver} from './campaign-stats-resolver';
@@ -73,7 +72,6 @@ const matomoBaseUri = "https://biggive.matomo.cloud";
       provide: APP_BASE_HREF,
       useValue: environment.donateUriPrefix,
     },
-    { provide: TBG_DONATE_ID_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: "primary" } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: "primary" } },

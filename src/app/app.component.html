@@ -1,46 +1,46 @@
-<!--@if (this.browserSupportedMessage) {-->
-<!--  <div class="browser-unsupported-message">-->
-<!--    <div>-->
-<!--      <h2>Unsupported Browser</h2>-->
-<!--      <p>{{ browserSupportedMessage }}</p>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--}-->
-<!--@if (currentUrlWithoutHash$ | async; as currentUrl) {-->
-<!--  <div class="skip-to-content-link">-->
-<!--    &lt;!&ndash;-->
-<!--    Can't use a simple relative link for the URL because we have base href set of /d/ set in non-dev environments-->
-<!--    which is needed for links to assets but would break this.-->
-<!--    &ndash;&gt;-->
-<!--    <a [href]="currentUrl.toString() + '#content'">Skip to content</a>-->
-<!--  </div>-->
-<!--}-->
+@if (this.browserSupportedMessage) {
+  <div class="browser-unsupported-message">
+    <div>
+      <h2>Unsupported Browser</h2>
+      <p>{{ browserSupportedMessage }}</p>
+    </div>
+  </div>
+}
+@if (currentUrlWithoutHash$ | async; as currentUrl) {
+  <div class="skip-to-content-link">
+    <!--
+    Can't use a simple relative link for the URL because we have base href set of /d/ set in non-dev environments
+    which is needed for links to assets but would break this.
+    -->
+    <a [href]="currentUrl.toString() + '#content'">Skip to content</a>
+  </div>
+}
 
+@if (isDataLoaded) {
+  menu?
+  <biggive-main-menu
+    [donateUrlPrefix]="donateUriPrefix"
+    [blogUrlPrefix]="blogUriPrefix"
+    [experienceUrlPrefix]="experienceUriPrefix"
+    [isLoggedIn]="isLoggedIn"
+    [smallCharityWeekEnabled]="environment.environmentId !== 'production'"
+    [someCampaignHasHomePageRedirect]="someCampaignHasHomePageRedirect()"
+  ></biggive-main-menu>
+}
 
-<!--@if (isDataLoaded) {-->
-<!--  <biggive-main-menu-->
-<!--    [donateUrlPrefix]="donateUriPrefix"-->
-<!--    [blogUrlPrefix]="blogUriPrefix"-->
-<!--    [experienceUrlPrefix]="experienceUriPrefix"-->
-<!--    [isLoggedIn]="isLoggedIn"-->
-<!--    [smallCharityWeekEnabled]="environment.environmentId !== 'production'"-->
-<!--    [someCampaignHasHomePageRedirect]="someCampaignHasHomePageRedirect()"-->
-<!--  ></biggive-main-menu>-->
-<!--}-->
-
-<!--<a id="content">-->
-<!--  &lt;!&ndash; target for "skip to content" link &ndash;&gt;-->
-<!--</a>-->
+<a id="content">
+  <!-- target for "skip to content" link -->
+</a>
 <router-outlet></router-outlet>
 
-<!--<biggive-footer-->
-<!--  [headingLevel]=3-->
-<!--  [usePresetFooter]="true"-->
-<!--  [donateUrlPrefix]="donateUriPrefix"-->
-<!--  [blogUrlPrefix]="blogUriPrefix"-->
-<!--  [experienceUrlPrefix]="experienceUriPrefix"-->
-<!--  [smallCharityWeekEnabled]="environment.environmentId !== 'production'"-->
-<!--&gt;</biggive-footer>-->
+<biggive-footer
+  [headingLevel]=3
+  [usePresetFooter]="true"
+  [donateUrlPrefix]="donateUriPrefix"
+  [blogUrlPrefix]="blogUriPrefix"
+  [experienceUrlPrefix]="experienceUriPrefix"
+  [smallCharityWeekEnabled]="environment.environmentId !== 'production'"
+></biggive-footer>
 
 <!-- We only render the following div if isPlatformBrowser, because if rendered on the server side it would flash up on page reload
 for a few hundred ms for people who have already made cookie preference selection who don't need to see it again. I found
@@ -48,17 +48,17 @@ that was an issue on mobile, I couldn't see the issue on desktop browsers.
 We do not render it in regression test environment as it's hard to make the robot clever enough to
 dismiss the banner when it needs to to click on stuff behind it.
 -->
-<!--@if ( showingDedicatedCookiePreferencesPage || (-->
-<!--  (environment.environmentId !== 'regression') &&-->
-<!--  isPlatformBrowser &&-->
-<!--  (userHasExpressedCookiePreference$ | async) === false)) {-->
-<!--  <div-->
-<!--    id="cookie-banner"-->
-<!--    >-->
-<!--    <biggive-cookie-banner-->
-<!--      [previouslyAgreedCookiePreferences]="existingCookiePreferences | async"-->
-<!--      [blogUriPrefix]="environment.blogUriPrefix"-->
-<!--      [autoOpenPreferences]="showingDedicatedCookiePreferencesPage"-->
-<!--      />-->
-<!--  </div>-->
-<!--}-->
+@if ( showingDedicatedCookiePreferencesPage || (
+  (environment.environmentId !== 'regression') &&
+  isPlatformBrowser &&
+  (userHasExpressedCookiePreference$ | async) === false)) {
+  <div
+    id="cookie-banner"
+    >
+    <!--      [previouslyAgreedCookiePreferences]="existingCookiePreferences | async"-->
+    <biggive-cookie-banner
+      [blogUriPrefix]="environment.blogUriPrefix"
+      [autoOpenPreferences]="showingDedicatedCookiePreferencesPage"
+      />
+  </div>
+}

@@ -1,11 +1,22 @@
-import {isPlatformBrowser} from '@angular/common';
-import {AfterViewInit, Component, HostListener, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild, WritableSignal} from '@angular/core';
-import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
-import {BiggiveMainMenu} from '@biggive/components-angular';
-import {MatomoTracker} from "ngx-matomo-client";
+import {AsyncPipe, isPlatformBrowser} from '@angular/common';
+import {
+  AfterViewInit,
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  HostListener, Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  signal,
+  ViewChild,
+  WritableSignal
+} from '@angular/core';
+import {Event as RouterEvent, NavigationEnd, NavigationStart, Router, RouterOutlet,} from '@angular/router';
+import {BiggiveMainMenu, ComponentsModule} from '@biggive/components-angular';
+// import {MatomoTracker} from "ngx-matomo-client";
 import {filter, map, startWith} from 'rxjs/operators';
 
-import {DonationService} from './donation.service';
+import {DonationService, TBG_DONATE_STORAGE} from './donation.service';
 import {GetSiteControlService} from './getsitecontrol.service';
 import {NavigationService} from './navigation.service';
 import {IdentityService} from "./identity.service";
@@ -21,15 +32,16 @@ import {
 import {Observable, Subscription} from "rxjs";
 import {supportedBrowsers} from "../supportedBrowsers";
 import {detect} from "detect-browser";
+import {allChildComponentImports} from '../allChildComponentImports';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: 'app.component.scss',
-  standalone: false
+  standalone: false,
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
-  @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
+  @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu | undefined;
 
   protected browserSupportedMessage?: string;
   public isLoggedIn: boolean = false;
@@ -43,11 +55,10 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
   protected readonly environment = environment;
   protected readonly flags = flags;
-  // protected readonly userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
+  protected readonly userHasExpressedCookiePreference$: Observable<boolean>;
+  // todo fix types etc. on these
+  // protected readonly existingCookiePreferences: Observable<AgreedToCookieTypes | undefined>;
 
-  // protected readonly existingCookiePreferences = this.cookiePreferenceService.userOptInToSomeCookies()
-  //   .pipe(startWith(undefined))
-  //   .pipe(map(this.convertCookiePreferencesForDisplay));
   convertCookiePreferencesForDisplay(cookiePrefs: CookiePreferences): AgreedToCookieTypes {
     switch (true){
       case cookiePrefs === undefined:
@@ -63,32 +74,35 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
   public isPlatformBrowser: boolean;
   public someCampaignHasHomePageRedirect: WritableSignal<boolean> = signal(false);
-  private getPersonSubscription: Subscription;
-  private loginStatusChangeSubscription: Subscription;
-  protected showingDedicatedCookiePreferencesPage: boolean;
+  private loginStatusChangeSubscription: Subscription | undefined;
+  protected showingDedicatedCookiePreferencesPage: boolean | undefined;
 
   constructor(
-    // private identityService: IdentityService,
-    // private donationService: DonationService,
+    private identityService: IdentityService,
+    private donationService: DonationService,
     private getSiteControlService: GetSiteControlService,
     private navigationService: NavigationService,
-    // private cookiePreferenceService: CookiePreferenceService,
-    // @Inject(PLATFORM_ID) private platformId: Object,
-    private matomoTracker: MatomoTracker,
+    private cookiePreferenceService: CookiePreferenceService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    // private matomoTracker: MatomoTracker,
     private router: Router,
   ) {
-    // this.isPlatformBrowser = isPlatformBrowser(this.platformId);
+    this.isPlatformBrowser = isPlatformBrowser(this.platformId);
+    this.userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
+    // this.existingCookiePreferences = this.cookiePreferenceService.userOptInToSomeCookies()
+    //   .pipe(startWith(undefined))
+    //   .pipe(map(this.convertCookiePreferencesForDisplay));
 
     navigationService.setPossibleRedirectSignal(this.someCampaignHasHomePageRedirect);
 
     // https://www.amadousall.com/angular-routing-how-to-display-a-loading-indicator-when-navigating-between-routes/
     this.router.events.subscribe((event: RouterEvent) => {
       if (event instanceof NavigationEnd) {
-        // if (isPlatformBrowser(this.platformId)) {
-        //   this.navigationService.saveNewUrl(event.urlAfterRedirects);
-        //
-        //   this.showingDedicatedCookiePreferencesPage = event.url === '/cookie-preferences'
-        // }
+        if (isPlatformBrowser(this.platformId)) {
+          this.navigationService.saveNewUrl(event.urlAfterRedirects);
+
+          this.showingDedicatedCookiePreferencesPage = event.url === '/cookie-preferences'
+        }
       }
     });
 
@@ -128,40 +142,36 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
         this.browserSupportedMessage = `Your current browser: ${detect()?.name} ${detect()?.version} is not supported. Please try another browser.`;
       }
 
-      // this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {
-      //   if (agreesToThirdParty(preferences)) {
-      //     this.getSiteControlService.init();
-      //   }
-      //
-      //   if (agreesToAnalyticsAndTracking(preferences)) {
-      //     this.matomoTracker.setCookieConsentGiven();
-      //   }
-      // });
+      this.cookiePreferenceService.userOptInToSomeCookies().subscribe((preferences: CookiePreferences) => {
+        if (agreesToThirdParty(preferences)) {
+          this.getSiteControlService.init();
+        }
+
+        if (agreesToAnalyticsAndTracking(preferences)) {
+          // this.matomoTracker.setCookieConsentGiven();
+        }
+      });
     }
 
     // This service needs to be injected app-wide and this line is here, because
     // we need to be sure the server-detected `COUNTY_CODE` InjectionToken is
     // always set up during the initial page load, regardless of whether the first
     // page the donor lands on makes wider use of DonationService or not.
-    // this.donationService.deriveDefaultCountry();
+    this.donationService.deriveDefaultCountry();
 
-    // this.loginStatusChangeSubscription = this.identityService.loginStatusChanged.subscribe({
-    //   next: (isLoggedIn: boolean) => {
-    //     this.isLoggedIn = isLoggedIn;
-    //      // This double-checks the JWT and sets `isLoggedIn` again, but if event emitters' use is correct then
-    //      // that's a no-op.
-    //     this.updatePersonInfo();
-    //   },
-    // });
+    this.loginStatusChangeSubscription = this.identityService.loginStatusChanged.subscribe({
+      next: (isLoggedIn: boolean) => {
+        this.isLoggedIn = isLoggedIn;
+         // This double-checks the JWT and sets `isLoggedIn` again, but if event emitters' use is correct then
+         // that's a no-op.
+        this.updatePersonInfo();
+      },
+    });
 
     this.updatePersonInfo();
   }
 
   ngOnDestroy() {
-    if (this.getPersonSubscription) {
-      this.getPersonSubscription.unsubscribe();
-    }
-
     if (this.loginStatusChangeSubscription) {
       this.loginStatusChangeSubscription.unsubscribe();
     }

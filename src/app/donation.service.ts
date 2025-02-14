@@ -34,16 +34,11 @@ export class DonationService {
     @Optional() @Inject(COUNTRY_CODE) private defaultCountryCode: string,
     private http: HttpClient,
     private identityService: IdentityService,
-    private matomoTracker: MatomoTracker,
+    // private matomoTracker: MatomoTracker,
     @Inject(PLATFORM_ID) private platformId: Object,
 
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     private cookieService: CookieService,
-
-    /**
-     * @todo - after a version of this that includes the `sessionStorage` property above has been deployed for
-     * one day remove this - it's only here to allow us to retrieve donation info stored just before that change.
-     */
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
 
     private state: TransferState,
@@ -289,11 +284,11 @@ export class DonationService {
     const donationDataItems = this.getDonationCouplets().filter(donationItem => donationItem.donation.donationId === donation.donationId);
 
     if (donationDataItems.length !== 1) {
-      this.matomoTracker.trackEvent(
-        'donate_error',
-        'auth_jwt_error',
-        `Not authorised to work with donation ${donation.donationId} to campaign ${donation.projectId}`,
-      );
+      // this.matomoTracker.trackEvent(
+      //   'donate_error',
+      //   'auth_jwt_error',
+      //   `Not authorised to work with donation ${donation.donationId} to campaign ${donation.projectId}`,
+      // );
 
       return { headers: new HttpHeaders({}) };
     }
