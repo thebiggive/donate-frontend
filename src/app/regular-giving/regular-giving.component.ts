@@ -120,7 +120,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
 
   /**
-   * True if we have discovered that there are/were not enough match funds to cover the initial donations the donor
+   * Defined if we have discovered that there are/were not enough match funds to cover the initial donations the donor
    * wanted to make. They will have the option to try making a smaller matched donation, or donate without matching.
    */
   protected insufficientMatchFundsAvailable: InsufficientFundsDetail | undefined  = undefined;
