@@ -36,6 +36,9 @@ type StartMandateParams = {
 
   /** Whether the Donor wants to receive marketing emails from the charity they donate to with this mandate */
   charityComms: boolean,
+
+  /** Whether the Donor is happy to donate without having their donations matched */
+  unmatched?: boolean,
 };
 
 @Injectable({
