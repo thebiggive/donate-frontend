@@ -65,6 +65,10 @@ export class CampaignResolver  {
     identifier: string,
     method: (identifier: string) => Observable<Campaign>,
   ): Observable<Campaign> {
+    if (!this.plausibleIdentifier(identifier)) { // Make sure we don't do `/null` API requests, on /explore for e.g.
+      return EMPTY;
+    }
+
     const campaignKey = makeStateKey<Campaign>(`campaign-${identifier}`);
     const campaign = this.state.get(campaignKey, undefined);
     if (campaign) {
@@ -87,5 +91,14 @@ export class CampaignResolver  {
     });
 
     return observable;
+  }
+
+  /**
+   * Makes sure we aren't doing API requests for clearly off "slugs", including if dev mode SSR
+   * is being used and the `/d/` base doesn't totally make sense. Mostly this would happen on `/explore`
+   * historically, where there is no actual ID or slug in the route params.
+   */
+  private plausibleIdentifier(identifier: string): boolean {
+    return !!identifier && identifier !== 'd' && identifier !== 'null';
   }
 }
