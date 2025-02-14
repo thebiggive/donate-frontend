@@ -168,6 +168,19 @@
             "scripts": []
           }
         },
+        "e2e": {
+          "builder": "@cypress/schematic:cypress",
+          "options": {
+            "devServerTarget": "donate-frontend:serve",
+            "watch": false,
+            "headless": true
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "donate-frontend:serve:production"
+            }
+          }
+        },
         "serve-ssr": {
           "builder": "@angular-devkit/build-angular:ssr-dev-server",
           "options": {},
