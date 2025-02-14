@@ -17,7 +17,7 @@ import {Campaign} from "./campaign.model";
 })
 export class StripeService {
   private didInit = false;
-  private stripe: Stripe | null;
+  private stripe?: Stripe | null;
 
   async init() {
     if (this.didInit) {

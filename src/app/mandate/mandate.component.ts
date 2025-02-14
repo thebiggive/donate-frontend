@@ -18,7 +18,7 @@ import {MoneyPipe} from "../money.pipe";
 export class MandateComponent implements OnInit {
   protected encodedShareUrl: string = '';
   protected encodedPrefilledText: string = '';
-  protected mandate: Mandate;
+  protected mandate!: Mandate;
 
   constructor(
     private route: ActivatedRoute

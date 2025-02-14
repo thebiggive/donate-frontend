@@ -130,6 +130,12 @@
             "production": {
               "buildTarget": "donate-frontend:build:production"
             },
+            "staging": {
+              "buildTarget": "donate-frontend:build:staging"
+            },
+            "regression": {
+              "buildTarget": "donate-frontend:build:regression"
+            },
             "development": {
               "buildTarget": "donate-frontend:build:development"
             }
@@ -161,6 +167,29 @@
             ],
             "scripts": []
           }
+        },
+        "serve-ssr": {
+          "builder": "@angular-devkit/build-angular:ssr-dev-server",
+          "options": {},
+          "configurations": {
+            "production": {
+              "browserTarget": "donate-frontend:build:production",
+              "serverTarget": "donate-frontend:server:production"
+            },
+            "staging": {
+              "serverTarget": "donate-frontend:server:staging",
+              "browserTarget": "donate-frontend:build:staging"
+            },
+            "regression": {
+              "serverTarget": "donate-frontend:server:regression",
+              "browserTarget": "donate-frontend:build:regression"
+            },
+            "development": {
+              "serverTarget": "donate-frontend:server:development",
+              "browserTarget": "donate-frontend:build:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }

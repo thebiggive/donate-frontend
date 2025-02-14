@@ -73,21 +73,21 @@ const paymentStepIndex = 2;
     styleUrl: './regular-giving.component.scss'
 })
 export class RegularGivingComponent implements OnInit, AfterViewInit {
-  protected campaign: Campaign;
-  mandateForm: FormGroup;
-  @ViewChild('stepper') private stepper: MatStepper;
+  protected campaign!: Campaign;
+  mandateForm!: FormGroup;
+  @ViewChild('stepper') private stepper!: MatStepper;
   readonly termsUrl = 'https://biggive.org/terms-and-conditions';
   readonly privacyUrl = 'https://biggive.org/privacy';
-  protected donor: Person;
-  protected donorAccount: DonorAccount;
+  protected donor?: Person;
+  protected donorAccount!: DonorAccount;
   protected countryOptionsObject = countryOptions;
-  protected selectedBillingCountryCode: string;
+  protected selectedBillingCountryCode!: string;
   private stripeElements: StripeElements | undefined;
   private stripePaymentElement: StripePaymentElement | undefined;
 
   public readonly labelYourPaymentInformation = "Your Payment Information";
 
-  @ViewChild('cardInfo') protected cardInfo: ElementRef;
+  @ViewChild('cardInfo') protected cardInfo?: ElementRef;
   private stripeCustomerSession: StripeCustomerSession | undefined;
   protected submitting: boolean = false;
 
@@ -124,14 +124,14 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    const donor: Person | null = this.route.snapshot.data.donor;
+    const donor: Person | null = this.route.snapshot.data['donor'];
     if (! donor) {
       throw new Error("Must be logged in to see regular giving page");
     }
     this.donor = donor;
-    this.donorAccount = this.route.snapshot.data.donorAccount
+    this.donorAccount = this.route.snapshot.data['donorAccount']
 
-    this.campaign = this.route.snapshot.data.campaign;
+    this.campaign = this.route.snapshot.data['campaign'];
 
     if ( !this.campaign.isRegularGiving ) {
       console.error("Campaign " + this.campaign.id + " is not a regular giving campaign");
@@ -361,6 +361,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
+      // @ts-ignore Not sure why only 'loaderstart' sig is recognised now.
       this.stripePaymentElement.on('change', this.cardHandler);
     }
   }
@@ -447,7 +448,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    */
   private validateAmountStep() {
     let errorFound = false;
-    const donationAmountErrors = this.mandateForm.controls.donationAmount!.errors;
+    const donationAmountErrors = this.mandateForm.controls['donationAmount']!.errors;
 
     if (donationAmountErrors) {
       for (const [key] of Object.entries(donationAmountErrors)) {
@@ -513,7 +514,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
      this.paymentInfoErrorMessage = this.stripeError;
     }
 
-    const postcodeErrors = this.mandateForm.controls.billingPostcode!.errors;
+    const postcodeErrors = this.mandateForm.controls['billingPostcode']!.errors;
     if (postcodeErrors) {
       for (const [key] of Object.entries(postcodeErrors)) {
         switch (key) {

@@ -29,10 +29,9 @@ import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.com
     ]
 })
 export class UpdateCardModalComponent implements OnInit {
-  form: FormGroup;
-
-  card: PaymentMethod.Card;
-  formattedCardExpiry: string;
+  form!: FormGroup;
+  card?: PaymentMethod.Card;
+  formattedCardExpiry?: string;
   readonly COUNTRIES = COUNTRIES;
   countryCode: string | undefined;
   postalCode: string | undefined;

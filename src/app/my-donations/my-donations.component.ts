@@ -18,8 +18,8 @@ import {myRegularGivingPath} from "../app-routing";
     styleUrl: './my-donations.component.scss'
 })
 export class MyDonationsComponent implements OnInit{
-  protected donations: EnrichedDonation[];
-  protected atLeastOneLargeRecentDonation: boolean;
+  protected donations!: EnrichedDonation[];
+  protected atLeastOneLargeRecentDonation?: boolean;
   protected readonly myRegularGivingPath = myRegularGivingPath;
 
   constructor(

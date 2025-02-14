@@ -27,7 +27,7 @@ import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 })
 export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
   protected paymentMethods: PaymentMethod[] | undefined;
-  protected person: Person;
+  protected person!: Person;
 
   private savedCardsTimer: undefined | ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
 

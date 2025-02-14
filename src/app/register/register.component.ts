@@ -28,21 +28,21 @@ import {NavigationService} from "../navigation.service";
 })
 export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('frccaptcha', { static: false })
-  protected friendlyCaptcha: ElementRef<HTMLElement>;
+  protected friendlyCaptcha!: ElementRef<HTMLElement>;
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
   protected readonly transferFundsPath = transferFundsPath;
 
 
   protected processing = false;
   protected error?: string;
-  registrationForm: FormGroup;
+  registrationForm!: FormGroup;
   private readyToLogIn = false;
   protected errorHtml: SafeHtml | undefined;
   private friendlyCaptchaSolution: string|undefined;
   protected readonly flags = flags;
-  private friendlyCaptchaWidget: WidgetInstance;
+  private friendlyCaptchaWidget!: WidgetInstance;
   protected redirectPath: string = 'my-account';
-  protected loginLink: string;
+  protected loginLink!: string;
 
 
   constructor(
@@ -118,17 +118,17 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       const passwordErrors = this.registrationForm.controls?.password?.errors;
 
       switch (true) {
-        case emailErrors?.required && passwordErrors?.required:
+        case emailErrors?.['required'] && passwordErrors?.['required']:
           this.error = 'Email address and password are required';
           break;
-        case emailErrors?.required:
+        case emailErrors?.['required']:
           this.error = 'Email address is required';
           break;
-        case passwordErrors?.required:
+        case passwordErrors?.['required']:
           this.error = 'Password is required';
           break;
-        case !!emailErrors?.pattern:
-          this.error = `'${emailErrors!.pattern.actualValue}' is not a recognised email address`;
+        case !!emailErrors?.['pattern']:
+          this.error = `'${emailErrors!['pattern'].actualValue}' is not a recognised email address`;
           break;
         default:
           this.error = 'Unknown Error - please try again or contact us if this error persists';
