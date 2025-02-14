@@ -12,6 +12,7 @@ import {IdentityService} from '../identity.service';
 import {EMAIL_REGEXP} from '../validators/patterns';
 import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.component";
 import {WidgetInstance} from "friendly-challenge";
+import {BackendError, errorDescription} from "../backendError";
 
 @Component({
     selector: 'app-login-modal',
@@ -93,11 +94,10 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
     this.identityService.login(credentials).subscribe((response: { id: string, jwt: string }) => {
       this.dialogRef.close(response);
       this.loggingIn = false;
-    }, async (error) => {
+    }, async (error: BackendError) => {
       this.friendlyCaptchaWidget?.reset();
       await this.friendlyCaptchaWidget?.start();
-      const errorDescription = error.error.error.description;
-      this.loginError = errorDescription || error.message || 'Unknown error';
+      this.loginError = errorDescription(error);
       this.loggingIn = false;
     });
   }

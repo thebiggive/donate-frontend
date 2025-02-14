@@ -13,6 +13,7 @@ import {IdentityService} from "../identity.service";
 import {MatDialog} from "@angular/material/dialog";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
+import {BackendError, errorDetails} from "../backendError";
 
 @Component({
     selector: 'app-my-payment-methods',
@@ -75,9 +76,9 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
 
     this.donationService.deleteStripePaymentMethod(this.person, method, this.jwtAsString()).subscribe(
       this.loadPaymentMethods.bind(this),
-      error => {
+      (error: BackendError) => {
         this.loadPaymentMethods.bind(this)()
-        alert(error.error.error)
+        alert(errorDetails(error))
       }
     )
   }

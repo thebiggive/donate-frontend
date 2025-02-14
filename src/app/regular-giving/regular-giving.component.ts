@@ -40,6 +40,14 @@ import {
 } from "@angular/material/autocomplete";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {GiftAidAddressSuggestion} from "../gift-aid-address-suggestion.model";
+import {MoneyPipe} from "../money.pipe";
+import {
+  BackendError,
+  errorDescription,
+  errorDetails,
+  InsufficientFundsDetail,
+  isInsufficientMatchFundsError
+} from "../backendError";
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -49,26 +57,27 @@ const paymentStepIndex = 2;
 
 @Component({
     selector: 'app-regular-giving',
-    imports: [
-        ComponentsModule,
-        FormsModule,
-        MatStep,
-        MatStepper,
-        ReactiveFormsModule,
-        MatInput,
-        MatButton,
-        MatIcon,
-        MatProgressSpinner,
-        MatHint,
-        MatRadioButton,
-        MatRadioGroup,
-        MatIconAnchor,
-        RouterLink,
-        MatAutocomplete,
-        MatAutocompleteTrigger,
-        MatCheckbox,
-        MatOption
-    ],
+  imports: [
+    ComponentsModule,
+    FormsModule,
+    MatStep,
+    MatStepper,
+    ReactiveFormsModule,
+    MatInput,
+    MatButton,
+    MatIcon,
+    MatProgressSpinner,
+    MatHint,
+    MatRadioButton,
+    MatRadioGroup,
+    MatIconAnchor,
+    RouterLink,
+    MatAutocomplete,
+    MatAutocompleteTrigger,
+    MatCheckbox,
+    MatOption,
+    MoneyPipe
+  ],
     templateUrl: './regular-giving.component.html',
     styleUrl: './regular-giving.component.scss'
 })
@@ -109,6 +118,12 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    */
   protected homeAddress: HomeAddress | undefined;
   protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
+
+  /**
+   * Defined if we have discovered that there are/were not enough match funds to cover the initial donations the donor
+   * wanted to make. They will have the option to try making a smaller matched donation, or donate without matching.
+   */
+  protected insufficientMatchFundsAvailable: InsufficientFundsDetail | undefined  = undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -168,6 +183,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       homeOutsideUK: [null],
       homeAddress: [null],
       homePostcode: [null],
+      unmatched: [false], // If ticked, indicates that the donor is willing to donate without match funding.
       });
 
     this.stripeService.init().catch(console.error);
@@ -278,18 +294,28 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       tbgComms: !!this.optInTbgEmail,
       homeAddress: this.homeAddressFormValue,
       homePostcode: this.homePostcode,
+      unmatched: this.unmatched,
     }).subscribe({
       next: async (mandate: Mandate) => {
         await this.router.navigateByUrl(`/${myRegularGivingPath}/${mandate.id}`);
       },
-      error: (error: {error: {error: {description?: string} }}) => {
-        const message = error.error.error.description ?? 'Sorry, something went wrong';
+      error: (error: BackendError) => {
+        const message = errorDescription(error);
 
-        this.submitErrorMessage = message;
+        if (isInsufficientMatchFundsError(error)) {
+          this.insufficientMatchFundsAvailable = errorDetails(error);
+          this.selectStep(0);
+        } else {
+          this.submitErrorMessage = message;
+        }
         this.toast.showError(message);
         this.submitting = false;
       }
     })
+  }
+
+  private get unmatched(): boolean {
+    return !!this.mandateForm.value.unmatched;
   }
 
   private get billingPostCode(): string | null{
@@ -402,7 +428,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   }
 
   private selectStep(stepIndex: number) {
-    if (this.validateAmountStep()) {
+    if (stepIndex > 0 && this.validateAmountStep()) {
       return;
     }
 
@@ -473,6 +499,21 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       errorFound = true;
     } else {
       this.amountErrorMessage = undefined;
+
+      const askingToMatchMoreThanAvailable =
+        this.insufficientMatchFundsAvailable &&
+        ! this.unmatched &&
+        this.getDonationAmountPence() > this.insufficientMatchFundsAvailable.maxMatchable.amountInPence;
+
+      if (askingToMatchMoreThanAvailable) {
+        errorFound = true;
+        const formattedMax = MoneyPipe.format(this.insufficientMatchFundsAvailable!.maxMatchable);
+        this.amountErrorMessage =
+          `There is only funding available to match donations of up to ${formattedMax}. ` +
+          'Please choose a smaller donation amount, or make an unmatched donation.';
+
+        this.toast.showError(this.amountErrorMessage!);
+      }
     }
     return errorFound;
   }

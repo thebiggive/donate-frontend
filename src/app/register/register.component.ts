@@ -19,6 +19,7 @@ import {flags} from "../featureFlags";
 import type {LoginNavigationState} from "../login/login.component";
 import {PageMetaService} from '../page-meta.service';
 import {NavigationService} from "../navigation.service";
+import {BackendError, errorDescription, errorDetails} from "../backendError";
 
 @Component({
     selector: 'app-register',
@@ -141,16 +142,13 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private doRegistrationAndLogin(captchaResponse: string|undefined = undefined) {
-    const extractErrorMessage = (error: {
-      error: { error: { description?: string, htmlDescription?: string } },
-      message?: string
-    }) => {
-      const errorInfo = error.error.error;
+    const extractErrorMessage = (error: BackendError) => {
+      const errorInfo = errorDetails(error);
       if (errorInfo.htmlDescription) {
         // this HTML can only have come back from our identity server, which we consider trustworthy.
         this.errorHtml = this.sanitizer.bypassSecurityTrustHtml(errorInfo.htmlDescription)
       } else {
-        this.error = errorInfo.description || error.message || 'Unknown error';
+        this.error = errorDescription(error);
       }
     }
 
