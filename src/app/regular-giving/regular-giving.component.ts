@@ -428,7 +428,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   }
 
   private selectStep(stepIndex: number) {
-    if (this.validateAmountStep()) {
+    if (stepIndex > 0 && this.validateAmountStep()) {
       return;
     }
 
@@ -499,6 +499,21 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       errorFound = true;
     } else {
       this.amountErrorMessage = undefined;
+
+      const askingToMatchMoreThanAvailable =
+        this.insufficientMatchFundsAvailable &&
+        ! this.unmatched &&
+        this.getDonationAmountPence() > this.insufficientMatchFundsAvailable.maxMatchable.amountInPence;
+
+      if (askingToMatchMoreThanAvailable) {
+        errorFound = true;
+        const formattedMax = MoneyPipe.format(this.insufficientMatchFundsAvailable!.maxMatchable);
+        this.amountErrorMessage =
+          `There is only funding available to match donations of up to ${formattedMax}. ` +
+          'Please choose a smaller donation amount, or make an unmatched donation.';
+
+        this.toast.showError(this.amountErrorMessage!);
+      }
     }
     return errorFound;
   }

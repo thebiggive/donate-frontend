@@ -12,6 +12,10 @@ import {ExactCurrencyPipe} from "./exact-currency.pipe";
 })
 export class MoneyPipe implements PipeTransform {
   transform(money: Money): string {
+    return MoneyPipe.format(money);
+  }
+
+  public static format(money: Money) {
     const exactCurrencyPipe = new ExactCurrencyPipe();
 
     // Delegate actual work to pre-existing pipe that takes a number. At some point we can consider removing the
