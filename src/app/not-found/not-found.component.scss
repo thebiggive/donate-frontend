@@ -1,4 +1,4 @@
-@use '../../abstract' as abstract;
+@use '../../abstract';
 
 main {
   @include abstract.make-container;

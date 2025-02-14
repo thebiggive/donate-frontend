@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@use '../../abstract' as abstract;
+@use '../../abstract';
 
 .error {
   color: mat.m2-get-color-from-palette(abstract.$donate-warn);

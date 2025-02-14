@@ -1,6 +1,6 @@
 // common CSS rules used in authentication related pages - my account, register and login.
 @use '@angular/material' as mat;
-@use '../../abstract' as abstract;
+@use '../../abstract';
 
 main {
   @include abstract.make-container;
