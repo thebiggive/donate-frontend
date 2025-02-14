@@ -8,8 +8,10 @@ import express, {Request, Response} from 'express';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import {REQUEST, RESPONSE} from './express.tokens';
 import bootstrap from './main.server';
 import {environment} from './environments/environment';
+import {COUNTRY_CODE} from './app/country-code.token';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -73,7 +75,16 @@ app.get('**', (req, res, next) => {
       documentFilePath: indexHtml,
       url: `${protocol}://${headers.host}${originalUrl}`,
       publicPath: browserDistFolder,
-      providers: [{ provide: APP_BASE_HREF, useValue: environment.donateUriPrefix }],
+      providers: [
+        // Ensure we render with a supported base HREF, including behind an ALB and regardless of the
+        // base reported by CloudFront when talking to the origin.
+        // (Stock Angular SSR uses `req.baseUrl` but based on the previous note about CloudFront, from Angular Universal
+        // days, I suspect this will still not be reliable for us.)
+        { provide: APP_BASE_HREF, useValue: environment.donateUriPrefix },
+        { provide: COUNTRY_CODE, useValue: req.header('CloudFront-Viewer-Country') || undefined },
+        { provide: RESPONSE, useValue: res },
+        { provide: REQUEST, useValue: req }
+      ],
     })
     .then(async (html) => {
       setAssetPath(`${environment.donateUriPrefix}/assets`);
