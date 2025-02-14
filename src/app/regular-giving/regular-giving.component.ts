@@ -10,7 +10,7 @@ import {MatButton, MatIconAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
 import {RegularGivingService} from "../regularGiving.service";
-import {Mandate, Money} from '../mandate.model';
+import {Mandate} from '../mandate.model';
 import {myRegularGivingPath} from "../app-routing";
 import {requiredNotBlankValidator} from "../validators/notBlank";
 import {getCurrencyMinValidator} from "../validators/currency-min";
@@ -41,6 +41,13 @@ import {
 import {MatCheckbox} from "@angular/material/checkbox";
 import {GiftAidAddressSuggestion} from "../gift-aid-address-suggestion.model";
 import {MoneyPipe} from "../money.pipe";
+import {
+  BackendError,
+  errorDescription,
+  errorDetails,
+  InsufficientFundsDetail,
+  isInsufficientMatchFundsError
+} from "../backendError";
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -116,13 +123,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    * True if we have discovered that there are/were not enough match funds to cover the initial donations the donor
    * wanted to make. They will have the option to try making a smaller matched donation, or donate without matching.
    */
-  protected insufficientMatchFundsAvailable: any = undefined;
-
-  /**
-   * The maximum amount that we can match, if known. Currently only when a donor gets an error for trying to match
-   * more than available, but in principle we could set this on load.
-   */
-  protected maxMatchableDonation: Money | undefined;
+  protected insufficientMatchFundsAvailable: InsufficientFundsDetail | undefined  = undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -298,14 +299,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       next: async (mandate: Mandate) => {
         await this.router.navigateByUrl(`/${myRegularGivingPath}/${mandate.id}`);
       },
-      error: (error: {error: {error: {description?: string} }}) => {
-        const message = error.error.error.description ?? 'Sorry, something went wrong';
+      error: (error: BackendError) => {
+        const message = errorDescription(error);
 
-        // @ts-ignore
-        if (error.error.error.type === 'INSUFFICIENT_MATCH_FUNDS') {
-          this.insufficientMatchFundsAvailable = error.error.error;
-          // @ts-ignore
-          this.maxMatchableDonation = error.error.error.maxMatchable;
+        if (isInsufficientMatchFundsError(error)) {
+          this.insufficientMatchFundsAvailable = errorDetails(error);
           this.selectStep(0);
         } else {
           this.submitErrorMessage = message;

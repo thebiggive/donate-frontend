@@ -16,6 +16,7 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {registerPath} from "../app-routing";
 import {WidgetInstance} from "friendly-challenge";
 import {NavigationService} from "../navigation.service";
+import {errorDescription, BackendError} from "../backendError";
 
 export type LoginNavigationState = {
   /**
@@ -178,9 +179,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
       next: async (_response: { id: string, jwt: string }) => {
         await this.router.navigateByUrl(this.redirectPath);
       },
-      error: async (error) => {
-        const errorDescription = error.error.error.description;
-        this.loginError = errorDescription || error.message || 'Unknown error';
+      error: async (error: BackendError) => {
+        this.loginError = errorDescription(error)
         this.loggingIn = false;
 
         this.captchaCode = undefined;
