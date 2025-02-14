@@ -1,4 +1,4 @@
-@import '../abstract';
+@use '../abstract';
 
 biggive-main-menu {
   z-index: 11; // Must be greater than match funds reserved banner.
@@ -22,7 +22,7 @@ biggive-main-menu {
   transition: transform 0.3s;
 
   a {
-    background-color: $colour-background;
+    background-color: abstract.$colour-background;
     padding: 5px;
     border-radius: 3px;
   }
@@ -33,7 +33,7 @@ biggive-main-menu {
 }
 
 .browser-unsupported-message {
-  background-color: $colour-secondary;
+  background-color: abstract.$colour-secondary;
   padding: 10px;
   margin: 10px 0px;
   div {

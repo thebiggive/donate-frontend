@@ -1,9 +1,9 @@
 // common CSS rules used in authentication related pages - my account, register and login.
 @use '@angular/material' as mat;
-@import '../../abstract';
+@use '../../abstract';
 
 main {
-  @include make-container;
+  @include abstract.make-container;
   margin: 0 0;
 }
 
@@ -13,7 +13,7 @@ form {
 
 #banner {
   display: none;
-  @media #{$breakpoint-lg} {
+  @media #{abstract.$breakpoint-lg} {
     display: block;
     background-size: cover;
     background-position: center;
@@ -23,10 +23,10 @@ form {
 }
 
 input {
-  @include b-rt-0;
+  @include abstract.b-rt-0;
   outline: none;
   border: none;
-  background-color: $colour-background;
+  background-color: abstract.$colour-background;
   width: 100%;
   padding: 0; // We rely on containing element margin, and don't want vendor-dependent extra padding.
 
@@ -58,7 +58,7 @@ input {
 
     @media only screen and (max-width: 650px) {
       display: block;
-      color: mat.m2-get-color-from-palette($donate-primary);
+      color: mat.m2-get-color-from-palette(abstract.$donate-primary);
       font-size: 10px;
       text-align: center;
       margin-top: 0;
@@ -69,13 +69,13 @@ input {
 }
 
 main > div {
-  @include make-container;
+  @include abstract.make-container;
   box-sizing: border-box;
-  color: $colour-primary;
-  background-color: $colour-background;
+  color: abstract.$colour-primary;
+  background-color: abstract.$colour-background;
   margin-bottom: 125px;
 
-  @media #{$breakpoint-lg} {
+  @media #{abstract.$breakpoint-lg} {
     padding-top: 0;
     padding-right: 100px;
     padding-left: 100px;
@@ -89,7 +89,7 @@ main > div {
 div.actions {
   display: flex;
   flex-direction: column-reverse;
-  @media #{$breakpoint-md} {
+  @media #{abstract.$breakpoint-md} {
     flex-direction: row;
   }
 
@@ -102,7 +102,7 @@ div.actions {
   #register-button, #reset-password-button {
     margin-bottom: 1em;
     width: 100%;
-    @media #{$breakpoint-md} {
+    @media #{abstract.$breakpoint-md} {
       margin-bottom: 0;
     }
     flex-basis: 60%;
@@ -113,12 +113,12 @@ div.actions {
   width: 80%;
   text-align: center;
   margin: auto;
-  @media #{$breakpoint-lg} {
+  @media #{abstract.$breakpoint-lg} {
     max-width: 15em;
   }
 }
 
 .error {
-  color: mat.m2-get-color-from-palette($donate-warn);
+  color: mat.m2-get-color-from-palette(abstract.$donate-warn);
   margin: 1rem 0;
 }

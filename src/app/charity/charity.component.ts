@@ -8,9 +8,10 @@ import { PageMetaService } from '../page-meta.service';
 import { CampaignService } from '../campaign.service';
 
 @Component({
-  selector: 'app-charity',
-  templateUrl: './charity.component.html',
-  styleUrl: 'charity.component.scss',
+    selector: 'app-charity',
+    templateUrl: './charity.component.html',
+    styleUrl: 'charity.component.scss',
+    standalone: false
 })
 export class CharityComponent implements OnInit {
   campaigns: CampaignSummary[];

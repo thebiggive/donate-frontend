@@ -18,14 +18,15 @@ import {
 
 // See https://medium.com/angular-in-depth/angular-unit-testing-viewchild-4525e0c7b756
 @Component({
-  selector: "app-donation-start-form",
-  template: "",
-  providers: [
-    {
-      provide: DonationStartFormComponent,
-      useClass: DonationStartFormStubComponent,
-    },
-  ],
+    selector: "app-donation-start-form",
+    template: "",
+    providers: [
+        {
+            provide: DonationStartFormComponent,
+            useClass: DonationStartFormStubComponent,
+        },
+    ],
+    standalone: false
 })
 class DonationStartFormStubComponent {
   resumeDonationsIfPossible() {}

@@ -6,7 +6,7 @@ import {renderToString} from '@biggive/components/hydrate';
 import {setAssetPath} from '@biggive/components/dist/components';
 import * as compression from 'compression';
 import {createHash} from 'crypto';
-import {CommonEngine, CommonEngineRenderOptions} from '@angular/ssr';
+import {CommonEngine, CommonEngineRenderOptions} from '@angular/ssr/node';
 import * as express from 'express';
 import {Request, Response} from 'express';
 import {existsSync} from 'node:fs';

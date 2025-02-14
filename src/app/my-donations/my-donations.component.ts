@@ -2,24 +2,20 @@ import {Component, OnInit} from '@angular/core';
 import {PageMetaService} from "../page-meta.service";
 import {ActivatedRoute} from "@angular/router";
 import {CompleteDonation, Donation, EnrichedDonation, isLargeDonation, withComputedProperties} from "../donation.model";
-import {AsyncPipe, DatePipe} from "@angular/common";
+import {DatePipe} from "@angular/common";
 import {ExactCurrencyPipe} from "../exact-currency.pipe";
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {allChildComponentImports} from "../../allChildComponentImports";
 import {myRegularGivingPath} from "../app-routing";
 
 @Component({
-  selector: 'app-my-donations',
-  standalone: true,
-  imports: [
-    ...allChildComponentImports,
-    AsyncPipe,
-    ExactCurrencyPipe,
-    DatePipe,
-    MatProgressSpinner
-  ],
-  templateUrl: './my-donations.component.html',
-  styleUrl: './my-donations.component.scss'
+    selector: 'app-my-donations',
+    imports: [
+        ...allChildComponentImports,
+        ExactCurrencyPipe,
+        DatePipe,
+    ],
+    templateUrl: './my-donations.component.html',
+    styleUrl: './my-donations.component.scss'
 })
 export class MyDonationsComponent implements OnInit{
   protected donations: EnrichedDonation[];
