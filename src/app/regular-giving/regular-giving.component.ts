@@ -10,7 +10,7 @@ import {MatButton, MatIconAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
 import {RegularGivingService} from "../regularGiving.service";
-import {Mandate} from '../mandate.model';
+import {Mandate, Money} from '../mandate.model';
 import {myRegularGivingPath} from "../app-routing";
 import {requiredNotBlankValidator} from "../validators/notBlank";
 import {getCurrencyMinValidator} from "../validators/currency-min";
@@ -40,6 +40,7 @@ import {
 } from "@angular/material/autocomplete";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {GiftAidAddressSuggestion} from "../gift-aid-address-suggestion.model";
+import {MoneyPipe} from "../money.pipe";
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -49,26 +50,27 @@ const paymentStepIndex = 2;
 
 @Component({
     selector: 'app-regular-giving',
-    imports: [
-        ComponentsModule,
-        FormsModule,
-        MatStep,
-        MatStepper,
-        ReactiveFormsModule,
-        MatInput,
-        MatButton,
-        MatIcon,
-        MatProgressSpinner,
-        MatHint,
-        MatRadioButton,
-        MatRadioGroup,
-        MatIconAnchor,
-        RouterLink,
-        MatAutocomplete,
-        MatAutocompleteTrigger,
-        MatCheckbox,
-        MatOption
-    ],
+  imports: [
+    ComponentsModule,
+    FormsModule,
+    MatStep,
+    MatStepper,
+    ReactiveFormsModule,
+    MatInput,
+    MatButton,
+    MatIcon,
+    MatProgressSpinner,
+    MatHint,
+    MatRadioButton,
+    MatRadioGroup,
+    MatIconAnchor,
+    RouterLink,
+    MatAutocomplete,
+    MatAutocompleteTrigger,
+    MatCheckbox,
+    MatOption,
+    MoneyPipe
+  ],
     templateUrl: './regular-giving.component.html',
     styleUrl: './regular-giving.component.scss'
 })
@@ -109,6 +111,18 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    */
   protected homeAddress: HomeAddress | undefined;
   protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
+
+  /**
+   * True if we have discovered that there are/were not enough match funds to cover the initial donations the donor
+   * wanted to make. They will have the option to try making a smaller matched donation, or donate without matching.
+   */
+  protected insufficientMatchFundsAvailable: any = undefined;
+
+  /**
+   * The maximum amount that we can match, if known. Currently only when a donor gets an error for trying to match
+   * more than available, but in principle we could set this on load.
+   */
+  protected maxMatchableDonation: Money | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -168,6 +182,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       homeOutsideUK: [null],
       homeAddress: [null],
       homePostcode: [null],
+      unmatched: [false], // If ticked, indicates that the donor is willing to donate without match funding.
       });
 
     this.stripeService.init().catch(console.error);
@@ -278,6 +293,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       tbgComms: !!this.optInTbgEmail,
       homeAddress: this.homeAddressFormValue,
       homePostcode: this.homePostcode,
+      unmatched: this.unmatched,
     }).subscribe({
       next: async (mandate: Mandate) => {
         await this.router.navigateByUrl(`/${myRegularGivingPath}/${mandate.id}`);
@@ -285,11 +301,23 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       error: (error: {error: {error: {description?: string} }}) => {
         const message = error.error.error.description ?? 'Sorry, something went wrong';
 
-        this.submitErrorMessage = message;
+        // @ts-ignore
+        if (error.error.error.type === 'INSUFFICIENT_MATCH_FUNDS') {
+          this.insufficientMatchFundsAvailable = error.error.error;
+          // @ts-ignore
+          this.maxMatchableDonation = error.error.error.maxMatchable;
+          this.selectStep(0);
+        } else {
+          this.submitErrorMessage = message;
+        }
         this.toast.showError(message);
         this.submitting = false;
       }
     })
+  }
+
+  private get unmatched(): boolean {
+    return !!this.mandateForm.value.unmatched;
   }
 
   private get billingPostCode(): string | null{
