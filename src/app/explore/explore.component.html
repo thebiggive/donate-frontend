@@ -54,14 +54,14 @@
       [locationOptions]="locationOptions"
       [selectedSortByOption]="searchService.selectedSortLabel"
       [searchText]="searchService.selected.term"
-      [selectedFilterBeneficiary]="searchService.selected.beneficiary ? searchService.selected.beneficiary : null"
-      [selectedFilterCategory]="searchService.selected.category ? searchService.selected.category : null"
-      [selectedFilterLocation]="searchService.selected.country ? searchService.selected.country : null">
+      [selectedFilterBeneficiary]="searchService.selected['beneficiary'] ? searchService.selected['beneficiary'] : null"
+      [selectedFilterCategory]="searchService.selected['category'] ? searchService.selected['category'] : null"
+      [selectedFilterLocation]="searchService.selected['country'] ? searchService.selected['country'] : null">
 
       @if (individualCampaigns) {
         <biggive-grid
           slot="campaign-grid"
-          column-count="3"
+          columnCount="3"
           infiniteScroll
           [infiniteScrollThrottle]="500"
           (scrolled)="onScroll()"

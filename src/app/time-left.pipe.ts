@@ -33,8 +33,8 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
     },
   ];
 
-  timer: Observable<string>;
-  value: Date;
+  timer?: Observable<string>;
+  value?: Date;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -58,7 +58,7 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
     return Math.floor((date.getTime() - Date.now()) / microsecsInUnit);
   }
 
-  transform(date: any, _args?: any[]): any {
+  override transform(date: any, _args?: any[]): any {
     if (!(date instanceof Date)) { // Support ISO 8601 strings as returned by the Salesforce API
       date = new Date(date);
     }
@@ -77,11 +77,12 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
 
   private getObservable(): Observable<string> {
     // On the browser / client-side JS, we set a 1 second interval so times can 'tick' live.
-    if (isPlatformBrowser(this.platformId)) {
-      return interval(1000).pipe(startWith(0), map(() => TimeLeftPipe.format(this.value)));
+    const theDate = this.value || new Date();
+    if (isPlatformBrowser(this.platformId) && this.value) {
+      return interval(1000).pipe(startWith(0), map(() => TimeLeftPipe.format(theDate)));
     }
 
     // On the server, get the value once; if we set an interval here, SSR spins forever and breaks the app!
-    return of(TimeLeftPipe.format(this.value));
+    return of(TimeLeftPipe.format(theDate));
   }
 }

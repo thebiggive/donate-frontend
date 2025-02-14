@@ -49,7 +49,7 @@ const endPipeToken = 'timeLeftToEndPipe';
     standalone: false
 })
 export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
-  @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid: BiggiveCampaignCardFilterGrid;
+  @ViewChild(BiggiveCampaignCardFilterGrid) cardGrid?: BiggiveCampaignCardFilterGrid;
 
   /**
    * This component is used both for pages about specific meta-campagins, and for the general 'explore' page.
@@ -57,21 +57,21 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
    */
   protected metaCampaign: Campaign | undefined;
 
-  individualCampaigns: CampaignSummary[];
+  individualCampaigns: CampaignSummary[] = [];
   currencyPipeDigitsInfo = currencyPipeDigitsInfo;
   loading = false; // Server render gets initial result set; set true when filters change.
   /** Whether any non-default search logic besides an order change has been applied. */
   searched = false;
 
   // Campaign ID may be passed instead
-  @Input({ required: false }) private campaignSlug: string;
+  @Input({ required: false }) private campaignSlug?: string;
   // Passed only on the fund-filtered view of this page.
-  @Input({ required: false }) private fundSlug: string;
+  @Input({ required: false }) private fundSlug?: string;
 
   private blurredSinceLastMajorScroll = false;
   private offset = 0;
-  private routeParamSubscription: Subscription;
-  private searchServiceSubscription: Subscription;
+  private routeParamSubscription?: Subscription;
+  private searchServiceSubscription?: Subscription;
   private readonly smallestSignificantScrollPx = 250;
 
   beneficiaryOptions: string[] = [];
@@ -79,20 +79,20 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   locationOptions: string[] = [];
   // While only /explore may render the cards, all Explore component routes now provide the resolver for these. It's used
   // to determine whether the menu needs a `?noredirect`, via NavigationService.
-  protected highlightCards: HighlightCard[];
+  protected highlightCards!: HighlightCard[];
 
-  private queryParamsSubscription: Subscription;
+  private queryParamsSubscription?: Subscription;
   public fund?: Fund;
   private readonly recentChildrenKey = `${environment.donateUriPrefix}/children/v2`; // Key is per-domain/env
   public filterError = false;
   private readonly recentChildrenMaxMinutes = 10; // Maximum time in mins we'll keep using saved child campaigns
 
   public tickerItems: { label: string, figure: string }[] = [];
-  private tickerUpdateTimer: number;
-  public tickerMainMessage: string;
-  private shouldAutoScroll: boolean;
+  private tickerUpdateTimer?: number;
+  public tickerMainMessage?: string;
+  private shouldAutoScroll?: boolean;
 
-  private routeChangeListener: Subscription;
+  private routeChangeListener?: Subscription;
   private autoScrollTimer: number | undefined; // State update setTimeout reference, for client side scroll to previous position.
 
   protected isInFuture = CampaignService.isInFuture;
@@ -161,7 +161,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.metaCampaign = this.route.snapshot.data.campaign;
+    this.metaCampaign = this.route.snapshot.data['campaign'];
 
     this.listenForRouteChanges();
 
@@ -181,7 +181,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.locationOptions = CampaignGroupsService.getCountries();
     this.queryParamsSubscription = this.scrollToSearchWhenParamsChange();
 
-    this.highlightCards = this.route.snapshot.data.highlights;
+    this.highlightCards = this.route.snapshot.data['highlights'];
     // Call for the main menu update side effect to possibly add `?noredirect`.
     void this.navigationService.getPotentialRedirectPathAndUpdateSignal(this.highlightCards);
 
