@@ -20,12 +20,11 @@
     "build:ssr:regression": "npm run build:regression && ng run donate-frontend:server:regression",
     "build:ssr:staging": "npm run build:staging && ng run donate-frontend:server:staging",
     "ci": "npm run lint && npm run test-ci && npm run e2e && npm run build:staging",
-    "dev:ssr": "ng run donate-frontend:serve-ssr",
-    "serve:ssr": "node dist/server/main.js",
     "link-components": "./link-components.sh",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "supportedBrowsers": "(echo export const supportedBrowsers: RegExp = && browserslist-useragent-regexp --allowHigherVersions) > src/supportedBrowsers.ts"
+    "supportedBrowsers": "(echo export const supportedBrowsers: RegExp = && browserslist-useragent-regexp --allowHigherVersions) > src/supportedBrowsers.ts",
+    "serve:ssr:donate-frontend": "node dist/server/server.mjs"
   },
   "dependencies": {
     "@angular/animations": "^19.1.6",
@@ -51,7 +50,7 @@
     "browserslist-useragent-regexp": "^4.1.3",
     "compression": "^1.7.4",
     "detect-browser": "^5.3.0",
-    "express": "^4.21.2",
+    "express": "^4.18.2",
     "friendly-challenge": "^0.9.16",
     "helmet": "^7.1.0",
     "jwt-decode": "^3.1.2",
@@ -79,7 +78,7 @@
     "@babel/runtime": "7.16.3",
     "@cypress/schematic": "^2.5.1",
     "@types/compression": "^1.7.0",
-    "@types/express": "^4.17.21",
+    "@types/express": "^4.17.17",
     "@types/jasmine": "^3.6.9",
     "@types/jasminewd2": "^2.0.8",
     "@types/morgan": "^1.9.2",
