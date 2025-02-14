@@ -28,8 +28,10 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
-              }
+                "input": "node_modules/@biggive/components/dist/biggive/assets/images",
+                "output": "assets/images"
+              },
+              "src/assets"
             ],
             "styles": [
               "src/styles.scss"
@@ -149,8 +151,10 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
-              }
+                "input": "node_modules/@biggive/components/dist/biggive/assets/images",
+                "output": "assets/images"
+              },
+              "src/assets"
             ],
             "styles": [
               "src/styles.scss"
