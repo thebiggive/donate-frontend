@@ -40,7 +40,7 @@ import {allChildComponentImports} from '../allChildComponentImports';
   styleUrl: 'app.component.scss',
   standalone: false,
 })
-export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
+export class AppComponent implements OnDestroy, OnInit {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu | undefined;
 
   protected browserSupportedMessage?: string;
@@ -177,15 +177,16 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     }
   }
 
-  ngAfterViewInit() {
-    const headerEl = this.header;
-    this.router.events.pipe(
-      filter((event: RouterEvent) => event instanceof NavigationStart),
-    ).subscribe(
-      // we have seen TypeError: Cannot read properties of undefined (reading 'closeMobileMenuFromOutside'). So check headerEl is defined beofore reading the prop:
-      () => headerEl && headerEl.closeMobileMenuFromOutside()
-    );
-  }
+  // TODO figure out possible flakiness with this in server renders
+  // ngAfterViewInit() {
+  //   const headerEl = this.header;
+  //   this.router.events.pipe(
+  //     filter((event: RouterEvent) => event instanceof NavigationStart),
+  //   ).subscribe(
+  //     // we have seen TypeError: Cannot read properties of undefined (reading 'closeMobileMenuFromOutside'). So check headerEl is defined beofore reading the prop:
+  //     () => headerEl && headerEl.closeMobileMenuFromOutside()
+  //   );
+  // }
 
   @HostListener('cookieBannerAcceptAllSelected', ['$event'])
   onCookieBannerAcceptAllSelected(_event: CustomEvent) {
