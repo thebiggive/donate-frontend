@@ -15,8 +15,8 @@ export const environment: Environment = {
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
   // For staging-like SSR testing local builds
-  donateUriPrefix: 'http://localhost:4000',
-  // donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
+  // donateUriPrefix: 'http://localhost:4000',
+  donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   blogUriPrefix: 'https://wp-staging.thebiggivetest.org.uk',
   sharedCookieDomain: '.thebiggivetest.org.uk',
   experienceUriPrefix: 'https://thebiggive--full.sandbox.my.site.com',
