@@ -87,9 +87,7 @@ export class SearchService {
   private static sortFieldToCamelCase(sortBy: string, defaultSort: camelCaseSortOption): camelCaseSortOption {
     let selected;
 
-    // Todo check whether this is an issue? New TS thing Feb '25.
-    // @ts-ignore
-    Object.keys(sortOptions).forEach((key: camelCaseSortOption) => {
+    (Object.keys(sortOptions) as camelCaseSortOption[]).forEach((key: camelCaseSortOption) => {
       if (sortBy === key || sortBy === sortOptions[key]) {
         selected = key;
     }});

@@ -29,7 +29,6 @@ import {MatExpansionModule} from '@angular/material/expansion';
     ...allChildComponentImports,
     CampaignInfoComponent,
     DatePipe,
-    DonationStartFormComponent,
     DonationStartContainerRoutingModule,
     ExactCurrencyPipe,
     FontAwesomeModule,
@@ -54,6 +53,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     DonationStartContainerComponent,
     DonationStartLoginComponent,
     DonationStartContainerComponent,
+    DonationStartFormComponent,
   ],
   providers: [
     DatePipe,

@@ -15,8 +15,8 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatAutocompleteModule, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatDialog} from '@angular/material/dialog';
 import {MatStepper, MatStepperModule} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -65,14 +65,6 @@ import {requiredNotBlankValidator} from "../../validators/notBlank";
 import {flags} from "../../featureFlags";
 import {WidgetInstance} from "friendly-challenge";
 import {Toast} from "../../toast.service";
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatIconModule} from '@angular/material/icon';
-import {MatInputModule} from '@angular/material/input';
-import {MatRadioModule} from '@angular/material/radio';
-import {allChildComponentImports} from '../../../allChildComponentImports';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatOptionModule} from '@angular/material/core';
-import {MatExpansionModule} from '@angular/material/expansion';
 
 declare var _paq: {
   push: (args: Array<string|object>) => void,
@@ -82,23 +74,7 @@ declare var _paq: {
     selector: 'app-donation-start-form',
     templateUrl: './donation-start-form.component.html',
     styleUrl: './donation-start-form.component.scss',
-    // TODO I made this standalone as it seemed not to be getting the container module's deps any more, but that
-    // might have just been because of a stray now-deleted import. Consider reversing course.
-    imports: [
-      ...allChildComponentImports,
-      ExactCurrencyPipe,
-      FormsModule,
-      ReactiveFormsModule,
-      MatAutocompleteModule,
-      MatCheckboxModule,
-      MatExpansionModule,
-      MatIconModule,
-      MatInputModule,
-      MatOptionModule,
-      MatProgressSpinnerModule,
-      MatRadioModule,
-      MatStepperModule,
-    ],
+    standalone: false,
 })
 export class DonationStartFormComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit {
   /**

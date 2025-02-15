@@ -1,8 +1,7 @@
-import {AsyncPipe, isPlatformBrowser} from '@angular/common';
+import {isPlatformBrowser} from '@angular/common';
 import {
   AfterViewInit,
   Component,
-  CUSTOM_ELEMENTS_SCHEMA,
   HostListener, Inject,
   OnDestroy,
   OnInit,
@@ -11,12 +10,12 @@ import {
   ViewChild,
   WritableSignal
 } from '@angular/core';
-import {Event as RouterEvent, NavigationEnd, NavigationStart, Router, RouterOutlet,} from '@angular/router';
-import {BiggiveMainMenu, ComponentsModule} from '@biggive/components-angular';
-// import {MatomoTracker} from "ngx-matomo-client";
-import {filter, map, startWith} from 'rxjs/operators';
+import {Event as RouterEvent, NavigationEnd, NavigationStart, Router} from '@angular/router';
+import {BiggiveMainMenu} from '@biggive/components-angular';
+import {MatomoTracker} from "ngx-matomo-client";
+import {filter, map} from 'rxjs/operators';
 
-import {DonationService, TBG_DONATE_STORAGE} from './donation.service';
+import {DonationService} from './donation.service';
 import {GetSiteControlService} from './getsitecontrol.service';
 import {NavigationService} from './navigation.service';
 import {IdentityService} from "./identity.service";
@@ -32,7 +31,6 @@ import {
 import {Observable, Subscription} from "rxjs";
 import {supportedBrowsers} from "../supportedBrowsers";
 import {detect} from "detect-browser";
-import {allChildComponentImports} from '../allChildComponentImports';
 
 @Component({
   selector: 'app-root',
@@ -40,7 +38,7 @@ import {allChildComponentImports} from '../allChildComponentImports';
   styleUrl: 'app.component.scss',
   standalone: false,
 })
-export class AppComponent implements OnDestroy, OnInit {
+export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu | undefined;
 
   protected browserSupportedMessage?: string;
@@ -56,11 +54,10 @@ export class AppComponent implements OnDestroy, OnInit {
   protected readonly environment = environment;
   protected readonly flags = flags;
   protected readonly userHasExpressedCookiePreference$: Observable<boolean>;
-  // todo fix types etc. on these
-  // protected readonly existingCookiePreferences: Observable<AgreedToCookieTypes | undefined>;
+  protected readonly existingCookiePreferences: Observable<AgreedToCookieTypes | undefined>;
 
   convertCookiePreferencesForDisplay(cookiePrefs: CookiePreferences): AgreedToCookieTypes {
-    switch (true){
+    switch (true) {
       case cookiePrefs === undefined:
         return {analyticsAndTesting: false, thirdParty: false}
       case cookiePrefs.agreedToAll:
@@ -84,14 +81,13 @@ export class AppComponent implements OnDestroy, OnInit {
     private navigationService: NavigationService,
     private cookiePreferenceService: CookiePreferenceService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    // private matomoTracker: MatomoTracker,
+    private matomoTracker: MatomoTracker,
     private router: Router,
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
     this.userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
-    // this.existingCookiePreferences = this.cookiePreferenceService.userOptInToSomeCookies()
-    //   .pipe(startWith(undefined))
-    //   .pipe(map(this.convertCookiePreferencesForDisplay));
+    this.existingCookiePreferences = this.cookiePreferenceService.userOptInToSomeCookies()
+      .pipe(map(this.convertCookiePreferencesForDisplay));
 
     navigationService.setPossibleRedirectSignal(this.someCampaignHasHomePageRedirect);
 
@@ -138,7 +134,7 @@ export class AppComponent implements OnDestroy, OnInit {
     if (this.isPlatformBrowser) {
       // detect supported browser or inform user, https://dev.to/aakashgoplani/manage-list-of-supported-browsers-for-your-application-in-angular-4b47
       const browserIsSupported = supportedBrowsers.test(navigator.userAgent);
-      if (! browserIsSupported) {
+      if (!browserIsSupported) {
         this.browserSupportedMessage = `Your current browser: ${detect()?.name} ${detect()?.version} is not supported. Please try another browser.`;
       }
 
@@ -148,7 +144,7 @@ export class AppComponent implements OnDestroy, OnInit {
         }
 
         if (agreesToAnalyticsAndTracking(preferences)) {
-          // this.matomoTracker.setCookieConsentGiven();
+          this.matomoTracker.setCookieConsentGiven();
         }
       });
     }
@@ -162,8 +158,8 @@ export class AppComponent implements OnDestroy, OnInit {
     this.loginStatusChangeSubscription = this.identityService.loginStatusChanged.subscribe({
       next: (isLoggedIn: boolean) => {
         this.isLoggedIn = isLoggedIn;
-         // This double-checks the JWT and sets `isLoggedIn` again, but if event emitters' use is correct then
-         // that's a no-op.
+        // This double-checks the JWT and sets `isLoggedIn` again, but if event emitters' use is correct then
+        // that's a no-op.
         this.updatePersonInfo();
       },
     });
@@ -177,25 +173,23 @@ export class AppComponent implements OnDestroy, OnInit {
     }
   }
 
-  // TODO figure out possible flakiness with this in server renders
-  // ngAfterViewInit() {
-  //   const headerEl = this.header;
-  //   this.router.events.pipe(
-  //     filter((event: RouterEvent) => event instanceof NavigationStart),
-  //   ).subscribe(
-  //     // we have seen TypeError: Cannot read properties of undefined (reading 'closeMobileMenuFromOutside'). So check headerEl is defined beofore reading the prop:
-  //     () => headerEl && headerEl.closeMobileMenuFromOutside()
-  //   );
-  // }
+  ngAfterViewInit() {
+    /**
+     * Server copy never has the menu open and doesn't have a DOM for Stencil to adjust.
+     */
+    if (isPlatformBrowser(this.platformId)) {
+      this.setUpMenuCloseOnNavigation(this.router, this.header);
+    }
+  }
 
   @HostListener('cookieBannerAcceptAllSelected', ['$event'])
   onCookieBannerAcceptAllSelected(_event: CustomEvent) {
-    // this.cookiePreferenceService.agreeToAll();
+    this.cookiePreferenceService.agreeToAll();
   }
 
   @HostListener('logoutClicked', ['$event'])
   onLogoutClicked(_event: CustomEvent) {
-    // this.identityService.logout();
+    this.identityService.logout();
     void this.router.navigate(['']);
   }
 
@@ -208,11 +202,22 @@ export class AppComponent implements OnDestroy, OnInit {
 
   @HostListener('cookieBannerSavePreferencesSelected', ['$event'])
   onCookieBannerSavePreferencesSelected(event: CustomEvent) {
-    // this.cookiePreferenceService.storePreferences({agreedToAll: false, agreedToCookieTypes: event.detail});
+    this.cookiePreferenceService.storePreferences({agreedToAll: false, agreedToCookieTypes: event.detail});
   }
 
   private updatePersonInfo() {
-    // this.isLoggedIn = this.identityService.probablyHaveLoggedInPerson();
+    this.isLoggedIn = this.identityService.probablyHaveLoggedInPerson();
     this.isDataLoaded = true;
   }
+
+  private setUpMenuCloseOnNavigation(router: Router, header: BiggiveMainMenu | undefined) {
+    const headerEl = this.header;
+    this.router.events.pipe(
+      filter((event: RouterEvent) => event instanceof NavigationStart),
+    ).subscribe(
+      // we have seen TypeError: Cannot read properties of undefined (reading 'closeMobileMenuFromOutside'). So check headerEl is defined beofore reading the prop:
+      () => headerEl && headerEl.closeMobileMenuFromOutside()
+    );
+  }
 }
+

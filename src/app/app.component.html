@@ -54,8 +54,8 @@ dismiss the banner when it needs to to click on stuff behind it.
   <div
     id="cookie-banner"
     >
-    <!--      [previouslyAgreedCookiePreferences]="existingCookiePreferences | async"-->
     <biggive-cookie-banner
+      [previouslyAgreedCookiePreferences]="existingCookiePreferences | async"
       [blogUriPrefix]="environment.blogUriPrefix"
       [autoOpenPreferences]="showingDedicatedCookiePreferencesPage"
       />
