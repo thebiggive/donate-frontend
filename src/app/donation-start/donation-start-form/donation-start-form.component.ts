@@ -1,5 +1,5 @@
 import {StepperSelectionEvent} from '@angular/cdk/stepper';
-import {DatePipe, getCurrencySymbol, isPlatformBrowser} from '@angular/common';
+import {getCurrencySymbol, isPlatformBrowser} from '@angular/common';
 import {HttpErrorResponse} from '@angular/common/http';
 import {
   AfterContentChecked,
@@ -18,7 +18,7 @@ import {
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {MatDialog} from '@angular/material/dialog';
-import {MatStepper, MatStepperModule} from '@angular/material/stepper';
+import {MatStepper} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatomoTracker} from 'ngx-matomo-client';
 import {retryWhen, tap} from 'rxjs/operators';
@@ -57,7 +57,6 @@ import {getStripeFriendlyError, StripeService} from '../../stripe.service';
 import {getCurrencyMaxValidator} from '../../validators/currency-max';
 import {getCurrencyMinValidator} from '../../validators/currency-min';
 import {EMAIL_REGEXP} from '../../validators/patterns';
-import {TimeLeftPipe} from "../../time-left.pipe";
 import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
 import {PaymentReadinessTracker} from "./PaymentReadinessTracker";
@@ -71,10 +70,13 @@ declare var _paq: {
 };
 
 @Component({
-    selector: 'app-donation-start-form',
-    templateUrl: './donation-start-form.component.html',
-    styleUrl: './donation-start-form.component.scss',
-    standalone: false,
+  selector: 'app-donation-start-form',
+  templateUrl: './donation-start-form.component.html',
+  styleUrl: './donation-start-form.component.scss',
+  standalone: false,
+  providers: [
+    ExactCurrencyPipe,
+  ]
 })
 export class DonationStartFormComponent implements AfterContentChecked, AfterContentInit, OnDestroy, OnInit, AfterViewInit {
   /**
@@ -245,8 +247,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private route: ActivatedRoute,
     private router: Router,
     private stripeService: StripeService,
-    public datePipe: DatePipe,
-    public timeLeftPipe: TimeLeftPipe,
     private toast: Toast
   ) {
     this.defaultCountryCode = this.donationService.getDefaultCounty();
