@@ -38,8 +38,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   protected forgotPassword = false;
   protected loggingIn = false;
   protected loginError?: string;
-  loginForm: FormGroup;
-  protected resetPasswordForm: FormGroup;
+  loginForm!: FormGroup;
+  protected resetPasswordForm!: FormGroup;
   protected resetPasswordSuccess: boolean|undefined = undefined;
   protected readonly friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   /** Used to prevent displaying the page before all parts are ready **/
   public pageInitialised = false;
   private captchaCode: string | undefined;
-  protected registerLink: string;
+  protected registerLink!: string;
   protected isNewRegistration: boolean = false;
 
   constructor(
@@ -109,7 +109,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     this.pageInitialised = true;
   }
 
-  private friendlyCaptchaWidget: WidgetInstance;
+  private friendlyCaptchaWidget!: WidgetInstance;
 
   async ngAfterViewInit() {
     if (! isPlatformBrowser(this.platformId)) {

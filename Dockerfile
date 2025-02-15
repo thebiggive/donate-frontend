@@ -1,6 +1,6 @@
 # Ensure updates are mirrored in `.circleci/config.yml`.
 # Always specify a 3-part version, even if it's x.x.0.
-FROM node:20.13.1
+FROM node:22.14.0
 RUN node --version
 
 WORKDIR /usr/src/app
@@ -25,7 +25,7 @@ COPY . .
 ARG BUILD_ENV
 
 # Build client bundle and prepare for Server-Side Rendering
-RUN npm run build:ssr:${BUILD_ENV}
+RUN npm run build:${BUILD_ENV}
 
 EXPOSE 4000
 

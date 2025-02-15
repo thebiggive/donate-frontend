@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Campaign } from 'src/app/campaign.model';
+import { Campaign } from '../../campaign.model';
 import { LoginModalComponent } from '../../login-modal/login-modal.component';
 
 
@@ -11,14 +11,14 @@ import { LoginModalComponent } from '../../login-modal/login-modal.component';
     standalone: false
 })
 export class DonationStartLoginComponent {
-  @Input({ required: true }) loadAuthedPersonInfo: (dataId: string, dataJwt: string) => void;
-  @Input({ required: true }) campaign: Campaign;
-  @Input({ required: true }) creditPenceToUse: number;
-  @Input({ required: true }) email?: string;
+  @Input({ required: true }) loadAuthedPersonInfo!: (dataId: string, dataJwt: string) => void;
+  @Input({ required: true }) campaign!: Campaign;
+  @Input({ required: true }) creditPenceToUse!: number;
+  @Input({ required: true }) email: string = '';
   @Input({ required: true }) personId: string | undefined;
-  @Input({ required: false }) loggedInWithPassword: boolean;
+  @Input({ required: false }) loggedInWithPassword?: boolean;
 
-  @Input({ required: true }) private loginChangeEmitter: EventEmitter<boolean>;
+  @Input({ required: true }) public loginChangeEmitter!: EventEmitter<boolean>;
 
   constructor(
     public dialog: MatDialog,

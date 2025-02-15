@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {HighlightCard} from "../highlight-cards/HighlightCard";
+import {HighlightCard} from "./HighlightCard";
 import {ComponentsModule} from "@biggive/components-angular";
 
 @Component({
@@ -10,5 +10,5 @@ import {ComponentsModule} from "@biggive/components-angular";
     templateUrl: './highlight-cards.component.html'
 })
 export class HighlightCardsComponent {
-  @Input({ required: true }) protected highlightCards: HighlightCard[];
+  @Input({ required: true }) public highlightCards!: HighlightCard[];
 }

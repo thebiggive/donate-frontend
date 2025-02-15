@@ -27,24 +27,24 @@ import {WidgetInstance} from "friendly-challenge";
     standalone: false
 })
 export class DonationThanksComponent implements OnInit {
-  @Input({ required: true }) private donationId: string;
+  @Input({ required: true }) private donationId!: string;
 
   campaign?: Campaign;
-  totalPaid: number;
+  totalPaid?: number;
   complete = false;
-  donation: Donation;
-  encodedShareUrl: string;
-  giftAidAmount: number;
+  donation?: Donation;
+  encodedShareUrl?: string;
+  giftAidAmount?: number;
   loggedIn = false;
-  minPasswordLength: number;
+  minPasswordLength!: number;
   noAccess = false;
-  encodedPrefilledText: string;
+  encodedPrefilledText?: string;
   registerError?: string;
   registerErrorDescription?: string = undefined;
   registerErrorDescriptionHtml?: SafeHtml = undefined;
   registrationComplete = false;
   timedOut = false;
-  totalValue: number;
+  totalValue?: number;
   donationIsLarge: boolean = false;
   private readonly maxTries = 5;
   private patchedCorePersonInfo = false;
@@ -56,7 +56,7 @@ export class DonationThanksComponent implements OnInit {
   protected readonly friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
   @ViewChild('frccaptcha', { static: false })
-  protected friendlyCaptcha: ElementRef<HTMLElement>;
+  protected friendlyCaptcha!: ElementRef<HTMLElement>;
   private friendlyCaptchaWidget: WidgetInstance | undefined;
   private friendlyCaptchaSolution: string | undefined;
 
@@ -72,13 +72,11 @@ export class DonationThanksComponent implements OnInit {
     private pageMeta: PageMetaService,
     private sanitizer: DomSanitizer,
   ) {
+    this.minPasswordLength = minPasswordLength;
   }
 
   ngOnInit() {
     this.checkDonation();
-
-    this.minPasswordLength = minPasswordLength;
-
     this.loadPerson();
   }
 
@@ -157,7 +155,7 @@ export class DonationThanksComponent implements OnInit {
 
   protected get showNoFundsRemainingMessage(): boolean
   {
-    return this.donation.pspMethodType === 'customer_balance' && this.hasDonationFunds === false
+    return this.donation?.pspMethodType === 'customer_balance' && this.hasDonationFunds === false
   }
 
   protected get cashBalanceInPounds(): number
@@ -197,7 +195,7 @@ export class DonationThanksComponent implements OnInit {
     }
 
     const credentials: Credentials = {
-      email_address: this.donation.emailAddress as string,
+      email_address: this.donation?.emailAddress as string,
       raw_password: this.person?.raw_password as string,
       captcha_code: this.friendlyCaptchaSolution,
     };

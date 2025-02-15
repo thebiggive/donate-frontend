@@ -1,8 +1,8 @@
 import { APP_BASE_HREF, AsyncPipe, DatePipe } from "@angular/common";
 import {
-  provideHttpClient,
+  provideHttpClient, withFetch,
   withInterceptorsFromDi,
-} from "@angular/common/http";
+} from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from "@angular/material/checkbox";
 import { MAT_RADIO_DEFAULT_OPTIONS } from "@angular/material/radio";
@@ -20,8 +20,12 @@ import { CampaignResolver } from "./campaign.resolver";
 import { CharityCampaignsResolver } from "./charity-campaigns.resolver";
 import { TBG_DONATE_STORAGE } from "./donation.service";
 import { environment } from "../environments/environment";
-import { TBG_DONATE_ID_STORAGE } from "./identity.service";
 import { MatomoModule, MatomoRouterModule} from "ngx-matomo-client";
+import {MandateResolver} from './mandate.resolver';
+import {CampaignStatsResolver} from './campaign-stats-resolver';
+import {PastDonationsResolver} from './past-donations.resolver';
+import {PaymentMethodsResolver} from './payment-methods.resolver';
+import {HighlightCardsResolver} from './highlight-cards-resolver';
 
 const matomoBaseUri = "https://biggive.matomo.cloud";
 
@@ -57,17 +61,21 @@ const matomoBaseUri = "https://biggive.matomo.cloud";
   providers: [
     CampaignListResolver,
     CampaignResolver,
+    CampaignStatsResolver,
     CharityCampaignsResolver,
+    HighlightCardsResolver,
+    MandateResolver,
+    PastDonationsResolver,
+    PaymentMethodsResolver,
     DatePipe,
     {
       provide: APP_BASE_HREF,
       useValue: environment.donateUriPrefix,
     },
-    { provide: TBG_DONATE_ID_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: "primary" } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: "primary" } },
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withFetch(), withInterceptorsFromDi()),
   ],
 })
 export class AppModule {}

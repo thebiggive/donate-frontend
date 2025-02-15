@@ -14,7 +14,7 @@ import {DonationService} from '../donation.service';
 import {DonorAccountService} from '../donor-account.service';
 import {Donation, maximumDonationAmountForFundedDonation} from '../donation.model';
 import {DonationCreatedResponse} from '../donation-created-response.model';
-import {environment} from 'src/environments/environment';
+import {environment} from '../../environments/environment';
 import {FundingInstruction} from '../fundingInstruction.model';
 import {GiftAidAddressSuggestion} from '../gift-aid-address-suggestion.model';
 import {GiftAidAddress} from '../gift-aid-address.model';
@@ -42,12 +42,12 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   isOptedIntoGiftAid = false;
   currency = '£';
   /** The Big Give campaign which receives any on-topup tips. */
-  campaign: Campaign;
+  campaign!: Campaign;
   donation?: Donation;
-  creditForm: FormGroup;
-  amountsGroup: FormGroup;
-  giftAidGroup: FormGroup;
-  marketingGroup: FormGroup;
+  creditForm!: FormGroup;
+  amountsGroup!: FormGroup;
+  giftAidGroup!: FormGroup;
+  marketingGroup!: FormGroup;
   loadingAddressSuggestions = false;
   minimumCreditAmount = environment.minimumCreditAmount;
   maximumCreditAmount = environment.maximumCreditAmount;
@@ -99,7 +99,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
           // Explicitly enforce minimum custom tip amount of £0. This is already covered by the regexp
           // validation rule below, but it's good to add the explicit check for future-proofness
           getCurrencyMinValidator(), // no override, so custom tip amount min is £0 (default)
-          // Below we validate the tip as a donation because when transfering funds, tips are set
+          // Below we validate the tip as a donation because when transfering funds, tips are
           // set as real donations to a dedicated Big Give SF campaign.
           // See MAT-266 and the Slack thread linked in its description for more context.
           getCurrencyMaxValidator(maximumDonationAmountForFundedDonation),
@@ -139,21 +139,21 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
     if (giftAidChecked) {
       this.isOptedIntoGiftAid = true;
-        this.giftAidGroup.controls.homePostcode!.setValidators(
+        this.giftAidGroup.controls['homePostcode']!.setValidators(
           this.getHomePostcodeValidatorsWhenClaimingGiftAid(this.giftAidGroup.value.homeOutsideUK),
         );
-        this.giftAidGroup.controls.homeAddress!.setValidators([
+        this.giftAidGroup.controls['homeAddress']!.setValidators([
           Validators.required,
           Validators.maxLength(255),
         ]);
       } else {
         this.isOptedIntoGiftAid = false;
-        this.giftAidGroup.controls.homePostcode!.setValidators([]);
-        this.giftAidGroup.controls.homeAddress!.setValidators([]);
+        this.giftAidGroup.controls['homePostcode']!.setValidators([]);
+        this.giftAidGroup.controls['homeAddress']!.setValidators([]);
       }
 
-      this.giftAidGroup.controls.homePostcode!.updateValueAndValidity();
-      this.giftAidGroup.controls.homeAddress!.updateValueAndValidity();
+      this.giftAidGroup.controls['homePostcode']!.updateValueAndValidity();
+      this.giftAidGroup.controls['homeAddress']!.updateValueAndValidity();
     });
 
     // get the tips campaign data on page load
@@ -266,7 +266,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       return undefined;
     }
 
-    return this.creditForm.controls.amounts!.get('creditAmount');
+    return this.creditForm.controls['amounts']!.get('creditAmount');
   }
 
   get customTipAmountField() {
@@ -274,7 +274,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       return undefined;
     }
 
-    return this.creditForm.controls.amounts!.get('customTipAmount');
+    return this.creditForm.controls['amounts']!.get('customTipAmount');
   }
 
   get totalToTransfer(): number {
@@ -343,7 +343,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
    * currently just for GBP / UK bank transfers. 0 if donor's not yet loaded.
    */
   get pendingTipBalance(): number {
-    return this.donor?.pending_tip_balance?.gbp || 0;
+    return this.donor?.pending_tip_balance?.['gbp'] || 0;
   }
 
   get donorHasPendingTipBalance(): boolean {
@@ -351,7 +351,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
   }
 
   get recentlyConfirmedTipsTotal(): number {
-    return this.donor?.recently_confirmed_tips_total?.gbp || 0;
+    return this.donor?.recently_confirmed_tips_total?.['gbp'] || 0;
   }
 
   get donorHasRecentlyTipped(): boolean {
@@ -401,7 +401,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     const tipFieldsAvailable = this.pendingTipBalance === 0;
     const validatorsForFieldsRequiredIfTipFieldsAvailable = tipFieldsAvailable ? [Validators.required] : [];
 
-    this.marketingGroup.controls.optInTbgEmail!.setValidators(validatorsForFieldsRequiredIfTipFieldsAvailable);
+    this.marketingGroup.controls['optInTbgEmail']!.setValidators(validatorsForFieldsRequiredIfTipFieldsAvailable);
   }
 
   private getHomePostcodeValidatorsWhenClaimingGiftAid(homeOutsideUK: boolean) {
@@ -516,6 +516,6 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
    */
   protected get hasDonationFunds()
   {
-    return this.donor?.cash_balance?.gbp;
+    return this.donor?.cash_balance?.['gbp'];
   }
 }

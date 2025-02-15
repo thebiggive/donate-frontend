@@ -5,7 +5,6 @@ import {IdentityService} from "../identity.service";
 import {Person} from "../person.model";
 import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
-import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 import {flags} from "../featureFlags";
 import { HighlightCard } from '../highlight-cards/HighlightCard';
 import {environment} from "../../environments/environment";
@@ -18,13 +17,7 @@ import {environment} from "../../environments/environment";
     standalone: false
 })
 export class MyAccountComponent implements OnInit {
-  public person: Person;
-
-
-  protected readonly faExclamationTriangle = faExclamationTriangle;
-
-  protected readonly flags = flags;
-
+  public person!: Person;
   protected readonly actions: HighlightCard[];
 
   constructor(

@@ -30,17 +30,17 @@ import {BackendError, errorDescription} from "../backendError";
     ]
 })
 export class LoginModalComponent implements OnInit, AfterViewInit {
-  loginForm: FormGroup;
+  loginForm!: FormGroup;
   loggingIn = false;
   loginError?: string;
   forgotPassword = false;
-  resetPasswordForm: FormGroup;
+  resetPasswordForm!: FormGroup;
   resetPasswordSuccess: boolean|undefined = undefined;
   userAskedForResetLink = false;
   protected readonly friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
   private captchaCode: string | undefined;
   @ViewChild('frccaptcha', { static: false })
-  friendlyCaptcha: ElementRef<HTMLElement>;
+  friendlyCaptcha!: ElementRef<HTMLElement>;
   private friendlyCaptchaWidget: WidgetInstance | undefined;
 
   constructor(
