@@ -3,7 +3,6 @@ import {EventEmitter, Inject, Injectable, InjectionToken} from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import {CookieService} from 'ngx-cookie-service';
 import {MatomoTracker} from 'ngx-matomo-client';
-import {StorageService} from 'ngx-webstorage-service';
 import {Observable, of} from 'rxjs';
 import {delay, retry, tap} from 'rxjs/operators';
 
@@ -35,7 +34,7 @@ export class IdentityService {
 
   constructor(
     private http: HttpClient,
-    // private matomoTracker: MatomoTracker,
+    private matomoTracker: MatomoTracker,
     private cookieService: CookieService,
   ) {}
 
@@ -238,11 +237,11 @@ export class IdentityService {
     const jwt = this.getJWT();
 
     if (jwt === undefined) {
-      // this.matomoTracker.trackEvent(
-      //   'identity_error',
-      //   'auth_jwt_error',
-      //   `Not authorised to work with person ${person.id}`,
-      // );
+      this.matomoTracker.trackEvent(
+        'identity_error',
+        'auth_jwt_error',
+        `Not authorised to work with person ${person.id}`,
+      );
 
       return { headers: new HttpHeaders({}) };
     }

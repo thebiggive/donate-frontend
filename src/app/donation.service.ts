@@ -34,7 +34,7 @@ export class DonationService {
     @Optional() @Inject(COUNTRY_CODE) private defaultCountryCode: string,
     private http: HttpClient,
     private identityService: IdentityService,
-    // private matomoTracker: MatomoTracker,
+    private matomoTracker: MatomoTracker,
     @Inject(PLATFORM_ID) private platformId: Object,
 
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
@@ -284,11 +284,11 @@ export class DonationService {
     const donationDataItems = this.getDonationCouplets().filter(donationItem => donationItem.donation.donationId === donation.donationId);
 
     if (donationDataItems.length !== 1) {
-      // this.matomoTracker.trackEvent(
-      //   'donate_error',
-      //   'auth_jwt_error',
-      //   `Not authorised to work with donation ${donation.donationId} to campaign ${donation.projectId}`,
-      // );
+      this.matomoTracker.trackEvent(
+        'donate_error',
+        'auth_jwt_error',
+        `Not authorised to work with donation ${donation.donationId} to campaign ${donation.projectId}`,
+      );
 
       return { headers: new HttpHeaders({}) };
     }

@@ -61,8 +61,6 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
       }
     } as unknown as Router,
     undefined as unknown as StripeService,
-    undefined as unknown as DatePipe,
-    undefined as unknown as TimeLeftPipe,
     {
       showError: () => {},
     } as unknown as Toast,
