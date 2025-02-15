@@ -1,41 +1,113 @@
-// TODO bring back all our previous server customisations!
-
 import { APP_BASE_HREF } from '@angular/common';
+import {enableProdMode} from '@angular/core';
 import { CommonEngine, isMainModule } from '@angular/ssr/node';
 import {renderToString} from '@biggive/components/hydrate';
 import {setAssetPath} from '@biggive/components/dist/components';
+import compression from 'compression';
+import {createHash} from 'crypto';
 import express, {Request, Response} from 'express';
+import helmet from 'helmet';
+import morgan from 'morgan';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {REQUEST, RESPONSE} from './express.tokens';
+import {COUNTRY_CODE} from './app/country-code.token';
+import {GetSiteControlService} from './app/getsitecontrol.service';
 import bootstrap from './main.server';
 import {environment} from './environments/environment';
-import {COUNTRY_CODE} from './app/country-code.token';
 
+const donateHost = (new URL(environment.donateUriPrefix)).host;
+const matomoUriBase = 'https://biggive.matomo.cloud';
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 const indexHtml = join(serverDistFolder, 'index.server.html');
 
+enableProdMode();
 const app = express();
 const commonEngine = new CommonEngine();
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/**', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
+app.use(compression());
+// Sane header defaults, e.g. remove powered by, add HSTS, stop MIME sniffing etc.
+// https://github.com/helmetjs/helmet#reference
+
+// frame-src and child-src do very nearly the same thing, specifying both the same.
+const frameAndChildSrc = [
+  'https://*.js.stripe.com',
+  'https://js.stripe.com',
+  'https://hooks.stripe.com',
+  'blob:', // for friendly-captcha
+  'player.vimeo.com',
+  'www.youtube.com',
+  'www.youtube-nocookie.com',
+];
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      'connect-src': [
+        'wss:', // For GetSiteControl. wss:// is for secure-only WebSockets.
+        (new URL(environment.apiUriPrefix)).host,
+        (new URL(environment.donationsApiPrefix)).host,
+        (new URL(environment.identityApiPrefix)).host,
+        matomoUriBase,
+        'api.getAddress.io',
+        '*.getsitecontrol.com',
+        'api.friendlycaptcha.com',
+        'https://api.stripe.com',
+      ],
+      'default-src': [
+        `'none'`
+      ],
+      'font-src': [
+        `'self'`,
+        'fonts.gstatic.com',
+        'data:',
+      ],
+      'style-src': [
+        `'self'`,
+        `'unsafe-inline'`,
+        'fonts.googleapis.com',
+        'data:',
+      ],
+      'img-src': [
+        `'self'`,
+        'data:',
+        'https:',
+        matomoUriBase,
+      ],
+      'script-src': [
+        `'self'`,
+        donateHost,
+        matomoUriBase,
+        `'unsafe-eval'`,
+        `'sha256-wNvBKHC/AcXH+tcTOtnmNx/Ag5exRdBFD8iL9UUQ8es='`, // "Unsupported browser" inline script.
+        `'sha256-${createHash('sha256').update(GetSiteControlService.getConfigureContent()).digest('base64')}'`,
+        'api.getAddress.io',
+        '*.getsitecontrol.com', // GSC support suggested using wildcard. DON-459.
+        'js.stripe.com',
+        'www.gstatic.com',
+        // Vimeo's iframe embed seems to need script access to not error with our current embed approach.
+        'https://player.vimeo.com',
+        `'wasm-unsafe-eval'`,`'self'`, // for friendly-captcha, see https://docs.friendlycaptcha.com/#/csp
+        'https://*.js.stripe.com',
+        'https://js.stripe.com',
+      ],
+      'worker-src': [
+        'blob:', // friendly-captcha
+      ],
+      'frame-src': frameAndChildSrc,
+      'child-src': frameAndChildSrc,
+    },
+  },
+}));
+app.use(morgan('combined')); // Log requests to stdout in Apache-like format
 
 /**
  * Serve static files from /browser
  */
-app.get('/robots.txt', (req: Request, res: Response) => {
+app.get('/robots.txt', (_req: Request, res: Response) => {
   res.type('text/plain');
   if (environment.production) {
     res.send('User-agent: *\nAllow: /');
@@ -44,7 +116,7 @@ app.get('/robots.txt', (req: Request, res: Response) => {
   }
 });
 
-app.get('/.well-known/apple-developer-merchantid-domain-association', (req: Request, res: Response) => {
+app.get('/.well-known/apple-developer-merchantid-domain-association', (_req: Request, res: Response) => {
   res.sendFile(`${browserDistFolder}/assets/stripe-apple-developer-merchantid-domain-association`, {
     maxAge: '7 days',
   });
@@ -64,7 +136,7 @@ app.use('/assets', express.static(`${browserDistFolder}/assets`, {
  * Handle all other requests by rendering the Angular application.
  */
 app.get('**', (req, res, next) => {
-  const { protocol, originalUrl, baseUrl, headers } = req;
+  const { protocol, originalUrl, headers } = req;
 
   // Note that the file output as `index.html` is actually dynamic. See `index` config keys in `angular.json`.
   // See https://github.com/angular/angular-cli/issues/10881#issuecomment-530864193 for info on the undocumented use of
@@ -89,7 +161,7 @@ app.get('**', (req, res, next) => {
     .then(async (html) => {
       setAssetPath(`${environment.donateUriPrefix}/assets`);
       const hydratedDoc = await renderToString(html, {
-        // Don't `removeScripts` like Ionic does: we need them to handover to browser JS runtime successfully!
+        // Don't `removeScripts` like Ionic does: we need them to hand over to browser JS runtime successfully!
         prettyHtml: true,
         removeHtmlComments: true,
       });
@@ -105,7 +177,16 @@ app.get('**', (req, res, next) => {
  */
 if (isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;
-  app.listen(port, () => {
+
+  const server = app.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
+
+  /**
+   * ALBs are configured with 60s timeout and these should be longer.
+   * @link https://shuheikagawa.com/blog/2019/04/25/keep-alive-timeout/
+   * @link https://adamcrowder.net/posts/node-express-api-and-aws-alb-502/
+   */
+  server.keepAliveTimeout = 65 * 1_000;
+  server.timeout = 70 * 1_000;
 }
