@@ -24,6 +24,8 @@ import { LoggedInPersonResolver } from './logged-in-person.resolver';
 import { DonorAccountResolver } from './donor-account.resolver';
 import {MyRegularGivingComponent} from './my-regular-giving/my-regular-giving.component';
 import {NavigationService} from './navigation.service';
+import {RegularGivingService} from './regularGiving.service';
+import {allActiveMandatesResolver} from './all-active-mandates.resolver';
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
 export const transferFundsPath = 'transfer-funds';
@@ -294,7 +296,7 @@ if (flags.regularGivingEnabled) {
     {
       path: myRegularGivingPath,
       resolve: {
-        mandates: MandateResolver,
+        mandates: allActiveMandatesResolver,
       },
       pathMatch: 'full',
       component: MyRegularGivingComponent,
