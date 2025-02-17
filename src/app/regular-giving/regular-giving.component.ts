@@ -9,7 +9,7 @@ import {MatHint, MatInput} from "@angular/material/input";
 import {MatButton, MatIconAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
-import {RegularGivingService} from "../regularGiving.service";
+import {RegularGivingService, StartMandateParams} from "../regularGiving.service";
 import {Mandate} from '../mandate.model';
 import {myRegularGivingPath} from "../app-routing";
 import {requiredNotBlankValidator} from "../validators/notBlank";
@@ -281,6 +281,18 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     this.submitErrorMessage = undefined;
 
+    let home: StartMandateParams["home"];
+    if (this.giftAid && this.homeAddressFormValue) {
+      home = {
+        addressLine1: this.homeAddressFormValue,
+        // postcode and isOutsideUK must be set within this if block.
+        postcode: this.homePostcode!,
+        isOutsideUK: this.homeOutsideUK!
+      };
+    } else {
+      home = undefined;
+    }
+
     this.regularGivingService.startMandate({
       amountInPence: this.getDonationAmountPence(),
       dayOfMonth,
@@ -294,6 +306,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       tbgComms: !!this.optInTbgEmail,
       homeAddress: this.homeAddressFormValue,
       homePostcode: this.homePostcode,
+      home: home,
       unmatched: this.unmatched,
     }).subscribe({
       next: async (mandate: Mandate) => {
