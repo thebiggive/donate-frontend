@@ -1,5 +1,5 @@
 import { Injectable, makeStateKey, TransferState } from '@angular/core';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import {ActivatedRouteSnapshot, Resolve, Router} from '@angular/router';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -10,7 +10,7 @@ import {SearchService} from "./search.service";
 @Injectable(
   {providedIn: 'root'}
 )
-export class CampaignResolver  {
+export class CampaignResolver implements Resolve<Campaign>  {
   constructor(
     public campaignService: CampaignService,
     public searchService: SearchService,

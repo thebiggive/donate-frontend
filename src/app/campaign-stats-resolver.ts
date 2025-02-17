@@ -1,4 +1,4 @@
-import {ActivatedRouteSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
 import {first, Observable, ReplaySubject} from 'rxjs';
 import {CampaignStats} from './campaign-stats.model';
 import {CampaignService} from "./campaign.service";
@@ -12,7 +12,7 @@ type FormattedCampaignStats = {
 @Injectable(
   {providedIn: 'root'}
 )
-export class CampaignStatsResolver {
+export class CampaignStatsResolver implements Resolve<FormattedCampaignStats | null>{
   constructor(private campaignService: CampaignService) {}
 
   resolve(_route: ActivatedRouteSnapshot): Observable<FormattedCampaignStats | null> {
