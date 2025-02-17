@@ -8,7 +8,7 @@ import {MatomoTracker} from 'ngx-matomo-client';
 import {Campaign} from '../campaign.model';
 import {CampaignService} from '../campaign.service';
 import {Credentials} from '../credentials.model';
-import {Donation, isLargeDonation} from '../donation.model';
+import {Donation, isLargeDonation, OVERSEAS} from '../donation.model';
 import {DonationThanksSetPasswordDialogComponent} from './donation-thanks-set-password-dialog.component';
 import {DonationService} from '../donation.service';
 import {environment} from '../../environments/environment';
@@ -361,8 +361,8 @@ export class DonationThanksComponent implements OnInit {
 
     if (donation.giftAid) {
       person.home_address_line_1 = donation.homeAddress;
-      person.home_postcode = donation.homePostcode === 'OVERSEAS' ? undefined : donation.homePostcode;
-      person.home_country_code = donation.homePostcode === 'OVERSEAS' ? 'OVERSEAS' : 'GB';
+      person.home_postcode = donation.homePostcode === OVERSEAS ? undefined : donation.homePostcode;
+      person.home_country_code = donation.homePostcode === OVERSEAS ? OVERSEAS : 'GB';
     }
 
     return person;

@@ -1,7 +1,7 @@
 import {StepperSelectionEvent} from "@angular/cdk/stepper";
 import {FormGroup} from "@angular/forms";
 import {DonationService} from "../donation.service";
-import {Donation} from "../donation.model";
+import {Donation, OVERSEAS} from "../donation.model";
 import {Campaign} from "../campaign.model";
 import {sanitiseCurrency} from "./sanitiseCurrency";
 
@@ -38,7 +38,7 @@ export function updateDonationFromForm
   }
 
   if (donation.giftAid || donation.tipGiftAid) {
-    donation.homePostcode = giftAidGroup.value.homeOutsideUK ? 'OVERSEAS' : giftAidGroup.value.homePostcode;
+    donation.homePostcode = giftAidGroup.value.homeOutsideUK ? OVERSEAS : giftAidGroup.value.homePostcode;
     donation.homeAddress = giftAidGroup.value.homeAddress;
     // Optional additional field to improve data alignment w/ HMRC when a lookup was used.
     donation.homeBuildingNumber = giftAidGroup.value.homeBuildingNumber || undefined;

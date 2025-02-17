@@ -12,7 +12,7 @@ import {Campaign} from '../campaign.model';
 import {CampaignService} from '../campaign.service';
 import {DonationService} from '../donation.service';
 import {DonorAccountService} from '../donor-account.service';
-import {Donation, maximumDonationAmountForFundedDonation} from '../donation.model';
+import {Donation, maximumDonationAmountForFundedDonation, OVERSEAS} from '../donation.model';
 import {DonationCreatedResponse} from '../donation-created-response.model';
 import {environment} from '../../environments/environment';
 import {FundingInstruction} from '../fundingInstruction.model';
@@ -453,7 +453,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     };
 
     if (this.giftAidGroup.value.giftAid) {
-      donation.homePostcode = this.giftAidGroup.value.homeOutsideUK ? 'OVERSEAS' : this.giftAidGroup.value.homePostcode;
+      donation.homePostcode = this.giftAidGroup.value.homeOutsideUK ? OVERSEAS : this.giftAidGroup.value.homePostcode;
       donation.homeAddress = this.giftAidGroup.value.homeAddress;
       // Optional additional field to improve data alignment w/ HMRC when a lookup was used.
       donation.homeBuildingNumber = this.giftAidGroup.value.homeBuildingNumber || undefined;
