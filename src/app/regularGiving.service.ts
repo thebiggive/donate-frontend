@@ -10,14 +10,26 @@ import {map, switchMap} from "rxjs/operators";
  * Details of a desired new regular giving mandate sent to Matchbot to create it. Deseralized on the matchbot side
  * to class MandateCreate: https://github.com/thebiggive/matchbot/blob/main/src/Application/HttpModels/MandateCreate.php
  */
-type StartMandateParams = {
+export type StartMandateParams = {
   amountInPence: number,
   currency: 'GBP',
   dayOfMonth: number,
   campaignId: string,
   giftAid: boolean,
+
+  /** @deprecated pass home instead */
   homeAddress: string | null,
+
+  /** @deprecated pass home instead */
   homePostcode: string | null,
+
+  /** Home address details used for Gift Aid claim. Should only be included if GA is selected. */
+  home?: {
+    addressLine1: string
+    postcode: string,
+    isOutsideUK: boolean,
+  }
+
   /** ISO-2 code for country. Must match that on the DonorAccount if the latter is non-null */
   billingCountry: string,
 
