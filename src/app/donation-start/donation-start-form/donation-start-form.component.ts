@@ -230,6 +230,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   protected zeroTipTextABTestVariant: 'A'|'B' = 'A';
   private manuallySelectedABTestVariant: string | null = null;
   protected countryOptionsObject = countryOptions;
+  private friendlyCaptchaWidget: WidgetInstance | undefined;
 
   constructor(
     public cardIconsService: CardIconsService,
@@ -443,7 +444,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    const widget = new WidgetInstance(friendlyCaptcha.nativeElement, {
+    this.friendlyCaptchaWidget = new WidgetInstance(friendlyCaptcha.nativeElement, {
       doneCallback: (solution) => {
         this.idCaptchaCode = solution;
         if (this.stepChangeBlockedByCaptcha) {
@@ -455,9 +456,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         this.toast.showError("Sorry, there was an error with the anti-spam captcha check.");
         console.error(error);
       },
-    })
+    });
 
-    await widget.start()
+    await this.friendlyCaptchaWidget.start();
   }
 
   public setSelectedCountry = ((countryCode: string) => {
@@ -1518,6 +1519,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           this.matomoTracker.trackEvent('identity_error', 'person_create_failed', `${error.status}: ${error.message}`);
           this.creatingDonation = false;
           this.donationCreateError = true;
+          this.friendlyCaptchaWidget?.reset();
           this.showDonationCreateError();
           this.stepper.previous(); // Go back to step 1 to make the general error for donor visible.
         }
