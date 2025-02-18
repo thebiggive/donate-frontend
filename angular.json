@@ -68,7 +68,23 @@
                   "maximumWarning": "80kb"
                 }
               ],
-              "outputHashing": "all"
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
+              "outputHashing": "all",
+              "sourceMap": {
+                "scripts": true,
+                "styles": false,
+                "hidden": true,
+                "vendor": true
+              },
+              "namedChunks": true,
+              "extractLicenses": true
             },
             "staging": {
               "fileReplacements": [
@@ -92,7 +108,23 @@
                   "maximumWarning": "80kb"
                 }
               ],
-              "outputHashing": "all"
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
+              "outputHashing": "all",
+              "sourceMap": {
+                "scripts": true,
+                "styles": false,
+                "hidden": true,
+                "vendor": true
+              },
+              "namedChunks": true,
+              "extractLicenses": true
             },
             "regression": {
               "fileReplacements": [
@@ -116,7 +148,23 @@
                   "maximumWarning": "80kb"
                 }
               ],
-              "outputHashing": "all"
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
+              "outputHashing": "all",
+              "sourceMap": {
+                "scripts": true,
+                "styles": false,
+                "hidden": true,
+                "vendor": true
+              },
+              "namedChunks": true,
+              "extractLicenses": true
             },
             "development": {
               "optimization": false,
