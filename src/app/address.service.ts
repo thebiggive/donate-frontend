@@ -54,7 +54,9 @@ export class AddressService {
    * @param callback Callback function to update the address when fetched
    */
   public loadAddress(event: MatAutocompleteSelectedEvent, callback: (address: HomeAddress) => void) {
-    this.get(event.option.value.url).subscribe((address: GiftAidAddress) => {
+    const autoCompleteSuggestionValue: GiftAidAddressSuggestion = event.option.value;
+    this.get(autoCompleteSuggestionValue.url).subscribe({
+    next: (address: GiftAidAddress) => {
       const addressParts = [address.line_1];
       if (address.line_2) {
         addressParts.push(address.line_2);
@@ -68,9 +70,17 @@ export class AddressService {
       } as const;
 
       callback(anAddress);
-    }, error => {
+    },
+    error: (error: unknown) => {
+      // We failed to fetch an address from the lookup service so use the address from the suggestion as a fallback.
+      // The donor will have to manually fill in their postcode. Home building number is not currently used.
+      callback({
+        homeAddress: autoCompleteSuggestionValue.address,
+        homePostcode: '',
+        homeBuildingNumber: '',
+      });
       console.log('Postcode resolve error', error);
-    });
+    }});
   }
 
   public suggestAddresses (
