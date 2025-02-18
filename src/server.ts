@@ -145,6 +145,7 @@ app.get('**', (req, res, next) => {
     .render({
       bootstrap,
       documentFilePath: indexHtml,
+      inlineCriticalCss: false,
       url: `${protocol}://${headers.host}${originalUrl}`,
       publicPath: browserDistFolder,
       providers: [
