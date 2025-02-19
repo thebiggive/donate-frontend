@@ -7,7 +7,7 @@ export type Mandate = {
   id: string,
   campaignId: string,
   charityName: string,
-  status: 'active'|'pending',
+  status: 'active'|'pending'|'cancelled',
   "schedule": {
     "type": "monthly",
     "dayOfMonth": number,

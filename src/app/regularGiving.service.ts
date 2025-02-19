@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {Mandate} from "./mandate.model";
 import {getPersonAuthHttpOptions, IdentityService} from "./identity.service";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../environments/environment";
 import {map, switchMap} from "rxjs/operators";
 
@@ -53,6 +53,7 @@ export type StartMandateParams = {
   unmatched?: boolean,
 };
 
+type PersonAuthHttpOptions = {headers: HttpHeaders };
 @Injectable({
   providedIn: 'root',
 })
@@ -62,49 +63,62 @@ export class RegularGivingService {
     private identityService: IdentityService,
   ) {}
 
-  startMandate(mandate: StartMandateParams): Observable<Mandate> {
-    const IDAndJWT = this.identityService.getIdAndJWT();
-    if (!IDAndJWT) {
-      throw new Error("Missing ID and JWT, can't create mandate");
-    }
-
-    return this.http.post<unknown>(
-      `${environment.donationsApiPrefix}/people/${IDAndJWT.id}/regular-giving`,
-      mandate,
-      getPersonAuthHttpOptions(IDAndJWT.jwt),
-    ) as Observable<Mandate>;
+  public startMandate(mandate: StartMandateParams): Observable<Mandate> {
+    return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
+      const IDAndJWT = this.identityService.getIdAndJWT()!;
+      return this.http.post<unknown>(
+        `${environment.donationsApiPrefix}/people/${IDAndJWT.id}/regular-giving`,
+        mandate,
+        personAuthHttpOptions,
+      ) as Observable<Mandate>;
+    });
   }
 
 
-  getActiveMandates() {
-    const jwt = this.identityService.getJWT();
-    const person$ = this.identityService.getLoggedInPerson();
-
-    return person$.pipe(switchMap((person) => {
-      if (! person) {
-        throw new Error("logged in person required");
-      }
-
+  public getActiveMandates() {
+      return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
       return this.http.get<{ mandates: Mandate[] }>(
         `${environment.donationsApiPrefix}/regular-giving/my-donation-mandates`,
-        getPersonAuthHttpOptions(jwt),
+        personAuthHttpOptions,
       ).pipe(map((response) => response.mandates));
-    }));
+    });
   }
 
-  getActiveMandate(mandateId: string) {
+  public getActiveMandate(mandateId: string) {
+    return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
+      return this.http.get<{ mandate: Mandate }>(
+        `${environment.donationsApiPrefix}/regular-giving/my-donation-mandates/${mandateId}`,
+        personAuthHttpOptions,
+      ).pipe(map((response) => response.mandate));
+    });
+  }
+
+  public cancel(mandate: Mandate, {cancellationReason}: {cancellationReason: string}): Observable<unknown> {
+    return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
+      return this.http.post(
+        `${environment.donationsApiPrefix}/regular-giving/my-donation-mandates/${mandate.id}/cancel`,
+        {
+          cancellationReason: cancellationReason,
+          mandateUUID: mandate.id
+        },
+        personAuthHttpOptions
+      )
+    })
+  }
+
+  private withLoggedInDonor<T extends (personAuthHttpOptions: PersonAuthHttpOptions) => Observable<unknown>>(callable: T): ReturnType<T> {
     const jwt = this.identityService.getJWT();
     const person$ = this.identityService.getLoggedInPerson();
+    const personAuthHttpOptions = getPersonAuthHttpOptions(jwt);
 
+    // @ts-expect-error currently getting `Type Observable<unknown> is not assignable to type ReturnType<T>` .
+    // Maybe ok to leave for now.
     return person$.pipe(switchMap((person) => {
-      if (! person) {
+      if (!person) {
         throw new Error("logged in person required");
       }
 
-      return this.http.get<{ mandate: Mandate }>(
-        `${environment.donationsApiPrefix}/regular-giving/my-donation-mandates/${mandateId}`,
-        getPersonAuthHttpOptions(jwt),
-      ).pipe(map((response) => response.mandate));
+      return callable(personAuthHttpOptions);
     }));
   }
 }
