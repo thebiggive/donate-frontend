@@ -64,33 +64,24 @@ export class RegularGivingService {
   ) {}
 
   public startMandate(mandate: StartMandateParams): Observable<Mandate> {
-    const IDAndJWT = this.identityService.getIdAndJWT();
-    if (!IDAndJWT) {
-      throw new Error("Missing ID and JWT, can't create mandate");
-    }
-
-    return this.http.post<unknown>(
-      `${environment.donationsApiPrefix}/people/${IDAndJWT.id}/regular-giving`,
-      mandate,
-      getPersonAuthHttpOptions(IDAndJWT.jwt),
-    ) as Observable<Mandate>;
+    return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
+      const IDAndJWT = this.identityService.getIdAndJWT()!;
+      return this.http.post<unknown>(
+        `${environment.donationsApiPrefix}/people/${IDAndJWT.id}/regular-giving`,
+        mandate,
+        personAuthHttpOptions,
+      ) as Observable<Mandate>;
+    });
   }
 
 
   public getActiveMandates() {
-    const jwt = this.identityService.getJWT();
-    const person$ = this.identityService.getLoggedInPerson();
-
-    return person$.pipe(switchMap((person) => {
-      if (! person) {
-        throw new Error("logged in person required");
-      }
-
+      return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
       return this.http.get<{ mandates: Mandate[] }>(
         `${environment.donationsApiPrefix}/regular-giving/my-donation-mandates`,
-        getPersonAuthHttpOptions(jwt),
+        personAuthHttpOptions,
       ).pipe(map((response) => response.mandates));
-    }));
+    });
   }
 
   public getActiveMandate(mandateId: string) {
