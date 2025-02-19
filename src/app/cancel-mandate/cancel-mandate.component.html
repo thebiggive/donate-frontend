@@ -14,15 +14,14 @@
         You are currently giving <strong>{{ mandate.donationAmount | money }}</strong> to
         <strong>{{ mandate.charityName }}</strong>,
         on the {{ mandate.schedule.dayOfMonth | ordinal }} of each month.
-        Click below to stop future payments.
+        Click below to stop future donations.
       </p>
 
-      <p>This will not affect any payments that have already been collected or are currently being processed.</p>
+      <p>This will not affect any donations that have already been collected or are currently being processed.</p>
 
       <form [formGroup]="cancellationForm" (ngSubmit)="cancel(mandate)">
         <biggive-text-input spaceBelow="4">
-          <label slot="label" for="reason">Please tell us why you wish to stop giving to {{ mandate.charityName }}
-            (optional)</label>
+          <label slot="label" for="reason">Please tell us why you wish to stop giving to {{ mandate.charityName }}</label>
           <input
             slot="input"
             matInput type="email" id="reason" formControlName="reason" autocapitalize="off" [maxlength]="reasonMaxLength">
@@ -36,10 +35,9 @@
           <biggive-button
             space-above="5"
             spaceBelow="0"
-            colour-scheme="tertiary"
-            [label]="'Stop payments to ' + mandate.charityName"
+            colour-scheme="primary"
+            label="Stop donations"
             full-width="true"
-            disabled="!loginForm.valid"
             size="medium"
             rounded="false"
             (click)="cancel(mandate)"
