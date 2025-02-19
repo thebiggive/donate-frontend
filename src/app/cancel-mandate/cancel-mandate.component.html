@@ -10,6 +10,7 @@
           [text]="'Cancel regular giving to ' + mandate.charityName"
         ></biggive-heading>
       </div>
+      <!-- @todo  DON-1022 replace form with message if mandate is already cancelled has a non-cancelable status    -->
       <p>
         You are currently giving <strong>{{ mandate.donationAmount | money }}</strong> to
         <strong>{{ mandate.charityName }}</strong>,
@@ -21,10 +22,12 @@
 
       <form [formGroup]="cancellationForm" (ngSubmit)="cancel(mandate)">
         <biggive-text-input spaceBelow="4">
-          <label slot="label" for="reason">Please tell us why you wish to stop giving to {{ mandate.charityName }}</label>
+          <label slot="label" for="reason">Please tell us why you wish to stop giving
+            to {{ mandate.charityName }}</label>
           <input
             slot="input"
-            matInput type="email" id="reason" formControlName="reason" autocapitalize="off" [maxlength]="reasonMaxLength">
+            matInput type="email" id="reason" formControlName="reason" autocapitalize="off"
+            [maxlength]="reasonMaxLength">
         </biggive-text-input>
 
         <div class="actions">
@@ -32,16 +35,20 @@
             <a href="/my-account/regular-giving/{{mandate.id}}">Back to mandate details</a>
           </div>
           <div>
-          <biggive-button
-            space-above="5"
-            spaceBelow="0"
-            colour-scheme="primary"
-            label="Stop donations"
-            full-width="true"
-            size="medium"
-            rounded="false"
-            (click)="cancel(mandate)"
-          />
+            @if (processing) {
+              <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
+            } @else {
+              <biggive-button
+                space-above="5"
+                spaceBelow="0"
+                colour-scheme="primary"
+                label="Stop donations"
+                full-width="true"
+                size="medium"
+                rounded="false"
+                (click)="cancel(mandate)"
+              />
+            }
           </div>
         </div>
       </form>

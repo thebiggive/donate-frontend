@@ -1,5 +1,5 @@
 import {Component, inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {ComponentsModule} from '@biggive/components-angular';
 import {Mandate} from "../mandate.model";
 import {MoneyPipe} from '../money.pipe';
@@ -8,6 +8,10 @@ import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {MatInput} from '@angular/material/input';
 import {isPlatformBrowser} from '@angular/common';
 import {PageMetaService} from '../page-meta.service';
+import {RegularGivingService} from '../regularGiving.service';
+import {BackendError, errorDescription} from '../backendError';
+import {Toast} from '../toast.service';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-cancel-mandate',
@@ -17,7 +21,8 @@ import {PageMetaService} from '../page-meta.service';
     OrdinalPipe,
     FormsModule,
     MatInput,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatProgressSpinner
   ],
   templateUrl: './cancel-mandate.component.html',
   styleUrl: './cancel-mandate.component.scss'
@@ -30,10 +35,14 @@ export class CancelMandateComponent implements OnInit, OnDestroy {
   });
 
   private platformId = inject(PLATFORM_ID);
+  protected processing = false;
 
   public constructor(
     route: ActivatedRoute,
     private readonly pageMeta: PageMetaService,
+    private readonly regularGivingService: RegularGivingService,
+    private readonly router: Router,
+    private readonly toaster: Toast
   ) {
     this.mandate = route.snapshot.data.mandate;
   }
@@ -53,6 +62,18 @@ export class CancelMandateComponent implements OnInit, OnDestroy {
   }
 
   cancel(mandate: Mandate) {
-    alert("To implement: cancel " + mandate.id + ' because ' + this.cancellationForm.controls.reason.value);
+    this.processing = true;
+    this.regularGivingService.cancel(mandate, {cancellationReason: this.cancellationForm.controls.reason.value || ''}).subscribe(
+      {
+        next: async () => {
+          this.toaster.showSuccess("Your regular donations to " + this.mandate.charityName + " will now stop");
+          void this.router.navigateByUrl(`/my-account/regular-giving/${this.mandate.id}`);
+        },
+        error: (error: BackendError) => {
+          this.toaster.showError(errorDescription(error));
+          this.processing = false;
+        },
+      }
+    );
   }
 }
