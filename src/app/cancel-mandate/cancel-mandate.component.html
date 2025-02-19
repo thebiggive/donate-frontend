@@ -1,1 +1,52 @@
-<p>cancel-mandate works!</p>
+<div id="banner"></div>
+<main>
+  <div>
+    <biggive-page-section>
+      <div class="heading-wrapper">
+        <biggive-heading
+          colour="tertiary"
+          size="1"
+          align="center"
+          [text]="'Cancel regular giving to ' + mandate.charityName"
+        ></biggive-heading>
+      </div>
+      <p>
+        You are currently giving <strong>{{ mandate.donationAmount | money }}</strong> to
+        <strong>{{ mandate.charityName }}</strong>,
+        on the {{ mandate.schedule.dayOfMonth | ordinal }} of each month.
+        Click below to stop future payments.
+      </p>
+
+      <p>This will not affect any payments that have already been collected or are currently being processed.</p>
+
+      <form [formGroup]="cancellationForm" (ngSubmit)="cancel(mandate)">
+        <biggive-text-input spaceBelow="4">
+          <label slot="label" for="reason">Please tell us why you wish to stop giving to {{ mandate.charityName }}
+            (optional)</label>
+          <input
+            slot="input"
+            matInput type="email" id="reason" formControlName="reason" autocapitalize="off" [maxlength]="reasonMaxLength">
+        </biggive-text-input>
+
+        <div class="actions">
+          <div>
+            <a href="/my-account/regular-giving/{{mandate.id}}">Back to mandate details</a>
+          </div>
+          <div>
+          <biggive-button
+            space-above="5"
+            spaceBelow="0"
+            colour-scheme="tertiary"
+            [label]="'Stop payments to ' + mandate.charityName"
+            full-width="true"
+            disabled="!loginForm.valid"
+            size="medium"
+            rounded="false"
+            (click)="cancel(mandate)"
+          />
+          </div>
+        </div>
+      </form>
+    </biggive-page-section>
+  </div>
+</main>

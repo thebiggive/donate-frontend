@@ -26,6 +26,7 @@ import {MyRegularGivingComponent} from './my-regular-giving/my-regular-giving.co
 import {NavigationService} from './navigation.service';
 import {RegularGivingService} from './regularGiving.service';
 import {allActiveMandatesResolver} from './all-active-mandates.resolver';
+import {CancelMandateComponent} from './cancel-mandate/cancel-mandate.component';
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
 export const transferFundsPath = 'transfer-funds';
@@ -149,6 +150,17 @@ export const routes: Routes = [
     path: `${myRegularGivingPath}/:mandateId`,
     pathMatch: 'full',
     component: MandateComponent,
+    canActivate: [
+      requireLogin,
+    ],
+    resolve: {
+      mandate:  MandateResolver,
+    },
+  },
+  {
+    path: `${myRegularGivingPath}/:mandateId/cancel`,
+    pathMatch: 'full',
+    component: CancelMandateComponent,
     canActivate: [
       requireLogin,
     ],
