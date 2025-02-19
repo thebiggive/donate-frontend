@@ -146,6 +146,17 @@ export const routes: Routes = [
     redirectTo: 'donate/:campaignId',
   },
   {
+    path: `${myRegularGivingPath}/:mandateId`,
+    pathMatch: 'full',
+    component: MandateComponent,
+    canActivate: [
+      requireLogin,
+    ],
+    resolve: {
+      mandate:  MandateResolver,
+    },
+  },
+  {
     path: 'metacampaign/:campaignId',
     pathMatch: 'full',
     resolve: {
@@ -321,17 +332,5 @@ if (flags.regularGivingEnabled) {
       },
     },
   )
-
-  routes.unshift({
-    path: `${myRegularGivingPath}/:mandateId`,
-    pathMatch: 'full',
-    component: MandateComponent,
-    canActivate: [
-      requireLogin,
-    ],
-    resolve: {
-        mandate:  MandateResolver,
-    },
-  })
 }
 
