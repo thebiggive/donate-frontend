@@ -20,7 +20,12 @@
                 card-colour="white"
                 background-colour="primary"
               >
-                <div class="mandate">
+                <div class="mandate" class="{{mandate.status}}">
+                  @if (mandate.status === 'cancelled') {
+                    <div class="cancelled">
+                      <strong>Mandate Cancelled</strong>
+                    </div>
+                  }
                   <h3><a href="{{'/campaign/' + mandate.campaignId}}">{{ mandate.charityName }}</a></h3>
                 <ul>
                   <li>Amount: {{mandate.donationAmount | money }}</li>
@@ -31,9 +36,16 @@
                     <li>Total with gift aid {{mandate.totalIncGiftAid | money}}</li>
                   }
                   <li>Payment collection day: {{mandate.schedule.dayOfMonth}} </li>
-                  <li>Next expected payment date: {{ mandate.schedule.expectedNextPaymentDate | date: 'mediumDate'}}</li>
+                  @if (mandate.schedule.expectedNextPaymentDate) {
+                  <li>Next expected payment date:
+                    {{ mandate.schedule.expectedNextPaymentDate | date: 'mediumDate'}}
+                  </li>
+                  }
                   <li>Active from: {{ mandate.schedule.activeFrom | date: 'mediumDate'}}</li>
-                </ul>
+                  @if (mandate.cancellationDate) {
+                    <li>Cancelled: {{ mandate.cancellationDate | date: 'mediumDate'}}</li>
+                  }
+                    </ul>
                 </div>
 
                 <biggive-button
