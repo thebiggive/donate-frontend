@@ -20,6 +20,7 @@ import type {LoginNavigationState} from "../login/login.component";
 import {PageMetaService} from '../page-meta.service';
 import {NavigationService} from "../navigation.service";
 import {BackendError, errorDescription, errorDetails} from "../backendError";
+import {addBodyClass, removeBodyClass} from '../bodyStyle';
 
 @Component({
     selector: 'app-register',
@@ -58,17 +59,13 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-    if (isPlatformBrowser(this.platformId)) {
-      document.body.classList.remove('primary-colour');
-    }
+    removeBodyClass(this.platformId, 'primary-colour');
   }
 
   ngOnInit() {
     this.pageMeta.setCommon('Register', 'Register for a Big Give account', null);
 
-    if (isPlatformBrowser(this.platformId)) {
-      document.body.classList.add('primary-colour');
-    }
+    addBodyClass(this.platformId, 'primary-colour');
 
     this.registrationForm = this.formBuilder.group({
       firstName: [null, [Validators.required]],
