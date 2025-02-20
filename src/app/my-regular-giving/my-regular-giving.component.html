@@ -15,7 +15,6 @@
         @if (mandates.length > 0) {
           <biggive-grid columnCount="2">
             @for (mandate of mandates; track mandate.id) {
-              <!-- @todo-regular-giving show donor-cancelled mandates here clearly marked as cancelled. Don't show mandates auto-cancelled at creation time that practically never existed. -->
               <biggive-container-card
                 card-colour="white"
                 background-colour="primary"
