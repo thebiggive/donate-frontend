@@ -28,6 +28,6 @@ export class MandateComponent {
     private route: ActivatedRoute
   ) {
     this.mandate = this.route.snapshot.data.mandate;
-    this.cancelPath = `${myRegularGivingPath}/${this.mandate.id}/cancel`;
+    this.cancelPath = `/${myRegularGivingPath}/${this.mandate.id}/cancel`;
   }
 }
