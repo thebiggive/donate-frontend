@@ -65,6 +65,14 @@
                 <th scope="row">Active from</th>
                 <td id="regularActiveFrom">{{ mandate.schedule.activeFrom | date: 'mediumDate' }}</td>
               </tr>
+
+              @if (mandate.cancellationDate) {
+                <tr>
+                  <th scope="row">Cancelled</th>
+                  <td id="cancelledFrom">{{ mandate.cancellationDate | date: 'mediumDate' }}</td>
+                </tr>
+              }
+
               <tr>
                 <th scope="row">Payment schedule</th>
                 <td id="regularDayOfMonth">Monthly on day #{{ mandate.schedule.dayOfMonth }}</td>
