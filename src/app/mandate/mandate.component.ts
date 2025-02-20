@@ -4,6 +4,8 @@ import {DatePipe} from "@angular/common";
 import {Mandate} from "../mandate.model";
 import {ActivatedRoute} from "@angular/router";
 import {MoneyPipe} from "../money.pipe";
+import {myRegularGivingPath} from '../app-routing';
+
 
 @Component({
     selector: 'app-mandate',
@@ -15,19 +17,17 @@ import {MoneyPipe} from "../money.pipe";
     templateUrl: './mandate.component.html',
     styleUrl: './mandate.component.scss'
 })
-export class MandateComponent implements OnInit {
+export class MandateComponent {
   protected encodedShareUrl: string = '';
   protected encodedPrefilledText: string = '';
   protected mandate!: Mandate;
+  protected readonly cancelPath;
+
 
   constructor(
     private route: ActivatedRoute
-  ) {}
-
-  ngOnInit() {
+  ) {
     this.mandate = this.route.snapshot.data.mandate;
+    this.cancelPath = `${myRegularGivingPath}/${this.mandate.id}/cancel`;
   }
-
-  // @todo-regular-giving: calculate the total in matchbot and show on template
-  // totalPaid: number = 0;
 }
