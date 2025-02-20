@@ -12,35 +12,35 @@ import {IdentityService} from '../identity.service';
 import {EMAIL_REGEXP} from '../validators/patterns';
 import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.component";
 import {WidgetInstance} from "friendly-challenge";
+import {BackendError, errorDescription} from "../backendError";
 
 @Component({
-  standalone: true,
-  selector: 'app-login-modal',
-  templateUrl: 'login-modal.html',
-  styleUrl: './login-modal.component.scss',
-  imports: [
-    ...allChildComponentImports,
-    FormsModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-    ReactiveFormsModule,
-    PopupStandaloneComponent,
-  ],
+    selector: 'app-login-modal',
+    templateUrl: 'login-modal.html',
+    styleUrl: './login-modal.component.scss',
+    imports: [
+        ...allChildComponentImports,
+        FormsModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+        ReactiveFormsModule,
+        PopupStandaloneComponent,
+    ]
 })
 export class LoginModalComponent implements OnInit, AfterViewInit {
-  loginForm: FormGroup;
+  loginForm!: FormGroup;
   loggingIn = false;
   loginError?: string;
   forgotPassword = false;
-  resetPasswordForm: FormGroup;
+  resetPasswordForm!: FormGroup;
   resetPasswordSuccess: boolean|undefined = undefined;
   userAskedForResetLink = false;
   protected readonly friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
   private captchaCode: string | undefined;
   @ViewChild('frccaptcha', { static: false })
-  friendlyCaptcha: ElementRef<HTMLElement>;
+  friendlyCaptcha!: ElementRef<HTMLElement>;
   private friendlyCaptchaWidget: WidgetInstance | undefined;
 
   constructor(
@@ -94,11 +94,10 @@ export class LoginModalComponent implements OnInit, AfterViewInit {
     this.identityService.login(credentials).subscribe((response: { id: string, jwt: string }) => {
       this.dialogRef.close(response);
       this.loggingIn = false;
-    }, async (error) => {
+    }, async (error: BackendError) => {
       this.friendlyCaptchaWidget?.reset();
       await this.friendlyCaptchaWidget?.start();
-      const errorDescription = error.error.error.description;
-      this.loginError = errorDescription || error.message || 'Unknown error';
+      this.loginError = errorDescription(error);
       this.loggingIn = false;
     });
   }

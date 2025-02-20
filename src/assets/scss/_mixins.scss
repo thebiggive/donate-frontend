@@ -1,3 +1,5 @@
+@use './variables' as var;
+
 @mixin size-md {
   font-size: 14px;
 }
@@ -17,7 +19,7 @@
 @mixin b-rt-sm {
   font-size: 11px;
   line-height: 14px;
-  @media #{$breakpoint-lg} {
+  @media #{var.$breakpoint-lg} {
     font-size: 14px;
     line-height: 20px
   }
@@ -26,7 +28,7 @@
 @mixin b-rt-0 {
   font-size: 14px;
   line-height: 20px;
-  @media #{$breakpoint-lg} {
+  @media #{var.$breakpoint-lg} {
     font-size: 18px;
     line-height: 27px;
   }
@@ -35,7 +37,7 @@
 @mixin b-rt-1 {
   font-size: 18px;
   line-height: 1.5;
-  @media #{$breakpoint-lg} {
+  @media #{var.$breakpoint-lg} {
     font-size: 24px;
     line-height: 36px;
   }
@@ -46,14 +48,14 @@
     display: inline-block;
     width: 2rem;
     text-align: center;
-    color: $colour-grey;
+    color: var.$colour-grey;
   }
 }
 
 @mixin b-rt-2 {
   font-size: 20px;
   line-height: 26px;
-  @media #{$breakpoint-lg} {
+  @media #{var.$breakpoint-lg} {
     font-size: 34px;
     line-height: 40px;
   }
@@ -62,7 +64,7 @@
 @mixin b-rt-3 {
   font-size: 34px;
   line-height: 41px;
-  @media #{$breakpoint-lg} {
+  @media #{var.$breakpoint-lg} {
     font-size: 40px;
     line-height: 56px;
   }
@@ -70,10 +72,10 @@
 
 @mixin make-container {
   margin: 0 15px;
-  @media #{$breakpoint-lg} {
+  @media #{var.$breakpoint-lg} {
     margin: 0 30px;
   }
-  @media #{$breakpoint-xl} {
+  @media #{var.$breakpoint-xl} {
     max-width: 1220px;
     margin: 0 auto;
   }
@@ -81,45 +83,45 @@
 
 @mixin make-container-sm {
   margin: 0 15px;
-  @media #{$breakpoint-md} {
+  @media #{var.$breakpoint-md} {
     margin: 0 30px;
   }
-  @media #{$breakpoint-lg} {
+  @media #{var.$breakpoint-lg} {
     margin: 0 60px;
   }
-  @media #{$breakpoint-xl} {
+  @media #{var.$breakpoint-xl} {
     max-width: 1150px;
     margin: 0 auto;
   }
 }
 
 @mixin make-primary-column {
-  @media #{$breakpoint-md} {
+  @media #{var.$breakpoint-md} {
     width: 100%;
   }
 
-  @media #{$breakpoint-lg} {
+  @media #{var.$breakpoint-lg} {
     width: calc(100% - 380px);
     padding-right: 4rem;
     box-sizing: border-box;
   }
 
-  @media #{$breakpoint-xl} {
+  @media #{var.$breakpoint-xl} {
     width: calc(100% - 500px);
   }
 }
 
 @mixin make-secondary-column {
   margin-top: 2rem;
-  @media #{$breakpoint-md} {
+  @media #{var.$breakpoint-md} {
     margin-top: 0;
     width: 100%;
   }
-  @media #{$breakpoint-lg} {
+  @media #{var.$breakpoint-lg} {
     margin-top: 0;
     width: 380px;
   }
-  @media #{$breakpoint-xl} {
+  @media #{var.$breakpoint-xl} {
     margin-top: 0;
     width: 500px;
   }
@@ -127,8 +129,8 @@
 
 @mixin make-donate-button {
   padding: 0.5rem 2rem;
-  background-color: $colour-primary;
-  color: $colour-primary-contrast;
+  background-color: var.$colour-primary;
+  color: var.$colour-primary-contrast;
   border-radius: 4px;
   font-size: 18px;
   box-shadow: none !important;
@@ -136,14 +138,14 @@
   &:hover,
   &:active,
   &:focus {
-    background-color: darken($colour-primary, 10%);
+    background-color: darken(var.$colour-primary, 10%);
   }
 }
 
 @mixin make-back-button {
   display: inline-block;
   text-align: left;
-  color: $colour-primary;
+  color: var.$colour-primary;
   margin-bottom: 1rem;
 
   .mat-mdc-icon-button {
@@ -160,8 +162,8 @@
   }
 }
 
-@mixin make-card($box-shadow: $box-shadow-soft) {
-  background-color: $colour-card-background;
+@mixin make-card($box-shadow: var.$box-shadow-soft) {
+  background-color: var.$colour-card-background;
   border-radius: 4px;
   box-shadow: $box-shadow;
 }
@@ -177,8 +179,8 @@
   position: relative;
   top: -19px;
   left: -4px;
-  background: $colour-highlight;
-  color: $colour-black;
+  background: var.$colour-highlight;
+  color: var.$colour-black;
   font-size: 12px;
   padding: 0.25rem 0.5rem;
 }
@@ -199,7 +201,7 @@
   flex-direction: column;
   overflow: hidden;
 
-  @media#{$breakpoint-lg} {
+  @media#{var.$breakpoint-lg} {
     flex-direction: row;
     :nth-child(1) {
       padding-left: 0;
@@ -214,13 +216,13 @@
   min-width: 28%;
   padding-left: 20px;
 
-  @media#{$breakpoint-sm} {
+  @media#{var.$breakpoint-sm} {
     max-width: 28%;
   }
-  @media#{$breakpoint-md} {
+  @media#{var.$breakpoint-md} {
     padding-left: 0px;
   }
-  @media#{$breakpoint-lg} {
+  @media#{var.$breakpoint-lg} {
     padding-left: 20px;
   }
 }
@@ -234,10 +236,10 @@
     word-wrap: break-word;
     padding-left: 20px;
 
-    @media#{$breakpoint-lg} {
+    @media#{var.$breakpoint-lg} {
       padding-left: 5px;
     }
-    @media#{$breakpoint-xl} {
+    @media#{var.$breakpoint-xl} {
       padding-left: 10px;
     }
 }
@@ -257,7 +259,7 @@
     display: none;
   }
 
-  @media #{$breakpoint-lg} {
+  @media #{var.$breakpoint-lg} {
     #campaign-highlights-beneficiaries-and-categories-mobile {
       display: none;
     }
@@ -273,7 +275,7 @@
   div.frc-captcha:not(:empty) {
     margin: auto;
     background: none;
-    border: 2px solid $colour-primary;
+    border: 2px solid var.$colour-primary;
   }
 }
 
@@ -285,7 +287,7 @@
     gap: 24px;
     flex-direction: column;
 
-    @media ($breakpoint-md) {
+    @media (var.$breakpoint-md) {
       flex-direction: row;
     }
   }
@@ -296,8 +298,8 @@
 
   div.binary-option {
     flex-basis: 50%;
-    background-color: $colour-card-background;
-    box-shadow: $box-shadow-soft;
+    background-color: var.$colour-card-background;
+    box-shadow: var.$box-shadow-soft;
     border-radius: 4px;
     margin-right: 0;
     padding-left: 0;

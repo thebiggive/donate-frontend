@@ -3,20 +3,21 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { getPasswordValidator } from '../validators/validate-passwords-same';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IdentityService } from '../identity.service';
-import { minPasswordLength } from 'src/environments/common';
+import { minPasswordLength } from '../../environments/common';
 
 @Component({
-  selector: 'app-reset-password',
-  templateUrl: './reset-password.component.html',
-  styleUrl: './reset-password.component.scss',
+    selector: 'app-reset-password',
+    templateUrl: './reset-password.component.html',
+    styleUrl: './reset-password.component.scss',
+    standalone: false
 })
 export class ResetPasswordComponent implements OnInit {
   minPasswordLength: number;
-  passwordForm: FormGroup;
+  passwordForm!: FormGroup;
   savingNewPassword: boolean = false;
   saveSuccessful: boolean|undefined = undefined;
   errorMessageHtml: string | undefined;
-  token: string;
+  token!: string;
   tokenValid: boolean|undefined = undefined;
 
   constructor(
@@ -24,7 +25,9 @@ export class ResetPasswordComponent implements OnInit {
     private identityService: IdentityService,
     private route: ActivatedRoute,
     private router: Router,
-  ) { }
+  ) {
+    this.minPasswordLength = minPasswordLength;
+  }
 
   ngOnInit(): void {
     this.passwordForm = this.formBuilder.group({
@@ -40,21 +43,20 @@ export class ResetPasswordComponent implements OnInit {
     this.route.queryParams
       .subscribe(params => {
         this.token = params.token;
-        this.identityService.checkTokenValid(this.token).subscribe(
-          (response: {valid: boolean}) => {
+        this.identityService.checkTokenValid(this.token).subscribe({
+          // @ts-ignore Not sure how to make subscribe() happy with the type narrowing
+          next: (response: {valid: boolean}) => {
             this.tokenValid = response.valid;
           },
-          () => {
+          error: () => {
             this.tokenValid = false;
           }
-        );
+        });
         if (!this.token) {
           void this.router.navigate(['']);
         }
       }
     );
-
-    this.minPasswordLength = minPasswordLength;
   }
 
   get confirmPasswordField() {

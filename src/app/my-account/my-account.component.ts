@@ -5,25 +5,19 @@ import {IdentityService} from "../identity.service";
 import {Person} from "../person.model";
 import {Router} from "@angular/router";
 import {MatDialog} from "@angular/material/dialog";
-import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 import {flags} from "../featureFlags";
 import { HighlightCard } from '../highlight-cards/HighlightCard';
 import {environment} from "../../environments/environment";
 
 @Component({
-  selector: 'app-my-account',
-  templateUrl: './my-account.component.html',
-  styleUrl: './my-account.component.scss',
-  providers: [DatePipe]
+    selector: 'app-my-account',
+    templateUrl: './my-account.component.html',
+    styleUrl: './my-account.component.scss',
+    providers: [DatePipe],
+    standalone: false
 })
 export class MyAccountComponent implements OnInit {
-  public person: Person;
-
-
-  protected readonly faExclamationTriangle = faExclamationTriangle;
-
-  protected readonly flags = flags;
-
+  public person!: Person;
   protected readonly actions: HighlightCard[];
 
   constructor(
@@ -67,7 +61,7 @@ export class MyAccountComponent implements OnInit {
             color: 'brand-afa-pink',
             image: new URL(environment.donateUriPrefix + '/assets/images/peach-texture.jpg')
           },
-          headerText: "Your Regular\u00A0Giving", // u00A0 = non-breaking space. We prefer the break after "Your".
+          headerText: "Your Regular Giving",
           bodyText: 'View and manage your regular giving mandates',
           button: {
             text: '',

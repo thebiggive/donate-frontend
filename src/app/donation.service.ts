@@ -39,11 +39,6 @@ export class DonationService {
 
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     private cookieService: CookieService,
-
-    /**
-     * @todo - after a version of this that includes the `sessionStorage` property above has been deployed for
-     * one day remove this - it's only here to allow us to retrieve donation info stored just before that change.
-     */
     @Inject(TBG_DONATE_STORAGE) private storage: StorageService,
 
     private state: TransferState,
@@ -166,6 +161,14 @@ export class DonationService {
   }
 
   update(donation: Donation): Observable<Donation> {
+    if (donation.homeAddress?.hasOwnProperty('address')) {
+      // should never happen given fix made now to AddressService.loadAddress but just in case:
+
+      console.error("Donation.homeAddress is object, should be string");
+      // @ts-expect-error:
+      donation.homeAddress = donation.homeAddress.address;
+    }
+
     return this.http.put<Donation>(
       `${environment.donationsApiPrefix}${this.apiPath}/${donation.donationId}`,
       donation,

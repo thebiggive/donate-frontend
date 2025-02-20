@@ -13,27 +13,25 @@ import {MatSelectModule} from "@angular/material/select";
 import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.component";
 
 @Component({
-  standalone: true,
-  selector: 'app-update-card-modal',
-  templateUrl: 'update-card-modal.html',
-  imports: [
-    ...allChildComponentImports,
-    FormsModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatInputModule,
-    MatOptionModule,
-    MatSelectModule,
-    MatProgressSpinnerModule,
-    ReactiveFormsModule,
-    PopupStandaloneComponent,
-  ],
+    selector: 'app-update-card-modal',
+    templateUrl: 'update-card-modal.html',
+    imports: [
+        ...allChildComponentImports,
+        FormsModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatInputModule,
+        MatOptionModule,
+        MatSelectModule,
+        MatProgressSpinnerModule,
+        ReactiveFormsModule,
+        PopupStandaloneComponent,
+    ]
 })
 export class UpdateCardModalComponent implements OnInit {
-  form: FormGroup;
-
-  card: PaymentMethod.Card;
-  formattedCardExpiry: string;
+  form!: FormGroup;
+  card?: PaymentMethod.Card;
+  formattedCardExpiry?: string;
   readonly COUNTRIES = COUNTRIES;
   countryCode: string | undefined;
   postalCode: string | undefined;

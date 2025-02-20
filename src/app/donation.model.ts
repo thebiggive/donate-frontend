@@ -15,6 +15,13 @@ export function maximumDonationAmount(currencyCode: string, creditPenceToUse: nu
 
 export const maximumDonationAmountForCardDonation = 25_000;
 export const maximumDonationAmountForFundedDonation = 200_000;
+
+/**
+ * Placeholder for postcode and country code used when a donor from outside the UK claims gift aid
+ * See also \MatchBot\Domain\Donation::OVERSEAS
+ * */
+export const OVERSEAS = 'OVERSEAS';
+
   /**
  * Many properties on `Donation` are nullable, because they are set only:
  * * after the donation has been persisted in Salesforce (e.g. `status`, `createdTime`, ...); or

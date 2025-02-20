@@ -14,6 +14,8 @@ export const environment: Environment = {
   creditTipsCampaign: 'a056900002LDXWgAAP',
   apiUriPrefix: 'https://sf-api-staging.thebiggivetest.org.uk',
   creditDonationsEnabled: true, // Whether the donation start page offers credit for settlement. Credit purchase page is always available.
+  // For staging-like SSR testing local builds
+  // donateUriPrefix: 'http://localhost:4000',
   donateUriPrefix: 'https://donate-staging.thebiggivetest.org.uk',
   blogUriPrefix: 'https://wp-staging.thebiggivetest.org.uk',
   sharedCookieDomain: '.thebiggivetest.org.uk',
@@ -50,4 +52,4 @@ export const environment: Environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

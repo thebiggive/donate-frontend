@@ -10,12 +10,13 @@ import {environment} from "../../environments/environment";
 import {NavigationService} from "../navigation.service";
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrl: 'home.component.scss',
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrl: 'home.component.scss',
+    standalone: false
 })
 export class HomeComponent implements OnInit {
-  stats: {
+  stats!: {
     totalRaisedFormatted: string,
     totalCountFormatted: string
   };
@@ -26,7 +27,7 @@ export class HomeComponent implements OnInit {
    */
   protected mayBeAboutToRedirect: boolean = true;
 
-  protected highlightCards: HighlightCard[];
+  protected highlightCards!: HighlightCard[];
 
   public constructor(
     private navigationService: NavigationService,
@@ -45,8 +46,8 @@ export class HomeComponent implements OnInit {
       'Big Give – discover campaigns and donate',
       '/assets/images/social-banner.png',
     );
-    this.stats = this.route.snapshot.data.stats;
-    this.highlightCards = this.route.snapshot.data.highlights;
+    this.stats = this.route.snapshot.data['stats'];
+    this.highlightCards = this.route.snapshot.data['highlights'];
     const queryParams = this.route.snapshot.queryParams;
     const redirectPath = this.navigationService.getPotentialRedirectPathAndUpdateSignal(this.highlightCards);
 

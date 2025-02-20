@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@import '../../abstract';
+@use '../../abstract';
 
 .auth-options {
     display: flex;
@@ -9,7 +9,7 @@
 }
 
 .existing-balance-info {
-    @include make-card($box-shadow-hard);
+    @include abstract.make-card(abstract.$box-shadow-hard);
     padding: 1rem;
     margin-bottom: 3rem;
 }
@@ -19,9 +19,9 @@
 }
 
 button[mat-button] {
-    background-color: mat.m2-get-color-from-palette($donate-primary);
+    background-color: mat.m2-get-color-from-palette(abstract.$donate-primary);
     color: white;
-    box-shadow: $box-shadow-hard;
+    box-shadow: abstract.$box-shadow-hard;
 }
 
 .tip-text {
@@ -33,7 +33,7 @@ button[mat-button] {
 }
 
 .error {
-    color: mat.m2-get-color-from-palette($donate-warn);
+    color: mat.m2-get-color-from-palette(abstract.$donate-warn);
     font-size: 1rem; // slightly smaller text
     margin: 0;
 }
@@ -52,7 +52,7 @@ button#my-account-link {
   text-align: right;
   margin-top: 3rem;
 
-  @media #{$breakpoint-md} {
+  @media #{abstract.$breakpoint-md} {
     margin-top: inherit;
   }
 }

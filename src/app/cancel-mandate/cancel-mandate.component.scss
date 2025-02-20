@@ -1,0 +1,18 @@
+@use '../../abstract';
+@use "../../assets/scss/auth-common";
+
+#banner {
+  background-image: url(../../assets/images/banner-my-account.jpg);
+}
+
+div.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 17px;
+
+  div {
+      flex: 0 0 auto;
+  }
+}

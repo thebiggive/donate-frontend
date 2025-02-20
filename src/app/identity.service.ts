@@ -3,7 +3,6 @@ import {EventEmitter, Inject, Injectable, InjectionToken} from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import {CookieService} from 'ngx-cookie-service';
 import {MatomoTracker} from 'ngx-matomo-client';
-import {StorageService} from 'ngx-webstorage-service';
 import {Observable, of} from 'rxjs';
 import {delay, retry, tap} from 'rxjs/operators';
 
@@ -13,8 +12,6 @@ import {IdentityJWT} from './identity-jwt.model';
 import {Person} from './person.model';
 import {FundingInstruction} from './fundingInstruction.model';
 import {STRIPE_SESSION_SECRET_COOKIE_NAME} from "./donation.service";
-
-export const TBG_DONATE_ID_STORAGE = new InjectionToken<StorageService>('TBG_DONATE_ID_STORAGE');
 
 @Injectable({
   providedIn: 'root',
@@ -38,11 +35,6 @@ export class IdentityService {
   constructor(
     private http: HttpClient,
     private matomoTracker: MatomoTracker,
-
-    /**
-     * @todo remove StorageService once we have been saving JWTs to cookies for one day in prod.
-     */
-    @Inject(TBG_DONATE_ID_STORAGE) private storage: StorageService,
     private cookieService: CookieService,
   ) {}
 
@@ -171,24 +163,23 @@ export class IdentityService {
     this.cookieService.set(this.cookieName, '', new Date('1970-01-01'), '/')
     this.cookieService.set(this.isLoggedInCookieName, '', new Date('1970-01-01'), '/');
     this.cookieService.set(STRIPE_SESSION_SECRET_COOKIE_NAME, '', new Date('1970-01-01'), '/')
-    this.storage.remove(this.storageKey);
     this.loginStatusChanged.emit(false);
   }
 
   getIdAndJWT(): { id: string, jwt: string } | undefined {
     const cookieValue = this.cookieService.get(this.cookieName);
     var idAndJwt: {jwt: string, id: string};
-    if (cookieValue) {
-      idAndJwt = JSON.parse(cookieValue);
-    } else {
-      idAndJwt = this.storage.get(this.storageKey);
+    if (!cookieValue) {
+      return undefined;
     }
+
+    idAndJwt = JSON.parse(cookieValue);
 
     if (idAndJwt === undefined) {
       return undefined;
     }
 
-    if (this.getTokenPayload(idAndJwt.jwt).exp as number < Math.floor(Date.now() / 1000)) {
+    if ((this.getTokenPayload(idAndJwt.jwt).exp as number) < Math.floor(Date.now() / 1000)) {
       // JWT has expired.
       this.logout();
       return undefined;

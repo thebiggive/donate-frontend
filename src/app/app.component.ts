@@ -1,9 +1,19 @@
 import {isPlatformBrowser} from '@angular/common';
-import {AfterViewInit, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild, WritableSignal} from '@angular/core';
-import {Event as RouterEvent, NavigationEnd, NavigationStart, Router,} from '@angular/router';
+import {
+  AfterViewInit,
+  Component,
+  HostListener, Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  signal,
+  ViewChild,
+  WritableSignal
+} from '@angular/core';
+import {Event as RouterEvent, NavigationEnd, NavigationStart, Router} from '@angular/router';
 import {BiggiveMainMenu} from '@biggive/components-angular';
 import {MatomoTracker} from "ngx-matomo-client";
-import {filter, map, startWith} from 'rxjs/operators';
+import {filter, map} from 'rxjs/operators';
 
 import {DonationService} from './donation.service';
 import {GetSiteControlService} from './getsitecontrol.service';
@@ -26,9 +36,10 @@ import {detect} from "detect-browser";
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: 'app.component.scss',
+  standalone: false,
 })
 export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
-  @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu;
+  @ViewChild(BiggiveMainMenu) header: BiggiveMainMenu | undefined;
 
   protected browserSupportedMessage?: string;
   public isLoggedIn: boolean = false;
@@ -42,13 +53,11 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
   protected readonly environment = environment;
   protected readonly flags = flags;
-  protected readonly userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
+  protected readonly userHasExpressedCookiePreference$: Observable<boolean>;
+  protected readonly existingCookiePreferences: Observable<AgreedToCookieTypes | undefined>;
 
-  protected readonly existingCookiePreferences = this.cookiePreferenceService.userOptInToSomeCookies()
-    .pipe(startWith(undefined))
-    .pipe(map(this.convertCookiePreferencesForDisplay));
   convertCookiePreferencesForDisplay(cookiePrefs: CookiePreferences): AgreedToCookieTypes {
-    switch (true){
+    switch (true) {
       case cookiePrefs === undefined:
         return {analyticsAndTesting: false, thirdParty: false}
       case cookiePrefs.agreedToAll:
@@ -62,9 +71,8 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
   public isPlatformBrowser: boolean;
   public someCampaignHasHomePageRedirect: WritableSignal<boolean> = signal(false);
-  private getPersonSubscription: Subscription;
-  private loginStatusChangeSubscription: Subscription;
-  protected showingDedicatedCookiePreferencesPage: boolean;
+  private loginStatusChangeSubscription: Subscription | undefined;
+  protected showingDedicatedCookiePreferencesPage: boolean | undefined;
 
   constructor(
     private identityService: IdentityService,
@@ -77,6 +85,9 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     private router: Router,
   ) {
     this.isPlatformBrowser = isPlatformBrowser(this.platformId);
+    this.userHasExpressedCookiePreference$ = this.cookiePreferenceService.userHasExpressedCookiePreference();
+    this.existingCookiePreferences = this.cookiePreferenceService.userOptInToSomeCookies()
+      .pipe(map(this.convertCookiePreferencesForDisplay));
 
     navigationService.setPossibleRedirectSignal(this.someCampaignHasHomePageRedirect);
 
@@ -117,13 +128,13 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     // no-op
     // @to-do: Either restore and fix, or remove this function entirely and remove the event emitter it depends on
     // from https://github.com/thebiggive/components/blob/cf6175ea0272eac2219e87db78389df0eeb87ca8/src/components/biggive-button/biggive-button.tsx#L15
-  }  
+  }
 
   ngOnInit() {
     if (this.isPlatformBrowser) {
       // detect supported browser or inform user, https://dev.to/aakashgoplani/manage-list-of-supported-browsers-for-your-application-in-angular-4b47
       const browserIsSupported = supportedBrowsers.test(navigator.userAgent);
-      if (! browserIsSupported) {
+      if (!browserIsSupported) {
         this.browserSupportedMessage = `Your current browser: ${detect()?.name} ${detect()?.version} is not supported. Please try another browser.`;
       }
 
@@ -147,8 +158,8 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     this.loginStatusChangeSubscription = this.identityService.loginStatusChanged.subscribe({
       next: (isLoggedIn: boolean) => {
         this.isLoggedIn = isLoggedIn;
-         // This double-checks the JWT and sets `isLoggedIn` again, but if event emitters' use is correct then
-         // that's a no-op.
+        // This double-checks the JWT and sets `isLoggedIn` again, but if event emitters' use is correct then
+        // that's a no-op.
         this.updatePersonInfo();
       },
     });
@@ -157,23 +168,18 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    if (this.getPersonSubscription) {
-      this.getPersonSubscription.unsubscribe();
-    }
-
     if (this.loginStatusChangeSubscription) {
       this.loginStatusChangeSubscription.unsubscribe();
     }
   }
 
   ngAfterViewInit() {
-    const headerEl = this.header;
-    this.router.events.pipe(
-      filter((event: RouterEvent) => event instanceof NavigationStart),
-    ).subscribe(
-      // we have seen TypeError: Cannot read properties of undefined (reading 'closeMobileMenuFromOutside'). So check headerEl is defined beofore reading the prop:
-      () => headerEl && headerEl.closeMobileMenuFromOutside()
-    );
+    /**
+     * Server copy never has the menu open and doesn't have a DOM for Stencil to adjust.
+     */
+    if (isPlatformBrowser(this.platformId)) {
+      this.setUpMenuCloseOnNavigation(this.router, this.header);
+    }
   }
 
   @HostListener('cookieBannerAcceptAllSelected', ['$event'])
@@ -203,4 +209,15 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     this.isLoggedIn = this.identityService.probablyHaveLoggedInPerson();
     this.isDataLoaded = true;
   }
+
+  private setUpMenuCloseOnNavigation(router: Router, header: BiggiveMainMenu | undefined) {
+    const headerEl = this.header;
+    this.router.events.pipe(
+      filter((event: RouterEvent) => event instanceof NavigationStart),
+    ).subscribe(
+      // we have seen TypeError: Cannot read properties of undefined (reading 'closeMobileMenuFromOutside'). So check headerEl is defined beofore reading the prop:
+      () => headerEl && headerEl.closeMobileMenuFromOutside()
+    );
+  }
 }
+

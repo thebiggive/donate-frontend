@@ -9,7 +9,6 @@ import { of } from "rxjs";
 
 import { TBG_DONATE_STORAGE } from "../donation.service";
 import { DonationThanksComponent } from "./donation-thanks.component";
-import { TBG_DONATE_ID_STORAGE } from "../identity.service";
 import { CompleteDonation } from "../donation.model";
 import { MatomoModule } from "ngx-matomo-client";
 import {
@@ -47,7 +46,6 @@ describe("DonationThanksComponent", () => {
           useValue: { params: of({ donationId: "myTestDonationId" }) },
         },
         InMemoryStorageService,
-        { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),

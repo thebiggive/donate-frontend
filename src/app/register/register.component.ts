@@ -19,31 +19,31 @@ import {flags} from "../featureFlags";
 import type {LoginNavigationState} from "../login/login.component";
 import {PageMetaService} from '../page-meta.service';
 import {NavigationService} from "../navigation.service";
+import {BackendError, errorDescription, errorDetails} from "../backendError";
 
 @Component({
-  selector: 'app-register',
-  standalone: true,
-  imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule],
-  templateUrl: './register.component.html',
-  styleUrl: 'register.component.scss'
+    selector: 'app-register',
+    imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule],
+    templateUrl: './register.component.html',
+    styleUrl: 'register.component.scss'
 })
 export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('frccaptcha', { static: false })
-  protected friendlyCaptcha: ElementRef<HTMLElement>;
+  protected friendlyCaptcha!: ElementRef<HTMLElement>;
   friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
   protected readonly transferFundsPath = transferFundsPath;
 
 
   protected processing = false;
   protected error?: string;
-  registrationForm: FormGroup;
+  registrationForm!: FormGroup;
   private readyToLogIn = false;
   protected errorHtml: SafeHtml | undefined;
   private friendlyCaptchaSolution: string|undefined;
   protected readonly flags = flags;
-  private friendlyCaptchaWidget: WidgetInstance;
+  private friendlyCaptchaWidget!: WidgetInstance;
   protected redirectPath: string = 'my-account';
-  protected loginLink: string;
+  protected loginLink!: string;
 
 
   constructor(
@@ -119,17 +119,17 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       const passwordErrors = this.registrationForm.controls?.password?.errors;
 
       switch (true) {
-        case emailErrors?.required && passwordErrors?.required:
+        case emailErrors?.['required'] && passwordErrors?.['required']:
           this.error = 'Email address and password are required';
           break;
-        case emailErrors?.required:
+        case emailErrors?.['required']:
           this.error = 'Email address is required';
           break;
-        case passwordErrors?.required:
+        case passwordErrors?.['required']:
           this.error = 'Password is required';
           break;
-        case !!emailErrors?.pattern:
-          this.error = `'${emailErrors!.pattern.actualValue}' is not a recognised email address`;
+        case !!emailErrors?.['pattern']:
+          this.error = `'${emailErrors!['pattern'].actualValue}' is not a recognised email address`;
           break;
         default:
           this.error = 'Unknown Error - please try again or contact us if this error persists';
@@ -142,16 +142,13 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private doRegistrationAndLogin(captchaResponse: string|undefined = undefined) {
-    const extractErrorMessage = (error: {
-      error: { error: { description?: string, htmlDescription?: string } },
-      message?: string
-    }) => {
-      const errorInfo = error.error.error;
+    const extractErrorMessage = (error: BackendError) => {
+      const errorInfo = errorDetails(error);
       if (errorInfo.htmlDescription) {
         // this HTML can only have come back from our identity server, which we consider trustworthy.
         this.errorHtml = this.sanitizer.bypassSecurityTrustHtml(errorInfo.htmlDescription)
       } else {
-        this.error = errorInfo.description || error.message || 'Unknown error';
+        this.error = errorDescription(error);
       }
     }
 

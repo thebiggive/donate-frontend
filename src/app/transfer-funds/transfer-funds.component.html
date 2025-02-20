@@ -4,7 +4,7 @@
 
     @if (hasDonationFunds) {
       <div class="existing-balance-info">
-        <p>Existing available balance: <strong>{{ ((donor?.cash_balance?.gbp || 0) / 100) | exactCurrency:'GBP' }}</strong></p>
+        <p>Existing available balance: <strong>{{ ((donor?.cash_balance?.['gbp'] || 0) / 100) | exactCurrency:'GBP' }}</strong></p>
         <p>Ready to donate to charities? <a routerLink="/explore">Explore campaigns</a> &ndash; your Funds will be used for logged in donations automatically.</p>
         <p>Want to add more to your balance first? Continue with the form below to get bank details for another transfer.</p>
       </div>
@@ -135,7 +135,6 @@
                     matInput
                     autocomplete="off"
                     [matAutocomplete]="autoAddress"
-                    [matAutocompleteDisabled]="!showAddressLookup"
                     >
                   <mat-autocomplete
                     #autoAddress="matAutocomplete"
@@ -160,7 +159,7 @@
                     }
                   </mat-hint>
                 </mat-form-field>
-                @if (giftAidGroup.get('homeAddress')?.errors?.maxlength) {
+                @if (giftAidGroup.get('homeAddress')?.errors?.['maxlength']) {
                   <div class="error">
                     Maximum 255 characters exceeded
                   </div>
@@ -185,7 +184,7 @@
             </div>
           </mat-step>
         }
-        @if (!donor.pending_tip_balance?.gbp) {
+        @if (!donor.pending_tip_balance?.['gbp']) {
           <mat-step
             formGroupName="marketing"
             [stepControl]="marketingGroup"

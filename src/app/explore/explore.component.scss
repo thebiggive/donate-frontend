@@ -1,9 +1,9 @@
 @use '@angular/material' as mat;
-@import '../../abstract';
+@use '../../abstract';
 
 .error {
-  color: mat.m2-get-color-from-palette($donate-warn);
-  max-width: $full-copy-max-width;
+  color: mat.m2-get-color-from-palette(abstract.$donate-warn);
+  max-width: abstract.$full-copy-max-width;
   text-align: center;
   margin: 1rem auto;
 }

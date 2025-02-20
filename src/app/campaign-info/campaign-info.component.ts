@@ -15,34 +15,33 @@ const openPipeToken = 'timeLeftToOpenPipe';
 const endPipeToken = 'timeLeftToEndPipe';
 
 @Component({
-  selector: 'app-campaign-info',
-  standalone: true,
-  templateUrl: './campaign-info.component.html',
-  styleUrl: './campaign-info.component.scss',
-  imports: [
-    ...allChildComponentImports,
-    FontAwesomeModule,
-  ],
-  providers: [
-    CurrencyPipe,
-    {provide: integerPipeToken, useClass: DecimalPipe},
-    // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
-    {provide: openPipeToken, useClass: TimeLeftPipe},
-    {provide: endPipeToken, useClass: TimeLeftPipe},
-  ],
+    selector: 'app-campaign-info',
+    templateUrl: './campaign-info.component.html',
+    styleUrl: './campaign-info.component.scss',
+    imports: [
+        ...allChildComponentImports,
+        FontAwesomeModule,
+    ],
+    providers: [
+        CurrencyPipe,
+        { provide: integerPipeToken, useClass: DecimalPipe },
+        // TimeLeftPipes are stateful, so we need to use a separate pipe for each date.
+        { provide: openPipeToken, useClass: TimeLeftPipe },
+        { provide: endPipeToken, useClass: TimeLeftPipe },
+    ]
 })
 export class CampaignInfoComponent implements OnInit {
   additionalImageUris: Array<string|null> = [];
-  @Input({ required: true }) campaign: Campaign;
-  campaignOpen: boolean;
-  campaignFinished: boolean;
-  campaignRaised: string; // Formatted
-  campaignTarget: string; // Formatted
+  @Input({ required: true }) campaign!: Campaign;
+  campaignOpen!: boolean;
+  campaignFinished!: boolean;
+  campaignRaised!: string; // Formatted
+  campaignTarget!: string; // Formatted
   /**
    * The count of donations to the parent campaign if it shares funds, or to this
    * specific campaign otherwise.
    */
-  donationCount: number;
+  donationCount!: number;
 
   constructor(
     private currencyPipe: CurrencyPipe,

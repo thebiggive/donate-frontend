@@ -15,7 +15,7 @@ export class NavigationService {
    * This Signal's value being false doesn't necessarily mean Donate does NOT have redirects. We just check on certain
    * routes, where a ?noredirect link is most likely to be helpful or where we might actually redirect.
    */
-  private possibleRedirectSignal: WritableSignal<boolean>;
+  private possibleRedirectSignal: WritableSignal<boolean> | undefined;
 
   setPossibleRedirectSignal(someCampaignHasHomePageRedirect: WritableSignal<boolean>) {
     this.possibleRedirectSignal = someCampaignHasHomePageRedirect;

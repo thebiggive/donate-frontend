@@ -62,6 +62,23 @@
                     {{ this.amountErrorMessage }}
                   </div>
                 }
+
+                @if (insufficientMatchFundsAvailable) {
+                  <p>
+                  @if (insufficientMatchFundsAvailable.maxMatchable.amountInPence === 0) {
+                    There are no match funds currently available for this campaign. Remember, every penny helps.
+                      Please continue to make an <strong>unmatched donation</strong> to the charity!
+                  } @else {
+                    There are limited match funds available.
+                    Remember, every penny helps.
+                      Please donate up to {{insufficientMatchFundsAvailable.maxMatchable | money}}, or make an
+                    <strong>unmatched donation</strong> to the charity!
+                  }
+                  </p>
+                <mat-checkbox formControlName="unmatched" id="unmatched">
+                  Make an unmatched donation
+                </mat-checkbox>
+                }
               </div>
 
               <div style="text-align: center">
@@ -348,16 +365,18 @@
               <p>
                 Your details
               </p>
-              <table id="personal-details">
-                <tr>
-                  <td>Name</td>
-                  <td>{{ donor.first_name }} {{ donor.last_name }}</td>
-                </tr>
-                <tr>
-                  <td>Email</td>
-                  <td>{{ donor.email_address }}</td>
-                </tr>
-              </table>
+              @if (donor) {
+                <table id="personal-details">
+                  <tr>
+                    <td>Name</td>
+                    <td>{{ donor.first_name }} {{ donor.last_name }}</td>
+                  </tr>
+                  <tr>
+                    <td>Email</td>
+                    <td>{{ donor.email_address }}</td>
+                  </tr>
+                </table>
+              }
 
               <p class="b-rt-0 b-m-0 b-mt-40">By clicking on the <span class="b-bold">Start regular giving now</span>
                 button, you agree to

@@ -1,31 +1,32 @@
-import {ActivatedRouteSnapshot, CanActivateFn, ResolveFn, Router, Routes} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivateFn, Router, Routes} from '@angular/router';
 
 import {CampaignListResolver} from './campaign-list.resolver';
 import {CampaignResolver} from './campaign.resolver';
 import {CharityCampaignsResolver} from './charity-campaigns.resolver';
-import {campaignStatsResolver} from "./campaign-stats-resolver";
-import {highlightCardsResolver} from "./highlight-cards-resolver";
+import {CampaignStatsResolver} from "./campaign-stats-resolver";
+import {HighlightCardsResolver} from "./highlight-cards-resolver";
 import {LoginComponent} from "./login/login.component";
-import {inject, PLATFORM_ID} from "@angular/core";
-import {IdentityService} from "./identity.service";
 import {RegisterComponent} from "./register/register.component";
-import {isPlatformServer} from "@angular/common";
 import {flags} from "./featureFlags";
 import {MyDonationsComponent} from "./my-donations/my-donations.component";
-import {DonationService} from "./donation.service";
-import {MyRegularGivingComponent} from "./my-regular-giving/my-regular-giving.component";
-import {MandateService} from "./mandate.service";
 import {RegularGivingComponent} from "./regular-giving/regular-giving.component";
-import {Person} from "./person.model";
-import {firstValueFrom} from "rxjs";
 import {MandateComponent} from "./mandate/mandate.component";
-import {Mandate} from "./mandate.model";
 import {MyPaymentMethodsComponent} from "./my-payment-methods/my-payment-methods.component";
 import {NotFoundComponent} from "./not-found/not-found.component";
-import {DonorAccountService} from "./donor-account.service";
-import {DonorAccount} from "./donorAccount.model";
-import {NavigationService} from "./navigation.service";
+import {MandateResolver} from './mandate.resolver';
+import {PaymentMethodsResolver} from './payment-methods.resolver';
+import {PastDonationsResolver} from './past-donations.resolver';
+import { isPlatformServer } from '@angular/common';
+import {inject, PLATFORM_ID} from '@angular/core';
 
+import {IdentityService} from './identity.service';
+import { LoggedInPersonResolver } from './logged-in-person.resolver';
+import { DonorAccountResolver } from './donor-account.resolver';
+import {MyRegularGivingComponent} from './my-regular-giving/my-regular-giving.component';
+import {NavigationService} from './navigation.service';
+import {RegularGivingService} from './regularGiving.service';
+import {allActiveMandatesResolver} from './all-active-mandates.resolver';
+import {CancelMandateComponent} from './cancel-mandate/cancel-mandate.component';
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
 export const transferFundsPath = 'transfer-funds';
@@ -88,35 +89,13 @@ const handleLogout: CanActivateFn = () => {
   return inject(Router).parseUrl('/');
 };
 
-const LoggedInPersonResolver: ResolveFn<Person | null> = async () => {
-  const identityService = inject(IdentityService);
-
-  const person$ = identityService.getLoggedInPerson();
-  return await firstValueFrom(person$);
-}
-
-const DonorAccountResolver: () => Promise<DonorAccount | null> = async () => {
-  const loggedInDonorAccount$ = inject(DonorAccountService).getLoggedInDonorAccount();
-  return await firstValueFrom(loggedInDonorAccount$);
-};
-
-const mandateResolver: ResolveFn<Mandate> = async (route: ActivatedRouteSnapshot) => {
-  const mandateService = inject(MandateService);
-  const mandateId = route.paramMap.get('mandateId');
-  if (!mandateId) {
-    throw new Error('mandateId param missing in route');
-  }
-  const mandate$ = mandateService.getActiveMandate(mandateId);
-  return await firstValueFrom(mandate$);
-}
-
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     resolve: {
-      stats: campaignStatsResolver,
-      highlights: highlightCardsResolver
+      stats: CampaignStatsResolver,
+      highlights: HighlightCardsResolver
     },
     loadChildren: () => import('./home/home.module')
       .then(c => c.HomeModule),
@@ -168,11 +147,33 @@ const routes: Routes = [
     redirectTo: 'donate/:campaignId',
   },
   {
+    path: `${myRegularGivingPath}/:mandateId`,
+    pathMatch: 'full',
+    component: MandateComponent,
+    canActivate: [
+      requireLogin,
+    ],
+    resolve: {
+      mandate:  MandateResolver,
+    },
+  },
+  {
+    path: `${myRegularGivingPath}/:mandateId/cancel`,
+    pathMatch: 'full',
+    component: CancelMandateComponent,
+    canActivate: [
+      requireLogin,
+    ],
+    resolve: {
+      mandate:  MandateResolver,
+    },
+  },
+  {
     path: 'metacampaign/:campaignId',
     pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
-      highlights: highlightCardsResolver,
+      highlights: HighlightCardsResolver,
     },
     loadChildren: () => import('./explore/explore.module')
       .then(c => c.ExploreModule),
@@ -182,7 +183,7 @@ const routes: Routes = [
     pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
-      highlights: highlightCardsResolver,
+      highlights: HighlightCardsResolver,
     },
     loadChildren: () => import('./explore/explore.module')
       .then(c => c.ExploreModule),
@@ -202,7 +203,7 @@ const routes: Routes = [
   {
     path: 'my-account/donations',
     resolve: {
-      donations: () => inject(DonationService).getPastDonations(),
+      donations: PastDonationsResolver,
     },
     pathMatch: 'full',
     component: MyDonationsComponent,
@@ -214,10 +215,8 @@ const routes: Routes = [
     path: 'my-account/payment-methods',
     pathMatch: 'full',
     resolve: {
-      person: async () => await firstValueFrom(inject(IdentityService).getLoggedInPerson()),
-      paymentMethods: async () => {
-        return await inject(DonationService).getPaymentMethods();
-      },
+      person: LoggedInPersonResolver,
+      paymentMethods: PaymentMethodsResolver,
     },
     component: MyPaymentMethodsComponent,
     canActivate: [
@@ -229,7 +228,7 @@ const routes: Routes = [
     pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
-      highlights: highlightCardsResolver,
+      highlights: HighlightCardsResolver,
     },
     loadChildren: () => import('./explore/explore.module')
       .then(c => c.ExploreModule),
@@ -239,7 +238,7 @@ const routes: Routes = [
     pathMatch: 'full',
     resolve: {
       campaigns: CampaignListResolver,
-      highlights: highlightCardsResolver
+      highlights: HighlightCardsResolver
     },
     loadChildren: () => import('./explore/explore.module')
       .then(c => c.ExploreModule),
@@ -286,8 +285,8 @@ const routes: Routes = [
     path: 'cookie-preferences',
     pathMatch: 'full',
     resolve: {
-      stats: campaignStatsResolver,
-      highlights: highlightCardsResolver
+      stats: CampaignStatsResolver,
+      highlights: HighlightCardsResolver
     },
     data: {
       showCookiePreferences: true,
@@ -303,7 +302,7 @@ const routes: Routes = [
     pathMatch: 'full',
     resolve: {
       campaign: CampaignResolver,
-      highlights: highlightCardsResolver,
+      highlights: HighlightCardsResolver,
     },
     loadChildren: () => import('./explore/explore.module')
       .then(c => c.ExploreModule),
@@ -320,7 +319,7 @@ if (flags.regularGivingEnabled) {
     {
       path: myRegularGivingPath,
       resolve: {
-        mandates: () => inject(MandateService).getActiveMandates(),
+        mandates: allActiveMandatesResolver,
       },
       pathMatch: 'full',
       component: MyRegularGivingComponent,
@@ -345,18 +344,5 @@ if (flags.regularGivingEnabled) {
       },
     },
   )
-
-  routes.unshift({
-    path: `${myRegularGivingPath}/:mandateId`,
-    pathMatch: 'full',
-    component: MandateComponent,
-    canActivate: [
-      requireLogin,
-    ],
-    resolve: {
-        mandate:  mandateResolver,
-    },
-  })
 }
 
-export {routes};

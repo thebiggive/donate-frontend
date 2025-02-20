@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 
 import {Campaign} from "../../campaign.model";
 import {CampaignService} from '../../campaign.service';
-import { Donation } from 'src/app/donation.model';
+import { Donation } from '../../donation.model';
 import {Person} from "../../person.model";
 import {IdentityService} from "../../identity.service";
 import {environment} from "../../../environments/environment";
@@ -11,20 +11,21 @@ import {DonationStartFormComponent} from "../donation-start-form/donation-start-
 import {ImageService} from "../../image.service";
 
 @Component({
-  templateUrl: './donation-start-container.component.html',
-  styleUrl: './donation-start-container.component.scss'
+    templateUrl: './donation-start-container.component.html',
+    styleUrl: './donation-start-container.component.scss',
+    standalone: false
 })
 export class DonationStartContainerComponent implements AfterViewInit, OnInit{
-  campaign: Campaign;
-  campaignOpenOnLoad: boolean;
+  campaign!: Campaign;
+  campaignOpenOnLoad!: boolean;
   donation: Donation | undefined = undefined;
   personId?: string;
   loggedInEmailAddress?: string;
 
-  @ViewChild('donation_start_form') donationStartForm: DonationStartFormComponent
+  @ViewChild('donation_start_form') donationStartForm!: DonationStartFormComponent
   public reservationExpiryDate: Date| undefined = undefined;
   public donor: Person | undefined;
-  public bannerUri: string | null;
+  public bannerUri!: string | null;
 
   constructor(
     public identityService: IdentityService,
@@ -115,11 +116,11 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
     });
   };
 
-  get loggedInWithPassword() {
-    return !!this.donor?.has_password;
+  get loggedInWithPassword(): boolean {
+    return !!this.donor?.has_password || false;
   }
 
-  setDonation = (donation: Donation) => {
+  setDonation = (donation?: Donation) => {
     this.donation = donation;
     this.updateReservationExpiryTime();
   }

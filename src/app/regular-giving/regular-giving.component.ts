@@ -9,7 +9,7 @@ import {MatHint, MatInput} from "@angular/material/input";
 import {MatButton, MatIconAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
-import {RegularGivingService} from "../regularGiving.service";
+import {RegularGivingService, StartMandateParams} from "../regularGiving.service";
 import {Mandate} from '../mandate.model';
 import {myRegularGivingPath} from "../app-routing";
 import {requiredNotBlankValidator} from "../validators/notBlank";
@@ -29,7 +29,7 @@ import {
 } from "@stripe/stripe-js";
 import {DonationService, StripeCustomerSession} from "../donation.service";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {AddressService, billingPostcodeRegExp, HomeAddress} from "../address.service";
+import {AddressService, billingPostcodeRegExp, HomeAddress, postcodeRegExp} from "../address.service";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {environment} from "../../environments/environment";
 import {
@@ -40,6 +40,14 @@ import {
 } from "@angular/material/autocomplete";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {GiftAidAddressSuggestion} from "../gift-aid-address-suggestion.model";
+import {MoneyPipe} from "../money.pipe";
+import {
+  BackendError,
+  errorDescription,
+  errorDetails,
+  InsufficientFundsDetail,
+  isInsufficientMatchFundsError
+} from "../backendError";
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -48,8 +56,7 @@ const minAmount = 1;
 const paymentStepIndex = 2;
 
 @Component({
-  selector: 'app-regular-giving',
-  standalone: true,
+    selector: 'app-regular-giving',
   imports: [
     ComponentsModule,
     FormsModule,
@@ -68,27 +75,28 @@ const paymentStepIndex = 2;
     MatAutocomplete,
     MatAutocompleteTrigger,
     MatCheckbox,
-    MatOption
+    MatOption,
+    MoneyPipe
   ],
-  templateUrl: './regular-giving.component.html',
-  styleUrl: './regular-giving.component.scss'
+    templateUrl: './regular-giving.component.html',
+    styleUrl: './regular-giving.component.scss'
 })
 export class RegularGivingComponent implements OnInit, AfterViewInit {
-  protected campaign: Campaign;
-  mandateForm: FormGroup;
-  @ViewChild('stepper') private stepper: MatStepper;
+  protected campaign!: Campaign;
+  mandateForm!: FormGroup;
+  @ViewChild('stepper') private stepper!: MatStepper;
   readonly termsUrl = 'https://biggive.org/terms-and-conditions';
   readonly privacyUrl = 'https://biggive.org/privacy';
-  protected donor: Person;
-  protected donorAccount: DonorAccount;
+  protected donor?: Person;
+  protected donorAccount!: DonorAccount;
   protected countryOptionsObject = countryOptions;
-  protected selectedBillingCountryCode: string;
+  protected selectedBillingCountryCode!: string;
   private stripeElements: StripeElements | undefined;
   private stripePaymentElement: StripePaymentElement | undefined;
 
   public readonly labelYourPaymentInformation = "Your Payment Information";
 
-  @ViewChild('cardInfo') protected cardInfo: ElementRef;
+  @ViewChild('cardInfo') protected cardInfo?: ElementRef;
   private stripeCustomerSession: StripeCustomerSession | undefined;
   protected submitting: boolean = false;
 
@@ -111,6 +119,12 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected homeAddress: HomeAddress | undefined;
   protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
 
+  /**
+   * Defined if we have discovered that there are/were not enough match funds to cover the initial donations the donor
+   * wanted to make. They will have the option to try making a smaller matched donation, or donate without matching.
+   */
+  protected insufficientMatchFundsAvailable: InsufficientFundsDetail | undefined  = undefined;
+
   constructor(
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -125,14 +139,14 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    const donor: Person | null = this.route.snapshot.data.donor;
+    const donor: Person | null = this.route.snapshot.data['donor'];
     if (! donor) {
       throw new Error("Must be logged in to see regular giving page");
     }
     this.donor = donor;
-    this.donorAccount = this.route.snapshot.data.donorAccount
+    this.donorAccount = this.route.snapshot.data['donorAccount']
 
-    this.campaign = this.route.snapshot.data.campaign;
+    this.campaign = this.route.snapshot.data['campaign'];
 
     if ( !this.campaign.isRegularGiving ) {
       console.error("Campaign " + this.campaign.id + " is not a regular giving campaign");
@@ -169,6 +183,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       homeOutsideUK: [null],
       homeAddress: [null],
       homePostcode: [null],
+      unmatched: [false], // If ticked, indicates that the donor is willing to donate without match funding.
       });
 
     this.stripeService.init().catch(console.error);
@@ -230,12 +245,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       let errorMessage = 'Form error: ';
       if (this.mandateForm.get('donationAmount')?.hasError('required')) {
         errorMessage += "Monthly donation amount is required";
+      } else {
+        errorMessage = "Sorry, we encountered an unexpected form error. Please try again or contact Big Give for assistance."
       }
       this.toast.showError(errorMessage);
       return;
     }
 
-    const billingPostcode: string = this.mandateForm.value.billingPostcode;
     const billingCountry: string = this.selectedBillingCountryCode;
 
     let confirmationToken: ConfirmationToken | undefined;
@@ -247,7 +263,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     if (this.stripeElements && !this.donorAccount.regularGivingPaymentMethod) {
       const confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(
-        {billingPostalAddress: billingPostcode, countryCode: billingCountry},
+        {billingPostalAddress: this.billingPostCode + '', countryCode: billingCountry},
         this.stripeElements
       );
 
@@ -265,31 +281,58 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     this.submitErrorMessage = undefined;
 
+    let home: StartMandateParams["home"];
+    if (this.giftAid && this.homeAddressFormValue) {
+      home = {
+        addressLine1: this.homeAddressFormValue,
+        // postcode and isOutsideUK must be set within this if block.
+        postcode: this.homePostcode!,
+        isOutsideUK: this.homeOutsideUK!
+      };
+    } else {
+      home = undefined;
+    }
+
     this.regularGivingService.startMandate({
       amountInPence: this.getDonationAmountPence(),
       dayOfMonth,
       campaignId: this.campaign.id,
       currency: "GBP",
       giftAid: !!this.giftAid,
-      billingPostcode,
+      billingPostcode: this.billingPostCode,
       billingCountry,
       stripeConfirmationTokenId: confirmationToken?.id,
       charityComms: !!this.optInCharityEmail,
       tbgComms: !!this.optInTbgEmail,
       homeAddress: this.homeAddressFormValue,
       homePostcode: this.homePostcode,
+      home: home,
+      unmatched: this.unmatched,
     }).subscribe({
       next: async (mandate: Mandate) => {
         await this.router.navigateByUrl(`/${myRegularGivingPath}/${mandate.id}`);
       },
-      error: (error: {error: {error: {description?: string} }}) => {
-        const message = error.error.error.description ?? 'Sorry, something went wrong';
+      error: (error: BackendError) => {
+        const message = errorDescription(error);
 
-        this.submitErrorMessage = message;
+        if (isInsufficientMatchFundsError(error)) {
+          this.insufficientMatchFundsAvailable = errorDetails(error);
+          this.selectStep(0);
+        } else {
+          this.submitErrorMessage = message;
+        }
         this.toast.showError(message);
         this.submitting = false;
       }
     })
+  }
+
+  private get unmatched(): boolean {
+    return !!this.mandateForm.value.unmatched;
+  }
+
+  private get billingPostCode(): string | null{
+    return this.mandateForm.value.billingPostcode;
   }
 
   private getDonationAmountPence(): number {
@@ -357,6 +400,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     if (this.cardInfo && this.stripePaymentElement) {
       this.stripePaymentElement.mount(this.cardInfo.nativeElement);
+      // @ts-ignore Not sure why only 'loaderstart' sig is recognised now.
       this.stripePaymentElement.on('change', this.cardHandler);
     }
   }
@@ -398,23 +442,29 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   }
 
   private selectStep(stepIndex: number) {
-    let errorFound = this.validateAmountStep();
-
-    if (stepIndex > 1) {
-      errorFound = this.validateGiftAidStep() || errorFound;
+    if (stepIndex > 0 && this.validateAmountStep()) {
+      return;
     }
 
-    if (stepIndex > 2) {
-      errorFound = this.validatePaymentInformationStep() || errorFound;
+    if (stepIndex > 1 && this.validateGiftAidStep()) {
+      return;
     }
 
-    if (stepIndex > 3) {
-      errorFound = this.validateUpdatesStep() || errorFound;
+    if (stepIndex > 2 && this.validatePaymentInformationStep()) {
+      return;
     }
 
-    if (! errorFound) {
-      this.stepper.selected = this.stepper.steps.get(stepIndex);
+    if (stepIndex > 3 && this.validateUpdatesStep()) {
+      return;
     }
+
+    if (this.giftAid && this.homePostcode?.trim() && ! this.billingPostCode?.trim()) {
+      this.mandateForm.patchValue({
+        billingPostcode: this.homePostcode,
+      });
+    }
+
+    this.stepper.selected = this.stepper.steps.get(stepIndex);
   }
 
   protected get optInCharityEmail(): boolean | undefined
@@ -437,7 +487,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    */
   private validateAmountStep() {
     let errorFound = false;
-    const donationAmountErrors = this.mandateForm.controls.donationAmount!.errors;
+    const donationAmountErrors = this.mandateForm.controls['donationAmount']!.errors;
 
     if (donationAmountErrors) {
       for (const [key] of Object.entries(donationAmountErrors)) {
@@ -463,6 +513,21 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       errorFound = true;
     } else {
       this.amountErrorMessage = undefined;
+
+      const askingToMatchMoreThanAvailable =
+        this.insufficientMatchFundsAvailable &&
+        ! this.unmatched &&
+        this.getDonationAmountPence() > this.insufficientMatchFundsAvailable.maxMatchable.amountInPence;
+
+      if (askingToMatchMoreThanAvailable) {
+        errorFound = true;
+        const formattedMax = MoneyPipe.format(this.insufficientMatchFundsAvailable!.maxMatchable);
+        this.amountErrorMessage =
+          `There is only funding available to match donations of up to ${formattedMax}. ` +
+          'Please choose a smaller donation amount, or make an unmatched donation.';
+
+        this.toast.showError(this.amountErrorMessage!);
+      }
     }
     return errorFound;
   }
@@ -503,7 +568,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
      this.paymentInfoErrorMessage = this.stripeError;
     }
 
-    const postcodeErrors = this.mandateForm.controls.billingPostcode!.errors;
+    const postcodeErrors = this.mandateForm.controls['billingPostcode']!.errors;
     if (postcodeErrors) {
       for (const [key] of Object.entries(postcodeErrors)) {
         switch (key) {
@@ -538,6 +603,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     if (this.giftAid && ! this.homeOutsideUK && !this.homePostcode) {
       errors.push('Please enter your home postcode to claim Gift Aid if you are in the UK.');
+    }
+
+    if (this.giftAid && ! this.homeOutsideUK && ! this.homePostcode?.match(postcodeRegExp)) {
+      errors.push("Please enter a UK postcode");
     }
 
     this.giftAidErrorMessage = errors.join(' ');

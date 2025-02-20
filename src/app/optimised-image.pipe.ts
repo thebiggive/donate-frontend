@@ -12,7 +12,10 @@ export class OptimisedImagePipe implements PipeTransform {
   transform(originalUri: string | null, width: number = 830): Promise<string|null> {
     return new Promise((resolve, reject) => {
       this.imageService.getImageUri(originalUri, width)
-        .subscribe(uri => resolve(uri), error => reject(error));
+        .subscribe({
+          next: uri => resolve(uri),
+          error: error => reject(error)
+        });
     });
   }
 }

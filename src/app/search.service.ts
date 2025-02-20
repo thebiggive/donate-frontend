@@ -29,7 +29,7 @@ export class SearchService {
   changed: EventEmitter<boolean>; // Value indicates if an interactive UI change triggered this.
 
   nonDefaultsActive: boolean;
-  selectedSortLabel: sortLabel;
+  selectedSortLabel?: sortLabel;
 
   constructor() {
     this.changed = new EventEmitter();
@@ -56,9 +56,9 @@ export class SearchService {
     filterFunding: string;
   }, defaultSort: camelCaseSortOption) {
     this.nonDefaultsActive = true;
-    this.selected.beneficiary = customSearchEvent.filterBeneficiary ? customSearchEvent.filterBeneficiary : '';
-    this.selected.category = customSearchEvent.filterCategory ? customSearchEvent.filterCategory : '';
-    this.selected.country = customSearchEvent.filterLocation ? customSearchEvent.filterLocation : '';
+    this.selected['beneficiary'] = customSearchEvent.filterBeneficiary ? customSearchEvent.filterBeneficiary : '';
+    this.selected['category'] = customSearchEvent.filterCategory ? customSearchEvent.filterCategory : '';
+    this.selected['country'] = customSearchEvent.filterLocation ? customSearchEvent.filterLocation : '';
 
     const blankSearchText = (
       !customSearchEvent.searchText || customSearchEvent.searchText.trim() === ''
@@ -67,7 +67,7 @@ export class SearchService {
     const previousSearchText = this.selected.term;
     // this helps for comparing the new search text with the previous, because 'null' and 'undefined' are changed to ''
     this.selected.term = blankSearchText ? '' : customSearchEvent.searchText;
-    this.selected.sortField = SearchService.sortFieldToCamelCase(customSearchEvent.sortBy, defaultSort);
+    this.selected['sortField'] = SearchService.sortFieldToCamelCase(customSearchEvent.sortBy, defaultSort);
 
     this.updateSelectedSortLabel();
 
@@ -78,7 +78,7 @@ export class SearchService {
       }
 
       // If search text changed and new search text is not blank, we want to re-sort by 'Relevance'. DON-558.
-      this.selected.sortField = 'relevance';
+      this.selected['sortField'] = 'relevance';
     }
 
     this.changed.emit(true);
@@ -87,7 +87,8 @@ export class SearchService {
   private static sortFieldToCamelCase(sortBy: string, defaultSort: camelCaseSortOption): camelCaseSortOption {
     let selected;
 
-    Object.keys(sortOptions).forEach((key: camelCaseSortOption) => {
+    // Not sure why TS isn't inferring `sortOptions`'s type any more; using `as` for now.
+    (Object.keys(sortOptions) as camelCaseSortOption[]).forEach((key: camelCaseSortOption) => {
       if (sortBy === key || sortBy === sortOptions[key]) {
         selected = key;
     }});
@@ -96,7 +97,7 @@ export class SearchService {
   }
 
   private updateSelectedSortLabel() {
-    switch(this.selected.sortField) {
+    switch(this.selected['sortField']) {
       case 'matchFundsRemaining':
         this.selectedSortLabel  = sortOptions.matchFundsRemaining;
         break;
@@ -142,8 +143,8 @@ export class SearchService {
       }
     }
 
-    if (this.selected.sortField === 'relevance' && length === 0) {
-      delete queryParams.sortField;
+    if (this.selected['sortField'] === 'relevance' && length === 0) {
+      delete queryParams['sortField'];
     }
 
     return queryParams;
@@ -182,21 +183,21 @@ export class SearchService {
   search(term: string, defaultSort: string) {
     this.nonDefaultsActive = true;
     this.selected.term = term;
-    this.selected.sortField = term.length > 0 ? '' : defaultSort;
+    this.selected['sortField'] = term.length > 0 ? '' : defaultSort;
     this.changed.emit(true);
   }
 
   showClearFilters(): boolean {
     return Boolean(
-      this.selected.beneficiary ||
-      this.selected.category ||
-      this.selected.country ||
+      this.selected['beneficiary'] ||
+      this.selected['category'] ||
+      this.selected['country'] ||
       this.selected.term,
     );
   }
 
   sort(selectedSort: string) {
-    this.selected.sortField = selectedSort;
+    this.selected['sortField'] = selectedSort;
     this.changed.emit(true);
   }
 }

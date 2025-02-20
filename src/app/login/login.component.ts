@@ -16,6 +16,7 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {registerPath} from "../app-routing";
 import {WidgetInstance} from "friendly-challenge";
 import {NavigationService} from "../navigation.service";
+import {errorDescription, BackendError} from "../backendError";
 
 export type LoginNavigationState = {
   /**
@@ -25,11 +26,10 @@ export type LoginNavigationState = {
 }
 
 @Component({
-  selector: 'app-login',
-  standalone: true,
-  imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule],
-  templateUrl: './login.component.html',
-  styleUrl: 'login.component.scss'
+    selector: 'app-login',
+    imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule],
+    templateUrl: './login.component.html',
+    styleUrl: 'login.component.scss'
 })
 export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   @ViewChild('frccaptcha', { static: false })
@@ -38,8 +38,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   protected forgotPassword = false;
   protected loggingIn = false;
   protected loginError?: string;
-  loginForm: FormGroup;
-  protected resetPasswordForm: FormGroup;
+  loginForm!: FormGroup;
+  protected resetPasswordForm!: FormGroup;
   protected resetPasswordSuccess: boolean|undefined = undefined;
   protected readonly friendlyCaptchaSiteKey = environment.friendlyCaptchaSiteKey;
 
@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   /** Used to prevent displaying the page before all parts are ready **/
   public pageInitialised = false;
   private captchaCode: string | undefined;
-  protected registerLink: string;
+  protected registerLink!: string;
   protected isNewRegistration: boolean = false;
 
   constructor(
@@ -109,7 +109,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     this.pageInitialised = true;
   }
 
-  private friendlyCaptchaWidget: WidgetInstance;
+  private friendlyCaptchaWidget!: WidgetInstance;
 
   async ngAfterViewInit() {
     if (! isPlatformBrowser(this.platformId)) {
@@ -179,9 +179,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
       next: async (_response: { id: string, jwt: string }) => {
         await this.router.navigateByUrl(this.redirectPath);
       },
-      error: async (error) => {
-        const errorDescription = error.error.error.description;
-        this.loginError = errorDescription || error.message || 'Unknown error';
+      error: async (error: BackendError) => {
+        this.loginError = errorDescription(error)
         this.loggingIn = false;
 
         this.captchaCode = undefined;

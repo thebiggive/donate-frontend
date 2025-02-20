@@ -13,22 +13,22 @@ import {IdentityService} from "../identity.service";
 import {MatDialog} from "@angular/material/dialog";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
+import {BackendError, errorDetails} from "../backendError";
 
 @Component({
-  selector: 'app-my-payment-methods',
-  standalone: true,
-  imports: [
-    ComponentsModule,
-    ExactCurrencyPipe,
-    MatProgressSpinner,
-    FaIconComponent
-  ],
-  templateUrl: './my-payment-methods.component.html',
-  styleUrl: './my-payment-methods.component.scss'
+    selector: 'app-my-payment-methods',
+    imports: [
+        ComponentsModule,
+        ExactCurrencyPipe,
+        MatProgressSpinner,
+        FaIconComponent
+    ],
+    templateUrl: './my-payment-methods.component.html',
+    styleUrl: './my-payment-methods.component.scss'
 })
 export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
   protected paymentMethods: PaymentMethod[] | undefined;
-  protected person: Person;
+  protected person!: Person;
 
   private savedCardsTimer: undefined | ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
 
@@ -76,9 +76,9 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
 
     this.donationService.deleteStripePaymentMethod(this.person, method, this.jwtAsString()).subscribe(
       this.loadPaymentMethods.bind(this),
-      error => {
+      (error: BackendError) => {
         this.loadPaymentMethods.bind(this)()
-        alert(error.error.error)
+        alert(errorDetails(error))
       }
     )
   }

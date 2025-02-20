@@ -1,4 +1,4 @@
-@import '../../abstract';
+@use '../../abstract';
 
 .auto-margin {
   margin: auto; //centres the button
@@ -24,7 +24,7 @@ swiper-slide {
   margin-bottom: 60px;
   margin-top: 60px;
   text-align: center;
-  color: $colour-primary;
+  color: abstract.$colour-primary;
   .slug {
     margin: 0;
     padding: 0;
@@ -50,8 +50,8 @@ swiper-slide {
 }
 
 .mySwiper {
-  --swiper-pagination-color: #2C089B; // i.e. $colour-primary but for some reason refrencing the variable doesn't seem to work here.
-  --swiper-pagination-bullet-inactive-color: #333333; // i.e. $colour-grey
+  --swiper-pagination-color: abstract.$colour-primary;
+  --swiper-pagination-bullet-inactive-color: abstract.$colour-grey;
 }
 
 .charity-carousel-navigation {

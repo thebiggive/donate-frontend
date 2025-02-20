@@ -1,4 +1,4 @@
-@import '../../abstract';
+@use '../../abstract';
 
 mat-spinner.complete-spinner {
   margin: 3rem auto;
@@ -15,17 +15,17 @@ mat-spinner.complete-spinner {
 
 hr {
   width: 80%;
-  @media #{$breakpoint-sm} {
+  @media #{abstract.$breakpoint-sm} {
     margin: 40px auto;
   }
-  @media #{$breakpoint-lg} {
+  @media #{abstract.$breakpoint-lg} {
     margin: 60px auto;
   }
   color: #868686;
 }
 
 .thank-you {
-  background-color: $colour-primary;
+  background-color: abstract.$colour-primary;
   padding: 75px 0;
   position: relative;
   top: -125px;
@@ -34,19 +34,19 @@ hr {
 
   h2 {
     margin-top: 0;
-    color: $colour-secondary;
+    color: abstract.$colour-secondary;
     text-align: center;
 
-    @media #{$breakpoint-sm} {
+    @media #{abstract.$breakpoint-sm} {
       font-size: 2rem;
     }
-    @media #{$breakpoint-md} {
+    @media #{abstract.$breakpoint-md} {
       font-size: 2.5rem;
     }
-    @media #{$breakpoint-lg} {
+    @media #{abstract.$breakpoint-lg} {
       font-size: 3rem;
     }
-    @media #{$breakpoint-xl} {
+    @media #{abstract.$breakpoint-xl} {
       font-size: 4rem;
     }
   }
@@ -59,7 +59,7 @@ hr {
 
     &.error {
       fa-icon {
-        color: $colour-secondary;
+        color: abstract.$colour-secondary;
       }
     }
 
@@ -71,16 +71,16 @@ hr {
 
   .thank-you-text {
     font-weight: 500;
-    @media #{$breakpoint-sm} {
+    @media #{abstract.$breakpoint-sm} {
       font-size: 1rem;
     }
-    @media #{$breakpoint-md} {
+    @media #{abstract.$breakpoint-md} {
       font-size: 1.2rem;
     }
-    @media #{$breakpoint-lg} {
+    @media #{abstract.$breakpoint-lg} {
       font-size: 1.5rem;
     }
-    @media #{$breakpoint-xl} {
+    @media #{abstract.$breakpoint-xl} {
       font-size: 2rem;
     }
   }
@@ -89,7 +89,7 @@ hr {
     max-width: 80%;
     margin: auto;
     fa-icon {
-      color: $colour-highlight;
+      color: abstract.$colour-highlight;
     }
     a {
       // this color style doesn't seem to have any affect - not sure why not. For now I've set the color
@@ -100,7 +100,7 @@ hr {
 }
 
 .donation-summary {
-  @media #{$breakpoint-md} {
+  @media #{abstract.$breakpoint-md} {
     text-align: center;
   }
   width: 80%;
@@ -109,21 +109,21 @@ hr {
 
   p {
     margin: 2rem 0;
-    @media #{$breakpoint-sm} {
+    @media #{abstract.$breakpoint-sm} {
       font-size: 1rem;
     }
-    @media #{$breakpoint-md} {
+    @media #{abstract.$breakpoint-md} {
       font-size: 1.1rem;
     }
-    @media #{$breakpoint-lg} {
+    @media #{abstract.$breakpoint-lg} {
       font-size: 1.2rem;
     }
-    @media #{$breakpoint-xl} {
+    @media #{abstract.$breakpoint-xl} {
       font-size: 1.5rem;
     }
     strong {
       &.figure {
-        color: $colour-primary;
+        color: abstract.$colour-primary;
       }
     }
   }
@@ -156,16 +156,16 @@ div.clearfix {
     caption, th, td {
       text-align: left;
 
-      @media #{$breakpoint-sm} {
+      @media #{abstract.$breakpoint-sm} {
         font-size: 1rem;
       }
-      @media #{$breakpoint-md} {
+      @media #{abstract.$breakpoint-md} {
         font-size: 1.1rem;
       }
-      @media #{$breakpoint-lg} {
+      @media #{abstract.$breakpoint-lg} {
         font-size: 1.2rem;
       }
-      @media #{$breakpoint-xl} {
+      @media #{abstract.$breakpoint-xl} {
         font-size: 1.4rem;
       }
     }
@@ -176,12 +176,12 @@ div.clearfix {
   }
   .receives {
     th, td {
-      background-color: $colour-highlight;
+      background-color: abstract.$colour-highlight;
       padding: 5px;
     }
   }
   .total {
-    color: $colour-primary;
+    color: abstract.$colour-primary;
   }
 }
 
@@ -212,16 +212,16 @@ div.clearfix {
   }
 
   a, p {
-    @media #{$breakpoint-sm} {
+    @media #{abstract.$breakpoint-sm} {
       font-size: 1rem;
     }
-    @media #{$breakpoint-md} {
+    @media #{abstract.$breakpoint-md} {
       font-size: 1.1rem;
     }
-    @media #{$breakpoint-lg} {
+    @media #{abstract.$breakpoint-lg} {
       font-size: 1.2rem;
     }
-    @media #{$breakpoint-xl} {
+    @media #{abstract.$breakpoint-xl} {
       font-size: 1.4rem;
     }
   }
@@ -239,4 +239,4 @@ div.clearfix {
   border: 0;
 }
 
-@include friendly-captcha();
+@include abstract.friendly-captcha();

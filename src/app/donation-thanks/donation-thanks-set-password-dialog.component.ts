@@ -5,31 +5,30 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { minPasswordLength } from 'src/environments/common';
 
+import { minPasswordLength } from '../../environments/common';
 import { allChildComponentImports } from '../../allChildComponentImports';
 import { Person } from '../person.model';
 import {PopupStandaloneComponent} from "../popup-standalone/popup-standalone.component";
 import {flags} from "../featureFlags";
 
 @Component({
-  standalone: true,
-  selector: 'app-donation-thanks-set-password-dialog',
-  templateUrl: 'donation-thanks-set-password-dialog.html',
-  styleUrl: './donation-thanks-set-password-dialog.component.scss',
-  imports: [
-    ...allChildComponentImports,
-    MatButtonModule,
-    MatDialogModule,
-    MatIconModule,
-    MatInputModule,
-    MatRadioModule,
-    ReactiveFormsModule,
-    PopupStandaloneComponent,
-  ]
+    selector: 'app-donation-thanks-set-password-dialog',
+    templateUrl: 'donation-thanks-set-password-dialog.html',
+    styleUrl: './donation-thanks-set-password-dialog.component.scss',
+    imports: [
+        ...allChildComponentImports,
+        MatButtonModule,
+        MatDialogModule,
+        MatIconModule,
+        MatInputModule,
+        MatRadioModule,
+        ReactiveFormsModule,
+        PopupStandaloneComponent,
+    ]
 })
 export class DonationThanksSetPasswordDialogComponent implements OnInit {
-  form: FormGroup;
+  form!: FormGroup;
   minPasswordLength: number;
   protected readonly flags = flags;
 
@@ -39,7 +38,9 @@ export class DonationThanksSetPasswordDialogComponent implements OnInit {
     },
     private dialogRef: MatDialogRef<DonationThanksSetPasswordDialogComponent>,
     private formBuilder: FormBuilder,
-  ) {}
+  ) {
+    this.minPasswordLength = minPasswordLength;
+  }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -49,7 +50,6 @@ export class DonationThanksSetPasswordDialogComponent implements OnInit {
       ]],
       stayLoggedIn: [false],
     });
-    this.minPasswordLength = minPasswordLength;
   }
 
   set() {

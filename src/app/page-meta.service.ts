@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
-import { environment } from 'src/environments/environment';
+import { environment } from '../environments/environment';
 
 /**
  * Encapsulates common logic for setting pages' key metadata consistently across basic HTML meta tags and

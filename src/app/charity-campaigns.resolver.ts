@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import {ActivatedRouteSnapshot, Resolve, Router} from '@angular/router';
 
 import { CampaignService } from './campaign.service';
 import { EMPTY, Observable, of } from 'rxjs';
 import { CampaignSummary } from './campaign-summary.model';
 import { catchError } from 'rxjs/operators';
 
-@Injectable()
-export class CharityCampaignsResolver  {
+@Injectable(
+  {providedIn: 'root'}
+)
+export class CharityCampaignsResolver implements Resolve<CampaignSummary[]> {
   constructor(private campaignService: CampaignService, private router: Router) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<CampaignSummary[]> {

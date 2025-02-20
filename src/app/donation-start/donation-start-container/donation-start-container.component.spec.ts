@@ -8,7 +8,6 @@ import { of } from "rxjs";
 
 import { DonationStartContainerComponent } from "./donation-start-container.component";
 import { DonationStartFormComponent } from "../donation-start-form/donation-start-form.component";
-import { TBG_DONATE_ID_STORAGE } from "../../identity.service";
 import { TBG_DONATE_STORAGE } from "../../donation.service";
 import { MatomoModule } from "ngx-matomo-client";
 import {
@@ -18,14 +17,15 @@ import {
 
 // See https://medium.com/angular-in-depth/angular-unit-testing-viewchild-4525e0c7b756
 @Component({
-  selector: "app-donation-start-form",
-  template: "",
-  providers: [
-    {
-      provide: DonationStartFormComponent,
-      useClass: DonationStartFormStubComponent,
-    },
-  ],
+    selector: "app-donation-start-form",
+    template: "",
+    providers: [
+        {
+            provide: DonationStartFormComponent,
+            useClass: DonationStartFormStubComponent,
+        },
+    ],
+    standalone: false
 })
 class DonationStartFormStubComponent {
   resumeDonationsIfPossible() {}
@@ -61,7 +61,6 @@ describe("DonationStartContainer", () => {
           },
         },
         InMemoryStorageService,
-        { provide: TBG_DONATE_ID_STORAGE, useExisting: InMemoryStorageService },
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
         provideHttpClient(withInterceptorsFromDi()),
         provideHttpClientTesting(),

@@ -12,7 +12,7 @@ jobs:
   test:
     resource_class: large
     docker:
-      - image: cimg/node:20.13.1-browsers
+      - image: cimg/node:22.14.0-browsers
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_ACCESS_TOKEN
@@ -74,13 +74,13 @@ jobs:
           aws_access_key_id: AWS_ACCESS_KEY_ID
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
 
-      - aws-s3/sync: # Sync dist/browser to S3 with 1 year lifetime
-          from: /usr/src/app/dist/browser
+      - aws-s3/sync: # Sync dist/donate-frontend/browser to S3 with 1 year lifetime
+          from: /usr/src/app/dist/donate-frontend/browser
           to: 's3://tbg-<< parameters.env >>-donate-static/d'
           arguments: '--acl public-read --cache-control "max-age=31536000"'
 
-      - aws-s3/sync: # Sync dist/browser/assets to S3 with 1 day lifetime
-          from: /usr/src/app/dist/browser/assets
+      - aws-s3/sync: # Sync dist/donate-frontend/browser/assets to S3 with 1 day lifetime
+          from: /usr/src/app/dist/donate-frontend/browser/assets
           to: 's3://tbg-<< parameters.env >>-donate-static/assets'
           arguments: '--acl public-read --cache-control "max-age=86400"'
 
@@ -92,7 +92,7 @@ jobs:
         type: string
     resource_class: large
     docker:
-      - image: cimg/node:20.13.1-browsers
+      - image: cimg/node:22.14.0-browsers
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_ACCESS_TOKEN

@@ -7,18 +7,17 @@ import {Mandate} from "../mandate.model";
 import {MoneyPipe} from "../money.pipe";
 
 @Component({
-  selector: 'app-my-mandates',
-  standalone: true,
-  imports: [
-    ...allChildComponentImports,
-    DatePipe,
-    MoneyPipe
-  ],
-  templateUrl: './my-regular-giving.component.html',
-  styleUrl: './my-regular-giving.component.scss'
+    selector: 'app-my-mandates',
+    imports: [
+        ...allChildComponentImports,
+        DatePipe,
+        MoneyPipe
+    ],
+    templateUrl: './my-regular-giving.component.html',
+    styleUrl: './my-regular-giving.component.scss'
 })
 export class MyRegularGivingComponent implements OnInit{
-  protected mandates: Mandate[];
+  protected mandates!: Mandate[];
 
   /** @convert number to ordinal, e.g 1st, 2nd*/
   protected ordinal = (d: number) => {
