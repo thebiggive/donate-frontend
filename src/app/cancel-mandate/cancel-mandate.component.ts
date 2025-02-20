@@ -49,6 +49,11 @@ export class CancelMandateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    if (this.mandate.status === 'cancelled') {
+      void this.router.navigateByUrl(`/my-account/regular-giving/${this.mandate.id}`)
+      return;
+    }
+
     this.pageMeta.setCommon('Cancel Regular Giving to ' + this.mandate.charityName, '', null);
     addBodyClass(this.platformId, 'primary-colour');
   }
