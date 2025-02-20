@@ -17,6 +17,7 @@ import {registerPath} from "../app-routing";
 import {WidgetInstance} from "friendly-challenge";
 import {NavigationService} from "../navigation.service";
 import {errorDescription, BackendError} from "../backendError";
+import {addBodyClass, removeBodyClass} from '../bodyStyle';
 
 export type LoginNavigationState = {
   /**
@@ -68,17 +69,13 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   ngOnDestroy() {
-    if (isPlatformBrowser(this.platformId)) {
-      document.body.classList.remove('primary-colour');
-    }
+    removeBodyClass(this.platformId, 'primary-colour');
   }
 
   ngOnInit() {
     this.pageMeta.setCommon('Login', 'Login to your Big Give account', null);
 
-    if (isPlatformBrowser(this.platformId)) {
-      document.body.classList.add('primary-colour');
-    }
+    addBodyClass(this.platformId, 'primary-colour');
 
     this.loginForm = this.formBuilder.group({
       emailAddress: [null, [

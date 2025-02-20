@@ -227,6 +227,12 @@ div.clearfix {
   }
 }
 
+#mandate.cancelled {
+  background: rgb(0 0 0 / 8%);
+  padding: 2em;
+  border-radius: 4px;
+}
+
 .screenreader-only {
   // additional content for screen readers that is not required for visual presentations.
   position: absolute;
