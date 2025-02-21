@@ -1,6 +1,8 @@
 import {Money} from "./mandate.model";
 
 type errorDetail = {
+  message?: string;
+  publicMessage?: string;
   description?: string
   type: string
   htmlDescription?: string
@@ -35,7 +37,13 @@ export type InsufficientMatchFundsError = BackendError &
   };
 
 export function errorDescription(error: BackendError): string {
-  return error.error.error.description || error.message || 'Sorry, something went wrong'
+  const errorDetail = error.error.error;
+
+  return errorDetail.description
+    || errorDetail.publicMessage
+    || errorDetail.message
+    || error.message
+    || 'Sorry, something went wrong'
 }
 
 export function errorDetails<T extends BackendError>(error: T): T extends InsufficientMatchFundsError ? InsufficientFundsDetail : errorDetail {
