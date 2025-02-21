@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ComponentsModule} from "@biggive/components-angular";
 import {DatePipe} from "@angular/common";
 import {Mandate} from "../mandate.model";
@@ -18,11 +18,8 @@ import {myRegularGivingPath} from '../app-routing';
     styleUrl: './mandate.component.scss'
 })
 export class MandateComponent {
-  protected encodedShareUrl: string = '';
-  protected encodedPrefilledText: string = '';
   protected mandate!: Mandate;
   protected readonly cancelPath;
-
 
   constructor(
     private route: ActivatedRoute
