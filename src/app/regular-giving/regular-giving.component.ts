@@ -45,7 +45,6 @@ import {
   BackendError,
   errorDescription,
   errorDetails,
-  InsufficientFundsDetail,
   isInsufficientMatchFundsError
 } from "../backendError";
 
@@ -123,7 +122,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    * Defined if we have discovered that there are/were not enough match funds to cover the initial donations the donor
    * wanted to make. They will have the option to try making a smaller matched donation, or donate without matching.
    */
-  protected insufficientMatchFundsAvailable: InsufficientFundsDetail | undefined  = undefined;
+  protected insufficientMatchFundsAvailable = false;
 
 
   /**
@@ -220,9 +219,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       }
     });
 
-    const campaign = this.campaign;
-
-    this.maximumMatchableDonation = maximumMatchableDonationGivenCampaign(campaign);
+    this.maximumMatchableDonation = maximumMatchableDonationGivenCampaign(this.campaign);
 
     if (this.maximumMatchableDonation.amountInPence === 0) {
       this.matchFundsZeroOnLoad = true;
@@ -339,7 +336,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
         const message = errorDescription(error);
 
         if (isInsufficientMatchFundsError(error)) {
-          this.insufficientMatchFundsAvailable = errorDetails(error);
+          this.insufficientMatchFundsAvailable = true;
+          this.maximumMatchableDonation = errorDetails(error).maxMatchable;
           this.selectStep(0);
         } else {
           this.submitErrorMessage = message;
@@ -537,18 +535,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     } else {
       this.amountErrorMessage = undefined;
 
-      const askingToMatchMoreThanAvailable =
-        this.insufficientMatchFundsAvailable &&
+      this.insufficientMatchFundsAvailable =
         ! this.unmatched &&
-        this.getDonationAmountPence() > this.insufficientMatchFundsAvailable.maxMatchable.amountInPence;
+        this.getDonationAmountPence() > this.maximumMatchableDonation.amountInPence;
 
-      if (askingToMatchMoreThanAvailable) {
+      if (this.insufficientMatchFundsAvailable) {
+        this.insufficientMatchFundsAvailable = true;
         errorFound = true;
-        const formattedMax = MoneyPipe.format(this.insufficientMatchFundsAvailable!.maxMatchable);
-        this.amountErrorMessage =
-          `There is only funding available to match donations of up to ${formattedMax}. ` +
-          'Please choose a smaller donation amount, or make an unmatched donation.';
-
         this.toast.showError(this.amountErrorMessage!);
       }
     }
@@ -648,8 +641,10 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 }
 
 export function maximumMatchableDonationGivenCampaign(campaign: Pick<Campaign, 'currencyCode'|'matchFundsRemaining'>): Money {
+  const standardNumberOfDonationMatched = 3;
+
   return {
     currency: campaign.currencyCode,
-    amountInPence: Math.max(Math.floor(campaign.matchFundsRemaining / 3), 0) * 100
+    amountInPence: Math.max(Math.floor(campaign.matchFundsRemaining / standardNumberOfDonationMatched), 0) * 100
   };
 }
