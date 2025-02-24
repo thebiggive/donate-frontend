@@ -10,7 +10,7 @@ import {MatButton, MatIconAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
 import {RegularGivingService, StartMandateParams} from "../regularGiving.service";
-import {Mandate} from '../mandate.model';
+import {Mandate, Money} from '../mandate.model';
 import {myRegularGivingPath} from "../app-routing";
 import {requiredNotBlankValidator} from "../validators/notBlank";
 import {getCurrencyMinValidator} from "../validators/currency-min";
@@ -125,6 +125,20 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    */
   protected insufficientMatchFundsAvailable: InsufficientFundsDetail | undefined  = undefined;
 
+
+  /**
+   * Amount of match funds remaining based on campaign information loaded with the page. Does not always account for
+   * any very recent or concurrent usage of match funds by another donor.
+   */
+    // @ts-expect-error - initialised in ngOnInit rather than constructor.
+  protected maximumMatchableDonation: Money;
+
+  /** Used to distinguish between the case where there are zero match funds available on the campaign as seen at page
+   * load, and a case where there are initially zero match funds and then we later discover that they are not enough
+   * for the donor, perhaps due to concurrent usage.
+   */
+  protected matchFundsZeroOnLoad = false;
+
   constructor(
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
@@ -205,6 +219,16 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
         this.addressSuggestions = suggestions;
       }
     });
+
+    this.maximumMatchableDonation = {
+      currency: this.campaign.currencyCode,
+      amountInPence: Math.max(Math.floor(this.campaign.matchFundsRemaining / 3), 0) * 100
+    };
+
+    if (this.maximumMatchableDonation.amountInPence === 0) {
+      this.matchFundsZeroOnLoad = true;
+      this.mandateForm.patchValue({unmatched: true});
+    }
   }
 
   ngAfterViewInit() {

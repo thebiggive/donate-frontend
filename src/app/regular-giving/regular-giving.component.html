@@ -69,15 +69,17 @@
                   </div>
                 }
 
-                @if (insufficientMatchFundsAvailable) {
-                  <p>
-                  @if (insufficientMatchFundsAvailable.maxMatchable.amountInPence === 0) {
+                  @if (maximumMatchableDonation.amountInPence === 0) {
+                    <p>
                     There are no match funds currently available for this campaign. Remember, every penny helps.
                       Please continue to make an <strong>unmatched donation</strong> to the charity!
+                      @if (! matchFundsZeroOnLoad) {
                     <mat-checkbox formControlName="unmatched" id="unmatched">
                       Make an unmatched donation
                     </mat-checkbox>
-                  } @else {
+                      }
+                    </p>
+                  } @else if (insufficientMatchFundsAvailable){
                     <p><span class="error">There are limited match funds available</span>, but every penny helps, so you have two options:</p>
                     <ol>
                       <li>Reduce your donation amount to a maximum of {{insufficientMatchFundsAvailable.maxMatchable | money}}, or </li>
@@ -87,8 +89,6 @@
                       </li>
                     </ol>
                   }
-                  </p>
-                }
               </div>
 
               <div style="text-align: center">
