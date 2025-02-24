@@ -220,10 +220,9 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.maximumMatchableDonation = {
-      currency: this.campaign.currencyCode,
-      amountInPence: Math.max(Math.floor(this.campaign.matchFundsRemaining / 3), 0) * 100
-    };
+    const campaign = this.campaign;
+
+    this.maximumMatchableDonation = maximumMatchableDonationGivenCampaign(campaign);
 
     if (this.maximumMatchableDonation.amountInPence === 0) {
       this.matchFundsZeroOnLoad = true;
@@ -646,4 +645,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       this.homeAddress = address;
     });
   }
+}
+
+export function maximumMatchableDonationGivenCampaign(campaign: Pick<Campaign, 'currencyCode'|'matchFundsRemaining'>): Money {
+  return {
+    currency: campaign.currencyCode,
+    amountInPence: Math.max(Math.floor(campaign.matchFundsRemaining / 3), 0) * 100
+  };
 }
