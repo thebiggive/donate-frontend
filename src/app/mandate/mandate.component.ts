@@ -54,7 +54,7 @@ export class MandateComponent implements OnInit {
           window.clearInterval(this.mandateRefreshTimer);
         }
       },
-      5_000
+      2_000
     )
   }
 
