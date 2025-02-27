@@ -356,7 +356,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
         } else {
           this.submitErrorMessage = message;
         }
-        this.toast.showError(JSON.stringify(error) + " --- " +  message);
+        this.toast.showError(message);
         this.submitting = false;
       }
     })
