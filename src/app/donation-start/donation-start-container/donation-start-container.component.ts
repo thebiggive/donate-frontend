@@ -51,7 +51,7 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
       return;
     }
 
-    this.campaignOpenOnLoad = this.campaignIsOpen();
+    this.campaignOpenOnLoad = CampaignService.campaignIsOpenLessForgiving(this.campaign);
     this.imageService.getImageUri(this.campaign.bannerUri, 830).subscribe(uri => this.bannerUri = uri);
   }
 
@@ -62,18 +62,6 @@ export class DonationStartContainerComponent implements AfterViewInit, OnInit{
       this.loadAuthedPersonInfo(idAndJWT.id, idAndJWT.jwt);
       return;
     }
-  }
-
-  /**
-   * Unlike the CampaignService method which is more forgiving if the status gets stuck Active (we don't trust
-   * these to be right in Salesforce yet), this check relies solely on campaign dates.
-   */
-  private campaignIsOpen(): boolean {
-    return (
-      this.campaign
-        ? (new Date(this.campaign.startDate) <= new Date() && new Date(this.campaign.endDate) > new Date())
-        : false
-    );
   }
 
   updateReservationExpiryTime(): void {

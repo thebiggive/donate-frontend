@@ -10,7 +10,7 @@ import {MatButton, MatIconAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
 import {MandateCreateResponse, RegularGivingService, StartMandateParams} from "../regularGiving.service";
-import {Mandate, Money} from '../mandate.model';
+import {Money} from '../mandate.model';
 import {myRegularGivingPath} from "../app-routing";
 import {requiredNotBlankValidator} from "../validators/notBlank";
 import {getCurrencyMinValidator} from "../validators/currency-min";
@@ -47,6 +47,7 @@ import {
   errorDetails,
   isInsufficientMatchFundsError
 } from "../backendError";
+import {CampaignService} from '../campaign.service';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -137,6 +138,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    * for the donor, perhaps due to concurrent usage.
    */
   protected matchFundsZeroOnLoad = false;
+  protected campaignOpenOnLoad = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -163,6 +165,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     if ( !this.campaign.isRegularGiving ) {
       console.error("Campaign " + this.campaign.id + " is not a regular giving campaign");
+    }
+
+    this.campaignOpenOnLoad = CampaignService.campaignIsOpenLessForgiving(this.campaign);
+    if (! this.campaignOpenOnLoad) {
+      void this.router.navigateByUrl(`/campaign/${this.campaign.id}`);
     }
 
     this.pageMeta.setCommon(
