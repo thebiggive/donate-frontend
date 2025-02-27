@@ -345,6 +345,12 @@
         <app-campaign-info [campaign]="campaign"></app-campaign-info>
 
         <div class="button-wrapper">
+          <!-- Note disparity between logic for ad-hoc and regular giving campaigns - only because I'm more actively
+                developing regular-giving now and more cautions of regressions in ad-hoc, and I don't fully understand
+                the rationale of the existing different logic in donateEnabled, campaignInPast and
+                DonationStartContainerComponent.campaignIsOpen. May be easier to clear up after we move campaign
+                backend from SF to matchbot.
+          -->
           @if (donateEnabled && !campaign.isRegularGiving) {
             <biggive-button
               space-above="5"
@@ -356,7 +362,7 @@
               [url]="'/donate/' + campaign.id"
             ></biggive-button>
           }
-          @if (donateEnabled && campaign.isRegularGiving) {
+          @if (donateEnabled && campaign.isRegularGiving && ! campaignInPast) {
             <biggive-button
               space-above="5"
               colour-scheme="primary"
