@@ -30,8 +30,9 @@
       <hr aria-hidden="true">
       <div id="mandate" class="{{mandate.status}}">
         <div class="donation-summary">
-          @if (mandate.status === 'cancelled') {
-            <p><strong>Regular Donations Cancelled</strong></p>
+          @if (statusMessage) {
+            <!-- Tells the donor if their mandate has been cancelled, or if collections have ended -->
+            <p><strong>{{statusMessage}}</strong></p>
             <hr aria-hidden="true">
           }
           <p><strong>Your donation summary</strong></p>
@@ -126,7 +127,7 @@
               }
             </table>
           </div>
-          @if (mandate.status !== 'cancelled') {
+          @if (showCancelLink) {
             <hr class="shorter" aria-hidden="true">
             <div style="text-align: center">
               <a [href]="cancelPath">Cancel future donations</a>
