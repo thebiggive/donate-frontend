@@ -23,7 +23,7 @@ export class CampaignService {
   ) {}
 
   /**
-   * See also the more forgiving variant `campaignIsOpenLessForgiving`.
+   * See also the less forgiving variant `campaignIsOpenLessForgiving`.
    */
   static isOpenForDonations(campaign: Campaign): boolean {
     if (campaign.hidden || !campaign.ready) {
