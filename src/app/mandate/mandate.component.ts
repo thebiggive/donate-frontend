@@ -64,4 +64,27 @@ export class MandateComponent implements OnInit {
 
     return this.mandate.status === 'pending' && ((new Date().getTime() - this.timePageLoaded.getTime()) > maxPollingTime);
   }
+
+  get showCancelLink(): boolean
+  {
+    // ts checks for exhaustiveness:
+    switch (this.mandate.status) {
+      case 'active': return true;
+
+      case 'cancelled': return false;
+      case 'pending': return false;
+      case 'campaign-ended': return false;
+    }
+  }
+
+  get statusMessage(): string|false
+  {
+    switch (this.mandate.status) {
+      case 'active': return false;
+
+      case 'cancelled': return 'Regular Donations Cancelled';
+      case 'pending': return 'Regular Giving agreement pending'; // should never actually be seen
+      case 'campaign-ended': return `Collections period ended for ${this.mandate.charityName} campaign`;
+    }
+  }
 }
