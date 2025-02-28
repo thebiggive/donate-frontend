@@ -22,7 +22,7 @@
       {{preExistingActiveMandate[0].donationAmount | money}} each month.
     </p>
 
-    <p>If you wish to change your regular donation to <strong>{{campaign.charity.name}}</strong> you can cancel the existing mandate
+    <p>If you wish to change your regular donation you can cancel the existing agreement
       and then return to this page to create a new one.
     </p>
 
@@ -35,7 +35,7 @@
       url="/my-account/regular-giving/{{preExistingActiveMandate[0].id}}"
     />
 
-  } @else if (campaignOpenOnLoad && (preExistingActiveMandate$ | async)?.length === 0) {
+  } @else if (campaignOpenOnLoad && preExistingActiveMandate?.length === 0) {
     <div class="c-form-container">
       <biggive-page-section>
         <form
