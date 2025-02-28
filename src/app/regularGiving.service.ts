@@ -136,7 +136,7 @@ export class RegularGivingService {
     // small, especially during the pilot when donors are unlikely to have many mandates each.
     return this.getMyMandates().pipe(
       map((mandates) => mandates.filter(
-        (mandate) => {
+        (mandate: Mandate) => {
           return mandate.status === 'active' &&
             mandate.campaignId === campaign.id;
         })
