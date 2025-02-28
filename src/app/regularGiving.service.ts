@@ -6,6 +6,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../environments/environment";
 import {map, switchMap} from "rxjs/operators";
 import {PaymentIntent, PaymentMethod} from '@stripe/stripe-js';
+import { Campaign } from './campaign.model';
 
 /**
  * Details of a desired new regular giving mandate sent to Matchbot to create it. Deseralized on the matchbot side
@@ -78,7 +79,12 @@ export class RegularGivingService {
   }
 
 
-  public getActiveMandates() {
+  /**
+   * Returns an array of regular giving mandates for the donor to view. Includes active mandates and any that
+   * would have been active in the past. Excludes pending and those that were cancelled directly from pending
+   * state.
+   */
+  public getMyMandates() {
       return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
       return this.http.get<{ mandates: Mandate[] }>(
         `${environment.donationsApiPrefix}/regular-giving/my-donation-mandates`,
@@ -123,5 +129,18 @@ export class RegularGivingService {
 
       return callable(personAuthHttpOptions);
     }));
+  }
+
+  activeMandate(campaign: Campaign): Observable<Mandate[]> {
+    // consider optimising by filtering in the backend database. But performance impact of filtering here should be
+    // small, especially during the pilot when donors are unlikely to have many mandates each.
+    return this.getMyMandates().pipe(
+      map((mandates) => mandates.filter(
+        (mandate: Mandate) => {
+          return mandate.status === 'active' &&
+            mandate.campaignId === campaign.id;
+        })
+      )
+    );
   }
 }
