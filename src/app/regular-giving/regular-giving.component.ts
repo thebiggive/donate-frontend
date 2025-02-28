@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Campaign} from "../campaign.model";
 import {ComponentsModule} from "@biggive/components-angular";
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormControl,FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatStep, MatStepper} from "@angular/material/stepper";
 import {StepperSelectionEvent} from "@angular/cdk/stepper";
 import {MatHint, MatInput} from "@angular/material/input";
@@ -57,6 +57,12 @@ const maxAmount = 500;
 const minAmount = 1;
 const paymentStepIndex = 2;
 
+
+// As on donation start form, these opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
+// and prefilling them with 'no' values in that case.
+const booleansDefaultValue = environment.environmentId === 'regression' ? false : null;
+
+
 @Component({
     selector: 'app-regular-giving',
   imports: [
@@ -85,8 +91,29 @@ const paymentStepIndex = 2;
     styleUrl: './regular-giving.component.scss'
 })
 export class RegularGivingComponent implements OnInit, AfterViewInit {
+  protected mandateForm = new FormGroup({
+    donationAmount: new FormControl('', [
+      requiredNotBlankValidator,
+      getCurrencyMinValidator(minAmount),
+      getCurrencyMaxValidator(maxAmount),
+      Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
+    ]),
+    billingPostcode: new FormControl('',
+      [
+        requiredNotBlankValidator,
+        Validators.pattern(billingPostcodeRegExp),
+      ]
+    ),
+    optInCharityEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
+    optInTbgEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
+    giftAid: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
+    homeOutsideUK: new FormControl<string|null>(null),
+    homeAddress: new FormControl<string|null>(null),
+    homePostcode: new FormControl<string|null>(null),
+    unmatched: new FormControl(false), // If ticked, indicates that the donor is willing to donate without match funding.
+  });
+
   protected campaign!: Campaign;
-  mandateForm!: FormGroup;
   @ViewChild('stepper') private stepper!: MatStepper;
   readonly termsUrl = 'https://biggive.org/terms-and-conditions';
   readonly privacyUrl = 'https://biggive.org/privacy';
@@ -147,7 +174,6 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
   constructor(
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
     private toast: Toast,
     private regularGivingService: RegularGivingService,
     private router: Router,
@@ -185,31 +211,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
 
-    // As on donation start form, these opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
-    // and prefilling them with 'no' values in that case.
-    const booleansDefaultValue = environment.environmentId === 'regression' ? false : null;
-
-    this.mandateForm = this.formBuilder.group({
-        donationAmount: ['', [
-          requiredNotBlankValidator,
-          getCurrencyMinValidator(minAmount),
-          getCurrencyMaxValidator(maxAmount),
-          Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
-        ]],
-      billingPostcode: [this.donorAccount.billingPostCode,
-        [
-          requiredNotBlankValidator,
-          Validators.pattern(billingPostcodeRegExp),
-        ]
-      ],
-      optInCharityEmail: [booleansDefaultValue, requiredNotBlankValidator],
-      optInTbgEmail: [booleansDefaultValue, requiredNotBlankValidator],
-      giftAid: [booleansDefaultValue, requiredNotBlankValidator],
-      homeOutsideUK: [null],
-      homeAddress: [null],
-      homePostcode: [null],
-      unmatched: [false], // If ticked, indicates that the donor is willing to donate without match funding.
-      });
+    this.mandateForm.patchValue({billingPostcode: this.donorAccount.billingPostCode})
 
     this.stripeService.init().catch(console.error);
 
@@ -381,21 +383,18 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   }
 
   private get billingPostCode(): string | null{
-    return this.mandateForm.value.billingPostcode;
+    return this.mandateForm.value.billingPostcode ?? null;
   }
 
   private getDonationAmountPence(): number {
-    return 100 * this.mandateForm.value.donationAmount;
+    return 100 * +(this.mandateForm.value.donationAmount ?? 0);
   }
 
   protected setSelectedCountry = ((countryCode: string) => {
     this.selectedBillingCountryCode = countryCode;
-    this.mandateForm.patchValue({
-      billingCountry: countryCode,
-    });
   })
 
-  protected get giftAid(): boolean | undefined
+  protected get giftAid(): boolean | undefined | null
   {
     return this.mandateForm.value.giftAid;
   }
@@ -410,7 +409,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   }
 
   protected get homePostcode(): string | null {
-    return this.mandateForm.value.homePostcode;
+    return this.mandateForm.value.homePostcode ?? null;
   }
 
   protected onBillingPostCodeChanged(_: Event) {
@@ -518,17 +517,17 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
   protected get optInCharityEmail(): boolean | undefined
   {
-    return this.mandateForm.value.optInCharityEmail;
+    return this.mandateForm.value.optInCharityEmail ?? undefined;
   }
 
   protected get optInTbgEmail(): boolean | undefined
   {
-    return this.mandateForm.value.optInTbgEmail;
+    return this.mandateForm.value.optInTbgEmail ?? undefined;
   }
 
   protected get homeAddressFormValue(): string
   {
-    return AddressService.summariseAddressSuggestion(this.mandateForm.value.homeAddress);
+    return AddressService.summariseAddressSuggestion(this.mandateForm.value.homeAddress ?? undefined);
   }
 
   /**
