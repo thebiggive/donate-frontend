@@ -115,6 +115,15 @@
                 }
               </div>
 
+              <mat-checkbox formControlName="aged18OrOver" id="aged18OrOver">
+                I am aged 18 or older.
+              </mat-checkbox>
+              @if (ageErrorMessage) {
+                <div class="error">
+                  {{ this.ageErrorMessage }}
+                </div>
+              }
+
               <div style="text-align: center">
                 <button style="width: 40%;"
                         type="button"
