@@ -111,6 +111,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     homeAddress: new FormControl<string|null>(null),
     homePostcode: new FormControl<string|null>(null),
     unmatched: new FormControl(false), // If ticked, indicates that the donor is willing to donate without match funding.
+    aged18OrOver: new FormControl(false, [Validators.requiredTrue]),
   });
 
   protected campaign!: Campaign;
@@ -171,6 +172,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected campaignOpenOnLoad = false;
 
   protected preExistingActiveMandate$: Observable<Mandate[]|undefined> = of(undefined);
+  protected ageErrorMessage: string | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -535,7 +537,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    */
   private validateAmountStep() {
     let errorFound = false;
-    const donationAmountErrors = this.mandateForm.controls['donationAmount']!.errors;
+    const donationAmountErrors = this.mandateForm.controls.donationAmount.errors;
 
     if (donationAmountErrors) {
       for (const [key] of Object.entries(donationAmountErrors)) {
@@ -571,6 +573,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
         errorFound = true;
         this.toast.showError(this.amountErrorMessage!);
       }
+
+      if (this.mandateForm.controls.aged18OrOver.errors?.required) {
+        errorFound = true;
+        this.ageErrorMessage = "You must be aged 18 or over to create a regular regular giving agreement. Please tick the box to confirm.";
+        this.toast.showError(this.ageErrorMessage);
+      } else {
+        this.ageErrorMessage = undefined;
+      }
+
     }
     return errorFound;
   }
