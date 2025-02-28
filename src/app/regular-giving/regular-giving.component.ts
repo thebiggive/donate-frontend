@@ -10,7 +10,7 @@ import {MatButton, MatIconAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
 import {MandateCreateResponse, RegularGivingService, StartMandateParams} from "../regularGiving.service";
-import {Money} from '../mandate.model';
+import {Mandate, Money} from '../mandate.model';
 import {myRegularGivingPath} from "../app-routing";
 import {requiredNotBlankValidator} from "../validators/notBlank";
 import {getCurrencyMinValidator} from "../validators/currency-min";
@@ -48,6 +48,8 @@ import {
   isInsufficientMatchFundsError
 } from "../backendError";
 import {CampaignService} from '../campaign.service';
+import {Observable, of} from 'rxjs';
+import {AsyncPipe} from '@angular/common';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -76,7 +78,8 @@ const paymentStepIndex = 2;
     MatAutocompleteTrigger,
     MatCheckbox,
     MatOption,
-    MoneyPipe
+    MoneyPipe,
+    AsyncPipe
   ],
     templateUrl: './regular-giving.component.html',
     styleUrl: './regular-giving.component.scss'
@@ -139,6 +142,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    */
   protected matchFundsZeroOnLoad = false;
   protected campaignOpenOnLoad = false;
+
+  protected preExistingActiveMandate$: Observable<Mandate[]|undefined> = of(undefined);
 
   constructor(
     private route: ActivatedRoute,
@@ -232,6 +237,8 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       this.matchFundsZeroOnLoad = true;
       this.mandateForm.patchValue({unmatched: true});
     }
+
+    this.preExistingActiveMandate$ = this.regularGivingService.activeMandate(this.campaign)
   }
 
   ngAfterViewInit() {
