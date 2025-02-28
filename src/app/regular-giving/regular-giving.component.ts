@@ -250,16 +250,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     // the select function which is called when the user clicks a step heading, to let us check that all previous
     // steps have been completed correctly, and then either proceed to the chosen step or display an error message.
 
-    // Based on https://stackoverflow.com/a/62787311/2526181 - I'm not 100% sure why it's wrapped in setTimeout but
-    // maybe returning immediately from ngAfterViewInit improves performance.
-
     setTimeout(() => {
-      this.stepper.steps.forEach((step, stepIndex) => {
-        step.select = () => {
-          this.selectStep(stepIndex);
-        };
-      });
-    });
+        this.stepper.steps.forEach((step, stepIndex) => {
+          step.select = () => {
+            this.selectStep(stepIndex);
+          };
+        });
+      },
+      500 // delay to for the stepper to be initialised - otherwise its undefined and the callback can't run.
+    );
   }
 
   async interceptSubmitAndProceedInstead(event: Event) {
