@@ -1,0 +1,63 @@
+<div id="banner"></div>
+<main>
+  <div>
+    <biggive-page-section>
+      <div class="heading-wrapper">
+        <biggive-heading
+          colour="tertiary"
+          size="1"
+          align="center"
+          text="Change Regular Giving Payment Method"
+        ></biggive-heading>
+      </div>
+    </biggive-page-section>
+    <biggive-page-section>
+      <p>Your current payment method for regular giving:</p>
+      <table id="regularGivingPaymentMethod" class="paymentMethods">
+        <tr>
+          <td class="cardBrand">
+            <div
+              class="cardBrand">{{ (paymentMethods?.regularGivingPaymentMethod?.card?.brand || paymentMethods?.regularGivingPaymentMethod?.type)?.toUpperCase() }}
+            </div>
+            @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
+              <div>
+                Card Ending: {{ paymentMethods?.regularGivingPaymentMethod?.card?.last4 }}
+              </div>
+            }
+            @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
+              <div class="cardExpiry">
+                Expiry
+                Date: {{ paymentMethods?.regularGivingPaymentMethod?.card?.exp_month?.toString()?.padStart(2, "0") }}
+                /{{ paymentMethods?.regularGivingPaymentMethod?.card?.exp_year }}
+              </div>
+            }
+          </td>
+        </tr>
+      </table>
+    </biggive-page-section>
+
+    <!--    Not using a biggive-text-input component to wrap the payment element here-->
+    <!--    because that only works on a grey background. This page has a blue background.-->
+
+    @if (this.setupIntent) {
+    <biggive-page-section>
+      <h3>New Payment Method for Regular Giving:</h3>
+      <div class="sr-input sr-card-element" id="card-info" #cardInfo>
+        Loading payment card form...
+      </div>
+      <div id="error-message" aria-live="polite" class="error">
+          <strong>{{ errorMessage }}</strong>
+      </div>
+      <div style="height: 80px"></div>
+        <p><strong>{{"@todo-regular-giving: Ask for billing country and postcode here and pass to stripe and matchbot"}} </strong></p>
+      <biggive-button
+        (click)="confirmSetup()"
+        label="Confirm"
+        full-width="false"
+        size="medium"
+        colour-scheme="white"
+      />
+    </biggive-page-section>
+    }
+  </div>
+</main>

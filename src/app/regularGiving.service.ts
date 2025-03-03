@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable} from "rxjs";
+import {firstValueFrom, Observable} from "rxjs";
 import {Mandate} from "./mandate.model";
 import {getPersonAuthHttpOptions, IdentityService} from "./identity.service";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
@@ -65,7 +65,8 @@ export class RegularGivingService {
   constructor(
     private http: HttpClient,
     private identityService: IdentityService,
-  ) {}
+  ) {
+  }
 
   public startMandate(mandate: StartMandateParams): Observable<MandateCreateResponse> {
     return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
@@ -85,7 +86,7 @@ export class RegularGivingService {
    * state.
    */
   public getMyMandates() {
-      return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
+    return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
       return this.http.get<{ mandates: Mandate[] }>(
         `${environment.donationsApiPrefix}/regular-giving/my-donation-mandates`,
         personAuthHttpOptions,
@@ -102,7 +103,7 @@ export class RegularGivingService {
     });
   }
 
-  public cancel(mandate: Mandate, {cancellationReason}: {cancellationReason: string}): Observable<unknown> {
+  public cancel(mandate: Mandate, {cancellationReason}: { cancellationReason: string }): Observable<unknown> {
     return this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
       return this.http.post(
         `${environment.donationsApiPrefix}/regular-giving/my-donation-mandates/${mandate.id}/cancel`,
@@ -142,5 +143,16 @@ export class RegularGivingService {
         })
       )
     );
+  }
+
+  public setRegularGivingPaymentMethod(paymentMethodId: string): Promise<unknown> {
+    return firstValueFrom(this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
+      const IDAndJWT = this.identityService.getIdAndJWT()!;
+      return this.http.put<unknown>(
+        `${environment.donationsApiPrefix}/people/${IDAndJWT.id}/regular-giving/payment-method`,
+        {paymentMethodId},
+        personAuthHttpOptions,
+      );
+    }));
   }
 }

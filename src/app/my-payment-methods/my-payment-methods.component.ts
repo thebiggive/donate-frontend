@@ -20,8 +20,8 @@ import {BackendError, errorDetails} from "../backendError";
     imports: [
         ComponentsModule,
         ExactCurrencyPipe,
+        FaIconComponent,
         MatProgressSpinner,
-        FaIconComponent
     ],
     templateUrl: './my-payment-methods.component.html',
     styleUrl: './my-payment-methods.component.scss'

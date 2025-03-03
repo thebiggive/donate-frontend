@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {Inject, Injectable, InjectionToken, makeStateKey, Optional, PLATFORM_ID, TransferState,} from '@angular/core';
 import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
 import {firstValueFrom, Observable, of} from 'rxjs';
-import {ConfirmationToken, PaymentIntent, PaymentMethod} from '@stripe/stripe-js';
+import {ConfirmationToken, PaymentIntent, PaymentMethod, SetupIntent} from '@stripe/stripe-js';
 
 import {COUNTRY_CODE} from './country-code.token';
 import {CompleteDonation, Donation} from './donation.model';
@@ -436,5 +436,15 @@ export class DonationService {
       {campaignId: campaign?.id},
       getPersonAuthHttpOptions(jwt),
     ) as Observable<StripeCustomerSession>);
+  }
+
+  async createSetupIntent(): Promise<SetupIntent> {
+    const {jwt, person} = await this.getLoggedInUser();
+
+    return (await firstValueFrom(this.http.post(
+      `${environment.donationsApiPrefix}/people/${person.id}/create-setup-intent`,
+      {},
+      getPersonAuthHttpOptions(jwt),
+    ) as Observable<{setupIntent: SetupIntent}>)).setupIntent;
   }
 }

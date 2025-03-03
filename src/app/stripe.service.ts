@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {
   ConfirmationTokenResult,
-  loadStripe,
+  loadStripe, SetupIntentResult,
   Stripe,
-  StripeElements,
-  StripeElementsOptionsMode, StripeError
+  StripeElements, StripeElementsOptionsClientSecret,
+  StripeElementsOptionsMode, StripeError, StripePaymentElement
 } from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
@@ -239,6 +239,41 @@ export class StripeService {
   private amountIncTipInMinorUnit(donation: Donation) {
     // use round not floor to avoid issues like returning 114 as the sum of £1 and £0.15
     return Math.round((donation.tipAmount + donation.donationAmount) * 100);
+  }
+
+  public stripeElementsForRegularGivingPaymentMethod(client_secret: string): [StripeElements, StripePaymentElement]  {
+    const options = {
+    clientSecret: client_secret,
+      // Fully customizable with appearance API.
+      appearance: {},
+  } satisfies StripeElementsOptionsClientSecret;
+
+  const elements = this.stripe!.elements(options);
+
+  return [elements, StripeService.createStripeElement(elements)];
+  }
+
+  public async confirmSetup(stripeElements: StripeElements, return_url: string): Promise<SetupIntentResult> {
+    if (! this.stripe) {
+      throw new Error("Stripe not ready");
+    }
+
+    return await this.stripe.confirmSetup({
+      confirmParams: {
+        return_url,
+        payment_method_data: {
+          billing_details: {
+            address: {
+              // @todo-regular-giving: Remove hard-coded data below, replace with data from form.
+              country: "gb",
+              postal_code: "sw1a 1aa",
+            }
+          }
+        }
+      },
+      elements: stripeElements,
+      redirect: 'if_required',
+    })
   }
 }
 
