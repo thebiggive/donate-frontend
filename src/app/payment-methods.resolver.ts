@@ -8,10 +8,10 @@ import {PaymentMethod} from '@stripe/stripe-js';
 @Injectable(
   {providedIn: 'root'}
 )
-export class PaymentMethodsResolver implements Resolve<PaymentMethod[]> {
+export class PaymentMethodsResolver implements Resolve<{adHocMethods: PaymentMethod[], regularGivingPaymentMethod?: PaymentMethod}> {
   constructor(private donationService: DonationService) {}
 
-  resolve(_route: ActivatedRouteSnapshot): Observable<PaymentMethod[]> {
+  resolve(_route: ActivatedRouteSnapshot): Observable<{adHocMethods: PaymentMethod[], regularGivingPaymentMethod?: PaymentMethod}>  {
     return from(this.donationService.getPaymentMethods());
   }
 }

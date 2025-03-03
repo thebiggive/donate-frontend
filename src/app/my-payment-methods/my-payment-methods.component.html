@@ -47,8 +47,8 @@
         </div>
       }
       @if (hasSavedPaymentMethods) {
-          <table id="paymentMethods">
-            @for (method of paymentMethods; track method.id) {
+          <table id="paymentMethods" class="paymentMethods">
+            @for (method of paymentMethods!.adHocMethods; track method.id) {
               <tr>
                 <td class="cardBrand">
                   <div class="cardBrand">{{(method.card?.brand || method.type).toUpperCase()}}</div>
@@ -86,11 +86,41 @@
             }
           </table>
         }
-        @if (paymentMethods !== undefined && paymentMethods.length === 0) {
+        @if (paymentMethods !== undefined && paymentMethods.adHocMethods.length === 0) {
           <div>
             No saved cards
           </div>
         }
+      @if (paymentMethods?.regularGivingPaymentMethod) {
+        <h3>
+          Regular Giving payment method
+        </h3>
+
+        <table id="regularGivingPaymentMethod" class="paymentMethods">
+        <tr>
+          <td class="cardBrand">
+            <div class="cardBrand">{{(paymentMethods?.regularGivingPaymentMethod?.card?.brand || paymentMethods?.regularGivingPaymentMethod?.type)?.toUpperCase()}}</div>
+            @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
+              <div>
+                Card Ending: {{paymentMethods?.regularGivingPaymentMethod?.card?.last4}}
+              </div>
+            }
+            @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
+              <div class="cardExpiry">
+                Expiry Date: {{paymentMethods?.regularGivingPaymentMethod?.card?.exp_month?.toString()?.padStart(2, "0")}}/{{paymentMethods?.regularGivingPaymentMethod?.card?.exp_year}}
+              </div>
+            }
+          </td>
+          <td class="cardExpiry">
+            @if (paymentMethods?.regularGivingPaymentMethod?.card !== undefined) {
+              <div>
+                Expiry Date: {{paymentMethods?.regularGivingPaymentMethod?.card?.exp_month?.toString()?.padStart(2, "0")}}/{{paymentMethods?.regularGivingPaymentMethod?.card?.exp_year}}
+              </div>
+            }
+          </td>
+        </tr>
+        </table>
+      }
     </biggive-page-section>
   </div>
 </main>

@@ -178,17 +178,20 @@ export class DonationService {
 
   async getPaymentMethods(
     {cacheBust}: { cacheBust?: boolean } = {cacheBust: false}
-  ): Promise<PaymentMethod[]> {
+  ): Promise<{adHocMethods: PaymentMethod[], regularGivingPaymentMethod?: PaymentMethod}> {
     const {jwt, person} = await this.getLoggedInUser();
 
     const cacheBuster = cacheBust ? ("?t=" + new Date().getTime()) : '';
 
-    const response = await firstValueFrom(this.http.get<{ data: PaymentMethod[] }>(
+    const response = await firstValueFrom(this.http.get(
       `${environment.donationsApiPrefix}/people/${person.id}/payment_methods${cacheBuster}`,
       getPersonAuthHttpOptions(jwt),
-    ));
+    )) as { data: PaymentMethod[], regularGivingPaymentMethod?: PaymentMethod };
 
-    return response.data;
+    return {
+      adHocMethods: response.data,
+      regularGivingPaymentMethod: response.regularGivingPaymentMethod
+    };
   }
 
   private async getLoggedInUser() {

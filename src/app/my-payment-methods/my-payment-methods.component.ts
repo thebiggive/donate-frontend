@@ -27,7 +27,10 @@ import {BackendError, errorDetails} from "../backendError";
     styleUrl: './my-payment-methods.component.scss'
 })
 export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
-  protected paymentMethods: PaymentMethod[] | undefined;
+  protected paymentMethods: {
+    adHocMethods: PaymentMethod[],
+    regularGivingPaymentMethod?: PaymentMethod,
+  } | undefined;
   protected person!: Person;
 
   private savedCardsTimer: undefined | ReturnType<typeof setTimeout>; // https://stackoverflow.com/a/56239226
@@ -52,7 +55,7 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
 
   protected get hasSavedPaymentMethods()
   {
-    return this.paymentMethods !== undefined && this.paymentMethods.length > 0;
+    return this.paymentMethods !== undefined && this.paymentMethods.adHocMethods.length > 0;
   }
 
   /**
@@ -60,7 +63,7 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
    * loaded at this point we check again with the server.
    */
   private checkForPaymentCardsIfNotLoaded = async () => {
-    if (this.paymentMethods && this.paymentMethods.length > 0) {
+    if (this.paymentMethods && this.paymentMethods.adHocMethods.length > 0) {
       return;
     }
 
