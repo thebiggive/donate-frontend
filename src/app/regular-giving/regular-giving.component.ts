@@ -575,7 +575,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
       if (this.mandateForm.controls.aged18OrOver.errors?.required) {
         errorFound = true;
-        this.ageErrorMessage = "You must be aged 18 or over to create a regular regular giving agreement. Please tick the box to confirm.";
+        this.ageErrorMessage = "Please tick the box to confirm if you are at least 18 years old to proceed.";
         this.toast.showError(this.ageErrorMessage);
       } else {
         this.ageErrorMessage = undefined;
