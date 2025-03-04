@@ -23,10 +23,10 @@
   background: abstract.$colour-black;
   color: white;
   text-align: center;
+  font-size: 15px;
   @media #{abstract.$breakpoint-lg} {
     font-size: 20px;
   }
-  font-size: 15px;
 
   .centered {
     display: flex;
@@ -43,15 +43,15 @@
   }
 
  span.time-left {
-   @media #{abstract.$breakpoint-lg} {
-     font-size: 24px;
-   }
    font-size: 18px;
    margin-left: 1em;
    background-color: abstract.$colour-primary;
    color: white;
    height: 100%;
    padding: 0 1em;
+   @media #{abstract.$breakpoint-lg} {
+     font-size: 24px;
+   }
  }
 }
 
