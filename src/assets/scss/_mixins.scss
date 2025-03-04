@@ -1,5 +1,4 @@
 @use './variables' as var;
-@use "sass:color";
 
 @mixin size-md {
   font-size: 14px;
@@ -139,10 +138,9 @@
   &:hover,
   &:active,
   &:focus {
-    background-color: color.adjust(var.$colour-primary, $lightness: -10%);
+    background-color: darken(var.$colour-primary, 10%);
   }
 }
-
 
 @mixin make-back-button {
   display: inline-block;
