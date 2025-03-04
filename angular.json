@@ -43,6 +43,11 @@
             "prerender": true,
             "ssr": {
               "entry": "src/server.ts"
+            },
+            "stylePreprocessorOptions": {
+              "sass": {
+                "fatalDeprecations": ["mixed-decls", "color-functions", "global-builtin", "import"],
+              }
             }
           },
           "configurations": {

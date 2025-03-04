@@ -11,8 +11,8 @@
 
 // Columns
 .b-primary-column {
-  @include mixins.make-primary-column;
   margin-bottom: 50px;
+  @include mixins.make-primary-column;
 }
 .b-secondary-column {
   @include mixins.make-secondary-column;
@@ -20,12 +20,12 @@
 
 // Responsive headings
 .b-rh-1 {
-  @include mixins.b-rt-3;
   color: vars.$colour-black;
+  @include mixins.b-rt-3;
 }
 .b-rh-2 {
-  @include mixins.b-rt-2;
   color: vars.$colour-black;
+  @include mixins.b-rt-2;
 }
 
 // Font weights

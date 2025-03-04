@@ -15,13 +15,13 @@ mat-spinner.complete-spinner {
 
 hr {
   width: 80%;
+  color: #868686;
   @media #{abstract.$breakpoint-sm} {
     margin: 40px auto;
   }
   @media #{abstract.$breakpoint-lg} {
     margin: 60px auto;
   }
-  color: #868686;
 }
 
 .thank-you {
@@ -159,13 +159,13 @@ hr {
 }
 
 .donation-summary {
-  @media #{abstract.$breakpoint-md} {
-    text-align: center;
-  }
   width: 80%;
   margin-right: auto;
   margin-left: auto;
 
+  @media #{abstract.$breakpoint-md} {
+    text-align: center;
+  }
   p {
     margin: 2rem 0;
     @media #{abstract.$breakpoint-sm} {
