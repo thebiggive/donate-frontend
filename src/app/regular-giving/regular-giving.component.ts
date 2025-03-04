@@ -2,15 +2,15 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Campaign} from "../campaign.model";
 import {ComponentsModule} from "@biggive/components-angular";
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormControl,FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatStep, MatStepper} from "@angular/material/stepper";
 import {StepperSelectionEvent} from "@angular/cdk/stepper";
 import {MatHint, MatInput} from "@angular/material/input";
 import {MatButton, MatIconAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
-import {RegularGivingService, StartMandateParams} from "../regularGiving.service";
-import {Mandate} from '../mandate.model';
+import {MandateCreateResponse, RegularGivingService, StartMandateParams} from "../regularGiving.service";
+import {Mandate, Money} from '../mandate.model';
 import {myRegularGivingPath} from "../app-routing";
 import {requiredNotBlankValidator} from "../validators/notBlank";
 import {getCurrencyMinValidator} from "../validators/currency-min";
@@ -45,15 +45,26 @@ import {
   BackendError,
   errorDescription,
   errorDetails,
-  InsufficientFundsDetail,
   isInsufficientMatchFundsError
 } from "../backendError";
+import {CampaignService} from '../campaign.service';
+import {Observable, of} from 'rxjs';
+import {AsyncPipe} from '@angular/common';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
 const maxAmount = 500;
 const minAmount = 1;
 const paymentStepIndex = 2;
+
+
+// As on donation start form, these opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
+// and prefilling them with 'no' values in that case.
+const booleansDefaultValue = environment.environmentId === 'regression' ? false : null;
+
+// apologies - been failing to get clicking this checkbox to work all day in regression tests,
+// so allowing regression tester to skip it.
+const over18DefaultValue = environment.environmentId === 'regression';
 
 @Component({
     selector: 'app-regular-giving',
@@ -76,14 +87,37 @@ const paymentStepIndex = 2;
     MatAutocompleteTrigger,
     MatCheckbox,
     MatOption,
-    MoneyPipe
+    MoneyPipe,
+    AsyncPipe
   ],
     templateUrl: './regular-giving.component.html',
     styleUrl: './regular-giving.component.scss'
 })
 export class RegularGivingComponent implements OnInit, AfterViewInit {
+  protected mandateForm = new FormGroup({
+    donationAmount: new FormControl('', [
+      requiredNotBlankValidator,
+      getCurrencyMinValidator(minAmount),
+      getCurrencyMaxValidator(maxAmount),
+      Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
+    ]),
+    billingPostcode: new FormControl('',
+      [
+        requiredNotBlankValidator,
+        Validators.pattern(billingPostcodeRegExp),
+      ]
+    ),
+    optInCharityEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
+    optInTbgEmail: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
+    giftAid: new FormControl(booleansDefaultValue, requiredNotBlankValidator),
+    homeOutsideUK: new FormControl<string|null>(null),
+    homeAddress: new FormControl<string|null>(null),
+    homePostcode: new FormControl<string|null>(null),
+    unmatched: new FormControl(false), // If ticked, indicates that the donor is willing to donate without match funding.
+    aged18OrOver: new FormControl(over18DefaultValue, [Validators.requiredTrue]),
+  });
+
   protected campaign!: Campaign;
-  mandateForm!: FormGroup;
   @ViewChild('stepper') private stepper!: MatStepper;
   readonly termsUrl = 'https://biggive.org/terms-and-conditions';
   readonly privacyUrl = 'https://biggive.org/privacy';
@@ -123,11 +157,28 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    * Defined if we have discovered that there are/were not enough match funds to cover the initial donations the donor
    * wanted to make. They will have the option to try making a smaller matched donation, or donate without matching.
    */
-  protected insufficientMatchFundsAvailable: InsufficientFundsDetail | undefined  = undefined;
+  protected insufficientMatchFundsAvailable = false;
+
+
+  /**
+   * Amount of match funds remaining based on campaign information loaded with the page. Does not always account for
+   * any very recent or concurrent usage of match funds by another donor.
+   */
+    // @ts-expect-error - initialised in ngOnInit rather than constructor.
+  protected maximumMatchableDonation: Money;
+
+  /** Used to distinguish between the case where there are zero match funds available on the campaign as seen at page
+   * load, and a case where there are initially zero match funds and then we later discover that they are not enough
+   * for the donor, perhaps due to concurrent usage.
+   */
+  protected matchFundsZeroOnLoad = false;
+  protected campaignOpenOnLoad = false;
+
+  protected preExistingActiveMandate$: Observable<Mandate[]|undefined> = of(undefined);
+  protected ageErrorMessage: string | undefined;
 
   constructor(
     private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
     private toast: Toast,
     private regularGivingService: RegularGivingService,
     private router: Router,
@@ -152,6 +203,11 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       console.error("Campaign " + this.campaign.id + " is not a regular giving campaign");
     }
 
+    this.campaignOpenOnLoad = CampaignService.campaignIsOpenLessForgiving(this.campaign);
+    if (! this.campaignOpenOnLoad) {
+      void this.router.navigateByUrl(`/campaign/${this.campaign.id}`);
+    }
+
     this.pageMeta.setCommon(
       `Regular Giving for ${this.campaign.charity.name}`,
       `Regular Giving for ${this.campaign.charity.name}`,
@@ -160,31 +216,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
     this.selectedBillingCountryCode = this.donorAccount.billingCountryCode ?? 'GB';
 
-    // As on donation start form, these opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
-    // and prefilling them with 'no' values in that case.
-    const booleansDefaultValue = environment.environmentId === 'regression' ? false : null;
-
-    this.mandateForm = this.formBuilder.group({
-        donationAmount: ['', [
-          requiredNotBlankValidator,
-          getCurrencyMinValidator(minAmount),
-          getCurrencyMaxValidator(maxAmount),
-          Validators.pattern('^\\s*[£$]?[0-9]+?(\\.00)?\\s*$'),
-        ]],
-      billingPostcode: [this.donorAccount.billingPostCode,
-        [
-          requiredNotBlankValidator,
-          Validators.pattern(billingPostcodeRegExp),
-        ]
-      ],
-      optInCharityEmail: [booleansDefaultValue, requiredNotBlankValidator],
-      optInTbgEmail: [booleansDefaultValue, requiredNotBlankValidator],
-      giftAid: [booleansDefaultValue, requiredNotBlankValidator],
-      homeOutsideUK: [null],
-      homeAddress: [null],
-      homePostcode: [null],
-      unmatched: [false], // If ticked, indicates that the donor is willing to donate without match funding.
-      });
+    this.mandateForm.patchValue({billingPostcode: this.donorAccount.billingPostCode})
 
     this.stripeService.init().catch(console.error);
 
@@ -205,6 +237,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
         this.addressSuggestions = suggestions;
       }
     });
+
+    this.maximumMatchableDonation = maximumMatchableDonationGivenCampaign(this.campaign);
+
+    if (this.maximumMatchableDonation.amountInPence === 0) {
+      this.matchFundsZeroOnLoad = true;
+      this.mandateForm.patchValue({unmatched: true});
+    }
+
+    this.preExistingActiveMandate$ = this.regularGivingService.activeMandate(this.campaign)
   }
 
   ngAfterViewInit() {
@@ -212,16 +253,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     // the select function which is called when the user clicks a step heading, to let us check that all previous
     // steps have been completed correctly, and then either proceed to the chosen step or display an error message.
 
-    // Based on https://stackoverflow.com/a/62787311/2526181 - I'm not 100% sure why it's wrapped in setTimeout but
-    // maybe returning immediately from ngAfterViewInit improves performance.
-
     setTimeout(() => {
-      this.stepper.steps.forEach((step, stepIndex) => {
-        step.select = () => {
-          this.selectStep(stepIndex);
-        };
-      });
-    });
+        this.stepper.steps.forEach((step, stepIndex) => {
+          step.select = () => {
+            this.selectStep(stepIndex);
+          };
+        });
+      },
+      500 // delay to for the stepper to be initialised - otherwise its undefined and the callback can't run.
+    );
   }
 
   async interceptSubmitAndProceedInstead(event: Event) {
@@ -309,14 +349,29 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       home: home,
       unmatched: this.unmatched,
     }).subscribe({
-      next: async (mandate: Mandate) => {
-        await this.router.navigateByUrl(`/${myRegularGivingPath}/${mandate.id}`);
+      next: async (response: MandateCreateResponse) => {
+        if (response.paymentIntent) {
+          const nextActionResult = await this.stripeService.handleNextAction(response.paymentIntent.client_secret);
+
+          if (nextActionResult.error) {
+            this.submitErrorMessage = nextActionResult.error.message;
+            this.submitting = false;
+
+            // @todo-regular-giving DON-1119 - cancel new mandate here to release match funds and/or, or consider providing
+            // a way for donor to retry the 3DS or other next action on the existing mandate, without calling matchbot
+            // to create a new one.
+            return;
+          }
+        }
+
+        await this.router.navigateByUrl(`/${myRegularGivingPath}/${response.mandate.id}`);
       },
       error: (error: BackendError) => {
         const message = errorDescription(error);
 
         if (isInsufficientMatchFundsError(error)) {
-          this.insufficientMatchFundsAvailable = errorDetails(error);
+          this.insufficientMatchFundsAvailable = true;
+          this.maximumMatchableDonation = errorDetails(error).maxMatchable;
           this.selectStep(0);
         } else {
           this.submitErrorMessage = message;
@@ -327,26 +382,23 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     })
   }
 
-  private get unmatched(): boolean {
+  protected get unmatched(): boolean {
     return !!this.mandateForm.value.unmatched;
   }
 
   private get billingPostCode(): string | null{
-    return this.mandateForm.value.billingPostcode;
+    return this.mandateForm.value.billingPostcode ?? null;
   }
 
   private getDonationAmountPence(): number {
-    return 100 * this.mandateForm.value.donationAmount;
+    return 100 * +(this.mandateForm.value.donationAmount ?? 0);
   }
 
   protected setSelectedCountry = ((countryCode: string) => {
     this.selectedBillingCountryCode = countryCode;
-    this.mandateForm.patchValue({
-      billingCountry: countryCode,
-    });
   })
 
-  protected get giftAid(): boolean | undefined
+  protected get giftAid(): boolean | undefined | null
   {
     return this.mandateForm.value.giftAid;
   }
@@ -361,7 +413,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   }
 
   protected get homePostcode(): string | null {
-    return this.mandateForm.value.homePostcode;
+    return this.mandateForm.value.homePostcode ?? null;
   }
 
   protected onBillingPostCodeChanged(_: Event) {
@@ -469,17 +521,17 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
   protected get optInCharityEmail(): boolean | undefined
   {
-    return this.mandateForm.value.optInCharityEmail;
+    return this.mandateForm.value.optInCharityEmail ?? undefined;
   }
 
   protected get optInTbgEmail(): boolean | undefined
   {
-    return this.mandateForm.value.optInTbgEmail;
+    return this.mandateForm.value.optInTbgEmail ?? undefined;
   }
 
   protected get homeAddressFormValue(): string
   {
-    return AddressService.summariseAddressSuggestion(this.mandateForm.value.homeAddress);
+    return AddressService.summariseAddressSuggestion(this.mandateForm.value.homeAddress ?? undefined);
   }
 
   /**
@@ -487,7 +539,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
    */
   private validateAmountStep() {
     let errorFound = false;
-    const donationAmountErrors = this.mandateForm.controls['donationAmount']!.errors;
+    const donationAmountErrors = this.mandateForm.controls.donationAmount.errors;
 
     if (donationAmountErrors) {
       for (const [key] of Object.entries(donationAmountErrors)) {
@@ -514,20 +566,24 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     } else {
       this.amountErrorMessage = undefined;
 
-      const askingToMatchMoreThanAvailable =
-        this.insufficientMatchFundsAvailable &&
+      this.insufficientMatchFundsAvailable =
         ! this.unmatched &&
-        this.getDonationAmountPence() > this.insufficientMatchFundsAvailable.maxMatchable.amountInPence;
+        this.getDonationAmountPence() > this.maximumMatchableDonation.amountInPence;
 
-      if (askingToMatchMoreThanAvailable) {
+      if (this.insufficientMatchFundsAvailable) {
+        this.insufficientMatchFundsAvailable = true;
         errorFound = true;
-        const formattedMax = MoneyPipe.format(this.insufficientMatchFundsAvailable!.maxMatchable);
-        this.amountErrorMessage =
-          `There is only funding available to match donations of up to ${formattedMax}. ` +
-          'Please choose a smaller donation amount, or make an unmatched donation.';
-
         this.toast.showError(this.amountErrorMessage!);
       }
+
+      if (this.mandateForm.controls.aged18OrOver.errors?.required) {
+        errorFound = true;
+        this.ageErrorMessage = "Please tick the box to confirm if you are at least 18 years old to proceed.";
+        this.toast.showError(this.ageErrorMessage);
+      } else {
+        this.ageErrorMessage = undefined;
+      }
+
     }
     return errorFound;
   }
@@ -622,4 +678,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       this.homeAddress = address;
     });
   }
+}
+
+export function maximumMatchableDonationGivenCampaign(campaign: Pick<Campaign, 'currencyCode'|'matchFundsRemaining'>): Money {
+  const standardNumberOfDonationMatched = 3;
+
+  return {
+    currency: campaign.currencyCode,
+    amountInPence: Math.max(Math.floor(campaign.matchFundsRemaining / standardNumberOfDonationMatched), 0) * 100
+  };
 }

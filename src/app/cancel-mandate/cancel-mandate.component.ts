@@ -1,5 +1,5 @@
 import {Component, inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ComponentsModule} from '@biggive/components-angular';
 import {Mandate} from "../mandate.model";
 import {MoneyPipe} from '../money.pipe';
@@ -12,6 +12,7 @@ import {RegularGivingService} from '../regularGiving.service';
 import {BackendError, errorDescription} from '../backendError';
 import {Toast} from '../toast.service';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {addBodyClass, removeBodyClass} from '../bodyStyle';
 
 @Component({
   selector: 'app-cancel-mandate',
@@ -48,17 +49,17 @@ export class CancelMandateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.pageMeta.setCommon('Cancel Regular Giving to ' + this.mandate.charityName, '', null);
-    if (isPlatformBrowser(this.platformId)) {
-      console.log("setting body to primary colour");
-      document.body.classList.add('primary-colour');
+    if (this.mandate.status === 'cancelled') {
+      void this.router.navigateByUrl(`/my-account/regular-giving/${this.mandate.id}`)
+      return;
     }
+
+    this.pageMeta.setCommon('Cancel Regular Giving to ' + this.mandate.charityName, '', null);
+    addBodyClass(this.platformId, 'primary-colour');
   }
 
   ngOnDestroy() {
-    if (isPlatformBrowser(this.platformId)) {
-      document.body.classList.remove('primary-colour');
-    }
+    removeBodyClass(this.platformId, 'primary-colour');
   }
 
   cancel(mandate: Mandate) {

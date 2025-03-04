@@ -1,5 +1,17 @@
 <main class="b-container">
+  @if (mandate.status === 'pending') {
+    @if (timedOut) {
+      <p class="error" aria-live="assertive">
+        Your regular giving was not processed immediately &ndash; it may be that there is a short delay because we're very
+        busy. Please refresh this page to see the latest status. We'll also email you when your regular giving mandate
+        is processed.
+      </p>
+    } @else {
+      <mat-spinner color="primary" diameter="30"
+                   aria-label="Processing your regular giving mandate"></mat-spinner>
 
+    }
+  } @else {
   <div id="banner-thank-you"></div>
 
   <div>
@@ -16,130 +28,114 @@
         <p class="thank-you-text">Your generous regular donation has been set up.</p>
       </div>
       <hr aria-hidden="true">
-      <div class="donation-summary">
-        @if (mandate.status === 'cancelled') {
-          <!-- @todo-regular-giving DON-1117 - add in more details, e.g. cancellation date, maybe distinguish various
-          possible types of cancellation. Probably don't need to show the canceallation reason typed in by donor -->
-          <p><strong>Regular Donations Cancelled</strong></p>
-          <hr aria-hidden="true">
-        }
-        <p><strong>Your donation summary</strong></p>
-        @if (mandate.isMatched) {
-        <p>Your donation of
-          <strong
-            class="figure">{{ mandate.donationAmount | money }}</strong>
-          is worth
-          <strong
-            class="figure">
-            {{ mandate.totalCharityReceivesPerInitial | money }}</strong>
-            to {{mandate.charityName}}
-            for the first
-          <strong
-            class="figure">
-            {{mandate.numberOfMatchedDonations + ' months!' }}
-          </strong>
-        </p>
-        } @else {
-          <p>Your donation of
-            <strong
-              class="figure">{{ mandate.donationAmount | money }}</strong>
-            is worth
-            <strong
-              class="figure">
-              {{ mandate.totalIncGiftAid | money }}</strong>
-            to {{mandate.charityName}}
-        }
-        <br/>
-        <!--            @todo-regular-giving: consider adding thank you message in matchbot / SF-->
-        <!--            @if (mandate?.thankYouMessage) {-->
-        <!--              <p id="charity-thank-you">{{ mandate?.thankYouMessage }}</p>-->
-        <!--            }-->
-      </div>
-      <div>
-        <div class="receipt">
-          <!-- Date time appears as e.g. "Sep 5, 2023" -->
-          <table>
-            <caption>Your Regular Donation Schedule</caption>
-            <tr>
-              <th scope="row">Active from</th>
-              <td id="regularActiveFrom">{{ mandate.schedule.activeFrom | date: 'mediumDate' }}</td>
-            </tr>
-            <tr>
-              <th scope="row">Payment schedule</th>
-              <td id="regularDayOfMonth">Monthly on day #{{ mandate.schedule.dayOfMonth }}</td>
-            </tr>
-            <td></td>
-            <tr class="donationAmount">
-              <th scope="row">Your donation</th>
-              <td>{{ mandate.donationAmount | money }}</td>
-            </tr>
-            @if (mandate.isMatched) {
-            <tr>
-              <th scope="row">Matched amount</th>
-              <td>{{ mandate.matchedAmount | money }}</td>
-            </tr>
-            }
-            @if (mandate.giftAid) {
-              <tr>
-                <th scope="row">Gift Aid</th>
-                <td>{{ mandate.giftAidAmount | money }}</td>
-              </tr>
-            }
-            <tr>
-              <td colspan="2">
-                <hr aria-hidden="true">
-              </td>
-            </tr>
-            @if (mandate.isMatched) {
-            <tr class="receives">
-              <th scope="row">Months 1-{{mandate.numberOfMatchedDonations}}, charity receives</th>
-              <td>{{ mandate.totalCharityReceivesPerInitial | money }}</td>
-            </tr>
-            <tr class="receives">
-              <th scope="row">From month {{mandate.numberOfMatchedDonations + 1}}, charity receives</th>
-              <td>{{ mandate.totalIncGiftAid | money }}</td>
-            </tr>
-            } @else {
-              <tr class="receives">
-                <th scope="row">Each month, charity receives</th>
-                <td>{{ mandate.totalIncGiftAid | money }}</td>
-              </tr>
-            }
-          </table>
+      <div id="mandate" class="{{mandate.status}}">
+        <div class="donation-summary">
+          @if (statusMessage) {
+            <!-- Tells the donor if their mandate has been cancelled, or if collections have ended -->
+            <p><strong>{{statusMessage}}</strong></p>
+            <hr aria-hidden="true">
+          }
+          <p><strong>Your donation summary</strong></p>
+          @if (mandate.isMatched) {
+            <p>Your donation of
+              <strong
+                class="figure">{{ mandate.donationAmount | money }}</strong>
+              is worth
+              <strong
+                class="figure">
+                {{ mandate.totalCharityReceivesPerInitial | money }}</strong>
+              to {{ mandate.charityName }}
+              for the first
+              <strong
+                class="figure">
+                {{ mandate.numberOfMatchedDonations + ' months!' }}
+              </strong>
+            </p>
+          } @else {
+            <p>Your donation of
+              <strong
+                class="figure">{{ mandate.donationAmount | money }}</strong>
+              is worth
+              <strong
+                class="figure">
+                {{ mandate.totalIncGiftAid | money }}</strong>
+              to {{ mandate.charityName }}
+              }
+          <br/>
+          <!--            @todo-regular-giving: consider adding thank you message in matchbot / SF-->
+          <!--            @if (mandate?.thankYouMessage) {-->
+          <!--              <p id="charity-thank-you">{{ mandate?.thankYouMessage }}</p>-->
+          <!--            }-->
         </div>
-        <hr class="shorter" aria-hidden="true">
-      </div>
-      <div class="socials">
-        <p>Boost your impact by sharing on social media</p>
-        <div class="social-icons-wrapper">
-          <span class="separator"></span>
-          <biggive-social-icon
-            service="Facebook"
-            label-prefix="Share"
-            url="https://www.facebook.com/sharer/sharer.php?u={{ encodedShareUrl }}" background-colour="tertiary"
-            icon-colour="black"
-            wide="true"
-          ></biggive-social-icon>
-          <span class="separator"></span>
-          <biggive-social-icon
-            service="Twitter"
-            label-prefix="Share"
-            url="https://x.com/intent/post?url={{ encodedShareUrl }}&text={{ encodedPrefilledText }}"
-            background-colour="tertiary"
-            icon-colour="black"
-            wide="true"
-          ></biggive-social-icon>
-          <span class="separator"></span>
-          <biggive-social-icon
-            service="LinkedIn"
-            label-prefix="Share"
-            url="https://www.linkedin.com/cws/share?url={{ encodedShareUrl }}"
-            background-colour="tertiary"
-            icon-colour="black"
-            wide="true"
-          ></biggive-social-icon>
+        <div>
+          <div class="receipt">
+            <!-- Date time appears as e.g. "Sep 5, 2023" -->
+            <table>
+              <caption>Your Regular Donation Schedule</caption>
+              <tr>
+                <th scope="row">Active from</th>
+                <td id="regularActiveFrom">{{ mandate.schedule.activeFrom | date: 'mediumDate' }}</td>
+              </tr>
+
+              @if (mandate.cancellationDate) {
+                <tr>
+                  <th scope="row">Cancelled</th>
+                  <td id="cancelledFrom">{{ mandate.cancellationDate | date: 'mediumDate' }}</td>
+                </tr>
+              }
+
+              <tr>
+                <th scope="row">Payment schedule</th>
+                <td id="regularDayOfMonth">Monthly on day #{{ mandate.schedule.dayOfMonth }}</td>
+              </tr>
+              <td></td>
+              <tr class="donationAmount">
+                <th scope="row">Your donation</th>
+                <td>{{ mandate.donationAmount | money }}</td>
+              </tr>
+              @if (mandate.isMatched) {
+                <tr>
+                  <th scope="row">Matched amount</th>
+                  <td>{{ mandate.matchedAmount | money }}</td>
+                </tr>
+              }
+              @if (mandate.giftAid) {
+                <tr>
+                  <th scope="row">Gift Aid</th>
+                  <td>{{ mandate.giftAidAmount | money }}</td>
+                </tr>
+              }
+              <tr>
+                <td colspan="2">
+                  <hr aria-hidden="true">
+                </td>
+              </tr>
+              @if (mandate.isMatched) {
+                <tr class="receives">
+                  <th scope="row">Months 1-{{ mandate.numberOfMatchedDonations }}, charity receives</th>
+                  <td>{{ mandate.totalCharityReceivesPerInitial | money }}</td>
+                </tr>
+                <tr class="receives">
+                  <th scope="row">From month {{ mandate.numberOfMatchedDonations + 1 }}, charity receives</th>
+                  <td>{{ mandate.totalIncGiftAid | money }}</td>
+                </tr>
+              } @else {
+                <tr class="receives">
+                  <th scope="row">Each month, charity receives</th>
+                  <td>{{ mandate.totalIncGiftAid | money }}</td>
+                </tr>
+              }
+            </table>
+          </div>
+          @if (showCancelLink) {
+            <hr class="shorter" aria-hidden="true">
+            <div style="text-align: center">
+              <a [href]="cancelPath">Cancel future donations</a>
+            </div>
+          }
         </div>
       </div>
     </div>
   </div>
+  }
 </main>

@@ -1,4 +1,12 @@
+@let preExistingActiveMandate = preExistingActiveMandate$ | async;
+
 <main class="b-container">
+  <div class="b-back-button">
+    <a mat-icon-button [routerLink]="'/campaign/' + campaign.id">
+      <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
+      Back to campaign
+    </a>
+  </div>
   @if (!campaign.isRegularGiving) {
     <div>
       <p class="error">
@@ -7,13 +15,27 @@
         href="/campaign/{{campaign.id}}">campaign page</a>.
       </p>
     </div>
-  } @else {
-    <div class="b-back-button">
-      <a mat-icon-button [routerLink]="'/campaign/' + campaign.id">
-        <mat-icon aria-hidden="false" aria-label="Back">keyboard_arrow_left</mat-icon>
-        Back to campaign
-      </a>
-    </div>
+  } @else if (preExistingActiveMandate && preExistingActiveMandate.length > 0) {
+
+    <p>
+      You already have a regular giving agreement for <strong>{{campaign.title}}</strong>, giving
+      {{preExistingActiveMandate[0].donationAmount | money}} each month.
+    </p>
+
+    <p>If you wish to change your regular donation you can cancel the existing agreement
+      and then return to this page to create a new one.
+    </p>
+
+    <biggive-button
+      space-above="5"
+      colour-scheme="primary"
+      label="View Mandate"
+      full-width="true"
+      size="medium"
+      url="/my-account/regular-giving/{{preExistingActiveMandate[0].id}}"
+    />
+
+  } @else if (campaignOpenOnLoad && preExistingActiveMandate?.length === 0) {
     <div class="c-form-container">
       <biggive-page-section>
         <form
@@ -56,30 +78,51 @@
               </div>
               <p>This amount will be taken from your account today and once every month in future</p>
 
-              <div aria-live="polite" >
+              <div aria-live="polite">
+                @if (this.matchFundsZeroOnLoad) {
+                  <!-- no need to show any message here, the donor will read below that there are no match funds-->
+                } @else if (!this.unmatched) {
+                  <p>Your first three donations will be match-funded. </p>
+                } @else {
+                  <p>Your donations will not be match-funded.</p>
+                }
                 @if (amountErrorMessage) {
                   <div class="error">
                     {{ this.amountErrorMessage }}
                   </div>
                 }
-
-                @if (insufficientMatchFundsAvailable) {
+                @if (maximumMatchableDonation.amountInPence === 0) {
                   <p>
-                  @if (insufficientMatchFundsAvailable.maxMatchable.amountInPence === 0) {
                     There are no match funds currently available for this campaign. Remember, every penny helps.
-                      Please continue to make an <strong>unmatched donation</strong> to the charity!
-                  } @else {
-                    There are limited match funds available.
-                    Remember, every penny helps.
-                      Please donate up to {{insufficientMatchFundsAvailable.maxMatchable | money}}, or make an
-                    <strong>unmatched donation</strong> to the charity!
-                  }
+                    Please continue to make an <strong>unmatched donation</strong> to the charity!
+                    @if (!matchFundsZeroOnLoad) {
+                      <mat-checkbox formControlName="unmatched" id="unmatched">
+                        Make an unmatched donation
+                      </mat-checkbox>
+                    }
                   </p>
-                <mat-checkbox formControlName="unmatched" id="unmatched">
-                  Make an unmatched donation
-                </mat-checkbox>
+                } @else if (insufficientMatchFundsAvailable) {
+                  <p><span class="error">There are limited match funds available</span>, but every penny helps, so you
+                    have two options:</p>
+                  <ol>
+                    <li>Reduce your donation amount to a maximum of {{ maximumMatchableDonation | money }}, or</li>
+                    <li>
+                      <mat-checkbox formControlName="unmatched" id="unmatched">
+                        Make an unmatched donation
+                      </mat-checkbox>
+                    </li>
+                  </ol>
                 }
               </div>
+
+              <mat-checkbox formControlName="aged18OrOver" id="aged18OrOver">
+                I am aged 18 or older.
+              </mat-checkbox>
+              @if (ageErrorMessage) {
+                <div class="error">
+                  {{ this.ageErrorMessage }}
+                </div>
+              }
 
               <div style="text-align: center">
                 <button style="width: 40%;"

@@ -1,13 +1,17 @@
 export type Money = {
   "amountInPence": number,
-  "currency": "GBP"
+  "currency": "GBP"|"USD"
 };
 
 export type Mandate = {
   id: string,
   campaignId: string,
   charityName: string,
-  status: 'active'|'pending'|'cancelled',
+
+  /** @see matchbot **/
+  status: 'active'|'pending'|'cancelled'|'campaign-ended',
+
+  cancellationDate?: string,
   "schedule": {
     "type": "monthly",
     "dayOfMonth": number,

@@ -185,46 +185,14 @@ div.clearfix {
   }
 }
 
-.socials {
-  display: grid;
+#mandate {
   margin-bottom: 50px;
-  p {
-    text-align: center;
-    max-width: 220px;
-    margin: auto;
-  }
+}
 
-  .social-icons-wrapper {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    margin-right: 0;
-    margin-left: 0;
-    margin-bottom: 40px;
-
-    span.separator {
-      width: 30px
-    }
-  }
-
-  a {
-    margin: auto;
-  }
-
-  a, p {
-    @media #{abstract.$breakpoint-sm} {
-      font-size: 1rem;
-    }
-    @media #{abstract.$breakpoint-md} {
-      font-size: 1.1rem;
-    }
-    @media #{abstract.$breakpoint-lg} {
-      font-size: 1.2rem;
-    }
-    @media #{abstract.$breakpoint-xl} {
-      font-size: 1.4rem;
-    }
-  }
+#mandate.cancelled, #mandate.campaign-ended {
+  background: rgb(0 0 0 / 8%);
+  padding: 2em;
+  border-radius: 4px;
 }
 
 .screenreader-only {
