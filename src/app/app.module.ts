@@ -6,7 +6,7 @@ import {
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from "@angular/material/checkbox";
 import { MAT_RADIO_DEFAULT_OPTIONS } from "@angular/material/radio";
-import { BrowserModule } from "@angular/platform-browser";
+import {BrowserModule, provideClientHydration, withEventReplay, withHttpTransferCacheOptions} from '@angular/platform-browser';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule, RouterOutlet } from "@angular/router";
 import { ComponentsModule } from "@biggive/components-angular";
@@ -75,6 +75,10 @@ const matomoBaseUri = "https://biggive.matomo.cloud";
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: "primary" } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: "primary" } },
+    provideClientHydration(
+      withEventReplay(),
+      withHttpTransferCacheOptions({includeHeaders: ['Origin']}),
+    ),
     provideHttpClient(withInterceptorsFromDi()),
   ],
 })
