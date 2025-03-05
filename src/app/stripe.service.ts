@@ -1,16 +1,17 @@
 import {Injectable} from '@angular/core';
 import {
   ConfirmationTokenResult,
-  loadStripe,
+  loadStripe, SetupIntentResult,
   Stripe,
-  StripeElements,
-  StripeElementsOptionsMode, StripeError
+  StripeElements, StripeElementsOptionsClientSecret,
+  StripeElementsOptionsMode, StripeError, StripePaymentElement
 } from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
 import {environment as stagingEnvironment} from '../environments/environment.staging';
 import {Donation} from './donation.model';
 import {Campaign} from "./campaign.model";
+import {countryISO2} from './countries';
 
 @Injectable({
   providedIn: 'root',
@@ -239,6 +240,50 @@ export class StripeService {
   private amountIncTipInMinorUnit(donation: Donation) {
     // use round not floor to avoid issues like returning 114 as the sum of £1 and £0.15
     return Math.round((donation.tipAmount + donation.donationAmount) * 100);
+  }
+
+  public stripeElementsForRegularGivingPaymentMethod(client_secret: string): [StripeElements, StripePaymentElement]  {
+    const options = {
+    clientSecret: client_secret,
+      // Fully customizable with appearance API.
+      appearance: {},
+  } satisfies StripeElementsOptionsClientSecret;
+
+  const elements = this.stripe!.elements(options);
+
+  return [elements, StripeService.createStripeElement(elements)];
+  }
+
+  public async confirmSetup({
+                              stripeElements,
+                              return_url,
+                              billingCountryCode,
+                              billingPostalCode,
+  }:{
+    billingCountryCode: countryISO2,
+    billingPostalCode: string,
+    stripeElements: StripeElements,
+    return_url: string
+  }): Promise<SetupIntentResult> {
+    if (! this.stripe) {
+      throw new Error("Stripe not ready");
+    }
+
+    return await this.stripe.confirmSetup({
+      confirmParams: {
+        return_url,
+        payment_method_data: {
+          billing_details: {
+            address: {
+              country: billingCountryCode.toLowerCase(),
+              postal_code: billingPostalCode,
+            }
+          }
+        }
+      },
+      elements: stripeElements,
+      redirect: 'if_required',
+    })
   }
 }
 
