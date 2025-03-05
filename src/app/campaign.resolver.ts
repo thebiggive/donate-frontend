@@ -1,4 +1,5 @@
-import { Injectable, makeStateKey, TransferState } from '@angular/core';
+import {isPlatformBrowser} from '@angular/common';
+import {Inject, Injectable, makeStateKey, PLATFORM_ID, TransferState} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, Router} from '@angular/router';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -13,6 +14,7 @@ import {SearchService} from "./search.service";
 export class CampaignResolver implements Resolve<Campaign>  {
   constructor(
     public campaignService: CampaignService,
+    @Inject(PLATFORM_ID) private platformId: Object,
     public searchService: SearchService,
     private router: Router,
     private state: TransferState,
@@ -69,7 +71,8 @@ export class CampaignResolver implements Resolve<Campaign>  {
       return EMPTY;
     }
 
-    const campaignKey = makeStateKey<Campaign>(`campaign-${identifier}`);
+    const platformIndicator = isPlatformBrowser(this.platformId) ? 'browser' : 'server';
+    const campaignKey = makeStateKey<Campaign>(`campaign-${identifier}-${platformIndicator}`);
     const campaign = this.state.get(campaignKey, undefined);
     if (campaign) {
       return of(campaign);
