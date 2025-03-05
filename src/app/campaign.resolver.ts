@@ -80,7 +80,8 @@ export class CampaignResolver implements Resolve<Campaign>  {
       return EMPTY;
     }
 
-    const campaignKey = makeStateKey<Campaign>(`campaign-${identifier}`);
+    const platformIndicator = isPlatformBrowser(this.platformId) ? 'browser' : 'server';
+    const campaignKey = makeStateKey<Campaign>(`campaign-${identifier}-${platformIndicator}`);
     const campaign = this.state.get(campaignKey, undefined);
     if (campaign) {
       return of(campaign);
