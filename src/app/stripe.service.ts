@@ -11,6 +11,7 @@ import {environment} from '../environments/environment';
 import {environment as stagingEnvironment} from '../environments/environment.staging';
 import {Donation} from './donation.model';
 import {Campaign} from "./campaign.model";
+import {countryISO2} from './countries';
 
 @Injectable({
   providedIn: 'root',
@@ -253,7 +254,17 @@ export class StripeService {
   return [elements, StripeService.createStripeElement(elements)];
   }
 
-  public async confirmSetup(stripeElements: StripeElements, return_url: string): Promise<SetupIntentResult> {
+  public async confirmSetup({
+                              stripeElements,
+                              return_url,
+                              billingCountryCode,
+                              billingPostalCode,
+  }:{
+    billingCountryCode: countryISO2,
+    billingPostalCode: string,
+    stripeElements: StripeElements,
+    return_url: string
+  }): Promise<SetupIntentResult> {
     if (! this.stripe) {
       throw new Error("Stripe not ready");
     }
@@ -264,9 +275,8 @@ export class StripeService {
         payment_method_data: {
           billing_details: {
             address: {
-              // @todo-regular-giving: Remove hard-coded data below, replace with data from form.
-              country: "gb",
-              postal_code: "sw1a 1aa",
+              country: billingCountryCode.toLowerCase(),
+              postal_code: billingPostalCode,
             }
           }
         }

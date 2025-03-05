@@ -46,7 +46,7 @@
           class="c-regular-giving-form"
           [formGroup]="paymentMethodForm"
         >
-      <h3>New Payment Method for Regular Giving:</h3>
+      <h3>New Payment Method for Regular Giving</h3>
       <div class="sr-input sr-card-element" id="card-info" #cardInfo>
         Loading payment card form...
       </div>
@@ -55,7 +55,7 @@
         <biggive-form-field-select
           [prompt]="'Billing country'"
           [options]="countryOptionsObject"
-          [selectedValue]="this.paymentMethods.regularGivingPaymentMethod?.billing_details?.address?.country || null"
+          [selectedValue]="selectedCountryCode"
           [backgroundColour]="'grey'"
           [selectionChanged]="setSelectedCountry"
           [spaceBelow]="3"

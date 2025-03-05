@@ -13,9 +13,10 @@ import {StripeService} from "../stripe.service";
 import {Toast} from '../toast.service';
 import {RegularGivingService} from '../regularGiving.service';
 import {DonationService} from '../donation.service';
-import {countryOptions} from '../countries';
+import {countryISO2, countryOptions} from '../countries';
 import {MatInput} from '@angular/material/input';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {requiredNotBlankValidator} from '../validators/notBlank';
 
 @Component({
   selector: 'app-change-regular-giving',
@@ -38,30 +39,37 @@ export class ChangeRegularGivingComponent implements OnInit {
   private stripePaymentElement: StripePaymentElement | undefined;
   private stripeElements: StripeElements | undefined;
   protected errorMessage: string | undefined;
-  private selectedCountryCode: string | undefined;
+  protected selectedCountryCode: countryISO2 | undefined;
+
+  protected paymentMethodForm = new FormGroup({
+    billingPostcode: new FormControl('', [
+      requiredNotBlankValidator,
+    ])
+  });
 
   constructor(
-      private stripeService: StripeService,
-      private regularGivingService: RegularGivingService,
-      private donationService: DonationService,
-      private route: ActivatedRoute,
-      private router: Router,
-      private toaster: Toast,
+    private stripeService: StripeService,
+    private regularGivingService: RegularGivingService,
+    private donationService: DonationService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private toaster: Toast,
   ) {
     this.paymentMethods = this.route.snapshot.data.paymentMethods;
     this.setupIntent = this.route.snapshot.data.setupIntent;
   }
 
   async ngOnInit() {
-     await this.stripeService.init().catch(console.error);
+    await this.stripeService.init().catch(console.error);
+    this.selectedCountryCode = this.paymentMethods.regularGivingPaymentMethod?.billing_details?.address?.country as countryISO2 || undefined
 
-   if (this.setupIntent) {
-     const clientSecret = this.setupIntent.client_secret;
-     if (clientSecret) {
-       [this.stripeElements, this.stripePaymentElement] = this.stripeService.stripeElementsForRegularGivingPaymentMethod(clientSecret);
-       this.stripePaymentElement.mount(this.cardInfo?.nativeElement);
-     }
-   }
+    if (this.setupIntent) {
+      const clientSecret = this.setupIntent.client_secret;
+      if (clientSecret) {
+        [this.stripeElements, this.stripePaymentElement] = this.stripeService.stripeElementsForRegularGivingPaymentMethod(clientSecret);
+        this.stripePaymentElement.mount(this.cardInfo?.nativeElement);
+      }
+    }
   }
 
   protected async confirmSetup(): Promise<void> {
@@ -70,7 +78,7 @@ export class ChangeRegularGivingComponent implements OnInit {
     }
 
     const stripeElements = this.stripeElements;
-    if (! stripeElements) {
+    if (!stripeElements) {
       this.toaster.showError(
         "Sorry, our payment card component did not load. Please retry or contact Big Give if the problem persists"
       );
@@ -80,7 +88,36 @@ export class ChangeRegularGivingComponent implements OnInit {
     let setupIntentResult: SetupIntentResult;
     let paymentIntentOrSetupIntentResult: PaymentIntentOrSetupIntentResult;
     try {
-      setupIntentResult = await this.stripeService.confirmSetup(stripeElements, window.location.href);
+      if (this.paymentMethodForm.controls.billingPostcode.invalid) {
+        this.errorMessage = "Please enter your billing postal code";
+        this.toaster.showError(this.errorMessage);
+        return;
+      }
+
+      const countryCode = this.selectedCountryCode;
+      const billingPostalCode = this.paymentMethodForm.value.billingPostcode;
+
+      if (!countryCode) {
+        this.errorMessage = "Please select your billing country";
+        this.toaster.showError(this.errorMessage);
+        return;
+      }
+
+      if (!billingPostalCode) {
+        // should be impossible due to form validation
+        this.errorMessage = "Please select your billing postcode";
+        this.toaster.showError(this.errorMessage);
+        return;
+      }
+
+
+      setupIntentResult = await this.stripeService.confirmSetup({
+          stripeElements: stripeElements,
+          billingCountryCode: countryCode,
+          billingPostalCode: billingPostalCode,
+          return_url: window.location.href
+        }
+      );
     } catch (error: unknown) {
       // @ts-expect-error
       this.errorMessage = error?.message || 'Unexpected error';
@@ -124,10 +161,8 @@ export class ChangeRegularGivingComponent implements OnInit {
   }
 
   protected readonly countryOptionsObject = countryOptions;
-  protected paymentMethodForm =  new FormGroup({
-    billingPostcode: new FormControl('', [])});
 
-  protected setSelectedCountry(countryCode: string) {
-    this.selectedCountryCode = countryCode;
+  protected setSelectedCountry(country: countryISO2) {
+    this.selectedCountryCode = country;
   }
 }
