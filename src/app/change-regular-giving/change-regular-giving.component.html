@@ -41,15 +41,43 @@
 
     @if (this.setupIntent) {
     <biggive-page-section>
+      <div id="change-form-container">
+        <form
+          class="c-regular-giving-form"
+          [formGroup]="paymentMethodForm"
+        >
       <h3>New Payment Method for Regular Giving:</h3>
       <div class="sr-input sr-card-element" id="card-info" #cardInfo>
         Loading payment card form...
+      </div>
+      <div style="margin-top: 2em;">
+
+        <biggive-form-field-select
+          [prompt]="'Billing country'"
+          [options]="countryOptionsObject"
+          [selectedValue]="this.paymentMethods.regularGivingPaymentMethod?.billing_details?.address?.country || null"
+          [backgroundColour]="'grey'"
+          [selectionChanged]="setSelectedCountry"
+          [spaceBelow]="3"
+          [selectedOptionColour]="'inherit'"
+        >
+        </biggive-form-field-select>
+
+        <biggive-text-input>
+          <label slot="label" for="billingPostcode">Billing postcode</label>
+          <input slot="input" id="billingPostcode"
+                 matInput
+                 formControlName="billingPostcode"
+                 [value]="this.paymentMethods.regularGivingPaymentMethod?.billing_details?.address?.postal_code || ''"
+                 autocapitalize="characters"
+                 autocomplete="postal-code">
+        </biggive-text-input>
+
       </div>
       <div id="error-message" aria-live="polite" class="error">
           <strong>{{ errorMessage }}</strong>
       </div>
       <div style="height: 80px"></div>
-        <p><strong>{{"@todo-regular-giving: Ask for billing country and postcode here and pass to stripe and matchbot"}} </strong></p>
       <biggive-button
         (click)="confirmSetup()"
         label="Confirm"
@@ -57,6 +85,8 @@
         size="medium"
         colour-scheme="white"
       />
+        </form>
+      </div>
     </biggive-page-section>
     }
   </div>

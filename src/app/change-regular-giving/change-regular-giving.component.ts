@@ -13,11 +13,16 @@ import {StripeService} from "../stripe.service";
 import {Toast} from '../toast.service';
 import {RegularGivingService} from '../regularGiving.service';
 import {DonationService} from '../donation.service';
+import {countryOptions} from '../countries';
+import {MatInput} from '@angular/material/input';
+import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-change-regular-giving',
   imports: [
     ComponentsModule,
+    MatInput,
+    ReactiveFormsModule,
   ],
   templateUrl: './change-regular-giving.component.html',
   styleUrl: './change-regular-giving.component.scss'
@@ -33,6 +38,7 @@ export class ChangeRegularGivingComponent implements OnInit {
   private stripePaymentElement: StripePaymentElement | undefined;
   private stripeElements: StripeElements | undefined;
   protected errorMessage: string | undefined;
+  private selectedCountryCode: string | undefined;
 
   constructor(
       private stripeService: StripeService,
@@ -115,5 +121,13 @@ export class ChangeRegularGivingComponent implements OnInit {
     await this.regularGivingService.setRegularGivingPaymentMethod(pmID);
     this.toaster.showSuccess("Updated your payment method for regular giving");
     await this.router.navigateByUrl('/my-account/payment-methods');
+  }
+
+  protected readonly countryOptionsObject = countryOptions;
+  protected paymentMethodForm =  new FormGroup({
+    billingPostcode: new FormControl('', [])});
+
+  protected setSelectedCountry(countryCode: string) {
+    this.selectedCountryCode = countryCode;
   }
 }

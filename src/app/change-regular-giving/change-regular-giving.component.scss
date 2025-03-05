@@ -12,3 +12,17 @@ main > div {
     color: white;
   }
 }
+
+#change-form-container {
+  padding: 1em;
+  // using this background colour
+  // is required to make our non-rectangular form fields work
+  background-color: abstract.$colour-background;
+
+  // other colours then have to be changed to provide contrast.
+  color: black;
+
+  a:link, a:visited, a:hover {
+    color: abstract.$colour-primary;
+  }
+}
