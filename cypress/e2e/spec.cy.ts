@@ -14,7 +14,7 @@ describe('App boot fundamentals', () => {
     cy.visit('/?noredirect');
 
     cy.contains('Hi. We’re Big Give');
-    cy.contains('£500,000');
-    cy.contains('raised for over 123,456 charity projects since 2008');
+    //cy.contains('£327,737,108'); // Real Staging figure at 17:48 on 5 March 2025.
+    cy.contains('charity projects since 2008');
   })
 })
