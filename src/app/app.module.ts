@@ -75,7 +75,7 @@ const matomoBaseUri = "https://biggive.matomo.cloud";
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: "primary" } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: "primary" } },
-    provideHttpClient(withFetch(), withInterceptorsFromDi()),
+    provideHttpClient(withInterceptorsFromDi()),
   ],
 })
 export class AppModule {}
