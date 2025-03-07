@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from '@angular/router';
 import {BiggiveCampaignCardFilterGrid} from '@biggive/components-angular';
+import {MatomoTracker} from 'ngx-matomo-client';
 import {skip, Subscription} from 'rxjs';
 
 import {currencyPipeDigitsInfo} from '../../environments/common';
@@ -31,6 +32,7 @@ import {FundService} from "../fund.service";
 import {TimeLeftPipe} from "../time-left.pipe";
 import {environment} from "../../environments/environment";
 import {SESSION_STORAGE, StorageService} from "ngx-webstorage-service";
+import {logCalloutError} from '../logCalloutError';
 
 const openPipeToken = 'TimeLeftToOpenPipe';
 const endPipeToken = 'timeLeftToEndPipe';
@@ -120,6 +122,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     private currencyPipe: CurrencyPipe,
     private datePipe: DatePipe,
     private fundService: FundService,
+    private matomoTracker: MatomoTracker,
     private navigationService: NavigationService,
     private route: ActivatedRoute,
     private router: Router,
@@ -391,7 +394,13 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
           this.sessionStorage.set(this.recentChildrenKey, recentChildrenData);
         }
       },
-      error: () => {
+      error: (error) => {
+        logCalloutError(
+          isPlatformBrowser(this.platformId),
+          `ExploreComponent.doCampaignSearch: ${error.message}`,
+          undefined,
+          this.matomoTracker,
+        );
         this.filterError = true;
         this.loading = false;
       }
@@ -412,13 +421,21 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.individualCampaigns = [];
     this.loading = true;
 
-    this.campaignService.search(query as SearchQuery).subscribe(campaignSummaries => {
-      this.individualCampaigns = campaignSummaries; // Success
-      this.loading = false;
-    }, () => {
+    this.campaignService.search(query as SearchQuery).subscribe({
+      next: campaignSummaries => {
+        this.individualCampaigns = campaignSummaries; // Success
         this.loading = false;
       },
-    );
+      error: (error) => {
+        logCalloutError(
+          isPlatformBrowser(this.platformId),
+          `ExploreComponent.run: ${error.message}`,
+          undefined,
+          this.matomoTracker,
+        );
+        this.loading = false;
+      },
+    });
 
     if (!isPlatformBrowser(this.platformId)) { // Server renders don't need the scroll restoration help
       // this.doCampaignSearch(query as SearchQuery, true); // Clear existing children, though there _should_ be none on server

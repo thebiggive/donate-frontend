@@ -1,11 +1,14 @@
-import { Injectable, makeStateKey, TransferState } from '@angular/core';
+import {isPlatformBrowser} from '@angular/common';
+import {Inject, Injectable, makeStateKey, PLATFORM_ID, TransferState} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, Router} from '@angular/router';
+import {MatomoTracker} from 'ngx-matomo-client';
 import { EMPTY, Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { Campaign } from './campaign.model';
 import {CampaignService, SearchQuery} from './campaign.service';
 import {SearchService} from "./search.service";
+import {logCalloutError} from './logCalloutError';
 
 @Injectable(
   {providedIn: 'root'}
@@ -13,6 +16,8 @@ import {SearchService} from "./search.service";
 export class CampaignResolver implements Resolve<Campaign>  {
   constructor(
     public campaignService: CampaignService,
+    private matomoTracker: MatomoTracker,
+    @Inject(PLATFORM_ID) private platformId: Object,
     public searchService: SearchService,
     private router: Router,
     private state: TransferState,
@@ -50,6 +55,12 @@ export class CampaignResolver implements Resolve<Campaign>  {
       this.campaignService.search(query as SearchQuery).subscribe({
         next: () => {},
         error: () => {
+          logCalloutError(
+            isPlatformBrowser(this.platformId),
+            'CampaignResolver search to check fundSlug validity',
+            `/${campaignSlug}/${fundSlug}`,
+            this.matomoTracker,
+          );
           void this.router.navigateByUrl(`/${campaignSlug}`);
         },
       });
@@ -69,7 +80,8 @@ export class CampaignResolver implements Resolve<Campaign>  {
       return EMPTY;
     }
 
-    const campaignKey = makeStateKey<Campaign>(`campaign-${identifier}`);
+    const platformIndicator = isPlatformBrowser(this.platformId) ? 'browser' : 'server';
+    const campaignKey = makeStateKey<Campaign>(`campaign-${identifier}-${platformIndicator}`);
     const campaign = this.state.get(campaignKey, undefined);
     if (campaign) {
       return of(campaign);
@@ -77,7 +89,7 @@ export class CampaignResolver implements Resolve<Campaign>  {
 
     const observable = method(identifier)
       .pipe(catchError(error => {
-        console.log(`CampaignResolver load error: "${error.message}"`);
+        logCalloutError(isPlatformBrowser(this.platformId), `CampaignResolver main load: ${error.message}`, identifier, this.matomoTracker);
         // Because it happens server side & before resolution, `replaceUrl` seems not to
         // work, so just fall back to serving the Home content on the requested path.
         void this.router.navigateByUrl('/');

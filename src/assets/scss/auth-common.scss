@@ -3,8 +3,8 @@
 @use '../../abstract';
 
 main {
-  @include abstract.make-container;
   margin: 0 0;
+  @include abstract.make-container;
 }
 
 form {
@@ -23,7 +23,6 @@ form {
 }
 
 input {
-  @include abstract.b-rt-0;
   outline: none;
   border: none;
   background-color: abstract.$colour-background;
@@ -33,6 +32,8 @@ input {
   margin: 0 auto;
   display: block;
   font-weight: 700;
+
+  @include abstract.b-rt-0;
 
   // Larger breakpoints only
   .floating-label {
@@ -69,11 +70,12 @@ input {
 }
 
 main > div {
-  @include abstract.make-container;
   box-sizing: border-box;
   color: abstract.$colour-primary;
   background-color: abstract.$colour-background;
   margin-bottom: 125px;
+
+  @include abstract.make-container;
 
   @media #{abstract.$breakpoint-lg} {
     padding-top: 0;
@@ -102,10 +104,10 @@ div.actions {
   #register-button, #reset-password-button {
     margin-bottom: 1em;
     width: 100%;
+    flex-basis: 60%;
     @media #{abstract.$breakpoint-md} {
       margin-bottom: 0;
     }
-    flex-basis: 60%;
   }
 }
 
