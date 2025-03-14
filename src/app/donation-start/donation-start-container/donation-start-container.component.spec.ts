@@ -11,9 +11,8 @@ import { DonationStartFormComponent } from "../donation-start-form/donation-star
 import { TBG_DONATE_STORAGE } from "../../donation.service";
 import { MatomoModule } from "ngx-matomo-client";
 import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from "@angular/common/http";
+  provideHttpClient, withFetch,
+} from '@angular/common/http';
 
 // See https://medium.com/angular-in-depth/angular-unit-testing-viewchild-4525e0c7b756
 @Component({
@@ -62,7 +61,7 @@ describe("DonationStartContainer", () => {
         },
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withFetch()),
         provideHttpClientTesting(),
       ],
     }).compileComponents();

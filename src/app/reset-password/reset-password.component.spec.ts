@@ -12,7 +12,7 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 import { TBG_DONATE_STORAGE } from '../donation.service';
 import { ResetPasswordComponent } from './reset-password.component';
 import {MatomoModule} from "ngx-matomo-client";
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {provideHttpClient, withFetch} from '@angular/common/http';
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe('ResetPasswordComponent', () => {
@@ -54,7 +54,7 @@ describe('ResetPasswordComponent', () => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     imports: [],
-    providers: [provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+    providers: [provideHttpClient(withFetch()), provideHttpClientTesting()]
     });
 
     fixture = TestBed.createComponent(ResetPasswordComponent);

@@ -15,9 +15,8 @@ import { DonationStatus } from "./donation-status.type";
 import { environment } from "../environments/environment";
 import { MatomoModule } from "ngx-matomo-client";
 import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from "@angular/common/http";
+  provideHttpClient, withFetch,
+} from '@angular/common/http';
 import { RouterModule } from "@angular/router";
 
 describe("DonationService", () => {
@@ -67,7 +66,7 @@ describe("DonationService", () => {
         { provide: SESSION_STORAGE, useClass: InMemoryStorageService },
         DonationService,
         InMemoryStorageService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withFetch()),
         provideHttpClientTesting(),
       ],
     })

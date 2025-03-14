@@ -1,8 +1,5 @@
 import { APP_BASE_HREF, AsyncPipe, DatePipe } from "@angular/common";
-import {
-  provideHttpClient, withFetch,
-  withInterceptorsFromDi,
-} from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from "@angular/material/checkbox";
 import { MAT_RADIO_DEFAULT_OPTIONS } from "@angular/material/radio";
@@ -75,9 +72,7 @@ const matomoBaseUri = "https://biggive.matomo.cloud";
     { provide: TBG_DONATE_STORAGE, useExisting: LOCAL_STORAGE },
     { provide: MAT_CHECKBOX_DEFAULT_OPTIONS, useValue: { color: "primary" } },
     { provide: MAT_RADIO_DEFAULT_OPTIONS, useValue: { color: "primary" } },
-    // Note: please ignore 'NG02801: Angular detected that `HttpClient` is not configured to use `fetch` APIs.'
-    // Adding `withFetch()` currently seems to break CORS when responses get shared between SSR & browser contexts.
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withFetch()),
   ],
 })
 export class AppModule {}

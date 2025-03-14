@@ -12,9 +12,8 @@ import { DonationThanksComponent } from "./donation-thanks.component";
 import { CompleteDonation } from "../donation.model";
 import { MatomoModule } from "ngx-matomo-client";
 import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from "@angular/common/http";
+  provideHttpClient, withFetch,
+} from '@angular/common/http';
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe("DonationThanksComponent", () => {
@@ -47,7 +46,7 @@ describe("DonationThanksComponent", () => {
         },
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withFetch()),
         provideHttpClientTesting(),
       ],
     });

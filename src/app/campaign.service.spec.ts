@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { Campaign } from './campaign.model';
 import {CampaignService} from './campaign.service';
 import { environment } from '../environments/environment';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {provideHttpClient, withFetch} from '@angular/common/http';
 
 describe('CampaignService', () => {
   const getDummyCampaign = () : Campaign => {
@@ -84,7 +84,7 @@ describe('CampaignService', () => {
 
   beforeEach(() => TestBed.configureTestingModule({
     imports: [],
-    providers: [CampaignService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+    providers: [CampaignService, provideHttpClient(withFetch()), provideHttpClientTesting()]
 }));
 
   it('should retrieve campaign details from API', () => {

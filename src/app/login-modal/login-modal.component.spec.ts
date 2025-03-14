@@ -9,7 +9,7 @@ import { InMemoryStorageService } from 'ngx-webstorage-service';
 
 import { LoginModalComponent } from './login-modal.component';
 import {MatomoModule} from "ngx-matomo-client";
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe('LoginModalComponent', () => {
@@ -33,7 +33,7 @@ describe('LoginModalComponent', () => {
         { provide: ActivatedRoute, useValue: {} }, // Needed for ngx-matomo not to crash.
         InMemoryStorageService,
         { provide: MatDialogRef, useValue: {} },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withFetch()),
         provideHttpClientTesting(),
     ]
 })
