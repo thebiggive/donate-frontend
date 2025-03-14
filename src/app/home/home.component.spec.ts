@@ -11,9 +11,8 @@ import { ActivatedRoute, RouterModule } from "@angular/router";
 
 import { HomeComponent } from "./home.component";
 import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from "@angular/common/http";
+  provideHttpClient, withFetch,
+} from '@angular/common/http';
 import {CUSTOM_ELEMENTS_SCHEMA} from "@angular/core";
 
 describe("HomeComponent", () => {
@@ -44,7 +43,7 @@ describe("HomeComponent", () => {
             },
           },
         },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withFetch()),
         provideHttpClientTesting(),
       ],
     }).compileComponents();

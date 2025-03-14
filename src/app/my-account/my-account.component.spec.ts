@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from "@angular/common/http";
+  provideHttpClient, withFetch,
+} from '@angular/common/http';
 import { NO_ERRORS_SCHEMA } from "@angular/core";
 import { InMemoryStorageService } from "ngx-webstorage-service";
 import { of } from "rxjs";
@@ -32,7 +31,7 @@ describe("MyAccountComponent", () => {
         { provide: ActivatedRoute, useValue: {} }, // Needed for ngx-matomo not to crash.
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withFetch()),
       ],
     });
   });

@@ -6,9 +6,8 @@ import { InMemoryStorageService } from "ngx-webstorage-service";
 import { TBG_DONATE_STORAGE } from "./donation.service";
 import { StripeService } from "./stripe.service";
 import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from "@angular/common/http";
+  provideHttpClient, withFetch,
+} from '@angular/common/http';
 
 describe("StripeService", () => {
   let service: StripeService;
@@ -20,7 +19,7 @@ describe("StripeService", () => {
         InMemoryStorageService,
         // Inject in-memory storage for tests, in place of local storage.
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withFetch()),
         provideHttpClientTesting(),
       ],
     });

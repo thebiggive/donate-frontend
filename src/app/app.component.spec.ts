@@ -1,7 +1,7 @@
 import { APP_BASE_HREF, AsyncPipe } from "@angular/common";
 import {
   provideHttpClient,
-  withInterceptorsFromDi,
+  withFetch,
 } from "@angular/common/http";
 import { provideHttpClientTesting } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
@@ -45,7 +45,7 @@ describe("AppComponent", () => {
         InMemoryStorageService,
         // Inject in-memory storage for tests, in place of local storage.
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withFetch()),
         provideHttpClientTesting(),
       ],
     });

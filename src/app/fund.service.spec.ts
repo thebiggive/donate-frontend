@@ -4,12 +4,12 @@ import { TestBed } from '@angular/core/testing';
 import { environment } from '../environments/environment';
 import { Fund } from './fund.model';
 import { FundService } from './fund.service';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {provideHttpClient, withFetch} from '@angular/common/http';
 
 describe('FundService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [],
-    providers: [FundService, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+    providers: [FundService, provideHttpClient(withFetch()), provideHttpClientTesting()]
 }));
 
   it('should retrieve Champion Funding details from API', () => {

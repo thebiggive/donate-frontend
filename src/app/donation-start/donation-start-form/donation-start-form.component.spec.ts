@@ -29,7 +29,7 @@ import {PageMetaService} from "../../page-meta.service";
 import {AddressService} from "../../address.service";
 import {StripeService} from "../../stripe.service";
 import {Donation} from "../../donation.model";
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {provideHttpClient, withFetch} from '@angular/common/http';
 import {Toast} from "../../toast.service";
 
 function makeDonationStartFormComponent(donationService: DonationService,) {
@@ -191,7 +191,7 @@ describe('DonationStartForm', () => {
         TimeLeftPipe,
         InMemoryStorageService,
         { provide: TBG_DONATE_STORAGE, useExisting: InMemoryStorageService },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withFetch()),
         provideHttpClientTesting(),
     ]
 });
