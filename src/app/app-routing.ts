@@ -24,7 +24,6 @@ import { LoggedInPersonResolver } from './logged-in-person.resolver';
 import { DonorAccountResolver } from './donor-account.resolver';
 import {MyRegularGivingComponent} from './my-regular-giving/my-regular-giving.component';
 import {NavigationService} from './navigation.service';
-import {RegularGivingService} from './regularGiving.service';
 import {myMandatesResolver} from './my-mandates.resolver';
 import {CancelMandateComponent} from './cancel-mandate/cancel-mandate.component';
 import {ChangeRegularGivingComponent} from './change-regular-giving/change-regular-giving.component';

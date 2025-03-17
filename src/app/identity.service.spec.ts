@@ -10,9 +10,8 @@ import { environment } from "../environments/environment";
 import { Person } from "./person.model";
 import { MatomoModule } from "ngx-matomo-client";
 import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from "@angular/common/http";
+  provideHttpClient, withFetch,
+} from '@angular/common/http';
 import { RouterModule } from "@angular/router";
 
 describe("IdentityService", () => {
@@ -37,7 +36,7 @@ describe("IdentityService", () => {
       providers: [
         IdentityService,
         InMemoryStorageService,
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withFetch()),
         provideHttpClientTesting(),
       ],
     })
