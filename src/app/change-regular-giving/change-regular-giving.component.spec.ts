@@ -22,7 +22,14 @@ describe('ChangeRegularGivingComponent', () => {
       providers: [
         {
           provide: ActivatedRoute, useValue: {
-            snapshot: {data: {}},
+            snapshot: {data: {
+                paymentMethods: {
+                  adHocMethods: [],
+                  regularGivingPaymentMethod: {
+
+                  },
+                },
+              }},
           }
         },
         InMemoryStorageService,
