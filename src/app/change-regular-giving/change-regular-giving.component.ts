@@ -61,20 +61,16 @@ export class ChangeRegularGivingComponent implements OnInit {
     await this.stripeService.init().catch(console.error);
     this.selectedCountryCode = this.paymentMethods.regularGivingPaymentMethod?.billing_details?.address?.country as countryISO2 || undefined
 
-    if (this.setupIntent) {
-      const clientSecret = this.setupIntent.client_secret;
-      if (clientSecret) {
-        [this.stripeElements, this.stripePaymentElement] = this.stripeService.stripeElementsForRegularGivingPaymentMethod(clientSecret);
-        this.stripePaymentElement.mount(this.cardInfo?.nativeElement);
-      }
+    const clientSecret = this.setupIntent.client_secret;
+    if (!clientSecret) {
+      throw new Error('Client secret not set on setup intent');
     }
+
+    [this.stripeElements, this.stripePaymentElement] = this.stripeService.stripeElementsForRegularGivingPaymentMethod(clientSecret);
+    this.stripePaymentElement.mount(this.cardInfo?.nativeElement);
   }
 
   protected async confirmSetup(): Promise<void> {
-    if (!this.setupIntent) {
-      throw new Error("Missing setup intent");
-    }
-
     const stripeElements = this.stripeElements;
     if (!stripeElements) {
       this.toaster.showError(
