@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
 import {Campaign} from './campaign.model';
-import {CampaignStats} from './campaign-stats.model';
+import {CampaignStats, formatCampaignStats} from './campaign-stats.model';
 import {CampaignSummary} from './campaign-summary.model';
 import {environment} from '../environments/environment';
 import {SelectedType} from './search.service';
@@ -216,7 +216,9 @@ export class CampaignService {
   }
 
   getCampaignImpactStats() {
-    return this.http.get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`);
+    return this.http.get<CampaignStats>(`${environment.apiUriPrefix}${this.apiPath}/campaigns/stats`).pipe(
+      map(formatCampaignStats)
+    )
   }
 
   getHomePageHighlightCards(): Observable<HighlightCard[]> {

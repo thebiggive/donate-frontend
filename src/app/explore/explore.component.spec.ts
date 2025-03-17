@@ -14,10 +14,7 @@ import {MatomoModule, MatomoTracker} from 'ngx-matomo-client';
 import {NEVER, of} from "rxjs";
 
 import { ExploreComponent } from "./explore.component";
-import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from "@angular/common/http";
+import {provideHttpClient, withFetch} from '@angular/common/http';
 import {ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, TransferState} from "@angular/core";
 import {Campaign} from "../campaign.model";
 import {TimeLeftPipe} from "../time-left.pipe";
@@ -69,7 +66,7 @@ describe("ExploreComponent", () => {
             queryParams: of({}), // Let `loadQueryParamsAndRun()` subscribe without crashing.
           },
         },
-        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClient(withFetch()),
         provideHttpClientTesting(),
       ],
     });
