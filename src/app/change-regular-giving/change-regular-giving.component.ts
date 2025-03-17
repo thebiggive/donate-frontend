@@ -4,8 +4,7 @@ import {
   PaymentIntentOrSetupIntentResult,
   PaymentMethod,
   SetupIntent,
-  SetupIntentResult,
-  StripeElements, StripeError,
+  StripeElements,
   StripePaymentElement
 } from '@stripe/stripe-js';
 import {ComponentsModule} from "@biggive/components-angular";
@@ -84,7 +83,7 @@ export class ChangeRegularGivingComponent implements OnInit {
       return;
     }
 
-    let paymentIntentOrSetupIntentResult: PaymentIntentOrSetupIntentResult;
+    let result: PaymentIntentOrSetupIntentResult;
     try {
       if (this.paymentMethodForm.controls.billingPostcode.invalid) {
         this.errorMessage = "Please enter your billing postal code";
@@ -108,7 +107,7 @@ export class ChangeRegularGivingComponent implements OnInit {
         return;
       }
 
-      paymentIntentOrSetupIntentResult = await this.stripeService.confirmSetup({
+      result = await this.stripeService.confirmSetup({
           stripeElements: stripeElements,
           billingCountryCode: countryCode,
           billingPostalCode: billingPostalCode,
@@ -122,22 +121,18 @@ export class ChangeRegularGivingComponent implements OnInit {
       return;
     }
 
-    if (paymentIntentOrSetupIntentResult.setupIntent?.next_action) {
-      paymentIntentOrSetupIntentResult = await this.stripeService.handleNextAction(this.setupIntent.client_secret!);
+    if (result.setupIntent?.next_action) {
+      result = await this.stripeService.handleNextAction(this.setupIntent.client_secret!);
     }
 
-    await this.handleSetupIntentResult(paymentIntentOrSetupIntentResult);
-  }
-
-  private async handleSetupIntentResult(setupIntentResult: PaymentIntentOrSetupIntentResult) {
-    if (setupIntentResult.setupIntent?.status !== 'succeeded') {
-      const errorMessage = "Payment method setup failed: " + setupIntentResult?.error?.message;
+    if (result.setupIntent?.status !== 'succeeded') {
+      const errorMessage = "Payment method setup failed: " + result?.error?.message;
       this.errorMessage = errorMessage;
       this.toaster.showError(errorMessage)
       return;
     }
 
-    const newPaymentMethodId = setupIntentResult.setupIntent?.payment_method
+    const newPaymentMethodId = result.setupIntent?.payment_method
     if (typeof newPaymentMethodId !== 'string') {
       throw new Error("expected payment method id to be string");
     }
