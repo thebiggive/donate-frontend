@@ -12,7 +12,6 @@ import {ComponentsModule} from "@biggive/components-angular";
 import {StripeService} from "../stripe.service";
 import {Toast} from '../toast.service';
 import {RegularGivingService} from '../regularGiving.service';
-import {DonationService} from '../donation.service';
 import {countryISO2, countryOptions} from '../countries';
 import {MatInput} from '@angular/material/input';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
@@ -50,7 +49,6 @@ export class ChangeRegularGivingComponent implements OnInit {
   constructor(
     private stripeService: StripeService,
     private regularGivingService: RegularGivingService,
-    private donationService: DonationService,
     private route: ActivatedRoute,
     private router: Router,
     private toaster: Toast,
