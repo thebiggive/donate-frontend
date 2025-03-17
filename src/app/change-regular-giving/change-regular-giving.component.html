@@ -27,8 +27,8 @@
             @if (paymentMethods.regularGivingPaymentMethod?.card) {
               <div class="cardExpiry">
                 Expiry
-                Date: {{ paymentMethods.regularGivingPaymentMethod?.card.exp_month?.toString()?.padStart(2, "0") }}
-                /{{ paymentMethods.regularGivingPaymentMethod?.card.exp_year }}
+                Date: {{ paymentMethods.regularGivingPaymentMethod?.card?.exp_month?.toString()?.padStart(2, "0") }}
+                /{{ paymentMethods.regularGivingPaymentMethod?.card?.exp_year }}
               </div>
             }
           </td>
