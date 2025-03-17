@@ -5,7 +5,7 @@ import {
   PaymentMethod,
   SetupIntent,
   SetupIntentResult,
-  StripeElements,
+  StripeElements, StripeError,
   StripePaymentElement
 } from '@stripe/stripe-js';
 import {ComponentsModule} from "@biggive/components-angular";
@@ -39,6 +39,7 @@ export class ChangeRegularGivingComponent implements OnInit {
   private stripeElements: StripeElements | undefined;
   protected errorMessage: string | undefined;
   protected selectedCountryCode: countryISO2 | undefined;
+  protected readonly countryOptionsObject = countryOptions;
 
   protected paymentMethodForm = new FormGroup({
     billingPostcode: new FormControl('', [
@@ -70,6 +71,10 @@ export class ChangeRegularGivingComponent implements OnInit {
     this.stripePaymentElement.mount(this.cardInfo?.nativeElement);
   }
 
+  protected setSelectedCountry(country: countryISO2) {
+    this.selectedCountryCode = country;
+  }
+
   protected async confirmSetup(): Promise<void> {
     const stripeElements = this.stripeElements;
     if (!stripeElements) {
@@ -79,7 +84,6 @@ export class ChangeRegularGivingComponent implements OnInit {
       return;
     }
 
-    let setupIntentResult: SetupIntentResult;
     let paymentIntentOrSetupIntentResult: PaymentIntentOrSetupIntentResult;
     try {
       if (this.paymentMethodForm.controls.billingPostcode.invalid) {
@@ -104,59 +108,44 @@ export class ChangeRegularGivingComponent implements OnInit {
         return;
       }
 
-
-      setupIntentResult = await this.stripeService.confirmSetup({
+      paymentIntentOrSetupIntentResult = await this.stripeService.confirmSetup({
           stripeElements: stripeElements,
           billingCountryCode: countryCode,
           billingPostalCode: billingPostalCode,
           return_url: window.location.href
         }
       );
-    } catch (error: unknown) {
-      // @ts-expect-error
+    } catch (error: any) {
       this.errorMessage = error?.message || 'Unexpected error';
       this.toaster.showError(this.errorMessage!);
       console.error(error);
       return;
     }
-    if (setupIntentResult.setupIntent?.next_action) {
-      paymentIntentOrSetupIntentResult = await this.stripeService.handleNextAction(this.setupIntent.client_secret!);
-      if (paymentIntentOrSetupIntentResult.setupIntent?.status !== 'succeeded') {
-        const errorMessage = "Payment method setup failed: " + paymentIntentOrSetupIntentResult?.error?.message;
-        this.errorMessage = errorMessage;
-        this.toaster.showError(errorMessage)
-        return;
-      }
-      const pmID = paymentIntentOrSetupIntentResult.setupIntent?.payment_method;
-      if (typeof pmID !== 'string') {
-        throw new Error("expected payment method id to be string");
-      }
 
-      await this.regularGivingService.setRegularGivingPaymentMethod(pmID);
-      this.toaster.showSuccess("Updated your payment method for regular giving");
-      await this.router.navigateByUrl('/my-account/payment-methods');
+    if (paymentIntentOrSetupIntentResult.setupIntent?.next_action) {
+      paymentIntentOrSetupIntentResult = await this.stripeService.handleNextAction(this.setupIntent.client_secret!);
     }
 
-    const pmID = setupIntentResult.setupIntent?.payment_method
+    await this.handleSetupIntentResult(paymentIntentOrSetupIntentResult);
+  }
+
+  private async handleSetupIntentResult(setupIntentResult: PaymentIntentOrSetupIntentResult) {
     if (setupIntentResult.setupIntent?.status !== 'succeeded') {
-      console.log({setupIntentResult});
       const errorMessage = "Payment method setup failed: " + setupIntentResult?.error?.message;
       this.errorMessage = errorMessage;
       this.toaster.showError(errorMessage)
       return;
     }
 
-    if (typeof pmID !== 'string') {
+    const newPaymentMethodId = setupIntentResult.setupIntent?.payment_method
+    if (typeof newPaymentMethodId !== 'string') {
       throw new Error("expected payment method id to be string");
     }
-    await this.regularGivingService.setRegularGivingPaymentMethod(pmID);
-    this.toaster.showSuccess("Updated your payment method for regular giving");
+
+    await this.regularGivingService.setRegularGivingPaymentMethod(newPaymentMethodId);
+
+    this.toaster.showSuccess("We have updated your payment method for regular giving");
+
     await this.router.navigateByUrl('/my-account/payment-methods');
-  }
-
-  protected readonly countryOptionsObject = countryOptions;
-
-  protected setSelectedCountry(country: countryISO2) {
-    this.selectedCountryCode = country;
   }
 }
