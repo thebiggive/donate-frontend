@@ -420,7 +420,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     // no-op for now, but @todo-regular-giving we may need to do some validation as we don the ad-hoc donation page.
   }
 
-  private prepareStripeElements(clientSecret? :string) {
+  private prepareStripeElements() {
     if (! this.selectedBillingCountryCode) {
       return;
     }
