@@ -1,10 +1,13 @@
 import {Injectable} from '@angular/core';
 import {
   ConfirmationTokenResult,
-  loadStripe, SetupIntentResult,
+  loadStripe,
+  SetupIntentResult,
   Stripe,
-  StripeElements, StripeElementsOptionsClientSecret,
-  StripeElementsOptionsMode, StripeError, StripePaymentElement
+  StripeElements,
+  StripeElementsOptionsMode,
+  StripeError,
+  StripePaymentElement
 } from '@stripe/stripe-js';
 
 import {environment} from '../environments/environment';
@@ -19,6 +22,93 @@ import {countryISO2} from './countries';
 export class StripeService {
   private didInit = false;
   private stripe?: Stripe | null;
+
+  private readonly fonts;
+
+  private readonly appearance = {
+    theme: 'flat',
+    variables: {
+      fontFamily: '"Euclid Triangle", sans-serif',
+      fontLineHeight: '1.5',
+      borderRadius: '0',
+      colorPrimary: '#2C089B', // matches our $colour-primary
+      colorBackground: '#F6F6F6', // matches our $colour-background
+      colorDanger: '#bb2222', // matches angular native and our snackbar
+      accessibleColorOnColorPrimary: '#262626',
+      focusOutline: '1px solid #FF7272', // matches our $colour-tertiary-coral
+    },
+    rules: {
+      '.Block': {
+        backgroundColor: 'var(--colorBackground)',
+        boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 7px rgba(18, 42, 66, 0.04)',
+        padding: '12px'
+      },
+      '.Input': {
+        padding: '12px',
+        border: 'solid 1px #8A8A8A', // matches our $colour-grey-medium
+      },
+      '.Input:disabled, .Input--invalid:disabled': {
+        color: 'lightgray'
+      },
+      '.Tab': {
+        padding: '10px 12px 8px 12px',
+        backgroundColor: '#fff',
+        transition: "background .15s ease, outline .15s ease, box-shadow .15s ease",
+      },
+      '.Tab:hover': {
+        backgroundColor: '#fff',
+      },
+      '.Tab--selected, .Tab--selected:focus, .Tab--selected:hover': {
+        backgroundColor: '#fff',
+        outline: "2px solid #FF7272",
+      },
+      '.TabIcon--selected': {
+        fill: '#FF7272', // icon is SVG so only fill has effect, but leaving in color too for good measure
+        color: '#FF7272', // and in case Stripe introduces a text element here in future.
+      },
+      '.CheckboxInput, .CheckboxInput--checked': {
+        backgroundColor: 'inherit',
+        outline: "solid 1px black",
+      },
+      '.Label, .CheckboxLabel': {
+        fontWeight: '500',
+        color: '#2C089B', // matches our $colour-primary
+      },
+      '.PickerItem': {
+        outline: "1px solid #8A8A8A",
+      },
+      '.PickerItem--highlight': {
+        outline: "1px solid #FF7272",
+      },
+      '.PickerItem--selected': {
+        outline: "none",
+      },
+      '.PickerItem--highlight, .PickerItem--highlight:hover': {
+        boxShadow: 'none',
+      },
+      '.PickerItem:hover, .PickerItem--highlight:hover': {
+        boxShadow: '0 0 1px rgba(0,0,0,.15), 0 2px 4px rgba(0, 0, 0, 0.05), 0 1px 8px rgba(0, 0, 0, 0.03)',
+      },
+    }
+  } as const;
+
+  public constructor() {
+    let fontOrigin: string = environment.donateUriPrefix;
+
+    if (environment.environmentId === 'development') {
+      // Stripe can't fetch the font from local dev env, so we use the staging URL instead.
+      fontOrigin = stagingEnvironment.donateUriPrefix;
+    }
+
+    this.fonts = [
+      {
+        family: 'Euclid Triangle',
+        src: `url('${fontOrigin}/d/EuclidTriangle-Regular.1d45abfd25720872.woff2') format('woff2')`,
+        display: 'swap',
+        weight: '400',
+      },
+    ];
+  }
 
   async init() {
     if (this.didInit) {
@@ -68,90 +158,9 @@ export class StripeService {
       throw new Error('Stripe not ready');
     }
 
-    let fontOrigin: string = environment.donateUriPrefix;
-
-    if (environment.environmentId === 'development') {
-      // Stripe can't fetch the font from local dev env, so we use the staging URL instead.
-      fontOrigin = stagingEnvironment.donateUriPrefix;
-    }
-
-    const colorPrimaryBlue = '#2C089B';  // matches our $colour-primary
-
     const elementOptions: StripeElementsOptionsMode = {
-      fonts: [
-        {
-          family: 'Euclid Triangle',
-          src: `url('${fontOrigin}/d/EuclidTriangle-Regular.1d45abfd25720872.woff2') format('woff2')`,
-          display: 'swap',
-          weight: '400',
-        },
-      ],
-      appearance: {
-        theme: 'flat',
-        variables: {
-          fontFamily: '"Euclid Triangle", sans-serif',
-          fontLineHeight: '1.5',
-          borderRadius: '0',
-          colorPrimary: colorPrimaryBlue,
-          colorBackground: '#F6F6F6', // matches our $colour-background
-          colorDanger: '#bb2222', // matches angular native and our snackbar
-          accessibleColorOnColorPrimary: '#262626',
-          focusOutline: '1px solid #FF7272', // matches our $colour-tertiary-coral
-        },
-        rules: {
-          '.Block': {
-            backgroundColor: 'var(--colorBackground)',
-            boxShadow: '0px 1px 1px rgba(0, 0, 0, 0.03), 0px 3px 7px rgba(18, 42, 66, 0.04)',
-            padding: '12px'
-          },
-          '.Input': {
-            padding: '12px',
-            border: 'solid 1px #8A8A8A', // matches our $colour-grey-medium
-          },
-          '.Input:disabled, .Input--invalid:disabled': {
-            color: 'lightgray'
-          },
-          '.Tab': {
-            padding: '10px 12px 8px 12px',
-            backgroundColor: '#fff',
-            transition: "background .15s ease, outline .15s ease, box-shadow .15s ease",
-          },
-          '.Tab:hover': {
-            backgroundColor: '#fff',
-          },
-          '.Tab--selected, .Tab--selected:focus, .Tab--selected:hover': {
-            backgroundColor: '#fff',
-            outline: "2px solid #FF7272",
-          },
-          '.TabIcon--selected': {
-            fill: '#FF7272', // icon is SVG so only fill has effect, but leaving in color too for good measure
-            color: '#FF7272', // and in case Stripe introduces a text element here in future.
-          },
-          '.CheckboxInput, .CheckboxInput--checked': {
-            backgroundColor: 'inherit',
-            outline: "solid 1px black",
-          },
-          '.Label, .CheckboxLabel': {
-            fontWeight: '500',
-            color: colorPrimaryBlue,
-          },
-          '.PickerItem': {
-            outline: "1px solid #8A8A8A",
-          },
-          '.PickerItem--highlight': {
-            outline: "1px solid #FF7272",
-          },
-          '.PickerItem--selected': {
-            outline: "none",
-          },
-          '.PickerItem--highlight, .PickerItem--highlight:hover': {
-            boxShadow: 'none',
-          },
-          '.PickerItem:hover, .PickerItem--highlight:hover': {
-            boxShadow: '0 0 1px rgba(0,0,0,.15), 0 2px 4px rgba(0, 0, 0, 0.05), 0 1px 8px rgba(0, 0, 0, 0.03)',
-          },
-        }
-      },
+      fonts: this.fonts,
+      appearance: this.appearance,
       mode: 'payment',
       amount: money.amount,
       currency: money.currency.toLowerCase(),
@@ -243,13 +252,11 @@ export class StripeService {
   }
 
   public stripeElementsForRegularGivingPaymentMethod(client_secret: string): [StripeElements, StripePaymentElement]  {
-    const options = {
+    const elements = this.stripe!.elements({
     clientSecret: client_secret,
-      // Fully customizable with appearance API.
-      appearance: {},
-  } satisfies StripeElementsOptionsClientSecret;
-
-  const elements = this.stripe!.elements(options);
+    appearance: this.appearance,
+    fonts: this.fonts
+  });
 
   return [elements, StripeService.createStripeElement(elements)];
   }
