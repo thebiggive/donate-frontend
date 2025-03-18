@@ -125,6 +125,7 @@ export class ChangeRegularGivingComponent implements OnInit {
       result = await this.stripeService.handleNextAction(this.setupIntent.client_secret!);
     }
 
+    // `result` is either from the original attempt or from the next action, if applicable
     if (result.setupIntent?.status !== 'succeeded') {
       const errorMessage = "Payment method setup failed: " + result?.error?.message;
       this.errorMessage = errorMessage;
