@@ -147,9 +147,9 @@ export class StripeService {
    */
   public stripeElements(
     money: {
-    currency: string;
-    amount: number
-  },
+      currency: string;
+      amount: number
+    },
     futureUsage: "off_session" | "on_session",
     campaign: Campaign,
     customerSessionClientSecret: string | undefined
