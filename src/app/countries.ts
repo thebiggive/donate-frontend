@@ -14,7 +14,7 @@
  *     }
  *   });
  */
-export const COUNTRIES: { country: string, iso2: string }[] = [
+export const COUNTRIES = [
   {
     "country": "Afghanistan",
     "iso2": "AF"
@@ -1019,10 +1019,12 @@ export const COUNTRIES: { country: string, iso2: string }[] = [
     "country": "Zimbabwe",
     "iso2": "ZW"
   }
-]
+] as const satisfies { country: string, iso2: string }[];
 
 /**
  * Keys are ISO2 codes, values are names.
  */
 export const countryOptions: { label: string; value: string }[] =
   COUNTRIES.map(country => ({label: country.country, value: country.iso2}));
+
+export type countryISO2 = (typeof COUNTRIES)[number]["iso2"];

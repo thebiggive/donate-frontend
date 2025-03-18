@@ -26,6 +26,8 @@ import {MyRegularGivingComponent} from './my-regular-giving/my-regular-giving.co
 import {NavigationService} from './navigation.service';
 import {myMandatesResolver} from './my-mandates.resolver';
 import {CancelMandateComponent} from './cancel-mandate/cancel-mandate.component';
+import {ChangeRegularGivingComponent} from './change-regular-giving/change-regular-giving.component';
+import {setupIntentResolver} from './setupIntent.resolver';
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
 export const transferFundsPath = 'transfer-funds';
@@ -327,6 +329,23 @@ if (flags.regularGivingEnabled) {
       ],
     },
   );
+
+  routes.unshift(
+    {
+      path: 'my-account/payment-methods/change-regular-giving',
+      resolve: {
+        person: LoggedInPersonResolver,
+        paymentMethods: PaymentMethodsResolver,
+        setupIntent: setupIntentResolver,
+      },
+      pathMatch: 'full',
+      component: ChangeRegularGivingComponent,
+      canActivate: [
+        requireLogin,
+      ],
+    },
+  );
+
 
   routes.unshift(
     {

@@ -255,13 +255,18 @@
                      to make clear that it will affect existing mandates as well as the new one -->
 
                 @if (donorAccount.regularGivingPaymentMethod) {
-                  <!-- @todo-regular-giving-DON-1021: show existing payment method here, and/or on account page -->
-                  <p style="border: 2px solid blue; background: pink">
-                    Your existing regular giving payment method {{ donorAccount.regularGivingPaymentMethod }}
+                  <!--
+                  @todo-regular-giving-DON-1021: Consider showing existing payment method detail here here,
+                    instead of just link to account. Might require either saving card brand and last4 to our matchbot
+                    DB to make it easy to show here, or loading it the same way we do on the linked page.
+                   -->
+                  <p>
+                    Your existing regular giving payment method
                     will be used for these donations.
-                    To change this please visit your account page
-
-                    (todo-regular-giving-DON-1021: replace this paragraph with an element showing details of the saved method)
+                  </p>
+                  <p>
+                    You can change your regular giving payment method at
+                    <a href="/my-account/payment-methods">Your Payment Methods</a>.
                   </p>
                 } @else {
                   <biggive-text-input>
