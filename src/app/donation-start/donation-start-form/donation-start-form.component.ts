@@ -920,6 +920,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       // Client-side issue that wasn't a next_action should be a `prepareMethodFromPaymentElement()`
       // problem.
       if (result) {
+        this.matomoTracker.trackEvent(
+          'donate_error',
+          'stripe_token_result_error',
+          result.error.message,
+        );
         this.handleStripeError(result.error, 'method_setup');
       }
 
