@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {
-  ConfirmationTokenResult,
+  ConfirmationTokenResult, CustomFontSource,
   loadStripe,
   SetupIntentResult,
   Stripe,
@@ -23,7 +23,7 @@ export class StripeService {
   private didInit = false;
   private stripe?: Stripe | null;
 
-  private readonly fonts;
+  private readonly fonts: CustomFontSource[];
 
   private readonly appearance = {
     theme: 'flat',
