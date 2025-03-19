@@ -133,6 +133,17 @@
           size="medium"
           url="/my-account/payment-methods/change-regular-giving"
         />
+
+        <!-- not necessarily needed for regular giving MVP but would be good to have a busy state option built
+        in to the button in case the donor is waiting for a slow network -->
+        <biggive-button
+          space-above="5"
+          colour-scheme="white"
+          label="Remove regular giving payment method"
+          full-width="false"
+          size="medium"
+          (click)="removeRegularGivingMethod()"
+        />
       }
     </biggive-page-section>
   </div>

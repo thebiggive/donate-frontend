@@ -1,5 +1,5 @@
 import {StepperSelectionEvent} from '@angular/cdk/stepper';
-import {getCurrencySymbol, isPlatformBrowser} from '@angular/common';
+import {isPlatformBrowser} from '@angular/common';
 import {HttpErrorResponse} from '@angular/common/http';
 import {
   AfterContentChecked,
@@ -21,7 +21,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatStepper} from '@angular/material/stepper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatomoTracker} from 'ngx-matomo-client';
-import {retryWhen, tap} from 'rxjs/operators';
+import {retry} from 'rxjs/operators';
 import {
   ConfirmationToken,
   ConfirmationTokenResult,
@@ -52,7 +52,7 @@ import {ConversionTrackingService} from '../../conversionTracking.service';
 import {PageMetaService} from '../../page-meta.service';
 import {Person} from '../../person.model';
 import {AddressService, billingPostcodeRegExp, postcodeFormatHelpRegExp, postcodeRegExp} from '../../address.service';
-import {retryStrategy} from '../../observable-retry';
+import {getDelay} from '../../observable-retry';
 import {getStripeFriendlyError, StripeService} from '../../stripe.service';
 import {getCurrencyMaxValidator} from '../../validators/currency-max';
 import {getCurrencyMinValidator} from '../../validators/currency-min';
@@ -151,6 +151,9 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   loadingAddressSuggestions = false;
   privacyUrl = 'https://biggive.org/privacy';
 
+  /** Briefly true each time the final step's entered. Hides final Stripe-activating button. */
+  runningFinalPreSubmitUpdate = false;
+
   // Kind of a subset of `stripePaymentMethodReady`, which tracks just the Payment Element Stripe.js element based
   // on the `complete` property of the callback event. Doesn't cover saved cards, or donation credit.
   // Maintains its value and is NOT reset when settlement method changes to one of those, since it might
@@ -194,6 +197,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   panelOpenState = false;
   showCustomTipInput = false;
 
+  confirmStepLabel = 'Confirm' as const;
   yourDonationStepLabel = 'Your donation' as const;
 
   displayCustomTipInput = () => {
@@ -650,10 +654,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         this.campaign,
         this.marketingGroup,
       );
-      // Else it's not a step that cleanly maps to the historically-comparable
-      // e-commerce funnel steps defined in our Analytics campaign, besides 1
-      // (which we fire on donation create API callback) and 4 (which we fire
-      // alongside calling payWithStripe()).
+
+      // And if we're about to submit, patch the donation in MatchBot and prevent submission
+      // until the latest is persisted. Previously we did this after submit button press but
+      // Apple Pay is highly sensitive about the wait time after the click event which caused
+      // its panel to open; so we must do the work early instead.
+      if (event.selectedStep.label === this.confirmStepLabel) {
+        this.runFinalPreSubmitUpdate();
+      }
     }
 
     // Create a donation if coming from first step and not offering to resume
@@ -687,6 +695,64 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         billingPostcode: this.giftAidGroup.value.homePostcode,
       });
     }
+  }
+
+  private runFinalPreSubmitUpdate() {
+    // Even if next guard fails, we want to prevent attempting to pay.
+    this.runningFinalPreSubmitUpdate = true;
+
+    const requiredDonationProperties = [this.donation, this.campaign, this.campaign.charity.id, this.psp];
+    // Set class prop `donationUpdateError` true if any required props missing.
+    requiredDonationProperties.forEach((value, index) => {
+      if (!value) {
+        const errorCodeDetail = `[code A${index}]`; // Data at `requiredDonationProperties` index `index` absent.
+        const errorMessage = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
+
+        this.matomoTracker.trackEvent(
+          'donate_error',
+          'submit_missing_donation_basics',
+          `Donation not set or form invalid ${errorCodeDetail}`,
+        );
+        this.toast.showError(errorMessage);
+        this.donationUpdateError = true;
+        this.stripeError = errorMessage;
+        this.stripeResponseErrorCode = undefined;
+      }
+    });
+
+    // First part of clause should be redundant but TS doesn't track enough to know that(?)
+    if (!this.donation || this.donationUpdateError) {
+      return;
+    }
+
+    if (this.paymentGroup.value.billingPostcode) {
+      this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
+      this.donation.countryCode = this.paymentGroup.value.billingCountry;
+      this.donationService.updateLocalDonation(this.donation);
+    }
+
+    this.donationService.update(this.donation)
+      .pipe(retry({ count: 3, delay: getDelay() }))
+      .subscribe({
+        next: async (donation: Donation) => {
+          this.donationService.updateLocalDonation(donation);
+          this.runningFinalPreSubmitUpdate = false;
+        },
+        error: (response: HttpErrorResponse) => {
+          let errorMessageForTracking: string;
+          if (response.message) {
+            errorMessageForTracking = `Could not update donation for campaign ${this.campaignId}: ${response.message}`;
+          } else {
+            // Unhandled 5xx crashes etc.
+            errorMessageForTracking = `Could not update donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
+          }
+          this.matomoTracker.trackEvent('donate_error', 'donation_update_failed', errorMessageForTracking);
+          this.retrying = false;
+          this.donationUpdateError = true;
+          this.toast.showError("Sorry, we can't submit your donation right now.");
+          this.submitting = false;
+        }
+      });
   }
 
   /**
@@ -741,7 +807,14 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   async submit() {
-    if (this.donation && this.donationForm.invalid) {
+    // Can't proceed if donation or campaign data issue. Prior check fn has already reported the issue.
+    if (this.donationUpdateError) {
+      // A more specific toast, and corresponding Matomo log, should have fired as donor entered Confirm.
+      this.toast.showError('Sorry, cannot process your payment due to the previous error');
+      return;
+    }
+
+    if (this.donationForm.invalid) {
       // Form invalid but submitted may mean enter was pressed inside Stripe.js. Best action
       // is to simply not submit yet.
       this.toast.showError('Please complete the remaining fields to submit your donation.');
@@ -753,70 +826,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       return;
     }
 
-    if (!this.donation) {
-      const errorCodeDetail = '[code A1]'; // Donation property absent.
-
-      const errorMessage = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
-
-      this.toast.showError(errorMessage);
-
-      this.stripeError = errorMessage;
-
-      this.stripeResponseErrorCode = undefined;
-      this.matomoTracker.trackEvent(
-        'donate_error',
-        'submit_missing_donation_basics',
-        `Donation not set or form invalid ${errorCodeDetail}`,
-      );
-      return;
-    }
-
-    if (
-      this.paymentGroup.value.billingPostcode
-    ) {
-      this.donation.billingPostalAddress = this.paymentGroup.value.billingPostcode;
-      this.donation.countryCode = this.paymentGroup.value.billingCountry;
-      this.donationService.updateLocalDonation(this.donation);
-    }
-
     this.submitting = true;
-    this.donationUpdateError = false;
-
-    // Can't proceed if campaign info not looked up yet or no usable PSP
-    if (!this.donation || !this.campaign || !this.campaign.charity.id || !this.psp) {
-      this.donationUpdateError = true;
-      this.toast.showError("Sorry, we can't submit your donation right now.");
-      return;
-    }
-
-    this.donationService.update(this.donation)
-      // excluding status code, delay for logging clarity
-      .pipe(
-        retryWhen(updateError => {
-          return updateError.pipe(
-            tap(val => this.retrying = (val.status !== 500)),
-            retryStrategy({excludedStatusCodes: [500]}),
-          );
-        }),
-      )
-      .subscribe(async (donation: Donation) => {
-        if (donation.psp === 'stripe') {
-          await this.payWithStripe();
-        }
-      }, response => {
-        let errorMessageForTracking: string;
-        if (response.message) {
-          errorMessageForTracking = `Could not update donation for campaign ${this.campaignId}: ${response.message}`;
-        } else {
-          // Unhandled 5xx crashes etc.
-          errorMessageForTracking = `Could not update donation for campaign ${this.campaignId}: HTTP code ${response.status}`;
-        }
-        this.matomoTracker.trackEvent('donate_error', 'donation_update_failed', errorMessageForTracking);
-        this.retrying = false;
-        this.donationUpdateError = true;
-        this.toast.showError("Sorry, we can't submit your donation right now.");
-        this.submitting = false;
-      });
+    await this.payWithStripe();
   }
 
   payWithStripe = async () => {
@@ -1424,6 +1435,13 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return false;
   }
 
+  private getCurrencySymbol(currencyCode: string): string {
+    return Intl.NumberFormat('en-GB', {style:'currency', currency: currencyCode})
+      .formatToParts()
+      .find(part => part.type === 'currency')
+      ?.value || '';
+  }
+
   private setCampaignBasedVars() {
     this.campaignId = this.campaign.id;
 
@@ -1431,7 +1449,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // close date and it passes while they're completing the form – in particular they should
     // be able to use match funds secured until 30 minutes after the close time.
 
-    this.currencySymbol = getCurrencySymbol(this.campaign.currencyCode, 'narrow', 'en-GB');
+    this.currencySymbol = this.getCurrencySymbol(this.campaign.currencyCode);
 
     if (environment.psps.stripe.enabled && this.campaign.charity.stripeAccountId) {
       this.psp = 'stripe';
