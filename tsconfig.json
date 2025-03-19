@@ -15,7 +15,7 @@
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
     "importHelpers": true,
-    "target": "es2022",
+    "target": "ES2015",
     "module": "es2020"
   },
   "angularCompilerOptions": {
