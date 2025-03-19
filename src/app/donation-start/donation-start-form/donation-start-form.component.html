@@ -621,7 +621,7 @@
                 </tr>
               </table>
             }
-            @if (!submitting) {
+            @if (!submitting && !runningFinalPreSubmitUpdate) {
               <button
                 (click)="submit()"
                 (keyup.enter)="submit()"
@@ -633,8 +633,13 @@
               </button>
             }
             <div aria-live="polite">
+              @if (runningFinalPreSubmitUpdate) {
+                <mat-spinner color="primary" diameter="30" aria-label="Loading"></mat-spinner>
+              }
+            </div>
+            <div aria-live="polite">
               @if (submitting) {
-                <mat-spinner color="primary" diameter="30" aria-label="Processing your donation" ></mat-spinner>
+                <mat-spinner color="primary" diameter="30" aria-label="Processing your donation"></mat-spinner>
               }
             </div>
           </div>
