@@ -701,7 +701,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // Even if next guard fails, we want to prevent attempting to pay.
     this.runningFinalPreSubmitUpdate = true;
 
-    let requiredDonationProperties = [this.donation, this.campaign, this.campaign.charity.id, this.psp];
+    const requiredDonationProperties = [this.donation, this.campaign, this.campaign.charity.id, this.psp];
     // Return if any of the required properties are missing.
     requiredDonationProperties.forEach((value, index) => {
       if (!value) {
