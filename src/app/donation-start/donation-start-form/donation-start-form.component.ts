@@ -702,7 +702,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     this.runningFinalPreSubmitUpdate = true;
 
     const requiredDonationProperties = [this.donation, this.campaign, this.campaign.charity.id, this.psp];
-    // Return if any of the required properties are missing.
+    // Set class prop `donationUpdateError` true if any required props missing.
     requiredDonationProperties.forEach((value, index) => {
       if (!value) {
         const errorCodeDetail = `[code A${index}]`; // Data at `requiredDonationProperties` index `index` absent.
