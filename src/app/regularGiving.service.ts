@@ -155,4 +155,14 @@ export class RegularGivingService {
       );
     }));
   }
+
+  removeCard(): Promise<unknown> {
+    return firstValueFrom(this.withLoggedInDonor((personAuthHttpOptions: PersonAuthHttpOptions) => {
+      const IDAndJWT = this.identityService.getIdAndJWT()!;
+      return this.http.delete<unknown>(
+        `${environment.donationsApiPrefix}/people/${IDAndJWT.id}/regular-giving/payment-method`,
+        personAuthHttpOptions,
+      );
+    }));
+  }
 }
