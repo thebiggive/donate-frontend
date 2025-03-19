@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {Inject, Injectable, InjectionToken, makeStateKey, Optional, PLATFORM_ID, TransferState,} from '@angular/core';
 import {SESSION_STORAGE, StorageService} from 'ngx-webstorage-service';
 import {firstValueFrom, Observable, of} from 'rxjs';
-import {ConfirmationToken, PaymentIntent, PaymentMethod} from '@stripe/stripe-js';
+import {ConfirmationToken, PaymentIntent, PaymentMethod, SetupIntent} from '@stripe/stripe-js';
 
 import {COUNTRY_CODE} from './country-code.token';
 import {CompleteDonation, Donation} from './donation.model';
@@ -178,17 +178,20 @@ export class DonationService {
 
   async getPaymentMethods(
     {cacheBust}: { cacheBust?: boolean } = {cacheBust: false}
-  ): Promise<PaymentMethod[]> {
+  ): Promise<{adHocMethods: PaymentMethod[], regularGivingPaymentMethod?: PaymentMethod}> {
     const {jwt, person} = await this.getLoggedInUser();
 
     const cacheBuster = cacheBust ? ("?t=" + new Date().getTime()) : '';
 
-    const response = await firstValueFrom(this.http.get<{ data: PaymentMethod[] }>(
+    const response = await firstValueFrom(this.http.get(
       `${environment.donationsApiPrefix}/people/${person.id}/payment_methods${cacheBuster}`,
       getPersonAuthHttpOptions(jwt),
-    ));
+    )) as { data: PaymentMethod[], regularGivingPaymentMethod?: PaymentMethod };
 
-    return response.data;
+    return {
+      adHocMethods: response.data,
+      regularGivingPaymentMethod: response.regularGivingPaymentMethod
+    };
   }
 
   private async getLoggedInUser() {
@@ -433,5 +436,15 @@ export class DonationService {
       {campaignId: campaign?.id},
       getPersonAuthHttpOptions(jwt),
     ) as Observable<StripeCustomerSession>);
+  }
+
+  async createSetupIntent(): Promise<SetupIntent> {
+    const {jwt, person} = await this.getLoggedInUser();
+
+    return (await firstValueFrom(this.http.post(
+      `${environment.donationsApiPrefix}/people/${person.id}/create-setup-intent`,
+      {},
+      getPersonAuthHttpOptions(jwt),
+    ) as Observable<{setupIntent: SetupIntent}>)).setupIntent;
   }
 }
