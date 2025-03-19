@@ -809,6 +809,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   async submit() {
     // Can't proceed if donation or campaign data issue. Prior check fn has already reported the issue.
     if (this.donationUpdateError) {
+      // A more specific toast, and corresponding Matomo log, should have fired as donor entered Confirm.
+      this.toast.showError('Sorry, cannot process your payment due to the previous error');
       return;
     }
 
