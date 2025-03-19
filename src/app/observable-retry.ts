@@ -7,7 +7,7 @@ export const getDelay = () => {
   return (
   (error: HttpErrorResponse, retryCount: number) => {
     // if response is a status code we don't wish to retry, throw error
-    if (excludedStatusCodes.find(e => e === error.status)) {
+    if (excludedStatusCodes.includes(error.status)) {
       return throwError(() => error);
     }
 
