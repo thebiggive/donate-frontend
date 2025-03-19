@@ -735,8 +735,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       .pipe(retry({ count: 3, delay: getDelay() }))
       .subscribe({
         next: async (donation: Donation) => {
-          this.runningFinalPreSubmitUpdate = false;
           this.donationService.updateLocalDonation(donation);
+          this.runningFinalPreSubmitUpdate = false;
         },
         error: (response: HttpErrorResponse) => {
           let errorMessageForTracking: string;
