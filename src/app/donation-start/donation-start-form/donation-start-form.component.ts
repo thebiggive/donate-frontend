@@ -197,6 +197,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   panelOpenState = false;
   showCustomTipInput = false;
 
+  confirmStepLabel = 'Confirm' as const;
   yourDonationStepLabel = 'Your donation' as const;
 
   displayCustomTipInput = () => {
@@ -658,7 +659,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       // until the latest is persisted. Previously we did this after submit button press but
       // Apple Pay is highly sensitive about the wait time after the click event which caused
       // its panel to open; so we must do the work early instead.
-      if (event.selectedStep.label === 'Confirm') {
+      if (event.selectedStep.label === this.confirmStepLabel) {
         this.runFinalPreSubmitUpdate();
       }
     }
@@ -700,29 +701,27 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // Even if next guard fails, we want to prevent attempting to pay.
     this.runningFinalPreSubmitUpdate = true;
 
-    // todo combine with below, improve Matomo logging
-    if (!this.donation) {
-      const errorCodeDetail = '[code A1]'; // Donation property absent.
+    let requiredDonationProperties = [this.donation, this.campaign, this.campaign.charity.id, this.psp];
+    // Return if any of the required properties are missing.
+    requiredDonationProperties.forEach((value, index) => {
+      if (!value) {
+        const errorCodeDetail = `[code A${index}]`; // Data at `requiredDonationProperties` index `index` absent.
+        const errorMessage = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
 
-      const errorMessage = `Missing donation information – please refresh and try again, or email hello@biggive.org quoting ${errorCodeDetail} if this problem persists`;
+        this.matomoTracker.trackEvent(
+          'donate_error',
+          'submit_missing_donation_basics',
+          `Donation not set or form invalid ${errorCodeDetail}`,
+        );
+        this.toast.showError(errorMessage);
+        this.donationUpdateError = true;
+        this.stripeError = errorMessage;
+        this.stripeResponseErrorCode = undefined;
+      }
+    });
 
-      this.toast.showError(errorMessage);
-
-      this.stripeError = errorMessage;
-
-      this.stripeResponseErrorCode = undefined;
-      this.matomoTracker.trackEvent(
-        'donate_error',
-        'submit_missing_donation_basics',
-        `Donation not set or form invalid ${errorCodeDetail}`,
-      );
-      return;
-    }
-
-    if (!this.donation || !this.campaign || !this.campaign.charity.id || !this.psp) {
-      this.donationUpdateError = true;
-      // todo log to Matomo
-      this.toast.showError("Sorry, we can't submit your donation right now.");
+    // First part of clause should be redundant but TS doesn't track enough to know that(?)
+    if (!this.donation || this.donationUpdateError) {
       return;
     }
 
@@ -736,12 +735,10 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       .pipe(retry({ count: 3, delay: getDelay() }))
       .subscribe({
         next: async (donation: Donation) => {
-          // todo consider whether Matomo log useful
           this.runningFinalPreSubmitUpdate = false;
           this.donationService.updateLocalDonation(donation);
         },
         error: (response: HttpErrorResponse) => {
-          // todo log to Matomo
           let errorMessageForTracking: string;
           if (response.message) {
             errorMessageForTracking = `Could not update donation for campaign ${this.campaignId}: ${response.message}`;
