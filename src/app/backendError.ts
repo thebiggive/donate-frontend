@@ -36,13 +36,23 @@ export type InsufficientMatchFundsError = BackendError &
     }
   };
 
-export function errorDescription(error: BackendError): string {
-  const errorDetail = error.error.error;
+export function errorDescription(error: BackendError|unknown): string {
+  if (typeof error === 'string') {
+    return error;
+  }
+
+  if (typeof error != 'object') {
+    return 'Sorry, something went wrong';
+  }
+
+  // @ts-expect-error
+  const errorDetail = error?.error.error;
 
   return errorDetail.description
     || errorDetail.publicMessage
     || errorDetail.message
-    || error.message
+    // @ts-expect-error
+    || error?.message
     || 'Sorry, something went wrong'
 }
 

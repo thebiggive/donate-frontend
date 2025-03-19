@@ -13,7 +13,9 @@ import {IdentityService} from "../identity.service";
 import {MatDialog} from "@angular/material/dialog";
 import {FaIconComponent} from "@fortawesome/angular-fontawesome";
 import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
-import {BackendError, errorDetails} from "../backendError";
+import {BackendError, errorDescription, errorDetails} from "../backendError";
+import {RegularGivingService} from '../regularGiving.service';
+import {Toast} from '../toast.service';
 
 @Component({
     selector: 'app-my-payment-methods',
@@ -37,11 +39,14 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
 
   protected registerErrorDescription: string | undefined;
   protected registerSuccessMessage: string | undefined;
+
   constructor(
     private donationService: DonationService,
     private identityService: IdentityService,
     private route: ActivatedRoute,
+    private regularGivingService: RegularGivingService,
     public dialog: MatDialog,
+    private toaster: Toast,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
@@ -159,4 +164,17 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
   }
 
   protected readonly faExclamationTriangle = faExclamationTriangle;
+
+  async removeRegularGivingMethod() {
+    try {
+      await this.regularGivingService.removeCard();
+    } catch (error: unknown) {
+      this.toaster.showError(errorDescription(error));
+      return;
+    }
+
+    this.paymentMethods = await this.donationService.getPaymentMethods();
+
+    this.toaster.showSuccess("Payment method removed");
+  }
 }
