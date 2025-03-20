@@ -1,7 +1,4 @@
-export type Money = {
-  "amountInPence": number,
-  "currency": "GBP"|"USD"
-};
+import {Money} from './Money';
 
 export type Mandate = {
   id: string,

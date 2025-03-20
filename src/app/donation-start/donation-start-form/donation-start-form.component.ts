@@ -64,6 +64,7 @@ import {requiredNotBlankValidator} from "../../validators/notBlank";
 import {flags} from "../../featureFlags";
 import {WidgetInstance} from "friendly-challenge";
 import {Toast} from "../../toast.service";
+import {GIFT_AID_FACTOR} from '../../Money';
 
 declare var _paq: {
   push: (args: Array<string|object>) => void,
@@ -1049,7 +1050,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   giftAidAmount(): number {
-    return this.giftAidGroup.value.giftAid ? (0.25 * this.donationAmount) : 0;
+    return this.giftAidGroup.value.giftAid ? (GIFT_AID_FACTOR * this.donationAmount) : 0;
   }
 
   tipAmount(): number {

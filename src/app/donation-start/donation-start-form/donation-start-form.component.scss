@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @use '../../../abstract';
+@use "../../../assets/scss/donation-common";
 
 @include abstract.binary-options();
 
@@ -195,20 +196,6 @@ input {
     &:last-of-type {
       margin-bottom: 0.5rem;
     }
-  }
-}
-
-.c-your-donation__highlight {
-  background: abstract.$colour-highlight;
-  color: abstract.$colour-black;
-  padding: 0.5rem;
-  display: block;
-  text-align: center;
-  margin-bottom: 1rem !important;
-  font-weight: bold;
-
-  img {
-    padding-right: 1rem;
   }
 }
 
@@ -439,32 +426,6 @@ div.payment-details > * {
 div.sr-card-element {
   min-height: 22px;
   padding-top: 3px;
-}
-
-table.summary {
-  text-align: left;
-  width: 100%;
-  border-spacing: 0 1em;
-  tr {
-    td:last-child {
-      text-align: right;
-    }
-    td {
-      div {
-        display: inline-block;
-        max-width: 15rem;
-      }
-    }
-  }
-}
-.receives {
-  td {
-    background-color: abstract.$colour-highlight;
-    padding: 5px;
-  }
-}
-.total {
-  color: abstract.$colour-primary;
 }
 
 h3 {
