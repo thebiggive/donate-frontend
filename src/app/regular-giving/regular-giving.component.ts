@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Campaign} from "../campaign.model";
 import {ComponentsModule} from "@biggive/components-angular";
@@ -65,7 +65,7 @@ const over18DefaultValue = environment.environmentId === 'regression';
 
 @Component({
     selector: 'app-regular-giving',
-  imports: [
+    imports: [
     ComponentsModule,
     FormsModule,
     MatStep,
@@ -90,7 +90,7 @@ const over18DefaultValue = environment.environmentId === 'regression';
     templateUrl: './regular-giving.component.html',
     styleUrl: './regular-giving.component.scss'
 })
-export class RegularGivingComponent implements OnInit, AfterViewInit {
+export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy {
   protected mandateForm = new FormGroup({
     donationAmount: new FormControl('', [
       requiredNotBlankValidator,
@@ -250,6 +250,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     }
 
     this.preExistingActiveMandate$ = this.regularGivingService.activeMandate(this.campaign)
+  }
+
+  ngOnDestroy() {
+    if (this.stripePaymentElement) {
+      this.stripePaymentElement.off('change');
+      this.stripePaymentElement.destroy();
+      this.stripePaymentElement = undefined;
+      this.stripeElements = undefined;
+    }
   }
 
   ngAfterViewInit() {
