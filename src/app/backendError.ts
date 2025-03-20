@@ -1,4 +1,4 @@
-import {Money} from "./mandate.model";
+import {Money} from "./Money";
 
 type errorDetail = {
   message?: string;

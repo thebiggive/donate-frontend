@@ -10,7 +10,7 @@ import {MatButton, MatIconAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {Person} from "../person.model";
 import {MandateCreateResponse, RegularGivingService, StartMandateParams} from "../regularGiving.service";
-import {Mandate, Money} from '../mandate.model';
+import {Mandate} from '../mandate.model';
 import {myRegularGivingPath} from "../app-routing";
 import {requiredNotBlankValidator} from "../validators/notBlank";
 import {getCurrencyMinValidator} from "../validators/currency-min";
@@ -46,6 +46,7 @@ import {CampaignService} from '../campaign.service';
 import {Observable, of} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {ExactCurrencyPipe} from '../exact-currency.pipe';
+import {GIFT_AID_FACTOR, Money} from '../Money';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -421,7 +422,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
 
   giftAidAmount(): Money {
     const {amountInPence} = this.donationAmount;
-    const gaAmountInPence = amountInPence * 0.25;
+    const gaAmountInPence = amountInPence * GIFT_AID_FACTOR;
 
     return this.giftAid ?
       {amountInPence: gaAmountInPence, currency: this.campaign.currencyCode} :

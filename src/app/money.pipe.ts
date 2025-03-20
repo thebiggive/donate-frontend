@@ -1,6 +1,6 @@
 import {Pipe, PipeTransform} from "@angular/core";
-import {Money} from "./mandate.model";
 import {ExactCurrencyPipe} from "./exact-currency.pipe";
+import {Money} from './Money';
 
 /**
  * Formats a money object as a string. Currently, the money object is only used in regular giving mandates, (hence

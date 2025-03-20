@@ -19,6 +19,7 @@ import {Person} from '../person.model';
 import {myAccountPath} from '../app-routing';
 import {flags} from "../featureFlags";
 import {WidgetInstance} from "friendly-challenge";
+import {GIFT_AID_FACTOR} from '../Money';
 
 @Component({
     selector: 'app-donation-thanks',
@@ -313,7 +314,7 @@ export class DonationThanksComponent implements OnInit {
       );
 
       this.totalPaid = donation.totalPaid;
-      this.giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;
+      this.giftAidAmount = donation.giftAid ? GIFT_AID_FACTOR * donation.donationAmount : 0;
       this.totalValue = donation.donationAmount + this.giftAidAmount + donation.matchedAmount;
       this.donationIsLarge = isLargeDonation(donation);
       this.complete = true;
