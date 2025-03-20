@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {Campaign} from "../campaign.model";
 import {ComponentsModule} from "@biggive/components-angular";
-import {FormControl,FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatStep, MatStepper} from "@angular/material/stepper";
 import {StepperSelectionEvent} from "@angular/cdk/stepper";
 import {MatHint, MatInput} from "@angular/material/input";
@@ -41,15 +41,11 @@ import {
 import {MatCheckbox} from "@angular/material/checkbox";
 import {GiftAidAddressSuggestion} from "../gift-aid-address-suggestion.model";
 import {MoneyPipe} from "../money.pipe";
-import {
-  BackendError,
-  errorDescription,
-  errorDetails,
-  isInsufficientMatchFundsError
-} from "../backendError";
+import {BackendError, errorDescription, errorDetails, isInsufficientMatchFundsError} from "../backendError";
 import {CampaignService} from '../campaign.service';
 import {Observable, of} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
+import {ExactCurrencyPipe} from '../exact-currency.pipe';
 
 // for now min & max are hard-coded, will change to be based on a field on
 // the campaign.
@@ -88,7 +84,7 @@ const over18DefaultValue = environment.environmentId === 'regression';
     MatCheckbox,
     MatOption,
     MoneyPipe,
-    AsyncPipe
+    AsyncPipe,
   ],
     templateUrl: './regular-giving.component.html',
     styleUrl: './regular-giving.component.scss'
@@ -177,6 +173,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected preExistingActiveMandate$: Observable<Mandate[]|undefined> = of(undefined);
   protected ageErrorMessage: string | undefined;
 
+  /**
+   * Not all regular giving donations are matched, but any that are have exactly the first three donations only
+   * matched. Ideally this might be sent from the backend as a property of the campaign, but the number three
+   * is quite baked into the logic for matching regular giving in matchbot.
+   */
+  public readonly standardNumberOfDonationsMatched = 3;
+
   constructor(
     private route: ActivatedRoute,
     private toast: Toast,
@@ -238,7 +241,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.maximumMatchableDonation = maximumMatchableDonationGivenCampaign(this.campaign);
+    this.maximumMatchableDonation = this.maximumMatchableDonationGivenCampaign(this.campaign);
 
     if (this.maximumMatchableDonation.amountInPence === 0) {
       this.matchFundsZeroOnLoad = true;
@@ -333,11 +336,17 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       home = undefined;
     }
 
+    const currency = this.campaign.currencyCode;
+
+    if (currency !== 'GBP') {
+      throw new Error(`unsupported currency ${currency}`);
+    }
+
     this.regularGivingService.startMandate({
       amountInPence: this.getDonationAmountPence(),
       dayOfMonth,
       campaignId: this.campaign.id,
-      currency: "GBP",
+      currency: currency,
       giftAid: !!this.giftAid,
       billingPostcode: this.billingPostCode,
       billingCountry,
@@ -394,6 +403,13 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
     return 100 * +(this.mandateForm.value.donationAmount ?? 0);
   }
 
+  protected get donationAmount(): Money {
+    return {
+      amountInPence: this.getDonationAmountPence(),
+      currency: this.campaign.currencyCode
+    }
+  }
+
   protected setSelectedCountry = ((countryCode: string) => {
     this.selectedBillingCountryCode = countryCode;
   })
@@ -401,6 +417,15 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
   protected get giftAid(): boolean | undefined | null
   {
     return this.mandateForm.value.giftAid;
+  }
+
+  giftAidAmount(): Money {
+    const {amountInPence} = this.donationAmount;
+    const gaAmountInPence = amountInPence * 0.25;
+
+    return this.giftAid ?
+      {amountInPence: gaAmountInPence, currency: this.campaign.currencyCode} :
+      {amountInPence: 0, currency: this.campaign.currencyCode};
   }
 
   protected addressSuggestions: GiftAidAddressSuggestion[] = [];
@@ -678,13 +703,16 @@ export class RegularGivingComponent implements OnInit, AfterViewInit {
       this.homeAddress = address;
     });
   }
-}
 
-export function maximumMatchableDonationGivenCampaign(campaign: Pick<Campaign, 'currencyCode'|'matchFundsRemaining'>): Money {
-  const standardNumberOfDonationMatched = 3;
+  maximumMatchableDonationGivenCampaign(campaign: Pick<Campaign, 'currencyCode'|'matchFundsRemaining'>): Money {
+    // this is not static just because it shares standardNumberOfDonationsMatched with the template, and templates can't
+    // read static values directly.
 
-  return {
-    currency: campaign.currencyCode,
-    amountInPence: Math.max(Math.floor(campaign.matchFundsRemaining / standardNumberOfDonationMatched), 0) * 100
-  };
+
+
+    return {
+      currency: campaign.currencyCode,
+      amountInPence: Math.max(Math.floor(campaign.matchFundsRemaining / this.standardNumberOfDonationsMatched), 0) * 100
+    };
+  }
 }

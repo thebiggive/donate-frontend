@@ -445,6 +445,32 @@
               </p>
               <p>(todo-regular-giving-OPS-766: add link to regular giving terms & conditions)</p>
 
+              <table class="summary">
+                <tr class="donationAmount">
+                  <td>Your monthly donation to {{ campaign.charity.name }}</td>
+                  <td>{{ donationAmount | money }}</td>
+                </tr>
+                @if (! unmatched) {
+                  <tr>
+                    <td>Matched Amount for first {{ standardNumberOfDonationsMatched }} donations</td>
+                    <td>{{ donationAmount | money }}</td>
+                  </tr>
+                }
+                @if (giftAid) {
+                  <tr>
+                    <td>Gift Aid Amount</td>
+                    <td>{{ giftAidAmount() | money }}</td>
+                  </tr>
+                }
+                <tr>
+                  <td colspan="2"><hr></td>
+                </tr>
+                <tr class="total">
+                  <td><div><strong>Total amount you will be charged each month</strong></div></td>
+                  <td>{{ donationAmount | money }}</td>
+                </tr>
+              </table>
+
               <div aria-live="polite">
                   @if (submitErrorMessage) {
                     <div

@@ -428,30 +428,11 @@ div.sr-card-element {
   padding-top: 3px;
 }
 
-table.summary {
-  text-align: left;
-  width: 100%;
-  border-spacing: 0 1em;
-  tr {
-    td:last-child {
-      text-align: right;
-    }
-    td {
-      div {
-        display: inline-block;
-        max-width: 15rem;
-      }
-    }
-  }
-}
 .receives {
   td {
     background-color: abstract.$colour-highlight;
     padding: 5px;
   }
-}
-.total {
-  color: abstract.$colour-primary;
 }
 
 h3 {
