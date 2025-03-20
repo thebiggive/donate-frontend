@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @use '../../../abstract';
+@use "../../../assets/scss/donation-common";
 
 @include abstract.binary-options();
 
@@ -195,20 +196,6 @@ input {
     &:last-of-type {
       margin-bottom: 0.5rem;
     }
-  }
-}
-
-.c-your-donation__highlight {
-  background: abstract.$colour-highlight;
-  color: abstract.$colour-black;
-  padding: 0.5rem;
-  display: block;
-  text-align: center;
-  margin-bottom: 1rem !important;
-  font-weight: bold;
-
-  img {
-    padding-right: 1rem;
   }
 }
 

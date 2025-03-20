@@ -54,6 +54,12 @@
               label="Your regular donation"
               class="c-your-donation">
 
+              @if (maximumMatchableDonation.amountInPence > 0) {
+                <p class="donation_highlight">
+                  Match funds are currently available!
+                </p>
+              }
+
               <div class="youAreSupporting">
                 <p class="b-rt-0 b-m-0">You are supporting:</p>
                 <p class="b-rt-0 b-m-0 b-bold">{{ campaign.charity.name }}</p>
@@ -82,9 +88,9 @@
                 @if (this.matchFundsZeroOnLoad) {
                   <!-- no need to show any message here, the donor will read below that there are no match funds-->
                 } @else if (!this.unmatched) {
-                  <p>Your first three donations will be match-funded. </p>
+                  <p>Your first three donations will be matched. </p>
                 } @else {
-                  <p>Your donations will not be match-funded.</p>
+                  <p>Your donations will not be matched.</p>
                 }
                 @if (amountErrorMessage) {
                   <div class="error">

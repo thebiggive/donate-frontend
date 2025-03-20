@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
 @use '../../abstract';
+@use "../../assets/scss/donation-common";
 
 @include abstract.binary-options();
 
