@@ -148,6 +148,20 @@ export const routes: Routes = [
     redirectTo: 'donate/:campaignId',
   },
   {
+    path: `${myRegularGivingPath}/:mandateId/thanks`,
+    pathMatch: 'full',
+    component: MandateComponent,
+    data: {
+      isThanks: true
+    },
+    canActivate: [
+      requireLogin,
+    ],
+    resolve: {
+      mandate:  MandateResolver,
+    },
+  },
+  {
     path: `${myRegularGivingPath}/:mandateId`,
     pathMatch: 'full',
     component: MandateComponent,
