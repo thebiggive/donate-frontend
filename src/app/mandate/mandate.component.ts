@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {ComponentsModule} from "@biggive/components-angular";
 import {DatePipe} from "@angular/common";
 import {Mandate} from "../mandate.model";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MoneyPipe} from "../money.pipe";
 import {myRegularGivingPath} from '../app-routing';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import { RegularGivingService } from '../regularGiving.service';
+import {RegularGivingService} from '../regularGiving.service';
 
 @Component({
     selector: 'app-mandate',
@@ -26,18 +26,44 @@ export class MandateComponent implements OnInit {
   private mandateRefreshTimer: number|undefined;
   private timePageLoaded = new Date();
 
+  /**
+   * This page always shows the details of the regular giving mandate but we vary it slightly according to
+   * how it's being used - if true then we're confirming thanking someone immediately after they have instructed
+   * us to start collecting their donations. If false we're showing them details of those instructions etc at a later
+   * date.
+   */
+  protected isThanksPage;
+
   constructor(
     private route: ActivatedRoute,
     private regularGivingService: RegularGivingService,
+    private router: Router,
   ) {
     this.mandate = this.route.snapshot.data.mandate;
     this.cancelPath = `/${myRegularGivingPath}/${this.mandate.id}/cancel`;
+    this.isThanksPage = !! this.route.snapshot.data['isThanks'];
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     if (this.mandate.status === 'pending') {
       this.pollForMandateUpdate();
     }
+    if (this.isThanksPage && this.mandateIsOld()) {
+      // As the mandate is more than a day old we assume the donor doesn't want to be thanked for setting it up now,
+      // they just want to review and/or manage it.
+      await this.router.navigateByUrl(`/${myRegularGivingPath}/${this.mandate.id}`);
+    }
+  }
+
+  /**
+   * Returns true iff the mandate is more tha one day old.
+   * @private
+   */
+  private mandateIsOld() {
+    const activationDate = new Date(this.mandate.schedule.activeFrom);
+    const mandateAgeMilliseconds = new Date().valueOf() - activationDate.valueOf();
+
+    return mandateAgeMilliseconds > 24 * 60 * 60 * 1_000;
   }
 
   private pollForMandateUpdate() {
@@ -67,6 +93,13 @@ export class MandateComponent implements OnInit {
 
   get showCancelLink(): boolean
   {
+    if (this.isThanksPage) {
+      // We don't want to encourage people to use regular giving as if it was ad-hoc, so we don't present the
+      // cancel link directly on the thanks page. If the donor wants to cancel they need to navigate to the
+      // non-thanks variant of this page.
+      return false;
+    }
+
     // ts checks for exhaustiveness:
     switch (this.mandate.status) {
       case 'active': return true;
