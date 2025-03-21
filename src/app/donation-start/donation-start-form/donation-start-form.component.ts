@@ -495,19 +495,27 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
               'cancel_auto',
               `Donation cancelled due to donor authentication change`,
             );
-            this.destroyStripeElements();
-            if (this.donation) {
-              // We already know the requested amount, so no need to jump back.
-              this.clearDonation(this.donation, {clearAllRecord: true, jumpToStart: false});
-            }
-            this.createDonationAndMaybePerson();
-            this.prepareStripeElements();
+            this.refreshDonationAndStripe();
           });
           return;
         }
 
         this.offerExistingDonation(existingDonation);
     });
+  }
+
+  /**
+   * Called when the pending donation has reached an unusable state - we need to replace it (and the stripe elements)
+   * with a new one to let the donor try again.
+   */
+  private refreshDonationAndStripe(): void {
+    this.destroyStripeElements();
+    if (this.donation) {
+      // We already know the requested amount, so no need to jump back.
+      this.clearDonation(this.donation, {clearAllRecord: true, jumpToStart: false});
+    }
+    this.createDonationAndMaybePerson();
+    this.prepareStripeElements();
   }
 
   ngAfterContentInit() {
@@ -924,7 +932,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           // usable. Stripe won't allow that PI to be confirmed, and the donor may want to try a different card. Best we
           // can do is clear the donation out and let them start a new one.
 
-          this.clearDonation(this.donation, {clearAllRecord: true, jumpToStart: false});
+          this.refreshDonationAndStripe();
         } else {
           await this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
           return;
