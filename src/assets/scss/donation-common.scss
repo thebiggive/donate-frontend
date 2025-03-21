@@ -1,0 +1,38 @@
+@use '../../abstract';
+
+// Style shared between regular-giving and ad-hoc donation forms
+
+.donation_highlight {
+  background: abstract.$colour-highlight;
+  color: abstract.$colour-black;
+  padding: 0.5rem;
+  display: block;
+  text-align: center;
+  margin-bottom: 1rem !important;
+  font-weight: bold;
+
+  img {
+    padding-right: 1rem;
+  }
+}
+
+table.summary {
+  text-align: left;
+  width: 100%;
+  border-spacing: 0 1em;
+  tr {
+    td:last-child {
+      text-align: right;
+    }
+    td {
+      div {
+        display: inline-block;
+        max-width: 15rem;
+      }
+    }
+  }
+}
+
+.total {
+  color: abstract.$colour-primary;
+}

@@ -24,6 +24,7 @@ import {AddressService} from '../address.service';
 import {getCurrencyMinValidator} from '../validators/currency-min';
 import {getCurrencyMaxValidator} from '../validators/currency-max';
 import {Toast} from '../toast.service';
+import {GIFT_AID_FACTOR} from '../Money';
 
 /**
  * Support for topping up Stripe customer_balance via bank transfer. Only
@@ -258,7 +259,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
   giftAidAmount() : number {
     // Gift Aid on the tip only when buying credits!
-    return this.calculatedTipAmount() * 0.25;
+    return this.calculatedTipAmount() * GIFT_AID_FACTOR;
   }
 
   get creditAmountField() {

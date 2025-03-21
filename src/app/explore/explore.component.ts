@@ -421,24 +421,8 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     this.individualCampaigns = [];
     this.loading = true;
 
-    this.campaignService.search(query as SearchQuery).subscribe({
-      next: campaignSummaries => {
-        this.individualCampaigns = campaignSummaries; // Success
-        this.loading = false;
-      },
-      error: (error) => {
-        logCalloutError(
-          isPlatformBrowser(this.platformId),
-          `ExploreComponent.run: ${error.message}`,
-          undefined,
-          this.matomoTracker,
-        );
-        this.loading = false;
-      },
-    });
-
     if (!isPlatformBrowser(this.platformId)) { // Server renders don't need the scroll restoration help
-      // this.doCampaignSearch(query as SearchQuery, true); // Clear existing children, though there _should_ be none on server
+      this.doCampaignSearch(query as SearchQuery, true); // Clear existing children, though there _should_ be none on server
       return;
     }
 
@@ -469,7 +453,6 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
 
     // Else need to load children newly in browser.
     this.doCampaignSearch(query as SearchQuery, true); // Clear existing children
-
   }
 
   /**

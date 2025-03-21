@@ -1,4 +1,5 @@
 import {completeStatuses, DonationStatus} from './donation-status.type';
+import {GIFT_AID_FACTOR} from './Money';
 
 export function maximumDonationAmount(currencyCode: string, creditPenceToUse: number): number {
   if (currencyCode !== 'GBP') {
@@ -187,7 +188,7 @@ export function isLargeDonation(donation: Donation) {
 export function withComputedProperties(donation: CompleteDonation): EnrichedDonation
 {
   // calculations here duplicate those in thanks page. Consider moving to matchbot soon.
-  const giftAidAmount = donation.giftAid ? 0.25 * donation.donationAmount : 0;
+  const giftAidAmount = donation.giftAid ? GIFT_AID_FACTOR * donation.donationAmount : 0;
   return {
     ...donation,
     giftAidAmount: giftAidAmount,

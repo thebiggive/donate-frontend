@@ -61,9 +61,9 @@ import {updateDonationFromForm} from "../updateDonationFromForm";
 import {sanitiseCurrency} from "../sanitiseCurrency";
 import {PaymentReadinessTracker} from "./PaymentReadinessTracker";
 import {requiredNotBlankValidator} from "../../validators/notBlank";
-import {flags} from "../../featureFlags";
 import {WidgetInstance} from "friendly-challenge";
 import {Toast} from "../../toast.service";
+import {GIFT_AID_FACTOR} from '../../Money';
 
 declare var _paq: {
   push: (args: Array<string|object>) => void,
@@ -911,16 +911,23 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         if (!result.paymentIntent.client_secret) {
           throw new Error("payment intent requires action but client secret missing")
         }
+
         const {
           error,
         } = await this.stripeService.handleNextAction(result.paymentIntent!.client_secret);
-        if (!error) {
-          await this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
-          return;
-        } else {
+        if (error) {
           // Next action (e.g. 3D Secure) was run by Stripe.js, and failed.
           result = {error: error};
           this.submitting = false;
+
+          // As the donation is now attached to a payment intent that will have status requires_action, its not really
+          // usable. Stripe won't allow that PI to be confirmed, and the donor may want to try a different card. Best we
+          // can do is clear the donation out and let them start a new one.
+
+          this.clearDonation(this.donation, {clearAllRecord: true, jumpToStart: false});
+        } else {
+          await this.exitPostDonationSuccess(this.donation, this.selectedPaymentMethodType);
+          return;
         }
       } // Else there's a `paymentMethod` which is already successful or errored » both handled later.
     } else {
@@ -1049,7 +1056,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   }
 
   giftAidAmount(): number {
-    return this.giftAidGroup.value.giftAid ? (0.25 * this.donationAmount) : 0;
+    return this.giftAidGroup.value.giftAid ? (GIFT_AID_FACTOR * this.donationAmount) : 0;
   }
 
   tipAmount(): number {
@@ -2020,6 +2027,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private removeStripeCardBillingValidators() {
     this.paymentGroup.controls.billingCountry!.setValidators([]);
     this.paymentGroup.controls.billingPostcode!.setValidators([]);
+    this.paymentGroup.setErrors(null);
+    this.donationForm.updateValueAndValidity();
   }
 
   private addStripeCardBillingValidators() {
@@ -2239,7 +2248,6 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return (this.creditPenceToUse > 0) ? 'customer_balance' : 'card';
   }
 
-  protected readonly flags = flags;
   protected showCardReuseMessage = false;
   protected summariseAddressSuggestion = AddressService.summariseAddressSuggestion;
 
