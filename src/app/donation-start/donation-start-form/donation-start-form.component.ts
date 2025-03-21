@@ -2027,6 +2027,8 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private removeStripeCardBillingValidators() {
     this.paymentGroup.controls.billingCountry!.setValidators([]);
     this.paymentGroup.controls.billingPostcode!.setValidators([]);
+    this.paymentGroup.setErrors(null);
+    this.donationForm.updateValueAndValidity();
   }
 
   private addStripeCardBillingValidators() {
