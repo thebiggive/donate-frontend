@@ -383,7 +383,7 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
           }
         }
 
-        await this.router.navigateByUrl(`/${myRegularGivingPath}/${response.mandate.id}`);
+        await this.router.navigateByUrl(`/${myRegularGivingPath}/${response.mandate.id}/thanks`);
       },
       error: (error: BackendError) => {
         const message = errorDescription(error);

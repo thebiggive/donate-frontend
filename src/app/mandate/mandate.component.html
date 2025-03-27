@@ -15,6 +15,7 @@
   <div id="banner-thank-you"></div>
 
   <div>
+    @if (isThanksPage) {
     <div aria-live="polite">
       <div>
         <div class="screenreader-only">
@@ -22,10 +23,16 @@
         </div>
       </div>
     </div>
+    }
     <div>
-      <div class="thank-you">
+      <div class="header-box">
+        @if (isThanksPage) {
         <h2>Thank you!</h2>
         <p class="thank-you-text">Your generous regular donation has been set up.</p>
+        } @else {
+          <h2>Regular Giving Mandate</h2>
+          <p class="thank-you-text">Your regular donation to {{ mandate.charityName }}</p>
+        }
       </div>
       <hr aria-hidden="true">
       <div id="mandate" class="{{mandate.status}}">
@@ -35,7 +42,9 @@
             <p><strong>{{statusMessage}}</strong></p>
             <hr aria-hidden="true">
           }
-          <p><strong>Your donation summary</strong></p>
+          @if (isThanksPage) {
+            <p><strong>Your regular donation to {{ mandate.charityName }}</strong></p>
+          }
           @if (mandate.isMatched) {
             <p>Your donation of
               <strong
@@ -131,6 +140,12 @@
             <hr class="shorter" aria-hidden="true">
             <div style="text-align: center">
               <a [href]="cancelPath">Cancel future donations</a>
+            </div>
+          }
+          @if (isThanksPage) {
+            <hr class="shorter" aria-hidden="true">
+            <div style="text-align: center">
+              <a href="/my-account">Your Big Give Donor Account</a>
             </div>
           }
         </div>
