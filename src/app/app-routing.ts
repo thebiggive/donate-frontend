@@ -179,9 +179,6 @@ export const routes: Routes = [
     canActivate: [
       requireLogin,
     ],
-    resolve: {
-      mandate:  MandateResolver,
-    },
   },
   {
     path: 'metacampaign/:campaignId',

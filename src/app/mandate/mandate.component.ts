@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ComponentsModule} from "@biggive/components-angular";
 import {DatePipe} from "@angular/common";
 import {Mandate} from "../mandate.model";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {MoneyPipe} from "../money.pipe";
 import {myRegularGivingPath} from '../app-routing';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
@@ -14,7 +14,8 @@ import {RegularGivingService} from '../regularGiving.service';
     ComponentsModule,
     DatePipe,
     MoneyPipe,
-    MatProgressSpinner
+    MatProgressSpinner,
+    RouterLink
   ],
     templateUrl: './mandate.component.html',
     styleUrl: './mandate.component.scss'

@@ -2,6 +2,7 @@
 <main>
   <div>
     <biggive-page-section>
+      @if(mandate$ | async; as mandate) {
       <div class="heading-wrapper">
         <biggive-heading
           colour="tertiary"
@@ -10,7 +11,6 @@
           [text]="'Cancel regular giving to ' + mandate.charityName"
         ></biggive-heading>
       </div>
-      <!-- @todo  DON-1022 replace form with message if mandate is already cancelled has a non-cancelable status    -->
       <p>
         You are currently giving <strong>{{ mandate.donationAmount | money }}</strong> to
         <strong>{{ mandate.charityName }}</strong>,
@@ -32,7 +32,7 @@
 
         <div class="actions">
           <div>
-            <a href="/my-account/regular-giving/{{mandate.id}}">Back to mandate details</a>
+            <a routerLink="/my-account/regular-giving/{{mandate.id}}">Back to mandate details</a>
           </div>
           <div>
             @if (processing) {
@@ -50,8 +50,24 @@
               />
             }
           </div>
+
         </div>
       </form>
+      } @else {
+        <div style="min-height: 10em">
+        @defer (on timer(1000ms)) {
+        <div class="heading-wrapper">
+          <biggive-heading
+            colour="tertiary"
+            size="1"
+            align="center"
+            text="Cancel regular giving..."
+          ></biggive-heading>
+        </div>
+          <mat-spinner color="primary" diameter="30" aria-label="Loading mandate"></mat-spinner>
+        }
+        </div>
+      }
     </biggive-page-section>
   </div>
 </main>
