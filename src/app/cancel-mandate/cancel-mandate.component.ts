@@ -54,8 +54,6 @@ export class CancelMandateComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.mandateSubscription = this.mandate$.subscribe(mandate => {
-      console.log({mandate});
-
       if (mandate.status === 'cancelled') {
         void this.router.navigateByUrl(`/my-account/regular-giving/${mandate.id}`)
         return;
