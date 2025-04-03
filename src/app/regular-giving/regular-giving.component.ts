@@ -714,15 +714,20 @@ export class RegularGivingComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
-  maximumMatchableDonationGivenCampaign(campaign: Pick<Campaign, 'currencyCode'|'matchFundsRemaining'>): Money {
+  maximumMatchableDonationGivenCampaign(campaign: Pick<Campaign, 'currencyCode'|'matchFundsRemaining'|'parentMatchFundsRemaining'|'parentUsesSharedFunds'>): Money {
     // this is not static just because it shares standardNumberOfDonationsMatched with the template, and templates can't
     // read static values directly.
-
-
+    const fundsRemaining = campaign.parentUsesSharedFunds ? campaign.parentMatchFundsRemaining : campaign.matchFundsRemaining;
+    if (fundsRemaining === undefined) {
+      return {
+        currency: campaign.currencyCode,
+        amountInPence: 0
+      };
+    }
 
     return {
       currency: campaign.currencyCode,
-      amountInPence: Math.max(Math.floor(campaign.matchFundsRemaining / this.standardNumberOfDonationsMatched), 0) * 100
+      amountInPence: Math.max(Math.floor(fundsRemaining / this.standardNumberOfDonationsMatched), 0) * 100
     };
   }
 }

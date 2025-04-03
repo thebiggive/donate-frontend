@@ -68,6 +68,7 @@ export interface Campaign {
     logoUri?: string;
     parentAmountRaised?: number;
     parentDonationCount?: number;
+    parentMatchFundsRemaining?: number;
     parentRef?: string;
     parentTarget?: number;
     surplusDonationInfo?: string;

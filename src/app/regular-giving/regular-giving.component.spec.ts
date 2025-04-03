@@ -9,14 +9,15 @@ import {AddressService} from '../address.service';
 
 describe('Match funds are only usable in multiples of £3', () => {
   ([
-    [{matchFundsRemaining: -50, currencyCode: 'GBP'}, {amountInPence: 0, currency: 'GBP'}],
-    [{matchFundsRemaining: -0.01, currencyCode: 'GBP'}, {amountInPence: 0, currency: 'GBP'}],
-    [{matchFundsRemaining: 0, currencyCode: 'GBP'}, {amountInPence: 0, currency: 'GBP'}],
-    [{matchFundsRemaining: 1, currencyCode: 'GBP'}, {amountInPence: 0, currency: 'GBP'}],
-    [{matchFundsRemaining: 2.99, currencyCode: 'GBP'}, {amountInPence: 0, currency: 'GBP'}],
-    [{matchFundsRemaining: 3, currencyCode: 'GBP'}, {amountInPence: 100, currency: 'GBP'}],
-    [{matchFundsRemaining: 5.99, currencyCode: 'GBP'}, {amountInPence: 100, currency: 'GBP'}],
-    [{matchFundsRemaining: 6, currencyCode: 'GBP'}, {amountInPence: 200, currency: 'GBP'}],
+    [{matchFundsRemaining: 0, currencyCode: 'GBP', parentUsesSharedFunds: true, parentMatchFundsRemaining: -50}, {amountInPence: 0, currency: 'GBP'}],
+    [{matchFundsRemaining: 0, currencyCode: 'GBP', parentUsesSharedFunds: true, parentMatchFundsRemaining: -0.01}, {amountInPence: 0, currency: 'GBP'}],
+    [{matchFundsRemaining: 0, currencyCode: 'GBP', parentUsesSharedFunds: true, parentMatchFundsRemaining: 0}, {amountInPence: 0, currency: 'GBP'}],
+    [{matchFundsRemaining: 0, currencyCode: 'GBP', parentUsesSharedFunds: true, parentMatchFundsRemaining: 1}, {amountInPence: 0, currency: 'GBP'}],
+    [{matchFundsRemaining: 0, currencyCode: 'GBP', parentUsesSharedFunds: true, parentMatchFundsRemaining: 2.99}, {amountInPence: 0, currency: 'GBP'}],
+    [{matchFundsRemaining: 0, currencyCode: 'GBP', parentUsesSharedFunds: true, parentMatchFundsRemaining: 3 }, {amountInPence: 100, currency: 'GBP'}],
+    [{matchFundsRemaining: 0, currencyCode: 'GBP', parentUsesSharedFunds: true, parentMatchFundsRemaining: 5.99}, {amountInPence: 100, currency: 'GBP'}],
+    [{matchFundsRemaining: 6, currencyCode: 'GBP', parentUsesSharedFunds: false, parentMatchFundsRemaining: 0}, {amountInPence: 200, currency: 'GBP'}],
+    [{matchFundsRemaining: 0, currencyCode: 'GBP', parentUsesSharedFunds: true, parentMatchFundsRemaining: 6}, {amountInPence: 200, currency: 'GBP'}],
   ] as const).forEach(([campaign, maxMatchable]) => {
     it('Calculates maximum matchable given state of a campaign', () => {
 
