@@ -6,6 +6,8 @@ import {PageMetaService} from '../page-meta.service';
 import {StripeService} from '../stripe.service';
 import {DonationService} from '../donation.service';
 import {AddressService} from '../address.service';
+import {Campaign} from '../campaign.model';
+import {Money} from '../Money';
 
 describe('Match funds are only usable in multiples of £3', () => {
   ([
@@ -18,7 +20,7 @@ describe('Match funds are only usable in multiples of £3', () => {
     [{matchFundsRemaining: 0, currencyCode: 'GBP', parentUsesSharedFunds: true, parentMatchFundsRemaining: 5.99}, {amountInPence: 100, currency: 'GBP'}],
     [{matchFundsRemaining: 6, currencyCode: 'GBP', parentUsesSharedFunds: false, parentMatchFundsRemaining: 0}, {amountInPence: 200, currency: 'GBP'}],
     [{matchFundsRemaining: 0, currencyCode: 'GBP', parentUsesSharedFunds: true, parentMatchFundsRemaining: 6}, {amountInPence: 200, currency: 'GBP'}],
-  ] as const).forEach(([campaign, maxMatchable]) => {
+  ] as [Campaign, Money][]).forEach(([campaign, maxMatchable]) => {
     it('Calculates maximum matchable given state of a campaign', () => {
 
       const regularGivingComponent = new RegularGivingComponent(
