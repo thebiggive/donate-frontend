@@ -10,6 +10,9 @@ const flagsForEnvironment = (environmentId: EnvironmentID) => {
      * inside the stripe payment element on the donation page.
      */
     stripeElementCardChoice: true,
+
+    // before this is enabled in prod the registration form needs to actually do realy verification with the backend.
+    requireEmailVerification: environmentId === 'development',
   } as const;
 }
 
