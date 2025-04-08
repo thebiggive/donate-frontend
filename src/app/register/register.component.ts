@@ -21,10 +21,11 @@ import {PageMetaService} from '../page-meta.service';
 import {NavigationService} from "../navigation.service";
 import {BackendError, errorDescription, errorDetails} from "../backendError";
 import {addBodyClass, removeBodyClass} from '../bodyStyle';
+import {VerifyEmailComponent} from '../verify-email/verify-email.component';
 
 @Component({
     selector: 'app-register',
-    imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule],
+  imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule, VerifyEmailComponent],
     templateUrl: './register.component.html',
     styleUrl: 'register.component.scss'
 })
@@ -45,7 +46,8 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   private friendlyCaptchaWidget!: WidgetInstance;
   protected redirectPath: string = 'my-account';
   protected loginLink!: string;
-
+  protected verificationLinkSentToEmail? : string;
+  protected verificationCodeSupplied?: string;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -110,7 +112,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   register(): void {
     this.errorHtml = this.error = undefined;
 
-    if (!this.registrationForm.valid) {
+    if (!this.registrationForm.valid && this.readyToTakeAccountDetails) {
 
       const emailErrors = this.registrationForm.controls?.emailAddress?.errors;
       const passwordErrors = this.registrationForm.controls?.password?.errors;
@@ -149,11 +151,21 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
 
+    const emailAddress = (this.verificationCodeSupplied && this.verificationLinkSentToEmail) || this.registrationForm.value.emailAddress;
+    const firstName = this.registrationForm.value.firstName;
+    const lastName = this.registrationForm.value.lastName;
+
+    if (flags.requireEmailVerification && ! this.verificationCodeSupplied) {
+      this.verificationLinkSentToEmail = emailAddress;
+      this.processing = false;
+      return;
+    }
+
     this.identityService.create({
       captcha_code: captchaResponse ,
-      email_address: this.registrationForm.value.emailAddress,
-      first_name: this.registrationForm.value.firstName,
-      last_name: this.registrationForm.value.lastName,
+      email_address: emailAddress,
+      first_name: firstName,
+      last_name: lastName,
     }).subscribe({
         next: initialPerson => {
           // would like to move the line below inside `identityService.create` but that caused test errors when I tried
@@ -207,5 +219,15 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
         this.processing = false;
       }
     });
+  }
+
+  verificationCodeEntered(verificationCode: string) {
+    // @todo - do the actual verification with backend - for now we're just going to pretend
+    // we know this is correct so we can see how the UX feels outside of production.
+   this.verificationCodeSupplied = verificationCode;
+  }
+
+  get readyToTakeAccountDetails(): boolean {
+    return !!this.verificationCodeSupplied || ! flags.requireEmailVerification
   }
 }

@@ -37,11 +37,18 @@
       </ul>
       }
 
+      @if (verificationLinkSentToEmail && !verificationCodeSupplied) {
+        <app-verify-email [emailAddress]="verificationLinkSentToEmail" (codeEnteredEvent)="verificationCodeEntered($event)">
+
+        </app-verify-email>
+
+      } @else {
       <form
         [formGroup]="registrationForm"
         (keydown.enter)="register()"
       >
 
+        @if (readyToTakeAccountDetails) {
         <biggive-text-input spaceBelow="4">
           <label slot="label" for="firstName">First Name *</label>
           <input
@@ -54,18 +61,28 @@
             slot="input"
             matInput type="text" id="lastName" formControlName="lastName">
         </biggive-text-input>
+        }
+        @if (! verificationLinkSentToEmail) {
         <biggive-text-input spaceBelow="4">
           <label slot="label" for="emailAddress">Email address *</label>
           <input
             slot="input"
             matInput type="email" id="emailAddress" formControlName="emailAddress" autocapitalize="off">
         </biggive-text-input>
+        } @else {
+          <div>
+          Email Address: {{verificationLinkSentToEmail}}
+          </div>
+        }
+
+        @if (readyToTakeAccountDetails) {
         <biggive-text-input spaceBelow="4">
           <label slot="label" for="password">Password *</label>
           <input
             slot="input"
             matInput type="password" id="password" formControlName="password">
         </biggive-text-input>
+        }
 
         <div aria-live="polite">
           @if (errorHtml) {
@@ -110,6 +127,7 @@
           }
         </div>
       </div>
+      }
       <hr style="margin: 20px auto;">
       Already have an account? <a href="{{loginLink}}">Login here</a>
     </biggive-page-section>
