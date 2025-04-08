@@ -1,7 +1,7 @@
 /**
  * @link https://app.swaggerhub.com/apis/Noel/TBG-Campaigns/#/Campaign
  */
-export interface Campaign {
+export type Campaign = {
     id: string;
     aims: string[];
     amountRaised: number;
@@ -44,7 +44,6 @@ export interface Campaign {
     matchFundsRemaining: number;
 
     matchFundsTotal: number;
-    parentUsesSharedFunds: boolean;
     problem: string | null;
     quotes: Array<{person: string, quote: string}>;
     ready: boolean;
@@ -74,4 +73,11 @@ export interface Campaign {
     target?: number;
     thankYouMessage?: string
     video?: {provider: string, key: string};
-}
+} & (
+{
+  // If parentUsesSharedFunds then we expect the backend to tell us how much of those parental shared funds are available
+  parentUsesSharedFunds: true;
+  parentMatchFundsRemaining: number;
+} | {
+  parentUsesSharedFunds: false;
+})

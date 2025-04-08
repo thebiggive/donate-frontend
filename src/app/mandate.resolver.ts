@@ -8,7 +8,7 @@ import {RegularGivingService} from './regularGiving.service';
 @Injectable(
   {providedIn: 'root'}
 )
-export class MandateResolver implements Resolve<Mandate> {
+export class MandateResolver implements Resolve<Observable<Mandate>> {
   constructor(private regularGivingService: RegularGivingService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Mandate> {

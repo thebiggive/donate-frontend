@@ -94,7 +94,7 @@
     "karma-coverage-istanbul-reporter": "~3.0.3",
     "karma-jasmine": "~4.0.1",
     "karma-jasmine-html-reporter": "^1.6.0",
-    "puppeteer": "22.12.*",
+    "puppeteer": "22.15.*",
     "ts-loader": "^8.1.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.5.4",
