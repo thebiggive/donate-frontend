@@ -720,26 +720,30 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    */
   private updateNewPersonInBackend(donation: Donation) {
     const idAndJWT = this.identityService.getIdAndJWT();
-    if (idAndJWT) {
-      let person = this.buildPersonFromDonation(donation);
-      person.id = idAndJWT.id;
+    if (!idAndJWT) {
+      console.error("Missing auth info, can't push person update to backend")
+      return;
+    }
 
-      // Try to patch the person only if they're not already a finalised donor account,
-      // e.g. they could have set a password then reloaded this page.
-      if (!this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
-        this.identityService.update(person)
-          .subscribe({
-            next: person => {
-              this.donor = person;
-            },
-            error: (error: HttpErrorResponse) => {
-              // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
-              // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
-              this.matomoTracker.trackEvent('identity_error', 'person_core_data_update_failed', `${error.status}: ${error.message}`);
-            },
-          });
-      } // End token-not-finalised condition.
-    } // End ID-feature-enabled condition.
+    if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
+      // Donor already has a password so we don't need to set their account details.
+      return;
+    }
+
+    const person = this.buildPersonFromDonation(donation);
+    person.id = idAndJWT.id;
+
+    this.identityService.update(person)
+      .subscribe({
+        next: person => {
+          this.donor = person;
+        },
+        error: (error: HttpErrorResponse) => {
+          // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
+          // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
+          this.matomoTracker.trackEvent('identity_error', 'person_core_data_update_failed', `${error.status}: ${error.message}`);
+        },
+      });
   }
 
   private buildPersonFromDonation(donation: Donation): Person {
