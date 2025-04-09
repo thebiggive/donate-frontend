@@ -101,7 +101,7 @@ div.actions {
     flex-basis: 20%;
   }
 
-  #register-button, #reset-password-button {
+  #register-button-container, #reset-password-button-container {
     margin-bottom: 1em;
     width: 100%;
     flex-basis: 60%;
@@ -111,7 +111,7 @@ div.actions {
   }
 }
 
-#register-button, #reset-password-button, #login-button, #reset-password-button  {
+#register-button-container, #reset-password-button, #login-button, #reset-password-button  {
   width: 80%;
   text-align: center;
   margin: auto;

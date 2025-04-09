@@ -105,7 +105,7 @@
           data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
           #frccaptcha
         ></div>
-        <div id="register-button">
+        <div id="register-button-container">
           <div aria-live="polite">
             @if (processing) {
               <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
@@ -113,7 +113,9 @@
           </div>
 
           @if (!processing) {
+            <!-- button id below required by regression tests -->
             <biggive-button
+              id="register-button"
               space-above="5"
               spaceBelow="0"
               colour-scheme="primary"
