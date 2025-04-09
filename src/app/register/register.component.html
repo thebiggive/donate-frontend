@@ -117,7 +117,7 @@
               space-above="5"
               spaceBelow="0"
               colour-scheme="primary"
-              label="Register"
+              [label]="(flags.requireEmailVerification && !verificationCodeSupplied) ? 'Continue' : 'Register'"
               full-width="true"
               disabled="!registrationForm.valid"
               size="medium"
