@@ -15,7 +15,7 @@
       @if (redirectPath.startsWith('/regular-giving')) {
         <p>Please register for a a Big Give donation account to set up your regular giving agreement.</p>
         <p>You will be able to log-in any time to see your donations or cancel the agreement.</p>
-      } @else {
+      } @else if (! this.emailVerificationToken){
       <p>
         Registering for a Donor Account is quick and easy.
       </p>
@@ -42,6 +42,70 @@
 
         </app-verify-email>
 
+      } @else if (this.emailVerificationToken?.valid) {
+        <p>
+          For a smoother giving experience create a Big Give account. Your information will be saved securely, making
+          future donations quicker and easier.
+        </p>
+
+        <p>
+          <strong>Your payment card</strong> will be saved for reuse, if you selected "
+          Save payment details for future purchases" when making your donation.
+          It is held securely only with Stripe.
+          <a href="https://stripe.com/docs/security/stripe" target="_blank">
+            <mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>
+            Learn more about Stripe
+          </a>.
+        </p>
+
+        <form
+          [formGroup]="registerPostDonationForm"
+          (keydown.enter)="registerPostDonation()"
+        >
+          <div class="savedDetails">
+          <div class="label">
+            Email Address</div>
+            <div class="value"> <strong>{{this.emailVerificationToken?.email_address}}</strong>
+            </div>
+          <div class="label">
+            Name
+          </div>
+            <div class="value"> {{this.emailVerificationToken?.first_name}} {{this.emailVerificationToken?.last_name}}
+            </div>
+
+          </div>
+
+          <biggive-text-input spaceBelow="4">
+            <label slot="label" for="password">Password *</label>
+            <input
+              slot="input"
+              matInput type="password" id="password-post-donation" formControlName="password">
+          </biggive-text-input>
+
+          <div class="register-button-container">
+            <div aria-live="polite">
+              @if (processing) {
+                <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
+              }
+            </div>
+
+            @if (!processing) {
+              <biggive-button
+                id="register-button-post-donation"
+                space-above="5"
+                spaceBelow="0"
+                colour-scheme="primary"
+                label="Register"
+                full-width="true"
+                disabled="!registrationForm.valid"
+                size="medium"
+                rounded="false"
+                (click)="registerPostDonation()"
+              />
+            }
+          </div>
+
+        </form>
       } @else {
       <form
         [formGroup]="registrationForm"
@@ -105,7 +169,7 @@
           data-puzzle-endpoint="https://api.friendlycaptcha.com/api/v1/puzzle, https://eu-api.friendlycaptcha.eu/api/v1/puzzle"
           #frccaptcha
         ></div>
-        <div id="register-button-container">
+        <div class="register-button-container">
           <div aria-live="polite">
             @if (processing) {
               <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
@@ -130,8 +194,10 @@
         </div>
       </div>
       }
+      @if (!emailVerificationToken) {
       <hr style="margin: 20px auto;">
       Already have an account? <a href="{{loginLink}}">Login here</a>
+      }
     </biggive-page-section>
   </div>
 </main>

@@ -1,4 +1,14 @@
-import {AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild
+} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
 import {ComponentsModule} from "@biggive/components-angular";
 import {MatButtonModule} from "@angular/material/button";
@@ -22,10 +32,12 @@ import {NavigationService} from "../navigation.service";
 import {BackendError, errorDescription, errorDetails} from "../backendError";
 import {addBodyClass, removeBodyClass} from '../bodyStyle';
 import {VerifyEmailComponent} from '../verify-email/verify-email.component';
+import {EmailVerificationToken} from '../email-verification-token.resolver';
+import {MatIcon} from '@angular/material/icon';
 
 @Component({
     selector: 'app-register',
-  imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule, VerifyEmailComponent],
+  imports: [ComponentsModule, MatButtonModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, ReactiveFormsModule, MatAutocompleteModule, VerifyEmailComponent, MatIcon],
     templateUrl: './register.component.html',
     styleUrl: 'register.component.scss'
 })
@@ -39,6 +51,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   protected processing = false;
   protected error?: string;
   registrationForm!: FormGroup;
+  registerPostDonationForm!: FormGroup;
   private readyToLogIn = false;
   protected errorHtml: SafeHtml | undefined;
   private friendlyCaptchaSolution: string|undefined;
@@ -47,7 +60,9 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   protected redirectPath: string = 'my-account';
   protected loginLink!: string;
   protected verificationLinkSentToEmail? : string;
+
   protected verificationCodeSupplied?: string;
+  protected emailVerificationToken?: EmailVerificationToken;
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -58,6 +73,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly activatedRoute: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: Object,
   ) {
+    this.emailVerificationToken = this.activatedRoute.snapshot.data.emailVerificationToken;
   }
 
   ngOnDestroy() {
@@ -228,6 +244,11 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get readyToTakeAccountDetails(): boolean {
-    return !!this.verificationCodeSupplied || ! flags.requireEmailVerification
+    return !!this.verificationCodeSupplied || this.emailVerificationToken?.valid || ! flags.requireEmailVerification
+  }
+
+  registerPostDonation() {
+    alert(
+      "Function still to be built to register using donor UUID and Password and secret token, UUID: " + this.emailVerificationToken?.person_uuid + " secret token: " + this.emailVerificationToken?.secretNumber)
   }
 }
