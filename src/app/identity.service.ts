@@ -3,8 +3,8 @@ import {EventEmitter, Inject, Injectable, InjectionToken} from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import {CookieService} from 'ngx-cookie-service';
 import {MatomoTracker} from 'ngx-matomo-client';
-import {Observable, of} from 'rxjs';
-import {delay, retry, tap} from 'rxjs/operators';
+import {firstValueFrom, Observable, of} from 'rxjs';
+import {delay, map, retry, tap} from 'rxjs/operators';
 
 import {Credentials} from './credentials.model';
 import {environment} from '../environments/environment';
@@ -12,6 +12,7 @@ import {IdentityJWT} from './identity-jwt.model';
 import {Person} from './person.model';
 import {FundingInstruction} from './fundingInstruction.model';
 import {STRIPE_SESSION_SECRET_COOKIE_NAME} from "./donation.service";
+import {EmailVerificationToken} from './email-verification-token.resolver';
 
 @Injectable({
   providedIn: 'root',
@@ -251,6 +252,15 @@ export class IdentityService {
         'X-Tbg-Auth': jwt,
       }),
     };
+  }
+
+  async getEmailVerificationTokenDetails({secretNumber, personUUID}: {
+    secretNumber: string | undefined;
+    personUUID: string | undefined
+  }): Promise<EmailVerificationToken> {
+    const uri = `${environment.identityApiPrefix}/emailVerificationToken/${secretNumber}/${personUUID}`;
+
+    return firstValueFrom(this.http.get(uri).pipe(map(((response: any) => response.token))));
   }
 }
 export function getPersonAuthHttpOptions(jwt?: string): { headers: HttpHeaders } {
