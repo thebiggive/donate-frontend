@@ -106,6 +106,14 @@
           </div>
 
         </form>
+      } @else if (this.emailVerificationToken && ! this.emailVerificationToken.valid) {
+        <p>Sorry, we couldn't find your details. Your account registration link may have expired.</p>
+        <p>
+          <!-- href not routerlink because this component was built with a bit too much of an imperative style
+               and won't react to the change params properly if we allow angular to re-use it.
+          -->
+          <a href="/register">Register a new Big Give account</a>
+        </p>
       } @else {
       <form
         [formGroup]="registrationForm"
