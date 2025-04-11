@@ -82,6 +82,19 @@
               matInput type="password" id="password-post-donation" formControlName="password">
           </biggive-text-input>
 
+          <div aria-live="polite">
+            @if (errorHtml) {
+              <p class="error" aria-live="assertive">
+                Registration error: <span [innerHtml]="errorHtml"></span>
+              </p>
+            }
+            @if (error) {
+              <p class="error" aria-live="assertive">
+                {{ error }}
+              </p>
+            }
+          </div>
+
           <div class="register-button-container">
             <div aria-live="polite">
               @if (processing) {
