@@ -255,7 +255,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     try {
-      const response = await this.identityService.setFirstPasswordWithToken(password!, this.emailVerificationToken!)
+      await this.identityService.setFirstPasswordWithToken(password!, this.emailVerificationToken!)
     } catch (error: any) {
       this.extractErrorMessage(error);
       this.processing = false;
