@@ -269,6 +269,7 @@ export class IdentityService {
    * message.
    */
   async setFirstPasswordWithToken(password: string, {person_uuid, secretNumber}: EmailVerificationToken): Promise<Object> {
+    // @todo add an Identity route with UUID included & then switch Donate's used route over
     const uri = `${environment.identityApiPrefix}/people/setFirstPassword`;
 
     return firstValueFrom(this.http.post(
