@@ -113,21 +113,18 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   /**
-   *     no-op.
-   *     function body removed for now as seems to cause intermittent problems with layout on Desktop
-   *     and iOS Safari.
-   *     See COM-102 comments.
-   *
-   * Previously:
    * Component library's `<biggive-button/>`, which is also part of composed components like
    * `<biggive-campaign-card/>`, emits this custom event on click. This lets us swap in the
    * smoother in-app Angular routing for internal links automatically, without complicating the
    * input to the buttons.
    */
-  @HostListener('doButtonClick', ['$event']) onDoButtonClick(_event: CustomEvent) {
-    // no-op
-    // @to-do: Either restore and fix, or remove this function entirely and remove the event emitter it depends on
-    // from https://github.com/thebiggive/components/blob/cf6175ea0272eac2219e87db78389df0eeb87ca8/src/components/biggive-button/biggive-button.tsx#L15
+  @HostListener('doButtonClick', ['$event']) onDoButtonClick(event: CustomEvent) {
+    const url = event.detail.url;
+
+    if (url.startsWith(this.baseHref)) {
+      event.detail.event.preventDefault();
+      this.router.navigateByUrl(url.replace(this.baseHref, ''));
+    } // Else fall back to normal link behaviour
   }
 
   ngOnInit() {
