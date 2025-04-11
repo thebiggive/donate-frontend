@@ -262,7 +262,26 @@ export class IdentityService {
 
     return firstValueFrom(this.http.get(uri).pipe(map(((response: any) => response.token))));
   }
+
+  /**
+   * After a non-logged in donor donates they have an account but there is no password set on it. This method
+   * allows setting a password using the secret number that we emailed to them in their donation confirmation
+   * message.
+   */
+  async setFirstPasswordWithToken(password: string, {person_uuid, secretNumber}: EmailVerificationToken): Promise<Object> {
+    // @todo add an Identity route with UUID included & then switch Donate's used route over
+    const uri = `${environment.identityApiPrefix}/people/setFirstPassword`;
+
+    return firstValueFrom(this.http.post(
+      uri,
+      {
+        personUuid: person_uuid,
+        secret: secretNumber,
+        password: password,
+      }));
+  }
 }
+
 export function getPersonAuthHttpOptions(jwt?: string): { headers: HttpHeaders } {
   if (!jwt) {
     return { headers: new HttpHeaders({}) };

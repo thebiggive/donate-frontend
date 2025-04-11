@@ -16,7 +16,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {IdentityService} from "../identity.service";
 import {environment} from "../../environments/environment";
 import {EMAIL_REGEXP} from "../validators/patterns";
@@ -34,6 +34,7 @@ import {addBodyClass, removeBodyClass} from '../bodyStyle';
 import {VerifyEmailComponent} from '../verify-email/verify-email.component';
 import {EmailVerificationToken} from '../email-verification-token.resolver';
 import {MatIcon} from '@angular/material/icon';
+import {minPasswordLength} from '../../environments/common';
 
 @Component({
     selector: 'app-register',
@@ -51,7 +52,11 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   protected processing = false;
   protected error?: string;
   registrationForm!: FormGroup;
-  registerPostDonationForm!: FormGroup;
+
+  protected registerPostDonationForm = new FormGroup({
+    password: new FormControl('', [Validators.required, Validators.minLength(minPasswordLength)]),
+  });
+
   private readyToLogIn = false;
   protected errorHtml: SafeHtml | undefined;
   private friendlyCaptchaSolution: string|undefined;
@@ -157,16 +162,6 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private doRegistrationAndLogin(captchaResponse: string|undefined = undefined) {
-    const extractErrorMessage = (error: BackendError) => {
-      const errorInfo = errorDetails(error);
-      if (errorInfo.htmlDescription) {
-        // this HTML can only have come back from our identity server, which we consider trustworthy.
-        this.errorHtml = this.sanitizer.bypassSecurityTrustHtml(errorInfo.htmlDescription)
-      } else {
-        this.error = errorDescription(error);
-      }
-    }
-
     const emailAddress = (this.verificationCodeSupplied && this.verificationLinkSentToEmail) || this.registrationForm.value.emailAddress;
     const firstName = this.registrationForm.value.firstName;
     const lastName = this.registrationForm.value.lastName;
@@ -199,7 +194,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
               })
             },
             error: async (error) => {
-              extractErrorMessage(error);
+              this.extractErrorMessage(error);
               this.friendlyCaptchaWidget.reset()
               await this.friendlyCaptchaWidget.start();
               this.processing = false;
@@ -208,7 +203,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
           });
         },
         error: (error) => {
-          extractErrorMessage(error);
+          this.extractErrorMessage(error);
           this.friendlyCaptchaWidget.reset()
           this.processing = false;
         }
@@ -247,8 +242,40 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     return !!this.verificationCodeSupplied || this.emailVerificationToken?.valid || ! flags.requireEmailVerification
   }
 
-  registerPostDonation() {
-    alert(
-      "Function still to be built to register using donor UUID and Password and secret token, UUID: " + this.emailVerificationToken?.person_uuid + " secret token: " + this.emailVerificationToken?.secretNumber)
+  async registerPostDonation() {
+    this.processing = true;
+    this.registerPostDonationForm.markAllAsTouched();
+    const password = this.registerPostDonationForm.value.password
+
+    const passwordErrors = this.registerPostDonationForm.controls.password.errors;
+    if (passwordErrors?.required) {
+      this.error = "Password is required"
+      this.processing = false
+      return;
+    }
+
+    try {
+      await this.identityService.setFirstPasswordWithToken(password!, this.emailVerificationToken!)
+    } catch (error: any) {
+      this.extractErrorMessage(error);
+      this.processing = false;
+      return;
+    }
+
+    const state: LoginNavigationState = {newAccountRegistration: true};
+    await this.router.navigateByUrl("/login" + '?r=' + encodeURIComponent(this.redirectPath), {
+      state: state
+    })
+    this.processing = false;
+  }
+
+  private extractErrorMessage = (error: BackendError) => {
+    const errorInfo = errorDetails(error);
+    if (errorInfo.htmlDescription) {
+      // this HTML can only have come back from our identity server, which we consider trustworthy.
+      this.errorHtml = this.sanitizer.bypassSecurityTrustHtml(errorInfo.htmlDescription)
+    } else {
+      this.error = errorDescription(error);
+    }
   }
 }
