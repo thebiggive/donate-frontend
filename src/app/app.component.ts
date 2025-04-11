@@ -1,4 +1,4 @@
-import {isPlatformBrowser} from '@angular/common';
+import {APP_BASE_HREF, isPlatformBrowser} from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -75,6 +75,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
   protected showingDedicatedCookiePreferencesPage: boolean | undefined;
 
   constructor(
+    @Inject(APP_BASE_HREF) private baseHref: string,
     private identityService: IdentityService,
     private donationService: DonationService,
     private getSiteControlService: GetSiteControlService,
