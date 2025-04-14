@@ -130,7 +130,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.friendlyCaptchaWidget.start()
   }
 
-  register(): void {
+  async register(): Promise<void> {
     this.errorHtml = this.error = undefined;
 
     if (!this.registrationForm.valid && this.readyToTakeAccountDetails) {
@@ -158,17 +158,16 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.processing = true;
-    this.doRegistrationAndLogin(this.friendlyCaptchaSolution);
+    await this.doRegistrationAndLogin(this.friendlyCaptchaSolution);
   }
 
-  private doRegistrationAndLogin(captchaResponse: string|undefined = undefined) {
+  private async doRegistrationAndLogin(captchaResponse: string|undefined = undefined) {
     const emailAddress = (this.verificationCodeSupplied && this.verificationLinkSentToEmail) || this.registrationForm.value.emailAddress;
     const firstName = this.registrationForm.value.firstName;
     const lastName = this.registrationForm.value.lastName;
 
     if (flags.requireEmailVerification && ! this.verificationCodeSupplied) {
-      this.verificationLinkSentToEmail = emailAddress;
-      this.processing = false;
+      await this.requestVerificationCode(captchaResponse, emailAddress);
       return;
     }
 
@@ -209,6 +208,41 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
     );
+  }
+
+  private async requestVerificationCode(captchaResponse: string | undefined, emailAddress: string) {
+    if (!captchaResponse) {
+      this.error = 'Captcha error – please try again';
+        return;
+    }
+
+    const emailErrors = this.registrationForm.controls?.emailAddress?.errors;
+    if (emailErrors) {
+      // only concerned with email address errors as we are not using other parts of the form for this action.
+      if (emailErrors?.['required']) {
+        this.error = 'Email address is required';
+      } else if (!!emailErrors?.['pattern']) {
+        this.error = `'${emailErrors!['pattern'].actualValue}' is not a recognised email address`;
+      } else {
+        console.error({registrationFormWithErrors: this.registrationForm});
+        this.error = 'Unknown Error - please try again or contact us if this error persists';
+      }
+
+      this.processing = false;
+      return;
+    }
+
+    try {
+      await this.identityService.requestEmailAuthToken(emailAddress, {captcha_code: captchaResponse});
+      this.verificationLinkSentToEmail = emailAddress;
+    } catch (error: any) {
+      this.extractErrorMessage(error);
+      this.friendlyCaptchaWidget.reset()
+      await this.friendlyCaptchaWidget.start()
+    }
+    this.processing = false;
+
+    return
   }
 
   private login(captchaResponse: string | undefined) {

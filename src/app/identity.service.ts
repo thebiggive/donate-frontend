@@ -263,6 +263,22 @@ export class IdentityService {
     return firstValueFrom(this.http.get(uri).pipe(map(((response: any) => response.token))));
   }
 
+  async requestEmailAuthToken(emailAddress: string, {captcha_code}: {captcha_code: string} ): Promise<Object> {
+    const uri = `${environment.identityApiPrefix}/emailVerificationToken/`;
+
+    return firstValueFrom(this.http.post(
+      uri,
+      {
+        emailAddress,
+      },
+      {
+       headers: {
+         "x-captcha-code": captcha_code
+       }
+      }
+      ));
+  }
+
   /**
    * After a non-logged in donor donates they have an account but there is no password set on it. This method
    * allows setting a password using the secret number that we emailed to them in their donation confirmation
