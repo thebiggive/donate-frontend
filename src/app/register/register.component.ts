@@ -176,34 +176,21 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       email_address: emailAddress,
       first_name: firstName,
       last_name: lastName,
+      raw_password: this.registrationForm.value.password,
+      secretNumber: this.verificationCodeSupplied,
     }).subscribe({
-        next: initialPerson => {
-          // would like to move the line below inside `identityService.create` but that caused test errors when I tried
-          this.identityService.saveJWT(initialPerson.id as string, initialPerson.completion_jwt as string);
-
-          initialPerson.raw_password = this.registrationForm.value.password;
-
-          this.identityService.update(initialPerson).subscribe({
-            next: async () => {
-              // We can't re-use a captcha code twice, so auto-login won't work right now. For now we just
-              // redirect to the login form
-              const state: LoginNavigationState = {newAccountRegistration: true};
-              await this.router.navigateByUrl("/login" + '?r=' + encodeURIComponent(this.redirectPath), {
-                state: state
-              })
-            },
-            error: async (error) => {
-              this.extractErrorMessage(error);
-              this.friendlyCaptchaWidget.reset()
-              await this.friendlyCaptchaWidget.start();
-              this.processing = false;
-              this.friendlyCaptcha.nativeElement
-            }
-          });
+        next: async () => {
+          // We can't re-use a captcha code twice, so auto-login won't work right now. For now we just
+          // redirect to the login form
+          const state: LoginNavigationState = {newAccountRegistration: true};
+          await this.router.navigateByUrl("/login" + '?r=' + encodeURIComponent(this.redirectPath), {
+            state: state
+          })
         },
-        error: (error) => {
+        error: async (error) => {
           this.extractErrorMessage(error);
           this.friendlyCaptchaWidget.reset()
+          await this.friendlyCaptchaWidget.start();
           this.processing = false;
         }
       }
@@ -237,11 +224,11 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       this.verificationLinkSentToEmail = emailAddress;
     } catch (error: any) {
       this.extractErrorMessage(error);
-      this.friendlyCaptchaWidget.reset()
-      await this.friendlyCaptchaWidget.start()
+    } finally {
+      this.friendlyCaptchaWidget.reset();
+      await this.friendlyCaptchaWidget.start();
+      this.processing = false;
     }
-    this.processing = false;
-
     return
   }
 

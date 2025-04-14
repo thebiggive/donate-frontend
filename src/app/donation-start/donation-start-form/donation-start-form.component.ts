@@ -1601,9 +1601,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.donor?.id) {
       this.createDonation(donation);
     } else {
-      const person: Person = {};
-      person.captcha_code = this.idCaptchaCode;
-      person.captcha_type = 'friendly_captcha';
+      const person = {
+        captcha_code: this.idCaptchaCode,
+        captcha_type: 'friendly_captcha',
+        raw_password: undefined,
+      } satisfies Person;
+
       this.identityService.create(person).subscribe(
         (person: Person) => {
           // would like to move the line below inside `identityService.create` but that caused test errors when I tried

@@ -50,4 +50,5 @@ export class VerifyEmailComponent {
 
     this.codeEnteredEvent.emit(code);
   }
+
 }

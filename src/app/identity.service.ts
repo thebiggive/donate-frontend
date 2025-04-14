@@ -80,7 +80,10 @@ export class IdentityService {
     );
   }
 
-  create(person: Person): Observable<Person> {
+  /**
+   * secret number (from email verification) will be required soon if setting a password.
+   */
+  create(person: Person & ({secretNumber: string | undefined} | {raw_password: undefined})): Observable<Person> {
     return this.http.post<Person>(
       `${environment.identityApiPrefix}${this.peoplePath}`,
       person).pipe(
