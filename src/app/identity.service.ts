@@ -296,6 +296,25 @@ export class IdentityService {
         password: password,
       }));
   }
+
+  async checkNewAccountEmailVerificationTokenValid({emailAddress, secret}: {
+    secret: string;
+    emailAddress: string | undefined
+  }): Promise<boolean> {
+    try {
+      const {token} = await firstValueFrom(this.http.post(
+        `${environment.identityApiPrefix}/emailVerificationToken/check-is-valid-no-person-id`,
+        {
+          emailAddress,
+          secret,
+        },
+      ) as Observable<{token: EmailVerificationToken}>);
+
+      return token.valid;
+    } catch (error) {
+      return false;
+    }
+  }
 }
 
 export function getPersonAuthHttpOptions(jwt?: string): { headers: HttpHeaders } {

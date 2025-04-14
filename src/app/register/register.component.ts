@@ -266,10 +266,23 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  verificationCodeEntered(verificationCode: string) {
-    // @todo - do the actual verification with backend - for now we're just going to pretend
-    // we know this is correct so we can see how the UX feels outside of production.
-   this.verificationCodeSupplied = verificationCode;
+  async verificationCodeEntered(verificationCode: string) {
+    this.processing = true;
+    const tokenValid = await this.identityService.checkNewAccountEmailVerificationTokenValid(
+      {secret: verificationCode, emailAddress: this.verificationLinkSentToEmail}
+    );
+
+    console.log({tokenValid});
+
+    if (! tokenValid) {
+      this.error = "Sorry, we couldn't confirm that code. You may refresh the page to try again."
+      this.processing = false;
+      return;
+    }
+
+    this.error = undefined;
+    this.verificationCodeSupplied = verificationCode;
+    this.processing = false;
   }
 
   get readyToTakeAccountDetails(): boolean {
