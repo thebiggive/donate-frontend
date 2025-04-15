@@ -3,8 +3,8 @@ import {EventEmitter, Inject, Injectable, InjectionToken} from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import {CookieService} from 'ngx-cookie-service';
 import {MatomoTracker} from 'ngx-matomo-client';
-import {Observable, of} from 'rxjs';
-import {delay, retry, tap} from 'rxjs/operators';
+import {firstValueFrom, Observable, of} from 'rxjs';
+import {delay, map, retry, tap} from 'rxjs/operators';
 
 import {Credentials} from './credentials.model';
 import {environment} from '../environments/environment';
@@ -12,6 +12,7 @@ import {IdentityJWT} from './identity-jwt.model';
 import {Person} from './person.model';
 import {FundingInstruction} from './fundingInstruction.model';
 import {STRIPE_SESSION_SECRET_COOKIE_NAME} from "./donation.service";
+import {EmailVerificationToken} from './email-verification-token.resolver';
 
 @Injectable({
   providedIn: 'root',
@@ -79,7 +80,10 @@ export class IdentityService {
     );
   }
 
-  create(person: Person): Observable<Person> {
+  /**
+   * secret number (from email verification) will be required soon if setting a password.
+   */
+  create(person: Person & ({secretNumber: string | undefined} | {raw_password: undefined})): Observable<Person> {
     return this.http.post<Person>(
       `${environment.identityApiPrefix}${this.peoplePath}`,
       person).pipe(
@@ -252,7 +256,70 @@ export class IdentityService {
       }),
     };
   }
+
+  async getEmailVerificationTokenDetails({secretNumber, personUUID}: {
+    secretNumber: string | undefined;
+    personUUID: string | undefined
+  }): Promise<EmailVerificationToken> {
+    const uri = `${environment.identityApiPrefix}/emailVerificationToken/${secretNumber}/${personUUID}`;
+
+    return firstValueFrom(this.http.get(uri).pipe(map(((response: any) => response.token))));
+  }
+
+  async requestEmailAuthToken(emailAddress: string, {captcha_code}: {captcha_code: string} ): Promise<Object> {
+    const uri = `${environment.identityApiPrefix}/emailVerificationToken/`;
+
+    return firstValueFrom(this.http.post(
+      uri,
+      {
+        emailAddress,
+      },
+      {
+       headers: {
+         "x-captcha-code": captcha_code
+       }
+      }
+      ));
+  }
+
+  /**
+   * After a non-logged in donor donates they have an account but there is no password set on it. This method
+   * allows setting a password using the secret number that we emailed to them in their donation confirmation
+   * message.
+   */
+  async setFirstPasswordWithToken(password: string, {person_uuid, secretNumber}: EmailVerificationToken): Promise<Object> {
+    // @todo add an Identity route with UUID included & then switch Donate's used route over
+    const uri = `${environment.identityApiPrefix}/people/setFirstPassword`;
+
+    return firstValueFrom(this.http.post(
+      uri,
+      {
+        personUuid: person_uuid,
+        secret: secretNumber,
+        password: password,
+      }));
+  }
+
+  async checkNewAccountEmailVerificationTokenValid({emailAddress, secret}: {
+    secret: string;
+    emailAddress: string | undefined
+  }): Promise<boolean> {
+    try {
+      const {token} = await firstValueFrom(this.http.post(
+        `${environment.identityApiPrefix}/emailVerificationToken/check-is-valid-no-person-id`,
+        {
+          emailAddress,
+          secret,
+        },
+      ) as Observable<{token: EmailVerificationToken}>);
+
+      return token.valid;
+    } catch (error) {
+      return false;
+    }
+  }
 }
+
 export function getPersonAuthHttpOptions(jwt?: string): { headers: HttpHeaders } {
   if (!jwt) {
     return { headers: new HttpHeaders({}) };

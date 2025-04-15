@@ -38,7 +38,7 @@ import {Campaign} from '../../campaign.model';
 import {CardIconsService} from '../../card-icons.service';
 import {campaignHiddenMessage} from '../../../environments/common';
 import {countryOptions} from '../../countries';
-import {Donation, maximumDonationAmount} from '../../donation.model';
+import {Donation, maximumDonationAmount, OVERSEAS} from '../../donation.model';
 import {DonationCreatedResponse} from '../../donation-created-response.model';
 import {DonationService} from '../../donation.service';
 import {DonationStartMatchConfirmDialogComponent} from '../donation-start-match-confirm-dialog.component';
@@ -703,6 +703,66 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         billingPostcode: this.giftAidGroup.value.homePostcode,
       });
     }
+
+    if (
+      event.selectedIndex > this.paymentStepIndex &&
+      this.donor &&
+      this.donation
+    ) {
+      this.updateNewPersonInBackend(this.donation);
+    }
+  }
+
+  /**
+   * Updates the name and email address of the new person in the backend. Required at this stage for
+   * the email address in particular so that there will be a ready to use email verification token
+   * for when the donation is confirmed.
+   */
+  private updateNewPersonInBackend(donation: Donation) {
+    const idAndJWT = this.identityService.getIdAndJWT();
+    if (!idAndJWT) {
+      console.error("Missing auth info, can't push person update to backend")
+      return;
+    }
+
+    if (this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
+      // Donor already has a password so we don't need to set their account details.
+      return;
+    }
+
+    const person = this.buildPersonFromDonation(donation);
+    person.id = idAndJWT.id;
+
+    this.identityService.update(person)
+      .subscribe({
+        next: person => {
+          this.donor = person;
+        },
+        error: (error: HttpErrorResponse) => {
+          // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
+          // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
+          this.matomoTracker.trackEvent('identity_error', 'person_core_data_update_failed', `${error.status}: ${error.message}`);
+        },
+      });
+  }
+
+  private buildPersonFromDonation(donation: Donation): Person {
+    const idAndJWT = this.identityService.getIdAndJWT();
+
+    let person: Person = {
+      id: idAndJWT!.id,
+      email_address: donation.emailAddress,
+      first_name: donation.firstName,
+      last_name: donation.lastName,
+    };
+
+    if (donation.giftAid) {
+      person.home_address_line_1 = donation.homeAddress;
+      person.home_postcode = donation.homePostcode === OVERSEAS ? undefined : donation.homePostcode;
+      person.home_country_code = donation.homePostcode === OVERSEAS ? OVERSEAS : 'GB';
+    }
+
+    return person;
   }
 
   private runFinalPreSubmitUpdate() {
@@ -1541,9 +1601,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.donor?.id) {
       this.createDonation(donation);
     } else {
-      const person: Person = {};
-      person.captcha_code = this.idCaptchaCode;
-      person.captcha_type = 'friendly_captcha';
+      const person = {
+        captcha_code: this.idCaptchaCode,
+        captcha_type: 'friendly_captcha',
+        raw_password: undefined,
+      } satisfies Person;
+
       this.identityService.create(person).subscribe(
         (person: Person) => {
           // would like to move the line below inside `identityService.create` but that caused test errors when I tried

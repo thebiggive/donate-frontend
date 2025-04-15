@@ -34,7 +34,7 @@ export const environment: Environment = {
       publishableKey: 'pk_test_51GxbdTKkGuKkxwBNorvoPNKbbvEAwCjxfxOBd8lFZWAVkbJoXdFEDXOrbBbebAotP0vqLSntrLzs0Fvr7P7n0yjO00E3c61L5W',
     },
   },
-  reservationMinutes: 30,
+  reservationMinutes: 3,
   showDebugInfo: true,
 };
 

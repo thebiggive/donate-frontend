@@ -10,3 +10,13 @@ form {
 }
 
 @include abstract.friendly-captcha();
+
+.savedDetails {
+  .label {
+    margin-top: 1em;
+  }
+  .value {
+    padding-top: 5px;
+    border-bottom: 1px solid abstract.$colour-primary;
+  }
+}

@@ -28,6 +28,7 @@ import {myMandatesResolver} from './my-mandates.resolver';
 import {CancelMandateComponent} from './cancel-mandate/cancel-mandate.component';
 import {ChangeRegularGivingComponent} from './change-regular-giving/change-regular-giving.component';
 import {setupIntentResolver} from './setupIntent.resolver';
+import {EmailVerificationTokenResolver} from './email-verification-token.resolver';
 export const registerPath = 'register';
 export const myAccountPath = 'my-account';
 export const transferFundsPath = 'transfer-funds';
@@ -271,6 +272,9 @@ export const routes: Routes = [
     canActivate: [
       redirectIfAlreadyLoggedIn,
     ],
+    resolve: {
+      emailVerificationToken: EmailVerificationTokenResolver,
+    },
   },
   /** For use when donor clicks logout in the menu on the wordpress site **/
   {

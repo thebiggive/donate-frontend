@@ -95,6 +95,10 @@ export class DonationThanksComponent implements OnInit {
 
   protected get showRegistrationPrompt(): boolean
   {
+    if (! this.flags.offerNewAccountAfterDonation) {
+      return false;
+    }
+
     return !this.registrationComplete &&  // if they already registered they can't register again.
       !this.loggedIn && // if they registered and logged in they can't register again
       !!this.person // if we don't know who they are any more they can't register.
@@ -218,6 +222,10 @@ export class DonationThanksComponent implements OnInit {
   }
 
   private setPassword(password: string, stayLoggedIn: boolean) {
+    if (! flags.offerNewAccountAfterDonation) {
+      throw new Error("Donor not expected to set password this way now.")
+    }
+
     if (!this.person) {
       this.matomoTracker.trackEvent('identity_error', 'person_password_set_missing_data', 'No person in component');
       this.registerError = 'Cannot set password without a person';
@@ -264,31 +272,6 @@ export class DonationThanksComponent implements OnInit {
       this.noAccess = true; // If we don't have the local auth token we can never load the details.
       return;
     }
-
-    if (!this.patchedCorePersonInfo) {
-      const idAndJWT = this.identityService.getIdAndJWT();
-      if (idAndJWT) {
-        let person = this.buildPersonFromDonation(donation);
-        person.id = idAndJWT.id;
-
-        // Try to patch the person only if they're not already a finalised donor account,
-        // e.g. they could have set a password then reloaded this page.
-        if (! this.identityService.isTokenForFinalisedUser(idAndJWT.jwt)) {
-          this.identityService.update(person)
-            .subscribe({
-              next: person => {
-                this.patchedCorePersonInfo = true;
-                this.person = person;
-              },
-              error: (error: HttpErrorResponse) => {
-                // For now we probably don't really need to inform donors if we didn't patch their Person data, and just won't ask them to
-                // set a password if the first step failed. We'll want to monitor Analytics for any patterns suggesting a problem in the logic though.
-                this.matomoTracker.trackEvent('identity_error', 'person_core_data_update_failed', `${error.status}: ${error.message}`);
-              },
-            });
-        } // End token-not-finalised condition.
-      } // Else no ID JWT saved. Donor may have already set a password but opted to log out.
-    } // End ID-feature-enabled condition.
 
     this.donation = donation;
     this.campaignService.getOneById(donation.projectId).subscribe(campaign => {
@@ -353,21 +336,6 @@ export class DonationThanksComponent implements OnInit {
     return (this.retryBaseIntervalSeconds * 1000) * 2 ** tries;
   }
 
-  private buildPersonFromDonation(donation: Donation): Person {
-    let person: Person = {
-      email_address: donation.emailAddress,
-      first_name: donation.firstName,
-      last_name: donation.lastName,
-    };
-
-    if (donation.giftAid) {
-      person.home_address_line_1 = donation.homeAddress;
-      person.home_postcode = donation.homePostcode === OVERSEAS ? undefined : donation.homePostcode;
-      person.home_country_code = donation.homePostcode === OVERSEAS ? OVERSEAS : 'GB';
-    }
-
-    return person;
-  }
 
   private setSocialShares(campaign: Campaign) {
     const prefix = environment.donateUriPrefix;

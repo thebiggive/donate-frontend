@@ -1,0 +1,42 @@
+<h2>Verify your email</h2>
+
+<p>Enter the 6-digit code we sent to {{emailAddress}}</p>
+
+<form
+  [formGroup]="emailConfirmationForm"
+  (keydown.enter)="onFormSubmit()"
+>
+  <biggive-text-input spaceBelow="4">
+    <label slot="label" for="code">Verification code</label>
+    <input
+      slot="input"
+      matInput type="email" id="code" formControlName="code" autocapitalize="off"
+      [maxlength]="6">
+  </biggive-text-input>
+
+  <div aria-live="polite">
+    @if (error) {
+      <p class="error" aria-live="assertive">
+        {{ error }}
+      </p>
+    }
+  </div>
+
+  <div>
+    @if (processing) {
+      <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>
+    } @else {
+      <biggive-button
+        space-above="5"
+        spaceBelow="0"
+        colour-scheme="primary"
+        label="Continue"
+        full-width="true"
+        size="medium"
+        rounded="false"
+        (click)="onFormSubmit()"
+      />
+    }
+  </div>
+
+</form>

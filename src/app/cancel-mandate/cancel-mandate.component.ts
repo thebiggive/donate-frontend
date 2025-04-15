@@ -6,7 +6,7 @@ import {MoneyPipe} from '../money.pipe';
 import {OrdinalPipe} from '../ordinal.pipe';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatInput} from '@angular/material/input';
-import {AsyncPipe, isPlatformBrowser} from '@angular/common';
+import {AsyncPipe} from '@angular/common';
 import {PageMetaService} from '../page-meta.service';
 import {RegularGivingService} from '../regularGiving.service';
 import {BackendError, errorDescription} from '../backendError';
