@@ -14,6 +14,14 @@
       [maxlength]="6">
   </biggive-text-input>
 
+  <div aria-live="polite">
+    @if (error) {
+      <p class="error" aria-live="assertive">
+        {{ error }}
+      </p>
+    }
+  </div>
+
   <div>
     @if (processing) {
       <mat-spinner color="primary" diameter="30" aria-label="Processing"></mat-spinner>

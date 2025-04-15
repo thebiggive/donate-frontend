@@ -130,7 +130,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.friendlyCaptchaWidget.start()
   }
 
-  register(): void {
+  async register(): Promise<void> {
     this.errorHtml = this.error = undefined;
 
     if (!this.registrationForm.valid && this.readyToTakeAccountDetails) {
@@ -158,17 +158,16 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.processing = true;
-    this.doRegistrationAndLogin(this.friendlyCaptchaSolution);
+    await this.doRegistrationAndLogin(this.friendlyCaptchaSolution);
   }
 
-  private doRegistrationAndLogin(captchaResponse: string|undefined = undefined) {
+  private async doRegistrationAndLogin(captchaResponse: string|undefined = undefined) {
     const emailAddress = (this.verificationCodeSupplied && this.verificationLinkSentToEmail) || this.registrationForm.value.emailAddress;
     const firstName = this.registrationForm.value.firstName;
     const lastName = this.registrationForm.value.lastName;
 
     if (flags.requireEmailVerification && ! this.verificationCodeSupplied) {
-      this.verificationLinkSentToEmail = emailAddress;
-      this.processing = false;
+      await this.requestVerificationCode(captchaResponse, emailAddress);
       return;
     }
 
@@ -177,38 +176,60 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
       email_address: emailAddress,
       first_name: firstName,
       last_name: lastName,
+      raw_password: this.registrationForm.value.password,
+      secretNumber: this.verificationCodeSupplied,
     }).subscribe({
-        next: initialPerson => {
-          // would like to move the line below inside `identityService.create` but that caused test errors when I tried
-          this.identityService.saveJWT(initialPerson.id as string, initialPerson.completion_jwt as string);
-
-          initialPerson.raw_password = this.registrationForm.value.password;
-
-          this.identityService.update(initialPerson).subscribe({
-            next: async () => {
-              // We can't re-use a captcha code twice, so auto-login won't work right now. For now we just
-              // redirect to the login form
-              const state: LoginNavigationState = {newAccountRegistration: true};
-              await this.router.navigateByUrl("/login" + '?r=' + encodeURIComponent(this.redirectPath), {
-                state: state
-              })
-            },
-            error: async (error) => {
-              this.extractErrorMessage(error);
-              this.friendlyCaptchaWidget.reset()
-              await this.friendlyCaptchaWidget.start();
-              this.processing = false;
-              this.friendlyCaptcha.nativeElement
-            }
-          });
+        next: async () => {
+          // We can't re-use a captcha code twice, so auto-login won't work right now. For now we just
+          // redirect to the login form
+          const state: LoginNavigationState = {newAccountRegistration: true};
+          await this.router.navigateByUrl("/login" + '?r=' + encodeURIComponent(this.redirectPath), {
+            state: state
+          })
         },
-        error: (error) => {
+        error: async (error) => {
           this.extractErrorMessage(error);
           this.friendlyCaptchaWidget.reset()
+          await this.friendlyCaptchaWidget.start();
           this.processing = false;
         }
       }
     );
+  }
+
+  private async requestVerificationCode(captchaResponse: string | undefined, emailAddress: string) {
+    if (!captchaResponse) {
+      this.error = 'Captcha error – please try again';
+        return;
+    }
+
+    const emailErrors = this.registrationForm.controls?.emailAddress?.errors;
+    if (emailErrors) {
+      // only concerned with email address errors as we are not using other parts of the form for this action.
+      if (emailErrors?.['required']) {
+        this.error = 'Email address is required';
+      } else if (!!emailErrors?.['pattern']) {
+        this.error = `'${emailErrors!['pattern'].actualValue}' is not a recognised email address`;
+      } else {
+        console.error({registrationFormWithErrors: this.registrationForm});
+        this.error = 'Unknown Error - please try again or contact us if this error persists';
+      }
+
+      this.processing = false;
+      return;
+    }
+
+    try {
+      await this.identityService.requestEmailAuthToken(emailAddress, {captcha_code: captchaResponse});
+      this.verificationLinkSentToEmail = emailAddress;
+    } catch (error: any) {
+      this.extractErrorMessage(error);
+    } finally {
+      this.friendlyCaptchaWidget.reset();
+      await this.friendlyCaptchaWidget.start();
+      this.processing = false;
+    }
+    return
   }
 
   private login(captchaResponse: string | undefined) {
@@ -232,10 +253,23 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  verificationCodeEntered(verificationCode: string) {
-    // @todo - do the actual verification with backend - for now we're just going to pretend
-    // we know this is correct so we can see how the UX feels outside of production.
-   this.verificationCodeSupplied = verificationCode;
+  async verificationCodeEntered(verificationCode: string) {
+    this.processing = true;
+    const tokenValid = await this.identityService.checkNewAccountEmailVerificationTokenValid(
+      {secret: verificationCode, emailAddress: this.verificationLinkSentToEmail}
+    );
+
+    console.log({tokenValid});
+
+    if (! tokenValid) {
+      this.error = "Sorry, we couldn't confirm that code. You may refresh the page to try again."
+      this.processing = false;
+      return;
+    }
+
+    this.error = undefined;
+    this.verificationCodeSupplied = verificationCode;
+    this.processing = false;
   }
 
   get readyToTakeAccountDetails(): boolean {

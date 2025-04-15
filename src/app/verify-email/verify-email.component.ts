@@ -23,6 +23,10 @@ export class VerifyEmailComponent {
 
   @Input({required: true}) emailAddress!: string;
 
+  // @todo id-47 - work out why this doesn't seem to be updating when value in parent `register` component is updated
+  // in case where wrong verification code is entered.
+  @Input() error?: string | undefined;
+
   @Input() processing = false
 
   @Output() codeEnteredEvent = new EventEmitter<string>();
@@ -46,4 +50,5 @@ export class VerifyEmailComponent {
 
     this.codeEnteredEvent.emit(code);
   }
+
 }

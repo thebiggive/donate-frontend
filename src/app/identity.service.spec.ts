@@ -54,7 +54,7 @@ describe("IdentityService", () => {
       const service: IdentityService = TestBed.inject(IdentityService);
       const person = getDummyPerson();
 
-      service.create(person).subscribe(
+      service.create({...person, secretNumber: '123456'}).subscribe(
         (result) => {
           expect(result.first_name).toEqual("Michelle");
         },
