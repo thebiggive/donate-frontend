@@ -95,6 +95,10 @@ export class DonationThanksComponent implements OnInit {
 
   protected get showRegistrationPrompt(): boolean
   {
+    if (! this.flags.offerNewAccountAfterDonation) {
+      return false;
+    }
+
     return !this.registrationComplete &&  // if they already registered they can't register again.
       !this.loggedIn && // if they registered and logged in they can't register again
       !!this.person // if we don't know who they are any more they can't register.
@@ -218,6 +222,10 @@ export class DonationThanksComponent implements OnInit {
   }
 
   private setPassword(password: string, stayLoggedIn: boolean) {
+    if (! flags.offerNewAccountAfterDonation) {
+      throw new Error("Donor not expected to set password this way now.")
+    }
+
     if (!this.person) {
       this.matomoTracker.trackEvent('identity_error', 'person_password_set_missing_data', 'No person in component');
       this.registerError = 'Cannot set password without a person';

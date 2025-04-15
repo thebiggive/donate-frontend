@@ -43,6 +43,9 @@ export class DonationThanksSetPasswordDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (! flags.offerNewAccountAfterDonation) {
+      throw new Error('Delete this component when unused in all envs');
+    }
     this.form = this.formBuilder.group({
       password: [null, [
         Validators.required,
