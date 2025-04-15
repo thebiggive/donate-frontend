@@ -12,7 +12,8 @@ const flagsForEnvironment = (environmentId: EnvironmentID) => {
     stripeElementCardChoice: true,
 
     // before this is enabled in prod the registration form needs to actually do realy verification with the backend.
-    requireEmailVerification: environmentId !== 'production',
+    // Need to update test for regular giving when enabling this in regression environment.
+    requireEmailVerification: environmentId !== 'production' && environmentId !== 'regression',
   } as const;
 }
 
