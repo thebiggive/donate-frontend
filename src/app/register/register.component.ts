@@ -262,7 +262,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log({tokenValid});
 
     if (! tokenValid) {
-      this.error = "Sorry, we couldn't confirm that code. Please try again, or refresh the page and re-enter your email address to generate a new code."
+      this.error = "Sorry, we couldn't confirm that code. You may refresh the page to try again."
       this.processing = false;
       return;
     }
