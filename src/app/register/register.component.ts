@@ -166,7 +166,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     const firstName = this.registrationForm.value.firstName;
     const lastName = this.registrationForm.value.lastName;
 
-    if (flags.requireEmailVerification && ! this.verificationCodeSupplied) {
+    if (! this.verificationCodeSupplied) {
       await this.requestVerificationCode(captchaResponse, emailAddress);
       return;
     }
@@ -273,7 +273,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get readyToTakeAccountDetails(): boolean {
-    return !!this.verificationCodeSupplied || this.emailVerificationToken?.valid || ! flags.requireEmailVerification
+    return !!this.verificationCodeSupplied || !!this.emailVerificationToken?.valid
   }
 
   async registerPostDonation() {
