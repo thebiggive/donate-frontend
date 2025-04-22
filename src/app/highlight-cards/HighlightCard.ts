@@ -118,11 +118,18 @@ function backgroundImage(sfApiHighlightCard: SfApiHighlightCard, donateUriPrefix
 }
 
 export function SFHighlightCardsToFEHighlightCards(apiHighlightCards: SfApiHighlightCard[]): HighlightCard[] {
-  return apiHighlightCards.map(
-  card => SFAPIHighlightCardToHighlightCard(
-    environment.experienceUriPrefix,
-    environment.blogUriPrefix,
-    environment.donateUriPrefix,
-    card
-  ))
+  const cards = apiHighlightCards.map(
+    card => SFAPIHighlightCardToHighlightCard(
+      environment.experienceUriPrefix,
+      environment.blogUriPrefix,
+      environment.donateUriPrefix,
+      card
+    ));
+
+  // temp code, remove after GMF 2025
+  cards.sort((cardA, cardB) =>
+    (Number)(cardB.campaignFamily === 'greenMatchFund') - (Number)(cardA.campaignFamily === 'greenMatchFund')
+  );
+
+  return cards
 }
