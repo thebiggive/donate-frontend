@@ -6,7 +6,7 @@ import {Observable, of} from 'rxjs';
 
 import {CampaignService} from "./campaign.service";
 import {HighlightCard} from "./highlight-cards/HighlightCard";
-import {logCalloutError} from './logCalloutError';
+import {logCampaignCalloutError} from './logCampaignCalloutError';
 import {isPlatformBrowser} from '@angular/common';
 
 @Injectable(
@@ -23,7 +23,7 @@ export class HighlightCardsResolver implements Resolve<readonly HighlightCard[]>
     return this.campaignService.getHomePageHighlightCards().pipe(
       // If the HighlightCards API has any error we still want to show the rest of the homepage, so we catch the error
       catchError(error => {
-        logCalloutError(isPlatformBrowser((this.platformId)), `HighlightCardsResolver: ${error.message}`, undefined, this.matomoTracker);
+        logCampaignCalloutError(isPlatformBrowser((this.platformId)), `HighlightCardsResolver: ${error.message}`, undefined, this.matomoTracker);
         return of([]);
       })
     );
