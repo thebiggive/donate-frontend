@@ -1,6 +1,6 @@
 import {MatomoTracker} from 'ngx-matomo-client';
 
-export const logCalloutError = (
+export const logCampaignCalloutError = (
   isBrowser: boolean,
   context: string,
   calloutIdentifier?: string,

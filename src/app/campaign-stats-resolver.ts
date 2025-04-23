@@ -7,7 +7,7 @@ import {catchError} from 'rxjs/operators';
 
 import {CampaignService} from "./campaign.service";
 import {FormattedCampaignStats} from './campaign-stats.model';
-import {logCalloutError} from './logCalloutError';
+import {logCampaignCalloutError} from './logCampaignCalloutError';
 
 @Injectable(
   {providedIn: 'root'}
@@ -23,7 +23,7 @@ export class CampaignStatsResolver implements Resolve<FormattedCampaignStats>{
     return this.campaignService.getCampaignImpactStats().pipe(
       // If the HighlightCards API has any error we still want to show the rest of the homepage, so we catch the error
       catchError(error => {
-        logCalloutError(isPlatformBrowser((this.platformId)), `CampaignStatsResolver: ${error.message}`, undefined, this.matomoTracker);
+        logCampaignCalloutError(isPlatformBrowser((this.platformId)), `CampaignStatsResolver: ${error.message}`, undefined, this.matomoTracker);
         return of({totalRaisedFormatted: '£–', totalCountFormatted: '–'});
       })
     );
