@@ -64,6 +64,7 @@ import {requiredNotBlankValidator} from "../../validators/notBlank";
 import {WidgetInstance} from "friendly-challenge";
 import {Toast} from "../../toast.service";
 import {GIFT_AID_FACTOR} from '../../Money';
+import {noLongNumberValidator} from '../../validators/noLongNumberValidator';
 
 declare var _paq: {
   push: (args: Array<string|object>) => void,
@@ -367,10 +368,12 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
         firstName: [null, [
           Validators.maxLength(40),
           requiredNotBlankValidator,
+          noLongNumberValidator,
         ]],
         lastName: [null, [
           Validators.maxLength(80),
           requiredNotBlankValidator,
+          noLongNumberValidator,
         ]],
         emailAddress: [null, [
           requiredNotBlankValidator,
