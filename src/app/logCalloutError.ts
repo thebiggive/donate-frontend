@@ -3,20 +3,20 @@ import {MatomoTracker} from 'ngx-matomo-client';
 export const logCalloutError = (
   isBrowser: boolean,
   context: string,
-  calloutUrl?: string,
+  calloutIdentifier?: string,
   matomoTracker?: MatomoTracker,
 ) => {
   if (!isBrowser) {
-    console.error('Server-side error in: ' + context + '. Callout URL: ' + calloutUrl);
+    console.error('Server-side error in: ' + context + '. Callout identifier: ' + calloutIdentifier);
     return;
   }
 
-  console.error('Client-side error in: ' + context + '. Callout URL: ' + calloutUrl);
+  console.error('Client-side error in: ' + context + '. Callout identifier: ' + calloutIdentifier);
   if (matomoTracker) {
     matomoTracker.trackEvent(
-      'donate_error',
+      'campaign_error',
       'callout_error',
-      context + ' – ' + calloutUrl,
+      context + ' – ' + calloutIdentifier,
     );
   }
 };
