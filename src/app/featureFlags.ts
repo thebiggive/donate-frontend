@@ -28,9 +28,9 @@ const flagsForEnvironment: (environmentId: EnvironmentID) => flags = (environmen
     case 'development':
       return {regularGivingEnabled: true, requireEmailVerification: true, offerNewAccountAfterDonation: false};
     case 'regression':
-      return {regularGivingEnabled: true, requireEmailVerification: true, offerNewAccountAfterDonation: true};
+      return {regularGivingEnabled: true, requireEmailVerification: true, offerNewAccountAfterDonation: false};
     case "staging":
-      return {regularGivingEnabled: true, requireEmailVerification: true, offerNewAccountAfterDonation: true};
+      return {regularGivingEnabled: true, requireEmailVerification: true, offerNewAccountAfterDonation: false};
     case "production":
       return {regularGivingEnabled: false, requireEmailVerification: true, offerNewAccountAfterDonation: false};
   }
