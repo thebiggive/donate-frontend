@@ -46,7 +46,7 @@
             },
             "stylePreprocessorOptions": {
               "sass": {
-                "fatalDeprecations": ["mixed-decls", "color-functions", "global-builtin", "import"],
+                "fatalDeprecations": ["mixed-decls", "color-functions", "global-builtin", "import"]
               }
             }
           },
