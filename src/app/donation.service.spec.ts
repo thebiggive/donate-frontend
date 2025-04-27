@@ -107,10 +107,10 @@ describe("DonationService", () => {
       expect(mockPost.request.method).toEqual("POST");
       expect(mockPost.cancelled).toBeFalsy();
       expect(mockPost.request.responseType).toEqual("json");
-      const donationCreatedResponse = new DonationCreatedResponse(
-        donation,
-        "mockJwtheader.mockJwtBody.mockJwtSignature"
-      );
+      const donationCreatedResponse = {
+        donation: donation,
+        jwt: "mockJwtheader.mockJwtBody.mockJwtSignature"
+      } satisfies DonationCreatedResponse;
       mockPost.flush(donationCreatedResponse);
 
       httpMock.verify();
