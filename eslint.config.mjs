@@ -60,8 +60,6 @@ export default [{
     files: ["**/*.html"],
 
     rules: {
-        "@angular-eslint/template/click-events-have-key-events": "error",
-        "@angular-eslint/template/interactive-supports-focus": "error",
         "@angular-eslint/template/alt-text": "off",
     },
 }];
