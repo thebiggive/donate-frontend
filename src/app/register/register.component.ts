@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly router: Router,
     private sanitizer: DomSanitizer,
     private readonly activatedRoute: ActivatedRoute,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {
     this.emailVerificationToken = this.activatedRoute.snapshot.data.emailVerificationToken;
   }

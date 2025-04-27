@@ -35,7 +35,7 @@ export class DonationService {
     private http: HttpClient,
     private identityService: IdentityService,
     private matomoTracker: MatomoTracker,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
 
     @Inject(SESSION_STORAGE) private sessionStorage: StorageService,
     private cookieService: CookieService,

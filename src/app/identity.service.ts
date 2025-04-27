@@ -266,7 +266,7 @@ export class IdentityService {
     return firstValueFrom(this.http.get(uri).pipe(map(((response: any) => response.token))));
   }
 
-  async requestEmailAuthToken(emailAddress: string, {captcha_code}: {captcha_code: string} ): Promise<Object> {
+  async requestEmailAuthToken(emailAddress: string, {captcha_code}: {captcha_code: string} ): Promise<object> {
     const uri = `${environment.identityApiPrefix}/emailVerificationToken/`;
 
     return firstValueFrom(this.http.post(
@@ -287,7 +287,7 @@ export class IdentityService {
    * allows setting a password using the secret number that we emailed to them in their donation confirmation
    * message.
    */
-  async setFirstPasswordWithToken(password: string, {person_uuid, secretNumber}: EmailVerificationToken): Promise<Object> {
+  async setFirstPasswordWithToken(password: string, {person_uuid, secretNumber}: EmailVerificationToken): Promise<object> {
     // @todo add an Identity route with UUID included & then switch Donate's used route over
     const uri = `${environment.identityApiPrefix}/people/setFirstPassword`;
 

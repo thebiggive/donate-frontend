@@ -44,7 +44,7 @@ export class CampaignDetailsComponent implements OnInit, OnDestroy {
     private location: Location,
     private navigationService: NavigationService,
     private pageMeta: PageMetaService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,

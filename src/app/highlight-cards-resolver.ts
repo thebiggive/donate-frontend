@@ -16,7 +16,7 @@ export class HighlightCardsResolver implements Resolve<readonly HighlightCard[]>
   constructor(
     private campaignService: CampaignService,
     private matomoTracker: MatomoTracker,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {}
 
   resolve(_route: ActivatedRouteSnapshot) : Observable<readonly HighlightCard[]> {

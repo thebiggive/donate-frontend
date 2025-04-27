@@ -38,7 +38,7 @@ export default [{
         }],
         "@typescript-eslint/no-unused-vars": "off",
         "@angular-eslint/prefer-standalone": "off",
-        "@typescript-eslint/ban-types": "off",
+        // "@typescript-eslint/ban-types": "off",
         "no-extra-boolean-cast": "off",
         "no-prototype-builtins": "off",
         "@typescript-eslint/ban-ts-comment": "off",

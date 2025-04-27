@@ -47,7 +47,7 @@ export class MyPaymentMethodsComponent implements OnInit, OnDestroy{
     private regularGivingService: RegularGivingService,
     public dialog: MatDialog,
     private toaster: Toast,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {}
 
   ngOnInit(): void {

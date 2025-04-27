@@ -81,7 +81,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     private getSiteControlService: GetSiteControlService,
     private navigationService: NavigationService,
     private cookiePreferenceService: CookiePreferenceService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private matomoTracker: MatomoTracker,
     private router: Router,
   ) {

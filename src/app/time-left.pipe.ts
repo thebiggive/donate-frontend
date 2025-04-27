@@ -37,7 +37,7 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
   value?: Date;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private ref: ChangeDetectorRef,
   ) {
     super(ref);

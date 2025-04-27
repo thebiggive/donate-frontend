@@ -249,7 +249,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private matomoTracker: MatomoTracker,
     private pageMeta: PageMetaService,
     private addressService: AddressService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private route: ActivatedRoute,
     private router: Router,
     private stripeService: StripeService,

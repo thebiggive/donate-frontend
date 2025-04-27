@@ -68,7 +68,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     private donorAccountService: DonorAccountService,
     private identityService: IdentityService,
     private matomoTracker: MatomoTracker,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private addressService: AddressService,
     private toast: Toast,
   ) {}
