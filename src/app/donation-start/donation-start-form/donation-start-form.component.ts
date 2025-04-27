@@ -69,10 +69,6 @@ declare let _paq: {
   push: (args: Array<string|object>) => void,
 };
 
-// As on regular-giving form, these opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
-// and prefilling them with 'no' values in that case.
-const marketingBooleansDefaultValue = environment.environmentId === 'regression' ? false : null;
-
 @Component({
   selector: 'app-donation-start-form',
   templateUrl: './donation-start-form.component.html',
@@ -120,13 +116,11 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   creditPenceToUse = 0; // Set non-zero if logged in and Customer has a credit balance to spend. Caps donation amount too in that case.
   currencySymbol!: string;
 
-  // No explicit types on these FormGroup fields as TS infers the precise types
-  // from assignments in constructor.
-  protected donationForm;
-  protected amountsGroup;
-  protected giftAidGroup;
-  protected paymentGroup;
-  protected marketingGroup;
+  donationForm!: FormGroup;
+  amountsGroup!: FormGroup;
+  giftAidGroup!: FormGroup;
+  paymentGroup!: FormGroup;
+  marketingGroup!: FormGroup;
 
   maximumDonationAmount!: number;
   maximumTipPercentage = 30 as const;
@@ -276,67 +270,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.manuallySelectedABTestVariant == 'B') {
       this.zeroTipTextABTestVariant = 'B';
     }
-
-    this.donationForm = this.formBuilder.group({
-      amounts: this.formBuilder.group({
-        donationAmount: [null, [
-          requiredNotBlankValidator,
-          getCurrencyMinValidator(1), // min donation is £1
-          getCurrencyMaxValidator(),
-          Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
-        ]],
-        tipPercentage: [this.tipPercentage], // See setConditionalValidators().
-        tipAmount: [null], // See setConditionalValidators()
-      }),
-      giftAid: this.formBuilder.group({
-        giftAid: [null],        // See addUKValidators().
-        homeAddress: [null],  // See setConditionalValidators().
-        homeBuildingNumber: [null],
-        homeOutsideUK: [null],
-        homePostcode: [null], // See setConditionalValidators().
-      }),
-      marketing: this.formBuilder.group({
-        optInCharityEmail: [marketingBooleansDefaultValue, requiredNotBlankValidator],
-        optInTbgEmail: [marketingBooleansDefaultValue, requiredNotBlankValidator],
-        optInChampionEmail: [marketingBooleansDefaultValue],
-      }),
-      payment: this.formBuilder.group({
-        firstName: [null, [
-          Validators.maxLength(40),
-          requiredNotBlankValidator,
-          noLongNumberValidator,
-        ]],
-        lastName: [null, [
-          Validators.maxLength(80),
-          requiredNotBlankValidator,
-          noLongNumberValidator,
-        ]],
-        emailAddress: [null, [
-          requiredNotBlankValidator,
-          // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
-          Validators.pattern(EMAIL_REGEXP),
-        ]],
-        billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
-        billingPostcode: [null],  // See setConditionalValidators().
-      }),
-      // T&Cs agreement is implicit through submitting the form.
-    } as const satisfies {
-      amounts: FormGroup,   // Matching reservation happens at the end of this group.
-      giftAid: FormGroup,
-      marketing: FormGroup,
-      payment: FormGroup,  // Always present now we're Stripe-only.
-    });
-
-    this.amountsGroup = this.donationForm.controls['amounts'];
-
-    this.giftAidGroup = this.donationForm.controls['giftAid'];
-
-    this.paymentGroup = this.donationForm.controls['payment'];
-
-    this.marketingGroup = this.donationForm.controls['marketing'];
-
   }
-
 
   ngOnDestroy() {
     if (this.donation) {
@@ -396,6 +330,88 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     }
 
     this.setCampaignBasedVars();
+
+    // As on regular-giving form, these opt-in radio buttons seem awkward to click using our regression testing setup, so cheating
+    // and prefilling them with 'no' values in that case.
+    const marketingBooleansDefaultValue = environment.environmentId === 'regression' ? false : null;
+
+    const formGroups: {
+      amounts: FormGroup,   // Matching reservation happens at the end of this group.
+      giftAid: FormGroup,
+      marketing: FormGroup,
+      payment: FormGroup,  // Always present now we're Stripe-only.
+    } = {
+      amounts: this.formBuilder.group({
+        donationAmount: [null, [
+          requiredNotBlankValidator,
+          getCurrencyMinValidator(1), // min donation is £1
+          getCurrencyMaxValidator(),
+          Validators.pattern('^[£$]?[0-9]+?(\\.00)?$'),
+        ]],
+        tipPercentage: [this.tipPercentage], // See setConditionalValidators().
+        tipAmount: [null], // See setConditionalValidators()
+      }),
+      giftAid: this.formBuilder.group({
+        giftAid: [null],        // See addUKValidators().
+        homeAddress: [null],  // See setConditionalValidators().
+        homeBuildingNumber: [null],
+        homeOutsideUK: [null],
+        homePostcode: [null], // See setConditionalValidators().
+      }),
+      marketing: this.formBuilder.group({
+        optInCharityEmail: [marketingBooleansDefaultValue, requiredNotBlankValidator],
+        optInTbgEmail: [marketingBooleansDefaultValue, requiredNotBlankValidator],
+        optInChampionEmail: [marketingBooleansDefaultValue],
+      }),
+      payment: this.formBuilder.group({
+        firstName: [null, [
+          Validators.maxLength(40),
+          requiredNotBlankValidator,
+          noLongNumberValidator,
+        ]],
+        lastName: [null, [
+          Validators.maxLength(80),
+          requiredNotBlankValidator,
+          noLongNumberValidator,
+        ]],
+        emailAddress: [null, [
+          requiredNotBlankValidator,
+          // Regex below originally based on EMAIL_REGEXP in donate-frontend/node_modules/@angular/forms/esm2020/src/validators.mjs
+          Validators.pattern(EMAIL_REGEXP),
+        ]],
+        billingCountry: [this.defaultCountryCode], // See setConditionalValidators().
+        billingPostcode: [null],  // See setConditionalValidators().
+      }),
+      // T&Cs agreement is implicit through submitting the form.
+    };
+
+    this.donationForm = this.formBuilder.group(formGroups);
+
+    // Current strict type checks mean we need to do this for the compiler to be happy that
+    // the groups are not null.
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    const amountsGroup: any = this.donationForm.get('amounts');
+    if (amountsGroup != null) {
+      this.amountsGroup = amountsGroup;
+    }
+
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    const giftAidGroup: any = this.donationForm.get('giftAid');
+    if (giftAidGroup != null) {
+      this.giftAidGroup = giftAidGroup;
+    }
+
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    const paymentGroup: any = this.donationForm.get('payment');
+    if (paymentGroup != null) {
+      this.paymentGroup = paymentGroup;
+    }
+
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    const marketingGroup: any = this.donationForm.get('marketing');
+    if (marketingGroup != null) {
+      this.marketingGroup = marketingGroup;
+    }
 
     this.amountsGroup.get('tipAmount')?.valueChanges.subscribe((tipAmount: string) => {
       this.tipValue = sanitiseCurrency(tipAmount?.trim());
