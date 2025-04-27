@@ -210,12 +210,15 @@
 
             @if (campaign.additionalImageUris.length > 0) {
               <div class="c-additional">
+                <!-- I think we didn't collect alt-text from charities for these images, so can't show it here -->
+                <!-- eslint-disable @angular-eslint/template/alt-text -->
                 @for (image of campaign.additionalImageUris; track $index) {
                   <img
                     [src]="image.uri | optimisedImage:850 | async"
                     class="c-additional__images"
                   >
                 }
+                <!-- eslint-enable @angular-eslint/template/alt-text -->
               </div>
             }
 

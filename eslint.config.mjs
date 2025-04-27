@@ -60,6 +60,6 @@ export default [{
     files: ["**/*.html"],
 
     rules: {
-        "@angular-eslint/template/alt-text": "off",
+      // add any customisations wanted for rules in html files here.
     },
 }];
