@@ -4,7 +4,7 @@ import {ComponentsModule} from '@biggive/components-angular';
 import {Mandate} from "../mandate.model";
 import {MoneyPipe} from '../money.pipe';
 import {OrdinalPipe} from '../ordinal.pipe';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatInput} from '@angular/material/input';
 import {AsyncPipe} from '@angular/common';
 import {PageMetaService} from '../page-meta.service';
