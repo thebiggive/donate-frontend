@@ -36,14 +36,26 @@ export default [{
             prefix: "app",
             style: "kebab-case",
         }],
-        "@typescript-eslint/no-unused-vars": "off",
+
+        // The following rules are recommend by either angular-eslint typescript-eslint, but we were not following
+        // them in all places at time of setting up eslint. Leaving them turned off for now as a sort of crude baseline.
+        // Consider turning any or all of them back on and fixing issues.
         "@angular-eslint/prefer-standalone": "off",
-        // "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-unused-vars": ["error", {
+            // https://johnnyreilly.com/typescript-eslint-no-unused-vars
+            // intentionally ignored vars, args etc must start with underscore
+            args: "all",
+            argsIgnorePattern: "^_",
+            caughtErrors: "all",
+            caughtErrorsIgnorePattern: "^_",
+            destructuredArrayIgnorePattern: "^_",
+            varsIgnorePattern: "^_",
+            ignoreRestSiblings: true
+        }],
         "no-extra-boolean-cast": "off",
         "no-prototype-builtins": "off",
-        "@typescript-eslint/ban-ts-comment": "off",
         "no-unexpected-multiline": "off",
-        "no-useless-escape": "off",
     },
 }, ...compat.extends(
     "plugin:@angular-eslint/template/recommended",

@@ -36,7 +36,7 @@ export class CardIconsService {
     try {
       this.getCardIcon(brand);
       return true;
-    } catch (e) {
+    } catch (_e) {
       return false;
     }
   }

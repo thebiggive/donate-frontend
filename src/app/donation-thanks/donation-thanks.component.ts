@@ -8,7 +8,7 @@ import {MatomoTracker} from 'ngx-matomo-client';
 import {Campaign} from '../campaign.model';
 import {CampaignService} from '../campaign.service';
 import {Credentials} from '../credentials.model';
-import {Donation, isLargeDonation, OVERSEAS} from '../donation.model';
+import {Donation, isLargeDonation} from '../donation.model';
 import {DonationService} from '../donation.service';
 import {environment} from '../../environments/environment';
 import {minPasswordLength} from '../../environments/common';

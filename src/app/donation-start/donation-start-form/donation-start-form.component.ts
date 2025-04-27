@@ -23,7 +23,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatomoTracker} from 'ngx-matomo-client';
 import {retry} from 'rxjs/operators';
 import {
-  ConfirmationToken,
   ConfirmationTokenResult,
   PaymentIntent,
   PaymentMethod,
@@ -658,17 +657,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.donation && event.selectedIndex > 1) {
       // After create() update all Angular form data on step changes, except billing
       // postcode & country which can be set manually or via PRB callbacks.
-      updateDonationFromForm(
-        event,
-        this.tipValue,
-        this.donation,
-        this.paymentGroup,
-        this.amountsGroup,
-        this.giftAidGroup,
-        this.donationService,
-        this.campaign,
-        this.marketingGroup,
-      );
+      updateDonationFromForm(this.tipValue, this.donation, this.paymentGroup, this.amountsGroup, this.giftAidGroup, this.donationService, this.marketingGroup);
 
       // And if we're about to submit, patch the donation in MatchBot and prevent submission
       // until the latest is persisted. Previously we did this after submit button press but
@@ -2224,7 +2213,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
                 if (! this.donor?.id) {
                   throw new Error("Person identifier went away");
                 }
-                this.loadPerson(person, this.donor.id, jwt)
+                this.loadPerson(person, jwt)
               });
             }
           },
@@ -2290,7 +2279,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return false;
   }
 
-  public loadPerson(person: Person, id: string, jwt: string) {
+  public loadPerson(person: Person, jwt: string) {
     this.donor = person; // Should mean donations are attached to the Stripe Customer.
 
     // Only tokens for Identity users with a password have enough access to load payment methods, use credit

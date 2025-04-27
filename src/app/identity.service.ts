@@ -1,5 +1,5 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {EventEmitter, Inject, Injectable, InjectionToken} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import {CookieService} from 'ngx-cookie-service';
 import {MatomoTracker} from 'ngx-matomo-client';
@@ -314,7 +314,7 @@ export class IdentityService {
       ) as Observable<{token: EmailVerificationToken}>);
 
       return token.valid;
-    } catch (error) {
+    } catch (_e) {
       return false;
     }
   }

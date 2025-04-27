@@ -433,7 +433,7 @@ describe('DonationStartForm', () => {
     // Ensure form groups are ready, otherwise we get lots of errors from validation updates
     // etc. on undefined elements.
     await waitForAsync(() => {
-      sut.loadPerson({cash_balance: {gbp: 0}}, 'personID', 'jwt');
+      sut.loadPerson({cash_balance: {gbp: 0}}, 'jwt');
     });
 
     await sut.payWithStripe();

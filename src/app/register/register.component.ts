@@ -3,7 +3,6 @@ import {
   Component,
   ElementRef,
   Inject,
-  Input,
   OnDestroy,
   OnInit,
   PLATFORM_ID,

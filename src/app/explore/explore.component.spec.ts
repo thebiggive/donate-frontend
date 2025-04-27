@@ -130,6 +130,7 @@ describe("ExploreComponent", () => {
   function makeComponentWithCampaign(campaign: Campaign) {
     const noop = () => {};
 
+    // @ts-expect-error
     const pipe = new TimeLeftPipe("browser", {
       markForCheck: noop,
     } as unknown as ChangeDetectorRef);
