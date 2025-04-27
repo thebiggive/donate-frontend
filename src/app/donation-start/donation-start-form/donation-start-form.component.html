@@ -54,7 +54,7 @@
               </label>
               <input
                 maxlength="10"
-                formControlName="donationAmount" id="donationAmount" matInput
+                [formControl]="this.amountsGroup.controls.donationAmount" id="donationAmount" matInput
                 slot="input"
               />
             </biggive-text-input>
@@ -126,7 +126,7 @@
                             <label slot="label" for="tipAmount">Donation to the Big Give Trust</label>
                             <input
                               maxlength="10"
-                              formControlName="tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status"
+                              [formControl]="this.amountsGroup.controls.tipAmount" id="tipAmount" matInput aria-describedby="custom-tip-status"
                               slot="input"
                               />
                           </biggive-text-input>
@@ -217,7 +217,7 @@
                 <p class="b-grey b-rt-sm">I confirm that I am a UK tax payer and I understand that if I pay less income tax and/or capital gains tax in the current tax year than the amount of Gift Aid claimed on all my donations it is my responsibility to pay the difference.</p>
                 <p class="b-grey b-rt-sm">Gift Aid is a government scheme for UK charities to reclaim the tax you have paid and gain 25% more at no cost or hassle to you.</p>
                 <p><a [href]="termsUrl" target="_blank"><mat-icon class="b-va-bottom" aria-hidden="false" aria-label="Open in new tab">open_in_new</mat-icon>Find out more about Gift Aid</a></p>
-                <mat-radio-group formControlName="giftAid">
+                <mat-radio-group [formControl]="this.giftAidGroup.controls.giftAid">
                   <div class="binary-options">
                     <div class="binary-option">
                       <mat-radio-button class="b-mr-2 gift-aid" labelPosition="after" [value]="true">
@@ -246,7 +246,7 @@
                       <biggive-text-input>
                         <label slot="label" for="homeAddress">Enter your home address</label>
                         <input
-                          formControlName="homeAddress"
+                          [formControl]="this.giftAidGroup.controls.homeAddress"
                           id="homeAddress"
                           matInput
                           slot="input"
@@ -286,7 +286,7 @@
                           <label slot="label" for="homePostcode">Enter your home postcode</label>
                           <input
                             autocomplete="postal-code"
-                            formControlName="homePostcode"
+                            [formControl]="this.giftAidGroup.controls.homePostcode"
                             id="homePostcode"
                             autocapitalize="characters"
                             matInput
@@ -296,7 +296,7 @@
                       </div>
                     }
                     <div class="homeOutsideUK-wrapper">
-                      <mat-checkbox formControlName="homeOutsideUK" id="homeOutsideUK">
+                      <mat-checkbox [formControl]="this.giftAidGroup.controls.homeOutsideUK" id="homeOutsideUK">
                         I live outside the UK
                       </mat-checkbox>
                     </div>
@@ -327,7 +327,7 @@
                 <div>
                   <biggive-text-input>
                     <label slot="label" for="firstName">First Name *</label>
-                    <input slot="input" formControlName="firstName" id="firstName" autocomplete="given-name"  matInput>
+                    <input slot="input" [formControl]="this.paymentGroup.controls.firstName" id="firstName" autocomplete="given-name"  matInput>
                   </biggive-text-input>
                   @if (paymentGroup.get('firstName')?.errors?.maxlength) {
                     <div class="error">Maximum 40 characters exceeded</div>
@@ -336,7 +336,7 @@
                 <div>
                   <biggive-text-input>
                     <label slot="label" for="lastName">Last Name *</label>
-                    <input slot="input" formControlName="lastName" id="lastName" autocomplete="family-name" matInput>
+                    <input slot="input" [formControl]="this.paymentGroup.controls.lastName" id="lastName" autocomplete="family-name" matInput>
                   </biggive-text-input>
                   @if (giftAidGroup.value.giftAid) {
                     <mat-hint>This is for Gift Aid, smooth payment and identifying you if you have questions.</mat-hint>
@@ -351,7 +351,7 @@
                 <div>
                   <biggive-text-input>
                     <label slot="label" for="emailAddress">Email Address *</label>
-                    <input slot="input" formControlName="emailAddress" id="emailAddress" type="email" autocapitalize="off"  autocomplete="email"  matInput>
+                    <input slot="input" [formControl]="this.paymentGroup.controls.emailAddress" id="emailAddress" type="email" autocapitalize="off"  autocomplete="email"  matInput>
                   </biggive-text-input>
                   <mat-hint>We'll send you a donation receipt and use this to
                   confirm it's you in case you have any queries.</mat-hint>
@@ -399,7 +399,7 @@
                     </biggive-form-field-select>
                   <biggive-text-input>
                     <label slot="label" for="billingPostcode">Billing postcode</label>
-                    <input slot="input" formControlName="billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)" autocapitalize="characters" autocomplete="postal-code">
+                    <input slot="input" [formControl]="this.paymentGroup.controls.billingPostcode" id="billingPostcode" matInput (change)="onBillingPostCodeChanged($event)" autocapitalize="characters" autocomplete="postal-code">
                   </biggive-text-input>
                 </div>
               </div>
@@ -434,7 +434,7 @@
               label="Receive updates"
               >
               <p class="binary-question-header b-bold b-rt-0" id="optInCharityEmail-label">Would you be happy to receive email updates from <span class="colour-primary">{{ campaign.charity.name }}</span>?</p>
-              <mat-radio-group aria-labelledby="optInCharityEmail-label" formControlName="optInCharityEmail">
+              <mat-radio-group aria-labelledby="optInCharityEmail-label" [formControl]="this.marketingGroup.controls.optInCharityEmail">
                 <div class="binary-options">
                   <div class="binary-option">
                     <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">
@@ -474,7 +474,7 @@
                 }
               </mat-hint>
               <p class="binary-question-header b-bold b-rt-0" id="optInTbgEmail-label">Would you be happy to receive emails from <span class="colour-primary">Big Give</span>?</p>
-              <mat-radio-group aria-labelledby="optInTbgEmail-label" formControlName="optInTbgEmail">
+              <mat-radio-group aria-labelledby="optInTbgEmail-label" [formControl]="this.marketingGroup.controls.optInTbgEmail">
                 <div class="binary-options">
                   <div class="binary-option">
                     <mat-radio-button class="b-mr-2" labelPosition="after" [value]="true">
@@ -503,7 +503,7 @@
               @if (showChampionOptIn) {
                 <div>
                   <p class="binary-question-header b-bold b-rt-0" id="optInChampionEmail-label">Would you be happy to receive emails from <span class="colour-primary">{{ campaign.championName }}</span>?</p>
-                  <mat-radio-group aria-labelledby="optInChampionEmail-label" formControlName="optInChampionEmail">
+                  <mat-radio-group aria-labelledby="optInChampionEmail-label" [formControl]="this.marketingGroup.controls.optInCharityEmail">
                     <mat-hint>{{ campaign.championOptInStatement }}.</mat-hint>
                     <div class="binary-options">
                       <div class="binary-option">
