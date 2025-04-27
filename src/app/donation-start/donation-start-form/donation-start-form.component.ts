@@ -752,7 +752,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private buildPersonFromDonation(donation: Donation): Person {
     const idAndJWT = this.identityService.getIdAndJWT();
 
-    let person: Person = {
+    const person: Person = {
       id: idAndJWT!.id,
       email_address: donation.emailAddress,
       first_name: donation.firstName,
@@ -954,18 +954,16 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       throw new Error("Missing stripe elements");
     }
 
-    let confirmationTokenResult: ConfirmationTokenResult | undefined;
-    let confirmationToken: ConfirmationToken | undefined;
-    let paymentMethod: PaymentMethod | undefined;
-    confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(
+    const confirmationTokenResult: ConfirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(
       {countryCode: this.donation.countryCode!, billingPostalAddress: this.donation.billingPostalAddress!},
       this.stripeElements
     );
-    confirmationToken = confirmationTokenResult.confirmationToken;
 
-    if (confirmationToken || paymentMethod) {
+    const confirmationToken = confirmationTokenResult.confirmationToken;
+
+    if (confirmationToken) {
       try {
-        result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, {confirmationToken, paymentMethod}));
+        result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, {confirmationToken}));
       } catch (httpError) {
         this.matomoTracker.trackEvent(
           'donate_error',
@@ -2005,7 +2003,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           return;
         }
         parts.shift();
-        let formattedPostcode = parts.join(' ');
+        const formattedPostcode = parts.join(' ');
         if (formattedPostcode !== homePostcodeAsIs) {
           this.giftAidGroup.patchValue({
             homePostcode: formattedPostcode,
@@ -2048,7 +2046,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * @link https://stackoverflow.com/a/54045398/2803757
    */
   private updateAllValidities() {
-    for (let formGroup of [this.amountsGroup, this.giftAidGroup, this.paymentGroup]) {
+    for (const formGroup of [this.amountsGroup, this.giftAidGroup, this.paymentGroup]) {
       // Get each field in each group and update its validity.
       for (const control in formGroup.controls) {
         formGroup.get(control)!.updateValueAndValidity({ emitEvent: false }); // See fn doc re events.

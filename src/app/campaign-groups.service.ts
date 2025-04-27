@@ -85,7 +85,7 @@ export class CampaignGroupsService {
   }
 
   static getBeneficiaryNames(): string[] {
-    let names: string[] = [];
+    const names: string[] = [];
     const beneficiaries: {name: string, icon: IconDefinition}[] = this.getBeneficiaries();
 
     for (let i = 0; i < beneficiaries.length; i++) {
@@ -178,7 +178,7 @@ export class CampaignGroupsService {
   }
 
   static getCategoryNames(): string[] {
-    let names: string[] = [];
+    const names: string[] = [];
     const categories: {name: string, icon: IconDefinition}[] = this.getCategories();
 
     for (let i = 0; i < categories.length; i++) {

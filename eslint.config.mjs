@@ -41,7 +41,6 @@ export default [{
         "@typescript-eslint/no-unused-vars": "off",
         "@angular-eslint/prefer-standalone": "off",
         "no-extra-semi": "off",
-        "prefer-const": "off",
         "@typescript-eslint/ban-types": "off",
         "no-extra-boolean-cast": "off",
         "no-prototype-builtins": "off",

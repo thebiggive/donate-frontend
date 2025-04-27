@@ -206,7 +206,7 @@ export class DonationService {
   }
 
   create(donation: Donation, personId?: string, jwt?: string): Observable<DonationCreatedResponse> {
-    let endpoint = personId
+    const endpoint = personId
       ? `${environment.donationsApiPrefix}/people/${personId}${this.apiPath}`
       : `${environment.donationsApiPrefix}${this.apiPath}`;
 
@@ -378,12 +378,11 @@ export class DonationService {
     );
   }
 
-  confirmCardPayment(donation: Donation, {confirmationToken, paymentMethod}: {confirmationToken?: ConfirmationToken, paymentMethod?: PaymentMethod}):
+  confirmCardPayment(donation: Donation, {confirmationToken}: {confirmationToken?: ConfirmationToken}):
     Observable<{ paymentIntent: { status: PaymentIntent.Status; client_secret: string } }>
   {
     return this.http.post<{paymentIntent: {status: PaymentIntent.Status, client_secret: string}}>(
       `${environment.donationsApiPrefix}/donations/${donation.donationId}/confirm`, {
-        stripePaymentMethodId: paymentMethod?.id,
         stripeConfirmationTokenId: confirmationToken?.id,
       },
       this.getAuthHttpOptions(donation),
