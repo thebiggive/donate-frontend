@@ -34,9 +34,10 @@ import {Observable, Subscription} from 'rxjs';
 export class CancelMandateComponent implements OnInit, OnDestroy {
   protected mandate$: Observable<Mandate>;
   protected readonly reasonMaxLength = 500;
-  protected cancellationForm = new FormGroup({
-    reason: new FormControl('', [Validators.maxLength(this.reasonMaxLength)]),
-  });
+
+  protected reasonFormControl= new FormControl(
+    '', [Validators.maxLength(this.reasonMaxLength)]
+  );
 
   private platformId = inject(PLATFORM_ID);
   protected processing = false;
@@ -72,7 +73,7 @@ export class CancelMandateComponent implements OnInit, OnDestroy {
 
   cancel(mandate: Mandate) {
     this.processing = true;
-    this.regularGivingService.cancel(mandate, {cancellationReason: this.cancellationForm.controls.reason.value || ''}).subscribe(
+    this.regularGivingService.cancel(mandate, {cancellationReason: this.reasonFormControl.value || ''}).subscribe(
       {
         next: async () => {
           this.toaster.showSuccess("Your regular donations to " + mandate.charityName + " will now stop");
