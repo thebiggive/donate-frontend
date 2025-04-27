@@ -390,21 +390,25 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     // Current strict type checks mean we need to do this for the compiler to be happy that
     // the groups are not null.
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const amountsGroup: any = this.donationForm.get('amounts');
     if (amountsGroup != null) {
       this.amountsGroup = amountsGroup;
     }
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const giftAidGroup: any = this.donationForm.get('giftAid');
     if (giftAidGroup != null) {
       this.giftAidGroup = giftAidGroup;
     }
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const paymentGroup: any = this.donationForm.get('payment');
     if (paymentGroup != null) {
       this.paymentGroup = paymentGroup;
     }
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const marketingGroup: any = this.donationForm.get('marketing');
     if (marketingGroup != null) {
       this.marketingGroup = marketingGroup;
@@ -547,7 +551,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // guaranteed set on initial load, and the view is also not guaranteed to update with a
     // rendered #stepper by the time we are the end of `handleCampaign()` or similar.
 
-    const stepper = this.elRef.nativeElement.querySelector('#stepper');
+    const stepper: HTMLElement = this.elRef.nativeElement.querySelector('#stepper');
 
     // Can't do it, already did it, or server-side and so can't add DOM-based event listeners.
     if (!this.stepper || this.stepHeaderEventsSet || !isPlatformBrowser(this.platformId)) {
@@ -556,7 +560,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const stepperHeaders = stepper.getElementsByClassName('mat-step-header');
     for (const stepperHeader of stepperHeaders) {
-      stepperHeader.addEventListener('click', (clickEvent: any) => {
+      stepperHeader.addEventListener('click', (clickEvent) => {
         if (this.stepper.selectedIndex > 0) {
           this.validateAmountsCreateDonorDonationIfPossible(); // Handles amount error if needed, like Continue button does.
           return;
@@ -564,15 +568,15 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
         // usages of clickEvent.target may be wrong - wouldn't type check if we typed clickEvent as PointerEvent
         // instead of Any. But not changing right now as could create regression and doesn't relate to any known bug.
-        if (clickEvent.target.innerText.includes('Your details') && this.stepper.selected?.label === 'Gift Aid') {
+        if ((clickEvent.target as HTMLElement).innerText.includes('Your details') && this.stepper.selected?.label === 'Gift Aid') {
           this.triedToLeaveGiftAid = true;
         }
 
-        if (clickEvent.target.innerText.includes('Confirm') && this.stepper.selected?.label === 'Your details') {
+        if ((clickEvent.target as HTMLElement).innerText.includes('Confirm') && this.stepper.selected?.label === 'Your details') {
           this.triedToLeaveMarketing = true;
         }
 
-        if (this.psp === 'stripe' && clickEvent.target.innerText.includes('Receive updates') && !this.stripePaymentMethodReady) {
+        if (this.psp === 'stripe' && (clickEvent.target as HTMLElement).innerText.includes('Receive updates') && !this.stripePaymentMethodReady) {
           this.jumpToStep('Payment details');
         }
 

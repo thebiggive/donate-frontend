@@ -124,17 +124,19 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
 
     this.creditForm = this.formBuilder.group(formGroups);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const amountsGroup: any = this.creditForm.get('amounts');
     if (amountsGroup != null) {
       this.amountsGroup = amountsGroup;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const giftAidGroup: any = this.creditForm.get('giftAid');
     if (giftAidGroup != null) {
       this.giftAidGroup = giftAidGroup;
     }
 
-    this.marketingGroup = this.creditForm.get('marketing') as FormGroup<any>;
+    this.marketingGroup = this.creditForm.get('marketing') as FormGroup;
 
     // Gift Aid home address fields are validated only if the donor's claiming Gift Aid.
     this.giftAidGroup.get('giftAid')?.valueChanges.subscribe(giftAidChecked => {
@@ -177,7 +179,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
       // itself and swap in the observable on a lookup. But I'm not an expert with RxJS! I think/
       // hope this may also cancel previous outstanding lookup resolutions that are in flight?
       // https://www.learnrxjs.io/learn-rxjs/operators/transformation/switchmap
-      switchMap((initialAddress: any) => {
+      switchMap((initialAddress: string | undefined) => {
         if (!initialAddress) {
           return EMPTY;
         }
@@ -501,6 +503,7 @@ export class TransferFundsComponent implements AfterContentInit, OnInit {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private newDonationError(response: any) {
     let errorMessage: string;
     if (response.message) {

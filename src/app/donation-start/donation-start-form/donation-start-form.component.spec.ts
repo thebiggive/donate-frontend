@@ -45,7 +45,7 @@ function makeDonationStartFormComponent(donationService: DonationService,) {
     } as unknown as ConversionTrackingService,
     undefined as unknown as MatDialog,
     donationService,
-    undefined as unknown as ElementRef<any>,
+    undefined as unknown as ElementRef,
     new FormBuilder(),
     mockIdentityService,
     {
@@ -321,10 +321,12 @@ describe('DonationStartForm', () => {
 
     expect(component.donationForm.controls.amounts!.get('donationAmount')?.errors).toBeNull();
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const optInCharityEmailErrors: any = component.donationForm.controls.marketing!.get('optInCharityEmail')?.errors;
     expect(Object.keys(optInCharityEmailErrors).length).toBe(1);
     expect(optInCharityEmailErrors.required).toBe(true);
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const optInTbgEmailErrors: any = component.donationForm.controls.marketing!.get('optInTbgEmail')?.errors;
     expect(Object.keys(optInTbgEmailErrors).length).toBe(1);
     expect(optInTbgEmailErrors.required).toBe(true);
@@ -362,6 +364,7 @@ describe('DonationStartForm', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const donationAmountErrors: any = component.donationForm.controls.amounts!.get('donationAmount')?.errors;
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.required).toBe(true);
@@ -403,6 +406,7 @@ describe('DonationStartForm', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const donationAmountErrors: any = component.donationForm.controls.amounts!.get('donationAmount')?.errors;
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.min).toBe(true);
@@ -471,6 +475,7 @@ describe('DonationStartForm', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const donationAmountErrors: any = component.donationForm.controls.amounts!.get('donationAmount')?.errors;
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.max).toBe(true);
@@ -512,6 +517,7 @@ describe('DonationStartForm', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const donationAmountErrors: any = component.donationForm.controls.amounts!.get('donationAmount')?.errors;
     expect(Object.keys(donationAmountErrors).length).toBe(1);
     expect(donationAmountErrors.pattern).toEqual({
@@ -556,14 +562,17 @@ describe('DonationStartForm', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const billingCountryErrors: any = component.donationForm.controls.payment!.get('billingPostcode')?.errors;
     expect(Object.keys(billingCountryErrors).length).toBe(1);
     expect(billingCountryErrors.required).toBe(true);
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const billingPostcodeErrors: any = component.donationForm.controls.payment!.get('billingPostcode')?.errors;
     expect(Object.keys(billingPostcodeErrors).length).toBe(1);
     expect(billingPostcodeErrors.required).toBe(true);
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const giftAidErrors: any = component.donationForm.controls.giftAid!.get('giftAid')?.errors;
     expect(Object.keys(giftAidErrors).length).toBe(1);
     expect(giftAidErrors.required).toBe(true);
@@ -601,9 +610,9 @@ describe('DonationStartForm', () => {
 
     expect(component.donationForm.valid).toBe(false);
 
-    const emailAddressErrors: any = component.donationForm.controls.payment!.get('emailAddress')?.errors;
-    expect(Object.keys(emailAddressErrors).length).toBe(1);
-    expect(emailAddressErrors.required).toBe(true);
+    const emailAddressErrors = component.donationForm.controls.payment!.get('emailAddress')?.errors;
+    expect(Object.keys(emailAddressErrors!).length).toBe(1);
+    expect(emailAddressErrors!.required).toBe(true);
 
     expect(component.donationForm.controls.giftAid!.get('giftAid')?.errors).toBeNull();
   });

@@ -222,6 +222,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
     try {
       await this.identityService.requestEmailAuthToken(emailAddress, {captcha_code: captchaResponse});
       this.verificationLinkSentToEmail = emailAddress;
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     } catch (error: any) {
       this.extractErrorMessage(error);
     } finally {
@@ -290,6 +291,7 @@ export class RegisterComponent implements OnInit, OnDestroy, AfterViewInit {
 
     try {
       await this.identityService.setFirstPasswordWithToken(password!, this.emailVerificationToken!)
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     } catch (error: any) {
       this.extractErrorMessage(error);
       this.processing = false;

@@ -263,6 +263,7 @@ export class IdentityService {
   }): Promise<EmailVerificationToken> {
     const uri = `${environment.identityApiPrefix}/emailVerificationToken/${secretNumber}/${personUUID}`;
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     return firstValueFrom(this.http.get(uri).pipe(map(((response: any) => response.token))));
   }
 

@@ -14,7 +14,7 @@ import { environment } from '../environments/environment';
 })
 export class PageMetaService {
   constructor(
-    @Inject(DOCUMENT) private dom: any,
+    @Inject(DOCUMENT) private dom: Document,
     private meta: Meta,
     private router: Router,
     private title: Title,
@@ -23,7 +23,7 @@ export class PageMetaService {
   setCommon(title: string, description: string, imageUri: string|null) {
     const baseUri = environment.donateUriPrefix;
     const canonicalUri = `${baseUri}${this.router.url}`;
-    const links = this.dom.getElementsByTagName('link') as [HTMLLinkElement];
+    const links = this.dom.getElementsByTagName('link');
     // We patch the index 0 `<link />` from the source HTML. Appending a new element
     // causes some crawlers to see pages as duplicate content with different canonical
     // URLs. Angular doesn't seem to provide a more elegant abstraction

@@ -130,8 +130,8 @@ export class SearchService {
    * from the defaults.
    */
   getQueryParams(defaultSort = ''): {[key: string]: string} {
-    const defaults: {[key: string]: any} = SearchService.selectedDefaults(defaultSort);
-    const queryParams: {[key: string]: any} = {};
+    const defaults: {[key: string]: string} = SearchService.selectedDefaults(defaultSort);
+    const queryParams: {[key: string]: string} = {};
     const length = this.selected.term?.length || 0;
 
     for (const key in this.selected) {

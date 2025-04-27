@@ -12,7 +12,7 @@ const compat = new FlatCompat({
 });
 
 export default [{
-    ignores: ["projects/**/*"],
+    ignores: ["projects/**/*", "src/assets/custom-libs/modernizr.d.ts"],
 }, ...compat.extends(
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -36,8 +36,6 @@ export default [{
             prefix: "app",
             style: "kebab-case",
         }],
-
-        "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-unused-vars": "off",
         "@angular-eslint/prefer-standalone": "off",
         "no-extra-semi": "off",
