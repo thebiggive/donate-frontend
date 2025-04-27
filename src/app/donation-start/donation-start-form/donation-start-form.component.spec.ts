@@ -417,7 +417,7 @@ describe('DonationStartForm', () => {
   });
 
   it('Should not allow paying with with no payment method and no funds', async () => {
-    var finaliseCashBalancePurchaseCalled = false;
+    let finaliseCashBalancePurchaseCalled = false;
 
     const fakeDonationService = {
       getDefaultCounty: () => 'GB',

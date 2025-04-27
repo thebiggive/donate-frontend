@@ -66,7 +66,7 @@ import {Toast} from "../../toast.service";
 import {GIFT_AID_FACTOR} from '../../Money';
 import {noLongNumberValidator} from '../../validators/noLongNumberValidator';
 
-declare var _paq: {
+declare let _paq: {
   push: (args: Array<string|object>) => void,
 };
 
@@ -1999,7 +1999,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
         // Uppercase it in-place, then we can use patterns that assume upper case.
         homePostcode = homePostcode.toUpperCase();
-        var parts = homePostcode.match(postcodeFormatHelpRegExp);
+        const parts = homePostcode.match(postcodeFormatHelpRegExp);
         if (parts === null) {
           // If the input doesn't even match the much looser pattern here, it's going to fail
           // the validator check in a moment and there's nothing we can/should do with it

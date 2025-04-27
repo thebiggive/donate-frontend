@@ -98,7 +98,7 @@ export class IdentityService {
   }
 
   get(id: string, jwt: string, {withTipBalances = false, refresh = false}: {withTipBalances?: boolean, refresh?: boolean} = {}): Observable<Person> {
-    var cacheBuster: string;
+    let cacheBuster: string;
     if (refresh) {
       cacheBuster = "?cacheBust=" + (new Date()).getTime();
     } else {
@@ -172,12 +172,11 @@ export class IdentityService {
 
   getIdAndJWT(): { id: string, jwt: string } | undefined {
     const cookieValue = this.cookieService.get(this.cookieName);
-    var idAndJwt: {jwt: string, id: string};
     if (!cookieValue) {
       return undefined;
     }
 
-    idAndJwt = JSON.parse(cookieValue);
+    const idAndJwt: {jwt: string, id: string} = JSON.parse(cookieValue);
 
     if (idAndJwt === undefined) {
       return undefined;
