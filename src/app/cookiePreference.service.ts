@@ -37,7 +37,7 @@ export class CookiePreferenceService {
     let cookiePreferences;
     try {
       cookiePreferences = JSON.parse(this.cookieService.get(this.cookieName)) as CookiePreferences;
-    } catch (e) {
+    } catch (_e) {
       cookiePreferences = undefined;
     }
 

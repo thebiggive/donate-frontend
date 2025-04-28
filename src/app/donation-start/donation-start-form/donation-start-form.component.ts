@@ -23,7 +23,6 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MatomoTracker} from 'ngx-matomo-client';
 import {retry} from 'rxjs/operators';
 import {
-  ConfirmationToken,
   ConfirmationTokenResult,
   PaymentIntent,
   PaymentMethod,
@@ -66,7 +65,7 @@ import {Toast} from "../../toast.service";
 import {GIFT_AID_FACTOR} from '../../Money';
 import {noLongNumberValidator} from '../../validators/noLongNumberValidator';
 
-declare var _paq: {
+declare let _paq: {
   push: (args: Array<string|object>) => void,
 };
 
@@ -249,7 +248,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     private matomoTracker: MatomoTracker,
     private pageMeta: PageMetaService,
     private addressService: AddressService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private route: ActivatedRoute,
     private router: Router,
     private stripeService: StripeService,
@@ -390,21 +389,25 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     // Current strict type checks mean we need to do this for the compiler to be happy that
     // the groups are not null.
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const amountsGroup: any = this.donationForm.get('amounts');
     if (amountsGroup != null) {
       this.amountsGroup = amountsGroup;
     }
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const giftAidGroup: any = this.donationForm.get('giftAid');
     if (giftAidGroup != null) {
       this.giftAidGroup = giftAidGroup;
     }
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const paymentGroup: any = this.donationForm.get('payment');
     if (paymentGroup != null) {
       this.paymentGroup = paymentGroup;
     }
 
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     const marketingGroup: any = this.donationForm.get('marketing');
     if (marketingGroup != null) {
       this.marketingGroup = marketingGroup;
@@ -547,7 +550,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     // guaranteed set on initial load, and the view is also not guaranteed to update with a
     // rendered #stepper by the time we are the end of `handleCampaign()` or similar.
 
-    const stepper = this.elRef.nativeElement.querySelector('#stepper');
+    const stepper: HTMLElement = this.elRef.nativeElement.querySelector('#stepper');
 
     // Can't do it, already did it, or server-side and so can't add DOM-based event listeners.
     if (!this.stepper || this.stepHeaderEventsSet || !isPlatformBrowser(this.platformId)) {
@@ -556,7 +559,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
     const stepperHeaders = stepper.getElementsByClassName('mat-step-header');
     for (const stepperHeader of stepperHeaders) {
-      stepperHeader.addEventListener('click', (clickEvent: any) => {
+      stepperHeader.addEventListener('click', (clickEvent) => {
         if (this.stepper.selectedIndex > 0) {
           this.validateAmountsCreateDonorDonationIfPossible(); // Handles amount error if needed, like Continue button does.
           return;
@@ -564,15 +567,15 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
         // usages of clickEvent.target may be wrong - wouldn't type check if we typed clickEvent as PointerEvent
         // instead of Any. But not changing right now as could create regression and doesn't relate to any known bug.
-        if (clickEvent.target.innerText.includes('Your details') && this.stepper.selected?.label === 'Gift Aid') {
+        if ((clickEvent.target as HTMLElement).innerText.includes('Your details') && this.stepper.selected?.label === 'Gift Aid') {
           this.triedToLeaveGiftAid = true;
         }
 
-        if (clickEvent.target.innerText.includes('Confirm') && this.stepper.selected?.label === 'Your details') {
+        if ((clickEvent.target as HTMLElement).innerText.includes('Confirm') && this.stepper.selected?.label === 'Your details') {
           this.triedToLeaveMarketing = true;
         }
 
-        if (this.psp === 'stripe' && clickEvent.target.innerText.includes('Receive updates') && !this.stripePaymentMethodReady) {
+        if (this.psp === 'stripe' && (clickEvent.target as HTMLElement).innerText.includes('Receive updates') && !this.stripePaymentMethodReady) {
           this.jumpToStep('Payment details');
         }
 
@@ -654,17 +657,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     if (this.donation && event.selectedIndex > 1) {
       // After create() update all Angular form data on step changes, except billing
       // postcode & country which can be set manually or via PRB callbacks.
-      updateDonationFromForm(
-        event,
-        this.tipValue,
-        this.donation,
-        this.paymentGroup,
-        this.amountsGroup,
-        this.giftAidGroup,
-        this.donationService,
-        this.campaign,
-        this.marketingGroup,
-      );
+      updateDonationFromForm(this.tipValue, this.donation, this.paymentGroup, this.amountsGroup, this.giftAidGroup, this.donationService, this.marketingGroup);
 
       // And if we're about to submit, patch the donation in MatchBot and prevent submission
       // until the latest is persisted. Previously we did this after submit button press but
@@ -752,7 +745,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
   private buildPersonFromDonation(donation: Donation): Person {
     const idAndJWT = this.identityService.getIdAndJWT();
 
-    let person: Person = {
+    const person: Person = {
       id: idAndJWT!.id,
       email_address: donation.emailAddress,
       first_name: donation.firstName,
@@ -954,18 +947,16 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
       throw new Error("Missing stripe elements");
     }
 
-    let confirmationTokenResult: ConfirmationTokenResult | undefined;
-    let confirmationToken: ConfirmationToken | undefined;
-    let paymentMethod: PaymentMethod | undefined;
-    confirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(
+    const confirmationTokenResult: ConfirmationTokenResult = await this.stripeService.prepareConfirmationTokenFromPaymentElement(
       {countryCode: this.donation.countryCode!, billingPostalAddress: this.donation.billingPostalAddress!},
       this.stripeElements
     );
-    confirmationToken = confirmationTokenResult.confirmationToken;
 
-    if (confirmationToken || paymentMethod) {
+    const confirmationToken = confirmationTokenResult.confirmationToken;
+
+    if (confirmationToken) {
       try {
-        result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, {confirmationToken, paymentMethod}));
+        result = await firstValueFrom(this.donationService.confirmCardPayment(this.donation, {confirmationToken}));
       } catch (httpError) {
         this.matomoTracker.trackEvent(
           'donate_error',
@@ -1997,7 +1988,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
 
         // Uppercase it in-place, then we can use patterns that assume upper case.
         homePostcode = homePostcode.toUpperCase();
-        var parts = homePostcode.match(postcodeFormatHelpRegExp);
+        const parts = homePostcode.match(postcodeFormatHelpRegExp);
         if (parts === null) {
           // If the input doesn't even match the much looser pattern here, it's going to fail
           // the validator check in a moment and there's nothing we can/should do with it
@@ -2005,7 +1996,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
           return;
         }
         parts.shift();
-        let formattedPostcode = parts.join(' ');
+        const formattedPostcode = parts.join(' ');
         if (formattedPostcode !== homePostcodeAsIs) {
           this.giftAidGroup.patchValue({
             homePostcode: formattedPostcode,
@@ -2048,7 +2039,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
    * @link https://stackoverflow.com/a/54045398/2803757
    */
   private updateAllValidities() {
-    for (let formGroup of [this.amountsGroup, this.giftAidGroup, this.paymentGroup]) {
+    for (const formGroup of [this.amountsGroup, this.giftAidGroup, this.paymentGroup]) {
       // Get each field in each group and update its validity.
       for (const control in formGroup.controls) {
         formGroup.get(control)!.updateValueAndValidity({ emitEvent: false }); // See fn doc re events.
@@ -2222,7 +2213,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
                 if (! this.donor?.id) {
                   throw new Error("Person identifier went away");
                 }
-                this.loadPerson(person, this.donor.id, jwt)
+                this.loadPerson(person, jwt)
               });
             }
           },
@@ -2288,7 +2279,7 @@ export class DonationStartFormComponent implements AfterContentChecked, AfterCon
     return false;
   }
 
-  public loadPerson(person: Person, id: string, jwt: string) {
+  public loadPerson(person: Person, jwt: string) {
     this.donor = person; // Should mean donations are attached to the Stripe Customer.
 
     // Only tokens for Identity users with a password have enough access to load payment methods, use credit

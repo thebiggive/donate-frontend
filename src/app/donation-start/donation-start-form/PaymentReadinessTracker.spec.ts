@@ -1,7 +1,7 @@
-import {PaymentReadinessTracker} from "./PaymentReadinessTracker";
+import {PaymentGroupControls, PaymentReadinessTracker} from "./PaymentReadinessTracker";
 
 describe('PaymentReadinessTracker', () => {
-  let paymentGroup: {valid: boolean, controls: {}}
+  let paymentGroup: {valid: boolean, controls: PaymentGroupControls}
   beforeEach(() => {
     paymentGroup = {valid: true, controls: {}};
   })

@@ -129,7 +129,7 @@ export class ExploreComponent implements AfterViewChecked, OnDestroy, OnInit {
     private pageMeta: PageMetaService,
     private scroller: ViewportScroller,
     public searchService: SearchService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private state: TransferState,
     @Inject(openPipeToken) private timeLeftToOpenPipe: TimeLeftPipe,
     @Inject(endPipeToken) private timeLeftToEndPipe: TimeLeftPipe,

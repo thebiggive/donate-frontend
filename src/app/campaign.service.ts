@@ -110,6 +110,8 @@ export class CampaignService {
     return CampaignService.percentRaisedOfIndividualCampaign(campaign);
   }
 
+  // any predates having this linting rule on.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   buildQuery(selected: SelectedType, offset: number, campaignId?: string, campaignSlug?: string, fundSlug?: string): {[key: string]: any} {
     const perPage = 6;
     const query: SearchQuery = {
@@ -229,6 +231,7 @@ export class CampaignService {
 }
 
 interface SearchQueryInterface {
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   [key: string]: any;
 }
 

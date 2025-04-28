@@ -65,7 +65,7 @@ export const SFAPIHighlightCardToHighlightCard = (experienceUriPrefix: string, b
 
   const backgroundImageUrl = backgroundImage(sfApiHighlightCard, donateUriPrefix);
 
-  let href = replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href);
+  const href = replaceURLOrigin(experienceUriPrefix, blogUriPrefix, donateUriPrefix, sfApiHighlightCard.button.href);
 
   const color = iconColor(sfApiHighlightCard, campaignFamilyColours);
   return {

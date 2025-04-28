@@ -37,7 +37,7 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
   value?: Date;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private ref: ChangeDetectorRef,
   ) {
     super(ref);
@@ -58,6 +58,7 @@ export class TimeLeftPipe extends AsyncPipe implements PipeTransform {
     return Math.floor((date.getTime() - Date.now()) / microsecsInUnit);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   override transform(date: any, _args?: any[]): any {
     if (!(date instanceof Date)) { // Support ISO 8601 strings as returned by the Salesforce API
       date = new Date(date);

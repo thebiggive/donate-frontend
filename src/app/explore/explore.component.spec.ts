@@ -130,6 +130,7 @@ describe("ExploreComponent", () => {
   function makeComponentWithCampaign(campaign: Campaign) {
     const noop = () => {};
 
+    // @ts-expect-error
     const pipe = new TimeLeftPipe("browser", {
       markForCheck: noop,
     } as unknown as ChangeDetectorRef);
@@ -154,7 +155,7 @@ describe("ExploreComponent", () => {
       getPotentialRedirectPathAndUpdateSignal: () => null,
     } as unknown as NavigationService;
     const dummyPageMeta = { setCommon: noop } as unknown as PageMetaService;
-    const dummyPLATFORM_ID = {} as Object;
+    const dummyPLATFORM_ID = {} as object;
     const dummyRouter = { events: NEVER } as unknown as Router;
     const dummySearchService = {
       changed: new EventEmitter(),

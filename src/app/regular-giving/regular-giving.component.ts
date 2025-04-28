@@ -45,7 +45,6 @@ import {BackendError, errorDescription, errorDetails, isInsufficientMatchFundsEr
 import {CampaignService} from '../campaign.service';
 import {Observable, of} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
-import {ExactCurrencyPipe} from '../exact-currency.pipe';
 import {GIFT_AID_FACTOR, Money} from '../Money';
 
 // for now min & max are hard-coded, will change to be based on a field on

@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
     private pageMeta: PageMetaService,
     private route: ActivatedRoute,
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     @Optional() @Inject(RESPONSE) private response: Response,
   ) {
   }

@@ -17,7 +17,7 @@ export class CampaignResolver implements Resolve<Campaign>  {
   constructor(
     public campaignService: CampaignService,
     private matomoTracker: MatomoTracker,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     public searchService: SearchService,
     private router: Router,
     private state: TransferState,

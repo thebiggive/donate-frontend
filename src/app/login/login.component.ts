@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
     private readonly pageMeta: PageMetaService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {
     const state: LoginNavigationState = <LoginNavigationState>this.router.getCurrentNavigation()?.extras.state;
     this.isNewRegistration = !!state?.newAccountRegistration;

@@ -13,7 +13,7 @@ export class CampaignListResolver {
   constructor(
     private campaignService: CampaignService,
     private matomoTracker: MatomoTracker,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {}
 
   resolve(_: ActivatedRouteSnapshot) {

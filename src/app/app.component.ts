@@ -81,7 +81,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     private getSiteControlService: GetSiteControlService,
     private navigationService: NavigationService,
     private cookiePreferenceService: CookiePreferenceService,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private matomoTracker: MatomoTracker,
     private router: Router,
   ) {
@@ -176,7 +176,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
      * Server copy never has the menu open and doesn't have a DOM for Stencil to adjust.
      */
     if (isPlatformBrowser(this.platformId)) {
-      this.setUpMenuCloseOnNavigation(this.router, this.header);
+      this.setUpMenuCloseOnNavigation();
     }
   }
 
@@ -208,7 +208,7 @@ export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
     this.isDataLoaded = true;
   }
 
-  private setUpMenuCloseOnNavigation(router: Router, header: BiggiveMainMenu | undefined) {
+  private setUpMenuCloseOnNavigation() {
     const headerEl = this.header;
     this.router.events.pipe(
       filter((event: RouterEvent) => event instanceof NavigationStart),
