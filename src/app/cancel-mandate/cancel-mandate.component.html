@@ -20,13 +20,13 @@
 
       <p>This will not affect any donations that have already been collected or are currently being processed.</p>
 
-      <form [formGroup]="cancellationForm">
+      <form>
         <biggive-text-input spaceBelow="4">
           <label slot="label" for="reason">Please tell us why you wish to stop giving
             to {{ mandate.charityName }}</label>
           <input
             slot="input"
-            matInput type="email" id="reason" formControlName="reason" autocapitalize="off"
+            matInput type="email" id="reason" [formControl]="reasonFormControl" autocapitalize="off"
             [maxlength]="reasonMaxLength">
         </biggive-text-input>
 
