@@ -1,0 +1,6 @@
+# commit below has many relatively unintersting changes. To ignore it in `git blame`, run
+# `git config blame.ignoreRevsFile .git-blame-ignore-revs`
+# github does this automatically.
+
+# setup prettier
+273e57eb2adb571
